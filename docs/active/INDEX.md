@@ -19,8 +19,7 @@ This directory is the active backlog and revalidation layer for this repo. Use
 **Beta 0.7.3 relevance:** Most non-done items below are future or deferred work;
 current beta gate and proof status is controlled by [RELEASE-0.7.3](RELEASE-0.7.3.md).
 **Broadband release status:** `emule-bb-v0.7.3` is the first beta/public
-release target. Superseded `1.0.0`, `1.0.1`, and `1.1.1` labels are internal
-evidence only and must not be published.
+release target.
 **Beta-release backlog view:** [RELEASE-0.7.3](RELEASE-0.7.3.md)
 **Beta-release checklist:** [RELEASE-0.7.3-CHECKLIST](RELEASE-0.7.3-CHECKLIST.md)
 **Beta-release runbook:** [RELEASE-0.7.3-RUNBOOK](RELEASE-0.7.3-RUNBOOK.md)

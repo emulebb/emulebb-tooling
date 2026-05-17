@@ -35,9 +35,6 @@ Use it for status, release-source truth, and the open beta task list.
   - optional controller asset:
     `eMule-broadband-0.7.3-amutorrent-x64.zip`
 
-Superseded `1.0.0`, `1.0.1`, and `1.1.1` labels are internal evidence only.
-Do not publish GitHub releases or package assets for those labels.
-
 ## Active Control Docs
 
 - [Execution plan](plans/RELEASE-0.7.3-EXECUTION-PLAN.md)
