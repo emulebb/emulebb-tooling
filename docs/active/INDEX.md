@@ -323,6 +323,7 @@ not active item docs.
 | [FEAT-062](../history/items/FEAT-062.md) | Minor | DONE | Category management dialog polish and robustness |
 | [FEAT-063](../history/items/FEAT-063.md) | Minor | DONE | Web Interface preferences layout polish |
 | [FEAT-064](items/FEAT-064.md) | Minor | OPEN | Curated post-0.7.3 future release roadmap |
+| [FEAT-065](../history/items/FEAT-065.md) | Minor | DONE | Polish the native MiniMule tray popup |
 
 ---
 
