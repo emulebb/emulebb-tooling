@@ -324,6 +324,7 @@ not active item docs.
 | [FEAT-063](../history/items/FEAT-063.md) | Minor | DONE | Web Interface preferences layout polish |
 | [FEAT-064](items/FEAT-064.md) | Minor | OPEN | Curated post-0.7.3 future release roadmap |
 | [FEAT-065](../history/items/FEAT-065.md) | Minor | DONE | Polish the native MiniMule tray popup |
+| [FEAT-066](../history/items/FEAT-066.md) | Minor | DONE | Replace MiniMule chrome with table and speed chart |
 
 ---
 
