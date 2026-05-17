@@ -189,6 +189,7 @@ not the tag source.
 | [BUG-111](../history/items/BUG-111.md) | Critical | DONE | Release and help URLs still point outside the emulebb namespace |
 | [BUG-112](../history/items/BUG-112.md) | Critical | WONT_DO | WebServer/qBit session tokens need CSPRNG-backed generation |
 | [BUG-114](items/BUG-114.md) | Minor | IN_PROGRESS | Prevent Standby can leave Windows sleep prevention asserted after disable |
+| [BUG-115](../history/items/BUG-115.md) | Minor | DONE | Tray left-click skips MiniMule and restores maximized windows as normal |
 
 `BUG-103` through `BUG-110` were superseded internal post-tag evidence labels,
 not active item docs.
