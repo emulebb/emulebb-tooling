@@ -47,10 +47,11 @@ the wrong architecture, contains source/build/debug artifacts, or cannot record
 per-file SHA-256 hashes in the package manifest.
 
 Current state: non-live build/test rows have partial historical evidence in
-[CI-035](items/CI-035.md), and [CI-037](items/CI-037.md) records a passed
-expanded weak-path live run. `CI-038`, final certification proof, final package
-refresh, clean-worktree confirmation, and final hash recording remain
-incomplete until rerun and recorded on the selected heads.
+[CI-035](items/CI-035.md), [CI-037](items/CI-037.md) records a passed expanded
+weak-path live run, and [CI-035](items/CI-035.md) records 2026-05-17 non-UI
+package evidence for x64, ARM64, and optional aMuTorrent x64 assets. `CI-038`
+and final certification proof remain incomplete until rerun and recorded on the
+selected heads.
 
 2026-05-14 closeout prep did not run live E2E, regenerate packages, or create
 tags. Existing package manifests are rehearsal artifacts from older commits and
