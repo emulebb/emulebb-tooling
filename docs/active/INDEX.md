@@ -13,7 +13,7 @@ This directory is the active backlog and revalidation layer for this repo. Use
 
 **Source of truth:** `EMULE_WORKSPACE_ROOT\workspaces\workspace\app\eMule-main` (`main` branch)  
 **Current non-done count:** `63`
-**Latest release-doc refresh:** 2026-05-16
+**Latest release-doc refresh:** 2026-05-17
 **Non-done by status:** `39` OPEN, `8` IN_PROGRESS, `16` DEFERRED, `0` BLOCKED.
 **Backlog counts:** item tables below are authoritative.
 **Beta 0.7.3 relevance:** Most non-done items below are future or deferred work;
@@ -169,7 +169,7 @@ topology.
 | [BUG-082](../history/items/BUG-082.md) | Major | DONE | GeoLocation and IPFilter background refresh flags can race and remain stuck |
 | [BUG-083](../history/items/BUG-083.md) | Major | DONE | Client UDP malformed-packet logging can read past a one-byte packet |
 | [BUG-084](../history/items/BUG-084.md) | Minor | DONE | Web admin high-level actions leak the process token handle |
-| [BUG-085](../history/items/BUG-085.md) | Major | DONE | Kad/client UDP encryption preference gating needs Release 1 compatibility proof |
+| [BUG-085](../history/items/BUG-085.md) | Major | DONE | Kad/client UDP encryption preference gating needs beta compatibility proof |
 | [BUG-086](../history/items/BUG-086.md) | Critical | DONE | HTTPS WebSocket casts SOCKET storage to mbedtls_net_context |
 | [BUG-087](../history/items/BUG-087.md) | Critical | DONE | HTTPS WebSocket queued writes can stall after TLS WANT_READ |
 | [BUG-088](../history/items/BUG-088.md) | Major | DONE | WebSocket timeout shutdown leaves global state unsafe for restart |

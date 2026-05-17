@@ -63,6 +63,22 @@ release testing model, [Release Test Campaigns](../active/RELEASE-TEST-CAMPAIGNS
 for campaign evidence, and [CI Baseline](CI-BASELINE.md) for the reusable
 GitHub Actions baseline.
 
+Feature work should choose evidence by changed surface:
+
+| Changed surface | Minimum evidence expectation |
+|---|---|
+| Docs-only or policy-only | `git diff --check`, stale-reference searches, and taxonomy checks when item/index metadata changes |
+| App code | Workspace validation plus both x64 app builds required by workspace policy |
+| Command-line parser | Parser seam/native coverage and product/development guide updates |
+| VPN or bind policy | Bind-resolution coverage, diagnostics review, and network-guide updates |
+| UPnP or NAT mapping | Backend-selection coverage, failure-path diagnostics, and network/preference docs |
+| REST/controller behavior | REST/OpenAPI drift checks, malformed/concurrent request coverage, and controller guide updates |
+| Packaging or release proof | Release checklist/runbook commands, package manifests, hashes, and provenance |
+
+Do not cite hosted CI as a replacement for local release proof. Hosted CI is a
+fast baseline signal; live network, UI/resource, protocol parity, and package
+proof remain explicit release-campaign evidence.
+
 ## CI And GitHub Checks
 
 Shared baseline CI is owned by `eMule-tooling`:
@@ -144,6 +160,17 @@ Supported options:
 Only one positional argument is supported. It may be an `ed2k` link, magnet
 link, collection file, or command such as `exit`.
 
+Parser contract:
+
+- singleton options must not be repeated
+- `-c` requires an absolute canonical Windows path
+- `--generate-webserver-cert` requires `--cert` and `--key`
+- `--cert`, `--key`, and `--host` are valid only with
+  `--generate-webserver-cert`
+- `--host` is repeatable for certificate subject alternative names
+- certificate generation does not accept a positional argument
+- unknown options and invalid option values are command-line errors
+
 ## Product Guide Refresh Workflow
 
 Run this workflow whenever feature status, release proof, command-line behavior,
@@ -177,6 +204,9 @@ changes.
      preferences, IP filters, long paths, shortcuts, and troubleshooting.
    - This guide: development, validation, CI, command-line, packaging, and
      refresh workflow changes.
+   - Each landed user-visible feature needs an operator workflow, configuration
+     reference when applicable, validation/test evidence, and a bounded product
+     claim that excludes still-open future work.
 4. Update navigation and public touchpoints.
    - `docs\INDEX.md`
    - `docs\HELP.md`
@@ -212,6 +242,8 @@ commit message or review notes:
   entrypoints.
 - Command-line options match current parser behavior.
 - VPN/interface binding language is provider-neutral outside live-test policy.
+- UPnP language keeps P2P mapping, backend mode, close-on-exit behavior, and
+  WebServer UPnP separated.
 - REST/controller docs match OpenAPI and adapter docs.
 - Release status links point to active `0.7.3` docs.
 - Public website and org profile link to the updated guide set.

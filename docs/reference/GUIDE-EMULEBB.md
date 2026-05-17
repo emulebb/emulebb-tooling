@@ -21,6 +21,12 @@ eMule BB is for users and operators who want a long-running native eMule client:
 It is not a rewrite and not a headless daemon. The desktop app owns the live
 state; REST and companion tools adapt to that state.
 
+Release documentation follows the same rule as the product: every shipped
+feature needs an operator-facing description, a preference/API reference when
+it has configuration surface, and development-guide evidence for how it is
+validated. Open, deferred, exploratory, and historical items stay out of the
+released behavior summary.
+
 ## Install And Profile Model
 
 Keep these locations conceptually separate:
@@ -106,6 +112,24 @@ active release dashboard.
 | qBit-style workflows | Download shortcuts and batch menu actions that preserve eMule semantics | FEAT-057 | [Downloads and Search Guide](GUIDE-DOWNLOADS-SEARCH.md) |
 | Closeout UX | Release-facing UX polish and audit closeout | FEAT-058 | [Troubleshooting Guide](GUIDE-TROUBLESHOOTING.md) |
 
+## Release Documentation Coverage
+
+For enterprise-style release readiness, a landed feature is not considered
+fully documented until it has the right coverage in each owner document:
+
+| Feature surface | Required documentation |
+|---|---|
+| User workflow | This guide and the focused guide that owns the workflow |
+| Configuration | [Preferences Guide](GUIDE-PREFERENCES.md), including storage key, owner/API, UI binding, REST binding, and normalization notes |
+| Network behavior | [Network Guide](GUIDE-NETWORK.md), including bind, firewall, UPnP, WebServer/REST, and diagnosis boundaries |
+| Controller behavior | [Controllers and REST Guide](GUIDE-CONTROLLERS-REST.md), REST contract, and OpenAPI |
+| Command line | [Development Guide](DEVELOPMENT-GUIDE.md), plus setup/product summary when the option affects operators |
+| Testing and release proof | [Development Guide](DEVELOPMENT-GUIDE.md), [Release Test Strategy](../active/RELEASE-TEST-STRATEGY.md), and active `0.7.3` release docs |
+
+The product guide should describe what an operator can rely on. It should not
+turn test-only seams, future backlog, abandoned ideas, or private evidence
+labels into product promises.
+
 ## Quality And Test Evidence
 
 eMule BB release claims are tied to the workspace evidence model rather than to
@@ -171,11 +195,12 @@ Network and bootstrap:
 - eD2K and Kad remain the native network model
 - bind policy covers peer TCP, client UDP, server UDP, pinger-adjacent paths,
   and UPnP discovery where applicable
-- VPN-aware operation is provider-neutral interface/address binding; VPN
-  kill-switch, firewall, and route enforcement remain external operator or
-  provider policy
+- VPN-aware operation is provider-neutral interface/address binding with
+  resolved-state diagnostics, startup bind blocking, and optional exit on
+  configured-interface loss; VPN kill-switch, firewall, and route enforcement
+  remain external operator or provider policy
 - WebServer/REST has its own bind address and should be configured separately
-- UPnP stores enablement, close-on-exit behavior, and backend mode, and
+- P2P UPnP stores enablement, close-on-exit behavior, and backend mode;
   WebServer UPnP is configured separately from P2P listener mapping
 - server.met, nodes.dat, IP filter, and geolocation update sources use practical
   seeded/default behavior
@@ -183,12 +208,20 @@ Network and bootstrap:
   dual-stack compatibility; a distinct IPv6 Kad network remains exploratory and
   is documented separately.
 
-Sharing and startup:
+Startup and command line:
 
 - `-c` can select an alternate config directory
 - `--help`, `-h`, and `/?` print command-line usage
 - `-ignoreinstances`, `-AutoStart`, and Debug-build `-assertfile` keep their
   targeted startup semantics
+- `--generate-webserver-cert` creates WebServer TLS certificate/key material
+  and exits when `--cert` and `--key` are provided; `--host` can add one or
+  more subject alternative names
+- one positional input can be forwarded as an `ed2k` link, magnet link,
+  collection file, or command such as `exit`
+
+Sharing and library management:
+
 - share-ignore rules are supported through `shareignore.dat`
 - shared startup cache and duplicate-path cache accelerate large libraries
 - monitored shares can keep selected roots synchronized

@@ -66,6 +66,17 @@ If the configured bind target cannot be resolved, eMule BB reports the active
 bind state in UI/diagnostics. With startup bind blocking enabled, P2P networking
 stays offline for that session instead of silently falling back.
 
+Released bind coverage:
+
+| Surface | Behavior |
+|---|---|
+| Peer TCP listener | Uses the active P2P bind target when configured |
+| Client UDP listener | Uses the active P2P bind target when configured |
+| Server UDP support | Uses the active P2P bind target where the server path needs local UDP |
+| Pinger-adjacent network paths | Keep the same resolved bind decision where applicable |
+| UPnP discovery/mapping | Runs against the selected P2P path where the backend supports it |
+| WebServer/REST | Uses its own WebServer bind address, not the P2P bind address |
+
 ## VPN And Interface Binding
 
 VPN-aware operation is implemented as explicit bind policy. Configure an
@@ -79,6 +90,9 @@ Operational rules:
   interface name is the intended control.
 - startup bind blocking can keep P2P networking offline for the session when
   the required target is unavailable.
+- `ExitOnBindInterfaceLoss` can close the app if the resolved configured
+  interface is lost during runtime; it is an app lifecycle safety option, not
+  VPN route enforcement.
 - WebServer/REST bind address is configured separately under WebServer
   settings.
 - VPN kill-switch, firewall, and route enforcement remain external operator or
@@ -87,6 +101,16 @@ Operational rules:
 When diagnosing a VPN path, collect the configured bind target, resolved bind
 state, selected local address, UPnP result, firewall state, and current Low ID
 or Kad firewalled status before changing ports.
+
+Recommended VPN-profile shape:
+
+| Setting | Recommended value |
+|---|---|
+| `BindInterface` | VPN adapter/interface name when interface binding is the policy |
+| `BindAddr` | Empty unless a specific stable local address is required |
+| Startup bind blocking | Enabled when P2P traffic must not start without the configured interface |
+| Exit on bind loss | Optional, depending on operator preference for closing the desktop app after interface loss |
+| WebServer bind | Usually loopback or another deliberate controller interface, configured separately |
 
 ## Windows Firewall
 
@@ -130,6 +154,15 @@ The persisted UPnP settings cover enablement, close-on-exit behavior, and
 backend mode. The automatic backend may use the supported router-discovery
 implementation for the current build, including IGD-style UPnP and supported
 PCP/NAT-PMP paths where present.
+
+Release-facing UPnP settings:
+
+| Setting | Scope | Meaning |
+|---|---|---|
+| `[UPnP] EnableUPnP` | P2P listener mapping | Enables automatic mapping for the peer TCP/client UDP listener pair |
+| `[UPnP] CloseUPnPOnExit` | P2P listener mapping | Requests removal of mappings on app exit when the backend supports it |
+| `[UPnP] BackendMode` | P2P listener mapping | Selects automatic, IGD-only, or PCP/NAT-PMP-only backend behavior |
+| `[WebServer] WebUseUPnP` | WebServer/REST listener mapping | Separately controls WebServer/REST exposure through UPnP |
 
 If UPnP fails:
 
