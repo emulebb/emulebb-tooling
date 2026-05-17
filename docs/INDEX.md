@@ -46,6 +46,7 @@ If a status claim outside `docs/active/` conflicts with `docs/active/`, treat
 | Document | Description |
 |---|---|
 | [reference/GUIDE-EMULEBB](reference/GUIDE-EMULEBB.md) | eMule BB product manual entry point, setup, tools, diagnostics, and compatibility |
+| [reference/GUIDE-SETUP](reference/GUIDE-SETUP.md) | Install model, first-run profile behavior, release-aware setup, and evidence links |
 | [reference/GUIDE-NETWORK](reference/GUIDE-NETWORK.md) | eD2K, Kad, binding, ports, UPnP, firewall, and REST listener basics |
 | [reference/GUIDE-SHARING](reference/GUIDE-SHARING.md) | Shared directories, monitored shares, large libraries, and share-ignore policy |
 | [reference/GUIDE-DOWNLOADS-SEARCH](reference/GUIDE-DOWNLOADS-SEARCH.md) | Downloads, search, categories, broadband upload policy, modern limits, and copy workflows |
@@ -54,6 +55,7 @@ If a status claim outside `docs/active/` conflicts with `docs/active/`, treat
 | [reference/GUIDE-IP-FILTERS](reference/GUIDE-IP-FILTERS.md) | IP filter storage, seeded URLs, formats, and practical use |
 | [reference/GUIDE-LONGPATHS](reference/GUIDE-LONGPATHS.md) | Long-path product behavior, setup, limits, and troubleshooting |
 | [reference/KEYBOARD-SHORTCUTS](reference/KEYBOARD-SHORTCUTS.md) | Main shell and list keyboard shortcut reference |
+| [reference/GUIDE-TROUBLESHOOTING](reference/GUIDE-TROUBLESHOOTING.md) | Symptom-led diagnostics, support evidence, and testing/performance context |
 | [dependencies/DEP-STATUS](dependencies/DEP-STATUS.md) | Current third-party dependency decision record |
 | [rest/REST-API-CONTRACT](rest/REST-API-CONTRACT.md) | Human-readable broadband REST contract |
 | [rest/REST-API-OPENAPI](rest/REST-API-OPENAPI.yaml) | Canonical machine-readable `/api/v1` OpenAPI contract |

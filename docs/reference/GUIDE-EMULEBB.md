@@ -67,6 +67,7 @@ For an existing profile:
 
 | Need | Guide |
 |---|---|
+| Install model, first-run profile behavior, and release-aware setup | [Setup Guide](GUIDE-SETUP.md) |
 | Complete `preferences.ini` reference and preference behavior | [Preferences Guide](GUIDE-PREFERENCES.md) |
 | eD2K, Kad, ports, binding, UPnP, firewall, WebServer network behavior | [Network Guide](GUIDE-NETWORK.md) |
 | Downloads, search, categories, broadband upload policy, transfer behavior | [Downloads and Search Guide](GUIDE-DOWNLOADS-SEARCH.md) |
@@ -75,6 +76,51 @@ For an existing profile:
 | IP filter storage, updates, formats, and reload behavior | [IP Filter Guide](GUIDE-IP-FILTERS.md) |
 | Deep Windows long-path behavior | [Long Path Guide](GUIDE-LONGPATHS.md) |
 | Keyboard and menu workflow | [Keyboard Shortcuts](KEYBOARD-SHORTCUTS.md) |
+| Symptom-led diagnostics and support evidence | [Troubleshooting Guide](GUIDE-TROUBLESHOOTING.md) |
+
+## Quality And Test Evidence
+
+eMule BB release claims are tied to the workspace evidence model rather than to
+one manual smoke test. The public hosted CI lane gives fast feedback for the
+shared Python harness, while the release campaign covers the slower and more
+environment-dependent proof that belongs on operator machines.
+
+The current release model is organized around these confidence layers:
+
+- workspace validation and fast non-live test coverage
+- native and Python harness coverage for app-facing behavior
+- REST contract, OpenAPI drift, malformed-request, and controller checks
+- UI, resource, and full stock language smoke coverage
+- eD2K/Kad protocol parity, community comparison, and live-diff evidence
+- live-wire network, search, transfer, and weak-path scenarios
+- x64 and ARM64 build/package provenance, manifests, and SHA-256 hashes
+
+Use [Release Test Strategy](../active/RELEASE-TEST-STRATEGY.md) for the generic
+testing model and [Release Test Campaigns](../active/RELEASE-TEST-CAMPAIGNS.md)
+for the current campaign view. The beta dashboard remains the release authority
+for what has passed, what is still open, and whether public packages may be
+tagged.
+
+## Performance Improvements
+
+Performance messaging should be read as operational behavior, not as a synthetic
+benchmark promise. eMule BB focuses on places where old desktop assumptions are
+visible during long broadband sessions:
+
+- finite broadband upload policy with reviewable slot targets
+- weak or stalled slot recycling after warm-up, grace, and cooldown windows
+- higher queue, source, socket-buffer, and disk-buffer defaults where landed
+- startup and shared-file cache work for large libraries
+- duplicate-path and monitored-share handling for deep shared trees
+- long-path guidance for modern Windows library layouts
+- fixed timeout and buffer assumptions exposed as documented preferences where
+  useful
+- REST/controller behavior tested as part of the product, not as an external
+  scraping layer
+
+These improvements are deliberately compatibility-preserving. They tune local
+policy, limits, caching, diagnostics, and controller surfaces while keeping
+stock eD2K/Kad wire behavior and the native desktop app model intact.
 
 ## Released Behavior Summary
 
