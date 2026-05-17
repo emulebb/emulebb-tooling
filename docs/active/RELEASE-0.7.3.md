@@ -38,6 +38,7 @@ Do not publish GitHub releases or package assets for those labels.
 - [Execution plan](plans/RELEASE-0.7.3-EXECUTION-PLAN.md)
 - [Operator checklist](RELEASE-0.7.3-CHECKLIST.md)
 - [Operator runbook](RELEASE-0.7.3-RUNBOOK.md)
+- [Release test campaigns](RELEASE-TEST-CAMPAIGNS.md)
 - [Controller surface matrix](CONTROLLER-SURFACE-MATRIX.md)
 
 Historical gate evidence and superseded cluster plans live under

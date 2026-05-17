@@ -24,6 +24,8 @@ evidence only and must not be published.
 **Beta-release backlog view:** [RELEASE-0.7.3](RELEASE-0.7.3.md)
 **Beta-release checklist:** [RELEASE-0.7.3-CHECKLIST](RELEASE-0.7.3-CHECKLIST.md)
 **Beta-release runbook:** [RELEASE-0.7.3-RUNBOOK](RELEASE-0.7.3-RUNBOOK.md)
+**Release test strategy:** [RELEASE-TEST-STRATEGY](RELEASE-TEST-STRATEGY.md)
+**Release test campaigns:** [RELEASE-TEST-CAMPAIGNS](RELEASE-TEST-CAMPAIGNS.md)
 **Beta controller surface matrix:** [CONTROLLER-SURFACE-MATRIX](CONTROLLER-SURFACE-MATRIX.md)
 **Future release roadmap:** [FUTURE-ROADMAP](FUTURE-ROADMAP.md)
 **Beta-release execution plan:** [RELEASE-0.7.3-EXECUTION-PLAN](plans/RELEASE-0.7.3-EXECUTION-PLAN.md)
@@ -36,6 +38,8 @@ Current release trail:
 - [RELEASE-0.7.3](RELEASE-0.7.3.md)
 - [RELEASE-0.7.3-CHECKLIST](RELEASE-0.7.3-CHECKLIST.md)
 - [RELEASE-0.7.3-RUNBOOK](RELEASE-0.7.3-RUNBOOK.md)
+- [RELEASE-TEST-STRATEGY](RELEASE-TEST-STRATEGY.md)
+- [RELEASE-TEST-CAMPAIGNS](RELEASE-TEST-CAMPAIGNS.md)
 - [CONTROLLER-SURFACE-MATRIX](CONTROLLER-SURFACE-MATRIX.md)
 - [RELEASE-0.7.3 execution plan](plans/RELEASE-0.7.3-EXECUTION-PLAN.md)
 

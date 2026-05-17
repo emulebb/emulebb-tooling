@@ -25,6 +25,7 @@ complete.
 
 ## Required Commands
 
+- [ ] `python -m emule_workspace test release-campaign --campaign emule-bb-0.7.3`
 - [ ] `python -m emule_workspace test certification --profile fast`
 - [ ] `python -m emule_workspace test certification --profile overnight`
 - [ ] `python -m emule_workspace test live-e2e --profile release-expanded --fail-fast --live-wire-inputs-file repos\eMule-build-tests\live-wire-inputs.local.json`

@@ -21,6 +21,13 @@ git -C workspaces\workspace\app\eMule-main rev-parse --short HEAD
 Do not continue to tagging if validation fails or if any active repo has
 unrelated uncommitted changes.
 
+Show the release campaign matrix before running proof so missing evidence and
+local input requirements are visible:
+
+```powershell
+python -m emule_workspace test release-campaign --campaign emule-bb-0.7.3
+```
+
 ## Certification Proof
 
 ```powershell
