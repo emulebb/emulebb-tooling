@@ -73,7 +73,6 @@ If a status claim outside `docs/active/` conflicts with `docs/active/`, treat
 | [ideas/IDEA-MODERNIZATION-2026](ideas/IDEA-MODERNIZATION-2026.md) | Historical modernization roadmap idea; not an active plan |
 | [ideas/IDEA-IPV6-KAD-NETWORK](ideas/IDEA-IPV6-KAD-NETWORK.md) | Exploratory IPv6-native Kad network design inspired by qBittorrent/libtorrent dual-stack DHT state separation; not an active plan |
 | [ideas/IDEA-RESTRUCTURE](ideas/IDEA-RESTRUCTURE.md) | Exploratory source-structure idea; not an active plan |
-| [ideas/IDEA-VPN-KILL-SWITCH](ideas/IDEA-VPN-KILL-SWITCH.md) | Exploratory external watchdog idea; not an active plan |
 
 ## Notes
 

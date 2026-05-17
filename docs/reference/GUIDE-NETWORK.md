@@ -81,9 +81,8 @@ Operational rules:
   the required target is unavailable.
 - WebServer/REST bind address is configured separately under WebServer
   settings.
-- a VPN provider's own kill-switch, firewall, and route policy remain external
-  controls; do not present eMule BB interface binding as shipped kill-switch
-  behavior.
+- VPN kill-switch, firewall, and route enforcement remain external operator or
+  provider controls; eMule BB interface binding is not a kill switch.
 
 When diagnosing a VPN path, collect the configured bind target, resolved bind
 state, selected local address, UPnP result, firewall state, and current Low ID

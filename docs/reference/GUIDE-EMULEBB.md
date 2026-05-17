@@ -171,8 +171,9 @@ Network and bootstrap:
 - eD2K and Kad remain the native network model
 - bind policy covers peer TCP, client UDP, server UDP, pinger-adjacent paths,
   and UPnP discovery where applicable
-- VPN-aware operation is provider-neutral interface/address binding; an
-  external VPN kill-switch remains outside the built-in product claim
+- VPN-aware operation is provider-neutral interface/address binding; VPN
+  kill-switch, firewall, and route enforcement remain external operator or
+  provider policy
 - WebServer/REST has its own bind address and should be configured separately
 - UPnP stores enablement, close-on-exit behavior, and backend mode, and
   WebServer UPnP is configured separately from P2P listener mapping

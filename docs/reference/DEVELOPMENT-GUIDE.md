@@ -85,8 +85,9 @@ preference and bind the P2P stack through the `hide.me` interface by writing
 interface target.
 
 Product documentation should stay provider-neutral. It can describe VPN-aware
-interface binding and external VPN kill-switch discipline, but must not claim
-that eMule BB ships kill-switch behavior.
+interface binding and diagnostics, but must not describe an eMule BB
+kill-switch helper as product behavior or roadmap. VPN kill-switch, firewall,
+and route enforcement are external operator or provider policy.
 
 ## Release Campaign And Evidence
 
@@ -186,8 +187,8 @@ changes.
    - Do not describe open, deferred, exploratory, or future backlog work as
      shipped.
    - Do not use retired release labels as current public release names.
-   - Do not describe an external VPN kill-switch design as built-in product
-     behavior.
+   - Do not describe an eMule BB VPN kill-switch helper as current product
+     behavior or roadmap.
    - Do not publish release-package claims before package evidence exists.
 6. Validate the docs-only slice.
    - Run `git diff --check` in each edited repo.
