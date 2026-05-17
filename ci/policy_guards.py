@@ -266,7 +266,7 @@ def run_basic_hygiene(
                 add_issue(issues, "yaml-shape", relative_path, yaml_issue)
         elif lower_path.endswith(".ps1"):
             checked["powershell"] += 1
-            header_issue = test_powershell_version_header(repo_root_path, relative_path, full_path)
+            header_issue = test_powershell_version_header(repo_root_path, repo_kind, relative_path, full_path)
             if header_issue:
                 add_issue(issues, "powershell-version", relative_path, header_issue)
         elif lower_path.endswith(".psd1"):
@@ -275,7 +275,7 @@ def run_basic_hygiene(
             if psd1_issue:
                 add_issue(issues, "psd1-shape", relative_path, psd1_issue)
 
-    if repo_kind == "node-web":
+    if repo_kind in {"node-web", "amutorrent"}:
         package_json_path = repo_root_path / "package.json"
         if package_json_path.is_file():
             package_json = json.loads(package_json_path.read_text(encoding="utf-8"))
@@ -319,12 +319,12 @@ def test_yaml_text_shape(path: Path) -> str | None:
     return None
 
 
-def test_powershell_version_header(repo_root: Path, relative_path: str, path: Path) -> str | None:
+def test_powershell_version_header(repo_root: Path, repo_kind: str, relative_path: str, path: Path) -> str | None:
     """Checks the workspace-required PowerShell version header."""
 
     is_tooling_repo = repo_root.name == "eMule-tooling" or (repo_root / "ci" / "check-workspace-policy.py").is_file()
     normalized_path = normalize_path(relative_path)
-    is_amutorrent_installer = repo_root.name == "amutorrent" and normalized_path.startswith("installer/windows/")
+    is_amutorrent_installer = (repo_root.name == "amutorrent" or repo_kind == "amutorrent") and normalized_path.startswith("installer/windows/")
     expected_version = "5.1" if (is_tooling_repo and normalized_path.startswith("scripts/")) or is_amutorrent_installer else "7.6"
     expected_header = f"#Requires -Version {expected_version}"
     first_non_empty_line = next((line.strip() for line in path.read_text(encoding="utf-8-sig").splitlines() if line.strip()), "")
