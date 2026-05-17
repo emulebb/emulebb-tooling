@@ -466,19 +466,25 @@ The canonical workspace currently materializes these app worktrees:
 ## PowerShell Runtime Policy
 
 - Workspace-wide PowerShell policy is centralized in `repos\eMule-tooling`.
-- `repos\eMule-tooling\scripts\` is the only directory in the active workspace
-  where tracked `*.ps1` files may remain.
+- `repos\eMule-tooling\scripts\` is the standard workspace directory where
+  tracked `*.ps1` files may remain.
 - PowerShell files in `repos\eMule-tooling\scripts\` are release-facing Windows
   administration/operator scripts; they are intentionally allowed to stay
   PowerShell and must stay compatible with Windows PowerShell `5.1`.
+- `repos\amutorrent\installer\windows\*.ps1` is also allowed for aMuTorrent-owned
+  native Windows installer/setup assets. These scripts are product runtime
+  assets, not workspace orchestration, and must stay compatible with Windows
+  PowerShell `5.1`.
 - Allowed scripts in `repos\eMule-tooling\scripts\` must declare
+  `#Requires -Version 5.1`.
+- Allowed scripts in `repos\amutorrent\installer\windows\` must declare
   `#Requires -Version 5.1`.
 - Executable PowerShell scripts in `repos\eMule-tooling\scripts\` must have
   matching `.cmd` wrappers that launch Windows PowerShell `5.1` explicitly.
 - New tracked PowerShell files must not be added anywhere else in workspace-owned
   repos or managed app worktrees.
 - Workspace hygiene checks must fail when tracked PowerShell appears outside
-  `repos\eMule-tooling\scripts\` or when an allowed script omits the required
+  the allowed paths or when an allowed script omits the required
   `#Requires -Version 5.1` header.
 
 ## Active Build Policy

@@ -324,7 +324,9 @@ def test_powershell_version_header(repo_root: Path, relative_path: str, path: Pa
     """Checks the workspace-required PowerShell version header."""
 
     is_tooling_repo = repo_root.name == "eMule-tooling" or (repo_root / "ci" / "check-workspace-policy.py").is_file()
-    expected_version = "5.1" if is_tooling_repo and normalize_path(relative_path).startswith("scripts/") else "7.6"
+    normalized_path = normalize_path(relative_path)
+    is_amutorrent_installer = repo_root.name == "amutorrent" and normalized_path.startswith("installer/windows/")
+    expected_version = "5.1" if (is_tooling_repo and normalized_path.startswith("scripts/")) or is_amutorrent_installer else "7.6"
     expected_header = f"#Requires -Version {expected_version}"
     first_non_empty_line = next((line.strip() for line in path.read_text(encoding="utf-8-sig").splitlines() if line.strip()), "")
     if first_non_empty_line == expected_header:
