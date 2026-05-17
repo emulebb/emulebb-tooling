@@ -298,6 +298,7 @@ above for user-facing defaults and ranges.
 | Key | Type | Access | Owner/API | Default and normalization | UI | REST | Notes |
 |---|---|---|---|---|---|---|---|
 | `VideoPreviewThumbnails` | bool | write | m_bVideoPreviewThumbnails | Not explicitly declared in schema | PPgFiles.cpp | None | Written as false for compatibility while runtime loading forces thumbnails disabled. |
+| `AllowPeerPreview` | bool | read, write | m_bAllowPeerPreview | Not explicitly declared in schema | PPgFiles.cpp | None | Explicit opt-in for advertising and serving peer preview frames from shared video files. Requires visible shares and a valid FFmpeg executable. |
 
 #### dynamic-family
 
@@ -597,7 +598,6 @@ above for user-facing defaults and ranges.
 | `VariousStatisticsMaxValue` | integer | read, write | None | Not explicitly declared in schema | None | None | None |
 | `VerboseOptions` | bool | read, write | None | Not explicitly declared in schema | None | None | None |
 | `VersionCheckLastAutomatic` | integer | read, write | None | Not explicitly declared in schema | None | None | None |
-| `VideoPreviewBackupped` | bool | read, write | None | Not explicitly declared in schema | None | None | None |
 | `WatchClipboard4ED2kFilelinks` | bool | read, write | None | Not explicitly declared in schema | None | None | None |
 | `WebMirrorAlertLevel` | integer | read, write | None | Not explicitly declared in schema | None | None | None |
 | `WebTemplateFile` | string | read, write | None | Not explicitly declared in schema | None | None | None |
