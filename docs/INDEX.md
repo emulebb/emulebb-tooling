@@ -52,6 +52,7 @@ If a status claim outside `docs/active/` conflicts with `docs/active/`, treat
 | [reference/GUIDE-DOWNLOADS-SEARCH](reference/GUIDE-DOWNLOADS-SEARCH.md) | Downloads, search, categories, broadband upload policy, modern limits, and copy workflows |
 | [reference/GUIDE-PREFERENCES](reference/GUIDE-PREFERENCES.md) | Single preference manual: `preferences.ini`, compatibility, defaults/ranges, schema coverage, and REST mutation |
 | [reference/GUIDE-CONTROLLERS-REST](reference/GUIDE-CONTROLLERS-REST.md) | REST, aMuTorrent, Arr, qBit, and Torznab controller guidance |
+| [reference/ED2K-PROJECT-INVENTORY](reference/ED2K-PROJECT-INVENTORY.md) | eD2K/eMule ecosystem inventory, including ED2K servers, server lists, clients, controllers, libraries, and historical mods |
 | [reference/GUIDE-IP-FILTERS](reference/GUIDE-IP-FILTERS.md) | IP filter storage, seeded URLs, formats, and practical use |
 | [reference/GUIDE-LONGPATHS](reference/GUIDE-LONGPATHS.md) | Long-path product behavior, setup, limits, and troubleshooting |
 | [reference/KEYBOARD-SHORTCUTS](reference/KEYBOARD-SHORTCUTS.md) | Main shell and list keyboard shortcut reference |
