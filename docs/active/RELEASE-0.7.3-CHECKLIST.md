@@ -12,6 +12,13 @@ recording on the selected reviewed `main` heads. Do not create Git tags until
 the operator gives a separate tagging instruction after this checklist is
 complete.
 
+Release freeze is active. No new feature, refactor, UI polish, warning-debt, or
+roadmap work enters beta `0.7.3`; only direct release-gate blockers may be fixed
+before tag readiness. The current closure pass is documentation-only by operator
+direction: do not run eMule tests or edit eMule test/harness files until the
+operator lifts that hold. All command rows below remain pending unless they are
+rerun and recorded after the hold.
+
 ## Gate Revalidation
 
 - [ ] [RELEASE-0.7.3](RELEASE-0.7.3.md) has no open beta-blocking task without

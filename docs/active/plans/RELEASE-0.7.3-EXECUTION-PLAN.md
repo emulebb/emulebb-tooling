@@ -3,6 +3,18 @@
 This is the only active execution plan for beta `emule-bb-v0.7.3`.
 Every actionable release task must have its own item ID.
 
+## Release Freeze
+
+- Freeze status: active.
+- No new feature, refactor, UI polish, warning-debt, dependency refresh, or
+  roadmap work may enter beta `0.7.3`.
+- Allowed pre-tag changes are limited to direct release-gate blockers,
+  packaging/provenance failures, release-doc drift, or severe app defects found
+  by the required release proof.
+- Current operator hold: do not run eMule tests or edit eMule test/harness
+  files. Keep `CI-035` and `CI-038` open until test work resumes and fresh
+  current-head proof is recorded.
+
 ## Source Decision
 
 - Release source: selected reviewed `main` commit in
@@ -22,6 +34,19 @@ Every actionable release task must have its own item ID.
 Execution resumed by operator direction on 2026-05-17. Run the proof and
 packaging commands in the checklist order, then stop before Git tagging until
 the operator gives a separate tag instruction.
+
+## Known Deferred Proof Gaps
+
+- `CI-038`: latest observed `resource-ui-smoke` artifact failed before full
+  language proof because `resource-ui-smoke.py` referenced
+  `emule_live_profile_common.prepare_scenario_profile`, which is not exported
+  by the current helper module. Do not fix while the test/harness hold is
+  active.
+- `CI-035`: latest observed fast certification artifact failed, the latest
+  overnight artifact was not final release evidence, and final package hashes
+  must be regenerated from the selected heads after proof passes.
+- Controller/live rows that depend on Radarr, Sonarr, or live-wire inputs must
+  be rerun later with operator-owned local inputs and explicit Arr roots.
 
 ## Non-Blocking Follow-Up
 
@@ -59,10 +84,12 @@ The following are provenance, not current execution owners:
 
 ## Validation Bar
 
-- Docs-only changes: `git diff --check` in `repos\eMule-tooling` and
-  `python -m emule_workspace validate`.
-- App blockers: `validate`, focused tests for the touched area, and Release x64
-  app build when behavior or resources change.
+- Docs-only changes while the test hold is active: `git diff --check` in
+  `repos\eMule-tooling` plus documentation taxonomy checks only. Do not run
+  eMule test commands.
+- App blockers: `validate`, focused checks for the touched area when the hold
+  is lifted, and both active x64 app builds when behavior or resources change:
+  Debug x64 and Release x64 through the supported workspace entrypoint.
 - Build/package blockers: `validate`, package-focused tests when available, and
   x64 plus ARM64 package rehearsal.
 - Final proof: the command set in

@@ -9,6 +9,11 @@ Use it for status, release-source truth, and the open beta task list.
 - Proof status: release proof resumed by operator direction on 2026-05-17.
   Live proof, package refresh, and evidence recording are active; Git tagging
   still requires a later separate operator instruction.
+- Release freeze: active. No new feature, refactor, UI polish, warning-debt, or
+  roadmap work enters beta `0.7.3`; only direct release-gate blockers may be
+  fixed before the tag.
+- Current hold: documentation-only release closure is allowed, but eMule test
+  execution and test-harness edits are paused by operator direction.
 - Release source: selected reviewed `main` commit in
   `EMULE_WORKSPACE_ROOT\workspaces\workspace\app\eMule-main`.
 - Tag target: `emule-bb-v0.7.3` on the selected reviewed `main` commit after
@@ -59,6 +64,11 @@ release-scope language/resource live gate, final certification proof, fresh
 x64/ARM64 core package regeneration, optional aMuTorrent x64 package
 regeneration, hash recording, clean-worktree confirmation, and the later
 operator-controlled tag instruction.
+
+All other active `FEAT`, `REF`, warning-debt, cleanup, and polish items are
+post-`0.7.3` by default. A non-blocking item may enter the beta only if a
+current release gate exposes a direct blocker and the item doc records that
+promotion explicitly.
 
 `FEAT-056` remains post-beta automation and evidence UX work. It is not a beta
 tag blocker unless a later item promotes a specific slice.
