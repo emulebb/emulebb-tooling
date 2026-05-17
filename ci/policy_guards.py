@@ -323,7 +323,8 @@ def test_yaml_text_shape(path: Path) -> str | None:
 def test_powershell_version_header(repo_root: Path, relative_path: str, path: Path) -> str | None:
     """Checks the workspace-required PowerShell version header."""
 
-    expected_version = "5.1" if repo_root.name == "eMule-tooling" and normalize_path(relative_path).startswith("scripts/") else "7.6"
+    is_tooling_repo = repo_root.name == "eMule-tooling" or (repo_root / "ci" / "check-workspace-policy.py").is_file()
+    expected_version = "5.1" if is_tooling_repo and normalize_path(relative_path).startswith("scripts/") else "7.6"
     expected_header = f"#Requires -Version {expected_version}"
     first_non_empty_line = next((line.strip() for line in path.read_text(encoding="utf-8-sig").splitlines() if line.strip()), "")
     if first_non_empty_line == expected_header:

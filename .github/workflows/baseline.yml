@@ -10,4 +10,4 @@ jobs:
     with:
       policy_path: manifests/privacy-guard/policy.v1.json
       repo_kind: tooling
-      tooling_ref: ci/v7
+      tooling_ref: ci/v8
