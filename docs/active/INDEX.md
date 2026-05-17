@@ -219,7 +219,7 @@ not active item docs.
 | [REF-022](items/REF-022.md) | Trivial | OPEN | Replace custom type aliases in types.h with <cstdint> standard types |
 | [REF-023](../history/items/REF-023.md) | Minor | DONE | Replace unsafe sprintf/_stprintf/wsprintf with safe equivalents |
 | [REF-024](items/REF-024.md) | Trivial | OPEN | Convert #define constants in Opcodes.h to constexpr in namespace |
-| [REF-025](items/REF-025.md) | Minor | IN_PROGRESS | Remove legacy feature set — IRC, SMTP, Scheduler, MiniMule, first-start wizard, splash screen, update checker |
+| [REF-025](items/REF-025.md) | Minor | IN_PROGRESS | Remove legacy feature set — IRC, SMTP, Scheduler, first-start wizard, splash screen, update checker |
 | [REF-026](../history/items/REF-026.md) | Minor | DONE | Manifest — keep Win10/11+ compatibility GUID only and move Common Controls into manifests |
 | [REF-027](items/REF-027.md) | Minor | OPEN | CaptchaGenerator — replace CxImage with ATL CImage / native GDI |
 | [REF-028](items/REF-028.md) | Minor | DEFERRED | Audit current MbedTLS 4.1 integration |

@@ -23,6 +23,9 @@ remove the surface or prove that its removal did not damage supported behavior.
 | Archive preview and archive recovery | Frozen. No support and no tests. Candidate for deletion. |
 | IRC and IRC-adjacent chat UI | Frozen. No support and no tests. Candidate for deletion through `REF-025`. |
 | Legacy Scheduler and scheduler preferences | Frozen. No support and no tests. Candidate for deletion through `REF-025`. |
+| SMTP/email notifications | Frozen. No support and no tests. Candidate for deletion through `REF-025`. |
+| First-run connection wizard | Frozen. No support and no tests. Candidate for deletion through `REF-025`. |
+| Splash screen | Frozen. No support and no tests. Candidate for deletion through `REF-025`. |
 | Legacy WebServer HTML templates and page UI | Frozen. No support and no tests. The supported surface is JSON REST and controller adapters only. |
 | Proxy support | Frozen. No support and no tests. Candidate for later deletion or replacement by a deliberately designed transport policy. |
 
@@ -37,6 +40,8 @@ remove the surface or prove that its removal did not damage supported behavior.
 - Category behavior remains supported. Scheduler behavior does not.
 - Friend/source dialog behavior remains supported where covered separately.
   IRC/chat UI behavior does not.
+- Native MiniMule behavior is owned by eMule BB and is not part of the frozen
+  legacy MiniMule/IE-host removal bucket.
 
 ## Release Test Rule
 
