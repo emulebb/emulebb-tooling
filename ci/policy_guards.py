@@ -315,7 +315,7 @@ def test_yaml_text_shape(path: Path) -> str | None:
         return "YAML file is empty."
     if "\t" in content:
         return "YAML file contains tab indentation."
-    if not re.search(r"(?m)^\s*(name|on|jobs|defaults|env|version|updates)\s*:", content):
+    if not re.search(r"(?m)^\s*(name|on|jobs|defaults|env|version|updates|services)\s*:", content):
         return "YAML file does not contain an obvious top-level mapping key."
     return None
 
