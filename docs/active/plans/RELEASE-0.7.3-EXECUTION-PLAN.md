@@ -31,7 +31,7 @@ the operator gives a separate tag instruction.
 - [BUG-102](../../history/items/BUG-102.md) is closed; the dedicated
   aMuTorrent browser smoke passed on current `main` with generated harness port
   and isolated state coverage.
-- [CI-037](../items/CI-037.md) is passed; the expanded weak-path live profile
+- [CI-037](../../history/items/CI-037.md) is passed; the expanded weak-path live profile
   remains release evidence unless a later candidate change invalidates it.
 - [BUG-111](../../history/items/BUG-111.md) is closed; app release, update,
   and help URLs now point at `emulebb` destinations with focused update-check

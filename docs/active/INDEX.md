@@ -14,7 +14,7 @@ This directory is the active backlog and revalidation layer for this repo. Use
 **Source of truth:** `EMULE_WORKSPACE_ROOT\workspaces\workspace\app\eMule-main` (`main` branch)  
 **Current non-done count:** `63`
 **Latest release-doc refresh:** 2026-05-16
-**Non-done by status:** `38` OPEN, `8` IN_PROGRESS, `16` DEFERRED, `0` BLOCKED.
+**Non-done by status:** `39` OPEN, `8` IN_PROGRESS, `16` DEFERRED, `0` BLOCKED.
 **Backlog counts:** item tables below are authoritative.
 **Beta 0.7.3 relevance:** Most non-done items below are future or deferred work;
 current beta gate and proof status is controlled by [RELEASE-0.7.3](RELEASE-0.7.3.md).
@@ -370,7 +370,7 @@ not active item docs.
 | [CI-034](../history/items/CI-034.md) | Major | DONE | Package-release provenance and dirty-input guard |
 | [CI-035](items/CI-035.md) | Major | OPEN | Final current-head beta proof and fresh package hashes |
 | [CI-036](../history/items/CI-036.md) | Major | DONE | Release certification test matrix |
-| [CI-037](items/CI-037.md) | Major | PASSED | Expanded live UI and E2E weak-path stress gate |
+| [CI-037](../history/items/CI-037.md) | Major | PASSED | Expanded live UI and E2E weak-path stress gate |
 | [CI-038](items/CI-038.md) | Major | OPEN | UI resource-depth and language smoke gate |
 
 ---

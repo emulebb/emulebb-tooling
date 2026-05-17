@@ -68,7 +68,7 @@ Accepted non-blockers for beta `0.7.3`:
 - [CI-034](../history/items/CI-034.md): package-release now rejects dirty
   provenance inputs and records selected `main` source/build/test/tooling
   commits in package manifests.
-- [CI-037](items/CI-037.md): the expanded weak-path live profile is supported
+- [CI-037](../history/items/CI-037.md): the expanded weak-path live profile is supported
   and has passed with `100/100` required REST live download triggers; cite it as
   evidence unless a later release-candidate change invalidates it.
 - [BUG-102](../history/items/BUG-102.md): aMuTorrent browser smoke now uses

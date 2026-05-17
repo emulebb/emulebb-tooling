@@ -48,7 +48,7 @@ the wrong architecture, contains source/build/debug artifacts, or cannot record
 per-file SHA-256 hashes in the package manifest.
 
 Current state: non-live build/test rows have partial historical evidence in
-[CI-035](items/CI-035.md), [CI-037](items/CI-037.md) records a passed expanded
+[CI-035](items/CI-035.md), [CI-037](../history/items/CI-037.md) records a passed expanded
 weak-path live run, and [CI-035](items/CI-035.md) records 2026-05-17 non-UI
 package evidence for x64, ARM64, and optional aMuTorrent x64 assets. `CI-038`
 and final certification proof remain incomplete until rerun and recorded on the

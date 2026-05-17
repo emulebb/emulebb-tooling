@@ -255,6 +255,10 @@ The canonical workspace currently materializes these app worktrees:
 - Every development change should pass `validate`.
 - After `validate`, run the smallest relevant build and test set for the area
   being changed.
+- Every app code change must rebuild both active x64 app configurations before
+  commit:
+  - `python -m emule_workspace build app --variant main --config Debug --platform x64 --build-output-mode ErrorsOnly`
+  - `python -m emule_workspace build app --variant main --config Release --platform x64 --build-output-mode ErrorsOnly`
 - For feature and fix work on `main`, targeted regression checks are the
   default expectation.
 - When a change affects observable behavior, compare `main` against
