@@ -439,11 +439,11 @@ The canonical workspace currently materializes these app worktrees:
   hooks or later cleanup passes to repair `.editorconfig` drift after the fact.
 - Line endings, charset or BOM, trailing whitespace, and final-newline policy
   are part of the workspace contract, not optional editor preferences.
-- Active workspace-owned repos use LF by default for tracked text files,
-  including Windows resource files, Visual Studio solution/project files, and
-  any explicitly allowed PowerShell files. CRLF is reserved for Windows command
-  files (`*.bat`, `*.cmd`) unless a repo-local policy explicitly says
-  otherwise.
+- Active workspace-owned repos use LF for tracked text files, including
+  Windows command files (`*.bat`, `*.cmd`), Windows resource files (`*.rc`,
+  `*.rc2`), Visual Studio solution/project files, and any explicitly allowed
+  PowerShell files. Tracked CRLF text is not allowed in active workspace-owned
+  repos or managed app worktrees.
 - Do not leave edited tracked files in mixed-EOL state.
 - `repos\eMule-tooling\helpers\source-normalizer.py` is the canonical
   normalization helper for workspace-owned repos and app worktrees.
