@@ -15,25 +15,36 @@ on:
         type: string
         default: ''
 
+permissions:
+  contents: read
+
 jobs:
   baseline:
-    runs-on: windows-latest
+    name: baseline (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - windows-2022
+          - windows-2025-vs2026
 
     steps:
       - name: Checkout caller repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           path: repo
 
       - name: Checkout eMule-tooling
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: eMulebb/eMule-tooling
-          ref: ci/v4
+          ref: ci/v5
           path: tooling
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.x'
 
