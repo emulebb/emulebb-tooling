@@ -296,7 +296,7 @@ not active item docs.
 | [FEAT-032](items/FEAT-032.md) | Minor | DEFERRED | NAT mapping modernization — keep MiniUPnP, drop WinServ, add PCP/NAT-PMP |
 | [FEAT-033](../history/items/FEAT-033.md) | Minor | DONE | Disk-space floor hardening and legacy import-flow retirement |
 | [FEAT-034](items/FEAT-034.md) | Minor | IN_PROGRESS | Shared-files reload should stop blocking the UI on large trees |
-| [FEAT-035](items/FEAT-035.md) | Major | OPEN | IPv6 dual-stack networking for peers, friends, Kad, and server surfaces |
+| [FEAT-035](items/FEAT-035.md) | Major | OPEN | IPv6 dual-stack compatibility for current eD2K/Kad networking |
 | [FEAT-036](items/FEAT-036.md) | Major | OPEN | NAT traversal and extended source exchange for LowID-to-LowID connectivity |
 | [FEAT-037](items/FEAT-037.md) | Minor | DEFERRED | Release-oriented sharing controls — PowerShare, Release Bonus, and Share Only The Need |
 | [FEAT-038](../history/items/FEAT-038.md) | Minor | DONE | Shared-files watcher and live recursive share sync |

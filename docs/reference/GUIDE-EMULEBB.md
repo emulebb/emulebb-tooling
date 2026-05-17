@@ -178,6 +178,9 @@ Network and bootstrap:
   WebServer UPnP is configured separately from P2P listener mapping
 - server.met, nodes.dat, IP filter, and geolocation update sources use practical
   seeded/default behavior
+- IPv6 is future connectivity work. The active future item is current-network
+  dual-stack compatibility; a distinct IPv6 Kad network remains exploratory and
+  is documented separately.
 
 Sharing and startup:
 
@@ -267,6 +270,14 @@ monitored-share files, shared-library caches, REST/WebServer settings,
 geolocation/IP-filter updater state, and preference schema markers. Older stock
 clients can ignore many unknown text preferences, but they do not understand all
 BB sharing policy, cache files, or controller-side behavior.
+
+IPv6 roadmap language has two separate meanings. Current-network dual-stack
+compatibility is tracked by [FEAT-035](../active/items/FEAT-035.md). A separate
+IPv6 Kad network is only an exploratory design note in
+[IDEA-IPV6-KAD-NETWORK](../ideas/IDEA-IPV6-KAD-NETWORK.md), inspired by the
+qBittorrent/libtorrent approach of keeping IPv4 and IPv6 DHT state separate.
+Neither track changes released beta 0.7.3 behavior unless the active release
+docs later say otherwise.
 
 ## Release Status
 
