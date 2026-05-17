@@ -63,6 +63,7 @@ If a status claim outside `docs/active/` conflicts with `docs/active/`, treat
 
 | Document | Description |
 |---|---|
+| [ideas/IDEA-AMULE-WATCHLIST](ideas/IDEA-AMULE-WATCHLIST.md) | Exploratory aMule reference watchlist; not an active plan |
 | [ideas/IDEA-BOOST](ideas/IDEA-BOOST.md) | Exploratory Boost/POCO adoption idea; not an active plan |
 | [ideas/IDEA-CMAKE](ideas/IDEA-CMAKE.md) | Exploratory CMake/Ninja adoption idea; not an active plan |
 | [ideas/IDEA-MODERNIZATION-2026](ideas/IDEA-MODERNIZATION-2026.md) | Historical modernization roadmap idea; not an active plan |
