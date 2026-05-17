@@ -42,7 +42,7 @@ Directive precedence is:
   chunk unless the user explicitly asks to hold local commits.
 - Routine active work happens through those granular commits on each repo's
   `main` branch unless the user explicitly requests a separate branch.
-- App edits belong in `workspaces\v0.72a\app\eMule-main`; do not edit the
+- App edits belong in `workspaces\workspace\app\eMule-main`; do not edit the
   canonical `repos\eMule` branch-store checkout for normal app work.
 - Interactive build, validation, and test commands must go through the
   supported `repos\eMule-build` orchestration entrypoints.
@@ -58,7 +58,7 @@ Directive precedence is:
 
 - Canonical workspace paths are expressed through `EMULE_WORKSPACE_ROOT`.
 - Repos live under `EMULE_WORKSPACE_ROOT\repos\...`.
-- App worktrees live under `EMULE_WORKSPACE_ROOT\workspaces\v0.72a\app\...`.
+- App worktrees live under `EMULE_WORKSPACE_ROOT\workspaces\workspace\app\...`.
 - Do not hardcode machine-specific absolute paths in workspace docs or scripts.
 
 ## Repo Roles
@@ -91,14 +91,14 @@ Directive precedence is:
   | Branch | Role | Release status |
   |---|---|---|
   | `main` | active eMule BB integration line | beta 0.7.3 release source after reviewed release proof passes |
-  | `release/v0.72a-broadband` | broadband pre-release stabilization/reference line | not the beta 0.7.3 tag source; may receive selective reviewed backports only if explicitly needed |
-  | `release/v0.72a-community` | seam-enabled parity and regression baseline | test-only branch; the `release/` prefix is legacy branch naming |
-  | `tracing-harness/v0.72a-community` | variant-client parity harness | not a release branch and not the default regression baseline |
-- `release/v0.72a-build`, `release/v0.72a-bugfix`,
+  | `baseline/community-0.72a` | seam-enabled parity and regression baseline | test-only baseline; not a release branch |
+  | `tracing-harness/community-0.72a` | variant-client parity harness | not a release branch and not the default regression baseline |
+- Future release bugfix branches use `release/MAJOR.MINOR` and are created
+  only after an operator-approved release needs maintenance between major
+  versions.
+- `release/v0.72a-broadband`, `release/v0.72a-build`, `release/v0.72a-bugfix`,
   `oracle/v0.72a-build`, `tracing/v0.72a`, and
   `tracing-harness/v0.72a` are retired historical references.
-- Small merge work on the broadband pre-release stabilization branch is allowed
-  only to backport reviewed fixes or keep the branch buildable.
 - Beta 0.7.3 release work is cut from a reviewed commit already present on
   `main`; the annotated beta tag belongs on that selected `main` commit after
   release proof and operator approval.
@@ -138,13 +138,12 @@ Directive precedence is:
 The canonical workspace currently materializes these app worktrees:
 
 - `eMule-main` -> `main`
-- `eMule-v0.72a-community` -> `release/v0.72a-community`
-- `eMule-v0.72a-broadband` -> `release/v0.72a-broadband`
-- `eMule-v0.72a-tracing-harness-community` -> `tracing-harness/v0.72a-community`
+- `eMule-community-baseline` -> `baseline/community-0.72a`
+- `eMule-community-tracing-harness` -> `tracing-harness/community-0.72a`
 
 ## Workspace Manifest Contract
 
-- `workspaces\v0.72a\deps.json` is a required generated contract file.
+- `workspaces\workspace\deps.json` is a required generated contract file.
 - `repos\eMule-build` owns that contract and must regenerate it on topology
   changes.
 - `python -m emule_workspace validate` must fail if the generated contract
@@ -259,7 +258,7 @@ The canonical workspace currently materializes these app worktrees:
 - For feature and fix work on `main`, targeted regression checks are the
   default expectation.
 - When a change affects observable behavior, compare `main` against
-  `release/v0.72a-community` as the seam-enabled parity and regression
+  `baseline/community-0.72a` as the seam-enabled parity and regression
   baseline where the existing targeted test or live-diff flow makes that
   comparison meaningful.
 - Full matrix validation is expected for:
@@ -295,20 +294,15 @@ The canonical workspace currently materializes these app worktrees:
 
 ## Backport And Baseline Maintenance Rules
 
-- `release/v0.72a-broadband` is the broadband pre-release
-  stabilization/reference branch. It is not the beta 0.7.3 tag source. It may
-  receive selective reviewed backports only when needed to preserve a usable
-  stabilization reference.
-- `release/v0.72a-community` is the seam-enabled parity and regression
-  baseline. It is test-only even though its legacy branch name uses the
-  `release/` prefix.
-- Retired refs such as `release/v0.72a-build`, `release/v0.72a-bugfix`,
-  `oracle/v0.72a-build`, `tracing/v0.72a`, and
+- `baseline/community-0.72a` is the seam-enabled parity and regression
+  baseline. It is test-only and not a product release line.
+- Retired refs such as `release/v0.72a-broadband`, `release/v0.72a-build`,
+  `release/v0.72a-bugfix`, `oracle/v0.72a-build`, `tracing/v0.72a`, and
   `tracing-harness/v0.72a` are historical references only.
-- Acceptable broadband backports are narrow and selective:
-  - buildability fixes
-  - important low-risk fixes
-  - narrowly scoped release maintenance
+- Future release branch backports are narrow and selective:
+  - critical buildability fixes
+  - important low-risk bug fixes
+  - narrowly scoped release maintenance for an already published line
 - Acceptable parity/regression baseline maintenance is limited to:
   - inert test seams
   - deterministic probes or adapters
@@ -319,11 +313,12 @@ The canonical workspace currently materializes these app worktrees:
   - broad refactors
   - speculative cleanup
   - changes that have not already been reviewed on `main`
-- Prefer cherry-picks or tightly scoped merge work over branch drift.
+- Prefer cherry-picks or tightly scoped merge work over branch drift on
+  release maintenance branches.
 
 ## Community Baseline Rules
 
-- `release/v0.72a-community` is the seam-enabled comparison baseline for
+- `baseline/community-0.72a` is the seam-enabled comparison baseline for
   parity and regression testing. It is not an actual release, not a product
   release, and not a packaging or public-tag target.
 - Allowed parity/regression baseline changes are limited to:
@@ -340,9 +335,9 @@ The canonical workspace currently materializes these app worktrees:
 
 ## Tracing Harness Rules
 
-- `tracing-harness/v0.72a-community` derives from
-  `release/v0.72a-community`.
-- `tracing-harness/v0.72a-community` is the only sanctioned place for
+- `tracing-harness/community-0.72a` derives from
+  `baseline/community-0.72a`.
+- `tracing-harness/community-0.72a` is the only sanctioned place for
   deterministic parity-harness behavior used for explicit variant P2P client
   comparisons, such as:
   - CLI orchestration hooks
@@ -352,7 +347,7 @@ The canonical workspace currently materializes these app worktrees:
     decisions
 - The tracing harness is not a release branch, not a product baseline, and not
   the default regression baseline.
-- `release/v0.72a-community` remains the default comparison baseline for
+- `baseline/community-0.72a` remains the default comparison baseline for
   live-diff, regression, and comparable parity work unless a task explicitly
   requires `tracing-harness`.
 

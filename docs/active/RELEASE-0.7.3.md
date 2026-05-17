@@ -9,12 +9,11 @@ Use it for status, release-source truth, and the open beta task list.
 - Proof status: paused by operator direction on 2026-05-13; no further live
   testing, package refresh, or Git tags until a new explicit instruction.
 - Release source: selected reviewed `main` commit in
-  `EMULE_WORKSPACE_ROOT\workspaces\v0.72a\app\eMule-main`.
+  `EMULE_WORKSPACE_ROOT\workspaces\workspace\app\eMule-main`.
 - Tag target: `emule-bb-v0.7.3` on the selected reviewed `main` commit after
   fresh proof passes and the operator gives a separate tagging instruction.
-- Stock/community comparison baseline: `release/v0.72a-community`.
-- Stabilization reference: `release/v0.72a-broadband`; it is not the beta
-  `0.7.3` tag source.
+- Stock/community comparison baseline: `baseline/community-0.72a`.
+- Former broadband stabilization branch: retired from the active beta topology.
 - Package publication: held until all beta-blocking item IDs below are closed
   or explicitly accepted, final proof passes, and fresh packages are generated.
 

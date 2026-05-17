@@ -6,12 +6,11 @@ Every actionable release task must have its own item ID.
 ## Source Decision
 
 - Release source: selected reviewed `main` commit in
-  `EMULE_WORKSPACE_ROOT\workspaces\v0.72a\app\eMule-main`.
+  `EMULE_WORKSPACE_ROOT\workspaces\workspace\app\eMule-main`.
 - Tag target: the same selected reviewed `main` commit after final proof passes
   and the operator gives a separate tagging instruction.
-- Stabilization reference: `release/v0.72a-broadband`; it is not the beta
-  `0.7.3` tag source.
-- Stock/community comparison baseline: `release/v0.72a-community`.
+- Former broadband stabilization branch: retired from the active beta topology.
+- Stock/community comparison baseline: `baseline/community-0.72a`.
 
 ## Blocking Work
 

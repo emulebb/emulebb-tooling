@@ -56,10 +56,9 @@ WORKSPACE_CLEAN_REPO_PATHS = (
     "repos/third_party/eMule-miniupnp",
     "repos/third_party/eMule-ResizableLib",
     "repos/third_party/eMule-zlib",
-    "workspaces/v0.72a/app/eMule-main",
-    "workspaces/v0.72a/app/eMule-v0.72a-community",
-    "workspaces/v0.72a/app/eMule-v0.72a-broadband",
-    "workspaces/v0.72a/app/eMule-v0.72a-tracing-harness-community",
+    "workspaces/workspace/app/eMule-main",
+    "workspaces/workspace/app/eMule-community-baseline",
+    "workspaces/workspace/app/eMule-community-tracing-harness",
 )
 
 

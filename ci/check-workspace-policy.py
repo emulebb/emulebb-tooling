@@ -232,7 +232,7 @@ def audit_build_policy(root: Path) -> None:
     cryptopp_debug = "'$(Configuration)'=='Debug' Or '$(Configuration)'=='DLL-Import Debug'"
     cryptopp_release = "'$(Configuration)'=='Release' Or '$(Configuration)'=='DLL-Import Release'"
 
-    app = load_project_xml(root, r"workspaces\v0.72a\app\eMule-main\srchybrid\emule.vcxproj")
+    app = load_project_xml(root, r"workspaces\workspace\app\eMule-main\srchybrid\emule.vcxproj")
     assert_no_project_configuration(app, "emule.vcxproj", "Platform", "Win32")
     assert_no_project_configuration(app, "emule.vcxproj", "Configuration", "_SpecialBootstrapNodes")
     for prop, expected in (
@@ -418,7 +418,7 @@ def audit_branch_policy(root: Path) -> None:
 
     build_deps_path = resolve_workspace_path(root, r"repos\eMule-build\deps.json")
     build_deps = json.loads(read_text(build_deps_path))
-    workspace_name = build_deps.get("workspace", {}).get("name") or "v0.72a"
+    workspace_name = build_deps.get("workspace", {}).get("name") or "workspace"
     workspace_path = resolve_workspace_path(root, f"workspaces\\{workspace_name}")
     manifest_path = workspace_path / "deps.json"
     manifest = json.loads(read_text(manifest_path))
@@ -507,10 +507,9 @@ def audit_project_entrypoints(root: Path) -> None:
     """Runs project entrypoint policy checks."""
 
     for variant in (
-        r"workspaces\v0.72a\app\eMule-main",
-        r"workspaces\v0.72a\app\eMule-v0.72a-community",
-        r"workspaces\v0.72a\app\eMule-v0.72a-broadband",
-        r"workspaces\v0.72a\app\eMule-v0.72a-tracing-harness-community",
+        r"workspaces\workspace\app\eMule-main",
+        r"workspaces\workspace\app\eMule-community-baseline",
+        r"workspaces\workspace\app\eMule-community-tracing-harness",
     ):
         app_root = resolve_workspace_path(root, variant)
         assert_path_missing(app_root / r"srchybrid\emule.sln")
@@ -555,7 +554,7 @@ def audit_warning_policy(root: Path) -> None:
             (r"DisableSpecificWarnings[^<]*4996", False, "Do not blanket-disable C4996 in miniupnp project settings."),
             (r"/wd4996", False, "Do not inject /wd4996 into miniupnp build flags."),
         ),
-        r"workspaces\v0.72a\app\eMule-main\srchybrid\emule.vcxproj": (
+        r"workspaces\workspace\app\eMule-main\srchybrid\emule.vcxproj": (
             (r"<ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>", True, "The app project must keep external headers at /external:W0 through ExternalWarningLevel in Debug and Release."),
             (r"<AdditionalOptions[^>]*>[^<]*/external:W[0-4]\b", False, "Do not inject raw /external:W* switches through app AdditionalOptions; use ExternalWarningLevel instead."),
         ),
@@ -591,7 +590,7 @@ def audit_localization_policy(root: Path) -> None:
 
     tooling_root = resolve_workspace_path(root, r"repos\eMule-tooling")
     helper = tooling_root / r"helpers\rc-string-table.py"
-    english_rc = resolve_workspace_path(root, r"workspaces\v0.72a\app\eMule-main\srchybrid\emule.rc")
+    english_rc = resolve_workspace_path(root, r"workspaces\workspace\app\eMule-main\srchybrid\emule.rc")
     release_languages = tooling_root / r"helpers\rc-release-languages.json"
     require_ids = tooling_root / r"helpers\rc-release-localization-ids.txt"
     allow_identical = tooling_root / r"helpers\rc-translation-identical-ok-ids.txt"
@@ -658,10 +657,9 @@ def audit_powershell_boundary(root: Path) -> None:
         resolve_workspace_path(root, r"repos\eMule-build"),
         resolve_workspace_path(root, r"repos\eMule-build-tests"),
         resolve_workspace_path(root, r"repos\eMule"),
-        resolve_workspace_path(root, r"workspaces\v0.72a\app\eMule-main"),
-        resolve_workspace_path(root, r"workspaces\v0.72a\app\eMule-v0.72a-community"),
-        resolve_workspace_path(root, r"workspaces\v0.72a\app\eMule-v0.72a-broadband"),
-        resolve_workspace_path(root, r"workspaces\v0.72a\app\eMule-v0.72a-tracing-harness-community"),
+        resolve_workspace_path(root, r"workspaces\workspace\app\eMule-main"),
+        resolve_workspace_path(root, r"workspaces\workspace\app\eMule-community-baseline"),
+        resolve_workspace_path(root, r"workspaces\workspace\app\eMule-community-tracing-harness"),
     )
     issues: list[str] = []
     for repo_root in scan_roots:
@@ -707,10 +705,9 @@ def audit_editorconfig_policy(root: Path) -> None:
         ("tooling", tooling_root),
         ("build", resolve_workspace_path(root, r"repos\eMule-build")),
         ("tests", resolve_workspace_path(root, r"repos\eMule-build-tests")),
-        ("app-main", resolve_workspace_path(root, r"workspaces\v0.72a\app\eMule-main")),
-        ("app-community", resolve_workspace_path(root, r"workspaces\v0.72a\app\eMule-v0.72a-community")),
-        ("app-broadband", resolve_workspace_path(root, r"workspaces\v0.72a\app\eMule-v0.72a-broadband")),
-        ("app-tracing-harness", resolve_workspace_path(root, r"workspaces\v0.72a\app\eMule-v0.72a-tracing-harness-community")),
+        ("app-main", resolve_workspace_path(root, r"workspaces\workspace\app\eMule-main")),
+        ("app-community", resolve_workspace_path(root, r"workspaces\workspace\app\eMule-community-baseline")),
+        ("app-tracing-harness", resolve_workspace_path(root, r"workspaces\workspace\app\eMule-community-tracing-harness")),
     ):
         if not repo_root.is_dir():
             raise RuntimeError(f"Editorconfig audit root is missing: {repo_root}")
@@ -751,10 +748,9 @@ def collect_doc_path_issues(root: Path) -> list[str]:
         (tooling, (r"docs\active\*.md", r"docs\active\items\*.md", r"docs\active\plans\*.md", r"docs\active\reviews\*.md")),
         (resolve_workspace_path(root, r"repos\eMule-build"), ("README.md", "AGENTS.md")),
         (resolve_workspace_path(root, r"repos\eMule-build-tests"), ("README.md", "AGENTS.md")),
-        (resolve_workspace_path(root, r"workspaces\v0.72a\app\eMule-main"), ("README.md", "AGENTS.md")),
-        (resolve_workspace_path(root, r"workspaces\v0.72a\app\eMule-v0.72a-community"), ("AGENTS.md",)),
-        (resolve_workspace_path(root, r"workspaces\v0.72a\app\eMule-v0.72a-broadband"), ("AGENTS.md",)),
-        (resolve_workspace_path(root, r"workspaces\v0.72a\app\eMule-v0.72a-tracing-harness-community"), ("AGENTS.md",)),
+        (resolve_workspace_path(root, r"workspaces\workspace\app\eMule-main"), ("README.md", "AGENTS.md")),
+        (resolve_workspace_path(root, r"workspaces\workspace\app\eMule-community-baseline"), ("AGENTS.md",)),
+        (resolve_workspace_path(root, r"workspaces\workspace\app\eMule-community-tracing-harness"), ("AGENTS.md",)),
     )
     absolute_path_re = re.compile(r"\b[a-z]:\\", re.IGNORECASE)
     for repo_root, patterns in scan_scopes:
@@ -865,10 +861,9 @@ def audit_doc_paths(root: Path) -> None:
         (tooling, r"scripts\AGENTS.md"),
         (resolve_workspace_path(root, r"repos\eMule-build"), "AGENTS.md"),
         (resolve_workspace_path(root, r"repos\eMule-build-tests"), "AGENTS.md"),
-        (resolve_workspace_path(root, r"workspaces\v0.72a\app\eMule-main"), "AGENTS.md"),
-        (resolve_workspace_path(root, r"workspaces\v0.72a\app\eMule-v0.72a-community"), "AGENTS.md"),
-        (resolve_workspace_path(root, r"workspaces\v0.72a\app\eMule-v0.72a-broadband"), "AGENTS.md"),
-        (resolve_workspace_path(root, r"workspaces\v0.72a\app\eMule-v0.72a-tracing-harness-community"), "AGENTS.md"),
+        (resolve_workspace_path(root, r"workspaces\workspace\app\eMule-main"), "AGENTS.md"),
+        (resolve_workspace_path(root, r"workspaces\workspace\app\eMule-community-baseline"), "AGENTS.md"),
+        (resolve_workspace_path(root, r"workspaces\workspace\app\eMule-community-tracing-harness"), "AGENTS.md"),
     )
     for repo_root, relative_path in agent_files:
         assert_text_contains(issues, repo_root, relative_path, policy_text, "AGENTS.md must point to the central workspace policy.")

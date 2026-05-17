@@ -99,8 +99,7 @@ This add-on does not replace the required overnight certification row above.
 - [ ] Release notes use `eMule broadband edition` as the public product name.
 - [ ] Release notes use `eMule BB` as the compact app/mod/API name.
 - [ ] Package-facing README identifies reviewed `main` as the beta `0.7.3`
-      release source and treats `release/v0.72a-broadband` as a stabilization
-      reference only.
+      release source and does not depend on a broadband stabilization branch.
 - [ ] Annotated beta tag is `emule-bb-v0.7.3`.
 - [ ] Annotated beta tag points at the selected reviewed `main` commit.
 - [ ] x64 beta asset is `eMule-broadband-0.7.3-x64.zip`.

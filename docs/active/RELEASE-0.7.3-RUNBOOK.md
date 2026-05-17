@@ -14,8 +14,8 @@ python -m emule_workspace validate
 git -C repos\eMule-tooling status --short --branch
 git -C repos\eMule-build status --short --branch
 git -C repos\eMule-build-tests status --short --branch
-git -C workspaces\v0.72a\app\eMule-main status --short --branch
-git -C workspaces\v0.72a\app\eMule-main rev-parse --short HEAD
+git -C workspaces\workspace\app\eMule-main status --short --branch
+git -C workspaces\workspace\app\eMule-main rev-parse --short HEAD
 ```
 
 Do not continue to tagging if validation fails or if any active repo has
@@ -38,7 +38,7 @@ python -m emule_workspace test certification --profile overnight `
 ```
 
 The certification command records a single aggregate report under
-`workspaces\v0.72a\state\certification\<timestamp>-<profile>\result.json`.
+`workspaces\workspace\state\certification\<timestamp>-<profile>\result.json`.
 Record that report path and the child report paths it references in
 [CI-035](items/CI-035.md).
 
@@ -87,7 +87,7 @@ python -m emule_workspace package-release --config Release --platform ARM64
 Package manifests are written next to the ZIP assets under:
 
 ```text
-workspaces\v0.72a\state\release\emule-bb-v0.7.3
+workspaces\workspace\state\release\emule-bb-v0.7.3
 ```
 
 The release ZIP assets must be named:

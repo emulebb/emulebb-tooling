@@ -4,8 +4,8 @@
 **Source of truth:** [REST-API-OPENAPI.yaml](REST-API-OPENAPI.yaml)
 **Adapter subsets:** [REST-API-ADAPTERS.md](REST-API-ADAPTERS.md)
 **Migrated action inventory:** [REST-API-PARITY-INVENTORY.md](REST-API-PARITY-INVENTORY.md)
-**Primary implementation:** `EMULE_WORKSPACE_ROOT\workspaces\v0.72a\app\eMule-main\srchybrid\WebServerJson.cpp`
-**Route seam:** `EMULE_WORKSPACE_ROOT\workspaces\v0.72a\app\eMule-main\srchybrid\WebServerJsonSeams.h`
+**Primary implementation:** `EMULE_WORKSPACE_ROOT\workspaces\workspace\app\eMule-main\srchybrid\WebServerJson.cpp`
+**Route seam:** `EMULE_WORKSPACE_ROOT\workspaces\workspace\app\eMule-main\srchybrid\WebServerJsonSeams.h`
 
 ## Overview
 

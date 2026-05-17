@@ -11,7 +11,7 @@ This directory is the active backlog and revalidation layer for this repo. Use
 
 ## Current Snapshot
 
-**Source of truth:** `EMULE_WORKSPACE_ROOT\workspaces\v0.72a\app\eMule-main` (`main` branch)  
+**Source of truth:** `EMULE_WORKSPACE_ROOT\workspaces\workspace\app\eMule-main` (`main` branch)  
 **Current non-done count:** `63`
 **Latest release-doc refresh:** 2026-05-16
 **Non-done by status:** `38` OPEN, `8` IN_PROGRESS, `16` DEFERRED, `0` BLOCKED.
@@ -61,22 +61,20 @@ and current dependency pins.
 
 **Regression rule:** New feature/fix work from this backlog should include targeted
 regression checks. When behavior changes, compare `main` against
-`release/v0.72a-community` as the seam-enabled parity and regression baseline
+`baseline/community-0.72a` as the seam-enabled parity and regression baseline
 where that comparison is meaningful.
 
 **Beta 0.7.3 source rule:** the public beta tag is cut from the selected
 reviewed `main` commit after refreshed proof passes and operator approval.
-`release/v0.72a-broadband` is a stabilization/reference branch for this beta,
-not the tag source.
+The former broadband stabilization branch is retired from the active beta
+topology.
 
 **Baseline stack rule:**
 
-- `release/v0.72a-community` = seam-enabled parity and regression baseline,
+- `baseline/community-0.72a` = seam-enabled parity and regression baseline,
   test-only
-- `tracing-harness/v0.72a-community` = behavior-changing variant-client parity
+- `tracing-harness/community-0.72a` = behavior-changing variant-client parity
   harness, not the default baseline
-- `release/v0.72a-broadband` = broadband pre-release stabilization/reference
-  branch
 
 ---
 

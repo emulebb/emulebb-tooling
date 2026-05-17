@@ -121,31 +121,31 @@ audit. Do not hand-edit broad legacy translations during a label update.
 Typical release localization audit:
 
 ```powershell
-python helpers\rc-string-table.py --cross-reference --quality-audit --fail-on-quality-warning --show-extra --allow-identical-ids helpers\rc-translation-identical-ok-ids.txt --quality-rules helpers\rc-translation-quality-rules.json --english-rc ..\..\workspaces\v0.72a\app\eMule-main\srchybrid\emule.rc --require-ids helpers\rc-release-localization-ids.txt --release-languages helpers\rc-release-languages.json
+python helpers\rc-string-table.py --cross-reference --quality-audit --fail-on-quality-warning --show-extra --allow-identical-ids helpers\rc-translation-identical-ok-ids.txt --quality-rules helpers\rc-translation-quality-rules.json --english-rc ..\..\workspaces\workspace\app\eMule-main\srchybrid\emule.rc --require-ids helpers\rc-release-localization-ids.txt --release-languages helpers\rc-release-languages.json
 ```
 
 Release language manifest audit:
 
 ```powershell
-python helpers\rc-string-table.py --audit-release-manifest --english-rc ..\..\workspaces\v0.72a\app\eMule-main\srchybrid\emule.rc --release-languages helpers\rc-release-languages.json
+python helpers\rc-string-table.py --audit-release-manifest --english-rc ..\..\workspaces\workspace\app\eMule-main\srchybrid\emule.rc --release-languages helpers\rc-release-languages.json
 ```
 
 Missing managed-label report:
 
 ```powershell
-python helpers\rc-string-table.py --missing-report --fail-on-missing --english-rc ..\..\workspaces\v0.72a\app\eMule-main\srchybrid\emule.rc --require-ids helpers\rc-release-localization-ids.txt --release-languages helpers\rc-release-languages.json
+python helpers\rc-string-table.py --missing-report --fail-on-missing --english-rc ..\..\workspaces\workspace\app\eMule-main\srchybrid\emule.rc --require-ids helpers\rc-release-localization-ids.txt --release-languages helpers\rc-release-languages.json
 ```
 
 Stock-language review packets, safe to run in parallel:
 
 ```powershell
-python helpers\rc-translate-missing.py --source-rc ..\..\workspaces\v0.72a\app\eMule-main\srchybrid\emule.rc --require-ids helpers\rc-release-localization-ids.txt --all-stock-targets --draft-only --no-machine-translate --ignore-cache --review-dir $env:TEMP\emule-rc-review --jobs 8
+python helpers\rc-translate-missing.py --source-rc ..\..\workspaces\workspace\app\eMule-main\srchybrid\emule.rc --require-ids helpers\rc-release-localization-ids.txt --all-stock-targets --draft-only --no-machine-translate --ignore-cache --review-dir $env:TEMP\emule-rc-review --jobs 8
 ```
 
 Apply curated per-language TSVs after review:
 
 ```powershell
-python helpers\rc-translate-missing.py --source-rc ..\..\workspaces\v0.72a\app\eMule-main\srchybrid\emule.rc --require-ids helpers\rc-release-localization-ids.txt --all-stock-targets --no-machine-translate --ignore-cache --manual-dir $env:TEMP\emule-rc-reviewed --jobs 1
+python helpers\rc-translate-missing.py --source-rc ..\..\workspaces\workspace\app\eMule-main\srchybrid\emule.rc --require-ids helpers\rc-release-localization-ids.txt --all-stock-targets --no-machine-translate --ignore-cache --manual-dir $env:TEMP\emule-rc-reviewed --jobs 1
 ```
 
 Tracked PowerShell is not used for workspace orchestration. Keep future
@@ -157,7 +157,7 @@ allows a PowerShell runtime asset.
 Canonical paths are expressed through `EMULE_WORKSPACE_ROOT`:
 
 - repos live under `EMULE_WORKSPACE_ROOT\repos\...`
-- app worktrees live under `EMULE_WORKSPACE_ROOT\workspaces\v0.72a\app\...`
+- app worktrees live under `EMULE_WORKSPACE_ROOT\workspaces\workspace\app\...`
 
 Helper scripts in this repo should follow that model and should not encode old
 fixed `eMulebb` workspace paths.
