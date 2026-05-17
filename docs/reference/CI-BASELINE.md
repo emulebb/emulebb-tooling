@@ -5,20 +5,23 @@
 ## Reusable Workflow
 
 - workflow: `.github/workflows/reusable-baseline.yml`
-- stable ref: `ci/v4`
+- stable ref: `ci/v7`
 
 Consumer repos should reference:
 
-- `eMulebb/eMule-tooling/.github/workflows/reusable-baseline.yml@ci/v4`
+- `eMulebb/eMule-tooling/.github/workflows/reusable-baseline.yml@ci/v7`
 
 Do not point long-lived branches at `@main`.
+
+Consumers must pass the same immutable tag as `tooling_ref` so the reusable
+workflow executes scripts from the reviewed baseline version.
 
 ## Required Checks
 
 Use these status names in branch protection:
 
-- `Baseline / Privacy Guard`
-- `Baseline / Basic Hygiene`
+- `baseline / baseline (windows-2022)`
+- `baseline / baseline (windows-2025-vs2026)`
 
 ## Shared Scripts
 
