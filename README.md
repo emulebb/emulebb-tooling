@@ -28,6 +28,8 @@ is:
 - reference-doc index: [`docs/INDEX.md`](docs/INDEX.md)
 - active backlog index: [`docs/active/INDEX.md`](docs/active/INDEX.md)
 - product guide: [`docs/reference/GUIDE-EMULEBB.md`](docs/reference/GUIDE-EMULEBB.md)
+- development guide and recurring product-doc refresh workflow:
+  [`docs/reference/DEVELOPMENT-GUIDE.md`](docs/reference/DEVELOPMENT-GUIDE.md)
 - historical API sidecar plan:
   [`docs/history/rest/HIST-PLAN-API-SERVER.md`](docs/history/rest/HIST-PLAN-API-SERVER.md)
 - modernization idea:

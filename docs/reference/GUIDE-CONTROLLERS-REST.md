@@ -29,6 +29,26 @@ Use:
 
 Do not expose REST broadly on untrusted networks.
 
+## WebServer HTTPS And Certificates
+
+REST uses the embedded WebServer listener. HTTPS therefore follows WebServer
+certificate settings:
+
+- `UseHTTPS` enables HTTPS behavior.
+- `HTTPSCertificate` points to the certificate file.
+- `HTTPSKey` points to the private-key file.
+- `BindAddr`, `Port`, `AllowedIPs`, and firewall policy still control exposure.
+
+The app can generate a WebServer certificate from the command line:
+
+```powershell
+emule.exe --generate-webserver-cert --cert webserver.crt --key webserver.key --host localhost --host 127.0.0.1
+```
+
+Generate certificates deliberately, store private keys with the profile or
+operator-owned secret material, and keep controller API keys out of shared
+logs. HTTPS does not make broad untrusted-network exposure safe by itself.
+
 ## Native Behavior Remains Authoritative
 
 Controllers must preserve eMule semantics:
@@ -74,6 +94,10 @@ before running long workflows:
 
 If browser/UI tests fail, compare aMuTorrent assumptions with the current
 OpenAPI contract and live REST smoke evidence.
+
+aMuTorrent should treat the desktop app as the authority. It may present a
+modern controller workflow, but category, search, transfer, shared-file,
+upload-queue, and lifecycle semantics still come from native eMule BB state.
 
 ## Arr, qBit, And Torznab Adapters
 

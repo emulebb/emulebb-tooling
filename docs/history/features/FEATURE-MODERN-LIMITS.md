@@ -547,7 +547,8 @@ When executing this plan later, use the following rules:
 - comment any newly introduced limit or default clearly so it is easy to identify in future review
 - avoid wrappers and compatibility mapping layers when refactoring
 - keep the implementation split into reviewable chunks
-- update `RESUME.md` before and after each chunk
+- record handoff state in the current active plan or review note before and
+  after each chunk
 - build with `..\\23-build-emule-debug-incremental.cmd`
 
 ## Copy-Paste Prompt For Future Execution
@@ -563,7 +564,8 @@ Rules:
 - preserve existing user overrides
 - keep comments clear around any new or changed hard-coded limit
 - avoid wrappers and compatibility mappings
-- update RESUME.md with the exact last and next chunk
+- record the exact last and next chunk in the current active plan or review
+  note
 - build with ..\23-build-emule-debug-incremental.cmd after each chunk
 
 Execution order:
@@ -598,7 +600,7 @@ Do not change anything else in this chunk.
 Requirements:
 - preserve existing user overrides
 - keep comments clear
-- update RESUME.md
+- update the current active plan or review note
 - build with ..\23-build-emule-debug-incremental.cmd
 - report exact file changes and exact default values changed
 ```

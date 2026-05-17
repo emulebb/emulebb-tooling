@@ -304,6 +304,7 @@ The first chunk should not yet include:
 
 ## Notes
 
-- Update `RESUME.md` when execution starts so the exact last and next chunk are tracked.
+- Record handoff state in the current active plan or review note when
+  execution starts so the exact last and next chunk are tracked.
 - Build using `..\\23-build-emule-debug-incremental.cmd`.
 - Keep code comments explicit around the new Kad policy logic so the purpose is easy to identify during later review.

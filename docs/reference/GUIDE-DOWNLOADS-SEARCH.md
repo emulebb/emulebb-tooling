@@ -80,6 +80,26 @@ Common actions:
 
 Keyboard details are in [Keyboard Shortcuts](KEYBOARD-SHORTCUTS.md).
 
+## qBittorrent-Style Shortcuts And Batch Actions
+
+eMule BB exposes selected qBittorrent-style shortcuts and batch menu actions
+for faster desktop operation and controller parity. These are convenience
+workflows over native eMule behavior, not a replacement behavior model.
+
+Batch rules:
+
+- destructive delete/cancel actions must preserve native confirmation and
+  shifted no-confirm semantics.
+- category actions must preserve eMule category ownership and destination
+  behavior.
+- paused and started adds remain distinct.
+- completed and incomplete files remain different resources.
+- copy actions should preserve enough detail for support, controller imports,
+  or manual audits.
+
+When a controller or shortcut behaves unexpectedly, compare it with the native
+UI operation it is intended to represent.
+
 ## Categories
 
 Categories are persistent workflow state. They affect organization, incoming
@@ -109,6 +129,21 @@ Review before batch changes when:
 
 Filename cleanup settings and threshold preferences are documented in
 [Preferences Guide](GUIDE-PREFERENCES.md).
+
+## Completion Command
+
+Completed downloads can optionally launch an external program. The feature is
+profile-owned and should be used for trusted local automation only.
+
+The relevant settings live under `[FileCompletion]`:
+
+- `RunCommandOnFileCompletion`
+- `FileCompletionProgram`
+- `FileCompletionArguments`
+
+Keep completion commands narrow, deterministic, and safe for filenames that
+come from untrusted networks. Prefer explicit tools and explicit arguments over
+shell expansion.
 
 ## Transfer Limits
 

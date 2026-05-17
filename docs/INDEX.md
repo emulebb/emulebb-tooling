@@ -46,6 +46,7 @@ If a status claim outside `docs/active/` conflicts with `docs/active/`, treat
 | Document | Description |
 |---|---|
 | [reference/GUIDE-EMULEBB](reference/GUIDE-EMULEBB.md) | eMule BB product manual entry point, setup, tools, diagnostics, and compatibility |
+| [reference/DEVELOPMENT-GUIDE](reference/DEVELOPMENT-GUIDE.md) | Development, validation, CI, packaging, command-line, and recurring guide refresh workflow |
 | [reference/GUIDE-SETUP](reference/GUIDE-SETUP.md) | Install model, first-run profile behavior, release-aware setup, and evidence links |
 | [reference/GUIDE-NETWORK](reference/GUIDE-NETWORK.md) | eD2K, Kad, binding, ports, UPnP, firewall, and REST listener basics |
 | [reference/GUIDE-SHARING](reference/GUIDE-SHARING.md) | Shared directories, monitored shares, large libraries, and share-ignore policy |

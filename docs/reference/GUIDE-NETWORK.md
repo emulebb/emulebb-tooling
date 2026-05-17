@@ -66,6 +66,29 @@ If the configured bind target cannot be resolved, eMule BB reports the active
 bind state in UI/diagnostics. With startup bind blocking enabled, P2P networking
 stays offline for that session instead of silently falling back.
 
+## VPN And Interface Binding
+
+VPN-aware operation is implemented as explicit bind policy. Configure an
+interface target when P2P traffic must use a named VPN adapter, or an address
+target when a stable local address is the actual requirement.
+
+Operational rules:
+
+- `BindInterface` names the interface target.
+- `BindAddr` is a local address override and should stay empty when the
+  interface name is the intended control.
+- startup bind blocking can keep P2P networking offline for the session when
+  the required target is unavailable.
+- WebServer/REST bind address is configured separately under WebServer
+  settings.
+- a VPN provider's own kill-switch, firewall, and route policy remain external
+  controls; do not present eMule BB interface binding as shipped kill-switch
+  behavior.
+
+When diagnosing a VPN path, collect the configured bind target, resolved bind
+state, selected local address, UPnP result, firewall state, and current Low ID
+or Kad firewalled status before changing ports.
+
 ## Windows Firewall
 
 The Windows Firewall repair action launches an elevated PowerShell script and
@@ -100,12 +123,22 @@ UPnP can map ports automatically when the router supports it and local policy
 allows it. It is useful on home networks but is not a substitute for knowing
 the firewall, router, and bind state.
 
+Main P2P UPnP and WebServer UPnP are separate decisions. P2P mapping targets
+the peer TCP/client UDP listener pair; WebServer mapping exposes the controller
+listener and should be enabled only when that exposure is intentional.
+
+The persisted UPnP settings cover enablement, close-on-exit behavior, and
+backend mode. The automatic backend may use the supported router-discovery
+implementation for the current build, including IGD-style UPnP and supported
+PCP/NAT-PMP paths where present.
+
 If UPnP fails:
 
 1. Confirm the router supports UPnP.
 2. Confirm Windows Firewall allows eMule BB.
 3. Confirm bind settings point to the expected interface.
-4. Test manual port forwarding.
+4. Confirm the router path is the same path used by the selected bind target.
+5. Test manual port forwarding.
 
 UPnP enablement, close-on-exit behavior, and backend mode are persisted under
 the `UPnP` section in `preferences.ini`.

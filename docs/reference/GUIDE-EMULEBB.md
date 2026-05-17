@@ -77,6 +77,34 @@ For an existing profile:
 | Deep Windows long-path behavior | [Long Path Guide](GUIDE-LONGPATHS.md) |
 | Keyboard and menu workflow | [Keyboard Shortcuts](KEYBOARD-SHORTCUTS.md) |
 | Symptom-led diagnostics and support evidence | [Troubleshooting Guide](GUIDE-TROUBLESHOOTING.md) |
+| Development, validation, CI, packaging, and guide refresh workflow | [Development Guide](DEVELOPMENT-GUIDE.md) |
+
+## Landed Feature Matrix
+
+This matrix summarizes behavior that is documented as landed on the current
+line. It is a map to the deeper guide chapters, not a replacement for the
+active release dashboard.
+
+| Area | Landed behavior | Item IDs | Deep guide |
+|---|---|---|---|
+| Long paths | Long-path hardening for important profile, temp, incoming, shared-library, package, and tooling paths | FEAT-010 | [Long Path Guide](GUIDE-LONGPATHS.md) |
+| Listen-socket hardening | TCP error-flood defense before the broader future shield engine | FEAT-012 | [Network Guide](GUIDE-NETWORK.md) |
+| REST core | Authenticated in-process JSON REST API under `/api/v1` | FEAT-013 | [Controllers and REST Guide](GUIDE-CONTROLLERS-REST.md) |
+| Broadband upload | Finite upload slot target, weak-slot recycling, low-ratio policy, and queue visibility | FEAT-015, FEAT-023 | [Downloads and Search Guide](GUIDE-DOWNLOADS-SEARCH.md) |
+| Modern limits | Updated practical defaults for queues, sources, buffers, timeouts, and search ceilings | FEAT-016, FEAT-029 | [Downloads and Search Guide](GUIDE-DOWNLOADS-SEARCH.md) |
+| Geolocation | DB-IP city geolocation update and display support | FEAT-020 | [Network Guide](GUIDE-NETWORK.md) |
+| Profile selection | `-c <base-dir>` startup profile override for isolated profiles | FEAT-022 | [Setup Guide](GUIDE-SETUP.md) |
+| Sharing policy | `shareignore.dat`, monitored shares, startup cache, duplicate cache, and Shared Files virtualization | FEAT-024, FEAT-026, FEAT-027, FEAT-028, FEAT-038 | [Sharing Guide](GUIDE-SHARING.md) |
+| Filename hygiene | Download filename cleanup on intake, completion, and message display | FEAT-025, FEAT-054 | [Downloads and Search Guide](GUIDE-DOWNLOADS-SEARCH.md) |
+| Network binding | Completed P2P bind coverage and separate WebServer bind behavior | FEAT-030 | [Network Guide](GUIDE-NETWORK.md) |
+| Disk safety | Disk-space floor hardening and legacy import-flow retirement | FEAT-033 | [Downloads and Search Guide](GUIDE-DOWNLOADS-SEARCH.md) |
+| IP filters | Automatic IP-filter update scheduling and reload behavior | FEAT-042 | [IP Filter Guide](GUIDE-IP-FILTERS.md) |
+| REST completeness | Transfer detail, server/Kad bootstrap, search, upload queue, and preference expansion | FEAT-045, FEAT-046, FEAT-047, FEAT-048, FEAT-049 | [Controllers and REST Guide](GUIDE-CONTROLLERS-REST.md) |
+| Completion automation | Optional external program launch on completed download | FEAT-050 | [Downloads and Search Guide](GUIDE-DOWNLOADS-SEARCH.md) |
+| Power-user UX | Advanced context menus, keyboard shortcuts, tray options, category polish, Web Interface preference layout, and MiniMule polish | FEAT-051, FEAT-052, FEAT-053, FEAT-059, FEAT-062, FEAT-063, FEAT-065, FEAT-066 | [Keyboard Shortcuts](KEYBOARD-SHORTCUTS.md), [Preferences Guide](GUIDE-PREFERENCES.md) |
+| Preference quality | Preference inventory, mapping, clamps, persistence audit, and strong schema validation | FEAT-060, FEAT-061 | [Preferences Guide](GUIDE-PREFERENCES.md) |
+| qBit-style workflows | Download shortcuts and batch menu actions that preserve eMule semantics | FEAT-057 | [Downloads and Search Guide](GUIDE-DOWNLOADS-SEARCH.md) |
+| Closeout UX | Release-facing UX polish and audit closeout | FEAT-058 | [Troubleshooting Guide](GUIDE-TROUBLESHOOTING.md) |
 
 ## Quality And Test Evidence
 
@@ -99,7 +127,9 @@ Use [Release Test Strategy](../active/RELEASE-TEST-STRATEGY.md) for the generic
 testing model and [Release Test Campaigns](../active/RELEASE-TEST-CAMPAIGNS.md)
 for the current campaign view. The beta dashboard remains the release authority
 for what has passed, what is still open, and whether public packages may be
-tagged.
+tagged. Use [Development Guide](DEVELOPMENT-GUIDE.md) for the workflow that
+keeps product docs, development docs, CI policy, command-line behavior, and
+release evidence aligned.
 
 ## Performance Improvements
 
@@ -141,13 +171,20 @@ Network and bootstrap:
 - eD2K and Kad remain the native network model
 - bind policy covers peer TCP, client UDP, server UDP, pinger-adjacent paths,
   and UPnP discovery where applicable
+- VPN-aware operation is provider-neutral interface/address binding; an
+  external VPN kill-switch remains outside the built-in product claim
 - WebServer/REST has its own bind address and should be configured separately
+- UPnP stores enablement, close-on-exit behavior, and backend mode, and
+  WebServer UPnP is configured separately from P2P listener mapping
 - server.met, nodes.dat, IP filter, and geolocation update sources use practical
   seeded/default behavior
 
 Sharing and startup:
 
 - `-c` can select an alternate config directory
+- `--help`, `-h`, and `/?` print command-line usage
+- `-ignoreinstances`, `-AutoStart`, and Debug-build `-assertfile` keep their
+  targeted startup semantics
 - share-ignore rules are supported through `shareignore.dat`
 - shared startup cache and duplicate-path cache accelerate large libraries
 - monitored shares can keep selected roots synchronized
@@ -158,6 +195,9 @@ Downloads and search:
 - search result ceilings are configurable for eD2K and Kad
 - download filename cleanup can normalize intake and completion names
 - categories remain first-class workflow state
+- qBittorrent-style shortcuts and batch menu actions preserve native delete,
+  category, and paused/started semantics
+- completed downloads can optionally run a configured external command
 - direct delete/cancel operations keep native semantics
 
 Controllers and diagnostics:
@@ -165,6 +205,8 @@ Controllers and diagnostics:
 - native REST is the preferred automation surface
 - qBit/Torznab/Arr-style adapters are compatibility layers, not the source of
   truth
+- WebServer TLS certificate generation is available from the command line with
+  explicit certificate, key, and optional host arguments
 - Tools actions expose save, reload, firewall repair, Windows maintenance,
   diagnostics, dumps, view presets, config-file editors, and folder shortcuts
 - redacted diagnostic snapshots are the default support artifact

@@ -16,6 +16,9 @@ Collect the support artifact that matches the problem:
 | Sharing and startup | shared-cache state, hash queue, share roots, long-path state |
 | Upload performance | upload cap, slot target, slow-slot state, queue and IO diagnostics |
 | REST/controllers | WebServer state, bind/port, API key, OpenAPI route, controller logs |
+| VPN/interface binding | configured bind target, resolved bind state, selected local address, route/firewall state |
+| UPnP/NAT | P2P UPnP state, WebServer UPnP state, backend mode, router mapping, bind target |
+| Completion automation | completion command setting, program path, arguments, completed filename, app log |
 | Crashes or hangs | mini dump for crashes, full dump for hangs or memory growth |
 
 Prefer redacted diagnostic snapshots for support. Use raw snapshots only when
@@ -32,6 +35,33 @@ the recipient is trusted and the data sensitivity is understood.
 | Slow upload | finite upload cap, slot target, slow-slot state, IO/timer diagnostics |
 | REST fails | WebServer enabled, bind/port, API key, lifecycle, OpenAPI route |
 | IP filter ineffective | enabled flag, rule count, filter level, reload/update logs |
+| Completion command fails | enabled flag, program path, arguments, completed file path, log output |
+
+## High-Value Triage Paths
+
+Network:
+
+1. Check bind target and resolved bind state.
+2. Check TCP/UDP/WebServer ports.
+3. Check Windows Firewall repair output.
+4. Check UPnP/router mapping only after confirming the selected interface path.
+5. Re-run Low ID or Kad firewall checks.
+
+Controllers:
+
+1. Confirm WebServer/REST is enabled and bound where expected.
+2. Confirm API key handling.
+3. Compare the route with OpenAPI.
+4. Check lifecycle state before retrying mutations.
+5. Capture redacted diagnostics plus controller request/response data.
+
+Sharing:
+
+1. Confirm share roots and monitored roots.
+2. Check `shareignore.dat`.
+3. Let hashing/scanning settle.
+4. Check startup cache and duplicate cache status.
+5. Force a rescan only after the root list and ignore rules are understood.
 
 ## Testing And Performance Context
 

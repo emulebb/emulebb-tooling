@@ -72,6 +72,10 @@ The current watcher has practical Windows handle limits. If many roots are
 needed, prefer fewer higher-quality curated roots rather than monitoring every
 folder independently.
 
+Monitored-share files are part of the profile. Back them up with the rest of
+the config directory, and edit them only while the app is closed or through the
+matching Tools actions when available.
+
 ## Large Library Operation
 
 Large libraries need predictable scanning:
@@ -86,6 +90,12 @@ Large libraries need predictable scanning:
 Released startup-cache behavior stores verified shared-library state so later
 starts can avoid repeating expensive work. If cache sidecars are deleted, the
 app can rebuild them, but the next startup or scan may be slower.
+
+The duplicate-path cache helps avoid repeating path resolution and duplicate
+work across large trees. Treat `sharedcache.dat` and `shareddups.dat` as
+derived profile sidecars: useful for performance, safe to rebuild when
+intentionally troubleshooting, but not a substitute for `known.met` or the
+configured share-root list.
 
 ## Shared Files UI
 

@@ -40,6 +40,37 @@ For an existing profile:
 4. Verify connection state, downloads, shared files, categories, and logs.
 5. Let eMule BB create branch-specific sidecars and caches before heavy use.
 
+## Command-Line Startup
+
+The normal startup path is the desktop executable with the default profile.
+Command-line options are for controlled profile isolation, automation, support,
+and WebServer certificate maintenance.
+
+```text
+emule.exe [options] [ed2k-link|magnet-link|collection-file|command]
+```
+
+Supported options:
+
+| Option | Use |
+|---|---|
+| `--help`, `-h`, `/?` | Print usage and exit |
+| `-c <base-dir>` | Use an isolated eMule base directory with config and log folders under that base |
+| `-ignoreinstances` | Start without the running-instance guard unless a link, magnet, collection, or command must be forwarded |
+| `-AutoStart` | Mark the session as automatic startup |
+| `-assertfile` | Debug-build assertion logging helper |
+| `--generate-webserver-cert` | Generate a WebServer TLS certificate and exit |
+| `--cert <path>` | Certificate output path for certificate generation |
+| `--key <path>` | Private-key output path for certificate generation |
+| `--host <dns-or-ip>` | Certificate subject alternative name; repeatable |
+
+Only one positional argument is supported. Use it for an `ed2k` link, magnet
+link, collection file, or supported command such as `exit`.
+
+`-c <base-dir>` is the release-safe way to keep test, live, and operator
+profiles isolated. Use an absolute canonical Windows path and do not point two
+running clients at the same live profile.
+
 ## Release-Aware Setup
 
 The first public beta line is planned as `0.7.3` and is not released until the
