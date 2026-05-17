@@ -648,10 +648,9 @@ def tracked_powershell_paths(repo_root: Path) -> tuple[str, ...]:
 
 
 def audit_powershell_boundary(root: Path) -> None:
-    """Checks that only approved release-facing Windows script assets carry PowerShell."""
+    """Checks that only approved Windows runtime assets carry PowerShell."""
 
     tooling_root = resolve_workspace_path(root, r"repos\eMule-tooling")
-    tooling_scripts_root = tooling_root / "scripts"
     amutorrent_root = resolve_workspace_path(root, r"repos\amutorrent")
     scan_roots = (
         tooling_root,
@@ -670,22 +669,6 @@ def audit_powershell_boundary(root: Path) -> None:
             continue
         for relative_path in tracked_powershell_paths(repo_root):
             normalized = relative_path.replace("\\", "/")
-            if repo_root == tooling_root and normalized.startswith("scripts/"):
-                path = repo_root / relative_path
-                first_non_empty = next((line.strip() for line in read_text(path).splitlines() if line.strip()), "")
-                if first_non_empty != "#Requires -Version 5.1":
-                    issues.append(f"{path}: tooling scripts PowerShell must declare #Requires -Version 5.1.")
-                wrapper_path = tooling_scripts_root / f"{path.stem}.cmd"
-                if not wrapper_path.is_file():
-                    issues.append(f"{path}: executable tooling PowerShell script is missing matching .cmd wrapper.")
-                else:
-                    wrapper_text = read_text(wrapper_path)
-                    expected_file_arg = f'-File "%~dp0{path.name}"'
-                    if r"WindowsPowerShell\v1.0\powershell.exe" not in wrapper_text:
-                        issues.append(f"{wrapper_path}: wrapper must launch Windows PowerShell 5.1 explicitly.")
-                    if expected_file_arg not in wrapper_text:
-                        issues.append(f"{wrapper_path}: wrapper must launch sibling script with {expected_file_arg}.")
-                continue
             if repo_root == amutorrent_root and normalized.startswith("installer/windows/"):
                 path = repo_root / relative_path
                 first_non_empty = next((line.strip() for line in read_text(path).splitlines() if line.strip()), "")
@@ -694,7 +677,7 @@ def audit_powershell_boundary(root: Path) -> None:
                 continue
             issues.append(
                 f"{repo_root}\\{relative_path}: tracked PowerShell is only allowed under "
-                "repos\\eMule-tooling\\scripts or repos\\amutorrent\\installer\\windows."
+                "repos\\amutorrent\\installer\\windows."
             )
     if issues:
         raise RuntimeError("\n".join(issues))

@@ -148,10 +148,9 @@ Apply curated per-language TSVs after review:
 python helpers\rc-translate-missing.py --source-rc ..\..\workspaces\v0.72a\app\eMule-main\srchybrid\emule.rc --require-ids helpers\rc-release-localization-ids.txt --all-stock-targets --no-machine-translate --ignore-cache --manual-dir $env:TEMP\emule-rc-reviewed --jobs 1
 ```
 
-Release-facing Windows operator scripts are the only tracked PowerShell files
-allowed in the active workspace. They live under `scripts\`, must stay Windows
-PowerShell 5.1-compatible, and executable scripts must have matching `.cmd`
-wrappers.
+Tracked PowerShell is not used for workspace orchestration. Keep future
+workspace automation in Python unless `docs\WORKSPACE_POLICY.md` explicitly
+allows a PowerShell runtime asset.
 
 ## Workspace Convention
 

@@ -445,9 +445,10 @@ The canonical workspace currently materializes these app worktrees:
 - Line endings, charset or BOM, trailing whitespace, and final-newline policy
   are part of the workspace contract, not optional editor preferences.
 - Active workspace-owned repos use LF by default for tracked text files,
-  including PowerShell files and Visual Studio solution/project files. CRLF is
-  reserved for Windows command files (`*.bat`, `*.cmd`) and Windows resource
-  files (`*.rc`, `*.rc2`) unless a repo-local policy explicitly says otherwise.
+  including Windows resource files, Visual Studio solution/project files, and
+  any explicitly allowed PowerShell files. CRLF is reserved for Windows command
+  files (`*.bat`, `*.cmd`) unless a repo-local policy explicitly says
+  otherwise.
 - Do not leave edited tracked files in mixed-EOL state.
 - `repos\eMule-tooling\helpers\source-normalizer.py` is the canonical
   normalization helper for workspace-owned repos and app worktrees.
@@ -466,25 +467,16 @@ The canonical workspace currently materializes these app worktrees:
 ## PowerShell Runtime Policy
 
 - Workspace-wide PowerShell policy is centralized in `repos\eMule-tooling`.
-- `repos\eMule-tooling\scripts\` is the standard workspace directory where
-  tracked `*.ps1` files may remain.
-- PowerShell files in `repos\eMule-tooling\scripts\` are release-facing Windows
-  administration/operator scripts; they are intentionally allowed to stay
-  PowerShell and must stay compatible with Windows PowerShell `5.1`.
 - `repos\amutorrent\installer\windows\*.ps1` is also allowed for aMuTorrent-owned
   native Windows installer/setup assets. These scripts are product runtime
   assets, not workspace orchestration, and must stay compatible with Windows
   PowerShell `5.1`.
-- Allowed scripts in `repos\eMule-tooling\scripts\` must declare
-  `#Requires -Version 5.1`.
 - Allowed scripts in `repos\amutorrent\installer\windows\` must declare
   `#Requires -Version 5.1`.
-- Executable PowerShell scripts in `repos\eMule-tooling\scripts\` must have
-  matching `.cmd` wrappers that launch Windows PowerShell `5.1` explicitly.
 - New tracked PowerShell files must not be added anywhere else in workspace-owned
   repos or managed app worktrees.
 - Workspace hygiene checks must fail when tracked PowerShell appears outside
-  the allowed paths or when an allowed script omits the required
+  the allowed path or when an allowed script omits the required
   `#Requires -Version 5.1` header.
 
 ## Active Build Policy
