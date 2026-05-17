@@ -16,11 +16,12 @@ Every actionable release task must have its own item ID.
 
 | Order | ID | Owner repo | Required outcome |
 |-------|----|------------|------------------|
-| 1 | [CI-035](../items/CI-035.md) | build/tests/tooling | Fresh current-head proof and x64/ARM64 package hashes are recorded before tag creation. |
+| 1 | [CI-038](../items/CI-038.md) | build/tests/tooling | Full stock-language `ui-resource-depth` smoke passes on the selected current head before final packaging. |
+| 2 | [CI-035](../items/CI-035.md) | build/tests/tooling | Fresh current-head proof and x64/ARM64 core package hashes plus optional aMuTorrent x64 package hash are recorded before tag creation. |
 
-Execution is paused by operator direction on 2026-05-13. Do not run additional
-live proof, package-release finalization, or Git tagging commands until a new
-explicit instruction resumes release proof.
+Execution resumed by operator direction on 2026-05-17. Run the proof and
+packaging commands in the checklist order, then stop before Git tagging until
+the operator gives a separate tag instruction.
 
 ## Non-Blocking Follow-Up
 
@@ -30,6 +31,8 @@ explicit instruction resumes release proof.
 - [BUG-102](../../history/items/BUG-102.md) is closed; the dedicated
   aMuTorrent browser smoke passed on current `main` with generated harness port
   and isolated state coverage.
+- [CI-037](../items/CI-037.md) is passed; the expanded weak-path live profile
+  remains release evidence unless a later candidate change invalidates it.
 - [BUG-111](../../history/items/BUG-111.md) is closed; app release, update,
   and help URLs now point at `emulebb` destinations with focused update-check
   coverage.

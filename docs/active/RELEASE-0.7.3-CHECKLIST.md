@@ -4,13 +4,13 @@ This is the final operator checklist for beta target `emule-bb-v0.7.3`.
 Do not record stale proof here; every row must be refreshed on the selected
 reviewed `main` commit.
 
-## Proof Pause
+## Proof Status
 
-Final proof is paused by operator direction on 2026-05-13. Do not run additional
-live E2E, do not regenerate final packages, and do not create Git tags until a
-new explicit instruction resumes release proof. Partial evidence captured before
-the pause is recorded in [CI-035](items/CI-035.md); it does not complete this
-checklist.
+Final proof resumed by operator direction on 2026-05-17. Run live E2E,
+certification, package refresh, clean-worktree confirmation, and evidence
+recording on the selected reviewed `main` heads. Do not create Git tags until
+the operator gives a separate tagging instruction after this checklist is
+complete.
 
 ## Gate Revalidation
 
@@ -31,6 +31,7 @@ checklist.
 - [ ] `python -m emule_workspace test live-e2e --profile ui-resource-depth --fail-fast`
 - [ ] `python -m emule_workspace package-release --config Release --platform x64`
 - [ ] `python -m emule_workspace package-release --config Release --platform ARM64`
+- [ ] `python -m emule_workspace package-amutorrent --config Release --platform x64`
 - [ ] `python repos\eMule-tooling\ci\check-clean-worktree.py`
 
 Run certification with the required local live inputs and Arr roots when those
@@ -45,9 +46,11 @@ does not contain the full stock language DLL set, contains a language DLL for
 the wrong architecture, contains source/build/debug artifacts, or cannot record
 per-file SHA-256 hashes in the package manifest.
 
-Current state: non-live build/test rows have partial passing evidence in
-[CI-035](items/CI-035.md). Live proof, final package refresh, clean-worktree
-confirmation, and final hash recording remain incomplete.
+Current state: non-live build/test rows have partial historical evidence in
+[CI-035](items/CI-035.md), and [CI-037](items/CI-037.md) records a passed
+expanded weak-path live run. `CI-038`, final certification proof, final package
+refresh, clean-worktree confirmation, and final hash recording remain
+incomplete until rerun and recorded on the selected heads.
 
 2026-05-14 closeout prep did not run live E2E, regenerate packages, or create
 tags. Existing package manifests are rehearsal artifacts from older commits and
@@ -74,12 +77,13 @@ validation changed the build-tests candidate. Treat all final proof rows as
 pending until rerun on the pushed heads that exist after this schema hardening
 lands.
 
-When proof resumes, run the remaining queue in this order:
+Run the remaining queue in this order:
 
 1. Revalidate the active release docs and item dispositions.
 2. Run the required command rows above on the selected current app `main` head,
-   including the expanded weak-path live gate.
-3. Regenerate x64 and ARM64 packages only after proof succeeds.
+   including the expanded weak-path live gate and `ui-resource-depth`.
+3. Regenerate x64, ARM64, and optional aMuTorrent x64 packages only after proof
+   succeeds.
 4. Record fresh package paths, manifests, SHA-256 hashes, and repo commits in
    [CI-035](items/CI-035.md).
 5. Leave the annotated tag step blocked until the operator gives a separate tag
@@ -87,8 +91,8 @@ When proof resumes, run the remaining queue in this order:
 
 ## Stabilization Add-On
 
-After the proof pause is lifted, this focused add-on remains available for
-diagnosing a certification failure without rerunning the full overnight gate:
+This focused add-on remains available for diagnosing a certification failure
+without rerunning the full overnight gate:
 
 - [ ] `python -m emule_workspace test live-e2e --profile stabilization-stress --fail-fast`
 
@@ -104,6 +108,8 @@ This add-on does not replace the required overnight certification row above.
 - [ ] Annotated beta tag points at the selected reviewed `main` commit.
 - [ ] x64 beta asset is `eMule-broadband-0.7.3-x64.zip`.
 - [ ] ARM64 beta asset is `eMule-broadband-0.7.3-arm64.zip`.
+- [ ] Optional aMuTorrent x64 controller asset is
+      `eMule-broadband-0.7.3-amutorrent-x64.zip`.
 - [ ] Each ZIP contains exactly the full stock language DLL set under
       `eMule\lang`.
 - [ ] Each ZIP contains package-facing README, release notes, GPL text,
@@ -118,5 +124,7 @@ This add-on does not replace the required overnight certification row above.
 - [ ] Confirm no active workspace repo has unrelated uncommitted changes.
 - [ ] Confirm fresh x64 and ARM64 package hashes are recorded in
       [CI-035](items/CI-035.md).
+- [ ] Confirm the optional aMuTorrent x64 package hash is recorded in
+      [CI-035](items/CI-035.md) if that asset is published.
 - [ ] Create the annotated beta tag only after package verification and a
       separate operator instruction.

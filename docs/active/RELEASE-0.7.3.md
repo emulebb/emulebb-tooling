@@ -5,9 +5,10 @@ Use it for status, release-source truth, and the open beta task list.
 
 ## Current Status
 
-- Status: Blocked.
-- Proof status: paused by operator direction on 2026-05-13; no further live
-  testing, package refresh, or Git tags until a new explicit instruction.
+- Status: Final proof in progress.
+- Proof status: release proof resumed by operator direction on 2026-05-17.
+  Live proof, package refresh, and evidence recording are active; Git tagging
+  still requires a later separate operator instruction.
 - Release source: selected reviewed `main` commit in
   `EMULE_WORKSPACE_ROOT\workspaces\workspace\app\eMule-main`.
 - Tag target: `emule-bb-v0.7.3` on the selected reviewed `main` commit after
@@ -26,6 +27,8 @@ Use it for status, release-source truth, and the open beta task list.
 - Assets:
   - `eMule-broadband-0.7.3-x64.zip`
   - `eMule-broadband-0.7.3-arm64.zip`
+  - optional controller asset:
+    `eMule-broadband-0.7.3-amutorrent-x64.zip`
 
 Superseded `1.0.0`, `1.0.1`, and `1.1.1` labels are internal evidence only.
 Do not publish GitHub releases or package assets for those labels.
@@ -45,14 +48,16 @@ Historical gate evidence and superseded cluster plans live under
 
 | ID | Priority | Area | Required outcome |
 |----|----------|------|------------------|
-| [CI-035](items/CI-035.md) | Major | Final proof | Current-head beta proof passes and fresh x64/ARM64 package hashes are recorded. |
+| [CI-038](items/CI-038.md) | Major | Language/resource proof | Current-head `ui-resource-depth` release-scope language smoke passes for the full stock language set. |
+| [CI-035](items/CI-035.md) | Major | Final proof | Current-head beta proof passes and fresh x64/ARM64 core package hashes plus optional aMuTorrent x64 hash are recorded. |
 
 ## Remaining Release Backlog
 
-The beta backlog is narrowed to `CI-035` only. Remaining work is final proof,
-fresh x64/ARM64 package regeneration, hash recording, clean-worktree
-confirmation, and the later operator-controlled tag instruction. No live proof
-or tagging is active while the pause above is in effect.
+The beta backlog is narrowed to `CI-038` and `CI-035`. Remaining work is the
+release-scope language/resource live gate, final certification proof, fresh
+x64/ARM64 core package regeneration, optional aMuTorrent x64 package
+regeneration, hash recording, clean-worktree confirmation, and the later
+operator-controlled tag instruction.
 
 `FEAT-056` remains post-beta automation and evidence UX work. It is not a beta
 tag blocker unless a later item promotes a specific slice.
@@ -62,6 +67,9 @@ Accepted non-blockers for beta `0.7.3`:
 - [CI-034](../history/items/CI-034.md): package-release now rejects dirty
   provenance inputs and records selected `main` source/build/test/tooling
   commits in package manifests.
+- [CI-037](items/CI-037.md): the expanded weak-path live profile is supported
+  and has passed with `100/100` required REST live download triggers; cite it as
+  evidence unless a later release-candidate change invalidates it.
 - [BUG-102](../history/items/BUG-102.md): aMuTorrent browser smoke now uses
   generated harness ports with isolated state and passed on current `main`.
 - [BUG-111](../history/items/BUG-111.md): release, update, and help URLs now
