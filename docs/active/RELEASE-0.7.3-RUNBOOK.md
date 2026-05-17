@@ -113,6 +113,31 @@ then verifies the package before writing the manifest. Verification covers:
 `MediaInfo.dll` remains optional and external. The release ZIPs are not
 code-signed and do not include debug symbols.
 
+## Optional aMuTorrent Controller Package
+
+aMuTorrent is packaged separately from the core eMule BB portable ZIPs. The
+CI packaging proof is x64-only and verifies that the optional controller ZIP can
+be produced without publishing workflow artifacts:
+
+```powershell
+python -m emule_workspace package-amutorrent --config Release --platform x64
+```
+
+The optional controller assets are written next to the core package assets:
+
+```text
+workspaces\workspace\state\release\emule-bb-v0.7.3\eMule-broadband-0.7.3-amutorrent-x64.zip
+workspaces\workspace\state\release\emule-bb-v0.7.3\eMule-broadband-0.7.3-amutorrent-x64.manifest.json
+```
+
+The aMuTorrent package command requires clean provenance inputs for
+`repos\amutorrent`, `repos\eMule-build`, `repos\eMule-build-tests`, and
+`repos\eMule-tooling`. It rebuilds frontend assets, installs production server
+dependencies, rejects generated runtime state and source maps, and records
+package-local runtime policy in the manifest. ARM64 aMuTorrent packaging must
+run from a native ARM64 Node environment until a deliberate cross-architecture
+native-module build path exists.
+
 ## Ship Decision
 
 After the final proof:

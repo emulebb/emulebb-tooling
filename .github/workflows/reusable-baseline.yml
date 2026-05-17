@@ -14,6 +14,18 @@ on:
         required: false
         type: string
         default: ''
+      extra_commands:
+        required: false
+        type: string
+        default: ''
+      node_version:
+        required: false
+        type: string
+        default: ''
+      node_cache_dependency_path:
+        required: false
+        type: string
+        default: ''
       tooling_ref:
         required: true
         type: string
@@ -51,6 +63,20 @@ jobs:
         with:
           python-version: '3.x'
 
+      - name: Set up Node
+        if: ${{ inputs.node_version != '' && inputs.node_cache_dependency_path == '' }}
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ inputs.node_version }}
+
+      - name: Set up Node with npm cache
+        if: ${{ inputs.node_version != '' && inputs.node_cache_dependency_path != '' }}
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ inputs.node_version }}
+          cache: npm
+          cache-dependency-path: ${{ inputs.node_cache_dependency_path }}
+
       - name: Run tracked-file privacy guard
         shell: cmd
         run: >
@@ -72,3 +98,10 @@ jobs:
         shell: cmd
         run: >
           call "%CD%\repo\${{ inputs.extra_step_script }}"
+
+      - name: Run optional extra commands
+        if: ${{ inputs.extra_commands != '' }}
+        shell: pwsh
+        working-directory: repo
+        run: |
+          ${{ inputs.extra_commands }}
