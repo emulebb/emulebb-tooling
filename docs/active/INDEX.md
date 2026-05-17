@@ -14,7 +14,7 @@ This directory is the active backlog and revalidation layer for this repo. Use
 **Source of truth:** `EMULE_WORKSPACE_ROOT\workspaces\workspace\app\eMule-main` (`main` branch)  
 **Current non-done count:** `63`
 **Latest release-doc refresh:** 2026-05-17
-**Non-done by status:** `39` OPEN, `8` IN_PROGRESS, `16` DEFERRED, `0` BLOCKED.
+**Non-done by status:** `38` OPEN, `8` IN_PROGRESS, `17` DEFERRED, `0` BLOCKED.
 **Backlog counts:** item tables below are authoritative.
 **Beta 0.7.3 relevance:** Most non-done items below are future or deferred work;
 current beta gate and proof status is controlled by [RELEASE-0.7.3](RELEASE-0.7.3.md).
@@ -25,6 +25,7 @@ release target.
 **Beta-release runbook:** [RELEASE-0.7.3-RUNBOOK](RELEASE-0.7.3-RUNBOOK.md)
 **Release test strategy:** [RELEASE-TEST-STRATEGY](RELEASE-TEST-STRATEGY.md)
 **Release test campaigns:** [RELEASE-TEST-CAMPAIGNS](RELEASE-TEST-CAMPAIGNS.md)
+**Frozen surfaces:** [FROZEN-SURFACES](FROZEN-SURFACES.md)
 **Beta controller surface matrix:** [CONTROLLER-SURFACE-MATRIX](CONTROLLER-SURFACE-MATRIX.md)
 **Future release roadmap:** [FUTURE-ROADMAP](FUTURE-ROADMAP.md)
 **Beta-release execution plan:** [RELEASE-0.7.3-EXECUTION-PLAN](plans/RELEASE-0.7.3-EXECUTION-PLAN.md)
@@ -203,7 +204,7 @@ not active item docs.
 |----|----------|--------|-------|
 | [REF-001](../history/items/REF-001.md) | Major | WONT_DO | Keep the existing CZIPFile implementation |
 | [REF-002](../history/items/REF-002.md) | Major | DONE | Remove Source Exchange v1 branches |
-| [REF-003](items/REF-003.md) | Trivial | OPEN | Rename stale IRC string resources left over from IRC module removal |
+| [REF-003](items/REF-003.md) | Trivial | DEFERRED | Rename stale IRC string resources left over from IRC module removal |
 | [REF-004](../history/items/REF-004.md) | Minor | DONE | Audit and disposition 17 load-only preference keys |
 | [REF-005](../history/items/REF-005.md) | Trivial | DONE | Remove dead DebugSourceExchange commented-out calls |
 | [REF-006](../history/items/REF-006.md) | Trivial | DONE | GetCategory should be const in DownloadListCtrl |

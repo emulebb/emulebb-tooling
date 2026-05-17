@@ -46,12 +46,12 @@ to implement the full qBittorrent Web API surface, including unrelated RSS,
 tracker, peer-management, sync, logging, ban-list, global-speed, or complete
 content-layout operations.
 
-The legacy template-based WebServer UI is kept as deprecated code behind the
-same listener. The release goal for that engine is compile preservation and not
-functional parity. HTML templates, legacy page routes, and template interaction
+The legacy template-based WebServer UI is a frozen surface behind the same
+listener. The release goal for that engine is compile preservation only until
+it is removed. HTML templates, legacy page routes, and template interaction
 state are not part of the REST v1 contract, not part of the adapter contract,
-and not a release-gated behavior surface beyond avoiding shared listener
-regressions.
+not supported, and not a release-gated behavior surface beyond avoiding shared
+listener regressions.
 
 ## Contract Rules
 
@@ -126,7 +126,7 @@ and remain outside broad automated mutation/stress loops.
 The release API intentionally excludes:
 
 - HTML sessions, login/logout, templates, sort state, column hiding, and other
-  deprecated legacy WebServer presentation state
+  frozen legacy WebServer presentation state
 - WebServer page-only preferences such as HTML gzip and refresh interval
 - host operating-system shutdown and reboot
 - binary shared-file streaming

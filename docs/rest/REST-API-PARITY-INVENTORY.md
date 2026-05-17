@@ -4,12 +4,12 @@
 **Contract:** [REST-API-OPENAPI.yaml](REST-API-OPENAPI.yaml)
 **Scope:** controller-relevant runtime capabilities historically reachable
 through WebServer command handlers, plus explicit exclusions for
-presentation-only, deprecated template UI, or host-level actions.
+presentation-only, frozen template UI, or host-level actions.
 
 This inventory is not a functional parity promise for the legacy
-template-based WebServer UI. That engine is deprecated and compile-only; its
-HTML pages, templates, sessions, and page interaction state are not release
-gates.
+template-based WebServer UI. That engine is frozen and compile-only until
+removal; its HTML pages, templates, sessions, and page interaction state are
+not supported and are not release gates.
 
 ## Classification Rules
 

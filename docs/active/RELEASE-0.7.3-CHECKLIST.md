@@ -122,7 +122,8 @@ This add-on does not replace the required overnight certification row above.
 - [ ] Each ZIP contains exactly the full stock language DLL set under
       `eMule\lang`.
 - [ ] Each ZIP contains package-facing README, release notes, GPL text,
-      third-party notices, REST docs, and the legacy web template.
+      third-party notices, and REST docs. Legacy web templates are frozen
+      baggage and are not required release assets.
 - [ ] Package manifests record the ZIP hash, `emule.exe` hash, expected
       language DLL list/count, and per-file package hashes.
 - [ ] Package notes state that ZIPs are not code-signed, contain no debug

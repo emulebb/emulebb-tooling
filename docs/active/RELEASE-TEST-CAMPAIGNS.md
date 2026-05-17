@@ -39,6 +39,11 @@ release gates into feature-flow scenarios across:
 - x64 package, ARM64 package, optional aMuTorrent package, clean worktree, and
   hash recording.
 
+Frozen surfaces are excluded from campaign ownership: archive preview/recovery,
+IRC and IRC-adjacent chat UI, legacy Scheduler, legacy WebServer HTML templates,
+and proxy support receive no support and no release-gated tests. See
+[FROZEN-SURFACES](FROZEN-SURFACES.md).
+
 The active release checklist remains the ship authority. The campaign report is
 the release-matrix and evidence-status view.
 

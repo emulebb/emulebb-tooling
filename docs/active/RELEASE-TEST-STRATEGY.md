@@ -20,6 +20,10 @@ release strategy, not a `0.7.3`-only checklist.
   proven stable.
 - ARM64 is a release build/package proof, not a live execution proof. Shared
   test execution remains x64-only under current workspace policy.
+- Archive preview/recovery, IRC and IRC-adjacent chat UI, the legacy Scheduler,
+  legacy WebServer HTML templates, and proxy support are frozen surfaces. They
+  receive no release-gated support and no new test coverage; see
+  [FROZEN-SURFACES](FROZEN-SURFACES.md).
 
 ## Enterprise Practice Inputs
 
@@ -56,6 +60,15 @@ All release campaign instances use these phase ids:
 | `ui-resource-depth` | Full stock language/resource smoke and release-facing UI depth. |
 | `stabilization-stress` | Optional crash, leak, dump, CPU, and concurrency add-on evidence. |
 | `packaging-provenance` | x64/ARM64 packages, manifests, hashes, and clean source provenance. |
+
+## Frozen Surface Exclusion
+
+Release campaigns must not add scenarios, live automation, native seams, or
+manual evidence rows for frozen surfaces. They may validate only that supported
+surfaces still work when frozen code happens to share infrastructure, such as
+REST over the WebServer listener. Legacy HTML template behavior, IRC,
+scheduler, archive preview/recovery, and proxy behavior are not acceptance
+criteria.
 
 ## Future Direction
 
