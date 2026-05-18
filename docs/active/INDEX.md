@@ -12,9 +12,9 @@ This directory is the active backlog and revalidation layer for this repo. Use
 ## Current Snapshot
 
 **Source of truth:** `EMULE_WORKSPACE_ROOT\workspaces\workspace\app\eMule-main` (`main` branch)  
-**Current non-done count:** `63`
+**Current non-done count:** `64`
 **Latest release-doc refresh:** 2026-05-17
-**Non-done by status:** `38` OPEN, `8` IN_PROGRESS, `17` DEFERRED, `0` BLOCKED.
+**Non-done by status:** `39` OPEN, `8` IN_PROGRESS, `17` DEFERRED, `0` BLOCKED.
 **Backlog counts:** item tables below are authoritative.
 **Beta 0.7.3 relevance:** Most non-done items below are future or deferred work;
 current beta gate and proof status is controlled by [RELEASE-0.7.3](RELEASE-0.7.3.md).
@@ -236,6 +236,7 @@ not active item docs.
 | [REF-039](../history/items/REF-039.md) | Minor | DONE | Classify MediaInfo loader failures and bound metadata extraction counts |
 | [REF-040](../history/items/REF-040.md) | Minor | DONE | Harden external UnRAR DLL loading |
 | [REF-041](../history/items/REF-041.md) | Minor | DONE | Move remaining active app DLL probes to LoadLibraryEx |
+| [REF-042](items/REF-042.md) | Minor | OPEN | Consolidate WinInet download helpers and review URL shortcut intake |
 
 ---
 
