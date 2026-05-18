@@ -9,10 +9,10 @@ Native `/api/v1` is the only clean JSON REST contract. The compatibility
 adapters below exist so Arr-family tools can talk to eMule BB without forcing
 native v1 to mimic qBittorrent or Torznab quirks.
 
-The legacy template-based WebServer UI is frozen and compile-only until
-removal. It is not an adapter contract, no functional HTML/template behavior is
-supported, and no adapter or release campaign may add template-specific tests
-for beta 0.7.3.
+The deprecated legacy template-based WebServer UI is frozen and compile-only
+until removal. It is not an adapter contract, no functional HTML/template
+behavior is supported, and no adapter or release campaign may add
+template-specific tests for beta 0.7.3.
 
 ## qBittorrent-Compatible `/api/v2`
 
