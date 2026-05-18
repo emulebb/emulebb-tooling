@@ -24,6 +24,7 @@ remove the surface or prove that its removal did not damage supported behavior.
 | IRC and IRC-adjacent chat UI | Frozen. No support and no tests. Candidate for deletion through `REF-025`. |
 | Legacy Scheduler and scheduler preferences | Frozen. No support and no tests. Candidate for deletion through `REF-025`. |
 | SMTP/email notifications | Frozen. No support and no tests. Candidate for deletion through `REF-025`. |
+| SAPI text-to-speech notifications | Frozen. No feature work and no tests. Keep only best-effort compile/runtime compatibility with installed Windows SAPI. |
 | First-run connection wizard | Frozen. No support and no tests. Candidate for deletion through `REF-025`. |
 | Splash screen | Frozen. No support and no tests. Candidate for deletion through `REF-025`. |
 | Legacy WebServer HTML templates and page UI | Frozen. No support and no tests. The supported surface is JSON REST and controller adapters only. |
