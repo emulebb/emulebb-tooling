@@ -414,8 +414,8 @@ The canonical workspace currently materializes these app worktrees:
   historical material under `docs\history`.
 - The public future-roadmap workflow is GitHub-primary after migration:
   `eMulebb/eMule` issues plus the public org-level `eMule BB Roadmap` project
-  own status, priority, release placement, ownership, discussion, and PR
-  linkage for migrated future-roadmap items.
+  own roadmap status, work type, priority, release placement, ownership,
+  discussion, and PR linkage for migrated future-roadmap items.
 - Local `docs\active\items\*.md` files with `workflow: github` are not workflow
   status authority. Their `status` front matter is legacy/taxonomy metadata
   until the broader active-doc model is migrated, and the linked GitHub issue

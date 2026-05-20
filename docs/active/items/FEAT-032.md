@@ -1,5 +1,7 @@
 ---
 id: FEAT-032
+workflow: github
+github_issue: https://github.com/eMulebb/eMule/issues/13
 title: NAT mapping modernization — keep MiniUPnP, drop WinServ, add PCP/NAT-PMP
 status: DEFERRED
 priority: Minor
@@ -9,6 +11,9 @@ milestone: ~
 created: 2026-04-20
 source: 2026-04-20 UPnP robustness review plus PCP/NAT-PMP dependency follow-through
 ---
+
+
+> Workflow status is tracked in GitHub: https://github.com/eMulebb/eMule/issues/13. This local document is retained as an engineering spec/evidence record.
 
 ## Summary
 

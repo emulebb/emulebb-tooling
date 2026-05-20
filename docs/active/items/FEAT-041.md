@@ -1,5 +1,7 @@
 ---
 id: FEAT-041
+workflow: github
+github_issue: https://github.com/eMulebb/eMule/issues/17
 title: Download Inspector automation for stale downloads and majority-name rename
 status: OPEN
 priority: Minor
@@ -9,6 +11,9 @@ milestone: ~
 created: 2026-04-25
 source: `analysis\emuleai` v1.4 release notes
 ---
+
+
+> Workflow status is tracked in GitHub: https://github.com/eMulebb/eMule/issues/17. This local document is retained as an engineering spec/evidence record.
 
 ## Summary
 

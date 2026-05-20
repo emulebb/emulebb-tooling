@@ -1,5 +1,7 @@
 ---
 id: FEAT-017
+workflow: github
+github_issue: https://github.com/eMulebb/eMule/issues/11
 title: DPI awareness — Per-Monitor V2 manifest + hardcoded pixel audit
 status: OPEN
 priority: Major
@@ -9,6 +11,9 @@ milestone: ~
 created: 2026-04-08
 source: AUDIT-WWMOD.md (WWMOD_010, P0 severity)
 ---
+
+
+> Workflow status is tracked in GitHub: https://github.com/eMulebb/eMule/issues/11. This local document is retained as an engineering spec/evidence record.
 
 ## Summary
 

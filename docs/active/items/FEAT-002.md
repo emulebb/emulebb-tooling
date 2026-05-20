@@ -1,5 +1,7 @@
 ---
 id: FEAT-002
+workflow: github
+github_issue: https://github.com/eMulebb/eMule/issues/7
 title: Kad SafeKad — evolve from coarse same-IP gate into layered trust model (CGNAT fix)
 status: OPEN
 priority: Major
@@ -9,6 +11,9 @@ milestone: ~
 created: 2026-04-08
 source: AUDIT-KAD.md (AUD_KAD_006, AUD_KAD_007)
 ---
+
+
+> Workflow status is tracked in GitHub: https://github.com/eMulebb/eMule/issues/7. This local document is retained as an engineering spec/evidence record.
 
 > Historical reference only: `stale-v0.72a-experimental-clean` and
 > `analysis\stale-v0.72a-experimental-clean` are retired reference sources, not

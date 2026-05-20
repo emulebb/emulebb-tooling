@@ -1,5 +1,7 @@
 ---
 id: FEAT-019
+workflow: github
+github_issue: https://github.com/eMulebb/eMule/issues/12
 title: Dark mode UI — system-aware Windows 10 dark theme integration
 status: OPEN
 priority: Minor
@@ -9,6 +11,9 @@ milestone: ~
 created: 2026-04-10
 source: eMuleAI (DarkMode.cpp/h, CDarkMode class, 2026)
 ---
+
+
+> Workflow status is tracked in GitHub: https://github.com/eMulebb/eMule/issues/12. This local document is retained as an engineering spec/evidence record.
 
 ## Summary
 

@@ -1,5 +1,7 @@
 ---
 id: FEAT-011
+workflow: github
+github_issue: https://github.com/eMulebb/eMule/issues/10
 title: CShield — integrate ED2K anti-leecher engine (44 bad-client categories)
 status: OPEN
 priority: Minor
@@ -9,6 +11,9 @@ milestone: ~
 created: 2026-04-08
 source: FEATURE-PEERS-BANS.md (FEAT_011)
 ---
+
+
+> Workflow status is tracked in GitHub: https://github.com/eMulebb/eMule/issues/10. This local document is retained as an engineering spec/evidence record.
 
 ## Summary
 

@@ -24,8 +24,8 @@ from github_roadmap_common import (
 
 
 PROJECT_FIELDS = {
-    "Status": ("SINGLE_SELECT", ["Triage", "Ready", "In Progress", "Blocked", "Deferred", "Done", "Won't Do"]),
-    "Type": ("SINGLE_SELECT", ["Bug", "Feature", "Refactor", "CI", "Planning"]),
+    "Roadmap Status": ("SINGLE_SELECT", ["Triage", "Ready", "In Progress", "Blocked", "Deferred", "Done", "Won't Do"]),
+    "Work Type": ("SINGLE_SELECT", ["Bug", "Feature", "Refactor", "CI", "Planning"]),
     "Priority": ("SINGLE_SELECT", ["Critical", "Major", "Minor", "Trivial"]),
     "Lane": (
         "SINGLE_SELECT",
@@ -409,8 +409,8 @@ def sync_project_fields(project_id: str, project_item_id: str, fields: dict[str,
     """Synchronize project fields for one roadmap item."""
 
     values = {
-        "Status": item.project_status,
-        "Type": item.project_type,
+        "Roadmap Status": item.project_status,
+        "Work Type": item.project_type,
         "Priority": item.priority,
         "Lane": item.lane,
         "Local ID": item.item_id,
