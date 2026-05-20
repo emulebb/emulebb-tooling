@@ -13,7 +13,7 @@ is:
 
 ## Start Here
 
-- active backlog and landed/open status:
+- active local backlog/spec and release status:
   [`docs/active/INDEX.md`](docs/active/INDEX.md)
 - long-form reference docs and topic map: [`docs/INDEX.md`](docs/INDEX.md)
 - historical-reference rules for the stale experimental branch:
@@ -26,7 +26,9 @@ is:
 - central workspace policy: [`docs/WORKSPACE_POLICY.md`](docs/WORKSPACE_POLICY.md)
 - documentation ownership policy: [`docs/DOCS_POLICY.md`](docs/DOCS_POLICY.md)
 - reference-doc index: [`docs/INDEX.md`](docs/INDEX.md)
-- active backlog index: [`docs/active/INDEX.md`](docs/active/INDEX.md)
+- active backlog/spec index: [`docs/active/INDEX.md`](docs/active/INDEX.md)
+- GitHub-primary future roadmap:
+  [`docs/active/FUTURE-ROADMAP.md`](docs/active/FUTURE-ROADMAP.md)
 - product guide: [`docs/reference/GUIDE-EMULEBB.md`](docs/reference/GUIDE-EMULEBB.md)
 - development guide and recurring product-doc refresh workflow:
   [`docs/reference/DEVELOPMENT-GUIDE.md`](docs/reference/DEVELOPMENT-GUIDE.md)
@@ -42,8 +44,8 @@ scripts that operate inside the canonical workspace.
 
 Documentation is intentionally organized by document role:
 
-- `docs/active/` = active revalidated backlog, release control, item evidence,
-  execution plans, and dated review trail
+- `docs/active/` = active revalidated local specs, release control, item
+  evidence, execution plans, and dated review trail
 - `docs/architecture/`, `docs/rest/`, and `docs/reference/` = durable technical
   and product reference
 - `docs/dependencies/DEP-STATUS.md` = current dependency decision record
@@ -52,7 +54,9 @@ Documentation is intentionally organized by document role:
 - `docs/ideas/` = exploratory proposals only, not active implementation plans
 
 If a status statement in `docs/` conflicts with `docs/active`, treat
-`docs/active` as authoritative for the current backlog state.
+`docs/active` as authoritative for the current local backlog state. For
+future-roadmap items marked `workflow: github`, the linked GitHub issue and the
+public `eMule BB Roadmap` org project are authoritative for workflow state.
 
 The central policy defaults to low-drift hardening and bug-fix work. Major
 behavioral changes are exception work and must be explicitly justified rather
@@ -105,6 +109,11 @@ Normalization helpers live here too:
 - `hooks\pre-commit` is the shared workspace pre-commit hook entrypoint
 - `python -m emule_workspace sync` configures repo-local `core.hooksPath` to
   use that shared hook
+- `scripts\github-roadmap-sync.py` previews or applies the GitHub-primary
+  future-roadmap import to `eMulebb/eMule` issues and the `eMule BB Roadmap`
+  project.
+- `scripts\github-roadmap-check.py` validates local GitHub roadmap metadata,
+  and can query GitHub when run with `--github`.
 
 Release translation rule: preserve stock/eMule translations as they are; add
 or refine only new eMule BB labels, and make those translations meaningful for

@@ -5,7 +5,7 @@ path, not by filename alone.
 
 ## Active Docs
 
-`docs/active/` owns current backlog and release truth:
+`docs/active/` owns current local backlog/spec and release truth:
 
 - `docs/active/INDEX.md`: active backlog dashboard and item tables
 - `docs/active/RELEASE-0.7.3*.md`: Beta release control, checklist, runbook,
@@ -16,6 +16,14 @@ path, not by filename alone.
 
 If another doc conflicts with `docs/active/`, `docs/active/` wins for current
 status.
+
+For future-roadmap items migrated to GitHub, workflow status is an exception:
+the linked `eMulebb/eMule` issue and the public org-level `eMule BB Roadmap`
+project own current state, priority, release placement, discussion, and PR
+linkage. The local active item doc remains the engineering spec/evidence record.
+Such files carry `workflow: github` and `github_issue:` front matter. Their
+legacy `status:` field is retained only for the current taxonomy tooling until
+the active-doc model is migrated more broadly.
 
 ## Reference Docs
 
@@ -55,6 +63,9 @@ Examples: CMake adoption and Boost adoption.
 - Every actionable active task must have its own item ID under
   `docs/active/items/`; release dashboards and plans should point to item IDs
   instead of carrying anonymous task rows.
+- Future-roadmap items promoted after GitHub migration must also have a
+  GitHub issue in `eMulebb/eMule` and membership in the `eMule BB Roadmap`
+  project before implementation starts.
 - Do not create new top-level Markdown files in `docs/` unless they are policy
   or navigation entry points.
 - Add new exploratory proposals under `docs/ideas/` with an explicit
@@ -98,3 +109,8 @@ Legacy title-case status spellings in historical files are provenance only.
 Use `python scripts\docs-item-taxonomy-check.py` after item or active-index
 changes to validate item IDs, statuses, duplicate front matter IDs, and active
 index consistency.
+
+Use `python scripts\github-roadmap-sync.py` to preview GitHub-primary
+future-roadmap imports. Use `python scripts\github-roadmap-check.py` after
+migration to validate local GitHub metadata; pass `--github` when the local
+GitHub token has `project` scope and network access.

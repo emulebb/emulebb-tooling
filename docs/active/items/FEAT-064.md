@@ -20,6 +20,10 @@ The roadmap is intentionally selective: eMule BB stays a Windows MFC desktop
 client with REST support, and rejected ideas are recorded so they do not drift
 back into the backlog accidentally.
 
+After GitHub migration, this local document is the engineering scope record.
+Workflow state for the umbrella and promoted slices is tracked in GitHub issues
+and the public `eMule BB Roadmap` org project.
+
 ## Approved Lanes
 
 - Connectivity modernization: IPv6 dual-stack and NAT/LowID relief.
@@ -48,7 +52,8 @@ back into the backlog accidentally.
 - [x] Active future roadmap exists under `docs/active/`.
 - [x] Approved lanes are grouped instead of exploded into many new item files.
 - [x] Rejected scope is written down explicitly.
-- [ ] Any future promoted lane gets its own reviewed item and validation plan.
+- [ ] Any future promoted lane gets its own reviewed item, GitHub issue,
+      project item, and validation plan.
 
 ## Validation
 

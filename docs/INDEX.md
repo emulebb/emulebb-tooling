@@ -14,13 +14,16 @@ This directory is the single Markdown home for the tooling repo. Use
 | Repo-level navigation | [../README](../README.md) |
 
 If a status claim outside `docs/active/` conflicts with `docs/active/`, treat
-`docs/active/` as authoritative for current backlog and release state.
+`docs/active/` as authoritative for current local backlog and release state.
+For future-roadmap items marked `workflow: github`, the linked GitHub issue and
+the public `eMule BB Roadmap` org project are authoritative for workflow state.
 
 ## Active Work
 
 | Document | Description |
 |---|---|
 | [active/INDEX](active/INDEX.md) | Active backlog dashboard and item tables |
+| [active/FUTURE-ROADMAP](active/FUTURE-ROADMAP.md) | GitHub-primary post-beta future roadmap |
 | [active/RELEASE-0.7.3](active/RELEASE-0.7.3.md) | Beta release control document |
 | [active/RELEASE-0.7.3-CHECKLIST](active/RELEASE-0.7.3-CHECKLIST.md) | Beta release operator checklist |
 | [active/RELEASE-0.7.3-RUNBOOK](active/RELEASE-0.7.3-RUNBOOK.md) | Beta release operator runbook |
@@ -30,6 +33,13 @@ If a status claim outside `docs/active/` conflicts with `docs/active/`, treat
 | [history/reviews/](history/reviews/) | Dated revalidation reviews |
 | [history/audits/](history/audits/) | Historical broad audit reports |
 | [history/release-0.7.3/](history/release-0.7.3/) | Superseded beta gate evidence, release audit snapshots, and old cluster plans |
+
+GitHub-primary future-roadmap helper scripts live under `scripts/`:
+
+- `github-roadmap-sync.py` previews or applies the first-rollout import to
+  `eMulebb/eMule` issues and the `eMule BB Roadmap` project.
+- `github-roadmap-check.py` validates local GitHub metadata, and can query
+  GitHub when run with `--github`.
 
 ## Reference Families
 

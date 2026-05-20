@@ -6,6 +6,18 @@ the backlog. The purpose is to keep future work focused on the Windows MFC app
 with REST support, while explicitly excluding ideas that belong elsewhere or no
 longer match the product direction.
 
+## GitHub Workflow Authority
+
+Future-roadmap workflow is GitHub-primary after migration. Promoted roadmap
+slices are tracked as issues in `eMulebb/eMule` and as items in the public
+`eMule BB Roadmap` org project. Local item docs remain engineering specs and
+evidence records; for files marked `workflow: github`, current status, priority,
+release placement, discussion, ownership, and PR linkage live in GitHub.
+
+Use `python scripts\github-roadmap-sync.py` from `repos\eMule-tooling` to preview
+or apply the initial GitHub import, and use
+`python scripts\github-roadmap-check.py` to validate migrated metadata.
+
 ## Product Boundary
 
 eMule BB remains a Windows MFC desktop client with a first-class UI, tray
@@ -75,6 +87,9 @@ External references used as directional signals, not implementation authority:
 
 - This roadmap is grouped intentionally. Do not create a new detailed `FEAT-*`
   file from a lane until the user approves that specific slice.
+- After GitHub migration, a promoted future-roadmap slice must have a
+  `eMulebb/eMule` issue and `eMule BB Roadmap` project item before
+  implementation starts.
 - Before implementation, revalidate the slice against current `main`, current
   dependency pins, and `WORKSPACE_POLICY.md`.
 - Prefer narrow, observable improvements over broad behavioral rewrites.

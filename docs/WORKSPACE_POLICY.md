@@ -22,6 +22,9 @@ Every workspace session starts from this contract:
   this document.
 - Revalidate backlog and release docs against current `main`, current
   dependency pins, and this policy before implementation.
+- For future-roadmap items that carry `workflow: github`, treat the linked
+  GitHub issue and the `eMule BB Roadmap` project as the authoritative workflow
+  state. The local item doc is retained as engineering spec and evidence.
 
 Directive precedence is:
 
@@ -176,6 +179,9 @@ The canonical workspace currently materializes these app worktrees:
   coherent outcome.
 - When a change spans multiple repos, create and verify those commits sequentially; do not launch parallel commits.
 - Commit messages for feature, bug, refactor, and CI backlog work must include the tracked item id such as `BUG-017`, `FEAT-015`, `REF-021`, or `CI-003`.
+- GitHub-tracked future-roadmap work should keep the stable local item id in
+  commit messages and PR text, and should also link the GitHub issue when the
+  work closes or materially advances that issue.
 - Push each completed `main` commit to its `origin/main` before starting the
   next unrelated slice unless the user explicitly asks to hold local commits.
 
@@ -406,6 +412,14 @@ The canonical workspace currently materializes these app worktrees:
   active docs under `docs\active`, exploratory ideas under `docs\ideas`,
   current reference material under role-specific folders, and stale or
   historical material under `docs\history`.
+- The public future-roadmap workflow is GitHub-primary after migration:
+  `eMulebb/eMule` issues plus the public org-level `eMule BB Roadmap` project
+  own status, priority, release placement, ownership, discussion, and PR
+  linkage for migrated future-roadmap items.
+- Local `docs\active\items\*.md` files with `workflow: github` are not workflow
+  status authority. Their `status` front matter is legacy/taxonomy metadata
+  until the broader active-doc model is migrated, and the linked GitHub issue
+  wins on current state.
 - Historical handoff notes live under `repos\eMule-tooling\docs\history`.
   Create or refresh a current handoff only when terminating a session or when
   the user explicitly asks for one. Detailed durable analysis belongs in
@@ -418,6 +432,9 @@ The canonical workspace currently materializes these app worktrees:
 - Use `EMULE_WORKSPACE_ROOT` style references instead of machine-specific
   absolute paths in active docs.
 - Backlog and planning docs are not authoritative by themselves.
+- For GitHub-migrated future-roadmap work, backlog and planning docs are
+  supporting specs only; current state is read from the linked GitHub issue and
+  the `eMule BB Roadmap` project.
 - Before implementing a backlog item, revalidate it against current `main`,
   current dependency pins, and the current workspace policy.
 - The documentation and normalization requirements in this policy are mandatory

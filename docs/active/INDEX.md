@@ -1,7 +1,14 @@
 # eMule Active Backlog — Issue Index
 
-This directory is the active backlog and revalidation layer for this repo. Use
-[`../INDEX.md`](../INDEX.md) for long-form background and reference reading.
+This directory is the active local backlog/spec and revalidation layer for this
+repo. Use [`../INDEX.md`](../INDEX.md) for long-form background and reference
+reading.
+
+Future-roadmap workflow is GitHub-primary after migration: `eMulebb/eMule`
+issues and the public `eMule BB Roadmap` org project own current status,
+priority, release placement, discussion, ownership, and PR linkage for migrated
+items. Local item docs marked `workflow: github` are engineering spec/evidence
+records, not workflow status authority.
 
 > Historical reference only: `stale-v0.72a-experimental-clean` and
 > `analysis\stale-v0.72a-experimental-clean` are retired reference sources, not
@@ -28,6 +35,8 @@ release target.
 **Frozen surfaces:** [FROZEN-SURFACES](FROZEN-SURFACES.md)
 **Beta controller surface matrix:** [CONTROLLER-SURFACE-MATRIX](CONTROLLER-SURFACE-MATRIX.md)
 **Future release roadmap:** [FUTURE-ROADMAP](FUTURE-ROADMAP.md)
+**Future roadmap workflow:** GitHub issues in `eMulebb/eMule` plus the
+`eMule BB Roadmap` org project are authoritative for migrated roadmap items.
 **Beta-release execution plan:** [RELEASE-0.7.3-EXECUTION-PLAN](plans/RELEASE-0.7.3-EXECUTION-PLAN.md)
 **Historical beta evidence:** [release-0.7.3](../history/release-0.7.3/)
 **Historical reviews:** [reviews](../history/reviews/)
@@ -49,9 +58,11 @@ Current release trail:
 **Status values:** OPEN / IN_PROGRESS / BLOCKED / DEFERRED / PASSED / DONE /
 WONT_DO
 
-**Directory role:** `docs/active/` owns current backlog status, release
-control, active item evidence, and the current release execution plan. Closed
-item records and dated review provenance live under `docs/history/`.
+**Directory role:** `docs/active/` owns current local specs, release control,
+active item evidence, and the current release execution plan. Closed item
+records and dated review provenance live under `docs/history/`. For
+future-roadmap items marked `workflow: github`, current workflow state lives in
+GitHub.
 
 **Important:** Items marked OPEN, IN_PROGRESS, BLOCKED, or DEFERRED link to
 active item records. Items marked DONE, PASSED, or WONT_DO link to archived
