@@ -15,3 +15,15 @@
 .md-typeset code {
   word-break: break-word;
 }
+
+@media screen and (min-width: 1600px) {
+  .md-grid {
+    max-width: 88rem;
+  }
+}
+
+@media screen and (min-width: 2200px) {
+  .md-grid {
+    max-width: 104rem;
+  }
+}
