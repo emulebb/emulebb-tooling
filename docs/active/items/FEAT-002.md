@@ -39,6 +39,13 @@ degrading route diversity unintentionally.
 A contact from an already-seen IP is rejected at routing admission. There is
 no probation, no port-differentiation, no density-aware fallback.
 
+2026-05-21 upstream revalidation: aMule issue #668 raised the same question for
+its Kad routing table, specifically whether one KadID per public IP and ten per
+/24 remain appropriate under widespread CGNAT. Current eMule BB `main` still has
+the same kind of hard gate in `srchybrid/kademlia/routing/RoutingBin.cpp`
+(`MAX_CONTACTS_IP` and `MAX_CONTACTS_SUBNET`), so this issue remains the
+correct backlog home for that concern.
+
 ## Proposed Layered Trust Model (AUD_KAD_007)
 
 Replace the hard gate with a graduated policy:

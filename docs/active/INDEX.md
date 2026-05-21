@@ -19,9 +19,9 @@ records, not workflow status authority.
 ## Current Snapshot
 
 **Source of truth:** `EMULE_WORKSPACE_ROOT\workspaces\workspace\app\eMule-main` (`main` branch)  
-**Current non-done count:** `64`
-**Latest release-doc refresh:** 2026-05-17
-**Non-done by status:** `39` OPEN, `8` IN_PROGRESS, `17` DEFERRED, `0` BLOCKED.
+**Current non-done count:** `71`
+**Latest release-doc refresh:** 2026-05-21
+**Non-done by status:** `45` OPEN, `8` IN_PROGRESS, `18` DEFERRED, `0` BLOCKED.
 **Backlog counts:** item tables below are authoritative.
 **Beta 0.7.3 relevance:** Most non-done items below are future or deferred work;
 current beta gate and proof status is controlled by [RELEASE-0.7.3](RELEASE-0.7.3.md).
@@ -203,6 +203,7 @@ topology.
 | [BUG-112](../history/items/BUG-112.md) | Critical | WONT_DO | WebServer/qBit session tokens need CSPRNG-backed generation |
 | [BUG-114](items/BUG-114.md) | Minor | IN_PROGRESS | Prevent Standby can leave Windows sleep prevention asserted after disable |
 | [BUG-115](../history/items/BUG-115.md) | Minor | DONE | Tray left-click skips MiniMule and restores maximized windows as normal |
+| [BUG-117](items/BUG-117.md) | Minor | DEFERRED | Audit Year-2038-sensitive persisted and runtime timestamps |
 
 `BUG-103` through `BUG-110` were superseded internal post-tag evidence labels,
 not active item docs.
@@ -248,6 +249,8 @@ not active item docs.
 | [REF-040](../history/items/REF-040.md) | Minor | DONE | Harden external UnRAR DLL loading |
 | [REF-041](../history/items/REF-041.md) | Minor | DONE | Move remaining active app DLL probes to LoadLibraryEx |
 | [REF-042](items/REF-042.md) | Minor | OPEN | Consolidate WinInet download helpers and review URL shortcut intake |
+| [REF-043](items/REF-043.md) | Minor | OPEN | Drop the legacy HTML Web Interface and keep REST as the supported controller surface |
+| [REF-044](items/REF-044.md) | Minor | OPEN | Remove remaining import-parts residue and keep legacy import flows retired |
 
 ---
 
@@ -339,7 +342,10 @@ not active item docs.
 | [FEAT-064](items/FEAT-064.md) | Minor | OPEN | Curated post-0.7.3 future release roadmap |
 | [FEAT-065](../history/items/FEAT-065.md) | Minor | DONE | Polish the native MiniMule tray popup |
 | [FEAT-066](../history/items/FEAT-066.md) | Minor | DONE | Replace MiniMule chrome with table and speed chart |
-| [FEAT-067](items/FEAT-067.md) | Minor | OPEN | Filename mojibake repair for search results and download intake |
+| [FEAT-071](items/FEAT-071.md) | Minor | OPEN | Filename mojibake repair for search results and download intake |
+| [FEAT-068](items/FEAT-068.md) | Minor | OPEN | Bound REST shared-files memory use for very large libraries |
+| [FEAT-069](items/FEAT-069.md) | Minor | OPEN | Shared-file include and exclude pattern rules |
+| [FEAT-070](items/FEAT-070.md) | Minor | OPEN | Add targeted client UserHash and upload-lifecycle diagnostics |
 
 ---
 
