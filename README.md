@@ -136,6 +136,8 @@ python -m mkdocs serve
 Set `$env:NO_MKDOCS_2_WARNING='1'`, then use
 `python -m mkdocs build --strict` for the same local site build gate used by
 CI. The generated site is written under `.local\mkdocs-site`.
+Published documentation is served from
+`https://emulebb.github.io/eMule-tooling/`.
 
 Release translation rule: preserve stock/eMule translations as they are; add
 or refine only new eMule BB labels, and make those translations meaningful for

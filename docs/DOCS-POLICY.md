@@ -145,4 +145,5 @@ Use MkDocs for browser-formatted documentation:
   `$env:NO_MKDOCS_2_WARNING='1'; python -m mkdocs build --strict`
 
 Generated HTML belongs under `.local/mkdocs-site` and must not be committed.
-GitHub Pages publishing is owned by `.github/workflows/docs-site.yml`.
+GitHub Pages publishing is owned by `.github/workflows/docs-site.yml`; the
+rendered site URL is `https://emulebb.github.io/eMule-tooling/`.

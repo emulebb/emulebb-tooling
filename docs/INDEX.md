@@ -91,7 +91,8 @@ Use `python -m mkdocs build --strict` for CI-equivalent local validation. The
 Material theme emits a current MkDocs 2.0 compatibility notice as a warning, so
 set `$env:NO_MKDOCS_2_WARNING='1'` before strict local builds. The generated
 HTML is written to `.local/mkdocs-site` and deployed to GitHub Pages by
-`.github/workflows/docs-site.yml` on `main`.
+`.github/workflows/docs-site.yml` on `main` at
+`https://emulebb.github.io/eMule-tooling/`.
 
 ## Exploratory Ideas
 
