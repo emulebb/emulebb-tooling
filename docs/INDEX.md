@@ -99,11 +99,16 @@ HTML is written to `.local/mkdocs-site` and deployed to GitHub Pages by
 | Document | Description |
 |---|---|
 | [ideas/IDEA-AMULE-WATCHLIST](ideas/IDEA-AMULE-WATCHLIST.md) | Exploratory aMule reference watchlist; not an active plan |
-| [ideas/IDEA-BOOST](ideas/IDEA-BOOST.md) | Exploratory Boost/POCO adoption idea; not an active plan |
-| [ideas/IDEA-CMAKE](ideas/IDEA-CMAKE.md) | Exploratory CMake/Ninja adoption idea; not an active plan |
 | [ideas/IDEA-MODERNIZATION-2026](ideas/IDEA-MODERNIZATION-2026.md) | Historical modernization roadmap idea; not an active plan |
 | [ideas/IDEA-IPV6-KAD-NETWORK](ideas/IDEA-IPV6-KAD-NETWORK.md) | Exploratory IPv6-native Kad network design inspired by qBittorrent/libtorrent dual-stack DHT state separation; not an active plan |
 | [ideas/IDEA-RESTRUCTURE](ideas/IDEA-RESTRUCTURE.md) | Exploratory source-structure idea; not an active plan |
+
+## Abandoned Ideas
+
+| Document | Description |
+|---|---|
+| [history/ideas/IDEA-BOOST](history/ideas/IDEA-BOOST.md) | Abandoned Boost/POCO adoption exploration; provenance only |
+| [history/ideas/IDEA-CMAKE](history/ideas/IDEA-CMAKE.md) | Abandoned CMake/Ninja/vcpkg adoption exploration; provenance only |
 
 ## Notes
 

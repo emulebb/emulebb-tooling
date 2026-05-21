@@ -142,8 +142,8 @@ closure and revalidation flow.
 The following tracks stay outside the first beta release unless a later
 release-readiness review promotes a concrete blocker:
 
-- exploratory Boost and CMake adoption ideas: `REF-008` through `REF-014`,
-  `CI-001`
+- abandoned Boost/POCO and CMake/Ninja/vcpkg adoption ideas: `REF-008`
+  through `REF-014`, `CI-001`
 - broad CI/toolchain migration: `CI-002` through `CI-007`, `CI-010`
 - dependency upgrades: `REF-028`, `REF-034`
 - broad networking work: `REF-029`, `REF-030`, `FEAT-018`, `FEAT-035`,

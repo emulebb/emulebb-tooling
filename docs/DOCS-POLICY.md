@@ -45,7 +45,10 @@ active implementation plans and must not be treated as current release scope or
 current branch direction unless a future active item explicitly promotes a
 specific slice.
 
-Examples: CMake adoption and Boost adoption.
+Examples: IPv6 Kad experiments and source-structure proposals.
+
+Abandoned exploratory proposals move to `docs/history/ideas/` and are retained
+as provenance only.
 
 ## Writing Rules
 

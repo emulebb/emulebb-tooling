@@ -1,11 +1,11 @@
-# IDEA-CMAKE — CMake / Ninja / vcpkg Adoption Exploration
+# IDEA-CMAKE - Abandoned CMake / Ninja / vcpkg Adoption Exploration
 
-> Exploratory only. This is not an active implementation plan, not Release 1
-> scope, and not current branch direction. The supported build entrypoint
-> remains `python -m emule_workspace` unless a future `docs/active/`
-> item explicitly promotes a narrow build-system slice.
+> Abandoned historical idea. This is not an active implementation plan, not
+> Release 1 scope, and not current branch direction. Operator decision on
+> 2026-05-21 closed the linked backlog record as `WONT_DO`. The supported build
+> entrypoint remains `python -m emule_workspace`.
 > Archived sections below preserve migration wording from the original note;
-> read them as option analysis, not scheduled work.
+> read them as provenance, not scheduled work.
 
 **Explored target stack:** CMake 3.25+ · Ninja · MSVC cl.exe (v143) · vcpkg · VS Code
 **Archived assumption:** Windows-only, no VS IDE, no direct MSBuild workflow.

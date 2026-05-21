@@ -19,9 +19,9 @@ records, not workflow status authority.
 ## Current Snapshot
 
 **Source of truth:** `EMULE_WORKSPACE_ROOT\workspaces\workspace\app\eMule-main` (`main` branch)  
-**Current non-done count:** `71`
+**Current non-done count:** `63`
 **Latest release-doc refresh:** 2026-05-21
-**Non-done by status:** `45` OPEN, `8` IN_PROGRESS, `18` DEFERRED, `0` BLOCKED.
+**Non-done by status:** `45` OPEN, `8` IN_PROGRESS, `10` DEFERRED, `0` BLOCKED.
 **Backlog counts:** item tables below are authoritative.
 **Beta 0.7.3 relevance:** Most non-done items below are future or deferred work;
 current beta gate and proof status is controlled by [RELEASE-0.7.3](RELEASE-0.7.3.md).
@@ -255,22 +255,22 @@ not active item docs.
 
 ---
 
-## Boost Adoption Ideas (exploratory only — not planned)
+## Abandoned Boost/POCO Ideas (historical only)
 
-> These items are exploratory idea material from
-> [IDEA-BOOST](../ideas/IDEA-BOOST.md). There is no active plan to adopt Boost
-> for beta `0.7.3` or current mainline work. Promote only a narrow future slice if
-> explicitly approved.
+> These items were closed from the abandoned
+> [IDEA-BOOST](../history/ideas/IDEA-BOOST.md) exploration by operator
+> decision on 2026-05-21. They remain listed here as historical context only;
+> do not promote this lane without a new approved active item.
 
 | ID | Priority | Status | Title |
 |----|----------|--------|-------|
-| [REF-008](items/REF-008.md) | Major | DEFERRED | Replace CAsyncSocketEx custom WinSock wrapper — Boost.Asio or Windows IOCP |
-| [REF-009](items/REF-009.md) | Major | DEFERRED | Replace CCriticalSection + CWinThread + Win32 events — std::mutex/thread or Boost |
-| [REF-010](items/REF-010.md) | Major | DEFERRED | Replace raw owned pointers with std::unique_ptr / std::shared_ptr |
-| [REF-011](items/REF-011.md) | Minor | DEFERRED | Replace GetTickCount / SetTimer with type-safe monotonic clock — std::chrono or Boost |
-| [REF-012](items/REF-012.md) | Minor | DEFERRED | Replace CFile + CString path concatenation — std::filesystem or boost::filesystem |
-| [REF-013](items/REF-013.md) | Minor | DEFERRED | Replace CString + unsafe sprintf with safe string formatting — std or Boost |
-| [REF-014](items/REF-014.md) | Minor | DEFERRED | Replace custom CRing<T> circular buffer — fix in place, std::deque, or boost::circular_buffer |
+| [REF-008](../history/items/REF-008.md) | Major | WONT_DO | Replace CAsyncSocketEx custom WinSock wrapper — Boost.Asio or Windows IOCP |
+| [REF-009](../history/items/REF-009.md) | Major | WONT_DO | Replace CCriticalSection + CWinThread + Win32 events — std::mutex/thread or Boost |
+| [REF-010](../history/items/REF-010.md) | Major | WONT_DO | Replace raw owned pointers with std::unique_ptr / std::shared_ptr |
+| [REF-011](../history/items/REF-011.md) | Minor | WONT_DO | Replace GetTickCount / SetTimer with type-safe monotonic clock — std::chrono or Boost |
+| [REF-012](../history/items/REF-012.md) | Minor | WONT_DO | Replace CFile + CString path concatenation — std::filesystem or boost::filesystem |
+| [REF-013](../history/items/REF-013.md) | Minor | WONT_DO | Replace CString + unsafe sprintf with safe string formatting — std or Boost |
+| [REF-014](../history/items/REF-014.md) | Minor | WONT_DO | Replace custom CRing<T> circular buffer — fix in place, std::deque, or boost::circular_buffer |
 
 ---
 
@@ -354,7 +354,7 @@ not active item docs.
 
 | ID | Priority | Status | Title |
 |----|----------|--------|-------|
-| [CI-001](items/CI-001.md) | Major | DEFERRED | CMake adoption exploration — replace emule.vcxproj with CMakeLists.txt + Ninja |
+| [CI-001](../history/items/CI-001.md) | Major | WONT_DO | CMake adoption exploration — replace emule.vcxproj with CMakeLists.txt + Ninja |
 | [CI-002](items/CI-002.md) | Minor | OPEN | clang-format — enforce consistent code formatting |
 | [CI-003](../history/items/CI-003.md) | Minor | DONE | MSVC compiler hardening — SDL, guard:cf, /WX (Phase A done: SDL+CFG in commit `5557216`) |
 | [CI-004](items/CI-004.md) | Minor | OPEN | clang-tidy — integrate static analysis into build and CI |

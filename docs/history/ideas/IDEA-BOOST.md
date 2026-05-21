@@ -1,11 +1,10 @@
-# IDEA-BOOST — Boost / POCO Adoption Exploration
+# IDEA-BOOST - Abandoned Boost / POCO Adoption Exploration
 
-> Exploratory only. This is not an active implementation plan, not Release 1
-> scope, and not current branch direction. Treat it as historical analysis and
-> idea material unless a future `docs/active/` item explicitly promotes a
-> narrow slice.
+> Abandoned historical idea. This is not an active implementation plan, not
+> Release 1 scope, and not current branch direction. Operator decision on
+> 2026-05-21 closed the linked backlog records as `WONT_DO`.
 > Archived sections below preserve migration wording from the original note;
-> read them as option analysis, not scheduled work.
+> read them as provenance, not scheduled work.
 
 > Analysis based on the full 611-file C++ codebase at `srchybrid/`.  
 > Date: 2026-04-08

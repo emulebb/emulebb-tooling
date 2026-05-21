@@ -70,13 +70,14 @@ nav:
       - Status: dependencies/DEP-STATUS.md
   - Ideas:
       - aMule Watchlist: ideas/IDEA-AMULE-WATCHLIST.md
-      - Boost Adoption: ideas/IDEA-BOOST.md
-      - CMake Adoption: ideas/IDEA-CMAKE.md
       - Kad Protocol Modernization: ideas/IDEA-KAD-PROTOCOL-MODERNIZATION.md
       - IPv6 Kad Network: ideas/IDEA-IPV6-KAD-NETWORK.md
       - Modernization: ideas/IDEA-MODERNIZATION-2026.md
       - Restructure: ideas/IDEA-RESTRUCTURE.md
-  - Historical References: HISTORICAL-REFERENCES.md
+  - History:
+      - Historical References: HISTORICAL-REFERENCES.md
+      - Abandoned Boost / POCO Adoption: history/ideas/IDEA-BOOST.md
+      - Abandoned CMake / Ninja / vcpkg Adoption: history/ideas/IDEA-CMAKE.md
 
 not_in_nav: |
   /HELP.md
