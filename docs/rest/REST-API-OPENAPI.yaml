@@ -1825,6 +1825,16 @@ components:
             data:
               type: object
               additionalProperties: false
+              required:
+                - app
+                - status
+                - transfers
+                - sharedFiles
+                - uploads
+                - uploadQueue
+                - servers
+                - kad
+                - logs
               properties:
                 app:
                   $ref: "#/components/schemas/App"
@@ -2333,6 +2343,7 @@ components:
             data:
               type: object
               additionalProperties: false
+              required: [transfer, parts, sources]
               properties:
                 transfer:
                   $ref: "#/components/schemas/Transfer"
@@ -3353,6 +3364,30 @@ components:
     SearchResult:
       type: object
       additionalProperties: false
+      required:
+        - searchId
+        - method
+        - type
+        - hash
+        - name
+        - sizeBytes
+        - sources
+        - completeSources
+        - fileType
+        - complete
+        - knownType
+        - directory
+        - clientIp
+        - clientPort
+        - serverIp
+        - serverPort
+        - clientCount
+        - serverCount
+        - kadPublishInfo
+        - rating
+        - hasComment
+        - spam
+        - evidence
       properties:
         searchId:
           type: string
