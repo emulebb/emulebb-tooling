@@ -1407,6 +1407,7 @@ components:
                 - METHOD_NOT_ALLOWED
                 - NOT_FOUND
                 - INVALID_STATE
+                - SERVICE_BUSY
                 - EMULE_UNAVAILABLE
                 - EMULE_ERROR
             message:
