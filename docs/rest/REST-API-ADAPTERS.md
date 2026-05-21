@@ -55,6 +55,10 @@ Unsupported qBittorrent families remain outside the adapter contract: RSS,
 tracker editing, peer management, sync, logging, ban lists, global speed
 controls, and full content-layout operations.
 
+Hash mutation routes accept one to 100 pipe-delimited 32-character eD2K hashes
+in qBittorrent's `hashes` form field. The `hashes=all` value is intentionally
+not supported by the Arr adapter.
+
 ## Torznab `/indexer/emulebb/api`
 
 The Torznab adapter is a Prowlarr/Radarr/Sonarr search bridge. It emits XML and
