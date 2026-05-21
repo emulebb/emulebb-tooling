@@ -408,7 +408,7 @@ The canonical workspace currently materializes these app worktrees:
   `repos\eMule-tooling`.
 - All Markdown documentation belongs under `repos\eMule-tooling\docs`; do not
   create a parallel active-doc tree outside `docs`.
-- `repos\eMule-tooling\docs\DOCS_POLICY.md` owns the documentation taxonomy:
+- `repos\eMule-tooling\docs\DOCS-POLICY.md` owns the documentation taxonomy:
   active docs under `docs\active`, exploratory ideas under `docs\ideas`,
   current reference material under role-specific folders, and stale or
   historical material under `docs\history`.

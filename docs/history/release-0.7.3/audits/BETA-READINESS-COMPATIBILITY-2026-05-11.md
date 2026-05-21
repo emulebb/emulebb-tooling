@@ -11,7 +11,7 @@ Release blocker. The active release-intent branch is not aligned with current `m
 ## Review Checklist
 
 - [x] Read workspace root `AGENTS.md`.
-- [x] Read `repos/eMule-tooling/docs/WORKSPACE_POLICY.md`.
+- [x] Read `repos/eMule-tooling/docs/WORKSPACE-POLICY.md`.
 - [x] Read repo-local `AGENTS.md` files for the app, build, test, and tooling repos after the workspace policy.
 - [x] Ran `git status --short --branch` before drawing conclusions for `workspaces/v0.72a/app/eMule-main`, `workspaces/v0.72a/app/eMule-v0.72a-community`, `workspaces/v0.72a/app/eMule-v0.72a-broadband`, `repos/eMule-build`, `repos/eMule-build-tests`, and `repos/eMule-tooling`.
 - [x] Compared `main` against `release/v0.72a-community` for changed-surface scale and compatibility-sensitive files.
@@ -29,7 +29,7 @@ Severity: Release blocker
 
 Affected area: Release branch policy, beta tag source, packaged-code identity, update-check identity.
 
-Evidence: `repos/eMule-tooling/docs/WORKSPACE_POLICY.md:92` states that `main` is not a release branch, and `docs/WORKSPACE_POLICY.md:93` plus `docs/WORKSPACE_POLICY.md:103` identify `release/v0.72a-broadband` as the only release-intent branch. `git rev-list --left-right --count release/v0.72a-broadband...main` in `workspaces/v0.72a/app/eMule-main` returned `3	308`. The release-intent branch has only `57dd9f7`, `e2e991a`, and `d545177` beyond `main`, while `main` has 308 commits beyond it. `git show release/v0.72a-broadband:srchybrid/Version.h` shows no `MOD_RELEASE_*` beta identity, while current `main` has `MOD_RELEASE_PRODUCT_NAME`, `MOD_RELEASE_TAG_PREFIX`, and `MOD_RELEASE_VERSION_*` set to `eMule BB`, `emule-bb-v`, and `0.7.3` in `srchybrid/Version.h:36` through `srchybrid/Version.h:47`. `git diff --name-status release/v0.72a-broadband..main -- srchybrid/Version.h srchybrid/ReleaseUpdateCheckSeams.h srchybrid/ReleaseUpdateCheck.cpp srchybrid/emule.rc` shows the release-update implementation and eMule BB resource branding are absent from the release-intent branch.
+Evidence: `repos/eMule-tooling/docs/WORKSPACE-POLICY.md:92` states that `main` is not a release branch, and `docs/WORKSPACE-POLICY.md:93` plus `docs/WORKSPACE-POLICY.md:103` identify `release/v0.72a-broadband` as the only release-intent branch. `git rev-list --left-right --count release/v0.72a-broadband...main` in `workspaces/v0.72a/app/eMule-main` returned `3	308`. The release-intent branch has only `57dd9f7`, `e2e991a`, and `d545177` beyond `main`, while `main` has 308 commits beyond it. `git show release/v0.72a-broadband:srchybrid/Version.h` shows no `MOD_RELEASE_*` beta identity, while current `main` has `MOD_RELEASE_PRODUCT_NAME`, `MOD_RELEASE_TAG_PREFIX`, and `MOD_RELEASE_VERSION_*` set to `eMule BB`, `emule-bb-v`, and `0.7.3` in `srchybrid/Version.h:36` through `srchybrid/Version.h:47`. `git diff --name-status release/v0.72a-broadband..main -- srchybrid/Version.h srchybrid/ReleaseUpdateCheckSeams.h srchybrid/ReleaseUpdateCheck.cpp srchybrid/emule.rc` shows the release-update implementation and eMule BB resource branding are absent from the release-intent branch.
 
 Impact: Tagging `release/v0.72a-broadband` now would not tag the current beta product; tagging `main` would conflict with current policy. Either path can produce a public beta whose tag, binary version, GitHub update-check rules, and release notes do not describe the same code. That is a first-beta publication blocker, not only a documentation issue.
 
@@ -52,7 +52,7 @@ Severity: High
 
 Affected area: Packaging orchestration, release asset provenance, tag/package consistency.
 
-Evidence: `repos/eMule-build/emule_workspace/release.py:34` calls `ensure_canonical_app_anchor(layout)`, then `release.py:35` hardcodes `app_root = layout.get_app_variant("main").path`; `release.py:36` checks the package version against that app root. The `package-release` command in `repos/eMule-build/emule_workspace/cli.py:518` through `cli.py:535` exposes `--release-version` but no release-variant or tag-commit input. Current policy says official releases should be annotated tags on a chosen release-branch commit in `docs/WORKSPACE_POLICY.md:536` through `docs/WORKSPACE_POLICY.md:537`.
+Evidence: `repos/eMule-build/emule_workspace/release.py:34` calls `ensure_canonical_app_anchor(layout)`, then `release.py:35` hardcodes `app_root = layout.get_app_variant("main").path`; `release.py:36` checks the package version against that app root. The `package-release` command in `repos/eMule-build/emule_workspace/cli.py:518` through `cli.py:535` exposes `--release-version` but no release-variant or tag-commit input. Current policy says official releases should be annotated tags on a chosen release-branch commit in `docs/WORKSPACE-POLICY.md:536` through `docs/WORKSPACE-POLICY.md:537`.
 
 Impact: Even if the release branch is fixed, the supported package command still proves and packages `main`. That can produce ZIPs and manifests from one commit while the public annotated tag points at another commit. The update checker is strict about `emule-bb-vMAJOR.MINOR.PATCH` and `eMule-broadband-` assets in `srchybrid/ReleaseUpdateCheckSeams.h:63` through `srchybrid/ReleaseUpdateCheckSeams.h:64`, so provenance drift directly affects users who rely on update notifications.
 

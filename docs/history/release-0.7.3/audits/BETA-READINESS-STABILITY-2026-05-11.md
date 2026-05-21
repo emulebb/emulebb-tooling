@@ -11,7 +11,7 @@ Release blocker. The active candidate is no longer the candidate proven by the r
 ## Review Checklist
 
 - [x] Read `AGENTS.md`.
-- [x] Read `repos/eMule-tooling/docs/WORKSPACE_POLICY.md`.
+- [x] Read `repos/eMule-tooling/docs/WORKSPACE-POLICY.md`.
 - [x] Checked `git status --short --branch` before drawing conclusions for `workspaces/v0.72a/app/eMule-main`: clean `main...origin/main`.
 - [x] Checked `git status --short --branch` for `workspaces/v0.72a/app/eMule-v0.72a-community`: clean `release/v0.72a-community`.
 - [x] Checked `git status --short --branch` for `repos/eMule-build`: clean `main...origin/main`.

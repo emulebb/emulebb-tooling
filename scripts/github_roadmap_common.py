@@ -278,7 +278,7 @@ def issue_body(item: Item) -> str:
             local_status_note,
             "",
             "Before implementation, revalidate this slice against current `main`, "
-            "current dependency pins, and `WORKSPACE_POLICY.md`.",
+            "current dependency pins, and `WORKSPACE-POLICY.md`.",
         ]
     )
 

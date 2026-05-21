@@ -2,7 +2,7 @@
 
 This guide is the durable entry point for development, validation, release
 proof, and recurring product-documentation refresh work. It complements
-[Workspace Policy](../WORKSPACE_POLICY.md), which remains the source of truth
+[Workspace Policy](../WORKSPACE-POLICY.md), which remains the source of truth
 for branch, worktree, build, test, and release rules.
 
 ## Development Model
@@ -178,7 +178,7 @@ REST/controller behavior, network policy, packaging, or product messaging
 changes.
 
 1. Start from policy and status.
-   - Read `docs\WORKSPACE_POLICY.md`.
+   - Read `docs\WORKSPACE-POLICY.md`.
    - Check `git status --short --branch` in every repo that will be read or
      edited.
    - Confirm whether the change is docs-only, app code, build orchestration,

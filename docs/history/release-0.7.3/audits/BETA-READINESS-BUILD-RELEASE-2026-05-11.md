@@ -11,7 +11,7 @@ Release blocker. The build/release path has the right public beta identity (`0.7
 ## Review Checklist
 
 - [x] Read workspace root `AGENTS.md`.
-- [x] Read `repos\eMule-tooling\docs\WORKSPACE_POLICY.md`.
+- [x] Read `repos\eMule-tooling\docs\WORKSPACE-POLICY.md`.
 - [x] Checked `git status --short --branch` before drawing conclusions in `repos\eMule-tooling`, `repos\eMule-build`, `repos\eMule-build-tests`, `repos\eMule`, `workspaces\v0.72a\app\eMule-main`, `workspaces\v0.72a\app\eMule-v0.72a-community`, and `workspaces\v0.72a\app\eMule-v0.72a-broadband`.
 - [x] Reviewed `python -m emule_workspace` CLI surfaces for validate/build/test/package entrypoints.
 - [x] Reviewed release package implementation, generated package manifests, active release control docs, release naming policy, and app release version constants.
@@ -190,7 +190,7 @@ Affected area: Active build policy, language DLL build, package portability
 
 Evidence:
 
-- Workspace policy requires active MSVC toolset baseline `v143` in `docs\WORKSPACE_POLICY.md:463-486`.
+- Workspace policy requires active MSVC toolset baseline `v143` in `docs\WORKSPACE-POLICY.md:463-486`.
 - Main app project declares `v143` at `workspaces\v0.72a\app\eMule-main\srchybrid\emule.vcxproj:32`.
 - Language DLL projects declare `v145`; examples include `srchybrid\lang\ar_AE.vcxproj:21`, `srchybrid\lang\de_DE.vcxproj:21`, and every other active language project returned by static scan.
 - Package orchestration compensates by passing `/p:PlatformToolset=v143` unless overridden at `repos\eMule-build\emule_workspace\release.py:188-190`.
@@ -228,7 +228,7 @@ Affected area: Release branch policy, packaging target selection, operator clari
 
 Evidence:
 
-- Workspace policy identifies `release/v0.72a-broadband` as the only release-intent branch at `docs\WORKSPACE_POLICY.md:92-104` and says official releases should be annotated tags on the chosen release-branch commit at `docs\WORKSPACE_POLICY.md:536-543`.
+- Workspace policy identifies `release/v0.72a-broadband` as the only release-intent branch at `docs\WORKSPACE-POLICY.md:92-104` and says official releases should be annotated tags on the chosen release-branch commit at `docs\WORKSPACE-POLICY.md:536-543`.
 - Active release control identifies the candidate app line as `workspaces\v0.72a\app\eMule-main` on `main` at `docs\active\RELEASE-0.7.3.md:22`.
 - `repos\eMule-build\emule_workspace\release.py:35` always packages the `main` variant and `repos\eMule-build\emule_workspace\cli.py:518-521` exposes no package variant or release-branch selection option.
 

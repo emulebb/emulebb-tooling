@@ -19,12 +19,12 @@ is:
 - historical-reference rules for the stale experimental branch:
   [`docs/HISTORICAL-REFERENCES.md`](docs/HISTORICAL-REFERENCES.md)
 - workspace-wide operating contract:
-  [`docs/WORKSPACE_POLICY.md`](docs/WORKSPACE_POLICY.md)
+  [`docs/WORKSPACE-POLICY.md`](docs/WORKSPACE-POLICY.md)
 
 ## What This Repo Owns
 
-- central workspace policy: [`docs/WORKSPACE_POLICY.md`](docs/WORKSPACE_POLICY.md)
-- documentation ownership policy: [`docs/DOCS_POLICY.md`](docs/DOCS_POLICY.md)
+- central workspace policy: [`docs/WORKSPACE-POLICY.md`](docs/WORKSPACE-POLICY.md)
+- documentation ownership policy: [`docs/DOCS-POLICY.md`](docs/DOCS-POLICY.md)
 - repeatable backlog process:
   [`docs/reference/BACKLOG-PROCESS.md`](docs/reference/BACKLOG-PROCESS.md)
 - reference-doc index: [`docs/INDEX.md`](docs/INDEX.md)
@@ -119,6 +119,9 @@ Normalization helpers live here too:
 - `scripts\docs-item-taxonomy-check.py` validates backlog item IDs, required
   active-item front matter, filename/front-matter alignment, active index links,
   status counts, and table ordering.
+- `scripts\docs-structure-check.py` validates current Markdown naming,
+  navigation coverage, top-level headings, and wide table rows that can render
+  poorly in browsers.
 
 Release translation rule: preserve stock/eMule translations as they are; add
 or refine only new eMule BB labels, and make those translations meaningful for
@@ -165,7 +168,7 @@ python helpers\rc-translate-missing.py --source-rc ..\..\workspaces\workspace\ap
 ```
 
 Tracked PowerShell is not used for workspace orchestration. Keep future
-workspace automation in Python unless `docs\WORKSPACE_POLICY.md` explicitly
+workspace automation in Python unless `docs\WORKSPACE-POLICY.md` explicitly
 allows a PowerShell runtime asset.
 
 ## Workspace Convention
@@ -179,7 +182,7 @@ Helper scripts in this repo should follow that model and should not encode old
 fixed `eMulebb` workspace paths.
 
 For the full workspace operating contract, use
-`EMULE_WORKSPACE_ROOT\repos\eMule-tooling\docs\WORKSPACE_POLICY.md`.
+`EMULE_WORKSPACE_ROOT\repos\eMule-tooling\docs\WORKSPACE-POLICY.md`.
 
 ## Notes
 

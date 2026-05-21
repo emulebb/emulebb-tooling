@@ -529,7 +529,7 @@ def audit_project_entrypoints(root: Path) -> None:
         resolve_workspace_path(root, r"repos\eMule-build-tests\README.md"),
         resolve_workspace_path(root, r"repos\eMule-tooling\README.md"),
         resolve_workspace_path(root, r"repos\eMule-tooling\AGENTS.md"),
-        resolve_workspace_path(root, r"repos\eMule-tooling\docs\WORKSPACE_POLICY.md"),
+        resolve_workspace_path(root, r"repos\eMule-tooling\docs\WORKSPACE-POLICY.md"),
     ):
         assert_not_contains(doc, r"emule\.slnx?", f"{doc} must not describe emule.sln or emule.slnx as active build entrypoints.")
         assert_not_contains(
@@ -744,7 +744,7 @@ def collect_doc_path_issues(root: Path) -> list[str]:
     issues: list[str] = []
     tooling = resolve_workspace_path(root, r"repos\eMule-tooling")
     scan_scopes = (
-        (tooling, ("README.md", "AGENTS.md", r"docs\WORKSPACE_POLICY.md")),
+        (tooling, ("README.md", "AGENTS.md", r"docs\WORKSPACE-POLICY.md")),
         (tooling, (r"docs\active\*.md", r"docs\active\items\*.md", r"docs\active\plans\*.md", r"docs\active\reviews\*.md")),
         (resolve_workspace_path(root, r"repos\eMule-build"), ("README.md", "AGENTS.md")),
         (resolve_workspace_path(root, r"repos\eMule-build-tests"), ("README.md", "AGENTS.md")),
@@ -854,7 +854,7 @@ def audit_doc_paths(root: Path) -> None:
 
     issues = collect_doc_path_issues(root)
     tooling = resolve_workspace_path(root, r"repos\eMule-tooling")
-    policy_text = r"repos\eMule-tooling\docs\WORKSPACE_POLICY.md"
+    policy_text = r"repos\eMule-tooling\docs\WORKSPACE-POLICY.md"
     agent_files = (
         (root, "AGENTS.md"),
         (tooling, "AGENTS.md"),

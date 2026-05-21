@@ -1,16 +1,16 @@
 # eMule Documentation Index
 
 This directory is the single Markdown home for the tooling repo. Use
-[DOCS_POLICY](DOCS_POLICY.md) for ownership rules.
+[DOCS-POLICY](DOCS-POLICY.md) for ownership rules.
 
 ## Start Here
 
 | Need | Primary Doc |
 |---|---|
-| Workspace policy | [WORKSPACE_POLICY](WORKSPACE_POLICY.md) |
+| Workspace policy | [WORKSPACE-POLICY](WORKSPACE-POLICY.md) |
 | Active backlog and beta release status | [active/INDEX](active/INDEX.md) |
 | Repeatable backlog process | [reference/BACKLOG-PROCESS](reference/BACKLOG-PROCESS.md) |
-| Documentation ownership rules | [DOCS_POLICY](DOCS_POLICY.md) |
+| Documentation ownership rules | [DOCS-POLICY](DOCS-POLICY.md) |
 | Historical-reference rules | [HISTORICAL-REFERENCES](HISTORICAL-REFERENCES.md) |
 | Repo-level navigation | [../README](../README.md) |
 
@@ -58,6 +58,7 @@ GitHub-primary future-roadmap helper scripts live under `scripts/`:
 |---|---|
 | [reference/GUIDE-EMULEBB](reference/GUIDE-EMULEBB.md) | eMule BB product manual entry point, setup, tools, diagnostics, and compatibility |
 | [reference/BACKLOG-PROCESS](reference/BACKLOG-PROCESS.md) | Repeatable workflow for creating, updating, validating, and closing backlog records |
+| [reference/CI-BASELINE](reference/CI-BASELINE.md) | Reusable CI baseline workflow contract |
 | [reference/DEVELOPMENT-GUIDE](reference/DEVELOPMENT-GUIDE.md) | Development, validation, CI, packaging, command-line, and recurring guide refresh workflow |
 | [reference/GUIDE-SETUP](reference/GUIDE-SETUP.md) | Install model, first-run profile behavior, release-aware setup, and evidence links |
 | [reference/GUIDE-NETWORK](reference/GUIDE-NETWORK.md) | eD2K, Kad, binding, ports, UPnP, firewall, and REST listener basics |
@@ -71,6 +72,7 @@ GitHub-primary future-roadmap helper scripts live under `scripts/`:
 | [reference/KEYBOARD-SHORTCUTS](reference/KEYBOARD-SHORTCUTS.md) | Main shell and list keyboard shortcut reference |
 | [reference/GUIDE-TROUBLESHOOTING](reference/GUIDE-TROUBLESHOOTING.md) | Symptom-led diagnostics, support evidence, and testing/performance context |
 | [dependencies/DEP-STATUS](dependencies/DEP-STATUS.md) | Current third-party dependency decision record |
+| [rest/REST-API-ADAPTERS](rest/REST-API-ADAPTERS.md) | Adapter-specific REST, qBit, Torznab, Arr, and aMuTorrent contract notes |
 | [rest/REST-API-CONTRACT](rest/REST-API-CONTRACT.md) | Human-readable broadband REST contract |
 | [rest/REST-API-OPENAPI](rest/REST-API-OPENAPI.yaml) | Canonical machine-readable `/api/v1` OpenAPI contract |
 | [rest/REST-API-PARITY-INVENTORY](rest/REST-API-PARITY-INVENTORY.md) | Completed REST/WebServer action parity ledger |

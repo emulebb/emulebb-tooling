@@ -10,7 +10,7 @@ the engineering spec and evidence record.
 
 ## Preflight
 
-1. Read `EMULE_WORKSPACE_ROOT\repos\eMule-tooling\docs\WORKSPACE_POLICY.md`.
+1. Read `EMULE_WORKSPACE_ROOT\repos\eMule-tooling\docs\WORKSPACE-POLICY.md`.
 2. Check `git status --short --branch` in every repo you will read for
    current-state decisions or edit.
 3. Revalidate candidate backlog work against current `main`, current dependency
@@ -96,6 +96,7 @@ or active-index changes:
 ```powershell
 git diff --check
 python scripts\docs-item-taxonomy-check.py
+python scripts\docs-structure-check.py
 python scripts\github-roadmap-check.py
 ```
 

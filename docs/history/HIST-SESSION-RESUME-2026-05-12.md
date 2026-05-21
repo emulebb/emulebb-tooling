@@ -4,7 +4,7 @@ This file is the session-termination handoff for the canonical eMule
 workspace. Update it only when ending a work session or when the user
 explicitly asks for a current handoff. Do not use it for mid-task planning.
 This file is not policy, not backlog authority, and not a substitute for
-`EMULE_WORKSPACE_ROOT\repos\eMule-tooling\docs\WORKSPACE_POLICY.md`.
+`EMULE_WORKSPACE_ROOT\repos\eMule-tooling\docs\WORKSPACE-POLICY.md`.
 
 ## Current State
 
@@ -75,7 +75,7 @@ Completed validation:
 
 ## Next Steps
 
-- Read `repos\eMule-tooling\docs\WORKSPACE_POLICY.md` before the next
+- Read `repos\eMule-tooling\docs\WORKSPACE-POLICY.md` before the next
   workspace task.
 - Use `python -m emule_workspace` for build, validation, test, and live
   commands.

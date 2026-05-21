@@ -11,7 +11,7 @@ Release blocker. The advertised eMule BB feature set is largely implemented, but
 ## Review Checklist
 
 - [x] Read workspace root `AGENTS.md`.
-- [x] Read and applied `repos\eMule-tooling\docs\WORKSPACE_POLICY.md`.
+- [x] Read and applied `repos\eMule-tooling\docs\WORKSPACE-POLICY.md`.
 - [x] Ran `git status --short --branch` before drawing conclusions in `workspaces\v0.72a\app\eMule-main`.
 - [x] Ran `git status --short --branch` before drawing conclusions in `workspaces\v0.72a\app\eMule-v0.72a-community`.
 - [x] Ran `git status --short --branch` before drawing conclusions in `workspaces\v0.72a\app\eMule-v0.72a-broadband`.
@@ -76,8 +76,8 @@ Affected area: Public update check, Help link, GitHub release discovery, product
 
 Evidence:
 
-- Workspace policy says the GitHub organization, code name, and URL slug are `emulebb` in `docs\WORKSPACE_POLICY.md:521-524`.
-- Release tags and assets must use `emule-bb-vMAJOR.MINOR.PATCH` and `eMule-broadband-MAJOR.MINOR.PATCH-ARCH.zip` in `docs\WORKSPACE_POLICY.md:528-532`.
+- Workspace policy says the GitHub organization, code name, and URL slug are `emulebb` in `docs\WORKSPACE-POLICY.md:521-524`.
+- Release tags and assets must use `emule-bb-vMAJOR.MINOR.PATCH` and `eMule-broadband-MAJOR.MINOR.PATCH-ARCH.zip` in `docs\WORKSPACE-POLICY.md:528-532`.
 - The active build topology uses `https://github.com/eMulebb/eMule.git` for the app repo.
 - `srchybrid\Preferences.cpp:3647-3659` returns `https://github.com/itlezy/eMule`, `https://github.com/itlezy/eMule/releases`, and `https://api.github.com/repos/itlezy/eMule/releases/latest`.
 - `srchybrid\Emule.cpp:87-88` sets online help to `https://github.com/itlezy/eMule-tooling/blob/main/docs/HELP.md`.
@@ -115,7 +115,7 @@ Affected area: Native REST `/api/v1/app` identity, aMuTorrent/controller metadat
 
 Evidence:
 
-- Workspace policy defines `eMule BB` as the compact app, UI, API, and protocol-facing mod name in `docs\WORKSPACE_POLICY.md:521-523`.
+- Workspace policy defines `eMule BB` as the compact app, UI, API, and protocol-facing mod name in `docs\WORKSPACE-POLICY.md:521-523`.
 - `srchybrid\WebServerJson.cpp:819-826` builds the public REST app payload with `{"name", "eMule"}` while the same payload exposes beta capabilities.
 - `srchybrid\Emule.cpp:896-904` intentionally keeps release builds at version text such as `0.7.3 x64`, so `name` is the only stable REST field that can identify the product as eMule BB.
 - The OpenAPI app schema requires `name`, `version`, `apiVersion`, and `capabilities` in `docs\rest\REST-API-OPENAPI.yaml:1453-1483`, but it does not constrain the expected name value.
@@ -154,7 +154,7 @@ Evidence:
 
 - Package manifests include `eMule/README.md` in both x64 and ARM64 0.7.3 assets.
 - `workspaces\v0.72a\app\eMule-main\README.md:13-16` says the broadband release-intent branch is not ready until "Release 1.0 gates and operator steps are complete".
-- Workspace policy says the first beta/public release is `0.7.3`, and superseded `1.0.0`, `1.0.1`, and `1.1.1` labels are internal evidence/rehearsal labels only in `docs\WORKSPACE_POLICY.md:521-527`.
+- Workspace policy says the first beta/public release is `0.7.3`, and superseded `1.0.0`, `1.0.1`, and `1.1.1` labels are internal evidence/rehearsal labels only in `docs\WORKSPACE-POLICY.md:521-527`.
 
 Impact:
 

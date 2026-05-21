@@ -50,6 +50,13 @@ Examples: CMake adoption and Boost adoption.
 ## Writing Rules
 
 - Keep current decisions in `docs/active/`, not in historical reference docs.
+- Current non-item Markdown filenames use uppercase words separated by hyphens:
+  `WORKSPACE-POLICY.md`, `GUIDE-NETWORK.md`, `REST-API-CONTRACT.md`.
+- Release-control filenames may include version dots inside the existing
+  `RELEASE-*` family, such as `RELEASE-0.7.3.md`.
+- Active and historical item records keep their stable item-ID filenames, such
+  as `BUG-117.md` and `CI-039.md`.
+- Historical provenance docs are not renamed only for style.
 - Move closed item records (`DONE`, `PASSED`, `WONT_DO`) to
   `docs/history/items/`.
 - Move dated review reports to `docs/history/reviews/` after they stop driving
@@ -70,6 +77,9 @@ Examples: CMake adoption and Boost adoption.
   or navigation entry points.
 - Add new exploratory proposals under `docs/ideas/` with an explicit
   exploratory-only banner.
+- Keep Markdown tables browser-readable. Prefer two to four columns, move long
+  evidence text into bullets below the table, split large inventories by
+  section, and avoid long comma-separated ID lists inside table cells.
 
 ## Item IDs And Statuses
 
@@ -117,3 +127,8 @@ GitHub token has `project` scope and network access.
 
 Use [reference/BACKLOG-PROCESS](reference/BACKLOG-PROCESS.md) as the repeatable
 operator runbook for creating, updating, validating, and closing backlog items.
+
+Use `python scripts\docs-structure-check.py` after current-doc navigation,
+naming, or table-heavy edits. Wide table rows are warnings by default; pass
+`--fail-on-wide-tables` only when deliberately tightening browser-rendering
+policy.

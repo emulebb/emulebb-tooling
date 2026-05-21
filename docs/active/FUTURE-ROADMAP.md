@@ -91,7 +91,7 @@ External references used as directional signals, not implementation authority:
   `eMulebb/eMule` issue and `eMule BB Roadmap` project item before
   implementation starts.
 - Before implementation, revalidate the slice against current `main`, current
-  dependency pins, and `WORKSPACE_POLICY.md`.
+  dependency pins, and `WORKSPACE-POLICY.md`.
 - Prefer narrow, observable improvements over broad behavioral rewrites.
 - Keep stock/community behavior intact unless the feature explicitly documents
   the product reason for drift.

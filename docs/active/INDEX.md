@@ -393,6 +393,7 @@ not active item docs.
 | [CI-037](../history/items/CI-037.md) | Major | PASSED | Expanded live UI and E2E weak-path stress gate |
 | [CI-038](items/CI-038.md) | Major | OPEN | UI resource-depth and language smoke gate |
 | [CI-039](../history/items/CI-039.md) | Minor | DONE | Consolidate Markdown backlog process and validation |
+| [CI-040](../history/items/CI-040.md) | Minor | DONE | Standardize current Markdown naming and structure checks |
 
 ---
 
@@ -423,4 +424,4 @@ Superseded release gate evidence and old cluster plans live under
 
 Current issue status is tracked here. Other `docs/` areas contain reference,
 history, architecture notes, audits, ideas, and active execution plans according
-to [DOCS_POLICY](../DOCS_POLICY.md).
+to [DOCS-POLICY](../DOCS-POLICY.md).

@@ -19,7 +19,7 @@ Crypto++ 8.9 refresh is deferred post-beta.
 
 ## Review Checklist
 
-- [x] Read `AGENTS.md` and `repos\eMule-tooling\docs\WORKSPACE_POLICY.md` before reviewing.
+- [x] Read `AGENTS.md` and `repos\eMule-tooling\docs\WORKSPACE-POLICY.md` before reviewing.
 - [x] Ran `git status --short --branch` before drawing conclusions in `repos\eMule-tooling`, `repos\eMule-build`, `repos\eMule-build-tests`, `repos\eMule`, active app worktrees, and relevant third-party dependency worktrees.
 - [x] Confirmed assigned report file did not exist before writing it.
 - [x] Reviewed active app worktree `workspaces\v0.72a\app\eMule-main` at `main` commit `df1191e`.
