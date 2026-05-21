@@ -72,6 +72,8 @@ Directive precedence is:
   orchestration, build orchestration, validation, and packaging.
 - `repos\eMule-build-tests` owns shared test harness code and test execution
   helpers.
+- `repos\emulebb-ed2k-server` owns the local ED2K server used by deterministic
+  eMule BB live E2E and protocol-parity scenarios.
 - `repos\eMule` is the canonical app repo checkout used as the branch store and
   worktree anchor.
 - Normal app editing belongs in the active app worktrees, not in the canonical
@@ -118,7 +120,10 @@ Directive precedence is:
   - `eMule-build`
   - `eMule-build-tests`
   - `eMule-tooling`
+  - `emulebb-ed2k-server`
   - `amutorrent`
+- `emulebb-ed2k-server` tracks its upstream-compatible `master` branch as
+  documented in the generated workspace topology.
 
 ### `stale/*`
 
@@ -153,6 +158,9 @@ The canonical workspace currently materializes these app worktrees:
   drifts from the current Python topology.
 - `repos\eMule-tooling` and test helpers may consume the generated contract, but
   must not become an independent second source of truth for workspace topology.
+- The ED2K server path is exposed as `workspace.repos.ed2k_server`; live E2E
+  helpers must resolve it from the manifest or the orchestration layout, not a
+  machine-local environment variable.
 
 ## Canonical App Checkout
 
