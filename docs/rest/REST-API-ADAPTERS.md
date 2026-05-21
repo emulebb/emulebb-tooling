@@ -40,7 +40,7 @@ Supported routes:
 | `GET` | `/api/v2/torrents/info` | yes | Transfer list, optionally filtered by `category`; rows include Arr import fields such as `save_path` and `content_path` from the native category path. |
 | `GET` | `/api/v2/torrents/properties` | yes | One transfer's qBit-shaped properties by `hash`, including path, size, progress, and seeding-time fields consumed by Arr completed download handling. |
 | `GET` | `/api/v2/torrents/files` | yes | One transfer's qBit-shaped file list by `hash`, including file `name`, `size`, and `progress`. |
-| `POST` | `/api/v2/torrents/add` | yes | Add one Torznab-emitted magnet converted back to an eD2K link; accepts Arr qBit form fields that eMule ignores after validation. |
+| `POST` | `/api/v2/torrents/add` | yes | Add one Torznab-emitted eD2K link; accepts Arr qBit form fields that eMule ignores after validation. Magnet URLs are rejected. |
 | `POST` | `/api/v2/torrents/delete` | yes | Delete/cancel transfers by `hashes`; always maps to native `deleteFiles: true`. |
 | `POST` | `/api/v2/torrents/setCategory` | yes | Assign a native category by `hashes` and `category`. |
 | `POST` | `/api/v2/torrents/pause` | yes | Pause transfers by `hashes`. |

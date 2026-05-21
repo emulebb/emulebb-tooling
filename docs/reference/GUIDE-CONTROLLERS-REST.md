@@ -127,11 +127,11 @@ Controllers should:
 
 ## Legacy WebServer
 
-The legacy WebServer template UI can still be useful for compatibility. It is
-not the default automation surface.
+The legacy WebServer template UI is frozen pending removal. It receives no
+product support, no feature work, and no controller compatibility guarantees.
 
-REST should remain useful even when legacy templates are absent. Enable legacy
-HTML UI explicitly only when you need it.
+REST and the documented qBit/Torznab adapters are the supported controller
+surfaces. REST should remain useful even when legacy templates are absent.
 
 ## Diagnostics
 
