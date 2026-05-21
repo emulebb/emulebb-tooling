@@ -267,6 +267,47 @@ Downloads and search:
 - completed downloads can optionally run a configured external command
 - direct delete/cancel operations keep native semantics
 
+Disk-space protection:
+
+- eMule BB protects the volumes that host the config directory, every temp
+  directory, the default incoming directory, and category-specific incoming
+  directories.
+- Separate free-space floors are stored as `MinFreeDiskSpaceConfig`,
+  `MinFreeDiskSpaceTemp`, and `MinFreeDiskSpaceIncoming`. The UI shows them in
+  GiB under Tweaks; the INI stores normalized byte values.
+- The hard minimums are 1 GiB for the config volume, 5 GiB for temp volumes,
+  and 5 GiB for incoming/category volumes. Values are clamped to the supported
+  5120 GiB maximum rather than allowing a zero-floor unsafe profile.
+- Protection is volume-based, not path-text-based. If config, temp, incoming,
+  or a category path share the same volume, the largest applicable floor wins
+  for that volume.
+- The effective requirement for a protected volume is the configured floor plus
+  reserved completion demand. Completion demand accounts for remaining temp
+  growth and, when the completed file will be moved to a different incoming
+  volume, the completed file size on that incoming volume.
+- If any protected volume falls below its effective requirement, the disk-space
+  guard logs the breached volume, immediately saves part metadata, and stops
+  all active downloads so the profile and part files do not continue writing
+  into an exhausted volume.
+- `.part.met` writes have their own guard. If the target volume cannot provide
+  the required free space, metadata writes are skipped instead of risking a
+  truncated metadata file. Write failures invalidate the guard state before the
+  next attempt.
+- Downloads paused as insufficient resume only after the protected-volume block
+  is clear and enough free space exists for the relevant volume. Resume
+  decisions include a bounded headroom allowance so a file is not immediately
+  restarted into another low-space failure.
+- New-download temp placement uses protected-volume availability. It avoids
+  choosing a temp volume that cannot satisfy the file's temp demand, avoids FAT
+  candidates for files above the old FAT-safe size limit, and accounts for
+  incoming-volume demand when temp and incoming are different volumes.
+- The periodic disk-space check runs during queue processing and at the normal
+  15-minute disk-space recheck interval. Manual actions that add, resume,
+  complete, or flush downloads can force a fresh snapshot sooner.
+- Preview and archive-copy paths require extra free space beyond the normal
+  floor because they may copy completed bytes or archive payload before
+  opening the preview.
+
 Controllers and diagnostics:
 
 - native REST is the preferred automation surface

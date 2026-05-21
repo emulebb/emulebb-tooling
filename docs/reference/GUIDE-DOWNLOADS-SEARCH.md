@@ -166,6 +166,110 @@ Related controls:
 These settings are operational controls. Setting them too high can make network,
 disk, or UI behavior worse even on a fast machine.
 
+## Disk-Space Protection
+
+eMule BB treats low disk space as a profile-safety problem, not just a transfer
+speed problem. The guard protects the volumes used by active downloads and
+metadata so the app does not keep writing when the filesystem is already below
+the configured reserve.
+
+Protected roles:
+
+- config: the profile/config directory that stores `preferences.ini`, logs,
+  identity files, known-file metadata, and download metadata sidecars
+- temp: every configured temporary download directory
+- incoming: the default incoming directory
+- category incoming: every category-specific incoming directory
+
+The stored preference keys are:
+
+| Key | Role | Hard minimum |
+|---|---|---|
+| `MinFreeDiskSpaceConfig` | Config/profile volume | 1 GiB |
+| `MinFreeDiskSpaceTemp` | Temp download volumes | 5 GiB |
+| `MinFreeDiskSpaceIncoming` | Incoming and category incoming volumes | 5 GiB |
+
+The Preferences dialog exposes these floors in GiB under Tweaks. The INI stores
+normalized byte values. Direct INI values are normalized on load and save.
+Values below the hard minimum are raised to the minimum, and values above the
+supported 5120 GiB maximum are clamped to that maximum.
+
+The guard works by resolved volume identity. If several protected paths point
+to the same volume, eMule BB merges their roles and uses the largest floor for
+that volume. For example, if config and temp are both on `D:`, the temp floor
+normally controls that volume because it is higher. If temp and incoming are on
+separate volumes, each volume is checked against its own effective requirement.
+
+The effective requirement is:
+
+```text
+effective required free space = protected floor + completion reserve
+```
+
+The completion reserve is dynamic. For active or resumable downloads, eMule BB
+adds the extra temp bytes still needed by the part file. If the completed file
+will land on a different incoming volume, it also reserves the completed file
+size on that incoming volume. This prevents a profile from accepting work that
+fits in temp but cannot be safely completed into the configured incoming path.
+
+When any protected volume is below its effective requirement, the queue enters
+a protected disk-space block:
+
+1. A warning is logged with the volume identity, protected role, current free
+   bytes, required bytes, configured floor, and completion reserve.
+2. Active, empty, hashing-wait, and insufficient downloads are stopped/paused.
+3. `.part.met` metadata is saved immediately for every part file where the
+   metadata write guard allows it.
+4. The same breach is remembered so the log is not spammed repeatedly for an
+   unchanged low-space condition.
+
+The normal timed disk-space check runs every 15 minutes during queue activity.
+Queue processing and manual actions that add, resume, complete, or flush files
+can force a fresh protected-volume snapshot sooner.
+
+The block clears only after protected-volume checks no longer find a breach.
+Downloads marked insufficient for disk space are not resumed while a protected
+volume is still below its requirement. Resume checks require the relevant temp
+volume to have enough free space, including bounded headroom for the file that
+previously failed because of insufficient space.
+
+Metadata writes have a separate per-write safety guard. Before writing a
+`.part.met` file, eMule BB resolves the metadata target's volume and compares
+current free space with the effective requirement for that path. If the volume
+cannot be resolved and a nonzero requirement applies, the write is blocked. If
+the volume is resolved but below the requirement, the write is skipped and a
+warning is logged. Failed metadata writes invalidate the guard state before the
+next attempt. This is intentionally conservative: skipping a metadata write is
+safer than producing a truncated or partially replaced `.part.met` file on an
+exhausted disk.
+
+New-download placement also uses protected-volume availability. When several
+temp directories exist, eMule BB evaluates each candidate after subtracting the
+protected requirement. It avoids duplicate volume candidates, rejects FAT
+volumes for files above the old FAT-safe size limit, prefers a valid temp
+volume that shares the incoming volume when appropriate, and otherwise chooses
+a candidate that can satisfy both temp demand and any separate incoming demand.
+If no candidate can satisfy the protected-volume snapshot, the add cannot
+select a temp directory.
+
+Preview paths perform additional checks because preview may need temporary
+copies. Archive-copy preview requires enough free space for the protected floor
+plus two copies of the file size. Normal preview requires the floor plus the
+completed bytes available for preview and a small extra buffer.
+
+Operational guidance:
+
+- keep config, temp, and incoming on volumes with predictable free space
+- raise floors for very large download queues or automation-heavy profiles
+- avoid putting temp on a nearly full system drive
+- keep category incoming paths on volumes that can receive completed files
+- treat repeated disk-space guard warnings as a storage issue, not a network
+  issue
+- free space or move paths, then resume downloads after the protected block has
+  cleared
+- do not lower floors to force a download through an exhausted volume; that
+  increases the risk of metadata and part-file damage
+
 ## Broadband Upload Policy
 
 The broadband upload controller changes the old stock model where upload slot
