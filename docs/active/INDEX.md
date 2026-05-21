@@ -37,6 +37,7 @@ release target.
 **Future release roadmap:** [FUTURE-ROADMAP](FUTURE-ROADMAP.md)
 **Future roadmap workflow:** GitHub issues in `eMulebb/eMule` plus the
 `eMule BB Roadmap` org project are authoritative for migrated roadmap items.
+**Backlog process runbook:** [BACKLOG-PROCESS](../reference/BACKLOG-PROCESS.md)
 **Beta-release execution plan:** [RELEASE-0.7.3-EXECUTION-PLAN](plans/RELEASE-0.7.3-EXECUTION-PLAN.md)
 **Historical beta evidence:** [release-0.7.3](../history/release-0.7.3/)
 **Historical reviews:** [reviews](../history/reviews/)
@@ -342,10 +343,10 @@ not active item docs.
 | [FEAT-064](items/FEAT-064.md) | Minor | OPEN | Curated post-0.7.3 future release roadmap |
 | [FEAT-065](../history/items/FEAT-065.md) | Minor | DONE | Polish the native MiniMule tray popup |
 | [FEAT-066](../history/items/FEAT-066.md) | Minor | DONE | Replace MiniMule chrome with table and speed chart |
-| [FEAT-071](items/FEAT-071.md) | Minor | OPEN | Filename mojibake repair for search results and download intake |
 | [FEAT-068](items/FEAT-068.md) | Minor | OPEN | Bound REST shared-files memory use for very large libraries |
 | [FEAT-069](items/FEAT-069.md) | Minor | OPEN | Shared-file include and exclude pattern rules |
 | [FEAT-070](items/FEAT-070.md) | Minor | OPEN | Add targeted client UserHash and upload-lifecycle diagnostics |
+| [FEAT-071](items/FEAT-071.md) | Minor | OPEN | Filename mojibake repair for search results and download intake |
 
 ---
 
@@ -391,6 +392,7 @@ not active item docs.
 | [CI-036](../history/items/CI-036.md) | Major | DONE | Release certification test matrix |
 | [CI-037](../history/items/CI-037.md) | Major | PASSED | Expanded live UI and E2E weak-path stress gate |
 | [CI-038](items/CI-038.md) | Major | OPEN | UI resource-depth and language smoke gate |
+| [CI-039](../history/items/CI-039.md) | Minor | DONE | Consolidate Markdown backlog process and validation |
 
 ---
 

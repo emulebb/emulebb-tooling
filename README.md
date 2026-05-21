@@ -25,6 +25,8 @@ is:
 
 - central workspace policy: [`docs/WORKSPACE_POLICY.md`](docs/WORKSPACE_POLICY.md)
 - documentation ownership policy: [`docs/DOCS_POLICY.md`](docs/DOCS_POLICY.md)
+- repeatable backlog process:
+  [`docs/reference/BACKLOG-PROCESS.md`](docs/reference/BACKLOG-PROCESS.md)
 - reference-doc index: [`docs/INDEX.md`](docs/INDEX.md)
 - active backlog/spec index: [`docs/active/INDEX.md`](docs/active/INDEX.md)
 - GitHub-primary future roadmap:
@@ -114,6 +116,9 @@ Normalization helpers live here too:
   project.
 - `scripts\github-roadmap-check.py` validates local GitHub roadmap metadata,
   and can query GitHub when run with `--github`.
+- `scripts\docs-item-taxonomy-check.py` validates backlog item IDs, required
+  active-item front matter, filename/front-matter alignment, active index links,
+  status counts, and table ordering.
 
 Release translation rule: preserve stock/eMule translations as they are; add
 or refine only new eMule BB labels, and make those translations meaningful for

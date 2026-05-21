@@ -9,6 +9,7 @@ This directory is the single Markdown home for the tooling repo. Use
 |---|---|
 | Workspace policy | [WORKSPACE_POLICY](WORKSPACE_POLICY.md) |
 | Active backlog and beta release status | [active/INDEX](active/INDEX.md) |
+| Repeatable backlog process | [reference/BACKLOG-PROCESS](reference/BACKLOG-PROCESS.md) |
 | Documentation ownership rules | [DOCS_POLICY](DOCS_POLICY.md) |
 | Historical-reference rules | [HISTORICAL-REFERENCES](HISTORICAL-REFERENCES.md) |
 | Repo-level navigation | [../README](../README.md) |
@@ -56,6 +57,7 @@ GitHub-primary future-roadmap helper scripts live under `scripts/`:
 | Document | Description |
 |---|---|
 | [reference/GUIDE-EMULEBB](reference/GUIDE-EMULEBB.md) | eMule BB product manual entry point, setup, tools, diagnostics, and compatibility |
+| [reference/BACKLOG-PROCESS](reference/BACKLOG-PROCESS.md) | Repeatable workflow for creating, updating, validating, and closing backlog records |
 | [reference/DEVELOPMENT-GUIDE](reference/DEVELOPMENT-GUIDE.md) | Development, validation, CI, packaging, command-line, and recurring guide refresh workflow |
 | [reference/GUIDE-SETUP](reference/GUIDE-SETUP.md) | Install model, first-run profile behavior, release-aware setup, and evidence links |
 | [reference/GUIDE-NETWORK](reference/GUIDE-NETWORK.md) | eD2K, Kad, binding, ports, UPnP, firewall, and REST listener basics |

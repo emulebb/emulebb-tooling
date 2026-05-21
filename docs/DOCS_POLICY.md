@@ -114,3 +114,6 @@ Use `python scripts\github-roadmap-sync.py` to preview GitHub-primary
 future-roadmap imports. Use `python scripts\github-roadmap-check.py` after
 migration to validate local GitHub metadata; pass `--github` when the local
 GitHub token has `project` scope and network access.
+
+Use [reference/BACKLOG-PROCESS](reference/BACKLOG-PROCESS.md) as the repeatable
+operator runbook for creating, updating, validating, and closing backlog items.

@@ -17,6 +17,17 @@ ALLOWED_PREFIXES = {"BUG", "FEAT", "REF", "CI", "AMUT", "ARR"}
 ACTIVE_STATUSES = {"OPEN", "IN_PROGRESS", "BLOCKED", "DEFERRED"}
 CLOSED_STATUSES = {"DONE", "PASSED", "WONT_DO"}
 ALLOWED_STATUSES = ACTIVE_STATUSES | CLOSED_STATUSES
+REQUIRED_ACTIVE_FIELDS = (
+    "id",
+    "title",
+    "status",
+    "priority",
+    "category",
+    "labels",
+    "milestone",
+    "created",
+    "source",
+)
 LEGACY_STATUS_MAP = {
     "Open": "OPEN",
     "In Progress": "IN_PROGRESS",
@@ -32,9 +43,23 @@ def read_text(path: Path) -> str:
     return path.read_text(encoding="utf-8", errors="ignore")
 
 
+def parse_frontmatter(text: str) -> dict[str, str]:
+    if not text.startswith("---\n"):
+        return {}
+    end = text.find("\n---", 4)
+    if end == -1:
+        return {}
+    fields: dict[str, str] = {}
+    for line in text[4:end].splitlines():
+        if ":" not in line:
+            continue
+        name, value = line.split(":", 1)
+        fields[name.strip()] = value.strip()
+    return fields
+
+
 def frontmatter_field(text: str, name: str) -> str:
-    match = re.search(rf"^{re.escape(name)}:\s*(.+)$", text, re.MULTILINE)
-    return match.group(1).strip() if match else ""
+    return parse_frontmatter(text).get(name, "")
 
 
 def item_files() -> list[Path]:
@@ -58,6 +83,36 @@ def parse_active_index() -> dict[str, dict[str, str]]:
             "title": match.group(5).strip(),
         }
     return rows
+
+
+def item_sort_key(item_id: str) -> tuple[str, int]:
+    prefix, number = item_id.split("-", 1)
+    return prefix, int(number)
+
+
+def check_active_index_order(errors: list[str]) -> None:
+    text = read_text(DOCS / "active" / "INDEX.md")
+    section_heading = re.compile(r"^## (.+)$", re.MULTILINE)
+    headings = list(section_heading.finditer(text))
+    row_pattern = re.compile(
+        r"^\| \[([A-Z]+-\d+)\]\([^)]+\) \| [^|]+ \| [^|]+ \| .*? \|$",
+        re.MULTILINE,
+    )
+
+    for index, heading in enumerate(headings):
+        start = heading.end()
+        end = headings[index + 1].start() if index + 1 < len(headings) else len(text)
+        section = text[start:end]
+        item_ids = [match.group(1) for match in row_pattern.finditer(section)]
+        if len(item_ids) < 2:
+            continue
+        expected = sorted(item_ids, key=item_sort_key)
+        if item_ids != expected:
+            section_name = heading.group(1).strip()
+            errors.append(
+                "docs/active/INDEX.md: item rows in section "
+                f"{section_name!r} are not sorted by item id"
+            )
 
 
 def check_active_snapshot_counts(
@@ -121,6 +176,8 @@ def main() -> int:
             continue
 
         ids[item_id].append(path)
+        if path.stem != item_id:
+            errors.append(f"{path}: filename stem must match id frontmatter {item_id!r}")
         match = id_pattern.match(item_id)
         if not match:
             errors.append(f"{path}: id must match PREFIX-###, got {item_id!r}")
@@ -128,6 +185,13 @@ def main() -> int:
             errors.append(f"{path}: unsupported item prefix {match.group(1)!r}")
 
         if is_active:
+            fields = parse_frontmatter(text)
+            missing = [name for name in REQUIRED_ACTIVE_FIELDS if not fields.get(name)]
+            if missing:
+                errors.append(
+                    f"{path}: missing required active frontmatter fields "
+                    + ", ".join(missing)
+                )
             if status not in ALLOWED_STATUSES:
                 errors.append(f"{path}: active status must be canonical, got {status!r}")
         elif status and status not in ALLOWED_STATUSES:
@@ -145,6 +209,7 @@ def main() -> int:
     rows = parse_active_index()
     active_paths = {path.stem: path for path in (DOCS / "active" / "items").glob("*.md")}
     check_active_snapshot_counts(active_paths, errors)
+    check_active_index_order(errors)
 
     for item_id, path in sorted(active_paths.items()):
         row = rows.get(item_id)
