@@ -9,7 +9,7 @@ is:
 - app source: `repos\eMule`
 - build/test orchestration: `repos\eMule-build` and `repos\eMule-build-tests`
 - companion web UI: `repos\amutorrent`
-- local live-test ED2K server: `repos\emulebb-ed2k-server`
+- local live-test ED2K server: `repos\goed2k-server`
 - tooling docs and helpers: this repo
 
 ## Start Here

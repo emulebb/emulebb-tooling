@@ -72,7 +72,7 @@ Directive precedence is:
   orchestration, build orchestration, validation, and packaging.
 - `repos\eMule-build-tests` owns shared test harness code and test execution
   helpers.
-- `repos\emulebb-ed2k-server` owns the local ED2K server used by deterministic
+- `repos\goed2k-server` owns the local ED2K server used by deterministic
   eMule BB live E2E and protocol-parity scenarios.
 - `repos\eMule` is the canonical app repo checkout used as the branch store and
   worktree anchor.
@@ -120,9 +120,9 @@ Directive precedence is:
   - `eMule-build`
   - `eMule-build-tests`
   - `eMule-tooling`
-  - `emulebb-ed2k-server`
+  - `goed2k-server`
   - `amutorrent`
-- `emulebb-ed2k-server` tracks its upstream-compatible `master` branch as
+- `goed2k-server` tracks its upstream-compatible `master` branch as
   documented in the generated workspace topology.
 
 ### `stale/*`

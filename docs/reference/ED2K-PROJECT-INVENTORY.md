@@ -29,8 +29,8 @@ and may expose UDP status or admin APIs.
 
 | Project | Status | Language | Source or archive | Notes |
 |---|---|---|---|---|
-| p2p-overlord ED2K server | Active | Go | https://github.com/p2p-overlord/p2p-overlord-ed2k-server | Go ED2K/eMule server with TCP protocol handling, static/dynamic catalogs, UDP status, and HTTP admin UI/API. Local sibling checkout was observed under the p2p-overlord research tree. |
-| goed2k-server | Active | Go | https://github.com/chenjia404/goed2k-server | Go ED2K/eMule server built around `github.com/monkeyWie/goed2k`; implements login, status, message, ID assignment, offer files, search, search-more, source lookup, callbacks, JSON/MySQL/PostgreSQL catalog storage, and admin UI/API. |
+| goed2k-server | Active | Go | https://github.com/chenjia404/goed2k-server | Go ED2K/eMule server built around `github.com/monkeyWie/goed2k`; implements login, status, message, ID assignment, offer files, search, search-more, source lookup, callbacks, JSON/MySQL/PostgreSQL catalog storage, and admin UI/API. The eMule BB managed fork lives at `https://github.com/eMulebb/goed2k-server`. |
+| p2p-overlord ED2K server | Historical reference | Go | https://github.com/p2p-overlord/p2p-overlord-ed2k-server | Renamed fork lineage retained only as historical reference; active eMule BB workspace topology tracks `goed2k-server` directly. |
 | ed2kd | Stale | C | https://github.com/gureedo/ed2kd | eDonkey2000 server implementation using libevent, zlib, libconfig, and SQLite support. Local research checkout exists in archived server material. |
 | eNode | Stale | Node.js | https://github.com/zt8989/eNode | Experimental eD2K/eMule server. README describes TCP/UDP opcodes, obfuscation, Lugdunum/eMule extended protocol, LowID callbacks, files over 4 GiB, and pluggable storage through MySQL or MongoDB. |
 | gomule | Stale | Go | https://github.com/HackLinux/gomule | Go "Goroutines eMule Server" project. Treat as a small historical implementation reference until protocol coverage is revalidated. |
