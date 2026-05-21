@@ -1,0 +1,17 @@
+.md-typeset__table {
+  display: block;
+  overflow-x: auto;
+}
+
+.md-typeset table:not([class]) {
+  min-width: max-content;
+}
+
+.md-typeset table:not([class]) th,
+.md-typeset table:not([class]) td {
+  vertical-align: top;
+}
+
+.md-typeset code {
+  word-break: break-word;
+}

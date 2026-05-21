@@ -28,6 +28,7 @@ is:
 - repeatable backlog process:
   [`docs/reference/BACKLOG-PROCESS.md`](docs/reference/BACKLOG-PROCESS.md)
 - reference-doc index: [`docs/INDEX.md`](docs/INDEX.md)
+- browser-formatted docs entrypoint: [`docs/INDEX.md`](docs/INDEX.md#browser-site)
 - active backlog/spec index: [`docs/active/INDEX.md`](docs/active/INDEX.md)
 - GitHub-primary future roadmap:
   [`docs/active/FUTURE-ROADMAP.md`](docs/active/FUTURE-ROADMAP.md)
@@ -75,6 +76,8 @@ Shared CI and policy guard code lives under `ci\`:
 - `.github\workflows\reusable-baseline.yml` is the reusable baseline workflow;
   consumers should pin the stable ref documented in
   [`docs/reference/CI-BASELINE.md`](docs/reference/CI-BASELINE.md)
+- `.github\workflows\docs-site.yml` builds the MkDocs Material documentation
+  site and deploys it to GitHub Pages from `main`
 
 Normalization helpers live here too:
 
@@ -122,6 +125,17 @@ Normalization helpers live here too:
 - `scripts\docs-structure-check.py` validates current Markdown naming,
   navigation coverage, top-level headings, and wide table rows that can render
   poorly in browsers.
+
+Documentation can be previewed as formatted HTML with MkDocs:
+
+```powershell
+python -m pip install -r requirements-docs.txt
+python -m mkdocs serve
+```
+
+Set `$env:NO_MKDOCS_2_WARNING='1'`, then use
+`python -m mkdocs build --strict` for the same local site build gate used by
+CI. The generated site is written under `.local\mkdocs-site`.
 
 Release translation rule: preserve stock/eMule translations as they are; add
 or refine only new eMule BB labels, and make those translations meaningful for

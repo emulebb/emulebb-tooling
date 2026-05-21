@@ -1,0 +1,96 @@
+site_name: eMule BB Documentation
+site_description: eMule BB workspace, release, product, and REST documentation.
+repo_url: https://github.com/eMulebb/eMule-tooling
+edit_uri: blob/main/docs/
+docs_dir: docs
+site_dir: .local/mkdocs-site
+
+theme:
+  name: material
+  language: en
+  features:
+    - navigation.indexes
+    - navigation.sections
+    - navigation.top
+    - search.highlight
+    - search.share
+    - toc.follow
+
+extra_css:
+  - assets/mkdocs.css
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - def_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+
+plugins:
+  - search
+
+nav:
+  - Home: INDEX.md
+  - Workspace Policy: WORKSPACE-POLICY.md
+  - Documentation Policy: DOCS-POLICY.md
+  - Active:
+      - Backlog Index: active/INDEX.md
+      - Future Roadmap: active/FUTURE-ROADMAP.md
+      - Release 0.7.3: active/RELEASE-0.7.3.md
+      - Release Checklist: active/RELEASE-0.7.3-CHECKLIST.md
+      - Release Runbook: active/RELEASE-0.7.3-RUNBOOK.md
+      - Release Test Strategy: active/RELEASE-TEST-STRATEGY.md
+      - Release Test Campaigns: active/RELEASE-TEST-CAMPAIGNS.md
+      - Controller Surface Matrix: active/CONTROLLER-SURFACE-MATRIX.md
+      - Frozen Surfaces: active/FROZEN-SURFACES.md
+  - Reference:
+      - Backlog Process: reference/BACKLOG-PROCESS.md
+      - Development Guide: reference/DEVELOPMENT-GUIDE.md
+      - CI Baseline: reference/CI-BASELINE.md
+      - Product Guide: reference/GUIDE-EMULEBB.md
+      - Setup Guide: reference/GUIDE-SETUP.md
+      - Network Guide: reference/GUIDE-NETWORK.md
+      - Sharing Guide: reference/GUIDE-SHARING.md
+      - Downloads And Search: reference/GUIDE-DOWNLOADS-SEARCH.md
+      - Preferences Guide: reference/GUIDE-PREFERENCES.md
+      - REST Controllers: reference/GUIDE-CONTROLLERS-REST.md
+      - IP Filters: reference/GUIDE-IP-FILTERS.md
+      - Long Paths: reference/GUIDE-LONGPATHS.md
+      - Keyboard Shortcuts: reference/KEYBOARD-SHORTCUTS.md
+      - Troubleshooting: reference/GUIDE-TROUBLESHOOTING.md
+      - eD2K Inventory: reference/ED2K-PROJECT-INVENTORY.md
+  - REST:
+      - Contract: rest/REST-API-CONTRACT.md
+      - Adapter Notes: rest/REST-API-ADAPTERS.md
+      - Parity Inventory: rest/REST-API-PARITY-INVENTORY.md
+  - Dependencies:
+      - Status: dependencies/DEP-STATUS.md
+  - Ideas:
+      - aMule Watchlist: ideas/IDEA-AMULE-WATCHLIST.md
+      - Boost Adoption: ideas/IDEA-BOOST.md
+      - CMake Adoption: ideas/IDEA-CMAKE.md
+      - Kad Protocol Modernization: ideas/IDEA-KAD-PROTOCOL-MODERNIZATION.md
+      - IPv6 Kad Network: ideas/IDEA-IPV6-KAD-NETWORK.md
+      - Modernization: ideas/IDEA-MODERNIZATION-2026.md
+      - Restructure: ideas/IDEA-RESTRUCTURE.md
+  - Historical References: HISTORICAL-REFERENCES.md
+
+not_in_nav: |
+  /HELP.md
+  /active/items/**
+  /active/plans/**
+  /architecture/**
+  /audits/**
+  /history/**
+  /rest/REST-API-OPENAPI.yaml
+
+validation:
+  nav:
+    omitted_files: info
+    not_found: warn
+  links:
+    not_found: info
+    anchors: info
+    unrecognized_links: info

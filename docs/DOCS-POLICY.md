@@ -52,6 +52,10 @@ Examples: CMake adoption and Boost adoption.
 - Keep current decisions in `docs/active/`, not in historical reference docs.
 - Current non-item Markdown filenames use uppercase words separated by hyphens:
   `WORKSPACE-POLICY.md`, `GUIDE-NETWORK.md`, `REST-API-CONTRACT.md`.
+- `docs/INDEX.md` is also the MkDocs web entrypoint. Do not add a separate
+  lowercase `docs/index.md`; case-only twins are unsafe on Windows checkouts.
+- `docs/index.html` is the static MkDocs root redirect to `INDEX/` for GitHub
+  Pages hosting.
 - Release-control filenames may include version dots inside the existing
   `RELEASE-*` family, such as `RELEASE-0.7.3.md`.
 - Active and historical item records keep their stable item-ID filenames, such
@@ -132,3 +136,13 @@ Use `python scripts\docs-structure-check.py` after current-doc navigation,
 naming, or table-heavy edits. Wide table rows are warnings by default; pass
 `--fail-on-wide-tables` only when deliberately tightening browser-rendering
 policy.
+
+Use MkDocs for browser-formatted documentation:
+
+- install dependencies with `python -m pip install -r requirements-docs.txt`
+- preview locally with `python -m mkdocs serve`
+- build release HTML with
+  `$env:NO_MKDOCS_2_WARNING='1'; python -m mkdocs build --strict`
+
+Generated HTML belongs under `.local/mkdocs-site` and must not be committed.
+GitHub Pages publishing is owned by `.github/workflows/docs-site.yml`.

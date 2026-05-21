@@ -11,6 +11,7 @@ This directory is the single Markdown home for the tooling repo. Use
 | Active backlog and beta release status | [active/INDEX](active/INDEX.md) |
 | Repeatable backlog process | [reference/BACKLOG-PROCESS](reference/BACKLOG-PROCESS.md) |
 | Documentation ownership rules | [DOCS-POLICY](DOCS-POLICY.md) |
+| Browser-formatted documentation | [MkDocs site](INDEX.md#browser-site) |
 | Historical-reference rules | [HISTORICAL-REFERENCES](HISTORICAL-REFERENCES.md) |
 | Repo-level navigation | [../README](../README.md) |
 
@@ -76,6 +77,21 @@ GitHub-primary future-roadmap helper scripts live under `scripts/`:
 | [rest/REST-API-CONTRACT](rest/REST-API-CONTRACT.md) | Human-readable broadband REST contract |
 | [rest/REST-API-OPENAPI](rest/REST-API-OPENAPI.yaml) | Canonical machine-readable `/api/v1` OpenAPI contract |
 | [rest/REST-API-PARITY-INVENTORY](rest/REST-API-PARITY-INVENTORY.md) | Completed REST/WebServer action parity ledger |
+
+## Browser Site
+
+This Markdown tree can be rendered with MkDocs Material:
+
+```powershell
+python -m pip install -r requirements-docs.txt
+python -m mkdocs serve
+```
+
+Use `python -m mkdocs build --strict` for CI-equivalent local validation. The
+Material theme emits a current MkDocs 2.0 compatibility notice as a warning, so
+set `$env:NO_MKDOCS_2_WARNING='1'` before strict local builds. The generated
+HTML is written to `.local/mkdocs-site` and deployed to GitHub Pages by
+`.github/workflows/docs-site.yml` on `main`.
 
 ## Exploratory Ideas
 
