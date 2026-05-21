@@ -227,6 +227,36 @@ Sharing and library management:
 - monitored shares can keep selected roots synchronized
 - Shared Files UI is hardened and virtualized for large lists
 
+Shared startup cache behavior:
+
+- `sharedcache.dat` is a disposable performance sidecar. It never replaces
+  `known.met`, `known2.met`, `shareddir.dat`, or a real scan when validation is
+  uncertain.
+- eMule BB trusts the cache only after verifying that the configured shared
+  directory still describes the same directory state. If validation fails, that
+  directory is rescanned and the cache can be rebuilt later.
+- Local NTFS directories use the strongest fast path. The cache records the
+  containing volume identity, NTFS journal identity, a USN checkpoint, the
+  directory file reference, directory identity, directory timestamp, and the
+  cached file inventory.
+- Windows drive letters and mounted-folder paths are resolved through the
+  containing volume. A local NTFS volume reached as `D:\Shares\...` or through a
+  mounted folder can use the same trusted local-volume journal validation.
+- A UNC share mapped to a drive letter is treated as remote by Windows and does
+  not use the local NTFS journal fast path. Direct UNC paths and unsupported
+  path forms also fall back to generic cache validation.
+- Generic validation re-enumerates the directory and requires the current file
+  inventory to match the cached inventory by leaf name, file timestamp, and
+  file size before cached known-file entries are reused.
+- Network filesystems, non-NTFS volumes, journal resets, changed volume
+  identity, stale checkpoints, directory timestamp changes, share-ignore
+  changes, missing known-file metadata, pending hashes, interrupted cache saves,
+  or uncertain filesystem results cause the app to reject the affected cache
+  data and rescan.
+- Deleting `sharedcache.dat` is safe when intentionally troubleshooting slow or
+  suspicious sharing state. The next startup or rescan may be slower while the
+  derived cache is rebuilt.
+
 Downloads and search:
 
 - search result ceilings are configurable for eD2K and Kad
