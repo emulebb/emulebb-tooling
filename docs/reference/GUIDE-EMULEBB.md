@@ -301,6 +301,9 @@ Disk-space protection:
   choosing a temp volume that cannot satisfy the file's temp demand, avoids FAT
   candidates for files above the old FAT-safe size limit, and accounts for
   incoming-volume demand when temp and incoming are different volumes.
+- Controller add-transfer requests use the same placement guard. When no temp
+  volume can safely accept a requested transfer, the native REST response is an
+  error/failed item rather than a success envelope.
 - The periodic disk-space check runs during queue processing and at the normal
   15-minute disk-space recheck interval. Manual actions that add, resume,
   complete, or flush downloads can force a fresh snapshot sooner.

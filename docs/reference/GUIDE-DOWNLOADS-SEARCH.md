@@ -252,6 +252,11 @@ a candidate that can satisfy both temp demand and any separate incoming demand.
 If no candidate can satisfy the protected-volume snapshot, the add cannot
 select a temp directory.
 
+Native REST add-transfer requests go through the same placement logic. If the
+disk-space guard rejects the transfer because no configured temp volume can
+accept it safely, the API reports an error/failed item for that request instead
+of returning a successful `ok: true` outcome.
+
 Preview paths perform additional checks because preview may need temporary
 copies. Archive-copy preview requires enough free space for the protected floor
 plus two copies of the file size. Normal preview requires the floor plus the
