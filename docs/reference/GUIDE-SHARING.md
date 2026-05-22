@@ -29,7 +29,7 @@ Important sharing files:
 | `shareignore.dat` | BB-specific ignore rules for share scanning |
 | `sharedcache.dat` | Startup cache for large shared libraries |
 | `shareddups.dat` | Duplicate path cache |
-| `known.met`, `known2.met` | Known shared-file metadata and AICH state |
+| `known.met`, `known2_64.met` | Known shared-file metadata and AICH state |
 
 Use the Shared Files page for normal operation. Use text-file editors from
 Tools only for controlled maintenance.
@@ -110,7 +110,7 @@ and known-file metadata. A usable record includes the canonical shared
 directory path, directory identity when Windows can provide it, directory
 timestamp, validation mode, cached file count, and cached file entries. Cached
 file entries use the file leaf name, file timestamp, and file size to reconnect
-startup state with existing `known.met`/`known2.met` metadata.
+startup state with existing `known.met`/`known2_64.met` metadata.
 
 Two validation modes are used:
 
@@ -166,8 +166,10 @@ Cache writes use temporary files and replacement so a failed write should not
 turn the cache into source-of-truth state. If startup cache diagnostics show a
 reject reason, the normal recovery action is to rescan shared files. Removing
 `sharedcache.dat` is safe when deliberately forcing a rebuild; do not remove
-`known.met`, `known2.met`, or `shareddir.dat` unless following a separate
-profile-recovery procedure.
+`known.met`, `known2_64.met`, or `shareddir.dat` unless following a separate
+profile-recovery procedure. See the
+[Persistence Files](GUIDE-PERSISTENCE-FILES.md) reference for recovery priority
+and `.met`/`.dat` file roles.
 
 ## Shared Files UI
 

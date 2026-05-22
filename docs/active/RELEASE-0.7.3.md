@@ -31,9 +31,13 @@ Use it for status, release-source truth, and the open beta task list.
 - Tag: `emule-bb-v0.7.3`
 - Assets:
   - `eMule-broadband-0.7.3-x64.zip`
+  - `eMule-broadband-0.7.3-x64.sbom.spdx.json`
   - `eMule-broadband-0.7.3-arm64.zip`
+  - `eMule-broadband-0.7.3-arm64.sbom.spdx.json`
   - optional controller asset:
     `eMule-broadband-0.7.3-amutorrent-x64.zip`
+  - optional controller SBOM:
+    `eMule-broadband-0.7.3-amutorrent-x64.sbom.spdx.json`
 
 ## Active Control Docs
 
@@ -59,8 +63,8 @@ Historical gate evidence and superseded cluster plans live under
 The beta backlog is narrowed to `CI-038` and `CI-035`. Remaining work is the
 release-scope language/resource live gate, final certification proof, fresh
 x64/ARM64 core package regeneration, optional aMuTorrent x64 package
-regeneration, hash recording, clean-worktree confirmation, and the later
-operator-controlled tag instruction.
+regeneration, package SBOM generation, hash recording, clean-worktree
+confirmation, and the later operator-controlled tag instruction.
 
 All other active `FEAT`, `REF`, warning-debt, cleanup, and polish items are
 post-`0.7.3` by default. A non-blocking item may enter the beta only if a
@@ -101,6 +105,10 @@ Accepted non-blockers for beta `0.7.3`:
   preference schema now validates storage uniqueness, REST bindings, and
   Preferences UI source bindings; it resets the build-tests/tooling candidate
   heads but does not replace fresh proof or package hashes.
+- [FEAT-071](../history/items/FEAT-071.md): remote filename intake now repairs
+  conservative Western mojibake and bounded HTML/XML entities before existing
+  filename cleanup; it resets the app/build-tests/tooling candidate heads but
+  does not replace fresh proof or package hashes.
 - [REF-034](items/REF-034.md): Crypto++ 8.9 dependency refresh is deferred
   post-beta.
 - IP-filter HTTP update transport from
@@ -118,7 +126,8 @@ Beta `0.7.3` can be tagged only when:
 - no active workspace repo has unrelated uncommitted changes; and
 - the operator gives a separate tagging instruction.
 
-The accepted `FEAT-058`, `FEAT-059`, `FEAT-060`, and `FEAT-061` closeout
-hardening changed release-facing documentation, app UI, app REST metadata, and
-build-test guardrails after the previous prep audit. Final proof must target
-the pushed heads that exist after this polish and hardening lands.
+The accepted `FEAT-058`, `FEAT-059`, `FEAT-060`, `FEAT-061`, and `FEAT-071`
+closeout hardening changed release-facing documentation, app UI, app REST
+metadata, build-test guardrails, and remote filename intake after the previous
+prep audit. Final proof must target the pushed heads that exist after this
+polish and hardening lands.

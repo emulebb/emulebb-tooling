@@ -40,9 +40,11 @@ Keep these locations conceptually separate:
 | Shared directories | User-selected publish roots |
 
 Common profile files include `preferences.ini`, `preferences.dat`,
-`server.met`, `nodes.dat`, `known.met`, `known2.met`, `cancelled.met`,
+`server.met`, `nodes.dat`, `known.met`, `known2_64.met`, `cancelled.met`,
 `Category.ini`, `ipfilter.dat`, `addresses.dat`, `shareignore.dat`,
-`shareddir.dat`, monitored-share files, and active `.part.met` files.
+`shareddir.dat`, monitored-share files, and active `.part.met` files. See the
+[Persistence Files](GUIDE-PERSISTENCE-FILES.md) reference for `.met` and `.dat`
+roles, structures, and recovery priority.
 
 Before reusing a stock profile, close all eMule-family clients and copy the
 whole config directory as a rollback backup. Do not run multiple clients against
@@ -265,7 +267,7 @@ Sharing and library management:
 Shared startup cache behavior:
 
 - `sharedcache.dat` is a disposable performance sidecar. It never replaces
-  `known.met`, `known2.met`, `shareddir.dat`, or a real scan when validation is
+  `known.met`, `known2_64.met`, `shareddir.dat`, or a real scan when validation is
   uncertain.
 - eMule BB trusts the cache only after verifying that the configured shared
   directory still describes the same directory state. If validation fails, that
@@ -407,7 +409,7 @@ Common symptom routing:
 ## Compatibility Notes
 
 Core profile files remain stock-compatible where possible, including
-`preferences.dat`, `clients.met`, `cryptkey.dat`, `known.met`, `known2.met`,
+`preferences.dat`, `clients.met`, `cryptkey.dat`, `known.met`, `known2_64.met`,
 `cancelled.met`, `.part.met`, `server.met`, and `nodes.dat`.
 
 eMule BB also writes branch-specific state such as `shareignore.dat`,

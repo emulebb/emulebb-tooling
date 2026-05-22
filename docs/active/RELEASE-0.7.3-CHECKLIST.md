@@ -46,13 +46,13 @@ Run certification with the required local live inputs and Arr roots when those
 are needed by the operator environment, for example
 `--live-wire-inputs-file`, `--radarr-movie-root`, and `--sonarr-series-root`.
 Record certification reports, command summaries, commits, log paths, package
-paths, and SHA-256 hashes in [CI-035](items/CI-035.md).
+paths, SBOM paths, and SHA-256 hashes in [CI-035](items/CI-035.md).
 
 `package-release` is the package verification gate. It must fail instead of
 writing accepted manifests when a ZIP is missing a required runtime/doc file,
 does not contain the full stock language DLL set, contains a language DLL for
 the wrong architecture, contains source/build/debug artifacts, or cannot record
-per-file SHA-256 hashes in the package manifest.
+per-file SHA-256 hashes and SPDX SBOM provenance in the package manifest.
 
 Current state: non-live build/test rows have partial historical evidence in
 [CI-035](items/CI-035.md), [CI-037](../history/items/CI-037.md) records a passed expanded
@@ -86,6 +86,11 @@ validation changed the build-tests candidate. Treat all final proof rows as
 pending until rerun on the pushed heads that exist after this schema hardening
 lands.
 
+The accepted [FEAT-071](../history/items/FEAT-071.md) filename mojibake repair
+changed the app and build-tests candidates. Treat all final proof rows as
+pending until rerun on the pushed heads that exist after this filename-intake
+hardening lands.
+
 Run the remaining queue in this order:
 
 1. Revalidate the active release docs and item dispositions.
@@ -93,8 +98,8 @@ Run the remaining queue in this order:
    including the expanded weak-path live gate and `ui-resource-depth`.
 3. Regenerate x64, ARM64, and optional aMuTorrent x64 packages only after proof
    succeeds.
-4. Record fresh package paths, manifests, SHA-256 hashes, and repo commits in
-   [CI-035](items/CI-035.md).
+4. Record fresh package paths, manifests, SBOMs, SHA-256 hashes, and repo
+   commits in [CI-035](items/CI-035.md).
 5. Leave the annotated tag step blocked until the operator gives a separate tag
    instruction.
 
@@ -122,10 +127,10 @@ This add-on does not replace the required overnight certification row above.
 - [ ] Each ZIP contains exactly the full stock language DLL set under
       `eMule\lang`.
 - [ ] Each ZIP contains package-facing README, release notes, GPL text,
-      third-party notices, and REST docs. Legacy web templates are frozen
-      baggage and are not required release assets.
+      third-party notices, SPDX SBOM, and REST docs. Legacy web templates are
+      frozen baggage and are not required release assets.
 - [ ] Package manifests record the ZIP hash, `emule.exe` hash, expected
-      language DLL list/count, and per-file package hashes.
+      language DLL list/count, SBOM hash, and per-file package hashes.
 - [ ] Package notes state that ZIPs are not code-signed, contain no debug
       symbols, and do not bundle optional `MediaInfo.dll`.
 
@@ -134,7 +139,11 @@ This add-on does not replace the required overnight certification row above.
 - [ ] Confirm no active workspace repo has unrelated uncommitted changes.
 - [ ] Confirm fresh x64 and ARM64 package hashes are recorded in
       [CI-035](items/CI-035.md).
+- [ ] Confirm fresh x64 and ARM64 package SBOM hashes are recorded in
+      [CI-035](items/CI-035.md).
 - [ ] Confirm the optional aMuTorrent x64 package hash is recorded in
+      [CI-035](items/CI-035.md) if that asset is published.
+- [ ] Confirm the optional aMuTorrent x64 package SBOM hash is recorded in
       [CI-035](items/CI-035.md) if that asset is published.
 - [ ] Create the annotated beta tag only after package verification and a
       separate operator instruction.

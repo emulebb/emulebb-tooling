@@ -19,9 +19,9 @@ records, not workflow status authority.
 ## Current Snapshot
 
 **Source of truth:** `EMULE_WORKSPACE_ROOT\workspaces\workspace\app\eMule-main` (`main` branch)  
-**Current non-done count:** `63`
+**Current non-done count:** `62`
 **Latest release-doc refresh:** 2026-05-21
-**Non-done by status:** `45` OPEN, `8` IN_PROGRESS, `10` DEFERRED, `0` BLOCKED.
+**Non-done by status:** `44` OPEN, `8` IN_PROGRESS, `10` DEFERRED, `0` BLOCKED.
 **Backlog counts:** item tables below are authoritative.
 **Beta 0.7.3 relevance:** Most non-done items below are future or deferred work;
 current beta gate and proof status is controlled by [RELEASE-0.7.3](RELEASE-0.7.3.md).
@@ -346,7 +346,7 @@ not active item docs.
 | [FEAT-068](items/FEAT-068.md) | Minor | OPEN | Bound REST shared-files memory use for very large libraries |
 | [FEAT-069](items/FEAT-069.md) | Minor | OPEN | Shared-file include and exclude pattern rules |
 | [FEAT-070](items/FEAT-070.md) | Minor | OPEN | Add targeted client UserHash and upload-lifecycle diagnostics |
-| [FEAT-071](items/FEAT-071.md) | Minor | OPEN | Filename mojibake repair for search results and download intake |
+| [FEAT-071](../history/items/FEAT-071.md) | Minor | DONE | Filename mojibake repair for search results and download intake |
 
 ---
 

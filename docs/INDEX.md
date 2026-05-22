@@ -68,6 +68,7 @@ GitHub-primary future-roadmap helper scripts live under `scripts/`:
 | [reference/GUIDE-SHARING](reference/GUIDE-SHARING.md) | Shared directories, monitored shares, large libraries, and share-ignore policy |
 | [reference/GUIDE-DOWNLOADS-SEARCH](reference/GUIDE-DOWNLOADS-SEARCH.md) | Downloads, search, categories, broadband upload policy, modern limits, and copy workflows |
 | [reference/GUIDE-PREFERENCES](reference/GUIDE-PREFERENCES.md) | Single preference manual: `preferences.ini`, compatibility, defaults/ranges, schema coverage, and REST mutation |
+| [reference/GUIDE-PERSISTENCE-FILES](reference/GUIDE-PERSISTENCE-FILES.md) | Runtime `.met` and `.dat` file roles, structure, editability, backup importance, and recovery notes |
 | [reference/GUIDE-CONTROLLERS-REST](reference/GUIDE-CONTROLLERS-REST.md) | REST, aMuTorrent, Arr, qBit, and Torznab controller guidance |
 | [reference/ED2K-PROJECT-INVENTORY](reference/ED2K-PROJECT-INVENTORY.md) | eD2K/eMule ecosystem inventory, including ED2K servers, server lists, clients, controllers, libraries, and historical mods |
 | [reference/GUIDE-IP-FILTERS](reference/GUIDE-IP-FILTERS.md) | IP filter storage, seeded URLs, formats, and practical use |

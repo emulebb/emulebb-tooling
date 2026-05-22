@@ -76,12 +76,15 @@ Common profile files include:
 
 - `preferences.ini` and `preferences.dat`
 - `server.met` and `nodes.dat`
-- `known.met`, `known2.met`, and `cancelled.met`
+- `known.met`, `known2_64.met`, and `cancelled.met`
 - `Category.ini`
 - `ipfilter.dat` and `addresses.dat`
 - `shareignore.dat` and `shareddir.dat`
 - monitored-share files and shared-cache sidecars
 - active `.part.met` files for incomplete downloads
+
+For `.met` and `.dat` roles, structures, and recovery priority, use the
+[Persistence Files](GUIDE-PERSISTENCE-FILES.md) reference.
 
 If the old profile has stale paths, fix directories before starting downloads.
 If the old profile has broad shared roots, let scanning finish before judging
