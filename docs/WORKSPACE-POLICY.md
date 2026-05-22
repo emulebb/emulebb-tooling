@@ -294,16 +294,36 @@ The canonical workspace currently materializes these app worktrees:
 
 ## Live Test Network Policy
 
-- Every live test that launches an eMule profile must enable the main P2P UPnP
-  preference.
-- Every live test that launches an eMule profile must bind the P2P stack through
-  the `hide.me` interface by writing `BindInterface=hide.me`.
-- Live test harnesses must not write `hide.me` into `BindAddr`; `BindAddr` is an
-  address override and should remain empty when the bind target is an interface
-  name.
-- Standalone live test entrypoints must use the same defaults as aggregate live
-  runners. Do not make UPnP or the `hide.me` bind depend on aggregate-only
-  wrapper flags.
+- Live tests fall into two network classes:
+  - **Public network live tests** contact the real public eD2K/Kad network,
+    public servers, public peers, public search results, or operator-provided
+    live-wire terms.
+  - **Local live-stack tests** run only against deterministic workspace-owned
+    services and clients, such as the local ED2K server, local Kad swarms,
+    local peer matrices, VHD-backed profiles, or LAN-only protocol fixtures.
+- Public network live tests that launch an eMule profile must enable the main
+  P2P UPnP preference.
+- Public network live tests that launch an eMule profile must bind the P2P stack
+  through the `hide.me` interface by writing `BindInterface=hide.me`.
+- Public network live test harnesses must not write `hide.me` into `BindAddr`;
+  `BindAddr` is an address override and should remain empty when the bind target
+  is an interface name.
+- Standalone public network live test entrypoints must use the same defaults as
+  aggregate live runners. Do not make UPnP or the `hide.me` bind depend on
+  aggregate-only wrapper flags.
+- Local live-stack tests are allowed to bind to LAN addresses, local-only
+  virtual adapters, test-specific network adapters, or explicit local IP
+  addresses when that is required for deterministic eD2K/Kad behavior, Release
+  build IP validation, multi-client isolation, or VHD-backed profile scenarios.
+- Local live-stack tests may add or select local IP addresses and adapters as
+  test inputs, provided the test remains isolated from public peer discovery and
+  documents the selected bind mode in its result metadata or log output.
+- Local live-stack tests must not depend on `hide.me` unless the scenario is
+  deliberately validating VPN/interface behavior. They should prefer explicit
+  LAN/interface binding over public-network routing.
+- A local live-stack test becomes a public network live test as soon as it
+  contacts public eD2K/Kad infrastructure, imports public bootstrap nodes,
+  performs public searches, or accepts public peer discovery.
 - Live-wire media titles and search terms are operator-owned runtime inputs.
   Never hardcode real movie, series, or release titles in tracked harness code,
   docs, or tests. Load live terms from `live-wire-inputs.local.json` or an
