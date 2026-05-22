@@ -28,6 +28,24 @@ local input requirements are visible:
 python -m emule_workspace test release-campaign --campaign emule-bb-0.7.3
 ```
 
+## Repeatable Build Matrix
+
+Use these rows when refreshing build evidence. Do not substitute direct
+MSBuild commands for the workspace entrypoint.
+
+| Purpose | Command | Output contract |
+|---|---|---|
+| Developer Debug x64 | `python -m emule_workspace build app --variant main --config Debug --platform x64 --build-output-mode ErrorsOnly` | `workspaces\workspace\app\eMule-main\srchybrid\x64\Debug`; startup profiling is compiled by `_DEBUG`. |
+| Developer Release x64 | `python -m emule_workspace build app --variant main --config Release --platform x64 --build-output-mode ErrorsOnly` | `workspaces\workspace\app\eMule-main\srchybrid\x64\Release`; startup profiling is compiled in and runtime-gated by `EMULE_STARTUP_PROFILE`. |
+| Package Release x64 | `python -m emule_workspace package-release --config Release --platform x64 --clean` | app binary/intermediates under `workspaces\workspace\state\package-build\emule-bb-v0.7.3\x64`; packaged binary must not contain startup profiling support. |
+| Package Release ARM64 | `python -m emule_workspace package-release --config Release --platform ARM64 --clean` | app binary/intermediates under `workspaces\workspace\state\package-build\emule-bb-v0.7.3\arm64`; packaged binary must not contain startup profiling support. |
+
+`package-release` stages ZIP contents under
+`workspaces\workspace\state\release\emule-bb-v0.7.3\staging\<arch>` and writes
+the final ZIP, manifest, and SBOM next to that staging directory. Package app
+outputs are intentionally separate from developer app outputs so profiling
+builds cannot be reused for release ZIPs.
+
 ## Certification Proof
 
 ```powershell
@@ -87,8 +105,8 @@ checks. It is not a substitute for the overnight certification row.
 ## Packaging
 
 ```powershell
-python -m emule_workspace package-release --config Release --platform x64
-python -m emule_workspace package-release --config Release --platform ARM64
+python -m emule_workspace package-release --config Release --platform x64 --clean
+python -m emule_workspace package-release --config Release --platform ARM64 --clean
 ```
 
 Package manifests are written next to the ZIP assets under:
@@ -105,13 +123,15 @@ eMule-broadband-0.7.3-arm64.zip
 ```
 
 The packaging command is intentionally strict. It builds the selected
-architecture, builds the stock language resource DLLs, stages the portable ZIP,
-then verifies the package before writing the manifest. Verification covers:
+architecture into the package-only app output root, builds the stock language
+resource DLLs, stages the portable ZIP, then verifies the package before
+writing the manifest. Verification covers:
 
 - `emule.exe`, full stock `lang\*.dll` set, `webserver\eMule.tmpl`, package
   README, release notes, GPL text, third-party notices, and REST docs;
 - x64 packages containing only x64 PE files and ARM64 packages containing only
   ARM64 PE files for `emule.exe` and language DLLs;
+- release package `emule.exe` not containing startup profiling support;
 - no source files, project files, debug symbols, intermediates, or build logs in
   the ZIP; and
 - manifest fields for ZIP hash, executable hash, expected language DLL
