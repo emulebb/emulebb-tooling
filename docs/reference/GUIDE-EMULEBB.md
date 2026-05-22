@@ -263,6 +263,8 @@ Sharing and library management:
 - shared startup cache and duplicate-path cache accelerate large libraries
 - monitored shares can keep selected roots synchronized
 - Shared Files UI is hardened and virtualized for large lists
+- Shared Files `Last Request` uses the same list date/time formatting preference
+  as other native list timestamp columns
 
 Shared startup cache behavior:
 
@@ -360,6 +362,15 @@ Controllers and diagnostics:
 - Tools actions expose save, reload, firewall repair, Windows maintenance,
   diagnostics, dumps, view presets, config-file editors, and folder shortcuts
 - redacted diagnostic snapshots are the default support artifact
+
+Display and date/time:
+
+- normal native UI date/time text follows the Windows user locale by default
+- users can customize general, log, and list timestamps with MFC
+  `CTime::Format` strings in `preferences.ini`
+- [Preferences Guide](GUIDE-PREFERENCES.md#date-and-time-formatting) documents
+  the supported keys, common format tokens, examples, and the distinction
+  between user-formatted UI timestamps and fixed protocol/API timestamps
 
 ## Tools And Maintenance
 

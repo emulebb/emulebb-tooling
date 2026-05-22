@@ -196,6 +196,73 @@ configuration and troubleshooting:
 Exact keys, owners, UI bindings, and REST bindings are in the complete reference
 below.
 
+## Date And Time Formatting
+
+eMule BB uses the Windows user locale for normal date/time text. At startup the
+app initializes the C runtime locale from Windows, then keeps numeric formatting
+stable by forcing the numeric category back to `C`. In practice, date and time
+names follow the user's Windows language and regional settings, while decimal
+and protocol-oriented numeric output stays predictable.
+
+Three persisted format strings control most native UI timestamps:
+
+| Key | Default | Used for |
+|---|---|---|
+| `DateTimeFormat` | `%A, %c` | General file, friend, and peer detail displays |
+| `DateTimeFormat4Log` | `%c` | Log lines and log-like status output |
+| `DateTimeFormat4Lists` | `%c` | List-view timestamp columns, including Downloads timestamps and Shared Files `Last Request` |
+
+These values are MFC `CTime::Format` format strings, which follow the C
+`strftime` token model. Literal text can be written directly in the value. Use
+`%%` when a literal percent sign is needed.
+
+Common tokens:
+
+| Token | Meaning | Example shape |
+|---|---|---|
+| `%c` | Locale date and time representation | user-locale date plus time |
+| `%x` | Locale date representation | user-locale date |
+| `%X` | Locale time representation | user-locale time |
+| `%A` | Full weekday name | `Friday` |
+| `%a` | Abbreviated weekday name | `Fri` |
+| `%B` | Full month name | `May` |
+| `%b` | Abbreviated month name | `May` |
+| `%Y` | Four-digit year | `2026` |
+| `%y` | Two-digit year | `26` |
+| `%m` | Month number, zero-padded | `05` |
+| `%d` | Day of month, zero-padded | `22` |
+| `%H` | Hour, 24-hour clock, zero-padded | `14` |
+| `%I` | Hour, 12-hour clock, zero-padded | `02` |
+| `%M` | Minute, zero-padded | `07` |
+| `%S` | Second, zero-padded | `09` |
+| `%p` | Locale AM/PM marker | `PM` |
+| `%j` | Day of year, zero-padded | `142` |
+| `%w` | Weekday number, Sunday as `0` | `5` |
+| `%U` | Week number, Sunday first day | `20` |
+| `%W` | Week number, Monday first day | `20` |
+| `%%` | Literal percent sign | `%` |
+
+Useful examples:
+
+| Format string | Output shape |
+|---|---|
+| `%c` | Windows locale default date/time |
+| `%Y-%m-%d %H:%M:%S` | `2026-05-22 14:07:09` |
+| `%d.%m.%Y %H:%M` | `22.05.2026 14:07` |
+| `%A, %x %X` | full weekday plus locale date/time |
+
+Keep custom values concise for list columns and logs. `DateTimeFormat` and
+`DateTimeFormat4Log` are validated as non-empty by the Preferences UI.
+`DateTimeFormat4Lists` is used directly by list controls, so an empty or
+invalid direct INI edit can produce blank or confusing list timestamps.
+
+Not every timestamp is user-formatted. Protocol, HTTP, REST, and
+machine-readable outputs keep fixed formats or raw Unix timestamps where
+interoperability matters. For example, HTTP `Last-Modified` uses an English GMT
+wire format, REST JSON timestamp fields use Unix seconds or `null`, and some
+diagnostic/performance log files intentionally use fixed machine-readable
+formats.
+
 ## REST Preferences
 
 REST exposes a curated mutable subset of preferences. It is not a general
