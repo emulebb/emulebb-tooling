@@ -35,6 +35,7 @@ plugins:
 nav:
   - Home: INDEX.md
   - Workspace Policy: WORKSPACE-POLICY.md
+  - Agent Checklist: reference/AGENT-CHECKLIST.md
   - Documentation Policy: DOCS-POLICY.md
   - Active:
       - Backlog Index: active/INDEX.md

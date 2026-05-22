@@ -2,6 +2,8 @@
 
 This document is the single source of truth for the canonical eMule workspace.
 Repo-local docs should point here instead of restating workspace-wide policy.
+AI contributors should use the [Agent Checklist](reference/AGENT-CHECKLIST.md)
+as the repeatable operating path after reading this policy.
 
 ## Session Startup Contract
 
@@ -202,6 +204,8 @@ Routine `validate` in `repos\eMule-build` must run the active static audits:
 - All active Markdown documentation belongs under `repos\eMule-tooling\docs`.
 - `docs\DOCS-POLICY.md` owns the documentation taxonomy, naming conventions,
   navigation expectations, and browser-readability rules.
+- `docs\reference\AGENT-CHECKLIST.md` is the repeatable operating checklist
+  for AI agents contributing to the workspace.
 - `docs\reference\DEVELOPMENT-GUIDE.md` is the practical guide for routine
   docs-first and light-code contribution work.
 - Backlog and planning docs are supporting specs, not authority by themselves.

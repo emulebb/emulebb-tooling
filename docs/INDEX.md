@@ -8,6 +8,7 @@ This directory is the single Markdown home for the tooling repo. Use
 | Need | Primary Doc |
 |---|---|
 | Workspace policy | [WORKSPACE-POLICY](WORKSPACE-POLICY.md) |
+| AI contributor repeatability checklist | [reference/AGENT-CHECKLIST](reference/AGENT-CHECKLIST.md) |
 | Active backlog and beta release status | [active/INDEX](active/INDEX.md) |
 | Repeatable backlog process | [reference/BACKLOG-PROCESS](reference/BACKLOG-PROCESS.md) |
 | Documentation ownership rules | [DOCS-POLICY](DOCS-POLICY.md) |
@@ -57,6 +58,7 @@ GitHub-primary future-roadmap helper scripts live under `scripts/`:
 
 | Document | Description |
 |---|---|
+| [reference/AGENT-CHECKLIST](reference/AGENT-CHECKLIST.md) | Repeatable operating checklist for AI agents contributing to the workspace |
 | [reference/GUIDE-EMULEBB](reference/GUIDE-EMULEBB.md) | eMule BB product manual entry point, setup, tools, diagnostics, and compatibility |
 | [reference/BACKLOG-PROCESS](reference/BACKLOG-PROCESS.md) | Repeatable workflow for creating, updating, validating, and closing backlog records |
 | [reference/CI-BASELINE](reference/CI-BASELINE.md) | Reusable CI baseline workflow contract |

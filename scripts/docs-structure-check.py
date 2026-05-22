@@ -14,6 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DOCS = ROOT / "docs"
 WIDE_TABLE_WARN_LIMIT = 180
 MAX_WIDE_TABLE_WARNINGS = 50
+AGENT_CHECKLIST_REL = "reference/AGENT-CHECKLIST.md"
 
 CURRENT_DOC_DIRS = {
     "active",
@@ -113,6 +114,58 @@ def check_index_navigation(errors: list[str]) -> None:
                 errors.append(f"docs/INDEX.md: missing navigation link for {rel}")
 
 
+def assert_contains(path: Path, needle: str, errors: list[str], message: str) -> None:
+    """Validate that a text file contains a required reference."""
+
+    if not path.is_file():
+        errors.append(f"{path.relative_to(ROOT)}: missing required file")
+        return
+    if needle not in read_text(path):
+        errors.append(f"{path.relative_to(ROOT)}: {message}")
+
+
+def check_agent_checklist(errors: list[str]) -> None:
+    """Validate that the agent checklist is present and discoverable."""
+
+    checklist = DOCS / AGENT_CHECKLIST_REL
+    if not checklist.is_file():
+        errors.append(f"docs/{AGENT_CHECKLIST_REL}: missing agent checklist")
+        return
+
+    assert_contains(
+        DOCS / "INDEX.md",
+        AGENT_CHECKLIST_REL,
+        errors,
+        "missing link to agent checklist",
+    )
+    assert_contains(
+        DOCS / "WORKSPACE-POLICY.md",
+        "reference/AGENT-CHECKLIST.md",
+        errors,
+        "missing link to agent checklist",
+    )
+    assert_contains(
+        DOCS / "reference" / "DEVELOPMENT-GUIDE.md",
+        "AGENT-CHECKLIST.md",
+        errors,
+        "missing link to agent checklist",
+    )
+    assert_contains(
+        ROOT / "README.md",
+        "docs/reference/AGENT-CHECKLIST.md",
+        errors,
+        "missing link to agent checklist",
+    )
+
+    mkdocs = ROOT / "mkdocs.yml"
+    if not mkdocs.is_file():
+        errors.append("mkdocs.yml: missing required MkDocs config")
+        return
+    mkdocs_text = read_text(mkdocs)
+    if f"Agent Checklist: {AGENT_CHECKLIST_REL}" not in mkdocs_text:
+        errors.append("mkdocs.yml: missing top-level Agent Checklist nav entry")
+
+
 def find_wide_table_rows(limit: int) -> list[WideTableRow]:
     """Return current-doc Markdown table rows wider than the configured limit."""
 
@@ -153,6 +206,7 @@ def main() -> int:
         check_filename(path, errors)
         check_heading(path, errors)
     check_index_navigation(errors)
+    check_agent_checklist(errors)
 
     wide_rows = find_wide_table_rows(args.wide_table_limit)
     for row in wide_rows[:MAX_WIDE_TABLE_WARNINGS]:

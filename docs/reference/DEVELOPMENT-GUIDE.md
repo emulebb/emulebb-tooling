@@ -4,6 +4,8 @@ This guide is the practical entry point for internal contributors and operators
 who make routine documentation updates and light code changes in the canonical
 workspace. [Workspace Policy](../WORKSPACE-POLICY.md) remains the authority for
 branch, worktree, build, test, release, and documentation rules.
+AI contributors should start with the [Agent Checklist](AGENT-CHECKLIST.md)
+for the repeatable end-to-end operating path.
 
 ## Contributor Model
 
@@ -37,6 +39,7 @@ Before editing:
 | Change type | Primary location | Notes |
 |---|---|---|
 | Workspace policy | `docs\WORKSPACE-POLICY.md` | Mandatory rules only; avoid workflow prose here. |
+| Agent repeatability | `docs\reference\AGENT-CHECKLIST.md` | End-to-end checklist for AI contributors. |
 | Documentation taxonomy | `docs\DOCS-POLICY.md` | Naming, nav, table, and docs-structure rules. |
 | Contributor workflow | `docs\reference\DEVELOPMENT-GUIDE.md` | Practical checklists for routine work. |
 | Backlog process | `docs\reference\BACKLOG-PROCESS.md` | Repeatable backlog mechanics and item lifecycle. |

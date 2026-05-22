@@ -19,6 +19,8 @@ It is not the app repo and it is not the build orchestrator:
   <https://emulebb.github.io/eMule-tooling/>
 - workspace policy:
   [`docs/WORKSPACE-POLICY.md`](docs/WORKSPACE-POLICY.md)
+- agent checklist:
+  [`docs/reference/AGENT-CHECKLIST.md`](docs/reference/AGENT-CHECKLIST.md)
 - development guide:
   [`docs/reference/DEVELOPMENT-GUIDE.md`](docs/reference/DEVELOPMENT-GUIDE.md)
 - documentation policy:
@@ -90,5 +92,7 @@ Canonical paths are expressed through `EMULE_WORKSPACE_ROOT`:
 
 Use [`docs/WORKSPACE-POLICY.md`](docs/WORKSPACE-POLICY.md) for the operating
 contract before making workspace decisions. Use
+[`docs/reference/AGENT-CHECKLIST.md`](docs/reference/AGENT-CHECKLIST.md) for
+the repeatable AI contributor checklist. Use
 [`docs/reference/DEVELOPMENT-GUIDE.md`](docs/reference/DEVELOPMENT-GUIDE.md)
 for the routine contributor workflow.
