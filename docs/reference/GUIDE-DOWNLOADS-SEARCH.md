@@ -119,6 +119,37 @@ Good category practice:
 eMule BB can normalize download names on intake and completion. This is intended
 to reduce obvious junk, not to erase identity.
 
+Before normal cleanup, remote search and download-intake filenames pass through
+a conservative text repair step. This step is filename-only and is meant for
+common encoding damage seen in eD2K/Kad search results, pasted eD2K links, and
+controller add-transfer requests:
+
+- Western UTF-8 text that was decoded as Windows-1252 or Latin-1, such as
+  `cittÃ `, `EspaÃ±a`, `canciÃ³n`, and `Â¿QuÃ©?`
+- Windows-1252 punctuation mojibake such as `â€™`, `â€œ`, `â€¦`, and en/em dashes
+- bounded HTML/XML entities in filenames, including `&amp;`, `&lt;`, `&gt;`,
+  `&quot;`, `&apos;`, `&nbsp;`, decimal numeric entities such as `&#241;`, and
+  hexadecimal numeric entities such as `&#xF1;`
+
+Entity decoding runs first, with at most two passes so double-escaped numeric
+entities can be repaired without turning the filename parser into a browser.
+Mojibake repair then runs only when known damage markers are present. If the
+candidate repair does not clearly reduce those markers, or if numeric entities
+decode to invalid Unicode/control values, the original text is kept.
+
+The repaired name becomes the primary remote-intake name shown by search,
+download creation, REST add-transfer, and later download filename cleanup. The
+raw damaged name is not exposed as a separate REST field. eMule BB does not use
+this feature to reinterpret protocol packets globally, rewrite comments,
+usernames, server names, or arbitrary metadata, and it does not silently rename
+already-shared local files on disk.
+
+Decoded characters still go through the existing filename cleanup where a
+download filename is being created or completed. For example, `&quot;` and `&lt;`
+may decode to characters that Windows cannot use in a leaf filename; the normal
+download cleanup removes or normalizes them consistently with other unsafe
+filename input.
+
 Review before batch changes when:
 
 - the filename becomes generic

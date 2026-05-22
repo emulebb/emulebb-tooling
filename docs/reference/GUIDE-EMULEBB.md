@@ -101,7 +101,7 @@ active release dashboard.
 | Geolocation | DB-IP city geolocation update and display support | FEAT-020 | [Network Guide](GUIDE-NETWORK.md) |
 | Profile selection | `-c <base-dir>` startup profile override for isolated profiles | FEAT-022 | [Setup Guide](GUIDE-SETUP.md) |
 | Sharing policy | `shareignore.dat`, monitored shares, startup cache, duplicate cache, and Shared Files virtualization | FEAT-024, FEAT-026, FEAT-027, FEAT-028, FEAT-038 | [Sharing Guide](GUIDE-SHARING.md) |
-| Filename hygiene | Download filename cleanup on intake, completion, and message display | FEAT-025, FEAT-054 | [Downloads and Search Guide](GUIDE-DOWNLOADS-SEARCH.md) |
+| Filename hygiene | Download filename cleanup, remote-intake mojibake/entity repair, and message display cleanup | FEAT-025, FEAT-054, FEAT-071 | [Downloads and Search Guide](GUIDE-DOWNLOADS-SEARCH.md) |
 | Network binding | Completed P2P bind coverage and separate WebServer bind behavior | FEAT-030 | [Network Guide](GUIDE-NETWORK.md) |
 | Disk safety | Disk-space floor hardening and legacy import-flow retirement | FEAT-033 | [Downloads and Search Guide](GUIDE-DOWNLOADS-SEARCH.md) |
 | IP filters | Automatic IP-filter update scheduling and reload behavior | FEAT-042 | [IP Filter Guide](GUIDE-IP-FILTERS.md) |
@@ -260,6 +260,8 @@ Shared startup cache behavior:
 Downloads and search:
 
 - search result ceilings are configurable for eD2K and Kad
+- remote search and download-intake filenames repair conservative Western
+  mojibake and bounded HTML/XML entities before normal filename cleanup
 - download filename cleanup can normalize intake and completion names
 - categories remain first-class workflow state
 - qBittorrent-style shortcuts and batch menu actions preserve native delete,
