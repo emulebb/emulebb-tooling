@@ -96,8 +96,11 @@ python -m emule_workspace build app --variant main --config Release --platform x
 - Preserve stock/eMule translations. Do not mass-retranslate legacy labels.
 - New release-facing strings must land in `srchybrid\emule.rc` and every stock
   `srchybrid\lang\*.rc` language before release proof.
-- Use tooling helpers for release localization audits and managed-string
-  updates; do not run concurrent `.rc` writes.
+- Use tooling helpers for release localization coverage, layout/order audits,
+  and managed-string updates; do not run concurrent `.rc` writes.
+- Preserve community labels exactly unless making an explicit targeted
+  correction. New labels need reviewed AI-assisted or curated translations for
+  every release language before they are treated as release-ready.
 - Treat external or historical translation engines as inspiration only, not
   authoritative release sources.
 

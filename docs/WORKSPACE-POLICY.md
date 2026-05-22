@@ -324,16 +324,25 @@ Routine `validate` in `repos\eMule-build` must run the active static audits:
   stock resource file set.
 - New release-facing user-visible strings must land in `srchybrid\emule.rc` and
   every stock language file before release proof.
-- Existing stock/eMule translation strings must be preserved. Do not
+- Existing stock/eMule community translation strings must be preserved exactly
+  as labels unless the user explicitly asks for a targeted correction. Do not
   mass-retranslate legacy labels or rewrite unrelated strings during a
   release-label pass.
-- New eMule BB labels must be meaningfully translated. Machine translation may
-  be used only as a reviewed draft source.
+- New eMule BB labels must be meaningfully translated for every release
+  language. AI or machine translation is allowed and expected for draft
+  coverage, but it must be treated as a reviewed translation source, not a
+  blind bulk replacement.
 - External or historical translation engines, including the eMuleAI analysis
   tree, are not authoritative translation sources for release `.rc` files.
 - `helpers\rc-string-table.py` is the canonical helper for release localization
-  coverage and quality audits.
+  coverage, layout, ordering, and quality audits.
 - `helpers\rc-translate-missing.py` is a convenience helper for adding only
   missing managed strings while preserving existing translations.
+- `helpers\rc-release-localization-layout.json` owns source-anchored placement
+  rules for managed release labels that must keep identical order across all
+  release language `.rc` files.
+- Mechanical localization edits must be generated or audited by the helpers and
+  keyed on resource ids, not fragile surrounding text. A managed label may be
+  inserted or normalized, but unrelated community labels must not change.
 - Parallel localization work is allowed only for draft/review artifacts. Do not
   run concurrent `.rc` writes.

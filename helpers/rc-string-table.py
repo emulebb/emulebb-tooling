@@ -36,6 +36,27 @@ class RcStrings:
     duplicates: list[str]
 
 
+@dataclass(frozen=True)
+class RcStringEntry:
+    """One parsed one-line RC string resource."""
+
+    key: str
+    value: str
+    line_index: int
+    prefix: str
+    separator: str
+    suffix: str
+
+
+@dataclass(frozen=True)
+class ReleaseLayoutRule:
+    """Placement rule for one source-anchored release string."""
+
+    key: str
+    after: str
+    before: str
+
+
 def read_rc(path: Path) -> RcText:
     """Read an RC file while preserving its UTF-8 BOM and dominant newline."""
 
@@ -103,6 +124,42 @@ def parse_id_list(path: Path | None) -> list[str]:
     if duplicates:
         raise SystemExit("Duplicate required resource ids: " + ", ".join(duplicates))
     return ids
+
+
+def parse_release_layouts(path: Path | None) -> list[ReleaseLayoutRule]:
+    """Parse source-anchored release string layout rules."""
+
+    if path is None:
+        return []
+    data = json.loads(path.read_text(encoding="utf-8-sig"))
+    layouts = data.get("layouts")
+    if not isinstance(layouts, list):
+        raise SystemExit(f"{path} must contain a 'layouts' list.")
+    rules: list[ReleaseLayoutRule] = []
+    seen: Counter[str] = Counter()
+    errors: list[str] = []
+    for index, item in enumerate(layouts, 1):
+        if not isinstance(item, dict):
+            errors.append(f"layout entry {index} must be an object")
+            continue
+        key = item.get("id")
+        after = item.get("after")
+        before = item.get("before")
+        for field, value in (("id", key), ("after", after), ("before", before)):
+            if not isinstance(value, str) or not re.fullmatch(r"IDS_[A-Z0-9_]+", value):
+                errors.append(f"layout entry {index} has invalid {field}: {value!r}")
+        if isinstance(key, str):
+            seen[key] += 1
+        if isinstance(key, str) and isinstance(after, str) and isinstance(before, str):
+            if key in (after, before) or after == before:
+                errors.append(f"layout entry {index} must use distinct id/after/before values")
+            rules.append(ReleaseLayoutRule(key=key, after=after, before=before))
+    duplicates = sorted(key for key, count in seen.items() if count > 1)
+    if duplicates:
+        errors.append("duplicate layout ids: " + ", ".join(duplicates))
+    if errors:
+        raise SystemExit(f"{path} has invalid release layout entries:\n" + "\n".join(errors))
+    return rules
 
 
 def require_ids(rows: list[tuple[str, str]], required_ids: list[str], label: str) -> None:
@@ -475,6 +532,37 @@ def _string_literal_from_line(line: str) -> str | None:
     return _decode_rc_literal(match.group(1))
 
 
+def _parse_rc_string_line(line: str, line_index: int) -> RcStringEntry | None:
+    """Parse one-line IDS_* string resources while preserving layout pieces."""
+
+    match = re.match(r"(?P<prefix>\s*)(?P<key>IDS_[A-Z0-9_]+)(?P<separator>\s+)\"(?P<raw>(?:[^\"]|\"\")*)\"(?P<suffix>.*)$", line)
+    if not match:
+        return None
+    return RcStringEntry(
+        key=match.group("key"),
+        value=_decode_rc_literal(match.group("raw")),
+        line_index=line_index,
+        prefix=match.group("prefix"),
+        separator=match.group("separator"),
+        suffix=match.group("suffix"),
+    )
+
+
+def collect_rc_string_entries(path: Path) -> tuple[list[RcStringEntry], list[str]]:
+    """Collect one-line RC string entries in file order plus duplicate ids."""
+
+    entries: list[RcStringEntry] = []
+    seen: Counter[str] = Counter()
+    for index, line in enumerate(read_rc(path).text.splitlines()):
+        entry = _parse_rc_string_line(line, index)
+        if entry is None:
+            continue
+        entries.append(entry)
+        seen[entry.key] += 1
+    duplicates = sorted(key for key, count in seen.items() if count > 1)
+    return entries, duplicates
+
+
 def collect_rc_strings(path: Path) -> RcStrings:
     """Collect one-line and next-line RC string literals by resource id."""
 
@@ -501,6 +589,162 @@ def collect_rc_strings(path: Path) -> RcStrings:
         index += 1
     duplicates = sorted(key for key, count in seen.items() if count > 1)
     return RcStrings(values=found, duplicates=duplicates)
+
+
+def _entry_by_key(entries: list[RcStringEntry], key: str, path: Path) -> RcStringEntry:
+    """Return the single one-line entry for key or fail with context."""
+
+    matches = [entry for entry in entries if entry.key == key]
+    if len(matches) != 1:
+        raise SystemExit(f"{path}: expected exactly one one-line {key} entry, got {len(matches)}")
+    return matches[0]
+
+
+def _release_layout_source_entries(english_rc: Path, rules: list[ReleaseLayoutRule]) -> dict[str, RcStringEntry]:
+    """Return source entries used as canonical layout templates."""
+
+    source_entries, duplicates = collect_rc_string_entries(english_rc)
+    if duplicates:
+        raise SystemExit(f"{english_rc} has duplicate one-line resource ids:\n" + "\n".join(duplicates))
+    return {rule.key: _entry_by_key(source_entries, rule.key, english_rc) for rule in rules}
+
+
+def _format_release_layout_line(template: RcStringEntry, value: str) -> str:
+    """Format a managed layout row using the source RC spacing and suffix."""
+
+    return f'{template.prefix}{template.key}{template.separator}"{escape_rc_string(value)}"{template.suffix}'
+
+
+def _release_layout_errors(path: Path, rules: list[ReleaseLayoutRule], templates: dict[str, RcStringEntry]) -> list[str]:
+    """Return source-anchored release layout errors for one RC file."""
+
+    entries, duplicates = collect_rc_string_entries(path)
+    by_key: dict[str, list[RcStringEntry]] = {}
+    for entry in entries:
+        by_key.setdefault(entry.key, []).append(entry)
+    errors: list[str] = []
+    if duplicates:
+        errors.append("duplicate one-line ids:\n" + "\n".join(duplicates))
+    for rule in rules:
+        after_entries = by_key.get(rule.after, [])
+        managed_entries = by_key.get(rule.key, [])
+        before_entries = by_key.get(rule.before, [])
+        if len(after_entries) != 1:
+            errors.append(f"{rule.key}: expected one anchor {rule.after}, got {len(after_entries)}")
+            continue
+        if len(managed_entries) != 1:
+            errors.append(f"{rule.key}: expected one managed row, got {len(managed_entries)}")
+            continue
+        if len(before_entries) != 1:
+            errors.append(f"{rule.key}: expected one anchor {rule.before}, got {len(before_entries)}")
+            continue
+        after_entry = after_entries[0]
+        managed_entry = managed_entries[0]
+        before_entry = before_entries[0]
+        if not (after_entry.line_index < managed_entry.line_index < before_entry.line_index):
+            errors.append(f"{rule.key}: expected order {rule.after}, {rule.key}, {rule.before}")
+        expected_line = _format_release_layout_line(templates[rule.key], managed_entry.value)
+        actual_line = read_rc(path).text.splitlines()[managed_entry.line_index]
+        if actual_line != expected_line:
+            errors.append(f"{rule.key}: row layout differs from source template")
+    return errors
+
+
+def audit_release_layouts(args: argparse.Namespace) -> None:
+    """Audit source-anchored release string placement and row layout."""
+
+    if not args.english_rc:
+        raise SystemExit("--audit-release-layouts requires --english-rc.")
+    rules = parse_release_layouts(args.release_layouts)
+    if not rules:
+        raise SystemExit("--audit-release-layouts requires at least one layout rule.")
+    targets = collect_target_rcs(args, "audit-release-layouts")
+    templates = _release_layout_source_entries(args.english_rc, rules)
+    errors: list[str] = []
+    for target_path in targets:
+        target_errors = _release_layout_errors(target_path, rules, templates)
+        if target_errors:
+            errors.append(f"{target_path}: release layout mismatch:\n" + "\n".join(target_errors))
+        else:
+            print(f"OK {target_path}: {len(rules)} release layout row(s)")
+    if errors:
+        raise SystemExit("\n\n".join(errors))
+
+
+def _sync_release_layout_target(path: Path, rules: list[ReleaseLayoutRule], templates: dict[str, RcStringEntry]) -> bool:
+    """Rewrite managed release layout rows in one target while preserving labels."""
+
+    rc_text = read_rc(path)
+    lines = rc_text.text.splitlines()
+    changed = False
+    for rule in rules:
+        entries = []
+        for index, line in enumerate(lines):
+            entry = _parse_rc_string_line(line, index)
+            if entry is not None:
+                entries.append(entry)
+        matching = [entry for entry in entries if entry.key == rule.key]
+        if not matching:
+            raise SystemExit(f"{path}: {rule.key} is missing; add a reviewed translation before sync.")
+        values = {entry.value for entry in matching}
+        if len(values) > 1:
+            raise SystemExit(f"{path}: duplicate {rule.key} rows have conflicting translations.")
+        value = matching[0].value
+        old_line = lines[matching[0].line_index]
+        # Remove duplicate or misplaced managed rows before reinserting at the source anchor.
+        remove_indexes = {entry.line_index for entry in matching}
+        lines = [line for index, line in enumerate(lines) if index not in remove_indexes]
+        entries = []
+        for index, line in enumerate(lines):
+            entry = _parse_rc_string_line(line, index)
+            if entry is not None:
+                entries.append(entry)
+        after_entry = _entry_by_key(entries, rule.after, path)
+        before_entry = _entry_by_key(entries, rule.before, path)
+        if after_entry.line_index >= before_entry.line_index:
+            raise SystemExit(f"{path}: expected {rule.after} before {rule.before} for {rule.key}.")
+        new_line = _format_release_layout_line(templates[rule.key], value)
+        insert_at = after_entry.line_index + 1
+        lines.insert(insert_at, new_line)
+        changed = changed or len(matching) > 1 or matching[0].line_index != insert_at or old_line != new_line
+
+    new_text = "\n".join(lines) + ("\n" if rc_text.text.endswith(("\n", "\r\n")) else "")
+    if new_text != rc_text.text.replace("\r\n", "\n").replace("\r", "\n"):
+        before_values = collect_rc_strings(path).values
+        write_rc(path, rc_text, new_text)
+        after_values = collect_rc_strings(path).values
+        changed_values = [
+            key for key in sorted(set(before_values) & set(after_values))
+            if before_values[key] != after_values[key]
+        ]
+        removed_values = sorted(set(before_values) - set(after_values))
+        added_values = sorted(set(after_values) - set(before_values))
+        allowed = {rule.key for rule in rules}
+        unexpected = [key for key in changed_values + removed_values + added_values if key not in allowed]
+        if unexpected:
+            raise SystemExit(f"{path}: release layout sync changed unrelated resource ids:\n" + "\n".join(unexpected))
+        changed = True
+    return changed
+
+
+def sync_release_layouts(args: argparse.Namespace) -> None:
+    """Sync source-anchored release string placement and layout."""
+
+    if not args.english_rc:
+        raise SystemExit("--sync-release-layouts requires --english-rc.")
+    rules = parse_release_layouts(args.release_layouts)
+    if not rules:
+        raise SystemExit("--sync-release-layouts requires at least one layout rule.")
+    targets = collect_target_rcs(args, "sync-release-layouts")
+    templates = _release_layout_source_entries(args.english_rc, rules)
+    changed_count = 0
+    for target_path in targets:
+        if _sync_release_layout_target(target_path, rules, templates):
+            changed_count += 1
+            print(f"SYNC {target_path}")
+        else:
+            print(f"OK {target_path}: already synced")
+    print(f"Synced {changed_count}/{len(targets)} target RC file(s).")
 
 
 def _required_or_source_ids(required_ids: list[str], source: dict[str, str]) -> list[str]:
@@ -669,6 +913,11 @@ def main() -> int:
         help="JSON release language manifest whose RC files are added as --target-rc entries.",
     )
     parser.add_argument(
+        "--release-layouts",
+        type=Path,
+        help="JSON release layout manifest for source-anchored managed string placement.",
+    )
+    parser.add_argument(
         "--all-stock-targets",
         action="store_true",
         help="Add every stock eMule srchybrid/lang/*.rc file as a target.",
@@ -697,6 +946,16 @@ def main() -> int:
         "--audit-release-manifest",
         action="store_true",
         help="Require --release-languages to enumerate every stock eMule language RC file.",
+    )
+    parser.add_argument(
+        "--audit-release-layouts",
+        action="store_true",
+        help="Audit source-anchored release string placement and row layout.",
+    )
+    parser.add_argument(
+        "--sync-release-layouts",
+        action="store_true",
+        help="Rewrite source-anchored release string rows while preserving labels.",
     )
     parser.add_argument(
         "--fail-on-missing",
@@ -733,6 +992,10 @@ def main() -> int:
     args = parser.parse_args()
     if args.audit_release_manifest:
         audit_release_language_manifest(args)
+    elif args.audit_release_layouts:
+        audit_release_layouts(args)
+    elif args.sync_release_layouts:
+        sync_release_layouts(args)
     elif args.cross_reference:
         cross_reference(args)
     elif args.missing_report:

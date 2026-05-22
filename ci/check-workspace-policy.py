@@ -592,10 +592,11 @@ def audit_localization_policy(root: Path) -> None:
     helper = tooling_root / r"helpers\rc-string-table.py"
     english_rc = resolve_workspace_path(root, r"workspaces\workspace\app\eMule-main\srchybrid\emule.rc")
     release_languages = tooling_root / r"helpers\rc-release-languages.json"
+    release_layouts = tooling_root / r"helpers\rc-release-localization-layout.json"
     require_ids = tooling_root / r"helpers\rc-release-localization-ids.txt"
     allow_identical = tooling_root / r"helpers\rc-translation-identical-ok-ids.txt"
     quality_rules = tooling_root / r"helpers\rc-translation-quality-rules.json"
-    for path in (helper, english_rc, release_languages, require_ids, allow_identical, quality_rules):
+    for path in (helper, english_rc, release_languages, release_layouts, require_ids, allow_identical, quality_rules):
         if not path.is_file():
             raise RuntimeError(f"Required localization policy file is missing: {path}")
 
@@ -610,6 +611,20 @@ def audit_localization_policy(root: Path) -> None:
                 str(english_rc),
                 "--release-languages",
                 str(release_languages),
+            ],
+        ),
+        (
+            "release localization layout audit",
+            [
+                sys.executable,
+                str(helper),
+                "--audit-release-layouts",
+                "--english-rc",
+                str(english_rc),
+                "--release-languages",
+                str(release_languages),
+                "--release-layouts",
+                str(release_layouts),
             ],
         ),
         (

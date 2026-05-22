@@ -1,0 +1,9 @@
+{
+  "layouts": [
+    {
+      "id": "IDS_SF_LASTREQUEST",
+      "after": "IDS_SF_REQUESTS",
+      "before": "IDS_SF_ACCEPTS"
+    }
+  ]
+}
