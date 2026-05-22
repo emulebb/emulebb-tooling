@@ -144,8 +144,10 @@ Use MkDocs for browser-formatted documentation:
 
 - install dependencies with `python -m pip install -r requirements-docs.txt`
 - preview locally with `python -m mkdocs serve`
-- build release HTML with
-  `$env:NO_MKDOCS_2_WARNING='1'; python -m mkdocs build --strict`
+- run the repeatable local publish gate with
+  `python scripts\docs-publish-check.py`
+- the publish gate runs item taxonomy, docs structure, GitHub roadmap metadata,
+  and strict MkDocs HTML generation checks
 
 Generated HTML belongs under `.local/mkdocs-site` and must not be committed.
 GitHub Pages publishing is owned by `.github/workflows/docs-site.yml`; the

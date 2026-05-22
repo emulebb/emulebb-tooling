@@ -59,8 +59,7 @@ python -m mkdocs serve
 Run the docs build gate used by CI:
 
 ```powershell
-$env:NO_MKDOCS_2_WARNING='1'
-python -m mkdocs build --strict
+python scripts\docs-publish-check.py
 ```
 
 Run Markdown structure validation:

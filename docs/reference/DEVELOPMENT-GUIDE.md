@@ -73,6 +73,34 @@ python -m emule_workspace build app --variant main --config Release --platform x
 Documentation-only changes do not require an app build when they do not alter
 the build contract.
 
+## Markdown To HTML Publishing
+
+Markdown in `repos\eMule-tooling\docs` is the maintained source for the public
+documentation site. MkDocs Material renders that Markdown to HTML at
+`https://emulebb.github.io/eMule-tooling/`.
+
+Use this repeatable path when product, reference, release, REST, or policy docs
+need to be published as formatted HTML:
+
+1. Edit the owning Markdown source under `docs\`.
+2. Keep links and navigation current in `docs\INDEX.md` and `mkdocs.yml` when
+   adding or moving discoverable pages.
+3. Run the local publish gate:
+
+   ```powershell
+   cd $env:EMULE_WORKSPACE_ROOT\repos\eMule-tooling
+   python scripts\docs-publish-check.py
+   ```
+
+4. Commit and push the Markdown source. The `Documentation Site` GitHub Actions
+   workflow builds the same MkDocs site from `main` and deploys the HTML to
+   GitHub Pages.
+
+Generated MkDocs output belongs under `.local\mkdocs-site` and must not be
+committed. The static product homepage in `repos\eMulebb-pages` is separate:
+update it only after the source Markdown is current, then regenerate its
+committed HTML through that repo's Jinja renderer.
+
 ## Docs-Only Checklist
 
 Use this for Markdown-only changes that do not alter build, source, release
@@ -91,9 +119,7 @@ packaging, or API behavior.
 ```powershell
 cd $env:EMULE_WORKSPACE_ROOT\repos\eMule-tooling
 git diff --check
-python scripts\docs-structure-check.py
-$env:NO_MKDOCS_2_WARNING='1'
-python -m mkdocs build --strict
+python scripts\docs-publish-check.py
 ```
 
 Run `python scripts\docs-item-taxonomy-check.py` when active items, backlog
