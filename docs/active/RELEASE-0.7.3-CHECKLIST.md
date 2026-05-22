@@ -36,6 +36,8 @@ rerun and recorded after the hold.
 - [ ] `python -m emule_workspace test certification --profile fast`
 - [ ] `python -m emule_workspace test certification --profile overnight`
 - [ ] `python -m emule_workspace test live-e2e --profile release-expanded --fail-fast --live-wire-inputs-file repos\eMule-build-tests\live-wire-inputs.local.json`
+- [ ] `python -m emule_workspace test live-e2e --profile cpu-heavy --fail-fast`
+- [ ] `python -m emule_workspace test live-e2e --suite live-process-monitor --fail-fast`
 - [ ] `python -m emule_workspace test live-e2e --profile ui-resource-depth --fail-fast`
 - [ ] `python -m emule_workspace package-release --config Release --platform x64`
 - [ ] `python -m emule_workspace package-release --config Release --platform ARM64`
@@ -95,7 +97,8 @@ Run the remaining queue in this order:
 
 1. Revalidate the active release docs and item dispositions.
 2. Run the required command rows above on the selected current app `main` head,
-   including the expanded weak-path live gate and `ui-resource-depth`.
+   including the expanded weak-path live gate, disposable heavy profile,
+   real-profile live monitor, and `ui-resource-depth`.
 3. Regenerate x64, ARM64, and optional aMuTorrent x64 packages only after proof
    succeeds.
 4. Record fresh package paths, manifests, SBOMs, SHA-256 hashes, and repo

@@ -90,8 +90,29 @@ materializes in the transfer queue; completion is not required.
 
 ## Focused Stabilization Stress
 
-When release proof resumes and the operator wants extra crash, leak, CPU, REST
-concurrency, and dump evidence without rerunning the full overnight gate, run:
+When release proof resumes, refresh the generated heavy-profile gate before the
+real-profile gate:
+
+```powershell
+python -m emule_workspace test live-e2e --profile cpu-heavy --fail-fast
+```
+
+This uses throw-away generated Shared Files stress data and ETW/xperf sampling.
+It must not depend on operator media paths.
+
+Then run the real live-wire profile monitor:
+
+```powershell
+python -m emule_workspace test live-e2e --suite live-process-monitor --fail-fast
+```
+
+This reads ignored local settings from
+`repos\eMule-build-tests\live-process-monitor.local.json`. The local file must
+point at the operator-owned real profile and corrected HTTPS REST bind, and the
+run must remain at or above the 1800-second minimum.
+
+For extra crash, leak, CPU, REST concurrency, and dump evidence without
+rerunning the full overnight gate, run:
 
 ```powershell
 python -m emule_workspace test live-e2e --profile stabilization-stress --fail-fast
@@ -100,7 +121,8 @@ python -m emule_workspace test live-e2e --profile stabilization-stress --fail-fa
 This profile runs `rest-api`, `rest-cold-start-dump-stress`, and
 `local-dumps-crash-smoke` with REST soak stress, socket/TLS adversity, leak
 churn, cold-start resource telemetry, download churn, and crash-dump evidence
-checks. It is not a substitute for the overnight certification row.
+checks. It is not a substitute for the overnight certification row or for the
+separate generated-heavy and real-profile monitor rows above.
 
 ## Packaging
 
