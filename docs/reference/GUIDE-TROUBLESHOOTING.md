@@ -1,9 +1,9 @@
 # eMule BB Troubleshooting Guide
 
 Troubleshooting should start by collecting evidence, then changing the smallest
-setting that explains the symptom. eMule BB keeps the classic desktop app model:
-the live state belongs to the app, while REST and companion tools observe or
-request native state changes.
+setting that explains the symptom. eMule BB keeps the classic desktop app
+model: the live state belongs to the app, while REST and companion tools observe
+or request native state changes.
 
 ## Evidence First
 
@@ -11,75 +11,217 @@ Collect the support artifact that matches the problem:
 
 | Problem area | Useful evidence |
 |---|---|
-| Network and Low ID | normal logs, verbose logs, port test output, firewall state, bind target |
+| Network and Low ID | logs, port test output, firewall state, bind target |
 | Kad | Kad state, UDP port state, bootstrap source, firewall and UPnP evidence |
 | Sharing and startup | shared-cache state, hash queue, share roots, long-path state |
 | Upload performance | upload cap, slot target, slow-slot state, queue and IO diagnostics |
 | REST/controllers | WebServer state, bind/port, API key, OpenAPI route, controller logs |
-| VPN/interface binding | configured bind target, resolved bind state, selected local address, route/firewall state |
-| UPnP/NAT | P2P UPnP state, WebServer UPnP state, backend mode, router mapping, bind target |
-| Completion automation | completion command setting, program path, arguments, completed filename, app log |
+| VPN/interface binding | bind target, resolved bind state, selected local address, route/firewall state |
+| UPnP/NAT | P2P UPnP state, WebServer UPnP state, backend mode, router mapping |
+| Completion automation | command setting, program path, arguments, completed filename, app log |
 | Crashes or hangs | mini dump for crashes, full dump for hangs or memory growth |
 
 Prefer redacted diagnostic snapshots for support. Use raw snapshots only when
 the recipient is trusted and the data sensitivity is understood.
 
-## Common Symptoms
+## General Triage Rules
 
-| Symptom | First checks |
-|---|---|
-| Low ID | TCP port, firewall, router/NAT, bind target, port test |
-| Kad firewalled | UDP port, Kad bootstrap, firewall, UPnP/router, bind target |
-| No search results | selected network, server/Kad state, query shape, search method |
-| Slow startup | shared cache state, broad share roots, hash queue, long paths |
-| Slow upload | finite upload cap, slot target, slow-slot state, IO/timer diagnostics |
-| REST fails | WebServer enabled, bind/port, API key, lifecycle, OpenAPI route |
-| IP filter ineffective | enabled flag, rule count, filter level, reload/update logs |
-| Completion command fails | enabled flag, program path, arguments, completed file path, log output |
+- Change one setting at a time.
+- Keep notes about the original value.
+- Prefer app logs and diagnostic snapshots over memory of what happened.
+- Separate P2P network issues from controller/WebServer issues.
+- Separate local profile/disk issues from public network behavior.
+- Do not diagnose frozen legacy surfaces as release-blocking behavior.
 
-## High-Value Triage Paths
+If the issue began after a package or profile change, confirm the setup path in
+[Setup Guide](GUIDE-SETUP.md) before changing network settings.
 
-Network:
+## Low ID Recipe
 
-1. Check bind target and resolved bind state.
-2. Check TCP/UDP/WebServer ports.
-3. Check Windows Firewall repair output.
-4. Check UPnP/router mapping only after confirming the selected interface path.
-5. Re-run Low ID or Kad firewall checks.
+Low ID normally means the TCP listener is not reachable from the eD2K server.
 
-Controllers:
+1. Confirm eMule BB is connected to an eD2K server.
+2. Confirm the configured TCP port in `Preferences > Connection`.
+3. Check Windows Firewall rules for that port and executable.
+4. Check router/NAT forwarding or P2P UPnP mapping.
+5. If bind settings are configured, confirm the resolved bind address is the
+   intended interface/address.
+6. Run the port test after firewall/router changes.
+7. Reconnect to a trusted server and check whether the ID changes.
 
-1. Confirm WebServer/REST is enabled and bound where expected.
-2. Confirm API key handling.
-3. Compare the route with OpenAPI.
-4. Check lifecycle state before retrying mutations.
-5. Capture redacted diagnostics plus controller request/response data.
+Do not fix Low ID by changing unrelated upload, search, or IP-filter settings.
 
-Sharing:
+## Kad Firewalled Recipe
 
-1. Confirm share roots and monitored roots.
-2. Check `shareignore.dat`.
-3. Let hashing/scanning settle.
-4. Check startup cache and duplicate cache status.
-5. Force a rescan only after the root list and ignore rules are understood.
+Kad firewall state depends primarily on UDP reachability and Kad bootstrap
+health.
 
-## Testing And Performance Context
+1. Confirm Kad is enabled and started.
+2. Confirm the UDP port in `Preferences > Connection`.
+3. Check Windows Firewall and router/NAT forwarding for UDP.
+4. Check P2P UPnP only after confirming the selected bind path.
+5. Bootstrap from trusted nodes or known peers.
+6. Recheck Kad firewall state after the network has settled.
+7. If UDP remains blocked, compare with Low ID state to determine whether only
+   UDP is affected.
 
-Do not diagnose performance from one isolated observation. eMule BB performance
-work is tied to concrete operating surfaces: broadband upload slot policy,
-queue/source limits, socket and file buffers, startup caches, long paths, and
-controller responsiveness. When a problem appears, compare the observed symptom
-with those surfaces before changing unrelated network or profile settings.
+Kad may need time after bootstrap before state is meaningful. Avoid repeatedly
+restarting it during the first minutes of diagnosis.
 
-For release confidence, distinguish quick hosted CI from full release proof.
-The hosted fast lane covers the shared non-live harness. Broader release proof
-adds native tests, REST/controller checks, UI/resource coverage, live eD2K/Kad
-scenarios, language smoke, and package provenance. Current release status lives
-in the [Beta 0.7.3 dashboard](../active/RELEASE-0.7.3.md).
+## No Search Results Recipe
+
+No results can come from network state, query shape, filter policy, or search
+method.
+
+1. Confirm eD2K and/or Kad are connected.
+2. Try a broad, ordinary query with the intended search method.
+3. Confirm the selected search type and search method.
+4. Check whether IP filtering is enabled and has an unexpectedly aggressive
+   rule set.
+5. Check logs for parse errors, server errors, or Kad search warnings.
+6. Compare local desktop search with REST/controller search if automation is
+   involved.
+7. If controller search fails but desktop search works, inspect the REST route,
+   method, body, and OpenAPI contract.
+
+Search result trust signals are hints, not proof. Use filename, size,
+availability, comments, and source consistency together.
+
+## Slow Startup Or Hashing Recipe
+
+Large libraries can make startup look slow when the app is scanning,
+validating cache state, or hashing.
+
+1. Confirm shared roots are intentional and reachable.
+2. Check whether a network share or removable drive is slow or unavailable.
+3. Check `shareignore.dat` for broad or incorrect rules.
+4. Let hashing and scanning settle before forcing a rescan.
+5. Check shared startup cache behavior in
+   [Sharing Guide](GUIDE-SHARING.md).
+6. Check long path state if deep paths are present.
+7. Delete cache sidecars only when intentionally forcing a clean rebuild.
+
+If startup is slow only once after a profile move or package upgrade, allow the
+derived caches to rebuild before treating it as a regression.
+
+## Slow Upload Or Queue Recipe
+
+Upload performance should be diagnosed through the broadband upload policy, not
+through stock-era assumptions about unlimited slot growth.
+
+1. Confirm the configured upload cap.
+2. Check active upload slot count and slot target behavior.
+3. Check whether slow or zero-rate slots are being recycled after warm-up,
+   grace, and cooldown windows.
+4. Check disk and CPU load before blaming peers.
+5. Check whether IP filters or firewall rules are removing many peers.
+6. Compare a longer operating window rather than a single short observation.
+
+Changing many queue, slot, and source limits together makes the result hard to
+interpret. Change one policy area at a time.
+
+## Disk-Space Protection Recipe
+
+When disk-space protection triggers, eMule BB is protecting profile and part
+file integrity.
+
+1. Identify the breached volume in logs.
+2. Check config, temp, incoming, and category incoming volumes.
+3. Free space on the volume or move paths deliberately.
+4. Confirm temp and incoming directories are still reachable.
+5. Let part metadata save complete before restarting downloads.
+6. Resume downloads only after the effective floor and completion demand are
+   satisfied.
+
+Do not lower free-space floors to zero to force progress. See
+[Downloads and Search Guide](GUIDE-DOWNLOADS-SEARCH.md) for the floor model.
+
+## REST Or Controller Failure Recipe
+
+REST failures should be split into listener, authentication, route, lifecycle,
+and adapter problems.
+
+1. Confirm WebServer/REST is enabled.
+2. Confirm bind address, port, firewall, and allowed IP policy.
+3. Confirm the API key or password path used by the controller.
+4. Confirm the route exists in
+   [OpenAPI](../rest/REST-API-OPENAPI.yaml).
+5. Check whether the app is starting or shutting down.
+6. Compare native `/api/v1` behavior with qBit/Torznab adapter behavior.
+7. Capture request method, route, status code, response body, and logs.
+
+The legacy HTML WebServer UI is frozen pending removal. Do not use legacy
+template behavior as proof that REST is broken or supported.
+
+## IP Filter Problem Recipe
+
+IP filter problems usually come from disabled filtering, zero rules, a bad
+provider list, or an overly aggressive level.
+
+1. Confirm filtering is enabled.
+2. Confirm `config\ipfilter.dat` exists.
+3. Confirm the loaded rule count is not zero.
+4. Confirm the filter level matches the selected list.
+5. Use **Reload** after manual edits.
+6. Temporarily disable filtering only long enough to isolate the symptom.
+7. Restore a known-good list if a provider update caused the problem.
+
+See [IP Filter Guide](GUIDE-IP-FILTERS.md).
+
+## Completion Command Failure Recipe
+
+Completion automation runs a configured external program after a download
+finishes.
+
+1. Confirm completion automation is enabled.
+2. Confirm the configured executable exists.
+3. Prefer a full path to a trusted local executable.
+4. Confirm arguments match the program's expected syntax.
+5. Check completed filename and path quoting.
+6. Check app logs after the file completes.
+7. Disable the command while diagnosing unrelated completion problems.
+
+Do not use completion automation to run untrusted files from incoming folders.
+
+## Crash Or Hang Recipe
+
+For crashes:
+
+1. Capture a mini dump.
+2. Record what the app was doing.
+3. Keep the relevant log files.
+4. Preserve the profile state if the crash is reproducible.
+
+For hangs or memory growth:
+
+1. Capture a full dump.
+2. Record uptime and active workload.
+3. Record controller activity, sharing state, and network state.
+4. Avoid killing the process until evidence is collected when practical.
+
+## Frozen Legacy Surfaces
+
+The following areas are intentionally frozen and are not release-gated support
+surfaces:
+
+- archive preview and archive recovery
+- IRC and IRC-adjacent chat UI
+- legacy Scheduler and scheduler preferences
+- SMTP/email notifications
+- SAPI text-to-speech notifications
+- first-run connection wizard
+- splash screen
+- legacy WebServer HTML templates and page UI
+- proxy support
+
+If one of these surfaces fails, treat it as unsupported legacy behavior unless
+the explicit task is removal or proving that removal did not damage supported
+behavior.
 
 ## Related Guides
 
 - [Product Guide](GUIDE-EMULEBB.md)
+- [Setup Guide](GUIDE-SETUP.md)
 - [Network Guide](GUIDE-NETWORK.md)
 - [Sharing Guide](GUIDE-SHARING.md)
 - [Downloads and Search Guide](GUIDE-DOWNLOADS-SEARCH.md)

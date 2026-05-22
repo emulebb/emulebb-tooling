@@ -7,13 +7,16 @@ automation, and compatibility adapters.
 
 eMule BB exposes JSON REST under `/api/v1` through the embedded WebServer
 listener. REST is the preferred automation surface. The legacy template web UI
-is separate compatibility behavior and should be enabled only when needed.
+is frozen pending removal and is not a supported controller surface.
 
 Contract references:
 
 - [REST API contract](../rest/REST-API-CONTRACT.md)
 - [OpenAPI contract](../rest/REST-API-OPENAPI.yaml)
 - [Adapter contracts](../rest/REST-API-ADAPTERS.md)
+
+The OpenAPI document is the route and schema source of truth. Human guides
+explain how to operate the surface safely.
 
 ## Trust Model
 
@@ -27,7 +30,42 @@ Use:
 - a controlled network path
 - redacted diagnostics when sharing support data
 
-Do not expose REST broadly on untrusted networks.
+Do not expose REST broadly on untrusted networks. HTTPS protects transport on
+the configured path, but it does not make broad exposure safe by itself.
+
+## Local-Only Setup Recipe
+
+Use this recipe for a controller on the same machine:
+
+1. Finish normal desktop setup first.
+2. Open `Preferences > Web Server`.
+3. Enable the WebServer/REST listener.
+4. Bind to localhost or the intended local-only address.
+5. Use a strong API key/password.
+6. Keep Windows Firewall closed to external clients unless deliberately
+   exposing the listener.
+7. Read `GET /api/v1/app` or another status route before attempting mutations.
+8. Add mutations only after status and preferences reads work.
+
+Local-only is the preferred default for automation. Use a broader bind only
+when the operator controls the network path and firewall policy.
+
+## Controlled-Network Setup Recipe
+
+Use this recipe for a LAN or VPN controller path:
+
+1. Choose the exact bind address or interface policy.
+2. Choose a port and document it with firewall/router rules.
+3. Configure allowed IPs when available.
+4. Use HTTPS certificate material if the network path is not strictly local.
+5. Use a strong unique API key/password.
+6. Test status reads from the controller host.
+7. Test one harmless read from each intended adapter.
+8. Test one reversible mutation before enabling unattended workflows.
+
+If the machine also uses P2P bind settings, keep them conceptually separate
+from WebServer/REST bind settings. P2P listener binding and WebServer binding
+are different surfaces.
 
 ## WebServer HTTPS And Certificates
 
@@ -47,7 +85,7 @@ emule.exe --generate-webserver-cert --cert webserver.crt --key webserver.key --h
 
 Generate certificates deliberately, store private keys with the profile or
 operator-owned secret material, and keep controller API keys out of shared
-logs. HTTPS does not make broad untrusted-network exposure safe by itself.
+logs.
 
 ## Native Behavior Remains Authoritative
 
@@ -64,6 +102,25 @@ Controllers must preserve eMule semantics:
 When a controller presents eMule BB as a generic download client, the adapter
 must still map back to native behavior correctly.
 
+## Native REST Surface
+
+Native `/api/v1` covers the supported controller model:
+
+- app state, preferences, shutdown, and diagnostics
+- global status, snapshots, and stats
+- categories
+- transfers, transfer details, and transfer sources
+- shared files and shared directories
+- uploads and upload queue
+- servers
+- Kad
+- searches and search results
+- friends
+- logs
+
+Use OpenAPI for exact route names, request bodies, response envelopes, and
+error shapes.
+
 ## Preference Mutation
 
 REST exposes a curated mutable subset of preferences. It is intentionally not a
@@ -79,6 +136,51 @@ Rules:
   [Preferences Guide](GUIDE-PREFERENCES.md)
 
 Direct config-file edits are a separate maintenance path, not REST behavior.
+
+## Search And Download Recipe
+
+For native REST search workflows:
+
+1. Confirm the app is connected to the intended network.
+2. Create a search with the intended method and type.
+3. Read the search session until results are available.
+4. Inspect filename, size, source, comment, fake/trust, and category data.
+5. Download a selected result through the documented operation route.
+6. Track the resulting native transfer by hash.
+7. Use pause, resume, stop, or delete operations deliberately.
+
+Do not discard native metadata just because a controller has a simpler UI.
+eMule search quality depends on several signals, not only on a title match.
+
+## Transfer Management Recipe
+
+For controller-managed transfers:
+
+1. List transfers and identify the hash.
+2. Read transfer detail before destructive actions.
+3. Preserve category and paused/started semantics.
+4. Use explicit delete confirmation when files may be removed.
+5. Use source operations only when the controller has a stable source selector.
+6. Treat failed add-transfer items as real failures, not partial success.
+7. Reconcile controller state with native desktop state after batch actions.
+
+Native eMule distinction between cancel, delete, stop, pause, and completed
+cleanup matters. Compatibility adapters must not flatten those into one action.
+
+## Shared Files And Directories Recipe
+
+For sharing automation:
+
+1. Read current shared directories.
+2. Replace shared directories only with a complete intended set.
+3. Reload shared directories after external config changes.
+4. Read shared files with paging where applicable.
+5. Use explicit confirmation for destructive shared-file removal.
+6. Keep local path visibility and privacy in mind before exposing data through
+   controllers.
+
+The desktop app owns shared-library scanning, hashing, and cache validation.
+Controllers request state changes; they do not own the scan engine.
 
 ## aMuTorrent
 
@@ -113,6 +215,10 @@ Expectations:
 - adapter errors remain typed and predictable
 - adapter routes should not invent behavior the native app cannot represent
 
+For Arr-style automation, validate both search/indexer behavior and download
+client behavior. A working Torznab search does not prove transfer management is
+correct.
+
 ## Lifecycle
 
 REST has lifecycle restrictions. During startup and shutdown, unsafe operations
@@ -124,6 +230,10 @@ Controllers should:
 - avoid hammering during startup
 - stop mutating after shutdown begins
 - tolerate temporary unavailability during profile or listener changes
+- retry reads more freely than mutations
+
+Unattended controllers should use bounded retry with backoff. A tight retry loop
+during startup can make diagnostics harder.
 
 ## Legacy WebServer
 
@@ -142,8 +252,12 @@ For controller failures, collect:
 - app lifecycle state
 - WebServer enabled/bind/port settings
 - API key configuration
+- adapter name and version, when applicable
 - recent REST and app logs
 - redacted diagnostic snapshot
+
+Do not share API keys, private keys, or full raw profile dumps unless the
+recipient is trusted and the exposure is understood.
 
 ## Troubleshooting
 
@@ -153,12 +267,14 @@ REST unavailable:
 2. Check bind address and port.
 3. Check firewall and allowed IP policy.
 4. Confirm the app is not starting or shutting down.
+5. Try a local status request from the same machine.
 
 Auth failure:
 
 1. Confirm the current API key.
 2. Confirm the `X-API-Key` header is sent.
 3. Check whether the profile regenerated an empty/missing key.
+4. Remove stale controller secrets after a profile restore.
 
 Route or schema failure:
 
@@ -166,3 +282,11 @@ Route or schema failure:
 2. Check field casing exactly.
 3. Remove unsupported aliases.
 4. Confirm adapter mapping is not using stale qBit/Torznab assumptions.
+
+Mutation rejected:
+
+1. Check lifecycle state.
+2. Check whether the target resource still exists.
+3. Check destructive confirmation fields.
+4. Check native state in the desktop app.
+5. Retry only if the response indicates a temporary condition.

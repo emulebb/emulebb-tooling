@@ -52,7 +52,7 @@ the same live profile.
 
 For a new profile:
 
-1. Start eMule BB and complete first-run setup.
+1. Start eMule BB with a clean profile.
 2. Choose incoming and temporary directories.
 3. Configure TCP and UDP ports in `Preferences > Connection`.
 4. Leave bind settings empty unless a specific interface or address is required.
@@ -73,17 +73,52 @@ For an existing profile:
 
 | Need | Guide |
 |---|---|
-| Install model, first-run profile behavior, and release-aware setup | [Setup Guide](GUIDE-SETUP.md) |
+| Install model, profile migration, isolated `-c` profiles, and release-aware setup | [Setup Guide](GUIDE-SETUP.md) |
 | Complete `preferences.ini` reference and preference behavior | [Preferences Guide](GUIDE-PREFERENCES.md) |
 | eD2K, Kad, ports, binding, UPnP, firewall, WebServer network behavior | [Network Guide](GUIDE-NETWORK.md) |
 | Downloads, search, categories, broadband upload policy, transfer behavior | [Downloads and Search Guide](GUIDE-DOWNLOADS-SEARCH.md) |
 | Shared directories, monitored shares, large libraries, share-ignore rules | [Sharing Guide](GUIDE-SHARING.md) |
-| REST, aMuTorrent, Arr, qBit, Torznab, controller behavior | [Controllers and REST Guide](GUIDE-CONTROLLERS-REST.md) |
-| IP filter storage, updates, formats, and reload behavior | [IP Filter Guide](GUIDE-IP-FILTERS.md) |
+| REST setup, aMuTorrent, Arr, qBit, Torznab, lifecycle, and controller safety | [Controllers and REST Guide](GUIDE-CONTROLLERS-REST.md) |
+| IP filter setup, updates, manual reloads, formats, levels, and troubleshooting | [IP Filter Guide](GUIDE-IP-FILTERS.md) |
 | Deep Windows long-path behavior | [Long Path Guide](GUIDE-LONGPATHS.md) |
 | Keyboard and menu workflow | [Keyboard Shortcuts](KEYBOARD-SHORTCUTS.md) |
-| Symptom-led diagnostics and support evidence | [Troubleshooting Guide](GUIDE-TROUBLESHOOTING.md) |
+| Symptom-led diagnostics, support evidence, Low ID, Kad, REST, and disk-space triage | [Troubleshooting Guide](GUIDE-TROUBLESHOOTING.md) |
 | Development, validation, CI, packaging, and guide refresh workflow | [Development Guide](DEVELOPMENT-GUIDE.md) |
+
+## Recommended Reading Paths
+
+For a first-time user:
+
+1. Read [Setup Guide](GUIDE-SETUP.md).
+2. Configure ports and connection behavior with
+   [Network Guide](GUIDE-NETWORK.md).
+3. Add one small shared directory with [Sharing Guide](GUIDE-SHARING.md).
+4. Learn searches and transfers with
+   [Downloads and Search Guide](GUIDE-DOWNLOADS-SEARCH.md).
+5. Use [Troubleshooting Guide](GUIDE-TROUBLESHOOTING.md) if Low ID, Kad,
+   search, disk-space, or startup symptoms appear.
+
+For a long-running seeder:
+
+1. Review directory layout and profile backup in
+   [Setup Guide](GUIDE-SETUP.md).
+2. Review shared-cache, monitored-share, and share-ignore behavior in
+   [Sharing Guide](GUIDE-SHARING.md).
+3. Review disk-space floors in
+   [Downloads and Search Guide](GUIDE-DOWNLOADS-SEARCH.md).
+4. Review long-path behavior in [Long Path Guide](GUIDE-LONGPATHS.md).
+5. Keep support evidence paths from
+   [Troubleshooting Guide](GUIDE-TROUBLESHOOTING.md) available.
+
+For controller or automation use:
+
+1. Finish normal desktop setup first.
+2. Configure the listener with
+   [Controllers and REST Guide](GUIDE-CONTROLLERS-REST.md).
+3. Use [REST API contract](../rest/REST-API-CONTRACT.md) and
+   [OpenAPI](../rest/REST-API-OPENAPI.yaml) for exact routes.
+4. Use [Preferences Guide](GUIDE-PREFERENCES.md) for preference fields.
+5. Keep legacy HTML WebServer behavior out of supported automation plans.
 
 ## Landed Feature Matrix
 
@@ -388,6 +423,26 @@ IPv6 Kad network is only an exploratory design note in
 qBittorrent/libtorrent approach of keeping IPv4 and IPv6 DHT state separate.
 Neither track changes released beta 0.7.3 behavior unless the active release
 docs later say otherwise.
+
+## Unsupported Legacy Areas
+
+Some old eMule surfaces may still appear in resources, settings, or historical
+notes. They are not maintained user workflows for eMule BB:
+
+- archive preview and archive recovery
+- IRC and IRC-adjacent chat UI
+- legacy Scheduler and scheduler preferences
+- SMTP/email notifications
+- SAPI text-to-speech notifications
+- first-run connection wizard
+- splash screen
+- legacy WebServer HTML templates and page UI
+- proxy support
+
+Use the supported replacements where they exist: Preferences pages for setup,
+REST and controller adapters for automation, Windows or operator scheduling for
+recurring tasks, and normal diagnostic snapshots for support. See
+[Frozen Surfaces](../active/FROZEN-SURFACES.md) for the current support rule.
 
 ## Release Status
 
