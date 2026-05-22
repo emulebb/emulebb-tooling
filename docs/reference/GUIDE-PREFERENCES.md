@@ -351,7 +351,7 @@ preference, add it to the schema and this guide.
 This section is derived from
 `repos/eMule-build-tests/manifests/preference-schema.v1.json`.
 
-Total `preferences.ini` schema entries: **329**.
+Total `preferences.ini` schema entries: **335**.
 
 Dynamic rows are generated families tracked by source expression rather
 than a finite static key list. Empty defaults or normalizers mean the
@@ -406,6 +406,7 @@ above for user-facing defaults and ranges.
 | `CryptLayerRequested` | bool | read, write | m_bCryptLayerRequested | Not explicitly declared in schema | PPgSecurity.cpp | None | None |
 | `CryptLayerRequired` | bool | read, write | IsCryptLayerRequired, m_bCryptLayerRequired | Not explicitly declared in schema | PPgSecurity.cpp | None | None |
 | `CryptLayerSupported` | bool | read, write | m_bCryptLayerSupported | Not explicitly declared in schema | PPgSecurity.cpp | None | None |
+| `DailyConfigBackup` | bool | read, write | GetDailyConfigBackup, SetDailyConfigBackup | Defaults to enabled | PPgTweaks.cpp | None | Daily configuration backup switch. |
 | `DateTimeFormat` | string | read, write | GetDateTimeFormat, m_strDateTimeFormat | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
 | `DateTimeFormat4Lists` | string | read, write | GetDateTimeFormat4Lists, m_strDateTimeFormat4Lists | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
 | `DateTimeFormat4Log` | string | read, write | GetDateTimeFormat4Log, m_strDateTimeFormat4Log | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
@@ -489,6 +490,7 @@ above for user-facing defaults and ranges.
 | `RestoreLastMainWndDlg` | bool | read, write | GetRestoreLastMainWndDlg, m_bRestoreLastMainWndDlg | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
 | `RTLWindowsLayout` | bool | read, write | GetRTLWindowsLayout, m_bRTLWindowsLayout | Not explicitly declared in schema | PPgGeneral.cpp | None | None |
 | `ServerKeepAliveTimeout` | integer | read, write | GetServerKeepAliveTimeout | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
+| `ShutdownProgressDialog` | integer | read, write | GetShutdownProgressDialogMode, SetShutdownProgressDialogMode | `NormalizeLifecycleProgressDialogMode`; default always shown | PPgTweaks.cpp | None | Shutdown progress dialog visibility mode. |
 | `ShowActiveDownloadsBold` | bool | read, write | GetShowActiveDownloadsBold, m_bShowActiveDownloadsBold | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
 | `ShowCopyEd2kLinkCmd` | bool | read, write | GetShowCopyEd2kLinkCmd, m_bShowCopyEd2kLinkCmd | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
 | `ShowDwlPercentage` | bool | read, write | GetUseDwlPercentage, m_bShowDwlPercentage | Not explicitly declared in schema | PPgDisplay.cpp | None | None |
@@ -498,8 +500,8 @@ above for user-facing defaults and ranges.
 | `ShowVerticalHourMarkers` | bool | read, write | m_bShowVerticalHourMarkers | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
 | `ShowWin7TaskbarGoodies` | bool | read, write | m_bShowWin7TaskbarGoodies | Not explicitly declared in schema | PPgDisplay.cpp | None | None |
 | `SparsePartFiles` | bool | read, write | GetSparsePartFiles, m_bSparsePartFiles | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `Splashscreen` | bool | read, write | splashscreen | Not explicitly declared in schema | PPgGeneral.cpp | None | None |
 | `StartNextFile` | integer | read, write | m_istartnextfile | Not explicitly declared in schema | PPgFiles.cpp | None | None |
+| `StartupProgressDialog` | integer | read, write | GetStartupProgressDialogMode, SetStartupProgressDialogMode | `NormalizeLifecycleProgressDialogMode`; default always shown | PPgTweaks.cpp | None | Startup progress dialog visibility mode. |
 | `StatsAverageMinutes` | integer | read, write | GetStatsAverageMinutes, SetStatsAverageMinutes | Not explicitly declared in schema | PPgStats.cpp | None | None |
 | `StatsInterval` | integer | read, write | GetStatsInterval, SetStatsInterval | Not explicitly declared in schema | PPgStats.cpp | None | None |
 | `StoreSearches` | bool | read, write | m_bStoreSearches | Not explicitly declared in schema | PPgDisplay.cpp | None | None |
@@ -553,6 +555,7 @@ above for user-facing defaults and ranges.
 | `CreateCrashDump` | integer | read, write | None | Not explicitly declared in schema | None | None | None |
 | `CryptTCPPaddingLength` | integer | read, write | None | Not explicitly declared in schema | None | None | None |
 | `DeadServerRetry` | integer | read, write | None | Not explicitly declared in schema | None | None | None |
+| `DesktopUiRefreshIntervalMs` | integer | read, write | None | `NormalizeDesktopUiRefreshIntervalMs`; default `2000`; valid values `500`, `1000`, `2000`, `5000`, `10000` | Tools menu | None | Native desktop transfer/client list refresh interval. |
 | `DebugClientKadUDP` | integer | read, write | None | Not explicitly declared in schema | None | None | None |
 | `DebugClientTCP` | integer | read, write | None | Not explicitly declared in schema | None | None | None |
 | `DebugClientUDP` | integer | read, write | None | Not explicitly declared in schema | None | None | None |
