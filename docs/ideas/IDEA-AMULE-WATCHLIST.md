@@ -12,7 +12,7 @@
 
 ## Summary
 
-aMule has limited immediate implementation value for eMule BB because the code
+aMule has limited immediate implementation value for eMuleBB because the code
 base differs materially in toolkit, build system, runtime assumptions, and app
 structure. It remains useful as a compatibility witness and as a source of
 focused protocol/file-format fixtures to revisit as aMule evolves.
@@ -24,14 +24,14 @@ Do not port aMule code directly by default. Mine it only for:
 - tag/name/type inventories for clearer compatibility tests
 - future parity checks when aMule adds narrowly relevant behavior
 
-Any promoted work should be implemented through eMule BB-native seams, tests,
+Any promoted work should be implemented through eMuleBB-native seams, tests,
 or diagnostics, with stock eMule/eD2K/Kad behavior treated as the authority.
 
 ## Protocol And Tag Test Ideas
 
 aMule has focused Kad/eD2K tag serialization tests in
 `analysis/amule/unittests/tests/CTagTest.cpp`. These are useful as a future
-fixture inventory for eMule BB protocol parser regression tests, especially:
+fixture inventory for eMuleBB protocol parser regression tests, especially:
 
 - Kad tag-list packets with UTF-8 filenames and mixed file metadata.
 - Kad integer width coverage for `uint8`, `uint16`, `uint32`, and `uint64`
@@ -63,7 +63,7 @@ for read-only inspection of profile and persistence files. It covers:
 - Kad index files such as `load_index.dat`, `key_index.dat`, and
   `src_index.dat`
 
-This has little immediate implementation value because eMule BB already has
+This has little immediate implementation value because eMuleBB already has
 some persistence seams for `server.met`, `nodes.dat`, and `preferencesKad.dat`.
 The useful future direction is to mine the file-shape knowledge for richer
 offline validators or diagnostics, not to port the utility directly.
@@ -81,7 +81,7 @@ Potential future slices:
 
 ## Watch Guidance
 
-Re-check aMule periodically when it changes in areas that overlap eMule BB:
+Re-check aMule periodically when it changes in areas that overlap eMuleBB:
 
 - Kad/eD2K protocol serialization tests
 - profile/persistence file decoders
@@ -89,5 +89,5 @@ Re-check aMule periodically when it changes in areas that overlap eMule BB:
 - parser hardening around malformed tags or truncated payloads
 - compatibility fixes called out in aMule release notes or changelog
 
-Keep this as a watchlist until a specific item has a concrete eMule BB bug,
+Keep this as a watchlist until a specific item has a concrete eMuleBB bug,
 test gap, support-diagnostic need, or compatibility risk attached to it.

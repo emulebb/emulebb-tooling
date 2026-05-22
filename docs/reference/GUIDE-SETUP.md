@@ -1,6 +1,6 @@
-# eMule BB Setup Guide
+# eMuleBB Setup Guide
 
-This guide covers practical setup for eMule BB. It complements the
+This guide covers practical setup for eMuleBB. It complements the
 [Product Guide](GUIDE-EMULEBB.md), which remains the user-manual entry point.
 
 ## Install Model
@@ -27,7 +27,7 @@ Use stable paths that will still exist after reboot:
 
 - Put the application under a normal install or unpack directory.
 - Put the config/profile directory somewhere writable by the user account that
-  runs eMule BB.
+  runs eMuleBB.
 - Put temp files on a fast, reliable local disk with enough free space.
 - Put incoming files on the final storage volume when possible.
 - Add shared directories deliberately, especially for large libraries.
@@ -45,7 +45,7 @@ library layouts until the profile is known to work. See
 
 Use this path for a clean first profile:
 
-1. Start eMule BB with a new config/profile directory.
+1. Start eMuleBB with a new config/profile directory.
 2. Open `Preferences > Directories`.
 3. Choose incoming and temporary directories.
 4. Open `Preferences > Connection`.
@@ -66,9 +66,9 @@ Use this path when moving from stock eMule or another eMule-family build:
 1. Close all eMule-family clients.
 2. Back up the full config directory, not just `preferences.ini`.
 3. Keep temp and incoming paths stable when possible.
-4. Start eMule BB once without controllers or automation.
+4. Start eMuleBB once without controllers or automation.
 5. Verify connection state, downloads, shared files, categories, and logs.
-6. Let eMule BB create branch-specific sidecars and caches before heavy use.
+6. Let eMuleBB create branch-specific sidecars and caches before heavy use.
 7. Re-enable controllers, automation, and large sharing only after the profile
    looks healthy.
 
@@ -95,7 +95,7 @@ performance.
 Use `-c <base-dir>` when you need a separate test, live, or operator profile:
 
 ```powershell
-emule.exe -c C:\eMuleBB-Profiles\live
+emulebb.exe -c C:\eMuleBB-Profiles\live
 ```
 
 The path must be an absolute canonical Windows path. Do not point two running
@@ -118,7 +118,7 @@ Command-line options are for controlled profile isolation, automation, support,
 and WebServer certificate maintenance.
 
 ```text
-emule.exe [options] [ed2k-link|magnet-link|collection-file|command]
+emulebb.exe [options] [ed2k-link|magnet-link|collection-file|command]
 ```
 
 Supported options:

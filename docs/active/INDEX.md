@@ -5,7 +5,7 @@ repo. Use [`../INDEX.md`](../INDEX.md) for long-form background and reference
 reading.
 
 Future-roadmap workflow is GitHub-primary after migration: `eMulebb/eMule`
-issues and the public `eMule BB Roadmap` org project own current status,
+issues and the public `eMuleBB Roadmap` org project own current status,
 priority, release placement, discussion, ownership, and PR linkage for migrated
 items. Local item docs marked `workflow: github` are engineering spec/evidence
 records, not workflow status authority.
@@ -25,7 +25,7 @@ records, not workflow status authority.
 **Backlog counts:** item tables below are authoritative.
 **Beta 0.7.3 relevance:** Most non-done items below are future or deferred work;
 current beta gate and proof status is controlled by [RELEASE-0.7.3](RELEASE-0.7.3.md).
-**Broadband release status:** `emule-bb-v0.7.3` is the first beta/public
+**Broadband release status:** `emulebb-v0.7.3` is the first beta/public
 release target.
 **Beta-release backlog view:** [RELEASE-0.7.3](RELEASE-0.7.3.md)
 **Beta-release checklist:** [RELEASE-0.7.3-CHECKLIST](RELEASE-0.7.3-CHECKLIST.md)
@@ -36,7 +36,7 @@ release target.
 **Beta controller surface matrix:** [CONTROLLER-SURFACE-MATRIX](CONTROLLER-SURFACE-MATRIX.md)
 **Future release roadmap:** [FUTURE-ROADMAP](FUTURE-ROADMAP.md)
 **Future roadmap workflow:** GitHub issues in `eMulebb/eMule` plus the
-`eMule BB Roadmap` org project are authoritative for migrated roadmap items.
+`eMuleBB Roadmap` org project are authoritative for migrated roadmap items.
 **Backlog process runbook:** [BACKLOG-PROCESS](../reference/BACKLOG-PROCESS.md)
 **Beta-release execution plan:** [RELEASE-0.7.3-EXECUTION-PLAN](plans/RELEASE-0.7.3-EXECUTION-PLAN.md)
 **Historical beta evidence:** [release-0.7.3](../history/release-0.7.3/)
@@ -403,7 +403,7 @@ not active item docs.
 
 | ID | Priority | Status | Title |
 |----|----------|--------|-------|
-| [AMUT-001](../history/items/AMUT-001.md) | Major | PASSED | aMuTorrent eMule BB browser smoke coverage |
+| [AMUT-001](../history/items/AMUT-001.md) | Major | PASSED | aMuTorrent eMuleBB browser smoke coverage |
 | [AMUT-002](../history/items/AMUT-002.md) | Major | PASSED | aMuTorrent transfer detail hydration |
 | [ARR-001](../history/items/ARR-001.md) | Major | PASSED | Full Arr release E2E validation |
 

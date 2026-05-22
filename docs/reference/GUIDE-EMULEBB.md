@@ -1,6 +1,6 @@
-# eMule BB Product Guide
+# eMuleBB Product Guide
 
-eMule BB is the broadband edition of classic eMule. It keeps the native Windows
+eMuleBB is the broadband edition of classic eMule. It keeps the native Windows
 desktop workflow and stock-compatible eD2K/Kad behavior while adding modern
 defaults, stronger profile handling, large-library support, diagnostics, and a
 trusted local REST/controller surface.
@@ -10,7 +10,7 @@ summarizes the behavior that matters when operating the app.
 
 ## Audience
 
-eMule BB is for users and operators who want a long-running native eMule client:
+eMuleBB is for users and operators who want a long-running native eMule client:
 
 - power users with sustained broadband upload capacity
 - archivists and seeders with large shared libraries
@@ -54,7 +54,7 @@ the same live profile.
 
 For a new profile:
 
-1. Start eMule BB with a clean profile.
+1. Start eMuleBB with a clean profile.
 2. Choose incoming and temporary directories.
 3. Configure TCP and UDP ports in `Preferences > Connection`.
 4. Leave bind settings empty unless a specific interface or address is required.
@@ -69,7 +69,7 @@ For an existing profile:
 2. Keep temp and incoming paths stable when possible.
 3. Start once without controllers or automation.
 4. Verify connection state, downloads, shared files, categories, and logs.
-5. Let eMule BB create its branch-specific sidecars and caches.
+5. Let eMuleBB create its branch-specific sidecars and caches.
 
 ## Main Guide Chapters
 
@@ -200,7 +200,7 @@ labels into product promises.
 
 ## Quality And Test Evidence
 
-eMule BB release claims are tied to the workspace evidence model rather than to
+eMuleBB release claims are tied to the workspace evidence model rather than to
 one manual smoke test. The public hosted CI lane gives fast feedback for the
 shared Python harness, while the release campaign covers the slower and more
 environment-dependent proof that belongs on operator machines.
@@ -226,7 +226,7 @@ release evidence aligned.
 ## Performance Improvements
 
 Performance messaging should be read as operational behavior, not as a synthetic
-benchmark promise. eMule BB focuses on places where old desktop assumptions are
+benchmark promise. eMuleBB focuses on places where old desktop assumptions are
 visible during long broadband sessions:
 
 - finite broadband upload policy with reviewable slot targets
@@ -302,7 +302,7 @@ Shared startup cache behavior:
 - `sharedcache.dat` is a disposable performance sidecar. It never replaces
   `known.met`, `known2_64.met`, `shareddir.dat`, or a real scan when validation is
   uncertain.
-- eMule BB trusts the cache only after verifying that the configured shared
+- eMuleBB trusts the cache only after verifying that the configured shared
   directory still describes the same directory state. If validation fails, that
   directory is rescanned and the cache can be rebuilt later.
 - Local NTFS directories use the strongest fast path. The cache records the
@@ -341,7 +341,7 @@ Downloads and search:
 
 Disk-space protection:
 
-- eMule BB protects the volumes that host the config directory, every temp
+- eMuleBB protects the volumes that host the config directory, every temp
   directory, the default incoming directory, and category-specific incoming
   directories.
 - Separate free-space floors are stored as `MinFreeDiskSpaceConfig`,
@@ -454,7 +454,7 @@ Core profile files remain stock-compatible where possible, including
 `preferences.dat`, `clients.met`, `cryptkey.dat`, `known.met`, `known2_64.met`,
 `cancelled.met`, `.part.met`, `server.met`, and `nodes.dat`.
 
-eMule BB also writes branch-specific state such as `shareignore.dat`,
+eMuleBB also writes branch-specific state such as `shareignore.dat`,
 monitored-share files, shared-library caches, REST/WebServer settings,
 geolocation/IP-filter updater state, and preference schema markers. Older stock
 clients can ignore many unknown text preferences, but they do not understand all
@@ -471,7 +471,7 @@ docs later say otherwise.
 ## Unsupported Legacy Areas
 
 Some old eMule surfaces may still appear in resources, settings, or historical
-notes. They are not maintained user workflows for eMule BB:
+notes. They are not maintained user workflows for eMuleBB:
 
 - archive preview and archive recovery
 - IRC and IRC-adjacent chat UI

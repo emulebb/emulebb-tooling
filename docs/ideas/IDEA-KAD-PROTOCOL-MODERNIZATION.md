@@ -14,7 +14,7 @@ This note captures two separate Kad modernization lanes:
 
 The distinction matters. The current eMule Kad network is shared infrastructure,
 and small wire-level changes can damage interoperability, routing behavior,
-search quality, and user trust. eMule BB policy therefore requires stock
+search quality, and user trust. eMuleBB policy therefore requires stock
 compatibility for current Kad behavior: packet shapes, opcode meanings,
 state-machine behavior, peer interaction rules, persistence semantics, and
 default network behavior must remain compatible unless a future active item
@@ -498,7 +498,7 @@ Avoid:
 
 ## Recommended Priority
 
-For eMule BB, the practical priority remains:
+For eMuleBB, the practical priority remains:
 
 1. compatible parser, routing, and publish hardening
 2. better Kad diagnostics and evidence traces

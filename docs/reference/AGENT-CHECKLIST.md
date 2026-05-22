@@ -1,7 +1,7 @@
 # Agent Checklist
 
 This checklist is the repeatable operating path for AI agents contributing to
-the canonical eMule BB workspace. It does not replace
+the canonical eMuleBB workspace. It does not replace
 [Workspace Policy](../WORKSPACE-POLICY.md); when this checklist and policy
 appear to conflict, policy wins.
 
@@ -54,7 +54,7 @@ python -m mkdocs build --strict
 - Revalidate backlog work against current `main`, current dependency pins, and
   workspace policy before implementation.
 - For files with `workflow: github`, treat the linked GitHub issue and public
-  `eMule BB Roadmap` project as workflow authority.
+  `eMuleBB Roadmap` project as workflow authority.
 - Run `python scripts\docs-item-taxonomy-check.py` after active item, index, or
   taxonomy changes.
 

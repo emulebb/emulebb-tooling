@@ -48,7 +48,7 @@ and latency for very large shared trees.
 - eMuleAI issue #79: large shared-library automation reports UI and shared-files
   pressure.
 
-The exact eMuleAI failure may not be the same as eMule BB, but the large-list
+The exact eMuleAI failure may not be the same as eMuleBB, but the large-list
 memory risk maps directly to the current REST serialization shape.
 
 ## Acceptance Criteria

@@ -29,8 +29,8 @@ and may expose UDP status or admin APIs.
 
 | Project | Status | Language | Source or archive | Notes |
 |---|---|---|---|---|
-| goed2k-server | Active | Go | https://github.com/chenjia404/goed2k-server | Go ED2K/eMule server built around `github.com/monkeyWie/goed2k`; implements login, status, message, ID assignment, offer files, search, search-more, source lookup, callbacks, JSON/MySQL/PostgreSQL catalog storage, and admin UI/API. The eMule BB managed fork lives at `https://github.com/eMulebb/goed2k-server`. |
-| p2p-overlord ED2K server | Historical reference | Go | https://github.com/p2p-overlord/p2p-overlord-ed2k-server | Renamed fork lineage retained only as historical reference; active eMule BB workspace topology tracks `goed2k-server` directly. |
+| goed2k-server | Active | Go | https://github.com/chenjia404/goed2k-server | Go ED2K/eMule server built around `github.com/monkeyWie/goed2k`; implements login, status, message, ID assignment, offer files, search, search-more, source lookup, callbacks, JSON/MySQL/PostgreSQL catalog storage, and admin UI/API. The eMuleBB managed fork lives at `https://github.com/eMulebb/goed2k-server`. |
+| p2p-overlord ED2K server | Historical reference | Go | https://github.com/p2p-overlord/p2p-overlord-ed2k-server | Renamed fork lineage retained only as historical reference; active eMuleBB workspace topology tracks `goed2k-server` directly. |
 | ed2kd | Stale | C | https://github.com/gureedo/ed2kd | eDonkey2000 server implementation using libevent, zlib, libconfig, and SQLite support. Local research checkout exists in archived server material. |
 | eNode | Stale | Node.js | https://github.com/zt8989/eNode | Experimental eD2K/eMule server. README describes TCP/UDP opcodes, obfuscation, Lugdunum/eMule extended protocol, LowID callbacks, files over 4 GiB, and pluggable storage through MySQL or MongoDB. |
 | gomule | Stale | Go | https://github.com/HackLinux/gomule | Go "Goroutines eMule Server" project. Treat as a small historical implementation reference until protocol coverage is revalidated. |
@@ -58,13 +58,13 @@ server addresses, `server.met` files, or bootstrap guidance.
 | aMule ED2K protocol wiki | Historical | https://wiki.amule.org/wiki/Ed2k_protocol | Protocol notes for eD2K client/server behavior. Revalidate against current code before treating as normative. |
 | eMule server FAQ | Historical | https://emule-project.net/faq/faq_server.htm | User-facing server behavior and connectivity background. |
 | eDonkey network server software history | Historical | https://en.wikipedia.org/wiki/EDonkey_network | Summarizes Lugdunum/eserver and satan-edonkey-server history. Use only as secondary context. |
-| eMule/aMule server opcode code | Maintained/historical | eMule BB source, aMule source | The current client code remains the most practical protocol reference for `OP_LOGINREQUEST`, `OP_SEARCHREQUEST`, `OP_SERVERLIST`, source lookup, and server tags. |
+| eMule/aMule server opcode code | Maintained/historical | eMuleBB source, aMule source | The current client code remains the most practical protocol reference for `OP_LOGINREQUEST`, `OP_SEARCHREQUEST`, `OP_SERVERLIST`, source lookup, and server tags. |
 
 ## Modern Clients, Forks, And Front Ends
 
 | Project | Status | Language/platform | Link | Notes |
 |---|---|---|---|---|
-| eMule BB | Active | Windows, C++/MFC | https://github.com/eMulebb/eMule | Workspace product line; modernized eMule broadband edition with compatibility and release hardening. |
+| eMuleBB | Active | Windows, C++/MFC | https://github.com/eMulebb/eMule | Workspace product line; modernized eMule broadband edition with compatibility and release hardening. |
 | eMule Community | Maintained | Windows, C++/MFC | https://github.com/irwir/eMule | Community continuation of classic eMule. Important compatibility and user-expectation reference. |
 | eMuleAI | Active | Windows, C++/MFC | https://github.com/eMuleAI/eMuleAI | Modern eMule fork with UI, performance, and feature ideas already used as comparative reference in tooling docs. |
 | eMule Qt | Active | Qt/C++ | https://github.com/ModderMule/emule-qt | Qt port intended to modernize the eMule client and improve platform independence. Homepage: https://emule-qt.org/ |

@@ -1,6 +1,6 @@
 # Persistence Files
 
-This reference documents the current eMule BB runtime `.met` and `.dat` files
+This reference documents the current eMuleBB runtime `.met` and `.dat` files
 found in the app source. It covers file roles, ownership, broad structure, and
 maintenance risk. It is not a replacement for the source readers and writers;
 use it as the map before touching a profile, writing migration code, or
@@ -11,7 +11,7 @@ beside the incomplete `.part` data in the configured temp directory.
 
 ## Maintenance Rules
 
-- Close eMule BB before hand-editing or replacing profile files.
+- Close eMuleBB before hand-editing or replacing profile files.
 - Back up the full config directory and all temp directories before profile
   migration or recovery work.
 - Do not hand-edit binary profile files such as `preferences.dat`, `known.met`,
@@ -117,7 +117,7 @@ hashsets, so it should not be used for GUI statistics or request timestamps.
 - `nodes.dat`: Kad routing/bootstrap contact snapshot and downloaded bootstrap
   payload format. It stores binary Kad contacts and supports normal and
   bootstrap-only handling. Current import validates before replacement.
-- `nodes.fastkad.dat`: eMule BB Fast Kad sidecar with contact health and
+- `nodes.fastkad.dat`: eMuleBB Fast Kad sidecar with contact health and
   response metadata. It improves bootstrap quality and can rebuild over time.
 - `src_index.dat`: Kad indexed source records. This is derived local DHT state.
 - `key_index.dat`: Kad keyword index records. This is derived local DHT state.

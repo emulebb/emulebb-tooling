@@ -1,7 +1,7 @@
-# eMule BB Troubleshooting Guide
+# eMuleBB Troubleshooting Guide
 
 Troubleshooting should start by collecting evidence, then changing the smallest
-setting that explains the symptom. eMule BB keeps the classic desktop app
+setting that explains the symptom. eMuleBB keeps the classic desktop app
 model: the live state belongs to the app, while REST and companion tools observe
 or request native state changes.
 
@@ -40,7 +40,7 @@ If the issue began after a package or profile change, confirm the setup path in
 
 Low ID normally means the TCP listener is not reachable from the eD2K server.
 
-1. Confirm eMule BB is connected to an eD2K server.
+1. Confirm eMuleBB is connected to an eD2K server.
 2. Confirm the configured TCP port in `Preferences > Connection`.
 3. Check Windows Firewall rules for that port and executable.
 4. Check router/NAT forwarding or P2P UPnP mapping.
@@ -122,7 +122,7 @@ interpret. Change one policy area at a time.
 
 ## Disk-Space Protection Recipe
 
-When disk-space protection triggers, eMule BB is protecting profile and part
+When disk-space protection triggers, eMuleBB is protecting profile and part
 file integrity.
 
 1. Identify the breached volume in logs.

@@ -25,7 +25,7 @@ Show the release campaign matrix before running proof so missing evidence and
 local input requirements are visible:
 
 ```powershell
-python -m emule_workspace test release-campaign --campaign emule-bb-0.7.3
+python -m emule_workspace test release-campaign --campaign emulebb-0.7.3
 ```
 
 ## Repeatable Build Matrix
@@ -37,11 +37,11 @@ MSBuild commands for the workspace entrypoint.
 |---|---|---|
 | Developer Debug x64 | `python -m emule_workspace build app --variant main --config Debug --platform x64 --build-output-mode ErrorsOnly` | `workspaces\workspace\app\eMule-main\srchybrid\x64\Debug`; startup profiling is compiled by `_DEBUG`. |
 | Developer Release x64 | `python -m emule_workspace build app --variant main --config Release --platform x64 --build-output-mode ErrorsOnly` | `workspaces\workspace\app\eMule-main\srchybrid\x64\Release`; startup profiling is compiled in and runtime-gated by `EMULE_STARTUP_PROFILE`. |
-| Package Release x64 | `python -m emule_workspace package-release --config Release --platform x64 --clean` | app binary/intermediates under `workspaces\workspace\state\package-build\emule-bb-v0.7.3\x64`; packaged binary must not contain startup profiling support. |
-| Package Release ARM64 | `python -m emule_workspace package-release --config Release --platform ARM64 --clean` | app binary/intermediates under `workspaces\workspace\state\package-build\emule-bb-v0.7.3\arm64`; packaged binary must not contain startup profiling support. |
+| Package Release x64 | `python -m emule_workspace package-release --config Release --platform x64 --clean` | app binary/intermediates under `workspaces\workspace\state\package-build\emulebb-v0.7.3\x64`; packaged binary must not contain startup profiling support. |
+| Package Release ARM64 | `python -m emule_workspace package-release --config Release --platform ARM64 --clean` | app binary/intermediates under `workspaces\workspace\state\package-build\emulebb-v0.7.3\arm64`; packaged binary must not contain startup profiling support. |
 
 `package-release` stages ZIP contents under
-`workspaces\workspace\state\release\emule-bb-v0.7.3\staging\<arch>` and writes
+`workspaces\workspace\state\release\emulebb-v0.7.3\staging\<arch>` and writes
 the final ZIP, manifest, and SBOM next to that staging directory. Package app
 outputs are intentionally separate from developer app outputs so profiling
 builds cannot be reused for release ZIPs.
@@ -134,14 +134,14 @@ python -m emule_workspace package-release --config Release --platform ARM64 --cl
 Package manifests are written next to the ZIP assets under:
 
 ```text
-workspaces\workspace\state\release\emule-bb-v0.7.3
+workspaces\workspace\state\release\emulebb-v0.7.3
 ```
 
 The release ZIP assets must be named:
 
 ```text
-eMule-broadband-0.7.3-x64.zip
-eMule-broadband-0.7.3-arm64.zip
+emulebb-0.7.3-x64.zip
+emulebb-0.7.3-arm64.zip
 ```
 
 The packaging command is intentionally strict. It builds the selected
@@ -149,11 +149,11 @@ architecture into the package-only app output root, builds the stock language
 resource DLLs, stages the portable ZIP, then verifies the package before
 writing the manifest. Verification covers:
 
-- `emule.exe`, full stock `lang\*.dll` set, `webserver\eMule.tmpl`, package
+- `emulebb.exe`, full stock `lang\*.dll` set, `webserver\eMule.tmpl`, package
   README, release notes, GPL text, third-party notices, and REST docs;
 - x64 packages containing only x64 PE files and ARM64 packages containing only
-  ARM64 PE files for `emule.exe` and language DLLs;
-- release package `emule.exe` not containing startup profiling support;
+  ARM64 PE files for `emulebb.exe` and language DLLs;
+- release package `emulebb.exe` not containing startup profiling support;
 - no source files, project files, debug symbols, intermediates, or build logs in
   the ZIP; and
 - manifest fields for ZIP hash, executable hash, expected language DLL
@@ -164,7 +164,7 @@ code-signed and do not include debug symbols.
 
 ## Optional aMuTorrent Controller Package
 
-aMuTorrent is packaged separately from the core eMule BB portable ZIPs. The
+aMuTorrent is packaged separately from the core eMuleBB portable ZIPs. The
 CI packaging proof is x64-only and verifies that the optional controller ZIP can
 be produced without publishing workflow artifacts:
 
@@ -175,8 +175,8 @@ python -m emule_workspace package-amutorrent --config Release --platform x64
 The optional controller assets are written next to the core package assets:
 
 ```text
-workspaces\workspace\state\release\emule-bb-v0.7.3\eMule-broadband-0.7.3-amutorrent-x64.zip
-workspaces\workspace\state\release\emule-bb-v0.7.3\eMule-broadband-0.7.3-amutorrent-x64.manifest.json
+workspaces\workspace\state\release\emulebb-v0.7.3\emulebb-0.7.3-amutorrent-x64.zip
+workspaces\workspace\state\release\emulebb-v0.7.3\emulebb-0.7.3-amutorrent-x64.manifest.json
 ```
 
 The aMuTorrent package command requires clean provenance inputs for
@@ -195,6 +195,6 @@ After the final proof:
   [RELEASE-0.7.3-CHECKLIST](RELEASE-0.7.3-CHECKLIST.md);
 - confirm [RELEASE-0.7.3](RELEASE-0.7.3.md) has no open beta-blocking task
   without item-level acceptance;
-- confirm release notes use `eMule broadband edition` and `eMule BB`; and
-- create `emule-bb-v0.7.3` only after package verification and a separate
+- confirm release notes use `eMule broadband edition` and `eMuleBB`; and
+- create `emulebb-v0.7.3` only after package verification and a separate
   operator instruction.

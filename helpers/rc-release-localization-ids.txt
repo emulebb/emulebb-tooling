@@ -1,4 +1,4 @@
-# Resource ids added by recent eMule BB UI, tools, diagnostics, web, and
+# Resource ids added by recent eMuleBB UI, tools, diagnostics, web, and
 # preferences work that must be translated for release language DLLs.
 IDS_VIDEOTHUMBNAILS
 IDS_VIDEOTHUMBNAILS_INVALID

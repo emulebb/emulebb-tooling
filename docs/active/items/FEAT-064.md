@@ -17,17 +17,17 @@ source: user future-release triage, local mod analysis, community feature scan
 
 ## Summary
 
-Maintain a curated future roadmap for eMule BB after beta `0.7.3`. This item is
+Maintain a curated future roadmap for eMuleBB after beta `0.7.3`. This item is
 the umbrella tracking record for the grouped roadmap in
 [`FUTURE-ROADMAP`](../FUTURE-ROADMAP.md).
 
-The roadmap is intentionally selective: eMule BB stays a Windows MFC desktop
+The roadmap is intentionally selective: eMuleBB stays a Windows MFC desktop
 client with REST support, and rejected ideas are recorded so they do not drift
 back into the backlog accidentally.
 
 After GitHub migration, this local document is the engineering scope record.
 Workflow state for the umbrella and promoted slices is tracked in GitHub issues
-and the public `eMule BB Roadmap` org project.
+and the public `eMuleBB Roadmap` org project.
 
 ## Approved Lanes
 

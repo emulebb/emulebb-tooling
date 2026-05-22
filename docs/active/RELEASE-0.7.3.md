@@ -1,6 +1,6 @@
 # eMule Broadband Edition 0.7.3 Beta Release Dashboard
 
-This is the current release dashboard for beta target `emule-bb-v0.7.3`.
+This is the current release dashboard for beta target `emulebb-v0.7.3`.
 Use it for status, release-source truth, and the open beta task list.
 
 ## Current Status
@@ -16,7 +16,7 @@ Use it for status, release-source truth, and the open beta task list.
   execution and test-harness edits are paused by operator direction.
 - Release source: selected reviewed `main` commit in
   `EMULE_WORKSPACE_ROOT\workspaces\workspace\app\eMule-main`.
-- Tag target: `emule-bb-v0.7.3` on the selected reviewed `main` commit after
+- Tag target: `emulebb-v0.7.3` on the selected reviewed `main` commit after
   fresh proof passes and the operator gives a separate tagging instruction.
 - Stock/community comparison baseline: `baseline/community-0.72a`.
 - Former broadband stabilization branch: retired from the active beta topology.
@@ -26,18 +26,18 @@ Use it for status, release-source truth, and the open beta task list.
 ## Release Identity
 
 - Public product name: `eMule broadband edition`
-- Compact app/mod/API name: `eMule BB`
+- Compact app/mod/API name: `eMuleBB`
 - GitHub organization and URL slug: `emulebb`
-- Tag: `emule-bb-v0.7.3`
+- Tag: `emulebb-v0.7.3`
 - Assets:
-  - `eMule-broadband-0.7.3-x64.zip`
-  - `eMule-broadband-0.7.3-x64.sbom.spdx.json`
-  - `eMule-broadband-0.7.3-arm64.zip`
-  - `eMule-broadband-0.7.3-arm64.sbom.spdx.json`
+  - `emulebb-0.7.3-x64.zip`
+  - `emulebb-0.7.3-x64.sbom.spdx.json`
+  - `emulebb-0.7.3-arm64.zip`
+  - `emulebb-0.7.3-arm64.sbom.spdx.json`
   - optional controller asset:
-    `eMule-broadband-0.7.3-amutorrent-x64.zip`
+    `emulebb-0.7.3-amutorrent-x64.zip`
   - optional controller SBOM:
-    `eMule-broadband-0.7.3-amutorrent-x64.sbom.spdx.json`
+    `emulebb-0.7.3-amutorrent-x64.sbom.spdx.json`
 
 ## Active Control Docs
 

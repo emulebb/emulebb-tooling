@@ -38,7 +38,7 @@ failure that does not help the operator understand what actually happened.
 
 **Release Candidate.** The code/build slice is already complete, so beta
 `0.7.3` should take the live NAT validation if the available network can prove
-it cleanly. Do not block `emule-bb-v0.7.3` solely because the local network
+it cleanly. Do not block `emulebb-v0.7.3` solely because the local network
 cannot provide a PCP/NAT-PMP-capable path.
 
 ## Execution Plan

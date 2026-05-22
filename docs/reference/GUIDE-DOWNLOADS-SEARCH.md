@@ -5,7 +5,7 @@ transfer limits, and broadband upload behavior.
 
 ## Search Modes
 
-eMule BB preserves native eMule search distinctions:
+eMuleBB preserves native eMule search distinctions:
 
 - Server search queries the current eD2K server.
 - Global search uses the eD2K server network more broadly.
@@ -24,7 +24,7 @@ preferences; exact keys and ranges are in [Preferences Guide](GUIDE-PREFERENCES.
 Search results can include bad names, misleading extensions, spam, or fake-file
 signals. Treat the visible row as a candidate, not proof.
 
-eMule BB separates **risk** from **evidence** in the search result list. Risk is
+eMuleBB separates **risk** from **evidence** in the search result list. Risk is
 local evidence that a row may be spam, fake, mislabeled, or internally
 inconsistent. Evidence is support for a specific claim about the row; it is not
 a guarantee that the file is safe or authentic.
@@ -82,7 +82,7 @@ Keyboard details are in [Keyboard Shortcuts](KEYBOARD-SHORTCUTS.md).
 
 ## qBittorrent-Style Shortcuts And Batch Actions
 
-eMule BB exposes selected qBittorrent-style shortcuts and batch menu actions
+eMuleBB exposes selected qBittorrent-style shortcuts and batch menu actions
 for faster desktop operation and controller parity. These are convenience
 workflows over native eMule behavior, not a replacement behavior model.
 
@@ -116,7 +116,7 @@ Good category practice:
 
 ## Filename Cleanup
 
-eMule BB can normalize download names on intake and completion. This is intended
+eMuleBB can normalize download names on intake and completion. This is intended
 to reduce obvious junk, not to erase identity.
 
 Before normal cleanup, remote search and download-intake filenames pass through
@@ -139,7 +139,7 @@ decode to invalid Unicode/control values, the original text is kept.
 
 The repaired name becomes the primary remote-intake name shown by search,
 download creation, REST add-transfer, and later download filename cleanup. The
-raw damaged name is not exposed as a separate REST field. eMule BB does not use
+raw damaged name is not exposed as a separate REST field. eMuleBB does not use
 this feature to reinterpret protocol packets globally, rewrite comments,
 usernames, server names, or arbitrary metadata, and it does not silently rename
 already-shared local files on disk.
@@ -178,7 +178,7 @@ shell expansion.
 
 ## Transfer Limits
 
-Upload and download limits are finite runtime caps. eMule BB defaults are
+Upload and download limits are finite runtime caps. eMuleBB defaults are
 modernized from older stock assumptions, but users should still set realistic
 values for the current line.
 
@@ -199,7 +199,7 @@ disk, or UI behavior worse even on a fast machine.
 
 ## Disk-Space Protection
 
-eMule BB treats low disk space as a profile-safety problem, not just a transfer
+eMuleBB treats low disk space as a profile-safety problem, not just a transfer
 speed problem. The guard protects the volumes used by active downloads and
 metadata so the app does not keep writing when the filesystem is already below
 the configured reserve.
@@ -226,7 +226,7 @@ Values below the hard minimum are raised to the minimum, and values above the
 supported 5120 GiB maximum are clamped to that maximum.
 
 The guard works by resolved volume identity. If several protected paths point
-to the same volume, eMule BB merges their roles and uses the largest floor for
+to the same volume, eMuleBB merges their roles and uses the largest floor for
 that volume. For example, if config and temp are both on `D:`, the temp floor
 normally controls that volume because it is higher. If temp and incoming are on
 separate volumes, each volume is checked against its own effective requirement.
@@ -237,7 +237,7 @@ The effective requirement is:
 effective required free space = protected floor + completion reserve
 ```
 
-The completion reserve is dynamic. For active or resumable downloads, eMule BB
+The completion reserve is dynamic. For active or resumable downloads, eMuleBB
 adds the extra temp bytes still needed by the part file. If the completed file
 will land on a different incoming volume, it also reserves the completed file
 size on that incoming volume. This prevents a profile from accepting work that
@@ -265,7 +265,7 @@ volume to have enough free space, including bounded headroom for the file that
 previously failed because of insufficient space.
 
 Metadata writes have a separate per-write safety guard. Before writing a
-`.part.met` file, eMule BB resolves the metadata target's volume and compares
+`.part.met` file, eMuleBB resolves the metadata target's volume and compares
 current free space with the effective requirement for that path. If the volume
 cannot be resolved and a nonzero requirement applies, the write is blocked. If
 the volume is resolved but below the requirement, the write is skipped and a
@@ -275,7 +275,7 @@ safer than producing a truncated or partially replaced `.part.met` file on an
 exhausted disk.
 
 New-download placement also uses protected-volume availability. When several
-temp directories exist, eMule BB evaluates each candidate after subtracting the
+temp directories exist, eMuleBB evaluates each candidate after subtracting the
 protected requirement. It avoids duplicate volume candidates, rejects FAT
 volumes for files above the old FAT-safe size limit, prefers a valid temp
 volume that shares the incoming volume when appropriate, and otherwise chooses
@@ -361,7 +361,7 @@ for support notes or manual audits.
 
 ## Automation Discipline
 
-Controllers should not flatten eMule BB into a generic download-client model.
+Controllers should not flatten eMuleBB into a generic download-client model.
 Native distinctions matter:
 
 - search network choice

@@ -13,8 +13,8 @@ from pathlib import Path
 
 
 UTF8_BOM = b"\xef\xbb\xbf"
-START_MARKER = "// eMule BB managed translation block: begin"
-END_MARKER = "// eMule BB managed translation block: end"
+START_MARKER = "// eMuleBB managed translation block: begin"
+END_MARKER = "// eMuleBB managed translation block: end"
 DEFAULT_PROBE_START = "IDS_ENABLE_IPFILTER"
 DEFAULT_PROBE_END = "IDS_ALWAYS_SHOW_TRAY_ICON"
 

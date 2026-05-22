@@ -19,7 +19,7 @@ This directory is the single Markdown home for the tooling repo. Use
 If a status claim outside `docs/active/` conflicts with `docs/active/`, treat
 `docs/active/` as authoritative for current local backlog and release state.
 For future-roadmap items marked `workflow: github`, the linked GitHub issue and
-the public `eMule BB Roadmap` org project are authoritative for workflow state.
+the public `eMuleBB Roadmap` org project are authoritative for workflow state.
 
 ## Active Work
 
@@ -40,7 +40,7 @@ the public `eMule BB Roadmap` org project are authoritative for workflow state.
 GitHub-primary future-roadmap helper scripts live under `scripts/`:
 
 - `github-roadmap-sync.py` previews or applies the first-rollout import to
-  `eMulebb/eMule` issues and the `eMule BB Roadmap` project.
+  `eMulebb/eMule` issues and the `eMuleBB Roadmap` project.
 - `github-roadmap-check.py` validates local GitHub metadata, and can query
   GitHub when run with `--github`.
 
@@ -59,7 +59,7 @@ GitHub-primary future-roadmap helper scripts live under `scripts/`:
 | Document | Description |
 |---|---|
 | [reference/AGENT-CHECKLIST](reference/AGENT-CHECKLIST.md) | Repeatable operating checklist for AI agents contributing to the workspace |
-| [reference/GUIDE-EMULEBB](reference/GUIDE-EMULEBB.md) | eMule BB product manual entry point, setup, tools, diagnostics, and compatibility |
+| [reference/GUIDE-EMULEBB](reference/GUIDE-EMULEBB.md) | eMuleBB product manual entry point, setup, tools, diagnostics, and compatibility |
 | [reference/BACKLOG-PROCESS](reference/BACKLOG-PROCESS.md) | Repeatable workflow for creating, updating, validating, and closing backlog records |
 | [reference/CI-BASELINE](reference/CI-BASELINE.md) | Reusable CI baseline workflow contract |
 | [reference/DEVELOPMENT-GUIDE](reference/DEVELOPMENT-GUIDE.md) | Development, validation, CI, packaging, command-line, and recurring guide refresh workflow |

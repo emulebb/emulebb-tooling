@@ -5,7 +5,7 @@ large libraries, startup cache behavior, long paths, and recovery.
 
 ## Sharing Model
 
-eMule BB keeps classic eMule sharing behavior. Files in configured shared
+eMuleBB keeps classic eMule sharing behavior. Files in configured shared
 directories are published through eD2K/Kad according to network state and local
 queue policy.
 
@@ -100,7 +100,7 @@ configured share-root list.
 ## Startup Cache Behavior
 
 `sharedcache.dat` is an acceleration cache for the Shared Files startup path.
-It is intentionally disposable. eMule BB should never publish stale shared-file
+It is intentionally disposable. eMuleBB should never publish stale shared-file
 state merely because a cache file exists; if validation is incomplete,
 ambiguous, or inconsistent, the app rescans the affected directory and can
 write a fresh cache later.
@@ -119,7 +119,7 @@ Two validation modes are used:
 | Local NTFS journal fast path | Local NTFS volumes with a usable USN journal | Volume key, volume serial, journal ID, checkpoint range, directory file reference, directory identity, directory timestamp, and absence of relevant journal changes |
 | Generic file verification | Non-NTFS volumes, remote shares, unsupported path forms, or any case without trusted journal state | Directory identity/timestamp where available, plus a fresh directory inventory matching cached leaf names, timestamps, and sizes |
 
-For the local NTFS path, eMule BB resolves the containing volume instead of
+For the local NTFS path, eMuleBB resolves the containing volume instead of
 trusting only the textual path. That matters for Windows drive letters and
 mounted folders:
 
@@ -135,7 +135,7 @@ mounted folders:
   fast path. They are safe, but may need more startup enumeration.
 
 The NTFS journal fast path records a checkpoint from the volume USN journal.
-On a later startup, eMule BB verifies that the current volume is the same
+On a later startup, eMuleBB verifies that the current volume is the same
 volume, the same journal is still active, the checkpoint is still inside the
 valid journal range, and no journal records since that checkpoint affect the
 tracked shared directory. If the journal was reset, truncated before the
@@ -187,7 +187,7 @@ Use view presets if old profiles hide useful columns or preserve cramped widths.
 
 ## Long Paths
 
-Deep trees can exceed older Windows path assumptions. eMule BB includes
+Deep trees can exceed older Windows path assumptions. eMuleBB includes
 long-path hardening in important file operations, but the OS, filesystem, and
 external tools still matter.
 

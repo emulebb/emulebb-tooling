@@ -1,10 +1,10 @@
-# eMule BB Help
+# eMuleBB Help
 
-This page is the online help landing page for eMule BB.
+This page is the online help landing page for eMuleBB.
 
 ## Start Here
 
-- [eMule BB product guide](reference/GUIDE-EMULEBB.md)
+- [eMuleBB product guide](reference/GUIDE-EMULEBB.md)
 - [Setup guide](reference/GUIDE-SETUP.md)
 - [Network guide](reference/GUIDE-NETWORK.md)
 - [Downloads and search guide](reference/GUIDE-DOWNLOADS-SEARCH.md)
@@ -20,7 +20,7 @@ This page is the online help landing page for eMule BB.
 
 ## User Notes
 
-eMule BB keeps the classic eMule desktop workflow while adding the maintained
+eMuleBB keeps the classic eMule desktop workflow while adding the maintained
 broadband controller and REST API surfaces documented in this repository.
 
 For user-facing product documentation, start with the product guide. For build,

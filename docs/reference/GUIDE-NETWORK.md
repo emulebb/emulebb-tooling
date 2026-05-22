@@ -5,7 +5,7 @@ WebServer/REST listener behavior, geolocation, and network diagnosis.
 
 ## Network Surfaces
 
-eMule BB uses the classic eMule network model:
+eMuleBB uses the classic eMule network model:
 
 - eD2K server connections for server-indexed search and source discovery
 - Kad for decentralized search, source discovery, and firewall state
@@ -62,7 +62,7 @@ Released bind behavior covers peer TCP, client UDP, server UDP, pinger-adjacent
 network paths, and UPnP discovery where applicable. The WebServer/REST bind
 address is separate from the P2P bind address.
 
-If the configured bind target cannot be resolved, eMule BB reports the active
+If the configured bind target cannot be resolved, eMuleBB reports the active
 bind state in UI/diagnostics. With startup bind blocking enabled, P2P networking
 stays offline for that session instead of silently falling back.
 
@@ -96,7 +96,7 @@ Operational rules:
 - WebServer/REST bind address is configured separately under WebServer
   settings.
 - VPN kill-switch, firewall, and route enforcement remain external operator or
-  provider controls; eMule BB interface binding is not a kill switch.
+  provider controls; eMuleBB interface binding is not a kill switch.
 
 When diagnosing a VPN path, collect the configured bind target, resolved bind
 state, selected local address, UPnP result, firewall state, and current Low ID
@@ -115,7 +115,7 @@ Recommended VPN-profile shape:
 ## Windows Firewall
 
 The Windows Firewall repair action launches an elevated PowerShell script and
-creates broad allow rules for the eMule BB executable:
+creates broad allow rules for the eMuleBB executable:
 
 - inbound TCP
 - inbound UDP
@@ -124,7 +124,7 @@ creates broad allow rules for the eMule BB executable:
 - all profiles
 - all local/remote ports and addresses
 
-The repair action deletes exact-name eMule BB rules before recreating them. It
+The repair action deletes exact-name eMuleBB rules before recreating them. It
 does not remove unrelated legacy rules. The repair result appears in the
 elevated PowerShell window and in diagnostic snapshots.
 
@@ -167,7 +167,7 @@ Release-facing UPnP settings:
 If UPnP fails:
 
 1. Confirm the router supports UPnP.
-2. Confirm Windows Firewall allows eMule BB.
+2. Confirm Windows Firewall allows eMuleBB.
 3. Confirm bind settings point to the expected interface.
 4. Confirm the router path is the same path used by the selected bind target.
 5. Test manual port forwarding.
@@ -206,7 +206,7 @@ runtime behavior only.
 
 ## IPv6 And Kad Roadmap
 
-Current eMule BB product behavior remains stock-compatible IPv4 eD2K/Kad. IPv6
+Current eMuleBB product behavior remains stock-compatible IPv4 eD2K/Kad. IPv6
 work is future connectivity modernization, not a shipped beta 0.7.3 capability.
 
 The docs intentionally split IPv6 Kad into two tracks:

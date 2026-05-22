@@ -1,11 +1,11 @@
 # Backlog Process
 
 This runbook is the repeatable workflow for creating, updating, validating, and
-closing eMule BB backlog records.
+closing eMuleBB backlog records.
 
 `docs/active/` is the current local spec and evidence layer. For future-roadmap
 items marked `workflow: github`, GitHub issues in `eMulebb/eMule` and the
-`eMule BB Roadmap` project own workflow state; the local Markdown file remains
+`eMuleBB Roadmap` project own workflow state; the local Markdown file remains
 the engineering spec and evidence record.
 
 ## Preflight
@@ -65,7 +65,7 @@ Use this path for promoted future-roadmap slices:
    `docs\active\FUTURE-ROADMAP.md`.
 4. Run `python scripts\github-roadmap-sync.py` to preview the GitHub import.
 5. Apply the sync when ready so the issue exists in `eMulebb/eMule` and is added
-   to the `eMule BB Roadmap` project.
+   to the `eMuleBB Roadmap` project.
 6. Ensure the local item has `workflow: github`, `github_issue:`, and the
    workflow-status note inserted by the sync helper.
 7. After migration, treat GitHub as the workflow authority for status, priority,

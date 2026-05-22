@@ -1,4 +1,4 @@
-# eMule BB REST API Contract
+# eMuleBB REST API Contract
 
 **Status:** beta 0.7.3 broadband contract
 **Source of truth:** [REST-API-OPENAPI.yaml](REST-API-OPENAPI.yaml)
@@ -20,7 +20,7 @@ completeness over preserving old command-style route names.
 ## Controller Boundary
 
 aMuTorrent is the primary UI consumer and beta 0.7.3 proof target, but it is not
-the authority for native route shape. The aMuTorrent eMule BB adapter must
+the authority for native route shape. The aMuTorrent eMuleBB adapter must
 translate UI expectations to the clean `/api/v1` contract instead of requiring
 native aliases, qBittorrent-compatible response shapes, or legacy command-style
 routes.
@@ -131,7 +131,7 @@ The release API intentionally excludes:
 - host operating-system shutdown and reboot
 - binary shared-file streaming
 - granular REST permissions or low-rights REST mode
-- dynamic capability negotiation between eMule BB and aMuTorrent
+- dynamic capability negotiation between eMuleBB and aMuTorrent
 
 `PATCH /api/v1/shared-directories` replaces the configured shared-directory
 roots and requires `confirmReplaceRoots: true`. Each root may be either a
@@ -218,7 +218,7 @@ beta 0.7.3 pass. Native route-seam tests cover the route schema table, strict
 validation behavior, and the internal route execution model. The Python smoke
 harness includes OpenAPI route consistency checks, validates success/error
 envelopes, and reports whether each native route is direct or UI-thread
-dispatched. aMuTorrent's eMule BB adapter consumes the same final field names
+dispatched. aMuTorrent's eMuleBB adapter consumes the same final field names
 while keeping aMuTorrent's own public routes stable.
 
 The live smoke harness validates route coverage and response envelopes against

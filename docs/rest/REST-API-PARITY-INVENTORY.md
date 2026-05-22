@@ -1,4 +1,4 @@
-# eMule BB REST API Migrated Action Inventory
+# eMuleBB REST API Migrated Action Inventory
 
 **Status:** current completed parity ledger
 **Contract:** [REST-API-OPENAPI.yaml](REST-API-OPENAPI.yaml)
@@ -185,7 +185,7 @@ be tracked as active item IDs before being added here as pending work.
 | Binary shared-file streaming through REST | obsolete | Metadata and ED2K links are enough for controller integration; local file serving changes risk profile. |
 | Host OS shutdown/reboot | obsolete | Not needed by aMuTorrent and too destructive for the trusted local API. |
 | Deprecated template sessions and low-rights mode | obsolete | REST is all-in behind `X-API-Key`. |
-| Dynamic capability negotiation | obsolete | eMule BB and aMuTorrent ship together; static contract compliance is simpler and stricter. |
+| Dynamic capability negotiation | obsolete | eMuleBB and aMuTorrent ship together; static contract compliance is simpler and stricter. |
 | Granular REST permissions | obsolete | User explicitly chose all-in API-key behavior. |
 
 ## aMuTorrent Gap Checklist
@@ -197,7 +197,7 @@ be tracked as active item IDs before being added here as pending work.
 | Torznab search method policy | implemented | Prowlarr/Torznab movie and TV searches dispatch REST `video` searches through connected `global` first and connected `kad` second, combining connected-network results; other families keep the native automatic policy. |
 | qBittorrent transfer delete semantics | implemented | qBit-compatible delete requests always forward native transfer cancel with `deleteFiles:true`; eMule does not provide a partial-state-preserving delete for incomplete transfers. |
 | Shared-file deletion | implemented | Shared deletes call `/shared-files/{hash}` instead of transfer delete helpers. |
-| Uploads in data pipeline | implemented | `/uploads` rows remain preserved through the eMule BB manager fetch result. |
+| Uploads in data pipeline | implemented | `/uploads` rows remain preserved through the eMuleBB manager fetch result. |
 | Transfer detail hydration | implemented | aMuTorrent hydrates peers plus part/source detail from `/transfers/{hash}/details`. |
 | Search polling | implemented | aMuTorrent stores the returned `id` and polls `/searches/{searchId}` for results. |
 | Browser smoke | implemented | `eMule-build-tests` now owns `amutorrent-browser-smoke.py`, launched from the aggregate live E2E suite. |
@@ -225,5 +225,5 @@ The completed REST parity surface is kept current by these supported workspace e
 | eMule app validation/build/tests | implemented |
 | Native REST route and contract tests | implemented |
 | Live eMule REST E2E completeness lane | implemented |
-| aMuTorrent Node eMule BB tests | implemented |
-| Live aMuTorrent browser smoke against eMule BB | implemented |
+| aMuTorrent Node eMuleBB tests | implemented |
+| Live aMuTorrent browser smoke against eMuleBB | implemented |

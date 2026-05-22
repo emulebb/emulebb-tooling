@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Production helpers for the static eMule BB pages site."""
+"""Production helpers for the static eMuleBB pages site."""
 
 from __future__ import annotations
 
@@ -153,7 +153,7 @@ def parse_args() -> argparse.Namespace:
     """Parse the command line for static page production helpers."""
 
     parser = argparse.ArgumentParser(
-        description="Validate and produce shared files for eMule BB static pages."
+        description="Validate and produce shared files for eMuleBB static pages."
     )
     parser.add_argument(
         "--pages-root",

@@ -44,7 +44,7 @@ drop, and removal transitions.
 ## Upstream Signal
 
 aMule issue #538 asks for detailed client connection logging including UserHash,
-IP, lifecycle events, bans, and filtered attempts. eMule BB already has much of
+IP, lifecycle events, bans, and filtered attempts. eMuleBB already has much of
 this surface, but a focused UserHash/lifecycle pass would improve diagnostics.
 
 ## Acceptance Criteria

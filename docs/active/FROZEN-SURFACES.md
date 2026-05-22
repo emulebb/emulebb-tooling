@@ -1,4 +1,4 @@
-# eMule BB Frozen Surfaces
+# eMuleBB Frozen Surfaces
 
 This document records product areas that are intentionally frozen in current
 `main`. If this document conflicts with older active item wording, this document
@@ -41,7 +41,7 @@ remove the surface or prove that its removal did not damage supported behavior.
 - Category behavior remains supported. Scheduler behavior does not.
 - Friend/source dialog behavior remains supported where covered separately.
   IRC/chat UI behavior does not.
-- Native MiniMule behavior is owned by eMule BB and is not part of the frozen
+- Native MiniMule behavior is owned by eMuleBB and is not part of the frozen
   legacy MiniMule/IE-host removal bucket.
 
 ## Release Test Rule

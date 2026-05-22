@@ -1,6 +1,6 @@
-# eMule BB Future Roadmap
+# eMuleBB Future Roadmap
 
-This is the active post-`0.7.3` product roadmap for eMule BB. It is not a beta
+This is the active post-`0.7.3` product roadmap for eMuleBB. It is not a beta
 `0.7.3` release gate, and it does not promote every historical feature idea in
 the backlog. The purpose is to keep future work focused on the Windows MFC app
 with REST support, while explicitly excluding ideas that belong elsewhere or no
@@ -10,7 +10,7 @@ longer match the product direction.
 
 Future-roadmap workflow is GitHub-primary after migration. Promoted roadmap
 slices are tracked as issues in `eMulebb/eMule` and as items in the public
-`eMule BB Roadmap` org project. Local item docs remain engineering specs and
+`eMuleBB Roadmap` org project. Local item docs remain engineering specs and
 evidence records; for files marked `workflow: github`, current status, priority,
 release placement, discussion, ownership, and PR linkage live in GitHub.
 
@@ -20,10 +20,10 @@ or apply the initial GitHub import, and use
 
 ## Product Boundary
 
-eMule BB remains a Windows MFC desktop client with a first-class UI, tray
+eMuleBB remains a Windows MFC desktop client with a first-class UI, tray
 workflow, and in-process REST surface for controllers. Headless-only, daemon,
 cross-platform, server-only, and mobile-controller product tracks belong outside
-eMule BB, including future Rust `p2p-overlord` work.
+eMuleBB, including future Rust `p2p-overlord` work.
 
 ## Approved Lanes
 
@@ -37,7 +37,7 @@ eMule BB, including future Rust `p2p-overlord` work.
 
 ## Explicit Non-Goals
 
-These ideas should not be added to the eMule BB future backlog unless the user
+These ideas should not be added to the eMuleBB future backlog unless the user
 explicitly reopens them:
 
 - Headless core, server-only mode, cross-platform client work, or mobile-first
@@ -88,7 +88,7 @@ External references used as directional signals, not implementation authority:
 - This roadmap is grouped intentionally. Do not create a new detailed `FEAT-*`
   file from a lane until the user approves that specific slice.
 - After GitHub migration, a promoted future-roadmap slice must have a
-  `eMulebb/eMule` issue and `eMule BB Roadmap` project item before
+  `eMulebb/eMule` issue and `eMuleBB Roadmap` project item before
   implementation starts.
 - Before implementation, revalidate the slice against current `main`, current
   dependency pins, and `WORKSPACE-POLICY.md`.

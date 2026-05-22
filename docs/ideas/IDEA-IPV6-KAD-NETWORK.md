@@ -28,7 +28,7 @@ References:
 
 ## Design Direction
 
-If eMule BB ever pursues an IPv6-native Kad network, the design should start
+If eMuleBB ever pursues an IPv6-native Kad network, the design should start
 from explicit state separation. The p2p-overlord `KV6_001` design is the
 strongest current external reference for this shape: keep legacy IPv4 Kad2 as a
 separate overlay, add an IPv6-capable Kad2-derived overlay, and merge behavior
@@ -91,7 +91,7 @@ Do:
 
 ## KV6_001 Reference Model
 
-The p2p-overlord `KV6_001` design gives eMule BB useful vocabulary for a future
+The p2p-overlord `KV6_001` design gives eMuleBB useful vocabulary for a future
 native IPv6 Kad track:
 
 - `kad4`: the existing Kad2 IPv4 overlay, unchanged on the wire
@@ -100,7 +100,7 @@ native IPv6 Kad track:
 - merged service layer: search, publish, and result presentation combine
   semantically equivalent data without mixing transport state
 
-For eMule BB, this means `kad6` should preserve Kad intent and state-machine
+For eMuleBB, this means `kad6` should preserve Kad intent and state-machine
 concepts where possible: bootstrap, hello, lookup, keyword search, source
 search, notes search, publish, firewall checks, and callbacks. It should not
 reuse legacy packet bodies when those bodies are structurally IPv4-shaped.
@@ -243,7 +243,7 @@ A future active implementation should be split into narrow, reviewable slices:
 
 Before this idea becomes an active item, answer these questions:
 
-- Should eMule BB share one Kad node ID across IPv4 and IPv6, or use separate
+- Should eMuleBB share one Kad node ID across IPv4 and IPv6, or use separate
   IDs per address family?
 - What is the on-disk format for IPv6 bootstrap state, and how is it rolled
   back independently from current `nodes.dat`?

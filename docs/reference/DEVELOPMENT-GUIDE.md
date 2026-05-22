@@ -1,4 +1,4 @@
-# eMule BB Development Guide
+# eMuleBB Development Guide
 
 This guide is the practical entry point for internal contributors and operators
 who make routine documentation updates and light code changes in the canonical
@@ -17,10 +17,10 @@ normal edit location.
 Use `EMULE_WORKSPACE_ROOT` style paths in maintained documentation and scripts.
 Avoid machine-specific absolute paths in active docs.
 
-The product line is eMule broadband edition, compactly eMule BB. The first
+The product line is eMule broadband edition, compactly eMuleBB. The first
 public beta release line is `0.7.3`; release tags use
-`emule-bb-vMAJOR.MINOR.PATCH`, and package assets use
-`eMule-broadband-MAJOR.MINOR.PATCH-ARCH.zip`.
+`emulebb-vMAJOR.MINOR.PATCH`, and package assets use
+`emulebb-MAJOR.MINOR.PATCH-ARCH.zip`.
 
 ## Start Every Change
 
@@ -133,7 +133,7 @@ Use this when adding, moving, closing, or reclassifying backlog work.
 - Revalidate the item against current `main`, dependency pins, and workspace
   policy before implementation.
 - For GitHub-migrated future-roadmap work, treat the linked issue and public
-  `eMule BB Roadmap` project as workflow authority.
+  `eMuleBB Roadmap` project as workflow authority.
 - Keep local item docs as engineering specs and evidence, not workflow status
   authority, when `workflow: github` is present.
 - Update active indexes and counts together with item metadata.
@@ -191,7 +191,7 @@ The app command line is part of the product contract and should stay documented
 when parser behavior changes:
 
 ```text
-emule.exe [options] [ed2k-link|magnet-link|collection-file|command]
+emulebb.exe [options] [ed2k-link|magnet-link|collection-file|command]
 ```
 
 Supported options:

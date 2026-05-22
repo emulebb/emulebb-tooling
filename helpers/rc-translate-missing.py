@@ -23,7 +23,7 @@ TOOL_DIR = Path(__file__).resolve().parent
 STRING_TABLE_HELPER = TOOL_DIR / "rc-string-table.py"
 DEFAULT_CACHE = TOOL_DIR.parent / ".local" / "rc-translation-cache.json"
 DEFAULT_PROTECT_TERMS = [
-    "eMule BB",
+    "eMuleBB",
     "eMule",
     "eMule Plus",
     "eMuleFuture",
@@ -229,7 +229,7 @@ def managed_rows(rc_helper, path: Path) -> list[tuple[str, str]]:
 
     text = rc_helper.read_rc(path).text
     block = re.search(
-        r"// eMule BB managed translation block: begin.*?// eMule BB managed translation block: end",
+        r"// eMuleBB managed translation block: begin.*?// eMuleBB managed translation block: end",
         text,
         re.S,
     )

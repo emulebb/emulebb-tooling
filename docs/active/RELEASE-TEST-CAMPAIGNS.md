@@ -1,4 +1,4 @@
-# eMule BB Release Test Campaigns
+# eMuleBB Release Test Campaigns
 
 Release campaigns are the operator view of the generic
 [Release Test Strategy](RELEASE-TEST-STRATEGY.md). They group feature-flow
@@ -9,15 +9,15 @@ scenarios into strict phases and show which current commands provide evidence.
 Use the supported workspace entrypoint:
 
 ```powershell
-python -m emule_workspace test release-campaign --campaign emule-bb-0.7.3
+python -m emule_workspace test release-campaign --campaign emulebb-0.7.3
 ```
 
 Useful variants:
 
 ```powershell
 python -m emule_workspace test release-campaign --template
-python -m emule_workspace test release-campaign --campaign emule-bb-0.7.3 --phase live-wire-release
-python -m emule_workspace test release-campaign --campaign emule-bb-0.7.3 --json
+python -m emule_workspace test release-campaign --campaign emulebb-0.7.3 --phase live-wire-release
+python -m emule_workspace test release-campaign --campaign emulebb-0.7.3 --json
 ```
 
 The command is report-only. It reads latest known JSON artifacts when they
@@ -26,7 +26,7 @@ authoritative, and warns for missing required evidence.
 
 ## Current Instance
 
-`emule-bb-0.7.3` is the first populated campaign instance. It maps the current
+`emulebb-0.7.3` is the first populated campaign instance. It maps the current
 release gates into feature-flow scenarios across:
 
 - workspace validation and fast certification;

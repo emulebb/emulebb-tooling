@@ -1,6 +1,6 @@
 # Beta 0.7.3 Execution Plan
 
-This is the only active execution plan for beta `emule-bb-v0.7.3`.
+This is the only active execution plan for beta `emulebb-v0.7.3`.
 Every actionable release task must have its own item ID.
 
 ## Release Freeze

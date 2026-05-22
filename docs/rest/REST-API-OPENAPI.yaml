@@ -1,13 +1,13 @@
 openapi: 3.1.0
 info:
-  title: eMule BB REST API
+  title: eMuleBB REST API
   version: 0.7.3
-  summary: Canonical beta 0.7.3 contract for the embedded eMule BB REST API.
+  summary: Canonical beta 0.7.3 contract for the embedded eMuleBB REST API.
   description: >
     This is the source-of-truth contract for the redesigned `/api/v1` API.
     The API is served by the existing eMule WebServer listener, uses
     `X-API-Key` authentication only, and is designed for aMuTorrent and other
-    trusted local controllers. eMule BB beta 0.7.3 is the first public beta
+    trusted local controllers. eMuleBB beta 0.7.3 is the first public beta
     line for this contract; adapter compatibility must not weaken the native
     route shape.
 servers:

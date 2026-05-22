@@ -20,7 +20,7 @@ Every workspace session starts from this contract:
 - Revalidate backlog and release docs against current `main`, current
   dependency pins, and this policy before implementation.
 - For future-roadmap items that carry `workflow: github`, treat the linked
-  GitHub issue and the `eMule BB Roadmap` project as the authoritative workflow
+  GitHub issue and the `eMuleBB Roadmap` project as the authoritative workflow
   state. The local item doc is retained as engineering spec and evidence.
 
 Directive precedence is:
@@ -44,7 +44,7 @@ Directive precedence is:
 - `repos\eMule-build-tests` owns shared test harness code and test execution
   helpers.
 - `repos\goed2k-server` owns the local ED2K server used by deterministic
-  eMule BB live E2E and protocol-parity scenarios.
+  eMuleBB live E2E and protocol-parity scenarios.
 - `repos\eMule` is the canonical app repo checkout used as the branch store and
   worktree anchor.
 - Normal app editing belongs in
@@ -146,7 +146,7 @@ Routine `validate` in `repos\eMule-build` must run the active static audits:
 
 ## Protocol Compatibility Policy
 
-- eMule BB stays stock-compatible at the eD2K and Kad protocol layer.
+- eMuleBB stays stock-compatible at the eD2K and Kad protocol layer.
 - Preserve stock/community eMule wire semantics, packet and tag shapes, opcode
   meanings, peer/server interaction rules, Kad state-machine behavior,
   persistence semantics that affect network identity, and default network
@@ -210,7 +210,7 @@ Routine `validate` in `repos\eMule-build` must run the active static audits:
   docs-first and light-code contribution work.
 - Backlog and planning docs are supporting specs, not authority by themselves.
 - For GitHub-migrated future-roadmap work, the linked GitHub issue and public
-  `eMule BB Roadmap` project win on workflow state.
+  `eMuleBB Roadmap` project win on workflow state.
 - Historical handoff notes live under `docs\history`. Create or refresh a
   current handoff only when terminating a session or when explicitly asked.
 - Repo-local `AGENTS.md` files should stay thin and repo-specific.
@@ -304,13 +304,13 @@ Routine `validate` in `repos\eMule-build` must run the active static audits:
 ## Product And Release Naming
 
 - The full public product name is `eMule broadband edition`.
-- The compact app, UI, API, and protocol-facing mod name is `eMule BB`.
+- The compact app, UI, API, and protocol-facing mod name is `eMuleBB`.
 - The GitHub organization, code name, and URL slug are `emulebb`.
 - The first beta/public release is `0.7.3`.
 - Superseded `1.0.0`, `1.0.1`, and `1.1.1` release labels are internal
   evidence/rehearsal labels only.
-- Release tags use `emule-bb-vMAJOR.MINOR.PATCH`.
-- Release ZIP assets use `eMule-broadband-MAJOR.MINOR.PATCH-ARCH.zip`.
+- Release tags use `emulebb-vMAJOR.MINOR.PATCH`.
+- Release ZIP assets use `emulebb-MAJOR.MINOR.PATCH-ARCH.zip`.
 - Official beta `0.7.3` is marked with an annotated tag on a selected reviewed
   `main` commit only after release proof passes and the operator gives a
   separate tagging instruction.
@@ -318,7 +318,7 @@ Routine `validate` in `repos\eMule-build` must run the active static audits:
 ## Release Localization Policy
 
 - Every stock eMule resource file under `srchybrid\lang\*.rc` in the active app
-  worktree is a supported eMule BB release language and part of release gating.
+  worktree is a supported eMuleBB release language and part of release gating.
 - `repos\eMule-tooling\helpers\rc-release-languages.json` is the
   machine-readable release manifest and must enumerate exactly the current
   stock resource file set.
@@ -328,7 +328,7 @@ Routine `validate` in `repos\eMule-build` must run the active static audits:
   as labels unless the user explicitly asks for a targeted correction. Do not
   mass-retranslate legacy labels or rewrite unrelated strings during a
   release-label pass.
-- New eMule BB labels must be meaningfully translated for every release
+- New eMuleBB labels must be meaningfully translated for every release
   language. AI or machine translation is allowed and expected for draft
   coverage, but it must be treated as a reviewed translation source, not a
   blind bulk replacement.

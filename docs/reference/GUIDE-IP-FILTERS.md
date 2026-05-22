@@ -1,6 +1,6 @@
 # IP Filter Guide
 
-eMule BB uses `ipfilter.dat` to reject peers, sources, Kad contacts, and
+eMuleBB uses `ipfilter.dat` to reject peers, sources, Kad contacts, and
 optionally servers whose IP ranges match loaded filter rules. IP filtering is a
 maintenance and abuse-reduction aid. It is not a privacy substitute for correct
 network binding, firewall rules, or VPN operation.
@@ -30,7 +30,7 @@ The Security page dropdown history is separate:
 - file: `config\AC_IPFilterUpdateURLs.dat`
 - format: UTF-16 text with one URL per line
 
-When `AC_IPFilterUpdateURLs.dat` is missing or has no usable entries, eMule BB
+When `AC_IPFilterUpdateURLs.dat` is missing or has no usable entries, eMuleBB
 seeds it with built-in suggestions. Existing non-empty user history is left
 unchanged.
 
@@ -61,7 +61,7 @@ The IP filter updater accepts:
 - PeerGuardian-style text
 - PeerGuardian binary files
 
-After a successful update, eMule BB promotes the downloaded filter into
+After a successful update, eMuleBB promotes the downloaded filter into
 `config\ipfilter.dat`, reloads the running filter table, and shows the loaded
 rule count in `Preferences > Security > IP Filter`.
 

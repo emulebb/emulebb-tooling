@@ -1,11 +1,11 @@
 # Controllers And REST Guide
 
-This guide explains how eMule BB should be used with trusted local controllers,
+This guide explains how eMuleBB should be used with trusted local controllers,
 automation, and compatibility adapters.
 
 ## REST Is The Preferred Controller Path
 
-eMule BB exposes JSON REST under `/api/v1` through the embedded WebServer
+eMuleBB exposes JSON REST under `/api/v1` through the embedded WebServer
 listener. REST is the preferred automation surface. The legacy template web UI
 is frozen pending removal and is not a supported controller surface.
 
@@ -80,7 +80,7 @@ certificate settings:
 The app can generate a WebServer certificate from the command line:
 
 ```powershell
-emule.exe --generate-webserver-cert --cert webserver.crt --key webserver.key --host localhost --host 127.0.0.1
+emulebb.exe --generate-webserver-cert --cert webserver.crt --key webserver.key --host localhost --host 127.0.0.1
 ```
 
 Generate certificates deliberately, store private keys with the profile or
@@ -99,7 +99,7 @@ Controllers must preserve eMule semantics:
 - source, fake, trust, comment, and category data should not be discarded
 - local path ownership belongs to the native profile
 
-When a controller presents eMule BB as a generic download client, the adapter
+When a controller presents eMuleBB as a generic download client, the adapter
 must still map back to native behavior correctly.
 
 ## Native REST Surface
@@ -190,7 +190,7 @@ before running long workflows:
 - app status reads correctly
 - preferences read correctly
 - search dispatch works
-- add/download flow reaches eMule BB
+- add/download flow reaches eMuleBB
 - upload and queue data remain meaningful when consumed
 - typed error envelopes are handled
 
@@ -199,12 +199,12 @@ OpenAPI contract and live REST smoke evidence.
 
 aMuTorrent should treat the desktop app as the authority. It may present a
 modern controller workflow, but category, search, transfer, shared-file,
-upload-queue, and lifecycle semantics still come from native eMule BB state.
+upload-queue, and lifecycle semantics still come from native eMuleBB state.
 
 ## Arr, qBit, And Torznab Adapters
 
 Adapter surfaces let Arr-family tools, qBittorrent-compatible workflows, and
-Torznab consumers talk to eMule BB. These are compatibility layers, not the
+Torznab consumers talk to eMuleBB. These are compatibility layers, not the
 native contract.
 
 Expectations:

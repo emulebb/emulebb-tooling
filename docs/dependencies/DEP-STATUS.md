@@ -3,7 +3,7 @@
 Reviewed on 2026-05-13 against current `main`, current
 `repos\eMule-build` dependency topology, and the active beta release policy.
 
-This document records the current dependency decisions for the eMule BB beta workspace.
+This document records the current dependency decisions for the eMuleBB beta workspace.
 It supersedes older dependency-removal notes that were written against other
 branch lines or earlier release experiments.
 

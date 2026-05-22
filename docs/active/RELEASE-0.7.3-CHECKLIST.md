@@ -1,6 +1,6 @@
 # eMule Broadband Edition 0.7.3 Beta Release Checklist
 
-This is the final operator checklist for beta target `emule-bb-v0.7.3`.
+This is the final operator checklist for beta target `emulebb-v0.7.3`.
 Do not record stale proof here; every row must be refreshed on the selected
 reviewed `main` commit.
 
@@ -32,7 +32,7 @@ rerun and recorded after the hold.
 
 ## Required Commands
 
-- [ ] `python -m emule_workspace test release-campaign --campaign emule-bb-0.7.3`
+- [ ] `python -m emule_workspace test release-campaign --campaign emulebb-0.7.3`
 - [ ] `python -m emule_workspace test certification --profile fast`
 - [ ] `python -m emule_workspace test certification --profile overnight`
 - [ ] `python -m emule_workspace test live-e2e --profile release-expanded --fail-fast --live-wire-inputs-file repos\eMule-build-tests\live-wire-inputs.local.json`
@@ -118,21 +118,21 @@ This add-on does not replace the required overnight certification row above.
 ## Release Identity
 
 - [ ] Release notes use `eMule broadband edition` as the public product name.
-- [ ] Release notes use `eMule BB` as the compact app/mod/API name.
+- [ ] Release notes use `eMuleBB` as the compact app/mod/API name.
 - [ ] Package-facing README identifies reviewed `main` as the beta `0.7.3`
       release source and does not depend on a broadband stabilization branch.
-- [ ] Annotated beta tag is `emule-bb-v0.7.3`.
+- [ ] Annotated beta tag is `emulebb-v0.7.3`.
 - [ ] Annotated beta tag points at the selected reviewed `main` commit.
-- [ ] x64 beta asset is `eMule-broadband-0.7.3-x64.zip`.
-- [ ] ARM64 beta asset is `eMule-broadband-0.7.3-arm64.zip`.
+- [ ] x64 beta asset is `emulebb-0.7.3-x64.zip`.
+- [ ] ARM64 beta asset is `emulebb-0.7.3-arm64.zip`.
 - [ ] Optional aMuTorrent x64 controller asset is
-      `eMule-broadband-0.7.3-amutorrent-x64.zip`.
+      `emulebb-0.7.3-amutorrent-x64.zip`.
 - [ ] Each ZIP contains exactly the full stock language DLL set under
       `eMule\lang`.
 - [ ] Each ZIP contains package-facing README, release notes, GPL text,
       third-party notices, SPDX SBOM, and REST docs. Legacy web templates are
       frozen baggage and are not required release assets.
-- [ ] Package manifests record the ZIP hash, `emule.exe` hash, expected
+- [ ] Package manifests record the ZIP hash, `emulebb.exe` hash, expected
       language DLL list/count, SBOM hash, and per-file package hashes.
 - [ ] Package notes state that ZIPs are not code-signed, contain no debug
       symbols, and do not bundle optional `MediaInfo.dll`.

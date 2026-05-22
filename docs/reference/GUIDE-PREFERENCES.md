@@ -1,6 +1,6 @@
 # Preferences Guide
 
-This is the single English reference for eMule BB preferences,
+This is the single English reference for eMuleBB preferences,
 `preferences.ini`, preference compatibility policy, and the REST preference
 surface. It replaces the older split between a user guide, a preference
 architecture note, and a separate preference matrix.
@@ -12,7 +12,7 @@ statistics-only files, and UI-runtime rows are summarized in prose.
 
 ## Storage Model
 
-`preferences.ini` is the main text configuration file for eMule BB. It contains
+`preferences.ini` is the main text configuration file for eMuleBB. It contains
 several different kinds of data:
 
 - user-facing Preferences dialog settings
@@ -44,7 +44,7 @@ preference, update the schema and this guide together.
 
 ## Compatibility Policy
 
-eMule BB preserves stock/community drop-in compatibility unless a change is
+eMuleBB preserves stock/community drop-in compatibility unless a change is
 explicitly chosen as a compatibility break.
 
 Rules:
@@ -102,13 +102,13 @@ explicit save point.
 
 ## Registry And Profile Identity
 
-eMule BB owns branch-specific Windows registry identity under
+eMuleBB owns branch-specific Windows registry identity under
 `HKCU\Software\eMuleBB`. It does not use stock `HKCU\Software\eMule` as a
 fallback.
 
 The Windows Run value for app autostart is `eMuleBBAutoStart`. The collection
 file ProgID is `eMuleBB.Collection`. The `ed2k` URL scheme is intentionally
-shared by Windows, so eMule BB only claims it through explicit setting-driven
+shared by Windows, so eMuleBB only claims it through explicit setting-driven
 link-repair behavior.
 
 Default filesystem folder names remain stock-compatible unless the user chooses
@@ -120,7 +120,7 @@ General and profile behavior:
 
 - identity, language, startup, tray, confirmation, update, and link-association
   settings shape how the native desktop session starts and presents itself
-- profile files remain mostly stock-compatible, but eMule BB owns its own
+- profile files remain mostly stock-compatible, but eMuleBB owns its own
   registry identity and branch-specific sidecars
 
 Connection and network behavior:
@@ -198,7 +198,7 @@ below.
 
 ## Date And Time Formatting
 
-eMule BB uses the Windows user locale for normal date/time text. At startup the
+eMuleBB uses the Windows user locale for normal date/time text. At startup the
 app initializes the C runtime locale from Windows, then keeps numeric formatting
 stable by forcing the numeric category back to `C`. In practice, date and time
 names follow the user's Windows language and regional settings, while decimal

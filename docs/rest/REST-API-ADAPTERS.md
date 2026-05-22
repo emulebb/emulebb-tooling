@@ -1,4 +1,4 @@
-# eMule BB REST Adapter Contracts
+# eMuleBB REST Adapter Contracts
 
 **Status:** beta 0.7.3 adapter subset contract
 **Native contract:** [REST-API-CONTRACT.md](REST-API-CONTRACT.md)
@@ -6,7 +6,7 @@
 ## Purpose
 
 Native `/api/v1` is the only clean JSON REST contract. The compatibility
-adapters below exist so Arr-family tools can talk to eMule BB without forcing
+adapters below exist so Arr-family tools can talk to eMuleBB without forcing
 native v1 to mimic qBittorrent or Torznab quirks.
 
 The deprecated legacy template-based WebServer UI is frozen and compile-only
@@ -32,7 +32,7 @@ Supported routes:
 | Method | Route | Auth | Contract role |
 |---|---|---|---|
 | `GET` | `/api/v2/app/webapiVersion` | no | Public qBit Web API version probe. |
-| `POST` | `/api/v2/auth/login` | no | Form login using the configured eMule BB API key as password. |
+| `POST` | `/api/v2/auth/login` | no | Form login using the configured eMuleBB API key as password. |
 | `GET` | `/api/v2/app/version` | yes | App version probe. |
 | `GET` | `/api/v2/app/preferences` | yes | Minimal preference payload for Arr client tests. |
 | `GET` | `/api/v2/torrents/categories` | yes | Category map. |

@@ -1,11 +1,11 @@
-# eMule BB Release Test Strategy
+# eMuleBB Release Test Strategy
 
-This document records the eMule BB-owned release test model. It is generic
+This document records the eMuleBB-owned release test model. It is generic
 release strategy, not a `0.7.3`-only checklist.
 
 ## Decision Log
 
-- eMule BB owns the release campaign model from now on. p2p-overlord inspired
+- eMuleBB owns the release campaign model from now on. p2p-overlord inspired
   stable scenario ids, campaign manifests, and evidence matrices, but the eMule
   BB model is intentionally independent and may evolve differently.
 - Release tests are organized as campaigns, strict phases, and feature-flow
@@ -37,7 +37,7 @@ The model follows a layered confidence strategy:
   hermetic builds where possible, and controlled release evidence:
   <https://sre.google/sre-book/release-engineering/>.
 - Google SRE canary guidance supports staged confidence and explicit rollback
-  readiness. eMule BB does not canary a service, but the campaign phases serve
+  readiness. eMuleBB does not canary a service, but the campaign phases serve
   the same purpose for desktop release confidence:
   <https://sre.google/workbook/canarying-releases/>.
 - Microsoft guidance favors fast, reliable tests earlier in the pipeline and

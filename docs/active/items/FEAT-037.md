@@ -18,7 +18,7 @@ Add an explicit release/distribution policy layer for rare or newly published fi
 
 **Deferred Beyond 1.0.** Product decision: PowerShare and adjacent
 release-oriented sharing controls are not valuable enough to delay the first
-release. eMule BB already has broadband upload-slot control and queue/scoring
+release. eMuleBB already has broadband upload-slot control and queue/scoring
 work for the 1.0 sharing story; this item stays as a later opt-in feature track.
 
 This feature groups several historically popular mod behaviors under one controlled design:

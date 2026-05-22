@@ -1,12 +1,12 @@
 # Long Path Guide
 
-This guide explains how eMule BB behaves with Windows paths that may exceed the
+This guide explains how eMuleBB behaves with Windows paths that may exceed the
 classic 260-character limit. It is product documentation for users, operators,
 and support work. It does not describe source-code changes.
 
 ## What Long Path Support Means
 
-Long path support lets eMule BB work with deep directory trees and long file
+Long path support lets eMuleBB work with deep directory trees and long file
 names in common file workflows:
 
 - scanning shared directories
@@ -21,7 +21,7 @@ This matters most for users with large archive libraries, organized media
 trees, long descriptive filenames, or nested category/share structures.
 
 Long path support does not make every Windows shell operation or external tool
-long-path safe. eMule BB can be long-path aware while another player, editor,
+long-path safe. eMuleBB can be long-path aware while another player, editor,
 archive tool, or shell extension still fails on the same path.
 
 ## Windows Requirements
@@ -32,7 +32,7 @@ Required environment:
 
 - Windows 10 version 1607 or newer, or Windows 11
 - system long-path policy enabled
-- an eMule BB build that declares long-path awareness
+- an eMuleBB build that declares long-path awareness
 - a filesystem and external tools that can tolerate the target paths
 
 The Windows policy is named `LongPathsEnabled` under the system filesystem
@@ -75,7 +75,7 @@ Long profile paths can affect:
 - sidecar cache files for sharing and monitoring
 
 If a profile path is too deep, move the whole profile while the app is closed
-and start eMule BB with the intended config location.
+and start eMuleBB with the intended config location.
 
 ## Incoming And Temp Paths
 
@@ -86,7 +86,7 @@ Long-path considerations:
 
 - deep temp paths add length to every incomplete part file
 - long category incoming paths add length at completion time
-- file completion can fail if the destination path is valid for eMule BB but
+- file completion can fail if the destination path is valid for eMuleBB but
   not valid for an external filesystem filter, antivirus tool, shell handler,
   or destination volume
 - keeping temp and incoming roots short reduces completion risk
@@ -98,7 +98,7 @@ then use categories and filenames for organization.
 
 Shared roots are the most common long-path stress point.
 
-eMule BB can scan and hash deep shared trees, but operators should still keep
+eMuleBB can scan and hash deep shared trees, but operators should still keep
 shares intentional:
 
 - share curated roots, not entire drives
@@ -128,7 +128,7 @@ Recommended use:
 
 ## Downloads And Completion
 
-Long filenames often arrive from search results or ED2K links. eMule BB should
+Long filenames often arrive from search results or ED2K links. eMuleBB should
 preserve valid names where practical, but completion still depends on the final
 destination path.
 
@@ -151,9 +151,9 @@ support varies by component.
 
 Expected behavior:
 
-- eMule BB can attempt supported internal reads on long paths
+- eMuleBB can attempt supported internal reads on long paths
 - optional media metadata libraries may have their own limits
-- external preview players may reject paths that eMule BB can store
+- external preview players may reject paths that eMuleBB can store
 - archive preview/recovery is legacy behavior and should not be treated as the
   primary way to validate long-path support
 
@@ -176,16 +176,16 @@ Tools actions are useful for long-path operation:
 Some folder-opening and shell actions can still be limited by Windows Explorer,
 shell extensions, file associations, or external editors. If a Tools action
 fails but the underlying transfer or share works, test the path with a shorter
-external tool chain before changing eMule BB settings.
+external tool chain before changing eMuleBB settings.
 
 ## Compatibility With Older Clients
 
-Older stock clients may not understand all eMule BB path behavior, sidecars, or
+Older stock clients may not understand all eMuleBB path behavior, sidecars, or
 profile additions.
 
-Avoid round-tripping one live profile between eMule BB and older clients when it
+Avoid round-tripping one live profile between eMuleBB and older clients when it
 contains long paths. Older clients may fail to open, move, share, preview, or
-clean up files that eMule BB can handle.
+clean up files that eMuleBB can handle.
 
 If rollback is required, restore from a profile backup made before long-path
 operation became active.
@@ -211,7 +211,7 @@ The safest operating model is still short base paths plus descriptive filenames.
 Use this checklist after enabling long path policy or moving to a deeper
 library:
 
-1. Restart eMule BB.
+1. Restart eMuleBB.
 2. Confirm incoming and temp roots are short and writable.
 3. Add one deep shared test folder.
 4. Rescan shared files.
@@ -268,7 +268,7 @@ When reporting long-path issues, include:
 - redacted diagnostic snapshot
 - relevant log lines
 - path role: profile, temp, incoming, shared, monitored, category, preview
-- whether the operation fails inside eMule BB or only in an external tool
+- whether the operation fails inside eMuleBB or only in an external tool
 - whether a shorter equivalent path works
 
 Use redacted snapshots for shared support unless exact local paths are required
