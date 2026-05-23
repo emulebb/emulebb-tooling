@@ -41,8 +41,10 @@ shortcuts when the relevant list has focus.
 Repeating the same shortcut toggles ascending and descending order through the
 same path as clicking the column header. If a list does not have the requested
 semantic column, the shortcut is consumed with a native beep and no fallback
-sort is guessed. Downloads currently has no type column, and Search Results
-currently has no date/time column.
+sort is guessed. If the matching column is currently hidden, the shortcut is
+also consumed with a native beep instead of changing the visible list order
+through a hidden sort key. Downloads currently has no type column, and Search
+Results currently has no date/time column.
 
 ## Downloads List Shortcuts
 
