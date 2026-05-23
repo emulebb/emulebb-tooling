@@ -52,8 +52,18 @@ builds cannot be reused for release ZIPs.
 python -m emule_workspace test certification --profile fast
 ```
 
-Then run the full overnight certification gate with the operator-owned live
-inputs and Arr-visible roots required by the local environment:
+The quick RC campaign is the repeatable blocking package gate. It uses bounded
+quick profiles plus targeted controller/aMuTorrent proof so RC packaging can be
+refreshed without a full soak each time:
+
+```powershell
+python -m emule_workspace test release-campaign --campaign emulebb-0.7.3 --execute
+```
+
+The full overnight certification gate remains available and intentionally uses
+the full `release-expanded`, `stabilization-stress`, and aMuTorrent lanes. Run
+it with the operator-owned live inputs and Arr-visible roots when collecting
+long-form soak proof:
 
 ```powershell
 python -m emule_workspace test certification --profile overnight `
@@ -63,46 +73,46 @@ python -m emule_workspace test certification --profile overnight `
 ```
 
 The certification command records a single aggregate report under
-`workspaces\workspace\state\certification\<timestamp>-<profile>\result.json`.
+`workspaces\workspace\state\certification\<timestamp>-<profile>\certification-result.json`.
 Record that report path and the child report paths it references in
 [CI-035](items/CI-035.md).
 
-No release-blocking certification step may fail. A live-network step may be
-accepted as inconclusive only when the aggregate and child reports prove the app
-and harness behaved correctly and the checklist records the external condition.
+No release-blocking campaign step may fail. A live-network step may be accepted
+as inconclusive only when the aggregate and child reports prove the app and
+harness behaved correctly and the checklist records the external condition.
 
 ## Expanded Weak-Path Gate
 
-Before packaging, run the bounded weak-path live gate with the operator-owned
-live-wire inputs:
+Before packaging, the RC campaign runs the bounded weak-path live gate with the
+operator-owned live-wire inputs:
 
 ```powershell
-python -m emule_workspace test live-e2e --profile release-expanded --fail-fast `
+python -m emule_workspace test live-e2e --profile release-expanded-quick --fail-fast `
   --live-wire-inputs-file repos\emulebb-build-tests\live-wire-inputs.local.json
 ```
 
 This profile covers Preferences directory-tree stress, Shared Files,
 shared-hash shutdown/recovery, Search UI, shared-directories REST, REST
-adversity, cold-start telemetry, local dump/crash smoke, and aMuTorrent browser
-smoke. It requires 50 server searches, 50 Kad searches, and 100 successful
-paused download triggers. Success means each triggered download is accepted and
-materializes in the transfer queue; completion is not required.
+adversity, cold-start telemetry, local dump/crash smoke, and representative
+volume/profile cases. The full `release-expanded` profile is reserved for
+overnight/soak proof.
 
 ## Focused Stabilization Stress
 
-When release proof resumes, refresh the generated heavy-profile gate before the
-real-profile gate:
+When release proof resumes, refresh the quick generated heavy-profile gate:
 
 ```powershell
-python -m emule_workspace test live-e2e --profile cpu-heavy --fail-fast
+python -m emule_workspace test live-e2e --profile cpu-heavy-quick --fail-fast
 ```
 
 This uses throw-away generated Shared Files stress data and ETW/xperf sampling.
 It must not depend on operator media paths.
 
-Then run the real live-wire profile monitor:
+The full generated-heavy profile and real live-wire profile monitor are
+long-form soak add-ons:
 
 ```powershell
+python -m emule_workspace test live-e2e --profile cpu-heavy --fail-fast
 python -m emule_workspace test live-e2e --suite live-process-monitor --fail-fast
 ```
 
@@ -111,18 +121,17 @@ This reads ignored local settings from
 point at the operator-owned real profile and corrected HTTPS REST bind, and the
 run must remain at or above the 1800-second minimum.
 
-For extra crash, leak, CPU, REST concurrency, and dump evidence without
-rerunning the full overnight gate, run:
+For blocking crash, leak, REST concurrency, and dump evidence, the RC campaign
+uses the quick stress profile:
 
 ```powershell
-python -m emule_workspace test live-e2e --profile stabilization-stress --fail-fast
+python -m emule_workspace test live-e2e --profile stabilization-stress-quick --fail-fast `
+  --live-wire-inputs-file repos\emulebb-build-tests\live-wire-inputs.local.json
 ```
 
-This profile runs `rest-api`, `rest-cold-start-dump-stress`, and
-`local-dumps-crash-smoke` with REST soak stress, socket/TLS adversity, leak
-churn, cold-start resource telemetry, download churn, and crash-dump evidence
-checks. It is not a substitute for the overnight certification row or for the
-separate generated-heavy and real-profile monitor rows above.
+The full `stabilization-stress` profile keeps the deeper REST soak stress,
+socket/TLS adversity, leak churn, cold-start resource telemetry, download
+churn, and crash-dump evidence checks for overnight/soak proof.
 
 ## Packaging
 
