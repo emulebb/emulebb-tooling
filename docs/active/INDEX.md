@@ -353,6 +353,7 @@ not active item docs.
 | [FEAT-071](../history/items/FEAT-071.md) | Minor | DONE | Filename mojibake repair for search results and download intake |
 | [FEAT-072](items/FEAT-072.md) | Minor | OPEN | Reduce startup cache UI-thread blocking on large shared libraries |
 | [FEAT-073](items/FEAT-073.md) | Minor | OPEN | Incorporate p2p-overlord into the eMuleBB product family |
+| [FEAT-074](../history/items/FEAT-074.md) | Minor | DONE | Add main-window visual evidence for connected LowID state |
 
 ---
 
