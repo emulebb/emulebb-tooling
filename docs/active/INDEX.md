@@ -23,22 +23,22 @@ records, not workflow status authority.
 **Latest release-doc refresh:** 2026-05-23
 **Non-done by status:** `46` OPEN, `8` IN_PROGRESS, `10` DEFERRED, `0` BLOCKED.
 **Backlog counts:** item tables below are authoritative.
-**Beta 0.7.3 relevance:** Most non-done items below are future or deferred work;
-current beta gate and proof status is controlled by [RELEASE-0.7.3](RELEASE-0.7.3.md).
-**Broadband release status:** `emulebb-v0.7.3` is the first beta/public
-release target.
-**Beta-release backlog view:** [RELEASE-0.7.3](RELEASE-0.7.3.md)
-**Beta-release checklist:** [RELEASE-0.7.3-CHECKLIST](RELEASE-0.7.3-CHECKLIST.md)
-**Beta-release runbook:** [RELEASE-0.7.3-RUNBOOK](RELEASE-0.7.3-RUNBOOK.md)
+**RC 0.7.3 relevance:** Most non-done items below are future or deferred work;
+current RC gate and proof status is controlled by [RELEASE-0.7.3](RELEASE-0.7.3.md).
+**Broadband release status:** `emulebb-v0.7.3-rc.1` is the first public
+release-candidate target.
+**RC-release backlog view:** [RELEASE-0.7.3](RELEASE-0.7.3.md)
+**RC-release checklist:** [RELEASE-0.7.3-CHECKLIST](RELEASE-0.7.3-CHECKLIST.md)
+**RC-release runbook:** [RELEASE-0.7.3-RUNBOOK](RELEASE-0.7.3-RUNBOOK.md)
 **Release test strategy:** [RELEASE-TEST-STRATEGY](RELEASE-TEST-STRATEGY.md)
 **Release test campaigns:** [RELEASE-TEST-CAMPAIGNS](RELEASE-TEST-CAMPAIGNS.md)
 **Frozen surfaces:** [FROZEN-SURFACES](FROZEN-SURFACES.md)
-**Beta controller surface matrix:** [CONTROLLER-SURFACE-MATRIX](CONTROLLER-SURFACE-MATRIX.md)
+**RC controller surface matrix:** [CONTROLLER-SURFACE-MATRIX](CONTROLLER-SURFACE-MATRIX.md)
 **Future release roadmap:** [FUTURE-ROADMAP](FUTURE-ROADMAP.md)
 **Future roadmap workflow:** GitHub issues in `emulebb/emulebb` plus the
 `eMuleBB Roadmap` org project are authoritative for migrated roadmap items.
 **Backlog process runbook:** [BACKLOG-PROCESS](../reference/BACKLOG-PROCESS.md)
-**Beta-release execution plan:** [RELEASE-0.7.3-EXECUTION-PLAN](plans/RELEASE-0.7.3-EXECUTION-PLAN.md)
+**RC-release execution plan:** [RELEASE-0.7.3-EXECUTION-PLAN](plans/RELEASE-0.7.3-EXECUTION-PLAN.md)
 **p2p-overlord product-family plan:** [P2P-OVERLORD-PRODUCT-FAMILY-INTEGRATION](plans/P2P-OVERLORD-PRODUCT-FAMILY-INTEGRATION.md)
 **Historical beta evidence:** [release-0.7.3](../history/release-0.7.3/)
 **Historical reviews:** [reviews](../history/reviews/)
@@ -81,10 +81,10 @@ regression checks. When behavior changes, compare `main` against
 `baseline/community-0.72a` as the seam-enabled parity and regression baseline
 where that comparison is meaningful.
 
-**Beta 0.7.3 source rule:** the public beta tag is cut from the selected
+**RC 0.7.3 source rule:** the public RC tag is cut from the selected
 reviewed `main` commit after refreshed proof passes and operator approval.
-The former broadband stabilization branch is retired from the active beta
-topology.
+The release stabilization branch is `release/0.7.3` once the operator starts
+the RC branch.
 
 **Baseline stack rule:**
 
@@ -313,7 +313,7 @@ not active item docs.
 | [FEAT-029](../history/items/FEAT-029.md) | Minor | DONE | Search result ceilings — configurable ed2k expansion plus moderate Kad totals/lifetimes |
 | [FEAT-030](../history/items/FEAT-030.md) | Minor | DONE | Bind policy completion — global `BindAddr` everywhere else, separate `WebBindAddr` for WebServer |
 | [FEAT-031](items/FEAT-031.md) | Minor | OPEN | Auto-browse compatible remote shared-file inventories with persisted cache |
-| [FEAT-032](items/FEAT-032.md) | Minor | DEFERRED | NAT mapping modernization — keep MiniUPnP, drop WinServ, add PCP/NAT-PMP |
+| [FEAT-032](items/FEAT-032.md) | Minor | DEFERRED | NAT mapping modernization — lease controls, status visibility, and PCP/NAT-PMP |
 | [FEAT-033](../history/items/FEAT-033.md) | Minor | DONE | Disk-space floor hardening and legacy import-flow retirement |
 | [FEAT-034](items/FEAT-034.md) | Minor | IN_PROGRESS | Shared-files reload should stop blocking the UI on large trees |
 | [FEAT-035](items/FEAT-035.md) | Major | OPEN | IPv6 dual-stack compatibility for current eD2K/Kad networking |
@@ -394,7 +394,7 @@ not active item docs.
 | [CI-032](../history/items/CI-032.md) | Major | DONE | Beta 0.7.3 post-tag focused coverage gaps |
 | [CI-033](../history/items/CI-033.md) | Major | DONE | Beta 0.7.3 internal pre-release proof |
 | [CI-034](../history/items/CI-034.md) | Major | DONE | Package-release provenance and dirty-input guard |
-| [CI-035](items/CI-035.md) | Major | OPEN | Final current-head beta proof and fresh package hashes |
+| [CI-035](items/CI-035.md) | Major | OPEN | Final current-head RC proof and fresh package hashes |
 | [CI-036](../history/items/CI-036.md) | Major | DONE | Release certification test matrix |
 | [CI-037](../history/items/CI-037.md) | Major | PASSED | Expanded live UI and E2E weak-path stress gate |
 | [CI-038](items/CI-038.md) | Major | OPEN | UI resource-depth and language smoke gate |
@@ -416,10 +416,10 @@ not active item docs.
 
 ## Release Focus
 
-Beta 0.7.3 hardening is controlled by [RELEASE-0.7.3](RELEASE-0.7.3.md).
-Use that page for release status, source decision, and the open beta task table.
+RC 0.7.3 hardening is controlled by [RELEASE-0.7.3](RELEASE-0.7.3.md).
+Use that page for release status, source decision, and the open RC task table.
 The current implementation sequence lives in the single
-[Beta 0.7.3 execution plan](plans/RELEASE-0.7.3-EXECUTION-PLAN.md).
+[RC 0.7.3 execution plan](plans/RELEASE-0.7.3-EXECUTION-PLAN.md).
 Superseded release gate evidence and old cluster plans live under
 `docs\history\release-0.7.3`.
 

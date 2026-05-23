@@ -9,7 +9,7 @@ This directory is the single Markdown home for the tooling repo. Use
 |---|---|
 | Workspace policy | [WORKSPACE-POLICY](WORKSPACE-POLICY.md) |
 | AI contributor repeatability checklist | [reference/AGENT-CHECKLIST](reference/AGENT-CHECKLIST.md) |
-| Active backlog and beta release status | [active/INDEX](active/INDEX.md) |
+| Active backlog and RC release status | [active/INDEX](active/INDEX.md) |
 | Repeatable backlog process | [reference/BACKLOG-PROCESS](reference/BACKLOG-PROCESS.md) |
 | Documentation ownership rules | [DOCS-POLICY](DOCS-POLICY.md) |
 | Browser-formatted documentation | [MkDocs site](INDEX.md#browser-site) |
@@ -28,10 +28,10 @@ the public `eMuleBB Roadmap` org project are authoritative for workflow state.
 | [active/INDEX](active/INDEX.md) | Active backlog dashboard and item tables |
 | [active/FUTURE-ROADMAP](active/FUTURE-ROADMAP.md) | GitHub-primary post-beta future roadmap |
 | [active/plans/P2P-OVERLORD-PRODUCT-FAMILY-INTEGRATION](active/plans/P2P-OVERLORD-PRODUCT-FAMILY-INTEGRATION.md) | Post-beta p2p-overlord product-family integration plan |
-| [active/RELEASE-0.7.3](active/RELEASE-0.7.3.md) | Beta release control document |
-| [active/RELEASE-0.7.3-CHECKLIST](active/RELEASE-0.7.3-CHECKLIST.md) | Beta release operator checklist |
-| [active/RELEASE-0.7.3-RUNBOOK](active/RELEASE-0.7.3-RUNBOOK.md) | Beta release operator runbook |
-| [active/plans/RELEASE-0.7.3-EXECUTION-PLAN](active/plans/RELEASE-0.7.3-EXECUTION-PLAN.md) | Current beta release execution plan |
+| [active/RELEASE-0.7.3](active/RELEASE-0.7.3.md) | RC release control document |
+| [active/RELEASE-0.7.3-CHECKLIST](active/RELEASE-0.7.3-CHECKLIST.md) | RC release operator checklist |
+| [active/RELEASE-0.7.3-RUNBOOK](active/RELEASE-0.7.3-RUNBOOK.md) | RC release operator runbook |
+| [active/plans/RELEASE-0.7.3-EXECUTION-PLAN](active/plans/RELEASE-0.7.3-EXECUTION-PLAN.md) | Current RC release execution plan |
 | [active/items/](active/items/) | Active item records for Open, In Progress, Blocked, and Deferred work |
 | [history/items/](history/items/) | Closed item records |
 | [history/reviews/](history/reviews/) | Dated revalidation reviews |
@@ -64,6 +64,7 @@ GitHub-primary future-roadmap helper scripts live under `scripts/`:
 | [reference/BACKLOG-PROCESS](reference/BACKLOG-PROCESS.md) | Repeatable workflow for creating, updating, validating, and closing backlog records |
 | [reference/CI-BASELINE](reference/CI-BASELINE.md) | Reusable CI baseline workflow contract |
 | [reference/DEVELOPMENT-GUIDE](reference/DEVELOPMENT-GUIDE.md) | Development, validation, CI, packaging, command-line, and recurring guide refresh workflow |
+| [reference/RELEASE-BRANCHING-AND-PACKAGING](reference/RELEASE-BRANCHING-AND-PACKAGING.md) | Official release branch, tag, version, and portable package naming policy |
 | [reference/GUIDE-SETUP](reference/GUIDE-SETUP.md) | Install model, first-run profile behavior, release-aware setup, and evidence links |
 | [reference/GUIDE-NETWORK](reference/GUIDE-NETWORK.md) | eD2K, Kad, binding, ports, UPnP, firewall, and REST listener basics |
 | [reference/GUIDE-SHARING](reference/GUIDE-SHARING.md) | Shared directories, monitored shares, large libraries, and share-ignore policy |

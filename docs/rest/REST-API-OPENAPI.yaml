@@ -913,7 +913,7 @@ paths:
       summary: Return search status and results.
       description: >
         Returns the current native visible result snapshot for this search.
-        Beta 0.7.3 intentionally does not accept `limit` or `offset` on this
+        RC 0.7.3 intentionally does not accept `limit` or `offset` on this
         route; unknown query parameters are rejected by the native route table.
         Controllers should poll this route and treat `results` as a bounded
         native snapshot governed by eMule's existing search-result retention

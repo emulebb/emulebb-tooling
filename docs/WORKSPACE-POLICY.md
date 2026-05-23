@@ -73,9 +73,15 @@ The canonical workspace currently materializes these app worktrees:
   requests a separate branch.
 - Short-lived working branches are exceptional. If explicitly requested, use
   `feature/<topic>`, `fix/<topic>`, or `chore/<topic>`.
-- Future release bugfix branches use `release/MAJOR.MINOR` and are created only
-  after an operator-approved release needs maintenance between major versions.
+- Release stabilization branches use `release/MAJOR.MINOR.PATCH` and are
+  created from the selected reviewed `main` commit when a release candidate
+  starts.
+- Patch maintenance branches use the next patch version, branch from the latest
+  stable tag when `main` has moved on, and accept only low-risk bug, packaging,
+  documentation, and release-proof fixes.
 - Do not start normal feature work directly on release branches.
+- Fixes made on release branches must be merged or cherry-picked back to `main`
+  unless the fix is release-packaging metadata that does not apply to `main`.
 - Supporting repos use `main` unless a repo has an explicitly maintained branch
   documented by setup pins.
 - `stale/*` branches are retired historical references only. Never use them as
@@ -314,14 +320,43 @@ Routine `validate` in `repos\emulebb-build` must run the active static audits:
 - The full public product name is `eMule broadband edition`.
 - The compact app, UI, API, and protocol-facing mod name is `eMuleBB`.
 - The GitHub organization, code name, and URL slug are `emulebb`.
-- The first beta/public release is `0.7.3`.
+- The first public release candidate is `0.7.3-rc.1`.
+- The first stable release target is `0.7.3`.
+- Stable patch releases increment the patch number, starting with `0.7.4` after
+  `0.7.3` if a stable hotfix is needed.
+- Future prereleases use the next target version with an explicit prerelease
+  suffix, for example `0.7.5-rc.1` or `0.7.5-beta.1`.
 - Superseded `1.0.0`, `1.0.1`, and `1.1.1` release labels are internal
   evidence/rehearsal labels only.
-- Release tags use `emulebb-vMAJOR.MINOR.PATCH`.
-- Release ZIP assets use `emulebb-MAJOR.MINOR.PATCH-ARCH.zip`.
-- Official beta `0.7.3` is marked with an annotated tag on a selected reviewed
-  `main` commit only after release proof passes and the operator gives a
-  separate tagging instruction.
+- Release tags use `emulebb-vMAJOR.MINOR.PATCH` for stable releases and
+  `emulebb-vMAJOR.MINOR.PATCH-rc.N` or
+  `emulebb-vMAJOR.MINOR.PATCH-beta.N` for prereleases.
+- Release ZIP assets use
+  `emulebb-MAJOR.MINOR.PATCH[-rc.N|-beta.N]-ARCH.zip`.
+- The executable inside packages remains `emulebb.exe`; do not put the version
+  number in the executable filename.
+- Runtime diagnostic artifacts written by the app use lowercase kebab-case
+  `emulebb` names. Current log names are `emulebb.log`,
+  `emulebb-verbose.log`, `emulebb-crt-debug.log`,
+  `emulebb-performance.csv`, `emulebb-performance.mrtg`,
+  `emulebb-performance-data.mrtg`, and
+  `emulebb-performance-overhead.mrtg`. Rotated logs append
+  `-YYYYMMDD-HHMMSS` before the extension. Dump names use
+  `emulebb-dump-YYYYMMDD-HHMMSS-pid<PID>-mini|full.dmp` and
+  `emulebb-crash-YYYYMMDD-HHMMSS-pid<PID>.dmp`.
+- Runtime artifact renames are strict unless the user explicitly requests
+  compatibility aliases; do not add dual writes or fallback opens for retired
+  filenames by default.
+- Build and test artifact names are strict. New build, certification, release
+  campaign, and test runs use UTC `YYYYMMDDTHHMMSSZ` run ids. Build recaps use
+  `build-result.json`; certification recaps use `certification-result.json`;
+  release-campaign recaps use `release-campaign-run-result.json`. Test suites
+  publish timestamped run folders plus `<suite>\latest` snapshots, and suite
+  leaves use `<suite>-result.json`, `<suite>-result.partial.json`, and
+  `<suite>-summary.json`.
+- Official release tags are annotated tags on selected reviewed commits only
+  after release proof passes and the operator gives a separate tagging
+  instruction.
 
 ## Release Localization Policy
 

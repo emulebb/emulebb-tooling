@@ -1,7 +1,7 @@
-# Beta 0.7.3 Controller Surface Matrix
+# RC 0.7.3 Controller Surface Matrix
 
 This matrix defines the controller API surface that must stay green before the
-`emulebb-v0.7.3` beta can be tagged. It covers the release-facing API and
+`emulebb-v0.7.3-rc.1` RC can be tagged. It covers the release-facing API and
 controller integrations only; Source Exchange protocol validation is tracked by
 the search/server/Kad parity gates.
 

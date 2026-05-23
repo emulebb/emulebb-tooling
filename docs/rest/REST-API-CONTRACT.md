@@ -163,7 +163,7 @@ audit the selected file filter without inferring from result timing or counts.
 
 `GET /api/v1/searches` lists active native search sessions without expanding
 their result rows. `GET /api/v1/searches/{searchId}` returns the current native
-visible result snapshot for one search. Beta 0.7.3 intentionally does not
+visible result snapshot for one search. RC 0.7.3 intentionally does not
 expose search result paging; search routes do not accept `limit` or `offset`,
 and the strict route table rejects unknown query parameters. Controllers should
 poll the search resource and treat `results` as a bounded native snapshot

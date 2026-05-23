@@ -1,6 +1,6 @@
-# eMule Broadband Edition 0.7.3 Beta Release Checklist
+# eMule Broadband Edition 0.7.3 RC Release Checklist
 
-This is the final operator checklist for beta target `emulebb-v0.7.3`.
+This is the final operator checklist for RC target `emulebb-v0.7.3-rc.1`.
 Do not record stale proof here; every row must be refreshed on the selected
 reviewed `main` commit.
 
@@ -13,7 +13,7 @@ the operator gives a separate tagging instruction after this checklist is
 complete.
 
 Release freeze is active. No new feature, refactor, UI polish, warning-debt, or
-roadmap work enters beta `0.7.3`; only direct release-gate blockers may be fixed
+roadmap work enters RC `0.7.3`; only direct release-gate blockers may be fixed
 before tag readiness. The current closure pass is documentation-only by operator
 direction: do not run eMule tests or edit eMule test/harness files until the
 operator lifts that hold. All command rows below remain pending unless they are
@@ -21,11 +21,11 @@ rerun and recorded after the hold.
 
 ## Gate Revalidation
 
-- [ ] [RELEASE-0.7.3](RELEASE-0.7.3.md) has no open beta-blocking task without
+- [ ] [RELEASE-0.7.3](RELEASE-0.7.3.md) has no open RC-blocking task without
       item-level acceptance.
 - [ ] [RELEASE-0.7.3-EXECUTION-PLAN](plans/RELEASE-0.7.3-EXECUTION-PLAN.md)
       has no unaccepted blocking item remaining.
-- [ ] Every beta-blocking item doc records the implementation commit,
+- [ ] Every RC-blocking item doc records the implementation commit,
       validation evidence, and final disposition.
 - [ ] Any accepted inconclusive live-network result records the external
       condition that blocked proof.
@@ -119,14 +119,14 @@ This add-on does not replace the required overnight certification row above.
 
 - [ ] Release notes use `eMule broadband edition` as the public product name.
 - [ ] Release notes use `eMuleBB` as the compact app/mod/API name.
-- [ ] Package-facing README identifies reviewed `main` as the beta `0.7.3`
+- [ ] Package-facing README identifies reviewed `main` as the RC `0.7.3`
       release source and does not depend on a broadband stabilization branch.
-- [ ] Annotated beta tag is `emulebb-v0.7.3`.
-- [ ] Annotated beta tag points at the selected reviewed `main` commit.
-- [ ] x64 beta asset is `emulebb-0.7.3-x64.zip`.
-- [ ] ARM64 beta asset is `emulebb-0.7.3-arm64.zip`.
+- [ ] Annotated RC tag is `emulebb-v0.7.3-rc.1`.
+- [ ] Annotated RC tag points at the selected reviewed `main` commit.
+- [ ] x64 RC asset is `emulebb-0.7.3-rc.1-x64.zip`.
+- [ ] ARM64 RC asset is `emulebb-0.7.3-rc.1-arm64.zip`.
 - [ ] Optional aMuTorrent x64 controller asset is
-      `emulebb-0.7.3-amutorrent-x64.zip`.
+      `emulebb-0.7.3-rc.1-amutorrent-x64.zip`.
 - [ ] Each ZIP contains exactly the full stock language DLL set under
       `eMule\lang`.
 - [ ] Each ZIP contains package-facing README, release notes, GPL text,
@@ -148,5 +148,5 @@ This add-on does not replace the required overnight certification row above.
       [CI-035](items/CI-035.md) if that asset is published.
 - [ ] Confirm the optional aMuTorrent x64 package SBOM hash is recorded in
       [CI-035](items/CI-035.md) if that asset is published.
-- [ ] Create the annotated beta tag only after package verification and a
+- [ ] Create the annotated RC tag only after package verification and a
       separate operator instruction.

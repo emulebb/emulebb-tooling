@@ -8,11 +8,11 @@ path, not by filename alone.
 `docs/active/` owns current local backlog/spec and release truth:
 
 - `docs/active/INDEX.md`: active backlog dashboard and item tables
-- `docs/active/RELEASE-0.7.3*.md`: Beta release control, checklist, runbook,
+- `docs/active/RELEASE-0.7.3*.md`: RC release control, checklist, runbook,
   and release operator docs
 - `docs/active/items/`: active item records for `OPEN`, `IN_PROGRESS`,
   `BLOCKED`, and `DEFERRED` work
-- `docs/active/plans/`: the single current beta release execution plan
+- `docs/active/plans/`: the single current RC release execution plan
 
 If another doc conflicts with `docs/active/`, `docs/active/` wins for current
 status.

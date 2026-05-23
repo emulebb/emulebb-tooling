@@ -2,7 +2,7 @@
 id: FEAT-032
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/13
-title: NAT mapping modernization — keep MiniUPnP, drop WinServ, add PCP/NAT-PMP
+title: NAT mapping modernization — lease controls, status visibility, and PCP/NAT-PMP
 status: DEFERRED
 priority: Minor
 category: feature
@@ -34,6 +34,25 @@ failure that does not help the operator understand what actually happened.
   `NAT-PMP`
 - exposing a new Tweaks backend-mode selector
 
+This item also owns the next UPnP/NAT-mapping usability slice:
+
+- allow an operator-configurable mapping lease time instead of relying only on
+  backend defaults or hard-coded request lifetimes
+- expose the current NAT-mapping status in a human-readable form, including
+  backend/protocol selected, local endpoint, requested external endpoint,
+  actual mapped external endpoint, lease duration, expiry/renewal deadline,
+  last renewal result, delete-on-exit state, and last error
+- keep P2P TCP, P2P UDP/Kad, and WebServer mappings separately visible because
+  they can succeed, fail, expire, or be disabled independently
+- record mapping conflicts and router substitutions, especially when the
+  router accepts a mapping but chooses a different external port
+- surface status consistently through logs, diagnostics, and the native UI; add
+  REST exposure only as a diagnostic/status surface, not as a new controller
+  feature family
+- make renewal and teardown behavior explicit, including what happens when a
+  lease expires, a network interface changes, the bind target changes, or
+  `CloseUPnPOnExit` is enabled
+
 ## Beta 0.7.3 Classification
 
 **Release Candidate.** The code/build slice is already complete, so beta
@@ -55,6 +74,21 @@ Historical release context: [Beta 0.7.3 NAT Mapping execution plan](../../histor
 - [x] WinServ-only active prefs are removed from runtime behavior
 - [x] supported `emulebb-build` app builds pass for active architectures
 - [ ] live-network NAT-mapping validation completed on current `main`
+- [ ] preference-backed lease time exists with bounded validation and a clear
+      default that preserves current behavior
+- [ ] UI and diagnostic output can list active and failed NAT mappings with
+      backend, protocol, internal/external endpoints, lease, expiry/renewal,
+      and last-error state
+- [ ] P2P TCP, P2P UDP/Kad, and WebServer mapping states are reported
+      independently
+- [ ] router-selected external-port substitutions and mapping conflicts are
+      visible to the operator
+- [ ] renewal, interface-change, bind-change, disable, and exit-teardown paths
+      are covered by focused tests or lab/live evidence
+- [ ] native tests cover lease bounds, status formatting, renewal scheduling,
+      and backend-specific result normalization
+- [ ] product docs explain lease-time tradeoffs and how to interpret UPnP,
+      PCP, and NAT-PMP status
 
 ## Beta 0.7.3 Decision
 

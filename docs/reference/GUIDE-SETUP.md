@@ -198,7 +198,7 @@ Setup confidence comes from the same release evidence model used elsewhere:
 
 See [Release Test Strategy](../active/RELEASE-TEST-STRATEGY.md),
 [Release Test Campaigns](../active/RELEASE-TEST-CAMPAIGNS.md), and the
-[Beta 0.7.3 dashboard](../active/RELEASE-0.7.3.md) for the current release
+[RC 0.7.3 dashboard](../active/RELEASE-0.7.3.md) for the current release
 proof model.
 
 ## Unsupported Setup Targets

@@ -31,8 +31,8 @@ The following are intentionally excluded from active materialization:
 
 - `p2p-overlord-tooling`, because Rust/Node build orchestration stays separate
 - p2p-overlord ED2K server lineage, because eMuleBB uses `goed2k-server`
-- `https://github.com/emulebb/emulebb-ed2k-server`, which is obsolete and
-  should be removed/decommissioned
+- obsolete `emulebb-ed2k-server` fork lineage, which has no current public
+  repository and should remain decommissioned
 
 ## Shared Contracts
 

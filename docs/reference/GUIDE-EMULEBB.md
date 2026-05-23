@@ -436,6 +436,19 @@ Collect evidence before changing many settings. Use:
 - startup/shared-cache evidence for large libraries
 - REST/OpenAPI checks for controller failures
 
+Runtime diagnostic file names are intentionally uniform and script-friendly.
+The normal log is `emulebb.log`, the verbose log is `emulebb-verbose.log`, the
+debug CRT log is `emulebb-crt-debug.log`, and performance logs default to
+`emulebb-performance.csv` or `emulebb-performance.mrtg` with
+`emulebb-performance-data.mrtg` and `emulebb-performance-overhead.mrtg` sidecars.
+Rotated logs append `-YYYYMMDD-HHMMSS` before the extension. Diagnostic dumps
+use `emulebb-dump-YYYYMMDD-HHMMSS-pid<PID>-mini|full.dmp` for operator-requested
+dumps and `emulebb-crash-YYYYMMDD-HHMMSS-pid<PID>.dmp` for crash dumps.
+
+The rename is strict in current eMuleBB builds: tools and support procedures
+should use the new names and should not rely on legacy `eMule.log`,
+`eMule_Verbose.log`, or `perflog.*` filenames.
+
 Common symptom routing:
 
 | Symptom | First checks |
@@ -493,9 +506,9 @@ recurring tasks, and normal diagnostic snapshots for support. See
 Product usage docs do not duplicate release proof. Current release state remains
 in:
 
-- [Beta 0.7.3 dashboard](../active/RELEASE-0.7.3.md)
-- [Beta 0.7.3 checklist](../active/RELEASE-0.7.3-CHECKLIST.md)
-- [Beta 0.7.3 runbook](../active/RELEASE-0.7.3-RUNBOOK.md)
+- [RC 0.7.3 dashboard](../active/RELEASE-0.7.3.md)
+- [RC 0.7.3 checklist](../active/RELEASE-0.7.3-CHECKLIST.md)
+- [RC 0.7.3 runbook](../active/RELEASE-0.7.3-RUNBOOK.md)
 - [Active backlog index](../active/INDEX.md)
 
 When user-visible behavior changes, update the guide chapter that owns it.

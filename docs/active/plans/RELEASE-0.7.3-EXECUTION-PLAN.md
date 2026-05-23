@@ -1,13 +1,13 @@
-# Beta 0.7.3 Execution Plan
+# RC 0.7.3 Execution Plan
 
-This is the only active execution plan for beta `emulebb-v0.7.3`.
+This is the only active execution plan for RC `emulebb-v0.7.3-rc.1`.
 Every actionable release task must have its own item ID.
 
 ## Release Freeze
 
 - Freeze status: active.
 - No new feature, refactor, UI polish, warning-debt, dependency refresh, or
-  roadmap work may enter beta `0.7.3`.
+  roadmap work may enter RC `0.7.3`.
 - Allowed pre-tag changes are limited to direct release-gate blockers,
   packaging/provenance failures, release-doc drift, or severe app defects found
   by the required release proof.
@@ -21,7 +21,8 @@ Every actionable release task must have its own item ID.
   `EMULE_WORKSPACE_ROOT\workspaces\workspace\app\eMule-main`.
 - Tag target: the same selected reviewed `main` commit after final proof passes
   and the operator gives a separate tagging instruction.
-- Former broadband stabilization branch: retired from the active beta topology.
+- Release stabilization branch: `release/0.7.3` once the operator starts the
+  RC branch.
 - Stock/community comparison baseline: `baseline/community-0.72a`.
 
 ## Blocking Work
@@ -61,10 +62,10 @@ the operator gives a separate tag instruction.
 - [BUG-111](../../history/items/BUG-111.md) is closed; app release, update,
   and help URLs now point at `emulebb` destinations with focused update-check
   coverage.
-- [FEAT-056](../items/FEAT-056.md) owns post-beta proof automation and operator
-  evidence UX. Do not block beta `0.7.3` on it unless a later release decision
-  promotes a specific slice into a new beta-blocking item ID.
-- [BUG-112](../../history/items/BUG-112.md) is Wont-Fix for beta `0.7.3`;
+- [FEAT-056](../items/FEAT-056.md) owns post-`0.7.3` proof automation and
+  operator evidence UX. Do not block RC `0.7.3` on it unless a later release
+  decision promotes a specific slice into a new RC-blocking item ID.
+- [BUG-112](../../history/items/BUG-112.md) is Wont-Fix for RC `0.7.3`;
   legacy WebServer/qBit-compatible session-token hardening is not release
   scope.
 - [REF-034](../items/REF-034.md) is deferred; the Crypto++ 8.9 refresh is

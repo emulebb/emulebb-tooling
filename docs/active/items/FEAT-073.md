@@ -21,9 +21,9 @@ aMule remain distinct clients, but it should share contracts, campaign
 patterns, and selected dependencies where that reduces drift.
 
 The active ED2K server for eMuleBB remains
-`https://github.com/emulebb/goed2k-server`. The obsolete
-`https://github.com/emulebb/emulebb-ed2k-server` fork is not part of this
-future integration and should be decommissioned.
+`https://github.com/emulebb/goed2k-server`. The obsolete `emulebb-ed2k-server`
+fork slug has no current public repository, is not part of this future
+integration, and should remain decommissioned.
 
 ## Intended Shape
 
