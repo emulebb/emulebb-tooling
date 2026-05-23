@@ -21,7 +21,7 @@ appear to conflict, policy wins.
 ## Workspace Boundaries
 
 - Use `EMULE_WORKSPACE_ROOT` style paths in maintained docs and scripts.
-- Edit app source in `workspaces\workspace\app\eMule-main`.
+- Edit app source in `workspaces\workspace\app\emulebb-main`.
 - Treat `repos\emulebb` as the branch-store checkout, not the normal edit
   location.
 - Do not hardcode machine-local absolute paths in active docs or helpers.
@@ -65,7 +65,7 @@ python -m mkdocs build --strict
 - Before writing custom parsing, encoding, filesystem, crypto, protocol,
   date/time, compression, or structured-data logic, look for an existing
   standard library, platform API, project helper, or pinned dependency.
-- Keep app source changes in `workspaces\workspace\app\eMule-main`.
+- Keep app source changes in `workspaces\workspace\app\emulebb-main`.
 - Use `repos\emulebb-build` orchestration for build, validation, test, live-test,
   and packaging.
 - Do not run ad hoc direct `MSBuild` from app worktrees, `srchybrid`, or

@@ -56,9 +56,9 @@ WORKSPACE_CLEAN_REPO_PATHS = (
     "repos/third_party/emulebb-miniupnp",
     "repos/third_party/emulebb-resizablelib",
     "repos/third_party/emulebb-zlib",
-    "workspaces/workspace/app/eMule-main",
-    "workspaces/workspace/app/eMule-community-baseline",
-    "workspaces/workspace/app/eMule-community-tracing-harness",
+    "workspaces/workspace/app/emulebb-main",
+    "workspaces/workspace/app/emulebb-community-baseline",
+    "workspaces/workspace/app/emulebb-community-tracing-harness",
 )
 
 

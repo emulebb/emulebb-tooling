@@ -27,7 +27,7 @@ improvements from eMuleAI and historical mods:
 
 ## Current Main Evidence
 
-Current `eMule-main` has:
+Current `emulebb-main` has:
 
 - safe manual IP-filter promotion
 - `FEAT-042` automatic IP-filter update scheduling

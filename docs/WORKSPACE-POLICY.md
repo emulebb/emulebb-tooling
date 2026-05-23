@@ -48,7 +48,7 @@ Directive precedence is:
 - `repos\emulebb` is the canonical app repo checkout used as the branch store and
   worktree anchor.
 - Normal app editing belongs in
-  `workspaces\workspace\app\eMule-main`, not in `repos\emulebb`.
+  `workspaces\workspace\app\emulebb-main`, not in `repos\emulebb`.
 - Retired pre-rename repository paths such as `repos\eMule`,
   `repos\eMule-build`, `repos\eMule-build-tests`, and `repos\eMule-tooling`
   are historical references only. Active policy, docs, tests, and helper code
@@ -62,9 +62,9 @@ The canonical workspace currently materializes these app worktrees:
 
 | Worktree | Branch |
 |---|---|
-| `eMule-main` | `main` |
-| `eMule-community-baseline` | `baseline/community-0.72a` |
-| `eMule-community-tracing-harness` | `tracing-harness/community-0.72a` |
+| `emulebb-main` | `main` |
+| `emulebb-community-baseline` | `baseline/community-0.72a` |
+| `emulebb-community-tracing-harness` | `tracing-harness/community-0.72a` |
 
 ## Branch And History Policy
 
@@ -284,7 +284,7 @@ Routine `validate` in `repos\emulebb-build` must run the active static audits:
   - `LinkTimeCodeGeneration=UseLinkTimeCodeGeneration` for release app links
 - Active compile targets should declare `BufferSecurityCheck=true` and
   `MultiProcessorCompilation=true`.
-- This policy applies to `eMule-main`, `emulebb-build-tests`, and maintained
+- This policy applies to `emulebb-main`, `emulebb-build-tests`, and maintained
   dependency projects used by the canonical workspace build.
 - Shared test builds support `x64` and `ARM64`; test execution remains `x64`
   only.

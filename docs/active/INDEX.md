@@ -18,7 +18,7 @@ records, not workflow status authority.
 
 ## Current Snapshot
 
-**Source of truth:** `EMULE_WORKSPACE_ROOT\workspaces\workspace\app\eMule-main` (`main` branch)  
+**Source of truth:** `EMULE_WORKSPACE_ROOT\workspaces\workspace\app\emulebb-main` (`main` branch)
 **Current non-done count:** `64`
 **Latest release-doc refresh:** 2026-05-23
 **Non-done by status:** `46` OPEN, `8` IN_PROGRESS, `10` DEFERRED, `0` BLOCKED.
@@ -88,11 +88,11 @@ the RC branch.
 
 **Baseline stack rule:**
 
-- variant key `community` maps to worktree `app\eMule-community-baseline`
+- variant key `community` maps to worktree `app\emulebb-community-baseline`
   on branch `baseline/community-0.72a`; it is the seam-enabled parity and
   regression baseline, test-only
 - variant key `tracing-harness` maps to worktree
-  `app\eMule-community-tracing-harness` on branch
+  `app\emulebb-community-tracing-harness` on branch
   `tracing-harness/community-0.72a`; it is the behavior-changing
   variant-client parity harness, not the default baseline
 

@@ -10,7 +10,7 @@ for the repeatable end-to-end operating path.
 ## Contributor Model
 
 Routine work happens on `main` in the relevant repo. App source edits belong in
-`EMULE_WORKSPACE_ROOT\workspaces\workspace\app\eMule-main`; the canonical
+`EMULE_WORKSPACE_ROOT\workspaces\workspace\app\emulebb-main`; the canonical
 `EMULE_WORKSPACE_ROOT\repos\emulebb` checkout is the branch-store anchor, not the
 normal edit location.
 
@@ -46,7 +46,7 @@ Before editing:
 | Active release/status docs | `docs\active\...` | Current release, roadmap, and item state. |
 | Product/user guides | `docs\reference\GUIDE-*.md` | User-facing behavior after source and evidence agree. |
 | REST docs | `docs\rest\...` | Contract, adapter, and parity documentation. |
-| App code | `workspaces\workspace\app\eMule-main` | Do not edit `repos\emulebb` for routine app work. |
+| App code | `workspaces\workspace\app\emulebb-main` | Do not edit `repos\emulebb` for routine app work. |
 | Build orchestration | `repos\emulebb-build` | Use supported orchestration entry points. |
 
 ## Supported Commands
@@ -148,7 +148,7 @@ Use this for small source, helper, or test-harness changes.
 - Prefer existing project helpers, platform APIs, or pinned dependencies over
   new custom parsing, encoding, path, crypto, protocol, date/time,
   compression, or structured-data logic.
-- Keep app source edits in `workspaces\workspace\app\eMule-main`.
+- Keep app source edits in `workspaces\workspace\app\emulebb-main`.
 - Update docs only when behavior, workflow, command-line surface, REST surface,
   or validation expectations change.
 - Run `python -m emule_workspace validate`.

@@ -21,7 +21,7 @@ while active clients refresh inside very large known-client histories.
 
 ## Current Main Evidence
 
-Current `eMule-main` has stale-row safety fixes for Known Clients, but
+Current `emulebb-main` has stale-row safety fixes for Known Clients, but
 `CClientListCtrl` is still a simple pointer-backed list:
 
 - `RefreshClient(...)` locates one row and calls `Update(...)`

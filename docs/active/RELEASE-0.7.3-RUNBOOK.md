@@ -14,8 +14,8 @@ python -m emule_workspace validate
 git -C repos\emulebb-tooling status --short --branch
 git -C repos\emulebb-build status --short --branch
 git -C repos\emulebb-build-tests status --short --branch
-git -C workspaces\workspace\app\eMule-main status --short --branch
-git -C workspaces\workspace\app\eMule-main rev-parse --short HEAD
+git -C workspaces\workspace\app\emulebb-main status --short --branch
+git -C workspaces\workspace\app\emulebb-main rev-parse --short HEAD
 ```
 
 Do not continue to tagging if validation fails or if any active repo has
@@ -35,8 +35,8 @@ MSBuild commands for the workspace entrypoint.
 
 | Purpose | Command | Output contract |
 |---|---|---|
-| Developer Debug x64 | `python -m emule_workspace build app --variant main --config Debug --platform x64 --build-output-mode ErrorsOnly` | `workspaces\workspace\app\eMule-main\srchybrid\x64\Debug`; startup profiling is compiled by `_DEBUG`. |
-| Developer Release x64 | `python -m emule_workspace build app --variant main --config Release --platform x64 --build-output-mode ErrorsOnly` | `workspaces\workspace\app\eMule-main\srchybrid\x64\Release`; startup profiling is compiled in and runtime-gated by `EMULE_STARTUP_PROFILE`. |
+| Developer Debug x64 | `python -m emule_workspace build app --variant main --config Debug --platform x64 --build-output-mode ErrorsOnly` | `workspaces\workspace\app\emulebb-main\srchybrid\x64\Debug`; startup profiling is compiled by `_DEBUG`. |
+| Developer Release x64 | `python -m emule_workspace build app --variant main --config Release --platform x64 --build-output-mode ErrorsOnly` | `workspaces\workspace\app\emulebb-main\srchybrid\x64\Release`; startup profiling is compiled in and runtime-gated by `EMULE_STARTUP_PROFILE`. |
 | Package Release x64 | `python -m emule_workspace package-release --config Release --platform x64 --clean` | app binary/intermediates under `workspaces\workspace\state\package-build\emulebb-v0.7.3-rc.1\x64`; packaged binary must not contain startup profiling support. |
 | Package Release ARM64 | `python -m emule_workspace package-release --config Release --platform ARM64 --clean` | app binary/intermediates under `workspaces\workspace\state\package-build\emulebb-v0.7.3-rc.1\arm64`; packaged binary must not contain startup profiling support. |
 
