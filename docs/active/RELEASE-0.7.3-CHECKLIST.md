@@ -62,7 +62,12 @@ current-head `ui-resource-depth` run for all 43 release languages, and
 [CI-035](items/CI-035.md) records 2026-05-17 non-UI package evidence for x64,
 ARM64, and optional aMuTorrent x64 assets. Final certification proof and fresh
 RC package hashes remain incomplete until rerun and recorded on the selected
-heads.
+heads. A 2026-05-23 fast certification attempt passed the build, static, and
+native-test rows before the REST live lane stopped on the external `hide.me`
+adapter precondition; [CI-035](items/CI-035.md) records the failed report and
+the follow-up harness classification commit. Do not mark the fast certification
+row complete until `hide.me` is available again and the command passes or the
+operator explicitly accepts the live-network condition.
 
 2026-05-14 closeout prep did not run live E2E, regenerate packages, or create
 tags. Existing package manifests are rehearsal artifacts from older commits and
