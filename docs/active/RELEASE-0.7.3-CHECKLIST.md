@@ -32,7 +32,7 @@ Git tags until the operator gives a separate tagging instruction.
 ## Required Commands
 
 - [ ] `python -m emule_workspace test release-campaign --campaign emulebb-0.7.3`
-- [ ] `python -m emule_workspace test certification --profile fast`
+- [x] `python -m emule_workspace test certification --profile fast`
 - [ ] `python -m emule_workspace test certification --profile overnight`
 - [ ] `python -m emule_workspace test live-e2e --profile release-expanded --fail-fast --live-wire-inputs-file repos\emulebb-build-tests\live-wire-inputs.local.json`
 - [ ] `python -m emule_workspace test live-e2e --profile cpu-heavy --fail-fast`
@@ -62,12 +62,14 @@ current-head `ui-resource-depth` run for all 43 release languages, and
 [CI-035](items/CI-035.md) records 2026-05-17 non-UI package evidence for x64,
 ARM64, and optional aMuTorrent x64 assets. Final certification proof and fresh
 RC package hashes remain incomplete until rerun and recorded on the selected
-heads. A 2026-05-23 fast certification attempt passed the build, static, and
-native-test rows before the REST live lane stopped on the external `hide.me`
-adapter precondition; [CI-035](items/CI-035.md) records the failed report and
-the follow-up harness classification commit. Do not mark the fast certification
-row complete until `hide.me` is available again and the command passes or the
-operator explicitly accepts the live-network condition.
+heads. A 2026-05-23 fast certification attempt first stopped on the external
+`hide.me` adapter precondition; [CI-035](items/CI-035.md) records that failed
+report and the follow-up harness classification commit. After the `hide.me`
+interface was restored, `python -m emule_workspace test certification --profile
+fast` passed on the selected heads and is recorded in
+[CI-035](items/CI-035.md). Overnight certification, expanded live-wire proof,
+heavy and real-profile stress rows, fresh RC packages, SBOMs, and hash
+recording remain incomplete.
 
 2026-05-14 closeout prep did not run live E2E, regenerate packages, or create
 tags. Existing package manifests are rehearsal artifacts from older commits and
