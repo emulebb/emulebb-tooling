@@ -3,6 +3,8 @@
 This is the post-`0.7.3` architecture plan for bringing relevant
 p2p-overlord work into the eMuleBB product family without merging the products.
 The tracking item is [FEAT-073](../items/FEAT-073.md).
+The shared campaign-core architecture slice is tracked separately as
+[FEAT-085](../items/FEAT-085.md).
 
 ## Product Boundary
 
@@ -61,6 +63,18 @@ conformance checks where possible:
   runs, REST conformance, ED2K/Kad behavior, and coordinator evidence.
 - Shared campaign code must keep operator-owned live data in ignored local
   files and must not commit live-wire paths, search terms, or profile roots.
+
+The preferred implementation shape is a small common campaign/runtime core
+owned by `repos/emulebb-build-tests`, plus thin product adapters for eMuleBB,
+aMuTorrent, and p2p-overlord. The common core owns workspace resolution,
+artifact naming, evidence loading, run summaries, process lifecycle policy, and
+typed campaign command dispatch. Product adapters own product-specific behavior
+such as eMuleBB live E2E profiles, aMuTorrent controller flows, and
+p2p-overlord scenario execution by stable `scenarioId`.
+
+Do not copy the p2p-overlord pytest harness into `emulebb-build-tests`. The
+eMuleBB campaign layer should reference p2p-overlord scenario manifests by ID
+and normalize their evidence into the eMuleBB artifact/report model.
 
 ## Dependency Convergence
 

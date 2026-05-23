@@ -120,11 +120,11 @@ Existing anchors:
 
 Scope:
 Post-`0.7.3` alignment for p2p-overlord repos, shared REST conformance, shared
-campaign variants, and shared MiniUPnP source ownership without merging
-products.
+campaign variants, shared campaign/runtime core infrastructure, and shared
+MiniUPnP source ownership without merging products.
 
 Existing anchors:
-`FEAT-073`.
+`FEAT-073`, `FEAT-085`.
 
 ### Local State And Configuration Planning
 
