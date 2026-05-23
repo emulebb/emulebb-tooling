@@ -1628,7 +1628,7 @@ components:
     Status:
       type: object
       additionalProperties: false
-      required: [lifecycle, stats, servers, kad, sharedStartupCache]
+      required: [lifecycle, stats, servers, kad, sharedStartupCache, runtimeDiagnostics]
       properties:
         lifecycle:
           $ref: "#/components/schemas/AppLifecycle"
@@ -1648,6 +1648,8 @@ components:
           $ref: "#/components/schemas/Stats"
         sharedStartupCache:
           $ref: "#/components/schemas/SharedStartupCache"
+        runtimeDiagnostics:
+          $ref: "#/components/schemas/RuntimeDiagnostics"
     StatsEnvelope:
       unevaluatedProperties: false
       allOf:
@@ -1815,6 +1817,65 @@ components:
         deferredHashingActive:
           type: boolean
         interruptedHashingInvalidatedCache:
+          type: boolean
+    RuntimeDiagnostics:
+      type: object
+      additionalProperties: false
+      required: [processId, knownFileCount, sharedFileCount, sharedHashingCount, downloadFileCount, activeUploads, waitingUploads, geolocation]
+      properties:
+        processId:
+          type: integer
+          minimum: 0
+        knownFileCount:
+          type: integer
+          minimum: 0
+        sharedFileCount:
+          type: integer
+          minimum: 0
+        sharedHashingCount:
+          type: integer
+          minimum: 0
+        downloadFileCount:
+          type: integer
+          minimum: 0
+        activeUploads:
+          type: integer
+          minimum: 0
+        waitingUploads:
+          type: integer
+          minimum: 0
+        geolocation:
+          oneOf:
+            - $ref: "#/components/schemas/GeolocationRuntimeDiagnostics"
+            - type: "null"
+    GeolocationRuntimeDiagnostics:
+      type: object
+      additionalProperties: false
+      required: [enabled, databaseLoaded, databaseBytes, indexBytes, nodeCount, recordSize, lookupCacheCount, decodedNodeCacheCount, refreshQueued]
+      properties:
+        enabled:
+          type: boolean
+        databaseLoaded:
+          type: boolean
+        databaseBytes:
+          type: integer
+          minimum: 0
+        indexBytes:
+          type: integer
+          minimum: 0
+        nodeCount:
+          type: integer
+          minimum: 0
+        recordSize:
+          type: integer
+          minimum: 0
+        lookupCacheCount:
+          type: integer
+          minimum: 0
+        decodedNodeCacheCount:
+          type: integer
+          minimum: 0
+        refreshQueued:
           type: boolean
     SnapshotEnvelope:
       unevaluatedProperties: false
@@ -3208,7 +3269,7 @@ components:
     Kad:
       type: object
       additionalProperties: false
-      required: [running, connected, firewalled, bootstrapping, bootstrapProgress, users, files]
+      required: [running, connected, firewalled, bootstrapping, bootstrapProgress, contactCount, lanMode, users, files]
       properties:
         running:
           type: boolean
@@ -3221,6 +3282,13 @@ components:
         nodes:
           type: integer
           minimum: 0
+        contactCount:
+          type:
+            - integer
+            - "null"
+          minimum: 0
+        lanMode:
+          type: boolean
         users:
           type:
             - integer
