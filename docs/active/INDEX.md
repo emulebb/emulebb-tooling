@@ -244,7 +244,7 @@ not active item docs.
 | [REF-026](../history/items/REF-026.md) | Minor | DONE | Manifest — keep Win10/11+ compatibility GUID only and move Common Controls into manifests |
 | [REF-027](items/REF-027.md) | Minor | OPEN | CaptchaGenerator — replace CxImage with ATL CImage / native GDI |
 | [REF-028](items/REF-028.md) | Minor | DEFERRED | Audit current MbedTLS 4.1 integration |
-| [REF-029](items/REF-029.md) | Major | OPEN | Move UDP sockets to WSAPoll backend (AsyncDatagramSocket) |
+| [REF-029](items/REF-029.md) | Major | OPEN | Move async socket readiness to WSAPoll backends |
 | [REF-030](../history/items/REF-030.md) | Minor | DONE | Replace window-message async hostname resolver with worker-thread model |
 | [REF-031](../history/items/REF-031.md) | Minor | DONE | Review upload queue scoring against community and stale baselines |
 | [REF-032](items/REF-032.md) | Minor | IN_PROGRESS | Use MFC-native property sheets and dynamic layout instead of CTreePropSheet / ResizableLib |

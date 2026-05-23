@@ -38,13 +38,13 @@ See [P2P-OVERLORD-PRODUCT-FAMILY-INTEGRATION](plans/P2P-OVERLORD-PRODUCT-FAMILY-
 Scope:
 IPv6 dual-stack compatibility for the current eD2K/Kad network, NAT/LowID
 relief, UPnP/PCP/NAT-PMP lease controls and status visibility, safer
-bind/interface behavior, low-risk connection diagnostics, and narrowly profiled
-source-hostname resolver scaling. Stock eD2K/Kad protocol semantics remain the
-boundary. A distinct IPv6 Kad network remains exploratory until separately
-promoted.
+bind/interface behavior, low-risk connection diagnostics, WSAPoll async-socket
+readiness modernization, and narrowly profiled source-hostname resolver
+scaling. Stock eD2K/Kad protocol semantics remain the boundary. A distinct IPv6
+Kad network remains exploratory until separately promoted.
 
 Existing anchors:
-`FEAT-018`, `FEAT-032`, `FEAT-035`, `FEAT-036`, `FEAT-081`, `REF-030`,
+`FEAT-018`, `FEAT-032`, `FEAT-035`, `FEAT-036`, `FEAT-081`, `REF-029`, `REF-030`,
 `ideas/IDEA-IPV6-KAD-NETWORK.md`.
 
 ### Search And Trust Clarity
