@@ -49,6 +49,14 @@ Directive precedence is:
   worktree anchor.
 - Normal app editing belongs in
   `workspaces\workspace\app\eMule-main`, not in `repos\emulebb`.
+- Retired pre-rename repository paths such as `repos\eMule`,
+  `repos\eMule-build`, `repos\eMule-build-tests`, and `repos\eMule-tooling`
+  are historical references only. Active policy, docs, tests, and helper code
+  must use `repos\emulebb`, `repos\emulebb-build`,
+  `repos\emulebb-build-tests`, and `repos\emulebb-tooling`.
+- `workspaces\workspace\deps.json` is the generated dependency contract for
+  the active workspace layout. Tests and helpers that need repo paths should
+  prefer its `workspace.repos` map instead of reconstructing old repo names.
 
 The canonical workspace currently materializes these app worktrees:
 
