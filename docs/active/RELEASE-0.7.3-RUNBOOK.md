@@ -72,6 +72,17 @@ python -m emule_workspace test certification --profile overnight `
   --sonarr-series-root <sonarr-visible-root>
 ```
 
+For the production overnight campaign, run the first-class campaign wrapper so
+the full certification, full generated CPU-heavy stress, and real-profile
+monitor are tracked as one proof set:
+
+```powershell
+python -m emule_workspace test release-campaign --campaign emulebb-0.7.3-overnight --execute `
+  --live-wire-inputs-file repos\emulebb-build-tests\live-wire-inputs.local.json `
+  --radarr-movie-root <radarr-visible-root> `
+  --sonarr-series-root <sonarr-visible-root>
+```
+
 The certification command records a single aggregate report under
 `workspaces\workspace\state\certification\<timestamp>-<profile>\certification-result.json`.
 Record that report path and the child report paths it references in

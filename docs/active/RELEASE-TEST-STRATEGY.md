@@ -14,9 +14,9 @@ release strategy, not a `0.7.3`-only checklist.
 - Release tests are organized as campaigns, strict phases, and feature-flow
   scenarios. Current suites and commands are evidence providers for those
   flows, not the taxonomy itself.
-- V1 is report-only. It makes the release matrix visible, reads latest known
-  evidence when safe, and warns on gaps. Test execution remains with the
-  existing supported `python -m emule_workspace` commands.
+- V1 supports both reporting and execution through
+  `python -m emule_workspace test release-campaign`. It makes the release
+  matrix visible, reads latest known evidence when safe, and warns on gaps.
 - Missing evidence is warn-only in V1 because historical reports, local
   live-wire inputs, Arr roots, and package artifacts are operator/environment
   dependent. Future releases may add strict audit mode once the matrix has
@@ -61,7 +61,7 @@ All release campaign instances use these phase ids:
 | `controller-surface` | REST, qBittorrent-compatible controller behavior, aMuTorrent, and Arr integration. |
 | `live-wire-release` | Operator-owned real-network search, transfer, UI, and weak-path release proof. |
 | `ui-resource-depth` | Full stock language/resource smoke and release-facing UI depth. |
-| `stabilization-stress` | Optional crash, leak, dump, CPU, and concurrency add-on evidence. |
+| `stabilization-stress` | Bounded RC stress evidence plus optional/full overnight CPU, memory, real-profile, crash, leak, dump, and concurrency soak. |
 | `packaging-provenance` | x64/ARM64 packages, manifests, hashes, and clean source provenance. |
 
 ## Frozen Surface Exclusion
@@ -75,8 +75,7 @@ criteria.
 
 ## Future Direction
 
-The next step after V1 reporting is a strict audit mode that fails on missing
-required evidence. A later step can add explicit phase execution, but only once
-live-wire input handling, Arr roots, package generation, and long-running
-certification semantics are represented without hidden defaults or legacy
-compatibility assumptions.
+The next step after V1 reporting/execution is a strict audit mode that fails on
+missing required evidence once live-wire input handling, Arr roots, package
+generation, and long-running certification semantics have enough successful
+operator runs to make missing evidence actionable instead of environmental.

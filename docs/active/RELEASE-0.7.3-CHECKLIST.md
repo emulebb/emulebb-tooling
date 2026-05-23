@@ -123,6 +123,7 @@ These full-duration add-ons remain available for diagnosing release-candidate
 failures or collecting extra soak evidence without blocking RC1 packaging:
 
 - [ ] `python -m emule_workspace test certification --profile overnight`
+- [ ] `python -m emule_workspace test release-campaign --campaign emulebb-0.7.3-overnight --execute`
 - [ ] `python -m emule_workspace test live-e2e --profile release-expanded --fail-fast --live-wire-inputs-file repos\emulebb-build-tests\live-wire-inputs.local.json`
 - [ ] `python -m emule_workspace test live-e2e --profile cpu-heavy --fail-fast`
 - [ ] `python -m emule_workspace test live-e2e --suite live-process-monitor --fail-fast`
