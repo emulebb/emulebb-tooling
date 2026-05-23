@@ -108,7 +108,7 @@ The repeatable publishing workflow is:
 3. Commit and push the source Markdown. GitHub Actions builds the MkDocs HTML
    site from `main` and deploys it to GitHub Pages.
 4. When the public homepage needs a shorter product summary, update
-   `repos\emulebbbb-pages` from the rendered-doc facts and regenerate its static
+   `repos\emulebb-pages` from the rendered-doc facts and regenerate its static
    HTML pages.
 
 Release-facing product claims are backed by evidence, not by homepage copy.
