@@ -26,6 +26,24 @@ queue, upload, download, server, search-results, and shared-files lists.
 | `Shift+F3` | Finds the previous match after list find is active. |
 | `Ctrl+A` | Selects all rows in the focused list. |
 
+## File-Like List Sort Shortcuts
+
+Downloads, Search Results, and Shared Files support Total Commander-style sort
+shortcuts when the relevant list has focus.
+
+| Shortcut | Behavior |
+|----------|----------|
+| `Ctrl+F3` | Sorts by name. |
+| `Ctrl+F4` | Sorts by type where the list has a type column. |
+| `Ctrl+F5` | Sorts by date/time where the list has a date/time column. |
+| `Ctrl+F6` | Sorts by size. |
+
+Repeating the same shortcut toggles ascending and descending order through the
+same path as clicking the column header. If a list does not have the requested
+semantic column, the shortcut is consumed with a native beep and no fallback
+sort is guessed. Downloads currently has no type column, and Search Results
+currently has no date/time column.
+
 ## Downloads List Shortcuts
 
 These shortcuts are local to the Downloads file list. They operate on the
