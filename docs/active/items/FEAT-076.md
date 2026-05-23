@@ -31,6 +31,23 @@ I/O bottleneck or starving the UI.
   deterministic.
 - Add diagnostics so live profiling can explain chosen worker counts and volume
   grouping.
+- Keep worker ownership explicit: workers may perform file I/O and hashing, but
+  shared-file map mutation, UI updates, and final `CKnownFile` adoption remain
+  on the owning application/UI path.
+
+## Current Mainline Evidence
+
+Current `main` already has a long-lived shared-file hash worker and queue, but
+actual hashing is still serialized:
+
+- `CAddFileThread::Run()` takes `theApp.hashing_mut` before hashing one file.
+- `CSharedFileList::RunSharedHashJob()` also takes `theApp.hashing_mut` before
+  creating the `CKnownFile` from disk.
+
+That serialization is intentional for safety, but it is now the main limit for
+large multi-volume and SSD-backed profiles. FEAT-076 should replace the single
+global hash bottleneck with a bounded scheduler, not with unbounded per-file
+threads.
 
 ## Scope Constraints
 
@@ -39,6 +56,10 @@ I/O bottleneck or starving the UI.
 - Do not regress slow HDD behavior to improve SSD-only scenarios.
 - Do not make physical drive detection a hard startup dependency; fall back to
   the current conservative policy when detection is uncertain.
+- Do not let background workers mutate `CSharedFileList`, `CKnownFileList`,
+  MFC controls, or upload/download queue state directly.
+- Do not parallelize part-file hash write-back without preserving the existing
+  hash-layout generation checks.
 
 ## Acceptance Criteria
 

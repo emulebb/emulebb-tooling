@@ -23,6 +23,11 @@ Improve this without moving the backup off the startup path as a first step:
 add progress callbacks around config-backup phases and keep the startup dialog
 painting with visible progress while backup work runs.
 
+This item remains the owner for possible later backup backgrounding. A worker is
+acceptable only after the progress-callback slice proves insufficient and only
+if the backup snapshot ordering stays before normal config load, migration, and
+writes.
+
 ## Intended Shape
 
 - Keep daily config backup before normal config load/migration/writes.
@@ -35,6 +40,9 @@ painting with visible progress while backup work runs.
   mechanism; do not start normal app timers or network work during backup.
 - Consider chunked copy for individual large files only after profiling proves
   one-file stalls remain.
+- If a later worker-backed backup is implemented, build an immutable copy plan
+  before config readers/writers start, run file copies in the worker, and keep
+  completion/prune reporting deterministic.
 
 ## Scope Constraints
 
@@ -43,6 +51,8 @@ painting with visible progress while backup work runs.
   readers/writers.
 - Do not change the backup directory naming, retention, or skip policy unless a
   separate bug is found.
+- Do not allow normal app startup phases to mutate config files before the
+  daily snapshot is either complete or explicitly skipped.
 
 ## Acceptance Criteria
 

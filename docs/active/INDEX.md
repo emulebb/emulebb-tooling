@@ -20,9 +20,9 @@ engineering spec/evidence records, not workflow status authority.
 ## Current Snapshot
 
 **Source of truth:** `EMULE_WORKSPACE_ROOT\workspaces\workspace\app\emulebb-main` (`main` branch)
-**Current non-done count:** `69`
+**Current non-done count:** `71`
 **Latest release-doc refresh:** 2026-05-23
-**Non-done by status:** `51` OPEN, `8` IN_PROGRESS, `10` DEFERRED, `0` BLOCKED.
+**Non-done by status:** `52` OPEN, `8` IN_PROGRESS, `11` DEFERRED, `0` BLOCKED.
 **Backlog counts:** item tables below are authoritative.
 **RC 0.7.3 relevance:** Most non-done items below are future or deferred work;
 current RC gate and proof status is controlled by [RELEASE-0.7.3](RELEASE-0.7.3.md).
@@ -242,7 +242,7 @@ not active item docs.
 | [REF-027](items/REF-027.md) | Minor | OPEN | CaptchaGenerator — replace CxImage with ATL CImage / native GDI |
 | [REF-028](items/REF-028.md) | Minor | DEFERRED | Audit current MbedTLS 4.1 integration |
 | [REF-029](items/REF-029.md) | Major | OPEN | Move UDP sockets to WSAPoll backend (AsyncDatagramSocket) |
-| [REF-030](items/REF-030.md) | Minor | OPEN | Replace window-message async hostname resolver with worker-thread model |
+| [REF-030](../history/items/REF-030.md) | Minor | DONE | Replace window-message async hostname resolver with worker-thread model |
 | [REF-031](../history/items/REF-031.md) | Minor | DONE | Review upload queue scoring against community and stale baselines |
 | [REF-032](items/REF-032.md) | Minor | IN_PROGRESS | Use MFC-native property sheets and dynamic layout instead of CTreePropSheet / ResizableLib |
 | [REF-033](items/REF-033.md) | Trivial | OPEN | Remove remaining IE/MSHTML drag-drop, HTML Help, and legacy IE web-client baggage |
@@ -350,7 +350,7 @@ not active item docs.
 | [FEAT-064](items/FEAT-064.md) | Minor | OPEN | Curated post-0.7.3 future release roadmap |
 | [FEAT-065](../history/items/FEAT-065.md) | Minor | DONE | Polish the native MiniMule tray popup |
 | [FEAT-066](../history/items/FEAT-066.md) | Minor | DONE | Replace MiniMule chrome with table and speed chart |
-| [FEAT-068](items/FEAT-068.md) | Minor | OPEN | Bound REST shared-files memory use for very large libraries |
+| [FEAT-068](items/FEAT-068.md) | Minor | OPEN | Bound REST large-list memory and latency for very large profiles |
 | [FEAT-069](items/FEAT-069.md) | Minor | OPEN | Shared-file include and exclude pattern rules |
 | [FEAT-070](items/FEAT-070.md) | Minor | OPEN | Add targeted client UserHash and upload-lifecycle diagnostics |
 | [FEAT-071](../history/items/FEAT-071.md) | Minor | DONE | Filename mojibake repair for search results and download intake |
@@ -361,6 +361,9 @@ not active item docs.
 | [FEAT-076](items/FEAT-076.md) | Minor | OPEN | Parallelize shared-file hashing across physical volumes and SSDs |
 | [FEAT-077](items/FEAT-077.md) | Minor | OPEN | Auto-managed upload friend-slot candidates without mutating manual friends |
 | [FEAT-078](items/FEAT-078.md) | Minor | OPEN | Persist auto-browse inventories in a local queryable database |
+| [FEAT-079](items/FEAT-079.md) | Minor | OPEN | Save known and cancelled metadata from immutable background snapshots |
+| [FEAT-080](items/FEAT-080.md) | Minor | OPEN | Refresh protected-volume disk-space snapshots in the background |
+| [FEAT-081](items/FEAT-081.md) | Trivial | DEFERRED | Add a bounded source-hostname resolver pool only if profiling shows backlog |
 
 ---
 

@@ -76,6 +76,19 @@ hashing can still fall into the existing timeout/leak-and-exit shutdown path if
 a read wedges hard enough. Add diagnostics or cancellation hardening there
 before treating FEAT-034 as complete.
 
+The next implementation direction should be background directory enumeration
+with immutable scan results:
+
+- enumerate shared roots off the UI thread into a candidate list
+- keep path filtering and share-policy decisions deterministic
+- apply additions/removals to `CSharedFileList` on the owning app/UI path
+- queue hashing work only after the scan result has been validated
+- keep the existing deferred/coalesced reload behavior while a scan or hash
+  drain is active
+
+Workers must not mutate `CSharedFileList`, `CSharedFilesCtrl`, upload state, or
+KnownFile maps directly.
+
 ## Comparison Notes
 
 - `analysis\emuleai` keeps a dedicated search worker thread alive and resets/coalesces
@@ -109,6 +122,8 @@ broader `eMuleAI` shared-files feature import.
 
 - [ ] manual shared-files reload returns control quickly on large trees
 - [x] repeated reload requests coalesce instead of starting overlapping scans while hashing is active
+- [ ] directory enumeration can run in the background and produce an immutable
+      candidate list
 - [x] targeted long-path live profile converges to the expected final visible Shared Files rows after hash drain
 - [ ] general final shared-file results converge to the same set as the synchronous path across broader reload scenarios
 - [x] uploads, share state, and GUI counters remain stable while shared hashes drain in the background

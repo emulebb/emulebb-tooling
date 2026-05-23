@@ -38,12 +38,13 @@ See [P2P-OVERLORD-PRODUCT-FAMILY-INTEGRATION](plans/P2P-OVERLORD-PRODUCT-FAMILY-
 Scope:
 IPv6 dual-stack compatibility for the current eD2K/Kad network, NAT/LowID
 relief, UPnP/PCP/NAT-PMP lease controls and status visibility, safer
-bind/interface behavior, and low-risk connection diagnostics. Stock eD2K/Kad
-protocol semantics remain the boundary. A distinct IPv6 Kad network remains
-exploratory until separately promoted.
+bind/interface behavior, low-risk connection diagnostics, and narrowly profiled
+source-hostname resolver scaling. Stock eD2K/Kad protocol semantics remain the
+boundary. A distinct IPv6 Kad network remains exploratory until separately
+promoted.
 
 Existing anchors:
-`FEAT-032`, `FEAT-035`, `FEAT-036`,
+`FEAT-032`, `FEAT-035`, `FEAT-036`, `FEAT-081`, `REF-030`,
 `ideas/IDEA-IPV6-KAD-NETWORK.md`.
 
 ### Search And Trust Clarity
@@ -75,10 +76,23 @@ Scope:
 Compatibility-preserving startup and shared-file performance work where the
 behavior remains explainable and safe under large real profiles. This includes
 responsive startup maintenance, large-library startup cache cleanup, and
-storage-aware shared-file hashing across independent physical volumes or SSDs.
+storage-aware shared-file hashing across independent physical volumes or SSDs,
+background-safe metadata persistence, and protected-volume disk-space snapshot
+refresh.
 
 Existing anchors:
-`FEAT-072`, `FEAT-075`, `FEAT-076`.
+`FEAT-034`, `FEAT-072`, `FEAT-075`, `FEAT-076`, `FEAT-079`, `FEAT-080`.
+
+### Controller Surface Performance
+
+Scope:
+REST/controller maintenance that bounds memory use and latency for large
+profiles without expanding the public capability surface. Snapshot workers may
+build immutable response records, but live app objects remain owned by their
+normal app/UI/protocol paths.
+
+Existing anchors:
+`FEAT-068`.
 
 ### Upload Policy Clarity
 
