@@ -31,6 +31,8 @@ LANE_BY_TITLE = {
     "UI power-user polish": "UI Polish",
     "Security and operations": "Security and Operations",
     "Narrow anti-leecher review": "Anti-Leecher Review",
+    "Local state and configuration planning": "Planning",
+    "Planning": "Planning",
 }
 
 STATUS_TO_PROJECT = {

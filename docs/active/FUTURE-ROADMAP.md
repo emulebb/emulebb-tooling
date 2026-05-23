@@ -51,10 +51,13 @@ Existing anchors:
 Scope:
 Clearer fake-file confidence wording, Kad/search popularity and consistency
 explanations, source-name divergence handling, and media plausibility checks
-when evidence is local and cheap.
+when evidence is local and cheap. The lane also includes opt-in remote
+shared-file inventory discovery when a peer already exposes that inventory
+through compatible browse/share behavior.
 
 Existing anchors:
-`FEAT-002`, `FEAT-003`, `FEAT-006`, `FEAT-039`, `FEAT-041`.
+`FEAT-002`, `FEAT-003`, `FEAT-006`, `FEAT-031`, `FEAT-039`, `FEAT-041`,
+`FEAT-078`.
 
 ### UI Power-User Polish
 
@@ -109,6 +112,19 @@ products.
 Existing anchors:
 `FEAT-073`.
 
+### Local State And Configuration Planning
+
+Scope:
+Evaluate local persistence changes before implementation. This includes
+SQLite-backed local metadata structures, queryable auto-browse inventory
+caches, and operator-editable JSON or TOML configuration where a structured
+format is more robust than legacy INI text. Existing profile compatibility,
+backup behavior, downgrade behavior, and stock-compatible `.met`/`.dat`
+semantics remain hard constraints.
+
+Existing anchors:
+`FEAT-078`, `REF-045`, `REF-046`.
+
 ### Narrow Anti-Leecher Review
 
 Scope:
@@ -132,7 +148,9 @@ explicitly reopens them:
 - Large-library or background-worker performance roadmap expansion outside the
   approved startup and storage performance lane.
 - Metadata/file-intelligence expansion. MediaInfo remains an external DLL in
-  this release line.
+  this release line. Operator-approved local persistence planning in
+  `FEAT-078`, `REF-045`, and `REF-046` is allowed only as storage/configuration
+  evaluation, not as a broad metadata-intelligence feature.
 - Bundled MediaInfo, Windows Property Store expansion, or webservice metadata
   growth.
 - Protocol forks, proprietary Kad/eD2K extensions, opcode or packet/tag shape
@@ -182,3 +200,10 @@ External references used as directional signals, not implementation authority:
   starts.
 - qBittorrent/libtorrent can inform dual-stack architecture, but BitTorrent DHT
   mechanics are not eMule Kad protocol authority.
+
+## GitHub-Primary Backlog Import Set
+
+| Lane | Scope | Items |
+|---|---|---|
+| Search and trust clarity | Remote shared-file inventory discovery and cached browse inspection | `FEAT-031`, `FEAT-078` |
+| Local state and configuration planning | SQLite metadata and structured configuration evaluation | `REF-045`, `REF-046` |

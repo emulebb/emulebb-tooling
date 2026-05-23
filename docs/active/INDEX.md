@@ -20,9 +20,9 @@ engineering spec/evidence records, not workflow status authority.
 ## Current Snapshot
 
 **Source of truth:** `EMULE_WORKSPACE_ROOT\workspaces\workspace\app\emulebb-main` (`main` branch)
-**Current non-done count:** `66`
+**Current non-done count:** `69`
 **Latest release-doc refresh:** 2026-05-23
-**Non-done by status:** `48` OPEN, `8` IN_PROGRESS, `10` DEFERRED, `0` BLOCKED.
+**Non-done by status:** `51` OPEN, `8` IN_PROGRESS, `10` DEFERRED, `0` BLOCKED.
 **Backlog counts:** item tables below are authoritative.
 **RC 0.7.3 relevance:** Most non-done items below are future or deferred work;
 current RC gate and proof status is controlled by [RELEASE-0.7.3](RELEASE-0.7.3.md).
@@ -257,6 +257,8 @@ not active item docs.
 | [REF-042](items/REF-042.md) | Minor | OPEN | Consolidate WinInet download helpers and review URL shortcut intake |
 | [REF-043](items/REF-043.md) | Minor | OPEN | Drop the legacy HTML Web Interface and keep REST as the supported controller surface |
 | [REF-044](items/REF-044.md) | Minor | OPEN | Remove remaining import-parts residue and keep legacy import flows retired |
+| [REF-045](items/REF-045.md) | Minor | OPEN | Evaluate SQLite-backed storage for local metadata structures |
+| [REF-046](items/REF-046.md) | Minor | OPEN | Evaluate JSON or TOML for operator-editable configuration |
 
 ---
 
@@ -313,7 +315,7 @@ not active item docs.
 | [FEAT-028](../history/items/FEAT-028.md) | Minor | DONE | Virtualize and harden shared files list |
 | [FEAT-029](../history/items/FEAT-029.md) | Minor | DONE | Search result ceilings — configurable ed2k expansion plus moderate Kad totals/lifetimes |
 | [FEAT-030](../history/items/FEAT-030.md) | Minor | DONE | Bind policy completion — global `BindAddr` everywhere else, separate `WebBindAddr` for WebServer |
-| [FEAT-031](items/FEAT-031.md) | Minor | OPEN | Auto-browse compatible remote shared-file inventories with persisted cache |
+| [FEAT-031](items/FEAT-031.md) | Minor | OPEN | Auto-browse peers that expose remote shared-file inventories |
 | [FEAT-032](items/FEAT-032.md) | Minor | DEFERRED | NAT mapping modernization — lease controls, status visibility, and PCP/NAT-PMP |
 | [FEAT-033](../history/items/FEAT-033.md) | Minor | DONE | Disk-space floor hardening and legacy import-flow retirement |
 | [FEAT-034](items/FEAT-034.md) | Minor | IN_PROGRESS | Shared-files reload should stop blocking the UI on large trees |
@@ -358,6 +360,7 @@ not active item docs.
 | [FEAT-075](items/FEAT-075.md) | Minor | OPEN | Keep startup progress responsive during daily config backup |
 | [FEAT-076](items/FEAT-076.md) | Minor | OPEN | Parallelize shared-file hashing across physical volumes and SSDs |
 | [FEAT-077](items/FEAT-077.md) | Minor | OPEN | Auto-managed upload friend-slot candidates without mutating manual friends |
+| [FEAT-078](items/FEAT-078.md) | Minor | OPEN | Persist auto-browse inventories in a local queryable database |
 
 ---
 
