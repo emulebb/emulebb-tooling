@@ -159,26 +159,106 @@ This matrix summarizes behavior that is documented as landed on the current
 line. It is a map to the deeper guide chapters, not a replacement for the
 active release dashboard.
 
-| Area | Landed behavior | Item IDs | Deep guide |
-|---|---|---|---|
-| Long paths | Long-path hardening for important profile, temp, incoming, shared-library, package, and tooling paths | FEAT-010 | [Long Path Guide](GUIDE-LONGPATHS.md) |
-| Listen-socket hardening | TCP error-flood defense before the broader future shield engine | FEAT-012 | [Network Guide](GUIDE-NETWORK.md) |
-| REST core | Authenticated in-process JSON REST API under `/api/v1` | FEAT-013 | [Controllers and REST Guide](GUIDE-CONTROLLERS-REST.md) |
-| Broadband upload | Finite upload slot target, weak-slot recycling, low-ratio policy, and queue visibility | FEAT-015, FEAT-023 | [Downloads and Search Guide](GUIDE-DOWNLOADS-SEARCH.md) |
-| Modern limits | Updated practical defaults for queues, sources, buffers, timeouts, and search ceilings | FEAT-016, FEAT-029 | [Downloads and Search Guide](GUIDE-DOWNLOADS-SEARCH.md) |
-| Geolocation | DB-IP city geolocation update and display support | FEAT-020 | [Network Guide](GUIDE-NETWORK.md) |
-| Profile selection | `-c <base-dir>` startup profile override for isolated profiles | FEAT-022 | [Setup Guide](GUIDE-SETUP.md) |
-| Sharing policy | `shareignore.dat`, monitored shares, startup cache, duplicate cache, and Shared Files virtualization | FEAT-024, FEAT-026, FEAT-027, FEAT-028, FEAT-038 | [Sharing Guide](GUIDE-SHARING.md) |
-| Filename hygiene | Download filename cleanup, remote-intake mojibake/entity repair, and message display cleanup | FEAT-025, FEAT-054, FEAT-071 | [Downloads and Search Guide](GUIDE-DOWNLOADS-SEARCH.md) |
-| Network binding | Completed P2P bind coverage and separate WebServer bind behavior | FEAT-030 | [Network Guide](GUIDE-NETWORK.md) |
-| Disk safety | Disk-space floor hardening and legacy import-flow retirement | FEAT-033 | [Downloads and Search Guide](GUIDE-DOWNLOADS-SEARCH.md) |
-| IP filters | Automatic IP-filter update scheduling and reload behavior | FEAT-042 | [IP Filter Guide](GUIDE-IP-FILTERS.md) |
-| REST completeness | Transfer detail, server/Kad bootstrap, search, upload queue, and preference expansion | FEAT-045, FEAT-046, FEAT-047, FEAT-048, FEAT-049 | [Controllers and REST Guide](GUIDE-CONTROLLERS-REST.md) |
-| Completion automation | Optional external program launch on completed download | FEAT-050 | [Downloads and Search Guide](GUIDE-DOWNLOADS-SEARCH.md) |
-| Power-user UX | Advanced context menus, keyboard shortcuts, tray options, category polish, Web Interface preference layout, and MiniMule polish | FEAT-051, FEAT-052, FEAT-053, FEAT-059, FEAT-062, FEAT-063, FEAT-065, FEAT-066 | [Keyboard Shortcuts](KEYBOARD-SHORTCUTS.md), [Preferences Guide](GUIDE-PREFERENCES.md) |
-| Preference quality | Preference inventory, mapping, clamps, persistence audit, and strong schema validation | FEAT-060, FEAT-061 | [Preferences Guide](GUIDE-PREFERENCES.md) |
-| qBit-style workflows | Download shortcuts and batch menu actions that preserve eMule semantics | FEAT-057 | [Downloads and Search Guide](GUIDE-DOWNLOADS-SEARCH.md) |
-| Closeout UX | Release-facing UX polish and audit closeout | FEAT-058 | [Troubleshooting Guide](GUIDE-TROUBLESHOOTING.md) |
+- **Long paths**
+  - Landed behavior: Long-path hardening for important profile, temp, incoming,
+                     shared-library, package, and tooling paths
+  - Item IDs: FEAT-010
+  - Deep guide: [Long Path Guide](GUIDE-LONGPATHS.md)
+
+- **Listen-socket hardening**
+  - Landed behavior: TCP error-flood defense before the broader future shield engine
+  - Item IDs: FEAT-012
+  - Deep guide: [Network Guide](GUIDE-NETWORK.md)
+
+- **REST core**
+  - Landed behavior: Authenticated in-process JSON REST API under `/api/v1`
+  - Item IDs: FEAT-013
+  - Deep guide: [Controllers and REST Guide](GUIDE-CONTROLLERS-REST.md)
+
+- **Broadband upload**
+  - Landed behavior: Finite upload slot target, weak-slot recycling, low-ratio policy,
+                     and queue visibility
+  - Item IDs: FEAT-015, FEAT-023
+  - Deep guide: [Downloads and Search Guide](GUIDE-DOWNLOADS-SEARCH.md)
+
+- **Modern limits**
+  - Landed behavior: Updated practical defaults for queues, sources, buffers, timeouts,
+                     and search ceilings
+  - Item IDs: FEAT-016, FEAT-029
+  - Deep guide: [Downloads and Search Guide](GUIDE-DOWNLOADS-SEARCH.md)
+
+- **Geolocation**
+  - Landed behavior: DB-IP city geolocation update and display support
+  - Item IDs: FEAT-020
+  - Deep guide: [Network Guide](GUIDE-NETWORK.md)
+
+- **Profile selection**
+  - Landed behavior: `-c <base-dir>` startup profile override for isolated profiles
+  - Item IDs: FEAT-022
+  - Deep guide: [Setup Guide](GUIDE-SETUP.md)
+
+- **Sharing policy**
+  - Landed behavior: `shareignore.dat`, monitored shares, startup cache, duplicate
+                     cache, and Shared Files virtualization
+  - Item IDs: FEAT-024, FEAT-026, FEAT-027, FEAT-028, FEAT-038
+  - Deep guide: [Sharing Guide](GUIDE-SHARING.md)
+
+- **Filename hygiene**
+  - Landed behavior: Download filename cleanup, remote-intake mojibake/entity repair,
+                     and message display cleanup
+  - Item IDs: FEAT-025, FEAT-054, FEAT-071
+  - Deep guide: [Downloads and Search Guide](GUIDE-DOWNLOADS-SEARCH.md)
+
+- **Network binding**
+  - Landed behavior: Completed P2P bind coverage and separate WebServer bind behavior
+  - Item IDs: FEAT-030
+  - Deep guide: [Network Guide](GUIDE-NETWORK.md)
+
+- **Disk safety**
+  - Landed behavior: Disk-space floor hardening and legacy import-flow retirement
+  - Item IDs: FEAT-033
+  - Deep guide: [Downloads and Search Guide](GUIDE-DOWNLOADS-SEARCH.md)
+
+- **IP filters**
+  - Landed behavior: Automatic IP-filter update scheduling and reload behavior
+  - Item IDs: FEAT-042
+  - Deep guide: [IP Filter Guide](GUIDE-IP-FILTERS.md)
+
+- **REST completeness**
+  - Landed behavior: Transfer detail, server/Kad bootstrap, search, upload queue, and
+                     preference expansion
+  - Item IDs: FEAT-045, FEAT-046, FEAT-047, FEAT-048, FEAT-049
+  - Deep guide: [Controllers and REST Guide](GUIDE-CONTROLLERS-REST.md)
+
+- **Completion automation**
+  - Landed behavior: Optional external program launch on completed download
+  - Item IDs: FEAT-050
+  - Deep guide: [Downloads and Search Guide](GUIDE-DOWNLOADS-SEARCH.md)
+
+- **Power-user UX**
+  - Landed behavior: Advanced context menus, keyboard shortcuts, tray options, category
+                     polish, Web Interface preference layout, and MiniMule polish
+  - Item IDs: FEAT-051, FEAT-052, FEAT-053, FEAT-059, FEAT-062, FEAT-063, FEAT-065,
+              FEAT-066
+  - Deep guide: [Keyboard Shortcuts](KEYBOARD-SHORTCUTS.md), [Preferences
+                Guide](GUIDE-PREFERENCES.md)
+
+- **Preference quality**
+  - Landed behavior: Preference inventory, mapping, clamps, persistence audit, and
+                     strong schema validation
+  - Item IDs: FEAT-060, FEAT-061
+  - Deep guide: [Preferences Guide](GUIDE-PREFERENCES.md)
+
+- **qBit-style workflows**
+  - Landed behavior: Download shortcuts and batch menu actions that preserve eMule
+                     semantics
+  - Item IDs: FEAT-057
+  - Deep guide: [Downloads and Search Guide](GUIDE-DOWNLOADS-SEARCH.md)
+
+- **Closeout UX**
+  - Landed behavior: Release-facing UX polish and audit closeout
+  - Item IDs: FEAT-058
+  - Deep guide: [Troubleshooting Guide](GUIDE-TROUBLESHOOTING.md)
 
 ## Release Documentation Coverage
 

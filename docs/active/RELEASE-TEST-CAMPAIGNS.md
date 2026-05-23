@@ -33,11 +33,15 @@ Every campaign instance uses the same strict phase taxonomy from
 [Release Test Strategy](RELEASE-TEST-STRATEGY.md). Each instance also carries a
 required proof tier:
 
-| Proof tier | Meaning |
-|---|---|
-| `rc-blocking-quick` | Current RC package gate. Bounded enough to refresh repeatedly before packaging. |
-| `overnight-full` | Long-form soak and monitoring proof. Used for confidence and failure diagnosis, not as the default package refresh loop. |
-| `future` | Nonblocking product-family or post-release campaign shape retained for planning. |
+- `rc-blocking-quick`:
+  current RC package gate. Bounded enough to refresh repeatedly before
+  packaging.
+- `overnight-full`:
+  long-form soak and monitoring proof. Used for confidence and failure
+  diagnosis, not as the default package refresh loop.
+- `future`:
+  nonblocking product-family or post-release campaign shape retained for
+  planning.
 
 The machine-readable manifest schema is
 `emulebb-build-tests.release-campaign.v1`. Active campaign manifests must use
@@ -58,11 +62,29 @@ python -m emule_workspace test release-campaign --campaign emulebb-0.7.3-overnig
 
 ## Current Instances
 
-| Campaign | Proof tier | Purpose |
-|---|---|---|
-| `emulebb-0.7.3` | `rc-blocking-quick` | Current RC-blocking package readiness campaign. |
-| `emulebb-0.7.3-overnight` | `overnight-full` | Full certification, full generated heavy stress, and real-profile monitoring. |
-| `p2p-overlord-post-0.7.3` | `future` | Post-0.7.3 product-family campaign skeleton. |
+### `emulebb-0.7.3`
+
+Proof tier:
+`rc-blocking-quick`.
+
+Purpose:
+current RC-blocking package readiness campaign.
+
+### `emulebb-0.7.3-overnight`
+
+Proof tier:
+`overnight-full`.
+
+Purpose:
+full certification, full generated heavy stress, and real-profile monitoring.
+
+### `p2p-overlord-post-0.7.3`
+
+Proof tier:
+`future`.
+
+Purpose:
+post-`0.7.3` product-family campaign skeleton.
 
 `emulebb-0.7.3` maps the current release gates into feature-flow scenarios
 across:

@@ -211,10 +211,15 @@ work is future connectivity modernization, not a shipped beta 0.7.3 capability.
 
 The docs intentionally split IPv6 Kad into two tracks:
 
-| Track | Status | Meaning |
-|---|---|---|
-| Current-network dual-stack compatibility | Active future item: [FEAT-035](../active/items/FEAT-035.md) | Add IPv6-capable endpoints, address abstraction, display, logging, bind policy, and safe source/Kad handoff without breaking today's network |
-| Distinct IPv6 Kad network | Exploratory idea: [IDEA-IPV6-KAD-NETWORK](../ideas/IDEA-IPV6-KAD-NETWORK.md) | Consider a separate IPv6 Kad routing/bootstrap space inspired by qBittorrent/libtorrent dual-stack DHT state separation |
+- **Current-network dual-stack compatibility**
+  - Status: Active future item: [FEAT-035](../active/items/FEAT-035.md)
+  - Meaning: Add IPv6-capable endpoints, address abstraction, display, logging, bind
+             policy, and safe source/Kad handoff without breaking today's network
+
+- **Distinct IPv6 Kad network**
+  - Status: Exploratory idea: [IDEA-IPV6-KAD-NETWORK](../ideas/IDEA-IPV6-KAD-NETWORK.md)
+  - Meaning: Consider a separate IPv6 Kad routing/bootstrap space inspired by
+             qBittorrent/libtorrent dual-stack DHT state separation
 
 qBittorrent is useful here through its libtorrent backend. Libtorrent's DHT
 model keeps separate IPv4 and IPv6 bootstrap state, commonly described as

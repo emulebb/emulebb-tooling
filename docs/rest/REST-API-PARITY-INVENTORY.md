@@ -13,49 +13,157 @@ not supported and are not release gates.
 
 ## Classification Rules
 
-| Status | Meaning |
-|---|---|
-| `implemented` | Current `main` exposes the route through the OpenAPI contract and matching native route seam. |
-| `obsolete` | Intentionally excluded from REST because it is deprecated web-page presentation state, session plumbing, binary streaming, host OS control, or outside the adapter's declared purpose. |
+- **`implemented`**
+  - Meaning: Current `main` exposes the route through the OpenAPI contract and matching
+             native route seam.
+
+- **`obsolete`**
+  - Meaning: Intentionally excluded from REST because it is deprecated web-page
+             presentation state, session plumbing, binary streaming, host OS control, or
+             outside the adapter's declared purpose.
 
 This ledger currently has no deferred rows. Future controller-relevant gaps should
 be tracked as active item IDs before being added here as pending work.
 
 ## Contract-Wide Release Requirements
 
-| Requirement | Status | Notes |
-|---|---|---|
-| REST base path is `/api/v1` | implemented | Existing REST already uses this root. |
-| Auth uses `X-API-Key` only | implemented | No REST sessions, no cookie login, and no low-rights REST mode. |
-| REST inherits WebServer bind, HTTPS, and allowed-IP exposure controls | implemented | REST remains in-process on the existing listener. |
-| JSON success envelope is `{ data, meta }` | implemented | Landed on native `main`; aMuTorrent also unwraps this shape. |
-| JSON collection envelope is `{ data: { items: [...] }, meta }` | implemented | Only `GET /shared-files` and `GET /upload-queue` expose `offset`/`limit` pagination metadata; other list routes are intentionally unpaged. |
-| JSON error envelope is `{ error: { code, message, details? } }` | implemented | Native errors now use `{ error: { code, message } }`; `details` remains optional for future richer validation. |
-| Field names are `camelCase` | implemented | Pre-release aliases were removed from public route parsing; final names include `searchId`, `categoryId`, `deleteFiles`, and `*KiBps` speed fields. |
-| Mutations return the updated resource when practical | implemented | Preference, category, transfer property, shared-file metadata, and shared-directory mutations now return the updated model. Async/operation routes return operation envelopes. |
-| Bulk endpoints use HTTP 200 with per-item results | implemented | Transfer delete and multi-link add use `{items:[...]}` per-item result envelopes. |
-| Destructive file deletion requires explicit confirmation | implemented | Transfer deletes require `deleteFiles: true`; shared-file deletes require an explicit boolean because `false` means unshare/exclude without deleting the local file. `delete_files` is no longer public API. |
-| aMuTorrent consumes this OpenAPI surface statically | implemented | The integration branch unwraps native envelopes and consumes final resource/operation routes and field names. |
-| Native REST commands are serialized through the UI thread | implemented | `/api/v1` dispatch uses a synchronous main-window command before touching UI-owned eMule state, with exception containment at the dispatch boundary. |
-| OpenAPI and smoke registry stay in sync | implemented | The Python smoke unit tests parse `REST-API-OPENAPI.yaml` and fail if route coverage drifts from the documented contract. |
+- **REST base path is `/api/v1`**
+  - Status: implemented
+  - Notes: Existing REST already uses this root.
+
+- **Auth uses `X-API-Key` only**
+  - Status: implemented
+  - Notes: No REST sessions, no cookie login, and no low-rights REST mode.
+
+- **REST inherits WebServer bind, HTTPS, and allowed-IP exposure controls**
+  - Status: implemented
+  - Notes: REST remains in-process on the existing listener.
+
+- **JSON success envelope is `{ data, meta }`**
+  - Status: implemented
+  - Notes: Landed on native `main`; aMuTorrent also unwraps this shape.
+
+- **JSON collection envelope is `{ data: { items: [...] }, meta }`**
+  - Status: implemented
+  - Notes: Only `GET /shared-files` and `GET /upload-queue` expose `offset`/`limit`
+           pagination metadata; other list routes are intentionally unpaged.
+
+- **JSON error envelope is `{ error: { code, message, details? } }`**
+  - Status: implemented
+  - Notes: Native errors now use `{ error: { code, message } }`; `details` remains
+           optional for future richer validation.
+
+- **Field names are `camelCase`**
+  - Status: implemented
+  - Notes: Pre-release aliases were removed from public route parsing; final names
+           include `searchId`, `categoryId`, `deleteFiles`, and `*KiBps` speed fields.
+
+- **Mutations return the updated resource when practical**
+  - Status: implemented
+  - Notes: Preference, category, transfer property, shared-file metadata, and
+           shared-directory mutations now return the updated model. Async/operation
+           routes return operation envelopes.
+
+- **Bulk endpoints use HTTP 200 with per-item results**
+  - Status: implemented
+  - Notes: Transfer delete and multi-link add use `{items:[...]}` per-item result
+           envelopes.
+
+- **Destructive file deletion requires explicit confirmation**
+  - Status: implemented
+  - Notes: Transfer deletes require `deleteFiles: true`; shared-file deletes require an
+           explicit boolean because `false` means unshare/exclude without deleting the
+           local file. `delete_files` is no longer public API.
+
+- **aMuTorrent consumes this OpenAPI surface statically**
+  - Status: implemented
+  - Notes: The integration branch unwraps native envelopes and consumes final
+           resource/operation routes and field names.
+
+- **Native REST commands are serialized through the UI thread**
+  - Status: implemented
+  - Notes: `/api/v1` dispatch uses a synchronous main-window command before touching
+           UI-owned eMule state, with exception containment at the dispatch boundary.
+
+- **OpenAPI and smoke registry stay in sync**
+  - Status: implemented
+  - Notes: The Python smoke unit tests parse `REST-API-OPENAPI.yaml` and fail if route
+           coverage drifts from the documented contract.
 
 ## Application And Preferences
 
-| Migrated capability | REST target | Status | Impact and notes |
-|---|---|---|---|
-| Show app/version/runtime information | `GET /app` | implemented | Returns app identity, build flavor, lifecycle state, and static capabilities while REST is accepting requests. |
-| Show global status/statistics summary | `GET /status`, `GET /stats`, `GET /snapshot` | implemented | Status, stats, and snapshot routes use stable v1 envelopes. |
-| Update WebServer gzip preference | none | obsolete | HTML/WebServer gzip is page-serving presentation behavior, not a native controller preference. |
-| Update WebServer refresh interval | none | obsolete | HTML/WebServer refresh timing remains in `[WebServer] PageRefreshTime`; controller UIs own their own polling cadence. |
-| Update max download speed | `PATCH /app/preferences` | implemented | Uses `downloadLimitKiBps`; valid range is `1..4294967294` to match finite UI limits and avoid the unlimited sentinel. |
-| Update max upload speed | `PATCH /app/preferences` | implemented | Uses `uploadLimitKiBps`; same range as download. |
-| Update max sources per file | `PATCH /app/preferences` | implemented | Uses `maxSourcesPerFile`; valid range is `1..2147483647` for UI and INI integer round-trip. |
-| Update max connections | `PATCH /app/preferences` | implemented | Uses `maxConnections`; valid range is `1..2147483647`. |
-| Update max connections per five seconds | `PATCH /app/preferences` | implemented | Uses `maxConnectionsPerFiveSeconds`; valid range is `1..2147483647`. |
-| Start app shutdown | `POST /app/shutdown` | implemented | Keeps eMule-process shutdown only. Excluded from live destructive mutation loops. |
-| Host shutdown or reboot from web UI | none | obsolete | User explicitly excluded OS shutdown/reboot from REST. |
-| HTML login/logout/session state | none | obsolete | REST uses API-key auth only and must never fall back to HTML session behavior. |
-| HTML template, sort, column, refresh presentation state | none | obsolete | Controller UIs own their own presentation state. |
+- **Show app/version/runtime information**
+  - REST target: `GET /app`
+  - Status: implemented
+  - Impact and notes: Returns app identity, build flavor, lifecycle state, and static
+                      capabilities while REST is accepting requests.
+
+- **Show global status/statistics summary**
+  - REST target: `GET /status`, `GET /stats`, `GET /snapshot`
+  - Status: implemented
+  - Impact and notes: Status, stats, and snapshot routes use stable v1 envelopes.
+
+- **Update WebServer gzip preference**
+  - REST target: none
+  - Status: obsolete
+  - Impact and notes: HTML/WebServer gzip is page-serving presentation behavior, not a
+                      native controller preference.
+
+- **Update WebServer refresh interval**
+  - REST target: none
+  - Status: obsolete
+  - Impact and notes: HTML/WebServer refresh timing remains in `[WebServer]
+                      PageRefreshTime`; controller UIs own their own polling cadence.
+
+- **Update max download speed**
+  - REST target: `PATCH /app/preferences`
+  - Status: implemented
+  - Impact and notes: Uses `downloadLimitKiBps`; valid range is `1..4294967294` to match
+                      finite UI limits and avoid the unlimited sentinel.
+
+- **Update max upload speed**
+  - REST target: `PATCH /app/preferences`
+  - Status: implemented
+  - Impact and notes: Uses `uploadLimitKiBps`; same range as download.
+
+- **Update max sources per file**
+  - REST target: `PATCH /app/preferences`
+  - Status: implemented
+  - Impact and notes: Uses `maxSourcesPerFile`; valid range is `1..2147483647` for UI
+                      and INI integer round-trip.
+
+- **Update max connections**
+  - REST target: `PATCH /app/preferences`
+  - Status: implemented
+  - Impact and notes: Uses `maxConnections`; valid range is `1..2147483647`.
+
+- **Update max connections per five seconds**
+  - REST target: `PATCH /app/preferences`
+  - Status: implemented
+  - Impact and notes: Uses `maxConnectionsPerFiveSeconds`; valid range is
+                      `1..2147483647`.
+
+- **Start app shutdown**
+  - REST target: `POST /app/shutdown`
+  - Status: implemented
+  - Impact and notes: Keeps eMule-process shutdown only. Excluded from live destructive
+                      mutation loops.
+
+- **Host shutdown or reboot from web UI**
+  - REST target: none
+  - Status: obsolete
+  - Impact and notes: User explicitly excluded OS shutdown/reboot from REST.
+
+- **HTML login/logout/session state**
+  - REST target: none
+  - Status: obsolete
+  - Impact and notes: REST uses API-key auth only and must never fall back to HTML
+                      session behavior.
+
+- **HTML template, sort, column, refresh presentation state**
+  - REST target: none
+  - Status: obsolete
+  - Impact and notes: Controller UIs own their own presentation state.
 
 ## Categories
 
@@ -70,64 +178,262 @@ be tracked as active item IDs before being added here as pending work.
 
 ## Transfers
 
-| Migrated capability | REST target | Status | Impact and notes |
-|---|---|---|---|
-| List downloads | `GET /transfers` | implemented | Current REST already returns transfer rows. |
-| Show one download | `GET /transfers/{hash}` | implemented | Current route exists. |
-| Add ED2K URL | `POST /transfers` | implemented | Accepts `link` or `links` and always returns the per-item operation envelope. |
-| Pause transfer | `POST /transfers/{hash}/operations/pause` | implemented | Returns the stable per-item operation envelope. |
-| Resume transfer | `POST /transfers/{hash}/operations/resume` | implemented | Returns the stable per-item operation envelope. |
-| Stop transfer | `POST /transfers/{hash}/operations/stop` | implemented | Returns the stable per-item operation envelope. |
-| Cancel transfer | `DELETE /transfers/{hash}` with `deleteFiles: true` | implemented | Native eMule cancel removes partial `.part` state; adapters must not send `deleteFiles:false` for incomplete transfers. |
-| Delete transfer local files | `DELETE /transfers/{hash}` with `deleteFiles: true` | implemented | `deleteFiles` is the preferred spelling. |
-| Clear completed transfers | `POST /transfers/operations/clear-completed` | implemented | Uses the existing main-window clear-completed path. |
-| Rename incomplete transfer | `PATCH /transfers/{hash}` | implemented | Current main includes rename support for incomplete files only. |
-| Set transfer priority | `PATCH /transfers/{hash}` | implemented | Final enum is `auto`, `verylow`, `low`, `normal`, `high`, and `veryhigh`; shared-file release priority is separate. |
-| Set transfer category | `PATCH /transfers/{hash}` | implemented | Supports category id/name; final naming must be `categoryId`/`categoryName`. |
-| File recheck | `POST /transfers/{hash}/operations/recheck` | implemented | Returns the accepted-operation envelope after queuing the native recheck. |
-| Preview transfer | `POST /transfers/{hash}/operations/preview` | implemented | Route validates preview readiness before launching the existing preview command. |
-| Get transfer sources | `GET /transfers/{hash}/sources` | implemented | Current route exists. |
-| Get one transfer source | `GET /transfers/{hash}/sources/{clientId}` | implemented | Uses the same stable source selector as peer operations. |
-| Get transfer part/source detail | `GET /transfers/{hash}/details` | implemented | Native route returns transfer, part, and source detail; aMuTorrent hydrates transfer detail from it. |
-| Browse source | `POST /transfers/{hash}/sources/{clientId}/operations/browse` | implemented | Uses source user hash as the stable selector where available. |
-| Add/remove friend from transfer peer | `POST /transfers/{hash}/sources/{clientId}/operations/add-friend`, `.../remove-friend`, plus `/friends` | implemented | Transfer-source peer operations use the same stable `clientId` selector exposed by source rows. |
-| Ban/unban transfer peer | `POST /transfers/{hash}/sources/{clientId}/operations/ban`, `.../unban` | implemented | Mirrors pro-user source context-menu controls. |
-| Remove transfer source | `POST /transfers/{hash}/sources/{clientId}/operations/remove` | implemented | Removes the source through the normal download queue removal path. |
-| Hide transfer columns or update transfer table sort | none | obsolete | Presentation state belongs to aMuTorrent or any other controller. |
+- **List downloads**
+  - REST target: `GET /transfers`
+  - Status: implemented
+  - Impact and notes: Current REST already returns transfer rows.
+
+- **Show one download**
+  - REST target: `GET /transfers/{hash}`
+  - Status: implemented
+  - Impact and notes: Current route exists.
+
+- **Add ED2K URL**
+  - REST target: `POST /transfers`
+  - Status: implemented
+  - Impact and notes: Accepts `link` or `links` and always returns the per-item
+                      operation envelope.
+
+- **Pause transfer**
+  - REST target: `POST /transfers/{hash}/operations/pause`
+  - Status: implemented
+  - Impact and notes: Returns the stable per-item operation envelope.
+
+- **Resume transfer**
+  - REST target: `POST /transfers/{hash}/operations/resume`
+  - Status: implemented
+  - Impact and notes: Returns the stable per-item operation envelope.
+
+- **Stop transfer**
+  - REST target: `POST /transfers/{hash}/operations/stop`
+  - Status: implemented
+  - Impact and notes: Returns the stable per-item operation envelope.
+
+- **Cancel transfer**
+  - REST target: `DELETE /transfers/{hash}` with `deleteFiles: true`
+  - Status: implemented
+  - Impact and notes: Native eMule cancel removes partial `.part` state; adapters must
+                      not send `deleteFiles:false` for incomplete transfers.
+
+- **Delete transfer local files**
+  - REST target: `DELETE /transfers/{hash}` with `deleteFiles: true`
+  - Status: implemented
+  - Impact and notes: `deleteFiles` is the preferred spelling.
+
+- **Clear completed transfers**
+  - REST target: `POST /transfers/operations/clear-completed`
+  - Status: implemented
+  - Impact and notes: Uses the existing main-window clear-completed path.
+
+- **Rename incomplete transfer**
+  - REST target: `PATCH /transfers/{hash}`
+  - Status: implemented
+  - Impact and notes: Current main includes rename support for incomplete files only.
+
+- **Set transfer priority**
+  - REST target: `PATCH /transfers/{hash}`
+  - Status: implemented
+  - Impact and notes: Final enum is `auto`, `verylow`, `low`, `normal`, `high`, and
+                      `veryhigh`; shared-file release priority is separate.
+
+- **Set transfer category**
+  - REST target: `PATCH /transfers/{hash}`
+  - Status: implemented
+  - Impact and notes: Supports category id/name; final naming must be
+                      `categoryId`/`categoryName`.
+
+- **File recheck**
+  - REST target: `POST /transfers/{hash}/operations/recheck`
+  - Status: implemented
+  - Impact and notes: Returns the accepted-operation envelope after queuing the native
+                      recheck.
+
+- **Preview transfer**
+  - REST target: `POST /transfers/{hash}/operations/preview`
+  - Status: implemented
+  - Impact and notes: Route validates preview readiness before launching the existing
+                      preview command.
+
+- **Get transfer sources**
+  - REST target: `GET /transfers/{hash}/sources`
+  - Status: implemented
+  - Impact and notes: Current route exists.
+
+- **Get one transfer source**
+  - REST target: `GET /transfers/{hash}/sources/{clientId}`
+  - Status: implemented
+  - Impact and notes: Uses the same stable source selector as peer operations.
+
+- **Get transfer part/source detail**
+  - REST target: `GET /transfers/{hash}/details`
+  - Status: implemented
+  - Impact and notes: Native route returns transfer, part, and source detail; aMuTorrent
+                      hydrates transfer detail from it.
+
+- **Browse source**
+  - REST target: `POST /transfers/{hash}/sources/{clientId}/operations/browse`
+  - Status: implemented
+  - Impact and notes: Uses source user hash as the stable selector where available.
+
+- **Add/remove friend from transfer peer**
+  - REST target: `POST /transfers/{hash}/sources/{clientId}/operations/add-friend`,
+                 `.../remove-friend`, plus `/friends`
+  - Status: implemented
+  - Impact and notes: Transfer-source peer operations use the same stable `clientId`
+                      selector exposed by source rows.
+
+- **Ban/unban transfer peer**
+  - REST target: `POST /transfers/{hash}/sources/{clientId}/operations/ban`, `.../unban`
+  - Status: implemented
+  - Impact and notes: Mirrors pro-user source context-menu controls.
+
+- **Remove transfer source**
+  - REST target: `POST /transfers/{hash}/sources/{clientId}/operations/remove`
+  - Status: implemented
+  - Impact and notes: Removes the source through the normal download queue removal path.
+
+- **Hide transfer columns or update transfer table sort**
+  - REST target: none
+  - Status: obsolete
+  - Impact and notes: Presentation state belongs to aMuTorrent or any other controller.
 
 ## Shared Files And Shared Directories
 
-| Migrated capability | REST target | Status | Impact and notes |
-|---|---|---|---|
-| List shared files | `GET /shared-files` | implemented | Current REST has shared-file listing. |
-| Show one shared file | `GET /shared-files/{hash}` | implemented | Current route exists. |
-| Add one shared file by path | `POST /shared-files` | implemented | Returns a shared-file create operation result because hashing may be asynchronous. |
-| Unshare one file | `DELETE /shared-files/{hash}` | implemented | Uses final `deleteFiles` naming and returns the delete-result envelope. |
-| Delete shared local file | `DELETE /shared-files/{hash}` with `deleteFiles: true` | implemented | Native deletion requires explicit `deleteFiles:true`; default delete only unshares/excludes where allowed. |
-| Set shared-file upload priority | `PATCH /shared-files/{hash}` | implemented | Supports `auto`, `verylow`, `low`, `normal`, `high`, and native upload `release`. |
-| Update shared-file comment/rating | `PATCH /shared-files/{hash}` | implemented | Current main supports comment/rating for completed shared files. |
-| Get ED2K link | `GET /shared-files/{hash}/ed2k-link` | implemented | Metadata only; binary file streaming remains excluded. |
-| Show known file comments | `GET /shared-files/{hash}/comments` | implemented | Returns the local known-file comment/rating metadata as a comments collection. |
-| Binary file download from WebServer `getfile` | none | obsolete | User explicitly excluded binary shared-file streaming. |
-| Reload shared files | `POST /shared-files/operations/reload` and `/shared-directories/operations/reload` | implemented | Final contract names both operation routes. |
-| List shared directories | `GET /shared-directories` | implemented | Current REST supports configured roots. |
-| Replace shared directory roots | `PATCH /shared-directories` | implemented | Request roots accept compact string paths or `{path, recursive}` objects; current live E2E covers persistence. |
-| Auto-share folder live monitor add/remove file events | `GET /shared-files` plus live E2E | implemented | Live REST test coverage exists in `emulebb-build-tests`; final contract stays resource-based. |
-| Shared-files sort/column state | none | obsolete | Presentation-only. |
+- **List shared files**
+  - REST target: `GET /shared-files`
+  - Status: implemented
+  - Impact and notes: Current REST has shared-file listing.
+
+- **Show one shared file**
+  - REST target: `GET /shared-files/{hash}`
+  - Status: implemented
+  - Impact and notes: Current route exists.
+
+- **Add one shared file by path**
+  - REST target: `POST /shared-files`
+  - Status: implemented
+  - Impact and notes: Returns a shared-file create operation result because hashing may
+                      be asynchronous.
+
+- **Unshare one file**
+  - REST target: `DELETE /shared-files/{hash}`
+  - Status: implemented
+  - Impact and notes: Uses final `deleteFiles` naming and returns the delete-result
+                      envelope.
+
+- **Delete shared local file**
+  - REST target: `DELETE /shared-files/{hash}` with `deleteFiles: true`
+  - Status: implemented
+  - Impact and notes: Native deletion requires explicit `deleteFiles:true`; default
+                      delete only unshares/excludes where allowed.
+
+- **Set shared-file upload priority**
+  - REST target: `PATCH /shared-files/{hash}`
+  - Status: implemented
+  - Impact and notes: Supports `auto`, `verylow`, `low`, `normal`, `high`, and native
+                      upload `release`.
+
+- **Update shared-file comment/rating**
+  - REST target: `PATCH /shared-files/{hash}`
+  - Status: implemented
+  - Impact and notes: Current main supports comment/rating for completed shared files.
+
+- **Get ED2K link**
+  - REST target: `GET /shared-files/{hash}/ed2k-link`
+  - Status: implemented
+  - Impact and notes: Metadata only; binary file streaming remains excluded.
+
+- **Show known file comments**
+  - REST target: `GET /shared-files/{hash}/comments`
+  - Status: implemented
+  - Impact and notes: Returns the local known-file comment/rating metadata as a comments
+                      collection.
+
+- **Binary file download from WebServer `getfile`**
+  - REST target: none
+  - Status: obsolete
+  - Impact and notes: User explicitly excluded binary shared-file streaming.
+
+- **Reload shared files**
+  - REST target: `POST /shared-files/operations/reload` and
+                 `/shared-directories/operations/reload`
+  - Status: implemented
+  - Impact and notes: Final contract names both operation routes.
+
+- **List shared directories**
+  - REST target: `GET /shared-directories`
+  - Status: implemented
+  - Impact and notes: Current REST supports configured roots.
+
+- **Replace shared directory roots**
+  - REST target: `PATCH /shared-directories`
+  - Status: implemented
+  - Impact and notes: Request roots accept compact string paths or `{path, recursive}`
+                      objects; current live E2E covers persistence.
+
+- **Auto-share folder live monitor add/remove file events**
+  - REST target: `GET /shared-files` plus live E2E
+  - Status: implemented
+  - Impact and notes: Live REST test coverage exists in `emulebb-build-tests`; final
+                      contract stays resource-based.
+
+- **Shared-files sort/column state**
+  - REST target: none
+  - Status: obsolete
+  - Impact and notes: Presentation-only.
 
 ## Uploads And Queue
 
-| Migrated capability | REST target | Status | Impact and notes |
-|---|---|---|---|
-| List active uploads | `GET /uploads` | implemented | Current REST exposes uploads; aMuTorrent currently drops this data in its data pipeline. |
-| List upload queue | `GET /upload-queue` | implemented | Current REST exposes queue. |
-| Show one active upload | `GET /uploads/{clientId}` | implemented | Returns the selected upload row plus existing score breakdown state for controller drill-down. |
-| Show one queued upload | `GET /upload-queue/{clientId}` | implemented | Returns the selected waiting-queue row plus existing score breakdown state for controller drill-down. |
-| Remove upload client | `POST /uploads/{clientId}/operations/remove` | implemented | Stable selectors are either user hash or `address:port` when no hash exists; the duplicate `DELETE /uploads/{clientId}` alias was removed before v1 freeze. |
-| Give release slot | `POST /uploads/{clientId}/operations/release-slot` | implemented | Uses the normal upload-queue removal path for active slots. |
-| Upload context menu ban/unban | `POST /uploads/{clientId}/operations/ban`, `.../unban` | implemented | Same peer-control command family as transfer sources. |
-| Upload friend actions | `POST /uploads/{clientId}/operations/add-friend`, `.../remove-friend` | implemented | Idempotent add returns an existing friend when already present. |
-| Upload queue remove/release/friend/ban actions | `POST /upload-queue/{clientId}/operations/...` | implemented | Queue routes share the same stable peer selector and operation vocabulary. |
+- **List active uploads**
+  - REST target: `GET /uploads`
+  - Status: implemented
+  - Impact and notes: Current REST exposes uploads; aMuTorrent currently drops this data
+                      in its data pipeline.
+
+- **List upload queue**
+  - REST target: `GET /upload-queue`
+  - Status: implemented
+  - Impact and notes: Current REST exposes queue.
+
+- **Show one active upload**
+  - REST target: `GET /uploads/{clientId}`
+  - Status: implemented
+  - Impact and notes: Returns the selected upload row plus existing score breakdown
+                      state for controller drill-down.
+
+- **Show one queued upload**
+  - REST target: `GET /upload-queue/{clientId}`
+  - Status: implemented
+  - Impact and notes: Returns the selected waiting-queue row plus existing score
+                      breakdown state for controller drill-down.
+
+- **Remove upload client**
+  - REST target: `POST /uploads/{clientId}/operations/remove`
+  - Status: implemented
+  - Impact and notes: Stable selectors are either user hash or `address:port` when no
+                      hash exists; the duplicate `DELETE /uploads/{clientId}` alias was
+                      removed before v1 freeze.
+
+- **Give release slot**
+  - REST target: `POST /uploads/{clientId}/operations/release-slot`
+  - Status: implemented
+  - Impact and notes: Uses the normal upload-queue removal path for active slots.
+
+- **Upload context menu ban/unban**
+  - REST target: `POST /uploads/{clientId}/operations/ban`, `.../unban`
+  - Status: implemented
+  - Impact and notes: Same peer-control command family as transfer sources.
+
+- **Upload friend actions**
+  - REST target: `POST /uploads/{clientId}/operations/add-friend`, `.../remove-friend`
+  - Status: implemented
+  - Impact and notes: Idempotent add returns an existing friend when already present.
+
+- **Upload queue remove/release/friend/ban actions**
+  - REST target: `POST /upload-queue/{clientId}/operations/...`
+  - Status: implemented
+  - Impact and notes: Queue routes share the same stable peer selector and operation
+                      vocabulary.
 
 ## Servers
 
@@ -158,17 +464,54 @@ be tracked as active item IDs before being added here as pending work.
 
 ## Searches
 
-| Migrated capability | REST target | Status | Impact and notes |
-|---|---|---|---|
-| Start search | `POST /searches` | implemented | Returns `{id, query, method, type, status, results}` for async polling. |
-| List search sessions | `GET /searches` | implemented | Returns active search sessions without expanding result rows. |
-| Get search results | `GET /searches/{searchId}` | implemented | aMuTorrent should poll this until stable and verify the echoed `method` and `type`. |
-| Stop/delete one search | `DELETE /searches/{searchId}` | implemented | Final route deletes the search session. |
-| Delete all searches | `DELETE /searches` | implemented | Uses the existing delete-all-searches UI action. |
-| Start search with method/type/min/max/availability/extension filters | `POST /searches` | implemented | Method, type, size, and extension filters are parsed by the native command seam. |
-| Add selected search result to downloads | `POST /searches/{searchId}/results/{hash}/operations/download` | implemented | Returns an operation result with the accepted search id and hash. |
-| Clear searches before new search | `DELETE /searches` | implemented | Explicit clear is required; `POST /searches` no longer accepts `clearExisting` before v1 freeze. |
-| Search page sort, table layout, and refresh | none | obsolete | Presentation-only. |
+- **Start search**
+  - REST target: `POST /searches`
+  - Status: implemented
+  - Impact and notes: Returns `{id, query, method, type, status, results}` for async
+                      polling.
+
+- **List search sessions**
+  - REST target: `GET /searches`
+  - Status: implemented
+  - Impact and notes: Returns active search sessions without expanding result rows.
+
+- **Get search results**
+  - REST target: `GET /searches/{searchId}`
+  - Status: implemented
+  - Impact and notes: aMuTorrent should poll this until stable and verify the echoed
+                      `method` and `type`.
+
+- **Stop/delete one search**
+  - REST target: `DELETE /searches/{searchId}`
+  - Status: implemented
+  - Impact and notes: Final route deletes the search session.
+
+- **Delete all searches**
+  - REST target: `DELETE /searches`
+  - Status: implemented
+  - Impact and notes: Uses the existing delete-all-searches UI action.
+
+- **Start search with method/type/min/max/availability/extension filters**
+  - REST target: `POST /searches`
+  - Status: implemented
+  - Impact and notes: Method, type, size, and extension filters are parsed by the native
+                      command seam.
+
+- **Add selected search result to downloads**
+  - REST target: `POST /searches/{searchId}/results/{hash}/operations/download`
+  - Status: implemented
+  - Impact and notes: Returns an operation result with the accepted search id and hash.
+
+- **Clear searches before new search**
+  - REST target: `DELETE /searches`
+  - Status: implemented
+  - Impact and notes: Explicit clear is required; `POST /searches` no longer accepts
+                      `clearExisting` before v1 freeze.
+
+- **Search page sort, table layout, and refresh**
+  - REST target: none
+  - Status: obsolete
+  - Impact and notes: Presentation-only.
 
 ## Logs
 
@@ -190,17 +533,53 @@ be tracked as active item IDs before being added here as pending work.
 
 ## aMuTorrent Gap Checklist
 
-| Area | Status | Work required |
-|---|---|---|
-| Endpoint adapter route names | implemented | aMuTorrent now prefers final operation/resource routes for transfers, servers, shared reload, and search-result download. |
-| Response envelopes | implemented | Native REST now always emits `{data, meta}` success envelopes and `{error:{code,message,details}}` errors; aMuTorrent unwraps both. |
-| Torznab search method policy | implemented | Prowlarr/Torznab movie and TV searches dispatch REST `video` searches through connected `global` first and connected `kad` second, combining connected-network results; other families keep the native automatic policy. |
-| qBittorrent transfer delete semantics | implemented | qBit-compatible delete requests always forward native transfer cancel with `deleteFiles:true`; eMule does not provide a partial-state-preserving delete for incomplete transfers. |
-| Shared-file deletion | implemented | Shared deletes call `/shared-files/{hash}` instead of transfer delete helpers. |
-| Uploads in data pipeline | implemented | `/uploads` rows remain preserved through the eMuleBB manager fetch result. |
-| Transfer detail hydration | implemented | aMuTorrent hydrates peers plus part/source detail from `/transfers/{hash}/details`. |
-| Search polling | implemented | aMuTorrent stores the returned `id` and polls `/searches/{searchId}` for results. |
-| Browser smoke | implemented | `emulebb-build-tests` now owns `amutorrent-browser-smoke.py`, launched from the aggregate live E2E suite. |
+- **Endpoint adapter route names**
+  - Status: implemented
+  - Work required: aMuTorrent now prefers final operation/resource routes for transfers,
+                   servers, shared reload, and search-result download.
+
+- **Response envelopes**
+  - Status: implemented
+  - Work required: Native REST now always emits `{data, meta}` success envelopes and
+                   `{error:{code,message,details}}` errors; aMuTorrent unwraps both.
+
+- **Torznab search method policy**
+  - Status: implemented
+  - Work required: Prowlarr/Torznab movie and TV searches dispatch REST `video` searches
+                   through connected `global` first and connected `kad` second,
+                   combining connected-network results; other families keep the native
+                   automatic policy.
+
+- **qBittorrent transfer delete semantics**
+  - Status: implemented
+  - Work required: qBit-compatible delete requests always forward native transfer cancel
+                   with `deleteFiles:true`; eMule does not provide a
+                   partial-state-preserving delete for incomplete transfers.
+
+- **Shared-file deletion**
+  - Status: implemented
+  - Work required: Shared deletes call `/shared-files/{hash}` instead of transfer delete
+                   helpers.
+
+- **Uploads in data pipeline**
+  - Status: implemented
+  - Work required: `/uploads` rows remain preserved through the eMuleBB manager fetch
+                   result.
+
+- **Transfer detail hydration**
+  - Status: implemented
+  - Work required: aMuTorrent hydrates peers plus part/source detail from
+                   `/transfers/{hash}/details`.
+
+- **Search polling**
+  - Status: implemented
+  - Work required: aMuTorrent stores the returned `id` and polls `/searches/{searchId}`
+                   for results.
+
+- **Browser smoke**
+  - Status: implemented
+  - Work required: `emulebb-build-tests` now owns `amutorrent-browser-smoke.py`,
+                   launched from the aggregate live E2E suite.
 
 ## Arr And qBittorrent-Compatible Adapter Boundary
 

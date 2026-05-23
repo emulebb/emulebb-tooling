@@ -362,16 +362,37 @@ above for user-facing defaults and ranges.
 
 #### disabled-tombstone
 
-| Key | Type | Access | Owner/API | Default and normalization | UI | REST | Notes |
-|---|---|---|---|---|---|---|---|
-| `VideoPreviewThumbnails` | bool | write | m_bVideoPreviewThumbnails | Not explicitly declared in schema | PPgFiles.cpp | None | Written as false for compatibility while runtime loading forces thumbnails disabled. |
-| `AllowPeerPreview` | bool | read, write | m_bAllowPeerPreview | Not explicitly declared in schema | PPgFiles.cpp | None | Explicit opt-in for advertising and serving peer preview frames from shared video files. Requires visible shares and a valid FFmpeg executable. |
+- **`VideoPreviewThumbnails`**
+  - Type: bool
+  - Access: write
+  - Owner/API: m_bVideoPreviewThumbnails
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgFiles.cpp
+  - REST: None
+  - Notes: Written as false for compatibility while runtime loading forces thumbnails
+           disabled.
+
+- **`AllowPeerPreview`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: m_bAllowPeerPreview
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgFiles.cpp
+  - REST: None
+  - Notes: Explicit opt-in for advertising and serving peer preview frames from shared
+           video files. Requires visible shares and a valid FFmpeg executable.
 
 #### dynamic-family
 
-| Key | Type | Access | Owner/API | Default and normalization | UI | REST | Notes |
-|---|---|---|---|---|---|---|---|
-| `<dynamic:si>` | string | read | None | Not explicitly declared in schema | None | None | Dynamic family generated at runtime; source expression is guarded instead of enumerating every concrete key. |
+- **`<dynamic:si>`**
+  - Type: string
+  - Access: read
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: Dynamic family generated at runtime; source expression is guarded instead of
+           enumerating every concrete key.
 
 #### editable-rest
 
@@ -382,303 +403,2542 @@ above for user-facing defaults and ranges.
 
 #### editable-ui
 
-| Key | Type | Access | Owner/API | Default and normalization | UI | REST | Notes |
-|---|---|---|---|---|---|---|---|
-| `3DDepth` | integer | read, write | Get3DDepth | Not explicitly declared in schema | PPgDisplay.cpp | None | None |
-| `A4AFSaveCpu` | bool | read, write | GetA4AFSaveCpu, m_bA4AFSaveCpu | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `AddNewFilesPaused` | bool | read, write | addnewfilespaused | Not explicitly declared in schema | PPgFiles.cpp | None | None |
-| `AddServersFromServer` | bool | read, write | m_bAddServersFromServer | Not explicitly declared in schema | PPgServer.cpp | None | None |
-| `AdvancedSpamFilter` | bool | read, write | m_bAdvancedSpamfilter | Not explicitly declared in schema | PPgMessages.cpp | None | None |
-| `AlwaysShowTrayIcon` | bool | read, write | IsAlwaysShowTrayIcon, m_bAlwaysShowTrayIcon | Not explicitly declared in schema | PPgDisplay.cpp | None | None |
-| `AutoClearCompleted` | bool | read, write | GetRemoveFinishedDownloads, m_bRemoveFinishedDownloads | Not explicitly declared in schema | PPgDisplay.cpp | None | None |
-| `AutoFilenameCleanup` | bool | read, write | AutoFilenameCleanup, autofilenamecleanup | Not explicitly declared in schema | PPgFiles.cpp | None | None |
-| `AutoStart` | bool | read, write | m_bAutoStart | Not explicitly declared in schema | PPgGeneral.cpp | None | None |
-| `AutoTakeED2KLinks` | bool | read, write | AutoTakeED2KLinks, autotakeed2klinks | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `BeepOnError` | bool | read, write | beepOnError | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `BindAddr` | string | read, write | GetBindAddr, GetConfiguredBindAddr | Not explicitly declared in schema | PPgConnection.cpp | None | None |
-| `BindInterface` | string | read, write | GetBindInterface | Not explicitly declared in schema | PPgConnection.cpp | None | None |
-| `BlockNetworkWhenBindUnavailableAtStartup` | bool | read, write | m_bBlockNetworkWhenBindUnavailableAtStartup | Not explicitly declared in schema | PPgConnection.cpp | None | None |
-| `CheckFileOpen` | bool | read, write | GetCheckFileOpen, m_bCheckFileOpen | Not explicitly declared in schema | PPgSecurity.cpp | None | None |
-| `CommentFilter` | string | read, write | commentFilter | Not explicitly declared in schema | PPgMessages.cpp | None | None |
-| `CommitFiles` | integer | read, write | m_iCommitFiles | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `ConditionalTCPAccept` | bool | read, write | GetConditionalTCPAccept, m_bConditionalTCPAccept | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `ConfirmExit` | bool | read, write | confirmExit | Not explicitly declared in schema | PPgGeneral.cpp | None | None |
-| `CryptLayerRequested` | bool | read, write | m_bCryptLayerRequested | Not explicitly declared in schema | PPgSecurity.cpp | None | None |
-| `CryptLayerRequired` | bool | read, write | IsCryptLayerRequired, m_bCryptLayerRequired | Not explicitly declared in schema | PPgSecurity.cpp | None | None |
-| `CryptLayerSupported` | bool | read, write | m_bCryptLayerSupported | Not explicitly declared in schema | PPgSecurity.cpp | None | None |
-| `DailyConfigBackup` | bool | read, write | GetDailyConfigBackup, SetDailyConfigBackup | Defaults to enabled | PPgTweaks.cpp | None | Daily configuration backup switch. |
-| `DateTimeFormat` | string | read, write | GetDateTimeFormat, m_strDateTimeFormat | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `DateTimeFormat4Lists` | string | read, write | GetDateTimeFormat4Lists, m_strDateTimeFormat4Lists | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `DateTimeFormat4Log` | string | read, write | GetDateTimeFormat4Log, m_strDateTimeFormat4Log | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `DebugSourceExchange` | bool | read, write | m_bDebugSourceExchange | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `DetectTCPErrorFlooder` | bool | read, write | IsDetectTCPErrorFlooder, m_bDetectTCPErrorFlooder | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `DisableKnownClientList` | bool | read, write | m_bDisableKnownClientList | Not explicitly declared in schema | PPgDisplay.cpp | None | None |
-| `DisableQueueList` | bool | read, write | m_bDisableQueueList | Not explicitly declared in schema | PPgDisplay.cpp | None | None |
-| `Ed2kSearchMaxMoreRequests` | integer | read, write | GetEd2kSearchMaxMoreRequests, SetEd2kSearchMaxMoreRequests | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `Ed2kSearchMaxResults` | integer | read, write | GetEd2kSearchMaxResults, SetEd2kSearchMaxResults | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `ExitOnBindInterfaceLoss` | bool | read, write | IsExitOnBindInterfaceLossEnabled, SetExitOnBindInterfaceLossEnabled | Not explicitly declared in schema | PPgConnection.cpp | None | None |
-| `ExtractMetaData` | integer | read, write | m_iExtractMetaData | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `ExtraPreviewWithMenu` | bool | read, write | GetExtraPreviewWithMenu, m_bExtraPreviewWithMenu | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `FileBufferSize` | integer | read, write | GetFileBufferSize, SetFileBufferSize | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `FileBufferTimeLimit` | integer | read, write | GetFileBufferTimeLimit | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `FilenameCleanups` | string | read, write | GetFilenameCleanups, SetFilenameCleanups | Not explicitly declared in schema | PPgFiles.cpp | None | None |
-| `FilterLevel` | integer | read, write | filterlevel | Not explicitly declared in schema | PPgSecurity.cpp | None | None |
-| `FollowMajorityFilenameForNewDownloads` | bool | read, write | GetFollowMajorityFilenameForNewDownloads, SetFollowMajorityFilenameForNewDownloads | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `FollowMajorityFilenameMinimumVotes` | integer | read, write | GetFollowMajorityFilenameMinimumVotes, SetFollowMajorityFilenameMinimumVotes | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `FollowMajorityFilenameRequiredPercent` | integer | read, write | GetFollowMajorityFilenameRequiredPercent, SetFollowMajorityFilenameRequiredPercent | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `ForceSpeedsToKB` | bool | read, write | GetForceSpeedsToKB, m_bForceSpeedsToKB | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `FullVerbose` | bool | read, write | m_bFullVerbose | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `HighresTimer` | bool | read, write | GetHighresTimer, m_bHighresTimer | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `ICH` | bool | read, write | ICH | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `IconflashOnNewMessage` | bool | read, write | m_bIconflashOnNewMessage | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `IncomingDir` | string | read, write | m_strIncomingDir | Not explicitly declared in schema | PPgDirectories.cpp | None | None |
-| `IndicateRatings` | bool | read, write | indicateratings | Not explicitly declared in schema | PPgMessages.cpp | None | None |
-| `InspectAllFileTypes` | bool | read, write | GetInspectAllFileTypes, m_bInspectAllFileTypes | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `IPFilterEnabled` | bool | read, write | IsIPFilterEnabled, SetIPFilterEnabled | Not explicitly declared in schema | PPgSecurity.cpp | None | None |
-| `IPFilterUpdatePeriodDays` | integer | read, write | GetIPFilterUpdatePeriodDays, SetIPFilterUpdatePeriodDays | Not explicitly declared in schema | PPgSecurity.cpp | None | None |
-| `IPFilterUpdateUrl` | string | read, write | GetIPFilterUpdateUrl, SetIPFilterUpdateUrl | Not explicitly declared in schema | PPgSecurity.cpp | None | None |
-| `IRCAddTimestamp` | bool | read, write | GetIRCAddTimeStamp, m_bIRCAddTimeStamp | Not explicitly declared in schema | PPgIRC.cpp | None | None |
-| `IRCAllowEmuleAddFriend` | bool | read, write | GetIRCAllowEmuleAddFriend, m_bIRCAllowEmuleAddFriend | Not explicitly declared in schema | PPgIRC.cpp | None | None |
-| `IRCEnableSmileys` | bool | read, write | GetIRCEnableSmileys, m_bIRCEnableSmileys | Not explicitly declared in schema | PPgIRC.cpp | None | None |
-| `IRCEnableUTF8` | bool | read, write | GetIRCEnableUTF8, m_bIRCEnableUTF8 | Not explicitly declared in schema | PPgIRC.cpp | None | None |
-| `IRCIgnoreEmuleAddFriendMsgs` | bool | read, write | GetIRCIgnoreEmuleAddFriendMsgs, m_bIRCIgnoreEmuleAddFriendMsgs | Not explicitly declared in schema | PPgIRC.cpp | None | None |
-| `IRCIgnoreEmuleSendLinkMsgs` | bool | read, write | GetIRCIgnoreEmuleSendLinkMsgs, m_bIRCIgnoreEmuleSendLinkMsgs | Not explicitly declared in schema | PPgIRC.cpp | None | None |
-| `IRCIgnoreJoinMessages` | bool | read, write | GetIRCIgnoreJoinMessages, m_bIRCIgnoreJoinMessages | Not explicitly declared in schema | PPgIRC.cpp | None | None |
-| `IRCIgnoreMiscMessages` | bool | read, write | GetIRCIgnoreMiscMessages, m_bIRCIgnoreMiscMessages | Not explicitly declared in schema | PPgIRC.cpp | None | None |
-| `IRCIgnorePartMessages` | bool | read, write | GetIRCIgnorePartMessages, m_bIRCIgnorePartMessages | Not explicitly declared in schema | PPgIRC.cpp | None | None |
-| `IRCIgnorePingPongMessages` | bool | read, write | GetIRCIgnorePingPongMessages, m_bIRCIgnorePingPongMessages | Not explicitly declared in schema | PPgIRC.cpp | None | None |
-| `IRCIgnoreQuitMessages` | bool | read, write | GetIRCIgnoreQuitMessages, m_bIRCIgnoreQuitMessages | Not explicitly declared in schema | PPgIRC.cpp | None | None |
-| `IRCNick` | string | read, write | m_strIRCNick | Not explicitly declared in schema | PPgIRC.cpp | None | None |
-| `IRCPerformString` | string | read, write | m_strIRCPerformString | Not explicitly declared in schema | PPgIRC.cpp | None | None |
-| `IRCUsePerform` | bool | read, write | m_bIRCUsePerform | Not explicitly declared in schema | PPgIRC.cpp | None | None |
-| `KadFileSearchTotal` | integer | read, write | GetKadFileSearchTotal, SetKadFileSearchTotal | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `KadKeywordSearchTotal` | integer | read, write | GetKadKeywordSearchTotal, SetKadKeywordSearchTotal | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `KeepUnavailableFixedSharedDirs` | bool | read, write | m_bKeepUnavailableFixedSharedDirs | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `Language` | integer | read, write | SetLanguage | Not explicitly declared in schema | PPgGeneral.cpp | None | None |
-| `LogA4AF` | bool | read, write | m_bLogA4AF | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `LogBannedClients` | bool | read, write | m_bLogBannedClients | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `LogFileFormat` | integer | read, write | GetLogFileFormat, m_iLogFileFormat | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `LogFileSaving` | bool | read, write | m_bLogFileSaving | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `LogFilteredIPs` | bool | read, write | m_bLogFilteredIPs | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `LogRatingDescReceived` | bool | read, write | m_bLogRatingDescReceived | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `LogSecureIdent` | bool | read, write | m_bLogSecureIdent | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `LogUlDlEvents` | bool | read, write | m_bLogUlDlEvents | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `MaxChatHistoryLines` | integer | read, write | GetMaxChatHistoryLines | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `MaxHalfConnections` | integer | read, write | GetMaxHalfConnections, SetMaxHalfConnections | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `MaxLogBuff` | integer | read, write | GetMaxLogBuff | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `MaxLogFileSize` | integer | read, write | GetMaxLogFileSize | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `MessageEnableSmileys` | bool | read, write | GetMessageEnableSmileys, m_bMessageEnableSmileys | Not explicitly declared in schema | PPgMessages.cpp | None | None |
-| `MessageFilter` | string | read, write | messageFilter | Not explicitly declared in schema | PPgMessages.cpp | None | None |
-| `MinFreeDiskSpaceConfig` | integer | read, write | GetMinFreeDiskSpaceConfig | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `MinFreeDiskSpaceIncoming` | integer | read, write | GetMinFreeDiskSpaceIncoming | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `MinFreeDiskSpaceTemp` | integer | read, write | GetMinFreeDiskSpaceTemp | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `MinToTray` | bool | read, write | mintotray | Not explicitly declared in schema | PPgDisplay.cpp | None | None |
-| `NotifierDisplayMode` | integer | read, write | notifierDisplayMode | Not explicitly declared in schema | PPgNotify.cpp | None | None |
-| `PartiallyPurgeOldKnownFiles` | bool | read, write | DoPartiallyPurgeOldKnownFiles, m_bPartiallyPurgeOldKnownFiles | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `Port` | integer | read, write | port | Not explicitly declared in schema | PPgConnection.cpp | None | None |
-| `PreventStandby` | bool | read, write | GetPreventStandby, m_bPreventStandby | Not explicitly declared in schema | PPgGeneral.cpp | None | None |
-| `PreviewCopiedArchives` | bool | read, write | GetPreviewCopiedArchives, m_bPreviewCopiedArchives | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `PreviewOnIconDblClk` | bool | read, write | GetPreviewOnIconDblClk, m_bPreviewOnIconDblClk | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `PreviewPrio` | bool | read, write | m_bpreviewprio | Not explicitly declared in schema | PPgFiles.cpp | None | None |
-| `PreviewSmallBlocks` | integer | read, write | GetPreviewSmallBlocks, m_iPreviewSmallBlocks | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `RearrangeKadSearchKeywords` | bool | read, write | GetRearrangeKadSearchKeywords, m_bRearrangeKadSearchKeywords | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `ReBarToolbar` | bool | read, write | GetReBarToolbar, m_bReBarToolbar | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `Reconnect` | bool | read, write | reconnect | Not explicitly declared in schema | PPgConnection.cpp | None | None |
-| `RememberCancelledFiles` | bool | read, write | SetRememberCancelledFiles | Not explicitly declared in schema | PPgFiles.cpp | None | None |
-| `RememberDownloadedFiles` | bool | read, write | SetRememberDownloadedFiles | Not explicitly declared in schema | PPgFiles.cpp | None | None |
-| `RestoreLastLogPane` | bool | read, write | GetRestoreLastLogPane, m_bRestoreLastLogPane | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `RestoreLastMainWndDlg` | bool | read, write | GetRestoreLastMainWndDlg, m_bRestoreLastMainWndDlg | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `RTLWindowsLayout` | bool | read, write | GetRTLWindowsLayout, m_bRTLWindowsLayout | Not explicitly declared in schema | PPgGeneral.cpp | None | None |
-| `ServerKeepAliveTimeout` | integer | read, write | GetServerKeepAliveTimeout | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `ShutdownProgressDialog` | integer | read, write | GetShutdownProgressDialogMode, SetShutdownProgressDialogMode | `NormalizeLifecycleProgressDialogMode`; default always shown | PPgTweaks.cpp | None | Shutdown progress dialog visibility mode. |
-| `ShowActiveDownloadsBold` | bool | read, write | GetShowActiveDownloadsBold, m_bShowActiveDownloadsBold | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `ShowCopyEd2kLinkCmd` | bool | read, write | GetShowCopyEd2kLinkCmd, m_bShowCopyEd2kLinkCmd | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `ShowDwlPercentage` | bool | read, write | GetUseDwlPercentage, m_bShowDwlPercentage | Not explicitly declared in schema | PPgDisplay.cpp | None | None |
-| `ShowOverhead` | bool | read, write | m_bshowoverhead | Not explicitly declared in schema | PPgConnection.cpp | None | None |
-| `ShowRatesOnTitle` | bool | read, write | ShowRatesOnTitle | Not explicitly declared in schema | PPgDisplay.cpp | None | None |
-| `ShowUpDownIconInTaskbar` | bool | read, write | IsShowUpDownIconInTaskbar, m_bShowUpDownIconInTaskbar | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `ShowVerticalHourMarkers` | bool | read, write | m_bShowVerticalHourMarkers | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `ShowWin7TaskbarGoodies` | bool | read, write | m_bShowWin7TaskbarGoodies | Not explicitly declared in schema | PPgDisplay.cpp | None | None |
-| `SparsePartFiles` | bool | read, write | GetSparsePartFiles, m_bSparsePartFiles | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `StartNextFile` | integer | read, write | m_istartnextfile | Not explicitly declared in schema | PPgFiles.cpp | None | None |
-| `StartupProgressDialog` | integer | read, write | GetStartupProgressDialogMode, SetStartupProgressDialogMode | `NormalizeLifecycleProgressDialogMode`; default always shown | PPgTweaks.cpp | None | Startup progress dialog visibility mode. |
-| `StatsAverageMinutes` | integer | read, write | GetStatsAverageMinutes, SetStatsAverageMinutes | Not explicitly declared in schema | PPgStats.cpp | None | None |
-| `StatsInterval` | integer | read, write | GetStatsInterval, SetStatsInterval | Not explicitly declared in schema | PPgStats.cpp | None | None |
-| `StoreSearches` | bool | read, write | m_bStoreSearches | Not explicitly declared in schema | PPgDisplay.cpp | None | None |
-| `TCPErrorFlooderIntervalMinutes` | integer | read, write | GetTCPErrorFlooderIntervalMinutes, m_uTCPErrorFlooderIntervalMinutes | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `TCPErrorFlooderThreshold` | integer | read, write | GetTCPErrorFlooderThreshold, m_uTCPErrorFlooderThreshold | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `TempDir` | string | read, write | GetTempDir, tempdir | Not explicitly declared in schema | PPgDirectories.cpp | None | None |
-| `ToolTipDelay` | integer | read, write | GetToolTipDelay, SetToolTipDelay | Not explicitly declared in schema | PPgDisplay.cpp | None | None |
-| `TransferDoubleClick` | bool | read, write | transferDoubleclick | Not explicitly declared in schema | PPgDisplay.cpp | None | None |
-| `TxtEditor` | string | read, write | GetTxtEditor, m_strTxtEditor | Not explicitly declared in schema | PPgSecurity.cpp, PPgServer.cpp, PPgTweaks.cpp | None | None |
-| `UDPPort` | integer | read, write | GetUDPPort, udpport | Not explicitly declared in schema | PPgConnection.cpp | None | None |
-| `UseAutocompletion` | bool | read, write | GetUseAutocompletion, m_bUseAutocompl | Not explicitly declared in schema | PPgDisplay.cpp, PPgSecurity.cpp | None | None |
-| `Verbose` | bool | read, write | m_bVerbose | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `VideoPlayer` | string | read, write | m_strVideoPlayer | Not explicitly declared in schema | PPgFiles.cpp | None | None |
-| `VideoPlayerArgs` | string | read, write | m_strVideoPlayerArgs | Not explicitly declared in schema | PPgFiles.cpp | None | None |
-| `VideoThumbnailFfmpegPath` | string | read, write | m_strVideoThumbnailFfmpegPath | Not explicitly declared in schema | PPgFiles.cpp | None | None |
-| `VideoThumbnailIntervalSeconds` | integer | read, write | m_uVideoThumbnailIntervalSeconds | Not explicitly declared in schema | PPgFiles.cpp | None | None |
-| `WinaTransToolbar` | bool | read, write | m_bWinaTransToolbar | Not explicitly declared in schema | PPgDisplay.cpp | None | None |
-| `YourHostname` | string | read, write | GetYourHostname, SetYourHostname | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
+- **`3DDepth`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: Get3DDepth
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgDisplay.cpp
+  - REST: None
+  - Notes: None
+
+- **`A4AFSaveCpu`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: GetA4AFSaveCpu, m_bA4AFSaveCpu
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`AddNewFilesPaused`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: addnewfilespaused
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgFiles.cpp
+  - REST: None
+  - Notes: None
+
+- **`AddServersFromServer`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: m_bAddServersFromServer
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgServer.cpp
+  - REST: None
+  - Notes: None
+
+- **`AdvancedSpamFilter`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: m_bAdvancedSpamfilter
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgMessages.cpp
+  - REST: None
+  - Notes: None
+
+- **`AlwaysShowTrayIcon`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: IsAlwaysShowTrayIcon, m_bAlwaysShowTrayIcon
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgDisplay.cpp
+  - REST: None
+  - Notes: None
+
+- **`AutoClearCompleted`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: GetRemoveFinishedDownloads, m_bRemoveFinishedDownloads
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgDisplay.cpp
+  - REST: None
+  - Notes: None
+
+- **`AutoFilenameCleanup`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: AutoFilenameCleanup, autofilenamecleanup
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgFiles.cpp
+  - REST: None
+  - Notes: None
+
+- **`AutoStart`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: m_bAutoStart
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgGeneral.cpp
+  - REST: None
+  - Notes: None
+
+- **`AutoTakeED2KLinks`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: AutoTakeED2KLinks, autotakeed2klinks
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`BeepOnError`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: beepOnError
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`BindAddr`**
+  - Type: string
+  - Access: read, write
+  - Owner/API: GetBindAddr, GetConfiguredBindAddr
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgConnection.cpp
+  - REST: None
+  - Notes: None
+
+- **`BindInterface`**
+  - Type: string
+  - Access: read, write
+  - Owner/API: GetBindInterface
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgConnection.cpp
+  - REST: None
+  - Notes: None
+
+- **`BlockNetworkWhenBindUnavailableAtStartup`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: m_bBlockNetworkWhenBindUnavailableAtStartup
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgConnection.cpp
+  - REST: None
+  - Notes: None
+
+- **`CheckFileOpen`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: GetCheckFileOpen, m_bCheckFileOpen
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgSecurity.cpp
+  - REST: None
+  - Notes: None
+
+- **`CommentFilter`**
+  - Type: string
+  - Access: read, write
+  - Owner/API: commentFilter
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgMessages.cpp
+  - REST: None
+  - Notes: None
+
+- **`CommitFiles`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: m_iCommitFiles
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`ConditionalTCPAccept`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: GetConditionalTCPAccept, m_bConditionalTCPAccept
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`ConfirmExit`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: confirmExit
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgGeneral.cpp
+  - REST: None
+  - Notes: None
+
+- **`CryptLayerRequested`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: m_bCryptLayerRequested
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgSecurity.cpp
+  - REST: None
+  - Notes: None
+
+- **`CryptLayerRequired`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: IsCryptLayerRequired, m_bCryptLayerRequired
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgSecurity.cpp
+  - REST: None
+  - Notes: None
+
+- **`CryptLayerSupported`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: m_bCryptLayerSupported
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgSecurity.cpp
+  - REST: None
+  - Notes: None
+
+- **`DailyConfigBackup`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: GetDailyConfigBackup, SetDailyConfigBackup
+  - Default and normalization: Defaults to enabled
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: Daily configuration backup switch.
+
+- **`DateTimeFormat`**
+  - Type: string
+  - Access: read, write
+  - Owner/API: GetDateTimeFormat, m_strDateTimeFormat
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`DateTimeFormat4Lists`**
+  - Type: string
+  - Access: read, write
+  - Owner/API: GetDateTimeFormat4Lists, m_strDateTimeFormat4Lists
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`DateTimeFormat4Log`**
+  - Type: string
+  - Access: read, write
+  - Owner/API: GetDateTimeFormat4Log, m_strDateTimeFormat4Log
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`DebugSourceExchange`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: m_bDebugSourceExchange
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`DetectTCPErrorFlooder`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: IsDetectTCPErrorFlooder, m_bDetectTCPErrorFlooder
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`DisableKnownClientList`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: m_bDisableKnownClientList
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgDisplay.cpp
+  - REST: None
+  - Notes: None
+
+- **`DisableQueueList`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: m_bDisableQueueList
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgDisplay.cpp
+  - REST: None
+  - Notes: None
+
+- **`Ed2kSearchMaxMoreRequests`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: GetEd2kSearchMaxMoreRequests, SetEd2kSearchMaxMoreRequests
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`Ed2kSearchMaxResults`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: GetEd2kSearchMaxResults, SetEd2kSearchMaxResults
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`ExitOnBindInterfaceLoss`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: IsExitOnBindInterfaceLossEnabled, SetExitOnBindInterfaceLossEnabled
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgConnection.cpp
+  - REST: None
+  - Notes: None
+
+- **`ExtractMetaData`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: m_iExtractMetaData
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`ExtraPreviewWithMenu`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: GetExtraPreviewWithMenu, m_bExtraPreviewWithMenu
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`FileBufferSize`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: GetFileBufferSize, SetFileBufferSize
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`FileBufferTimeLimit`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: GetFileBufferTimeLimit
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`FilenameCleanups`**
+  - Type: string
+  - Access: read, write
+  - Owner/API: GetFilenameCleanups, SetFilenameCleanups
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgFiles.cpp
+  - REST: None
+  - Notes: None
+
+- **`FilterLevel`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: filterlevel
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgSecurity.cpp
+  - REST: None
+  - Notes: None
+
+- **`FollowMajorityFilenameForNewDownloads`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: GetFollowMajorityFilenameForNewDownloads,
+               SetFollowMajorityFilenameForNewDownloads
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`FollowMajorityFilenameMinimumVotes`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: GetFollowMajorityFilenameMinimumVotes,
+               SetFollowMajorityFilenameMinimumVotes
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`FollowMajorityFilenameRequiredPercent`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: GetFollowMajorityFilenameRequiredPercent,
+               SetFollowMajorityFilenameRequiredPercent
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`ForceSpeedsToKB`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: GetForceSpeedsToKB, m_bForceSpeedsToKB
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`FullVerbose`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: m_bFullVerbose
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`HighresTimer`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: GetHighresTimer, m_bHighresTimer
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`ICH`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: ICH
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`IconflashOnNewMessage`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: m_bIconflashOnNewMessage
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`IncomingDir`**
+  - Type: string
+  - Access: read, write
+  - Owner/API: m_strIncomingDir
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgDirectories.cpp
+  - REST: None
+  - Notes: None
+
+- **`IndicateRatings`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: indicateratings
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgMessages.cpp
+  - REST: None
+  - Notes: None
+
+- **`InspectAllFileTypes`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: GetInspectAllFileTypes, m_bInspectAllFileTypes
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`IPFilterEnabled`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: IsIPFilterEnabled, SetIPFilterEnabled
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgSecurity.cpp
+  - REST: None
+  - Notes: None
+
+- **`IPFilterUpdatePeriodDays`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: GetIPFilterUpdatePeriodDays, SetIPFilterUpdatePeriodDays
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgSecurity.cpp
+  - REST: None
+  - Notes: None
+
+- **`IPFilterUpdateUrl`**
+  - Type: string
+  - Access: read, write
+  - Owner/API: GetIPFilterUpdateUrl, SetIPFilterUpdateUrl
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgSecurity.cpp
+  - REST: None
+  - Notes: None
+
+- **`IRCAddTimestamp`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: GetIRCAddTimeStamp, m_bIRCAddTimeStamp
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgIRC.cpp
+  - REST: None
+  - Notes: None
+
+- **`IRCAllowEmuleAddFriend`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: GetIRCAllowEmuleAddFriend, m_bIRCAllowEmuleAddFriend
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgIRC.cpp
+  - REST: None
+  - Notes: None
+
+- **`IRCEnableSmileys`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: GetIRCEnableSmileys, m_bIRCEnableSmileys
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgIRC.cpp
+  - REST: None
+  - Notes: None
+
+- **`IRCEnableUTF8`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: GetIRCEnableUTF8, m_bIRCEnableUTF8
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgIRC.cpp
+  - REST: None
+  - Notes: None
+
+- **`IRCIgnoreEmuleAddFriendMsgs`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: GetIRCIgnoreEmuleAddFriendMsgs, m_bIRCIgnoreEmuleAddFriendMsgs
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgIRC.cpp
+  - REST: None
+  - Notes: None
+
+- **`IRCIgnoreEmuleSendLinkMsgs`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: GetIRCIgnoreEmuleSendLinkMsgs, m_bIRCIgnoreEmuleSendLinkMsgs
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgIRC.cpp
+  - REST: None
+  - Notes: None
+
+- **`IRCIgnoreJoinMessages`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: GetIRCIgnoreJoinMessages, m_bIRCIgnoreJoinMessages
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgIRC.cpp
+  - REST: None
+  - Notes: None
+
+- **`IRCIgnoreMiscMessages`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: GetIRCIgnoreMiscMessages, m_bIRCIgnoreMiscMessages
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgIRC.cpp
+  - REST: None
+  - Notes: None
+
+- **`IRCIgnorePartMessages`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: GetIRCIgnorePartMessages, m_bIRCIgnorePartMessages
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgIRC.cpp
+  - REST: None
+  - Notes: None
+
+- **`IRCIgnorePingPongMessages`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: GetIRCIgnorePingPongMessages, m_bIRCIgnorePingPongMessages
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgIRC.cpp
+  - REST: None
+  - Notes: None
+
+- **`IRCIgnoreQuitMessages`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: GetIRCIgnoreQuitMessages, m_bIRCIgnoreQuitMessages
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgIRC.cpp
+  - REST: None
+  - Notes: None
+
+- **`IRCNick`**
+  - Type: string
+  - Access: read, write
+  - Owner/API: m_strIRCNick
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgIRC.cpp
+  - REST: None
+  - Notes: None
+
+- **`IRCPerformString`**
+  - Type: string
+  - Access: read, write
+  - Owner/API: m_strIRCPerformString
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgIRC.cpp
+  - REST: None
+  - Notes: None
+
+- **`IRCUsePerform`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: m_bIRCUsePerform
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgIRC.cpp
+  - REST: None
+  - Notes: None
+
+- **`KadFileSearchTotal`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: GetKadFileSearchTotal, SetKadFileSearchTotal
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`KadKeywordSearchTotal`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: GetKadKeywordSearchTotal, SetKadKeywordSearchTotal
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`KeepUnavailableFixedSharedDirs`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: m_bKeepUnavailableFixedSharedDirs
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`Language`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: SetLanguage
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgGeneral.cpp
+  - REST: None
+  - Notes: None
+
+- **`LogA4AF`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: m_bLogA4AF
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`LogBannedClients`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: m_bLogBannedClients
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`LogFileFormat`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: GetLogFileFormat, m_iLogFileFormat
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`LogFileSaving`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: m_bLogFileSaving
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`LogFilteredIPs`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: m_bLogFilteredIPs
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`LogRatingDescReceived`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: m_bLogRatingDescReceived
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`LogSecureIdent`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: m_bLogSecureIdent
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`LogUlDlEvents`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: m_bLogUlDlEvents
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`MaxChatHistoryLines`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: GetMaxChatHistoryLines
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`MaxHalfConnections`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: GetMaxHalfConnections, SetMaxHalfConnections
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`MaxLogBuff`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: GetMaxLogBuff
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`MaxLogFileSize`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: GetMaxLogFileSize
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`MessageEnableSmileys`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: GetMessageEnableSmileys, m_bMessageEnableSmileys
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgMessages.cpp
+  - REST: None
+  - Notes: None
+
+- **`MessageFilter`**
+  - Type: string
+  - Access: read, write
+  - Owner/API: messageFilter
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgMessages.cpp
+  - REST: None
+  - Notes: None
+
+- **`MinFreeDiskSpaceConfig`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: GetMinFreeDiskSpaceConfig
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`MinFreeDiskSpaceIncoming`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: GetMinFreeDiskSpaceIncoming
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`MinFreeDiskSpaceTemp`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: GetMinFreeDiskSpaceTemp
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`MinToTray`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: mintotray
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgDisplay.cpp
+  - REST: None
+  - Notes: None
+
+- **`NotifierDisplayMode`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: notifierDisplayMode
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgNotify.cpp
+  - REST: None
+  - Notes: None
+
+- **`PartiallyPurgeOldKnownFiles`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: DoPartiallyPurgeOldKnownFiles, m_bPartiallyPurgeOldKnownFiles
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`Port`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: port
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgConnection.cpp
+  - REST: None
+  - Notes: None
+
+- **`PreventStandby`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: GetPreventStandby, m_bPreventStandby
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgGeneral.cpp
+  - REST: None
+  - Notes: None
+
+- **`PreviewCopiedArchives`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: GetPreviewCopiedArchives, m_bPreviewCopiedArchives
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`PreviewOnIconDblClk`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: GetPreviewOnIconDblClk, m_bPreviewOnIconDblClk
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`PreviewPrio`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: m_bpreviewprio
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgFiles.cpp
+  - REST: None
+  - Notes: None
+
+- **`PreviewSmallBlocks`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: GetPreviewSmallBlocks, m_iPreviewSmallBlocks
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`RearrangeKadSearchKeywords`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: GetRearrangeKadSearchKeywords, m_bRearrangeKadSearchKeywords
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`ReBarToolbar`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: GetReBarToolbar, m_bReBarToolbar
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`Reconnect`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: reconnect
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgConnection.cpp
+  - REST: None
+  - Notes: None
+
+- **`RememberCancelledFiles`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: SetRememberCancelledFiles
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgFiles.cpp
+  - REST: None
+  - Notes: None
+
+- **`RememberDownloadedFiles`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: SetRememberDownloadedFiles
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgFiles.cpp
+  - REST: None
+  - Notes: None
+
+- **`RestoreLastLogPane`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: GetRestoreLastLogPane, m_bRestoreLastLogPane
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`RestoreLastMainWndDlg`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: GetRestoreLastMainWndDlg, m_bRestoreLastMainWndDlg
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`RTLWindowsLayout`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: GetRTLWindowsLayout, m_bRTLWindowsLayout
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgGeneral.cpp
+  - REST: None
+  - Notes: None
+
+- **`ServerKeepAliveTimeout`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: GetServerKeepAliveTimeout
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`ShutdownProgressDialog`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: GetShutdownProgressDialogMode, SetShutdownProgressDialogMode
+  - Default and normalization: `NormalizeLifecycleProgressDialogMode`; default always
+                               shown
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: Shutdown progress dialog visibility mode.
+
+- **`ShowActiveDownloadsBold`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: GetShowActiveDownloadsBold, m_bShowActiveDownloadsBold
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`ShowCopyEd2kLinkCmd`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: GetShowCopyEd2kLinkCmd, m_bShowCopyEd2kLinkCmd
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`ShowDwlPercentage`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: GetUseDwlPercentage, m_bShowDwlPercentage
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgDisplay.cpp
+  - REST: None
+  - Notes: None
+
+- **`ShowOverhead`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: m_bshowoverhead
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgConnection.cpp
+  - REST: None
+  - Notes: None
+
+- **`ShowRatesOnTitle`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: ShowRatesOnTitle
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgDisplay.cpp
+  - REST: None
+  - Notes: None
+
+- **`ShowUpDownIconInTaskbar`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: IsShowUpDownIconInTaskbar, m_bShowUpDownIconInTaskbar
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`ShowVerticalHourMarkers`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: m_bShowVerticalHourMarkers
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`ShowWin7TaskbarGoodies`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: m_bShowWin7TaskbarGoodies
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgDisplay.cpp
+  - REST: None
+  - Notes: None
+
+- **`SparsePartFiles`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: GetSparsePartFiles, m_bSparsePartFiles
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`StartNextFile`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: m_istartnextfile
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgFiles.cpp
+  - REST: None
+  - Notes: None
+
+- **`StartupProgressDialog`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: GetStartupProgressDialogMode, SetStartupProgressDialogMode
+  - Default and normalization: `NormalizeLifecycleProgressDialogMode`; default always
+                               shown
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: Startup progress dialog visibility mode.
+
+- **`StatsAverageMinutes`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: GetStatsAverageMinutes, SetStatsAverageMinutes
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgStats.cpp
+  - REST: None
+  - Notes: None
+
+- **`StatsInterval`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: GetStatsInterval, SetStatsInterval
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgStats.cpp
+  - REST: None
+  - Notes: None
+
+- **`StoreSearches`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: m_bStoreSearches
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgDisplay.cpp
+  - REST: None
+  - Notes: None
+
+- **`TCPErrorFlooderIntervalMinutes`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: GetTCPErrorFlooderIntervalMinutes, m_uTCPErrorFlooderIntervalMinutes
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`TCPErrorFlooderThreshold`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: GetTCPErrorFlooderThreshold, m_uTCPErrorFlooderThreshold
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`TempDir`**
+  - Type: string
+  - Access: read, write
+  - Owner/API: GetTempDir, tempdir
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgDirectories.cpp
+  - REST: None
+  - Notes: None
+
+- **`ToolTipDelay`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: GetToolTipDelay, SetToolTipDelay
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgDisplay.cpp
+  - REST: None
+  - Notes: None
+
+- **`TransferDoubleClick`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: transferDoubleclick
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgDisplay.cpp
+  - REST: None
+  - Notes: None
+
+- **`TxtEditor`**
+  - Type: string
+  - Access: read, write
+  - Owner/API: GetTxtEditor, m_strTxtEditor
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgSecurity.cpp, PPgServer.cpp, PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`UDPPort`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: GetUDPPort, udpport
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgConnection.cpp
+  - REST: None
+  - Notes: None
+
+- **`UseAutocompletion`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: GetUseAutocompletion, m_bUseAutocompl
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgDisplay.cpp, PPgSecurity.cpp
+  - REST: None
+  - Notes: None
+
+- **`Verbose`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: m_bVerbose
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`VideoPlayer`**
+  - Type: string
+  - Access: read, write
+  - Owner/API: m_strVideoPlayer
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgFiles.cpp
+  - REST: None
+  - Notes: None
+
+- **`VideoPlayerArgs`**
+  - Type: string
+  - Access: read, write
+  - Owner/API: m_strVideoPlayerArgs
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgFiles.cpp
+  - REST: None
+  - Notes: None
+
+- **`VideoThumbnailFfmpegPath`**
+  - Type: string
+  - Access: read, write
+  - Owner/API: m_strVideoThumbnailFfmpegPath
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgFiles.cpp
+  - REST: None
+  - Notes: None
+
+- **`VideoThumbnailIntervalSeconds`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: m_uVideoThumbnailIntervalSeconds
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgFiles.cpp
+  - REST: None
+  - Notes: None
+
+- **`WinaTransToolbar`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: m_bWinaTransToolbar
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgDisplay.cpp
+  - REST: None
+  - Notes: None
+
+- **`YourHostname`**
+  - Type: string
+  - Access: read, write
+  - Owner/API: GetYourHostname, SetYourHostname
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
 
 #### editable-ui-rest
 
-| Key | Type | Access | Owner/API | Default and normalization | UI | REST | Notes |
-|---|---|---|---|---|---|---|---|
-| `AutoBroadbandIO` | bool | read, write | IsAutoBroadbandIOEnabled, SetAutoBroadbandIOEnabled | Not explicitly declared in schema | PPgTweaks.cpp | autoBroadbandIo | None |
-| `Autoconnect` | bool | read, write | autoconnect | Not explicitly declared in schema | PPgConnection.cpp | autoConnect | None |
-| `MaxConnections` | integer | read, write | GetMaxConnections, SetMaxConnections, maxconnections | Not explicitly declared in schema | PPgConnection.cpp, PPgStats.cpp | maxConnections | None |
-| `MaxConnectionsPerFiveSeconds` | integer | read, write | GetMaxConperFive, SetMaxConsPerFive | Not explicitly declared in schema | PPgTweaks.cpp | maxConnectionsPerFiveSeconds | None |
-| `MaxDownload` | integer | read, write | GetConfiguredMaxDownload, SetMaxDownload | Not explicitly declared in schema | PPgConnection.cpp | downloadLimitKiBps | None |
-| `MaxSourcesPerFile` | integer | read, write | SetMaxSourcesPerFile | Not explicitly declared in schema | PPgConnection.cpp | maxSourcesPerFile | None |
-| `MaxUpload` | integer | read, write | GetConfiguredMaxUpload, SetMaxUpload | Not explicitly declared in schema | PPgConnection.cpp | uploadLimitKiBps | None |
-| `NetworkED2K` | bool | read, write | SetNetworkED2K, networked2k | Not explicitly declared in schema | PPgConnection.cpp | networkEd2k | None |
-| `NetworkKademlia` | bool | read, write | GetNetworkKademlia, SetNetworkKademlia, networkkademlia | Not explicitly declared in schema | PPgConnection.cpp | networkKademlia | None |
-| `QueueSize` | integer | read, write | GetQueueSize, SetQueueSize | Not explicitly declared in schema | PPgTweaks.cpp | queueSize | None |
-| `SafeServerConnect` | bool | read, write | m_bSafeServerConnect | Not explicitly declared in schema | PPgServer.cpp | safeServerConnect | None |
-| `UseCreditSystem` | bool | read, write | m_bCreditSystem | Not explicitly declared in schema | PPgTweaks.cpp | creditSystem | None |
+- **`AutoBroadbandIO`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: IsAutoBroadbandIOEnabled, SetAutoBroadbandIOEnabled
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: autoBroadbandIo
+  - Notes: None
+
+- **`Autoconnect`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: autoconnect
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgConnection.cpp
+  - REST: autoConnect
+  - Notes: None
+
+- **`MaxConnections`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: GetMaxConnections, SetMaxConnections, maxconnections
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgConnection.cpp, PPgStats.cpp
+  - REST: maxConnections
+  - Notes: None
+
+- **`MaxConnectionsPerFiveSeconds`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: GetMaxConperFive, SetMaxConsPerFive
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: maxConnectionsPerFiveSeconds
+  - Notes: None
+
+- **`MaxDownload`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: GetConfiguredMaxDownload, SetMaxDownload
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgConnection.cpp
+  - REST: downloadLimitKiBps
+  - Notes: None
+
+- **`MaxSourcesPerFile`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: SetMaxSourcesPerFile
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgConnection.cpp
+  - REST: maxSourcesPerFile
+  - Notes: None
+
+- **`MaxUpload`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: GetConfiguredMaxUpload, SetMaxUpload
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgConnection.cpp
+  - REST: uploadLimitKiBps
+  - Notes: None
+
+- **`NetworkED2K`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: SetNetworkED2K, networked2k
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgConnection.cpp
+  - REST: networkEd2k
+  - Notes: None
+
+- **`NetworkKademlia`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: GetNetworkKademlia, SetNetworkKademlia, networkkademlia
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgConnection.cpp
+  - REST: networkKademlia
+  - Notes: None
+
+- **`QueueSize`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: GetQueueSize, SetQueueSize
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: queueSize
+  - Notes: None
+
+- **`SafeServerConnect`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: m_bSafeServerConnect
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgServer.cpp
+  - REST: safeServerConnect
+  - Notes: None
+
+- **`UseCreditSystem`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: m_bCreditSystem
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: creditSystem
+  - Notes: None
 
 #### persisted-runtime
 
-| Key | Type | Access | Owner/API | Default and normalization | UI | REST | Notes |
-|---|---|---|---|---|---|---|---|
-| `AddServersFromClient` | bool | read, write | None | Not explicitly declared in schema | None | None | None |
-| `AllocateFullFile` | bool | read, write | None | Not explicitly declared in schema | None | None | None |
-| `AllowLocalHostIP` | bool | read, write | None | Not explicitly declared in schema | None | None | None |
-| `AppVersion` | string | read, write | None | Not explicitly declared in schema | None | None | None |
-| `AutoArchivePreviewStart` | bool | read, write | None | Not explicitly declared in schema | None | None | None |
-| `AutoConnectStaticOnly` | bool | read, write | None | Not explicitly declared in schema | None | None | None |
-| `AutoShowLookups` | bool | read, write | None | Not explicitly declared in schema | None | None | None |
-| `BBPreferenceSchema` | integer | read, write | None | Not explicitly declared in schema | None | None | None |
-| `BringToFront` | bool | read, write | None | Not explicitly declared in schema | None | None | None |
-| `Check4NewVersionDelay` | integer | read, write | None | Not explicitly declared in schema | None | None | None |
-| `CreateCrashDump` | integer | read, write | None | Not explicitly declared in schema | None | None | None |
-| `CryptTCPPaddingLength` | integer | read, write | None | Not explicitly declared in schema | None | None | None |
-| `DeadServerRetry` | integer | read, write | None | Not explicitly declared in schema | None | None | None |
-| `DesktopUiRefreshIntervalMs` | integer | read, write | None | `NormalizeDesktopUiRefreshIntervalMs`; default `2000`; valid values `0`, `500`, `1000`, `2000`, `5000`, `10000`; `0` pauses transfer/client list refreshes | Tools menu | None | Native desktop transfer/client list refresh interval. Title, tray, and status transfer-rate text stays on the lightweight presentation timer. |
-| `DebugClientKadUDP` | integer | read, write | None | Not explicitly declared in schema | None | None | None |
-| `DebugClientTCP` | integer | read, write | None | Not explicitly declared in schema | None | None | None |
-| `DebugClientUDP` | integer | read, write | None | Not explicitly declared in schema | None | None | None |
-| `DebugHeap` | integer | read, write | None | Not explicitly declared in schema | None | None | None |
-| `DebugLogLevel` | integer | read, write | None | Not explicitly declared in schema | None | None | None |
-| `DebugSearchResultDetailLevel` | integer | read, write | None | Not explicitly declared in schema | None | None | None |
-| `DebugServerSearches` | integer | read, write | None | Not explicitly declared in schema | None | None | None |
-| `DebugServerSources` | integer | read, write | None | Not explicitly declared in schema | None | None | None |
-| `DebugServerTCP` | integer | read, write | None | Not explicitly declared in schema | None | None | None |
-| `DebugServerUDP` | integer | read, write | None | Not explicitly declared in schema | None | None | None |
-| `DefaultIRCServerNew` | string | read, write | None | Not explicitly declared in schema | None | None | None |
-| `DisableFirstTimeWizard` | bool | read, write | None | Not explicitly declared in schema | None | None | None |
-| `DontRecreateStatGraphsOnResize` | bool | read, write | None | Not explicitly declared in schema | None | None | None |
-| `EnableScheduler` | bool | read, write | None | Not explicitly declared in schema | None | None | None |
-| `EnableSearchResultSpamFilter` | bool | read, write | None | Not explicitly declared in schema | None | None | None |
-| `FilterBadIPs` | bool | read, write | None | Not explicitly declared in schema | None | None | None |
-| `FilterServersByIP` | bool | read, write | None | Not explicitly declared in schema | None | None | None |
-| `FullChunkTransfers` | bool | read, write | None | Not explicitly declared in schema | None | None | None |
-| `GeoLocationLastUpdateTime` | string | read, write | None | Not explicitly declared in schema | None | None | None |
-| `GeoLocationLookupEnabled` | bool | read, write | None | Not explicitly declared in schema | None | None | None |
-| `GeoLocationUpdatePeriodDays` | integer | read, write | None | Not explicitly declared in schema | None | None | None |
-| `GeoLocationUpdateUrl` | string | read, write | None | Not explicitly declared in schema | None | None | None |
-| `HyperTextFont` | binary | read, write | None | Not explicitly declared in schema | None | None | None |
-| `IPFilterLastUpdateTime` | string | read, write | None | Not explicitly declared in schema | None | None | None |
-| `IPFilterUpdateEnabled` | bool | read, write | None | Not explicitly declared in schema | None | None | None |
-| `IRCAcceptLink` | bool | read, write | None | Not explicitly declared in schema | None | None | None |
-| `IRCAcceptLinkFriends` | bool | read, write | None | Not explicitly declared in schema | None | None | None |
-| `IRCFilterName` | string | read, write | None | Not explicitly declared in schema | None | None | None |
-| `IRCFilterUser` | integer | read, write | None | Not explicitly declared in schema | None | None | None |
-| `IRCHelpChannel` | bool | read, write | None | Not explicitly declared in schema | None | None | None |
-| `IRCListOnConnect` | bool | read, write | None | Not explicitly declared in schema | None | None | None |
-| `IRCSoundEvents` | bool | read, write | None | Not explicitly declared in schema | None | None | None |
-| `IRCUseFilter` | bool | read, write | None | Not explicitly declared in schema | None | None | None |
-| `KadFileSearchLifetime` | integer | read, write | None | Not explicitly declared in schema | None | None | None |
-| `KadKeywordSearchLifetime` | integer | read, write | None | Not explicitly declared in schema | None | None | None |
-| `KadUDPKey` | integer | read, write | None | Not explicitly declared in schema | None | None | None |
-| `LastLogPaneID` | integer | read, write | None | Not explicitly declared in schema | None | None | None |
-| `LastMainWndDlgID` | integer | read, write | None | Not explicitly declared in schema | None | None | None |
-| `LogTextFont` | binary | read, write | None | Not explicitly declared in schema | None | None | None |
-| `LostFromCorruption` | integer | read, write | None | Not explicitly declared in schema | None | None | None |
-| `ManualHighPrio` | bool | read, write | None | Not explicitly declared in schema | None | None | None |
-| `MaxMessageSessions` | integer | read, write | None | Not explicitly declared in schema | None | None | None |
-| `MessageFromValidSourcesOnly` | bool | read, write | None | Not explicitly declared in schema | None | None | None |
-| `MessagesFromFriendsOnly` | bool | read, write | None | Not explicitly declared in schema | None | None | None |
-| `MessageUseCaptchas` | bool | read, write | None | Not explicitly declared in schema | None | None | None |
-| `MinToTray_Aero` | bool | read, write | None | Not explicitly declared in schema | None | None | None |
-| `Nick` | string | read, write | None | Not explicitly declared in schema | None | None | None |
-| `NotifierConfiguration` | string | read, write | None | Not explicitly declared in schema | None | None | None |
-| `NotifierMailAuth` | integer | read, write | None | Not explicitly declared in schema | None | None | None |
-| `NotifierMailLogin` | string | read, write | None | Not explicitly declared in schema | None | None | None |
-| `NotifierMailPassword` | string | read, write | None | Not explicitly declared in schema | None | None | None |
-| `NotifierMailPort` | integer | read, write | None | Not explicitly declared in schema | None | None | None |
-| `NotifierMailRecipient` | string | read, write | None | Not explicitly declared in schema | None | None | None |
-| `NotifierMailSender` | string | read, write | None | Not explicitly declared in schema | None | None | None |
-| `NotifierMailServer` | string | read, write | None | Not explicitly declared in schema | None | None | None |
-| `NotifierMailTLS` | integer | read, write | None | Not explicitly declared in schema | None | None | None |
-| `NotifierPopEveryChatMessage` | bool | read, write | None | Not explicitly declared in schema | None | None | None |
-| `NotifierPopNewVersion` | bool | read, write | None | Not explicitly declared in schema | None | None | None |
-| `NotifierSendMail` | bool | read, write | None | Not explicitly declared in schema | None | None | None |
-| `NotifierSoundPath` | string | read, write | None | Not explicitly declared in schema | None | None | None |
-| `NotifierUseSound` | integer | read, write | None | Not explicitly declared in schema | None | None | None |
-| `NotifyOnChat` | bool | read, write | None | Not explicitly declared in schema | None | None | None |
-| `NotifyOnDownload` | bool | read, write | None | Not explicitly declared in schema | None | None | None |
-| `NotifyOnImportantError` | bool | read, write | None | Not explicitly declared in schema | None | None | None |
-| `NotifyOnLog` | bool | read, write | None | Not explicitly declared in schema | None | None | None |
-| `NotifyOnNewDownload` | bool | read, write | None | Not explicitly declared in schema | None | None | None |
-| `OnlineSignature` | bool | read, write | None | Not explicitly declared in schema | None | None | None |
-| `PartsSavedByICH` | integer | read, write | None | Not explicitly declared in schema | None | None | None |
-| `RandomizePortsOnStartup` | bool | read, write | None | Not explicitly declared in schema | None | None | None |
-| `RemoveFilesToBin` | bool | read, write | None | Not explicitly declared in schema | None | None | None |
-| `SaveDebugToDisk` | bool | read, write | None | Not explicitly declared in schema | None | None | None |
-| `SavedFromCompression` | integer | read, write | None | Not explicitly declared in schema | None | None | None |
-| `SaveLogToDisk` | bool | read, write | None | Not explicitly declared in schema | None | None | None |
-| `Scoresystem` | bool | read, write | None | Not explicitly declared in schema | None | None | None |
-| `SearchMethod` | integer | read, write | None | Not explicitly declared in schema | None | None | None |
-| `SecureIdent` | bool | read, write | None | Not explicitly declared in schema | None | None | None |
-| `SeeShare` | integer | read, write | None | Not explicitly declared in schema | None | None | None |
-| `Serverlist` | bool | read, write | None | Not explicitly declared in schema | None | None | None |
-| `ServerUDPPort` | integer | read, write | None | Not explicitly declared in schema | None | None | None |
-| `ShowDownloadToolbar` | bool | read, write | None | Not explicitly declared in schema | None | None | None |
-| `ShowInfoOnCatTabs` | bool | read, write | None | Not explicitly declared in schema | None | None | None |
-| `ShowSharedFilesDetails` | bool | read, write | None | Not explicitly declared in schema | None | None | None |
-| `SkinProfile` | string | read, write | None | Not explicitly declared in schema | None | None | None |
-| `SkinProfileDir` | string | read, write | None | Not explicitly declared in schema | None | None | None |
-| `SmartIdCheck` | bool | read, write | None | Not explicitly declared in schema | None | None | None |
-| `SplitterbarPosition` | integer | read, write | None | Not explicitly declared in schema | None | None | None |
-| `SplitterbarPositionFriend` | integer | read, write | None | Not explicitly declared in schema | None | None | None |
-| `SplitterbarPositionIRC` | integer | read, write | None | Not explicitly declared in schema | None | None | None |
-| `SplitterbarPositionServer` | integer | read, write | None | Not explicitly declared in schema | None | None | None |
-| `SplitterbarPositionShared` | integer | read, write | None | Not explicitly declared in schema | None | None | None |
-| `SplitterbarPositionStat` | integer | read, write | None | Not explicitly declared in schema | None | None | None |
-| `SplitterbarPositionStat_HL` | integer | read, write | None | Not explicitly declared in schema | None | None | None |
-| `SplitterbarPositionStat_HR` | integer | read, write | None | Not explicitly declared in schema | None | None | None |
-| `StartupMinimized` | bool | read, write | None | Not explicitly declared in schema | None | None | None |
-| `StatGraphsInterval` | integer | read, write | None | Not explicitly declared in schema | None | None | None |
-| `StatsFillGraphs` | bool | read, write | None | Not explicitly declared in schema | None | None | None |
-| `StraightWindowStyles` | integer | read, write | None | Not explicitly declared in schema | None | None | None |
-| `TempDirs` | string | read, write | None | Not explicitly declared in schema | None | None | None |
-| `ToolbarBitmap` | string | read, write | None | Not explicitly declared in schema | None | None | None |
-| `ToolbarBitmapFolder` | string | read, write | None | Not explicitly declared in schema | None | None | None |
-| `ToolbarIconSize` | integer | read, write | None | Not explicitly declared in schema | None | None | None |
-| `ToolbarLabels` | integer | read, write | None | Not explicitly declared in schema | None | None | None |
-| `ToolbarSetting` | string | read, write | None | Not explicitly declared in schema | None | None | None |
-| `TransferWnd1` | integer | read, write | None | Not explicitly declared in schema | None | None | None |
-| `TransferWnd2` | integer | read, write | None | Not explicitly declared in schema | None | None | None |
-| `TransflstRemainOrder` | bool | read, write | None | Not explicitly declared in schema | None | None | None |
-| `UserSortedServerList` | bool | read, write | None | Not explicitly declared in schema | None | None | None |
-| `UseSimpleTimeRemainingComputation` | bool | read, write | None | Not explicitly declared in schema | None | None | None |
-| `UseSystemFontForMainControls` | bool | read, write | None | Not explicitly declared in schema | None | None | None |
-| `VariousStatisticsMaxValue` | integer | read, write | None | Not explicitly declared in schema | None | None | None |
-| `VerboseOptions` | bool | read, write | None | Not explicitly declared in schema | None | None | None |
-| `VersionCheckLastAutomatic` | integer | read, write | None | Not explicitly declared in schema | None | None | None |
-| `WatchClipboard4ED2kFilelinks` | bool | read, write | None | Not explicitly declared in schema | None | None | None |
-| `WebMirrorAlertLevel` | integer | read, write | None | Not explicitly declared in schema | None | None | None |
-| `WebTemplateFile` | string | read, write | None | Not explicitly declared in schema | None | None | None |
+- **`AddServersFromClient`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`AllocateFullFile`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`AllowLocalHostIP`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`AppVersion`**
+  - Type: string
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`AutoArchivePreviewStart`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`AutoConnectStaticOnly`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`AutoShowLookups`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`BBPreferenceSchema`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`BringToFront`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`Check4NewVersionDelay`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`CreateCrashDump`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`CryptTCPPaddingLength`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`DeadServerRetry`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`DesktopUiRefreshIntervalMs`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: `NormalizeDesktopUiRefreshIntervalMs`; default `2000`;
+                               valid values `0`, `500`, `1000`, `2000`, `5000`, `10000`;
+                               `0` pauses transfer/client list refreshes
+  - UI: Tools menu
+  - REST: None
+  - Notes: Native desktop transfer/client list refresh interval. Title, tray, and status
+           transfer-rate text stays on the lightweight presentation timer.
+
+- **`DebugClientKadUDP`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`DebugClientTCP`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`DebugClientUDP`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`DebugHeap`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`DebugLogLevel`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`DebugSearchResultDetailLevel`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`DebugServerSearches`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`DebugServerSources`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`DebugServerTCP`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`DebugServerUDP`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`DefaultIRCServerNew`**
+  - Type: string
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`DisableFirstTimeWizard`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`DontRecreateStatGraphsOnResize`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`EnableScheduler`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`EnableSearchResultSpamFilter`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`FilterBadIPs`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`FilterServersByIP`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`FullChunkTransfers`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`GeoLocationLastUpdateTime`**
+  - Type: string
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`GeoLocationLookupEnabled`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`GeoLocationUpdatePeriodDays`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`GeoLocationUpdateUrl`**
+  - Type: string
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`HyperTextFont`**
+  - Type: binary
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`IPFilterLastUpdateTime`**
+  - Type: string
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`IPFilterUpdateEnabled`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`IRCAcceptLink`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`IRCAcceptLinkFriends`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`IRCFilterName`**
+  - Type: string
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`IRCFilterUser`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`IRCHelpChannel`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`IRCListOnConnect`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`IRCSoundEvents`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`IRCUseFilter`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`KadFileSearchLifetime`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`KadKeywordSearchLifetime`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`KadUDPKey`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`LastLogPaneID`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`LastMainWndDlgID`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`LogTextFont`**
+  - Type: binary
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`LostFromCorruption`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`ManualHighPrio`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`MaxMessageSessions`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`MessageFromValidSourcesOnly`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`MessagesFromFriendsOnly`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`MessageUseCaptchas`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`MinToTray_Aero`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`Nick`**
+  - Type: string
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`NotifierConfiguration`**
+  - Type: string
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`NotifierMailAuth`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`NotifierMailLogin`**
+  - Type: string
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`NotifierMailPassword`**
+  - Type: string
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`NotifierMailPort`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`NotifierMailRecipient`**
+  - Type: string
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`NotifierMailSender`**
+  - Type: string
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`NotifierMailServer`**
+  - Type: string
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`NotifierMailTLS`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`NotifierPopEveryChatMessage`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`NotifierPopNewVersion`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`NotifierSendMail`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`NotifierSoundPath`**
+  - Type: string
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`NotifierUseSound`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`NotifyOnChat`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`NotifyOnDownload`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`NotifyOnImportantError`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`NotifyOnLog`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`NotifyOnNewDownload`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`OnlineSignature`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`PartsSavedByICH`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`RandomizePortsOnStartup`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`RemoveFilesToBin`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`SaveDebugToDisk`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`SavedFromCompression`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`SaveLogToDisk`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`Scoresystem`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`SearchMethod`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`SecureIdent`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`SeeShare`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`Serverlist`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`ServerUDPPort`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`ShowDownloadToolbar`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`ShowInfoOnCatTabs`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`ShowSharedFilesDetails`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`SkinProfile`**
+  - Type: string
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`SkinProfileDir`**
+  - Type: string
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`SmartIdCheck`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`SplitterbarPosition`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`SplitterbarPositionFriend`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`SplitterbarPositionIRC`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`SplitterbarPositionServer`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`SplitterbarPositionShared`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`SplitterbarPositionStat`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`SplitterbarPositionStat_HL`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`SplitterbarPositionStat_HR`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`StartupMinimized`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`StatGraphsInterval`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`StatsFillGraphs`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`StraightWindowStyles`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`TempDirs`**
+  - Type: string
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`ToolbarBitmap`**
+  - Type: string
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`ToolbarBitmapFolder`**
+  - Type: string
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`ToolbarIconSize`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`ToolbarLabels`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`ToolbarSetting`**
+  - Type: string
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`TransferWnd1`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`TransferWnd2`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`TransflstRemainOrder`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`UserSortedServerList`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`UseSimpleTimeRemainingComputation`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`UseSystemFontForMainControls`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`VariousStatisticsMaxValue`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`VerboseOptions`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`VersionCheckLastAutomatic`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`WatchClipboard4ED2kFilelinks`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`WebMirrorAlertLevel`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
+
+- **`WebTemplateFile`**
+  - Type: string
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: None
 
 #### read-only-legacy
 
-| Key | Type | Access | Owner/API | Default and normalization | UI | REST | Notes |
-|---|---|---|---|---|---|---|---|
-| `LogErrorColor` | color | read | None | Not explicitly declared in schema | None | None | Legacy/customization key is accepted on load; current Preferences.cpp has no matching writer. |
-| `LogSuccessColor` | color | read | None | Not explicitly declared in schema | None | None | Legacy/customization key is accepted on load; current Preferences.cpp has no matching writer. |
-| `LogWarningColor` | color | read | None | Not explicitly declared in schema | None | None | Legacy/customization key is accepted on load; current Preferences.cpp has no matching writer. |
+- **`LogErrorColor`**
+  - Type: color
+  - Access: read
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: Legacy/customization key is accepted on load; current Preferences.cpp has no
+           matching writer.
+
+- **`LogSuccessColor`**
+  - Type: color
+  - Access: read
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: Legacy/customization key is accepted on load; current Preferences.cpp has no
+           matching writer.
+
+- **`LogWarningColor`**
+  - Type: color
+  - Access: read
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: Legacy/customization key is accepted on load; current Preferences.cpp has no
+           matching writer.
 
 ### `eMule`
 
@@ -692,19 +2952,46 @@ above for user-facing defaults and ranges.
 
 #### editable-ui
 
-| Key | Type | Access | Owner/API | Default and normalization | UI | REST | Notes |
-|---|---|---|---|---|---|---|---|
-| `FileCompletionArguments` | string | read, write | GetFileCompletionArguments, m_strFileCompletionArguments | Not explicitly declared in schema | PPgFiles.cpp | None | None |
-| `FileCompletionProgram` | string | read, write | GetFileCompletionProgram, m_strFileCompletionProgram | Not explicitly declared in schema | PPgFiles.cpp | None | None |
-| `RunCommandOnFileCompletion` | bool | read, write | GetRunCommandOnFileCompletion, m_bRunCommandOnFileCompletion | Not explicitly declared in schema | PPgFiles.cpp | None | None |
+- **`FileCompletionArguments`**
+  - Type: string
+  - Access: read, write
+  - Owner/API: GetFileCompletionArguments, m_strFileCompletionArguments
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgFiles.cpp
+  - REST: None
+  - Notes: None
+
+- **`FileCompletionProgram`**
+  - Type: string
+  - Access: read, write
+  - Owner/API: GetFileCompletionProgram, m_strFileCompletionProgram
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgFiles.cpp
+  - REST: None
+  - Notes: None
+
+- **`RunCommandOnFileCompletion`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: GetRunCommandOnFileCompletion, m_bRunCommandOnFileCompletion
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgFiles.cpp
+  - REST: None
+  - Notes: None
 
 ### `ListControlSetup`
 
 #### dynamic-family
 
-| Key | Type | Access | Owner/API | Default and normalization | UI | REST | Notes |
-|---|---|---|---|---|---|---|---|
-| `<dynamic:di>` | string | write | None | Not explicitly declared in schema | None | None | Dynamic family generated at runtime; source expression is guarded instead of enumerating every concrete key. |
+- **`<dynamic:di>`**
+  - Type: string
+  - Access: write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: Dynamic family generated at runtime; source expression is guarded instead of
+           enumerating every concrete key.
 
 ### `Proxy`
 
@@ -724,24 +3011,106 @@ above for user-facing defaults and ranges.
 
 #### editable-ui
 
-| Key | Type | Access | Owner/API | Default and normalization | UI | REST | Notes |
-|---|---|---|---|---|---|---|---|
-| `LowRatioBoostEnabled` | bool | read, write | IsLowRatioBoostEnabled, SetLowRatioBoostEnabled | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `LowRatioThreshold` | number | read, write | GetLowRatioThreshold, SetLowRatioThreshold | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `SessionTimeLimitSeconds` | integer | read, write | GetSessionTimeLimitSeconds, SetSessionTimeLimitSeconds | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `SessionTransferLimitMode` | integer | read, write | GetSessionTransferLimitMode, SetSessionTransferLimitMode | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `SessionTransferLimitValue` | integer | read, write | GetSessionTransferLimitValue, SetSessionTransferLimitValue | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `SlowUploadCooldownSeconds` | integer | read, write | GetSlowUploadCooldownSeconds, SetSlowUploadCooldownSeconds | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `SlowUploadGraceSeconds` | integer | read, write | GetSlowUploadGraceSeconds, SetSlowUploadGraceSeconds | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `SlowUploadThresholdFactor` | number | read, write | GetSlowUploadThresholdFactor, SetSlowUploadThresholdFactor | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `SlowUploadWarmupSeconds` | integer | read, write | GetSlowUploadWarmupSeconds, SetSlowUploadWarmupSeconds | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
-| `ZeroUploadRateGraceSeconds` | integer | read, write | GetZeroUploadRateGraceSeconds, SetZeroUploadRateGraceSeconds | Not explicitly declared in schema | PPgTweaks.cpp | None | None |
+- **`LowRatioBoostEnabled`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: IsLowRatioBoostEnabled, SetLowRatioBoostEnabled
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`LowRatioThreshold`**
+  - Type: number
+  - Access: read, write
+  - Owner/API: GetLowRatioThreshold, SetLowRatioThreshold
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`SessionTimeLimitSeconds`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: GetSessionTimeLimitSeconds, SetSessionTimeLimitSeconds
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`SessionTransferLimitMode`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: GetSessionTransferLimitMode, SetSessionTransferLimitMode
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`SessionTransferLimitValue`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: GetSessionTransferLimitValue, SetSessionTransferLimitValue
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`SlowUploadCooldownSeconds`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: GetSlowUploadCooldownSeconds, SetSlowUploadCooldownSeconds
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`SlowUploadGraceSeconds`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: GetSlowUploadGraceSeconds, SetSlowUploadGraceSeconds
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`SlowUploadThresholdFactor`**
+  - Type: number
+  - Access: read, write
+  - Owner/API: GetSlowUploadThresholdFactor, SetSlowUploadThresholdFactor
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`SlowUploadWarmupSeconds`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: GetSlowUploadWarmupSeconds, SetSlowUploadWarmupSeconds
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
+
+- **`ZeroUploadRateGraceSeconds`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: GetZeroUploadRateGraceSeconds, SetZeroUploadRateGraceSeconds
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: None
+  - Notes: None
 
 #### editable-ui-rest
 
-| Key | Type | Access | Owner/API | Default and normalization | UI | REST | Notes |
-|---|---|---|---|---|---|---|---|
-| `MaxUploadClientsAllowed` | integer | read, write | GetMaxUploadClientsAllowed, SetMaxUploadClientsAllowed | Not explicitly declared in schema | PPgTweaks.cpp | maxUploadSlots, uploadClientDataRate | None |
+- **`MaxUploadClientsAllowed`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: GetMaxUploadClientsAllowed, SetMaxUploadClientsAllowed
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
+  - REST: maxUploadSlots, uploadClientDataRate
+  - Notes: None
 
 #### persisted-runtime
 

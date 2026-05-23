@@ -27,9 +27,12 @@ Every actionable release task must have its own item ID.
 
 ## Blocking Work
 
-| Order | ID | Owner repo | Required outcome |
-|-------|----|------------|------------------|
-| 1 | [CI-035](../items/CI-035.md) | build/tests/tooling | Fresh current-head proof and x64/ARM64 core package hashes plus optional aMuTorrent x64 package hash are recorded before tag creation. |
+- **1**
+  - ID: [CI-035](../items/CI-035.md)
+  - Owner repo: build/tests/tooling
+  - Required outcome: Fresh current-head proof and x64/ARM64 core package hashes plus
+                      optional aMuTorrent x64 package hash are recorded before tag
+                      creation.
 
 Execution resumed by operator direction on 2026-05-17. Run the proof and
 packaging commands in the checklist order, then stop before Git tagging until

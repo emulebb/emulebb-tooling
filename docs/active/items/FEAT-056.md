@@ -24,15 +24,68 @@ not fix a confirmed Beta 0.7.3 regression or missing advertised behavior.
 
 ## Approved Workstream
 
-| Improvement | Classification | Target |
-|-------------|----------------|--------|
-| one-command Beta 0.7.3 proof orchestration through `python -m emule_workspace` | next-patch | add a single command that runs validate, required builds, native tests, live smoke suites when configured, package rehearsals, and final summary collection |
-| compact operator summary for live E2E artifacts | next-patch | emit a short JSON/Markdown summary with suite name, outcome, profile path, ports, app exit status, and inconclusive diagnostics |
-| packaging manifest diff report against the previous release asset | next-patch | compare file list, hashes, docs, language DLLs, unsupported artifacts, and app/build commits against the previous tagged package |
-| controller compatibility matrix for native REST, qBit, Torznab, Arr, and aMuTorrent consumers | beta-closeout slice | publish a maintained matrix tying controller workflows to API families and evidence artifacts |
-| clearer release-note separation between stock parity, Broadband features, and intentionally frozen legacy areas | next-patch | split future release notes into parity, advertised Broadband/API behavior, packaging, and frozen/removal sections |
-| automated changed-surface grouping for future release audits | future | convert the manual CI-022 grouping into a repeatable report generator |
-| lightweight UI smoke coverage for representative language/resource loads | future | add selected language-load UI smoke beyond language DLL build/package proof |
+### One-Command Beta 0.7.3 Proof Orchestration
+
+Classification:
+`next-patch`.
+
+Target:
+add a single `python -m emule_workspace` command that runs validate, required
+builds, native tests, configured live smoke suites, package rehearsals, and
+final summary collection.
+
+### Compact Operator Summary For Live E2E Artifacts
+
+Classification:
+`next-patch`.
+
+Target:
+emit a short JSON/Markdown summary with suite name, outcome, profile path,
+ports, app exit status, and inconclusive diagnostics.
+
+### Packaging Manifest Diff Report
+
+Classification:
+`next-patch`.
+
+Target:
+compare file list, hashes, docs, language DLLs, unsupported artifacts, and
+app/build commits against the previous tagged release asset.
+
+### Controller Compatibility Matrix
+
+Classification:
+`beta-closeout slice`.
+
+Target:
+publish a maintained matrix tying native REST, qBit, Torznab, Arr, and
+aMuTorrent workflows to API families and evidence artifacts.
+
+### Release-Note Separation
+
+Classification:
+`next-patch`.
+
+Target:
+split future release notes into stock parity, advertised Broadband/API
+behavior, packaging, and frozen/removal sections.
+
+### Changed-Surface Grouping
+
+Classification:
+`future`.
+
+Target:
+convert the manual CI-022 grouping into a repeatable report generator.
+
+### Language/Resource UI Smoke
+
+Classification:
+`future`.
+
+Target:
+add selected language-load UI smoke beyond language DLL build/package proof if
+it remains worth the runtime cost after Beta 0.7.3.
 
 ## Acceptance Criteria
 

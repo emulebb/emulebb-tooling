@@ -33,14 +33,67 @@ See [P2P-OVERLORD-PRODUCT-FAMILY-INTEGRATION](plans/P2P-OVERLORD-PRODUCT-FAMILY-
 
 ## Approved Lanes
 
-| Lane | Scope | Existing anchors |
-|------|-------|------------------|
-| Connectivity modernization | IPv6 dual-stack compatibility for the current eD2K/Kad network, NAT/LowID relief, UPnP/PCP/NAT-PMP lease controls and status visibility, safer bind/interface behavior, and low-risk connection diagnostics, while preserving stock eD2K/Kad protocol semantics. A distinct IPv6 Kad network remains exploratory until separately promoted. | `FEAT-032`, `FEAT-035`, `FEAT-036`, `ideas/IDEA-IPV6-KAD-NETWORK.md` |
-| Search and trust clarity | Clearer fake-file confidence wording, Kad/search popularity and consistency explanations, source-name divergence handling, and media plausibility checks when evidence is local and cheap. | `FEAT-002`, `FEAT-003`, `FEAT-006`, `FEAT-039`, `FEAT-041` |
-| UI power-user polish | Dark mode, Per-Monitor DPI, category-management polish, table/menu consistency, keyboard-friendly workflows, and preference clarity. | `FEAT-017`, `FEAT-019`, `FEAT-062` |
-| Security and operations | IP-filter input policy, PeerGuardian-style imports, whitelist/private-network policy, dependency/DLL loading hardening, diagnostics, and release-proof automation. | `FEAT-044`, `FEAT-056`, `REF-028`, `REF-038`, `REF-039`, `REF-040`, `REF-041`, `REF-042` |
-| Product-family integration | Post-`0.7.3` alignment for p2p-overlord repos, shared REST conformance, shared campaign variants, and shared MiniUPnP source ownership without merging products. | `FEAT-073` |
-| Narrow anti-leecher review | CShield-style anti-leecher ideas only where the reasons are observable, explainable, and low false-positive risk. | `FEAT-011` |
+### Connectivity Modernization
+
+Scope:
+IPv6 dual-stack compatibility for the current eD2K/Kad network, NAT/LowID
+relief, UPnP/PCP/NAT-PMP lease controls and status visibility, safer
+bind/interface behavior, and low-risk connection diagnostics. Stock eD2K/Kad
+protocol semantics remain the boundary. A distinct IPv6 Kad network remains
+exploratory until separately promoted.
+
+Existing anchors:
+`FEAT-032`, `FEAT-035`, `FEAT-036`,
+`ideas/IDEA-IPV6-KAD-NETWORK.md`.
+
+### Search And Trust Clarity
+
+Scope:
+Clearer fake-file confidence wording, Kad/search popularity and consistency
+explanations, source-name divergence handling, and media plausibility checks
+when evidence is local and cheap.
+
+Existing anchors:
+`FEAT-002`, `FEAT-003`, `FEAT-006`, `FEAT-039`, `FEAT-041`.
+
+### UI Power-User Polish
+
+Scope:
+Dark mode, Per-Monitor DPI, category-management polish, table/menu consistency,
+keyboard-friendly workflows, and preference clarity.
+
+Existing anchors:
+`FEAT-017`, `FEAT-019`, `FEAT-062`.
+
+### Security And Operations
+
+Scope:
+IP-filter input policy, PeerGuardian-style imports, whitelist/private-network
+policy, dependency/DLL loading hardening, diagnostics, and release-proof
+automation.
+
+Existing anchors:
+`FEAT-044`, `FEAT-056`, `REF-028`, `REF-038`, `REF-039`, `REF-040`,
+`REF-041`, `REF-042`.
+
+### Product-Family Integration
+
+Scope:
+Post-`0.7.3` alignment for p2p-overlord repos, shared REST conformance, shared
+campaign variants, and shared MiniUPnP source ownership without merging
+products.
+
+Existing anchors:
+`FEAT-073`.
+
+### Narrow Anti-Leecher Review
+
+Scope:
+CShield-style anti-leecher ideas only where the reasons are observable,
+explainable, and low false-positive risk.
+
+Existing anchors:
+`FEAT-011`.
 
 ## Explicit Non-Goals
 

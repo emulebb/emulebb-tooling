@@ -242,14 +242,41 @@ Torznab family-to-search-type mapping still resolves to REST tokens accepted by
 
 ## Controller Compatibility Matrix
 
-| Consumer | Surface | Contract boundary | Proof lane |
-|---|---|---|---|
-| Native REST clients | `/api/v1` | OpenAPI is authoritative; adapters do not define route names or envelopes. | REST smoke, OpenAPI drift, live completeness |
-| aMuTorrent | `/api/v1` through its own adapter | Translates UI expectations to final native fields and unwraps native envelopes. | aMuTorrent browser smoke |
-| Prowlarr Torznab | Torznab XML adapter | Keeps Torznab XML/error shape adapter-local while reusing native parsing and search commands. | Prowlarr live |
-| Radarr/Sonarr | Torznab plus qBit-compatible download client | Uses Arr-facing compatibility routes without broadening `/api/v1`. | Radarr/Sonarr live |
-| qBittorrent-compatible clients | `/api/v2` | Implements the Arr-needed qBit subset only; qBit text/session errors stay adapter-shaped. | qBit route completeness and Arr live |
-| p2p-overlord agents | Claimed subset of `/api/v1` | OpenAPI remains authoritative; missing endpoints are p2p-overlord implementation gaps, not contract drift. | Future p2p-overlord REST conformance |
+- **Native REST clients**
+  - Surface: `/api/v1`
+  - Contract boundary: OpenAPI is authoritative; adapters do not define route names or
+                       envelopes.
+  - Proof lane: REST smoke, OpenAPI drift, live completeness
+
+- **aMuTorrent**
+  - Surface: `/api/v1` through its own adapter
+  - Contract boundary: Translates UI expectations to final native fields and unwraps
+                       native envelopes.
+  - Proof lane: aMuTorrent browser smoke
+
+- **Prowlarr Torznab**
+  - Surface: Torznab XML adapter
+  - Contract boundary: Keeps Torznab XML/error shape adapter-local while reusing native
+                       parsing and search commands.
+  - Proof lane: Prowlarr live
+
+- **Radarr/Sonarr**
+  - Surface: Torznab plus qBit-compatible download client
+  - Contract boundary: Uses Arr-facing compatibility routes without broadening
+                       `/api/v1`.
+  - Proof lane: Radarr/Sonarr live
+
+- **qBittorrent-compatible clients**
+  - Surface: `/api/v2`
+  - Contract boundary: Implements the Arr-needed qBit subset only; qBit text/session
+                       errors stay adapter-shaped.
+  - Proof lane: qBit route completeness and Arr live
+
+- **p2p-overlord agents**
+  - Surface: Claimed subset of `/api/v1`
+  - Contract boundary: OpenAPI remains authoritative; missing endpoints are p2p-overlord
+                       implementation gaps, not contract drift.
+  - Proof lane: Future p2p-overlord REST conformance
 
 Adapter subset details are documented in [REST-API-ADAPTERS.md](REST-API-ADAPTERS.md).
 

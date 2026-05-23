@@ -29,12 +29,25 @@ separate profile authorities.
 
 ## Format Families
 
-| Family | Files | Shape |
-|---|---|---|
-| Tag-vector `.met` | `known.met`, `.part.met`, `server.met` | Binary header plus records carrying typed tags. Unknown tag IDs are usually skippable when the tag type is known. |
-| Fixed binary state | `preferences.dat`, `preferencesKad.dat`, `nodes.dat`, `known2_64.met`, Kad indexes | Versioned or fixed-field binary structures. Treat as implementation-owned. |
-| Text lists | `shareddir.dat`, `shareignore.dat`, `addresses.dat`, `staticservers.dat`, autocomplete `.dat` files | Line-oriented or simple text lists, normally editable through Tools or UI. |
-| Derived caches | `sharedcache.dat`, `shareddups.dat`, `FakeFile.met`, Kad indexes | Rebuildable acceleration or analysis state. Deletion can slow the next startup or scan. |
+- **Tag-vector `.met`**
+  - Files: `known.met`, `.part.met`, `server.met`
+  - Shape: Binary header plus records carrying typed tags. Unknown tag IDs are usually
+           skippable when the tag type is known.
+
+- **Fixed binary state**
+  - Files: `preferences.dat`, `preferencesKad.dat`, `nodes.dat`, `known2_64.met`, Kad
+           indexes
+  - Shape: Versioned or fixed-field binary structures. Treat as implementation-owned.
+
+- **Text lists**
+  - Files: `shareddir.dat`, `shareignore.dat`, `addresses.dat`, `staticservers.dat`,
+           autocomplete `.dat` files
+  - Shape: Line-oriented or simple text lists, normally editable through Tools or UI.
+
+- **Derived caches**
+  - Files: `sharedcache.dat`, `shareddups.dat`, `FakeFile.met`, Kad indexes
+  - Shape: Rebuildable acceleration or analysis state. Deletion can slow the next
+           startup or scan.
 
 Many legacy `.met` timestamps are stored as unsigned 32-bit Unix seconds. That
 does not have the signed-2038 storage limit, but the stored range still ends in

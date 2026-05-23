@@ -114,10 +114,18 @@ startup state with existing `known.met`/`known2_64.met` metadata.
 
 Two validation modes are used:
 
-| Mode | When used | What must match |
-|---|---|---|
-| Local NTFS journal fast path | Local NTFS volumes with a usable USN journal | Volume key, volume serial, journal ID, checkpoint range, directory file reference, directory identity, directory timestamp, and absence of relevant journal changes |
-| Generic file verification | Non-NTFS volumes, remote shares, unsupported path forms, or any case without trusted journal state | Directory identity/timestamp where available, plus a fresh directory inventory matching cached leaf names, timestamps, and sizes |
+- **Local NTFS journal fast path**
+  - When used: Local NTFS volumes with a usable USN journal
+  - What must match: Volume key, volume serial, journal ID, checkpoint range, directory
+                     file reference, directory identity, directory timestamp, and
+                     absence of relevant journal changes
+
+- **Generic file verification**
+  - When used: Non-NTFS volumes, remote shares, unsupported path forms, or any case
+               without trusted journal state
+  - What must match: Directory identity/timestamp where available, plus a fresh
+                     directory inventory matching cached leaf names, timestamps, and
+                     sizes
 
 For the local NTFS path, eMuleBB resolves the containing volume instead of
 trusting only the textual path. That matters for Windows drive letters and

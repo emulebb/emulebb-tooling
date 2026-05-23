@@ -57,15 +57,36 @@ The model follows a layered confidence strategy:
 
 All release campaign instances use these phase ids:
 
-| Phase | Purpose |
-|---|---|
-| `preflight` | Workspace policy, fast validation, buildability, and unit harness confidence. |
-| `protocol-parity` | Kad/eD2K compatibility, community comparison, protocol goldens, and live-diff signal. |
-| `controller-surface` | REST, qBittorrent-compatible controller behavior, aMuTorrent, and Arr integration. |
-| `live-wire-release` | Operator-owned real-network search, transfer, UI, and weak-path release proof. |
-| `ui-resource-depth` | Full stock language/resource smoke and release-facing UI depth. |
-| `stabilization-stress` | Bounded RC stress evidence plus optional/full overnight CPU, memory, real-profile, crash, leak, dump, and concurrency soak. |
-| `packaging-provenance` | x64/ARM64 packages, manifests, hashes, and clean source provenance. |
+### `preflight`
+
+Workspace policy, fast validation, buildability, and unit harness confidence.
+
+### `protocol-parity`
+
+Kad/eD2K compatibility, community comparison, protocol goldens, and live-diff
+signal.
+
+### `controller-surface`
+
+REST, qBittorrent-compatible controller behavior, aMuTorrent, and Arr
+integration.
+
+### `live-wire-release`
+
+Operator-owned real-network search, transfer, UI, and weak-path release proof.
+
+### `ui-resource-depth`
+
+Full stock language/resource smoke and release-facing UI depth.
+
+### `stabilization-stress`
+
+Bounded RC stress evidence plus optional/full overnight CPU, memory,
+real-profile, crash, leak, dump, and concurrency soak.
+
+### `packaging-provenance`
+
+x64/ARM64 packages, manifests, hashes, and clean source provenance.
 
 ## Frozen Surface Exclusion
 

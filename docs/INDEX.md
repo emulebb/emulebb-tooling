@@ -57,31 +57,87 @@ GitHub-primary future-roadmap helper scripts live under `scripts/`:
 
 ## Common References
 
-| Document | Description |
-|---|---|
-| [reference/AGENT-CHECKLIST](reference/AGENT-CHECKLIST.md) | Repeatable operating checklist for AI agents contributing to the workspace |
-| [reference/GUIDE-EMULEBB](reference/GUIDE-EMULEBB.md) | eMuleBB product manual entry point, setup, tools, diagnostics, and compatibility |
-| [reference/BACKLOG-PROCESS](reference/BACKLOG-PROCESS.md) | Repeatable workflow for creating, updating, validating, and closing backlog records |
-| [reference/CI-BASELINE](reference/CI-BASELINE.md) | Reusable CI baseline workflow contract |
-| [reference/DEVELOPMENT-GUIDE](reference/DEVELOPMENT-GUIDE.md) | Development, validation, CI, packaging, command-line, and recurring guide refresh workflow |
-| [reference/RELEASE-BRANCHING-AND-PACKAGING](reference/RELEASE-BRANCHING-AND-PACKAGING.md) | Official release branch, tag, version, and portable package naming policy |
-| [reference/GUIDE-SETUP](reference/GUIDE-SETUP.md) | Install model, first-run profile behavior, release-aware setup, and evidence links |
-| [reference/GUIDE-NETWORK](reference/GUIDE-NETWORK.md) | eD2K, Kad, binding, ports, UPnP, firewall, and REST listener basics |
-| [reference/GUIDE-SHARING](reference/GUIDE-SHARING.md) | Shared directories, monitored shares, large libraries, and share-ignore policy |
-| [reference/GUIDE-DOWNLOADS-SEARCH](reference/GUIDE-DOWNLOADS-SEARCH.md) | Downloads, search, categories, broadband upload policy, modern limits, and copy workflows |
-| [reference/GUIDE-PREFERENCES](reference/GUIDE-PREFERENCES.md) | Single preference manual: `preferences.ini`, compatibility, defaults/ranges, schema coverage, and REST mutation |
-| [reference/GUIDE-PERSISTENCE-FILES](reference/GUIDE-PERSISTENCE-FILES.md) | Runtime `.met` and `.dat` file roles, structure, editability, backup importance, and recovery notes |
-| [reference/GUIDE-CONTROLLERS-REST](reference/GUIDE-CONTROLLERS-REST.md) | REST, aMuTorrent, Arr, qBit, and Torznab controller guidance |
-| [reference/ED2K-PROJECT-INVENTORY](reference/ED2K-PROJECT-INVENTORY.md) | eD2K/eMule ecosystem inventory, including ED2K servers, server lists, clients, controllers, libraries, and historical mods |
-| [reference/GUIDE-IP-FILTERS](reference/GUIDE-IP-FILTERS.md) | IP filter storage, seeded URLs, formats, and practical use |
-| [reference/GUIDE-LONGPATHS](reference/GUIDE-LONGPATHS.md) | Long-path product behavior, setup, limits, and troubleshooting |
-| [reference/KEYBOARD-SHORTCUTS](reference/KEYBOARD-SHORTCUTS.md) | Main shell and list keyboard shortcut reference |
-| [reference/GUIDE-TROUBLESHOOTING](reference/GUIDE-TROUBLESHOOTING.md) | Symptom-led diagnostics, support evidence, and testing/performance context |
-| [dependencies/DEP-STATUS](dependencies/DEP-STATUS.md) | Current third-party dependency decision record |
-| [rest/REST-API-ADAPTERS](rest/REST-API-ADAPTERS.md) | Adapter-specific REST, qBit, Torznab, Arr, and aMuTorrent contract notes |
-| [rest/REST-API-CONTRACT](rest/REST-API-CONTRACT.md) | Human-readable broadband REST contract |
-| [rest/REST-API-OPENAPI](rest/REST-API-OPENAPI.yaml) | Canonical machine-readable `/api/v1` OpenAPI contract |
-| [rest/REST-API-PARITY-INVENTORY](rest/REST-API-PARITY-INVENTORY.md) | Completed REST/WebServer action parity ledger |
+- **[reference/AGENT-CHECKLIST](reference/AGENT-CHECKLIST.md)**
+  - Description: Repeatable operating checklist for AI agents contributing to the
+                 workspace
+
+- **[reference/GUIDE-EMULEBB](reference/GUIDE-EMULEBB.md)**
+  - Description: eMuleBB product manual entry point, setup, tools, diagnostics, and
+                 compatibility
+
+- **[reference/BACKLOG-PROCESS](reference/BACKLOG-PROCESS.md)**
+  - Description: Repeatable workflow for creating, updating, validating, and closing
+                 backlog records
+
+- **[reference/CI-BASELINE](reference/CI-BASELINE.md)**
+  - Description: Reusable CI baseline workflow contract
+
+- **[reference/DEVELOPMENT-GUIDE](reference/DEVELOPMENT-GUIDE.md)**
+  - Description: Development, validation, CI, packaging, command-line, and recurring
+                 guide refresh workflow
+
+- **[reference/RELEASE-BRANCHING-AND-PACKAGING](reference/RELEASE-BRANCHING-AND-PACKAGING.md)**
+  - Description: Official release branch, tag, version, and portable package naming
+                 policy
+
+- **[reference/GUIDE-SETUP](reference/GUIDE-SETUP.md)**
+  - Description: Install model, first-run profile behavior, release-aware setup, and
+                 evidence links
+
+- **[reference/GUIDE-NETWORK](reference/GUIDE-NETWORK.md)**
+  - Description: eD2K, Kad, binding, ports, UPnP, firewall, and REST listener basics
+
+- **[reference/GUIDE-SHARING](reference/GUIDE-SHARING.md)**
+  - Description: Shared directories, monitored shares, large libraries, and share-ignore
+                 policy
+
+- **[reference/GUIDE-DOWNLOADS-SEARCH](reference/GUIDE-DOWNLOADS-SEARCH.md)**
+  - Description: Downloads, search, categories, broadband upload policy, modern limits,
+                 and copy workflows
+
+- **[reference/GUIDE-PREFERENCES](reference/GUIDE-PREFERENCES.md)**
+  - Description: Single preference manual: `preferences.ini`, compatibility,
+                 defaults/ranges, schema coverage, and REST mutation
+
+- **[reference/GUIDE-PERSISTENCE-FILES](reference/GUIDE-PERSISTENCE-FILES.md)**
+  - Description: Runtime `.met` and `.dat` file roles, structure, editability, backup
+                 importance, and recovery notes
+
+- **[reference/GUIDE-CONTROLLERS-REST](reference/GUIDE-CONTROLLERS-REST.md)**
+  - Description: REST, aMuTorrent, Arr, qBit, and Torznab controller guidance
+
+- **[reference/ED2K-PROJECT-INVENTORY](reference/ED2K-PROJECT-INVENTORY.md)**
+  - Description: eD2K/eMule ecosystem inventory, including ED2K servers, server lists,
+                 clients, controllers, libraries, and historical mods
+
+- **[reference/GUIDE-IP-FILTERS](reference/GUIDE-IP-FILTERS.md)**
+  - Description: IP filter storage, seeded URLs, formats, and practical use
+
+- **[reference/GUIDE-LONGPATHS](reference/GUIDE-LONGPATHS.md)**
+  - Description: Long-path product behavior, setup, limits, and troubleshooting
+
+- **[reference/KEYBOARD-SHORTCUTS](reference/KEYBOARD-SHORTCUTS.md)**
+  - Description: Main shell and list keyboard shortcut reference
+
+- **[reference/GUIDE-TROUBLESHOOTING](reference/GUIDE-TROUBLESHOOTING.md)**
+  - Description: Symptom-led diagnostics, support evidence, and testing/performance
+                 context
+
+- **[dependencies/DEP-STATUS](dependencies/DEP-STATUS.md)**
+  - Description: Current third-party dependency decision record
+
+- **[rest/REST-API-ADAPTERS](rest/REST-API-ADAPTERS.md)**
+  - Description: Adapter-specific REST, qBit, Torznab, Arr, and aMuTorrent contract
+                 notes
+
+- **[rest/REST-API-CONTRACT](rest/REST-API-CONTRACT.md)**
+  - Description: Human-readable broadband REST contract
+
+- **[rest/REST-API-OPENAPI](rest/REST-API-OPENAPI.yaml)**
+  - Description: Canonical machine-readable `/api/v1` OpenAPI contract
+
+- **[rest/REST-API-PARITY-INVENTORY](rest/REST-API-PARITY-INVENTORY.md)**
+  - Description: Completed REST/WebServer action parity ledger
 
 ## Browser Site
 
@@ -101,12 +157,19 @@ HTML is written to `.local/mkdocs-site` and deployed to GitHub Pages by
 
 ## Exploratory Ideas
 
-| Document | Description |
-|---|---|
-| [ideas/IDEA-AMULE-WATCHLIST](ideas/IDEA-AMULE-WATCHLIST.md) | Exploratory aMule reference watchlist; not an active plan |
-| [ideas/IDEA-MODERNIZATION-2026](ideas/IDEA-MODERNIZATION-2026.md) | Historical modernization roadmap idea; not an active plan |
-| [ideas/IDEA-IPV6-KAD-NETWORK](ideas/IDEA-IPV6-KAD-NETWORK.md) | Exploratory IPv6-native Kad network design inspired by qBittorrent/libtorrent dual-stack DHT state separation; not an active plan |
-| [ideas/IDEA-RESTRUCTURE](ideas/IDEA-RESTRUCTURE.md) | Exploratory source-structure idea; not an active plan |
+- **[ideas/IDEA-AMULE-WATCHLIST](ideas/IDEA-AMULE-WATCHLIST.md)**
+  - Description: Exploratory aMule reference watchlist; not an active plan
+
+- **[ideas/IDEA-MODERNIZATION-2026](ideas/IDEA-MODERNIZATION-2026.md)**
+  - Description: Historical modernization roadmap idea; not an active plan
+
+- **[ideas/IDEA-IPV6-KAD-NETWORK](ideas/IDEA-IPV6-KAD-NETWORK.md)**
+  - Description: Exploratory IPv6-native Kad network design inspired by
+                 qBittorrent/libtorrent dual-stack DHT state separation; not an active
+                 plan
+
+- **[ideas/IDEA-RESTRUCTURE](ideas/IDEA-RESTRUCTURE.md)**
+  - Description: Exploratory source-structure idea; not an active plan
 
 ## Abandoned Ideas
 

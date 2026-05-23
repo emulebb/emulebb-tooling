@@ -42,7 +42,7 @@ appear to conflict, policy wins.
 ```powershell
 cd $env:EMULE_WORKSPACE_ROOT\repos\emulebb-tooling
 git diff --check
-python scripts\docs-structure-check.py
+python scripts\docs-structure-check.py --fail-on-wide-tables
 $env:NO_MKDOCS_2_WARNING='1'
 python -m mkdocs build --strict
 ```

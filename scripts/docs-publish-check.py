@@ -27,7 +27,11 @@ def main() -> int:
 
     steps = [
         ("item taxonomy", [sys.executable, "scripts/docs-item-taxonomy-check.py"], None),
-        ("docs structure", [sys.executable, "scripts/docs-structure-check.py"], None),
+        (
+            "docs structure",
+            [sys.executable, "scripts/docs-structure-check.py", "--fail-on-wide-tables"],
+            None,
+        ),
         ("GitHub roadmap metadata", [sys.executable, "scripts/github-roadmap-check.py"], None),
     ]
 

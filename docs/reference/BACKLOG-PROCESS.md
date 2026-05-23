@@ -96,7 +96,7 @@ or active-index changes:
 ```powershell
 git diff --check
 python scripts\docs-item-taxonomy-check.py
-python scripts\docs-structure-check.py
+python scripts\docs-structure-check.py --fail-on-wide-tables
 python scripts\github-roadmap-check.py
 ```
 

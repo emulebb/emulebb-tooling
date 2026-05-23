@@ -87,6 +87,11 @@ as provenance only.
 - Keep Markdown tables browser-readable. Prefer two to four columns, move long
   evidence text into bullets below the table, split large inventories by
   section, and avoid long comma-separated ID lists inside table cells.
+- Before RC documentation closeout, current docs under `docs/active/`,
+  `docs/reference/`, and `docs/rest/` should pass
+  `python scripts\docs-structure-check.py --fail-on-wide-tables`. Historical
+  provenance docs may stay warning-only unless they are promoted back into
+  current release guidance.
 
 ## Item IDs And Statuses
 
@@ -136,9 +141,9 @@ Use [reference/BACKLOG-PROCESS](reference/BACKLOG-PROCESS.md) as the repeatable
 operator runbook for creating, updating, validating, and closing backlog items.
 
 Use `python scripts\docs-structure-check.py` after current-doc navigation,
-naming, or table-heavy edits. Wide table rows are warnings by default; pass
-`--fail-on-wide-tables` only when deliberately tightening browser-rendering
-policy.
+naming, or table-heavy edits. Use
+`python scripts\docs-structure-check.py --fail-on-wide-tables` before RC docs
+closeout and before publishing current docs as HTML.
 
 Use MkDocs for browser-formatted documentation:
 

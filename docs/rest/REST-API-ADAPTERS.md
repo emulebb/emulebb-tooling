@@ -29,27 +29,109 @@ Reference surface used for compatibility decisions:
 
 Supported routes:
 
-| Method | Route | Auth | Contract role |
-|---|---|---|---|
-| `GET` | `/api/v2/app/webapiVersion` | no | Public qBit Web API version probe. |
-| `POST` | `/api/v2/auth/login` | no | Form login using the configured eMuleBB API key as password. |
-| `GET` | `/api/v2/app/version` | yes | App version probe. |
-| `GET` | `/api/v2/app/preferences` | yes | Minimal preference payload for Arr client tests. |
-| `GET` | `/api/v2/torrents/categories` | yes | Category map. |
-| `POST` | `/api/v2/torrents/createCategory` | yes | Create a native category from qBit form field `category`. |
-| `GET` | `/api/v2/torrents/info` | yes | Transfer list, optionally filtered by `category`; rows include Arr import fields such as `save_path` and `content_path` from the native category path. |
-| `GET` | `/api/v2/torrents/properties` | yes | One transfer's qBit-shaped properties by `hash`, including path, size, progress, and seeding-time fields consumed by Arr completed download handling. |
-| `GET` | `/api/v2/torrents/files` | yes | One transfer's qBit-shaped file list by `hash`, including file `name`, `size`, and `progress`. |
-| `POST` | `/api/v2/torrents/add` | yes | Add one Torznab-emitted eD2K link; accepts Arr qBit form fields that eMule ignores after validation. Magnet URLs are rejected. |
-| `POST` | `/api/v2/torrents/delete` | yes | Delete/cancel transfers by `hashes`; always maps to native `deleteFiles: true`. |
-| `POST` | `/api/v2/torrents/setCategory` | yes | Assign a native category by `hashes` and `category`. |
-| `POST` | `/api/v2/torrents/pause` | yes | Pause transfers by `hashes`. |
-| `POST` | `/api/v2/torrents/stop` | yes | Stop transfers by `hashes`. |
-| `POST` | `/api/v2/torrents/resume` | yes | Resume transfers by `hashes`. |
-| `POST` | `/api/v2/torrents/start` | yes | Start/resume transfers by `hashes`. |
-| `POST` | `/api/v2/torrents/setShareLimits` | yes | Accepted no-op for Arr compatibility after validating `hashes`, `ratioLimit`, `seedingTimeLimit`, and `inactiveSeedingTimeLimit`. |
-| `POST` | `/api/v2/torrents/topPrio` | yes | Accepted no-op for Arr compatibility after validating `hashes`. |
-| `POST` | `/api/v2/torrents/setForceStart` | yes | Accepted no-op after validating `hashes` and optional boolean `value`. |
+- **`GET`**
+  - Route: `/api/v2/app/webapiVersion`
+  - Auth: no
+  - Contract role: Public qBit Web API version probe.
+
+- **`POST`**
+  - Route: `/api/v2/auth/login`
+  - Auth: no
+  - Contract role: Form login using the configured eMuleBB API key as password.
+
+- **`GET`**
+  - Route: `/api/v2/app/version`
+  - Auth: yes
+  - Contract role: App version probe.
+
+- **`GET`**
+  - Route: `/api/v2/app/preferences`
+  - Auth: yes
+  - Contract role: Minimal preference payload for Arr client tests.
+
+- **`GET`**
+  - Route: `/api/v2/torrents/categories`
+  - Auth: yes
+  - Contract role: Category map.
+
+- **`POST`**
+  - Route: `/api/v2/torrents/createCategory`
+  - Auth: yes
+  - Contract role: Create a native category from qBit form field `category`.
+
+- **`GET`**
+  - Route: `/api/v2/torrents/info`
+  - Auth: yes
+  - Contract role: Transfer list, optionally filtered by `category`; rows include Arr
+                   import fields such as `save_path` and `content_path` from the native
+                   category path.
+
+- **`GET`**
+  - Route: `/api/v2/torrents/properties`
+  - Auth: yes
+  - Contract role: One transfer's qBit-shaped properties by `hash`, including path,
+                   size, progress, and seeding-time fields consumed by Arr completed
+                   download handling.
+
+- **`GET`**
+  - Route: `/api/v2/torrents/files`
+  - Auth: yes
+  - Contract role: One transfer's qBit-shaped file list by `hash`, including file
+                   `name`, `size`, and `progress`.
+
+- **`POST`**
+  - Route: `/api/v2/torrents/add`
+  - Auth: yes
+  - Contract role: Add one Torznab-emitted eD2K link; accepts Arr qBit form fields that
+                   eMule ignores after validation. Magnet URLs are rejected.
+
+- **`POST`**
+  - Route: `/api/v2/torrents/delete`
+  - Auth: yes
+  - Contract role: Delete/cancel transfers by `hashes`; always maps to native
+                   `deleteFiles: true`.
+
+- **`POST`**
+  - Route: `/api/v2/torrents/setCategory`
+  - Auth: yes
+  - Contract role: Assign a native category by `hashes` and `category`.
+
+- **`POST`**
+  - Route: `/api/v2/torrents/pause`
+  - Auth: yes
+  - Contract role: Pause transfers by `hashes`.
+
+- **`POST`**
+  - Route: `/api/v2/torrents/stop`
+  - Auth: yes
+  - Contract role: Stop transfers by `hashes`.
+
+- **`POST`**
+  - Route: `/api/v2/torrents/resume`
+  - Auth: yes
+  - Contract role: Resume transfers by `hashes`.
+
+- **`POST`**
+  - Route: `/api/v2/torrents/start`
+  - Auth: yes
+  - Contract role: Start/resume transfers by `hashes`.
+
+- **`POST`**
+  - Route: `/api/v2/torrents/setShareLimits`
+  - Auth: yes
+  - Contract role: Accepted no-op for Arr compatibility after validating `hashes`,
+                   `ratioLimit`, `seedingTimeLimit`, and `inactiveSeedingTimeLimit`.
+
+- **`POST`**
+  - Route: `/api/v2/torrents/topPrio`
+  - Auth: yes
+  - Contract role: Accepted no-op for Arr compatibility after validating `hashes`.
+
+- **`POST`**
+  - Route: `/api/v2/torrents/setForceStart`
+  - Auth: yes
+  - Contract role: Accepted no-op after validating `hashes` and optional boolean
+                   `value`.
 
 Unsupported qBittorrent families remain outside the adapter contract: RSS,
 tracker editing, peer management, sync, logging, ban lists, global speed
@@ -73,14 +155,30 @@ Reference surface used for compatibility decisions:
 
 Supported request shape:
 
-| Field | Contract |
-|---|---|
-| `t` | `caps`, `search`, `tvsearch`, or `movie`; missing or empty defaults to `search`. |
-| `apikey` | Optional query API key. If omitted, `X-API-Key` may authenticate the request. |
-| `q` | Search text, normalized through native REST search validation. |
-| `cat` | Comma-separated Torznab categories mapped to native eMule file families. |
-| `season`, `ep`, `year` | Optional unsigned decimal filters bounded to `0..9999`. |
-| `offset`, `limit` | Optional unsigned decimal paging controls. `limit` is bounded to `0..100`, with `0` using the default `100`; `offset` is bounded to `0..1000000`. Non-zero offsets page only a cached first-page result set for the same normalized query, category, media family, and native method set. If no cached result set exists, the adapter returns an empty accepted feed instead of launching a new native search for that later page. |
+- **`t`**
+  - Contract: `caps`, `search`, `tvsearch`, or `movie`; missing or empty defaults to
+              `search`.
+
+- **`apikey`**
+  - Contract: Optional query API key. If omitted, `X-API-Key` may authenticate the
+              request.
+
+- **`q`**
+  - Contract: Search text, normalized through native REST search validation.
+
+- **`cat`**
+  - Contract: Comma-separated Torznab categories mapped to native eMule file families.
+
+- **`season`, `ep`, `year`**
+  - Contract: Optional unsigned decimal filters bounded to `0..9999`.
+
+- **`offset`, `limit`**
+  - Contract: Optional unsigned decimal paging controls. `limit` is bounded to `0..100`,
+              with `0` using the default `100`; `offset` is bounded to `0..1000000`.
+              Non-zero offsets page only a cached first-page result set for the same
+              normalized query, category, media family, and native method set. If no
+              cached result set exists, the adapter returns an empty accepted feed
+              instead of launching a new native search for that later page.
 
 Unknown Torznab/Newznab extension query parameters are ignored after strict URL
 decoding and duplicate-name rejection. This keeps compatibility with Arr-family
