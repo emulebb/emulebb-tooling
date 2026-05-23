@@ -555,7 +555,7 @@ above for user-facing defaults and ranges.
 | `CreateCrashDump` | integer | read, write | None | Not explicitly declared in schema | None | None | None |
 | `CryptTCPPaddingLength` | integer | read, write | None | Not explicitly declared in schema | None | None | None |
 | `DeadServerRetry` | integer | read, write | None | Not explicitly declared in schema | None | None | None |
-| `DesktopUiRefreshIntervalMs` | integer | read, write | None | `NormalizeDesktopUiRefreshIntervalMs`; default `2000`; valid values `500`, `1000`, `2000`, `5000`, `10000` | Tools menu | None | Native desktop transfer/client list refresh interval. |
+| `DesktopUiRefreshIntervalMs` | integer | read, write | None | `NormalizeDesktopUiRefreshIntervalMs`; default `2000`; valid values `0`, `500`, `1000`, `2000`, `5000`, `10000`; `0` pauses transfer/client list refreshes | Tools menu | None | Native desktop transfer/client list refresh interval. Title, tray, and status transfer-rate text stays on the lightweight presentation timer. |
 | `DebugClientKadUDP` | integer | read, write | None | Not explicitly declared in schema | None | None | None |
 | `DebugClientTCP` | integer | read, write | None | Not explicitly declared in schema | None | None | None |
 | `DebugClientUDP` | integer | read, write | None | Not explicitly declared in schema | None | None | None |

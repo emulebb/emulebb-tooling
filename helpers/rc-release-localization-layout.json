@@ -1,6 +1,11 @@
 {
   "layouts": [
     {
+      "id": "IDS_REFRESH_INTERVAL_PAUSED",
+      "after": "IDS_TOOLS_REFRESH_INTERVAL",
+      "before": "IDS_REFRESH_INTERVAL_FAST"
+    },
+    {
       "id": "IDS_SF_LASTREQUEST",
       "after": "IDS_SF_REQUESTS",
       "before": "IDS_SF_ACCEPTS"
