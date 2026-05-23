@@ -18,8 +18,11 @@ This directory is the single Markdown home for the tooling repo. Use
 
 If a status claim outside `docs/active/` conflicts with `docs/active/`, treat
 `docs/active/` as authoritative for current local backlog and release state.
-For future-roadmap items marked `workflow: github`, the linked GitHub issue and
-the public `eMuleBB Roadmap` org project are authoritative for workflow state.
+For GitHub-primary backlog items marked `workflow: github`, the linked
+`emulebb/emulebb` issue and the public `eMuleBB Roadmap` org Project #2 are
+authoritative for workflow state. Canonical workflow endpoints are
+`https://github.com/emulebb/emulebb/issues` and
+`https://github.com/orgs/emulebb/projects/2`.
 
 ## Active Work
 
@@ -38,10 +41,10 @@ the public `eMuleBB Roadmap` org project are authoritative for workflow state.
 | `history/audits/` | Historical broad audit reports |
 | `history/release-0.7.3/` | Superseded beta gate evidence, release audit snapshots, and old cluster plans |
 
-GitHub-primary future-roadmap helper scripts live under `scripts/`:
+GitHub-primary roadmap-backed backlog helper scripts live under `scripts/`:
 
-- `github-roadmap-sync.py` previews or applies the first-rollout import to
-  `emulebb/emulebb` issues and the `eMuleBB Roadmap` project.
+- `github-roadmap-sync.py` previews or applies the roadmap-backed backlog
+  import to `emulebb/emulebb` issues and the `eMuleBB Roadmap` Project #2.
 - `github-roadmap-check.py` validates local GitHub metadata, and can query
   GitHub when run with `--github`.
 

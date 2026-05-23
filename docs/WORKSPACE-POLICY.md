@@ -19,9 +19,10 @@ Every workspace session starts from this contract:
   document.
 - Revalidate backlog and release docs against current `main`, current
   dependency pins, and this policy before implementation.
-- For future-roadmap items that carry `workflow: github`, treat the linked
-  GitHub issue and the `eMuleBB Roadmap` project as the authoritative workflow
-  state. The local item doc is retained as engineering spec and evidence.
+- For backlog items that carry `workflow: github`, treat the linked
+  `emulebb/emulebb` issue and org Project #2 (`eMuleBB Roadmap`) as the
+  authoritative workflow state. The local item doc is retained as engineering
+  spec and evidence.
 
 Directive precedence is:
 
@@ -222,9 +223,19 @@ Routine `validate` in `repos\emulebb-build` must run the active static audits:
   for AI agents contributing to the workspace.
 - `docs\reference\DEVELOPMENT-GUIDE.md` is the practical guide for routine
   docs-first and light-code contribution work.
-- Backlog and planning docs are supporting specs, not authority by themselves.
-- For GitHub-migrated future-roadmap work, the linked GitHub issue and public
-  `eMuleBB Roadmap` project win on workflow state.
+- Backlog and planning docs are supporting specs, not workflow authority by
+  themselves for GitHub-primary items.
+- Canonical public backlog workflow endpoints are
+  `https://github.com/emulebb/emulebb/issues` and
+  `https://github.com/orgs/emulebb/projects/2`.
+- New externally actionable backlog items should be managed in the local
+  Markdown item, the linked `emulebb/emulebb` issue, and Project #2 as one
+  backlog-maintenance slice unless the item is explicitly local-only,
+  historical, or provenance-only.
+- For GitHub-primary backlog work, the linked GitHub issue and public
+  `eMuleBB Roadmap` project win on workflow state, priority, release placement,
+  ownership, discussion, and PR linkage. Local Markdown owns the durable
+  engineering spec, acceptance criteria, implementation notes, and evidence.
 - Historical handoff notes live under `docs\history`. Create or refresh a
   current handoff only when terminating a session or when explicitly asked.
 - Repo-local `AGENTS.md` files should stay thin and repo-specific.

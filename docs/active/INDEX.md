@@ -4,11 +4,12 @@ This directory is the active local backlog/spec and revalidation layer for this
 repo. Use [`../INDEX.md`](../INDEX.md) for long-form background and reference
 reading.
 
-Future-roadmap workflow is GitHub-primary after migration: `emulebb/emulebb`
-issues and the public `eMuleBB Roadmap` org project own current status,
-priority, release placement, discussion, ownership, and PR linkage for migrated
-items. Local item docs marked `workflow: github` are engineering spec/evidence
-records, not workflow status authority.
+GitHub-primary backlog workflow uses `emulebb/emulebb` issues
+(`https://github.com/emulebb/emulebb/issues`) and the public `eMuleBB Roadmap`
+org Project #2 (`https://github.com/orgs/emulebb/projects/2`) as current
+status, priority, release placement, discussion, ownership, and PR linkage
+authority for migrated items. Local item docs marked `workflow: github` are
+engineering spec/evidence records, not workflow status authority.
 
 > Historical reference only: `stale-v0.72a-experimental-clean` and
 > `analysis\stale-v0.72a-experimental-clean` are retired reference sources, not
@@ -19,9 +20,9 @@ records, not workflow status authority.
 ## Current Snapshot
 
 **Source of truth:** `EMULE_WORKSPACE_ROOT\workspaces\workspace\app\emulebb-main` (`main` branch)
-**Current non-done count:** `65`
+**Current non-done count:** `66`
 **Latest release-doc refresh:** 2026-05-23
-**Non-done by status:** `47` OPEN, `8` IN_PROGRESS, `10` DEFERRED, `0` BLOCKED.
+**Non-done by status:** `48` OPEN, `8` IN_PROGRESS, `10` DEFERRED, `0` BLOCKED.
 **Backlog counts:** item tables below are authoritative.
 **RC 0.7.3 relevance:** Most non-done items below are future or deferred work;
 current RC gate and proof status is controlled by [RELEASE-0.7.3](RELEASE-0.7.3.md).
@@ -35,8 +36,8 @@ release-candidate target.
 **Frozen surfaces:** [FROZEN-SURFACES](FROZEN-SURFACES.md)
 **RC controller surface matrix:** [CONTROLLER-SURFACE-MATRIX](CONTROLLER-SURFACE-MATRIX.md)
 **Future release roadmap:** [FUTURE-ROADMAP](FUTURE-ROADMAP.md)
-**Future roadmap workflow:** GitHub issues in `emulebb/emulebb` plus the
-`eMuleBB Roadmap` org project are authoritative for migrated roadmap items.
+**GitHub-primary backlog workflow:** GitHub issues in `emulebb/emulebb` plus
+the `eMuleBB Roadmap` Project #2 are authoritative for migrated backlog items.
 **Backlog process runbook:** [BACKLOG-PROCESS](../reference/BACKLOG-PROCESS.md)
 **RC-release execution plan:** [RELEASE-0.7.3-EXECUTION-PLAN](plans/RELEASE-0.7.3-EXECUTION-PLAN.md)
 **p2p-overlord product-family plan:** [P2P-OVERLORD-PRODUCT-FAMILY-INTEGRATION](plans/P2P-OVERLORD-PRODUCT-FAMILY-INTEGRATION.md)
@@ -63,7 +64,7 @@ WONT_DO
 **Directory role:** `docs/active/` owns current local specs, release control,
 active item evidence, and the current release execution plan. Closed item
 records and dated review provenance live under `docs/history/`. For
-future-roadmap items marked `workflow: github`, current workflow state lives in
+GitHub-primary items marked `workflow: github`, current workflow state lives in
 GitHub.
 
 **Important:** Items marked OPEN, IN_PROGRESS, BLOCKED, or DEFERRED link to

@@ -53,8 +53,14 @@ python -m mkdocs build --strict
   validation, and closure.
 - Revalidate backlog work against current `main`, current dependency pins, and
   workspace policy before implementation.
+- When the user asks to add or materially update an externally actionable
+  backlog item, manage the local item, the `emulebb/emulebb` issue tracker
+  (`https://github.com/emulebb/emulebb/issues`), and Project #2
+  (`https://github.com/orgs/emulebb/projects/2`) together unless the item is
+  explicitly local-only, historical, exploratory, or provenance-only.
 - For files with `workflow: github`, treat the linked GitHub issue and public
-  `eMuleBB Roadmap` project as workflow authority.
+  `eMuleBB Roadmap` project as workflow authority. The Markdown item remains
+  the spec and evidence record.
 - Run `python scripts\docs-item-taxonomy-check.py` after active item, index, or
   taxonomy changes.
 

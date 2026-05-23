@@ -17,13 +17,16 @@ path, not by filename alone.
 If another doc conflicts with `docs/active/`, `docs/active/` wins for current
 status.
 
-For future-roadmap items migrated to GitHub, workflow status is an exception:
-the linked `emulebb/emulebb` issue and the public org-level `eMuleBB Roadmap`
-project own current state, priority, release placement, discussion, and PR
-linkage. The local active item doc remains the engineering spec/evidence record.
-Such files carry `workflow: github` and `github_issue:` front matter. Their
-legacy `status:` field is retained only for the current taxonomy tooling until
-the active-doc model is migrated more broadly.
+For GitHub-primary backlog items, workflow status is an exception: the linked
+`emulebb/emulebb` issue and the public org-level `eMuleBB Roadmap` Project #2
+own current state, priority, release placement, discussion, ownership, and PR
+linkage. The canonical endpoints are
+`https://github.com/emulebb/emulebb/issues` and
+`https://github.com/orgs/emulebb/projects/2`. The local active item doc remains
+the engineering spec/evidence record. Such files carry `workflow: github` and
+`github_issue:` front matter. Their legacy `status:` field is retained only for
+the current taxonomy tooling until the active-doc model is migrated more
+broadly.
 
 ## Reference Docs
 
@@ -77,9 +80,10 @@ as provenance only.
 - Every actionable active task must have its own item ID under
   `docs/active/items/`; release dashboards and plans should point to item IDs
   instead of carrying anonymous task rows.
-- Future-roadmap items promoted after GitHub migration must also have a
-  GitHub issue in `emulebb/emulebb` and membership in the `eMuleBB Roadmap`
-  project before implementation starts.
+- New externally actionable backlog items should be GitHub-primary by default:
+  create or update the local item, the `emulebb/emulebb` issue, and membership
+  in the `eMuleBB Roadmap` Project #2 unless the item is explicitly local-only,
+  historical, exploratory, or provenance-only.
 - Do not create new top-level Markdown files in `docs/` unless they are policy
   or navigation entry points.
 - Add new exploratory proposals under `docs/ideas/` with an explicit
@@ -132,10 +136,14 @@ Use `python scripts\docs-item-taxonomy-check.py` after item or active-index
 changes to validate item IDs, statuses, duplicate front matter IDs, and active
 index consistency.
 
-Use `python scripts\github-roadmap-sync.py` to preview GitHub-primary
-future-roadmap imports. Use `python scripts\github-roadmap-check.py` after
-migration to validate local GitHub metadata; pass `--github` when the local
-GitHub token has `project` scope and network access.
+Use `python scripts\github-roadmap-sync.py` to preview and apply
+GitHub-primary imports for items listed in `docs/active/FUTURE-ROADMAP.md`. For
+GitHub-primary backlog items outside that roadmap import set, create or update
+the GitHub issue and Project #2 item directly, then add the same local
+`workflow: github` and `github_issue:` metadata. Use
+`python scripts\github-roadmap-check.py` after migration to validate local
+GitHub metadata; pass `--github` when the local GitHub token has `project`
+scope and network access.
 
 Use [reference/BACKLOG-PROCESS](reference/BACKLOG-PROCESS.md) as the repeatable
 operator runbook for creating, updating, validating, and closing backlog items.

@@ -3,10 +3,20 @@
 This runbook is the repeatable workflow for creating, updating, validating, and
 closing eMuleBB backlog records.
 
-`docs/active/` is the current local spec and evidence layer. For future-roadmap
-items marked `workflow: github`, GitHub issues in `emulebb/emulebb` and the
-`eMuleBB Roadmap` project own workflow state; the local Markdown file remains
-the engineering spec and evidence record.
+`docs/active/` is the current local spec and evidence layer. For
+GitHub-primary items marked `workflow: github`, GitHub issues in
+`emulebb/emulebb` and org Project #2 (`eMuleBB Roadmap`) own workflow state;
+the local Markdown file remains the engineering spec and evidence record.
+
+Canonical public backlog workflow endpoints:
+
+- issue tracker: `https://github.com/emulebb/emulebb/issues`
+- project board: `https://github.com/orgs/emulebb/projects/2`
+
+When adding or materially updating an externally actionable backlog item,
+manage all three records together unless the item is explicitly local-only,
+historical, exploratory, or provenance-only: local Markdown spec, GitHub issue,
+and Project #2 item.
 
 ## Preflight
 
@@ -54,22 +64,28 @@ source: short provenance note
 7. Update the snapshot counts in `docs\active\INDEX.md` when adding, closing, or
    changing active statuses.
 
-## GitHub-Primary Future Roadmap
+## GitHub-Primary Backlog
 
-Use this path for promoted future-roadmap slices:
+Use this path for normal externally actionable backlog slices:
 
-1. Confirm the slice belongs to an approved lane in
-   `docs\active\FUTURE-ROADMAP.md`.
-2. Create or update the local active item spec first.
-3. Add the item ID to the appropriate roadmap lane in
-   `docs\active\FUTURE-ROADMAP.md`.
-4. Run `python scripts\github-roadmap-sync.py` to preview the GitHub import.
-5. Apply the sync when ready so the issue exists in `emulebb/emulebb` and is added
-   to the `eMuleBB Roadmap` project.
-6. Ensure the local item has `workflow: github`, `github_issue:`, and the
-   workflow-status note inserted by the sync helper.
-7. After migration, treat GitHub as the workflow authority for status, priority,
-   release placement, discussion, ownership, and PR linkage.
+1. Create or update the local active item spec first, including the stable item
+   ID, scope, constraints, and acceptance criteria.
+2. If the item belongs to an approved future lane, add the item ID to
+   `docs\active\FUTURE-ROADMAP.md`, then use
+   `python scripts\github-roadmap-sync.py` to preview and apply the issue and
+   Project #2 import.
+3. If the item is GitHub-primary but not part of the future-roadmap import set,
+   create or update the issue in `https://github.com/emulebb/emulebb/issues`
+   and add it to Project #2 (`https://github.com/orgs/emulebb/projects/2`)
+   directly.
+4. Set the project fields that mirror the local item: `Roadmap Status`,
+   `Work Type`, `Priority`, `Lane`, `Local ID`, and `Release` when applicable.
+5. Ensure the local item has `workflow: github`,
+   `github_issue: https://github.com/emulebb/emulebb/issues/<number>`, and a
+   workflow-status note that points to the issue.
+6. After migration, treat GitHub as the workflow authority for status, priority,
+   release placement, discussion, ownership, and PR linkage. Keep the Markdown
+   item as the durable spec/evidence record.
 
 Run `python scripts\github-roadmap-check.py` after local edits. Run
 `python scripts\github-roadmap-check.py --github` when the current GitHub token
