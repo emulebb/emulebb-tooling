@@ -87,10 +87,13 @@ topology.
 
 **Baseline stack rule:**
 
-- `baseline/community-0.72a` = seam-enabled parity and regression baseline,
-  test-only
-- `tracing-harness/community-0.72a` = behavior-changing variant-client parity
-  harness, not the default baseline
+- variant key `community` maps to worktree `app\eMule-community-baseline`
+  on branch `baseline/community-0.72a`; it is the seam-enabled parity and
+  regression baseline, test-only
+- variant key `tracing-harness` maps to worktree
+  `app\eMule-community-tracing-harness` on branch
+  `tracing-harness/community-0.72a`; it is the behavior-changing
+  variant-client parity harness, not the default baseline
 
 ---
 
