@@ -33,10 +33,12 @@ Git tags until the operator gives a separate tagging instruction.
 
 - [ ] `python -m emule_workspace test release-campaign --campaign emulebb-0.7.3`
 - [x] `python -m emule_workspace test certification --profile fast`
-- [ ] `python -m emule_workspace test certification --profile overnight`
-- [ ] `python -m emule_workspace test live-e2e --profile release-expanded --fail-fast --live-wire-inputs-file repos\emulebb-build-tests\live-wire-inputs.local.json`
-- [ ] `python -m emule_workspace test live-e2e --profile cpu-heavy --fail-fast`
-- [ ] `python -m emule_workspace test live-e2e --suite live-process-monitor --fail-fast`
+- [ ] `python -m emule_workspace test live-e2e --profile release-expanded-quick --fail-fast --live-wire-inputs-file repos\emulebb-build-tests\live-wire-inputs.local.json`
+- [ ] `python -m emule_workspace test live-e2e --profile cpu-heavy-quick --fail-fast`
+- [ ] `python -m emule_workspace test live-e2e --profile stabilization-stress-quick --fail-fast --live-wire-inputs-file repos\emulebb-build-tests\live-wire-inputs.local.json`
+- [ ] `python -m emule_workspace test amutorrent-clean-startup --live-wire-inputs-file repos\emulebb-build-tests\live-wire-inputs.local.json --rest-webserver-scheme https --keep-artifacts`
+- [ ] `python -m emule_workspace test amutorrent-emulebb-ui --live-wire-inputs-file repos\emulebb-build-tests\live-wire-inputs.local.json --rest-webserver-scheme https --keep-artifacts`
+- [ ] `python -m emule_workspace test amutorrent-resilience --live-wire-inputs-file repos\emulebb-build-tests\live-wire-inputs.local.json --rest-webserver-scheme https --keep-artifacts`
 - [x] `python -m emule_workspace test live-e2e --profile ui-resource-depth --fail-fast`
 - [ ] `python -m emule_workspace package-release --config Release --platform x64`
 - [ ] `python -m emule_workspace package-release --config Release --platform ARM64`
@@ -67,9 +69,10 @@ heads. A 2026-05-23 fast certification attempt first stopped on the external
 report and the follow-up harness classification commit. After the `hide.me`
 interface was restored, `python -m emule_workspace test certification --profile
 fast` passed on the selected heads and is recorded in
-[CI-035](items/CI-035.md). Overnight certification, expanded live-wire proof,
-heavy and real-profile stress rows, fresh RC packages, SBOMs, and hash
-recording remain incomplete.
+[CI-035](items/CI-035.md). Quick expanded live-wire proof, quick heavy/stress
+rows, aMuTorrent add-on rows, fresh RC packages, SBOMs, and hash recording
+remain incomplete. Full overnight certification and real-profile monitoring are
+supporting soak evidence, not blocking RC1 package generation.
 
 2026-05-14 closeout prep did not run live E2E, regenerate packages, or create
 tags. Existing package manifests are rehearsal artifacts from older commits and
@@ -105,8 +108,8 @@ Run the remaining queue in this order:
 
 1. Revalidate the active release docs and item dispositions.
 2. Run the required command rows above on the selected current app `main` head,
-   including the expanded weak-path live gate, disposable heavy profile,
-   real-profile live monitor, and `ui-resource-depth`.
+   including the quick expanded weak-path live gate, quick disposable heavy and
+   stabilization profiles, aMuTorrent add-ons, and `ui-resource-depth`.
 3. Regenerate x64, ARM64, and optional aMuTorrent x64 packages only after proof
    succeeds.
 4. Record fresh package paths, manifests, SBOMs, SHA-256 hashes, and repo
@@ -114,14 +117,20 @@ Run the remaining queue in this order:
 5. Leave the annotated tag step blocked until the operator gives a separate tag
    instruction.
 
-## Stabilization Add-On
+## Supporting Soak Add-Ons
 
-This focused add-on remains available for diagnosing a certification failure
-without rerunning the full overnight gate:
+These full-duration add-ons remain available for diagnosing release-candidate
+failures or collecting extra soak evidence without blocking RC1 packaging:
 
-- [ ] `python -m emule_workspace test live-e2e --profile stabilization-stress --fail-fast`
+- [ ] `python -m emule_workspace test certification --profile overnight`
+- [ ] `python -m emule_workspace test live-e2e --profile release-expanded --fail-fast --live-wire-inputs-file repos\emulebb-build-tests\live-wire-inputs.local.json`
+- [ ] `python -m emule_workspace test live-e2e --profile cpu-heavy --fail-fast`
+- [ ] `python -m emule_workspace test live-e2e --suite live-process-monitor --fail-fast`
+- [ ] `python -m emule_workspace test live-e2e --profile stabilization-stress --fail-fast --live-wire-inputs-file repos\emulebb-build-tests\live-wire-inputs.local.json`
 
-This add-on does not replace the required overnight certification row above.
+The blocking release campaign uses the quick variants plus targeted aMuTorrent
+proofs; these full add-ons are supporting evidence unless a new blocker is
+found.
 
 ## Release Identity
 
@@ -139,7 +148,7 @@ This add-on does not replace the required overnight certification row above.
       `eMule\lang`.
 - [ ] Each ZIP contains package-facing README, release notes, GPL text,
       third-party notices, SPDX SBOM, and REST docs. Legacy web templates are
-      frozen baggage and are not required release assets.
+      frozen baggage and must not be shipped in RC assets.
 - [ ] Package manifests record the ZIP hash, `emulebb.exe` hash, expected
       language DLL list/count, SBOM hash, and per-file package hashes.
 - [ ] Package notes state that ZIPs are not code-signed, contain no debug

@@ -95,6 +95,12 @@ emulebb-0.7.3-amutorrent-x64.zip
 
 SBOM and manifest assets use the same package stem with their normal suffixes.
 
+Main app ZIPs ship the runtime executable, the full release language DLL set,
+package-facing notices, REST API docs, and SPDX SBOM/manifest provenance. The
+legacy template-based `webserver` payload is not shipped in RC/stable release
+assets; REST support is validated through the in-process API and documented
+under the packaged `docs/` directory.
+
 The executable inside every package remains:
 
 ```text

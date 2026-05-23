@@ -149,8 +149,9 @@ architecture into the package-only app output root, builds the stock language
 resource DLLs, stages the portable ZIP, then verifies the package before
 writing the manifest. Verification covers:
 
-- `emulebb.exe`, full stock `lang\*.dll` set, `webserver\eMule.tmpl`, package
-  README, release notes, GPL text, third-party notices, and REST docs;
+- `emulebb.exe`, full stock `lang\*.dll` set, package README, release notes,
+  GPL text, third-party notices, SBOM, and REST docs;
+- absence of the legacy template-based `webserver` payload in RC assets;
 - x64 packages containing only x64 PE files and ARM64 packages containing only
   ARM64 PE files for `emulebb.exe` and language DLLs;
 - release package `emulebb.exe` not containing startup profiling support;
