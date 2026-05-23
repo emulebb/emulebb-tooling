@@ -60,10 +60,22 @@ Existing anchors:
 
 Scope:
 Dark mode, Per-Monitor DPI, category-management polish, table/menu consistency,
-keyboard-friendly workflows, and preference clarity.
+keyboard-friendly workflows, preference clarity, and visible progress for
+long-running startup maintenance.
 
 Existing anchors:
-`FEAT-017`, `FEAT-019`, `FEAT-062`.
+`FEAT-017`, `FEAT-019`, `FEAT-062`, `FEAT-075`.
+
+### Startup And Storage Performance
+
+Scope:
+Compatibility-preserving startup and shared-file performance work where the
+behavior remains explainable and safe under large real profiles. This includes
+responsive startup maintenance, large-library startup cache cleanup, and
+storage-aware shared-file hashing across independent physical volumes or SSDs.
+
+Existing anchors:
+`FEAT-072`, `FEAT-075`, `FEAT-076`.
 
 ### Security And Operations
 
@@ -106,8 +118,8 @@ explicitly reopens them:
   fixes, and compatibility repairs.
 - Historical releaser controls such as PowerShare, Share Only The Need, release
   bonus, or default share-permission rewrites.
-- Large-library or background-worker performance roadmap expansion beyond
-  already-active hardening work.
+- Large-library or background-worker performance roadmap expansion outside the
+  approved startup and storage performance lane.
 - Metadata/file-intelligence expansion. MediaInfo remains an external DLL in
   this release line.
 - Bundled MediaInfo, Windows Property Store expansion, or webservice metadata

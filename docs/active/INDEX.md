@@ -19,9 +19,9 @@ records, not workflow status authority.
 ## Current Snapshot
 
 **Source of truth:** `EMULE_WORKSPACE_ROOT\workspaces\workspace\app\emulebb-main` (`main` branch)
-**Current non-done count:** `63`
+**Current non-done count:** `65`
 **Latest release-doc refresh:** 2026-05-23
-**Non-done by status:** `45` OPEN, `8` IN_PROGRESS, `10` DEFERRED, `0` BLOCKED.
+**Non-done by status:** `47` OPEN, `8` IN_PROGRESS, `10` DEFERRED, `0` BLOCKED.
 **Backlog counts:** item tables below are authoritative.
 **RC 0.7.3 relevance:** Most non-done items below are future or deferred work;
 current RC gate and proof status is controlled by [RELEASE-0.7.3](RELEASE-0.7.3.md).
@@ -354,6 +354,8 @@ not active item docs.
 | [FEAT-072](items/FEAT-072.md) | Minor | OPEN | Reduce startup cache UI-thread blocking on large shared libraries |
 | [FEAT-073](items/FEAT-073.md) | Minor | OPEN | Incorporate p2p-overlord into the eMuleBB product family |
 | [FEAT-074](../history/items/FEAT-074.md) | Minor | DONE | Add main-window visual evidence for connected LowID state |
+| [FEAT-075](items/FEAT-075.md) | Minor | OPEN | Keep startup progress responsive during daily config backup |
+| [FEAT-076](items/FEAT-076.md) | Minor | OPEN | Parallelize shared-file hashing across physical volumes and SSDs |
 
 ---
 
