@@ -19,9 +19,9 @@ records, not workflow status authority.
 ## Current Snapshot
 
 **Source of truth:** `EMULE_WORKSPACE_ROOT\workspaces\workspace\app\emulebb-main` (`main` branch)
-**Current non-done count:** `64`
+**Current non-done count:** `63`
 **Latest release-doc refresh:** 2026-05-23
-**Non-done by status:** `46` OPEN, `8` IN_PROGRESS, `10` DEFERRED, `0` BLOCKED.
+**Non-done by status:** `45` OPEN, `8` IN_PROGRESS, `10` DEFERRED, `0` BLOCKED.
 **Backlog counts:** item tables below are authoritative.
 **RC 0.7.3 relevance:** Most non-done items below are future or deferred work;
 current RC gate and proof status is controlled by [RELEASE-0.7.3](RELEASE-0.7.3.md).
@@ -397,7 +397,7 @@ not active item docs.
 | [CI-035](items/CI-035.md) | Major | OPEN | Final current-head RC proof and fresh package hashes |
 | [CI-036](../history/items/CI-036.md) | Major | DONE | Release certification test matrix |
 | [CI-037](../history/items/CI-037.md) | Major | PASSED | Expanded live UI and E2E weak-path stress gate |
-| [CI-038](items/CI-038.md) | Major | OPEN | UI resource-depth and language smoke gate |
+| [CI-038](../history/items/CI-038.md) | Major | DONE | UI resource-depth and language smoke gate |
 | [CI-039](../history/items/CI-039.md) | Minor | DONE | Consolidate Markdown backlog process and validation |
 | [CI-040](../history/items/CI-040.md) | Minor | DONE | Standardize current Markdown naming and structure checks |
 | [CI-041](../history/items/CI-041.md) | Minor | DONE | Publish Markdown documentation with MkDocs Material |

@@ -29,9 +29,18 @@ Git tags until the operator gives a separate tagging instruction.
 - [ ] Any accepted inconclusive live-network result records the external
       condition that blocked proof.
 
-## Required Commands
+## Required Campaign Gate
+
+The canonical RC-blocking proof is the quick campaign execution. The rows under
+"Campaign Expanded Rows" are the leaf evidence commands that this gate tracks
+or executes; keep them visible so failures can be assigned to the correct
+phase.
 
 - [ ] `python -m emule_workspace test release-campaign --campaign emulebb-0.7.3`
+- [ ] `python -m emule_workspace test release-campaign --campaign emulebb-0.7.3 --execute`
+
+## Campaign Expanded Rows
+
 - [x] `python -m emule_workspace test certification --profile fast`
 - [ ] `python -m emule_workspace test live-e2e --profile release-expanded-quick --fail-fast --live-wire-inputs-file repos\emulebb-build-tests\live-wire-inputs.local.json`
 - [ ] `python -m emule_workspace test live-e2e --profile cpu-heavy-quick --fail-fast`
@@ -59,7 +68,7 @@ per-file SHA-256 hashes and SPDX SBOM provenance in the package manifest.
 
 Current state: non-live build/test rows have partial historical evidence in
 [CI-035](items/CI-035.md), [CI-037](../history/items/CI-037.md) records a passed expanded
-weak-path live run, [CI-038](items/CI-038.md) records a passed 2026-05-23
+weak-path live run, [CI-038](../history/items/CI-038.md) records a passed 2026-05-23
 current-head `ui-resource-depth` run for all 43 release languages, and
 [CI-035](items/CI-035.md) records 2026-05-17 non-UI package evidence for x64,
 ARM64, and optional aMuTorrent x64 assets. Final certification proof and fresh

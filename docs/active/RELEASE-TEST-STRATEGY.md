@@ -14,6 +14,9 @@ release strategy, not a `0.7.3`-only checklist.
 - Release tests are organized as campaigns, strict phases, and feature-flow
   scenarios. Current suites and commands are evidence providers for those
   flows, not the taxonomy itself.
+- Campaign manifests use the `emulebb-build-tests.release-campaign.v1`
+  namespace, strict phase ids, required proof tiers, stable scenario ids, and
+  explicit release-gate mappings.
 - V1 supports both reporting and execution through
   `python -m emule_workspace test release-campaign`. It makes the release
   matrix visible, reads latest known evidence when safe, and warns on gaps.

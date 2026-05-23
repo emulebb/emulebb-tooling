@@ -27,6 +27,25 @@ exist, shows manual evidence rows where command output/checklist evidence is
 authoritative, and warns for missing required evidence. With `--execute`, it
 runs the selected campaign's blocking commands in manifest order.
 
+## Structure Contract
+
+Every campaign instance uses the same strict phase taxonomy from
+[Release Test Strategy](RELEASE-TEST-STRATEGY.md). Each instance also carries a
+required proof tier:
+
+| Proof tier | Meaning |
+|---|---|
+| `rc-blocking-quick` | Current RC package gate. Bounded enough to refresh repeatedly before packaging. |
+| `overnight-full` | Long-form soak and monitoring proof. Used for confidence and failure diagnosis, not as the default package refresh loop. |
+| `future` | Nonblocking product-family or post-release campaign shape retained for planning. |
+
+The machine-readable manifest schema is
+`emulebb-build-tests.release-campaign.v1`. Active campaign manifests must use
+the `emulebb` namespace, the strict phase ids, stable
+`emulebb.flow.*.vN` scenario ids, and explicit release gates.
+The release coverage ownership manifest maps both the quick RC campaign and
+the nonblocking overnight soak campaign back to release-owned weak areas.
+
 Pass operator-owned runtime inputs at execution time rather than committing
 them into manifests:
 
@@ -37,10 +56,16 @@ python -m emule_workspace test release-campaign --campaign emulebb-0.7.3-overnig
   --sonarr-series-root <sonarr-visible-root>
 ```
 
-## Current Instance
+## Current Instances
 
-`emulebb-0.7.3` is the RC-blocking quick campaign. It maps the current release
-gates into feature-flow scenarios across:
+| Campaign | Proof tier | Purpose |
+|---|---|---|
+| `emulebb-0.7.3` | `rc-blocking-quick` | Current RC-blocking package readiness campaign. |
+| `emulebb-0.7.3-overnight` | `overnight-full` | Full certification, full generated heavy stress, and real-profile monitoring. |
+| `p2p-overlord-post-0.7.3` | `future` | Post-0.7.3 product-family campaign skeleton. |
+
+`emulebb-0.7.3` maps the current release gates into feature-flow scenarios
+across:
 
 - workspace validation and fast certification;
 - Kad/eD2K protocol parity, native coverage, community comparison, and
