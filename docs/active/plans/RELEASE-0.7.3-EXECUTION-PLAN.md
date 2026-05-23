@@ -11,9 +11,9 @@ Every actionable release task must have its own item ID.
 - Allowed pre-tag changes are limited to direct release-gate blockers,
   packaging/provenance failures, release-doc drift, or severe app defects found
   by the required release proof.
-- Current operator hold: do not run eMule tests or edit eMule test/harness
-  files. Keep `CI-035` and `CI-038` open until test work resumes and fresh
-  current-head proof is recorded.
+- Current operator hold: none for release proof. Continue one gate at a time,
+  keep commits granular, and stop before Git tagging until the operator gives
+  the separate RC tag instruction.
 
 ## Source Decision
 
@@ -29,8 +29,7 @@ Every actionable release task must have its own item ID.
 
 | Order | ID | Owner repo | Required outcome |
 |-------|----|------------|------------------|
-| 1 | [CI-038](../items/CI-038.md) | build/tests/tooling | Full stock-language `ui-resource-depth` smoke passes on the selected current head before final packaging. |
-| 2 | [CI-035](../items/CI-035.md) | build/tests/tooling | Fresh current-head proof and x64/ARM64 core package hashes plus optional aMuTorrent x64 package hash are recorded before tag creation. |
+| 1 | [CI-035](../items/CI-035.md) | build/tests/tooling | Fresh current-head proof and x64/ARM64 core package hashes plus optional aMuTorrent x64 package hash are recorded before tag creation. |
 
 Execution resumed by operator direction on 2026-05-17. Run the proof and
 packaging commands in the checklist order, then stop before Git tagging until
@@ -38,11 +37,9 @@ the operator gives a separate tag instruction.
 
 ## Known Deferred Proof Gaps
 
-- `CI-038`: latest observed `resource-ui-smoke` artifact failed before full
-  language proof because `resource-ui-smoke.py` referenced
-  `emule_live_profile_common.prepare_scenario_profile`, which is not exported
-  by the current helper module. Do not fix while the test/harness hold is
-  active.
+- `CI-038` is Done. The 2026-05-23 current-head `ui-resource-depth` run passed
+  `resource-ui-smoke` for all 43 release languages and passed the Preferences
+  companion.
 - `CI-035`: latest observed fast certification artifact failed, the latest
   overnight artifact was not final release evidence, and final package hashes
   must be regenerated from the selected heads after proof passes.

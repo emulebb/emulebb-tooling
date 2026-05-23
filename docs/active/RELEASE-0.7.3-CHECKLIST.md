@@ -14,10 +14,9 @@ complete.
 
 Release freeze is active. No new feature, refactor, UI polish, warning-debt, or
 roadmap work enters RC `0.7.3`; only direct release-gate blockers may be fixed
-before tag readiness. The current closure pass is documentation-only by operator
-direction: do not run eMule tests or edit eMule test/harness files until the
-operator lifts that hold. All command rows below remain pending unless they are
-rerun and recorded after the hold.
+before tag readiness. The prior documentation-only hold is lifted for release
+proof. Continue one gate at a time, record fresh evidence, and do not create
+Git tags until the operator gives a separate tagging instruction.
 
 ## Gate Revalidation
 
@@ -38,7 +37,7 @@ rerun and recorded after the hold.
 - [ ] `python -m emule_workspace test live-e2e --profile release-expanded --fail-fast --live-wire-inputs-file repos\emulebb-build-tests\live-wire-inputs.local.json`
 - [ ] `python -m emule_workspace test live-e2e --profile cpu-heavy --fail-fast`
 - [ ] `python -m emule_workspace test live-e2e --suite live-process-monitor --fail-fast`
-- [ ] `python -m emule_workspace test live-e2e --profile ui-resource-depth --fail-fast`
+- [x] `python -m emule_workspace test live-e2e --profile ui-resource-depth --fail-fast`
 - [ ] `python -m emule_workspace package-release --config Release --platform x64`
 - [ ] `python -m emule_workspace package-release --config Release --platform ARM64`
 - [ ] `python -m emule_workspace package-amutorrent --config Release --platform x64`
@@ -58,10 +57,12 @@ per-file SHA-256 hashes and SPDX SBOM provenance in the package manifest.
 
 Current state: non-live build/test rows have partial historical evidence in
 [CI-035](items/CI-035.md), [CI-037](../history/items/CI-037.md) records a passed expanded
-weak-path live run, and [CI-035](items/CI-035.md) records 2026-05-17 non-UI
-package evidence for x64, ARM64, and optional aMuTorrent x64 assets. `CI-038`
-and final certification proof remain incomplete until rerun and recorded on the
-selected heads.
+weak-path live run, [CI-038](items/CI-038.md) records a passed 2026-05-23
+current-head `ui-resource-depth` run for all 43 release languages, and
+[CI-035](items/CI-035.md) records 2026-05-17 non-UI package evidence for x64,
+ARM64, and optional aMuTorrent x64 assets. Final certification proof and fresh
+RC package hashes remain incomplete until rerun and recorded on the selected
+heads.
 
 2026-05-14 closeout prep did not run live E2E, regenerate packages, or create
 tags. Existing package manifests are rehearsal artifacts from older commits and

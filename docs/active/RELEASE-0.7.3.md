@@ -12,8 +12,8 @@ Use it for status, release-source truth, and the open RC task list.
 - Release freeze: active. No new feature, refactor, UI polish, warning-debt, or
   roadmap work enters RC `0.7.3`; only direct release-gate blockers may be
   fixed before the tag.
-- Current hold: documentation-only release closure is allowed, but eMule test
-  execution and test-harness edits are paused by operator direction.
+- Current hold: none for release proof. Continue one gate at a time and stop
+  before Git tagging until the operator gives the separate RC tag instruction.
 - Release source: selected reviewed `main` commit in
   `EMULE_WORKSPACE_ROOT\workspaces\workspace\app\emulebb-main`.
 - Tag target: `emulebb-v0.7.3-rc.1` on the selected reviewed `main` commit after
@@ -56,16 +56,15 @@ Historical gate evidence and superseded cluster plans live under
 
 | ID | Priority | Area | Required outcome |
 |----|----------|------|------------------|
-| [CI-038](items/CI-038.md) | Major | Language/resource proof | Current-head `ui-resource-depth` release-scope language smoke passes for the full stock language set. |
 | [CI-035](items/CI-035.md) | Major | Final proof | Current-head RC proof passes and fresh x64/ARM64 core package hashes plus optional aMuTorrent x64 hash are recorded. |
 
 ## Remaining Release Backlog
 
-The RC backlog is narrowed to `CI-038` and `CI-035`. Remaining work is the
-release-scope language/resource live gate, final certification proof, fresh
-x64/ARM64 core package regeneration, optional aMuTorrent x64 package
-regeneration, package SBOM generation, hash recording, clean-worktree
-confirmation, and the later operator-controlled tag instruction.
+The RC backlog is narrowed to `CI-035`. `CI-038` is Done with a current-head
+`ui-resource-depth` pass covering all 43 release languages. Remaining work is
+final certification proof, fresh x64/ARM64 core package regeneration, optional
+aMuTorrent x64 package regeneration, package SBOM generation, hash recording,
+clean-worktree confirmation, and the later operator-controlled tag instruction.
 
 All other active `FEAT`, `REF`, warning-debt, cleanup, and polish items are
 post-`0.7.3` by default. A non-blocking item may enter the RC only if a
