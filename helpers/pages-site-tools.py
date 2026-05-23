@@ -17,10 +17,12 @@ from pathlib import Path
 SITE_BASE_URL = "https://emulebb.github.io"
 PICO_CDN = "https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.classless.min.css"
 PROHIBITED_ASSET_PATTERN = re.compile(
-    r"emule-logo|Logo\.jpg|logo\.(?:jpg|png|gif)|favicon|screenshot",
+    r"emule-logo|Logo\.jpg|favicon|screenshot",
     re.IGNORECASE,
 )
-ALLOWED_IMAGE_SRC_PATTERN = re.compile(r"^(?:\.\./)?assets/team/[a-z0-9-]+\.png$")
+ALLOWED_IMAGE_SRC_PATTERN = re.compile(
+    r"^(?:\.\./)?assets/(?:team/[a-z0-9-]+|brand/emulebb-broadband-edition-logo)\.png$"
+)
 
 
 @dataclass(frozen=True)
@@ -301,7 +303,7 @@ def validate_page(pages_root: Path, page: PageSpec, errors: list[str]) -> None:
 
 
 def validate_images(relative_file: Path, parsed: ParsedPage, errors: list[str]) -> None:
-    """Allow only section-local Team/lore raster images."""
+    """Allow only the header brand logo and section-local Team/lore images."""
 
     for attrs in parsed.images:
         src = attrs.get("src", "")
@@ -309,7 +311,7 @@ def validate_images(relative_file: Path, parsed: ParsedPage, errors: list[str]) 
         if not ALLOWED_IMAGE_SRC_PATTERN.match(src):
             errors.append(f"{relative_file}: unsupported image source: {src}")
         if not alt.strip():
-            errors.append(f"{relative_file}: Team image is missing alt text: {src}")
+            errors.append(f"{relative_file}: image is missing alt text: {src}")
 
 
 def validate_language_page(pages_root: Path, errors: list[str]) -> None:
@@ -364,7 +366,7 @@ def validate_sitemap(pages_root: Path, errors: list[str]) -> None:
 
 
 def validate_prohibited_assets(pages_root: Path, errors: list[str]) -> None:
-    """Ensure static pages do not regain committed bitmap/logo dependencies."""
+    """Ensure static pages do not regain prohibited image dependencies."""
 
     paths = [pages_root / "styles.css", pages_root / "index.html", pages_root / LANGUAGE_PAGE.relative_file]
     paths.extend(pages_root / page.relative_file for page in CANONICAL_PAGES if page.directory)
