@@ -77,6 +77,17 @@ storage-aware shared-file hashing across independent physical volumes or SSDs.
 Existing anchors:
 `FEAT-072`, `FEAT-075`, `FEAT-076`.
 
+### Upload Policy Clarity
+
+Scope:
+Compatibility-preserving upload/seeding policy improvements that make Broadband
+behavior clearer without silently mutating user-managed state. Friend slots
+remain user-directed by default; any automatic promotion must be opt-in,
+diagnosable, and safe for manual Friends.
+
+Existing anchors:
+`FEAT-015`, `FEAT-023`, `FEAT-077`.
+
 ### Security And Operations
 
 Scope:

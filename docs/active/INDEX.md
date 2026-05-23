@@ -356,6 +356,7 @@ not active item docs.
 | [FEAT-074](../history/items/FEAT-074.md) | Minor | DONE | Add main-window visual evidence for connected LowID state |
 | [FEAT-075](items/FEAT-075.md) | Minor | OPEN | Keep startup progress responsive during daily config backup |
 | [FEAT-076](items/FEAT-076.md) | Minor | OPEN | Parallelize shared-file hashing across physical volumes and SSDs |
+| [FEAT-077](items/FEAT-077.md) | Minor | OPEN | Auto-managed upload friend-slot candidates without mutating manual friends |
 
 ---
 
