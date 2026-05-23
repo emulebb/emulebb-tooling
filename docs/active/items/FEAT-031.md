@@ -69,3 +69,29 @@ browse behavior.
   - autoconnect through preferences only
   - fallback transfer bootstrap hash `28EAB1A0AB1B9416AAF534E27A234941`
   - rejection of `.exe` download candidates during fallback bootstrap
+
+## eMuleAI Implementation References
+
+Review source: eMuleAI commit
+[`8e34bdec2b7e4fe9e4307df9d80f691804be99ed`](https://github.com/emulebb/emulebb-ai/tree/8e34bdec2b7e4fe9e4307df9d80f691804be99ed).
+
+- client-history data structures:
+  [`ClientList.h`](https://github.com/emulebb/emulebb-ai/blob/8e34bdec2b7e4fe9e4307df9d80f691804be99ed/srchybrid/ClientList.h#L319)
+- persisted history and known-client map handling:
+  [`ClientList.cpp`](https://github.com/emulebb/emulebb-ai/blob/8e34bdec2b7e4fe9e4307df9d80f691804be99ed/srchybrid/ClientList.cpp#L2010)
+- client-list UI columns and known-client display:
+  [`ClientListCtrl.cpp`](https://github.com/emulebb/emulebb-ai/blob/8e34bdec2b7e4fe9e4307df9d80f691804be99ed/srchybrid/ClientListCtrl.cpp#L864)
+- remote shared-files browse entry points and history guards:
+  [`BaseClient.cpp`](https://github.com/emulebb/emulebb-ai/blob/8e34bdec2b7e4fe9e4307df9d80f691804be99ed/srchybrid/BaseClient.cpp#L6073)
+- preference UI for remote shared files and client history:
+  [`PPgMod.cpp`](https://github.com/emulebb/emulebb-ai/blob/8e34bdec2b7e4fe9e4307df9d80f691804be99ed/srchybrid/eMuleAI/PPgMod.cpp#L748),
+  [`PPgMod.cpp`](https://github.com/emulebb/emulebb-ai/blob/8e34bdec2b7e4fe9e4307df9d80f691804be99ed/srchybrid/eMuleAI/PPgMod.cpp#L1338),
+  [`PPgMod.cpp`](https://github.com/emulebb/emulebb-ai/blob/8e34bdec2b7e4fe9e4307df9d80f691804be99ed/srchybrid/eMuleAI/PPgMod.cpp#L1734)
+
+## eMuleBB Direction
+
+The eMuleAI history model is useful, but eMuleBB should split it into smaller
+steps: manual remote-browse stability, opt-in auto-browse scheduling, bounded
+client-history notes, then local cache persistence under [FEAT-078](FEAT-078.md).
+None of these steps should auto-queue downloads or expose cached inventories
+through REST until privacy and retention rules are documented.

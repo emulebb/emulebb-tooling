@@ -55,6 +55,28 @@ tweak.
 - coordinate with anti-abuse logic so aggressive release settings do not become a leecher
   fingerprint
 
+## eMuleAI Implementation References
+
+Review source: eMuleAI commit
+[`8e34bdec2b7e4fe9e4307df9d80f691804be99ed`](https://github.com/emulebb/emulebb-ai/tree/8e34bdec2b7e4fe9e4307df9d80f691804be99ed).
+
+- v1.4 Share Tweaks release-note entry:
+  [`Release_Notes.txt`](https://github.com/emulebb/emulebb-ai/blob/8e34bdec2b7e4fe9e4307df9d80f691804be99ed/Release_Notes.txt#L6)
+- per-file share-policy fields:
+  [`KnownFile.h`](https://github.com/emulebb/emulebb-ai/blob/8e34bdec2b7e4fe9e4307df9d80f691804be99ed/srchybrid/KnownFile.h#L145)
+- known-file share-policy behavior:
+  [`KnownFile.cpp`](https://github.com/emulebb/emulebb-ai/blob/8e34bdec2b7e4fe9e4307df9d80f691804be99ed/srchybrid/KnownFile.cpp#L1986)
+- Share Tweaks options surface:
+  [`PPgMod.cpp`](https://github.com/emulebb/emulebb-ai/blob/8e34bdec2b7e4fe9e4307df9d80f691804be99ed/srchybrid/eMuleAI/PPgMod.cpp#L695)
+
+## eMuleBB Direction
+
+Keep this deferred. If reopened, implement a narrow per-file release mode with
+visible queue effects instead of importing a broad mod-style matrix of
+PowerShare, Share Only The Need, Hide Overshares, and default share-permission
+rules. The core risk is fairness drift: a release helper should not silently
+starve ordinary shared files or make eMuleBB look abusive to stock peers.
+
 ## Acceptance Criteria
 
 - [ ] a file can be marked for release-oriented sharing policy
@@ -62,3 +84,5 @@ tweak.
 - [ ] scarcity-aware distribution can prefer under-served parts or files
 - [ ] normal uploads remain bounded and not permanently starved
 - [ ] operators can disable the entire feature globally
+- [ ] queue-impact diagnostics show exactly how release policy affected upload
+      selection

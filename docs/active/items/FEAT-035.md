@@ -85,6 +85,47 @@ The split is intentional:
 - do not describe IPv6 as a released 0.7.3 capability until active release
   evidence says it is shipped
 
+## eMuleAI Implementation References
+
+Review source: eMuleAI commit
+[`8e34bdec2b7e4fe9e4307df9d80f691804be99ed`](https://github.com/emulebb/emulebb-ai/tree/8e34bdec2b7e4fe9e4307df9d80f691804be99ed).
+
+- Address abstraction:
+  [`Address.h`](https://github.com/emulebb/emulebb-ai/blob/8e34bdec2b7e4fe9e4307df9d80f691804be99ed/srchybrid/eMuleAI/Address.h#L9),
+  [`Address.cpp`](https://github.com/emulebb/emulebb-ai/blob/8e34bdec2b7e4fe9e4307df9d80f691804be99ed/srchybrid/eMuleAI/Address.cpp#L136).
+- IPv6-related tags and mod metadata:
+  [`Opcodes.h`](https://github.com/emulebb/emulebb-ai/blob/8e34bdec2b7e4fe9e4307df9d80f691804be99ed/srchybrid/Opcodes.h#L643).
+- Client endpoint handling and capability flow:
+  [`BaseClient.cpp`](https://github.com/emulebb/emulebb-ai/blob/8e34bdec2b7e4fe9e4307df9d80f691804be99ed/srchybrid/BaseClient.cpp#L1034),
+  [`BaseClient.cpp`](https://github.com/emulebb/emulebb-ai/blob/8e34bdec2b7e4fe9e4307df9d80f691804be99ed/srchybrid/BaseClient.cpp#L6128).
+- IPv6 bind/display/resource integration touches are spread through the socket,
+  list, and preferences code. Treat the eMuleAI tree as an implementation map,
+  not as a single cherry-pick target.
+
+## Protocol Change Notes
+
+IPv6 support is easy to make incompatible if it is treated as a tag-only patch.
+The eMuleAI implementation adds IPv6 metadata and private mod tags, but eMuleBB
+must preserve stock peer behavior:
+
+- IPv4 peers must continue to receive the same packet shapes and address
+  semantics as before. IPv6 metadata must be omitted or ignored safely when the
+  peer has not negotiated support.
+- Any `TAG_IPV6`, serving-buddy IPv6, or miscellaneous IPv6-capability tag must
+  be defined as optional, versioned, and ignorable. It cannot become mandatory
+  Kad/source metadata on the public network.
+- A custom IPv6 client-IP-change opcode is not approved for direct import. The
+  current stock `OP_CHANGE_CLIENT_ID` behavior remains the baseline until a
+  full dual-stack design defines the replacement path.
+- Kad and source persistence must not silently reinterpret 32-bit IPv4 IDs as
+  IPv6 endpoints. Persisted structures need explicit versioning or separate
+  fields so downgrade and backup behavior remains clear.
+- UI, REST, logs, friend links, and clipboard paths must all handle bracketed
+  IPv6 endpoints consistently before network advertisement is enabled.
+
+The implementation order should be address abstraction, UI/log/persistence
+readiness, socket bind/connect support, then negotiated protocol exposure.
+
 ## Acceptance Criteria
 
 - [ ] peer and server sockets can listen and connect on IPv6
@@ -96,3 +137,5 @@ The split is intentional:
       left out
 - [ ] docs clearly distinguish current-network dual-stack compatibility from a
       distinct IPv6 Kad network
+- [ ] no IPv6-related tag or opcode is advertised until the consumer path is
+      implemented end-to-end and covered by downgrade tests

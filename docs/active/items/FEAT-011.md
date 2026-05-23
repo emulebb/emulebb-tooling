@@ -89,6 +89,33 @@ Both panels register as `CPropertyPage` children under the existing preferences 
 
 `PR_TCPERRORFLOODER` is tracked in **FEAT-012** because it has a distinct detection path (`CheckTCPErrorFlooder()` at the listen-socket level, before a full client object exists).
 
+## eMuleAI Implementation References
+
+Review source: eMuleAI commit
+[`8e34bdec2b7e4fe9e4307df9d80f691804be99ed`](https://github.com/emulebb/emulebb-ai/tree/8e34bdec2b7e4fe9e4307df9d80f691804be99ed).
+
+- Core category/punishment engine:
+  [`Shield.h`](https://github.com/emulebb/emulebb-ai/blob/8e34bdec2b7e4fe9e4307df9d80f691804be99ed/srchybrid/eMuleAI/Shield.h#L29),
+  [`Shield.cpp`](https://github.com/emulebb/emulebb-ai/blob/8e34bdec2b7e4fe9e4307df9d80f691804be99ed/srchybrid/eMuleAI/Shield.cpp#L420).
+- Spam, hello-tag, info-tag, name/mod churn, and TCP error detectors:
+  [`Shield.cpp`](https://github.com/emulebb/emulebb-ai/blob/8e34bdec2b7e4fe9e4307df9d80f691804be99ed/srchybrid/eMuleAI/Shield.cpp#L779),
+  [`Shield.cpp`](https://github.com/emulebb/emulebb-ai/blob/8e34bdec2b7e4fe9e4307df9d80f691804be99ed/srchybrid/eMuleAI/Shield.cpp#L808),
+  [`Shield.cpp`](https://github.com/emulebb/emulebb-ai/blob/8e34bdec2b7e4fe9e4307df9d80f691804be99ed/srchybrid/eMuleAI/Shield.cpp#L839),
+  [`Shield.cpp`](https://github.com/emulebb/emulebb-ai/blob/8e34bdec2b7e4fe9e4307df9d80f691804be99ed/srchybrid/eMuleAI/Shield.cpp#L898).
+- Protection and blacklist UI:
+  [`PPgProtectionPanel.cpp`](https://github.com/emulebb/emulebb-ai/blob/8e34bdec2b7e4fe9e4307df9d80f691804be99ed/srchybrid/eMuleAI/PPgProtectionPanel.cpp#L744),
+  [`PPgBlacklistPanel.cpp`](https://github.com/emulebb/emulebb-ai/blob/8e34bdec2b7e4fe9e4307df9d80f691804be99ed/srchybrid/eMuleAI/PPgBlacklistPanel.cpp).
+- Client-list display integration for bad-client state:
+  [`ClientListCtrl.cpp`](https://github.com/emulebb/emulebb-ai/blob/8e34bdec2b7e4fe9e4307df9d80f691804be99ed/srchybrid/ClientListCtrl.cpp#L995).
+
+## eMuleBB Direction
+
+This should not start as an automatic punishment import. The first useful
+eMuleBB slice is detector visibility: log why a peer would have matched a
+category, expose that reason in the UI, and measure false positives. Only after
+that evidence should per-category punishments be enabled, and hard bans should
+remain limited to high-confidence cases.
+
 ## Acceptance Criteria
 
 - [ ] `Shield.h` / `Shield.cpp` ported to workspace `srchybrid/`
@@ -99,3 +126,5 @@ Both panels register as `CPropertyPage` children under the existing preferences 
 - [ ] Per-category punishment configurable via UI
 - [ ] `blacklist.conf` loaded at startup, hot-reload on prefs save
 - [ ] Hard-banned IPs/hashes also added to the existing IPFilter / clientban lists
+- [ ] first implementation can run in log-only mode with no score or ban effect
+- [ ] false-positive review data exists before any detector is allowed to hard-ban

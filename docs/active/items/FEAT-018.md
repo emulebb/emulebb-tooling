@@ -77,6 +77,50 @@ home networks. qBittorrent, Transmission, and Deluge all default to µTP.
 5. **Coordinate with REF-029** (WSAPoll UDP backend): If the UDP sockets are migrated to
    WSAPoll, µTP demultiplexing needs to work in that framework.
 
+## eMuleAI Implementation References
+
+Review source: eMuleAI commit
+[`8e34bdec2b7e4fe9e4307df9d80f691804be99ed`](https://github.com/emulebb/emulebb-ai/tree/8e34bdec2b7e4fe9e4307df9d80f691804be99ed).
+
+- µTP socket wrapper and libutp integration:
+  [`UtpSocket.h`](https://github.com/emulebb/emulebb-ai/blob/8e34bdec2b7e4fe9e4307df9d80f691804be99ed/srchybrid/eMuleAI/UtpSocket.h#L14),
+  [`UtpSocket.cpp`](https://github.com/emulebb/emulebb-ai/blob/8e34bdec2b7e4fe9e4307df9d80f691804be99ed/srchybrid/eMuleAI/UtpSocket.cpp#L1306),
+  [`UtpSocket.cpp`](https://github.com/emulebb/emulebb-ai/blob/8e34bdec2b7e4fe9e4307df9d80f691804be99ed/srchybrid/eMuleAI/UtpSocket.cpp#L1414),
+  [`UtpSocket.cpp`](https://github.com/emulebb/emulebb-ai/blob/8e34bdec2b7e4fe9e4307df9d80f691804be99ed/srchybrid/eMuleAI/UtpSocket.cpp#L1507).
+- Deferred NAT/µTP connection retry queue:
+  [`UtpSocket.cpp`](https://github.com/emulebb/emulebb-ai/blob/8e34bdec2b7e4fe9e4307df9d80f691804be99ed/srchybrid/eMuleAI/UtpSocket.cpp#L571).
+- UDP demultiplexing and runtime locking in the client UDP socket:
+  [`ClientUDPSocket.cpp`](https://github.com/emulebb/emulebb-ai/blob/8e34bdec2b7e4fe9e4307df9d80f691804be99ed/srchybrid/ClientUDPSocket.cpp#L389),
+  [`ClientUDPSocket.cpp`](https://github.com/emulebb/emulebb-ai/blob/8e34bdec2b7e4fe9e4307df9d80f691804be99ed/srchybrid/ClientUDPSocket.cpp#L2315).
+- Async socket layer interaction:
+  [`AsyncSocketEx.cpp`](https://github.com/emulebb/emulebb-ai/blob/8e34bdec2b7e4fe9e4307df9d80f691804be99ed/srchybrid/AsyncSocketEx.cpp#L1251).
+- Generic byte-buffer helper used by the µTP wrapper:
+  [`Buffer.cpp`](https://github.com/emulebb/emulebb-ai/blob/8e34bdec2b7e4fe9e4307df9d80f691804be99ed/srchybrid/eMuleAI/Buffer.cpp).
+
+## Protocol Change Notes
+
+µTP itself is a transport change rather than a new file-transfer protocol, but
+it still changes the observable peer connection path:
+
+- A peer must know whether the remote side can accept µTP. eMuleAI combines
+  this with private NAT capability bits and retry behavior; eMuleBB needs a
+  compatibility-preserving negotiation point or a strictly bounded attempt path
+  that falls back to normal TCP without altering legacy behavior.
+- µTP packets share UDP infrastructure with existing eMule UDP traffic.
+  Demultiplexing must be exact, cheap, and failure-safe so malformed or unknown
+  UDP packets cannot starve Kad, source exchange, or normal callback traffic.
+- Encrypted stream behavior must remain compatible when layered over µTP. The
+  encryption handshake cannot assume TCP stream timing or buffering quirks that
+  libutp does not guarantee.
+- Retry timing and source-state updates must not make disabled µTP builds more
+  aggressive than stock. Any "try µTP, then TCP" policy must document when the
+  source is considered failed and how that compares to baseline eMule.
+- Because libutp owns congestion behavior, the acceptance evidence must include
+  throughput, latency, shutdown, and many-socket stress tests on large profiles.
+
+Until those points are proven, the eMuleBB default should be disabled or
+experimental-only even if the eventual target is an enabled modern transport.
+
 ## Acceptance Criteria
 
 - [ ] libutp added as a submodule or vendored in `srchybrid/libutp/`
@@ -85,4 +129,7 @@ home networks. qBittorrent, Transmission, and Deluge all default to µTP.
 - [ ] Fall-back to TCP if µTP fails or peer doesn't support it
 - [ ] µTP packets demultiplexed from standard eMule UDP in `CClientUDPSocket::OnReceive`
 - [ ] No regression in standard TCP eMule transfers
-- [ ] Preferences toggle: enable/disable µTP (default: enabled)
+- [ ] Preferences toggle: enable/disable µTP; initial release default must stay
+      disabled or experimental until interoperability evidence is complete
+- [ ] packet-capture evidence proves ordinary UDP/Kad/source-exchange packets
+      are not misclassified as µTP

@@ -39,6 +39,23 @@ This is a file-handling convenience feature with real operator value on long-run
 - less queue clutter
 - less repeated junk from fake/spam-prone searches
 
+## eMuleAI Implementation References
+
+Review source: eMuleAI commit
+[`8e34bdec2b7e4fe9e4307df9d80f691804be99ed`](https://github.com/emulebb/emulebb-ai/tree/8e34bdec2b7e4fe9e4307df9d80f691804be99ed).
+
+- duplicate map load/update/remove/check paths:
+  [`DownloadChecker.h`](https://github.com/emulebb/emulebb-ai/blob/8e34bdec2b7e4fe9e4307df9d80f691804be99ed/srchybrid/eMuleAI/DownloadChecker.h#L10),
+  [`DownloadChecker.cpp`](https://github.com/emulebb/emulebb-ai/blob/8e34bdec2b7e4fe9e4307df9d80f691804be99ed/srchybrid/eMuleAI/DownloadChecker.cpp#L32),
+  [`DownloadChecker.cpp`](https://github.com/emulebb/emulebb-ai/blob/8e34bdec2b7e4fe9e4307df9d80f691804be99ed/srchybrid/eMuleAI/DownloadChecker.cpp#L72),
+  [`DownloadChecker.cpp`](https://github.com/emulebb/emulebb-ai/blob/8e34bdec2b7e4fe9e4307df9d80f691804be99ed/srchybrid/eMuleAI/DownloadChecker.cpp#L139).
+
+## eMuleBB Direction
+
+Start with exact ED2K hash matches against current downloads, completed known
+files, and shared files. Near-duplicate heuristics should be later and
+user-visible because filename/size similarity can produce false positives.
+
 ## Scope Constraints
 
 - exact-duplicate checks should be deterministic and cheap
@@ -57,3 +74,5 @@ This is a file-handling convenience feature with real operator value on long-run
 - [ ] optional near-duplicate mode can be enabled separately
 - [ ] clearly blacklisted repeat items can be filtered automatically when configured
 - [ ] no regression for normal add-download flows when the feature is disabled
+- [ ] exact-hash duplicate behavior is covered before any fuzzy/near-duplicate
+      rule is enabled

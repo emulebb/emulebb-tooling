@@ -20,9 +20,9 @@ engineering spec/evidence records, not workflow status authority.
 ## Current Snapshot
 
 **Source of truth:** `EMULE_WORKSPACE_ROOT\workspaces\workspace\app\emulebb-main` (`main` branch)
-**Current non-done count:** `71`
+**Current non-done count:** `75`
 **Latest release-doc refresh:** 2026-05-23
-**Non-done by status:** `52` OPEN, `8` IN_PROGRESS, `11` DEFERRED, `0` BLOCKED.
+**Non-done by status:** `56` OPEN, `8` IN_PROGRESS, `11` DEFERRED, `0` BLOCKED.
 **Backlog counts:** item tables below are authoritative.
 **RC 0.7.3 relevance:** Most non-done items below are future or deferred work;
 current RC gate and proof status is controlled by [RELEASE-0.7.3](RELEASE-0.7.3.md).
@@ -210,6 +210,9 @@ the RC branch.
 | [BUG-114](items/BUG-114.md) | Minor | IN_PROGRESS | Prevent Standby can leave Windows sleep prevention asserted after disable |
 | [BUG-115](../history/items/BUG-115.md) | Minor | DONE | Tray left-click skips MiniMule and restores maximized windows as normal |
 | [BUG-117](items/BUG-117.md) | Minor | DEFERRED | Audit Year-2038-sensitive persisted and runtime timestamps |
+| [BUG-118](items/BUG-118.md) | Minor | OPEN | CTag UInt64 values can serialize without guaranteed 64-bit promotion |
+| [BUG-119](items/BUG-119.md) | Minor | OPEN | Audit part-file gap and progress arithmetic against eMuleAI hardening |
+| [BUG-120](items/BUG-120.md) | Minor | OPEN | Audit obfuscated server retry behavior against eMuleAI repeat-login fix |
 
 `BUG-103` through `BUG-110` were superseded internal post-tag evidence labels,
 not active item docs.
@@ -364,6 +367,9 @@ not active item docs.
 | [FEAT-079](items/FEAT-079.md) | Minor | OPEN | Save known and cancelled metadata from immutable background snapshots |
 | [FEAT-080](items/FEAT-080.md) | Minor | OPEN | Refresh protected-volume disk-space snapshots in the background |
 | [FEAT-081](items/FEAT-081.md) | Trivial | DEFERRED | Add a bounded source-hostname resolver pool only if profiling shows backlog |
+| [FEAT-082](items/FEAT-082.md) | Minor | OPEN | Virtualize high-volume downloads, search results, and client-history lists |
+| [FEAT-083](../history/items/FEAT-083.md) | Minor | WONT_DO | Connection Checker based on public reachability polling |
+| [FEAT-084](../history/items/FEAT-084.md) | Minor | WONT_DO | Migration Wizard for legacy profile import |
 
 ---
 

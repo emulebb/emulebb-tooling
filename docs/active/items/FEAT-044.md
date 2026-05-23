@@ -50,6 +50,19 @@ The eMuleAI code is useful as behavior reference, but should not be copied
 wholesale without reconciling `BUG-004` overlap semantics and current safe
 promotion helpers.
 
+GitHub references from eMuleAI commit
+[`8e34bdec2b7e4fe9e4307df9d80f691804be99ed`](https://github.com/emulebb/emulebb-ai/tree/8e34bdec2b7e4fe9e4307df9d80f691804be99ed):
+
+- filter storage and policy fields:
+  [`IPFilter.h`](https://github.com/emulebb/emulebb-ai/blob/8e34bdec2b7e4fe9e4307df9d80f691804be99ed/srchybrid/IPFilter.h#L74)
+- range load/merge behavior:
+  [`IPFilter.cpp`](https://github.com/emulebb/emulebb-ai/blob/8e34bdec2b7e4fe9e4307df9d80f691804be99ed/srchybrid/IPFilter.cpp#L235),
+  [`IPFilter.cpp`](https://github.com/emulebb/emulebb-ai/blob/8e34bdec2b7e4fe9e4307df9d80f691804be99ed/srchybrid/IPFilter.cpp#L420)
+- richer `.p2p`, static, whitelist, and private-IP policy paths:
+  [`IPFilter.cpp`](https://github.com/emulebb/emulebb-ai/blob/8e34bdec2b7e4fe9e4307df9d80f691804be99ed/srchybrid/IPFilter.cpp#L596)
+- security preference surface:
+  [`PPgSecurity.cpp`](https://github.com/emulebb/emulebb-ai/blob/8e34bdec2b7e4fe9e4307df9d80f691804be99ed/srchybrid/PPgSecurity.cpp#L133)
+
 ## Stock/Community Comparison
 
 Stock/community 0.72 remains closer to the single `ipfilter.dat` model. This is
@@ -73,3 +86,5 @@ filter sources.
 - [ ] private/LAN exemption is explicit, persisted, and default-safe
 - [ ] malformed or empty inputs cannot clear the live filter
 - [ ] live reload semantics match manual and scheduled update paths
+- [ ] GitHub-linked eMuleAI reference behavior is covered by deterministic
+      local tests before enabling each policy source

@@ -36,6 +36,19 @@ for cached browse results once the feature produces useful inventories.
 - Keep manual browse and live peer state separate from cached historical
   snapshots.
 
+## eMuleAI Reference Scope
+
+eMuleAI demonstrates the peer-history and remote-shared-file surface that can
+feed this cache, but it does not settle the eMuleBB storage backend. Use the
+code as source of fields and workflows, not as a persistence-format mandate:
+
+- remote shared-files and client-history preference surface:
+  [`PPgMod.cpp`](https://github.com/emulebb/emulebb-ai/blob/8e34bdec2b7e4fe9e4307df9d80f691804be99ed/srchybrid/eMuleAI/PPgMod.cpp#L748)
+- client-history structures:
+  [`ClientList.h`](https://github.com/emulebb/emulebb-ai/blob/8e34bdec2b7e4fe9e4307df9d80f691804be99ed/srchybrid/ClientList.h#L319)
+- persisted client history behavior:
+  [`ClientList.cpp`](https://github.com/emulebb/emulebb-ai/blob/8e34bdec2b7e4fe9e4307df9d80f691804be99ed/srchybrid/ClientList.cpp#L2010)
+
 ## Constraints
 
 - Do not auto-download, auto-queue, or alter sharing behavior from cached data.

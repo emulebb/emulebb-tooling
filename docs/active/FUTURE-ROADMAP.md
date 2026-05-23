@@ -44,7 +44,7 @@ boundary. A distinct IPv6 Kad network remains exploratory until separately
 promoted.
 
 Existing anchors:
-`FEAT-032`, `FEAT-035`, `FEAT-036`, `FEAT-081`, `REF-030`,
+`FEAT-018`, `FEAT-032`, `FEAT-035`, `FEAT-036`, `FEAT-081`, `REF-030`,
 `ideas/IDEA-IPV6-KAD-NETWORK.md`.
 
 ### Search And Trust Clarity
@@ -68,7 +68,7 @@ keyboard-friendly workflows, preference clarity, and visible progress for
 long-running startup maintenance.
 
 Existing anchors:
-`FEAT-017`, `FEAT-019`, `FEAT-062`, `FEAT-075`.
+`FEAT-017`, `FEAT-019`, `FEAT-062`, `FEAT-075`, `FEAT-082`.
 
 ### Startup And Storage Performance
 
@@ -159,6 +159,11 @@ explicitly reopens them:
   fixes, and compatibility repairs.
 - Historical releaser controls such as PowerShare, Share Only The Need, release
   bonus, or default share-permission rewrites.
+- Public-reachability polling as a background Connection Checker. Local and
+  user-triggered diagnostics remain acceptable; the eMuleAI-style checker is
+  recorded as `FEAT-083` WONT_DO.
+- Startup profile-copy/import wizards that automatically mutate legacy
+  profiles. The eMuleAI migration wizard is recorded as `FEAT-084` WONT_DO.
 - Large-library or background-worker performance roadmap expansion outside the
   approved startup and storage performance lane.
 - Metadata/file-intelligence expansion. MediaInfo remains an external DLL in

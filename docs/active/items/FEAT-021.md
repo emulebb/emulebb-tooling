@@ -23,6 +23,18 @@ time to resume transfers after a restart.
 **Source files:**
 - `eMuleAI/SourceSaver.cpp` / `SourceSaver.h` — `CSourceSaver` class
 
+GitHub references from eMuleAI commit
+[`8e34bdec2b7e4fe9e4307df9d80f691804be99ed`](https://github.com/emulebb/emulebb-ai/tree/8e34bdec2b7e4fe9e4307df9d80f691804be99ed):
+
+- periodic save/load entry points:
+  [`SourceSaver.cpp`](https://github.com/emulebb/emulebb-ai/blob/8e34bdec2b7e4fe9e4307df9d80f691804be99ed/srchybrid/eMuleAI/SourceSaver.cpp#L44),
+  [`SourceSaver.cpp`](https://github.com/emulebb/emulebb-ai/blob/8e34bdec2b7e4fe9e4307df9d80f691804be99ed/srchybrid/eMuleAI/SourceSaver.cpp#L74),
+  [`SourceSaver.cpp`](https://github.com/emulebb/emulebb-ai/blob/8e34bdec2b7e4fe9e4307df9d80f691804be99ed/srchybrid/eMuleAI/SourceSaver.cpp#L155)
+- restored-source injection:
+  [`SourceSaver.cpp`](https://github.com/emulebb/emulebb-ai/blob/8e34bdec2b7e4fe9e4307df9d80f691804be99ed/srchybrid/eMuleAI/SourceSaver.cpp#L135)
+- source expiry helpers:
+  [`SourceSaver.cpp`](https://github.com/emulebb/emulebb-ai/blob/8e34bdec2b7e4fe9e4307df9d80f691804be99ed/srchybrid/eMuleAI/SourceSaver.cpp#L251)
+
 **Per-source data persisted:**
 ```cpp
 class CSourceData {
@@ -65,6 +77,11 @@ directory. `CalcExpiration(int nDays)` computes an ISO timestamp for source TTL.
    still succeed and the source must still have the file. Invalid saved sources are cleaned
    up naturally when the connection fails.
 
+7. **Persistence compatibility**: This should not alter `.part.met` identity or
+   downgrade behavior. Prefer a separate cache file or future local database
+   table with versioning, TTL, and bounded size. Saved sources are advisory
+   startup hints only.
+
 ## Relationship to Existing Items
 
 - **BUG-011** (Done: shareddir list race): no direct relationship, but same Preferences
@@ -82,3 +99,5 @@ directory. `CalcExpiration(int nDays)` computes an ISO timestamp for source TTL.
 - [ ] No regression if source file is missing, corrupted, or empty
 - [ ] Preferences toggle: enable/disable source saving; configurable TTL (default: 7 days)
 - [ ] Maximum sources per file capped (e.g., 200) to prevent unbounded file growth
+- [ ] persisted source hints are stored outside core `.met` files unless a
+      separately approved metadata-format change exists

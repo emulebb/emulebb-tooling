@@ -34,6 +34,20 @@ eMuleAI implements a comprehensive `CDarkMode` class that:
 - `eMuleAI/DarkMode.cpp` — full implementation
 - `eMuleAI/DarkMode.h` — class interface and 30+ color constant definitions
 
+GitHub references from eMuleAI commit
+[`8e34bdec2b7e4fe9e4307df9d80f691804be99ed`](https://github.com/emulebb/emulebb-ai/tree/8e34bdec2b7e4fe9e4307df9d80f691804be99ed):
+
+- dark-mode class and public entry points:
+  [`DarkMode.h`](https://github.com/emulebb/emulebb-ai/blob/8e34bdec2b7e4fe9e4307df9d80f691804be99ed/srchybrid/eMuleAI/DarkMode.h#L49),
+  [`DarkMode.cpp`](https://github.com/emulebb/emulebb-ai/blob/8e34bdec2b7e4fe9e4307df9d80f691804be99ed/srchybrid/eMuleAI/DarkMode.cpp#L77)
+- initialization, teardown, system icon, folder picker, and themed message box:
+  [`DarkMode.cpp`](https://github.com/emulebb/emulebb-ai/blob/8e34bdec2b7e4fe9e4307df9d80f691804be99ed/srchybrid/eMuleAI/DarkMode.cpp#L1779),
+  [`DarkMode.cpp`](https://github.com/emulebb/emulebb-ai/blob/8e34bdec2b7e4fe9e4307df9d80f691804be99ed/srchybrid/eMuleAI/DarkMode.cpp#L1799),
+  [`DarkMode.cpp`](https://github.com/emulebb/emulebb-ai/blob/8e34bdec2b7e4fe9e4307df9d80f691804be99ed/srchybrid/eMuleAI/DarkMode.cpp#L1816),
+  [`DarkMode.cpp`](https://github.com/emulebb/emulebb-ai/blob/8e34bdec2b7e4fe9e4307df9d80f691804be99ed/srchybrid/eMuleAI/DarkMode.cpp#L1923)
+- main-window integration:
+  [`EmuleDlg.cpp`](https://github.com/emulebb/emulebb-ai/blob/8e34bdec2b7e4fe9e4307df9d80f691804be99ed/srchybrid/EmuleDlg.cpp#L4137)
+
 **Color system:** eMuleAI defines a parallel color ID space (`COLOR_SHADEBASE=1000`
 through `COLOR_IRC_ACTION_MSG=1025`) that overlays the standard MFC color IDs, allowing
 existing custom-draw code to query themed colors by constant.
@@ -99,3 +113,5 @@ dark mode enabled immediately notices the mismatch. It pairs naturally with **FE
 - [ ] Preferences panel indicates current theme
 - [ ] No regression in light mode rendering
 - [ ] Preferences toggle: force light/dark/auto (follow system)
+- [ ] screenshot evidence covers main views, preferences, menus, tooltips,
+      progress bars, and high-volume lists in light and dark mode
