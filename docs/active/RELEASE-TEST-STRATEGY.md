@@ -8,6 +8,9 @@ release strategy, not a `0.7.3`-only checklist.
 - eMuleBB owns the release campaign model from now on. p2p-overlord inspired
   stable scenario ids, campaign manifests, and evidence matrices, but the eMule
   BB model is intentionally independent and may evolve differently.
+- Post-`0.7.3` p2p-overlord product-family campaigns should reuse common
+  scenario ids and evidence structures where they help compare products, while
+  keeping Rust agent and backend validation product-specific.
 - Release tests are organized as campaigns, strict phases, and feature-flow
   scenarios. Current suites and commands are evidence providers for those
   flows, not the taxonomy itself.

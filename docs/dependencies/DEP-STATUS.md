@@ -1,6 +1,6 @@
 # Dependency Status
 
-Reviewed on 2026-05-13 against current `main`, current
+Reviewed on 2026-05-23 against current `main`, current
 `repos\eMule-build` dependency topology, and the active beta release policy.
 
 This document records the current dependency decisions for the eMuleBB beta workspace.
@@ -46,6 +46,11 @@ metadata behavior and the current static-library integration stay as-is.
 The NAT mapping dependency forks stay on the current workspace branches. Branch
 head movement upstream is not, by itself, a release task. Future changes require
 a concrete bug, compatibility issue, or explicit product decision.
+
+Post-`0.7.3` p2p-overlord product-family integration should converge MiniUPnP
+source ownership on `repos/third_party/eMule-miniupnp`. p2p-overlord may keep
+its Rust crates and build wrappers, but duplicate C MiniUPnP source trees should
+resolve to the shared eMuleBB fork when that future slice is implemented.
 
 ### nlohmann-json
 

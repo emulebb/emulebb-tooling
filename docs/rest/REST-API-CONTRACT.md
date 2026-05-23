@@ -17,6 +17,12 @@ The API is designed for aMuTorrent and other trusted local controllers. The
 beta 0.7.3 contract intentionally prioritizes consistency and aMuTorrent
 completeness over preserving old command-style route names.
 
+After beta `0.7.3`, the same OpenAPI document is also the canonical
+product-family contract for p2p-overlord implementations that choose to expose
+an eMuleBB-compatible REST surface. p2p-overlord may implement a documented
+subset, but that subset must be proven against this OpenAPI source rather than
+creating a parallel contract.
+
 ## Controller Boundary
 
 aMuTorrent is the primary UI consumer and beta 0.7.3 proof target, but it is not
@@ -243,6 +249,7 @@ Torznab family-to-search-type mapping still resolves to REST tokens accepted by
 | Prowlarr Torznab | Torznab XML adapter | Keeps Torznab XML/error shape adapter-local while reusing native parsing and search commands. | Prowlarr live |
 | Radarr/Sonarr | Torznab plus qBit-compatible download client | Uses Arr-facing compatibility routes without broadening `/api/v1`. | Radarr/Sonarr live |
 | qBittorrent-compatible clients | `/api/v2` | Implements the Arr-needed qBit subset only; qBit text/session errors stay adapter-shaped. | qBit route completeness and Arr live |
+| p2p-overlord agents | Claimed subset of `/api/v1` | OpenAPI remains authoritative; missing endpoints are p2p-overlord implementation gaps, not contract drift. | Future p2p-overlord REST conformance |
 
 Adapter subset details are documented in [REST-API-ADAPTERS.md](REST-API-ADAPTERS.md).
 

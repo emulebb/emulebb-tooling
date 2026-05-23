@@ -49,6 +49,11 @@ and proxy support receive no support and no release-gated tests. See
 The active release checklist remains the ship authority. The campaign report is
 the release-matrix and evidence-status view.
 
+Post-`0.7.3` p2p-overlord product-family campaigns should build on the same
+campaign base in `repos\eMule-build-tests` with product-specific variants for
+Rust agents, backend coordinator checks, long-run monitoring, and claimed REST
+subset conformance.
+
 ## Local Inputs
 
 Live-wire terms, media titles, direct bootstrap rows, and Arr root paths remain

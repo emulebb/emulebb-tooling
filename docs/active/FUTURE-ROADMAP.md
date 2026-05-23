@@ -3,8 +3,8 @@
 This is the active post-`0.7.3` product roadmap for eMuleBB. It is not a beta
 `0.7.3` release gate, and it does not promote every historical feature idea in
 the backlog. The purpose is to keep future work focused on the Windows MFC app
-with REST support, while explicitly excluding ideas that belong elsewhere or no
-longer match the product direction.
+with REST support, while making related product-family boundaries explicit and
+excluding ideas that no longer match the eMuleBB desktop product direction.
 
 ## GitHub Workflow Authority
 
@@ -23,7 +23,13 @@ or apply the initial GitHub import, and use
 eMuleBB remains a Windows MFC desktop client with a first-class UI, tray
 workflow, and in-process REST surface for controllers. Headless-only, daemon,
 cross-platform, server-only, and mobile-controller product tracks belong outside
-eMuleBB, including future Rust `p2p-overlord` work.
+the eMuleBB desktop app.
+
+Those tracks may still belong to the broader eMuleBB product family when the
+operator explicitly promotes them. p2p-overlord is a separate Rust/Node product
+in that family: it can share REST contracts, test-campaign infrastructure, and
+selected dependency forks, but it does not become part of the desktop app.
+See [P2P-OVERLORD-PRODUCT-FAMILY-INTEGRATION](plans/P2P-OVERLORD-PRODUCT-FAMILY-INTEGRATION.md).
 
 ## Approved Lanes
 
@@ -33,6 +39,7 @@ eMuleBB, including future Rust `p2p-overlord` work.
 | Search and trust clarity | Clearer fake-file confidence wording, Kad/search popularity and consistency explanations, source-name divergence handling, and media plausibility checks when evidence is local and cheap. | `FEAT-002`, `FEAT-003`, `FEAT-006`, `FEAT-039`, `FEAT-041` |
 | UI power-user polish | Dark mode, Per-Monitor DPI, category-management polish, table/menu consistency, keyboard-friendly workflows, and preference clarity. | `FEAT-017`, `FEAT-019`, `FEAT-062` |
 | Security and operations | IP-filter input policy, PeerGuardian-style imports, whitelist/private-network policy, dependency/DLL loading hardening, diagnostics, and release-proof automation. | `FEAT-044`, `FEAT-056`, `REF-028`, `REF-038`, `REF-039`, `REF-040`, `REF-041`, `REF-042` |
+| Product-family integration | Post-`0.7.3` alignment for p2p-overlord repos, shared REST conformance, shared campaign variants, and shared MiniUPnP source ownership without merging products. | `FEAT-073` |
 | Narrow anti-leecher review | CShield-style anti-leecher ideas only where the reasons are observable, explainable, and low false-positive risk. | `FEAT-011` |
 
 ## Explicit Non-Goals
@@ -41,7 +48,7 @@ These ideas should not be added to the eMuleBB future backlog unless the user
 explicitly reopens them:
 
 - Headless core, server-only mode, cross-platform client work, or mobile-first
-  controller scope.
+  controller scope inside the eMuleBB desktop app.
 - New REST capability expansion beyond contract maintenance, drift checks, bug
   fixes, and compatibility repairs.
 - Historical releaser controls such as PowerShare, Share Only The Need, release

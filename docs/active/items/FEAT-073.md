@@ -1,0 +1,77 @@
+---
+id: FEAT-073
+title: Incorporate p2p-overlord into the eMuleBB product family
+status: OPEN
+priority: Minor
+category: feature
+labels: [product-family, p2p-overlord, rest, testing, upnp, post-beta-0.7.3]
+milestone: post-beta-0.7.3
+created: 2026-05-23
+source: operator product-family planning for p2p-overlord integration
+---
+
+# FEAT-073 - Incorporate p2p-overlord Into The eMuleBB Product Family
+
+## Summary
+
+Bring the relevant p2p-overlord repositories into the eMuleBB product-family
+workspace as first-class future integration targets after beta `0.7.3`.
+p2p-overlord remains its own Rust/Node product, similar to how eMuleBB and
+aMule remain distinct clients, but it should share contracts, campaign
+patterns, and selected dependencies where that reduces drift.
+
+The active ED2K server for eMuleBB remains
+`https://github.com/eMulebb/goed2k-server`. The obsolete
+`https://github.com/eMulebb/emulebb-ed2k-server` fork is not part of this
+future integration and should be decommissioned.
+
+## Intended Shape
+
+- Track `p2p-overlord-agents` and `p2p-overlord-be` as first-class
+  product-family repos.
+- Keep `p2p-overlord-tooling` separate because the Rust/Node build system
+  remains separate.
+- Keep p2p-overlord's ED2K server lineage out of the active eMuleBB topology;
+  use `goed2k-server` as the shared ED2K server fork.
+- Treat `docs/rest/REST-API-OPENAPI.yaml` as the shared REST API authority for
+  every implementation that claims the eMuleBB-compatible `/api/v1` surface.
+- Use `repos/eMule-build-tests` as the common base for cross-product release
+  campaigns, with product-specific variants rather than copied harnesses.
+- Converge MiniUPnP source ownership on `repos/third_party/eMule-miniupnp`,
+  while preserving p2p-overlord's Rust build boundaries.
+
+## Scope Constraints
+
+- Do not merge p2p-overlord into the eMuleBB desktop app.
+- Do not promote server-only, daemon-only, or headless product scope into the
+  eMuleBB beta `0.7.3` release.
+- Do not broaden eMuleBB wire behavior or introduce proprietary eD2K/Kad
+  protocol extensions.
+- Do not replace `goed2k-server` with the obsolete
+  `emulebb-ed2k-server` fork.
+- Do not make p2p-overlord conformance redefine the canonical REST contract;
+  OpenAPI remains the authority.
+
+## Acceptance Criteria
+
+- [ ] active docs describe the product-family boundary and p2p-overlord's role
+- [ ] workspace topology exposes `p2p-overlord-agents` and `p2p-overlord-be`
+      without materializing obsolete ED2K server repos
+- [ ] stale `emulebb-ed2k-server` references/remotes are removed or marked
+      superseded
+- [ ] shared test-campaign docs identify p2p-overlord variants and REST
+      conformance expectations
+- [ ] REST docs state how a p2p-overlord implementation proves a claimed
+      subset against the canonical OpenAPI contract
+- [ ] MiniUPnP convergence docs point both products at the shared
+      `eMule-miniupnp` fork
+
+## Validation
+
+- Docs-only slices should pass `git diff --check`.
+- Topology slices should pass `python -m emule_workspace validate` from
+  `repos/eMule-build`.
+- Test-harness slices should pass the relevant `repos/eMule-build-tests`
+  Python unit tests.
+- Future p2p-overlord code slices should pass `cargo fmt --all --check`,
+  p2p-overlord's clippy policy, and backend `npm run quality`.

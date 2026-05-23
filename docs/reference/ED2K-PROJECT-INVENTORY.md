@@ -1,6 +1,6 @@
 # eD2K Project Inventory
 
-Last verified: 2026-05-17
+Last verified: 2026-05-23
 
 This inventory tracks active, stale, obscure, and historical projects around
 eD2K, eDonkey2000, eMule, Kad, server software, controller tooling, protocol
@@ -30,7 +30,7 @@ and may expose UDP status or admin APIs.
 | Project | Status | Language | Source or archive | Notes |
 |---|---|---|---|---|
 | goed2k-server | Active | Go | https://github.com/chenjia404/goed2k-server | Go ED2K/eMule server built around `github.com/monkeyWie/goed2k`; implements login, status, message, ID assignment, offer files, search, search-more, source lookup, callbacks, JSON/MySQL/PostgreSQL catalog storage, and admin UI/API. The eMuleBB managed fork lives at `https://github.com/eMulebb/goed2k-server`. |
-| p2p-overlord ED2K server | Historical reference | Go | https://github.com/p2p-overlord/p2p-overlord-ed2k-server | Renamed fork lineage retained only as historical reference; active eMuleBB workspace topology tracks `goed2k-server` directly. |
+| p2p-overlord ED2K server | Historical reference | Go | https://github.com/p2p-overlord/p2p-overlord-ed2k-server | Renamed fork lineage retained only as historical reference; active eMuleBB workspace topology tracks `goed2k-server` directly. The obsolete `https://github.com/eMulebb/emulebb-ed2k-server` fork should not be used. |
 | ed2kd | Stale | C | https://github.com/gureedo/ed2kd | eDonkey2000 server implementation using libevent, zlib, libconfig, and SQLite support. Local research checkout exists in archived server material. |
 | eNode | Stale | Node.js | https://github.com/zt8989/eNode | Experimental eD2K/eMule server. README describes TCP/UDP opcodes, obfuscation, Lugdunum/eMule extended protocol, LowID callbacks, files over 4 GiB, and pluggable storage through MySQL or MongoDB. |
 | gomule | Stale | Go | https://github.com/HackLinux/gomule | Go "Goroutines eMule Server" project. Treat as a small historical implementation reference until protocol coverage is revalidated. |
@@ -70,6 +70,7 @@ server addresses, `server.met` files, or bootstrap guidance.
 | eMule Qt | Active | Qt/C++ | https://github.com/ModderMule/emule-qt | Qt port intended to modernize the eMule client and improve platform independence. Homepage: https://emule-qt.org/ |
 | eMule eSE LiveTV | Active/stale | Windows, C++/Node.js | https://github.com/diad87/eMule-eSE-LiveTV | eMule mod exploring P2P live TV over Kad/eD2K with HLS and Node.js web UI. Local sibling checkout was observed during research. |
 | aMule | Maintained | Cross-platform C++/wxWidgets | https://github.com/amule-project/amule | Cross-platform eMule-like client and protocol reference. |
+| p2p-overlord | Active | Rust/Node | Local product-family repos; upstream organization retained separately | Separate headless/server-oriented product in the eMuleBB product family. Relevant future integration repos are `p2p-overlord-agents` and `p2p-overlord-be`; the ED2K server lineage is not active because eMuleBB uses `goed2k-server`. |
 | MLDonkey | Maintained/stale | OCaml daemon | https://github.com/ygrek/mldonkey | Multi-network P2P daemon with eDonkey/eMule support; useful for headless daemon and controller ideas. |
 | Shareaza | Stale | Windows C++ | https://github.com/ivan386/Shareaza | Multi-network P2P client with eD2K support. Historical UX and protocol reference. |
 | Envy | Stale | Windows C++ | https://github.com/GetEnvy/Envy | Shareaza-derived multi-network client. |

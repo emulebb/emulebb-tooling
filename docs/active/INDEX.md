@@ -19,9 +19,9 @@ records, not workflow status authority.
 ## Current Snapshot
 
 **Source of truth:** `EMULE_WORKSPACE_ROOT\workspaces\workspace\app\eMule-main` (`main` branch)  
-**Current non-done count:** `63`
-**Latest release-doc refresh:** 2026-05-21
-**Non-done by status:** `45` OPEN, `8` IN_PROGRESS, `10` DEFERRED, `0` BLOCKED.
+**Current non-done count:** `64`
+**Latest release-doc refresh:** 2026-05-23
+**Non-done by status:** `46` OPEN, `8` IN_PROGRESS, `10` DEFERRED, `0` BLOCKED.
 **Backlog counts:** item tables below are authoritative.
 **Beta 0.7.3 relevance:** Most non-done items below are future or deferred work;
 current beta gate and proof status is controlled by [RELEASE-0.7.3](RELEASE-0.7.3.md).
@@ -39,6 +39,7 @@ release target.
 `eMuleBB Roadmap` org project are authoritative for migrated roadmap items.
 **Backlog process runbook:** [BACKLOG-PROCESS](../reference/BACKLOG-PROCESS.md)
 **Beta-release execution plan:** [RELEASE-0.7.3-EXECUTION-PLAN](plans/RELEASE-0.7.3-EXECUTION-PLAN.md)
+**p2p-overlord product-family plan:** [P2P-OVERLORD-PRODUCT-FAMILY-INTEGRATION](plans/P2P-OVERLORD-PRODUCT-FAMILY-INTEGRATION.md)
 **Historical beta evidence:** [release-0.7.3](../history/release-0.7.3/)
 **Historical reviews:** [reviews](../history/reviews/)
 **Closed item records:** [items](../history/items/)
@@ -351,6 +352,7 @@ not active item docs.
 | [FEAT-070](items/FEAT-070.md) | Minor | OPEN | Add targeted client UserHash and upload-lifecycle diagnostics |
 | [FEAT-071](../history/items/FEAT-071.md) | Minor | DONE | Filename mojibake repair for search results and download intake |
 | [FEAT-072](items/FEAT-072.md) | Minor | OPEN | Reduce startup cache UI-thread blocking on large shared libraries |
+| [FEAT-073](items/FEAT-073.md) | Minor | OPEN | Incorporate p2p-overlord into the eMuleBB product family |
 
 ---
 

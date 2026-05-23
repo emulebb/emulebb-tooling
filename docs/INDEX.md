@@ -27,6 +27,7 @@ the public `eMuleBB Roadmap` org project are authoritative for workflow state.
 |---|---|
 | [active/INDEX](active/INDEX.md) | Active backlog dashboard and item tables |
 | [active/FUTURE-ROADMAP](active/FUTURE-ROADMAP.md) | GitHub-primary post-beta future roadmap |
+| [active/plans/P2P-OVERLORD-PRODUCT-FAMILY-INTEGRATION](active/plans/P2P-OVERLORD-PRODUCT-FAMILY-INTEGRATION.md) | Post-beta p2p-overlord product-family integration plan |
 | [active/RELEASE-0.7.3](active/RELEASE-0.7.3.md) | Beta release control document |
 | [active/RELEASE-0.7.3-CHECKLIST](active/RELEASE-0.7.3-CHECKLIST.md) | Beta release operator checklist |
 | [active/RELEASE-0.7.3-RUNBOOK](active/RELEASE-0.7.3-RUNBOOK.md) | Beta release operator runbook |
