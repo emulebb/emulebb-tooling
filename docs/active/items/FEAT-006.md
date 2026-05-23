@@ -1,7 +1,7 @@
 ---
 id: FEAT-006
 workflow: github
-github_issue: https://github.com/eMulebb/eMule/issues/9
+github_issue: https://github.com/emulebb/emulebb/issues/9
 title: Kad — Add explicit trust, budget, and bootstrap observability counters
 status: OPEN
 priority: Minor
@@ -13,7 +13,7 @@ source: AUDIT-KAD.md (AUD_KAD_013, AUD_KAD_014)
 ---
 
 
-> Workflow status is tracked in GitHub: https://github.com/eMulebb/eMule/issues/9. This local document is retained as an engineering spec/evidence record.
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/9. This local document is retained as an engineering spec/evidence record.
 
 ## Summary
 

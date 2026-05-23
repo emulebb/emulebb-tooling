@@ -17,11 +17,11 @@ DOCS = ROOT / "docs"
 ACTIVE_ITEMS = DOCS / "active" / "items"
 FUTURE_ROADMAP = DOCS / "active" / "FUTURE-ROADMAP.md"
 
-OWNER = "eMulebb"
-ISSUE_REPO = "eMulebb/eMule"
+OWNER = "emulebb"
+ISSUE_REPO = "emulebb/emulebb"
 PROJECT_TITLE = "eMuleBB Roadmap"
 PROJECT_RELEASE = "post-beta-0.7.3"
-SPEC_BASE_URL = "https://github.com/eMulebb/eMule-tooling/blob/main"
+SPEC_BASE_URL = "https://github.com/emulebb/emulebb-tooling/blob/main"
 
 ID_PATTERN = re.compile(r"\b(?:BUG|FEAT|REF|CI|AMUT|ARR)-\d{3}\b")
 

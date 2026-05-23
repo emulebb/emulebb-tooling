@@ -41,7 +41,7 @@ the public `eMuleBB Roadmap` org project are authoritative for workflow state.
 GitHub-primary future-roadmap helper scripts live under `scripts/`:
 
 - `github-roadmap-sync.py` previews or applies the first-rollout import to
-  `eMulebb/eMule` issues and the `eMuleBB Roadmap` project.
+  `emulebb/emulebb` issues and the `eMuleBB Roadmap` project.
 - `github-roadmap-check.py` validates local GitHub metadata, and can query
   GitHub when run with `--github`.
 
@@ -96,7 +96,7 @@ Material theme emits a current MkDocs 2.0 compatibility notice as a warning, so
 set `$env:NO_MKDOCS_2_WARNING='1'` before strict local builds. The generated
 HTML is written to `.local/mkdocs-site` and deployed to GitHub Pages by
 `.github/workflows/docs-site.yml` on `main` at
-`https://emulebb.github.io/eMule-tooling/`.
+`https://emulebb.github.io/emulebb-tooling/`.
 
 ## Exploratory Ideas
 

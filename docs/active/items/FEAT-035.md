@@ -1,7 +1,7 @@
 ---
 id: FEAT-035
 workflow: github
-github_issue: https://github.com/eMulebb/eMule/issues/14
+github_issue: https://github.com/emulebb/emulebb/issues/14
 title: IPv6 dual-stack compatibility for current eD2K/Kad networking
 status: OPEN
 priority: Major
@@ -13,7 +13,7 @@ source: eMuleAI release notes; eMule Qt announcement 2026-03-05; qBittorrent/lib
 ---
 
 
-> Workflow status is tracked in GitHub: https://github.com/eMulebb/eMule/issues/14. This local document is retained as an engineering spec/evidence record.
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/14. This local document is retained as an engineering spec/evidence record.
 
 ## Summary
 

@@ -202,7 +202,7 @@ changes from `IMediaDet::GetBitmapBits` to an `IMFMediaBuffer`.
 ### What changes
 
 Replace `GrabFrames()` with an FFmpeg-based implementation and add FFmpeg as a new
-submodule dependency (matching the pattern of `eMule-id3lib`, `eMule-mbedtls`, etc.).
+submodule dependency (matching the pattern of `emulebb-id3lib`, `emulebb-mbedtls`, etc.).
 
 ### Key FFmpeg types used
 
@@ -383,7 +383,7 @@ eMuleAI embeds MediaInfo and ZenLib as static libraries with no runtime DLL depe
 ### Recommended approach for eMulebb
 
 - Vendor pinned versions of MediaInfo and ZenLib source
-- Build as static libraries following the existing submodule pattern (like `eMule-id3lib`, `eMule-mbedtls`)
+- Build as static libraries following the existing submodule pattern (like `emulebb-id3lib`, `emulebb-mbedtls`)
 - Link directly into the eMule binary
 - Do NOT reuse eMuleAI's wrapper layer (`CMediaInfoLIB`) -- call `MediaInfoLib` API directly to avoid carrying unnecessary abstraction
 - Plan to eventually replace `id3lib` with MediaInfo for MP3 metadata extraction, consolidating to a single metadata backend

@@ -35,14 +35,14 @@ rerun and recorded after the hold.
 - [ ] `python -m emule_workspace test release-campaign --campaign emulebb-0.7.3`
 - [ ] `python -m emule_workspace test certification --profile fast`
 - [ ] `python -m emule_workspace test certification --profile overnight`
-- [ ] `python -m emule_workspace test live-e2e --profile release-expanded --fail-fast --live-wire-inputs-file repos\eMule-build-tests\live-wire-inputs.local.json`
+- [ ] `python -m emule_workspace test live-e2e --profile release-expanded --fail-fast --live-wire-inputs-file repos\emulebb-build-tests\live-wire-inputs.local.json`
 - [ ] `python -m emule_workspace test live-e2e --profile cpu-heavy --fail-fast`
 - [ ] `python -m emule_workspace test live-e2e --suite live-process-monitor --fail-fast`
 - [ ] `python -m emule_workspace test live-e2e --profile ui-resource-depth --fail-fast`
 - [ ] `python -m emule_workspace package-release --config Release --platform x64`
 - [ ] `python -m emule_workspace package-release --config Release --platform ARM64`
 - [ ] `python -m emule_workspace package-amutorrent --config Release --platform x64`
-- [ ] `python repos\eMule-tooling\ci\check-clean-worktree.py`
+- [ ] `python repos\emulebb-tooling\ci\check-clean-worktree.py`
 
 Run certification with the required local live inputs and Arr roots when those
 are needed by the operator environment, for example

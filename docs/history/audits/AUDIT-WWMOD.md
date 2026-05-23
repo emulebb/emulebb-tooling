@@ -855,7 +855,7 @@ replaces DirectShow for media processing.
 ### WWMOD_040 - `ResizableLib` Third-Party Dependency
 
 **Severity:** P3
-**Files:** `srchybrid/emule.vcxproj:52` (references `eMule-ResizableLib`)
+**Files:** `srchybrid/emule.vcxproj:52` (references `emulebb-resizablelib`)
 
 ResizableLib is a third-party MFC extension for making dialogs resizable. It was
 essential in the Win2000/XP era when MFC had no built-in layout management. Modern

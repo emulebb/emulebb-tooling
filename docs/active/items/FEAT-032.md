@@ -1,7 +1,7 @@
 ---
 id: FEAT-032
 workflow: github
-github_issue: https://github.com/eMulebb/eMule/issues/13
+github_issue: https://github.com/emulebb/emulebb/issues/13
 title: NAT mapping modernization — keep MiniUPnP, drop WinServ, add PCP/NAT-PMP
 status: DEFERRED
 priority: Minor
@@ -13,7 +13,7 @@ source: 2026-04-20 UPnP robustness review plus PCP/NAT-PMP dependency follow-thr
 ---
 
 
-> Workflow status is tracked in GitHub: https://github.com/eMulebb/eMule/issues/13. This local document is retained as an engineering spec/evidence record.
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/13. This local document is retained as an engineering spec/evidence record.
 
 ## Summary
 
@@ -53,7 +53,7 @@ Historical release context: [Beta 0.7.3 NAT Mapping execution plan](../../histor
 - [x] Tweaks exposes `Automatic` / `UPnP IGD only` / `PCP/NAT-PMP only`
 - [x] native tests cover `Automatic` as UPnP IGD first, then PCP/NAT-PMP
 - [x] WinServ-only active prefs are removed from runtime behavior
-- [x] supported `eMule-build` app builds pass for active architectures
+- [x] supported `emulebb-build` app builds pass for active architectures
 - [ ] live-network NAT-mapping validation completed on current `main`
 
 ## Beta 0.7.3 Decision

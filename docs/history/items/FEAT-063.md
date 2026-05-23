@@ -54,9 +54,9 @@ defaults, API behavior, or template handling.
 - Release validation:
   `python -m emule_workspace validate --config Release --platform x64 --build-output-mode ErrorsOnly`
 - Preference UI harness:
-  `python repos\eMule-build-tests\scripts\preference-ui-e2e.py --workspace-root workspaces\v0.72a --app-root workspaces\v0.72a\app\eMule-main --configuration Debug --artifacts-dir workspaces\v0.72a\state\ui-proof\web-interface-after --web-interface-screenshot-name web-interface-after.png --keep-artifacts`
+  `python repos\emulebb-build-tests\scripts\preference-ui-e2e.py --workspace-root workspaces\v0.72a --app-root workspaces\v0.72a\app\eMule-main --configuration Debug --artifacts-dir workspaces\v0.72a\state\ui-proof\web-interface-after --web-interface-screenshot-name web-interface-after.png --keep-artifacts`
 - Follow-up Preference UI harness:
-  `python repos\eMule-build-tests\scripts\preference-ui-e2e.py --workspace-root workspaces\v0.72a --app-root workspaces\v0.72a\app\eMule-main --configuration Debug --artifacts-dir workspaces\v0.72a\state\ui-proof\web-interface-legacy-controls --web-interface-screenshot-name web-interface-legacy-controls.png --keep-artifacts`
+  `python repos\emulebb-build-tests\scripts\preference-ui-e2e.py --workspace-root workspaces\v0.72a --app-root workspaces\v0.72a\app\eMule-main --configuration Debug --artifacts-dir workspaces\v0.72a\state\ui-proof\web-interface-legacy-controls --web-interface-screenshot-name web-interface-legacy-controls.png --keep-artifacts`
 - UI proof:
   `workspaces\v0.72a\state\ui-proof\web-interface-before\web-interface-before.png`
   and

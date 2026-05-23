@@ -160,7 +160,7 @@ def parse_args() -> argparse.Namespace:
         type=Path,
         default=None,
         help=(
-            "Path to the eMulebb-pages checkout. Defaults to EMULEBB_PAGES_ROOT, "
+            "Path to the emulebb-pages checkout. Defaults to EMULEBB_PAGES_ROOT, "
             "then common EMULE_WORKSPACE_ROOT-relative layouts."
         ),
     )
@@ -188,7 +188,7 @@ def parse_args() -> argparse.Namespace:
 
 
 def candidate_pages_roots(explicit: Path | None) -> list[Path]:
-    """Return candidate eMulebb-pages roots without hardcoding machine paths."""
+    """Return candidate emulebb-pages roots without hardcoding machine paths."""
 
     candidates: list[Path] = []
     if explicit is not None:
@@ -199,16 +199,16 @@ def candidate_pages_roots(explicit: Path | None) -> list[Path]:
         workspace_root = Path(os.environ["EMULE_WORKSPACE_ROOT"])
         candidates.extend(
             [
-                workspace_root / "repos" / "eMulebb-pages",
-                workspace_root.parent / "eMulebb-pages",
+                workspace_root / "repos" / "emulebb-pages",
+                workspace_root.parent / "emulebb-pages",
             ]
         )
 
     cwd = Path.cwd()
-    candidates.extend([cwd, cwd / "eMulebb-pages", cwd.parent / "eMulebb-pages"])
+    candidates.extend([cwd, cwd / "emulebb-pages", cwd.parent / "emulebb-pages"])
     for parent in Path(__file__).resolve().parents:
-        candidates.append(parent / "eMulebb-pages")
-        if parent.name == "eMulebb-pages":
+        candidates.append(parent / "emulebb-pages")
+        if parent.name == "emulebb-pages":
             candidates.append(parent)
 
     unique: list[Path] = []
@@ -222,13 +222,13 @@ def candidate_pages_roots(explicit: Path | None) -> list[Path]:
 
 
 def resolve_pages_root(explicit: Path | None) -> Path:
-    """Find an eMulebb-pages checkout and fail with actionable guidance."""
+    """Find an emulebb-pages checkout and fail with actionable guidance."""
 
     for candidate in candidate_pages_roots(explicit):
         if (candidate / "index.html").is_file() and (candidate / "styles.css").is_file():
             return candidate
     raise SystemExit(
-        "Could not find eMulebb-pages. Pass --pages-root or set EMULEBB_PAGES_ROOT."
+        "Could not find emulebb-pages. Pass --pages-root or set EMULEBB_PAGES_ROOT."
     )
 
 

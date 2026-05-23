@@ -11,14 +11,14 @@ Release blocker. The advertised eMule BB feature set is largely implemented, but
 ## Review Checklist
 
 - [x] Read workspace root `AGENTS.md`.
-- [x] Read and applied `repos\eMule-tooling\docs\WORKSPACE-POLICY.md`.
+- [x] Read and applied `repos\emulebb-tooling\docs\WORKSPACE-POLICY.md`.
 - [x] Ran `git status --short --branch` before drawing conclusions in `workspaces\v0.72a\app\eMule-main`.
 - [x] Ran `git status --short --branch` before drawing conclusions in `workspaces\v0.72a\app\eMule-v0.72a-community`.
 - [x] Ran `git status --short --branch` before drawing conclusions in `workspaces\v0.72a\app\eMule-v0.72a-broadband`.
-- [x] Ran `git status --short --branch` before drawing conclusions in `repos\eMule`.
-- [x] Ran `git status --short --branch` before drawing conclusions in `repos\eMule-build`.
-- [x] Ran `git status --short --branch` before drawing conclusions in `repos\eMule-build-tests`.
-- [x] Ran `git status --short --branch` before drawing conclusions in `repos\eMule-tooling`.
+- [x] Ran `git status --short --branch` before drawing conclusions in `repos\emulebb`.
+- [x] Ran `git status --short --branch` before drawing conclusions in `repos\emulebb-build`.
+- [x] Ran `git status --short --branch` before drawing conclusions in `repos\emulebb-build-tests`.
+- [x] Ran `git status --short --branch` before drawing conclusions in `repos\emulebb-tooling`.
 - [x] Reviewed active release control, checklist, runbook, package manifests, app version/update code, REST identity code, and package-facing README.
 - [ ] Re-run the minimum beta proof on current heads after fixes.
 - [ ] Reconcile release-intent branch/tag target before tagging.
@@ -52,7 +52,7 @@ Refresh the final beta proof on current heads, then deliberately promote or tag 
 
 Suggested validation:
 
-Run only supported orchestration commands from `repos\eMule-build`: `python -m emule_workspace validate`, required app/test builds, required native tests, full Release x64 `live-e2e`, and x64/ARM64 package rehearsal.
+Run only supported orchestration commands from `repos\emulebb-build`: `python -m emule_workspace validate`, required app/test builds, required native tests, full Release x64 `live-e2e`, and x64/ARM64 package rehearsal.
 
 Owner suggestion:
 
@@ -60,9 +60,9 @@ Release owner with app, build, and test-harness owners available for failures.
 
 Execution checklist:
 
-- [ ] Confirm current dirty state is either cleaned or explicitly accepted before final proof; `repos\eMule-build-tests` currently has unrelated modified and untracked live-test work.
+- [ ] Confirm current dirty state is either cleaned or explicitly accepted before final proof; `repos\emulebb-build-tests` currently has unrelated modified and untracked live-test work.
 - [ ] Decide whether `release/v0.72a-broadband` is to be fast-forwarded/cherry-picked to the proven `main` commit or whether policy/docs are updated to make `main` the beta tag target.
-- [ ] Run `python -m emule_workspace validate` from `repos\eMule-build`.
+- [ ] Run `python -m emule_workspace validate` from `repos\emulebb-build`.
 - [ ] Run the minimum beta proof from `docs\active\RELEASE-0.7.3.md:112-121`.
 - [ ] Regenerate x64 and ARM64 packages from the selected current commit.
 - [ ] Update release evidence docs only after proof passes.
@@ -78,9 +78,9 @@ Evidence:
 
 - Workspace policy says the GitHub organization, code name, and URL slug are `emulebb` in `docs\WORKSPACE-POLICY.md:521-524`.
 - Release tags and assets must use `emule-bb-vMAJOR.MINOR.PATCH` and `eMule-broadband-MAJOR.MINOR.PATCH-ARCH.zip` in `docs\WORKSPACE-POLICY.md:528-532`.
-- The active build topology uses `https://github.com/eMulebb/eMule.git` for the app repo.
+- The active build topology uses `https://github.com/emulebb/emulebb.git` for the app repo.
 - `srchybrid\Preferences.cpp:3647-3659` returns `https://github.com/itlezy/eMule`, `https://github.com/itlezy/eMule/releases`, and `https://api.github.com/repos/itlezy/eMule/releases/latest`.
-- `srchybrid\Emule.cpp:87-88` sets online help to `https://github.com/itlezy/eMule-tooling/blob/main/docs/HELP.md`.
+- `srchybrid\Emule.cpp:87-88` sets online help to `https://github.com/itlezy/emulebb-tooling/blob/main/docs/HELP.md`.
 - `srchybrid\ReleaseUpdateCheckSeams.h` correctly requires `emule-bb-v` tags and `eMule-broadband-...zip` assets, so the wrong repository endpoint can make an otherwise correct parser look like update failure.
 
 Impact:
@@ -102,7 +102,7 @@ App owner for URL constants and update-check seam tests; tooling owner for relea
 Execution checklist:
 
 - [ ] Replace `CPreferences::GetHomepageBaseURLForLevel`, `GetVersionCheckBaseURL`, and `GetVersionCheckApiURL` with `eMulebb` URLs.
-- [ ] Replace `ONLINEHELPURL` with the current `eMulebb/eMule-tooling` Help path or the final public docs URL.
+- [ ] Replace `ONLINEHELPURL` with the current `emulebb/emulebb-tooling` Help path or the final public docs URL.
 - [ ] Add native seam coverage for release URL selection and update payload evaluation.
 - [ ] Add a lightweight policy check for stale `itlezy` public URLs in active app sources and package-facing docs.
 - [ ] Validate with `python -m emule_workspace validate` and the focused native update-check tests through the supported test entrypoint.
@@ -191,9 +191,9 @@ Execution checklist:
 
 ## Cross-review Notes
 
-- `repos\eMule-build-tests` is dirty on `main` with modified live E2E, live profile, release golden, and controller live scripts/tests plus untracked Radarr/Sonarr scripts. I treated these as parallel work and did not edit them. Final release proof should not proceed until the release owner either incorporates or isolates that work.
+- `repos\emulebb-build-tests` is dirty on `main` with modified live E2E, live profile, release golden, and controller live scripts/tests plus untracked Radarr/Sonarr scripts. I treated these as parallel work and did not edit them. Final release proof should not proceed until the release owner either incorporates or isolates that work.
 - `repos\amutorrent` reports `main...upstream/main [ahead 1]`. I did not use it for release-blocking conclusions beyond noting that controller compatibility should be revalidated after current app REST changes.
-- `git ls-remote --tags origin 'refs/tags/emule-bb-v*'` returned no remote eMule BB release tags from `https://github.com/eMulebb/eMule.git`; this matches the 0.7.3 tag hold but conflicts with older wording that described superseded evidence tags as pushed.
+- `git ls-remote --tags origin 'refs/tags/emule-bb-v*'` returned no remote eMule BB release tags from `https://github.com/emulebb/emulebb.git`; this matches the 0.7.3 tag hold but conflicts with older wording that described superseded evidence tags as pushed.
 
 ## Assumptions
 

@@ -89,13 +89,13 @@ Status:
   files while keeping the 10k observable-node floor, and raises the heavy
   scenario waits to distinguish slow startup from a hard block.
 - Live smoke artifact
-  `repos\eMule-build-tests\reports\shared-files-ui-e2e\20260508-125931-eMule-main-release\tree-refresh-stress-10k\result.json`
+  `repos\emulebb-build-tests\reports\shared-files-ui-e2e\20260508-125931-eMule-main-release\tree-refresh-stress-10k\result.json`
   failed before churn with `Timed out waiting for eMule main window`; this is
   tracked as [BUG-101](../items/BUG-101.md).
 - Passing 50k smoke artifact
-  `repos\eMule-build-tests\reports\shared-files-ui-e2e\20260508-170043-eMule-main-release\result.json`
+  `repos\emulebb-build-tests\reports\shared-files-ui-e2e\20260508-170043-eMule-main-release\result.json`
   and passing 160-cycle operator soak artifact
-  `repos\eMule-build-tests\reports\shared-files-ui-e2e\20260508-204401-eMule-main-release\tree-refresh-stress-10k\result.json`
+  `repos\emulebb-build-tests\reports\shared-files-ui-e2e\20260508-204401-eMule-main-release\tree-refresh-stress-10k\result.json`
   close this gate with resource thresholds enforced by test harness commit
   `f79199e`.
 
@@ -143,16 +143,16 @@ Status:
   `reset_during_response_send` raw socket probe to exercise queued-send cleanup
   when the client resets before consuming the response.
 - HTTPS smoke artifact
-  `repos\eMule-build-tests\reports\rest-api-smoke\20260508-120119-eMule-main-release\result.json`
+  `repos\emulebb-build-tests\reports\rest-api-smoke\20260508-120119-eMule-main-release\result.json`
   passed with `--webserver-scheme https`,
   `--rest-tls-handshake-adversity-budget smoke`, three TLS handshake probes,
   and process resource snapshots after launch and after adversity/stress.
 - HTTPS 32-client contract-stress artifact
-  `repos\eMule-build-tests\reports\rest-api-smoke\20260508-201653-eMule-main-release\result.json`,
+  `repos\emulebb-build-tests\reports\rest-api-smoke\20260508-201653-eMule-main-release\result.json`,
   HTTPS 64-client contract-stress artifact
-  `repos\eMule-build-tests\reports\rest-api-smoke\20260508-202554-eMule-main-release\result.json`,
+  `repos\emulebb-build-tests\reports\rest-api-smoke\20260508-202554-eMule-main-release\result.json`,
   and HTTP 64-client socket-adversity artifact
-  `repos\eMule-build-tests\reports\rest-api-smoke\20260508-203041-eMule-main-release\result.json`
+  `repos\emulebb-build-tests\reports\rest-api-smoke\20260508-203041-eMule-main-release\result.json`
   close this gate. App hardening commit `c5a2794` keeps accepted-client
   concurrency bounded while adding release-gate headroom, and test harness
   commit `d6b4f82` records transient reset retry recovery without masking
@@ -192,7 +192,7 @@ Status:
   rows tied to existing `web_api.tests.cpp` coverage for `METHOD_NOT_ALLOWED`
   and `INVALID_STATE`.
 - HTTP contract artifact
-  `repos\eMule-build-tests\reports\rest-api-smoke\20260508-120738-eMule-main-release\result.json`
+  `repos\emulebb-build-tests\reports\rest-api-smoke\20260508-120738-eMule-main-release\result.json`
   passed with all release statuses covered by live or seam-backed rows,
   `missing_release_statuses=[]`, and live gaps preserved for 405, 409, 500, and
   503.
@@ -200,9 +200,9 @@ Status:
   adds `reset_during_error_response_send` socket coverage. The Beta 0.7.3 release
   decision keeps 405, 409, 500, and 503 as deterministic seam-backed rows, with
   live gaps visible in `live_missing_release_statuses`. HTTPS artifact
-  `repos\eMule-build-tests\reports\rest-api-smoke\20260508-202554-eMule-main-release\result.json`
+  `repos\emulebb-build-tests\reports\rest-api-smoke\20260508-202554-eMule-main-release\result.json`
   and HTTP socket-adversity artifact
-  `repos\eMule-build-tests\reports\rest-api-smoke\20260508-203041-eMule-main-release\result.json`
+  `repos\emulebb-build-tests\reports\rest-api-smoke\20260508-203041-eMule-main-release\result.json`
   both passed with `missing_release_statuses=[]`.
 
 ### CI-021 - WebSocket and legacy socket leak-churn gate
@@ -246,38 +246,38 @@ Status:
   smoke harness; build orchestration commit `3ec3674` exposes it through
   `-RestStopStartAfterChurn`.
 - HTTPS smoke artifact
-  `repos\eMule-build-tests\reports\rest-api-smoke\20260508-121849-eMule-main-release\result.json`
+  `repos\emulebb-build-tests\reports\rest-api-smoke\20260508-121849-eMule-main-release\result.json`
   passed 100/100 HTTPS leak-churn cycles with enforced thresholds,
   `resource_thresholds.ok=true`, and zero threshold violations. Observed
   post-drain deltas were handles `+1`, private bytes `+45056`, and working set
   bytes `+57344`.
 - HTTP soak artifact
-  `repos\eMule-build-tests\reports\rest-api-smoke\20260508-122017-eMule-main-release\result.json`
+  `repos\emulebb-build-tests\reports\rest-api-smoke\20260508-122017-eMule-main-release\result.json`
   passed 1000/1000 HTTP leak-churn cycles with enforced thresholds,
   `resource_thresholds.ok=true`, and zero threshold violations. Observed
   post-drain deltas were handles `+1`, private bytes `+442368`, and working set
   bytes `+745472`.
 - HTTPS soak artifact
-  `repos\eMule-build-tests\reports\rest-api-smoke\20260508-122141-eMule-main-release\result.json`
+  `repos\emulebb-build-tests\reports\rest-api-smoke\20260508-122141-eMule-main-release\result.json`
   passed 1000/1000 HTTPS leak-churn cycles with enforced thresholds,
   `resource_thresholds.ok=true`, and zero threshold violations. Observed
   post-drain deltas were GDI objects `+1`, private bytes `+131563520`, and
   working set bytes `+131661824`; handles finished below baseline.
 - Thread-count smoke artifact
-  `repos\eMule-build-tests\reports\rest-api-smoke\20260508-122517-eMule-main-release\result.json`
+  `repos\emulebb-build-tests\reports\rest-api-smoke\20260508-122517-eMule-main-release\result.json`
   passed with process thread count `19 -> 19 -> 19` across baseline, peak, and
   post-drain snapshots, `thread_count` delta `0`, and zero threshold
   violations.
 - HTTPS stop/start-after-churn artifact
-  `repos\eMule-build-tests\reports\rest-api-smoke\20260508-123736-eMule-main-release\result.json`
+  `repos\emulebb-build-tests\reports\rest-api-smoke\20260508-123736-eMule-main-release\result.json`
   passed 100/100 HTTPS leak-churn cycles with enforced thresholds,
   `resource_thresholds.ok=true`, and zero threshold violations. The old process
   `15520` closed in `8590.308` ms, the same profile relaunched as process
   `16760`, and REST readiness returned status `200`.
 - Fresh HTTP stop/start soak artifact
-  `repos\eMule-build-tests\reports\rest-api-smoke\20260508-203500-eMule-main-release\result.json`
+  `repos\emulebb-build-tests\reports\rest-api-smoke\20260508-203500-eMule-main-release\result.json`
   and HTTPS stop/start soak artifact
-  `repos\eMule-build-tests\reports\rest-api-smoke\20260508-203928-eMule-main-release\result.json`
+  `repos\emulebb-build-tests\reports\rest-api-smoke\20260508-203928-eMule-main-release\result.json`
   close this gate with 1000/1000 churn cycles, `resource_thresholds.ok=true`,
   zero threshold violations, and successful post-churn relaunch.
 

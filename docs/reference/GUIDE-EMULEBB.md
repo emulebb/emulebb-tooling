@@ -89,26 +89,26 @@ For an existing profile:
 
 ## Public Documentation And Evidence
 
-The product guide is maintained as Markdown in `eMule-tooling` and published as
+The product guide is maintained as Markdown in `emulebb-tooling` and published as
 browser-readable HTML through the MkDocs documentation site at
-`https://emulebb.github.io/eMule-tooling/`. The public homepage links to that
+`https://emulebb.github.io/emulebb-tooling/`. The public homepage links to that
 rendered documentation and summarizes it; the Markdown guide remains the source
 of truth for product behavior, release evidence, and operator workflows.
 
 The repeatable publishing workflow is:
 
-1. Update the owning Markdown guide under `repos\eMule-tooling\docs`.
+1. Update the owning Markdown guide under `repos\emulebb-tooling\docs`.
 2. Run the local documentation publish gate:
 
    ```powershell
-   cd $env:EMULE_WORKSPACE_ROOT\repos\eMule-tooling
+   cd $env:EMULE_WORKSPACE_ROOT\repos\emulebb-tooling
    python scripts\docs-publish-check.py
    ```
 
 3. Commit and push the source Markdown. GitHub Actions builds the MkDocs HTML
    site from `main` and deploys it to GitHub Pages.
 4. When the public homepage needs a shorter product summary, update
-   `repos\eMulebb-pages` from the rendered-doc facts and regenerate its static
+   `repos\emulebbbb-pages` from the rendered-doc facts and regenerate its static
    HTML pages.
 
 Release-facing product claims are backed by evidence, not by homepage copy.

@@ -11,7 +11,7 @@ for the repeatable end-to-end operating path.
 
 Routine work happens on `main` in the relevant repo. App source edits belong in
 `EMULE_WORKSPACE_ROOT\workspaces\workspace\app\eMule-main`; the canonical
-`EMULE_WORKSPACE_ROOT\repos\eMule` checkout is the branch-store anchor, not the
+`EMULE_WORKSPACE_ROOT\repos\emulebb` checkout is the branch-store anchor, not the
 normal edit location.
 
 Use `EMULE_WORKSPACE_ROOT` style paths in maintained documentation and scripts.
@@ -46,21 +46,21 @@ Before editing:
 | Active release/status docs | `docs\active\...` | Current release, roadmap, and item state. |
 | Product/user guides | `docs\reference\GUIDE-*.md` | User-facing behavior after source and evidence agree. |
 | REST docs | `docs\rest\...` | Contract, adapter, and parity documentation. |
-| App code | `workspaces\workspace\app\eMule-main` | Do not edit `repos\eMule` for routine app work. |
-| Build orchestration | `repos\eMule-build` | Use supported orchestration entry points. |
+| App code | `workspaces\workspace\app\eMule-main` | Do not edit `repos\emulebb` for routine app work. |
+| Build orchestration | `repos\emulebb-build` | Use supported orchestration entry points. |
 
 ## Supported Commands
 
 Run workspace build, validation, test, live-test, and packaging work through
-`repos\eMule-build` orchestration:
+`repos\emulebb-build` orchestration:
 
 ```powershell
-cd $env:EMULE_WORKSPACE_ROOT\repos\eMule-build
+cd $env:EMULE_WORKSPACE_ROOT\repos\emulebb-build
 python -m emule_workspace validate
 ```
 
 Do not run ad hoc direct `MSBuild` from the app worktree, `srchybrid`, or
-`repos\eMule-build-tests`.
+`repos\emulebb-build-tests`.
 
 Every app code change must rebuild both active x64 app configurations before
 commit:
@@ -75,9 +75,9 @@ the build contract.
 
 ## Markdown To HTML Publishing
 
-Markdown in `repos\eMule-tooling\docs` is the maintained source for the public
+Markdown in `repos\emulebb-tooling\docs` is the maintained source for the public
 documentation site. MkDocs Material renders that Markdown to HTML at
-`https://emulebb.github.io/eMule-tooling/`.
+`https://emulebb.github.io/emulebb-tooling/`.
 
 Use this repeatable path when product, reference, release, REST, or policy docs
 need to be published as formatted HTML:
@@ -88,7 +88,7 @@ need to be published as formatted HTML:
 3. Run the local publish gate:
 
    ```powershell
-   cd $env:EMULE_WORKSPACE_ROOT\repos\eMule-tooling
+   cd $env:EMULE_WORKSPACE_ROOT\repos\emulebb-tooling
    python scripts\docs-publish-check.py
    ```
 
@@ -97,7 +97,7 @@ need to be published as formatted HTML:
    GitHub Pages.
 
 Generated MkDocs output belongs under `.local\mkdocs-site` and must not be
-committed. The static product homepage in `repos\eMulebb-pages` is separate:
+committed. The static product homepage in `repos\emulebbbb-pages` is separate:
 update it only after the source Markdown is current, then regenerate its
 committed HTML through that repo's Jinja renderer.
 
@@ -117,7 +117,7 @@ packaging, or API behavior.
 - Run:
 
 ```powershell
-cd $env:EMULE_WORKSPACE_ROOT\repos\eMule-tooling
+cd $env:EMULE_WORKSPACE_ROOT\repos\emulebb-tooling
 git diff --check
 python scripts\docs-publish-check.py
 ```
@@ -174,7 +174,7 @@ proof remain explicit release-campaign evidence.
 
 ## CI And GitHub Checks
 
-Shared baseline CI is owned by `eMule-tooling`:
+Shared baseline CI is owned by `emulebb-tooling`:
 
 - reusable workflow: `.github/workflows/reusable-baseline.yml`
 - stable ref: `ci/v8`

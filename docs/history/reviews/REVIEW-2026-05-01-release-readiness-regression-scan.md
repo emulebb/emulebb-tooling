@@ -106,8 +106,8 @@ reproduction appears.
 The redesigned `/api/v1` REST surface was live-proved on 2026-05-01 with the
 isolated Debug x64 REST smoke lane:
 
-- report: `repos\eMule-build-tests\reports\rest-api-smoke\20260501-154017-eMule-main-debug`
-- command: `python repos\eMule-build-tests\scripts\rest-api-smoke.py --workspace-root workspaces\v0.72a --configuration Debug --server-search-count 1 --kad-search-count 1 --enable-upnp --keep-artifacts`
+- report: `repos\emulebb-build-tests\reports\rest-api-smoke\20260501-154017-eMule-main-debug`
+- command: `python repos\emulebb-build-tests\scripts\rest-api-smoke.py --workspace-root workspaces\v0.72a --configuration Debug --server-search-count 1 --kad-search-count 1 --enable-upnp --keep-artifacts`
 - result: passed, including auth checks, resource-style REST surface checks,
   server connect/disconnect, Kad connect/disconnect, one server search, one Kad
   search, HTML root compatibility, and clean app shutdown

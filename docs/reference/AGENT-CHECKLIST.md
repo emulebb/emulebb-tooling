@@ -22,7 +22,7 @@ appear to conflict, policy wins.
 
 - Use `EMULE_WORKSPACE_ROOT` style paths in maintained docs and scripts.
 - Edit app source in `workspaces\workspace\app\eMule-main`.
-- Treat `repos\eMule` as the branch-store checkout, not the normal edit
+- Treat `repos\emulebb` as the branch-store checkout, not the normal edit
   location.
 - Do not hardcode machine-local absolute paths in active docs or helpers.
 - Do not use `stale/*` branches as active work targets unless the task is
@@ -30,7 +30,7 @@ appear to conflict, policy wins.
 
 ## Docs Workflow
 
-- Put active Markdown under `repos\eMule-tooling\docs`.
+- Put active Markdown under `repos\emulebb-tooling\docs`.
 - Follow [Documentation Policy](../DOCS-POLICY.md) for naming, taxonomy, and
   navigation.
 - Use [Development Guide](DEVELOPMENT-GUIDE.md) for routine docs-only and
@@ -40,7 +40,7 @@ appear to conflict, policy wins.
 - For docs-only edits, run:
 
 ```powershell
-cd $env:EMULE_WORKSPACE_ROOT\repos\eMule-tooling
+cd $env:EMULE_WORKSPACE_ROOT\repos\emulebb-tooling
 git diff --check
 python scripts\docs-structure-check.py
 $env:NO_MKDOCS_2_WARNING='1'
@@ -66,14 +66,14 @@ python -m mkdocs build --strict
   date/time, compression, or structured-data logic, look for an existing
   standard library, platform API, project helper, or pinned dependency.
 - Keep app source changes in `workspaces\workspace\app\eMule-main`.
-- Use `repos\eMule-build` orchestration for build, validation, test, live-test,
+- Use `repos\emulebb-build` orchestration for build, validation, test, live-test,
   and packaging.
 - Do not run ad hoc direct `MSBuild` from app worktrees, `srchybrid`, or
-  `repos\eMule-build-tests`.
+  `repos\emulebb-build-tests`.
 - For app code, run workspace validation and both required x64 app builds:
 
 ```powershell
-cd $env:EMULE_WORKSPACE_ROOT\repos\eMule-build
+cd $env:EMULE_WORKSPACE_ROOT\repos\emulebb-build
 python -m emule_workspace validate
 python -m emule_workspace build app --variant main --config Debug --platform x64 --build-output-mode ErrorsOnly
 python -m emule_workspace build app --variant main --config Release --platform x64 --build-output-mode ErrorsOnly

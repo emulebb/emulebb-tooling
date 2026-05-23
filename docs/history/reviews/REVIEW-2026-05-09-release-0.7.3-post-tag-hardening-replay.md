@@ -27,9 +27,9 @@ with targeted probes.
   - `494` parity test cases passed
   - `71` web API test cases passed
   - native coverage directory:
-    `EMULE_WORKSPACE_ROOT\repos\eMule-build-tests\reports\native-coverage\20260509-140248-eMulebb-workspace-v0.72a-eMule-main-x64-Release`
+    `EMULE_WORKSPACE_ROOT\repos\emulebb-build-tests\reports\native-coverage\20260509-140248-eMulebb-workspace-v0.72a-eMule-main-x64-Release`
   - live-diff summary:
-    `EMULE_WORKSPACE_ROOT\repos\eMule-build-tests\reports\live-diff-summary.txt`
+    `EMULE_WORKSPACE_ROOT\repos\emulebb-build-tests\reports\live-diff-summary.txt`
 
 ## Commit Map
 

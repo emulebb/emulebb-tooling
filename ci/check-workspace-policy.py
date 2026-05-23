@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Python workspace policy audits used by eMule-build validation."""
+"""Python workspace policy audits used by emulebb-build validation."""
 
 from __future__ import annotations
 
@@ -263,7 +263,7 @@ def audit_build_policy(root: Path) -> None:
     assert_link_value(app, "emule.vcxproj", app_release, "IncrementalLink", "false")
     assert_link_value(app, "emule.vcxproj", app_release, "LinkControlFlowGuard", "true")
 
-    tests = load_project_xml(root, r"repos\eMule-build-tests\emule-tests.vcxproj")
+    tests = load_project_xml(root, r"repos\emulebb-build-tests\emule-tests.vcxproj")
     assert_no_project_configuration(tests, "emule-tests.vcxproj", "Platform", "Win32")
     assert_no_project_configuration(tests, "emule-tests.vcxproj", "Configuration", "_SpecialBootstrapNodes")
     for condition in (tests_debug, tests_release, tests_debug_arm64, tests_release_arm64):
@@ -290,7 +290,7 @@ def audit_build_policy(root: Path) -> None:
         assert_cl_compile_value(tests, "emule-tests.vcxproj", tests_release_build, prop, expected)
     assert_link_value(tests, "emule-tests.vcxproj", tests_release_build, "IncrementalLink", "false")
 
-    id3 = load_project_xml(root, r"repos\third_party\eMule-id3lib\libprj\id3lib.vcxproj")
+    id3 = load_project_xml(root, r"repos\third_party\emulebb-id3lib\libprj\id3lib.vcxproj")
     for condition in (id3_debug_x64, id3_debug_arm64):
         for prop, expected in (
             ("LanguageStandard", "stdcpp17"),
@@ -313,7 +313,7 @@ def audit_build_policy(root: Path) -> None:
         ):
             assert_cl_compile_value(id3, "id3lib.vcxproj", condition, prop, expected)
 
-    resizable = load_project_xml(root, r"repos\third_party\eMule-ResizableLib\ResizableLib\ResizableLib.vcxproj")
+    resizable = load_project_xml(root, r"repos\third_party\emulebb-resizablelib\ResizableLib\ResizableLib.vcxproj")
     for condition in (resizable_debug_x64, resizable_debug_arm64):
         for prop, expected in (
             ("LanguageStandard", "stdcpp17"),
@@ -334,7 +334,7 @@ def audit_build_policy(root: Path) -> None:
         ):
             assert_cl_compile_value(resizable, "ResizableLib.vcxproj", condition, prop, expected)
 
-    miniupnp = load_project_xml(root, r"repos\third_party\eMule-miniupnp\miniupnpc\msvc\miniupnpc.vcxproj")
+    miniupnp = load_project_xml(root, r"repos\third_party\emulebb-miniupnp\miniupnpc\msvc\miniupnpc.vcxproj")
     for condition in (miniupnp_debug_x64, miniupnp_debug_arm64):
         for prop, expected in (
             ("Optimization", "Disabled"),
@@ -354,7 +354,7 @@ def audit_build_policy(root: Path) -> None:
         ):
             assert_cl_compile_value(miniupnp, "miniupnpc.vcxproj", condition, prop, expected)
 
-    cryptopp = load_project_xml(root, r"repos\third_party\eMule-cryptopp\cryptlib.vcxproj")
+    cryptopp = load_project_xml(root, r"repos\third_party\emulebb-cryptopp\cryptlib.vcxproj")
     for prop, expected in (
         ("Optimization", "Disabled"),
         ("BufferSecurityCheck", "true"),
@@ -373,10 +373,10 @@ def audit_build_policy(root: Path) -> None:
     ):
         assert_cl_compile_value(cryptopp, "cryptlib.vcxproj", cryptopp_release, prop, expected)
 
-    cmake_module = resolve_workspace_path(root, r"repos\eMule-build\emule_workspace\cmake.py")
+    cmake_module = resolve_workspace_path(root, r"repos\emulebb-build\emule_workspace\cmake.py")
     assert "-DCMAKE_POLICY_DEFAULT_CMP0091=NEW" in read_text(cmake_module)
     assert "-DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded$<$<CONFIG:Debug>:Debug>" in read_text(cmake_module)
-    build_module = resolve_workspace_path(root, r"repos\eMule-build\emule_workspace\build.py")
+    build_module = resolve_workspace_path(root, r"repos\emulebb-build\emule_workspace\build.py")
     assert "static_msvc_runtime_cmake_arguments()" in read_text(build_module)
     print("Active build policy audit passed.")
 
@@ -416,7 +416,7 @@ def workspace_relative(root: Path, absolute_path: Path) -> str:
 def audit_branch_policy(root: Path) -> None:
     """Runs branch/worktree policy checks."""
 
-    build_deps_path = resolve_workspace_path(root, r"repos\eMule-build\deps.json")
+    build_deps_path = resolve_workspace_path(root, r"repos\emulebb-build\deps.json")
     build_deps = json.loads(read_text(build_deps_path))
     workspace_name = build_deps.get("workspace", {}).get("name") or "workspace"
     workspace_path = resolve_workspace_path(root, f"workspaces\\{workspace_name}")
@@ -464,19 +464,19 @@ def audit_branch_policy(root: Path) -> None:
 def audit_dependency_pins(root: Path) -> None:
     """Runs third-party dependency pin checks."""
 
-    build_repo = resolve_workspace_path(root, r"repos\eMule-build")
+    build_repo = resolve_workspace_path(root, r"repos\emulebb-build")
     sys.path.insert(0, str(build_repo))
     from emule_workspace.topology import canonical_topology  # pylint: disable=import-outside-toplevel
 
     topology_by_path = {repo.relative_path: repo.branch for repo in canonical_topology().third_party_repos}
     for relative_path in (
-        r"repos\third_party\eMule-cryptopp",
-        r"repos\third_party\eMule-id3lib",
-        r"repos\third_party\eMule-mbedtls",
-        r"repos\third_party\eMule-miniupnp",
-        r"repos\third_party\eMule-nlohmann-json",
-        r"repos\third_party\eMule-ResizableLib",
-        r"repos\third_party\eMule-zlib",
+        r"repos\third_party\emulebb-cryptopp",
+        r"repos\third_party\emulebb-id3lib",
+        r"repos\third_party\emulebb-mbedtls",
+        r"repos\third_party\emulebb-miniupnp",
+        r"repos\third_party\emulebb-nlohmann-json",
+        r"repos\third_party\emulebb-resizablelib",
+        r"repos\third_party\emulebb-zlib",
     ):
         repo_root = resolve_workspace_path(root, relative_path)
         if not repo_root.exists():
@@ -515,27 +515,27 @@ def audit_project_entrypoints(root: Path) -> None:
         assert_path_missing(app_root / r"srchybrid\emule.sln")
         assert_path_missing(app_root / r"srchybrid\emule.slnx")
 
-    build_project = resolve_workspace_path(root, r"repos\eMule-build\pyproject.toml")
-    build_cli = resolve_workspace_path(root, r"repos\eMule-build\emule_workspace\cli.py")
-    build_module = resolve_workspace_path(root, r"repos\eMule-build\emule_workspace\build.py")
-    assert_contains(build_project, "emule-workspace", "eMule-build must expose the Python-first emule_workspace orchestration package.")
+    build_project = resolve_workspace_path(root, r"repos\emulebb-build\pyproject.toml")
+    build_cli = resolve_workspace_path(root, r"repos\emulebb-build\emule_workspace\cli.py")
+    build_module = resolve_workspace_path(root, r"repos\emulebb-build\emule_workspace\build.py")
+    assert_contains(build_project, "emule-workspace", "emulebb-build must expose the Python-first emule_workspace orchestration package.")
     assert_contains(build_cli, "test python", "emule_workspace CLI must include the migrated Python test command surface.")
     assert_contains(build_cli, "package-release", "emule_workspace CLI must include the migrated release package command surface.")
     assert_contains(build_module, r"srchybrid.*emule\.vcxproj", r"emule_workspace must build the app through srchybrid\emule.vcxproj.")
     assert_not_contains(build_module, r"emule\.slnx?", "emule_workspace must not rely on emule.sln or emule.slnx.")
-    assert_path_missing(resolve_workspace_path(root, r"repos\eMule-build\workspace.ps1"))
+    assert_path_missing(resolve_workspace_path(root, r"repos\emulebb-build\workspace.ps1"))
     for doc in (
-        resolve_workspace_path(root, r"repos\eMule-build\README.md"),
-        resolve_workspace_path(root, r"repos\eMule-build-tests\README.md"),
-        resolve_workspace_path(root, r"repos\eMule-tooling\README.md"),
-        resolve_workspace_path(root, r"repos\eMule-tooling\AGENTS.md"),
-        resolve_workspace_path(root, r"repos\eMule-tooling\docs\WORKSPACE-POLICY.md"),
+        resolve_workspace_path(root, r"repos\emulebb-build\README.md"),
+        resolve_workspace_path(root, r"repos\emulebb-build-tests\README.md"),
+        resolve_workspace_path(root, r"repos\emulebb-tooling\README.md"),
+        resolve_workspace_path(root, r"repos\emulebb-tooling\AGENTS.md"),
+        resolve_workspace_path(root, r"repos\emulebb-tooling\docs\WORKSPACE-POLICY.md"),
     ):
         assert_not_contains(doc, r"emule\.slnx?", f"{doc} must not describe emule.sln or emule.slnx as active build entrypoints.")
         assert_not_contains(
             doc,
             r"(^|\s|`|&)(?:&\s*)?msbuild(?:\.exe)?\s+(?:[./\\\w:-]+\.vcxproj|[./\\\w:-]+\.slnx?|/t:|/p:|-t:|-p:)",
-            f"{doc} must not document direct MSBuild command lines as active build entrypoints; use repos\\eMule-build orchestration.",
+            f"{doc} must not document direct MSBuild command lines as active build entrypoints; use repos\\emulebb-build orchestration.",
         )
     print("Project entrypoint audit passed.")
 
@@ -544,12 +544,12 @@ def audit_warning_policy(root: Path) -> None:
     """Runs warning policy checks."""
 
     projects = {
-        r"repos\third_party\eMule-cryptopp\cryptlib.vcxproj": (
+        r"repos\third_party\emulebb-cryptopp\cryptlib.vcxproj": (
             (r"_SILENCE_STDEXT_ARR_ITERS_DEPRECATION_WARNING", True, "Crypto++ must keep the narrow checked-iterator suppression."),
             (r"DisableSpecificWarnings[^<]*4996", False, "Do not blanket-disable C4996 in Crypto++ project settings."),
             (r"/wd4996", False, "Do not inject /wd4996 into Crypto++ build flags."),
         ),
-        r"repos\third_party\eMule-miniupnp\miniupnpc\msvc\miniupnpc.vcxproj": (
+        r"repos\third_party\emulebb-miniupnp\miniupnpc\msvc\miniupnpc.vcxproj": (
             (r"_WINSOCK_DEPRECATED_NO_WARNINGS", True, "miniupnp must keep the Winsock-specific deprecation suppression."),
             (r"DisableSpecificWarnings[^<]*4996", False, "Do not blanket-disable C4996 in miniupnp project settings."),
             (r"/wd4996", False, "Do not inject /wd4996 into miniupnp build flags."),
@@ -558,15 +558,15 @@ def audit_warning_policy(root: Path) -> None:
             (r"<ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>", True, "The app project must keep external headers at /external:W0 through ExternalWarningLevel in Debug and Release."),
             (r"<AdditionalOptions[^>]*>[^<]*/external:W[0-4]\b", False, "Do not inject raw /external:W* switches through app AdditionalOptions; use ExternalWarningLevel instead."),
         ),
-        r"repos\eMule-build-tests\emule-tests.vcxproj": (
+        r"repos\emulebb-build-tests\emule-tests.vcxproj": (
             (r"DisableSpecificWarnings[^<]*4996", False, "Do not blanket-disable C4996 in active project settings."),
             (r"/wd4996", False, "Do not inject /wd4996 into active build flags."),
         ),
-        r"repos\third_party\eMule-id3lib\libprj\id3lib.vcxproj": (
+        r"repos\third_party\emulebb-id3lib\libprj\id3lib.vcxproj": (
             (r"DisableSpecificWarnings[^<]*4996", False, "Do not blanket-disable C4996 in active project settings."),
             (r"/wd4996", False, "Do not inject /wd4996 into active build flags."),
         ),
-        r"repos\third_party\eMule-ResizableLib\ResizableLib\ResizableLib.vcxproj": (
+        r"repos\third_party\emulebb-resizablelib\ResizableLib\ResizableLib.vcxproj": (
             (r"DisableSpecificWarnings[^<]*4996", False, "Do not blanket-disable C4996 in active project settings."),
             (r"/wd4996", False, "Do not inject /wd4996 into active build flags."),
         ),
@@ -588,7 +588,7 @@ def audit_warning_policy(root: Path) -> None:
 def audit_localization_policy(root: Path) -> None:
     """Runs release localization manifest and required-id coverage checks."""
 
-    tooling_root = resolve_workspace_path(root, r"repos\eMule-tooling")
+    tooling_root = resolve_workspace_path(root, r"repos\emulebb-tooling")
     helper = tooling_root / r"helpers\rc-string-table.py"
     english_rc = resolve_workspace_path(root, r"workspaces\workspace\app\eMule-main\srchybrid\emule.rc")
     release_languages = tooling_root / r"helpers\rc-release-languages.json"
@@ -664,14 +664,14 @@ def tracked_powershell_paths(repo_root: Path) -> tuple[str, ...]:
 def audit_powershell_boundary(root: Path) -> None:
     """Checks that only approved Windows runtime assets carry PowerShell."""
 
-    tooling_root = resolve_workspace_path(root, r"repos\eMule-tooling")
+    tooling_root = resolve_workspace_path(root, r"repos\emulebb-tooling")
     amutorrent_root = resolve_workspace_path(root, r"repos\amutorrent")
     scan_roots = (
         tooling_root,
         amutorrent_root,
-        resolve_workspace_path(root, r"repos\eMule-build"),
-        resolve_workspace_path(root, r"repos\eMule-build-tests"),
-        resolve_workspace_path(root, r"repos\eMule"),
+        resolve_workspace_path(root, r"repos\emulebb-build"),
+        resolve_workspace_path(root, r"repos\emulebb-build-tests"),
+        resolve_workspace_path(root, r"repos\emulebb"),
         resolve_workspace_path(root, r"workspaces\workspace\app\eMule-main"),
         resolve_workspace_path(root, r"workspaces\workspace\app\eMule-community-baseline"),
         resolve_workspace_path(root, r"workspaces\workspace\app\eMule-community-tracing-harness"),
@@ -712,14 +712,14 @@ def modified_tracked_paths(repo_root: Path) -> tuple[str, ...]:
 def audit_editorconfig_policy(root: Path) -> None:
     """Runs editorconfig/normalization checks on modified tracked files."""
 
-    tooling_root = resolve_workspace_path(root, r"repos\eMule-tooling")
+    tooling_root = resolve_workspace_path(root, r"repos\emulebb-tooling")
     normalizer = tooling_root / r"helpers\source-normalizer.py"
     if not normalizer.is_file():
         raise RuntimeError(f"Missing source normalizer: {normalizer}")
     for label, repo_root in (
         ("tooling", tooling_root),
-        ("build", resolve_workspace_path(root, r"repos\eMule-build")),
-        ("tests", resolve_workspace_path(root, r"repos\eMule-build-tests")),
+        ("build", resolve_workspace_path(root, r"repos\emulebb-build")),
+        ("tests", resolve_workspace_path(root, r"repos\emulebb-build-tests")),
         ("app-main", resolve_workspace_path(root, r"workspaces\workspace\app\eMule-main")),
         ("app-community", resolve_workspace_path(root, r"workspaces\workspace\app\eMule-community-baseline")),
         ("app-tracing-harness", resolve_workspace_path(root, r"workspaces\workspace\app\eMule-community-tracing-harness")),
@@ -757,12 +757,12 @@ def collect_doc_path_issues(root: Path) -> list[str]:
     """Collects active documentation path audit issues."""
 
     issues: list[str] = []
-    tooling = resolve_workspace_path(root, r"repos\eMule-tooling")
+    tooling = resolve_workspace_path(root, r"repos\emulebb-tooling")
     scan_scopes = (
         (tooling, ("README.md", "AGENTS.md", r"docs\WORKSPACE-POLICY.md")),
         (tooling, (r"docs\active\*.md", r"docs\active\items\*.md", r"docs\active\plans\*.md", r"docs\active\reviews\*.md")),
-        (resolve_workspace_path(root, r"repos\eMule-build"), ("README.md", "AGENTS.md")),
-        (resolve_workspace_path(root, r"repos\eMule-build-tests"), ("README.md", "AGENTS.md")),
+        (resolve_workspace_path(root, r"repos\emulebb-build"), ("README.md", "AGENTS.md")),
+        (resolve_workspace_path(root, r"repos\emulebb-build-tests"), ("README.md", "AGENTS.md")),
         (resolve_workspace_path(root, r"workspaces\workspace\app\eMule-main"), ("README.md", "AGENTS.md")),
         (resolve_workspace_path(root, r"workspaces\workspace\app\eMule-community-baseline"), ("AGENTS.md",)),
         (resolve_workspace_path(root, r"workspaces\workspace\app\eMule-community-tracing-harness"), ("AGENTS.md",)),
@@ -868,14 +868,14 @@ def audit_doc_paths(root: Path) -> None:
     """Runs active documentation path checks."""
 
     issues = collect_doc_path_issues(root)
-    tooling = resolve_workspace_path(root, r"repos\eMule-tooling")
-    policy_text = r"repos\eMule-tooling\docs\WORKSPACE-POLICY.md"
+    tooling = resolve_workspace_path(root, r"repos\emulebb-tooling")
+    policy_text = r"repos\emulebb-tooling\docs\WORKSPACE-POLICY.md"
     agent_files = (
         (root, "AGENTS.md"),
         (tooling, "AGENTS.md"),
         (tooling, r"scripts\AGENTS.md"),
-        (resolve_workspace_path(root, r"repos\eMule-build"), "AGENTS.md"),
-        (resolve_workspace_path(root, r"repos\eMule-build-tests"), "AGENTS.md"),
+        (resolve_workspace_path(root, r"repos\emulebb-build"), "AGENTS.md"),
+        (resolve_workspace_path(root, r"repos\emulebb-build-tests"), "AGENTS.md"),
         (resolve_workspace_path(root, r"workspaces\workspace\app\eMule-main"), "AGENTS.md"),
         (resolve_workspace_path(root, r"workspaces\workspace\app\eMule-community-baseline"), "AGENTS.md"),
         (resolve_workspace_path(root, r"workspaces\workspace\app\eMule-community-tracing-harness"), "AGENTS.md"),
@@ -887,7 +887,7 @@ def audit_doc_paths(root: Path) -> None:
             issues,
             repo_root,
             relative_path,
-            (r"the canonical remote repo is `EMULE_WORKSPACE_ROOT\repos\eMule-remote`", "community/v0.72a` is the imported baseline"),
+            (r"the canonical remote repo is `EMULE_WORKSPACE_ROOT\repos\emulebb-remote`", "community/v0.72a` is the imported baseline"),
             "AGENTS.md contains stale workspace directive text",
         )
     resume_text = get_optional_text(tooling, r"docs\RESUME.md")
@@ -896,7 +896,7 @@ def audit_doc_paths(root: Path) -> None:
             issues.append(f"{tooling}\\docs\\RESUME.md: RESUME.md must identify itself as a handoff note.")
         if "not policy" not in resume_text:
             issues.append(f"{tooling}\\docs\\RESUME.md: RESUME.md must not be usable as policy authority.")
-    assert_text_not_contains(issues, tooling, "README.md", (r"repos\eMule-remote", "remote companion app"), "active tooling README must not reference abandoned eMule-remote entrypoints")
+    assert_text_not_contains(issues, tooling, "README.md", (r"repos\emulebb-remote", "remote companion app"), "active tooling README must not reference abandoned eMule-remote entrypoints")
     assert_rest_contract_defers_to_openapi(issues, tooling)
     assert_active_index_non_done_count(issues, tooling)
     if issues:

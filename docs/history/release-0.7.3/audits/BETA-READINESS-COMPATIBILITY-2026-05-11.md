@@ -11,9 +11,9 @@ Release blocker. The active release-intent branch is not aligned with current `m
 ## Review Checklist
 
 - [x] Read workspace root `AGENTS.md`.
-- [x] Read `repos/eMule-tooling/docs/WORKSPACE-POLICY.md`.
+- [x] Read `repos/emulebb-tooling/docs/WORKSPACE-POLICY.md`.
 - [x] Read repo-local `AGENTS.md` files for the app, build, test, and tooling repos after the workspace policy.
-- [x] Ran `git status --short --branch` before drawing conclusions for `workspaces/v0.72a/app/eMule-main`, `workspaces/v0.72a/app/eMule-v0.72a-community`, `workspaces/v0.72a/app/eMule-v0.72a-broadband`, `repos/eMule-build`, `repos/eMule-build-tests`, and `repos/eMule-tooling`.
+- [x] Ran `git status --short --branch` before drawing conclusions for `workspaces/v0.72a/app/eMule-main`, `workspaces/v0.72a/app/eMule-v0.72a-community`, `workspaces/v0.72a/app/eMule-v0.72a-broadband`, `repos/emulebb-build`, `repos/emulebb-build-tests`, and `repos/emulebb-tooling`.
 - [x] Compared `main` against `release/v0.72a-community` for changed-surface scale and compatibility-sensitive files.
 - [x] Compared `main` against `release/v0.72a-broadband` for release-branch readiness.
 - [x] Reviewed beta 0.7.3 version, tag, package naming, and update-check identity in app and build tooling.
@@ -29,7 +29,7 @@ Severity: Release blocker
 
 Affected area: Release branch policy, beta tag source, packaged-code identity, update-check identity.
 
-Evidence: `repos/eMule-tooling/docs/WORKSPACE-POLICY.md:92` states that `main` is not a release branch, and `docs/WORKSPACE-POLICY.md:93` plus `docs/WORKSPACE-POLICY.md:103` identify `release/v0.72a-broadband` as the only release-intent branch. `git rev-list --left-right --count release/v0.72a-broadband...main` in `workspaces/v0.72a/app/eMule-main` returned `3	308`. The release-intent branch has only `57dd9f7`, `e2e991a`, and `d545177` beyond `main`, while `main` has 308 commits beyond it. `git show release/v0.72a-broadband:srchybrid/Version.h` shows no `MOD_RELEASE_*` beta identity, while current `main` has `MOD_RELEASE_PRODUCT_NAME`, `MOD_RELEASE_TAG_PREFIX`, and `MOD_RELEASE_VERSION_*` set to `eMule BB`, `emule-bb-v`, and `0.7.3` in `srchybrid/Version.h:36` through `srchybrid/Version.h:47`. `git diff --name-status release/v0.72a-broadband..main -- srchybrid/Version.h srchybrid/ReleaseUpdateCheckSeams.h srchybrid/ReleaseUpdateCheck.cpp srchybrid/emule.rc` shows the release-update implementation and eMule BB resource branding are absent from the release-intent branch.
+Evidence: `repos/emulebb-tooling/docs/WORKSPACE-POLICY.md:92` states that `main` is not a release branch, and `docs/WORKSPACE-POLICY.md:93` plus `docs/WORKSPACE-POLICY.md:103` identify `release/v0.72a-broadband` as the only release-intent branch. `git rev-list --left-right --count release/v0.72a-broadband...main` in `workspaces/v0.72a/app/eMule-main` returned `3	308`. The release-intent branch has only `57dd9f7`, `e2e991a`, and `d545177` beyond `main`, while `main` has 308 commits beyond it. `git show release/v0.72a-broadband:srchybrid/Version.h` shows no `MOD_RELEASE_*` beta identity, while current `main` has `MOD_RELEASE_PRODUCT_NAME`, `MOD_RELEASE_TAG_PREFIX`, and `MOD_RELEASE_VERSION_*` set to `eMule BB`, `emule-bb-v`, and `0.7.3` in `srchybrid/Version.h:36` through `srchybrid/Version.h:47`. `git diff --name-status release/v0.72a-broadband..main -- srchybrid/Version.h srchybrid/ReleaseUpdateCheckSeams.h srchybrid/ReleaseUpdateCheck.cpp srchybrid/emule.rc` shows the release-update implementation and eMule BB resource branding are absent from the release-intent branch.
 
 Impact: Tagging `release/v0.72a-broadband` now would not tag the current beta product; tagging `main` would conflict with current policy. Either path can produce a public beta whose tag, binary version, GitHub update-check rules, and release notes do not describe the same code. That is a first-beta publication blocker, not only a documentation issue.
 
@@ -52,7 +52,7 @@ Severity: High
 
 Affected area: Packaging orchestration, release asset provenance, tag/package consistency.
 
-Evidence: `repos/eMule-build/emule_workspace/release.py:34` calls `ensure_canonical_app_anchor(layout)`, then `release.py:35` hardcodes `app_root = layout.get_app_variant("main").path`; `release.py:36` checks the package version against that app root. The `package-release` command in `repos/eMule-build/emule_workspace/cli.py:518` through `cli.py:535` exposes `--release-version` but no release-variant or tag-commit input. Current policy says official releases should be annotated tags on a chosen release-branch commit in `docs/WORKSPACE-POLICY.md:536` through `docs/WORKSPACE-POLICY.md:537`.
+Evidence: `repos/emulebb-build/emule_workspace/release.py:34` calls `ensure_canonical_app_anchor(layout)`, then `release.py:35` hardcodes `app_root = layout.get_app_variant("main").path`; `release.py:36` checks the package version against that app root. The `package-release` command in `repos/emulebb-build/emule_workspace/cli.py:518` through `cli.py:535` exposes `--release-version` but no release-variant or tag-commit input. Current policy says official releases should be annotated tags on a chosen release-branch commit in `docs/WORKSPACE-POLICY.md:536` through `docs/WORKSPACE-POLICY.md:537`.
 
 Impact: Even if the release branch is fixed, the supported package command still proves and packages `main`. That can produce ZIPs and manifests from one commit while the public annotated tag points at another commit. The update checker is strict about `emule-bb-vMAJOR.MINOR.PATCH` and `eMule-broadband-` assets in `srchybrid/ReleaseUpdateCheckSeams.h:63` through `srchybrid/ReleaseUpdateCheckSeams.h:64`, so provenance drift directly affects users who rely on update notifications.
 
@@ -63,11 +63,11 @@ Suggested validation: Package x64 and ARM64 from the chosen release branch, insp
 Owner suggestion: Build orchestration owner with release owner sign-off.
 
 Execution checklist:
-- [ ] In `repos/eMule-build`, run `git status --short --branch` before editing package orchestration.
+- [ ] In `repos/emulebb-build`, run `git status --short --branch` before editing package orchestration.
 - [ ] Add a packaging source selection that is policy-aligned with the chosen release branch.
 - [ ] Make `package-release` fail if the selected app source does not contain the requested `MOD_RELEASE_VERSION_TEXT`.
 - [ ] Make the package manifest record the selected app variant and exact app commit.
-- [ ] Run `python -m emule_workspace validate` from `repos/eMule-build`.
+- [ ] Run `python -m emule_workspace validate` from `repos/emulebb-build`.
 - [ ] Run `python -m emule_workspace package-release --config Release --platform x64 --release-version 0.7.3`.
 - [ ] Run `python -m emule_workspace package-release --config Release --platform ARM64 --release-version 0.7.3`.
 
@@ -77,22 +77,22 @@ Severity: High
 
 Affected area: Regression evidence, package evidence, REST/controller compatibility claims.
 
-Evidence: `docs/active/RELEASE-0.7.3.md:87` through `docs/active/RELEASE-0.7.3.md:94` records current 0.7.3 package rehearsal evidence for app commit `74e5c76`, build commit `0ead21a`, and tooling commit `2d904c3`. Current app `main` is `df1191e`; `git rev-list --count 74e5c76..main` returned `22`, including CI-014 REST and adapter hardening commits. Current `repos/eMule-build` is `7d81b07`, two commits past `0ead21a`; current `repos/eMule-tooling` is `d3b0cba`, 29 commits past `2d904c3`. `repos/eMule-build-tests` is also currently dirty, with modified live E2E harness files and untracked `scripts/radarr-emulebb-live.py` and `scripts/sonarr-emulebb-live.py`.
+Evidence: `docs/active/RELEASE-0.7.3.md:87` through `docs/active/RELEASE-0.7.3.md:94` records current 0.7.3 package rehearsal evidence for app commit `74e5c76`, build commit `0ead21a`, and tooling commit `2d904c3`. Current app `main` is `df1191e`; `git rev-list --count 74e5c76..main` returned `22`, including CI-014 REST and adapter hardening commits. Current `repos/emulebb-build` is `7d81b07`, two commits past `0ead21a`; current `repos/emulebb-tooling` is `d3b0cba`, 29 commits past `2d904c3`. `repos/emulebb-build-tests` is also currently dirty, with modified live E2E harness files and untracked `scripts/radarr-emulebb-live.py` and `scripts/sonarr-emulebb-live.py`.
 
 Impact: The documented proof no longer proves the current code or current release tooling. This is especially risky because the post-evidence app commits touch REST route shape, response envelopes, search type tokens, Torznab media search, qBit Arr import, and peer-friend REST response behavior. Controller compatibility and update readiness must be based on the code that will actually ship.
 
-Recommended fix: Treat existing proof as historical evidence only. After the release branch/package source issue is resolved and the test-harness worktree is settled, rerun the minimum current-candidate proof from `repos/eMule-build` with the supported `python -m emule_workspace` entrypoints.
+Recommended fix: Treat existing proof as historical evidence only. After the release branch/package source issue is resolved and the test-harness worktree is settled, rerun the minimum current-candidate proof from `repos/emulebb-build` with the supported `python -m emule_workspace` entrypoints.
 
 Suggested validation: Re-run validation, native/community comparison, focused live/controller checks, and package rehearsal on the exact release candidate. Record current app/build/test/tooling commits in the release control document only after the runs pass.
 
 Owner suggestion: Release QA owner with support from test-harness owner.
 
 Execution checklist:
-- [ ] Wait for the concurrent `repos/eMule-build-tests` live-harness changes to be either committed or explicitly excluded from release evidence.
+- [ ] Wait for the concurrent `repos/emulebb-build-tests` live-harness changes to be either committed or explicitly excluded from release evidence.
 - [ ] Run `git status --short --branch` in every repo and app worktree used for the proof.
-- [ ] From `repos/eMule-build`, run `python -m emule_workspace validate`.
-- [ ] From `repos/eMule-build`, run `python -m emule_workspace test community-core-coverage --config Release --platform x64 --test-run-variant main --baseline-variant community`.
-- [ ] From `repos/eMule-build`, run the scoped live/controller gates required by `docs/active/RELEASE-0.7.3.md` for the final candidate.
+- [ ] From `repos/emulebb-build`, run `python -m emule_workspace validate`.
+- [ ] From `repos/emulebb-build`, run `python -m emule_workspace test community-core-coverage --config Release --platform x64 --test-run-variant main --baseline-variant community`.
+- [ ] From `repos/emulebb-build`, run the scoped live/controller gates required by `docs/active/RELEASE-0.7.3.md` for the final candidate.
 - [ ] Re-run x64 and ARM64 `package-release` for version `0.7.3` after the package source is policy-aligned.
 - [ ] Record the exact app, build, build-tests, and tooling commits used by the refreshed proof.
 
@@ -118,7 +118,7 @@ Execution checklist:
 - [ ] Add a second scenario proving manual `MaxUploadClientsAllowed=12` is honored.
 - [ ] Add a slow/zero uploader scenario proving warm-up, recycle, and cooldown timings match `docs/history/features/FEATURE-BROADBAND.md`.
 - [ ] Add a collection-request scenario proving collection downloads still complete without the removed priority slot bypass.
-- [ ] Run the resulting checks through `python -m emule_workspace test community-core-coverage --config Release --platform x64 --test-run-variant main --baseline-variant community` or the narrower supported `eMule-build` entrypoint that owns the new tests.
+- [ ] Run the resulting checks through `python -m emule_workspace test community-core-coverage --config Release --platform x64 --test-run-variant main --baseline-variant community` or the narrower supported `emulebb-build` entrypoint that owns the new tests.
 
 ## Missing Tests / Validation Gaps
 
@@ -128,19 +128,19 @@ Execution checklist:
 - [ ] Migrated `preferences.ini` compatibility coverage for stock unlimited upload and missing broadband policy keys.
 - [ ] Upload-slot cap, slow-slot recycle, cooldown, and collection-request regression coverage.
 - [ ] Final x64 and ARM64 package rehearsal after package tooling and release-branch policy are aligned.
-- [ ] Clean or intentionally frozen `repos/eMule-build-tests` state before live/controller evidence is treated as release proof.
+- [ ] Clean or intentionally frozen `repos/emulebb-build-tests` state before live/controller evidence is treated as release proof.
 
 ## Cross-review Notes
 
 - Naming and release parser constants on current app `main` are aligned with policy: `srchybrid/Version.h:39` through `srchybrid/Version.h:47` use `eMule BB` and `0.7.3`, while `srchybrid/ReleaseUpdateCheckSeams.h:63` through `srchybrid/ReleaseUpdateCheckSeams.h:64` use `emule-bb-v` and `eMule-broadband-`.
-- `repos/eMule-build/emule_workspace/config.py:145` and `repos/eMule-build/emule_workspace/cli.py:521` default release packaging to `0.7.3`.
+- `repos/emulebb-build/emule_workspace/config.py:145` and `repos/emulebb-build/emule_workspace/cli.py:521` default release packaging to `0.7.3`.
 - The current workspace manifest maps `main`, `community`, `broadband`, and `tracing-harness` worktrees consistently with the policy, but the release packaging command does not use the `broadband` release-intent worktree.
-- The dirty `repos/eMule-build-tests` state appears to be concurrent/prior live-harness work. I did not modify it.
+- The dirty `repos/emulebb-build-tests` state appears to be concurrent/prior live-harness work. I did not modify it.
 
 ## Assumptions
 
 - I treated `release/v0.72a-community` as the parity/regression baseline and did not treat stale branches as active.
-- I treated existing modified/untracked files in `repos/eMule-build-tests` as prior work from another user or agent.
+- I treated existing modified/untracked files in `repos/emulebb-build-tests` as prior work from another user or agent.
 - I did not run build, validation, live-test, or package commands during this audit because the request was review output only and other agents are working in parallel.
 - I treated current local `main` branches as current because `git status --short --branch` reported `main...origin/main` without ahead/behind counts for the app, build, build-tests, and tooling repos.
 

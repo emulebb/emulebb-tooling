@@ -4,13 +4,13 @@ This runbook is the repeatable workflow for creating, updating, validating, and
 closing eMuleBB backlog records.
 
 `docs/active/` is the current local spec and evidence layer. For future-roadmap
-items marked `workflow: github`, GitHub issues in `eMulebb/eMule` and the
+items marked `workflow: github`, GitHub issues in `emulebb/emulebb` and the
 `eMuleBB Roadmap` project own workflow state; the local Markdown file remains
 the engineering spec and evidence record.
 
 ## Preflight
 
-1. Read `EMULE_WORKSPACE_ROOT\repos\eMule-tooling\docs\WORKSPACE-POLICY.md`.
+1. Read `EMULE_WORKSPACE_ROOT\repos\emulebb-tooling\docs\WORKSPACE-POLICY.md`.
 2. Check `git status --short --branch` in every repo you will read for
    current-state decisions or edit.
 3. Revalidate candidate backlog work against current `main`, current dependency
@@ -64,7 +64,7 @@ Use this path for promoted future-roadmap slices:
 3. Add the item ID to the appropriate roadmap lane in
    `docs\active\FUTURE-ROADMAP.md`.
 4. Run `python scripts\github-roadmap-sync.py` to preview the GitHub import.
-5. Apply the sync when ready so the issue exists in `eMulebb/eMule` and is added
+5. Apply the sync when ready so the issue exists in `emulebb/emulebb` and is added
    to the `eMuleBB Roadmap` project.
 6. Ensure the local item has `workflow: github`, `github_issue:`, and the
    workflow-status note inserted by the sync helper.
@@ -90,7 +90,7 @@ has project scope and network access.
 
 ## Validation And Commit
 
-Run these checks from `EMULE_WORKSPACE_ROOT\repos\eMule-tooling` after backlog
+Run these checks from `EMULE_WORKSPACE_ROOT\repos\emulebb-tooling` after backlog
 or active-index changes:
 
 ```powershell

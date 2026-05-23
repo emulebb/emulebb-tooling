@@ -23,8 +23,8 @@ granular item commit.
 ## Execution Workflow
 
 1. Refresh repository state.
-   - Check `git status --short --branch` in `repos\eMule-tooling`,
-     `repos\eMule-build`, `repos\eMule-build-tests`, and the active app
+   - Check `git status --short --branch` in `repos\emulebb-tooling`,
+     `repos\emulebb-build`, `repos\emulebb-build-tests`, and the active app
      worktree.
    - Confirm the app candidate is on `main` and the baseline branch exists.
 

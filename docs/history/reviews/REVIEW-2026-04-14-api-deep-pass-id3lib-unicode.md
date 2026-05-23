@@ -12,7 +12,7 @@ Focused on two things only:
 
 - live Windows / CRT / Winsock API modernization seams still present in current
   `workspaces\v0.72a\app\eMule-main\srchybrid`
-- whether the vendored `repos\third_party\eMule-id3lib` can realistically be
+- whether the vendored `repos\third_party\emulebb-id3lib` can realistically be
   made Unicode-safe, rather than just documented as "old"
 
 ## Findings
@@ -20,7 +20,7 @@ Focused on two things only:
 ### 1. `id3lib.vcxproj` says Unicode, but the actual library path API is still narrow
 
 The current vendor project is built with `CharacterSet=Unicode` in
-`repos\third_party\eMule-id3lib\libprj\id3lib.vcxproj`, but that does **not**
+`repos\third_party\emulebb-id3lib\libprj\id3lib.vcxproj`, but that does **not**
 mean the library can safely consume UTF-16 file paths.
 
 The actual implementation still hinges on narrow path handling:

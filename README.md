@@ -7,16 +7,16 @@ configuration, and engineering reference material.
 It is not the app repo and it is not the build orchestrator:
 
 - app source: `workspaces\workspace\app\eMule-main`
-- branch-store checkout: `repos\eMule`
-- build/test orchestration: `repos\eMule-build`
-- shared test helpers: `repos\eMule-build-tests`
+- branch-store checkout: `repos\emulebb`
+- build/test orchestration: `repos\emulebb-build`
+- shared test helpers: `repos\emulebb-build-tests`
 - local live-test ED2K server: `repos\goed2k-server`
 - workspace docs and helper audits: this repo
 
 ## Start Here
 
 - rendered docs site:
-  <https://emulebb.github.io/eMule-tooling/>
+  <https://emulebb.github.io/emulebb-tooling/>
 - workspace policy:
   [`docs/WORKSPACE-POLICY.md`](docs/WORKSPACE-POLICY.md)
 - agent checklist:
@@ -44,7 +44,7 @@ It is not the app repo and it is not the build orchestrator:
 - reusable baseline GitHub Actions workflow under `.github\workflows\`
 
 Workspace materialization, dependency pinning, app builds, test orchestration,
-and release packaging are owned by `repos\eMule-build`. App source is edited in
+and release packaging are owned by `repos\emulebb-build`. App source is edited in
 the active app worktree, not in this repo.
 
 ## Common Commands
@@ -78,7 +78,7 @@ python scripts\docs-item-taxonomy-check.py
 Run workspace validation through the build orchestrator:
 
 ```powershell
-cd $env:EMULE_WORKSPACE_ROOT\repos\eMule-build
+cd $env:EMULE_WORKSPACE_ROOT\repos\emulebb-build
 python -m emule_workspace validate
 ```
 

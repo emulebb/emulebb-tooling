@@ -51,10 +51,10 @@ jobs:
         with:
           path: repo
 
-      - name: Checkout eMule-tooling
+      - name: Checkout emulebb-tooling
         uses: actions/checkout@v6
         with:
-          repository: eMulebb/eMule-tooling
+          repository: emulebb/emulebb-tooling
           ref: ${{ inputs.tooling_ref }}
           path: tooling
 

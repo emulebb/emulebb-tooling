@@ -13,8 +13,8 @@ Revalidated the live backlog and historical docs against:
 - `workspaces\v0.72a\app\eMule-main`
 - `analysis\emuleai`
 - `analysis\stale-v0.72a-experimental-clean`
-- `repos\eMule-tooling\docs`
-- `repos\eMule-tooling\docs/active`
+- `repos\emulebb-tooling\docs`
+- `repos\emulebb-tooling\docs/active`
 
 Current app repo state at review time:
 

@@ -112,7 +112,7 @@ be tracked as active item IDs before being added here as pending work.
 | Reload shared files | `POST /shared-files/operations/reload` and `/shared-directories/operations/reload` | implemented | Final contract names both operation routes. |
 | List shared directories | `GET /shared-directories` | implemented | Current REST supports configured roots. |
 | Replace shared directory roots | `PATCH /shared-directories` | implemented | Request roots accept compact string paths or `{path, recursive}` objects; current live E2E covers persistence. |
-| Auto-share folder live monitor add/remove file events | `GET /shared-files` plus live E2E | implemented | Live REST test coverage exists in `eMule-build-tests`; final contract stays resource-based. |
+| Auto-share folder live monitor add/remove file events | `GET /shared-files` plus live E2E | implemented | Live REST test coverage exists in `emulebb-build-tests`; final contract stays resource-based. |
 | Shared-files sort/column state | none | obsolete | Presentation-only. |
 
 ## Uploads And Queue
@@ -200,7 +200,7 @@ be tracked as active item IDs before being added here as pending work.
 | Uploads in data pipeline | implemented | `/uploads` rows remain preserved through the eMuleBB manager fetch result. |
 | Transfer detail hydration | implemented | aMuTorrent hydrates peers plus part/source detail from `/transfers/{hash}/details`. |
 | Search polling | implemented | aMuTorrent stores the returned `id` and polls `/searches/{searchId}` for results. |
-| Browser smoke | implemented | `eMule-build-tests` now owns `amutorrent-browser-smoke.py`, launched from the aggregate live E2E suite. |
+| Browser smoke | implemented | `emulebb-build-tests` now owns `amutorrent-browser-smoke.py`, launched from the aggregate live E2E suite. |
 
 ## Arr And qBittorrent-Compatible Adapter Boundary
 

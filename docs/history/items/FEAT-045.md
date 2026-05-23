@@ -58,7 +58,7 @@ the endpoint with compatibility fallback for older eMule BB builds.
 - 2026-05-08: Promoted for Release 1 with `AMUT-002`. The native app advertises
   `capabilities.transferDetails`, the aMuTorrent adapter consumes the endpoint
   when that capability is present, and
-  `repos/eMule-build-tests/reports/amutorrent-browser-smoke-latest/result.json`
+  `repos/emulebb-build-tests/reports/amutorrent-browser-smoke-latest/result.json`
   records passing browser smoke proof.
 
 ## Relationship To Other Items

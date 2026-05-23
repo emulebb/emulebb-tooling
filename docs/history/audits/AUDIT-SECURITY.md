@@ -567,7 +567,7 @@ The following are explicitly flagged in the codebase and represent acknowledged 
 
 | Library | Version | Usage | Status |
 |---------|---------|-------|--------|
-| Crypto++ (`../../eMule-cryptopp/`) | — | DH, MD4, MD5, SHA, AutoSeededRandomPool, RC4 | Active |
+| Crypto++ (`../../emulebb-cryptopp/`) | — | DH, MD4, MD5, SHA, AutoSeededRandomPool, RC4 | Active |
 | mbedTLS | 3.x (PSA API) | TLS for web server and SMTP | Active, Modern |
 | Windows CryptoAPI | System | S/MIME / PKCS-7 email signing | Active, Legacy |
 

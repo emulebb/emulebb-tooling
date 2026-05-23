@@ -78,7 +78,7 @@ condition in [CI-011](../items/CI-011.md) and
 - `python -m emule_workspace test live-e2e --config Release
   --platform x64`
 - Artifact:
-  `repos\eMule-build-tests\reports\live-e2e-suite\20260509-093500-eMule-main-release\result.json`
+  `repos\emulebb-build-tests\reports\live-e2e-suite\20260509-093500-eMule-main-release\result.json`
 - Aggregate status: `passed`; `has_inconclusive_suites=true`.
 - Deterministic suites and controller suites passed:
   `preference-ui`, `shared-files-ui`, `config-stability-ui`,

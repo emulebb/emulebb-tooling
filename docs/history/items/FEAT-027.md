@@ -59,7 +59,7 @@ pick the next startup/shutdown hardening slices."
 Current evidence for future follow-up work:
 
 - startup matrix artifact:
-  `EMULE_WORKSPACE_ROOT\repos\eMule-build-tests\reports\startup-profile-scenarios\20260418-121956-eMule-main-debug\startup-profiles-wrapper-summary.json`
+  `EMULE_WORKSPACE_ROOT\repos\emulebb-build-tests\reports\startup-profile-scenarios\20260418-121956-eMule-main-debug\startup-profiles-wrapper-summary.json`
 - focused shutdown probe:
   `EMULE_WORKSPACE_ROOT\scratch\shutdown-probe-20260418-122546-profiling\summary.json`
 - repeated shutdown variance probe:

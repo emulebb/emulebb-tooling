@@ -46,16 +46,16 @@ class CleanWorktreeFailure(RuntimeError):
 
 
 WORKSPACE_CLEAN_REPO_PATHS = (
-    "repos/eMule",
-    "repos/eMule-build",
-    "repos/eMule-build-tests",
-    "repos/eMule-tooling",
-    "repos/third_party/eMule-cryptopp",
-    "repos/third_party/eMule-id3lib",
-    "repos/third_party/eMule-mbedtls",
-    "repos/third_party/eMule-miniupnp",
-    "repos/third_party/eMule-ResizableLib",
-    "repos/third_party/eMule-zlib",
+    "repos/emulebb",
+    "repos/emulebb-build",
+    "repos/emulebb-build-tests",
+    "repos/emulebb-tooling",
+    "repos/third_party/emulebb-cryptopp",
+    "repos/third_party/emulebb-id3lib",
+    "repos/third_party/emulebb-mbedtls",
+    "repos/third_party/emulebb-miniupnp",
+    "repos/third_party/emulebb-resizablelib",
+    "repos/third_party/emulebb-zlib",
     "workspaces/workspace/app/eMule-main",
     "workspaces/workspace/app/eMule-community-baseline",
     "workspaces/workspace/app/eMule-community-tracing-harness",
@@ -322,7 +322,7 @@ def test_yaml_text_shape(path: Path) -> str | None:
 def test_powershell_version_header(repo_root: Path, repo_kind: str, relative_path: str, path: Path) -> str | None:
     """Checks the workspace-required PowerShell version header."""
 
-    is_tooling_repo = repo_root.name == "eMule-tooling" or (repo_root / "ci" / "check-workspace-policy.py").is_file()
+    is_tooling_repo = repo_root.name == "emulebb-tooling" or (repo_root / "ci" / "check-workspace-policy.py").is_file()
     normalized_path = normalize_path(relative_path)
     is_amutorrent_installer = (repo_root.name == "amutorrent" or repo_kind == "amutorrent") and normalized_path.startswith("installer/windows/")
     expected_version = "5.1" if (is_tooling_repo and normalized_path.startswith("scripts/")) or is_amutorrent_installer else "7.6"

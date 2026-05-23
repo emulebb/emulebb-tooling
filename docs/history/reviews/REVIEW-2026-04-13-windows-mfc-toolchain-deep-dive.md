@@ -5,8 +5,8 @@
 Revalidated the current Windows-facing technical debt against:
 
 - `workspaces\v0.72a\app\eMule-main`
-- `repos\eMule-tooling\docs/active`
-- `repos\eMule-tooling\docs`
+- `repos\emulebb-tooling\docs/active`
+- `repos\emulebb-tooling\docs`
 
 Also checked the locally installed Visual Studio / MSVC / MFC toolchain and
 current Microsoft documentation.

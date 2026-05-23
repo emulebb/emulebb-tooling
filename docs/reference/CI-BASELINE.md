@@ -1,6 +1,6 @@
 # CI Baseline
 
-`eMule-tooling` owns the shared baseline CI used by the active eMule repos.
+`emulebb-tooling` owns the shared baseline CI used by the active eMule repos.
 
 ## Reusable Workflow
 
@@ -9,7 +9,7 @@
 
 Consumer repos should reference:
 
-- `eMulebb/eMule-tooling/.github/workflows/reusable-baseline.yml@ci/v8`
+- `emulebb/emulebb-tooling/.github/workflows/reusable-baseline.yml@ci/v8`
 
 Do not point long-lived branches at `@main`.
 

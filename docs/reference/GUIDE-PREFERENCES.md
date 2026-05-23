@@ -6,7 +6,7 @@ surface. It replaces the older split between a user guide, a preference
 architecture note, and a separate preference matrix.
 
 The complete key reference in this guide is aligned with
-`repos/eMule-build-tests/manifests/preference-schema.v1.json`. The guide covers
+`repos/emulebb-build-tests/manifests/preference-schema.v1.json`. The guide covers
 only schema rows whose storage file is `preferences.ini`; category records,
 statistics-only files, and UI-runtime rows are summarized in prose.
 
@@ -35,7 +35,7 @@ Use these sources when changing preference behavior:
 - preference defaults, getters, setters, and normalizers
 - Preferences dialog bindings
 - REST preference metadata and OpenAPI
-- the JSON preference schema in `eMule-build-tests`
+- the JSON preference schema in `emulebb-build-tests`
 - this guide
 
 For docs-only preference changes, compare the schema to this guide before
@@ -349,7 +349,7 @@ preference, add it to the schema and this guide.
 ## Complete preferences.ini Reference
 
 This section is derived from
-`repos/eMule-build-tests/manifests/preference-schema.v1.json`.
+`repos/emulebb-build-tests/manifests/preference-schema.v1.json`.
 
 Total `preferences.ini` schema entries: **335**.
 

@@ -18,7 +18,7 @@ If another doc conflicts with `docs/active/`, `docs/active/` wins for current
 status.
 
 For future-roadmap items migrated to GitHub, workflow status is an exception:
-the linked `eMulebb/eMule` issue and the public org-level `eMuleBB Roadmap`
+the linked `emulebb/emulebb` issue and the public org-level `eMuleBB Roadmap`
 project own current state, priority, release placement, discussion, and PR
 linkage. The local active item doc remains the engineering spec/evidence record.
 Such files carry `workflow: github` and `github_issue:` front matter. Their
@@ -78,7 +78,7 @@ as provenance only.
   `docs/active/items/`; release dashboards and plans should point to item IDs
   instead of carrying anonymous task rows.
 - Future-roadmap items promoted after GitHub migration must also have a
-  GitHub issue in `eMulebb/eMule` and membership in the `eMuleBB Roadmap`
+  GitHub issue in `emulebb/emulebb` and membership in the `eMuleBB Roadmap`
   project before implementation starts.
 - Do not create new top-level Markdown files in `docs/` unless they are policy
   or navigation entry points.
@@ -151,4 +151,4 @@ Use MkDocs for browser-formatted documentation:
 
 Generated HTML belongs under `.local/mkdocs-site` and must not be committed.
 GitHub Pages publishing is owned by `.github/workflows/docs-site.yml`; the
-rendered site URL is `https://emulebb.github.io/eMule-tooling/`.
+rendered site URL is `https://emulebb.github.io/emulebb-tooling/`.

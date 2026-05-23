@@ -302,11 +302,11 @@ All dependency include/library paths updated from upstream names to `eMule-`-pre
 
 | Before | After |
 |--------|-------|
-| `../cryptopp/` | `../eMule-cryptopp/` |
-| `../mbedtls/` | `../eMule-mbedtls/` |
-| `../miniupnpc/` | `../eMule-miniupnp/` |
-| `../ResizableLib/` | `../eMule-ResizableLib/` |
-| `../zlib/` | `../eMule-zlib/` |
+| `../cryptopp/` | `../emulebb-cryptopp/` |
+| `../mbedtls/` | `../emulebb-mbedtls/` |
+| `../miniupnpc/` | `../emulebb-miniupnp/` |
+| `../ResizableLib/` | `../emulebb-resizablelib/` |
+| `../zlib/` | `../emulebb-zlib/` |
 
 Also added `miniupnp` root directory to the include search path (previously only the `miniupnpc/` subdirectory was included).
 

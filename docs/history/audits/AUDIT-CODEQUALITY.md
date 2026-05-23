@@ -119,12 +119,12 @@ cmake_policy(SET CMP0091 NEW)
 
 # Dep roots — override on command line or via CMakePresets.json cache vars
 # Default: sibling dirs matching the repo submodule layout
-set(CRYPTOPP_ROOT  "${CMAKE_SOURCE_DIR}/eMule-cryptopp"    CACHE PATH "")
-set(ID3LIB_ROOT    "${CMAKE_SOURCE_DIR}/eMule-id3lib"       CACHE PATH "")
-set(MINIUPNP_ROOT  "${CMAKE_SOURCE_DIR}/eMule-miniupnp"     CACHE PATH "")
-set(RESIZABLE_ROOT "${CMAKE_SOURCE_DIR}/eMule-ResizableLib" CACHE PATH "")
-set(ZLIB_ROOT      "${CMAKE_SOURCE_DIR}/eMule-zlib"         CACHE PATH "")
-set(MBEDTLS_ROOT   "${CMAKE_SOURCE_DIR}/eMule-mbedtls"      CACHE PATH "")
+set(CRYPTOPP_ROOT  "${CMAKE_SOURCE_DIR}/emulebb-cryptopp"    CACHE PATH "")
+set(ID3LIB_ROOT    "${CMAKE_SOURCE_DIR}/emulebb-id3lib"       CACHE PATH "")
+set(MINIUPNP_ROOT  "${CMAKE_SOURCE_DIR}/emulebb-miniupnp"     CACHE PATH "")
+set(RESIZABLE_ROOT "${CMAKE_SOURCE_DIR}/emulebb-resizablelib" CACHE PATH "")
+set(ZLIB_ROOT      "${CMAKE_SOURCE_DIR}/emulebb-zlib"         CACHE PATH "")
+set(MBEDTLS_ROOT   "${CMAKE_SOURCE_DIR}/emulebb-mbedtls"      CACHE PATH "")
 
 add_subdirectory(eMule/srchybrid)
 ```
@@ -294,7 +294,7 @@ Ninja + MSVC.
 
 ```powershell
 # From VS 2022 x64 Developer PowerShell (or vcvarsall.bat x64 in cmd)
-cd C:\prj\p2p\eMule\eMulebb\eMule-build
+cd C:\prj\p2p\eMule\eMulebb\emulebb-build
 
 cmake --preset x64-debug
 cmake --build --preset x64-debug
@@ -682,9 +682,9 @@ cppcheck `
   --template="{file}:{line}: [{severity}][{id}] {message}" `
   --output-file=logs\cppcheck.txt `
   -I eMule\srchybrid `
-  -I eMule-id3lib\include `
-  -I eMule-miniupnp `
-  -I eMule-mbedtls\include `
+  -I emulebb-id3lib\include `
+  -I emulebb-miniupnp `
+  -I emulebb-mbedtls\include `
   -D UNICODE -D _UNICODE -D WIN32 -D _WIN64 `
   -D ID3LIB_LINKOPTION=1 -D MINIUPNP_STATICLIB `
   eMule\srchybrid

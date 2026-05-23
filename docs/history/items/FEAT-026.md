@@ -65,7 +65,7 @@ Fresh `eMule-main` startup profiling still indicates that the dominant remaining
 shared-tree delay is in the hash pipeline rather than shared-files window creation.
 
 From
-`EMULE_WORKSPACE_ROOT\repos\eMule-build-tests\reports\startup-profile-scenarios\20260418-121956-eMule-main-debug\startup-profiles-wrapper-summary.json`:
+`EMULE_WORKSPACE_ROOT\repos\emulebb-build-tests\reports\startup-profile-scenarios\20260418-121956-eMule-main-debug\startup-profiles-wrapper-summary.json`:
 
 - `shared_files_ready_absolute_ms = 29360.160`
 - `shared.scan.complete = 963.106 ms`

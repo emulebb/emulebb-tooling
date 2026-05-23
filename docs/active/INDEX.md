@@ -4,7 +4,7 @@ This directory is the active local backlog/spec and revalidation layer for this
 repo. Use [`../INDEX.md`](../INDEX.md) for long-form background and reference
 reading.
 
-Future-roadmap workflow is GitHub-primary after migration: `eMulebb/eMule`
+Future-roadmap workflow is GitHub-primary after migration: `emulebb/emulebb`
 issues and the public `eMuleBB Roadmap` org project own current status,
 priority, release placement, discussion, ownership, and PR linkage for migrated
 items. Local item docs marked `workflow: github` are engineering spec/evidence
@@ -35,7 +35,7 @@ release target.
 **Frozen surfaces:** [FROZEN-SURFACES](FROZEN-SURFACES.md)
 **Beta controller surface matrix:** [CONTROLLER-SURFACE-MATRIX](CONTROLLER-SURFACE-MATRIX.md)
 **Future release roadmap:** [FUTURE-ROADMAP](FUTURE-ROADMAP.md)
-**Future roadmap workflow:** GitHub issues in `eMulebb/eMule` plus the
+**Future roadmap workflow:** GitHub issues in `emulebb/emulebb` plus the
 `eMuleBB Roadmap` org project are authoritative for migrated roadmap items.
 **Backlog process runbook:** [BACKLOG-PROCESS](../reference/BACKLOG-PROCESS.md)
 **Beta-release execution plan:** [RELEASE-0.7.3-EXECUTION-PLAN](plans/RELEASE-0.7.3-EXECUTION-PLAN.md)

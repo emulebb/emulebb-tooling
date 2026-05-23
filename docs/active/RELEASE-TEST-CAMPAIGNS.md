@@ -50,7 +50,7 @@ The active release checklist remains the ship authority. The campaign report is
 the release-matrix and evidence-status view.
 
 Post-`0.7.3` p2p-overlord product-family campaigns should build on the same
-campaign base in `repos\eMule-build-tests` with product-specific variants for
+campaign base in `repos\emulebb-build-tests` with product-specific variants for
 Rust agents, backend coordinator checks, long-run monitoring, and claimed REST
 subset conformance.
 
@@ -58,12 +58,12 @@ subset conformance.
 
 Live-wire terms, media titles, direct bootstrap rows, and Arr root paths remain
 operator-owned runtime inputs. Do not commit them. Use local files such as
-`repos\eMule-build-tests\live-wire-inputs.local.json` and explicit command-line
+`repos\emulebb-build-tests\live-wire-inputs.local.json` and explicit command-line
 root arguments.
 
 The real-profile long-run monitor is intentionally separate from generated
 heavy fixtures. It uses the ignored
-`repos\eMule-build-tests\live-process-monitor.local.json` file for the
+`repos\emulebb-build-tests\live-process-monitor.local.json` file for the
 operator-owned profile path, HTTPS REST bind, API key, and ProcDump path. Keep
 that file local.
 

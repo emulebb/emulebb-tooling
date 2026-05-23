@@ -1,7 +1,7 @@
 ---
 id: FEAT-071
 workflow: github
-github_issue: https://github.com/eMulebb/eMule/issues/23
+github_issue: https://github.com/emulebb/emulebb/issues/23
 title: Filename mojibake repair for search results and download intake
 status: Done
 priority: Minor

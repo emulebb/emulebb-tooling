@@ -18,7 +18,7 @@
 
 ## Summary
 
-This plan modernizes the current Kad implementation in `eMulebb/eMule` with a focus on security, routing quality, search efficiency, and observability. The first execution chunk has already brought in `SafeKad` and `FastKad` in this branch, but the broader refactor, diagnostics, and validation work described below is still only partially complete.
+This plan modernizes the current Kad implementation in `emulebb/emulebb` with a focus on security, routing quality, search efficiency, and observability. The first execution chunk has already brought in `SafeKad` and `FastKad` in this branch, but the broader refactor, diagnostics, and validation work described below is still only partially complete.
 
 The goal is to improve Kad behavior without introducing protocol incompatibilities. All planned changes are local policy, timing, routing, and diagnostics changes. No Kad wire format changes are required.
 
@@ -220,7 +220,7 @@ Current branch note:
 
 - `SafeKad` and `FastKad` already exist under `srchybrid/kademlia/utils/`
 - both are compiled into the project and referenced from live Kad code in the UDP listener, search flow, routing, and Kad startup/shutdown paths
-- shared regression coverage also exists in `eMule-build-tests`
+- shared regression coverage also exists in `emulebb-build-tests`
 - the remaining gap is not import presence, but completing the broader cleanup, diagnostics, and follow-on routing-quality work promised by this plan
 
 ## Implementation Order

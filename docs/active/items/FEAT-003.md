@@ -1,7 +1,7 @@
 ---
 id: FEAT-003
 workflow: github
-github_issue: https://github.com/eMulebb/eMule/issues/8
+github_issue: https://github.com/emulebb/emulebb/issues/8
 title: Kad — Add response usefulness scoring and subnet-diversity search fanout
 status: OPEN
 priority: Minor
@@ -13,7 +13,7 @@ source: AUDIT-KAD.md (AUD_KAD_008, AUD_KAD_009)
 ---
 
 
-> Workflow status is tracked in GitHub: https://github.com/eMulebb/eMule/issues/8. This local document is retained as an engineering spec/evidence record.
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/8. This local document is retained as an engineering spec/evidence record.
 
 ## Summary
 

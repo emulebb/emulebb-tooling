@@ -115,7 +115,7 @@ should revalidate the API surfaces below before treating that evidence as fresh.
   surface.
 - Operator-owned live-wire search terms, transfer hashes, magnets, and direct
   ED2K bootstrap rows must stay in
-  `repos\eMule-build-tests\live-wire-inputs.local.json`, which is ignored and
+  `repos\emulebb-build-tests\live-wire-inputs.local.json`, which is ignored and
   untracked. Tracked release docs, manifests, and fixtures may contain only
   placeholders, stable contract vectors, or redacted summaries for this data.
 - Transfer progress ratio math is shared by native `/api/v1` and qBit-compatible
@@ -201,7 +201,7 @@ Latest beta 0.7.3 REST closure proof:
 - `python -m emule_workspace test live-e2e --config Release --platform x64 --suite rest-api --rest-coverage-budget contract-stress --rest-stress-budget smoke --rest-stress-duration-seconds 10 --rest-stress-concurrency 4 --rest-download-trigger-count 3 --skip-live-seed-refresh`
 - Result: passed on 2026-05-10.
 - Live artifact:
-  `repos\eMule-build-tests\reports\rest-api-smoke\20260510-235256-eMule-main-release`
+  `repos\emulebb-build-tests\reports\rest-api-smoke\20260510-235256-eMule-main-release`
 - REST contract summary: 85 OpenAPI routes in the registry, 82 safe routes
   exercised, 3 unsafe routes skipped, 0 failed routes, 37 success outcomes,
   and 45 expected-error outcomes. Strict OpenAPI response-schema validation was
@@ -214,13 +214,13 @@ Latest beta 0.7.3 REST closure proof:
   `procdump.exe`, and `procdump64.exe`.
 - Dedicated adapter follow-up on 2026-05-10:
   - Prowlarr/Torznab live passed:
-    `repos\eMule-build-tests\reports\prowlarr-emulebb-live\20260510-224143-eMule-main-release`
+    `repos\emulebb-build-tests\reports\prowlarr-emulebb-live\20260510-224143-eMule-main-release`
   - Radarr/Sonarr plus qBit-compatible live passed:
-    `repos\eMule-build-tests\reports\radarr-sonarr-emulebb-live\20260510-224447-eMule-main-release`
+    `repos\emulebb-build-tests\reports\radarr-sonarr-emulebb-live\20260510-224447-eMule-main-release`
   - aMuTorrent browser smoke stopped before browser execution because
     aMuTorrent served `127.0.0.1:57415` from its persistent server config while
     the harness waited on generated port `127.0.0.1:55939`:
-    `repos\eMule-build-tests\reports\amutorrent-browser-smoke\20260510-225224-eMule-main-release`.
+    `repos\emulebb-build-tests\reports\amutorrent-browser-smoke\20260510-225224-eMule-main-release`.
     This is tracked in [BUG-102](../items/BUG-102.md) as aMuTorrent/harness
     configuration drift, not native REST contract drift.
 
@@ -238,7 +238,7 @@ Latest live REST completeness proof:
 - `python -m emule_workspace test live-e2e --config Release
   --platform x64 --suite rest-api`
 - Artifact:
-  `repos\eMule-build-tests\reports\rest-api-smoke\20260509-080825-eMule-main-release`
+  `repos\emulebb-build-tests\reports\rest-api-smoke\20260509-080825-eMule-main-release`
 - Result: passed with `BindInterface=hide.me`, UPnP enabled, and contract
   coverage enabled.
 - REST contract summary: 82 OpenAPI routes in the registry, 81 safe routes
@@ -255,7 +255,7 @@ Latest malformed REST input proof:
   method_not_allowed or unsupported"`
 - Result: 2 selected tests passed on 2026-05-09.
 - Live artifact:
-  `repos\eMule-build-tests\reports\rest-api-smoke\20260509-080825-eMule-main-release`
+  `repos\emulebb-build-tests\reports\rest-api-smoke\20260509-080825-eMule-main-release`
 - The live error-path matrix recorded 72 error responses with no missing release
   statuses. It covered live 400/401/404 responses plus seam-backed
   405/409/500/503 responses.
@@ -270,7 +270,7 @@ Latest mixed REST/legacy stress proof:
   or non_json or html or shutdown_exclusion"`
 - Result: 10 selected tests passed on 2026-05-09.
 - Live artifact:
-  `repos\eMule-build-tests\reports\rest-api-smoke\20260509-080825-eMule-main-release`
+  `repos\emulebb-build-tests\reports\rest-api-smoke\20260509-080825-eMule-main-release`
 - The live mixed stress ran for 30 seconds with 4-way concurrency and completed
   13,311 requests with 0 failures, 0 timeouts, 0 retry recoveries, and 0 native
   REST non-JSON responses.
@@ -293,7 +293,7 @@ Latest destructive native operation audit:
   searches. It also inventories every native DELETE route so new destructive
   routes must be classified.
 - Live artifact:
-  `repos\eMule-build-tests\reports\rest-api-smoke\20260509-080825-eMule-main-release`
+  `repos\emulebb-build-tests\reports\rest-api-smoke\20260509-080825-eMule-main-release`
   confirmed `/api/v1/app/shutdown` remains excluded from broad mutation loops.
 
 Latest Radarr/Sonarr video-category proof:
@@ -301,11 +301,11 @@ Latest Radarr/Sonarr video-category proof:
 - `python -m emule_workspace test live-e2e --config Release
   --platform x64 --suite radarr-sonarr-emulebb`
 - Artifact:
-  `repos\eMule-build-tests\reports\radarr-sonarr-emulebb-live\20260509-074817-eMule-main-release`
+  `repos\emulebb-build-tests\reports\radarr-sonarr-emulebb-live\20260509-074817-eMule-main-release`
 - The suite searched video-family Torznab categories for the Arr proof:
   Radarr/qBit video category `2000` and Sonarr category `5000`.
 - Operator-owned terms, hashes, magnets, and direct ED2K rows remained in the
-  ignored `repos\eMule-build-tests\live-wire-inputs.local.json`; persisted
+  ignored `repos\emulebb-build-tests\live-wire-inputs.local.json`; persisted
   reports kept only counts and presence flags.
 - Prowlarr returned video-category rows for both Radarr and Sonarr searches,
   Radarr/Sonarr exposed synced enabled eMule BB indexers, temporary qBittorrent
@@ -317,11 +317,11 @@ Latest Prowlarr video-category proof:
 - `python -m emule_workspace test live-e2e --config Release
   --platform x64 --suite prowlarr-emulebb`
 - Artifact:
-  `repos\eMule-build-tests\reports\prowlarr-emulebb-live\20260509-080508-eMule-main-release`
+  `repos\emulebb-build-tests\reports\prowlarr-emulebb-live\20260509-080508-eMule-main-release`
 - The suite searched explicit Torznab categories: document category `7000`,
   Radarr/movie video category `2000`, and Sonarr/TV video category `5000`.
 - Operator-owned search terms stayed in the ignored
-  `repos\eMule-build-tests\live-wire-inputs.local.json`; persisted reports kept
+  `repos\emulebb-build-tests\live-wire-inputs.local.json`; persisted reports kept
   only term counts, query-presence flags, and result counts.
 - Direct eMule BB Torznab searches and Prowlarr API searches returned rows for
   document, movie, and TV categories, and the Prowlarr Generic Torznab
@@ -351,7 +351,7 @@ Latest adapter error-shape proof:
   tests\python\test_prowlarr_emulebb_live.py::test_direct_torznab_error_edges_are_expected_400s`
 - Result: 5 selected tests passed on 2026-05-09.
 - Live artifact:
-  `repos\eMule-build-tests\reports\rest-api-smoke\20260509-080825-eMule-main-release`
+  `repos\emulebb-build-tests\reports\rest-api-smoke\20260509-080825-eMule-main-release`
 - qBittorrent-compatible failures stayed qBit-shaped (`text/plain`, `Fails.`
   or `Forbidden`), Torznab failures stayed XML-shaped, and native `/api/v1`
   stress recorded 0 native REST non-JSON responses.
@@ -361,7 +361,7 @@ Latest aMuTorrent browser proof:
 - `python -m emule_workspace test live-e2e --config Release
   --platform x64 --suite amutorrent-browser-smoke`
 - Artifact:
-  `repos\eMule-build-tests\reports\amutorrent-browser-smoke\20260509-081711-eMule-main-release`
+  `repos\emulebb-build-tests\reports\amutorrent-browser-smoke\20260509-081711-eMule-main-release`
 - `python -m pytest tests\python -k "amutorrent or browser_smoke or
   search_modes or transfer_detail or segment_snapshot"`
 - Result: 21 selected tests passed on 2026-05-09.

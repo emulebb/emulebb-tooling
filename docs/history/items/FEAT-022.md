@@ -52,8 +52,8 @@ This was a real testing and stability enabler, not just a convenience switch:
 
 The live test harness now exercises this path directly under long config roots:
 
-- `repos\eMule-build-tests\scripts\config-stability-ui-e2e.py`
-- `repos\eMule-build-tests\scripts\config-stability-ui-e2e.py`
+- `repos\emulebb-build-tests\scripts\config-stability-ui-e2e.py`
+- `repos\emulebb-build-tests\scripts\config-stability-ui-e2e.py`
 
 That suite launches real `emule.exe` instances with explicit `-c`, edits/saves settings,
 verifies `preferences.ini` persistence across relaunch, and stresses repeated close/save

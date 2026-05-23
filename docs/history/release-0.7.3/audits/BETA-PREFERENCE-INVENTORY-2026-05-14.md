@@ -10,7 +10,7 @@ impact.
 
 The audit found 420 distinct `CIni` key references after stripping comments.
 They are now tracked in
-`repos\eMule-build-tests\manifests\preference-inventory.v1.json` and guarded by
+`repos\emulebb-build-tests\manifests\preference-inventory.v1.json` and guarded by
 `tests\python\test_preference_inventory.py`.
 
 No preference key was renamed. No migration was introduced. No default value was

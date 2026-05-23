@@ -30,7 +30,7 @@ regressions.
 ## Current State
 
 - The stale branch work was NOT merged into main.
-- The concept is sound: the main tree already has `eMule-build-tests` harness
+- The concept is sound: the main tree already has `emulebb-build-tests` harness
   with bugfix regression seams for packet parsing.
 - The oracle guard pattern extends that with richer state-machine coverage.
 
@@ -46,7 +46,7 @@ regressions.
 
 1. Read the actual diff of the stale branch against its parent.
 2. Extract the seam injection logic that doesn't depend on removed code.
-3. Integrate compatible seams into the existing `eMule-build-tests` harness.
+3. Integrate compatible seams into the existing `emulebb-build-tests` harness.
 4. Discard scaffolding that targeted code since refactored away.
 
 ## Priority

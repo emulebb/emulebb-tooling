@@ -1,7 +1,7 @@
 # Dependency Status
 
 Reviewed on 2026-05-23 against current `main`, current
-`repos\eMule-build` dependency topology, and the active beta release policy.
+`repos\emulebb-build` dependency topology, and the active beta release policy.
 
 This document records the current dependency decisions for the eMuleBB beta workspace.
 It supersedes older dependency-removal notes that were written against other
@@ -15,15 +15,15 @@ explicitly promoted.
 
 | Dependency | Current workspace fork/pin | Release decision |
 |---|---|---|
-| Crypto++ | `eMule-cryptopp`, `CRYPTOPP_8_4_0` baseline plus local VS/ARM64 build deltas | Stay on 8.4 for now |
-| id3lib | `eMule-id3lib`, `id3lib-v3.9.1-emule` | Stay as-is for the future; do not track removal/replacement |
-| miniupnp / miniupnpc | `eMule-miniupnp`, `miniupnpc-master-emule` | Stay as-is for now |
-| libpcpnatpmp | `eMule-libpcpnatpmp`, `libpcpnatpmp-master-emule` | Stay as-is for now |
-| nlohmann-json | `eMule-nlohmann-json`, `v3.11.3` | Stay as-is for now |
-| MbedTLS | `eMule-mbedtls`, `mbedtls-v4.1.0-emule` | Current; no upgrade item |
+| Crypto++ | `emulebb-cryptopp`, `CRYPTOPP_8_4_0` baseline plus local VS/ARM64 build deltas | Stay on 8.4 for now |
+| id3lib | `emulebb-id3lib`, `id3lib-v3.9.1-emule` | Stay as-is for the future; do not track removal/replacement |
+| miniupnp / miniupnpc | `emulebb-miniupnp`, `miniupnpc-master-emule` | Stay as-is for now |
+| libpcpnatpmp | `emulebb-libpcpnatpmp`, `libpcpnatpmp-master-emule` | Stay as-is for now |
+| nlohmann-json | `emulebb-nlohmann-json`, `v3.11.3` | Stay as-is for now |
+| MbedTLS | `emulebb-mbedtls`, `mbedtls-v4.1.0-emule` | Current; no upgrade item |
 | TF-PSA-Crypto | vendored by the MbedTLS fork, `v1.1.0` baseline | Current; no separate action |
-| ResizableLib | `eMule-ResizableLib`, `ResizableLib-bebab50-emule` | Stay as-is |
-| zlib | `eMule-zlib`, `v1.3.2` | Current; stay as-is |
+| ResizableLib | `emulebb-resizablelib`, `ResizableLib-bebab50-emule` | Stay as-is |
+| zlib | `emulebb-zlib`, `v1.3.2` | Current; stay as-is |
 
 ## Notes
 
@@ -48,7 +48,7 @@ head movement upstream is not, by itself, a release task. Future changes require
 a concrete bug, compatibility issue, or explicit product decision.
 
 Post-`0.7.3` p2p-overlord product-family integration should converge MiniUPnP
-source ownership on `repos/third_party/eMule-miniupnp`. p2p-overlord may keep
+source ownership on `repos/third_party/emulebb-miniupnp`. p2p-overlord may keep
 its Rust crates and build wrappers, but duplicate C MiniUPnP source trees should
 resolve to the shared eMuleBB fork when that future slice is implemented.
 

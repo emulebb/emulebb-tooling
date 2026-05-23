@@ -54,7 +54,7 @@ pointer truncation, old SDK API shims) and simplifies the feasibility analysis.
 ## 1. Crypto++ 8.9.0 — `DEP_001`
 
 ### Current setup
-- Build: `eMule-cryptopp\cryptlib.vcxproj` (MSVC Utility project, v143)
+- Build: `emulebb-cryptopp\cryptlib.vcxproj` (MSVC Utility project, v143)
 - Output: `x64\Release\cryptlib.lib` / `x64\Debug\cryptlib.lib`
 - CRT: `/MT` Release, `/MTd` Debug — patched to match eMule
 - Includes: headers pulled directly (`rsa.h`, `md5.h`, etc.)
@@ -101,15 +101,15 @@ ships versioned ABI guarantees.**
 ## 2. id3lib 3.9.1 — `DEP_002`
 
 ### Current setup
-- Build: `eMule-id3lib\libprj\id3lib.vcxproj` (v143)
+- Build: `emulebb-id3lib\libprj\id3lib.vcxproj` (v143)
 - Output: `x64\Release\id3lib.lib`
 - CRT: `/MT` Release, `/MTd` Debug
-- Depends on: zlib (path patched to `../../eMule-zlib`)
+- Depends on: zlib (path patched to `../../emulebb-zlib`)
 
 ### DLL availability
 id3lib has a shared library build option, but:
 - Upstream is effectively **dead** — last real release 2003, last meaningful commit ~2016
-- The `eMulebb/eMule-id3lib` fork used here has no releases and no DLL builds
+- The `emulebb/emulebb-id3lib` fork used here has no releases and no DLL builds
 - No pre-built DLLs exist from any reputable source
 
 ### What DLL linking would require
@@ -136,7 +136,7 @@ id3lib has a shared library build option, but:
 ## 3. miniupnpc 2.3.3 — `DEP_003`
 
 ### Current setup
-- Build: `eMule-miniupnp\miniupnpc\msvc\miniupnpc.vcxproj` (v143)
+- Build: `emulebb-miniupnp\miniupnpc\msvc\miniupnpc.vcxproj` (v143)
 - Output: `x64\Release\miniupnpc.lib`
 - CRT: `/MT` Release (patched from `/MD`)
 - Preprocessor: `MINIUPNP_STATICLIB` in eMule when linking static
@@ -182,7 +182,7 @@ Dll` configurations in `miniupnpc.vcxproj`. The DLL exports a pure **C API** (`u
 ## 4. ResizableLib (master / v1.5.3+) — `DEP_005`
 
 ### Current setup
-- Build: `eMule-ResizableLib\ResizableLib\ResizableLib.vcxproj` (v143)
+- Build: `emulebb-resizablelib\ResizableLib\ResizableLib.vcxproj` (v143)
 - Output: `x64\Release\resizablelib.lib`
 - CRT: `/MT`, MFC: Static — patched from inconsistent upstream configs
 - Nature: C++ MFC extension library; deeply uses `CWnd`, `CDialog`, `CControlBar` internals
@@ -218,7 +218,7 @@ Its classes inherit directly from MFC dialog/window classes and inline into the 
 ### Current setup
 - Build: CMake-generated MSBuild projects (CMake generator: VS 17 2022)
 - Wrapper: `templates\zlib\zlib.vcxproj` (Utility project)
-  - PreBuildEvent: `cmake -S ... -B eMule-zlib\cmake-build` (configure once)
+  - PreBuildEvent: `cmake -S ... -B emulebb-zlib\cmake-build` (configure once)
   - PostBuildEvent: `cmake --build ... --target zlibstatic` → copies `zs.lib` → `zlib.lib`
 - Output: `x64\Release\zlib.lib`
 - CRT: `/MT` via CMake flag `-DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded[Debug]`
@@ -358,7 +358,7 @@ the risk is reduced from VERY HIGH to HIGH (threading and version lock concerns 
 
 #### miniupnpc → DLL (`DEP_003`)
 
-1. In `eMule-miniupnp\miniupnpc\msvc\miniupnpc.vcxproj`, build configuration
+1. In `emulebb-miniupnp\miniupnpc\msvc\miniupnpc.vcxproj`, build configuration
    `x64 Release Dll` (already exists upstream, no patching needed)
 2. Collect output: `miniupnpc.dll` + import lib
 3. In `emule.vcxproj`:

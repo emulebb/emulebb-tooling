@@ -11,9 +11,9 @@ supported workspace entrypoint.
 
 ```powershell
 python -m emule_workspace validate
-git -C repos\eMule-tooling status --short --branch
-git -C repos\eMule-build status --short --branch
-git -C repos\eMule-build-tests status --short --branch
+git -C repos\emulebb-tooling status --short --branch
+git -C repos\emulebb-build status --short --branch
+git -C repos\emulebb-build-tests status --short --branch
 git -C workspaces\workspace\app\eMule-main status --short --branch
 git -C workspaces\workspace\app\eMule-main rev-parse --short HEAD
 ```
@@ -57,7 +57,7 @@ inputs and Arr-visible roots required by the local environment:
 
 ```powershell
 python -m emule_workspace test certification --profile overnight `
-  --live-wire-inputs-file repos\eMule-build-tests\live-wire-inputs.local.json `
+  --live-wire-inputs-file repos\emulebb-build-tests\live-wire-inputs.local.json `
   --radarr-movie-root <radarr-visible-root> `
   --sonarr-series-root <sonarr-visible-root>
 ```
@@ -78,7 +78,7 @@ live-wire inputs:
 
 ```powershell
 python -m emule_workspace test live-e2e --profile release-expanded --fail-fast `
-  --live-wire-inputs-file repos\eMule-build-tests\live-wire-inputs.local.json
+  --live-wire-inputs-file repos\emulebb-build-tests\live-wire-inputs.local.json
 ```
 
 This profile covers Preferences directory-tree stress, Shared Files,
@@ -107,7 +107,7 @@ python -m emule_workspace test live-e2e --suite live-process-monitor --fail-fast
 ```
 
 This reads ignored local settings from
-`repos\eMule-build-tests\live-process-monitor.local.json`. The local file must
+`repos\emulebb-build-tests\live-process-monitor.local.json`. The local file must
 point at the operator-owned real profile and corrected HTTPS REST bind, and the
 run must remain at or above the 1800-second minimum.
 
@@ -180,8 +180,8 @@ workspaces\workspace\state\release\emulebb-v0.7.3\emulebb-0.7.3-amutorrent-x64.m
 ```
 
 The aMuTorrent package command requires clean provenance inputs for
-`repos\amutorrent`, `repos\eMule-build`, `repos\eMule-build-tests`, and
-`repos\eMule-tooling`. It rebuilds frontend assets, installs production server
+`repos\amutorrent`, `repos\emulebb-build`, `repos\emulebb-build-tests`, and
+`repos\emulebb-tooling`. It rebuilds frontend assets, installs production server
 dependencies, rejects generated runtime state and source maps, and records
 package-local runtime policy in the manifest. ARM64 aMuTorrent packaging must
 run from a native ARM64 Node environment until a deliberate cross-architecture

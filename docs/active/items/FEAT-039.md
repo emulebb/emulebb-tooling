@@ -1,7 +1,7 @@
 ---
 id: FEAT-039
 workflow: github
-github_issue: https://github.com/eMulebb/eMule/issues/16
+github_issue: https://github.com/emulebb/emulebb/issues/16
 title: Download checker — duplicate and near-duplicate intake guard
 status: OPEN
 priority: Minor
@@ -13,7 +13,7 @@ source: eMuleAI release notes
 ---
 
 
-> Workflow status is tracked in GitHub: https://github.com/eMulebb/eMule/issues/16. This local document is retained as an engineering spec/evidence record.
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/16. This local document is retained as an engineering spec/evidence record.
 
 ## Summary
 

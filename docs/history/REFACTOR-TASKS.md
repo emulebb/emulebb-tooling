@@ -71,7 +71,7 @@ These need renaming to generic labels in a future pass.
 
 **Status:** Planned
 **Effort:** Low (3 consumer sites, well-documented migration)
-**Files:** `ZIPFile.cpp/.h` → delete; add minizip sources from `eMule-zlib/contrib/minizip/`
+**Files:** `ZIPFile.cpp/.h` → delete; add minizip sources from `emulebb-zlib/contrib/minizip/`
 
 ### Background
 
@@ -87,7 +87,7 @@ ZIP central-directory parser + deflate extractor. This can be replaced by **mini
 
 ### Implementation phases
 
-1. Add `unzip.c`, `ioapi.c`, `iowin32.c` from `eMule-zlib/contrib/minizip/` to vcxproj
+1. Add `unzip.c`, `ioapi.c`, `iowin32.c` from `emulebb-zlib/contrib/minizip/` to vcxproj
 2. Optionally write thin `CMiniZipReader` wrapper matching CZIPFile API surface
 3. Migrate all 3 consumer sites
 4. Delete `ZIPFile.cpp/.h` from project

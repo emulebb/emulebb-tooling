@@ -19,14 +19,14 @@ Crypto++ 8.9 refresh is deferred post-beta.
 
 ## Review Checklist
 
-- [x] Read `AGENTS.md` and `repos\eMule-tooling\docs\WORKSPACE-POLICY.md` before reviewing.
-- [x] Ran `git status --short --branch` before drawing conclusions in `repos\eMule-tooling`, `repos\eMule-build`, `repos\eMule-build-tests`, `repos\eMule`, active app worktrees, and relevant third-party dependency worktrees.
+- [x] Read `AGENTS.md` and `repos\emulebb-tooling\docs\WORKSPACE-POLICY.md` before reviewing.
+- [x] Ran `git status --short --branch` before drawing conclusions in `repos\emulebb-tooling`, `repos\emulebb-build`, `repos\emulebb-build-tests`, `repos\emulebb`, active app worktrees, and relevant third-party dependency worktrees.
 - [x] Confirmed assigned report file did not exist before writing it.
 - [x] Reviewed active app worktree `workspaces\v0.72a\app\eMule-main` at `main` commit `df1191e`.
 - [x] Reviewed parity baseline `workspaces\v0.72a\app\eMule-v0.72a-community` at `release/v0.72a-community` commit `c63f6e0`.
 - [x] Reviewed broadband stabilization worktree `workspaces\v0.72a\app\eMule-v0.72a-broadband` at `release/v0.72a-broadband` commit `57dd9f7`.
 - [x] Reviewed update-check, release packaging, REST/API auth, WebServer sessions, static-file serving, direct download, IP-filter update, and dependency pin evidence.
-- [x] Verified `repos\eMule-build-tests` had pre-existing modified/untracked files and did not modify them.
+- [x] Verified `repos\emulebb-build-tests` had pre-existing modified/untracked files and did not modify them.
 - [ ] Re-run security-focused validation after fixes land: update-check tests
       and package-release rehearsal.
 - [ ] Reconcile dependency status docs with actual topology before tagging.
@@ -44,7 +44,7 @@ Evidence:
 - `srchybrid\Preferences.cpp:3654` returns `https://github.com/itlezy/eMule/releases`.
 - `srchybrid\Preferences.cpp:3659` returns `https://api.github.com/repos/itlezy/eMule/releases/latest`.
 - `srchybrid\EmuleDlg.cpp:964-976` uses `ReleaseUpdateCheck::CheckLatestRelease()` and opens the returned `strReleaseUrl` when a newer release is found.
-- `repos\eMule-build-tests\src\release_update_check.tests.cpp:17` builds test JSON with `https://github.com/itlezy/eMule/releases/tag/...`, so the test suite currently preserves the wrong owner.
+- `repos\emulebb-build-tests\src\release_update_check.tests.cpp:17` builds test JSON with `https://github.com/itlezy/eMule/releases/tag/...`, so the test suite currently preserves the wrong owner.
 - Workspace policy requires the GitHub organization/code name/URL slug to be `emulebb`, tags to use `emule-bb-vMAJOR.MINOR.PATCH`, and first public beta to be `emule-bb-v0.7.3`.
 
 Impact:
@@ -53,23 +53,23 @@ An enabled update check can direct users to releases from a repository outside t
 
 Recommended fix:
 
-Move the release-check base and API URLs to `https://github.com/eMulebb/eMule/releases` and `https://api.github.com/repos/eMulebb/eMule/releases/latest`, then add tests that fail on `itlezy/eMule` and pass only for the policy-owned URL family. Keep the existing strict tag and asset-name parsing.
+Move the release-check base and API URLs to `https://github.com/emulebb/emulebb/releases` and `https://api.github.com/repos/emulebb/emulebb/releases/latest`, then add tests that fail on `itlezy/eMule` and pass only for the policy-owned URL family. Keep the existing strict tag and asset-name parsing.
 
 Suggested validation:
 
 - `python -m emule_workspace validate`
 - `python -m emule_workspace test native --config Debug --platform x64`
 - Targeted native test filter for `release_update_check.tests.cpp` if the harness exposes one.
-- Manual smoke with update notifications enabled against a controlled latest-release JSON seam or test double, confirming the notifier opens the `eMulebb/eMule` release URL.
+- Manual smoke with update notifications enabled against a controlled latest-release JSON seam or test double, confirming the notifier opens the `emulebb/emulebb` release URL.
 
 Owner suggestion: App/release engineering.
 
 Execution checklist:
 
-- [ ] Change `CPreferences::GetVersionCheckBaseURL()` and `CPreferences::GetVersionCheckApiURL()` in `srchybrid\Preferences.cpp` to the `eMulebb/eMule` release endpoints.
-- [ ] Update `repos\eMule-build-tests\src\release_update_check.tests.cpp` to build release URLs under `https://github.com/eMulebb/eMule/releases/tag/...`.
+- [ ] Change `CPreferences::GetVersionCheckBaseURL()` and `CPreferences::GetVersionCheckApiURL()` in `srchybrid\Preferences.cpp` to the `emulebb/emulebb` release endpoints.
+- [ ] Update `repos\emulebb-build-tests\src\release_update_check.tests.cpp` to build release URLs under `https://github.com/emulebb/emulebb/releases/tag/...`.
 - [ ] Add a focused test that rejects or at least detects the old `itlezy/eMule` URL in release-check fixtures.
-- [ ] Run the supported validation commands above through `repos\eMule-build`.
+- [ ] Run the supported validation commands above through `repos\emulebb-build`.
 
 ### Critical: Legacy WebServer Sessions Are Predictable
 
@@ -156,12 +156,12 @@ Affected area: Dependency pins, crypto/RNG/signature primitives, release documen
 
 Evidence:
 
-- `repos\eMule-build\emule_workspace\topology.py:335` pins `eMule-cryptopp` to branch `CRYPTOPP_8_4_0-pristine`.
-- `repos\eMule-build\emule_workspace\topology.py:339` uses update baseline `CRYPTOPP_8_4_0`.
-- `repos\third_party\eMule-cryptopp\config_ver.h:53` defines `CRYPTOPP_VERSION 840`.
+- `repos\emulebb-build\emule_workspace\topology.py:335` pins `emulebb-cryptopp` to branch `CRYPTOPP_8_4_0-pristine`.
+- `repos\emulebb-build\emule_workspace\topology.py:339` uses update baseline `CRYPTOPP_8_4_0`.
+- `repos\third_party\emulebb-cryptopp\config_ver.h:53` defines `CRYPTOPP_VERSION 840`.
 - `workspaces\v0.72a\app\eMule-main\srchybrid\emule.vcxproj:91` and `:128` link `cryptlib.lib`.
-- `repos\eMule-tooling\docs\dependencies\DEP-STATUS.md:18` and `:30` say the workspace pin is Crypto++ 8.9.0 / `CRYPTOPP_8_9_0`, which is not the active topology state.
-- `repos\eMule-tooling\docs\active\items\REF-034.md:3` tracks the upgrade from 8.4 to 8.9 as still open.
+- `repos\emulebb-tooling\docs\dependencies\DEP-STATUS.md:18` and `:30` say the workspace pin is Crypto++ 8.9.0 / `CRYPTOPP_8_9_0`, which is not the active topology state.
+- `repos\emulebb-tooling\docs\active\items\REF-034.md:3` tracks the upgrade from 8.4 to 8.9 as still open.
 - NVD records CVE-2022-48570 as affecting Crypto++ through 8.4; Crypto++ 8.4 release notes also state the constant-time elliptic-curve revert reactivated CVE-2019-14318.
 
 Impact:
@@ -183,22 +183,22 @@ Owner suggestion: Dependency/build owner with app crypto reviewer.
 Execution checklist:
 
 - [ ] Decide whether Crypto++ 8.9 upgrade is in-scope for beta or formally accepted as a documented beta exception.
-- [ ] If upgrading, update `repos\eMule-build\emule_workspace\topology.py`, regenerate managed topology artifacts via the supported workspace command path, and refresh `repos\third_party\eMule-cryptopp`.
+- [ ] If upgrading, update `repos\emulebb-build\emule_workspace\topology.py`, regenerate managed topology artifacts via the supported workspace command path, and refresh `repos\third_party\emulebb-cryptopp`.
 - [ ] If deferring, update dependency docs to state the active 8.4 pin, reachable-use analysis, CVE exception, and post-beta target.
 - [ ] Run the supported build and native validation commands above.
 
 ## Missing Tests / Validation Gaps
 
-- [ ] Release-update tests should assert the configured GitHub owner is `eMulebb/eMule` and should not carry `itlezy/eMule` fixtures.
+- [ ] Release-update tests should assert the configured GitHub owner is `emulebb/emulebb` and should not carry `itlezy/eMule` fixtures.
 - [ ] WebServer auth tests should cover session-token entropy, non-predictability under controlled time, failed token guessing, and token invalidation on logout/timeout.
 - [ ] IP-filter updater tests should cover URL scheme policy, HTTP auto-update rejection, HTTPS happy path, archive payload limits, and post-update reload behavior.
 - [ ] Direct-download tests should cover scheme allowlists and maximum downloaded byte budgets for updater use cases.
-- [ ] Dependency validation should fail when `DEP-STATUS.md` claims a different active crypto pin than `repos\eMule-build\emule_workspace\topology.py`.
+- [ ] Dependency validation should fail when `DEP-STATUS.md` claims a different active crypto pin than `repos\emulebb-build\emule_workspace\topology.py`.
 - [ ] Final beta proof should re-run native REST/qBit/Torznab contract tests after auth/session changes.
 
 ## Cross-review Notes
 
-- `repos\eMule-build-tests` had pre-existing modified/untracked live-test files at review start; this report treats them as prior work and does not rely on their uncommitted content as final release evidence.
+- `repos\emulebb-build-tests` had pre-existing modified/untracked live-test files at review start; this report treats them as prior work and does not rely on their uncommitted content as final release evidence.
 - Release packaging code is aligned with the 0.7.3 naming policy: `emule_workspace\config.py:145` defaults to `0.7.3`, `emule_workspace\release.py:60-64` uses `emule-bb-v0.7.3` and `eMule-broadband-0.7.3-ARCH.zip`, and `srchybrid\Version.h:42-44` defines app release version `0.7.3`.
 - The REST/native API surface has meaningful hardening evidence: `WebServerJsonSeams.h` validates API key presence, JSON content type, path/query parsing, allowed routes, and bounded content; `WebSocketHttpSeams.h` caps headers and bodies; `WebServerStaticFileSeams.h` contains static files under the web root with percent-decoding checks.
 - The WebServer remains disabled by default, diagnostic REST endpoints are disabled by default, and WebServer UPnP is disabled by default. Those defaults reduce exposure but do not remove the need to fix predictable sessions before public beta.
@@ -214,5 +214,5 @@ Execution checklist:
 ## Beta Readiness Verdict
 
 Do not tag or publish `emule-bb-v0.7.3` until the release-update endpoint is
-moved to `eMulebb/eMule` and the accepted non-blocker decisions above are
+moved to `emulebb/emulebb` and the accepted non-blocker decisions above are
 reflected in the active release docs.

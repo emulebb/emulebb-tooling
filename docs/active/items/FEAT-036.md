@@ -1,7 +1,7 @@
 ---
 id: FEAT-036
 workflow: github
-github_issue: https://github.com/eMulebb/eMule/issues/15
+github_issue: https://github.com/emulebb/emulebb/issues/15
 title: NAT traversal and extended source exchange for LowID-to-LowID connectivity
 status: OPEN
 priority: Major
@@ -13,7 +13,7 @@ source: eMuleAI release notes; eMule Qt announcement 2026-03-05
 ---
 
 
-> Workflow status is tracked in GitHub: https://github.com/eMulebb/eMule/issues/15. This local document is retained as an engineering spec/evidence record.
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/15. This local document is retained as an engineering spec/evidence record.
 
 ## Summary
 

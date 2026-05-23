@@ -11,7 +11,7 @@ readiness evidence from the internal pre-release pass.
 
 Current status: Release 1 gate proof has fresh 2026-05-09 revalidation
 evidence, rehearsal packages were created, and the annotated internal app tag
-`emule-bb-v1.0.0` was pushed to `eMulebb/eMule` at app commit `953a39f`.
+`emule-bb-v1.0.0` was pushed to `emulebb/emulebb` at app commit `953a39f`.
 This tag and its assets are superseded internal evidence only; the first beta
 release target is `emule-bb-v0.7.3`.
 

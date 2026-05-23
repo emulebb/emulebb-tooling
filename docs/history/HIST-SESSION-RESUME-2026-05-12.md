@@ -4,7 +4,7 @@ This file is the session-termination handoff for the canonical eMule
 workspace. Update it only when ending a work session or when the user
 explicitly asks for a current handoff. Do not use it for mid-task planning.
 This file is not policy, not backlog authority, and not a substitute for
-`EMULE_WORKSPACE_ROOT\repos\eMule-tooling\docs\WORKSPACE-POLICY.md`.
+`EMULE_WORKSPACE_ROOT\repos\emulebb-tooling\docs\WORKSPACE-POLICY.md`.
 
 ## Current State
 
@@ -12,8 +12,8 @@ This file is not policy, not backlog authority, and not a substitute for
 - Active app worktree: `%EMULE_WORKSPACE_ROOT%\workspaces\v0.72a\app\eMule-main`
   on `main`.
 - Supporting repos checked this session:
-  - `%EMULE_WORKSPACE_ROOT%\repos\eMule-tooling` on `main`
-  - `%EMULE_WORKSPACE_ROOT%\repos\eMule-build-tests` on `main`
+  - `%EMULE_WORKSPACE_ROOT%\repos\emulebb-tooling` on `main`
+  - `%EMULE_WORKSPACE_ROOT%\repos\emulebb-build-tests` on `main`
 - App and build-test repos are clean on `main...origin/main`.
 - Beta-readiness audit snapshots now live under
   `docs\history\release-0.7.3\audits`.
@@ -58,11 +58,11 @@ Completed validation:
   `python -m emule_workspace test live-e2e --suite radarr-emulebb --config
   Release --platform x64 --build-output-mode ErrorsOnly
   --live-wire-inputs-file
-  %EMULE_WORKSPACE_ROOT%\repos\eMule-build-tests\live-wire-inputs.local.json
+  %EMULE_WORKSPACE_ROOT%\repos\emulebb-build-tests\live-wire-inputs.local.json
   --fail-fast`.
 - The user intentionally interrupted that run after roughly 11 minutes.
 - Partial report:
-  `%EMULE_WORKSPACE_ROOT%\repos\eMule-build-tests\reports\radarr-emulebb-live\20260511-235514-eMule-main-release\result.json`.
+  `%EMULE_WORKSPACE_ROOT%\repos\emulebb-build-tests\reports\radarr-emulebb-live\20260511-235514-eMule-main-release\result.json`.
 - Important partial result: the new shared-hashing gates both passed:
   - `shared_hashing_idle_after_rest_ready`: `hashingCount=0`, `idle=true`
   - `shared_hashing_idle_after_category_setup`: `hashingCount=0`, `idle=true`
@@ -75,12 +75,12 @@ Completed validation:
 
 ## Next Steps
 
-- Read `repos\eMule-tooling\docs\WORKSPACE-POLICY.md` before the next
+- Read `repos\emulebb-tooling\docs\WORKSPACE-POLICY.md` before the next
   workspace task.
 - Use `python -m emule_workspace` for build, validation, test, and live
   commands.
 - Continue with Radarr first, then Sonarr, using logs and
-  `%EMULE_WORKSPACE_ROOT%\repos\eMule-build-tests\.env.local` plus
+  `%EMULE_WORKSPACE_ROOT%\repos\emulebb-build-tests\.env.local` plus
   `live-wire-inputs.local.json`.
 - Treat the shared-hashing question as answered for the latest run:
   hashing was idle, so the next debugging focus is the Radarr/prowlarr

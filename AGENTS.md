@@ -1,6 +1,6 @@
 # Rules
 
-- Read `EMULE_WORKSPACE_ROOT\repos\eMule-tooling\docs\WORKSPACE-POLICY.md`
+- Read `EMULE_WORKSPACE_ROOT\repos\emulebb-tooling\docs\WORKSPACE-POLICY.md`
   before workspace work; it is authoritative for workspace-wide rules.
 - This file contains tooling-local deltas only. Do not duplicate branch,
   worktree, setup, dependency, or build/test policy here.

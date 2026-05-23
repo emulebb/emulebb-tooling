@@ -46,5 +46,5 @@ Covered by the
 - command: `python -m emule_workspace build tests --config Debug --platform x64`
 - command: `python -m emule_workspace test all --config Debug --platform x64`
 - build logs: `workspaces\v0.72a\state\build-logs\20260506-201517`
-- native coverage: `repos\eMule-build-tests\reports\native-coverage\20260506-201526-eMulebb-workspace-v0.72a-eMule-main-x64-Debug`
+- native coverage: `repos\emulebb-build-tests\reports\native-coverage\20260506-201526-eMulebb-workspace-v0.72a-eMule-main-x64-Debug`
 - result: native tests passed `483/483` cases and `2686/2686` assertions

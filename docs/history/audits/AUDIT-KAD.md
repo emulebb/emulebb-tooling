@@ -11,7 +11,7 @@
 ## Metadata
 
 - Date: 2026-03-31
-- Target tree: `C:\prj\p2p\eMule\eMulebb\eMule-build\eMule`
+- Target tree: `C:\prj\p2p\eMule\eMulebb\emulebb-build\eMule`
 - Comparison trees:
   - `C:\prj\p2p\eMule\analysis\eMule-0.60d`
   - `C:\prj\p2p\eMule\analysis\eMule-0.72a`
@@ -98,7 +98,7 @@ This audit focused on the Kad-specific code paths and on adjacent bootstrap logi
 - `srchybrid/kademlia/utils`
 - `srchybrid/KademliaWnd.cpp`
 - `srchybrid/ClientList.*` for buddy interaction
-- `eMule-build-tests` for Kad helper coverage
+- `emulebb-build-tests` for Kad helper coverage
 
 The review compared:
 

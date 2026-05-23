@@ -1,7 +1,7 @@
 site_name: eMuleBB Documentation
 site_description: eMuleBB workspace, release, product, and REST documentation.
-site_url: https://emulebb.github.io/eMule-tooling/
-repo_url: https://github.com/eMulebb/eMule-tooling
+site_url: https://emulebb.github.io/emulebb-tooling/
+repo_url: https://github.com/emulebb/emulebb-tooling
 edit_uri: blob/main/docs/
 docs_dir: docs
 site_dir: .local/mkdocs-site

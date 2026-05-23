@@ -26,7 +26,7 @@ def check_local_metadata(errors: list[str]) -> None:
             errors.append(f"{item.item_id}: missing workflow: github front matter")
         if not item.github_issue:
             errors.append(f"{item.item_id}: missing github_issue front matter")
-        elif not re.match(r"^https://github\.com/eMulebb/eMule/issues/\d+$", item.github_issue):
+        elif not re.match(r"^https://github\.com/emulebb/emulebb/issues/\d+$", item.github_issue):
             errors.append(f"{item.item_id}: invalid github_issue URL {item.github_issue!r}")
 
         text = read_text(item.path)

@@ -41,10 +41,10 @@ Historical release context: [Beta 0.7.3 REST and Arr execution plan](../../histo
 - tests: `affc4d6`, `11365ca`
 - command: `python -m pytest tests\python\test_amutorrent_browser_smoke.py tests\python\test_live_e2e_suite.py -q`
 - command: `python -m emule_workspace test live-e2e --config Release --platform x64 --suite amutorrent-browser-smoke`
-- artifact: `repos\eMule-build-tests\reports\amutorrent-browser-smoke\20260506-193606-eMule-main-release\result.json`
-- aggregate: `repos\eMule-build-tests\reports\live-e2e-suite\20260506-193606-eMule-main-release\result.json`
+- artifact: `repos\emulebb-build-tests\reports\amutorrent-browser-smoke\20260506-193606-eMule-main-release\result.json`
+- aggregate: `repos\emulebb-build-tests\reports\live-e2e-suite\20260506-193606-eMule-main-release\result.json`
 - Follow-up debug live proof:
-  `repos\eMule-build-tests\reports\amutorrent-browser-smoke\20260508-001203-eMule-main-debug\result.json`.
+  `repos\emulebb-build-tests\reports\amutorrent-browser-smoke\20260508-001203-eMule-main-debug\result.json`.
   The run passed with browser workflows covering automatic, server, and Kad
   search modes twice, and the report now records `launch_inputs` with
   `p2p_bind_interface_name=hide.me` and `enable_upnp=true`. The isolated
@@ -58,12 +58,12 @@ Historical release context: [Beta 0.7.3 REST and Arr execution plan](../../histo
   aMuTorrent commit `3c23c1b` fixes the stale snapshot cache after mutation
   refreshes; test commit `5a7565d` keeps the browser regression covered.
 - Debug live artifact after the delete fix:
-  `repos\eMule-build-tests\reports\amutorrent-browser-smoke\20260508-004347-eMule-main-debug\result.json`.
+  `repos\emulebb-build-tests\reports\amutorrent-browser-smoke\20260508-004347-eMule-main-debug\result.json`.
   The run passed with delete result `Deleted 1/1 files`, post-delete item count
   `0`, automatic/server/Kad search mode coverage, `BindInterface=hide.me`,
   empty P2P `BindAddr`, and `EnableUPnP=1`.
 - Fresh Release x64 revalidation:
-  `repos\eMule-build-tests\reports\amutorrent-browser-smoke\20260509-081711-eMule-main-release\result.json`.
+  `repos\emulebb-build-tests\reports\amutorrent-browser-smoke\20260509-081711-eMule-main-release\result.json`.
   The run passed after native REST and Arr adapter revalidation with
   `BindInterface=hide.me`, UPnP enabled, eD2K and Kad connected,
   automatic/server/Kad search modes, category create/delete, shared-files
@@ -71,7 +71,7 @@ Historical release context: [Beta 0.7.3 REST and Arr execution plan](../../histo
   aMuTorrent tests selected by `amutorrent or browser_smoke or search_modes or
   transfer_detail or segment_snapshot` also passed.
 - Beta 0.7.3 controller replay artifact:
-  `repos\eMule-build-tests\reports\amutorrent-browser-smoke\20260509-142532-eMule-main-release\result.json`.
+  `repos\emulebb-build-tests\reports\amutorrent-browser-smoke\20260509-142532-eMule-main-release\result.json`.
   The run passed through the supported `amutorrent-browser-smoke` suite with
   browser workflows, eMule REST readiness, `BindInterface=hide.me`, empty P2P
   `BindAddr`, and `EnableUPnP=1` evidence.

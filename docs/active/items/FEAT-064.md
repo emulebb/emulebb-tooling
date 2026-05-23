@@ -1,7 +1,7 @@
 ---
 id: FEAT-064
 workflow: github
-github_issue: https://github.com/eMulebb/eMule/issues/20
+github_issue: https://github.com/emulebb/emulebb/issues/20
 title: Curated post-0.7.3 future release roadmap
 status: OPEN
 priority: Minor
@@ -13,7 +13,7 @@ source: user future-release triage, local mod analysis, community feature scan
 ---
 
 
-> Workflow status is tracked in GitHub: https://github.com/eMulebb/eMule/issues/20. This local document is retained as an engineering spec/evidence record.
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/20. This local document is retained as an engineering spec/evidence record.
 
 ## Summary
 

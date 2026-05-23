@@ -65,14 +65,14 @@ the browser `segmentData` WebSocket subscription.
   and targeted live proof
   `python -m emule_workspace test live-e2e --config Release --platform x64 --suite amutorrent-browser-smoke`.
   Latest live artifact:
-  `repos/eMule-build-tests/reports/amutorrent-browser-smoke-latest/result.json`.
+  `repos/emulebb-build-tests/reports/amutorrent-browser-smoke-latest/result.json`.
 - 2026-05-09: Fresh Release x64 browser smoke after REST/Arr revalidation
   passed at
-  `repos/eMule-build-tests/reports/amutorrent-browser-smoke/20260509-081711-eMule-main-release/result.json`.
+  `repos/emulebb-build-tests/reports/amutorrent-browser-smoke/20260509-081711-eMule-main-release/result.json`.
   The report includes hydrated transfer progress/status/source fields and
   segment-subscribed `partStatus`, `gapStatus`, and `reqStatus` evidence.
 - 2026-05-09: Beta 0.7.3 controller replay passed at
-  `repos/eMule-build-tests/reports/amutorrent-browser-smoke/20260509-142532-eMule-main-release/result.json`.
+  `repos/emulebb-build-tests/reports/amutorrent-browser-smoke/20260509-142532-eMule-main-release/result.json`.
   The browser smoke remained green after CI-032 post-tag hardening coverage.
 
 ## Relationship To Other Items

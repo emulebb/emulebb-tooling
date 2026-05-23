@@ -90,7 +90,7 @@ Mbed TLS was only used by the optional SMTP notifier and the embedded web server
 ### Removal outcome
 
 - `emule.exe` no longer links `mbedtls.lib`
-- `python -m emule_workspace` and `deps.json` no longer configure or build `eMule-mbedtls`
+- `python -m emule_workspace` and `deps.json` no longer configure or build `emulebb-mbedtls`
 - `WebSocket.cpp`, `WebServer.cpp`, `PPgWebServer.cpp`, `SendMail.cpp`, and `TLSthreading.cpp` are gone
 - Core P2P behavior is unchanged because the dependency was never used by ED2K/Kad traffic
 
@@ -104,7 +104,7 @@ Mbed TLS was only used by the optional SMTP notifier and the embedded web server
 
 ### What it is
 
-id3lib (`eMulebb/eMule-id3lib`, pinned at `v3.9.1`) is a C library for reading and writing ID3v1 and ID3v2 metadata tags in MP3 files. The library is effectively frozen — the last commit on the workspace fork is from February 2019 and there are no upstream releases. The workspace patch retargets the zlib include path from `../zlib` to `../eMule-zlib` and upgrades the vcxproj from `v142` to `v143`.
+id3lib (`emulebb/emulebb-id3lib`, pinned at `v3.9.1`) is a C library for reading and writing ID3v1 and ID3v2 metadata tags in MP3 files. The library is effectively frozen — the last commit on the workspace fork is from February 2019 and there are no upstream releases. The workspace patch retargets the zlib include path from `../zlib` to `../emulebb-zlib` and upgrades the vcxproj from `v142` to `v143`.
 
 The library is the weakest maintenance point in the workspace: it is old, has no active upstream, and is the most likely to accumulate build friction over time as MSVC evolves.
 

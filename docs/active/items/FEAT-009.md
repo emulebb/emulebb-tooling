@@ -38,7 +38,7 @@ or within an allowed delta.
 
 1. Review the actual diff of commit `226356a` against its parent.
 2. Determine if the mirror audit approach is compatible with the existing
-   `eMule-build-tests` infrastructure.
+   `emulebb-build-tests` infrastructure.
 3. If salvageable: fold into FEAT-008 as the "oracle comparison" phase.
 4. If not salvageable: close as Wont-Fix.
 

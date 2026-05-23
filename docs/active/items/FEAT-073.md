@@ -21,14 +21,14 @@ aMule remain distinct clients, but it should share contracts, campaign
 patterns, and selected dependencies where that reduces drift.
 
 The active ED2K server for eMuleBB remains
-`https://github.com/eMulebb/goed2k-server`. The obsolete
-`https://github.com/eMulebb/emulebb-ed2k-server` fork is not part of this
+`https://github.com/emulebb/goed2k-server`. The obsolete
+`https://github.com/emulebb/emulebb-ed2k-server` fork is not part of this
 future integration and should be decommissioned.
 
 ## Intended Shape
 
-- Track `https://github.com/eMulebb/p2p-overlord-agents` and
-  `https://github.com/eMulebb/p2p-overlord-be` as first-class product-family
+- Track `https://github.com/emulebb/p2p-overlord-agents` and
+  `https://github.com/emulebb/p2p-overlord-be` as first-class product-family
   repos.
 - Keep `p2p-overlord-tooling` separate because the Rust/Node build system
   remains separate.
@@ -36,9 +36,9 @@ future integration and should be decommissioned.
   use `goed2k-server` as the shared ED2K server fork.
 - Treat `docs/rest/REST-API-OPENAPI.yaml` as the shared REST API authority for
   every implementation that claims the eMuleBB-compatible `/api/v1` surface.
-- Use `repos/eMule-build-tests` as the common base for cross-product release
+- Use `repos/emulebb-build-tests` as the common base for cross-product release
   campaigns, with product-specific variants rather than copied harnesses.
-- Converge MiniUPnP source ownership on `repos/third_party/eMule-miniupnp`,
+- Converge MiniUPnP source ownership on `repos/third_party/emulebb-miniupnp`,
   while preserving p2p-overlord's Rust build boundaries.
 
 ## Scope Constraints
@@ -65,14 +65,14 @@ future integration and should be decommissioned.
 - [x] REST docs state how a p2p-overlord implementation proves a claimed
       subset against the canonical OpenAPI contract
 - [x] MiniUPnP convergence docs point both products at the shared
-      `eMule-miniupnp` fork
+      `emulebb-miniupnp` fork
 
 ## Validation
 
 - Docs-only slices should pass `git diff --check`.
 - Topology slices should pass `python -m emule_workspace validate` from
-  `repos/eMule-build`.
-- Test-harness slices should pass the relevant `repos/eMule-build-tests`
+  `repos/emulebb-build`.
+- Test-harness slices should pass the relevant `repos/emulebb-build-tests`
   Python unit tests.
 - Future p2p-overlord code slices should pass `cargo fmt --all --check`,
   p2p-overlord's clippy policy, and backend `npm run quality`.

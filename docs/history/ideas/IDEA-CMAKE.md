@@ -178,7 +178,7 @@ Set in `.vscode/settings.json` (see Phase 6). The CMake Tools extension can call
 The migration adds new `CMakeLists.txt` files and a `vcpkg.json` manifest. Nothing is moved or deleted from existing subdirectories (except the files listed in Section 10). The tree below shows only new/changed items.
 
 ```
-C:\prj\p2p\eMule\eMulebb\eMule-build\
+C:\prj\p2p\eMule\eMulebb\emulebb-build\
 ├── CMakeLists.txt                          ← NEW: top-level root
 ├── CMakePresets.json                       ← NEW: 4 build presets
 ├── vcpkg.json                              ← NEW: vcpkg manifest
@@ -196,32 +196,32 @@ C:\prj\p2p\eMule\eMulebb\eMule-build\
 │           ├── emuleWin32.manifest         ← unchanged
 │           └── emulex64.manifest           ← unchanged
 │
-├── eMule-cryptopp/
+├── emulebb-cryptopp/
 │   └── (source tree, not built by CMake — vcpkg provides cryptopp)
 │
-├── eMule-id3lib/
+├── emulebb-id3lib/
 │   ├── CMakeLists.txt                      ← NEW: id3lib static lib target
 │   └── (existing source tree unchanged)
 │
-├── eMule-mbedtls/
+├── emulebb-mbedtls/
 │   └── CMakeLists.txt                      ← EXISTING upstream, used as-is
 │
-├── eMule-miniupnp/
+├── emulebb-miniupnp/
 │   └── miniupnpc/
 │       └── CMakeLists.txt                  ← EXISTING upstream, used as-is
 │
-├── eMule-ResizableLib/
+├── emulebb-resizablelib/
 │   └── ResizableLib/
 │       └── CMakeLists.txt                  ← NEW: ResizableLib static lib target
 │
-└── eMule-zlib/
+└── emulebb-zlib/
     └── CMakeLists.txt                      ← EXISTING upstream, used as-is
 ```
 
 **Key layout decisions:**
 
 - The root `CMakeLists.txt` lives at the workspace root (`eMulebb/`), not inside the `eMule/` subfolder. This is so the root can `add_subdirectory` all sibling dependency trees.
-- `eMule-cryptopp/` source is kept for reference but not compiled by CMake — vcpkg's `cryptopp` package replaces it entirely. You may archive or delete it after confirming the vcpkg build works.
+- `emulebb-cryptopp/` source is kept for reference but not compiled by CMake — vcpkg's `cryptopp` package replaces it entirely. You may archive or delete it after confirming the vcpkg build works.
 - vcpkg operates in **manifest mode**: `vcpkg.json` at the root declares dependencies, vcpkg installs them into `build/<preset>/vcpkg_installed/` automatically during CMake configure.
 
 ---
@@ -236,7 +236,7 @@ zlib already has a CMakeLists.txt. Add it as a subdirectory from the root. The o
 # In root CMakeLists.txt (see Phase 3):
 set(ZLIB_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
-add_subdirectory(eMule-zlib EXCLUDE_FROM_ALL)
+add_subdirectory(emulebb-zlib EXCLUDE_FROM_ALL)
 # zlib's CMakeLists exports target "zlib" (static) or "zlibstatic" depending on version.
 # Modern zlib (1.3+) always exports "zlibstatic" when BUILD_SHARED_LIBS=OFF.
 # Alias for uniformity:
@@ -245,7 +245,7 @@ if(NOT TARGET ZLIB::ZLIB)
 endif()
 ```
 
-**Judgement call:** We use `add_subdirectory` rather than `FetchContent` because the source is already vendored in the repo as `eMule-zlib/`. `FetchContent` would re-download it at configure time, which is unnecessary and breaks offline builds.
+**Judgement call:** We use `add_subdirectory` rather than `FetchContent` because the source is already vendored in the repo as `emulebb-zlib/`. `FetchContent` would re-download it at configure time, which is unnecessary and breaks offline builds.
 
 ### 4.2 mbedTLS — use existing upstream CMakeLists
 
@@ -257,7 +257,7 @@ set(ENABLE_TESTING OFF CACHE BOOL "" FORCE)
 set(ENABLE_PROGRAMS OFF CACHE BOOL "" FORCE)
 set(USE_SHARED_MBEDTLS_LIBRARY OFF CACHE BOOL "" FORCE)
 set(USE_STATIC_MBEDTLS_LIBRARY ON CACHE BOOL "" FORCE)
-add_subdirectory(eMule-mbedtls EXCLUDE_FROM_ALL)
+add_subdirectory(emulebb-mbedtls EXCLUDE_FROM_ALL)
 # mbedTLS exports: MbedTLS::mbedtls, MbedTLS::mbedcrypto, MbedTLS::mbedx509
 ```
 
@@ -271,7 +271,7 @@ set(UPNPC_BUILD_SHARED OFF CACHE BOOL "" FORCE)
 set(UPNPC_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(UPNPC_BUILD_SAMPLE OFF CACHE BOOL "" FORCE)
 set(NO_GETADDRINFO OFF CACHE BOOL "" FORCE)
-add_subdirectory(eMule-miniupnp/miniupnpc EXCLUDE_FROM_ALL)
+add_subdirectory(emulebb-miniupnp/miniupnpc EXCLUDE_FROM_ALL)
 # miniupnpc exports target "libminiupnpc-static"
 ```
 
@@ -279,7 +279,7 @@ The `MINIUPNP_STATICLIB` define is needed by code that includes miniupnpc header
 
 ### 4.4 id3lib — write CMakeLists.txt from scratch
 
-id3lib is not in vcpkg mainstream and its autoconf build system does not work on Windows. The existing `eMule-id3lib/libprj/id3lib.vcxproj` reveals everything needed:
+id3lib is not in vcpkg mainstream and its autoconf build system does not work on Windows. The existing `emulebb-id3lib/libprj/id3lib.vcxproj` reveals everything needed:
 
 - Sources: all `.cpp` files in `../src/` (relative to `libprj/`)
 - Include dirs: `.`, `..`, `../include`, `../include/id3`, plus zlib headers
@@ -287,7 +287,7 @@ id3lib is not in vcpkg mainstream and its autoconf build system does not work on
 - Config header: `config.h` must come from `config.h.win32`
 - No PCH used in the library itself
 
-Create **`C:\prj\p2p\eMule\eMulebb\eMule-build\eMule-id3lib\CMakeLists.txt`**:
+Create **`C:\prj\p2p\eMule\eMulebb\emulebb-build\emulebb-id3lib\CMakeLists.txt`**:
 
 ```cmake
 cmake_minimum_required(VERSION 3.25)
@@ -296,7 +296,7 @@ project(id3lib LANGUAGES CXX)
 # id3lib needs zlib. It must already be in scope via the parent project.
 # We accept either the upstream target name or our alias.
 if(NOT TARGET ZLIB::ZLIB)
-    message(FATAL_ERROR "id3lib requires ZLIB::ZLIB target to be defined before add_subdirectory(eMule-id3lib)")
+    message(FATAL_ERROR "id3lib requires ZLIB::ZLIB target to be defined before add_subdirectory(emulebb-id3lib)")
 endif()
 
 add_library(id3lib STATIC
@@ -388,7 +388,7 @@ The original vcxproj does not use a PCH for this library. The sources are hetero
 
 ResizableLib is an MFC extension library. It uses `StdAfx.h`/`StdAfx.cpp` as its PCH. The original vcxproj uses `UseOfMfc=Static` for the configurations we care about.
 
-Create **`C:\prj\p2p\eMule\eMulebb\eMule-build\eMule-ResizableLib\ResizableLib\CMakeLists.txt`**:
+Create **`C:\prj\p2p\eMule\eMulebb\emulebb-build\emulebb-resizablelib\ResizableLib\CMakeLists.txt`**:
 
 ```cmake
 cmake_minimum_required(VERSION 3.25)
@@ -471,7 +471,7 @@ vcpkg operates in two modes: classic mode (global `vcpkg install cryptopp`) and 
 
 ### 5.2 `vcpkg.json`
 
-Create **`C:\prj\p2p\eMule\eMulebb\eMule-build\vcpkg.json`**:
+Create **`C:\prj\p2p\eMule\eMulebb\emulebb-build\vcpkg.json`**:
 
 ```json
 {
@@ -491,11 +491,11 @@ Create **`C:\prj\p2p\eMule\eMulebb\eMule-build\vcpkg.json`**:
 - zlib, mbedTLS, miniupnpc: already vendored with their own CMakeLists — `add_subdirectory` is used.
 - id3lib: not in vcpkg mainstream — custom CMakeLists written above.
 - ResizableLib: not in vcpkg — custom CMakeLists written above.
-- cryptopp: available in vcpkg as `cryptopp`, and the existing source tree in `eMule-cryptopp/` is a verbatim copy of the upstream anyway. vcpkg is the cleaner path.
+- cryptopp: available in vcpkg as `cryptopp`, and the existing source tree in `emulebb-cryptopp/` is a verbatim copy of the upstream anyway. vcpkg is the cleaner path.
 
 ### 5.3 `vcpkg-configuration.json` — baseline pin
 
-Create **`C:\prj\p2p\eMule\eMulebb\eMule-build\vcpkg-configuration.json`**:
+Create **`C:\prj\p2p\eMule\eMulebb\emulebb-build\vcpkg-configuration.json`**:
 
 ```json
 {
@@ -542,7 +542,7 @@ The cryptopp package exports a CMake target `cryptopp::cryptopp` via `find_packa
 
 ## 6. Phase 3 — Root CMakeLists.txt
 
-Create **`C:\prj\p2p\eMule\eMulebb\eMule-build\CMakeLists.txt`**:
+Create **`C:\prj\p2p\eMule\eMulebb\emulebb-build\CMakeLists.txt`**:
 
 ```cmake
 cmake_minimum_required(VERSION 3.25)
@@ -612,7 +612,7 @@ find_package(cryptopp CONFIG REQUIRED)
 # ---------------------------------------------------------------------------
 set(ZLIB_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 set(BUILD_SHARED_LIBS    OFF CACHE BOOL "" FORCE)
-add_subdirectory(eMule-zlib EXCLUDE_FROM_ALL)
+add_subdirectory(emulebb-zlib EXCLUDE_FROM_ALL)
 # Provide a canonical ZLIB::ZLIB alias regardless of zlib version
 if(TARGET zlibstatic AND NOT TARGET ZLIB::ZLIB)
     add_library(ZLIB::ZLIB ALIAS zlibstatic)
@@ -624,7 +624,7 @@ endif()
 # id3lib (custom CMakeLists written in Phase 1)
 # Must come after zlib because id3lib links against ZLIB::ZLIB.
 # ---------------------------------------------------------------------------
-add_subdirectory(eMule-id3lib EXCLUDE_FROM_ALL)
+add_subdirectory(emulebb-id3lib EXCLUDE_FROM_ALL)
 
 # ---------------------------------------------------------------------------
 # mbedTLS
@@ -635,7 +635,7 @@ set(USE_SHARED_MBEDTLS_LIBRARY  OFF CACHE BOOL "" FORCE)
 set(USE_STATIC_MBEDTLS_LIBRARY  ON  CACHE BOOL "" FORCE)
 # Disable TF-PSA-Crypto subproject programs/tests as well
 set(TF_PSA_CRYPTO_BUILD_TESTING OFF CACHE BOOL "" FORCE)
-add_subdirectory(eMule-mbedtls EXCLUDE_FROM_ALL)
+add_subdirectory(emulebb-mbedtls EXCLUDE_FROM_ALL)
 
 # ---------------------------------------------------------------------------
 # miniupnpc
@@ -644,12 +644,12 @@ set(UPNPC_BUILD_SHARED  OFF CACHE BOOL "" FORCE)
 set(UPNPC_BUILD_TESTS   OFF CACHE BOOL "" FORCE)
 set(UPNPC_BUILD_SAMPLE  OFF CACHE BOOL "" FORCE)
 set(UPNPC_NO_GETADDRINFO OFF CACHE BOOL "" FORCE)
-add_subdirectory(eMule-miniupnp/miniupnpc EXCLUDE_FROM_ALL)
+add_subdirectory(emulebb-miniupnp/miniupnpc EXCLUDE_FROM_ALL)
 
 # ---------------------------------------------------------------------------
 # ResizableLib (custom CMakeLists written in Phase 1)
 # ---------------------------------------------------------------------------
-add_subdirectory(eMule-ResizableLib/ResizableLib EXCLUDE_FROM_ALL)
+add_subdirectory(emulebb-resizablelib/ResizableLib EXCLUDE_FROM_ALL)
 
 # ---------------------------------------------------------------------------
 # Main application
@@ -677,7 +677,7 @@ The explicit list is long but maintainable. It is organized by subsystem.
 
 ### 7.2 The full `srchybrid/CMakeLists.txt`
 
-Create **`C:\prj\p2p\eMule\eMulebb\eMule-build\eMule\srchybrid\CMakeLists.txt`**:
+Create **`C:\prj\p2p\eMule\eMulebb\emulebb-build\eMule\srchybrid\CMakeLists.txt`**:
 
 ```cmake
 cmake_minimum_required(VERSION 3.25)
@@ -1225,7 +1225,7 @@ Listing `emule.rc` in the source list is sufficient. CMake detects `.rc` files a
 
 All commands must be run from an **MSVC-activated terminal** (i.e., after `vcvarsall.bat`).
 
-The working directory for all commands is `C:\prj\p2p\eMule\eMulebb\eMule-build\` (the workspace root where `CMakeLists.txt` and `CMakePresets.json` live).
+The working directory for all commands is `C:\prj\p2p\eMule\eMulebb\emulebb-build\` (the workspace root where `CMakeLists.txt` and `CMakePresets.json` live).
 
 ### 8.1 First-time setup (run once)
 
@@ -1236,7 +1236,7 @@ call "C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Auxiliar
 rem Set VCPKG_ROOT if not already in environment
 set VCPKG_ROOT=C:\tools\vcpkg
 
-cd C:\prj\p2p\eMule\eMulebb\eMule-build
+cd C:\prj\p2p\eMule\eMulebb\emulebb-build
 ```
 
 ### 8.2 Configure — x64 Release
@@ -1349,7 +1349,7 @@ cmake --build --preset x64-release
 
 ### 9.1 `CMakePresets.json`
 
-Create **`C:\prj\p2p\eMule\eMulebb\eMule-build\CMakePresets.json`**:
+Create **`C:\prj\p2p\eMule\eMulebb\emulebb-build\CMakePresets.json`**:
 
 ```json
 {
@@ -1471,7 +1471,7 @@ Create **`C:\prj\p2p\eMule\eMulebb\eMule-build\CMakePresets.json`**:
 
 ### 9.2 VS Code settings
 
-Create **`C:\prj\p2p\eMule\eMulebb\eMule-build\.vscode\settings.json`** (or merge into existing):
+Create **`C:\prj\p2p\eMule\eMulebb\emulebb-build\.vscode\settings.json`** (or merge into existing):
 
 ```json
 {
@@ -1522,13 +1522,13 @@ In VS Code: `Ctrl+Shift+P → CMake: Select a Kit → Visual Studio Build Tools 
 eMule/srchybrid/emule.vcxproj
 eMule/srchybrid/emule.vcxproj.filters
 eMule/srchybrid/emule.vcxproj.user      (if present)
-eMule-cryptopp/cryptlib.vcxproj
-eMule-cryptopp/cryptlib.vcxproj.filters (if present)
-eMule-id3lib/libprj/id3lib.vcxproj
-eMule-id3lib/libprj/id3lib.vcxproj.filters (if present)
-eMule-id3lib/libprj/id3lib.sln
-eMule-ResizableLib/ResizableLib/ResizableLib.vcxproj
-eMule-ResizableLib/ResizableLib/ResizableLib.vcxproj.filters (if present)
+emulebb-cryptopp/cryptlib.vcxproj
+emulebb-cryptopp/cryptlib.vcxproj.filters (if present)
+emulebb-id3lib/libprj/id3lib.vcxproj
+emulebb-id3lib/libprj/id3lib.vcxproj.filters (if present)
+emulebb-id3lib/libprj/id3lib.sln
+emulebb-resizablelib/ResizableLib/ResizableLib.vcxproj
+emulebb-resizablelib/ResizableLib/ResizableLib.vcxproj.filters (if present)
 templates/zlib/zlib.vcxproj             (the generated template)
 templates/mbedtls/mbedTLS.vcxproj       (the generated template)
 ```
@@ -1563,7 +1563,7 @@ eMule/srchybrid/Scanner.h     — KEEP
 eMule/srchybrid/Version.h     — KEEP: manually maintained
 eMule/srchybrid/emule.rc      — KEEP
 eMule/srchybrid/res/          — KEEP all .manifest, .ico, .bmp etc.
-eMule-id3lib/config.h.win32   — KEEP: used by the new CMakeLists via configure_file
+emulebb-id3lib/config.h.win32   — KEEP: used by the new CMakeLists via configure_file
 ```
 
 ### 10.3 `.gitignore` additions
@@ -1665,7 +1665,7 @@ Then set `VCPKG_TARGET_TRIPLET` to `custom-x64-windows-static-noavx2` in the aff
 ### 11.6 id3lib quirks
 
 - id3lib's source code predates modern C++ and uses `std::auto_ptr`, deprecated `register` keyword, and other C++11-deprecated constructs. The `_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS` define suppresses these. You may also need `/wd4996` to suppress deprecation warnings from MSVC itself.
-- id3lib uses `<zlib.h>` internally. The `ZLIB::ZLIB` target must be available before `add_subdirectory(eMule-id3lib)`. The root `CMakeLists.txt` orders `add_subdirectory(eMule-zlib)` before `add_subdirectory(eMule-id3lib)` for this reason.
+- id3lib uses `<zlib.h>` internally. The `ZLIB::ZLIB` target must be available before `add_subdirectory(emulebb-id3lib)`. The root `CMakeLists.txt` orders `add_subdirectory(emulebb-zlib)` before `add_subdirectory(emulebb-id3lib)` for this reason.
 - `config.h` must resolve at compile time. The `configure_file` approach copies `config.h.win32` → `${CMAKE_CURRENT_BINARY_DIR}/config.h`. The `PRIVATE` include of `CMAKE_CURRENT_BINARY_DIR` in `target_include_directories` makes this work.
 
 ### 11.7 miniupnpc `MINIUPNP_STATICLIB` propagation
@@ -1674,7 +1674,7 @@ The miniupnpc upstream `CMakeLists.txt` may or may not define `MINIUPNP_STATICLI
 
 ```bash
 # Check if libminiupnpc-static propagates MINIUPNP_STATICLIB
-grep -r "MINIUPNP_STATICLIB" eMule-miniupnp/miniupnpc/CMakeLists.txt
+grep -r "MINIUPNP_STATICLIB" emulebb-miniupnp/miniupnpc/CMakeLists.txt
 ```
 
 If it does not, add it manually in the root `CMakeLists.txt` after `add_subdirectory`:
@@ -1696,9 +1696,9 @@ The mbedTLS CMake build should expose these through the `MbedTLS::mbedcrypto` ta
 
 ```cmake
 target_include_directories(emule PRIVATE
-    "${CMAKE_SOURCE_DIR}/eMule-mbedtls/include"
-    "${CMAKE_SOURCE_DIR}/eMule-mbedtls/tf-psa-crypto/include"
-    "${CMAKE_SOURCE_DIR}/eMule-mbedtls/tf-psa-crypto/drivers/builtin/include"
+    "${CMAKE_SOURCE_DIR}/emulebb-mbedtls/include"
+    "${CMAKE_SOURCE_DIR}/emulebb-mbedtls/tf-psa-crypto/include"
+    "${CMAKE_SOURCE_DIR}/emulebb-mbedtls/tf-psa-crypto/drivers/builtin/include"
 )
 ```
 
@@ -1734,11 +1734,11 @@ The vcxproj has `<AdditionalOptions>/D _DEBUG</AdditionalOptions>` for Debug con
 
 ### Phase 1 — Dependency CMakeLists
 
-- [ ] Create `eMule-id3lib/CMakeLists.txt` (Section 4.4)
-  - [ ] Verify all 36 source files listed match the actual `eMule-id3lib/src/` directory
-  - [ ] Verify `config.h.win32` exists at `eMule-id3lib/config.h.win32`
-  - [ ] Test standalone: `cmake -B build-id3lib-test -S eMule-id3lib -DCMAKE_TOOLCHAIN_FILE=%VCPKG_ROOT%/scripts/buildsystems/vcpkg.cmake`
-- [ ] Create `eMule-ResizableLib/ResizableLib/CMakeLists.txt` (Section 4.5)
+- [ ] Create `emulebb-id3lib/CMakeLists.txt` (Section 4.4)
+  - [ ] Verify all 36 source files listed match the actual `emulebb-id3lib/src/` directory
+  - [ ] Verify `config.h.win32` exists at `emulebb-id3lib/config.h.win32`
+  - [ ] Test standalone: `cmake -B build-id3lib-test -S emulebb-id3lib -DCMAKE_TOOLCHAIN_FILE=%VCPKG_ROOT%/scripts/buildsystems/vcpkg.cmake`
+- [ ] Create `emulebb-resizablelib/ResizableLib/CMakeLists.txt` (Section 4.5)
   - [ ] Verify all `.cpp` files listed match the actual directory
   - [ ] Confirm `StdAfx.h` / `StdAfx.cpp` exist
   - [ ] Test standalone compile

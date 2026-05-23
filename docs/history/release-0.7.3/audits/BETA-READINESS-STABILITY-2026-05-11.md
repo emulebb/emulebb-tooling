@@ -11,12 +11,12 @@ Release blocker. The active candidate is no longer the candidate proven by the r
 ## Review Checklist
 
 - [x] Read `AGENTS.md`.
-- [x] Read `repos/eMule-tooling/docs/WORKSPACE-POLICY.md`.
+- [x] Read `repos/emulebb-tooling/docs/WORKSPACE-POLICY.md`.
 - [x] Checked `git status --short --branch` before drawing conclusions for `workspaces/v0.72a/app/eMule-main`: clean `main...origin/main`.
 - [x] Checked `git status --short --branch` for `workspaces/v0.72a/app/eMule-v0.72a-community`: clean `release/v0.72a-community`.
-- [x] Checked `git status --short --branch` for `repos/eMule-build`: clean `main...origin/main`.
-- [x] Checked `git status --short --branch` for `repos/eMule-tooling`: clean `main...origin/main`.
-- [x] Checked `git status --short --branch` for `repos/eMule-build-tests`: `main...origin/main` with pre-existing modified and untracked live-test files; treated as prior work.
+- [x] Checked `git status --short --branch` for `repos/emulebb-build`: clean `main...origin/main`.
+- [x] Checked `git status --short --branch` for `repos/emulebb-tooling`: clean `main...origin/main`.
+- [x] Checked `git status --short --branch` for `repos/emulebb-build-tests`: `main...origin/main` with pre-existing modified and untracked live-test files; treated as prior work.
 - [x] Reviewed current release/version naming against beta target `0.7.3`.
 - [x] Compared current heads with recorded 0.7.3 proof commits.
 - [x] Reviewed startup/shutdown and NAT traversal code paths for concrete runtime stability risk.
@@ -34,12 +34,12 @@ Affected area: Release gating, runtime REST/adapter surface, package provenance.
 Evidence:
 
 - Current app candidate is `workspaces/v0.72a/app/eMule-main` commit `df1191e` (`CI-014 harden peer friend REST response`).
-- Current build orchestration is `repos/eMule-build` commit `7d81b07`; current tooling is `repos/eMule-tooling` commit `d3b0cba`.
+- Current build orchestration is `repos/emulebb-build` commit `7d81b07`; current tooling is `repos/emulebb-tooling` commit `d3b0cba`.
 - `docs/active/RELEASE-0.7.3.md` records the current 0.7.3 package rehearsal at app commit `74e5c76`, build commit `0ead21a`, and tooling commit `2d904c3`.
 - `docs/active/RELEASE-0.7.3.md` also states that tagging is held until the remaining minimum beta proof is complete.
 - `docs/active/items/CI-033.md` records the final proof against superseded internal `1.0.1` artifacts at app commit `11e5966`, not current `df1191e`.
 - `git diff --stat 74e5c76..HEAD -- srchybrid` in `eMule-main` shows 11 runtime files changed after the recorded 0.7.3 package proof, including `srchybrid/WebServerJson.cpp`, `srchybrid/WebServerArrCompat.cpp`, `srchybrid/WebServerQBitCompat.cpp`, `srchybrid/WebApiSurfaceSeams.h`, and REST seam headers.
-- The 0.7.3 identity itself is aligned in source and build defaults: `srchybrid/Version.h` sets `MOD_RELEASE_VERSION_MAJOR/MINOR/PATCH` to `0.7.3`, `srchybrid/ReleaseUpdateCheckSeams.h` uses tag prefix `emule-bb-v` and asset prefix `eMule-broadband-`, and `repos/eMule-build/emule_workspace/config.py` plus `cli.py` default package release version to `0.7.3`.
+- The 0.7.3 identity itself is aligned in source and build defaults: `srchybrid/Version.h` sets `MOD_RELEASE_VERSION_MAJOR/MINOR/PATCH` to `0.7.3`, `srchybrid/ReleaseUpdateCheckSeams.h` uses tag prefix `emule-bb-v` and asset prefix `eMule-broadband-`, and `repos/emulebb-build/emule_workspace/config.py` plus `cli.py` default package release version to `0.7.3`.
 
 Impact:
 
@@ -51,7 +51,7 @@ Hold the beta tag and public release until a fresh current-head proof is complet
 
 Suggested validation:
 
-Run the policy-compliant proof through `repos/eMule-build` only, sequentially:
+Run the policy-compliant proof through `repos/emulebb-build` only, sequentially:
 
 - `python -m emule_workspace validate`
 - `python -m emule_workspace build app --config Debug --platform x64`
@@ -67,7 +67,7 @@ Owner suggestion: Release owner with app/runtime and build-test owners.
 Execution checklist:
 
 - [ ] Freeze the chosen beta candidate commit set and record current app, build, tests, and tooling heads.
-- [ ] Rerun minimum beta proof through `python -m emule_workspace` commands from `repos/eMule-build`, without direct app-project builds.
+- [ ] Rerun minimum beta proof through `python -m emule_workspace` commands from `repos/emulebb-build`, without direct app-project builds.
 - [ ] Regenerate x64 and ARM64 0.7.3 package rehearsals and confirm sidecar manifests record current app/build/tooling commits.
 - [ ] Verify REST/qBit/Torznab/aMuTorrent/Arr smoke results on the post-`74e5c76` REST adapter delta.
 - [ ] Update release evidence docs only after the proof passes, then request separate operator approval before creating `emule-bb-v0.7.3`.
@@ -85,7 +85,7 @@ Evidence:
 - `srchybrid/UPnPImplPcpNatPmp.cpp`, `CUPnPImplPcpNatPmp::CStartDiscoveryThread::Run`, keeps a raw `m_pOwner`, locks the owner's static mutex, and accesses owner fields and libpcpnatpmp context/flows during discovery and mapping.
 - `srchybrid/UPnPImplPcpNatPmp.cpp`, `CUPnPImplPcpNatPmp::StartThread`, dereferences `pStartDiscoveryThread` immediately after `AfxBeginThread(...)` without checking for `NULL`.
 - `srchybrid/UPnPImplMiniLib.cpp`, `CUPnPImplMiniLib::StartThread`, has the same unchecked `AfxBeginThread` dereference, and `CUPnPImplMiniLib::StopAsyncFind` still uses `TerminateThread` after a 7-second wait.
-- Existing tests in `repos/eMule-build-tests` cover UPnP wrapper ordering and MiniUPnP mapping seams, but I did not find coverage for PCP/NAT-PMP launch failure, cooperative cancellation, timeout shutdown, or owner lifetime.
+- Existing tests in `repos/emulebb-build-tests` cover UPnP wrapper ordering and MiniUPnP mapping seams, but I did not find coverage for PCP/NAT-PMP launch failure, cooperative cancellation, timeout shutdown, or owner lifetime.
 
 Impact:
 
@@ -112,7 +112,7 @@ Execution checklist:
 
 ## Missing Tests / Validation Gaps
 
-- [ ] Fresh current-head beta proof is missing for app commit `df1191e`, build commit `7d81b07`, tooling commit `d3b0cba`, and the current `repos/eMule-build-tests` state.
+- [ ] Fresh current-head beta proof is missing for app commit `df1191e`, build commit `7d81b07`, tooling commit `d3b0cba`, and the current `repos/emulebb-build-tests` state.
 - [ ] Current 0.7.3 package rehearsals do not cover the runtime REST delta after app commit `74e5c76`.
 - [ ] PCP/NAT-PMP implementation lacks focused native seam coverage for `AfxBeginThread` failure, cancellation timeout, and owner destruction while a worker is in flight.
 - [ ] MiniUPnP implementation lacks a regression test proving shutdown no longer uses forced thread termination.
@@ -121,14 +121,14 @@ Execution checklist:
 
 ## Cross-review Notes
 
-- `repos/eMule-build-tests` had pre-existing modified and untracked files when reviewed: live E2E/profile scripts, live-wire manifests, and related Python tests. I did not edit or interpret those changes as mine.
+- `repos/emulebb-build-tests` had pre-existing modified and untracked files when reviewed: live E2E/profile scripts, live-wire manifests, and related Python tests. I did not edit or interpret those changes as mine.
 - Product naming and release identity are mostly aligned for beta 0.7.3 in current source/build defaults. The remaining issue is provenance: evidence and package manifests must be regenerated on current heads.
 - Some active docs still contain superseded `1.0.1` proof details by design, but they can be easy to misread because `CI-033` is marked done while its package table is explicitly superseded.
 
 ## Assumptions
 
 - Current `main` heads are the intended beta candidate unless the release owner freezes a different commit set.
-- Existing modified/untracked files in `repos/eMule-build-tests` belong to another agent or prior user work and were not changed by this review.
+- Existing modified/untracked files in `repos/emulebb-build-tests` belong to another agent or prior user work and were not changed by this review.
 - I did not run build, test, live-test, package, or cleanup commands because this task was audit output only and other agents were working in parallel.
 - The stale experimental checkout was not needed for these conclusions and was not used as an active baseline.
 

@@ -37,18 +37,18 @@ Directive precedence is:
 - Repos live under `EMULE_WORKSPACE_ROOT\repos\...`.
 - App worktrees live under `EMULE_WORKSPACE_ROOT\workspaces\workspace\app\...`.
 - Do not hardcode machine-specific absolute paths in workspace docs or scripts.
-- `repos\eMule-tooling` owns shared workspace policy, helper docs, and
+- `repos\emulebb-tooling` owns shared workspace policy, helper docs, and
   engineering notes.
-- `repos\eMule-build` owns workspace materialization, repo/worktree
+- `repos\emulebb-build` owns workspace materialization, repo/worktree
   orchestration, build orchestration, validation, and packaging.
-- `repos\eMule-build-tests` owns shared test harness code and test execution
+- `repos\emulebb-build-tests` owns shared test harness code and test execution
   helpers.
 - `repos\goed2k-server` owns the local ED2K server used by deterministic
   eMuleBB live E2E and protocol-parity scenarios.
-- `repos\eMule` is the canonical app repo checkout used as the branch store and
+- `repos\emulebb` is the canonical app repo checkout used as the branch store and
   worktree anchor.
 - Normal app editing belongs in
-  `workspaces\workspace\app\eMule-main`, not in `repos\eMule`.
+  `workspaces\workspace\app\eMule-main`, not in `repos\emulebb`.
 
 The canonical workspace currently materializes these app worktrees:
 
@@ -75,7 +75,7 @@ The canonical workspace currently materializes these app worktrees:
   calls for historical comparison.
 - `analysis\stale-v0.72a-experimental-clean` may exist as a historical
   reference checkout only. It is not a managed app worktree or active branch.
-- `repos\eMule` exists to hold history, remotes, and worktrees. Its intended
+- `repos\emulebb` exists to hold history, remotes, and worktrees. Its intended
   neutral state is detached `HEAD` at `origin/main`.
 - One `main` commit should represent one coherent outcome.
 - Do not push `WIP`, checkpoint, or debug commits to `main`.
@@ -89,15 +89,15 @@ The canonical workspace currently materializes these app worktrees:
 ## Build, Validation, And Test Policy
 
 - Interactive build, validation, test, live-test, and packaging commands must
-  go through `repos\eMule-build` orchestration.
+  go through `repos\emulebb-build` orchestration.
 - Use `python -m emule_workspace` for workspace build, validation, test,
   live-test, and packaging orchestration.
-- `repos\eMule-build` owns a single workspace lock. Never start multiple build,
+- `repos\emulebb-build` owns a single workspace lock. Never start multiple build,
   validation, test, or live-test invocations in parallel.
 - Do not run ad hoc direct `MSBuild` commands from an app worktree,
-  `srchybrid`, or `repos\eMule-build-tests`.
+  `srchybrid`, or `repos\emulebb-build-tests`.
 - Direct `MSBuild` invocation is allowed only inside owned orchestration
-  implementation called through supported `eMule-build` entrypoints.
+  implementation called through supported `emulebb-build` entrypoints.
 - Every development change should pass scoped validation. After `validate`, run
   the smallest relevant build and test set for the changed area.
 - Every app code change must rebuild both active x64 app configurations before
@@ -111,7 +111,7 @@ The canonical workspace currently materializes these app worktrees:
 - `check-clean-worktree.py` is a CI, release-prep, or explicit hygiene guard;
   it is not the default requirement for every in-progress feature branch.
 
-Routine `validate` in `repos\eMule-build` must run the active static audits:
+Routine `validate` in `repos\emulebb-build` must run the active static audits:
 
 - build policy
 - branch policy
@@ -182,9 +182,9 @@ Routine `validate` in `repos\eMule-build` must run the active static audits:
 
 ## Setup And Dependency Authority
 
-- `repos\eMule-build` owns materialization, managed app worktrees, repo pinning,
+- `repos\emulebb-build` owns materialization, managed app worktrees, repo pinning,
   and supported app-build orchestration.
-- Python topology in `repos\eMule-build\emule_workspace` is the source of truth
+- Python topology in `repos\emulebb-build\emule_workspace` is the source of truth
   for active dependency branches used by the canonical workspace.
 - `workspaces\workspace\deps.json` is a required generated contract file.
 - `python -m emule_workspace validate` must fail if the generated dependency
@@ -200,8 +200,8 @@ Routine `validate` in `repos\eMule-build` must run the active static audits:
 
 - Workspace-wide development rules belong only in this document.
 - Workspace-wide hooks and policy helpers must be centralized in
-  `repos\eMule-tooling`.
-- All active Markdown documentation belongs under `repos\eMule-tooling\docs`.
+  `repos\emulebb-tooling`.
+- All active Markdown documentation belongs under `repos\emulebb-tooling\docs`.
 - `docs\DOCS-POLICY.md` owns the documentation taxonomy, naming conventions,
   navigation expectations, and browser-readability rules.
 - `docs\reference\AGENT-CHECKLIST.md` is the repeatable operating checklist
@@ -228,19 +228,19 @@ Routine `validate` in `repos\eMule-build` must run the active static audits:
   command files, resource files, Visual Studio solution/project files, and any
   explicitly allowed PowerShell files.
 - Do not leave edited tracked files in mixed-EOL state.
-- `repos\eMule-tooling\helpers\source-normalizer.py` is the canonical
+- `repos\emulebb-tooling\helpers\source-normalizer.py` is the canonical
   normalization helper for workspace-owned repos and app worktrees.
 - The normalizer is not mandatory for small LF-stable edits. Use it when
   touching files with uncertain encoding or EOL history, after generated or
   bulk edits, or when checks show normalization drift.
-- `repos\eMule-tooling\hooks\pre-commit` is the shared workspace hook
+- `repos\emulebb-tooling\hooks\pre-commit` is the shared workspace hook
   entrypoint.
 - `python -m emule_workspace sync` configures repo-local `core.hooksPath` to
   that shared hook directory.
 
 ## PowerShell Runtime Policy
 
-- Workspace-wide PowerShell policy is centralized in `repos\eMule-tooling`.
+- Workspace-wide PowerShell policy is centralized in `repos\emulebb-tooling`.
 - New tracked PowerShell files must not be added in workspace-owned repos or
   managed app worktrees unless this policy explicitly allows them.
 - `repos\amutorrent\installer\windows\*.ps1` is allowed for aMuTorrent-owned
@@ -270,7 +270,7 @@ Routine `validate` in `repos\eMule-build` must run the active static audits:
   - `LinkTimeCodeGeneration=UseLinkTimeCodeGeneration` for release app links
 - Active compile targets should declare `BufferSecurityCheck=true` and
   `MultiProcessorCompilation=true`.
-- This policy applies to `eMule-main`, `eMule-build-tests`, and maintained
+- This policy applies to `eMule-main`, `emulebb-build-tests`, and maintained
   dependency projects used by the canonical workspace build.
 - Shared test builds support `x64` and `ARM64`; test execution remains `x64`
   only.
@@ -319,7 +319,7 @@ Routine `validate` in `repos\eMule-build` must run the active static audits:
 
 - Every stock eMule resource file under `srchybrid\lang\*.rc` in the active app
   worktree is a supported eMuleBB release language and part of release gating.
-- `repos\eMule-tooling\helpers\rc-release-languages.json` is the
+- `repos\emulebb-tooling\helpers\rc-release-languages.json` is the
   machine-readable release manifest and must enumerate exactly the current
   stock resource file set.
 - New release-facing user-visible strings must land in `srchybrid\emule.rc` and

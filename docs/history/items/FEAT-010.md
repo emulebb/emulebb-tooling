@@ -30,7 +30,7 @@ The implementation now covers:
 - migration of persisted 8.3 shared entries to canonical long-name spellings during load
 - exact-name namespace handling for paths that need Win32 namespace semantics to preserve leading/trailing spaces, trailing dots, and reserved DOS device-looking names such as `NUL.txt`
 - directory recursion guards by filesystem object identity so junction/symlink loops do not explode recursive sharing
-- deterministic regression coverage in `eMule-build-tests` for delete, path-helper, shell/UI, exact-name, and shared-directory recursion behavior
+- deterministic regression coverage in `emulebb-build-tests` for delete, path-helper, shell/UI, exact-name, and shared-directory recursion behavior
 
 ## Already Landed On Main
 

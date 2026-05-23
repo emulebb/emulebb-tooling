@@ -13,7 +13,7 @@ The product family contains these related but separate products and repos:
 | eMuleBB | Full Windows desktop product for eMule broadband edition. |
 | aMuTorrent | Web/controller product for eMuleBB and aMule-style clients. |
 | eMuleBB aMule fork/builds | Cross-platform eMule-compatible client builds owned under the eMuleBB family. |
-| goed2k-server | Active ED2K server fork at `https://github.com/eMulebb/goed2k-server`. |
+| goed2k-server | Active ED2K server fork at `https://github.com/emulebb/goed2k-server`. |
 | p2p-overlord | Separate Rust/Node product for headless/server-oriented metadata and network agents under the eMuleBB org. |
 
 p2p-overlord is a peer product, not an eMuleBB desktop-app subsystem.
@@ -24,14 +24,14 @@ dependency ownership where sensible, and explicit topology awareness.
 
 The first-class p2p-overlord repos for this workspace integration are:
 
-- `https://github.com/eMulebb/p2p-overlord-agents`
-- `https://github.com/eMulebb/p2p-overlord-be`
+- `https://github.com/emulebb/p2p-overlord-agents`
+- `https://github.com/emulebb/p2p-overlord-be`
 
 The following are intentionally excluded from active materialization:
 
 - `p2p-overlord-tooling`, because Rust/Node build orchestration stays separate
 - p2p-overlord ED2K server lineage, because eMuleBB uses `goed2k-server`
-- `https://github.com/eMulebb/emulebb-ed2k-server`, which is obsolete and
+- `https://github.com/emulebb/emulebb-ed2k-server`, which is obsolete and
   should be removed/decommissioned
 
 ## Shared Contracts
@@ -51,7 +51,7 @@ The shared contract model is:
 
 ## Test Campaign Model
 
-`repos/eMule-build-tests` remains the common campaign base. Product-specific
+`repos/emulebb-build-tests` remains the common campaign base. Product-specific
 variants should reuse shared scenario ids, evidence models, and REST
 conformance checks where possible:
 
@@ -65,7 +65,7 @@ conformance checks where possible:
 ## Dependency Convergence
 
 MiniUPnP source ownership should converge on
-`repos/third_party/eMule-miniupnp`. p2p-overlord may keep Rust crates and build
+`repos/third_party/emulebb-miniupnp`. p2p-overlord may keep Rust crates and build
 wrappers, but the C MiniUPnP source tree should resolve from the shared
 eMuleBB fork when the convergence slice is implemented.
 
@@ -76,7 +76,7 @@ source ownership and makes future UPnP/NAT-PMP evidence easier to compare.
 
 1. Document this product-family boundary and active backlog item.
 2. Remove stale `emulebb-ed2k-server` remotes and local topology references.
-3. Move `p2p-overlord-agents` and `p2p-overlord-be` under the `eMulebb` org.
+3. Move `p2p-overlord-agents` and `p2p-overlord-be` under the `emulebb` org.
 4. Add topology entries for `p2p-overlord-agents` and `p2p-overlord-be`.
 5. Add shared campaign variants and REST conformance planning hooks.
 6. Add p2p-overlord claimed-subset REST conformance checks.

@@ -6,13 +6,13 @@
 
 ## Executive Summary
 
-Release blocker. The build/release path has the right public beta identity (`0.7.3`, `emule-bb-v0.7.3`, and `eMule-broadband-0.7.3-ARCH.zip`), but the current publishable assets are not proven against current `main`, final release proof rows are still open, `eMule-build-tests` is currently dirty, and `package-release` can create provenance-mismatched packages from dirty source/doc trees. These need to be closed before the first beta can be tagged or published.
+Release blocker. The build/release path has the right public beta identity (`0.7.3`, `emule-bb-v0.7.3`, and `eMule-broadband-0.7.3-ARCH.zip`), but the current publishable assets are not proven against current `main`, final release proof rows are still open, `emulebb-build-tests` is currently dirty, and `package-release` can create provenance-mismatched packages from dirty source/doc trees. These need to be closed before the first beta can be tagged or published.
 
 ## Review Checklist
 
 - [x] Read workspace root `AGENTS.md`.
-- [x] Read `repos\eMule-tooling\docs\WORKSPACE-POLICY.md`.
-- [x] Checked `git status --short --branch` before drawing conclusions in `repos\eMule-tooling`, `repos\eMule-build`, `repos\eMule-build-tests`, `repos\eMule`, `workspaces\v0.72a\app\eMule-main`, `workspaces\v0.72a\app\eMule-v0.72a-community`, and `workspaces\v0.72a\app\eMule-v0.72a-broadband`.
+- [x] Read `repos\emulebb-tooling\docs\WORKSPACE-POLICY.md`.
+- [x] Checked `git status --short --branch` before drawing conclusions in `repos\emulebb-tooling`, `repos\emulebb-build`, `repos\emulebb-build-tests`, `repos\emulebb`, `workspaces\v0.72a\app\eMule-main`, `workspaces\v0.72a\app\eMule-v0.72a-community`, and `workspaces\v0.72a\app\eMule-v0.72a-broadband`.
 - [x] Reviewed `python -m emule_workspace` CLI surfaces for validate/build/test/package entrypoints.
 - [x] Reviewed release package implementation, generated package manifests, active release control docs, release naming policy, and app release version constants.
 - [x] Reviewed x64/ARM64 package surface and active build policy evidence statically.
@@ -33,7 +33,7 @@ Evidence:
 - Generated manifests under `workspaces\v0.72a\state\release\emule-bb-v0.7.3` record x64 and ARM64 packages generated on `2026-05-10T20:11:29Z` and `2026-05-10T20:11:41Z`.
 - Those manifests record `appCommit: 74e5c76`, `buildCommit: 0ead21a`, and `toolingCommit: 2d904c3`.
 - Current checked heads are app `df1191e`, build `7d81b07`, tooling `d3b0cba`, and build-tests `76af0ef`.
-- `repos\eMule-tooling\docs\active\RELEASE-0.7.3.md:92` records package rehearsal at the older app/build/tooling commits and `docs\active\RELEASE-0.7.3.md:93` says not to create or push the tag until remaining minimum beta proof is complete.
+- `repos\emulebb-tooling\docs\active\RELEASE-0.7.3.md:92` records package rehearsal at the older app/build/tooling commits and `docs\active\RELEASE-0.7.3.md:93` says not to create or push the tag until remaining minimum beta proof is complete.
 - `docs\active\RELEASE-0.7.3-CHECKLIST.md:6` says the beta checklist must be refreshed on current `main`; `docs\active\RELEASE-0.7.3-CHECKLIST.md:44`, `:59`, and `:65` still have unchecked final clean-worktree/package-verification/tagging rows.
 - App commits after the package manifest include REST and adapter changes, for example `df1191e CI-014 harden peer friend REST response`, `784ea9b CI-014 stabilize REST operation envelopes`, and many other `CI-014` / `FEAT-014` commits.
 
@@ -78,7 +78,7 @@ Affected area: Release preflight, clean-worktree gate, final release decision
 
 Evidence:
 
-- `git status --short --branch` in `repos\eMule-build-tests` reports modified files: `emule_test_harness/live_e2e_suite.py`, `emule_test_harness/live_profiles.py`, `manifests/release-live-wire-golden.v1.json`, live scripts, and multiple test files.
+- `git status --short --branch` in `repos\emulebb-build-tests` reports modified files: `emule_test_harness/live_e2e_suite.py`, `emule_test_harness/live_profiles.py`, `manifests/release-live-wire-golden.v1.json`, live scripts, and multiple test files.
 - The same status reports untracked `scripts/radarr-emulebb-live.py` and `scripts/sonarr-emulebb-live.py`.
 - `docs\active\RELEASE-0.7.3-RUNBOOK.md:24` says not to continue to tagging if any active repo has unrelated uncommitted changes.
 - `docs\active\RELEASE-0.7.3-CHECKLIST.md:59` still requires confirming no active workspace repo has unrelated uncommitted changes.
@@ -89,12 +89,12 @@ The release evidence cannot be trusted as final while the active test harness ha
 
 Recommended fix:
 
-Resolve the `eMule-build-tests` work in a normal reviewed commit, or explicitly exclude it from the release candidate after confirming it is unrelated. Do not tag or publish while the release proof harness has uncommitted state.
+Resolve the `emulebb-build-tests` work in a normal reviewed commit, or explicitly exclude it from the release candidate after confirming it is unrelated. Do not tag or publish while the release proof harness has uncommitted state.
 
 Suggested validation:
 
-- `git -C repos\eMule-build-tests status --short --branch`
-- `python repos\eMule-tooling\ci\check-clean-worktree.py`
+- `git -C repos\emulebb-build-tests status --short --branch`
+- `python repos\emulebb-tooling\ci\check-clean-worktree.py`
 - `python -m emule_workspace test python --path tests/python/test_release_golden.py --path tests/python/test_live_e2e_suite.py`
 - Final full proof commands from the release runbook after cleanliness is restored.
 
@@ -102,7 +102,7 @@ Owner suggestion: Test harness owner and release owner.
 
 Execution checklist:
 
-- [ ] Review every modified/untracked `repos\eMule-build-tests` path and classify it as release-intended or unrelated.
+- [ ] Review every modified/untracked `repos\emulebb-build-tests` path and classify it as release-intended or unrelated.
 - [ ] Commit intended release proof harness changes on `main`, or move unrelated local work out of the release workspace.
 - [ ] Re-run `git status --short --branch` in every active repo listed by the runbook.
 - [ ] Run the clean-worktree guard only after active work is intentionally committed or removed by its owner.
@@ -116,7 +116,7 @@ Affected area: Package provenance, release manifests, reproducibility, operator 
 
 Evidence:
 
-- `repos\eMule-build\emule_workspace\release.py:35` hard-wires package input to `layout.get_app_variant("main").path`.
+- `repos\emulebb-build\emule_workspace\release.py:35` hard-wires package input to `layout.get_app_variant("main").path`.
 - `release.py:100-114` records package provenance as `appCommit`, `buildCommit`, and `toolingCommit`.
 - The only cleanliness/reanchor check in packaging is `ensure_canonical_app_anchor()` at `release.py:132-149`, and it checks `layout.seed_repo_path`, not the active app worktree, build repo, or tooling docs copied into the package.
 - `release.py:74-89` copies `README.md` from the app worktree and REST docs from tooling into the ZIP, but the manifest records only repository HEADs. If either tree is dirty, the package can contain content not represented by the recorded commits.
@@ -127,15 +127,15 @@ The package manifest can lie without any explicit failure: a local dirty app/doc
 
 Recommended fix:
 
-Make `package-release` fail fast unless all package input repos are clean, or add an explicit `--allow-dirty` diagnostic-only option that marks the manifest as non-publishable. At minimum, check active app variant, `repos\eMule-build`, and `repos\eMule-tooling`; for final release proof also require clean `repos\eMule-build-tests`.
+Make `package-release` fail fast unless all package input repos are clean, or add an explicit `--allow-dirty` diagnostic-only option that marks the manifest as non-publishable. At minimum, check active app variant, `repos\emulebb-build`, and `repos\emulebb-tooling`; for final release proof also require clean `repos\emulebb-build-tests`.
 
 Suggested validation:
 
-- Add unit coverage in `repos\eMule-build\tests` that simulates dirty app/tooling/build repo status and asserts `package-release` rejects it.
+- Add unit coverage in `repos\emulebb-build\tests` that simulates dirty app/tooling/build repo status and asserts `package-release` rejects it.
 - Run `python -m emule_workspace test python --path tests` from the supported workspace entrypoint.
 - Run both final package commands after the guard is in place.
 
-Owner suggestion: `eMule-build` owner.
+Owner suggestion: `emulebb-build` owner.
 
 Execution checklist:
 
@@ -153,9 +153,9 @@ Affected area: Reproducible beta packaging, package hashing, release verificatio
 
 Evidence:
 
-- `repos\eMule-build\emule_workspace\release.py:114` writes `generatedAt` with `datetime.now(timezone.utc)`, so the sidecar manifest changes on every run.
+- `repos\emulebb-build\emule_workspace\release.py:114` writes `generatedAt` with `datetime.now(timezone.utc)`, so the sidecar manifest changes on every run.
 - `release.py:245-249` uses `zipfile.ZipFile(..., "w", compression=zipfile.ZIP_DEFLATED)` plus `archive.write(...)`, which inherits filesystem timestamps and default ZIP metadata rather than a normalized timestamp/mode/order policy.
-- There is no package determinism test in `repos\eMule-build\tests`; current tests only assert CLI help exposes `--release-version` at `tests\test_cli.py:91-98`.
+- There is no package determinism test in `repos\emulebb-build\tests`; current tests only assert CLI help exposes `--release-version` at `tests\test_cli.py:91-98`.
 - `docs\active\items\FEAT-056.md:26` defers package manifest diff reporting to next-patch rather than making it a current release guard.
 
 Impact:
@@ -172,7 +172,7 @@ Suggested validation:
 - Add a unit-level package writer test that fixes source file mtimes and asserts byte-identical ZIP output.
 - Keep any wall-clock `generatedAt` outside the ZIP and mark it as sidecar metadata only.
 
-Owner suggestion: `eMule-build` owner with release owner.
+Owner suggestion: `emulebb-build` owner with release owner.
 
 Execution checklist:
 
@@ -193,7 +193,7 @@ Evidence:
 - Workspace policy requires active MSVC toolset baseline `v143` in `docs\WORKSPACE-POLICY.md:463-486`.
 - Main app project declares `v143` at `workspaces\v0.72a\app\eMule-main\srchybrid\emule.vcxproj:32`.
 - Language DLL projects declare `v145`; examples include `srchybrid\lang\ar_AE.vcxproj:21`, `srchybrid\lang\de_DE.vcxproj:21`, and every other active language project returned by static scan.
-- Package orchestration compensates by passing `/p:PlatformToolset=v143` unless overridden at `repos\eMule-build\emule_workspace\release.py:188-190`.
+- Package orchestration compensates by passing `/p:PlatformToolset=v143` unless overridden at `repos\emulebb-build\emule_workspace\release.py:188-190`.
 
 Impact:
 
@@ -230,7 +230,7 @@ Evidence:
 
 - Workspace policy identifies `release/v0.72a-broadband` as the only release-intent branch at `docs\WORKSPACE-POLICY.md:92-104` and says official releases should be annotated tags on the chosen release-branch commit at `docs\WORKSPACE-POLICY.md:536-543`.
 - Active release control identifies the candidate app line as `workspaces\v0.72a\app\eMule-main` on `main` at `docs\active\RELEASE-0.7.3.md:22`.
-- `repos\eMule-build\emule_workspace\release.py:35` always packages the `main` variant and `repos\eMule-build\emule_workspace\cli.py:518-521` exposes no package variant or release-branch selection option.
+- `repos\emulebb-build\emule_workspace\release.py:35` always packages the `main` variant and `repos\emulebb-build\emule_workspace\cli.py:518-521` exposes no package variant or release-branch selection option.
 
 Impact:
 
@@ -246,7 +246,7 @@ Suggested validation:
 - Confirm sidecar manifest records the selected variant name and branch.
 - Before tagging, compare `git rev-parse` of the selected package variant and the annotated tag target.
 
-Owner suggestion: Release owner and `eMule-build` owner.
+Owner suggestion: Release owner and `emulebb-build` owner.
 
 Execution checklist:
 
@@ -263,19 +263,19 @@ Execution checklist:
 - [ ] No static audit coverage for language project `PlatformToolset` drift under `srchybrid\lang\*.vcxproj`.
 - [ ] No package manifest field for selected app variant or branch.
 - [ ] No final current-HEAD package proof after app/build/tooling/build-tests moved past the recorded package manifest commits.
-- [ ] No final clean-worktree proof while `repos\eMule-build-tests` has modified and untracked release-harness files.
+- [ ] No final clean-worktree proof while `repos\emulebb-build-tests` has modified and untracked release-harness files.
 
 ## Cross-review Notes
 
 - REST/API changes after the current package rehearsal are likely covered by another review area, but they make the current package hashes stale for build/release purposes.
 - The current runbook and checklist intentionally hold tagging; this audit agrees with that hold.
-- I did not run build/test/package commands during this audit. Static inspection was sufficient, and package/test commands would have been premature while `eMule-build-tests` is dirty.
+- I did not run build/test/package commands during this audit. Static inspection was sufficient, and package/test commands would have been premature while `emulebb-build-tests` is dirty.
 
 ## Assumptions
 
 - The checked generated ZIPs and sidecar manifests under `workspaces\v0.72a\state\release\emule-bb-v0.7.3` are local rehearsal artifacts, not already published public assets.
 - Current `main` heads are intended to be considered for the first beta unless the release owner selects an earlier commit.
-- The uncommitted `repos\eMule-build-tests` changes are from another user or agent and should not be reverted by this audit.
+- The uncommitted `repos\emulebb-build-tests` changes are from another user or agent and should not be reverted by this audit.
 - The active policy remains authoritative where older release docs mention Release 1.0 terminology.
 
 ## Beta Readiness Verdict

@@ -6,9 +6,9 @@ Rechecked the active app and tests repos against the stale April 20 backlog
 state:
 
 - `EMULE_WORKSPACE_ROOT\workspaces\v0.72a\app\eMule-main`
-- `EMULE_WORKSPACE_ROOT\repos\eMule-build-tests`
+- `EMULE_WORKSPACE_ROOT\repos\emulebb-build-tests`
 - `EMULE_WORKSPACE_ROOT\analysis\emuleai`
-- `EMULE_WORKSPACE_ROOT\repos\eMule-tooling`
+- `EMULE_WORKSPACE_ROOT\repos\emulebb-tooling`
 
 The app repo is on `main` at `b5d253b` (`POLICY normalize source files to
 LF`). The tests repo is on `main` at `cac7b93` (`TEST-034 extend files-page
@@ -89,7 +89,7 @@ Latest known green app validation after the line-ending policy change:
 
 - Release x64 app build: `OK`, 882 warnings, no failures
 - REST live E2E: passed at
-  `EMULE_WORKSPACE_ROOT\repos\eMule-build-tests\reports\rest-api-smoke\20260425-105048-eMule-main-release`
+  `EMULE_WORKSPACE_ROOT\repos\emulebb-build-tests\reports\rest-api-smoke\20260425-105048-eMule-main-release`
 - Shared Files UI E2E: passed for `fixture-three-files`,
   `generated-robustness-recursive`, and `duplicate-startup-reuse`
 - source normalizer on app tracked files: 740 scanned, 0 needing normalization

@@ -33,7 +33,7 @@ through a new `Cached Clients` UI tab.
   - cached-only inspection path
   - manual live refresh path
 - live validation lane:
-  - isolated real-network auto-browse harness in `eMule-build-tests`
+  - isolated real-network auto-browse harness in `emulebb-build-tests`
 
 ## Constraints
 

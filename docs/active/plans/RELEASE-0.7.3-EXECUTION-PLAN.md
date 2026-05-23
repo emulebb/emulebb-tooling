@@ -85,7 +85,7 @@ The following are provenance, not current execution owners:
 ## Validation Bar
 
 - Docs-only changes while the test hold is active: `git diff --check` in
-  `repos\eMule-tooling` plus documentation taxonomy checks only. Do not run
+  `repos\emulebb-tooling` plus documentation taxonomy checks only. Do not run
   eMule test commands.
 - App blockers: `validate`, focused checks for the touched area when the hold
   is lifted, and both active x64 app builds when behavior or resources change:

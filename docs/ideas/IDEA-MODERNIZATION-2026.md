@@ -6,7 +6,7 @@
 
 **Audience:** Engineering team
 **Horizon:** 12 months of sustained effort
-**Baseline:** eMule 0.72a + current eMulebb `v0.72a-broadband-dev` branch
+**Baseline:** eMule 0.72a + current eMuleBB `v0.72a-broadband-dev` branch
 **Reference material:** eMuleAI fork, eMule-mods-archive (24 mods, 2006–2016)
 **Date:** 2026-03-29
 
@@ -45,7 +45,7 @@ eMule is a 24-year-old C++ MFC application that, remarkably, still serves millio
 
 The goal of this roadmap is **not** to rewrite eMule. It is to surgically modernize it across 15 engineering pillars while keeping the network protocol compatible, the user data safe, and the build green. Every item below is grounded in one of three sources:
 
-- **eMulebb** — active work already in progress on `v0.72a-broadband-dev`
+- **eMuleBB** — active work already in progress on `v0.72a-broadband-dev`
 - **eMuleAI** — the leading modern fork (IPv6, dark mode, virtual lists, Shield, uTP, NAT traversal, nlohmann/json, GeoLite2, embedded MediaInfo)
 - **Mods archive** — 24 mods spanning 2006–2016, representing ten years of community innovation (MorphXT, Mephisto, UltiMatiX, StulleMule, NeoMule, Xtreme, ScarAngel, …)
 
@@ -55,7 +55,7 @@ Where we have proven implementations to port from, we say so. Where we are propo
 
 ## 2. Current State Inventory
 
-### What eMulebb has already done (do not redo)
+### What eMuleBB has already done (do not redo)
 
 | Area | Status |
 |------|--------|
@@ -108,7 +108,7 @@ The 15 pillars below are grouped by engineering domain. Each pillar has:
 
 ### A-01 ARM64 Native Build
 
-**Why:** Windows-on-ARM laptops (Snapdragon X Elite) are shipping mainstream. The v0.72a tag added ARM64 detection but the eMulebb branch removed it to reduce scope. It belongs back in.
+**Why:** Windows-on-ARM laptops (Snapdragon X Elite) are shipping mainstream. The v0.72a tag added ARM64 detection but the eMuleBB branch removed it to reduce scope. It belongs back in.
 
 **What:**
 - Add `ARM64` configuration to `emule.vcxproj`
@@ -179,7 +179,7 @@ The 15 pillars below are grouped by engineering domain. Each pillar has:
 
 ### A-04 Windows Long-Path & Unicode Path Hardening
 
-**Why:** eMulebb added `enable-long-paths.ps1` but the code still uses `MAX_PATH`-sized `TCHAR` arrays in many file operations.
+**Why:** eMuleBB added `enable-long-paths.ps1` but the code still uses `MAX_PATH`-sized `TCHAR` arrays in many file operations.
 
 **What:**
 - Audit all `TCHAR szPath[MAX_PATH]` declarations
@@ -458,9 +458,9 @@ Separate worker threads (already exist):
 
 ## Pillar E — Upload & Download Engine
 
-### E-01 Broadband Upload Slot Controller (Complete the eMulebb Work)
+### E-01 Broadband Upload Slot Controller (Complete the eMuleBB Work)
 
-**Why:** eMulebb's `BBMaxUpClientsAllowed` controller is in progress. Needs hardening and UI exposure.
+**Why:** eMuleBB's `BBMaxUpClientsAllowed` controller is in progress. Needs hardening and UI exposure.
 
 **What:**
 - **Slot targeting:** `target_bytes_per_slot = effective_budget / slot_count`
@@ -805,7 +805,7 @@ The mod archive contains the most sophisticated anti-leecher ecosystem ever buil
 
 ### H-02 MediaInfo — Full Embedded Library
 
-**Why:** eMuleAI embeds MediaInfo directly (no external DLL). eMulebb refactored MediaInfo into per-format files but still probes for the DLL.
+**Why:** eMuleAI embeds MediaInfo directly (no external DLL). eMuleBB refactored MediaInfo into per-format files but still probes for the DLL.
 
 **What:**
 - Embed MediaInfoLib as a static library (already in eMuleAI)
@@ -1074,7 +1074,7 @@ POST /api/v1/prefs                  body: {max_dl_kbs, max_ul_kbs, ...}
 
 ### J-04 Geolocation Display (GeoLite2)
 
-**Why:** IP2Country via MMDB is already in eMulebb. Need UI to surface it.
+**Why:** IP2Country via MMDB is already in eMuleBB. Need UI to surface it.
 
 **What (port from eMuleAI's `GeoLite2.cpp/h` and `GeoLiteDownloadDlg.cpp/h`):**
 - Country flag icons in: client list, upload list, queue list, server list, Kad dialog
@@ -1472,7 +1472,7 @@ This is the genuinely new territory. eMuleAI's name is aspirational but the AI f
 
 ### N-02 Modern Defaults Pass
 
-**Why:** eMulebb's `MODERN_LIMITS.md` documents this. Defaults tuned for 2002 dial-up modems hurt broadband users.
+**Why:** eMuleBB's `MODERN_LIMITS.md` documents this. Defaults tuned for 2002 dial-up modems hurt broadband users.
 
 **What:**
 
@@ -1620,7 +1620,7 @@ jobs:
 
 ### CC-01 Documentation as Code
 
-Every pillar must produce a `docs/<pillar>/*.md` document covering: what changed, why, how to configure it, and what the default values are. This is already the pattern established in eMulebb (20 markdown files). Extend it.
+Every pillar must produce a `docs/<pillar>/*.md` document covering: what changed, why, how to configure it, and what the default values are. This is already the pattern established in eMuleBB (20 markdown files). Extend it.
 
 ### CC-02 Configuration Schema
 
@@ -1819,7 +1819,7 @@ After 12 months, the project should demonstrably achieve:
 
 ## Appendix A — Feature Origin Matrix
 
-| Feature | eMulebb | eMuleAI | MorphXT | Mephisto | UltiMatiX | Xtreme | StulleMule | NeoMule | New |
+| Feature | eMuleBB | eMuleAI | MorphXT | Mephisto | UltiMatiX | Xtreme | StulleMule | NeoMule | New |
 |---------|---------|---------|---------|---------|----------|--------|-----------|---------|-----|
 | TLS 1.3 | ✅ | | | | | | | | |
 | ARM64 build | ✅ | | | | | | | | |
@@ -1897,7 +1897,7 @@ The following changes are **not backward compatible** and would require a protoc
 
 ---
 
-*This document represents approximately 52 person-weeks of planning. Every item above is grounded in existing source code in eMulebb, eMuleAI, or the mods archive — nothing here is science fiction. The hardest items are B-01 (network thread) and C-01 (IPv6), both because they touch the entire codebase. Everything else can be done incrementally by one or two engineers per sprint.*
+*This document represents approximately 52 person-weeks of planning. Every item above is grounded in existing source code in eMuleBB, eMuleAI, or the mods archive — nothing here is science fiction. The hardest items are B-01 (network thread) and C-01 (IPv6), both because they touch the entire codebase. Everything else can be done incrementally by one or two engineers per sprint.*
 
 ---
 
@@ -1905,6 +1905,6 @@ The following changes are **not backward compatible** and would require a protoc
 
 ### PLAN_002: Overall Modernization Roadmap
 
-This document is the master modernization plan for eMulebb, covering C++20 migration, dependency updates, build system changes, and architectural improvements planned for 2026 and beyond.
+This document is the master modernization plan for eMuleBB, covering C++20 migration, dependency updates, build system changes, and architectural improvements planned for 2026 and beyond.
 
 **Status:** Active planning. Individual items are tracked by their own FEAT_* and PLAN_* identifiers where applicable.

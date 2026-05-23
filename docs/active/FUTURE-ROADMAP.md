@@ -9,12 +9,12 @@ excluding ideas that no longer match the eMuleBB desktop product direction.
 ## GitHub Workflow Authority
 
 Future-roadmap workflow is GitHub-primary after migration. Promoted roadmap
-slices are tracked as issues in `eMulebb/eMule` and as items in the public
+slices are tracked as issues in `emulebb/emulebb` and as items in the public
 `eMuleBB Roadmap` org project. Local item docs remain engineering specs and
 evidence records; for files marked `workflow: github`, current status, priority,
 release placement, discussion, ownership, and PR linkage live in GitHub.
 
-Use `python scripts\github-roadmap-sync.py` from `repos\eMule-tooling` to preview
+Use `python scripts\github-roadmap-sync.py` from `repos\emulebb-tooling` to preview
 or apply the initial GitHub import, and use
 `python scripts\github-roadmap-check.py` to validate migrated metadata.
 
@@ -95,7 +95,7 @@ External references used as directional signals, not implementation authority:
 - This roadmap is grouped intentionally. Do not create a new detailed `FEAT-*`
   file from a lane until the user approves that specific slice.
 - After GitHub migration, a promoted future-roadmap slice must have a
-  `eMulebb/eMule` issue and `eMuleBB Roadmap` project item before
+  `emulebb/emulebb` issue and `eMuleBB Roadmap` project item before
   implementation starts.
 - Before implementation, revalidate the slice against current `main`, current
   dependency pins, and `WORKSPACE-POLICY.md`.
