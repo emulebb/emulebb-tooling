@@ -30,15 +30,48 @@ python -m emule_workspace test release-campaign --campaign emulebb-0.7.3
 
 ## Repeatable Build Matrix
 
-Use these rows when refreshing build evidence. Do not substitute direct
+Use these commands when refreshing build evidence. Do not substitute direct
 MSBuild commands for the workspace entrypoint.
 
-| Purpose | Command | Output contract |
-|---|---|---|
-| Developer Debug x64 | `python -m emule_workspace build app --variant main --config Debug --platform x64 --build-output-mode ErrorsOnly` | `workspaces\workspace\app\emulebb-main\srchybrid\x64\Debug`; startup profiling is compiled by `_DEBUG`. |
-| Developer Release x64 | `python -m emule_workspace build app --variant main --config Release --platform x64 --build-output-mode ErrorsOnly` | `workspaces\workspace\app\emulebb-main\srchybrid\x64\Release`; startup profiling is compiled in and runtime-gated by `EMULE_STARTUP_PROFILE`. |
-| Package Release x64 | `python -m emule_workspace package-release --config Release --platform x64 --clean` | app binary/intermediates under `workspaces\workspace\state\package-build\emulebb-v0.7.3-rc.1\x64`; packaged binary must not contain startup profiling support. |
-| Package Release ARM64 | `python -m emule_workspace package-release --config Release --platform ARM64 --clean` | app binary/intermediates under `workspaces\workspace\state\package-build\emulebb-v0.7.3-rc.1\arm64`; packaged binary must not contain startup profiling support. |
+Developer Debug x64:
+
+```powershell
+python -m emule_workspace build app --variant main --config Debug --platform x64 --build-output-mode ErrorsOnly
+```
+
+Output contract:
+`workspaces\workspace\app\emulebb-main\srchybrid\x64\Debug`. Startup profiling
+is compiled by `_DEBUG`.
+
+Developer Release x64:
+
+```powershell
+python -m emule_workspace build app --variant main --config Release --platform x64 --build-output-mode ErrorsOnly
+```
+
+Output contract:
+`workspaces\workspace\app\emulebb-main\srchybrid\x64\Release`. Startup
+profiling is compiled in and runtime-gated by `EMULE_STARTUP_PROFILE`.
+
+Package Release x64:
+
+```powershell
+python -m emule_workspace package-release --config Release --platform x64 --clean
+```
+
+Output contract:
+`workspaces\workspace\state\package-build\emulebb-v0.7.3-rc.1\x64`.
+The packaged binary must not contain startup profiling support.
+
+Package Release ARM64:
+
+```powershell
+python -m emule_workspace package-release --config Release --platform ARM64 --clean
+```
+
+Output contract:
+`workspaces\workspace\state\package-build\emulebb-v0.7.3-rc.1\arm64`.
+The packaged binary must not contain startup profiling support.
 
 `package-release` stages ZIP contents under
 `workspaces\workspace\state\release\emulebb-v0.7.3-rc.1\staging\<arch>` and writes
@@ -105,8 +138,8 @@ python -m emule_workspace test live-e2e --profile release-expanded-quick --fail-
 This profile covers Preferences directory-tree stress, Shared Files,
 shared-hash shutdown/recovery, Search UI, shared-directories REST, REST
 adversity, cold-start telemetry, local dump/crash smoke, and representative
-volume/profile cases. The full `release-expanded` profile is reserved for
-overnight/soak proof.
+volume/profile cases. The full `release-expanded` profile belongs to the
+`overnight-full` proof tier.
 
 ## Focused Stabilization Stress
 
@@ -120,7 +153,7 @@ This uses throw-away generated Shared Files stress data and ETW/xperf sampling.
 It must not depend on operator media paths.
 
 The full generated-heavy profile and real live-wire profile monitor are
-long-form soak add-ons:
+long-form `overnight-full` proof:
 
 ```powershell
 python -m emule_workspace test live-e2e --profile cpu-heavy --fail-fast
@@ -142,7 +175,7 @@ python -m emule_workspace test live-e2e --profile stabilization-stress-quick --f
 
 The full `stabilization-stress` profile keeps the deeper REST soak stress,
 socket/TLS adversity, leak churn, cold-start resource telemetry, download
-churn, and crash-dump evidence checks for overnight/soak proof.
+churn, and crash-dump evidence checks for the `overnight-full` proof tier.
 
 ## Packaging
 

@@ -58,5 +58,5 @@ Those all point at the same historical source family.
 ## Related Docs
 
 - [WORKSPACE-POLICY](WORKSPACE-POLICY.md)
-- [../docs/active/INDEX.md](active/INDEX.md)
-- [../README.md](../README.md)
+- [active/INDEX](active/INDEX.md)
+- [GitHub README](https://github.com/emulebb/emulebb-tooling/blob/main/README.md)

@@ -104,6 +104,9 @@ Live-wire terms, media titles, direct bootstrap rows, and Arr root paths remain
 operator-owned runtime inputs. Do not commit them. Use local files such as
 `repos\emulebb-build-tests\live-wire-inputs.local.json` and explicit command-line
 root arguments.
+The current local input schema is `emulebb-build-tests.live-wire-inputs.v1`;
+the harness accepts the pre-rename schema only to avoid breaking existing
+ignored operator-local files.
 
 The real-profile long-run monitor is intentionally separate from generated
 heavy fixtures. It uses the ignored

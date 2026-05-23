@@ -62,6 +62,7 @@ nav:
       - IP Filters: reference/GUIDE-IP-FILTERS.md
       - Long Paths: reference/GUIDE-LONGPATHS.md
       - Keyboard Shortcuts: reference/KEYBOARD-SHORTCUTS.md
+      - Release Branching And Packaging: reference/RELEASE-BRANCHING-AND-PACKAGING.md
       - Troubleshooting: reference/GUIDE-TROUBLESHOOTING.md
       - eD2K Inventory: reference/ED2K-PROJECT-INVENTORY.md
   - REST:

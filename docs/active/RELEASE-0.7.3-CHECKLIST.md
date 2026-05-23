@@ -81,7 +81,8 @@ fast` passed on the selected heads and is recorded in
 [CI-035](items/CI-035.md). Quick expanded live-wire proof, quick heavy/stress
 rows, aMuTorrent add-on rows, fresh RC packages, SBOMs, and hash recording
 remain incomplete. Full overnight certification and real-profile monitoring are
-supporting soak evidence, not blocking RC1 package generation.
+formal `overnight-full` evidence for confidence and failure diagnosis, while
+`emulebb-0.7.3` remains the repeatable RC package gate.
 
 2026-05-14 closeout prep did not run live E2E, regenerate packages, or create
 tags. Existing package manifests are rehearsal artifacts from older commits and
@@ -126,10 +127,11 @@ Run the remaining queue in this order:
 5. Leave the annotated tag step blocked until the operator gives a separate tag
    instruction.
 
-## Supporting Soak Add-Ons
+## Overnight-Full Campaign
 
-These full-duration add-ons remain available for diagnosing release-candidate
-failures or collecting extra soak evidence without blocking RC1 packaging:
+These full-duration rows belong to the `emulebb-0.7.3-overnight` campaign.
+Run them when diagnosing release-candidate failures or collecting deeper soak
+confidence:
 
 - [ ] `python -m emule_workspace test certification --profile overnight`
 - [ ] `python -m emule_workspace test release-campaign --campaign emulebb-0.7.3-overnight --execute`
@@ -139,8 +141,8 @@ failures or collecting extra soak evidence without blocking RC1 packaging:
 - [ ] `python -m emule_workspace test live-e2e --profile stabilization-stress --fail-fast --live-wire-inputs-file repos\emulebb-build-tests\live-wire-inputs.local.json`
 
 The blocking release campaign uses the quick variants plus targeted aMuTorrent
-proofs; these full add-ons are supporting evidence unless a new blocker is
-found.
+proofs. The `overnight-full` campaign is tracked separately so long-duration
+soak status cannot be confused with the repeatable RC package gate.
 
 ## Release Identity
 

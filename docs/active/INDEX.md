@@ -40,9 +40,9 @@ release-candidate target.
 **Backlog process runbook:** [BACKLOG-PROCESS](../reference/BACKLOG-PROCESS.md)
 **RC-release execution plan:** [RELEASE-0.7.3-EXECUTION-PLAN](plans/RELEASE-0.7.3-EXECUTION-PLAN.md)
 **p2p-overlord product-family plan:** [P2P-OVERLORD-PRODUCT-FAMILY-INTEGRATION](plans/P2P-OVERLORD-PRODUCT-FAMILY-INTEGRATION.md)
-**Historical beta evidence:** [release-0.7.3](../history/release-0.7.3/)
-**Historical reviews:** [reviews](../history/reviews/)
-**Closed item records:** [items](../history/items/)
+**Historical beta evidence:** `docs/history/release-0.7.3/`
+**Historical reviews:** `docs/history/reviews/`
+**Closed item records:** `docs/history/items/`
 
 Current release trail:
 
