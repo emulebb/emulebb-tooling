@@ -14,7 +14,7 @@ The product family contains these related but separate products and repos:
 | aMuTorrent | Web/controller product for eMuleBB and aMule-style clients. |
 | eMuleBB aMule fork/builds | Cross-platform eMule-compatible client builds owned under the eMuleBB family. |
 | goed2k-server | Active ED2K server fork at `https://github.com/eMulebb/goed2k-server`. |
-| p2p-overlord | Separate Rust/Node product for headless/server-oriented metadata and network agents. |
+| p2p-overlord | Separate Rust/Node product for headless/server-oriented metadata and network agents under the eMuleBB org. |
 
 p2p-overlord is a peer product, not an eMuleBB desktop-app subsystem.
 Integration means shared contracts, shared release-campaign patterns, shared
@@ -24,8 +24,8 @@ dependency ownership where sensible, and explicit topology awareness.
 
 The first-class p2p-overlord repos for this workspace integration are:
 
-- `p2p-overlord-agents`
-- `p2p-overlord-be`
+- `https://github.com/eMulebb/p2p-overlord-agents`
+- `https://github.com/eMulebb/p2p-overlord-be`
 
 The following are intentionally excluded from active materialization:
 
@@ -76,9 +76,10 @@ source ownership and makes future UPnP/NAT-PMP evidence easier to compare.
 
 1. Document this product-family boundary and active backlog item.
 2. Remove stale `emulebb-ed2k-server` remotes and local topology references.
-3. Add topology entries for `p2p-overlord-agents` and `p2p-overlord-be`.
-4. Add shared campaign variants and REST conformance planning hooks.
-5. Add p2p-overlord claimed-subset REST conformance checks.
-6. Move p2p-overlord MiniUPnP source resolution to the shared fork.
+3. Move `p2p-overlord-agents` and `p2p-overlord-be` under the `eMulebb` org.
+4. Add topology entries for `p2p-overlord-agents` and `p2p-overlord-be`.
+5. Add shared campaign variants and REST conformance planning hooks.
+6. Add p2p-overlord claimed-subset REST conformance checks.
+7. Move p2p-overlord MiniUPnP source resolution to the shared fork.
 
 Each slice should be committed and pushed independently.

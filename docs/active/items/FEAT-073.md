@@ -27,8 +27,9 @@ future integration and should be decommissioned.
 
 ## Intended Shape
 
-- Track `p2p-overlord-agents` and `p2p-overlord-be` as first-class
-  product-family repos.
+- Track `https://github.com/eMulebb/p2p-overlord-agents` and
+  `https://github.com/eMulebb/p2p-overlord-be` as first-class product-family
+  repos.
 - Keep `p2p-overlord-tooling` separate because the Rust/Node build system
   remains separate.
 - Keep p2p-overlord's ED2K server lineage out of the active eMuleBB topology;
@@ -54,16 +55,16 @@ future integration and should be decommissioned.
 
 ## Acceptance Criteria
 
-- [ ] active docs describe the product-family boundary and p2p-overlord's role
-- [ ] workspace topology exposes `p2p-overlord-agents` and `p2p-overlord-be`
+- [x] active docs describe the product-family boundary and p2p-overlord's role
+- [x] workspace topology exposes `p2p-overlord-agents` and `p2p-overlord-be`
       without materializing obsolete ED2K server repos
-- [ ] stale `emulebb-ed2k-server` references/remotes are removed or marked
+- [x] stale `emulebb-ed2k-server` references/remotes are removed or marked
       superseded
-- [ ] shared test-campaign docs identify p2p-overlord variants and REST
+- [x] shared test-campaign docs identify p2p-overlord variants and REST
       conformance expectations
-- [ ] REST docs state how a p2p-overlord implementation proves a claimed
+- [x] REST docs state how a p2p-overlord implementation proves a claimed
       subset against the canonical OpenAPI contract
-- [ ] MiniUPnP convergence docs point both products at the shared
+- [x] MiniUPnP convergence docs point both products at the shared
       `eMule-miniupnp` fork
 
 ## Validation
