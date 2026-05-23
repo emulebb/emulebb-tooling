@@ -1,6 +1,6 @@
 # eMule Tooling
 
-This repo is the documentation and policy home for the eMule BB workspace. It
+This repo is the documentation and policy home for the eMuleBB workspace. It
 contains shared workspace policy, helper scripts, docs validation, CI baseline
 configuration, and engineering reference material.
 

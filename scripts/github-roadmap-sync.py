@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Create or refresh GitHub roadmap issues from eMule BB local specs."""
+"""Create or refresh GitHub roadmap issues from eMuleBB local specs."""
 
 from __future__ import annotations
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Shared helpers for eMule BB GitHub roadmap migration scripts."""
+"""Shared helpers for eMuleBB GitHub roadmap migration scripts."""
 
 from __future__ import annotations
 
@@ -19,7 +19,7 @@ FUTURE_ROADMAP = DOCS / "active" / "FUTURE-ROADMAP.md"
 
 OWNER = "eMulebb"
 ISSUE_REPO = "eMulebb/eMule"
-PROJECT_TITLE = "eMule BB Roadmap"
+PROJECT_TITLE = "eMuleBB Roadmap"
 PROJECT_RELEASE = "post-beta-0.7.3"
 SPEC_BASE_URL = "https://github.com/eMulebb/eMule-tooling/blob/main"
 

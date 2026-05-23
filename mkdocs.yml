@@ -1,5 +1,5 @@
-site_name: eMule BB Documentation
-site_description: eMule BB workspace, release, product, and REST documentation.
+site_name: eMuleBB Documentation
+site_description: eMuleBB workspace, release, product, and REST documentation.
 site_url: https://emulebb.github.io/eMule-tooling/
 repo_url: https://github.com/eMulebb/eMule-tooling
 edit_uri: blob/main/docs/

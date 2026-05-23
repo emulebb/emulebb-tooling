@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate eMule BB GitHub-primary future roadmap metadata."""
+"""Validate eMuleBB GitHub-primary future roadmap metadata."""
 
 from __future__ import annotations
 
