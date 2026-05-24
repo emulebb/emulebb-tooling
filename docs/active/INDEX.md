@@ -20,9 +20,9 @@ engineering spec/evidence records, not workflow status authority.
 ## Current Snapshot
 
 **Source of truth:** `EMULE_WORKSPACE_ROOT\workspaces\workspace\app\emulebb-main` (`main` branch)
-**Current non-done count:** `73`
+**Current non-done count:** `72`
 **Latest release-doc refresh:** 2026-05-23
-**Non-done by status:** `57` OPEN, `6` IN_PROGRESS, `10` DEFERRED, `0` BLOCKED.
+**Non-done by status:** `56` OPEN, `6` IN_PROGRESS, `10` DEFERRED, `0` BLOCKED.
 **Backlog counts:** item tables below are authoritative.
 **RC 0.7.3 relevance:** Most non-done items below are future or deferred work;
 current RC gate and proof status is controlled by [RELEASE-0.7.3](RELEASE-0.7.3.md).
@@ -212,7 +212,7 @@ the RC branch.
 | [BUG-117](items/BUG-117.md) | Minor | DEFERRED | Audit Year-2038-sensitive persisted and runtime timestamps |
 | [BUG-118](../history/items/BUG-118.md) | Minor | DONE | CTag UInt64 values can serialize without guaranteed 64-bit promotion |
 | [BUG-119](../history/items/BUG-119.md) | Minor | DONE | Audit part-file gap and progress arithmetic against eMuleAI hardening |
-| [BUG-120](items/BUG-120.md) | Minor | OPEN | Audit obfuscated server retry behavior against eMuleAI repeat-login fix |
+| [BUG-120](../history/items/BUG-120.md) | Minor | DONE | Audit obfuscated server retry behavior against eMuleAI repeat-login fix |
 | [BUG-121](../history/items/BUG-121.md) | Major | DONE | CorruptionBlackBox split reallocation can invalidate active CArray records |
 | [BUG-122](../history/items/BUG-122.md) | Minor | DONE | CRing raw-owned buffer was accidentally copyable |
 | [BUG-123](../history/items/BUG-123.md) | Major | DONE | Failed reask source delete needed explicit download-owner detachment |
