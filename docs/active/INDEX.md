@@ -421,6 +421,7 @@ not active item docs.
 | [CI-040](../history/items/CI-040.md) | Minor | DONE | Standardize current Markdown naming and structure checks |
 | [CI-041](../history/items/CI-041.md) | Minor | DONE | Publish Markdown documentation with MkDocs Material |
 | [CI-042](../history/items/CI-042.md) | Minor | DONE | Keep only the latest nightly GitHub prerelease per build stream |
+| [CI-043](../history/items/CI-043.md) | Minor | DONE | Add aMuTorrent automatic upstream nightly sync and release workflow |
 
 ---
 
