@@ -20,9 +20,9 @@ engineering spec/evidence records, not workflow status authority.
 ## Current Snapshot
 
 **Source of truth:** `EMULE_WORKSPACE_ROOT\workspaces\workspace\app\emulebb-main` (`main` branch)
-**Current non-done count:** `78`
+**Current non-done count:** `73`
 **Latest release-doc refresh:** 2026-05-23
-**Non-done by status:** `59` OPEN, `8` IN_PROGRESS, `11` DEFERRED, `0` BLOCKED.
+**Non-done by status:** `57` OPEN, `6` IN_PROGRESS, `10` DEFERRED, `0` BLOCKED.
 **Backlog counts:** item tables below are authoritative.
 **RC 0.7.3 relevance:** Most non-done items below are future or deferred work;
 current RC gate and proof status is controlled by [RELEASE-0.7.3](RELEASE-0.7.3.md).
@@ -114,7 +114,7 @@ the RC branch.
 | [BUG-009](../history/items/BUG-009.md) | Minor | DONE | PartFile — non-atomic part.met replacement (_tremove + _trename crash window) |
 | [BUG-010](../history/items/BUG-010.md) | Minor | DONE | PartFile — part.met write on low disk space risks truncation/corruption |
 | [BUG-011](../history/items/BUG-011.md) | Minor | DONE | Race — shareddir_list iterated without lock in SendSharedDirectories |
-| [BUG-012](items/BUG-012.md) | Minor | IN_PROGRESS | CPartFile destructor calls FlushBuffer after write thread has already exited |
+| [BUG-012](../history/items/BUG-012.md) | Minor | DONE | CPartFile destructor calls FlushBuffer after write thread has already exited |
 | [BUG-013](../history/items/BUG-013.md) | Minor | WONT_DO | ArchiveRecovery.cpp — three unchecked malloc() calls crash on OOM *(kept as-is by product decision)* |
 | [BUG-014](../history/items/BUG-014.md) | Minor | DONE | ZIPFile.cpp — WriteFile return value silently discarded on two paths |
 | [BUG-015](../history/items/BUG-015.md) | Minor | DONE | GetTickCount() 49-day overflow in ban expiry and download timeout checks |
@@ -133,7 +133,7 @@ the RC branch.
 | [BUG-028](../history/items/BUG-028.md) | Minor | WONT_DO | MP3 ID3 metadata extraction is ANSI-only; non-ACP filenames can silently lose tags |
 | [BUG-029](../history/items/BUG-029.md) | Major | DONE | Long-path tail hardening across config, media, shell, and GeoLocation surfaces |
 | [BUG-030](../history/items/BUG-030.md) | Minor | DONE | Obfuscated server logins can advertise redundant callback crypto flags and require extra attempts |
-| [BUG-031](items/BUG-031.md) | Minor | DEFERRED | Shared-file hashing fails too eagerly on transient sharing and lock violations |
+| [BUG-031](../history/items/BUG-031.md) | Minor | DONE | Shared-file hashing fails too eagerly on transient sharing and lock violations |
 | [BUG-032](../history/items/BUG-032.md) | Minor | DONE | AICH hashset save can fail spuriously after hashing because `known2.met` lock wait times out |
 | [BUG-033](../history/items/BUG-033.md) | Minor | WONT_DO | WebSocket and MiniUPnP shutdown still use forced thread termination |
 | [BUG-034](items/BUG-034.md) | Minor | IN_PROGRESS | Release paths silently swallow unexpected exceptions via catch (...) plus ASSERT(0) |
@@ -207,11 +207,11 @@ the RC branch.
 | [BUG-102](../history/items/BUG-102.md) | Major | DONE | aMuTorrent browser smoke ignores generated harness port |
 | [BUG-111](../history/items/BUG-111.md) | Critical | DONE | Release and help URLs still point outside the emulebb namespace |
 | [BUG-112](../history/items/BUG-112.md) | Critical | WONT_DO | WebServer/qBit session tokens need CSPRNG-backed generation |
-| [BUG-114](items/BUG-114.md) | Minor | IN_PROGRESS | Prevent Standby can leave Windows sleep prevention asserted after disable |
+| [BUG-114](../history/items/BUG-114.md) | Minor | DONE | Prevent Standby can leave Windows sleep prevention asserted after disable |
 | [BUG-115](../history/items/BUG-115.md) | Minor | DONE | Tray left-click skips MiniMule and restores maximized windows as normal |
 | [BUG-117](items/BUG-117.md) | Minor | DEFERRED | Audit Year-2038-sensitive persisted and runtime timestamps |
-| [BUG-118](items/BUG-118.md) | Minor | OPEN | CTag UInt64 values can serialize without guaranteed 64-bit promotion |
-| [BUG-119](items/BUG-119.md) | Minor | OPEN | Audit part-file gap and progress arithmetic against eMuleAI hardening |
+| [BUG-118](../history/items/BUG-118.md) | Minor | DONE | CTag UInt64 values can serialize without guaranteed 64-bit promotion |
+| [BUG-119](../history/items/BUG-119.md) | Minor | DONE | Audit part-file gap and progress arithmetic against eMuleAI hardening |
 | [BUG-120](items/BUG-120.md) | Minor | OPEN | Audit obfuscated server retry behavior against eMuleAI repeat-login fix |
 | [BUG-121](../history/items/BUG-121.md) | Major | DONE | CorruptionBlackBox split reallocation can invalidate active CArray records |
 | [BUG-122](../history/items/BUG-122.md) | Minor | DONE | CRing raw-owned buffer was accidentally copyable |
