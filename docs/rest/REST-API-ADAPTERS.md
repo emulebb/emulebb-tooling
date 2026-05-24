@@ -29,8 +29,30 @@ Reference surface used for compatibility decisions:
 
 Supported routes:
 
+| Method | Route | Auth | Contract role |
+|---|---|---|---|
+| `GET` | `/api/v2/app/webapiversion` | no | Public qBit Web API version probe. |
+| `POST` | `/api/v2/auth/login` | no | Form login using the configured eMuleBB API key as password. |
+| `GET` | `/api/v2/app/version` | yes | App version probe. |
+| `GET` | `/api/v2/app/preferences` | yes | Minimal preference payload for Arr client tests. |
+| `GET` | `/api/v2/torrents/categories` | yes | Category map. |
+| `POST` | `/api/v2/torrents/createcategory` | yes | Create a native category from qBit form field `category`. |
+| `GET` | `/api/v2/torrents/info` | yes | Transfer list, optionally filtered by `category`. |
+| `GET` | `/api/v2/torrents/properties` | yes | One transfer's qBit-shaped properties by `hash`. |
+| `GET` | `/api/v2/torrents/files` | yes | One transfer's qBit-shaped file list by `hash`. |
+| `POST` | `/api/v2/torrents/add` | yes | Add one Torznab-emitted eD2K link. |
+| `POST` | `/api/v2/torrents/delete` | yes | Delete/cancel transfers by `hashes`. |
+| `POST` | `/api/v2/torrents/setcategory` | yes | Assign a native category by `hashes` and `category`. |
+| `POST` | `/api/v2/torrents/pause` | yes | Pause transfers by `hashes`. |
+| `POST` | `/api/v2/torrents/stop` | yes | Stop transfers by `hashes`. |
+| `POST` | `/api/v2/torrents/resume` | yes | Resume transfers by `hashes`. |
+| `POST` | `/api/v2/torrents/start` | yes | Start/resume transfers by `hashes`. |
+| `POST` | `/api/v2/torrents/setsharelimits` | yes | Accepted no-op for Arr compatibility. |
+| `POST` | `/api/v2/torrents/topprio` | yes | Accepted no-op for Arr compatibility. |
+| `POST` | `/api/v2/torrents/setforcestart` | yes | Accepted no-op after validating `hashes` and optional boolean `value`. |
+
 - **`GET`**
-  - Route: `/api/v2/app/webapiVersion`
+  - Route: `/api/v2/app/webapiversion`
   - Auth: no
   - Contract role: Public qBit Web API version probe.
 
@@ -55,7 +77,7 @@ Supported routes:
   - Contract role: Category map.
 
 - **`POST`**
-  - Route: `/api/v2/torrents/createCategory`
+  - Route: `/api/v2/torrents/createcategory`
   - Auth: yes
   - Contract role: Create a native category from qBit form field `category`.
 
@@ -92,7 +114,7 @@ Supported routes:
                    `deleteFiles: true`.
 
 - **`POST`**
-  - Route: `/api/v2/torrents/setCategory`
+  - Route: `/api/v2/torrents/setcategory`
   - Auth: yes
   - Contract role: Assign a native category by `hashes` and `category`.
 
@@ -117,18 +139,18 @@ Supported routes:
   - Contract role: Start/resume transfers by `hashes`.
 
 - **`POST`**
-  - Route: `/api/v2/torrents/setShareLimits`
+  - Route: `/api/v2/torrents/setsharelimits`
   - Auth: yes
   - Contract role: Accepted no-op for Arr compatibility after validating `hashes`,
                    `ratioLimit`, `seedingTimeLimit`, and `inactiveSeedingTimeLimit`.
 
 - **`POST`**
-  - Route: `/api/v2/torrents/topPrio`
+  - Route: `/api/v2/torrents/topprio`
   - Auth: yes
   - Contract role: Accepted no-op for Arr compatibility after validating `hashes`.
 
 - **`POST`**
-  - Route: `/api/v2/torrents/setForceStart`
+  - Route: `/api/v2/torrents/setforcestart`
   - Auth: yes
   - Contract role: Accepted no-op after validating `hashes` and optional boolean
                    `value`.
