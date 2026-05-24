@@ -24,6 +24,25 @@ Collect the support artifact that matches the problem:
 Prefer redacted diagnostic snapshots for support. Use raw snapshots only when
 the recipient is trusted and the data sensitivity is understood.
 
+## Public Test Report Checklist
+
+When reporting a nightly, RC, or package problem, include enough context for the
+failure to be repeated:
+
+- package name or release tag, architecture, and whether it was a nightly, RC,
+  or stable package
+- Windows version and whether the run was x64 or ARM64
+- profile type: disposable, copied real profile, or live-wire real profile
+- launch command, including `-c` when an explicit profile path was used
+- exact repro steps and whether a clean retry reproduces the problem
+- relevant app logs, controller logs, package logs, diagnostic snapshots, or
+  dumps
+- REST method, route, status code, request body, and response body for API
+  failures
+
+Use [Product Guide](GUIDE-EMULEBB.md) for the repeatable public testing flow and
+[Setup Guide](GUIDE-SETUP.md) for profile isolation before deeper diagnosis.
+
 ## General Triage Rules
 
 - Change one setting at a time.

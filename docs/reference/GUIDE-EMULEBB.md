@@ -118,6 +118,95 @@ SHA-256 hashes, and SPDX SBOM files for release packages. The homepage may
 advertise those strengths only after the source guide and release docs describe
 the same evidence.
 
+## Public Testing And Downloads
+
+Public testing currently runs through GitHub Releases and nightly prerelease
+packages. Treat nightly packages as test builds: keep the previous working
+package, use a disposable or backed-up profile, and report repeatable failures
+with evidence.
+
+- eMuleBB desktop app:
+  `https://github.com/emulebb/emulebb/releases`. Nightly testing is open.
+  The first public release candidate target is `0.7.3-rc.1`; stable `0.7.3`
+  is not published until the release docs and operator approval say so.
+- aMule Windows builds:
+  `https://github.com/emulebb/amule/releases`. eMuleBB publishes Windows build
+  and validation artifacts for aMule users. This is an ecosystem build track,
+  not upstream aMule ownership.
+- aMuTorrent manager fork:
+  `https://github.com/emulebb/amutorrent/releases`. Release automation exists
+  for the eMuleBB-oriented fork. If the release page has no published asset,
+  there is no public package yet.
+- MiniUPnP/miniupnpc for Windows:
+  `https://github.com/emulebb/emulebb-miniupnp/releases`. Windows `upnpc`
+  packages are published as adjacent tooling for the eMuleBB ecosystem.
+
+### Repeatable Nightly Test Recipe
+
+Use this flow when testing a public nightly:
+
+1. Download the ZIP for the intended architecture, normally x64 unless testing
+   ARM64 specifically.
+2. Unzip it into a new application directory. Do not overwrite the previous
+   known-good package.
+3. Choose a config/profile directory. Prefer a disposable profile for first
+   tests; if using a real profile, close every eMule-family client and back up
+   the full config directory first.
+4. Launch with an explicit profile path:
+
+   ```powershell
+   emulebb.exe -c C:\Path\To\TestProfile
+   ```
+
+5. Start once without REST controllers, aMuTorrent, Arr tools, or other
+   automation.
+6. Verify the app opens, connection state is visible, server and Kad setup are
+   intentional, shared directories load, logs are written, and shutdown
+   completes normally.
+7. Add one small search or transfer and one small shared directory before
+   scaling to a large profile or live-wire workload.
+8. Keep the exact package name, architecture, profile type, and repro steps in
+   your notes.
+
+Never run two clients against the same live profile at the same time. If a test
+build damages a disposable profile, delete the disposable profile and retest
+from the same clean starting state before reporting data-loss behavior.
+
+### Repeatable Controller Test Recipe
+
+Only test controllers after the normal desktop app is healthy:
+
+1. Enable WebServer/REST only for the test window.
+2. Bind to localhost or a controlled interface.
+3. Use a strong API key or password path.
+4. Confirm a read-only status request works before running mutations.
+5. Compare controller behavior with the desktop UI when transfer, search, file,
+   or preference state looks wrong.
+6. Capture method, route, status code, request body, response body, controller
+   logs, and app logs for any failure.
+
+REST and companion tools are supported controller surfaces. The legacy HTML
+WebServer UI is frozen and should not be used as proof that REST behavior is
+broken or supported.
+
+### Evidence To Include In Reports
+
+Good public-test reports should include:
+
+- package name or release tag, architecture, and whether the package was a
+  nightly, RC, or stable build
+- Windows version and whether the run used x64 or ARM64
+- profile type: disposable, copied real profile, or live-wire real profile
+- exact launch command, including `-c` when used
+- exact repro steps and whether the failure survives a clean retry
+- relevant logs such as `emulebb.log`, `emulebb-verbose.log`, controller logs,
+  package logs, or startup/shutdown progress symptoms
+- diagnostic snapshot or redacted settings when preferences, paths, REST, or
+  networking are involved
+- mini dump for a crash, full dump for a hang or memory-growth case
+- REST method, route, status code, request body, and response body for API
+  failures
+
 ## Recommended Reading Paths
 
 For a first-time user:
@@ -297,7 +386,7 @@ The current release model is organized around these confidence layers:
 
 Use [Release Test Strategy](../active/RELEASE-TEST-STRATEGY.md) for the generic
 testing model and [Release Test Campaigns](../active/RELEASE-TEST-CAMPAIGNS.md)
-for the current campaign view. The beta dashboard remains the release authority
+for the current campaign view. The RC dashboard remains the release authority
 for what has passed, what is still open, and whether public packages may be
 tagged. Use [Development Guide](DEVELOPMENT-GUIDE.md) for the workflow that
 keeps product docs, development docs, CI policy, command-line behavior, and
@@ -558,7 +647,7 @@ compatibility is tracked by [FEAT-035](../active/items/FEAT-035.md). A separate
 IPv6 Kad network is only an exploratory design note in
 [IDEA-IPV6-KAD-NETWORK](../ideas/IDEA-IPV6-KAD-NETWORK.md), inspired by the
 qBittorrent/libtorrent approach of keeping IPv4 and IPv6 DHT state separate.
-Neither track changes released beta 0.7.3 behavior unless the active release
+Neither track changes planned `0.7.3` release behavior unless the active release
 docs later say otherwise.
 
 ## Unsupported Legacy Areas

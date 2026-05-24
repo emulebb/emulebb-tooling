@@ -174,9 +174,11 @@ pending removal and should not be treated as a maintained setup target. See
 
 ## Release-Aware Setup
 
-The first public beta line is planned as `0.7.3` and is not released until the
-active release dashboard says the gates have passed. Treat current builds as
-pre-release unless they are attached to an approved release tag and package.
+Public testing currently uses nightly packages. The first public release
+candidate target is `0.7.3-rc.1`; stable `0.7.3` is not released until the
+active release dashboard says the gates have passed and the operator approves
+the tag. Treat current builds as pre-release unless they are attached to an
+approved release tag and package.
 
 Before trusting a package:
 
@@ -186,6 +188,15 @@ Before trusting a package:
 - Back up the profile before first launch.
 - Check release notes for frozen, removed, or unsupported legacy surfaces.
 - Start once without controllers or automation after upgrade.
+
+When testing a nightly:
+
+- Prefer a disposable profile for first launch.
+- Use an explicit config path with `emulebb.exe -c <profile-path>`.
+- Never run another eMule-family client against the same profile at the same
+  time.
+- Record the package name, architecture, profile type, and repro steps before
+  reporting a failure.
 
 Setup confidence comes from the same release evidence model used elsewhere:
 
