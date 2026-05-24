@@ -781,6 +781,50 @@ def collect_doc_path_issues(root: Path) -> list[str]:
     return issues
 
 
+def collect_current_doc_stale_reference_issues(root: Path) -> list[str]:
+    """Collects stale product/workspace wording from the current doc surface."""
+
+    issues: list[str] = []
+    tooling = resolve_workspace_path(root, r"repos\emulebb-tooling")
+    scan_patterns = (
+        "README.md",
+        "AGENTS.md",
+        r"docs\WORKSPACE-POLICY.md",
+        r"docs\INDEX.md",
+        r"docs\DOCS-POLICY.md",
+        r"docs\HISTORICAL-REFERENCES.md",
+        r"docs\active\*.md",
+        r"docs\active\items\*.md",
+        r"docs\active\plans\*.md",
+        r"docs\active\reviews\*.md",
+        r"docs\dependencies\*.md",
+        r"docs\reference\*.md",
+        r"docs\rest\*.md",
+    )
+    stale_patterns = (
+        (re.compile(r"\beMule BB\b"), "compact product name must be eMuleBB in current docs"),
+        (re.compile(r"\bpost-beta(?:-0\.7\.3)?\b", re.IGNORECASE), "current release-era wording should use post-0.7.3, not post-beta"),
+        (re.compile(r"\bPost-beta\b"), "current release-era wording should use Post-0.7.3, not Post-beta"),
+        (re.compile(r"\bemule-bb-v\b"), "release tag prefix must use emulebb-v in current docs"),
+        (re.compile(r"\beMule-broadband-\b"), "package identity must use current lowercase emulebb naming in current docs"),
+    )
+    retired_repo_pattern = re.compile(r"\bemulebb-ed2k-server\b")
+    retired_repo_allow = re.compile(r"\b(obsolete|stale|retired|removed|no current|no active|historical|decommissioned)\b", re.IGNORECASE)
+    for relative_path in tracked_doc_paths(tooling, scan_patterns):
+        path = tooling / relative_path
+        if not path.is_file():
+            continue
+        for index, line in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1):
+            for pattern, message in stale_patterns:
+                if pattern.search(line):
+                    issues.append(f"{path}:{index}: {message}: {line.strip()}")
+            if retired_repo_pattern.search(line) and not retired_repo_allow.search(line):
+                issues.append(
+                    f"{path}:{index}: emulebb-ed2k-server may only appear in current docs as an explicit retired/obsolete reference: {line.strip()}"
+                )
+    return issues
+
+
 def assert_text_contains(issues: list[str], repo_root: Path, relative_path: str, needle: str, message: str) -> None:
     """Records an issue if a required text fragment is missing."""
 
@@ -868,6 +912,7 @@ def audit_doc_paths(root: Path) -> None:
     """Runs active documentation path checks."""
 
     issues = collect_doc_path_issues(root)
+    issues.extend(collect_current_doc_stale_reference_issues(root))
     tooling = resolve_workspace_path(root, r"repos\emulebb-tooling")
     policy_text = r"repos\emulebb-tooling\docs\WORKSPACE-POLICY.md"
     agent_files = (

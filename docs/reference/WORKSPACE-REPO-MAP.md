@@ -4,6 +4,10 @@ This map documents the active repository roles in the canonical eMuleBB
 workspace. Paths are written relative to `EMULE_WORKSPACE_ROOT`; do not replace
 them with machine-local absolute paths in docs, scripts, or CI output.
 
+`workspaces/workspace/repo-roles.json` is the generated machine-readable role
+manifest for this map. It is written by `python -m emule_workspace sync` from
+the Python topology in `repos/emulebb-build`.
+
 ## Primary Product Repositories
 
 | Path | Branch | Role | Validation |
@@ -76,13 +80,24 @@ setup, but they are not edited as part of normal product work.
 ## Operational Rules
 
 - Run `python -m emule_workspace sync` after topology changes so generated
-  manifests and shared hook configuration converge.
+  manifests, including `repo-roles.json`, and shared hook configuration
+  converge.
+- Run `python -m emule_workspace prepare-product-family` after materialization
+  or after dependency lockfile changes in p2p-overlord or `goed2k-server`.
 - Run `python -m emule_workspace workspace-status` before release and broad
   testing to inspect dirty state, branches, upstreams, and ahead/behind counts
   across all managed repos.
 - Run `python -m emule_workspace cleanup --profile routine` before large test
   campaigns when generated state contains stale reports, payloads, caches, or
   Windows path anomalies.
-- Run `python -m emule_workspace validate --include-product-family` when a
-  product-family change touches `goed2k-server`, p2p-overlord, or shared
-  contracts. Plain `validate` remains the default eMuleBB workspace gate.
+- Use explicit cleanup scopes for broader hygiene:
+  `--include-product-family-outputs` prunes generated outputs such as
+  `node_modules`, Rust `target`, and product-family dist folders;
+  `--include-root-legacy-state` removes old root-level generated state; and
+  `--include-legacy-root-logs` removes retired root workspace logs.
+- Run `python -m emule_workspace validate --include-product-family
+  --product-family-tier quality` when a product-family change touches
+  `goed2k-server`, p2p-overlord, or shared contracts. Use
+  `--product-family-tier quick` for fast smoke checks and `full` before broad
+  product-family release proof. Plain `validate` remains the default eMuleBB
+  workspace gate.

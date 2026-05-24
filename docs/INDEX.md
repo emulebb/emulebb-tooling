@@ -30,8 +30,8 @@ authoritative for workflow state. Canonical workflow endpoints are
 | Document | Description |
 |---|---|
 | [active/INDEX](active/INDEX.md) | Active backlog dashboard and item tables |
-| [active/FUTURE-ROADMAP](active/FUTURE-ROADMAP.md) | GitHub-primary post-beta future roadmap |
-| [active/plans/P2P-OVERLORD-PRODUCT-FAMILY-INTEGRATION](active/plans/P2P-OVERLORD-PRODUCT-FAMILY-INTEGRATION.md) | Post-beta p2p-overlord product-family integration plan |
+| [active/FUTURE-ROADMAP](active/FUTURE-ROADMAP.md) | GitHub-primary post-0.7.3 future roadmap |
+| [active/plans/P2P-OVERLORD-PRODUCT-FAMILY-INTEGRATION](active/plans/P2P-OVERLORD-PRODUCT-FAMILY-INTEGRATION.md) | Post-0.7.3 p2p-overlord product-family integration plan |
 | [active/RELEASE-0.7.3](active/RELEASE-0.7.3.md) | RC release control document |
 | [active/RELEASE-0.7.3-CHECKLIST](active/RELEASE-0.7.3-CHECKLIST.md) | RC release operator checklist |
 | [active/RELEASE-0.7.3-RUNBOOK](active/RELEASE-0.7.3-RUNBOOK.md) | RC release operator runbook |

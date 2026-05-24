@@ -26,6 +26,8 @@ appear to conflict, policy wins.
   location.
 - Use [Workspace Repository Map](WORKSPACE-REPO-MAP.md) for repo roles,
   product-family boundaries, and repeatable validation commands.
+- Prefer `workspaces\workspace\repo-roles.json` when tooling needs
+  machine-readable repository roles instead of parsing Markdown tables.
 - Do not hardcode machine-local absolute paths in active docs or helpers.
 - Do not use `stale/*` branches as active work targets unless the task is
   explicitly historical analysis.

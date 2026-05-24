@@ -69,7 +69,7 @@ the operator gives a separate tag instruction.
   legacy WebServer/qBit-compatible session-token hardening is not release
   scope.
 - [REF-034](../items/REF-034.md) is deferred; the Crypto++ 8.9 refresh is
-  post-beta dependency hardening.
+  post-0.7.3 dependency hardening.
 - The IP-filter HTTP update transport finding in
   [BETA-READINESS-SECURITY-2026-05-11](../../history/release-0.7.3/audits/BETA-READINESS-SECURITY-2026-05-11.md)
   is accepted as not release scope.

@@ -49,8 +49,8 @@ integration, and should remain decommissioned.
   eMuleBB `0.7.3` release line.
 - Do not broaden eMuleBB wire behavior or introduce proprietary eD2K/Kad
   protocol extensions.
-- Do not replace `goed2k-server` with the obsolete
-  `emulebb-ed2k-server` fork.
+- Do not replace `goed2k-server` with the obsolete `emulebb-ed2k-server`
+  fork.
 - Do not make p2p-overlord conformance redefine the canonical REST contract;
   OpenAPI remains the authority.
 
