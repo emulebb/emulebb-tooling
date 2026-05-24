@@ -31,8 +31,8 @@ integration, and should remain decommissioned.
 - Track `https://github.com/emulebb/p2p-overlord-agents` and
   `https://github.com/emulebb/p2p-overlord-be` as first-class product-family
   repos.
-- Keep `p2p-overlord-tooling` outside the managed topology until the deferred
-  shared campaign-core decision is made.
+- Manage `p2p-overlord-tooling` as the product-family scenario catalog while
+  keeping its test suite separate until the deferred shared campaign-core work.
 - Keep p2p-overlord's ED2K server lineage out of the active eMuleBB topology;
   use `goed2k-server` as the shared ED2K server fork.
 - Treat `docs/rest/REST-API-OPENAPI.yaml` as the shared REST API authority for
@@ -59,6 +59,8 @@ integration, and should remain decommissioned.
 - [x] active docs describe the product-family boundary and p2p-overlord's role
 - [x] workspace topology exposes `p2p-overlord-agents` and `p2p-overlord-be`
       without materializing obsolete ED2K server repos
+- [x] workspace topology exposes `p2p-overlord-tooling` as a managed scenario
+      catalog without merging its test suite into eMuleBB campaigns yet
 - [x] stale `emulebb-ed2k-server` references/remotes are removed or marked
       superseded
 - [x] shared test-campaign docs identify p2p-overlord variants and REST

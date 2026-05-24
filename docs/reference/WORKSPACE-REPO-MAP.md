@@ -44,9 +44,11 @@ subdirectories of the eMuleBB app.
 | `repos/amule` | `master` | aMule fork for eMuleBB-published builds. | package/rebase checks |
 | `repos/p2p-overlord-agents` | `develop` | Rust p2p-overlord agent code. | `cargo fmt --all --check` |
 | `repos/p2p-overlord-be` | `develop` | p2p-overlord backend/coordinator. | `npm run quality` |
+| `repos/p2p-overlord-tooling` | `develop` | p2p-overlord scenario catalog and pytest tooling. | future shared campaign adapter |
 
-`p2p-overlord-tooling` is not part of the active managed topology. Its future
-role is intentionally deferred until the shared campaign-core decision is made.
+`p2p-overlord-tooling` is managed from the current upstream repository until an
+`emulebb` organization clone exists. Its test suite remains separate until the
+shared campaign-core decision is implemented.
 
 ## Third-Party Forks
 

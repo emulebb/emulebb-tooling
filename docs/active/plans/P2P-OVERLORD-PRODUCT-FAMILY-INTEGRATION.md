@@ -31,8 +31,6 @@ The first-class p2p-overlord repos for this workspace integration are:
 
 The following are intentionally excluded from active materialization:
 
-- `p2p-overlord-tooling`, pending the deferred shared campaign-core topology
-  decision
 - p2p-overlord ED2K server lineage, because eMuleBB uses `goed2k-server`
 - obsolete `emulebb-ed2k-server` fork lineage, which has no current public
   repository and should remain decommissioned
@@ -97,8 +95,8 @@ source ownership and makes future UPnP/NAT-PMP evidence easier to compare.
 4. Done: add topology entries for `p2p-overlord-agents` and `p2p-overlord-be`.
 5. Done: add product-family validation hooks for `goed2k-server` and
    p2p-overlord repos.
-6. Deferred: decide whether `p2p-overlord-tooling` joins this topology or stays
-   standalone.
+6. Done: manage `p2p-overlord-tooling` through the current upstream remote until
+   an `emulebb` organization clone exists.
 7. Deferred: add a shared campaign-core implementation.
 8. Future: add p2p-overlord claimed-subset REST conformance checks.
 9. Future: move p2p-overlord MiniUPnP source resolution to the shared fork.
