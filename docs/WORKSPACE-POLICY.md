@@ -326,6 +326,23 @@ Routine `validate` in `repos\emulebb-build` must run the active static audits:
   Never hardcode real movie, series, or release titles in tracked harness code,
   docs, or tests.
 
+## Live Test Storage And Path Capability Policy
+
+- eMuleBB is the only active Windows P2P client under test that is treated as
+  long-path capable.
+- The community tracing harness, community baseline, eMuleAI comparison trees,
+  and aMule are compatibility clients. They must not be used as proof targets
+  for long-path behavior unless their own code has explicitly gained and proven
+  long-path support.
+- Mixed-client local live suites that include aMule or the tracing harness must
+  keep generated profiles, incoming directories, temp directories, and shared
+  libraries on short paths. Prefer throwaway VHD drive-letter roots for those
+  suites.
+- VHD folder-mount or intentionally deep-path storage scenarios are eMuleBB-only
+  tests. They may exercise eMuleBB shared files, startup cache, REST, part-file,
+  and completion behavior, but they must not launch aMule or the tracing harness
+  against those long paths.
+
 ## Product And Release Naming
 
 - The full public product name is `eMule broadband edition`.

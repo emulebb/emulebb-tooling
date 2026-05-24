@@ -187,6 +187,11 @@ Avoid round-tripping one live profile between eMuleBB and older clients when it
 contains long paths. Older clients may fail to open, move, share, preview, or
 clean up files that eMuleBB can handle.
 
+The workspace test rule follows the same boundary. Long-path proof is
+eMuleBB-only. Local mixed-client suites that include the community tracing
+harness or aMule use short throwaway VHD drive-letter profiles, not deep VHD
+folder-mount profiles.
+
 If rollback is required, restore from a profile backup made before long-path
 operation became active.
 
