@@ -7,7 +7,7 @@ status: OPEN
 priority: Minor
 category: feature
 labels: [emuleai, ipv6, nat-traversal, protocol-compatibility, diagnostics]
-milestone: post-beta-0.7.3
+milestone: post-0.7.3
 created: 2026-05-24
 source: operator compatibility review of eMuleAI private IPv6 and NAT traversal protocol surface
 ---

@@ -31,7 +31,8 @@ The first-class p2p-overlord repos for this workspace integration are:
 
 The following are intentionally excluded from active materialization:
 
-- `p2p-overlord-tooling`, because Rust/Node build orchestration stays separate
+- `p2p-overlord-tooling`, pending the deferred shared campaign-core topology
+  decision
 - p2p-overlord ED2K server lineage, because eMuleBB uses `goed2k-server`
 - obsolete `emulebb-ed2k-server` fork lineage, which has no current public
   repository and should remain decommissioned
@@ -88,12 +89,18 @@ source ownership and makes future UPnP/NAT-PMP evidence easier to compare.
 
 ## Implementation Order
 
-1. Document this product-family boundary and active backlog item.
-2. Remove stale `emulebb-ed2k-server` remotes and local topology references.
-3. Move `p2p-overlord-agents` and `p2p-overlord-be` under the `emulebb` org.
-4. Add topology entries for `p2p-overlord-agents` and `p2p-overlord-be`.
-5. Add shared campaign variants and REST conformance planning hooks.
-6. Add p2p-overlord claimed-subset REST conformance checks.
-7. Move p2p-overlord MiniUPnP source resolution to the shared fork.
+1. Done: document this product-family boundary and active backlog item.
+2. Done: remove stale `emulebb-ed2k-server` remotes and local topology
+   references, or mark historical references as provenance only.
+3. Done: move `p2p-overlord-agents` and `p2p-overlord-be` under the `emulebb`
+   org.
+4. Done: add topology entries for `p2p-overlord-agents` and `p2p-overlord-be`.
+5. Done: add product-family validation hooks for `goed2k-server` and
+   p2p-overlord repos.
+6. Deferred: decide whether `p2p-overlord-tooling` joins this topology or stays
+   standalone.
+7. Deferred: add a shared campaign-core implementation.
+8. Future: add p2p-overlord claimed-subset REST conformance checks.
+9. Future: move p2p-overlord MiniUPnP source resolution to the shared fork.
 
 Each slice should be committed and pushed independently.

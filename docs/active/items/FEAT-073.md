@@ -4,8 +4,8 @@ title: Incorporate p2p-overlord into the eMuleBB product family
 status: OPEN
 priority: Minor
 category: feature
-labels: [product-family, p2p-overlord, rest, testing, upnp, post-beta-0.7.3]
-milestone: post-beta-0.7.3
+labels: [product-family, p2p-overlord, rest, testing, upnp, post-0.7.3]
+milestone: post-0.7.3
 created: 2026-05-23
 source: operator product-family planning for p2p-overlord integration
 ---
@@ -15,7 +15,8 @@ source: operator product-family planning for p2p-overlord integration
 ## Summary
 
 Bring the relevant p2p-overlord repositories into the eMuleBB product-family
-workspace as first-class future integration targets after beta `0.7.3`.
+workspace as first-class future integration targets for the post-`0.7.3`
+release line.
 p2p-overlord remains its own Rust/Node product, similar to how eMuleBB and
 aMule remain distinct clients, but it should share contracts, campaign
 patterns, and selected dependencies where that reduces drift.
@@ -30,8 +31,8 @@ integration, and should remain decommissioned.
 - Track `https://github.com/emulebb/p2p-overlord-agents` and
   `https://github.com/emulebb/p2p-overlord-be` as first-class product-family
   repos.
-- Keep `p2p-overlord-tooling` separate because the Rust/Node build system
-  remains separate.
+- Keep `p2p-overlord-tooling` outside the managed topology until the deferred
+  shared campaign-core decision is made.
 - Keep p2p-overlord's ED2K server lineage out of the active eMuleBB topology;
   use `goed2k-server` as the shared ED2K server fork.
 - Treat `docs/rest/REST-API-OPENAPI.yaml` as the shared REST API authority for
@@ -45,7 +46,7 @@ integration, and should remain decommissioned.
 
 - Do not merge p2p-overlord into the eMuleBB desktop app.
 - Do not promote server-only, daemon-only, or headless product scope into the
-  eMuleBB beta `0.7.3` release.
+  eMuleBB `0.7.3` release line.
 - Do not broaden eMuleBB wire behavior or introduce proprietary eD2K/Kad
   protocol extensions.
 - Do not replace `goed2k-server` with the obsolete

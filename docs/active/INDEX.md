@@ -346,7 +346,7 @@ not active item docs.
 | [FEAT-053](../history/items/FEAT-053.md) | Minor | DONE | Classic tray balloon notification mode |
 | [FEAT-054](../history/items/FEAT-054.md) | Minor | DONE | Normalize download message filename display |
 | [FEAT-055](../history/items/FEAT-055.md) | Minor | DONE | Beta 0.7.3 improvement triage lane |
-| [FEAT-056](items/FEAT-056.md) | Minor | DEFERRED | Post-beta-0.7.3 release proof automation and operator evidence UX |
+| [FEAT-056](items/FEAT-056.md) | Minor | DEFERRED | Post-0.7.3 release proof automation and operator evidence UX |
 | [FEAT-058](../history/items/FEAT-058.md) | Minor | DONE | Beta 0.7.3 closeout UX polish and audit report |
 | [FEAT-059](../history/items/FEAT-059.md) | Minor | DONE | Move tray icon visibility preference next to minimize-to-tray |
 | [FEAT-060](../history/items/FEAT-060.md) | Minor | DONE | Preference inventory, mapping, clamp, and persistence audit |

@@ -5,7 +5,7 @@ status: OPEN
 priority: Minor
 category: feature
 labels: [diagnostics, logging, upload, clients, userhash]
-milestone: post-beta-0.7.3
+milestone: post-0.7.3
 created: 2026-05-21
 source: aMule issue #538 triage against current client/upload logging
 ---

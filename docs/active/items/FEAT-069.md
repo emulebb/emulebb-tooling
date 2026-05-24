@@ -5,7 +5,7 @@ status: OPEN
 priority: Minor
 category: feature
 labels: [sharing, filters, regex, privacy, file-handling]
-milestone: post-beta-0.7.3
+milestone: post-0.7.3
 created: 2026-05-21
 source: aMule issue #604 triage against current shared-file policy
 ---

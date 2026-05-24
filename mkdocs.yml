@@ -49,6 +49,7 @@ nav:
       - Frozen Surfaces: active/FROZEN-SURFACES.md
   - Reference:
       - Backlog Process: reference/BACKLOG-PROCESS.md
+      - Workspace Repository Map: reference/WORKSPACE-REPO-MAP.md
       - Development Guide: reference/DEVELOPMENT-GUIDE.md
       - CI Baseline: reference/CI-BASELINE.md
       - Product Guide: reference/GUIDE-EMULEBB.md

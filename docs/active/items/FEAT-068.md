@@ -5,7 +5,7 @@ status: OPEN
 priority: Minor
 category: feature
 labels: [rest, shared-files, transfers, uploads, performance, memory, controller-surface]
-milestone: post-beta-0.7.3
+milestone: post-0.7.3
 created: 2026-05-21
 updated: 2026-05-24
 source: eMuleAI issue #86/#79 triage plus current REST large-list review

@@ -7,7 +7,7 @@ status: OPEN
 priority: Minor
 category: feature
 labels: [product-family, p2p-overlord, test-campaigns, orchestration, evidence]
-milestone: post-beta-0.7.3
+milestone: post-0.7.3
 created: 2026-05-24
 source: operator request to bring p2p-overlord campaigns into one eMuleBB workspace with a uniform common module
 ---

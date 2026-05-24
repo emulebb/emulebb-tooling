@@ -7,7 +7,7 @@ status: OPEN
 priority: Minor
 category: feature
 labels: [ui, performance, lists, downloads, search, clients, emuleai]
-milestone: post-beta-0.7.3
+milestone: post-0.7.3
 created: 2026-05-24
 source: eMuleAI v1.4 release notes and `analysis\emuleai` list-control comparison
 ---

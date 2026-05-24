@@ -2,12 +2,12 @@
 id: FEAT-056
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/19
-title: Post-beta-0.7.3 release proof automation and operator evidence UX
+title: Post-0.7.3 release proof automation and operator evidence UX
 status: DEFERRED
 priority: Minor
 category: feature
-labels: [post-beta-0.7.3, release-proof, automation, operator-evidence]
-milestone: post-beta-0.7.3
+labels: [post-0.7.3, release-proof, automation, operator-evidence]
+milestone: post-0.7.3
 created: 2026-05-09
 source: FEAT-055 Beta 0.7.3 improvement triage
 ---

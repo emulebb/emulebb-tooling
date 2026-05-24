@@ -24,6 +24,8 @@ appear to conflict, policy wins.
 - Edit app source in `workspaces\workspace\app\emulebb-main`.
 - Treat `repos\emulebb` as the branch-store checkout, not the normal edit
   location.
+- Use [Workspace Repository Map](WORKSPACE-REPO-MAP.md) for repo roles,
+  product-family boundaries, and repeatable validation commands.
 - Do not hardcode machine-local absolute paths in active docs or helpers.
 - Do not use `stale/*` branches as active work targets unless the task is
   explicitly historical analysis.
@@ -74,6 +76,8 @@ python -m mkdocs build --strict
 - Keep app source changes in `workspaces\workspace\app\emulebb-main`.
 - Use `repos\emulebb-build` orchestration for build, validation, test, live-test,
   and packaging.
+- Use `python -m emule_workspace workspace-status` before broad release or
+  product-family work to inspect dirty state across all managed repos.
 - Do not run ad hoc direct `MSBuild` from app worktrees, `srchybrid`, or
   `repos\emulebb-build-tests`.
 - For app code, run workspace validation and both required x64 app builds:

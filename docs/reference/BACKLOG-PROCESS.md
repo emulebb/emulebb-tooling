@@ -51,7 +51,7 @@ status: OPEN
 priority: Minor
 category: feature
 labels: [area, risk, evidence]
-milestone: post-beta-0.7.3
+milestone: post-0.7.3
 created: YYYY-MM-DD
 source: short provenance note
 ---

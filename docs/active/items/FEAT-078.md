@@ -7,7 +7,7 @@ status: OPEN
 priority: Minor
 category: feature
 labels: [browse, cache, sqlite, database, ui, privacy]
-milestone: post-beta-0.7.3
+milestone: post-0.7.3
 created: 2026-05-24
 source: user-requested future backlog item for cached auto-browse results
 ---

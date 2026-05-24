@@ -5,7 +5,7 @@ status: OPEN
 priority: Minor
 category: feature
 labels: [startup, shared-files, performance, ui, cache]
-milestone: post-beta-0.7.3
+milestone: post-0.7.3
 created: 2026-05-22
 source: live large-library profiling against the operator-provided profile and startup dump analysis
 ---

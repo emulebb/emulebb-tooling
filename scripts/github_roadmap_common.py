@@ -20,7 +20,7 @@ FUTURE_ROADMAP = DOCS / "active" / "FUTURE-ROADMAP.md"
 OWNER = "emulebb"
 ISSUE_REPO = "emulebb/emulebb"
 PROJECT_TITLE = "eMuleBB Roadmap"
-PROJECT_RELEASE = "post-beta-0.7.3"
+PROJECT_RELEASE = "post-0.7.3"
 SPEC_BASE_URL = "https://github.com/emulebb/emulebb-tooling/blob/main"
 
 ID_PATTERN = re.compile(r"\b(?:BUG|FEAT|REF|CI|AMUT|ARR)-\d{3}\b")
@@ -76,8 +76,8 @@ LABEL_DEFINITIONS = {
     "priority:major": ("d93f0b", "Major priority"),
     "priority:minor": ("fbca04", "Minor priority"),
     "priority:trivial": ("cfd3d7", "Trivial priority"),
-    "roadmap:future": ("1d76db", "Post-beta future roadmap item"),
-    "release:post-beta-0.7.3": ("0e8a16", "Post-beta 0.7.3 release planning"),
+    "roadmap:future": ("1d76db", "Post-0.7.3 future roadmap item"),
+    "release:post-0.7.3": ("0e8a16", "Post-0.7.3 release planning"),
     "lane:connectivity": ("0052cc", "Connectivity modernization roadmap lane"),
     "lane:search-trust": ("5319e7", "Search and trust clarity roadmap lane"),
     "lane:ui-polish": ("d876e3", "UI power-user polish roadmap lane"),
@@ -130,7 +130,7 @@ class Item:
             TYPE_LABELS.get(self.category, "type:planning"),
             f"priority:{self.priority.lower()}",
             "roadmap:future",
-            "release:post-beta-0.7.3",
+            "release:post-0.7.3",
             LANE_LABELS[self.lane],
         ]
         if self.item_id == "FEAT-064":
