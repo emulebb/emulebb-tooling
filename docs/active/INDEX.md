@@ -20,9 +20,9 @@ engineering spec/evidence records, not workflow status authority.
 ## Current Snapshot
 
 **Source of truth:** `EMULE_WORKSPACE_ROOT\workspaces\workspace\app\emulebb-main` (`main` branch)
-**Current non-done count:** `76`
+**Current non-done count:** `77`
 **Latest release-doc refresh:** 2026-05-23
-**Non-done by status:** `57` OPEN, `8` IN_PROGRESS, `11` DEFERRED, `0` BLOCKED.
+**Non-done by status:** `58` OPEN, `8` IN_PROGRESS, `11` DEFERRED, `0` BLOCKED.
 **Backlog counts:** item tables below are authoritative.
 **RC 0.7.3 relevance:** Most non-done items below are future or deferred work;
 current RC gate and proof status is controlled by [RELEASE-0.7.3](RELEASE-0.7.3.md).
@@ -371,6 +371,7 @@ not active item docs.
 | [FEAT-083](../history/items/FEAT-083.md) | Minor | WONT_DO | Connection Checker based on public reachability polling |
 | [FEAT-084](../history/items/FEAT-084.md) | Minor | WONT_DO | Migration Wizard for legacy profile import |
 | [FEAT-085](items/FEAT-085.md) | Minor | OPEN | Establish a shared campaign core for eMuleBB product-family test orchestration |
+| [FEAT-086](items/FEAT-086.md) | Minor | OPEN | Parse eMuleAI extension hints without advertising protocol support |
 
 ---
 

@@ -44,7 +44,8 @@ scaling. Stock eD2K/Kad protocol semantics remain the boundary. A distinct IPv6
 Kad network remains exploratory until separately promoted.
 
 Existing anchors:
-`FEAT-018`, `FEAT-032`, `FEAT-035`, `FEAT-036`, `FEAT-081`, `REF-029`, `REF-030`,
+`FEAT-018`, `FEAT-032`, `FEAT-035`, `FEAT-036`, `FEAT-081`, `FEAT-086`,
+`REF-029`, `REF-030`,
 `ideas/IDEA-IPV6-KAD-NETWORK.md`.
 
 ### Search And Trust Clarity
