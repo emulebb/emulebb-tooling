@@ -213,6 +213,9 @@ the RC branch.
 | [BUG-118](items/BUG-118.md) | Minor | OPEN | CTag UInt64 values can serialize without guaranteed 64-bit promotion |
 | [BUG-119](items/BUG-119.md) | Minor | OPEN | Audit part-file gap and progress arithmetic against eMuleAI hardening |
 | [BUG-120](items/BUG-120.md) | Minor | OPEN | Audit obfuscated server retry behavior against eMuleAI repeat-login fix |
+| [BUG-121](../history/items/BUG-121.md) | Major | DONE | CorruptionBlackBox split reallocation can invalidate active CArray records |
+| [BUG-122](../history/items/BUG-122.md) | Minor | DONE | CRing raw-owned buffer was accidentally copyable |
+| [BUG-123](../history/items/BUG-123.md) | Major | DONE | Failed reask source delete needed explicit download-owner detachment |
 
 `BUG-103` through `BUG-110` were superseded internal post-tag evidence labels,
 not active item docs.
