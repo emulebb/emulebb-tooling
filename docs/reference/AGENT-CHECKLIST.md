@@ -102,6 +102,11 @@ python -m emule_workspace build app --variant main --config Release --platform x
   live-diff path.
 - For broad build, dependency, compiler, or toolchain policy changes, use the
   relevant full validation matrix.
+- Use [Evidence Retention](EVIDENCE-RETENTION.md) before pruning large generated
+  test, diagnostic, profiling, or release-campaign artifacts.
+- Treat root-level progress Markdown files under `workspaces\workspace\state`
+  as disposable scratch notes after durable conclusions move to active docs,
+  history, or GitHub issues.
 
 ## Localization And Resources
 

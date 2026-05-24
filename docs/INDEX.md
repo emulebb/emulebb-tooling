@@ -12,6 +12,7 @@ This directory is the single Markdown home for the tooling repo. Use
 | Workspace repository map | [reference/WORKSPACE-REPO-MAP](reference/WORKSPACE-REPO-MAP.md) |
 | Active backlog and RC release status | [active/INDEX](active/INDEX.md) |
 | Repeatable backlog process | [reference/BACKLOG-PROCESS](reference/BACKLOG-PROCESS.md) |
+| Evidence retention policy | [reference/EVIDENCE-RETENTION](reference/EVIDENCE-RETENTION.md) |
 | Documentation ownership rules | [DOCS-POLICY](DOCS-POLICY.md) |
 | Browser-formatted documentation | [MkDocs site](INDEX.md#browser-site) |
 | Historical-reference rules | [HISTORICAL-REFERENCES](HISTORICAL-REFERENCES.md) |
@@ -76,6 +77,10 @@ GitHub-primary roadmap-backed backlog helper scripts live under `scripts/`:
 - **[reference/BACKLOG-PROCESS](reference/BACKLOG-PROCESS.md)**
   - Description: Repeatable workflow for creating, updating, validating, and closing
                  backlog records
+
+- **[reference/EVIDENCE-RETENTION](reference/EVIDENCE-RETENTION.md)**
+  - Description: Generated evidence retention tiers, promotion rules, and cleanup
+                 policy
 
 - **[reference/CI-BASELINE](reference/CI-BASELINE.md)**
   - Description: Reusable CI baseline workflow contract

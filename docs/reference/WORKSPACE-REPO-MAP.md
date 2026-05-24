@@ -90,6 +90,9 @@ setup, but they are not edited as part of normal product work.
 - Run `python -m emule_workspace cleanup --profile routine` before large test
   campaigns when generated state contains stale reports, payloads, caches, or
   Windows path anomalies.
+- Use [Evidence Retention](EVIDENCE-RETENTION.md) before pruning large
+  generated diagnostics, profiling runs, release-campaign output, or scratch
+  progress notes.
 - Use explicit cleanup scopes for broader hygiene:
   `--include-product-family-outputs` prunes generated outputs such as
   `node_modules`, Rust `target`, and product-family dist folders;
