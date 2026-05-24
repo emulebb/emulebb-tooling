@@ -95,8 +95,7 @@ source ownership and makes future UPnP/NAT-PMP evidence easier to compare.
 4. Done: add topology entries for `p2p-overlord-agents` and `p2p-overlord-be`.
 5. Done: add product-family validation hooks for `goed2k-server` and
    p2p-overlord repos.
-6. Done: manage `p2p-overlord-tooling` through the current upstream remote until
-   an `emulebb` organization clone exists.
+6. Done: manage `p2p-overlord-tooling` from the `emulebb` organization.
 7. Deferred: add a shared campaign-core implementation.
 8. Future: add p2p-overlord claimed-subset REST conformance checks.
 9. Future: move p2p-overlord MiniUPnP source resolution to the shared fork.

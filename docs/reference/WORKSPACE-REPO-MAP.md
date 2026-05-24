@@ -46,9 +46,8 @@ subdirectories of the eMuleBB app.
 | `repos/p2p-overlord-be` | `develop` | p2p-overlord backend/coordinator. | `npm run quality` |
 | `repos/p2p-overlord-tooling` | `develop` | p2p-overlord scenario catalog and pytest tooling. | future shared campaign adapter |
 
-`p2p-overlord-tooling` is managed from the current upstream repository until an
-`emulebb` organization clone exists. Its test suite remains separate until the
-shared campaign-core decision is implemented.
+`p2p-overlord-tooling` is managed from the `emulebb` organization. Its test
+suite remains separate until the shared campaign-core decision is implemented.
 
 ## Third-Party Forks
 

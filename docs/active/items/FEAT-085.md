@@ -45,8 +45,8 @@ this item owns the concrete common-module and campaign-runner architecture.
   - live-wire seed, VPN/interface, runtime, and artifact helper code
 - The eMuleBB workspace already materializes `p2p-overlord-agents` and
   `p2p-overlord-be` through `workspaces/workspace/deps.json`.
-- The eMuleBB workspace now materializes `p2p-overlord-tooling` through the
-  current upstream remote, so the scenario catalog is resolvable from the same
+- The eMuleBB workspace now materializes `p2p-overlord-tooling` from the
+  `emulebb` organization, so the scenario catalog is resolvable from the same
   managed workspace before the common campaign-core layer exists.
 
 ## Intended Architecture
@@ -198,9 +198,8 @@ The common core should support at least these product-family campaign classes:
 
 ## Implementation Plan
 
-1. Done: add `p2p-overlord-tooling` to the managed workspace topology through
-   the current upstream remote while the repo is moved under the eMuleBB
-   organization.
+1. Done: add `p2p-overlord-tooling` to the managed workspace topology from the
+   eMuleBB organization.
 2. Add the first `campaign_core` package in `repos/emulebb-build-tests`.
 3. Move current release-campaign data structures behind the common core without
    changing operator-visible behavior.
