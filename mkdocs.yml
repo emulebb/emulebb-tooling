@@ -1,5 +1,5 @@
 site_name: eMuleBB Documentation
-site_description: eMuleBB workspace, release, product, and REST documentation.
+site_description: eMuleBB user, integration, release, and REST documentation.
 site_url: https://emulebb.github.io/emulebb-tooling/
 repo_url: https://github.com/emulebb/emulebb-tooling
 edit_uri: blob/main/docs/
@@ -34,10 +34,29 @@ plugins:
 
 nav:
   - Home: INDEX.md
-  - Workspace Policy: WORKSPACE-POLICY.md
-  - Agent Checklist: reference/AGENT-CHECKLIST.md
-  - Documentation Policy: DOCS-POLICY.md
-  - Active:
+  - Quick Help: HELP.md
+  - User Guides:
+      - Product Guide: reference/GUIDE-EMULEBB.md
+      - Setup Guide: reference/GUIDE-SETUP.md
+      - Downloads And Search: reference/GUIDE-DOWNLOADS-SEARCH.md
+      - Sharing Guide: reference/GUIDE-SHARING.md
+      - Network Guide: reference/GUIDE-NETWORK.md
+      - Stack Integrations: reference/GUIDE-STACK-INTEGRATIONS.md
+      - Controllers And REST: reference/GUIDE-CONTROLLERS-REST.md
+      - Preferences Guide: reference/GUIDE-PREFERENCES.md
+      - Persistence Files: reference/GUIDE-PERSISTENCE-FILES.md
+      - IP Filters: reference/GUIDE-IP-FILTERS.md
+      - Long Paths: reference/GUIDE-LONGPATHS.md
+      - Keyboard Shortcuts: reference/KEYBOARD-SHORTCUTS.md
+      - Troubleshooting: reference/GUIDE-TROUBLESHOOTING.md
+      - Translations: reference/GUIDE-TRANSLATIONS.md
+  - API And Automation:
+      - REST Contract: rest/REST-API-CONTRACT.md
+      - Adapter Notes: rest/REST-API-ADAPTERS.md
+      - OpenAPI Contract: rest/REST-API-OPENAPI.yaml
+      - Parity Inventory: rest/REST-API-PARITY-INVENTORY.md
+      - Controller Surface Matrix: active/CONTROLLER-SURFACE-MATRIX.md
+  - Active Release:
       - Backlog Index: active/INDEX.md
       - Future Roadmap: active/FUTURE-ROADMAP.md
       - Release 0.7.3: active/RELEASE-0.7.3.md
@@ -45,31 +64,18 @@ nav:
       - Release Runbook: active/RELEASE-0.7.3-RUNBOOK.md
       - Release Test Strategy: active/RELEASE-TEST-STRATEGY.md
       - Release Test Campaigns: active/RELEASE-TEST-CAMPAIGNS.md
-      - Controller Surface Matrix: active/CONTROLLER-SURFACE-MATRIX.md
       - Frozen Surfaces: active/FROZEN-SURFACES.md
-  - Reference:
+  - Developer And Workspace:
+      - Workspace Policy: WORKSPACE-POLICY.md
+      - Documentation Policy: DOCS-POLICY.md
+      - Agent Checklist: reference/AGENT-CHECKLIST.md
       - Backlog Process: reference/BACKLOG-PROCESS.md
+      - Evidence Retention: reference/EVIDENCE-RETENTION.md
       - Workspace Repository Map: reference/WORKSPACE-REPO-MAP.md
       - Development Guide: reference/DEVELOPMENT-GUIDE.md
       - CI Baseline: reference/CI-BASELINE.md
-      - Product Guide: reference/GUIDE-EMULEBB.md
-      - Setup Guide: reference/GUIDE-SETUP.md
-      - Network Guide: reference/GUIDE-NETWORK.md
-      - Sharing Guide: reference/GUIDE-SHARING.md
-      - Downloads And Search: reference/GUIDE-DOWNLOADS-SEARCH.md
-      - Preferences Guide: reference/GUIDE-PREFERENCES.md
-      - Persistence Files: reference/GUIDE-PERSISTENCE-FILES.md
-      - REST Controllers: reference/GUIDE-CONTROLLERS-REST.md
-      - IP Filters: reference/GUIDE-IP-FILTERS.md
-      - Long Paths: reference/GUIDE-LONGPATHS.md
-      - Keyboard Shortcuts: reference/KEYBOARD-SHORTCUTS.md
       - Release Branching And Packaging: reference/RELEASE-BRANCHING-AND-PACKAGING.md
-      - Troubleshooting: reference/GUIDE-TROUBLESHOOTING.md
       - eD2K Inventory: reference/ED2K-PROJECT-INVENTORY.md
-  - REST:
-      - Contract: rest/REST-API-CONTRACT.md
-      - Adapter Notes: rest/REST-API-ADAPTERS.md
-      - Parity Inventory: rest/REST-API-PARITY-INVENTORY.md
   - Dependencies:
       - Status: dependencies/DEP-STATUS.md
   - Ideas:
@@ -84,7 +90,6 @@ nav:
       - Abandoned CMake / Ninja / vcpkg Adoption: history/ideas/IDEA-CMAKE.md
 
 not_in_nav: |
-  /HELP.md
   /active/items/**
   /active/plans/**
   /architecture/**

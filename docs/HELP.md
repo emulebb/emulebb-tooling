@@ -1,28 +1,36 @@
 # eMuleBB Help
 
-This page is the online help landing page for eMuleBB.
+This is the shortest path into the eMuleBB manuals. It is written for users who
+already understand eMule-style clients and want exact operating guidance.
 
-## Start Here
+## I Want To...
 
-- [eMuleBB product guide](reference/GUIDE-EMULEBB.md)
-- [Setup guide](reference/GUIDE-SETUP.md)
-- [Network guide](reference/GUIDE-NETWORK.md)
-- [Downloads and search guide](reference/GUIDE-DOWNLOADS-SEARCH.md)
-- [Sharing guide](reference/GUIDE-SHARING.md)
-- [Preferences guide](reference/GUIDE-PREFERENCES.md)
-- [Controllers and REST guide](reference/GUIDE-CONTROLLERS-REST.md)
-- [Troubleshooting guide](reference/GUIDE-TROUBLESHOOTING.md)
-- [Development guide](reference/DEVELOPMENT-GUIDE.md)
-- [REST API contract](rest/REST-API-CONTRACT.md)
-- [REST API OpenAPI contract](rest/REST-API-OPENAPI.yaml)
-- [Workspace and developer documentation](INDEX.md)
-- [Current active backlog](active/INDEX.md)
+| Task | Start Here |
+|---|---|
+| Understand what eMuleBB is and why it exists | [Product Guide](reference/GUIDE-EMULEBB.md) |
+| Set up a fresh profile | [Setup Guide](reference/GUIDE-SETUP.md#new-profile-recipe) |
+| Use an existing eMule profile | [Setup Guide](reference/GUIDE-SETUP.md#existing-profile-recipe) |
+| Launch with an isolated `-c` profile | [Setup Guide](reference/GUIDE-SETUP.md#isolated-profile-recipe) |
+| Fix Low ID, Kad firewalled, or bind problems | [Network Guide](reference/GUIDE-NETWORK.md) |
+| Improve search and download workflow | [Downloads And Search](reference/GUIDE-DOWNLOADS-SEARCH.md) |
+| Share a large library deliberately | [Sharing Guide](reference/GUIDE-SHARING.md) |
+| Wire eMuleBB into aMuTorrent or Arr apps | [Stack Integration Guide](reference/GUIDE-STACK-INTEGRATIONS.md) |
+| Diagnose a crash, hang, slow startup, or REST failure | [Troubleshooting Guide](reference/GUIDE-TROUBLESHOOTING.md) |
+| Translate user-facing docs or homepage text | [Translations And Localization](reference/GUIDE-TRANSLATIONS.md) |
 
-## User Notes
+## Safe First Steps
 
-eMuleBB keeps the classic eMule desktop workflow while adding the maintained
-broadband controller and REST API surfaces documented in this repository.
+1. Keep the application directory separate from the profile directory.
+2. Back up an existing profile before first launch.
+3. Use `emulebb.exe -c <profile-dir>` when testing a package or copied profile.
+4. Confirm temp, incoming, and shared directories before starting downloads.
+5. Verify the desktop app before enabling REST, aMuTorrent, Radarr, or Sonarr.
 
-For user-facing product documentation, start with the product guide. For build,
-validation, release, and workspace workflow details, start from the developer
-documentation index.
+## Power User Notes
+
+eMuleBB keeps the classic eMule desktop workflow while adding maintained
+broadband defaults, diagnostics, large-library handling, and trusted local
+controller surfaces.
+
+The desktop app owns live state. Controllers and adapters should read or mutate
+that state through documented APIs; they do not replace the native client.

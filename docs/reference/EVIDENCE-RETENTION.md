@@ -12,8 +12,8 @@ release package retention.
 |---|---|---|
 | `release-proof` | Active release, RC, artifact, or release-blocking evidence. | Keep until superseded and recorded. |
 | `campaign-proof` | Broad regression, certification, live E2E, and overnight evidence. | Keep recent runs; prune superseded payloads. |
-| `debug-profile` | ETW, procdump, UMDH, pageheap, CPU spike, memory, and crash output. | Keep only while active; prune by routine cleanup after the payload retention window. |
-| `legacy-generated` | Old pre-state-migration reports under `repos\emulebb-build-tests\reports`. | Disposable generated output; prune on the same routine cadence as current reports. |
+| `debug-profile` | Active profiling and crash output. | Keep only while active; prune after the payload retention window. |
+| `legacy-generated` | Old reports under `repos\emulebb-build-tests\reports`. | Disposable; prune with current reports. |
 | `nightly` | Automated nightly build or test evidence. | Keep latest successful and failed runs per stream. |
 | `scratch` | Local experiments, command logs, caches, and transient progress notes. | Disposable after conclusions are promoted. |
 

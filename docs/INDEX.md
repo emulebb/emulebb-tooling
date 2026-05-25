@@ -1,156 +1,169 @@
-# eMule Documentation Index
+# eMuleBB User Guide
 
-This directory is the single Markdown home for the tooling repo. Use
-[DOCS-POLICY](DOCS-POLICY.md) for ownership rules.
+<section class="docs-hero">
+  <div>
+    <p class="docs-eyebrow">eMule broadband edition</p>
+    <h2>Classic eMule control, modern broadband operation.</h2>
+    <p>
+      eMuleBB is for power users who want a native Windows eMule client that can
+      run for long sessions, keep large libraries predictable, expose a trusted
+      local REST surface, and still respect stock eD2K/Kad behavior.
+    </p>
+    <p>
+      Start here if you are setting up a profile, moving an existing eMule
+      install, testing a release package, or wiring eMuleBB into aMuTorrent,
+      Prowlarr, Radarr, or Sonarr.
+    </p>
+  </div>
+  <img alt="eMuleBB broadband edition logo" src="assets/brand/emulebb-broadband-edition-logo.png" />
+</section>
 
 ## Start Here
+
+Use these guides in order for a first real profile:
+
+1. [Product Guide](reference/GUIDE-EMULEBB.md) explains what eMuleBB is, what it
+   changes, and how to operate it as a power user.
+2. [Setup Guide](reference/GUIDE-SETUP.md) covers install layout, first launch,
+   existing profiles, isolated `-c` profiles, and release-aware testing.
+3. [Network Guide](reference/GUIDE-NETWORK.md) covers eD2K, Kad, ports, bind
+   settings, UPnP, firewall behavior, and WebServer listener basics.
+4. [Downloads And Search](reference/GUIDE-DOWNLOADS-SEARCH.md) covers search
+   quality, categories, transfer actions, disk-space protection, and broadband
+   upload policy.
+5. [Sharing Guide](reference/GUIDE-SHARING.md) covers shared directories,
+   monitored shares, large libraries, and share-ignore rules.
+6. [Stack Integration Guide](reference/GUIDE-STACK-INTEGRATIONS.md) covers the
+   eMuleBB plus aMuTorrent plus Arr workflow with field-level setup details.
+
+## Power User Paths
+
+<div class="docs-card-grid">
+  <article>
+    <span>01</span>
+    <h3>Bring Your Existing Profile</h3>
+    <p>
+      Launch with an explicit profile directory, keep temp and incoming paths
+      stable, and verify the profile before enabling controllers.
+    </p>
+    <a href="reference/GUIDE-SETUP.md#existing-profile-recipe">Existing profile recipe</a>
+  </article>
+  <article>
+    <span>02</span>
+    <h3>Run Clean Test Builds</h3>
+    <p>
+      Unpack each package into its own app directory, start with
+      <code>-c &lt;profile&gt;</code>, and keep rollback evidence.
+    </p>
+    <a href="reference/GUIDE-SETUP.md#release-aware-setup">Release-aware setup</a>
+  </article>
+  <article>
+    <span>03</span>
+    <h3>Control It Locally</h3>
+    <p>
+      Use the trusted REST surface for local automation, with explicit bind,
+      API key, firewall, and lifecycle rules.
+    </p>
+    <a href="reference/GUIDE-CONTROLLERS-REST.md">Controllers and REST</a>
+  </article>
+  <article>
+    <span>04</span>
+    <h3>Automate Media Workflows</h3>
+    <p>
+      Present eMuleBB to Prowlarr, Radarr, and Sonarr through Torznab and
+      qBittorrent-compatible adapter paths.
+    </p>
+    <a href="reference/GUIDE-STACK-INTEGRATIONS.md">Stack integration guide</a>
+  </article>
+</div>
+
+## First Hour Checklist
+
+For a serious profile, do not start with every feature enabled. Prove the
+desktop app first, then layer automation on top.
+
+| Step | What To Prove | Guide |
+|---|---|---|
+| Install | App directory and profile directory are intentionally separate. | [Setup](reference/GUIDE-SETUP.md) |
+| Profile | `preferences.ini`, temp, incoming, categories, and identity files are where expected. | [Persistence Files](reference/GUIDE-PERSISTENCE-FILES.md) |
+| Network | TCP, UDP, firewall, UPnP, High ID, and Kad state are understood. | [Network](reference/GUIDE-NETWORK.md) |
+| Search | A small search returns believable results before heavy automation starts. | [Downloads And Search](reference/GUIDE-DOWNLOADS-SEARCH.md) |
+| Sharing | Shared roots and monitored shares are deliberate, not accidental broad folders. | [Sharing](reference/GUIDE-SHARING.md) |
+| Controllers | REST status reads pass before any mutation or Arr workflow is enabled. | [Stack Integration](reference/GUIDE-STACK-INTEGRATIONS.md) |
+
+## Product Guides
+
+| Need | Primary Doc |
+|---|---|
+| Product overview and operating model | [reference/GUIDE-EMULEBB](reference/GUIDE-EMULEBB.md) |
+| Setup, `-c` profiles, release package testing | [reference/GUIDE-SETUP](reference/GUIDE-SETUP.md) |
+| Search, downloads, categories, limits, upload policy | [reference/GUIDE-DOWNLOADS-SEARCH](reference/GUIDE-DOWNLOADS-SEARCH.md) |
+| Shared directories, monitored shares, large libraries | [reference/GUIDE-SHARING](reference/GUIDE-SHARING.md) |
+| eD2K, Kad, bind, ports, UPnP, firewall | [reference/GUIDE-NETWORK](reference/GUIDE-NETWORK.md) |
+| eMuleBB, aMuTorrent, Prowlarr, Radarr, Sonarr | [reference/GUIDE-STACK-INTEGRATIONS](reference/GUIDE-STACK-INTEGRATIONS.md) |
+| REST, qBit-compatible, Torznab, adapter behavior | [reference/GUIDE-CONTROLLERS-REST](reference/GUIDE-CONTROLLERS-REST.md) |
+| Preferences and `preferences.ini` reference | [reference/GUIDE-PREFERENCES](reference/GUIDE-PREFERENCES.md) |
+| Runtime `.met` and `.dat` file roles | [reference/GUIDE-PERSISTENCE-FILES](reference/GUIDE-PERSISTENCE-FILES.md) |
+| IP filter setup and troubleshooting | [reference/GUIDE-IP-FILTERS](reference/GUIDE-IP-FILTERS.md) |
+| Long-path behavior on Windows | [reference/GUIDE-LONGPATHS](reference/GUIDE-LONGPATHS.md) |
+| Keyboard and menu workflow | [reference/KEYBOARD-SHORTCUTS](reference/KEYBOARD-SHORTCUTS.md) |
+| Symptom-led diagnostics and support evidence | [reference/GUIDE-TROUBLESHOOTING](reference/GUIDE-TROUBLESHOOTING.md) |
+| Translation policy and glossary | [reference/GUIDE-TRANSLATIONS](reference/GUIDE-TRANSLATIONS.md) |
+
+## API And Automation
+
+REST is the preferred automation surface. The native desktop app remains the
+authority for live state.
+
+| Need | Primary Doc |
+|---|---|
+| Human-readable REST contract | [rest/REST-API-CONTRACT](rest/REST-API-CONTRACT.md) |
+| Machine-readable OpenAPI contract | [rest/REST-API-OPENAPI](rest/REST-API-OPENAPI.yaml) |
+| qBit, Torznab, Arr, and aMuTorrent adapter notes | [rest/REST-API-ADAPTERS](rest/REST-API-ADAPTERS.md) |
+| REST parity inventory | [rest/REST-API-PARITY-INVENTORY](rest/REST-API-PARITY-INVENTORY.md) |
+| Controller surface matrix | [active/CONTROLLER-SURFACE-MATRIX](active/CONTROLLER-SURFACE-MATRIX.md) |
+
+## Translations
+
+The long-form product docs are English-canonical for now. Do not fork large
+translated Markdown copies unless there is a review and maintenance owner. Use
+[Translations And Localization](reference/GUIDE-TRANSLATIONS.md) for glossary,
+terminology, screenshot, command, API field, and localized-homepage rules.
+
+The public homepage in `repos\emulebb-pages` has localized entry pages. Those
+pages should link back to this maintained guide set rather than carrying
+stale, partial copies of the manuals.
+
+## Workspace And Release Docs
+
+These docs are for contributors, release operators, and AI agents. They are
+kept here because this repository is the canonical documentation home, but they
+are not the best first read for users.
 
 | Need | Primary Doc |
 |---|---|
 | Workspace policy | [WORKSPACE-POLICY](WORKSPACE-POLICY.md) |
-| AI contributor repeatability checklist | [reference/AGENT-CHECKLIST](reference/AGENT-CHECKLIST.md) |
-| Workspace repository map | [reference/WORKSPACE-REPO-MAP](reference/WORKSPACE-REPO-MAP.md) |
-| Active backlog and RC release status | [active/INDEX](active/INDEX.md) |
-| Repeatable backlog process | [reference/BACKLOG-PROCESS](reference/BACKLOG-PROCESS.md) |
-| Evidence retention policy | [reference/EVIDENCE-RETENTION](reference/EVIDENCE-RETENTION.md) |
 | Documentation ownership rules | [DOCS-POLICY](DOCS-POLICY.md) |
-| Browser-formatted documentation | [MkDocs site](INDEX.md#browser-site) |
+| AI contributor checklist | [reference/AGENT-CHECKLIST](reference/AGENT-CHECKLIST.md) |
+| Workspace repository map | [reference/WORKSPACE-REPO-MAP](reference/WORKSPACE-REPO-MAP.md) |
+| Development and validation guide | [reference/DEVELOPMENT-GUIDE](reference/DEVELOPMENT-GUIDE.md) |
+| Active backlog and release dashboard | [active/INDEX](active/INDEX.md) |
+| RC release control document | [active/RELEASE-0.7.3](active/RELEASE-0.7.3.md) |
+| RC release checklist | [active/RELEASE-0.7.3-CHECKLIST](active/RELEASE-0.7.3-CHECKLIST.md) |
+| RC release runbook | [active/RELEASE-0.7.3-RUNBOOK](active/RELEASE-0.7.3-RUNBOOK.md) |
+| Backlog process | [reference/BACKLOG-PROCESS](reference/BACKLOG-PROCESS.md) |
+| Evidence retention policy | [reference/EVIDENCE-RETENTION](reference/EVIDENCE-RETENTION.md) |
+| CI baseline workflow | [reference/CI-BASELINE](reference/CI-BASELINE.md) |
+| Release branching and packaging | [reference/RELEASE-BRANCHING-AND-PACKAGING](reference/RELEASE-BRANCHING-AND-PACKAGING.md) |
+| eD2K ecosystem inventory | [reference/ED2K-PROJECT-INVENTORY](reference/ED2K-PROJECT-INVENTORY.md) |
+| Dependency status | [dependencies/DEP-STATUS](dependencies/DEP-STATUS.md) |
 | Historical-reference rules | [HISTORICAL-REFERENCES](HISTORICAL-REFERENCES.md) |
-| Repo-level navigation | [GitHub README](https://github.com/emulebb/emulebb-tooling/blob/main/README.md) |
 
 If a status claim outside `docs/active/` conflicts with `docs/active/`, treat
 `docs/active/` as authoritative for current local backlog and release state.
 For GitHub-primary backlog items marked `workflow: github`, the linked
 `emulebb/emulebb` issue and the public `eMuleBB Roadmap` org Project #2 are
-authoritative for workflow state. Canonical workflow endpoints are
-`https://github.com/emulebb/emulebb/issues` and
-`https://github.com/orgs/emulebb/projects/2`.
-
-## Active Work
-
-| Document | Description |
-|---|---|
-| [active/INDEX](active/INDEX.md) | Active backlog dashboard and item tables |
-| [active/FUTURE-ROADMAP](active/FUTURE-ROADMAP.md) | GitHub-primary post-0.7.3 future roadmap |
-| [active/plans/P2P-OVERLORD-PRODUCT-FAMILY-INTEGRATION](active/plans/P2P-OVERLORD-PRODUCT-FAMILY-INTEGRATION.md) | Post-0.7.3 p2p-overlord product-family integration plan |
-| [active/RELEASE-0.7.3](active/RELEASE-0.7.3.md) | RC release control document |
-| [active/RELEASE-0.7.3-CHECKLIST](active/RELEASE-0.7.3-CHECKLIST.md) | RC release operator checklist |
-| [active/RELEASE-0.7.3-RUNBOOK](active/RELEASE-0.7.3-RUNBOOK.md) | RC release operator runbook |
-| [active/plans/RELEASE-0.7.3-EXECUTION-PLAN](active/plans/RELEASE-0.7.3-EXECUTION-PLAN.md) | Current RC release execution plan |
-| `active/items/` | Active item records for Open, In Progress, Blocked, and Deferred work |
-| `history/items/` | Closed item records |
-| `history/reviews/` | Dated revalidation reviews |
-| `history/audits/` | Historical broad audit reports |
-| `history/release-0.7.3/` | Superseded beta gate evidence, release audit snapshots, and old cluster plans |
-
-GitHub-primary roadmap-backed backlog helper scripts live under `scripts/`:
-
-- `github-roadmap-sync.py` previews or applies the roadmap-backed backlog
-  import to `emulebb/emulebb` issues and the `eMuleBB Roadmap` Project #2.
-- `github-roadmap-check.py` validates local GitHub metadata, and can query
-  GitHub when run with `--github`.
-
-## Reference Families
-
-| Folder | Role |
-|---|---|
-| `dependencies/` | Current dependency health and decision records |
-| `history/` | Closed item records, dated reviews, historical comparisons, source salvage, and old ledgers |
-| `ideas/` | Exploratory proposals only, not active implementation plans |
-| `reference/` | Current product guides and durable specialist references |
-| `rest/` | REST contract and API reference |
-
-## Common References
-
-- **[reference/AGENT-CHECKLIST](reference/AGENT-CHECKLIST.md)**
-  - Description: Repeatable operating checklist for AI agents contributing to the
-                 workspace
-
-- **[reference/WORKSPACE-REPO-MAP](reference/WORKSPACE-REPO-MAP.md)**
-  - Description: Canonical repository roles, branches, validation commands, and
-                 product-family boundaries
-
-- **[reference/GUIDE-EMULEBB](reference/GUIDE-EMULEBB.md)**
-  - Description: eMuleBB product manual entry point, setup, tools, diagnostics, and
-                 compatibility
-
-- **[reference/BACKLOG-PROCESS](reference/BACKLOG-PROCESS.md)**
-  - Description: Repeatable workflow for creating, updating, validating, and closing
-                 backlog records
-
-- **[reference/EVIDENCE-RETENTION](reference/EVIDENCE-RETENTION.md)**
-  - Description: Generated evidence retention tiers, promotion rules, and cleanup
-                 policy
-
-- **[reference/CI-BASELINE](reference/CI-BASELINE.md)**
-  - Description: Reusable CI baseline workflow contract
-
-- **[reference/DEVELOPMENT-GUIDE](reference/DEVELOPMENT-GUIDE.md)**
-  - Description: Development, validation, CI, packaging, command-line, and recurring
-                 guide refresh workflow
-
-- **[reference/RELEASE-BRANCHING-AND-PACKAGING](reference/RELEASE-BRANCHING-AND-PACKAGING.md)**
-  - Description: Official release branch, tag, version, and portable package naming
-                 policy
-
-- **[reference/GUIDE-SETUP](reference/GUIDE-SETUP.md)**
-  - Description: Install model, first-run profile behavior, release-aware setup, and
-                 evidence links
-
-- **[reference/GUIDE-NETWORK](reference/GUIDE-NETWORK.md)**
-  - Description: eD2K, Kad, binding, ports, UPnP, firewall, and REST listener basics
-
-- **[reference/GUIDE-SHARING](reference/GUIDE-SHARING.md)**
-  - Description: Shared directories, monitored shares, large libraries, and share-ignore
-                 policy
-
-- **[reference/GUIDE-DOWNLOADS-SEARCH](reference/GUIDE-DOWNLOADS-SEARCH.md)**
-  - Description: Downloads, search, categories, broadband upload policy, modern limits,
-                 and copy workflows
-
-- **[reference/GUIDE-PREFERENCES](reference/GUIDE-PREFERENCES.md)**
-  - Description: Single preference manual: `preferences.ini`, compatibility,
-                 defaults/ranges, schema coverage, and REST mutation
-
-- **[reference/GUIDE-PERSISTENCE-FILES](reference/GUIDE-PERSISTENCE-FILES.md)**
-  - Description: Runtime `.met` and `.dat` file roles, structure, editability, backup
-                 importance, and recovery notes
-
-- **[reference/GUIDE-CONTROLLERS-REST](reference/GUIDE-CONTROLLERS-REST.md)**
-  - Description: REST, aMuTorrent, Arr, qBit, and Torznab controller guidance
-
-- **[reference/ED2K-PROJECT-INVENTORY](reference/ED2K-PROJECT-INVENTORY.md)**
-  - Description: eD2K/eMule ecosystem inventory, including ED2K servers, server lists,
-                 clients, controllers, libraries, and historical mods
-
-- **[reference/GUIDE-IP-FILTERS](reference/GUIDE-IP-FILTERS.md)**
-  - Description: IP filter storage, seeded URLs, formats, and practical use
-
-- **[reference/GUIDE-LONGPATHS](reference/GUIDE-LONGPATHS.md)**
-  - Description: Long-path product behavior, setup, limits, and troubleshooting
-
-- **[reference/KEYBOARD-SHORTCUTS](reference/KEYBOARD-SHORTCUTS.md)**
-  - Description: Main shell and list keyboard shortcut reference
-
-- **[reference/GUIDE-TROUBLESHOOTING](reference/GUIDE-TROUBLESHOOTING.md)**
-  - Description: Symptom-led diagnostics, support evidence, and testing/performance
-                 context
-
-- **[dependencies/DEP-STATUS](dependencies/DEP-STATUS.md)**
-  - Description: Current third-party dependency decision record
-
-- **[rest/REST-API-ADAPTERS](rest/REST-API-ADAPTERS.md)**
-  - Description: Adapter-specific REST, qBit, Torznab, Arr, and aMuTorrent contract
-                 notes
-
-- **[rest/REST-API-CONTRACT](rest/REST-API-CONTRACT.md)**
-  - Description: Human-readable broadband REST contract
-
-- **[rest/REST-API-OPENAPI](rest/REST-API-OPENAPI.yaml)**
-  - Description: Canonical machine-readable `/api/v1` OpenAPI contract
-
-- **[rest/REST-API-PARITY-INVENTORY](rest/REST-API-PARITY-INVENTORY.md)**
-  - Description: Completed REST/WebServer action parity ledger
+authoritative for workflow state.
 
 ## Browser Site
 
@@ -167,29 +180,6 @@ set `$env:NO_MKDOCS_2_WARNING='1'` before strict local builds. The generated
 HTML is written to `.local/mkdocs-site` and deployed to GitHub Pages by
 `.github/workflows/docs-site.yml` on `main` at
 `https://emulebb.github.io/emulebb-tooling/`.
-
-## Exploratory Ideas
-
-- **[ideas/IDEA-AMULE-WATCHLIST](ideas/IDEA-AMULE-WATCHLIST.md)**
-  - Description: Exploratory aMule reference watchlist; not an active plan
-
-- **[ideas/IDEA-MODERNIZATION-2026](ideas/IDEA-MODERNIZATION-2026.md)**
-  - Description: Historical modernization roadmap idea; not an active plan
-
-- **[ideas/IDEA-IPV6-KAD-NETWORK](ideas/IDEA-IPV6-KAD-NETWORK.md)**
-  - Description: Exploratory IPv6-native Kad network design inspired by
-                 qBittorrent/libtorrent dual-stack DHT state separation; not an active
-                 plan
-
-- **[ideas/IDEA-RESTRUCTURE](ideas/IDEA-RESTRUCTURE.md)**
-  - Description: Exploratory source-structure idea; not an active plan
-
-## Abandoned Ideas
-
-| Document | Description |
-|---|---|
-| [history/ideas/IDEA-BOOST](history/ideas/IDEA-BOOST.md) | Abandoned Boost/POCO adoption exploration; provenance only |
-| [history/ideas/IDEA-CMAKE](history/ideas/IDEA-CMAKE.md) | Abandoned CMake/Ninja/vcpkg adoption exploration; provenance only |
 
 ## Notes
 
