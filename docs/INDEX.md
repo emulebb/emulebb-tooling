@@ -24,8 +24,9 @@ Use these guides in order for a first real profile:
 
 1. [Product Guide](reference/GUIDE-EMULEBB.md) explains what eMuleBB is, what it
    changes, and how to operate it as a power user.
-2. [Power User Guide](reference/GUIDE-POWER-USERS.md) teaches eMule concepts
-   from zero: eD2K, Kad, High ID, queues, credits, parts, sharing, and tuning.
+2. [Power User Manual](reference/GUIDE-POWER-USERS.md) teaches eMule from zero
+   through full operation: eD2K, Kad, High ID, queues, credits, parts, sharing,
+   automation, safety, diagnostics, and tuning.
 3. [Setup Guide](reference/GUIDE-SETUP.md) covers install layout, first launch,
    existing profiles, isolated `-c` profiles, and release-aware testing.
 4. [Network Guide](reference/GUIDE-NETWORK.md) covers eD2K, Kad, ports, bind
@@ -98,7 +99,7 @@ desktop app first, then layer automation on top.
 | Need | Primary Doc |
 |---|---|
 | Product overview and operating model | [reference/GUIDE-EMULEBB](reference/GUIDE-EMULEBB.md) |
-| eMule concepts from zero to power-user operation | [reference/GUIDE-POWER-USERS](reference/GUIDE-POWER-USERS.md) |
+| Complete eMule manual from zero to power-user operation | [reference/GUIDE-POWER-USERS](reference/GUIDE-POWER-USERS.md) |
 | Setup, `-c` profiles, release package testing | [reference/GUIDE-SETUP](reference/GUIDE-SETUP.md) |
 | Search, downloads, categories, limits, upload policy | [reference/GUIDE-DOWNLOADS-SEARCH](reference/GUIDE-DOWNLOADS-SEARCH.md) |
 | Shared directories, monitored shares, large libraries | [reference/GUIDE-SHARING](reference/GUIDE-SHARING.md) |

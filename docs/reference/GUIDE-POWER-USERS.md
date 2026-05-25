@@ -1,4 +1,4 @@
-# eMuleBB Power User Guide
+# eMuleBB Power User Manual
 
 This guide is for a technically capable user who has never used eMule before.
 It explains the mental model first, then the operating workflow. The goal is to
@@ -35,6 +35,79 @@ For a first serious setup:
 6. Leave the client running long enough to gather sources and queue position.
 7. Add REST, aMuTorrent, Prowlarr, Radarr, or Sonarr only after the desktop app
    is healthy.
+
+## If You Know Other P2P Apps
+
+Coming from another tool, map the concepts carefully:
+
+| If You Know... | eMuleBB Difference |
+|---|---|
+| BitTorrent trackers | eD2K servers help discovery but do not host swarms. |
+| DHT | Kad is closer, but eMule still has eD2K-specific identity and source flow. |
+| Soulseek-style browsing | eMule can expose shared files, but search is hash/source based. |
+| Usenet indexers | Torznab here is an adapter over live eD2K/Kad search, not an NZB index. |
+| qBittorrent Web API | eMuleBB `/api/v2` is an Arr adapter subset, not full qBittorrent. |
+| Seedboxes | Long uptime helps, but upload queues, credits, and High ID matter. |
+| Download managers | eMule waits in other users' upload queues; idle is often normal. |
+
+The main adjustment is patience with source discovery and queues. In eMule,
+being well configured makes you more reachable and more useful to the network,
+but it does not force rare sources to be online.
+
+## The Main Window Map
+
+Classic eMule-style clients organize the workflow into a few durable pages.
+Names vary slightly by skin, language, and build, but the mental model is
+stable:
+
+| Area | What It Is For | First-Time User Rule |
+|---|---|---|
+| Server | eD2K server list, connection, logs, server messages. | Use clean server lists; do not chase random servers. |
+| Kad | Kad connection state and bootstrap controls. | Bootstrap once, then let `nodes.dat` stay fresh. |
+| Transfers | Downloads, uploads, queue, sources, categories. | Live here while learning the client. |
+| Search | eD2K/Kad searches and result inspection. | Search broad, inspect names and sources, then download. |
+| Shared Files | Files and directories you publish. | Verify privacy before adding large roots. |
+| Messages/Friends | Peer messages and friend slots. | Optional; useful for trusted peers, not normal setup. |
+| Statistics | Session and cumulative traffic behavior. | Use it to evaluate long sessions, not minute spikes. |
+| Options/Preferences | Ports, directories, limits, WebServer/REST, advanced settings. | Change one major setting at a time. |
+| Tools/Diagnostics | Maintenance and evidence collection. | Capture evidence before changing many variables. |
+
+The Transfers page is the cockpit. Search finds candidates; Transfers shows
+whether those candidates are actually obtainable.
+
+## First 10 Minutes, First Day, First Week
+
+Use staged confidence instead of trying to finish the whole setup at once.
+
+### First 10 Minutes
+
+1. Launch with `-c`.
+2. Set temp and incoming.
+3. Set TCP/UDP ports.
+4. Connect to eD2K and Kad.
+5. Read the status bar: connected, Low ID, firewalled, speeds.
+6. Add one small shared directory.
+7. Run one broad search.
+
+### First Day
+
+1. Fix High ID or Kad firewalled before adding heavy downloads.
+2. Learn the search result colors and source counts.
+3. Add a few downloads with different source counts.
+4. Watch QR, A4AF, and part availability.
+5. Create categories for manual/test/archive work.
+6. Let the client run long enough to gather sources and queue position.
+7. Shut down cleanly once and confirm the profile reloads.
+
+### First Week
+
+1. Add larger shared roots gradually.
+2. Tune upload and connection limits using real observation.
+3. Add IP filters only after baseline startup is understood.
+4. Add REST and aMuTorrent.
+5. Add Prowlarr/Radarr/Sonarr only after manual flows are clear.
+6. Create a profile backup routine.
+7. Record known-good package, profile, port, and category settings.
 
 ## Core Vocabulary
 
@@ -82,6 +155,26 @@ This is why a rare file may appear to do nothing for hours, then suddenly
 progress. You may be waiting for a source to appear, waiting in a queue, or
 waiting for a missing part to become available.
 
+## File Lifecycle
+
+Every download moves through a lifecycle:
+
+| Stage | What Happens | What To Check |
+|---|---|---|
+| Candidate | Search result or `ed2k://` link is selected. | Hash, size, extension, names, comments. |
+| Queued | eMuleBB creates `.part` and `.part.met` state. | Temp path and category. |
+| Source discovery | Server, Kad, and peer exchange find sources. | Source counts and network state. |
+| Waiting | Your client waits in remote upload queues. | QR and A4AF. |
+| Transferring | Blocks arrive from one or more peers. | Speed, compression, part colors. |
+| Verifying | Completed parts are hash-checked. | Corruption log entries. |
+| Sharing partials | Verified parts can be uploaded. | Upload queue and shared behavior. |
+| Completing | Whole file is assembled and moved. | Incoming path, disk space, permissions. |
+| Shared complete | Completed file is available to others. | Shared Files page and category path. |
+
+Do not manipulate temp files while the app is running. The `.part` file without
+the matching metadata is only raw bytes; the metadata tells eMuleBB what those
+bytes mean.
+
 ## What Servers Do And Do Not Do
 
 An eD2K server is not a file host. It helps clients find each other. A server can:
@@ -105,6 +198,33 @@ important than chasing one perfect server. Global searches ask more than the
 current server, but they also create more network load and still depend on the
 quality of the indexed sources.
 
+## Server List Hygiene
+
+Server lists are operational input. Treat them like a trust list, not a random
+collection.
+
+Good habits:
+
+- keep a small, reputable server list
+- remove dead or suspicious servers
+- avoid auto-importing from untrusted URLs
+- use static servers only when the static list is known good
+- do not diagnose Kad by changing many server settings at once
+- remember that server connection loss is not automatically a download failure
+
+If eMuleBB will not connect to eD2K:
+
+1. Check that the server list is not empty.
+2. Check whether "static servers only" blocks connection.
+3. Check firewall/router/VPN reachability.
+4. Try another known good server.
+5. Check logs for rejected, dead, or timed-out servers.
+6. Keep Kad separate in your diagnosis.
+
+Global server search is useful, but it asks more servers and takes longer. Use
+it when local server search does not find enough, not as the default hammer for
+every query.
+
 ## What Kad Adds
 
 Kad is decentralized. Instead of relying on a server list, the client learns
@@ -121,6 +241,30 @@ Use both eD2K and Kad when possible:
 - Kad keeps working without a chosen server once bootstrapped.
 - Search results can differ between networks.
 - Source discovery improves when both paths are healthy.
+
+## Kad Bootstrap Runbook
+
+For a new or broken Kad profile:
+
+1. Confirm UDP is not blocked locally.
+2. Confirm the configured UDP port is forwarded if you are behind NAT.
+3. Connect to an eD2K server if possible.
+4. Start one safe download or search so eMuleBB can encounter peers.
+5. Bootstrap Kad from known clients when available.
+6. If needed, import a fresh `nodes.dat` from a reputable source.
+7. Leave the client running long enough to learn nodes.
+8. Restart once and confirm Kad can reconnect from saved state.
+
+Kad states to understand:
+
+| State | Meaning | Next Step |
+|---|---|---|
+| Off | Kad is not connected. | Start Kad or bootstrap. |
+| Connecting | Client is trying to join. | Wait; then check nodes and UDP. |
+| Firewalled | Kad works but reachability is poor. | Fix UDP/NAT/VPN. |
+| Open/OK | Kad is reachable. | Leave it running and stable. |
+
+Do not constantly delete `nodes.dat`. A healthy profile improves over time.
 
 ## High ID, Low ID, And Firewalled Kad
 
@@ -156,6 +300,26 @@ Minimum network checklist:
 
 Do not copy old default port numbers blindly. Modern eMule clients can use
 different configured ports. Always forward the ports shown in your preferences.
+
+## NAT, VPN, And Port-Forwarding Cases
+
+Most reachability failures fall into one of these cases:
+
+| Case | Symptom | Fix |
+|---|---|---|
+| Windows Firewall only | Works when firewall disabled. | Allow `emulebb.exe` and configured ports. |
+| Home router NAT | Low ID from outside LAN. | Forward TCP/UDP to the eMuleBB machine. |
+| Double NAT | Forwarding one router is not enough. | Bridge one router or forward both layers. |
+| Carrier-grade NAT | Router has no public address. | Use ISP public IP option or forwarding-capable VPN. |
+| VPN without forwarding | Outbound works, incoming does not. | Use VPN provider with forwarded port support. |
+| VPN bind mismatch | Traffic leaves wrong interface. | Set bind policy deliberately and verify diagnostics. |
+| UPnP partial success | One port maps, another does not. | Inspect router mappings; fall back to manual rules. |
+| UDP remapping | eD2K High ID but Kad firewalled. | Preserve UDP port mapping or use different route. |
+
+If testing from inside your LAN, remember that some routers do not support
+hairpin NAT. A local test against the public address may fail even when outside
+peers can reach you. Use eMuleBB's network status and an external port test
+where appropriate.
 
 ## WebServer, REST, And P2P Ports Are Different
 
@@ -205,6 +369,30 @@ Before risky work:
 4. Record the app package version and architecture.
 5. Start the copied profile once without controllers.
 
+## Backup And Restore Runbook
+
+Back up profiles while eMuleBB is closed.
+
+Minimum profile backup:
+
+1. Profile/config directory.
+2. Temp directory if you need incomplete downloads.
+3. Incoming category configuration if paths live outside the profile.
+4. Notes for app version, architecture, ports, and launch command.
+
+Restore carefully:
+
+1. Restore to a new profile base.
+2. Launch with `-c <restored-profile>`.
+3. Confirm `preferences.ini` paths point to real directories.
+4. Do not let a restored profile share private paths accidentally.
+5. Start without controllers.
+6. Let hashing and known-file checks finish.
+7. Only then reconnect automation.
+
+Identity-sensitive files such as `preferences.dat` and `cryptkey.dat` should
+stay together. Losing identity state can affect secure recognition and credits.
+
 ## Directory Model
 
 Keep five concepts separate:
@@ -242,6 +430,34 @@ Use this sequence for a new profile:
 Do not import a large share, enable controllers, and add hundreds of downloads
 on the first run. That creates too many variables.
 
+## Status Bar And Connection Indicators
+
+The status bar is a compressed health report. Use it before opening settings.
+
+Read it for:
+
+- latest log line
+- estimated eD2K and Kad users/files
+- upload speed
+- download speed
+- optional protocol overhead
+- eD2K server connection
+- Kad connection state
+- combined connection icon
+
+Color conventions in classic eMule-family clients:
+
+| Color | Network Meaning |
+|---|---|
+| Red | Offline or not connected. |
+| Orange | Connecting. |
+| Yellow | Connected but firewalled or Low ID. |
+| Green | Connected and reachable. |
+
+For speed, distinguish payload from overhead. Control traffic, pings, server
+messages, source exchange, and Kad traffic can consume bandwidth even when no
+file payload is moving.
+
 ## Searching Well
 
 Search quality is a skill.
@@ -273,6 +489,38 @@ Common patterns:
 
 Do not rely on one search attempt. Try different file type filters, networks,
 and terms. Let the client gather sources before concluding a file is dead.
+
+## Search Modes
+
+Use the search mode that matches the question:
+
+| Mode | What It Asks | Use When |
+|---|---|---|
+| Local/server | Current eD2K server. | Quick first check. |
+| Global server | Many servers from your list. | Local server has poor results. |
+| Kad | Decentralized Kad network. | Server results are weak or you want Kad-only visibility. |
+| Automatic/controller | Adapter chooses supported methods. | REST or Arr workflow owns the search. |
+
+Kad and eD2K source counts are not always directly comparable. Treat search
+results as candidates. The transfer list becomes more authoritative after
+eMuleBB has contacted sources.
+
+## Search Result Triage
+
+Before double-clicking a result, ask:
+
+1. Does the size match the claimed content?
+2. Does the extension match the claimed content?
+3. Are there complete sources?
+4. Do alternative filenames agree?
+5. Are comments positive, negative, or suspicious?
+6. Is the file already in downloads or shared files?
+7. Does the result come from a network you trust for this query?
+8. Is this a safe file type to handle on this machine?
+
+For archives, installers, scripts, and executables, use extra caution. eMuleBB
+can identify and transfer bytes; it cannot decide whether running those bytes is
+safe.
 
 ## Reading The Transfer List
 
@@ -308,6 +556,47 @@ If the transfer list looks idle, ask:
 7. Is disk-space protection active?
 8. Is the file waiting normally in queues?
 
+## Progress Bar Colors
+
+Progress bars show availability and state at a glance. Exact colors can vary by
+skin, but the classic model is:
+
+| Color | Download Progress Meaning |
+|---|---|
+| Black | You already have this part and it verified. |
+| Yellow | This part is being downloaded now. |
+| Blue | Needed part is available from at least one source. Darker means more available. |
+| Red | No known source currently has this part. |
+| Green | File is complete and verified. |
+
+Expanded source bars show what a specific peer has:
+
+| Color | Source Bar Meaning |
+|---|---|
+| Black | Peer has a part you need. |
+| White/empty | Peer does not have that part. |
+| Green | Both you and the peer have it. |
+| Yellow | Peer is currently sending it to you. |
+
+Do not panic over red immediately after adding a file. Source discovery takes
+time. Worry when the same red gaps remain for days and all known sources miss
+the same parts.
+
+## Source Count Formats
+
+Classic eMule-family transfer lists often compress several counts into one
+field. Read them as:
+
+| Piece | Meaning |
+|---|---|
+| useful | Sources you can potentially download from. |
+| total | All known sources for the file. |
+| A4AF | Sources currently assigned to another wanted file. |
+| transferring | Sources actively sending data now. |
+
+The exact display can vary, but the intent is stable: not every known source is
+immediately useful, and not every useful source is transferring now.
+
 ## Download Priorities
 
 Priorities are relative. Setting everything to high is equivalent to setting
@@ -339,6 +628,22 @@ Use A4AF controls when:
 Do not micro-manage every A4AF entry. The client normally handles this well
 enough unless you have rare files or a specific completion goal.
 
+## Pause, Stop, Resume, Cancel, Delete
+
+These actions are different:
+
+| Action | Meaning |
+|---|---|
+| Pause | Stop transfer activity but keep source knowledge for quicker resume. |
+| Stop | Stop and drop active source state; resume requires fresh source work. |
+| Resume/start | Allow the transfer to continue. |
+| Cancel | Remove the download from the active list. |
+| Delete files | Remove associated data as well; destructive. |
+
+Use pause for temporary bandwidth or priority control. Use stop when you want to
+clear active source work. Use delete only when you are sure you no longer want
+the incomplete or completed data.
+
 ## Uploading, Queueing, And Credits
 
 Uploading is part of how eMule works. It is not just a moral preference; it is
@@ -362,6 +667,21 @@ For broadband users, the right upload limit is usually below the physical
 maximum but high enough to keep slots active. Saturating the connection can hurt
 latency, DNS, browsing, controllers, and source discovery. Starving upload hurts
 credits and network health.
+
+## Upload Slots And Friend Slots
+
+Normal upload slots are managed by the client. A friend slot is a deliberate
+exception for a trusted peer. Use it sparingly.
+
+Friend slots are useful when:
+
+- you coordinate with a known peer
+- you are helping someone obtain a rare file
+- you are testing upload behavior
+- you want to prioritize a trusted exchange
+
+They are not a general speed booster. Giving away upload capacity to a friend
+changes how much capacity remains for the normal queue.
 
 ## Why Downloads Are Not Instant
 
@@ -422,6 +742,41 @@ For a heavy live profile, the slow parts are often startup scanning, hashing,
 IP filter loading, server/Kad bootstrap, and transfer source processing. Do not
 judge performance from the first minute after launching a huge profile.
 
+## Bandwidth Units
+
+Network providers usually advertise bits per second. eMule-style clients often
+show bytes per second.
+
+| Unit | Meaning |
+|---|---|
+| `Mb/s` or `Mbps` | Megabits per second. Divide by 8 for megabytes/s. |
+| `MB/s` | Megabytes per second. Multiply by 8 for megabits/s. |
+| `kB/s` | Kilobytes per second. Common client display unit. |
+
+If your upstream is `40 Mbps`, the theoretical maximum is about `5 MB/s`.
+Practical upload limits should be below that to leave room for overhead and
+other applications.
+
+## Heavy Profile Startup
+
+A heavy profile may do real work before it feels responsive:
+
+- load preferences and categories
+- validate temp entries
+- read `.part.met` files
+- scan known files
+- hash new or changed shared files
+- load `known.met` and sidecars
+- load IP filters
+- reconnect eD2K and Kad
+- rebuild source state
+- initialize REST and controller surfaces
+
+If startup regresses, measure phases separately. "Slow startup" can be disk,
+hashing, IP filter parsing, source restoration, networking, or UI list
+population. A CPU profile and logs are more useful than changing settings at
+random.
+
 ## Categories
 
 Categories are not just labels. They can affect color, grouping, completed
@@ -451,6 +806,22 @@ Suggested starting shape:
 Keep category paths visible to the process that needs them. If Radarr or Sonarr
 runs in a container, VM, or another machine, configure remote path mappings
 there instead of lying to eMuleBB about its local paths.
+
+## Large Library Plan
+
+For a large shared library, stage the rollout:
+
+1. Start with one narrow root.
+2. Let hashing finish.
+3. Confirm the Shared Files page shows only intended files.
+4. Add share-ignore rules for junk and private sidecars.
+5. Add the next root.
+6. Watch startup time and hash time.
+7. Keep a list of public roots outside the app.
+
+For libraries with tens or hundreds of thousands of files, the risk is not only
+hashing time. It is accidental sharing, path churn, slow startup, and support
+reports that cannot distinguish scan time from network problems.
 
 ## Sharing Safely
 
@@ -482,6 +853,21 @@ Large library habits:
 - document which roots are public
 - recheck shares after restoring a profile on a different machine
 
+## Release And Archival Sharing
+
+If you intentionally publish a file:
+
+1. Put it in a stable shared directory.
+2. Give it a clear filename before hashing.
+3. Let hashing complete.
+4. Keep the client online long enough for discovery.
+5. Avoid moving or renaming it repeatedly.
+6. Use upload priority only for a small set of important files.
+7. Watch whether parts spread, not only whether one peer downloaded.
+
+Archival sharing is long-horizon work. A rare file becomes healthier when
+multiple reachable clients hold verified parts.
+
 ## Temp And Incoming Recovery
 
 Do not delete temp to clean up space unless you intend to delete incomplete
@@ -501,6 +887,21 @@ If a completed file cannot move to incoming, check free space and permissions
 on the incoming volume. Completion can fail even when temp has space if incoming
 is on a different disk and that target disk is full.
 
+## Disk-Space Strategy
+
+eMule downloads can reserve or consume large temp space before completion. Plan
+for both temp and incoming:
+
+- keep temp on a disk with enough write endurance and free space
+- keep incoming on the final storage volume when possible
+- avoid network temp paths
+- monitor low-space behavior before the disk is nearly full
+- do not use unrelated cleanup tools on temp while eMuleBB is running
+- remember that completion may need space or permissions on incoming
+
+If disk pressure appears, pause or stop selected transfers through the app.
+External deletion is the last resort.
+
 ## IP Filters
 
 An IP filter can block known bad ranges or unwanted peers, but it is not a
@@ -516,6 +917,25 @@ Use IP filters as one layer:
 
 If startup is slow and the IP filter is large, measure filter load time
 separately from hashing and source processing. They are different bottlenecks.
+
+## Logs And Diagnostics
+
+Logs are not just for developers. They explain startup, connectivity, parsing,
+hashing, REST, and completion failures.
+
+Use logs when:
+
+- ports appear open but status is still Low ID
+- Kad remains firewalled
+- a file completes but does not move
+- IP filter loading is slow
+- WebServer/REST does not bind
+- controller authentication fails
+- startup is much slower than the last known-good build
+
+For hangs and CPU burn, capture diagnostics before closing the process if
+possible. A dump or profile taken during the bad state is more valuable than a
+description after restart.
 
 ## Comments, Ratings, And Fakes
 
@@ -542,6 +962,21 @@ Warning signs:
 Do not run downloaded executables from untrusted sources. Treat archives and
 scripts as risky until inspected outside eMuleBB.
 
+## Content Safety Workflow
+
+For unknown files:
+
+1. Prefer data files over executables.
+2. Inspect filenames from multiple sources.
+3. Check comments and ratings.
+4. Verify extension and size.
+5. Scan completed files with local security tooling.
+6. Open risky files in an isolated environment if you must inspect them.
+7. Do not disable security tools to make a download easier to run.
+
+eMuleBB can help you avoid obvious bad candidates, but final execution safety is
+outside the P2P client.
+
 ## Security And Privacy
 
 eMule-style P2P is public peer-to-peer traffic. Other peers and servers can see
@@ -560,6 +995,19 @@ Rules:
 
 Obfuscation, HTTPS, or a VPN does not turn public P2P activity into private
 storage. It only changes parts of the transport path.
+
+## Multi-User Windows Machines
+
+On shared Windows machines:
+
+- use a profile directory owned by the intended user account
+- keep temp and incoming outside shared personal folders unless intentional
+- do not put API keys in shared scripts
+- avoid running eMuleBB elevated unless required for a specific diagnostic
+- check filesystem permissions on incoming and shared roots
+- document which account owns scheduled starts or controller services
+
+Two Windows users should not launch the same profile concurrently.
 
 ## Controllers And Automation
 

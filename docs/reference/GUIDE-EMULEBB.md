@@ -134,7 +134,7 @@ For an existing profile:
 
 | Need | Guide |
 |---|---|
-| Learn eMule concepts from zero: eD2K, Kad, High ID, queues, credits, sources, sharing | [Power User Guide](GUIDE-POWER-USERS.md) |
+| Learn eMule from zero through full operation: eD2K, Kad, High ID, queues, credits, sources, sharing, automation, safety, and tuning | [Power User Manual](GUIDE-POWER-USERS.md) |
 | Install model, profile migration, isolated `-c` profiles, and release-aware setup | [Setup Guide](GUIDE-SETUP.md) |
 | Complete `preferences.ini` reference and preference behavior | [Preferences Guide](GUIDE-PREFERENCES.md) |
 | eD2K, Kad, ports, binding, UPnP, firewall, WebServer network behavior | [Network Guide](GUIDE-NETWORK.md) |
