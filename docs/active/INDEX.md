@@ -20,9 +20,9 @@ engineering spec/evidence records, not workflow status authority.
 ## Current Snapshot
 
 **Source of truth:** `EMULE_WORKSPACE_ROOT\workspaces\workspace\app\emulebb-main` (`main` branch)
-**Current non-done count:** `80`
+**Current non-done count:** `81`
 **Latest release-doc refresh:** 2026-05-23
-**Non-done by status:** `64` OPEN, `6` IN_PROGRESS, `10` DEFERRED, `0` BLOCKED.
+**Non-done by status:** `65` OPEN, `6` IN_PROGRESS, `10` DEFERRED, `0` BLOCKED.
 **Backlog counts:** item tables below are authoritative.
 **RC 0.7.3 relevance:** Most non-done items below are future or deferred work;
 current RC gate and proof status is controlled by [RELEASE-0.7.3](RELEASE-0.7.3.md).
@@ -434,6 +434,7 @@ not active item docs.
 | [CI-044](items/CI-044.md) | Major | OPEN | Add containerized full-suite profiles for controller and P2P client testing |
 | [CI-045](items/CI-045.md) | Major | OPEN | Add workspace-level bind interface selection for predictable live tests |
 | [CI-046](items/CI-046.md) | Minor | OPEN | Share product-family test profile and fixture hygiene |
+| [CI-047](items/CI-047.md) | Minor | OPEN | Add repeatable local package install refresh command |
 
 ---
 
