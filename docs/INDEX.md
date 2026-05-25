@@ -24,16 +24,18 @@ Use these guides in order for a first real profile:
 
 1. [Product Guide](reference/GUIDE-EMULEBB.md) explains what eMuleBB is, what it
    changes, and how to operate it as a power user.
-2. [Setup Guide](reference/GUIDE-SETUP.md) covers install layout, first launch,
+2. [Power User Guide](reference/GUIDE-POWER-USERS.md) teaches eMule concepts
+   from zero: eD2K, Kad, High ID, queues, credits, parts, sharing, and tuning.
+3. [Setup Guide](reference/GUIDE-SETUP.md) covers install layout, first launch,
    existing profiles, isolated `-c` profiles, and release-aware testing.
-3. [Network Guide](reference/GUIDE-NETWORK.md) covers eD2K, Kad, ports, bind
+4. [Network Guide](reference/GUIDE-NETWORK.md) covers eD2K, Kad, ports, bind
    settings, UPnP, firewall behavior, and WebServer listener basics.
-4. [Downloads And Search](reference/GUIDE-DOWNLOADS-SEARCH.md) covers search
+5. [Downloads And Search](reference/GUIDE-DOWNLOADS-SEARCH.md) covers search
    quality, categories, transfer actions, disk-space protection, and broadband
    upload policy.
-5. [Sharing Guide](reference/GUIDE-SHARING.md) covers shared directories,
+6. [Sharing Guide](reference/GUIDE-SHARING.md) covers shared directories,
    monitored shares, large libraries, and share-ignore rules.
-6. [Stack Integration Guide](reference/GUIDE-STACK-INTEGRATIONS.md) covers the
+7. [Stack Integration Guide](reference/GUIDE-STACK-INTEGRATIONS.md) covers the
    eMuleBB plus aMuTorrent plus Arr workflow with field-level setup details.
 
 ## Power User Paths
@@ -96,6 +98,7 @@ desktop app first, then layer automation on top.
 | Need | Primary Doc |
 |---|---|
 | Product overview and operating model | [reference/GUIDE-EMULEBB](reference/GUIDE-EMULEBB.md) |
+| eMule concepts from zero to power-user operation | [reference/GUIDE-POWER-USERS](reference/GUIDE-POWER-USERS.md) |
 | Setup, `-c` profiles, release package testing | [reference/GUIDE-SETUP](reference/GUIDE-SETUP.md) |
 | Search, downloads, categories, limits, upload policy | [reference/GUIDE-DOWNLOADS-SEARCH](reference/GUIDE-DOWNLOADS-SEARCH.md) |
 | Shared directories, monitored shares, large libraries | [reference/GUIDE-SHARING](reference/GUIDE-SHARING.md) |

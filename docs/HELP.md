@@ -8,6 +8,7 @@ already understand eMule-style clients and want exact operating guidance.
 | Task | Start Here |
 |---|---|
 | Understand what eMuleBB is and why it exists | [Product Guide](reference/GUIDE-EMULEBB.md) |
+| Learn eMule from zero before tuning a serious profile | [Power User Guide](reference/GUIDE-POWER-USERS.md) |
 | Set up a fresh profile | [Setup Guide](reference/GUIDE-SETUP.md#new-profile-recipe) |
 | Use an existing eMule profile | [Setup Guide](reference/GUIDE-SETUP.md#existing-profile-recipe) |
 | Launch with an isolated `-c` profile | [Setup Guide](reference/GUIDE-SETUP.md#isolated-profile-recipe) |
