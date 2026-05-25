@@ -59,6 +59,11 @@ Possible later work:
   path treats the checked-in OpenAPI contract plus native route drift tests as
   the supported schema surface; the optional external gateway remains deferred
   and must not become a runtime prerequisite.
+- 2026-05-26: Deep native v1 standardization review confirmed the OpenAPI
+  route table and native route seam expose the same 88 operations. RC1 contract
+  freeze decisions for error responses, destructive route shape, exact error
+  envelope requirements, endpoint selector vocabulary, and action-route naming
+  are tracked separately in `REF-047`.
 
 ## Prerequisite
 

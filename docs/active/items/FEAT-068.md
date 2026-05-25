@@ -35,6 +35,11 @@ This is controller-surface maintenance, not a new product UI expansion.
 That is convenient for small and moderate profiles, but it can spike memory and
 latency for very large shared trees or controller polling loops.
 
+The 2026-05-26 native v1 API review kept this performance work separate from
+the RC1 contract-freeze standardization tracked in `REF-047`. Any paging or
+bounded-list change made here must preserve the final public v1 contract chosen
+there.
+
 ## Scope
 
 - Add paging, cursoring, limit/offset, or another bounded response mode for
