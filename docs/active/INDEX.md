@@ -20,9 +20,9 @@ engineering spec/evidence records, not workflow status authority.
 ## Current Snapshot
 
 **Source of truth:** `EMULE_WORKSPACE_ROOT\workspaces\workspace\app\emulebb-main` (`main` branch)
-**Current non-done count:** `77`
+**Current non-done count:** `78`
 **Latest release-doc refresh:** 2026-05-23
-**Non-done by status:** `61` OPEN, `6` IN_PROGRESS, `10` DEFERRED, `0` BLOCKED.
+**Non-done by status:** `62` OPEN, `6` IN_PROGRESS, `10` DEFERRED, `0` BLOCKED.
 **Backlog counts:** item tables below are authoritative.
 **RC 0.7.3 relevance:** Most non-done items below are future or deferred work;
 current RC gate and proof status is controlled by [RELEASE-0.7.3](RELEASE-0.7.3.md).
@@ -379,6 +379,7 @@ not active item docs.
 | [FEAT-087](items/FEAT-087.md) | Minor | OPEN | Add inline transfer speed sparklines |
 | [FEAT-088](items/FEAT-088.md) | Minor | OPEN | Keep completed upload rows visible briefly |
 | [FEAT-089](items/FEAT-089.md) | Minor | OPEN | Add guided Prowlarr indexer setup for eMuleBB |
+| [FEAT-090](items/FEAT-090.md) | Minor | OPEN | Tune broadband limits by drive topology and total budget |
 
 ---
 
