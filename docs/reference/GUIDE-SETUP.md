@@ -98,8 +98,12 @@ Use `-c <base-dir>` when you need a separate test, live, or operator profile:
 emulebb.exe -c C:\eMuleBB-Profiles\live
 ```
 
-The path must be an absolute canonical Windows path. Do not point two running
-clients at the same base directory.
+The path must be an absolute canonical Windows path. eMuleBB creates the base
+directory, `config`, and `logs` when they are missing. The effective
+preferences file is `config\preferences.ini` under that base. If that file
+already exists and contains `IncomingDir` or `TempDir`, those paths take
+precedence over the clean-profile defaults. Do not point two running clients at
+the same base directory.
 
 An isolated base is useful for:
 

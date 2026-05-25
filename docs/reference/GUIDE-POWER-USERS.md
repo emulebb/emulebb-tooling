@@ -405,11 +405,13 @@ Keep five concepts separate:
 | Incoming | completed downloads | Do not assume this is the same as shared roots. |
 | Shared roots | files you intentionally publish | Do not share broad personal folders. |
 
-When launching with `-c`, eMuleBB should use that directory as the profile base.
-If `preferences.ini` already exists there, its configured incoming and temp paths
-take precedence. A clean profile may create default directories, but an existing
-profile should not create dangling temp or incoming folders next to the
-executable.
+When launching with `-c`, eMuleBB uses that directory as the profile base and
+creates `config` and `logs` below it when needed. The effective preferences file
+is `<profile-dir>\config\preferences.ini`. If that file already exists, its
+configured incoming and temp paths take precedence. A clean profile may create
+default `<profile-dir>\Incoming` and `<profile-dir>\Temp` directories, but an
+existing profile with explicit paths should not create dangling temp or incoming
+folders next to the executable.
 
 ## First Launch From Zero
 

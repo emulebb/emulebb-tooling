@@ -54,7 +54,8 @@ Use a stable setup before adding controllers:
 
 - eMuleBB starts and shuts down cleanly.
 - The profile path is explicit, preferably through `emulebb.exe -c <profile-dir>`.
-- `preferences.ini` is in the intended profile directory.
+- `preferences.ini` is in the intended profile config directory:
+  `<profile-dir>\config\preferences.ini`.
 - Incoming and temp paths point where you expect.
 - A small manual search works in the desktop app.
 - A small manual download can be added, paused, resumed, and removed.

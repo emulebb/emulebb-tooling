@@ -105,6 +105,11 @@ Common profile files include `preferences.ini`, `preferences.dat`,
 [Persistence Files](GUIDE-PERSISTENCE-FILES.md) reference for `.met` and `.dat`
 roles, structures, and recovery priority.
 
+With `emulebb.exe -c <profile-dir>`, the effective preferences file is
+`<profile-dir>\config\preferences.ini`. Existing `IncomingDir` and `TempDir`
+values in that file take precedence over the clean-profile default directories
+under `<profile-dir>`.
+
 Before reusing a stock profile, close all eMule-family clients and copy the
 whole config directory as a rollback backup. Do not run multiple clients against
 the same live profile.

@@ -1,6 +1,6 @@
 ---
 id: FEAT-089
-title: Add guided Prowlarr indexer setup for eMuleBB
+title: Add in-app guided Prowlarr indexer setup for eMuleBB
 status: OPEN
 priority: Minor
 category: feature
@@ -12,12 +12,29 @@ source: operator request for easier Prowlarr indexer setup
 
 ## Summary
 
-Make it easy for users to add eMuleBB as a Prowlarr indexer without manually
-assembling the Torznab URL, API path, API key, and category choices.
+Make it easy for users to add eMuleBB as a Prowlarr indexer from the product UI
+without manually assembling the Torznab URL, API path, API key, and category
+choices.
 
 The current adapter surface already supports Prowlarr through Generic Torznab at
 `/indexer/emulebb/api`. This item is about discoverability, validation, and
 operator ergonomics, not a new wire protocol.
+
+## Current Implemented State
+
+Current docs and packages already provide a script-based setup path:
+
+- [Stack Integration Guide](../../reference/GUIDE-STACK-INTEGRATIONS.md)
+  documents the manual Generic Torznab fields and the package helper scripts.
+- `register-prowlarr.ps1` creates or updates a Prowlarr Generic Torznab indexer
+  named `eMuleBB`.
+- `register-arr-stack.ps1` can add Radarr/Sonarr qBittorrent-compatible
+  download clients and optionally register Prowlarr application sync.
+- The helper scripts request controller credentials at runtime and do not store
+  Prowlarr, Radarr, or Sonarr credentials in eMuleBB preferences.
+
+The remaining backlog value is an in-app guided surface, copy actions, and a
+local health/test affordance.
 
 ## Current Manual Setup
 
@@ -46,9 +63,9 @@ Add one or more operator-facing conveniences:
 - documentation in the Controllers and REST guide with screenshots or exact
   fields
 
-Avoid writing real Prowlarr credentials into eMuleBB preferences. If an
-automation helper is added later, it should require an explicit Prowlarr URL and
-API key at runtime and should avoid storing them by default.
+Avoid writing real Prowlarr credentials into eMuleBB preferences. The existing
+package helper scripts require explicit controller URLs and API keys at runtime
+and avoid storing those controller credentials in eMuleBB preferences.
 
 ## Scope Constraints
 
@@ -63,9 +80,11 @@ API key at runtime and should avoid storing them by default.
 
 ## Acceptance Criteria
 
+- [x] A user can view the exact eMuleBB Prowlarr Generic Torznab fields from
+      product documentation.
 - [ ] A user can copy or view the exact eMuleBB Prowlarr Generic Torznab fields
-      from product documentation or UI.
-- [ ] The setup guidance explains base URL, API path, API key, and category
+      from product UI.
+- [x] The setup guidance explains base URL, API path, API key, and category
       choices.
 - [ ] A local health check proves the Torznab caps endpoint responds before the
       user configures Prowlarr.

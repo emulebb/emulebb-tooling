@@ -378,7 +378,7 @@ not active item docs.
 | [FEAT-086](items/FEAT-086.md) | Minor | OPEN | Parse eMuleAI extension hints without advertising protocol support |
 | [FEAT-087](items/FEAT-087.md) | Minor | OPEN | Add inline transfer speed sparklines |
 | [FEAT-088](items/FEAT-088.md) | Minor | OPEN | Keep completed upload rows visible briefly |
-| [FEAT-089](items/FEAT-089.md) | Minor | OPEN | Add guided Prowlarr indexer setup for eMuleBB |
+| [FEAT-089](items/FEAT-089.md) | Minor | OPEN | Add in-app guided Prowlarr indexer setup for eMuleBB |
 | [FEAT-090](items/FEAT-090.md) | Minor | OPEN | Tune broadband limits by drive topology and total budget |
 | [FEAT-091](items/FEAT-091.md) | Minor | OPEN | Downloads list expand/collapse-all peer rows |
 

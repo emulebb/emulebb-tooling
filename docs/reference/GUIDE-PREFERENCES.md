@@ -316,7 +316,7 @@ Tracked retired names include:
 
 - `DownloadCapacity`, `UploadCapacityNew`, `UploadCapacity`
 - `FileBufferSizePref`, `QueueSizePref`
-- `MiniMule`, `AICHTrustEveryHash`
+- `AICHTrustEveryHash`
 - `ResumeNextFromSameCat`, `AdjustNTFSDaylightFileTime`
 - `SkipWANIPSetup`, `SkipWANPPPSetup`, `LastWorkingImplementation`
 - `DisableMiniUPNPLibImpl`, `DisableWinServImpl`
@@ -351,7 +351,7 @@ preference, add it to the schema and this guide.
 This section is derived from
 `repos/emulebb-build-tests/manifests/preference-schema.v1.json`.
 
-Total `preferences.ini` schema entries: **335**.
+Total `preferences.ini` schema entries: **336**.
 
 Dynamic rows are generated families tracked by source expression rather
 than a finite static key list. Empty defaults or normalizers mean the
@@ -526,6 +526,15 @@ above for user-facing defaults and ranges.
   - Owner/API: m_bBlockNetworkWhenBindUnavailableAtStartup
   - Default and normalization: Not explicitly declared in schema
   - UI: PPgConnection.cpp
+  - REST: None
+  - Notes: None
+
+- **`CaptureFullCrashDump`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: GetCaptureFullCrashDump, SetCaptureFullCrashDump
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgTweaks.cpp
   - REST: None
   - Notes: None
 
@@ -1197,6 +1206,15 @@ above for user-facing defaults and ranges.
   - UI: PPgTweaks.cpp
   - REST: None
   - Notes: None
+
+- **`MiniMule`**
+  - Type: bool
+  - Access: read, write
+  - Owner/API: m_bEnableMiniMule
+  - Default and normalization: Not explicitly declared in schema
+  - UI: PPgGeneral.cpp
+  - REST: None
+  - Notes: Native MiniMule enable switch.
 
 - **`MinToTray`**
   - Type: bool
@@ -2251,6 +2269,16 @@ above for user-facing defaults and ranges.
   - REST: None
   - Notes: None
 
+- **`MediaInfo_MediaInfoDllPath`**
+  - Type: string
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: Not explicitly declared in schema
+  - UI: None
+  - REST: None
+  - Notes: Optional MediaInfo.dll lookup path. The `<noload>` token intentionally
+           disables the optional DLL while keeping built-in metadata fallbacks.
+
 - **`MessageFromValidSourcesOnly`**
   - Type: bool
   - Access: read, write
@@ -2547,6 +2575,15 @@ above for user-facing defaults and ranges.
   - UI: None
   - REST: None
   - Notes: None
+
+- **`SearchResultsFileSizeFormat`**
+  - Type: integer
+  - Access: read, write
+  - Owner/API: None
+  - Default and normalization: SetSearchResultsFileSizeFormat
+  - UI: None
+  - REST: None
+  - Notes: Search results file-size display mode: default, KiB, or MiB.
 
 - **`SecureIdent`**
   - Type: bool
