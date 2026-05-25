@@ -55,7 +55,7 @@ Rules:
   values
 - new user input should prefer explicit UI/REST validation over silent rewrite
 - string reads and writes go through the shared Unicode INI/profile path
-- BB-owned sections are used only where they make behavior clearer without
+- eMuleBB-owned sections are used only where they make behavior clearer without
   breaking stock placement
 
 Known case-only canonical writes include `StatsInterval`, `AutoCat`,

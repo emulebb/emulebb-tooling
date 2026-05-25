@@ -702,7 +702,7 @@ eMuleBB also writes branch-specific state such as `shareignore.dat`,
 monitored-share files, shared-library caches, REST/WebServer settings,
 geolocation/IP-filter updater state, and preference schema markers. Older stock
 clients can ignore many unknown text preferences, but they do not understand all
-BB sharing policy, cache files, or controller-side behavior.
+eMuleBB sharing policy, cache files, or controller-side behavior.
 
 IPv6 roadmap language has two separate meanings. Current-network dual-stack
 compatibility is tracked by [FEAT-035](../active/items/FEAT-035.md). A separate

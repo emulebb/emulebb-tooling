@@ -26,7 +26,7 @@ Important sharing files:
 | `shareddir.dat` | Main shared directory list |
 | `shareddir.monitored.dat` | Roots watched for automatic share changes |
 | `shareddir.monitor-owned.dat` | Roots added by monitor ownership |
-| `shareignore.dat` | BB-specific ignore rules for share scanning |
+| `shareignore.dat` | eMuleBB-specific ignore rules for share scanning |
 | `sharedcache.dat` | Startup cache for large shared libraries |
 | `shareddups.dat` | Duplicate path cache |
 | `known.met`, `known2_64.met` | Known shared-file metadata and AICH state |
@@ -46,9 +46,9 @@ Use it for:
 - folders managed by another tool
 - file patterns that should never be shared
 
-After editing, use the matching Tools reload action. Share-ignore is eMule
-BB-specific policy; older stock clients do not understand why BB ignored a
-matched file.
+After editing, use the matching Tools reload action. Share-ignore is
+eMuleBB-specific policy; older stock clients do not understand why eMuleBB
+ignored a matched file.
 
 ## Monitored Shares
 
