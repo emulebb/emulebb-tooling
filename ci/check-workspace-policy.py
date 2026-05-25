@@ -661,15 +661,25 @@ def tracked_powershell_paths(repo_root: Path) -> tuple[str, ...]:
     return run_git(repo_root, ["ls-files", "*.ps1"]).lines
 
 
+def is_direct_child_of(normalized_path: str, directory: str) -> bool:
+    """Returns whether a slash-normalized path is a direct child of directory."""
+
+    if not normalized_path.startswith(directory):
+        return False
+    child_name = normalized_path[len(directory) :]
+    return bool(child_name) and "/" not in child_name
+
+
 def audit_powershell_boundary(root: Path) -> None:
     """Checks that only approved Windows runtime assets carry PowerShell."""
 
     tooling_root = resolve_workspace_path(root, r"repos\emulebb-tooling")
     amutorrent_root = resolve_workspace_path(root, r"repos\amutorrent")
+    build_root = resolve_workspace_path(root, r"repos\emulebb-build")
     scan_roots = (
         tooling_root,
         amutorrent_root,
-        resolve_workspace_path(root, r"repos\emulebb-build"),
+        build_root,
         resolve_workspace_path(root, r"repos\emulebb-build-tests"),
         resolve_workspace_path(root, r"repos\emulebb"),
         resolve_workspace_path(root, r"workspaces\workspace\app\emulebb-main"),
@@ -688,9 +698,19 @@ def audit_powershell_boundary(root: Path) -> None:
                 if first_non_empty != "#Requires -Version 5.1":
                     issues.append(f"{path}: aMuTorrent installer PowerShell must declare #Requires -Version 5.1.")
                 continue
+            if repo_root == build_root and is_direct_child_of(
+                normalized,
+                "emule_workspace/release_assets/emule/scripts/",
+            ):
+                path = repo_root / relative_path
+                first_non_empty = next((line.strip() for line in read_text(path).splitlines() if line.strip()), "")
+                if first_non_empty != "#Requires -Version 5.1":
+                    issues.append(f"{path}: eMuleBB runtime PowerShell must declare #Requires -Version 5.1.")
+                continue
             issues.append(
                 f"{repo_root}\\{relative_path}: tracked PowerShell is only allowed under "
-                "repos\\amutorrent\\installer\\windows."
+                "repos\\amutorrent\\installer\\windows or "
+                "repos\\emulebb-build\\emule_workspace\\release_assets\\emule\\scripts."
             )
     if issues:
         raise RuntimeError("\n".join(issues))

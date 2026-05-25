@@ -271,7 +271,12 @@ Routine `validate` in `repos\emulebb-build` must run the active static audits:
 - `repos\amutorrent\installer\windows\*.ps1` is allowed for aMuTorrent-owned
   native Windows installer/setup assets. These scripts are product runtime
   assets and must stay compatible with Windows PowerShell `5.1`.
-- Allowed aMuTorrent scripts must declare `#Requires -Version 5.1`.
+- `repos\emulebb-build\emule_workspace\release_assets\emule\scripts\*.ps1`
+  is allowed for eMuleBB package-owned native Windows setup and integration
+  assets staged into `eMule\scripts`. These scripts are product runtime assets
+  and must stay compatible with Windows PowerShell `5.1`.
+- Allowed aMuTorrent and eMuleBB runtime scripts must declare
+  `#Requires -Version 5.1`.
 - Workspace hygiene checks must fail when tracked PowerShell appears outside
   the allowed path or when an allowed script omits the required header.
 

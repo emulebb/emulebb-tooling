@@ -334,7 +334,17 @@ def test_powershell_version_header(repo_root: Path, repo_kind: str, relative_pat
     is_tooling_repo = repo_root.name == "emulebb-tooling" or (repo_root / "ci" / "check-workspace-policy.py").is_file()
     normalized_path = normalize_path(relative_path)
     is_amutorrent_installer = (repo_root.name == "amutorrent" or repo_kind == "amutorrent") and normalized_path.startswith("installer/windows/")
-    expected_version = "5.1" if (is_tooling_repo and normalized_path.startswith("scripts/")) or is_amutorrent_installer else "7.6"
+    is_emulebb_runtime_script = (repo_root.name == "emulebb-build" or repo_kind == "emulebb-build") and is_direct_child_of(
+        normalized_path,
+        "emule_workspace/release_assets/emule/scripts/",
+    )
+    expected_version = (
+        "5.1"
+        if (is_tooling_repo and normalized_path.startswith("scripts/"))
+        or is_amutorrent_installer
+        or is_emulebb_runtime_script
+        else "7.6"
+    )
     expected_header = f"#Requires -Version {expected_version}"
     first_non_empty_line = next((line.strip() for line in path.read_text(encoding="utf-8-sig").splitlines() if line.strip()), "")
     if first_non_empty_line == expected_header:
@@ -359,6 +369,15 @@ def normalize_path(value: str) -> str:
     """Returns a slash-normalized relative path."""
 
     return value.replace("\\", "/").lower()
+
+
+def is_direct_child_of(normalized_path: str, directory: str) -> bool:
+    """Returns whether a slash-normalized path is a direct child of directory."""
+
+    if not normalized_path.startswith(directory):
+        return False
+    child_name = normalized_path[len(directory) :]
+    return bool(child_name) and "/" not in child_name
 
 
 def write_summary(summary: dict[str, Any], summary_path: Path | None) -> None:
