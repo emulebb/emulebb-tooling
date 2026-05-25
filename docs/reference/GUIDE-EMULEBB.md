@@ -1,16 +1,26 @@
 # eMuleBB Product Guide
 
-eMuleBB is the broadband edition of classic eMule. It keeps the native Windows
-desktop workflow and stock-compatible eD2K/Kad behavior while adding modern
-defaults, stronger profile handling, large-library support, diagnostics, and a
-trusted local REST/controller surface.
+<section class="docs-hero">
+  <div>
+    <p class="docs-eyebrow">Product manual</p>
+    <h2>Run eMule like a serious broadband client.</h2>
+    <p>
+      eMuleBB keeps the native Windows desktop workflow and stock-compatible
+      eD2K/Kad behavior while adding modern defaults, stronger profile
+      handling, large-library support, diagnostics, and a trusted local
+      REST/controller surface.
+    </p>
+  </div>
+  <img alt="eMuleBB broadband edition logo" src="../assets/brand/emulebb-broadband-edition-logo.png" />
+</section>
 
 This is the product manual entry point. It links to focused guide chapters and
 summarizes the behavior that matters when operating the app.
 
-## Audience
+## Who This Is For
 
-eMuleBB is for users and operators who want a long-running native eMule client:
+eMuleBB is for users and operators who want a long-running native eMule client
+with explicit control:
 
 - power users with sustained broadband upload capacity
 - archivists and seeders with large shared libraries
@@ -20,6 +30,55 @@ eMuleBB is for users and operators who want a long-running native eMule client:
 
 It is not a rewrite and not a headless daemon. The desktop app owns the live
 state; REST and companion tools adapt to that state.
+
+## Why It Exists
+
+Classic eMule still has the right shape for eD2K/Kad: a native client with
+visible queues, explicit sharing, server/Kad state, and user-owned profiles.
+Modern usage needs tighter defaults around broadband links, path handling,
+large libraries, diagnostics, packaging, and automation.
+
+eMuleBB focuses on those gaps:
+
+| Power-user need | eMuleBB answer |
+|---|---|
+| Keep an existing profile under control | Explicit profile model, `-c` profiles, documented state files |
+| Run large shares without guessing | Large-library guidance, share-ignore rules, monitored-share behavior |
+| Diagnose real problems | Logs, dumps, performance evidence, symptom-led troubleshooting |
+| Use modern controllers | Native REST, aMuTorrent, qBit-compatible, and Torznab adapter docs |
+| Preserve eMule behavior | Stock-compatible eD2K/Kad defaults and native desktop authority |
+
+## First Hour Workflow
+
+1. Unpack or install eMuleBB into its own application directory.
+2. Launch with a deliberate profile directory, especially for test packages:
+
+   ```powershell
+   emulebb.exe -c C:\Path\To\eMuleBB-Profile
+   ```
+
+3. Set incoming and temp directories before starting serious downloads.
+4. Configure TCP/UDP ports, firewall, and UPnP or manual forwarding.
+5. Connect eD2K and/or Kad and confirm the state is understandable.
+6. Add one small shared directory and verify it on the Shared Files page.
+7. Run one small search or add one known safe link.
+8. Only then enable REST, aMuTorrent, Prowlarr, Radarr, or Sonarr.
+
+The fastest way to lose clarity is to start a copied profile, a controller, an
+Arr app, and a large share scan all at the same time. Prove one layer, then add
+the next.
+
+## Daily Operating Model
+
+eMuleBB should feel familiar if you know classic eMule, but the operating model
+is stricter:
+
+- profiles are explicit and backed up before risky testing
+- incoming, temp, and shared directories are separate concepts
+- categories carry real path and controller meaning
+- REST is trusted local automation, not a public internet service
+- controllers preserve native eMule semantics instead of replacing them
+- diagnostics should be collected before changing too many variables
 
 Release documentation follows the same rule as the product: every shipped
 feature needs an operator-facing description, a preference/API reference when
@@ -80,11 +139,13 @@ For an existing profile:
 | eD2K, Kad, ports, binding, UPnP, firewall, WebServer network behavior | [Network Guide](GUIDE-NETWORK.md) |
 | Downloads, search, categories, broadband upload policy, transfer behavior | [Downloads and Search Guide](GUIDE-DOWNLOADS-SEARCH.md) |
 | Shared directories, monitored shares, large libraries, share-ignore rules | [Sharing Guide](GUIDE-SHARING.md) |
+| eMuleBB plus aMuTorrent plus Prowlarr/Radarr/Sonarr workflows | [Stack Integration Guide](GUIDE-STACK-INTEGRATIONS.md) |
 | REST setup, aMuTorrent, Arr, qBit, Torznab, lifecycle, and controller safety | [Controllers and REST Guide](GUIDE-CONTROLLERS-REST.md) |
 | IP filter setup, updates, manual reloads, formats, levels, and troubleshooting | [IP Filter Guide](GUIDE-IP-FILTERS.md) |
 | Deep Windows long-path behavior | [Long Path Guide](GUIDE-LONGPATHS.md) |
 | Keyboard and menu workflow | [Keyboard Shortcuts](KEYBOARD-SHORTCUTS.md) |
 | Symptom-led diagnostics, support evidence, Low ID, Kad, REST, and disk-space triage | [Troubleshooting Guide](GUIDE-TROUBLESHOOTING.md) |
+| Translation terminology, localized homepage rules, and glossary | [Translations And Localization](GUIDE-TRANSLATIONS.md) |
 | Development, validation, CI, packaging, and guide refresh workflow | [Development Guide](DEVELOPMENT-GUIDE.md) |
 
 ## Public Documentation And Evidence

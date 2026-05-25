@@ -3,6 +3,11 @@
 This guide explains how eMuleBB should be used with trusted local controllers,
 automation, and compatibility adapters.
 
+For a task-first product walkthrough of eMuleBB with aMuTorrent, Prowlarr,
+Radarr, and Sonarr, start with the
+[Stack Integration Guide](GUIDE-STACK-INTEGRATIONS.md). This page is the
+controller behavior reference.
+
 ## REST Is The Preferred Controller Path
 
 eMuleBB exposes JSON REST under `/api/v1` through the embedded WebServer
@@ -218,6 +223,29 @@ Expectations:
 For Arr-style automation, validate both search/indexer behavior and download
 client behavior. A working Torznab search does not prove transfer management is
 correct.
+
+The most common manual setup values are:
+
+| Surface | Value |
+|---|---|
+| Prowlarr indexer type | Generic Torznab |
+| Prowlarr base URL | `http://HOST:PORT/indexer/emulebb` |
+| Prowlarr API path | `/api` |
+| Prowlarr API key | eMuleBB REST/Web API key |
+| Movie category | `2000` |
+| TV category | `5000` |
+| Radarr/Sonarr download client type | qBittorrent |
+| qBit host and port | eMuleBB WebServer/REST host and port |
+| qBit username | Any non-empty value, for example `emule` |
+| qBit password | eMuleBB REST/Web API key |
+| Radarr category | `emulebb-radarr` |
+| Sonarr category | `emulebb-sonarr` |
+
+Release packages may include helper scripts under `eMule\scripts`:
+`register-prowlarr.ps1` for the Prowlarr indexer and
+`register-arr-stack.ps1` for Radarr/Sonarr download-client registration plus
+optional Prowlarr application sync. The scripts are conveniences over the same
+documented adapter surfaces; they do not add a separate protocol.
 
 ## Lifecycle
 

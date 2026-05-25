@@ -170,7 +170,9 @@ For trusted local automation:
 
 REST is the supported controller surface. The legacy HTML template UI is frozen
 pending removal and should not be treated as a maintained setup target. See
-[Controllers and REST Guide](GUIDE-CONTROLLERS-REST.md).
+[Controllers and REST Guide](GUIDE-CONTROLLERS-REST.md). For a full
+eMuleBB plus aMuTorrent plus Prowlarr/Radarr/Sonarr setup, use the
+[Stack Integration Guide](GUIDE-STACK-INTEGRATIONS.md).
 
 ## Release-Aware Setup
 
