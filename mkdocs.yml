@@ -25,6 +25,10 @@ markdown_extensions:
   - attr_list
   - def_list
   - md_in_html
+  - pymdownx.highlight:
+      anchor_linenums: true
+      pygments_lang_class: true
+  - pymdownx.superfences
   - tables
   - toc:
       permalink: true
