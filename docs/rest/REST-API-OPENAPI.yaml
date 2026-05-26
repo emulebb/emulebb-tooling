@@ -48,6 +48,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/AppResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /app/preferences:
     get:
       tags: [App]
@@ -56,6 +58,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/PreferencesResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
     patch:
       tags: [App]
       summary: Update controller-relevant preferences.
@@ -69,6 +73,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/PreferencesResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /app/shutdown:
     post:
       tags: [App]
@@ -87,6 +93,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/OkAcceptedResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /diagnostics/dumps:
     post:
       tags: [Diagnostics]
@@ -104,6 +112,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/DiagnosticDumpResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /diagnostics/crash-tests:
     post:
       tags: [Diagnostics]
@@ -123,6 +133,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/OkAcceptedResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /status:
     get:
       tags: [Stats]
@@ -131,6 +143,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/StatusResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /snapshot:
     get:
       tags: [Stats]
@@ -141,6 +155,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/SnapshotResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /stats:
     get:
       tags: [Stats]
@@ -149,6 +165,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/StatsResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /categories:
     get:
       tags: [Categories]
@@ -157,6 +175,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/CategoryListResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
     post:
       tags: [Categories]
       summary: Create a download category.
@@ -170,6 +190,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/CategoryResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /categories/{categoryId}:
     parameters:
       - $ref: "#/components/parameters/CategoryId"
@@ -180,6 +202,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/CategoryResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
     patch:
       tags: [Categories]
       summary: Update one download category.
@@ -193,6 +217,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/CategoryResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
     delete:
       tags: [Categories]
       summary: Delete one download category.
@@ -200,6 +226,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/OkResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /transfers:
     get:
       tags: [Transfers]
@@ -219,6 +247,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/TransferListResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
     post:
       tags: [Transfers]
       summary: Add one or more ED2K links to downloads.
@@ -232,6 +262,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/BulkOperationResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /transfers/operations/clear-completed:
     post:
       tags: [Transfers]
@@ -246,6 +278,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/OkResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /transfers/{hash}:
     parameters:
       - $ref: "#/components/parameters/FileHash"
@@ -256,6 +290,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/TransferResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
     patch:
       tags: [Transfers]
       summary: Update mutable transfer properties.
@@ -269,23 +305,41 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/TransferResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
     delete:
       tags: [Transfers]
-      summary: Cancel an incomplete transfer.
+      summary: Remove a completed transfer row without deleting the completed file.
       description: >
-        Cancels an incomplete native eMule transfer. Native cancel does not
-        preserve partial .part state, so callers must send deleteFiles=true for
-        incomplete transfers.
+        Removes a completed transfer from the native transfer list without
+        deleting the completed file. Incomplete transfers cannot preserve their
+        partial .part state when cancelled; use
+        `DELETE /transfers/{hash}/files?confirm=true` to cancel an incomplete
+        transfer and delete its local part data.
       operationId: deleteTransfer
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/TransferDeleteFilesRequest"
       responses:
         "200":
           $ref: "#/components/responses/BulkOperationResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
+  /transfers/{hash}/files:
+    parameters:
+      - $ref: "#/components/parameters/FileHash"
+    delete:
+      tags: [Transfers]
+      summary: Delete one transfer and its local data.
+      description: >
+        Cancels/removes the transfer and deletes the local completed file or
+        incomplete .part data. This route is the REST v1 replacement for the
+        pre-RC body-required destructive transfer delete payload.
+      operationId: deleteTransferFiles
+      parameters:
+        - $ref: "#/components/parameters/Confirm"
+      responses:
+        "200":
+          $ref: "#/components/responses/BulkOperationResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /transfers/{hash}/details:
     parameters:
       - $ref: "#/components/parameters/FileHash"
@@ -296,6 +350,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/TransferDetailsResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /transfers/{hash}/sources:
     parameters:
       - $ref: "#/components/parameters/FileHash"
@@ -306,6 +362,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/TransferSourceListResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /transfers/{hash}/sources/{clientId}:
     parameters:
       - $ref: "#/components/parameters/FileHash"
@@ -317,6 +375,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/TransferSourceResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /transfers/{hash}/sources/{clientId}/operations/browse:
     parameters:
       - $ref: "#/components/parameters/FileHash"
@@ -328,6 +388,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/TransferSourceBrowseResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /transfers/{hash}/sources/{clientId}/operations/add-friend:
     parameters:
       - $ref: "#/components/parameters/FileHash"
@@ -339,6 +401,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/FriendResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /transfers/{hash}/sources/{clientId}/operations/remove-friend:
     parameters:
       - $ref: "#/components/parameters/FileHash"
@@ -350,6 +414,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/OkResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /transfers/{hash}/sources/{clientId}/operations/remove:
     parameters:
       - $ref: "#/components/parameters/FileHash"
@@ -361,6 +427,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/OkResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /transfers/{hash}/sources/{clientId}/operations/ban:
     parameters:
       - $ref: "#/components/parameters/FileHash"
@@ -372,6 +440,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/PeerBanResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /transfers/{hash}/sources/{clientId}/operations/unban:
     parameters:
       - $ref: "#/components/parameters/FileHash"
@@ -383,6 +453,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/PeerBanResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /transfers/{hash}/sources/{clientId}/operations/release-slot:
     parameters:
       - $ref: "#/components/parameters/FileHash"
@@ -394,6 +466,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/OkResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /transfers/{hash}/operations/pause:
     parameters:
       - $ref: "#/components/parameters/FileHash"
@@ -404,6 +478,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/BulkOperationResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /transfers/{hash}/operations/resume:
     parameters:
       - $ref: "#/components/parameters/FileHash"
@@ -414,6 +490,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/BulkOperationResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /transfers/{hash}/operations/stop:
     parameters:
       - $ref: "#/components/parameters/FileHash"
@@ -424,6 +502,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/BulkOperationResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /transfers/{hash}/operations/recheck:
     parameters:
       - $ref: "#/components/parameters/FileHash"
@@ -434,6 +514,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/OkAcceptedResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /transfers/{hash}/operations/preview:
     parameters:
       - $ref: "#/components/parameters/FileHash"
@@ -444,6 +526,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/TransferResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /shared-files:
     get:
       tags: [SharedFiles]
@@ -455,6 +539,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/SharedFileListResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
     post:
       tags: [SharedFiles]
       summary: Add one local file to the known shared file set.
@@ -468,6 +554,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/SharedFileCreateResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /shared-files/operations/reload:
     post:
       tags: [SharedFiles]
@@ -476,6 +564,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/OkAcceptedResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /shared-files/{hash}:
     parameters:
       - $ref: "#/components/parameters/FileHash"
@@ -486,6 +576,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/SharedFileResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
     patch:
       tags: [SharedFiles]
       summary: Update shared-file metadata and upload priority.
@@ -499,19 +591,35 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/SharedFileResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
     delete:
       tags: [SharedFiles]
-      summary: Unshare a file, optionally deleting the local file.
+      summary: Unshare a file without deleting it from disk.
       operationId: deleteSharedFile
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/DeleteFilesRequest"
       responses:
         "200":
           $ref: "#/components/responses/SharedFileDeleteResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
+  /shared-files/{hash}/file:
+    parameters:
+      - $ref: "#/components/parameters/FileHash"
+    delete:
+      tags: [SharedFiles]
+      summary: Delete one shared file from disk.
+      description: >
+        Deletes the local file and removes it from the shared-file set. This
+        route is the REST v1 replacement for the pre-RC body-required
+        destructive shared-file delete payload.
+      operationId: deleteSharedFileContent
+      parameters:
+        - $ref: "#/components/parameters/Confirm"
+      responses:
+        "200":
+          $ref: "#/components/responses/SharedFileDeleteResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /shared-files/{hash}/ed2k-link:
     parameters:
       - $ref: "#/components/parameters/FileHash"
@@ -522,6 +630,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/Ed2kLinkResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /shared-files/{hash}/comments:
     parameters:
       - $ref: "#/components/parameters/FileHash"
@@ -532,6 +642,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/CommentListResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /shared-directories:
     get:
       tags: [SharedDirectories]
@@ -540,6 +652,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/SharedDirectoryListResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
     patch:
       tags: [SharedDirectories]
       summary: Replace configured shared directory roots.
@@ -553,6 +667,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/SharedDirectoryListResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /shared-directories/operations/reload:
     post:
       tags: [SharedDirectories]
@@ -561,6 +677,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/OkAcceptedResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /uploads:
     get:
       tags: [Uploads]
@@ -569,6 +687,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/UploadListResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /uploads/{clientId}:
     parameters:
       - $ref: "#/components/parameters/ClientId"
@@ -579,6 +699,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/UploadResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /uploads/{clientId}/operations/release-slot:
     parameters:
       - $ref: "#/components/parameters/ClientId"
@@ -589,6 +711,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/OkResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /uploads/{clientId}/operations/remove:
     parameters:
       - $ref: "#/components/parameters/ClientId"
@@ -599,6 +723,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/UploadRemoveResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /uploads/{clientId}/operations/add-friend:
     parameters:
       - $ref: "#/components/parameters/ClientId"
@@ -609,6 +735,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/FriendResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /uploads/{clientId}/operations/remove-friend:
     parameters:
       - $ref: "#/components/parameters/ClientId"
@@ -619,6 +747,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/OkResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /uploads/{clientId}/operations/ban:
     parameters:
       - $ref: "#/components/parameters/ClientId"
@@ -629,6 +759,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/PeerBanResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /uploads/{clientId}/operations/unban:
     parameters:
       - $ref: "#/components/parameters/ClientId"
@@ -639,6 +771,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/PeerBanResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /upload-queue:
     get:
       tags: [Uploads]
@@ -650,6 +784,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/UploadQueueListResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /upload-queue/{clientId}/operations/remove:
     parameters:
       - $ref: "#/components/parameters/ClientId"
@@ -660,6 +796,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/UploadRemoveResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /upload-queue/{clientId}:
     parameters:
       - $ref: "#/components/parameters/ClientId"
@@ -670,6 +808,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/UploadQueueEntryResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /upload-queue/{clientId}/operations/release-slot:
     parameters:
       - $ref: "#/components/parameters/ClientId"
@@ -680,6 +820,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/OkResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /upload-queue/{clientId}/operations/add-friend:
     parameters:
       - $ref: "#/components/parameters/ClientId"
@@ -690,6 +832,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/FriendResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /upload-queue/{clientId}/operations/remove-friend:
     parameters:
       - $ref: "#/components/parameters/ClientId"
@@ -700,6 +844,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/OkResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /upload-queue/{clientId}/operations/ban:
     parameters:
       - $ref: "#/components/parameters/ClientId"
@@ -710,6 +856,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/PeerBanResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /upload-queue/{clientId}/operations/unban:
     parameters:
       - $ref: "#/components/parameters/ClientId"
@@ -720,6 +868,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/PeerBanResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /servers:
     get:
       tags: [Servers]
@@ -728,6 +878,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/ServerListResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
     post:
       tags: [Servers]
       summary: Add an ED2K server.
@@ -741,6 +893,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/ServerResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /servers/operations/connect:
     post:
       tags: [Servers]
@@ -749,6 +903,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/ServerStatusResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /servers/operations/disconnect:
     post:
       tags: [Servers]
@@ -757,6 +913,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/ServerStatusResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /servers/operations/import-met-url:
     post:
       tags: [Servers]
@@ -771,6 +929,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/UrlImportResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /servers/{serverId}:
     parameters:
       - $ref: "#/components/parameters/ServerId"
@@ -781,6 +941,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/ServerResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
     patch:
       tags: [Servers]
       summary: Update one ED2K server.
@@ -794,6 +956,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/ServerResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
     delete:
       tags: [Servers]
       summary: Remove one ED2K server.
@@ -801,6 +965,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/ServerResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /servers/{serverId}/operations/connect:
     parameters:
       - $ref: "#/components/parameters/ServerId"
@@ -811,6 +977,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/ServerStatusResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /kad:
     get:
       tags: [Kad]
@@ -819,6 +987,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/KadResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /kad/operations/import-nodes-url:
     post:
       tags: [Kad]
@@ -833,6 +1003,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/UrlImportResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /kad/operations/start:
     post:
       tags: [Kad]
@@ -841,6 +1013,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/KadResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /kad/operations/stop:
     post:
       tags: [Kad]
@@ -849,6 +1023,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/KadResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /kad/operations/bootstrap:
     post:
       tags: [Kad]
@@ -863,6 +1039,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/KadResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /kad/operations/recheck-firewall:
     post:
       tags: [Kad]
@@ -871,6 +1049,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/KadResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /searches:
     get:
       tags: [Searches]
@@ -879,6 +1059,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/SearchListResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
     post:
       tags: [Searches]
       summary: Start a search.
@@ -892,19 +1074,19 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/SearchResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
     delete:
       tags: [Searches]
       summary: Delete all search sessions.
       operationId: deleteSearches
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/DeleteAllSearchesRequest"
+      parameters:
+        - $ref: "#/components/parameters/Confirm"
       responses:
         "200":
           $ref: "#/components/responses/OkResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /searches/{searchId}:
     parameters:
       - $ref: "#/components/parameters/SearchId"
@@ -922,6 +1104,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/SearchResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
     delete:
       tags: [Searches]
       summary: Stop and delete one search session.
@@ -929,6 +1113,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/OkResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /searches/{searchId}/results/{hash}/operations/download:
     parameters:
       - $ref: "#/components/parameters/SearchId"
@@ -946,6 +1132,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/SearchResultDownloadResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /friends:
     get:
       tags: [Friends]
@@ -954,6 +1142,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/FriendListResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
     post:
       tags: [Friends]
       summary: Add a friend by user hash.
@@ -967,6 +1157,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/FriendResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /friends/{userHash}:
     parameters:
       - $ref: "#/components/parameters/UserHash"
@@ -977,6 +1169,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/OkResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /logs:
     get:
       tags: [Logs]
@@ -987,6 +1181,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/LogListResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /logs/operations/clear:
     post:
       tags: [Logs]
@@ -1001,6 +1197,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/OkResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
 components:
   securitySchemes:
     ApiKeyAuth:
@@ -1016,14 +1214,22 @@ components:
         type: integer
         minimum: 0
         maximum: 4294967295
+    Confirm:
+      name: confirm
+      in: query
+      required: true
+      schema:
+        type: boolean
+        enum: [true]
+      description: Required explicit confirmation for destructive body-free DELETE routes.
     ClientId:
       name: clientId
       in: path
       required: true
       schema:
         type: string
-        pattern: "^([0-9a-f]{32}|[^/:]+:(6553[0-5]|655[0-2][0-9]|65[0-4][0-9]{2}|6[0-4][0-9]{3}|[1-5][0-9]{4}|[1-9][0-9]{0,3}))$"
-      description: Stable client selector returned by upload or queue rows, either a lowercase MD4 hash or an `address:port` endpoint token.
+        pattern: "^([0-9a-f]{32}|[^/]+:(6553[0-5]|655[0-2][0-9]|65[0-4][0-9]{2}|6[0-4][0-9]{3}|[1-5][0-9]{4}|[1-9][0-9]{0,3}))$"
+      description: Stable client selector returned by upload or queue rows, either a lowercase MD4 hash or an endpoint token parsed at the final `address:port` colon.
     FileHash:
       name: hash
       in: path
@@ -1061,8 +1267,8 @@ components:
       required: true
       schema:
         type: string
-        pattern: "^[^/:]+:(6553[0-5]|655[0-2][0-9]|65[0-4][0-9]{2}|6[0-4][0-9]{3}|[1-5][0-9]{4}|[1-9][0-9]{0,3})$"
-      description: URL-encoded `address:port` composite id.
+        pattern: "^[^/]+:(6553[0-5]|655[0-2][0-9]|65[0-4][0-9]{2}|6[0-4][0-9]{3}|[1-5][0-9]{4}|[1-9][0-9]{0,3})$"
+      description: URL-encoded endpoint token parsed at the final `address:port` colon.
     UserHash:
       name: userHash
       in: path
@@ -1396,7 +1602,7 @@ components:
         error:
           type: object
           additionalProperties: false
-          required: [code, message]
+          required: [code, message, details]
           properties:
             code:
               type: string
@@ -1415,7 +1621,7 @@ components:
               description: Human-readable error summary.
             details:
               type: object
-              description: Optional bounded structured diagnostic fields.
+              description: Bounded structured diagnostic fields. Empty when no details are available.
               additionalProperties: true
     Collection:
       type: object
@@ -2537,22 +2743,6 @@ components:
           type: boolean
         sharedFilesRequestPending:
           type: boolean
-    DeleteFilesRequest:
-      type: object
-      additionalProperties: false
-      required: [deleteFiles]
-      properties:
-        deleteFiles:
-          type: boolean
-          default: false
-    TransferDeleteFilesRequest:
-      type: object
-      additionalProperties: false
-      required: [deleteFiles]
-      properties:
-        deleteFiles:
-          type: boolean
-          enum: [true]
     ClearCompletedTransfersRequest:
       type: object
       additionalProperties: false
@@ -2594,14 +2784,6 @@ components:
       required: [confirmCrash]
       properties:
         confirmCrash:
-          type: boolean
-          enum: [true]
-    DeleteAllSearchesRequest:
-      type: object
-      additionalProperties: false
-      required: [confirmDeleteAllSearches]
-      properties:
-        confirmDeleteAllSearches:
           type: boolean
           enum: [true]
     SharedFileListEnvelope:

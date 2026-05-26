@@ -111,7 +111,7 @@ Supported routes:
   - Route: `/api/v2/torrents/delete`
   - Auth: yes
   - Contract role: Delete/cancel transfers by `hashes`; always maps to native
-                   `deleteFiles: true`.
+                   destructive transfer-file deletion semantics.
 
 - **`POST`**
   - Route: `/api/v2/torrents/setcategory`

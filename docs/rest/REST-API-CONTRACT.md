@@ -40,8 +40,9 @@ weaken the native `/api/v1` OpenAPI contract. Torznab movie and TV searches run
 connected `global` and `kad` probes and combine results; non-media Torznab
 families keep the native default `automatic` search policy.
 qBittorrent-compatible transfer delete requests are adapted to native cancel
-semantics and therefore forward `deleteFiles: true` to the shared transfer
-delete command even when a qBit caller omits or clears its optional flag.
+semantics and therefore forward destructive transfer-file deletion to the shared
+transfer delete command even when a qBit caller omits or clears its optional
+flag.
 
 The `/api/v2` surface is a qBittorrent-compatible adapter for Arr download
 client integration only. It is complete when Prowlarr, Radarr, Sonarr, and other
@@ -107,15 +108,16 @@ listener regressions.
   255-character public filename limit used by REST-adjacent link conversion
 - accept server.met and nodes.dat URL imports only as trimmed `http://` or
   `https://` URLs with a host, no whitespace, and a 2048-character limit
-- require explicit booleans such as `deleteFiles: true` for destructive local
-  file deletion
+- keep native v1 `DELETE` routes body-free; destructive disk deletion uses
+  explicit resource targets plus `confirm=true`, such as
+  `DELETE /transfers/{hash}/files?confirm=true`
 - use HTTP 200 for valid bulk requests with per-item results
 - marshal native commands through the main UI thread before touching eMule
   state owned by dialogs, sockets, queues, and list controls
 - keep the route execution model explicit in the native route seam; only
   static/direct-safe routes may bypass the UI-thread dispatch path
 - reject pre-release alias spellings; public request fields are the final
-  OpenAPI names such as `categoryId`, `searchId`, `deleteFiles`,
+  OpenAPI names such as `categoryId`, `searchId`,
   `uploadLimitKiBps`, and `downloadLimitKiBps`
 
 ## Scope
@@ -191,9 +193,8 @@ safety guarantee:
 
 Unknown evidence is neutral, not positive; clients must not display it as
 trusted or safe. Search creation does not clear existing searches as a side
-effect; controllers must call
-`DELETE /api/v1/searches` with `confirmDeleteAllSearches: true` when they need a
-clean search set.
+effect; controllers must call `DELETE /api/v1/searches?confirm=true` when they
+need a clean search set.
 
 `POST /api/v1/searches/{searchId}/results/{hash}/operations/download` starts a
 download from one visible search result by lowercase 32-character eD2K hash and
@@ -201,11 +202,15 @@ returns an operation result with the accepted search id and hash. It does not
 pretend to return a `Transfer` resource before the native download queue has
 materialized one.
 
-`DELETE /api/v1/transfers/{hash}` cancels an incomplete native transfer. eMule
-does not preserve partial `.part` state on cancel, so controllers must send
-`deleteFiles: true` for incomplete transfers and treat that as native cancel
-semantics rather than an optional disk-delete toggle. The route validator
-rejects `deleteFiles: false` before dispatch.
+Native v1 `DELETE` routes do not accept JSON request bodies.
+`DELETE /api/v1/transfers/{hash}` removes a completed transfer row without
+deleting the completed file; incomplete transfers cannot be detached from their
+`.part` state and return a per-item failure. Controllers that intend to cancel
+a transfer and delete local completed or partial data must call
+`DELETE /api/v1/transfers/{hash}/files?confirm=true`.
+`DELETE /api/v1/shared-files/{hash}` unshares/excludes the file without
+deleting it from disk; actual disk deletion is
+`DELETE /api/v1/shared-files/{hash}/file?confirm=true`.
 
 Selected peer reads are available for controller drill-down through
 `GET /transfers/{hash}/sources/{clientId}`, `GET /uploads/{clientId}`, and

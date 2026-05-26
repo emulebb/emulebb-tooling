@@ -48,15 +48,15 @@ be tracked as active item IDs before being added here as pending work.
   - Notes: Only `GET /shared-files` and `GET /upload-queue` expose `offset`/`limit`
            pagination metadata; other list routes are intentionally unpaged.
 
-- **JSON error envelope is `{ error: { code, message, details? } }`**
+- **JSON error envelope is `{ error: { code, message, details } }`**
   - Status: implemented
-  - Notes: Native errors now use `{ error: { code, message } }`; `details` remains
-           optional for future richer validation.
+  - Notes: Native errors always include `details`, using an empty object when no
+           structured diagnostics are available.
 
 - **Field names are `camelCase`**
   - Status: implemented
   - Notes: Pre-release aliases were removed from public route parsing; final names
-           include `searchId`, `categoryId`, `deleteFiles`, and `*KiBps` speed fields.
+           include `searchId`, `categoryId`, `confirm`, and `*KiBps` speed fields.
 
 - **Mutations return the updated resource when practical**
   - Status: implemented
@@ -71,9 +71,10 @@ be tracked as active item IDs before being added here as pending work.
 
 - **Destructive file deletion requires explicit confirmation**
   - Status: implemented
-  - Notes: Transfer deletes require `deleteFiles: true`; shared-file deletes require an
-           explicit boolean because `false` means unshare/exclude without deleting the
-           local file. `delete_files` is no longer public API.
+  - Notes: Native v1 `DELETE` routes are body-free. Disk deletion uses explicit
+           resource targets plus `confirm=true`, for example
+           `/transfers/{hash}/files?confirm=true` and
+           `/shared-files/{hash}/file?confirm=true`.
 
 - **aMuTorrent consumes this OpenAPI surface statically**
   - Status: implemented
@@ -210,15 +211,15 @@ be tracked as active item IDs before being added here as pending work.
   - Impact and notes: Returns the stable per-item operation envelope.
 
 - **Cancel transfer**
-  - REST target: `DELETE /transfers/{hash}` with `deleteFiles: true`
+  - REST target: `DELETE /transfers/{hash}/files?confirm=true`
   - Status: implemented
   - Impact and notes: Native eMule cancel removes partial `.part` state; adapters must
-                      not send `deleteFiles:false` for incomplete transfers.
+                      use the explicit file target for incomplete transfers.
 
 - **Delete transfer local files**
-  - REST target: `DELETE /transfers/{hash}` with `deleteFiles: true`
+  - REST target: `DELETE /transfers/{hash}/files?confirm=true`
   - Status: implemented
-  - Impact and notes: `deleteFiles` is the preferred spelling.
+  - Impact and notes: This is the destructive transfer delete target for v1.
 
 - **Clear completed transfers**
   - REST target: `POST /transfers/operations/clear-completed`
@@ -318,14 +319,13 @@ be tracked as active item IDs before being added here as pending work.
 - **Unshare one file**
   - REST target: `DELETE /shared-files/{hash}`
   - Status: implemented
-  - Impact and notes: Uses final `deleteFiles` naming and returns the delete-result
-                      envelope.
+  - Impact and notes: Unshares/excludes the file without deleting it from disk and
+                      returns the delete-result envelope.
 
 - **Delete shared local file**
-  - REST target: `DELETE /shared-files/{hash}` with `deleteFiles: true`
+  - REST target: `DELETE /shared-files/{hash}/file?confirm=true`
   - Status: implemented
-  - Impact and notes: Native deletion requires explicit `deleteFiles:true`; default
-                      delete only unshares/excludes where allowed.
+  - Impact and notes: Native deletion requires the explicit destructive file target.
 
 - **Set shared-file upload priority**
   - REST target: `PATCH /shared-files/{hash}`
@@ -487,7 +487,7 @@ be tracked as active item IDs before being added here as pending work.
   - Impact and notes: Final route deletes the search session.
 
 - **Delete all searches**
-  - REST target: `DELETE /searches`
+  - REST target: `DELETE /searches?confirm=true`
   - Status: implemented
   - Impact and notes: Uses the existing delete-all-searches UI action.
 
@@ -503,7 +503,7 @@ be tracked as active item IDs before being added here as pending work.
   - Impact and notes: Returns an operation result with the accepted search id and hash.
 
 - **Clear searches before new search**
-  - REST target: `DELETE /searches`
+  - REST target: `DELETE /searches?confirm=true`
   - Status: implemented
   - Impact and notes: Explicit clear is required; `POST /searches` no longer accepts
                       `clearExisting` before v1 freeze.
@@ -553,7 +553,7 @@ be tracked as active item IDs before being added here as pending work.
 - **qBittorrent transfer delete semantics**
   - Status: implemented
   - Work required: qBit-compatible delete requests always forward native transfer cancel
-                   with `deleteFiles:true`; eMule does not provide a
+                   with destructive-file semantics; eMule does not provide a
                    partial-state-preserving delete for incomplete transfers.
 
 - **Shared-file deletion**
