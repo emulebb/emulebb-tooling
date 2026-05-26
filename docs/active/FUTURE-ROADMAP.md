@@ -144,10 +144,12 @@ Existing anchors:
 
 Scope:
 CShield-style anti-leecher ideas only where the reasons are observable,
-explainable, and low false-positive risk.
+explainable, and low false-positive risk. Layered peer behavior guards should
+prefer log-only evidence, client-local cooldown/quarantine, and only use the
+classic IP ban list for high-confidence IP-level abuse.
 
 Existing anchors:
-`FEAT-011`.
+`FEAT-011`, `FEAT-092`.
 
 ## Explicit Non-Goals
 
