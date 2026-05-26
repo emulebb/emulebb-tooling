@@ -42,7 +42,7 @@ Main user-facing ports:
 Changing peer ports while connected can be confusing. After changing TCP or UDP
 ports, reconnect or restart the session, then re-run reachability checks.
 
-## Binding Policy
+## P2P Binding Policy
 
 Leave binding empty unless a specific interface or address is required.
 
@@ -58,16 +58,21 @@ Use address binding only when:
 - a specific local address must be chosen
 - you understand the address can disappear after network changes
 
-Released bind behavior covers peer TCP, client UDP, server UDP, pinger-adjacent
-network paths, and UPnP discovery where applicable. When `BindInterface`
-resolves to a concrete IPv4 adapter, eMuleBB also applies Windows
-`IP_UNICAST_IF` to P2P TCP/UDP sockets so outbound IPv4 traffic is tied to the
-resolved adapter index in addition to the local bind address. The WebServer/REST
-bind address is separate from the P2P bind address.
+eMuleBB treats P2P binding as an active connectivity policy. When a named
+interface is configured, the P2P stack resolves that interface to its current
+IPv4 address and adapter index, then uses both pieces of information for P2P
+socket setup. That means the listener bind selects the local address, and the
+Windows `IP_UNICAST_IF` socket option pins IPv4 egress to the resolved adapter
+where Windows supports it.
+
+Released bind behavior covers peer TCP, client UDP, server UDP,
+pinger-adjacent network paths, layered/proxy TCP paths, and UPnP discovery where
+applicable. The WebServer/REST bind address is intentionally separate from the
+P2P bind address.
 
 If the configured bind target cannot be resolved, eMuleBB reports the active
 bind state in UI/diagnostics. With startup bind blocking enabled, P2P networking
-stays offline for that session instead of silently falling back.
+stays offline for that session instead of using an unintended route.
 
 Released bind coverage:
 
@@ -77,6 +82,7 @@ Released bind coverage:
 | Client UDP listener | Uses the active P2P bind target when configured |
 | Server UDP support | Uses the active P2P bind target where the server path needs local UDP |
 | IPv4 egress interface | Uses `IP_UNICAST_IF` when a named bind interface resolves to an adapter index |
+| Layered/proxy TCP paths | Apply the same local bind and adapter-index selection as direct peer TCP paths |
 | Pinger-adjacent network paths | Keep the same resolved bind decision where applicable |
 | UPnP discovery/mapping | Runs against the selected P2P path where the backend supports it |
 | WebServer/REST | Uses its own WebServer bind address, not the P2P bind address |
@@ -94,7 +100,7 @@ Operational rules:
   interface name is the intended control.
 - named interface binding resolves both the IPv4 address and adapter index; if
   `IP_UNICAST_IF` cannot be applied to required P2P sockets, that socket path
-  fails closed instead of silently falling back.
+  fails closed instead of using an unintended route.
 - startup bind blocking can keep P2P networking offline for the session when
   the required target is unavailable.
 - `ExitOnBindInterfaceLoss` can close the app if the resolved configured
@@ -118,6 +124,17 @@ Recommended VPN-profile shape:
 | Startup bind blocking | Enabled when P2P traffic must not start without the configured interface |
 | Exit on bind loss | Optional, depending on operator preference for closing the desktop app after interface loss |
 | WebServer bind | Usually loopback or another deliberate controller interface, configured separately |
+
+Practical verification is straightforward:
+
+1. Confirm diagnostics show the expected `BindInterface` and resolved P2P local
+   address.
+2. Confirm live TCP/UDP P2P sockets are bound to the resolved interface address.
+3. Capture the VPN and physical adapters during active peer traffic.
+4. Expect eD2K/Kad peer traffic on the selected adapter and no matching P2P
+   listener or peer-port traffic on the physical adapter.
+5. Classify WebServer/REST, UPnP discovery, LAN multicast, and the VPN tunnel
+   itself separately from public P2P traffic.
 
 ## Windows Firewall
 
