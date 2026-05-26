@@ -59,8 +59,11 @@ Use address binding only when:
 - you understand the address can disappear after network changes
 
 Released bind behavior covers peer TCP, client UDP, server UDP, pinger-adjacent
-network paths, and UPnP discovery where applicable. The WebServer/REST bind
-address is separate from the P2P bind address.
+network paths, and UPnP discovery where applicable. When `BindInterface`
+resolves to a concrete IPv4 adapter, eMuleBB also applies Windows
+`IP_UNICAST_IF` to P2P TCP/UDP sockets so outbound IPv4 traffic is tied to the
+resolved adapter index in addition to the local bind address. The WebServer/REST
+bind address is separate from the P2P bind address.
 
 If the configured bind target cannot be resolved, eMuleBB reports the active
 bind state in UI/diagnostics. With startup bind blocking enabled, P2P networking
@@ -73,6 +76,7 @@ Released bind coverage:
 | Peer TCP listener | Uses the active P2P bind target when configured |
 | Client UDP listener | Uses the active P2P bind target when configured |
 | Server UDP support | Uses the active P2P bind target where the server path needs local UDP |
+| IPv4 egress interface | Uses `IP_UNICAST_IF` when a named bind interface resolves to an adapter index |
 | Pinger-adjacent network paths | Keep the same resolved bind decision where applicable |
 | UPnP discovery/mapping | Runs against the selected P2P path where the backend supports it |
 | WebServer/REST | Uses its own WebServer bind address, not the P2P bind address |
@@ -88,6 +92,9 @@ Operational rules:
 - `BindInterface` names the interface target.
 - `BindAddr` is a local address override and should stay empty when the
   interface name is the intended control.
+- named interface binding resolves both the IPv4 address and adapter index; if
+  `IP_UNICAST_IF` cannot be applied to required P2P sockets, that socket path
+  fails closed instead of silently falling back.
 - startup bind blocking can keep P2P networking offline for the session when
   the required target is unavailable.
 - `ExitOnBindInterfaceLoss` can close the app if the resolved configured
