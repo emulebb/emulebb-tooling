@@ -210,6 +210,14 @@ be tracked as active item IDs before being added here as pending work.
   - Status: implemented
   - Impact and notes: Returns the stable per-item operation envelope.
 
+- **Remove completed transfer row**
+  - REST target: `DELETE /transfers/{hash}`
+  - Status: implemented
+  - Impact and notes: Removes a completed row from the transfer list without
+                      deleting the completed file or changing shared-file
+                      registration. Incomplete transfers must use the explicit
+                      destructive file target.
+
 - **Cancel transfer**
   - REST target: `DELETE /transfers/{hash}/files?confirm=true`
   - Status: implemented

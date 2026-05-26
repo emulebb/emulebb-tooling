@@ -93,6 +93,9 @@ listener regressions.
   `POST /app/shutdown` while lifecycle is `starting`, and reject all REST
   requests once lifecycle is `shuttingdown` or `done`
 - return errors as `{ "error": { "code": "...", "message": "...", "details": {} } }`
+- document the stable native error envelope on each OpenAPI operation for the
+  concrete runtime statuses `400`, `401`, `404`, `405`, `409`, `500`, and `503`,
+  while keeping `default` as a catch-all forward-compatibility response
 - return the updated resource from mutations when practical; asynchronous or
   native operation routes return explicit operation-result DTOs instead
 - keep public response DTOs closed in OpenAPI; additive fields require an
@@ -204,9 +207,10 @@ materialized one.
 
 Native v1 `DELETE` routes do not accept JSON request bodies.
 `DELETE /api/v1/transfers/{hash}` removes a completed transfer row without
-deleting the completed file; incomplete transfers cannot be detached from their
-`.part` state and return a per-item failure. Controllers that intend to cancel
-a transfer and delete local completed or partial data must call
+deleting the completed file or changing shared-file registration; incomplete
+transfers cannot be detached from their `.part` state and return a per-item
+failure. Controllers that intend to cancel a transfer and delete local completed
+or partial data must call
 `DELETE /api/v1/transfers/{hash}/files?confirm=true`.
 `DELETE /api/v1/shared-files/{hash}` unshares/excludes the file without
 deleting it from disk; actual disk deletion is
