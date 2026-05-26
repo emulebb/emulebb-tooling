@@ -37,6 +37,12 @@ shortcuts when the relevant list has focus.
 | `Ctrl+F4` | Sorts by type where the list has a type column. |
 | `Ctrl+F5` | Sorts by date/time where the list has a date/time column. |
 | `Ctrl+F6` | Sorts by size. |
+| `Ctrl+F7` | Sorts by status or availability where supported. |
+| `Ctrl+F8` | Sorts by progress or complete-source availability where supported. |
+| `Ctrl+F9` | Sorts by sources, or by size in Search Results. |
+| `Ctrl+F10` | Sorts by speed where supported. |
+| `Ctrl+F11` | Sorts by priority where supported. |
+| `Ctrl+F12` | Sorts by category where supported. |
 
 Repeating the same shortcut toggles ascending and descending order through the
 same path as clicking the column header. If a list does not have the requested
@@ -44,7 +50,7 @@ semantic column, the shortcut is consumed with a native beep and no fallback
 sort is guessed. If the matching column is currently hidden, the shortcut is
 also consumed with a native beep instead of changing the visible list order
 through a hidden sort key. Downloads currently has no type column, and Search
-Results currently has no date/time column.
+Results currently has no date/time, speed, priority, or category column.
 
 ## Downloads List Shortcuts
 
@@ -61,6 +67,7 @@ selected downloads and do not become global app accelerators.
 | `Ctrl+Shift+T` | Stops all stoppable downloads in the current category. |
 | `Ctrl++` / `Ctrl+-` | Raises or lowers selected download priority one manual step. |
 | `Ctrl+Shift++` / `Ctrl+Shift+-` | Sets selected download priority to High or Low. |
+| `Ctrl+M` | Opens the category picker for selected downloads. |
 | `Ctrl+O` | Opens the selected completed download when it can be opened. |
 | `Ctrl+Shift+O` | Opens the selected download's folder. |
 | `Ctrl+I` | Opens details for the selected download rows. |
@@ -73,6 +80,7 @@ selected downloads and do not become global app accelerators.
 | `Alt+Enter` | Opens details for the selected download rows. |
 | `Ctrl+C` | Copies selected download ED2K links. |
 | `Ctrl+V` | Pastes a direct ED2K download link when available. |
+| `Shift+F10` | Opens the Downloads context menu for the focused row. |
 
 ## Search Results List Shortcuts
 
@@ -83,6 +91,9 @@ These shortcuts are local to Search Results.
 | `Ctrl+D` | Downloads selected search results. |
 | `Ctrl+Shift+D` | Downloads selected search results paused. |
 | `Ctrl+I` | Opens details for selected results. |
+| `Enter` | Downloads selected search results. |
+| `Shift+Enter` | Downloads selected search results paused. |
+| `Ctrl+Enter` | Opens details for selected results. |
 | `Ctrl+L` | Copies selected result ED2K links. |
 | `Ctrl+Shift+C` | Copies selected result summaries. |
 | `Ctrl+F` | Starts list find. |
@@ -185,6 +196,10 @@ When Search is the active main pane, the Search parameter bar owns:
   the current transfer category, even when no row is selected.
 - In Downloads, `Ctrl++`, `Ctrl+-`, `Ctrl+Shift++`, and `Ctrl+Shift+-` should
   update selected download priorities without changing unrelated rows.
+- In Downloads, `Ctrl+F7` through `Ctrl+F12` should sort status, progress,
+  sources, speed, priority, and category respectively.
+- In Downloads, `Shift+F10` should open the same context menu as right-click,
+  and `Ctrl+M` should open the category picker for selected download rows.
 - In Search, `Alt+N` should focus the Name textbox without selecting existing
   text.
 - In Search, `Alt+Y`, `Alt+D`, `Alt+G`, `Alt+E`, `Alt+R`, and `Alt+L` should
@@ -192,6 +207,10 @@ When Search is the active main pane, the Search parameter bar owns:
   mnemonic behavior.
 - In Search, `F6` should move focus between the Name textbox and the search
   results list.
+- In Search Results, `Enter`, `Shift+Enter`, and `Ctrl+Enter` should download,
+  download paused, and open details respectively.
+- In Search Results, `Ctrl+F7`, `Ctrl+F8`, and `Ctrl+F9` should sort
+  availability, complete sources, and size respectively.
 - In searchable lists, `Ctrl+F`, `F3`, and `Shift+F3` should start find and
   navigate matches without changing transfer state.
 - In Shared Files, `F5` should reload the shared-files list through the same
