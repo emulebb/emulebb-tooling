@@ -84,7 +84,10 @@ def write_rc(path: Path, rc_text: RcText, text: str) -> None:
 def parse_tsv(path: Path | None) -> list[tuple[str, str]]:
     """Parse KEY<TAB>VALUE lines from a TSV file or stdin."""
 
-    source = sys.stdin.read() if path is None else path.read_text(encoding="utf-8-sig")
+    if path is None:
+        source = sys.stdin.buffer.read().decode("utf-8-sig")
+    else:
+        source = path.read_text(encoding="utf-8-sig")
     rows: list[tuple[str, str]] = []
     seen: Counter[str] = Counter()
     for line_no, raw_line in enumerate(source.splitlines(), 1):
@@ -258,6 +261,40 @@ def build_string_table(rows: list[tuple[str, str]]) -> str:
     lines.extend(f'    {key:<{width}} "{escape_rc_string(value)}"' for key, value in rows)
     lines.extend(["END", END_MARKER, ""])
     return "\n".join(lines)
+
+
+def find_managed_string_table(text: str) -> re.Match[str] | None:
+    """Return the managed eMuleBB string-table block, if present."""
+
+    pattern = re.compile(
+        rf"{re.escape(START_MARKER)}\r?\n"
+        rf"STRINGTABLE\r?\n"
+        rf"BEGIN\r?\n"
+        rf"(?P<body>.*?)"
+        rf"\r?\nEND\r?\n"
+        rf"{re.escape(END_MARKER)}",
+        re.DOTALL,
+    )
+    return pattern.search(text)
+
+
+def merge_managed_rows(existing_body: str, new_rows: list[tuple[str, str]]) -> list[tuple[str, str]]:
+    """Merge TSV rows into an existing managed string table."""
+
+    replacements = dict(new_rows)
+    merged: list[tuple[str, str]] = []
+    seen: set[str] = set()
+    for line_index, line in enumerate(existing_body.splitlines()):
+        entry = _parse_rc_string_line(line, line_index)
+        if entry is None:
+            continue
+        value = replacements.get(entry.key, entry.value)
+        merged.append((entry.key, value))
+        seen.add(entry.key)
+    for key, value in new_rows:
+        if key not in seen:
+            merged.append((key, value))
+    return merged
 
 
 PLACEHOLDER_RE = re.compile(r"%(?:%|[-+#0]*\d*(?:\.\d+)?(?:I64|I32|ll|l|h|z|t|j|L)?[A-Za-z])")
@@ -866,6 +903,16 @@ def apply_block(args: argparse.Namespace) -> None:
     if args.english_rc:
         validate_placeholders(args.english_rc, rows)
     rc_text = read_rc(args.rc)
+    managed = find_managed_string_table(rc_text.text)
+    if managed:
+        merged_rows = merge_managed_rows(managed.group("body"), rows)
+        write_rc(
+            args.rc,
+            rc_text,
+            rc_text.text[: managed.start()] + build_string_table(merged_rows).rstrip() + rc_text.text[managed.end() :],
+        )
+        return
+
     endif = find_resource_endif(rc_text.text)
     before = rc_text.text[: endif.start()]
     after = rc_text.text[endif.start() :]
