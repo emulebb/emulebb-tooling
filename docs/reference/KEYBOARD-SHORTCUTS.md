@@ -14,6 +14,16 @@ remove, or repurpose shortcuts.
 | `Alt+O` | main shell | Opens Options. |
 | `Ctrl+Tab` / `Ctrl+Shift+Tab` | main shell | Cycles primary toolbar panes. |
 
+## Transfers Navigation Shortcuts
+
+These shortcuts are local to the Transfers pane.
+
+| Shortcut | Behavior |
+|----------|----------|
+| `Ctrl+0` | Switches the Downloads category tab to All. |
+| `Ctrl+1` ... `Ctrl+9` | Switches to Downloads category tabs 1 through 9 when present. |
+| `F5` | Flushes the current Transfers view refresh. |
+
 ## Searchable List Shortcuts
 
 These shortcuts are inherited by searchable list controls such as client,
@@ -24,6 +34,7 @@ queue, upload, download, server, search-results, and shared-files lists.
 | `Ctrl+F` | Starts list find. |
 | `F3` | Finds the next match after list find is active. |
 | `Shift+F3` | Finds the previous match after list find is active. |
+| `Esc` | Clears the active list find text when one is set. |
 | `Ctrl+A` | Selects all rows in the focused list. |
 
 ## File-Like List Sort Shortcuts
@@ -94,6 +105,7 @@ These shortcuts are local to Search Results.
 | `Enter` | Downloads selected search results. |
 | `Shift+Enter` | Downloads selected search results paused. |
 | `Ctrl+Enter` | Opens details for selected results. |
+| `Alt+Enter` | Opens details for selected results. |
 | `Ctrl+L` | Copies selected result ED2K links. |
 | `Ctrl+Shift+C` | Copies selected result summaries. |
 | `Ctrl+F` | Starts list find. |
@@ -192,6 +204,10 @@ When Search is the active main pane, the Search parameter bar owns:
 - `Alt+U` should open the floating hotmenu.
 - `Alt+T` should open the Tools popup.
 - `Alt+O` should open Options.
+- In Transfers, `Ctrl+0` should select the All category tab; `Ctrl+1` through
+  `Ctrl+9` should select existing category tabs and beep for missing tabs.
+- In Transfers, `F5` should flush the visible transfer-list refresh without
+  changing selection.
 - In Downloads, `Ctrl+Shift+P`, `Ctrl+Shift+S`, and `Ctrl+Shift+T` should act on
   the current transfer category, even when no row is selected.
 - In Downloads, `Ctrl++`, `Ctrl+-`, `Ctrl+Shift++`, and `Ctrl+Shift+-` should
@@ -209,10 +225,14 @@ When Search is the active main pane, the Search parameter bar owns:
   results list.
 - In Search Results, `Enter`, `Shift+Enter`, and `Ctrl+Enter` should download,
   download paused, and open details respectively.
+- In Search Results, `Alt+Enter` should open details through the same path as
+  `Ctrl+Enter`.
 - In Search Results, `Ctrl+F7`, `Ctrl+F8`, and `Ctrl+F9` should sort
   availability, complete sources, and size respectively.
 - In searchable lists, `Ctrl+F`, `F3`, and `Shift+F3` should start find and
   navigate matches without changing transfer state.
+- In searchable lists, `Esc` should clear the active find text when one is set,
+  and otherwise leave normal list behavior alone.
 - In Shared Files, `F5` should reload the shared-files list through the same
   path as the existing reload button.
 - In Shared Files, the context menu should show native hints for `F2` rename
