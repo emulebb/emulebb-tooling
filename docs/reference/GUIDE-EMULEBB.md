@@ -674,7 +674,8 @@ Collect evidence before changing many settings. Use:
 
 Runtime diagnostic file names are intentionally uniform and script-friendly.
 The normal log is `emulebb.log`, the verbose log is `emulebb-verbose.log`, the
-debug CRT log is `emulebb-crt-debug.log`, and performance logs default to
+debug CRT log is `emulebb-crt-debug.log`, recoverable early startup directory
+errors use `emulebb-startup-errors.log`, and performance logs default to
 `emulebb-performance.csv` or `emulebb-performance.mrtg` with
 `emulebb-performance-data.mrtg` and `emulebb-performance-overhead.mrtg` sidecars.
 Rotated logs append `-YYYYMMDD-HHMMSS` before the extension. Diagnostic dumps
@@ -683,7 +684,7 @@ dumps and `emulebb-crash-YYYYMMDD-HHMMSS-pid<PID>.dmp` for crash dumps.
 
 The rename is strict in current eMuleBB builds: tools and support procedures
 should use the new names and should not rely on legacy `eMule.log`,
-`eMule_Verbose.log`, or `perflog.*` filenames.
+`eMule_Verbose.log`, `eMule-startup-errors.log`, or `perflog.*` filenames.
 
 Common symptom routing:
 

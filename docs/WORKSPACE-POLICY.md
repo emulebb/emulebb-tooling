@@ -371,8 +371,8 @@ Routine `validate` in `repos\emulebb-build` must run the active static audits:
 - Runtime diagnostic artifacts written by the app use lowercase kebab-case
   `emulebb` names. Current log names are `emulebb.log`,
   `emulebb-verbose.log`, `emulebb-crt-debug.log`,
-  `emulebb-performance.csv`, `emulebb-performance.mrtg`,
-  `emulebb-performance-data.mrtg`, and
+  `emulebb-startup-errors.log`, `emulebb-performance.csv`,
+  `emulebb-performance.mrtg`, `emulebb-performance-data.mrtg`, and
   `emulebb-performance-overhead.mrtg`. Rotated logs append
   `-YYYYMMDD-HHMMSS` before the extension. Dump names use
   `emulebb-dump-YYYYMMDD-HHMMSS-pid<PID>-mini|full.dmp` and
