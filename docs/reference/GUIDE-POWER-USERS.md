@@ -171,6 +171,21 @@ Every download moves through a lifecycle:
 | Completing | Whole file is assembled and moved. | Incoming path, disk space, permissions. |
 | Shared complete | Completed file is available to others. | Shared Files page and category path. |
 
+```mermaid
+stateDiagram-v2
+    [*] --> Candidate: search result or ed2k link
+    Candidate --> Queued: create part metadata
+    Queued --> SourceDiscovery: ask eD2K, Kad, and known peers
+    SourceDiscovery --> Waiting: remote queues
+    Waiting --> Transferring: upload slot opens
+    Transferring --> Verifying: part completes
+    Verifying --> SharingPartials: part hash is valid
+    SharingPartials --> SourceDiscovery: more parts needed
+    Verifying --> Completing: all parts verified
+    Completing --> SharedComplete: move to incoming
+    SharedComplete --> [*]
+```
+
 Do not manipulate temp files while the app is running. The `.part` file without
 the matching metadata is only raw bytes; the metadata tells eMuleBB what those
 bytes mean.

@@ -17,6 +17,26 @@ predictable.
 | Incoming directory | Completed downloads |
 | Shared directories | User-selected publish roots |
 
+```mermaid
+flowchart TD
+    Launch["emulebb.exe -c <profile-base>"]
+    AppDir["Application directory<br/>exe, DLLs, packaged assets"]
+    Profile["Profile base<br/>operator-owned state root"]
+    Config["config<br/>preferences.ini, identity, lists"]
+    Logs["logs<br/>runtime diagnostics"]
+    Temp["Temp directory<br/>.part and .part.met files"]
+    Incoming["Incoming directory<br/>completed downloads"]
+    Shared["Shared roots<br/>intentional published files"]
+
+    AppDir --> Launch
+    Launch --> Profile
+    Profile --> Config
+    Profile --> Logs
+    Config --> Temp
+    Config --> Incoming
+    Config --> Shared
+```
+
 Do not run multiple eMule-family clients against the same live profile. Before
 reusing an existing profile, close all clients and copy the full config
 directory as a rollback backup.

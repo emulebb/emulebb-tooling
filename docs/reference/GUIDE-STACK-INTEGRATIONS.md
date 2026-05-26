@@ -20,6 +20,29 @@ not flatten it into generic torrent semantics.
 | Torznab adapter `/indexer/emulebb/api` | Prowlarr/Radarr/Sonarr search bridge | Prowlarr Generic Torznab |
 | aMuTorrent | Web controller and multi-client UI | eMuleBB REST and adapter surfaces |
 
+```mermaid
+flowchart LR
+    Desktop["eMuleBB desktop<br/>profile, network, transfers, sharing"]
+    Rest["Native REST<br/>/api/v1"]
+    Qbit["qBit adapter<br/>/api/v2"]
+    Torznab["Torznab adapter<br/>/indexer/emulebb/api"]
+    Amu["aMuTorrent<br/>operator UI"]
+    Prowlarr["Prowlarr<br/>indexer"]
+    Radarr["Radarr<br/>movies"]
+    Sonarr["Sonarr<br/>series"]
+
+    Desktop --> Rest
+    Desktop --> Qbit
+    Desktop --> Torznab
+    Rest --> Amu
+    Torznab --> Prowlarr
+    Prowlarr --> Radarr
+    Prowlarr --> Sonarr
+    Radarr --> Qbit
+    Sonarr --> Qbit
+    Qbit --> Desktop
+```
+
 Do the setup in that order. If eMuleBB is not healthy as a desktop client,
 automation will only make failure modes harder to read.
 

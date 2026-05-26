@@ -157,6 +157,29 @@ For native REST search workflows:
 Do not discard native metadata just because a controller has a simpler UI.
 eMule search quality depends on several signals, not only on a title match.
 
+```mermaid
+sequenceDiagram
+    participant Controller
+    participant REST as eMuleBB REST /api/v1
+    participant Search as Native search
+    participant Queue as Download queue
+
+    Controller->>REST: POST /searches
+    REST->>Search: start native eD2K/Kad search
+    Search-->>REST: searchId and resolved method
+    REST-->>Controller: Search envelope
+    Controller->>REST: GET /searches/{searchId}
+    REST->>Search: read visible results
+    Search-->>REST: filenames, hashes, sources, evidence
+    REST-->>Controller: Search result snapshot
+    Controller->>REST: POST /searches/{searchId}/results/{hash}/operations/download
+    REST->>Queue: add selected native transfer
+    Queue-->>REST: accepted hash or per-item failure
+    REST-->>Controller: Operation envelope
+    Controller->>REST: GET /transfers/{hash}
+    REST-->>Controller: Native transfer state
+```
+
 ## Transfer Management Recipe
 
 For controller-managed transfers:
