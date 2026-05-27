@@ -39,6 +39,19 @@ Use these guides in order for a first real profile:
 7. [Stack Integration Guide](reference/GUIDE-STACK-INTEGRATIONS.md) covers the
    eMuleBB plus aMuTorrent plus Arr workflow with field-level setup details.
 
+## Developer And Release Operator Paths
+
+If you are contributing, validating, or preparing a release, start with the
+workspace and release controls instead of the product manual:
+
+| Role | Start Here |
+|---|---|
+| Contributor or AI agent | [Workspace Policy](WORKSPACE-POLICY.md) and [Agent Checklist](reference/AGENT-CHECKLIST.md) |
+| Routine developer | [Development Guide](reference/DEVELOPMENT-GUIDE.md) |
+| Backlog owner | [Active Backlog](active/INDEX.md) and [Backlog Process](reference/BACKLOG-PROCESS.md) |
+| RC release operator | [Release 0.7.3](active/RELEASE-0.7.3.md), [Execution Plan](active/plans/RELEASE-0.7.3-EXECUTION-PLAN.md), and [Runbook](active/RELEASE-0.7.3-RUNBOOK.md) |
+| REST/controller reviewer | [REST Contract](rest/REST-API-CONTRACT.md) and [Controller Surface Matrix](active/CONTROLLER-SURFACE-MATRIX.md) |
+
 ## Power User Paths
 
 <div class="docs-card-grid">

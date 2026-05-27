@@ -67,13 +67,14 @@ nav:
       - Controller Surface Matrix: active/CONTROLLER-SURFACE-MATRIX.md
   - Active Release:
       - Backlog Index: active/INDEX.md
-      - Future Roadmap: active/FUTURE-ROADMAP.md
       - Release 0.7.3: active/RELEASE-0.7.3.md
+      - Current Execution Plan: active/plans/RELEASE-0.7.3-EXECUTION-PLAN.md
       - Release Checklist: active/RELEASE-0.7.3-CHECKLIST.md
       - Release Runbook: active/RELEASE-0.7.3-RUNBOOK.md
       - Release Test Strategy: active/RELEASE-TEST-STRATEGY.md
       - Release Test Campaigns: active/RELEASE-TEST-CAMPAIGNS.md
       - Frozen Surfaces: active/FROZEN-SURFACES.md
+      - Future Roadmap: active/FUTURE-ROADMAP.md
   - Developer And Workspace:
       - Workspace Policy: WORKSPACE-POLICY.md
       - Documentation Policy: DOCS-POLICY.md
@@ -100,7 +101,6 @@ nav:
 
 not_in_nav: |
   /active/items/**
-  /active/plans/**
   /architecture/**
   /audits/**
   /history/**
