@@ -1,4 +1,4 @@
-# eMule Tooling
+# eMuleBB Tooling
 
 This repo is the documentation and policy home for the eMuleBB workspace. It
 contains shared workspace policy, helper scripts, docs validation, CI baseline
@@ -6,7 +6,7 @@ configuration, and engineering reference material.
 
 It is not the app repo and it is not the build orchestrator:
 
-- app source: `workspaces\workspace\app\eMule-main`
+- app source: `workspaces\workspace\app\emulebb-main`
 - branch-store checkout: `repos\emulebb`
 - build/test orchestration: `repos\emulebb-build`
 - shared test helpers: `repos\emulebb-build-tests`
@@ -15,6 +15,10 @@ It is not the app repo and it is not the build orchestrator:
 
 ## Start Here
 
+- user guide:
+  [`docs/INDEX.md`](docs/INDEX.md)
+- quick help:
+  [`docs/HELP.md`](docs/HELP.md)
 - rendered docs site:
   <https://emulebb.github.io/emulebb-tooling/>
 - workspace policy:
@@ -29,8 +33,6 @@ It is not the app repo and it is not the build orchestrator:
   [`docs/active/INDEX.md`](docs/active/INDEX.md)
 - backlog process:
   [`docs/reference/BACKLOG-PROCESS.md`](docs/reference/BACKLOG-PROCESS.md)
-- reference index:
-  [`docs/INDEX.md`](docs/INDEX.md)
 
 ## What This Repo Owns
 

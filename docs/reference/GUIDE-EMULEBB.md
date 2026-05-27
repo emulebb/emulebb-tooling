@@ -92,7 +92,7 @@ Keep these locations conceptually separate:
 
 | Location | Purpose |
 |---|---|
-| Application directory | Executable, bundled assets, WebServer templates, skins, toolbar assets |
+| Application directory | Executable, bundled runtime assets, skins, toolbar assets |
 | Config/profile directory | Identity, `preferences.ini`, server/Kad state, lists, logs, sidecars |
 | Temp directory | Incomplete download `.part` and `.part.met` files |
 | Incoming directory | Completed downloads |

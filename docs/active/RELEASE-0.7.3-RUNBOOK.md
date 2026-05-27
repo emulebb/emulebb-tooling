@@ -6,16 +6,18 @@ This runbook is procedure only. Use
 
 ## Preflight
 
-Start from `EMULE_WORKSPACE_ROOT` and keep build/test/package work behind the
-supported workspace entrypoint.
+Run build, test, and package commands from the build orchestrator checkout so
+`python -m emule_workspace` resolves the local module. Use absolute
+`EMULE_WORKSPACE_ROOT` paths for cross-repo status and local input files.
 
 ```powershell
+cd $env:EMULE_WORKSPACE_ROOT\repos\emulebb-build
 python -m emule_workspace validate
-git -C repos\emulebb-tooling status --short --branch
-git -C repos\emulebb-build status --short --branch
-git -C repos\emulebb-build-tests status --short --branch
-git -C workspaces\workspace\app\emulebb-main status --short --branch
-git -C workspaces\workspace\app\emulebb-main rev-parse --short HEAD
+git -C $env:EMULE_WORKSPACE_ROOT\repos\emulebb-tooling status --short --branch
+git -C $env:EMULE_WORKSPACE_ROOT\repos\emulebb-build status --short --branch
+git -C $env:EMULE_WORKSPACE_ROOT\repos\emulebb-build-tests status --short --branch
+git -C $env:EMULE_WORKSPACE_ROOT\workspaces\workspace\app\emulebb-main status --short --branch
+git -C $env:EMULE_WORKSPACE_ROOT\workspaces\workspace\app\emulebb-main rev-parse --short HEAD
 ```
 
 Do not continue to tagging if validation fails or if any active repo has
@@ -100,7 +102,7 @@ long-form soak proof:
 
 ```powershell
 python -m emule_workspace test certification --profile overnight `
-  --live-wire-inputs-file repos\emulebb-build-tests\live-wire-inputs.local.json `
+  --live-wire-inputs-file $env:EMULE_WORKSPACE_ROOT\repos\emulebb-build-tests\live-wire-inputs.local.json `
   --radarr-movie-root <radarr-visible-root> `
   --sonarr-series-root <sonarr-visible-root>
 ```
@@ -111,7 +113,7 @@ monitor are tracked as one proof set:
 
 ```powershell
 python -m emule_workspace test release-campaign --campaign emulebb-0.7.3-overnight --execute `
-  --live-wire-inputs-file repos\emulebb-build-tests\live-wire-inputs.local.json `
+  --live-wire-inputs-file $env:EMULE_WORKSPACE_ROOT\repos\emulebb-build-tests\live-wire-inputs.local.json `
   --radarr-movie-root <radarr-visible-root> `
   --sonarr-series-root <sonarr-visible-root>
 ```
@@ -132,7 +134,7 @@ operator-owned live-wire inputs:
 
 ```powershell
 python -m emule_workspace test live-e2e --profile release-expanded-quick --fail-fast `
-  --live-wire-inputs-file repos\emulebb-build-tests\live-wire-inputs.local.json
+  --live-wire-inputs-file $env:EMULE_WORKSPACE_ROOT\repos\emulebb-build-tests\live-wire-inputs.local.json
 ```
 
 This profile covers Preferences directory-tree stress, Shared Files,
@@ -170,7 +172,7 @@ uses the quick stress profile:
 
 ```powershell
 python -m emule_workspace test live-e2e --profile stabilization-stress-quick --fail-fast `
-  --live-wire-inputs-file repos\emulebb-build-tests\live-wire-inputs.local.json
+  --live-wire-inputs-file $env:EMULE_WORKSPACE_ROOT\repos\emulebb-build-tests\live-wire-inputs.local.json
 ```
 
 The full `stabilization-stress` profile keeps the deeper REST soak stress,

@@ -7,9 +7,10 @@ the search/server/Kad parity gates.
 
 ## Proof Command
 
-Run the focused controller-surface gate from `EMULE_WORKSPACE_ROOT`:
+Run the focused controller-surface gate from the build orchestrator checkout:
 
 ```powershell
+cd $env:EMULE_WORKSPACE_ROOT\repos\emulebb-build
 python -m emule_workspace test live-e2e --profile controller-surface --fail-fast
 ```
 

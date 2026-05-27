@@ -11,7 +11,7 @@ predictable.
 
 | Location | Purpose |
 |---|---|
-| Application directory | Executable, bundled assets, WebServer templates, skins, toolbar assets |
+| Application directory | Executable, bundled runtime assets, skins, toolbar assets |
 | Config/profile directory | Identity, preferences, server/Kad state, lists, logs, and sidecars |
 | Temp directory | Incomplete `.part` and `.part.met` files |
 | Incoming directory | Completed downloads |

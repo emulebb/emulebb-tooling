@@ -36,18 +36,22 @@ The canonical RC-blocking proof is the quick campaign execution. The rows under
 or executes; keep them visible so failures can be assigned to the correct
 phase.
 
+Run `python -m emule_workspace ...` commands from
+`$env:EMULE_WORKSPACE_ROOT\repos\emulebb-build`. Use absolute
+`$env:EMULE_WORKSPACE_ROOT\...` paths when passing local input files.
+
 - [ ] `python -m emule_workspace test release-campaign --campaign emulebb-0.7.3`
 - [ ] `python -m emule_workspace test release-campaign --campaign emulebb-0.7.3 --execute`
 
 ## Campaign Expanded Rows
 
 - [x] `python -m emule_workspace test certification --profile fast`
-- [ ] `python -m emule_workspace test live-e2e --profile release-expanded-quick --fail-fast --live-wire-inputs-file repos\emulebb-build-tests\live-wire-inputs.local.json`
+- [ ] `python -m emule_workspace test live-e2e --profile release-expanded-quick --fail-fast --live-wire-inputs-file $env:EMULE_WORKSPACE_ROOT\repos\emulebb-build-tests\live-wire-inputs.local.json`
 - [ ] `python -m emule_workspace test live-e2e --profile cpu-heavy-quick --fail-fast`
-- [ ] `python -m emule_workspace test live-e2e --profile stabilization-stress-quick --fail-fast --live-wire-inputs-file repos\emulebb-build-tests\live-wire-inputs.local.json`
-- [ ] `python -m emule_workspace test amutorrent-clean-startup --live-wire-inputs-file repos\emulebb-build-tests\live-wire-inputs.local.json --rest-webserver-scheme https --keep-artifacts`
-- [ ] `python -m emule_workspace test amutorrent-emulebb-ui --live-wire-inputs-file repos\emulebb-build-tests\live-wire-inputs.local.json --rest-webserver-scheme https --keep-artifacts`
-- [ ] `python -m emule_workspace test amutorrent-resilience --live-wire-inputs-file repos\emulebb-build-tests\live-wire-inputs.local.json --rest-webserver-scheme https --keep-artifacts`
+- [ ] `python -m emule_workspace test live-e2e --profile stabilization-stress-quick --fail-fast --live-wire-inputs-file $env:EMULE_WORKSPACE_ROOT\repos\emulebb-build-tests\live-wire-inputs.local.json`
+- [ ] `python -m emule_workspace test amutorrent-clean-startup --live-wire-inputs-file $env:EMULE_WORKSPACE_ROOT\repos\emulebb-build-tests\live-wire-inputs.local.json --rest-webserver-scheme https --keep-artifacts`
+- [ ] `python -m emule_workspace test amutorrent-emulebb-ui --live-wire-inputs-file $env:EMULE_WORKSPACE_ROOT\repos\emulebb-build-tests\live-wire-inputs.local.json --rest-webserver-scheme https --keep-artifacts`
+- [ ] `python -m emule_workspace test amutorrent-resilience --live-wire-inputs-file $env:EMULE_WORKSPACE_ROOT\repos\emulebb-build-tests\live-wire-inputs.local.json --rest-webserver-scheme https --keep-artifacts`
 - [x] `python -m emule_workspace test live-e2e --profile ui-resource-depth --fail-fast`
 - [ ] `python -m emule_workspace package-release --config Release --platform x64`
 - [ ] `python -m emule_workspace package-release --config Release --platform ARM64`
@@ -135,10 +139,10 @@ confidence:
 
 - [ ] `python -m emule_workspace test certification --profile overnight`
 - [ ] `python -m emule_workspace test release-campaign --campaign emulebb-0.7.3-overnight --execute`
-- [ ] `python -m emule_workspace test live-e2e --profile release-expanded --fail-fast --live-wire-inputs-file repos\emulebb-build-tests\live-wire-inputs.local.json`
+- [ ] `python -m emule_workspace test live-e2e --profile release-expanded --fail-fast --live-wire-inputs-file $env:EMULE_WORKSPACE_ROOT\repos\emulebb-build-tests\live-wire-inputs.local.json`
 - [ ] `python -m emule_workspace test live-e2e --profile cpu-heavy --fail-fast`
 - [ ] `python -m emule_workspace test live-e2e --suite live-process-monitor --fail-fast`
-- [ ] `python -m emule_workspace test live-e2e --profile stabilization-stress --fail-fast --live-wire-inputs-file repos\emulebb-build-tests\live-wire-inputs.local.json`
+- [ ] `python -m emule_workspace test live-e2e --profile stabilization-stress --fail-fast --live-wire-inputs-file $env:EMULE_WORKSPACE_ROOT\repos\emulebb-build-tests\live-wire-inputs.local.json`
 
 The blocking release campaign uses the quick variants plus targeted aMuTorrent
 proofs. The `overnight-full` campaign is tracked separately so long-duration
