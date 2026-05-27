@@ -20,9 +20,9 @@ engineering spec/evidence records, not workflow status authority.
 ## Current Snapshot
 
 **Source of truth:** `EMULE_WORKSPACE_ROOT\workspaces\workspace\app\emulebb-main` (`main` branch)
-**Current non-done count:** `81`
+**Current non-done count:** `82`
 **Latest release-doc refresh:** 2026-05-23
-**Non-done by status:** `65` OPEN, `6` IN_PROGRESS, `10` DEFERRED, `0` BLOCKED.
+**Non-done by status:** `66` OPEN, `6` IN_PROGRESS, `10` DEFERRED, `0` BLOCKED.
 **Backlog counts:** item tables below are authoritative.
 **RC 0.7.3 relevance:** Most non-done items below are future or deferred work;
 current RC gate and proof status is controlled by [RELEASE-0.7.3](RELEASE-0.7.3.md).
@@ -386,6 +386,7 @@ not active item docs.
 | [FEAT-090](items/FEAT-090.md) | Minor | OPEN | Tune broadband limits by drive topology and total budget |
 | [FEAT-091](items/FEAT-091.md) | Minor | OPEN | Downloads list expand/collapse-all peer rows |
 | [FEAT-092](items/FEAT-092.md) | Minor | OPEN | Add layered peer behavior guard for client quarantine and IP-ban escalation |
+| [FEAT-093](items/FEAT-093.md) | Minor | OPEN | Safely raise WebServer accepted-client concurrency |
 
 ---
 
