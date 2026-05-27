@@ -20,9 +20,9 @@ engineering spec/evidence records, not workflow status authority.
 ## Current Snapshot
 
 **Source of truth:** `EMULE_WORKSPACE_ROOT\workspaces\workspace\app\emulebb-main` (`main` branch)
-**Current non-done count:** `81`
+**Current non-done count:** `82`
 **Latest release-doc refresh:** 2026-05-23
-**Non-done by status:** `65` OPEN, `6` IN_PROGRESS, `10` DEFERRED, `0` BLOCKED.
+**Non-done by status:** `65` OPEN, `7` IN_PROGRESS, `10` DEFERRED, `0` BLOCKED.
 **Backlog counts:** item tables below are authoritative.
 **RC 0.7.3 relevance:** Most non-done items below are future or deferred work;
 current RC gate and proof status is controlled by [RELEASE-0.7.3](RELEASE-0.7.3.md).
@@ -217,6 +217,7 @@ the RC branch.
 | [BUG-122](../history/items/BUG-122.md) | Minor | DONE | CRing raw-owned buffer was accidentally copyable |
 | [BUG-123](../history/items/BUG-123.md) | Major | DONE | Failed reask source delete needed explicit download-owner detachment |
 | [BUG-124](../history/items/BUG-124.md) | Major | DONE | Log panes can nearly freeze the UI under high-volume output |
+| [BUG-125](items/BUG-125.md) | Major | IN_PROGRESS | Harden client and queue lifetime edges found by focused review |
 
 `BUG-103` through `BUG-110` were superseded internal post-tag evidence labels,
 not active item docs.
@@ -266,6 +267,7 @@ not active item docs.
 | [REF-044](items/REF-044.md) | Minor | OPEN | Remove remaining import-parts residue and keep legacy import flows retired |
 | [REF-045](items/REF-045.md) | Minor | OPEN | Evaluate SQLite-backed storage for local metadata structures |
 | [REF-046](items/REF-046.md) | Minor | OPEN | Evaluate JSON or TOML for operator-editable configuration |
+| [REF-047](../history/items/REF-047.md) | High | DONE | Finalize native REST v1 API standardization before RC1 |
 
 ---
 
