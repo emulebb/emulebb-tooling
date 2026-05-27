@@ -54,7 +54,7 @@ eMuleBB focuses on those gaps:
 2. Launch with a deliberate profile directory, especially for test packages:
 
    ```powershell
-   emulebb.exe -c C:\Path\To\eMuleBB-Profile
+   emulebb.exe -c "$env:TEMP\eMuleBB-Profile"
    ```
 
 3. Set incoming and temp directories before starting serious downloads.
@@ -222,7 +222,7 @@ Use this flow when testing a public nightly:
 4. Launch with an explicit profile path:
 
    ```powershell
-   emulebb.exe -c C:\Path\To\TestProfile
+   emulebb.exe -c "$env:TEMP\eMuleBB-TestProfile"
    ```
 
 5. Start once without REST controllers, aMuTorrent, Arr tools, or other

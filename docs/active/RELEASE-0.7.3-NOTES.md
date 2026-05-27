@@ -60,7 +60,7 @@ Do not treat a nightly package as the RC. The final RC tag is
 2. Start with a disposable or backed-up profile:
 
    ```powershell
-   emulebb.exe -c C:\Path\To\eMuleBB-TestProfile
+   emulebb.exe -c "$env:TEMP\eMuleBB-TestProfile"
    ```
 
 3. Verify directories, connection state, logs, and shutdown before enabling
