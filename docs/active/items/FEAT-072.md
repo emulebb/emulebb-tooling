@@ -7,7 +7,7 @@ category: feature
 labels: [startup, shared-files, performance, ui, cache]
 milestone: post-0.7.3
 created: 2026-05-22
-source: live large-library profiling against the operator-provided profile and startup dump analysis
+source: live large-library profiling against the operator-provided profile and startup dump analysis; 2026-05-27 senior C++ performance and I/O review
 ---
 
 # FEAT-072 - Reduce Startup Cache UI-Thread Blocking On Large Shared Libraries
@@ -24,6 +24,11 @@ canonicalization for in-memory cache keys, add rate-limited startup progress
 pumping inside long cache loops, and only consider a worker-backed cache
 preloader after re-profiling the simpler fix.
 
+The 2026-05-27 performance review added two concrete follow-ups to this lane:
+startup-cache load should reject malformed or oversized cache files before
+large vector reservations, and long-path preparation caching should avoid
+full-cache churn during very large scans if profiling shows eviction pressure.
+
 ## Intended Shape
 
 - Use lexical, case-insensitive normalized path keys for `sharedcache.dat` and
@@ -33,6 +38,10 @@ preloader after re-profiling the simpler fix.
   cache rebuild/write paths where it is semantically required.
 - Add a rate-limited startup progress pump, defaulting to the existing short UI
   yield cadence, inside long startup cache and shared-directory loops.
+- Add a global startup-cache file-record cap and file-size sanity checks before
+  reserving cache vectors.
+- Instrument long-path prepared-path cache hit/miss or eviction behavior before
+  replacing its full-clear behavior with bounded eviction.
 - Re-profile before moving broader `CSharedFileList` startup work onto a worker
   thread.
 
@@ -55,6 +64,10 @@ preloader after re-profiling the simpler fix.
       without migration
 - [ ] startup progress remains responsive during large cache load and shared
       directory rehydration loops
+- [ ] malformed or oversized startup caches are rejected before large memory
+      reservations
+- [ ] long-path prepared-path cache changes are driven by hit/miss or eviction
+      evidence, not by speculation
 - [ ] focused native tests cover lexical cache-key behavior and progress-pump
       cadence
 - [ ] a CPU-only live run against the large-library profile shows the captured

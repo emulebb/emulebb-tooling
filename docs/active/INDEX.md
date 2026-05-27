@@ -20,9 +20,9 @@ engineering spec/evidence records, not workflow status authority.
 ## Current Snapshot
 
 **Source of truth:** `EMULE_WORKSPACE_ROOT\workspaces\workspace\app\emulebb-main` (`main` branch)
-**Current non-done count:** `82`
+**Current non-done count:** `87`
 **Latest release-doc refresh:** 2026-05-23
-**Non-done by status:** `66` OPEN, `6` IN_PROGRESS, `10` DEFERRED, `0` BLOCKED.
+**Non-done by status:** `71` OPEN, `6` IN_PROGRESS, `10` DEFERRED, `0` BLOCKED.
 **Backlog counts:** item tables below are authoritative.
 **RC 0.7.3 relevance:** Most non-done items below are future or deferred work;
 current RC gate and proof status is controlled by [RELEASE-0.7.3](RELEASE-0.7.3.md).
@@ -270,6 +270,9 @@ not active item docs.
 | [REF-045](items/REF-045.md) | Minor | OPEN | Evaluate SQLite-backed storage for local metadata structures |
 | [REF-046](items/REF-046.md) | Minor | OPEN | Evaluate JSON or TOML for operator-editable configuration |
 | [REF-047](../history/items/REF-047.md) | High | DONE | Finalize native REST v1 API standardization before RC1 |
+| [REF-048](items/REF-048.md) | Minor | OPEN | Reduce queue and tracking scan cost without policy drift |
+| [REF-049](items/REF-049.md) | Major | OPEN | Shorten upload hot-path locks only after adding lifetime guards |
+| [REF-050](items/REF-050.md) | Minor | OPEN | Tune compression and hash buffers with bounded memory |
 
 ---
 
@@ -387,6 +390,8 @@ not active item docs.
 | [FEAT-091](items/FEAT-091.md) | Minor | OPEN | Downloads list expand/collapse-all peer rows |
 | [FEAT-092](items/FEAT-092.md) | Minor | OPEN | Add layered peer behavior guard for client quarantine and IP-ban escalation |
 | [FEAT-093](items/FEAT-093.md) | Minor | OPEN | Safely raise WebServer accepted-client concurrency |
+| [FEAT-094](items/FEAT-094.md) | Major | OPEN | Improve UDP burst handling without lock-held backoff |
+| [FEAT-095](items/FEAT-095.md) | Major | OPEN | Move part-file durability work off foreground paths |
 
 ---
 

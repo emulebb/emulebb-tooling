@@ -7,7 +7,7 @@ category: feature
 labels: [known-met, persistence, metadata, background-worker, performance, post-0.7.3]
 milestone: post-0.7.3
 created: 2026-05-24
-source: review of background parallel processing opportunities
+source: review of background parallel processing opportunities; 2026-05-27 senior C++ performance and I/O review
 ---
 
 # FEAT-079 - Save Known And Cancelled Metadata From Immutable Background Snapshots
@@ -23,6 +23,16 @@ Move the expensive file serialization to a background worker by first building
 an immutable save-record snapshot on the owner thread, then letting the worker
 write and atomically promote the metadata file.
 
+## Current Evidence
+
+- `CKnownFileList::Process` periodically requests `known.met` persistence.
+- `CKnownFileList::Save` still serializes `known.met` and `cancelled.met` on
+  the caller path even though temp-file promotion is now safer.
+- Large libraries can turn that whole-list serialization into an avoidable
+  latency spike.
+- The atomic temp/replace behavior is valuable and should be preserved; the
+  review target is caller-thread latency, not format or durability drift.
+
 ## Intended Shape
 
 - Keep `CKnownFileList` and live `CKnownFile` ownership on the current owner
@@ -33,6 +43,8 @@ write and atomically promote the metadata file.
 - Keep the current temp-file and atomic promotion behavior.
 - Coalesce repeated save requests while one save is in flight.
 - Report worker completion/failure through diagnostics without blocking the UI.
+- Apply save success/failure state back on the owner path so worker failures do
+  not mutate live known-file structures directly.
 
 ## Scope Constraints
 
@@ -49,6 +61,10 @@ write and atomically promote the metadata file.
 - [ ] background writer writes temp files and promotes atomically
 - [ ] repeated save requests coalesce without losing a required final save
 - [ ] shutdown behavior remains deterministic
+- [ ] stale snapshot handling is explicit when live maps change during an
+      in-flight save
+- [ ] binary golden files prove unchanged `known.met` and `cancelled.met`
+      output for representative profiles
 - [ ] native tests cover coalescing, worker failure, atomic promotion, and
       shutdown/final-save decisions
 - [ ] large-profile profiling shows reduced caller-thread latency during

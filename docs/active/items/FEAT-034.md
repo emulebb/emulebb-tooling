@@ -8,7 +8,7 @@ labels: [performance, shared-files, reload, threading, ui]
 milestone: ~
 created: 2026-04-20
 updated: 2026-04-26
-source: current `main` revalidation; `analysis\emuleai` and Xtreme comparison; filtered web-demand scan
+source: current `main` revalidation; `analysis\emuleai` and Xtreme comparison; filtered web-demand scan; 2026-05-27 senior C++ performance and I/O review
 ---
 
 ## Summary
@@ -79,6 +79,9 @@ before treating FEAT-034 as complete.
 The next implementation direction should be background directory enumeration
 with immutable scan results:
 
+- add a long-path-safe `FindFirstFileEx` helper using `FindExInfoBasic` and
+  `FIND_FIRST_EX_LARGE_FETCH`, with fallback to the current `FindFirstFile`
+  wrapper when unsupported or unsuitable
 - enumerate shared roots off the UI thread into a candidate list
 - keep path filtering and share-policy decisions deterministic
 - apply additions/removals to `CSharedFileList` on the owning app/UI path
@@ -124,6 +127,9 @@ broader `eMuleAI` shared-files feature import.
 - [x] repeated reload requests coalesce instead of starting overlapping scans while hashing is active
 - [ ] directory enumeration can run in the background and produce an immutable
       candidate list
+- [ ] large-fetch directory enumeration is covered for long paths, UNC paths,
+      empty directories, inaccessible directories, and large local/remote
+      directory scans
 - [x] targeted long-path live profile converges to the expected final visible Shared Files rows after hash drain
 - [ ] general final shared-file results converge to the same set as the synchronous path across broader reload scenarios
 - [x] uploads, share state, and GUI counters remain stable while shared hashes drain in the background
