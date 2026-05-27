@@ -173,6 +173,12 @@ Routine `validate` in `repos\emulebb-build` must run the active static audits:
   incompatible opcode or packet changes, default scheduling or routing policy
   drift, or peer/server behavior that cannot be validated against
   stock/community semantics.
+- Source Exchange v1 is the explicit exception to the stock-compatibility
+  default: eMuleBB intentionally removed the deprecated live-network SX1
+  advertise, request, response, and version-tracking paths. Source Exchange is
+  SX2-only on the live network; do not treat absent `OP_REQUESTSOURCES` /
+  `OP_ANSWERSOURCES` live-path support as an accidental protocol regression.
+  The durable decision record is [REF-002](history/items/REF-002.md).
 - Protocol-adjacent changes must carry explicit parity evidence through the
   community baseline, protocol goldens, tracing harness, live-diff, or live
   packet captures as appropriate.
