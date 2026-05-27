@@ -17,6 +17,7 @@ is frozen pending removal and is not a supported controller surface.
 Contract references:
 
 - [REST API contract](../rest/REST-API-CONTRACT.md)
+- [REST API quickstart](../rest/REST-API-QUICKSTART.md)
 - [OpenAPI contract](../rest/REST-API-OPENAPI.yaml)
 - [Adapter contracts](../rest/REST-API-ADAPTERS.md)
 

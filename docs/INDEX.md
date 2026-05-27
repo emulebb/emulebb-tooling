@@ -39,6 +39,10 @@ Use these guides in order for a first real profile:
 7. [Stack Integration Guide](reference/GUIDE-STACK-INTEGRATIONS.md) covers the
    eMuleBB plus aMuTorrent plus Arr workflow with field-level setup details.
 
+For public release testing, use the
+[0.7.3 RC release notes](active/RELEASE-0.7.3-NOTES.md) before downloading or
+reporting package behavior.
+
 ## Developer And Release Operator Paths
 
 If you are contributing, validating, or preparing a release, start with the
@@ -93,6 +97,19 @@ workspace and release controls instead of the product manual:
   </article>
 </div>
 
+## Automation Fast Path
+
+eMuleBB's main automation story is local and operator-controlled: the native
+desktop app owns eD2K/Kad state, while REST, aMuTorrent, qBittorrent-compatible
+routes, and Torznab routes make that state easier to operate.
+
+| Goal | Start Here |
+|---|---|
+| Make the first authenticated REST call | [REST Quickstart](rest/REST-API-QUICKSTART.md) |
+| Understand the exact REST contract | [REST API Contract](rest/REST-API-CONTRACT.md) |
+| Wire aMuTorrent, Prowlarr, Radarr, or Sonarr | [Stack Integration Guide](reference/GUIDE-STACK-INTEGRATIONS.md) |
+| Review adapter compatibility | [REST Adapter Notes](rest/REST-API-ADAPTERS.md) |
+
 ## First Hour Checklist
 
 For a serious profile, do not start with every feature enabled. Prove the
@@ -134,6 +151,7 @@ authority for live state.
 
 | Need | Primary Doc |
 |---|---|
+| First authenticated REST calls | [rest/REST-API-QUICKSTART](rest/REST-API-QUICKSTART.md) |
 | Human-readable REST contract | [rest/REST-API-CONTRACT](rest/REST-API-CONTRACT.md) |
 | Machine-readable OpenAPI contract | [rest/REST-API-OPENAPI](rest/REST-API-OPENAPI.yaml) |
 | qBit, Torznab, Arr, and aMuTorrent adapter notes | [rest/REST-API-ADAPTERS](rest/REST-API-ADAPTERS.md) |
@@ -166,6 +184,7 @@ are not the best first read for users.
 | Development and validation guide | [reference/DEVELOPMENT-GUIDE](reference/DEVELOPMENT-GUIDE.md) |
 | Active backlog and release dashboard | [active/INDEX](active/INDEX.md) |
 | RC release control document | [active/RELEASE-0.7.3](active/RELEASE-0.7.3.md) |
+| Public RC release notes | [active/RELEASE-0.7.3-NOTES](active/RELEASE-0.7.3-NOTES.md) |
 | RC release checklist | [active/RELEASE-0.7.3-CHECKLIST](active/RELEASE-0.7.3-CHECKLIST.md) |
 | RC release runbook | [active/RELEASE-0.7.3-RUNBOOK](active/RELEASE-0.7.3-RUNBOOK.md) |
 | Backlog process | [reference/BACKLOG-PROCESS](reference/BACKLOG-PROCESS.md) |
