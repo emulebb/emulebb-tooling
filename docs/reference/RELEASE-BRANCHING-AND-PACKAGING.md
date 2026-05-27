@@ -30,13 +30,16 @@ suffix; do not publish an unstable build as a plain patch number.
 future roadmap work happen on `main` unless the operator asks for a separate
 short-lived branch.
 
-Create a release branch when a release candidate starts:
+Create a release branch when the operator starts release-branch stabilization:
 
 ```text
 release/0.7.3
 ```
 
-Release branches are stabilization branches. Accept only:
+Release branches are stabilization branches. Some release candidates may be
+prepared directly from reviewed `main` until the active release dashboard or
+operator starts the stabilization branch. Once a release branch exists, accept
+only:
 
 - blocker and high-confidence bug fixes;
 - release proof and packaging fixes;
@@ -115,7 +118,8 @@ SBOMs, release notes, and Git tags.
 
 During RC:
 
-- fix release blockers on `release/0.7.3`;
+- fix release blockers on reviewed `main` until the operator starts the
+  release branch, then on `release/0.7.3`;
 - publish `emulebb-v0.7.3-rc.2`, `rc.3`, and so on only when a new public
   candidate is needed;
 - backport applicable fixes to `main`.

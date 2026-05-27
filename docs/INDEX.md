@@ -129,6 +129,7 @@ desktop app first, then layer automation on top.
 | Need | Primary Doc |
 |---|---|
 | Product overview and operating model | [reference/GUIDE-EMULEBB](reference/GUIDE-EMULEBB.md) |
+| Public-readable roadmap themes | [reference/ROADMAP-SUMMARY](reference/ROADMAP-SUMMARY.md) |
 | Complete eMule manual from zero to power-user operation | [reference/GUIDE-POWER-USERS](reference/GUIDE-POWER-USERS.md) |
 | Setup, `-c` profiles, release package testing | [reference/GUIDE-SETUP](reference/GUIDE-SETUP.md) |
 | Search, downloads, categories, limits, upload policy | [reference/GUIDE-DOWNLOADS-SEARCH](reference/GUIDE-DOWNLOADS-SEARCH.md) |

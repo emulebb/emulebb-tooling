@@ -6,6 +6,9 @@ the backlog. The purpose is to keep future work focused on the Windows MFC app
 with REST support, while making related product-family boundaries explicit and
 excluding ideas that no longer match the eMuleBB desktop product direction.
 
+For a shorter public-readable overview, use
+[Roadmap Summary](../reference/ROADMAP-SUMMARY.md).
+
 ## GitHub Workflow Authority
 
 Future-roadmap workflow is GitHub-primary after migration. Promoted roadmap
