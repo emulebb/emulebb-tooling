@@ -85,6 +85,13 @@ setup, but they are not edited as part of normal product work.
   converge.
 - Run `python -m emule_workspace prepare-product-family` after materialization
   or after dependency lockfile changes in p2p-overlord or `goed2k-server`.
+- Run `python -m emule_workspace refresh-product-family-rebases` after the
+  scheduled aMule or aMuTorrent upstream-rebase workflows publish rewritten
+  fork history. The command fetches `origin` for `repos/amule` and
+  `repos/amutorrent`, then refreshes the local branch only when the worktree is
+  clean and local `HEAD` exactly matched the pre-fetch remote-tracking ref. If
+  local commits or file changes exist, it stops and reports the repo for manual
+  review instead of resetting work.
 - Run `python -m emule_workspace workspace-status` before release and broad
   testing to inspect dirty state, branches, upstreams, and ahead/behind counts
   across all managed repos.
