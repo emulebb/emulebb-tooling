@@ -28,7 +28,7 @@ remove the surface or prove that its removal did not damage supported behavior.
 | First-run connection wizard | Frozen. No support and no tests. Candidate for deletion through `REF-025`. |
 | Splash screen | Frozen. No support and no tests. Candidate for deletion through `REF-025`. |
 | Legacy WebServer HTML templates and page UI | Frozen. No support and no tests. The supported surface is JSON REST and controller adapters only. |
-| Proxy support | Frozen. No support and no tests. Candidate for later deletion or replacement by a deliberately designed transport policy. |
+| Proxy support | Frozen. No support and no tests. Candidate for later deletion or replacement by a deliberately designed transport policy. SOCKS parser/handshake hardening findings are intentionally deferred while this remains frozen. |
 
 ## Supported Boundaries
 
