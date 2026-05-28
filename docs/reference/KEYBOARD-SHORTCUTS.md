@@ -8,19 +8,10 @@ remove, or repurpose shortcuts.
 
 | Shortcut | Owner | Behavior |
 |----------|-------|----------|
-| `Alt+1` | main shell | Opens Kad. |
-| `Alt+2` | main shell | Opens Servers. |
-| `Alt+3` | main shell | Opens Transfers. |
-| `Alt+4` | main shell | Opens Search. |
-| `Alt+5` | main shell | Opens Shared Files. |
-| `Alt+6` | main shell | Opens Messages. |
-| `Alt+7` | main shell | Opens IRC. |
-| `Alt+8` | main shell | Opens Statistics. |
-| `Alt+9` | main shell | Opens Options. |
 | `Alt+X` | main shell | Cleanly exits through `CemuleDlg::OnClose()` and respects Prompt on exit. |
 | `Alt+U` | main shell | Opens the existing floating hotmenu. |
-| `Alt+W` | main shell | Opens the Tools popup. |
-| `Alt+O` | main shell | Opens Options as a command alias for `Alt+9`. |
+| `Alt+T` | main shell | Opens the Tools popup. |
+| `Alt+O` | main shell | Opens Options. |
 | `Ctrl+Tab` / `Ctrl+Shift+Tab` | main shell | Cycles primary toolbar panes. |
 
 ## Transfers Navigation Shortcuts
@@ -167,8 +158,8 @@ Menu-only Copy actions include:
 These native Alt mnemonics are treated as main-shell toolbar or hotmenu
 ownership and should not be reused by modeless child panes:
 
-`Alt+1`, `Alt+2`, `Alt+3`, `Alt+4`, `Alt+5`, `Alt+6`, `Alt+7`, `Alt+8`,
-`Alt+9`, `Alt+O`, `Alt+U`, `Alt+W`, `Alt+X`.
+`Alt+C`, `Alt+K`, `Alt+V`, `Alt+T`, `Alt+S`, `Alt+F`, `Alt+M`, `Alt+I`,
+`Alt+A`, `Alt+O`, `Alt+H`, `Alt+U`, `Alt+X`.
 
 ## Search Pane Mnemonics
 
@@ -195,12 +186,7 @@ When Search is the active main pane, the Search parameter bar owns:
 - EMULE_KEYBOARD_SHORTCUT: do not reassign `Alt+X`; it is the direct app-exit
   mnemonic.
 - The old hidden hotmenu `Alt+X` button was retired; floating hotmenu ownership
-  is now `Alt+U`.
-- Primary toolbar navigation uses `Alt+1` through `Alt+9` instead of toolbar
-  label letters. This avoids letter collisions between localized labels and
-  baseline English labels such as `Transfers`.
-- Tools uses `Alt+W`; `Alt+T` is intentionally not claimed by the app shell so
-  it cannot conflict with Transfers.
+  is now `Alt+U`, and Tools ownership is `Alt+T`.
 - Search-local mnemonics deliberately avoid the reserved main-shell letters.
 - Shortcut reference stays in this document; do not duplicate it in a Tools
   menu dialog.
@@ -215,12 +201,9 @@ When Search is the active main pane, the Search parameter bar owns:
   progress path.
 - With Prompt on exit enabled, `Alt+X` should show the existing confirmation
   before shutdown.
-- `Alt+1` through `Alt+9` should open Kad, Servers, Transfers, Search, Shared
-  Files, Messages, IRC, Statistics, and Options respectively.
 - `Alt+U` should open the floating hotmenu.
-- `Alt+W` should open the Tools popup.
-- `Alt+O` should open Options as an alias.
-- `Alt+T` should not open Tools and should not steal Transfers focus.
+- `Alt+T` should open the Tools popup.
+- `Alt+O` should open Options.
 - In Transfers, `Ctrl+0` should select the All category tab; `Ctrl+1` through
   `Ctrl+9` should select existing category tabs and beep for missing tabs.
 - In Transfers, `F5` should flush the visible transfer-list refresh without
