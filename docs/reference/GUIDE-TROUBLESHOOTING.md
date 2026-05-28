@@ -24,8 +24,8 @@ Collect the support artifact that matches the problem:
 Prefer redacted diagnostic snapshots for support. Use raw snapshots only when
 the recipient is trusted and the data sensitivity is understood.
 The [Diagnostics Guide](GUIDE-DIAGNOSTICS.md) explains snapshot field families,
-dump types, unsafe diagnostic REST routes, and the headless media metadata
-diagnostic command.
+dump types, unsafe diagnostic REST routes, startup profiling traces, and the
+headless media metadata diagnostic command.
 
 ## Public Test Report Checklist
 
@@ -125,6 +125,12 @@ validating cache state, or hashing.
 
 If startup is slow only once after a profile move or package upgrade, allow the
 derived caches to rebuild before treating it as a regression.
+
+For developer or local release builds, use the `EMULE_STARTUP_PROFILE`
+environment switch from the [Diagnostics Guide](GUIDE-DIAGNOSTICS.md) to create
+`startup-profile.trace.json`. It separates app startup phases, shared-cache
+validation, hashing, and upload-budget setup more clearly than the ordinary
+log.
 
 ## Slow Upload Or Queue Recipe
 
