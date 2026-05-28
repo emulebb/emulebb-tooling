@@ -654,8 +654,9 @@ The Tools menu is the operational shortcut surface. It groups:
 - view presets: stock, extended, full, with optional width reset
 - diagnostics: logs, redacted/raw snapshots, mini dump, full dump
 
-The top-level Tools groups have native Alt mnemonics so keyboard users can open
-Tools with `Alt+T` and continue by letter.
+Main-shell shortcuts are language-independent and reuse the reviewed English
+toolbar mnemonics. Transfers owns `Alt+T`; Tools opens with `Alt+W` so keyboard
+users can open Tools and continue by letter without colliding with Transfers.
 
 Direct text edits are not always live. Prefer matching reload actions when they
 exist, and restart after startup, bind, listener, or layout-state edits.
