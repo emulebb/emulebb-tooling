@@ -17,7 +17,8 @@ quick-navigation surface documented below.
 - Refresh interval: desktop UI refresh cadence controls
 - Files and categories: common folders, category management, and category config
 - Network and Updates: IP filter, direct download, server.met update, port test,
-  firewall repair, geolocation update, and Arr/Prowlarr registration helpers
+  firewall repair, and geolocation update
+- Controllers and Integrations: Prowlarr, Radarr, and Sonarr setup helpers
 - Maintenance: reload filters, rescan shared files, save preferences, enable
   Windows long paths, and add Microsoft Defender exclusions
 - Diagnostics: open logs, copy diagnostic snapshots, and capture dumps
@@ -119,22 +120,29 @@ or restart when editing persistent startup, bind, listener, or layout settings.
 
 Network actions include the IP filter dialog, direct ED2K download dialog,
 server.met update from `addresses.dat`, open ports test, Windows Firewall
-repair, geolocation database update, and controller registration helpers. These
-actions affect reachability, bootstrap, network metadata, or local automation
-setup.
+repair, and geolocation database update. These actions affect reachability,
+bootstrap, and network metadata.
+
+## Controllers And Integrations
 
 The registration helpers launch packaged scripts for current Arr-family
 integration:
 
 - `Register eMuleBB in Prowlarr...` launches the Prowlarr Generic Torznab
   setup helper with the current local eMuleBB base URL and API key.
-- `Register Radarr/Sonarr integration...` launches the combined Arr helper
-  with the current local eMuleBB base URL and API key.
+- `Register Radarr integration...` launches the shared Arr helper with
+  `-Target Radarr`.
+- `Register Sonarr integration...` launches the shared Arr helper with
+  `-Target Sonarr`.
 
 The helpers still ask for Prowlarr, Radarr, and Sonarr URLs/API keys at runtime.
 They do not turn those external controller credentials into eMuleBB
 preferences. The future guided in-app setup work is tracked separately; these
 menu items are the current script-launcher surface.
+
+The menu uses eMuleBB-owned classic ICOs for these actions rather than upstream
+Radarr, Sonarr, or Prowlarr logos, so the desktop package avoids third-party
+logo and trademark attribution requirements.
 
 ## Maintenance
 

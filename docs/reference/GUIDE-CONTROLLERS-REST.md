@@ -267,9 +267,10 @@ The most common manual setup values are:
 
 Release packages may include helper scripts under `eMule\scripts`:
 `register-prowlarr.ps1` for the Prowlarr indexer and
-`register-arr-stack.ps1` for Radarr/Sonarr download-client registration plus
-optional Prowlarr application sync. The scripts are conveniences over the same
-documented adapter surfaces; they do not add a separate protocol.
+`register-arr-stack.ps1 -Target Radarr|Sonarr` for one selected Arr download
+client plus optional Prowlarr application sync per run. The scripts are
+conveniences over the same documented adapter surfaces; they do not add a
+separate protocol.
 
 ## Lifecycle
 

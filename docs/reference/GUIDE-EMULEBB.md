@@ -659,6 +659,8 @@ The Tools menu is the operational shortcut surface. It groups:
 - files and categories: incoming, temp, config, logs, WebServer, skins,
   executable, category manager, category config
 - network actions: server.met update, port test, firewall repair, geolocation
+- controllers and integrations: Prowlarr indexer setup plus separate Radarr
+  and Sonarr download-client helpers
 - maintenance: reload filters/rules, rescan shared files, save preferences,
   enable Windows long paths, and add Defender exclusions for active download
   folders

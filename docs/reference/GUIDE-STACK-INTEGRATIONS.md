@@ -223,9 +223,10 @@ The helper creates or updates a Prowlarr Generic Torznab indexer named
 `eMuleBB`. It does not make Prowlarr mandatory, and it should not store
 Prowlarr credentials in eMuleBB preferences.
 
-From the desktop app, use `Tools > Network and Updates > Register eMuleBB in
-Prowlarr...` to launch this helper with the current local eMuleBB connection
-details already filled in.
+From the desktop app, use
+`Tools > Controllers and Integrations > Register eMuleBB in Prowlarr...` to
+launch this helper with the current local eMuleBB connection details already
+filled in.
 
 ## Radarr And Sonarr Download Client Setup
 
@@ -255,32 +256,47 @@ completed-file import, or delete semantics are correct.
 
 ### Package Helper Script
 
-Release packages include a combined helper:
+Release packages include a shared helper that registers one selected Arr
+target per invocation:
 
 ```powershell
 .\scripts\register-arr-stack.ps1 `
+  -Target Radarr `
   -EmulebbBaseUrl 'http://127.0.0.1:4711' `
   -EmulebbApiKey '<emulebb-api-key>' `
   -ProwlarrUrl 'http://localhost:9696' `
   -ProwlarrApiKey '<prowlarr-api-key>' `
   -RadarrUrl 'http://localhost:7878' `
-  -RadarrApiKey '<radarr-api-key>' `
+  -RadarrApiKey '<radarr-api-key>'
+```
+
+Run it separately for Sonarr:
+
+```powershell
+.\scripts\register-arr-stack.ps1 `
+  -Target Sonarr `
+  -EmulebbBaseUrl 'http://127.0.0.1:4711' `
+  -EmulebbApiKey '<emulebb-api-key>' `
+  -ProwlarrUrl 'http://localhost:9696' `
+  -ProwlarrApiKey '<prowlarr-api-key>' `
   -SonarrUrl 'http://localhost:8989' `
   -SonarrApiKey '<sonarr-api-key>'
 ```
 
 The script can:
 
-- register Prowlarr application sync for Radarr and Sonarr
-- trigger Prowlarr application indexer sync
-- add or update the Radarr qBittorrent-compatible download client
-- add or update the Sonarr qBittorrent-compatible download client
+- register optional Prowlarr application sync for the selected target
+- trigger Prowlarr application indexer sync when Prowlarr details are supplied
+- add or update the selected target's qBittorrent-compatible download client
 
-Leave a URL blank when you want to skip that target.
+Use `-Target Radarr` for Radarr or `-Target Sonarr` for Sonarr. Leave the
+Prowlarr URL blank when you want to skip Prowlarr sync for that run.
 
-From the desktop app, use `Tools > Network and Updates > Register Radarr/Sonarr
-integration...` to launch this helper with the current local eMuleBB connection
-details already filled in.
+From the desktop app, use
+`Tools > Controllers and Integrations > Register Radarr integration...` or
+`Tools > Controllers and Integrations > Register Sonarr integration...` to
+launch this helper with the current local eMuleBB connection details already
+filled in.
 
 ## Adapter Compatibility Boundaries
 
