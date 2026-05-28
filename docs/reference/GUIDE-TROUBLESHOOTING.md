@@ -23,6 +23,9 @@ Collect the support artifact that matches the problem:
 
 Prefer redacted diagnostic snapshots for support. Use raw snapshots only when
 the recipient is trusted and the data sensitivity is understood.
+The [Diagnostics Guide](GUIDE-DIAGNOSTICS.md) explains snapshot field families,
+dump types, unsafe diagnostic REST routes, and the headless media metadata
+diagnostic command.
 
 ## Public Test Report Checklist
 
@@ -217,6 +220,18 @@ For hangs or memory growth:
 2. Record uptime and active workload.
 3. Record controller activity, sharing state, and network state.
 4. Avoid killing the process until evidence is collected when practical.
+
+## Media Metadata Diagnostic Recipe
+
+Use the headless metadata diagnostic when preview or media metadata extraction
+behaves differently across machines:
+
+```powershell
+emulebb.exe --diagnose-media-metadata --input C:\Media\sample.mkv --output C:\Temp\metadata.json
+```
+
+The output uses `emulebb.mediaMetadataDiagnostic.v1` and includes the input
+path. Review it before sharing publicly.
 
 ## Frozen Legacy Surfaces
 

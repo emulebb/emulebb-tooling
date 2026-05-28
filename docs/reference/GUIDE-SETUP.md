@@ -158,9 +158,16 @@ Supported options:
 | `--cert <path>` | Certificate output path for certificate generation |
 | `--key <path>` | Private-key output path for certificate generation |
 | `--host <dns-or-ip>` | Certificate subject alternative name; repeatable |
+| `--diagnose-media-metadata` | Probe maintained media metadata extractors and exit |
+| `--input <path>` | Media file path for metadata diagnostics |
+| `--output <path>` | Optional JSON output path for metadata diagnostics |
 
 Only one positional argument is supported. Use it for an `ed2k` link, magnet
 link, collection file, or supported command such as `exit`.
+
+Metadata diagnostics produce the `emulebb.mediaMetadataDiagnostic.v1` JSON
+schema and include the input path. Use them for controlled support or release
+proof, not as an anonymous public telemetry artifact.
 
 ## Network Setup Recipe
 

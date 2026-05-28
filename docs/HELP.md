@@ -17,7 +17,7 @@ already understand eMule-style clients and want exact operating guidance.
 | Share a large library deliberately | [Sharing Guide](reference/GUIDE-SHARING.md) |
 | Wire eMuleBB into aMuTorrent or Arr apps | [Stack Integration Guide](reference/GUIDE-STACK-INTEGRATIONS.md) |
 | Make the first REST API call | [REST Quickstart](rest/REST-API-QUICKSTART.md) |
-| Diagnose a crash, hang, slow startup, or REST failure | [Troubleshooting Guide](reference/GUIDE-TROUBLESHOOTING.md) |
+| Diagnose a crash, hang, slow startup, or REST failure | [Troubleshooting Guide](reference/GUIDE-TROUBLESHOOTING.md) and [Diagnostics Guide](reference/GUIDE-DIAGNOSTICS.md) |
 | Translate user-facing docs or homepage text | [Translations And Localization](reference/GUIDE-TRANSLATIONS.md) |
 
 ## Safe First Steps

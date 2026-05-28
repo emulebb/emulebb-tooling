@@ -311,6 +311,26 @@ For controller failures, collect:
 Do not share API keys, private keys, or full raw profile dumps unless the
 recipient is trusted and the exposure is understood.
 
+### Unsafe Diagnostic REST
+
+The native REST contract includes diagnostic dump and crash-test routes:
+
+- `POST /api/v1/diagnostics/dumps`
+- `POST /api/v1/diagnostics/crash-tests`
+
+These endpoints are intentionally unsafe for ordinary controller exposure. They
+are disabled unless diagnostic REST endpoints are explicitly enabled, and they
+require request confirmation fields: `confirmDump: true` or
+`confirmCrash: true`.
+
+Keep them localhost-only or on a tightly controlled operator network. Use dump
+capture for release proof and support evidence; use crash tests only for
+diagnostic harnesses. Do not expose these routes through broad LAN, public
+reverse-proxy, or Arr-controller paths.
+
+For snapshot, dump, and redaction details, see
+[Diagnostics Guide](GUIDE-DIAGNOSTICS.md).
+
 ## Troubleshooting
 
 REST unavailable:

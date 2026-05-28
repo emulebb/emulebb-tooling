@@ -207,6 +207,9 @@ Supported options:
 | `--cert <path>` | Certificate output path for `--generate-webserver-cert` |
 | `--key <path>` | Private-key output path for `--generate-webserver-cert` |
 | `--host <dns-or-ip>` | Subject alternative name for generated certificate; repeatable |
+| `--diagnose-media-metadata` | Probe maintained media metadata extractors and exit |
+| `--input <path>` | Media file path for `--diagnose-media-metadata` |
+| `--output <path>` | Optional JSON output path for `--diagnose-media-metadata` |
 
 Only one positional argument is supported. It may be an `ed2k` link, magnet
 link, collection file, or command such as `exit`.
@@ -220,6 +223,11 @@ Parser contract:
   `--generate-webserver-cert`
 - `--host` is repeatable for certificate subject alternative names
 - certificate generation does not accept a positional argument
+- `--diagnose-media-metadata` requires `--input`
+- `--input` and `--output` are valid only with
+  `--diagnose-media-metadata`
+- metadata diagnostics emit `emulebb.mediaMetadataDiagnostic.v1` JSON and do
+  not accept a positional argument
 - unknown options and invalid option values are command-line errors
 
 ## Product Guide Refresh

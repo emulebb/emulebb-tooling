@@ -58,6 +58,7 @@ nav:
       - IP Filters: reference/GUIDE-IP-FILTERS.md
       - Long Paths: reference/GUIDE-LONGPATHS.md
       - Keyboard Shortcuts: reference/KEYBOARD-SHORTCUTS.md
+      - Diagnostics: reference/GUIDE-DIAGNOSTICS.md
       - Troubleshooting: reference/GUIDE-TROUBLESHOOTING.md
       - Translations: reference/GUIDE-TRANSLATIONS.md
   - API And Automation:
