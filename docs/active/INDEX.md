@@ -20,9 +20,9 @@ engineering spec/evidence records, not workflow status authority.
 ## Current Snapshot
 
 **Source of truth:** `EMULE_WORKSPACE_ROOT\workspaces\workspace\app\emulebb-main` (`main` branch)
-**Current non-done count:** `87`
+**Current non-done count:** `88`
 **Latest release-doc refresh:** 2026-05-23
-**Non-done by status:** `71` OPEN, `6` IN_PROGRESS, `10` DEFERRED, `0` BLOCKED.
+**Non-done by status:** `72` OPEN, `6` IN_PROGRESS, `10` DEFERRED, `0` BLOCKED.
 **Backlog counts:** item tables below are authoritative.
 **RC 0.7.3 relevance:** Most non-done items below are future or deferred work;
 current RC gate and proof status is controlled by [RELEASE-0.7.3](RELEASE-0.7.3.md).
@@ -392,6 +392,7 @@ not active item docs.
 | [FEAT-093](items/FEAT-093.md) | Minor | OPEN | Safely raise WebServer accepted-client concurrency |
 | [FEAT-094](items/FEAT-094.md) | Major | OPEN | Improve UDP burst handling without lock-held backoff |
 | [FEAT-095](items/FEAT-095.md) | Major | OPEN | Move part-file durability work off foreground paths |
+| [FEAT-096](items/FEAT-096.md) | Minor | OPEN | Improve client and network statistics observability |
 
 ---
 

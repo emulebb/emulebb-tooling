@@ -68,11 +68,11 @@ Existing anchors:
 
 Scope:
 Dark mode, Per-Monitor DPI, category-management polish, table/menu consistency,
-keyboard-friendly workflows, preference clarity, and visible progress for
-long-running startup maintenance.
+keyboard-friendly workflows, preference clarity, statistics clarity, and visible
+progress for long-running startup maintenance.
 
 Existing anchors:
-`FEAT-017`, `FEAT-019`, `FEAT-062`, `FEAT-075`, `FEAT-082`.
+`FEAT-017`, `FEAT-019`, `FEAT-062`, `FEAT-075`, `FEAT-082`, `FEAT-096`.
 
 ### Startup And Storage Performance
 
