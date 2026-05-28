@@ -65,9 +65,11 @@ FILENAME_RE = re.compile(
     re.IGNORECASE,
 )
 URL_RE = re.compile(r"\b(?:https?|ed2k)://[^\s\"<>]+", re.IGNORECASE)
-PLACEHOLDER_RE = re.compile(r"%(?:%|[-+ #0]*\d*(?:\.\d+)?[hlI64]*[A-Za-z])")
+PLACEHOLDER_RE = re.compile(r"%(?:%|[-+ #0]*\d*(?:\.\d+)?[hlI64]*[A-Za-z])|%")
 ESCAPE_RE = re.compile(r"\\(?:r\\n|n|r|t)")
 TOKEN_RE = re.compile(r"QZX(\d+)XZQ")
+ESCAPE_GROUP_RE = re.compile(r"(?:\\r\\n|\\n|\\r|\\t)+")
+FORMAT_MARKER_RE = re.compile(r"%(?:%|[-+ #0]*\d*(?:\.\d+)?[hlI64]*[A-Za-z])|%")
 
 
 def load_rc_helper():
@@ -152,6 +154,65 @@ def restore_text(text: str, tokens: list[str]) -> str:
     return restored
 
 
+def restore_escape_layout(source: str, translated: str) -> str:
+    """Reinsert RC escape groups when translation collapses protected paragraph separators."""
+
+    source_groups = ESCAPE_GROUP_RE.findall(source)
+    if not source_groups:
+        return translated
+    if ESCAPE_RE.findall(translated) == ESCAPE_RE.findall(source):
+        return translated
+
+    result = ESCAPE_GROUP_RE.sub(" ", translated).strip()
+    if not result:
+        return translated
+    for group in source_groups:
+        source_offset = source.find(group)
+        ratio = source_offset / max(len(source), 1)
+        target_index = max(1, min(len(result), round(len(result) * ratio)))
+        punctuation = [". ", "! ", "? ", ": ", "; ", "。", "！", "؟ ", "؟", "؟ "]
+        candidates = []
+        for marker in punctuation:
+            start = 0
+            while True:
+                found = result.find(marker, start)
+                if found == -1:
+                    break
+                candidates.append(found + len(marker))
+                start = found + len(marker)
+        if candidates:
+            target_index = min(candidates, key=lambda item: abs(item - target_index))
+        result = result[:target_index].rstrip() + group + result[target_index:].lstrip()
+    return result
+
+
+def format_markers(value: str) -> list[str]:
+    """Return RC printf and literal-percent markers in order."""
+
+    return FORMAT_MARKER_RE.findall(value)
+
+
+def restore_format_markers(source: str, translated: str) -> str:
+    """Append source markers that a translation engine dropped from placeholder-heavy text."""
+
+    source_markers = format_markers(source)
+    if not source_markers:
+        return translated
+    target_markers = format_markers(translated)
+    if target_markers == source_markers:
+        return translated
+    index = 0
+    missing: list[str] = []
+    for marker in source_markers:
+        if index < len(target_markers) and target_markers[index] == marker:
+            index += 1
+        else:
+            missing.append(marker)
+    if index != len(target_markers) or not missing:
+        return translated
+    return translated.rstrip() + " " + " ".join(missing)
+
+
 def normalize_mnemonic(source: str, translated: str) -> str:
     """Keep one menu mnemonic when the English source had one."""
 
@@ -175,7 +236,10 @@ def translate_value(translator, source: str, extra_terms: list[str]) -> str:
             translated = translator.translate(protected)
             if translated is None:
                 raise RuntimeError("translator returned no text")
-            return normalize_mnemonic(source, restore_text(translated, tokens))
+            restored = restore_text(translated, tokens)
+            restored = restore_escape_layout(source, restored)
+            restored = restore_format_markers(source, restored)
+            return normalize_mnemonic(source, restored)
         except Exception:
             if attempt == 4:
                 raise
@@ -211,7 +275,10 @@ def translate_values_batch(translator, sources: list[str], extra_terms: list[str
             if translated is None:
                 translated_by_source[start + offset] = translate_value(translator, source, extra_terms)
             else:
-                translated_by_source[start + offset] = normalize_mnemonic(source, restore_text(translated, tokens))
+                restored = restore_text(translated, tokens)
+                restored = restore_escape_layout(source, restored)
+                restored = restore_format_markers(source, restored)
+                translated_by_source[start + offset] = normalize_mnemonic(source, restored)
 
     prepared_index = 0
     final: list[str] = []
