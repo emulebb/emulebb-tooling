@@ -5,22 +5,28 @@ maintenance, diagnostics, and direct config-file access.
 
 ## Organization
 
-Tools is grouped by task:
+The expanded main-shell Tools popup is grouped by task. The compact tray and
+legacy hot-menu surfaces keep their shorter ordering so tray use remains
+stable.
 
 - Session: connect, disconnect, pane jumps, tray, and exit
-- Speed Quick Actions: upload, download, and combined throttle presets
-- Folders: open important directories
-- Categories: manage categories and edit category config
-- Edit Config Files: open editable profile files in the configured text editor
+- Transfers and speed: transfer navigation, upload/download limit presets, and
+  refresh interval controls
+- Files and categories: common folders, category management, and category config
 - Network and Updates: IP filter, direct download, server.met update, port test,
   firewall repair, geolocation update, and Arr/Prowlarr registration helpers
 - Maintenance: reload filters, rescan shared files, save preferences, enable
   Windows long paths, and add Microsoft Defender exclusions
-- View Presets: apply stock, extended, or full table layouts
 - Diagnostics: open logs, copy diagnostic snapshots, and capture dumps
+- Display and views: toolbar skins, text-label display settings, toolbar
+  customization, display reset, and table view presets
+- Edit Config Files: open editable profile files in the configured text editor
+- Links and legacy: web links plus the frozen Scheduler and first-run wizard
+  entry points while those surfaces still exist
 
-The goal is fast access without forcing users through Preferences for every
-operational action.
+The top-level labels are built from existing localized resources where
+possible, so the structure can improve without creating a new translation pass
+for menu-only wording.
 
 ## Session
 
@@ -35,14 +41,19 @@ Session actions mirror high-frequency toolbar behavior:
 Use these actions when running from tray or when the toolbar is hidden or not
 focused.
 
-## Speed Quick Actions
+## Transfers And Speed
+
+The Transfers and speed group contains transfer pane navigation, speed quick
+actions, and refresh interval controls.
 
 Speed quick actions change limits for upload only, download only, or both
 directions together. Percentage actions apply to the current configured finite
 limit and are persisted through the same preference paths as normal limit
 changes.
 
-## Folders
+## Files And Categories
+
+The Files and categories group contains folder shortcuts and category actions.
 
 Folder actions open common locations:
 
@@ -56,6 +67,8 @@ Folder actions open common locations:
 - executable directory
 
 Use these instead of manually browsing through profile paths.
+
+Category actions open the category manager and `Category.ini` editor.
 
 ## Edit Config Files
 
@@ -117,14 +130,31 @@ persisted immediately.
 
 ## View Presets
 
+View presets live under the Display and views group in the expanded Tools
+popup. The compact tray menu keeps the older flat View Presets submenu.
+
 View presets reset table layouts:
 
 - Stock: conservative, classic columns
 - Extended: power-user columns without everything visible
 - Full: all reviewed columns visible
 
-Each preset has variants to preserve widths or reset widths. Use reset widths
-when old profiles have cramped or broken column layouts.
+In the expanded Tools popup each preset has its own submenu with preserve-widths
+and reset-widths commands. Use reset widths when old profiles have cramped or
+broken column layouts.
+
+## Display
+
+Display actions also live under Display and views:
+
+- toolbar bitmap skins
+- toolbar skin profiles
+- toolbar text-label display modes
+- display reset
+- toolbar customization
+
+These actions affect main-shell presentation only. They do not change network,
+transfer, or persistence behavior beyond the existing UI preference writes.
 
 ## Diagnostics
 
@@ -139,6 +169,14 @@ Diagnostics actions include:
 Use redacted JSON for public or routine support unless exact addresses, paths,
 or command lines are required for private diagnosis. See
 [Diagnostics Guide](GUIDE-DIAGNOSTICS.md) for privacy boundaries and dump use.
+
+## Links And Legacy
+
+The expanded Tools popup moves web links, Scheduler, and the first-run wizard
+under one low-priority group. Scheduler and the first-run wizard are frozen
+surfaces tracked for deletion through `REF-025`; this grouping makes that
+boundary visible without changing their current commands. The compact tray menu
+keeps the previous Links and Scheduler placement.
 
 ## Keyboard Notes
 

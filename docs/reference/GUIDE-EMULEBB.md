@@ -654,15 +654,20 @@ Display and date/time:
 The Tools menu is the operational shortcut surface. It groups:
 
 - session actions: connect, disconnect, pane jumps, tray, exit
-- speed actions: upload/download/both limit presets
-- folders: incoming, temp, config, logs, WebServer, skins, executable
-- config editors: preferences, filters, shares, categories, comments, statistics
+- transfers and speed: transfer navigation, upload/download/both limit presets,
+  refresh interval controls
+- files and categories: incoming, temp, config, logs, WebServer, skins,
+  executable, category manager, category config
 - network actions: server.met update, port test, firewall repair, geolocation
 - maintenance: reload filters/rules, rescan shared files, save preferences,
   enable Windows long paths, and add Defender exclusions for active download
   folders
-- view presets: stock, extended, full, with optional width reset
 - diagnostics: logs, redacted/raw snapshots, mini dump, full dump
+- display and views: toolbar skins, text labels, display reset, toolbar
+  customization, stock/extended/full view presets
+- config editors: preferences, filters, shares, comments, statistics
+- links and legacy: web links plus frozen Scheduler and first-run wizard entry
+  points while they remain compiled
 
 Main-shell shortcuts are language-independent and reuse the reviewed English
 toolbar mnemonics. Transfers owns `Alt+T`; Tools opens with `Alt+W` so keyboard
