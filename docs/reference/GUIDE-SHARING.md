@@ -46,6 +46,8 @@ Treat this as a sharing/privacy decision, not just a local preview convenience:
 - it depends on the selected shared-file visibility policy
 - it requires FFmpeg configuration for frame extraction
 - it should be disabled when you do not want peers previewing shared videos
+- it should be reviewed before enabling broad public sharing or controller
+  workflows that make preview-capable files easy to discover
 
 Local preview and peer preview are related but not identical. Local preview is
 for the operator. Peer preview is live-network behavior.
@@ -102,6 +104,15 @@ Large libraries need predictable scanning:
 - use long-path capable Windows setup for deep trees
 - let the first scan and hash queue finish
 - avoid judging performance during first-run cache creation
+
+First-hour checklist:
+
+1. Add one curated root and let hashing finish.
+2. Confirm `shareignore.dat` excludes private sidecars and generated files.
+3. Decide whether peer preview is acceptable for the files in that root.
+4. Restart once and confirm startup cache diagnostics are healthy.
+5. Add monitored shares only for stable automation output folders.
+6. Scale to additional roots gradually, watching logs and diagnostics.
 
 Released startup-cache behavior stores verified shared-library state so later
 starts can avoid repeating expensive work. If cache sidecars are deleted, the

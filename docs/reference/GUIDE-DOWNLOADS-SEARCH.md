@@ -320,6 +320,12 @@ copies. Archive-copy preview requires enough free space for the protected floor
 plus two copies of the file size. Normal preview requires the floor plus the
 completed bytes available for preview and a small extra buffer.
 
+Archive preview and archive recovery are legacy convenience paths. Passing an
+archive preview check does not prove that a file is authentic, complete,
+malware-free, or safe to extract. Use preview only as a local inspection aid and
+rely on normal hash, source, comment, risk/evidence, and operator review before
+trusting the result.
+
 Operational guidance:
 
 - keep config, temp, and incoming on volumes with predictable free space
@@ -344,9 +350,15 @@ Released behavior:
 - Slot decisions use a finite configured upload budget.
 - Slow or zero-rate slots can be recycled after warm-up and grace periods.
 - Cooldown prevents the same weak slot pattern from churning constantly.
-- Collection uploads have an intentional compatibility exception.
+- Collection uploads keep a correctness guard, not a separate scheduler lane.
 - Low-ratio scoring can give selected clients a queue boost.
 - Ratio and cooldown data can be shown in UI columns.
+
+Collection upload behavior is deliberately narrow. Current eMuleBB does not
+give `.emulecollection` requests their own upload scheduler path. The remaining
+collection-slot state is a guard that clears stale markers and rejects unsafe
+mid-slot switches away from valid small collection traffic. Diagnose it as
+upload correctness/compatibility state, not as a performance feature to tune.
 
 Practical tuning:
 

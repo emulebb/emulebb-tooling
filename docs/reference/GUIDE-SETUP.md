@@ -79,6 +79,11 @@ Use this path for a clean first profile:
 The legacy first-run connection wizard is a frozen surface. Treat the
 Preferences pages and the product guides as the supported setup path.
 
+Before adding a large shared library, review
+[Sharing Guide](GUIDE-SHARING.md#large-library-operation). The first run should
+prove one curated root, peer-preview policy, cache behavior, and monitored-share
+scope before broad roots or automation are enabled.
+
 ## Existing Profile Recipe
 
 Use this path when moving from stock eMule or another eMule-family build:
@@ -208,6 +213,10 @@ Leave bind settings empty unless the machine has multiple active network paths,
 a VPN/interface requirement, or an operator-controlled routing policy. When
 binding is required, prefer explicit interface/address configuration and verify
 the resolved bind state in diagnostics.
+
+Binding is not a VPN kill switch. Keep VPN provider kill-switch, route, and
+Windows Firewall policy separate from eMuleBB bind settings, and configure the
+WebServer/REST bind address independently from P2P bind policy.
 
 ## Controller Setup Recipe
 

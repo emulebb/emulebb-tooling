@@ -70,6 +70,11 @@ pinger-adjacent network paths, layered/proxy TCP paths, and UPnP discovery where
 applicable. The WebServer/REST bind address is intentionally separate from the
 P2P bind address.
 
+Binding is not a VPN kill switch. It chooses and verifies the local P2P socket
+path that eMuleBB controls; it does not replace the VPN provider, Windows
+Firewall, routing table, or external leak-prevention policy. Treat WebServer,
+REST, UPnP discovery, and LAN/controller exposure as separate surfaces.
+
 If the configured bind target cannot be resolved, eMuleBB reports the active
 bind state in UI/diagnostics. With startup bind blocking enabled, P2P networking
 stays offline for that session instead of using an unintended route.

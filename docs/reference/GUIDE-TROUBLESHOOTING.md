@@ -132,6 +132,10 @@ environment switch from the [Diagnostics Guide](GUIDE-DIAGNOSTICS.md) to create
 validation, hashing, and upload-budget setup more clearly than the ordinary
 log.
 
+If the profile uses monitored shares, confirm the monitored roots are stable
+and narrow. Watcher churn can look like startup/cache trouble when another tool
+is constantly creating, renaming, or deleting files under a monitored root.
+
 ## Slow Upload Or Queue Recipe
 
 Upload performance should be diagnosed through the broadband upload policy, not
