@@ -5,13 +5,16 @@ maintenance, diagnostics, and direct config-file access.
 
 ## Tools Organization
 
-The expanded main-shell Tools popup is grouped by task. The compact tray menu
-keeps its shorter ordering so tray use remains stable. The floating `Alt+U`
-Hotmenu is a separate quick-navigation surface documented below.
+The expanded main-shell Tools popup is grouped by task. Both the expanded Tools
+popup and compact tray Tools path must stay at a maximum of one submenu level:
+top-level groups may open one command list, but those command lists must not
+open another nested submenu. The floating `Alt+U` Hotmenu is a separate
+quick-navigation surface documented below.
 
 - Session: connect, disconnect, pane jumps, tray, and exit
-- Transfers and speed: transfer navigation, upload/download limit presets, and
-  refresh interval controls
+- Transfers: transfer navigation
+- Speed Quick Actions: upload/download/both limit presets
+- Refresh interval: desktop UI refresh cadence controls
 - Files and categories: common folders, category management, and category config
 - Network and Updates: IP filter, direct download, server.met update, port test,
   firewall repair, geolocation update, and Arr/Prowlarr registration helpers
@@ -27,6 +30,10 @@ Hotmenu is a separate quick-navigation surface documented below.
 The top-level labels are built from existing localized resources where
 possible, so the structure can improve without creating a new translation pass
 for menu-only wording.
+
+Menu art follows the same conservative rule: command icons should look native
+to the classic eMule/early-2000s Windows shell, use transparent ICO alpha/masks,
+and avoid opaque dark backgrounds that turn menu glyphs into black tiles.
 
 ## Alt+U Hotmenu
 
@@ -58,10 +65,11 @@ Session actions mirror high-frequency toolbar behavior:
 Use these actions when running from tray or when the toolbar is hidden or not
 focused.
 
-## Transfers And Speed
+## Transfers, Speed, And Refresh
 
-The Transfers and speed group contains transfer pane navigation, speed quick
-actions, and refresh interval controls.
+The expanded Tools popup exposes transfer pane navigation, speed quick actions,
+and refresh interval controls as separate top-level groups. The compact tray
+menu keeps the same one-level command lists in its shorter ordering.
 
 Speed quick actions change limits for upload only, download only, or both
 directions together. Percentage actions apply to the current configured finite
@@ -147,8 +155,9 @@ persisted immediately.
 
 ## View Presets
 
-View presets live under the Display and views group in the expanded Tools
-popup. The compact tray menu keeps the older flat View Presets submenu.
+View presets are direct commands under the Display and views group in the
+expanded Tools popup. The compact tray menu keeps a one-level View Presets
+submenu.
 
 View presets reset table layouts:
 
@@ -156,13 +165,12 @@ View presets reset table layouts:
 - Extended: power-user columns without everything visible
 - Full: all reviewed columns visible
 
-In the expanded Tools popup each preset has its own submenu with preserve-widths
-and reset-widths commands. Use reset widths when old profiles have cramped or
-broken column layouts.
+Each preset exposes preserve-widths and reset-widths commands directly. Use
+reset widths when old profiles have cramped or broken column layouts.
 
 ## Display
 
-Display actions also live under Display and views:
+Display actions also live directly under Display and views:
 
 - toolbar bitmap skins
 - toolbar skin profiles

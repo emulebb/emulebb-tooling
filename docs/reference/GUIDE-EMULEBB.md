@@ -654,8 +654,8 @@ Display and date/time:
 The Tools menu is the operational shortcut surface. It groups:
 
 - session actions: connect, disconnect, pane jumps, tray, exit
-- transfers and speed: transfer navigation, upload/download/both limit presets,
-  refresh interval controls
+- transfers, speed, and refresh: transfer navigation, upload/download/both
+  limit presets, refresh interval controls
 - files and categories: incoming, temp, config, logs, WebServer, skins,
   executable, category manager, category config
 - network actions: server.met update, port test, firewall repair, geolocation
@@ -673,6 +673,9 @@ Main-shell shortcuts are language-independent and reuse the reviewed English
 toolbar mnemonics. Transfers owns `Alt+T`; Tools opens with `Alt+W` so keyboard
 users can open Tools and continue by letter without colliding with Transfers.
 See [Tools Menu Guide](GUIDE-TOOLS-MENU.md) for the current menu map.
+The expanded Tools popup and compact tray Tools path intentionally allow only
+one submenu level, so grouped commands remain reachable without nested flyout
+chains.
 
 Direct text edits are not always live. Prefer matching reload actions when they
 exist, and restart after startup, bind, listener, or layout-state edits.
