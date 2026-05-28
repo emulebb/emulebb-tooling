@@ -668,8 +668,7 @@ The Tools menu is the operational shortcut surface. It groups:
 - display and views: toolbar skins, text labels, display reset, toolbar
   customization, stock/extended/full view presets
 - config editors: preferences, filters, shares, comments, statistics
-- links and legacy: web links plus frozen Scheduler and first-run wizard entry
-  points while they remain compiled
+- links: eMuleBB web links and configured web-service entries
 
 Main-shell shortcuts are language-independent and reuse the reviewed English
 toolbar mnemonics. Transfers owns `Alt+T`; Tools opens with `Alt+W` so keyboard

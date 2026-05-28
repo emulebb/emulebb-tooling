@@ -25,8 +25,7 @@ quick-navigation surface documented below.
 - Display and views: toolbar skins, text-label display settings, toolbar
   customization, display reset, and table view presets
 - Edit Config Files: open editable profile files in the configured text editor
-- Links and legacy: web links plus the frozen Scheduler and first-run wizard
-  entry points while those surfaces still exist
+- Links: eMuleBB web links and configured web-service entries
 
 The top-level labels are built from existing localized resources where
 possible, so the structure can improve without creating a new translation pass
@@ -46,12 +45,12 @@ and avoid opaque dark backgrounds that turn menu glyphs into black tiles.
 - fast actions: paste eD2K links and open IP Filter
 - folders: Incoming, Config, Logs
 - links: eMuleBB web links and configured web-service links
-- legacy/frozen entries: IRC, Scheduler, first-run wizard
+- legacy/frozen entries: IRC
 - exit
 
 The tray right-click menu is different from the Hotmenu. It is built from the
-Tools path with tray-specific Restore/Minimize/connect entries and preserves
-the compact tray ordering.
+Tools path with tray-specific Restore/Minimize/connect entries and keeps the
+compact tray ordering.
 
 ## Session
 
@@ -203,13 +202,13 @@ Use redacted JSON for public or routine support unless exact addresses, paths,
 or command lines are required for private diagnosis. See
 [Diagnostics Guide](GUIDE-DIAGNOSTICS.md) for privacy boundaries and dump use.
 
-## Links And Legacy
+## Links
 
-The expanded Tools popup moves web links, Scheduler, and the first-run wizard
-under one low-priority group. Scheduler and the first-run wizard are frozen
-surfaces tracked for deletion through `REF-025`; this grouping makes that
-boundary visible without changing their current commands. The compact tray menu
-keeps the previous Links and Scheduler placement.
+The expanded Tools popup and compact tray path expose web links under one
+Links group. Scheduler toggle/schedule actions and the first-run wizard are no
+longer appended to the expanded Tools, compact tray Tools, or floating Hotmenu
+surfaces. The underlying frozen Scheduler and wizard code still exists until
+the deletion slices tracked by `REF-025` remove it.
 
 ## Keyboard Notes
 
