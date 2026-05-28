@@ -228,6 +228,16 @@ Kad SafeKad and broader trust-scoring plans remain active backlog/future work
 unless marked done in the active index. This product guide documents released
 runtime behavior only.
 
+## Source Exchange Compatibility
+
+Live Source Exchange is SX2-only in eMuleBB. The old SX1 live-network advertise,
+request, response, and version-tracking paths are intentionally absent.
+
+Do not treat missing live `OP_REQUESTSOURCES` or `OP_ANSWERSOURCES` SX1 support
+as a protocol regression. Local eD2K-link source import remains separate from
+live SX1 packet support. The durable decision record is
+[REF-002](../history/items/REF-002.md).
+
 ## IPv6 And Kad Roadmap
 
 Current eMuleBB product behavior remains stock-compatible IPv4 eD2K/Kad. IPv6

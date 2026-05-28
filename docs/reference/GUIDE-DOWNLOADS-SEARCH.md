@@ -176,6 +176,21 @@ Keep completion commands narrow, deterministic, and safe for filenames that
 come from untrusted networks. Prefer explicit tools and explicit arguments over
 shell expansion.
 
+Supported argument tokens:
+
+| Token | Expands To |
+|---|---|
+| `%F` | completed file full path |
+| `%D` | completed file directory |
+| `%N` | completed file name |
+| `%H` | ED2K file hash |
+| `%S` | file size in bytes |
+| `%C` | category name |
+
+`%F` and `%D` are quoted automatically. Environment variables are not expanded,
+so write the full program path and explicit arguments rather than relying on
+shell behavior.
+
 ## Transfer Limits
 
 Upload and download limits are finite runtime caps. eMuleBB defaults are
@@ -196,6 +211,18 @@ Related controls:
 
 These settings are operational controls. Setting them too high can make network,
 disk, or UI behavior worse even on a fast machine.
+
+## Auto Broadband I/O
+
+`AutoBroadbandIO` is enabled by default for new broadband profiles. It keeps
+download buffering bounded by dividing a 512 MiB global download-buffer budget
+across active buffered files, then using the smaller value between that share
+and the manual file-buffer setting.
+
+The practical result is predictable memory use during many active downloads:
+one or two large active files can use larger buffers, while a broad active
+queue does not allocate a large buffer per file. Disable it only when comparing
+old manual-buffer behavior or diagnosing a specific I/O issue.
 
 ## Disk-Space Protection
 

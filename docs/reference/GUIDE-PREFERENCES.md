@@ -79,6 +79,49 @@ Important sections:
 Branch-added geolocation and IP-filter updater keys remain in the default
 section to stay near stock security/advanced behavior.
 
+## Operational Preference Notes
+
+### GitHub Releases Update Check
+
+The current `Check for eMuleBB updates` option checks GitHub Releases at startup
+when the configured interval has elapsed and only alerts when a newer eMuleBB
+package is available. This is not the old stock eMule update checker that
+pointed at defunct update infrastructure.
+
+Disable it for quiet startup. Enable it when the profile should periodically
+tell the operator that a newer package is available.
+
+### Auto Broadband I/O
+
+`AutoBroadbandIO` is the REST/UI-facing switch for bounded broadband download
+buffering. When enabled, eMuleBB divides a 512 MiB global download-buffer budget
+across active buffered files and uses the smaller value between that share and
+the manual file-buffer preference.
+
+This keeps memory bounded as active download count rises. The manual file
+buffer still matters: it is the per-file ceiling when the automatic share would
+be larger.
+
+### Performance Logging
+
+`[PerfLog]` controls optional performance logging. CSV mode writes one
+timestamped file that is easiest to inspect manually. MRTG mode writes graphing
+sidecars for tools that expect MRTG-style data and overhead files.
+
+The base path may be blank; blank means the default log path in the eMuleBB
+config/log area. Short sampling intervals create finer graphs but more disk
+writes. Use performance logs for repeatable diagnosis, then turn them off when
+the evidence has been collected.
+
+### Completion Commands
+
+`[FileCompletion]` controls the optional command that runs after a download
+completes. Supported argument tokens are documented in
+[Downloads And Search](GUIDE-DOWNLOADS-SEARCH.md#completion-command).
+
+Use explicit executable paths and arguments. The app does not expand
+environment variables in the argument template.
+
 ## Load, Normalize, And Save
 
 Preferences are loaded at startup through the shared INI/profile layer. Missing
@@ -1659,7 +1702,9 @@ above for user-facing defaults and ranges.
   - Default and normalization: Not explicitly declared in schema
   - UI: PPgTweaks.cpp
   - REST: autoBroadbandIo
-  - Notes: None
+  - Notes: Enabled behavior divides a 512 MiB global download-buffer budget across
+           active buffered files and caps each file by the manual file-buffer
+           setting.
 
 - **`Autoconnect`**
   - Type: bool
@@ -1850,7 +1895,8 @@ above for user-facing defaults and ranges.
   - Default and normalization: Not explicitly declared in schema
   - UI: None
   - REST: None
-  - Notes: None
+  - Notes: Startup interval for the current GitHub Releases update check, not the
+           removed legacy stock eMule update checker.
 
 - **`CreateCrashDump`**
   - Type: integer
@@ -2916,7 +2962,8 @@ above for user-facing defaults and ranges.
   - Default and normalization: Not explicitly declared in schema
   - UI: None
   - REST: None
-  - Notes: None
+  - Notes: Last automatic GitHub Releases update-check time; separate from legacy
+           stock eMule update infrastructure.
 
 - **`WatchClipboard4ED2kFilelinks`**
   - Type: bool
@@ -2996,7 +3043,8 @@ above for user-facing defaults and ranges.
   - Default and normalization: Not explicitly declared in schema
   - UI: PPgFiles.cpp
   - REST: None
-  - Notes: None
+  - Notes: Supports `%F`, `%D`, `%N`, `%H`, `%S`, and `%C`; `%F` and `%D` are
+           quoted automatically and environment variables are not expanded.
 
 - **`FileCompletionProgram`**
   - Type: string

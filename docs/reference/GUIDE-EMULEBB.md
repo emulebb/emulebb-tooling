@@ -521,12 +521,18 @@ Startup and command line:
 - `--generate-webserver-cert` creates WebServer TLS certificate/key material
   and exits when `--cert` and `--key` are provided; `--host` can add one or
   more subject alternative names
+- `--diagnose-media-metadata` probes maintained metadata extractors and exits
+  with `emulebb.mediaMetadataDiagnostic.v1` JSON
 - one positional input can be forwarded as an `ed2k` link, magnet link,
   collection file, or command such as `exit`
+- the current update check is a GitHub Releases startup check, distinct from
+  the removed legacy stock eMule update checker
 
 Sharing and library management:
 
 - share-ignore rules are supported through `shareignore.dat`
+- peer preview is an explicit opt-in live-network sharing behavior for shared
+  video files when shares are visible and FFmpeg is configured
 - shared startup cache and duplicate-path cache accelerate large libraries
 - monitored shares can keep selected roots synchronized
 - Shared Files UI is hardened and virtualized for large lists
@@ -574,6 +580,8 @@ Downloads and search:
   category, and paused/started semantics
 - completed downloads can optionally run a configured external command
 - direct delete/cancel operations keep native semantics
+- Auto Broadband I/O bounds download buffer memory by sharing a 512 MiB global
+  active-download buffer budget across active buffered files
 
 Disk-space protection:
 
@@ -629,6 +637,8 @@ Controllers and diagnostics:
 - Tools actions expose save, reload, firewall repair, Windows maintenance,
   diagnostics, dumps, view presets, config-file editors, and folder shortcuts
 - redacted diagnostic snapshots are the default support artifact
+- performance logging can write CSV or MRTG-style samples for bounded
+  operator diagnostics
 
 Display and date/time:
 
@@ -657,6 +667,7 @@ The Tools menu is the operational shortcut surface. It groups:
 Main-shell shortcuts are language-independent and reuse the reviewed English
 toolbar mnemonics. Transfers owns `Alt+T`; Tools opens with `Alt+W` so keyboard
 users can open Tools and continue by letter without colliding with Transfers.
+See [Tools Menu Guide](GUIDE-TOOLS-MENU.md) for the current menu map.
 
 Direct text edits are not always live. Prefer matching reload actions when they
 exist, and restart after startup, bind, listener, or layout-state edits.
@@ -710,6 +721,11 @@ monitored-share files, shared-library caches, REST/WebServer settings,
 geolocation/IP-filter updater state, and preference schema markers. Older stock
 clients can ignore many unknown text preferences, but they do not understand all
 eMuleBB sharing policy, cache files, or controller-side behavior.
+
+Live Source Exchange is SX2-only. eMuleBB intentionally removed deprecated
+live-network SX1 advertise, request, response, and version-tracking paths. Do
+not treat missing live `OP_REQUESTSOURCES` or `OP_ANSWERSOURCES` SX1 support as
+an accidental protocol regression.
 
 IPv6 roadmap language has two separate meanings. Current-network dual-stack
 compatibility is tracked by [FEAT-035](../active/items/FEAT-035.md). A separate

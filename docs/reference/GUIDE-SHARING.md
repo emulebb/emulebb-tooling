@@ -34,6 +34,22 @@ Important sharing files:
 Use the Shared Files page for normal operation. Use text-file editors from
 Tools only for controlled maintenance.
 
+## Peer Preview
+
+Peer preview is an explicit opt-in network behavior. When enabled, shared files
+are visible to the requesting peer, and a valid FFmpeg executable is configured,
+eMuleBB can advertise and serve preview frames from shared video files.
+
+Treat this as a sharing/privacy decision, not just a local preview convenience:
+
+- it sends derived preview image data to another peer
+- it depends on the selected shared-file visibility policy
+- it requires FFmpeg configuration for frame extraction
+- it should be disabled when you do not want peers previewing shared videos
+
+Local preview and peer preview are related but not identical. Local preview is
+for the operator. Peer preview is live-network behavior.
+
 ## Share Ignore Rules
 
 `shareignore.dat` prevents unwanted paths or patterns from being published.

@@ -142,6 +142,7 @@ desktop app first, then layer automation on top.
 | IP filter setup and troubleshooting | [reference/GUIDE-IP-FILTERS](reference/GUIDE-IP-FILTERS.md) |
 | Long-path behavior on Windows | [reference/GUIDE-LONGPATHS](reference/GUIDE-LONGPATHS.md) |
 | Keyboard and menu workflow | [reference/KEYBOARD-SHORTCUTS](reference/KEYBOARD-SHORTCUTS.md) |
+| Tools menu operations | [reference/GUIDE-TOOLS-MENU](reference/GUIDE-TOOLS-MENU.md) |
 | Diagnostic snapshots, dumps, and metadata diagnostics | [reference/GUIDE-DIAGNOSTICS](reference/GUIDE-DIAGNOSTICS.md) |
 | Symptom-led diagnostics and support evidence | [reference/GUIDE-TROUBLESHOOTING](reference/GUIDE-TROUBLESHOOTING.md) |
 | Translation policy and glossary | [reference/GUIDE-TRANSLATIONS](reference/GUIDE-TRANSLATIONS.md) |
