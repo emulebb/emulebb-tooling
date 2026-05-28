@@ -193,7 +193,7 @@ def format_markers(value: str) -> list[str]:
 
 
 def restore_format_markers(source: str, translated: str) -> str:
-    """Append source markers that a translation engine dropped from placeholder-heavy text."""
+    """Restore source marker order when translation engines reorder or drop placeholders."""
 
     source_markers = format_markers(source)
     if not source_markers:
@@ -201,16 +201,16 @@ def restore_format_markers(source: str, translated: str) -> str:
     target_markers = format_markers(translated)
     if target_markers == source_markers:
         return translated
-    index = 0
-    missing: list[str] = []
-    for marker in source_markers:
-        if index < len(target_markers) and target_markers[index] == marker:
-            index += 1
-        else:
-            missing.append(marker)
-    if index != len(target_markers) or not missing:
-        return translated
-    return translated.rstrip() + " " + " ".join(missing)
+    marker_iter = iter(source_markers)
+
+    def replace_marker(match: re.Match[str]) -> str:
+        return next(marker_iter, "")
+
+    restored = FORMAT_MARKER_RE.sub(replace_marker, translated)
+    missing = list(marker_iter)
+    if missing:
+        restored = restored.rstrip() + " " + " ".join(missing)
+    return restored
 
 
 def normalize_mnemonic(source: str, translated: str) -> str:
