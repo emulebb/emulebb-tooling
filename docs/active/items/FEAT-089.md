@@ -32,6 +32,10 @@ Current docs and packages already provide a script-based setup path:
   download clients and optionally register Prowlarr application sync.
 - The helper scripts request controller credentials at runtime and do not store
   Prowlarr, Radarr, or Sonarr credentials in eMuleBB preferences.
+- The Tools menu can launch the current helpers as
+  `Register eMuleBB in Prowlarr...` and `Register Radarr/Sonarr
+  integration...`, pre-filling the local eMuleBB base URL and API key while
+  still asking for external controller credentials at runtime.
 
 The remaining backlog value is an in-app guided surface, copy actions, and a
 local health/test affordance.

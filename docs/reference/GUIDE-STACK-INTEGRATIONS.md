@@ -157,6 +157,16 @@ adapter assumptions with [REST API contract](../rest/REST-API-CONTRACT.md) and
 
 Use this when Prowlarr should search eMuleBB through the Torznab adapter.
 
+Current eMuleBB packages expose two setup paths:
+
+- Manual fields, which are the most transparent way to prove the first setup.
+- Tools menu launchers that start the bundled helper scripts with the current
+  local eMuleBB base URL and API key.
+
+The Tools launchers are convenience wrappers around scripts, not the future
+guided setup tracked by `FEAT-089`. They still require the operator to provide
+Prowlarr, Radarr, or Sonarr URLs and API keys at runtime.
+
 ### Manual Fields
 
 In Prowlarr, add an indexer:
@@ -213,6 +223,10 @@ The helper creates or updates a Prowlarr Generic Torznab indexer named
 `eMuleBB`. It does not make Prowlarr mandatory, and it should not store
 Prowlarr credentials in eMuleBB preferences.
 
+From the desktop app, use `Tools > Network and Updates > Register eMuleBB in
+Prowlarr...` to launch this helper with the current local eMuleBB connection
+details already filled in.
+
 ## Radarr And Sonarr Download Client Setup
 
 Use this when Radarr or Sonarr should send selected releases to eMuleBB and
@@ -263,6 +277,30 @@ The script can:
 - add or update the Sonarr qBittorrent-compatible download client
 
 Leave a URL blank when you want to skip that target.
+
+From the desktop app, use `Tools > Network and Updates > Register Radarr/Sonarr
+integration...` to launch this helper with the current local eMuleBB connection
+details already filled in.
+
+## Adapter Compatibility Boundaries
+
+The adapters are compatibility subsets for Arr workflows, not full clones of
+qBittorrent or a generic Newznab provider.
+
+| Surface | Supported | Not supported or no-op |
+|---|---|---|
+| qBit app/auth | Web API version, app version, login, minimal preferences | Full qBit settings management |
+| qBit categories | List and create native eMuleBB categories | Torrent label semantics beyond category mapping |
+| qBit transfers | Info, properties, files, add eD2K link, pause/resume/start/stop/delete | RSS, trackers, peer management, sync, ban lists, `hashes=all` |
+| qBit policy routes | `setsharelimits`, `topprio`, and `setforcestart` validate input | They are accepted no-ops; eMuleBB has no torrent seeding policy |
+| Torznab caps/search | `caps`, `search`, `tvsearch`, and `movie` | Provider-specific extensions beyond ignored safe parameters |
+
+Torznab search is deliberately bounded. Generic searches observe native results
+for about 12 seconds. Movie and TV searches observe for about 45 seconds because
+they combine broader video results from connected networks. If the bridge is
+already busy and no useful cached page exists, Arr clients receive `503` and
+should retry with backoff. Offset pages use cached first-page results instead of
+starting another native eMuleBB search.
 
 ## Path And Category Discipline
 

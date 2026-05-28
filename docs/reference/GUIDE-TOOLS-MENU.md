@@ -13,7 +13,7 @@ Tools is grouped by task:
 - Categories: manage categories and edit category config
 - Edit Config Files: open editable profile files in the configured text editor
 - Network and Updates: IP filter, direct download, server.met update, port test,
-  firewall repair, and geolocation update
+  firewall repair, geolocation update, and Arr/Prowlarr registration helpers
 - Maintenance: reload filters, rescan shared files, save preferences, enable
   Windows long paths, and add Microsoft Defender exclusions
 - View Presets: apply stock, extended, or full table layouts
@@ -81,8 +81,22 @@ or restart when editing persistent startup, bind, listener, or layout settings.
 
 Network actions include the IP filter dialog, direct ED2K download dialog,
 server.met update from `addresses.dat`, open ports test, Windows Firewall
-repair, and geolocation database update. These actions affect reachability,
-bootstrap, or network metadata.
+repair, geolocation database update, and controller registration helpers. These
+actions affect reachability, bootstrap, network metadata, or local automation
+setup.
+
+The registration helpers launch packaged scripts for current Arr-family
+integration:
+
+- `Register eMuleBB in Prowlarr...` launches the Prowlarr Generic Torznab
+  setup helper with the current local eMuleBB base URL and API key.
+- `Register Radarr/Sonarr integration...` launches the combined Arr helper
+  with the current local eMuleBB base URL and API key.
+
+The helpers still ask for Prowlarr, Radarr, and Sonarr URLs/API keys at runtime.
+They do not turn those external controller credentials into eMuleBB
+preferences. The future guided in-app setup work is tracked separately; these
+menu items are the current script-launcher surface.
 
 ## Maintenance
 

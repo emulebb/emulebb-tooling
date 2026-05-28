@@ -51,6 +51,19 @@ Supported routes:
 | `POST` | `/api/v2/torrents/topprio` | yes | Accepted no-op for Arr compatibility. |
 | `POST` | `/api/v2/torrents/setforcestart` | yes | Accepted no-op after validating `hashes` and optional boolean `value`. |
 
+Compatibility summary:
+
+| Area | Status | Notes |
+|---|---|---|
+| App/auth probes | Supported | Enough for Arr qBittorrent client setup and health checks. |
+| Categories | Supported | Native eMuleBB categories are exposed through qBit-shaped routes. |
+| Transfer list/details | Supported subset | Rows are shaped for Arr queue and completed-download handling. |
+| Add transfer | Supported for eD2K links | Torznab-emitted eD2K links are accepted; magnet URLs are rejected. |
+| Pause/resume/delete | Supported subset | `delete` maps to native destructive transfer-file deletion semantics. |
+| Priority/share-limit/force-start | Accepted no-op | Validated for Arr compatibility; no torrent seeding policy exists. |
+| RSS/search/tracker/peer/sync/log APIs | Unsupported | These qBittorrent families are outside the adapter contract. |
+| `hashes=all` | Unsupported | Hash mutations require one to 100 explicit eD2K hashes. |
+
 - **`GET`**
   - Route: `/api/v2/app/webapiversion`
   - Auth: no
@@ -228,3 +241,15 @@ eD2K resolves to `global`, Kad-only resolves to `kad`, and offline searches are
 rejected as not connected. The
 adapter-side result filter for extension, size, and Torznab family only narrows
 returned rows; it does not replace the REST `type` field sent to REST v1.
+
+Operational timing:
+
+| Search family | Observation window | Why |
+|---|---:|---|
+| Generic search | 12 seconds | Keeps interactive Torznab tests bounded. |
+| Movie and TV search | 45 seconds | Allows the adapter to combine broader video results across networks. |
+
+Only one live bridge search should be active for the same adapter path at a
+time. When the bridge is still busy and no useful cached page exists, clients
+receive `503 application/xml`. Non-zero `offset` pages reuse a cached first-page
+result set and do not launch a new native search.
