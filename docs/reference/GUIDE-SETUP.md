@@ -135,6 +135,29 @@ An isolated base is useful for:
 Keep profile backups outside the live base directory so they are not mistaken
 for active config files.
 
+## Legacy Profile Directory Mode
+
+Prefer `-c <base-dir>` for every test, support, and operator profile. It makes
+the profile root explicit in the launch command and avoids ambiguity when
+packages are moved between machines.
+
+When `-c` is not used, eMuleBB still honors its branch-specific registry value
+`HKCU\Software\eMuleBB\UsePublicUserDirectories` to choose the default profile
+directory model:
+
+| Value | Mode | Effect |
+|---|---|---|
+| `0` | Multiuser | Use the per-user Windows application-data profile layout. |
+| `1` | Public user | Use the public/shared Windows application-data profile layout. |
+| `2` | Executable directory | Store profile/config state beside the executable. |
+
+This registry-backed mode is mainly compatibility and recovery behavior. If a
+profile appears to be "missing" after a package move or account change, check
+whether the app was launched without `-c` and whether this registry value points
+the app at a different default profile layout. Do not use registry edits as a
+routine profile switcher; create an explicit profile directory and launch with
+`-c` instead.
+
 ## Command-Line Startup
 
 The normal startup path is the desktop executable with the selected profile.

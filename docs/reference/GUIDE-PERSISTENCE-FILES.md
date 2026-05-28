@@ -9,6 +9,13 @@ debugging profile corruption.
 Most files live in the config/profile directory. Active download metadata lives
 beside the incomplete `.part` data in the configured temp directory.
 
+The clearest profile root is an explicit launch with `emulebb.exe -c
+<profile-base>`. Without `-c`, startup falls back to the branch registry value
+`HKCU\Software\eMuleBB\UsePublicUserDirectories`: `0` selects the multiuser
+per-user application-data layout, `1` selects the public/shared
+application-data layout, and `2` selects an executable-directory profile. Check
+that value when a profile appears to have moved or reset unexpectedly.
+
 ## Maintenance Rules
 
 - Close eMuleBB before hand-editing or replacing profile files.

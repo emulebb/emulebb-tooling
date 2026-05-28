@@ -149,6 +149,20 @@ eMuleBB owns branch-specific Windows registry identity under
 `HKCU\Software\eMuleBB`. It does not use stock `HKCU\Software\eMule` as a
 fallback.
 
+`UsePublicUserDirectories` is the registry-backed default profile directory
+mode used when the app is launched without `-c`:
+
+| Value | Mode |
+|---|---|
+| `0` | Multiuser/per-user application-data profile layout |
+| `1` | Public/shared application-data profile layout |
+| `2` | Executable-directory profile layout |
+
+Treat this as startup compatibility state, not as a preferred operator control.
+For reproducible testing, support, and automation, launch with
+`emulebb.exe -c <profile-base>` and keep the profile root visible in the command
+line or service configuration.
+
 The Windows Run value for app autostart is `eMuleBBAutoStart`. The collection
 file ProgID is `eMuleBB.Collection`. The `ed2k` URL scheme is intentionally
 shared by Windows, so eMuleBB only claims it through explicit setting-driven
