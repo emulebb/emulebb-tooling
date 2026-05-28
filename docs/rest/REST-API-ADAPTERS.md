@@ -18,7 +18,8 @@ template-specific tests for beta 0.7.3.
 
 `/api/v2` is an Arr download-client compatibility subset, not a full
 qBittorrent Web API clone. It uses qBittorrent-shaped content types, text
-responses, session cookies, and form bodies where Arr clients expect them.
+responses, session cookies, and form bodies where Arr clients expect them, but
+the accepted acquisition payload is still eMuleBB's native eD2K model.
 
 Reference surface used for compatibility decisions:
 
@@ -32,7 +33,7 @@ Supported routes:
 | Method | Route | Auth | Contract role |
 |---|---|---|---|
 | `GET` | `/api/v2/app/webapiversion` | no | Public qBit Web API version probe. |
-| `POST` | `/api/v2/auth/login` | no | Form login using the configured eMuleBB API key as password. |
+| `POST` | `/api/v2/auth/login` | no | Form login with username `emule` and the configured eMuleBB API key as password. |
 | `GET` | `/api/v2/app/version` | yes | App version probe. |
 | `GET` | `/api/v2/app/preferences` | yes | Minimal preference payload for Arr client tests. |
 | `GET` | `/api/v2/torrents/categories` | yes | Category map. |
@@ -58,7 +59,7 @@ Compatibility summary:
 | App/auth probes | Supported | Enough for Arr qBittorrent client setup and health checks. |
 | Categories | Supported | Native eMuleBB categories are exposed through qBit-shaped routes. |
 | Transfer list/details | Supported subset | Rows are shaped for Arr queue and completed-download handling. |
-| Add transfer | Supported for eD2K links | Torznab-emitted eD2K links are accepted; magnet URLs are rejected. |
+| Add transfer | Supported for eD2K links | Torznab-emitted eD2K links are accepted; `.torrent` uploads, BitTorrent magnet links, and HTTP torrent URLs are rejected. |
 | Pause/resume/delete | Supported subset | `delete` maps to native destructive transfer-file deletion semantics. |
 | Priority/share-limit/force-start | Accepted no-op | Validated for Arr compatibility; no torrent seeding policy exists. |
 | RSS/search/tracker/peer/sync/log APIs | Unsupported | These qBittorrent families are outside the adapter contract. |
@@ -72,7 +73,8 @@ Compatibility summary:
 - **`POST`**
   - Route: `/api/v2/auth/login`
   - Auth: no
-  - Contract role: Form login using the configured eMuleBB API key as password.
+  - Contract role: Form login with username `emule` and the configured eMuleBB
+                   API key as password.
 
 - **`GET`**
   - Route: `/api/v2/app/version`
@@ -118,7 +120,10 @@ Compatibility summary:
   - Route: `/api/v2/torrents/add`
   - Auth: yes
   - Contract role: Add one Torznab-emitted eD2K link; accepts Arr qBit form fields that
-                   eMule ignores after validation. Magnet URLs are rejected.
+                   eMule ignores after validation. `.torrent` uploads, BitTorrent
+                   magnet links, and HTTP torrent URLs are rejected because this
+                   adapter keeps qBit-shaped automation on eMuleBB's native eD2K
+                   acquisition model.
 
 - **`POST`**
   - Route: `/api/v2/torrents/delete`

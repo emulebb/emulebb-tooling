@@ -260,10 +260,17 @@ The most common manual setup values are:
 | TV category | `5000` |
 | Radarr/Sonarr download client type | qBittorrent |
 | qBit host and port | eMuleBB WebServer/REST host and port |
-| qBit username | Any non-empty value, for example `emule` |
+| qBit username | `emule` |
 | qBit password | eMuleBB REST/Web API key |
 | Radarr category | `emulebb-radarr` |
 | Sonarr category | `emulebb-sonarr` |
+
+The qBittorrent-compatible download-client surface is an eMuleBB/eD2K subset.
+It is meant for Arr clients consuming eMuleBB Torznab results and adding
+`ed2k://` URLs back to eMuleBB. It is not a full qBittorrent clone: `.torrent`
+uploads, BitTorrent magnet links, HTTP torrent URLs, tracker/RSS APIs, peer
+management, sync APIs, and `hashes=all` mutations are outside the supported
+controller contract.
 
 Release packages may include helper scripts under `eMule\scripts`:
 `register-prowlarr.ps1` for the Prowlarr indexer and

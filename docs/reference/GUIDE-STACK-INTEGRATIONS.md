@@ -243,7 +243,7 @@ Add a qBittorrent download client in Radarr or Sonarr:
 | Port | eMuleBB WebServer/REST port, for example `4711` | Same |
 | Use SSL | On only if eMuleBB listener uses HTTPS | Same |
 | URL Base | Empty | Empty |
-| Username | Any non-empty value, for example `emule` | Same |
+| Username | `emule` | Same |
 | Password | eMuleBB REST/Web API key | Same |
 | Category | `emulebb-radarr` | `emulebb-sonarr` |
 | Initial State | Start | Start |
@@ -253,6 +253,13 @@ Add a qBittorrent download client in Radarr or Sonarr:
 Then test the download client. A successful test proves only the qBit adapter
 login and basic route shape. It does not prove that search, category paths,
 completed-file import, or delete semantics are correct.
+
+The qBittorrent-compatible endpoint is intentionally an eMuleBB/eD2K subset.
+It accepts Torznab-emitted `ed2k://` URLs through the qBit-shaped add route; it
+does not accept `.torrent` file uploads, BitTorrent magnet links, HTTP torrent
+URLs, tracker/RSS APIs, or generic qBittorrent peer-management workflows. This
+keeps Arr integration on the native eMule network model instead of pretending
+that eMuleBB is a full BitTorrent client.
 
 ### Package Helper Script
 
@@ -307,7 +314,7 @@ qBittorrent or a generic Newznab provider.
 |---|---|---|
 | qBit app/auth | Web API version, app version, login, minimal preferences | Full qBit settings management |
 | qBit categories | List and create native eMuleBB categories | Torrent label semantics beyond category mapping |
-| qBit transfers | Info, properties, files, add eD2K link, pause/resume/start/stop/delete | RSS, trackers, peer management, sync, ban lists, `hashes=all` |
+| qBit transfers | Info, properties, files, add eD2K link, pause/resume/start/stop/delete | `.torrent` uploads, BitTorrent magnet links, HTTP torrent URLs, RSS, trackers, peer management, sync, ban lists, `hashes=all` |
 | qBit policy routes | `setsharelimits`, `topprio`, and `setforcestart` validate input | They are accepted no-ops; eMuleBB has no torrent seeding policy |
 | Torznab caps/search | `caps`, `search`, `tvsearch`, and `movie` | Provider-specific extensions beyond ignored safe parameters |
 
