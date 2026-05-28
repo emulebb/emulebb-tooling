@@ -655,7 +655,9 @@ The Tools menu is the operational shortcut surface. It groups:
 - diagnostics: logs, redacted/raw snapshots, mini dump, full dump
 
 The top-level Tools groups have native Alt mnemonics so keyboard users can open
-Tools with `Alt+T` and continue by letter.
+Tools with `Alt+W` and continue by letter. Main toolbar navigation uses
+`Alt+1` through `Alt+9`; this keeps Tools from colliding with Transfers on
+`Alt+T`.
 
 Direct text edits are not always live. Prefer matching reload actions when they
 exist, and restart after startup, bind, listener, or layout-state edits.
