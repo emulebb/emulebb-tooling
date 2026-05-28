@@ -153,6 +153,24 @@ If the aMuTorrent UI fails but direct `GET /api/v1/app` works, compare the UI
 adapter assumptions with [REST API contract](../rest/REST-API-CONTRACT.md) and
 [REST adapter notes](../rest/REST-API-ADAPTERS.md).
 
+### Package Helper Script
+
+Release packages include a helper that registers or repairs the eMuleBB client
+entry in a compatible aMuTorrent instance through aMuTorrent's config API:
+
+```powershell
+.\scripts\register-amutorrent.ps1 `
+  -AmutorrentUrl 'http://localhost:4000' `
+  -AmutorrentApiKey '<amutorrent-admin-api-key>' `
+  -EmulebbBaseUrl 'http://127.0.0.1:4711' `
+  -EmulebbApiKey '<emulebb-api-key>'
+```
+
+Use `-Action Unregister` to remove the matching aMuTorrent eMuleBB client. The
+helper refuses to edit entries owned by `EMULEBB_*` environment variables and
+refuses to remove the last enabled aMuTorrent download client. Leave
+`-AmutorrentApiKey` blank only when aMuTorrent authentication is disabled.
+
 ## Prowlarr Indexer Setup
 
 Use this when Prowlarr should search eMuleBB through the Torznab adapter.
