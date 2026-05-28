@@ -3,11 +3,11 @@
 The Tools menu is the power-user control surface for fast navigation,
 maintenance, diagnostics, and direct config-file access.
 
-## Organization
+## Tools Organization
 
-The expanded main-shell Tools popup is grouped by task. The compact tray and
-legacy hot-menu surfaces keep their shorter ordering so tray use remains
-stable.
+The expanded main-shell Tools popup is grouped by task. The compact tray menu
+keeps its shorter ordering so tray use remains stable. The floating `Alt+U`
+Hotmenu is a separate quick-navigation surface documented below.
 
 - Session: connect, disconnect, pane jumps, tray, and exit
 - Transfers and speed: transfer navigation, upload/download limit presets, and
@@ -27,6 +27,23 @@ stable.
 The top-level labels are built from existing localized resources where
 possible, so the structure can improve without creating a new translation pass
 for menu-only wording.
+
+## Alt+U Hotmenu
+
+`Alt+U` opens the floating Hotmenu. It is intentionally flatter than Tools:
+
+- connection state: connect, cancel connection, or disconnect
+- main navigation: Kad, Servers, Transfers, Search, Shared Files, Messages,
+  Statistics, Options, Help
+- fast actions: paste eD2K links and open IP Filter
+- folders: Incoming, Config, Logs
+- links: eMuleBB web links and configured web-service links
+- legacy/frozen entries: IRC, Scheduler, first-run wizard
+- exit
+
+The tray right-click menu is different from the Hotmenu. It is built from the
+Tools path with tray-specific Restore/Minimize/connect entries and preserves
+the compact tray ordering.
 
 ## Session
 
@@ -180,5 +197,6 @@ keeps the previous Links and Scheduler placement.
 
 ## Keyboard Notes
 
-`Alt+W` opens the Tools popup. `Alt+T` belongs to Transfers. Keyboard shortcut
-details are maintained in [Keyboard Shortcuts](KEYBOARD-SHORTCUTS.md).
+`Alt+U` opens the floating Hotmenu. `Alt+W` opens the Tools popup. `Alt+T`
+belongs to Transfers. Keyboard shortcut details are maintained in
+[Keyboard Shortcuts](KEYBOARD-SHORTCUTS.md).

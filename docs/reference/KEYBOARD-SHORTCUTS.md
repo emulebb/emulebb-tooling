@@ -21,7 +21,7 @@ remove, or repurpose shortcuts.
 | `Alt+H` | main shell | Opens Help for the active pane. |
 | `Alt+W` | main shell | Opens the Tools popup. |
 | `Alt+X` | main shell | Cleanly exits through `CemuleDlg::OnClose()` and respects Prompt on exit. |
-| `Alt+U` | main shell | Opens the existing floating hotmenu. |
+| `Alt+U` | main shell | Opens the floating Hotmenu quick-navigation menu. |
 | `Ctrl+Tab` / `Ctrl+Shift+Tab` | main shell | Cycles primary toolbar panes. |
 
 ## Transfers Navigation Shortcuts
