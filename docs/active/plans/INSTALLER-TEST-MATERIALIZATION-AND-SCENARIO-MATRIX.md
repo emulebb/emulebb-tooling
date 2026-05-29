@@ -55,6 +55,10 @@ Status: landed.
   `state\test-installs` root.
 - Build repo commit: preserve installer-owned profile directories and keep PDB
   validation beside the deployed executable.
+- Build repo commit: derive a curated `harness-profile-seed\config` from the
+  installer-owned profile for Python scenarios, supplementing only missing
+  seed files from the checked-in harness seed and filtering runtime cache
+  files.
 - Test repo commit: point live process monitoring at the materialized profile.
 - Test repo commit: keep synthetic seeds and generated throw-away profiles out
   of the suite install profile.
@@ -125,7 +129,7 @@ Current matrix findings:
 ### 4. Remaining Scenario Cleanup Slices
 
 Status: profile ownership and readiness classification landed; remaining work
-is the runtime proof loop.
+is the runtime proof loop after the installer-derived seed forwarding slice.
 
 - Test repo commit: consider a short `stabilization-stress-quick` Godzilla
   lane only after the `stabilization-stress` launch-scale runtime proof is
