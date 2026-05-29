@@ -532,16 +532,31 @@ def _rule_entries(group: dict, key: str, field: str) -> list[dict]:
     return entries
 
 
-def semantic_quality_warnings(target_path: Path, key: str, value: str, rules: dict) -> list[str]:
+def _rule_matches_source(item: dict, source_value: str | None) -> bool:
+    """Return whether a semantic rule is scoped to the English source text."""
+
+    pattern = item.get("source_regex")
+    if not isinstance(pattern, str):
+        return True
+    if source_value is None:
+        return False
+    return re.search(pattern, source_value, flags=re.IGNORECASE) is not None
+
+
+def semantic_quality_warnings(target_path: Path, key: str, value: str, rules: dict, source_value: str | None = None) -> list[str]:
     """Apply curated language/id rules that catch common bad translations."""
 
     warnings: list[str] = []
     for group in _rules_for_target(rules, target_path):
         for item in _rule_entries(group, key, "forbidden_regex"):
+            if not _rule_matches_source(item, source_value):
+                continue
             pattern = item.get("pattern")
             if isinstance(pattern, str) and re.search(pattern, value, flags=re.IGNORECASE):
                 warnings.append(item.get("message", f"forbidden pattern matched: {pattern}"))
         for item in _rule_entries(group, key, "required_regex"):
+            if not _rule_matches_source(item, source_value):
+                continue
             pattern = item.get("pattern")
             if isinstance(pattern, str) and not re.search(pattern, value, flags=re.IGNORECASE):
                 warnings.append(item.get("message", f"required pattern missing: {pattern}"))
@@ -826,7 +841,7 @@ def cross_reference(args: argparse.Namespace) -> None:
                 warning = untranslated_warning(source.values[key], target.values[key])
                 if warning:
                     quality_warnings.append(f"{key}: {warning}")
-            for warning in semantic_quality_warnings(target_path, key, target.values[key], quality_rules):
+            for warning in semantic_quality_warnings(target_path, key, target.values[key], quality_rules, source.values[key]):
                 quality_warnings.append(f"{key}: {warning}")
         if target.duplicates:
             errors.append(f"{target_path}: duplicate ids:\n" + "\n".join(target.duplicates))

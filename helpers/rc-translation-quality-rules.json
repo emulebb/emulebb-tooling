@@ -4,6 +4,7 @@
       "forbidden_regex": [
         {
           "pattern": "redigier|redigiert",
+          "source_regex": "redact",
           "message": "redacted should be translated as bereinigt/anonymisiert, not redigiert"
         }
       ],
@@ -82,6 +83,7 @@
       "forbidden_regex": [
         {
           "pattern": "redigid|redigido|redigida",
+          "source_regex": "redact",
           "message": "redacted should be expurgado/com dados removidos, not redigido"
         }
       ],
@@ -124,6 +126,7 @@
       "forbidden_regex": [
         {
           "pattern": "redigid|redigido|redigida",
+          "source_regex": "redact",
           "message": "redacted should be expurgado/com dados removidos, not redigido"
         }
       ],
@@ -166,6 +169,7 @@
       "forbidden_regex": [
         {
           "pattern": "redatt[aoei]",
+          "source_regex": "redact",
           "message": "redacted should be oscurato/depurato, not redatto"
         }
       ],
@@ -184,6 +188,7 @@
       "forbidden_regex": [
         {
           "pattern": "отредактир",
+          "source_regex": "redact",
           "message": "redacted should be очищенный/с удаленными данными, not edited"
         }
       ]
@@ -192,6 +197,7 @@
       "forbidden_regex": [
         {
           "pattern": "zredagow",
+          "source_regex": "redact",
           "message": "redacted should be oczyszczony/zanonimizowany, not edited"
         }
       ]
@@ -200,6 +206,7 @@
       "forbidden_regex": [
         {
           "pattern": "geredigeer",
+          "source_regex": "redact",
           "message": "redacted should be gezuiverd/geanonimiseerd, not geredigeerd"
         }
       ]
@@ -208,6 +215,7 @@
       "forbidden_regex": [
         {
           "pattern": "redakte",
+          "source_regex": "redact",
           "message": "redacted should be gizlenmiş/temizlenmiş, not redakte"
         }
       ]

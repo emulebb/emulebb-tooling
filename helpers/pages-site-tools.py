@@ -167,7 +167,7 @@ def parse_args() -> argparse.Namespace:
         default=None,
         help=(
             "Path to the emulebb-pages checkout. Defaults to EMULEBB_PAGES_ROOT, "
-            "then common EMULE_WORKSPACE_ROOT-relative layouts."
+            "then common EMULEBB_WORKSPACE_ROOT-relative layouts."
         ),
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
@@ -201,8 +201,8 @@ def candidate_pages_roots(explicit: Path | None) -> list[Path]:
         candidates.append(explicit)
     if os.environ.get("EMULEBB_PAGES_ROOT"):
         candidates.append(Path(os.environ["EMULEBB_PAGES_ROOT"]))
-    if os.environ.get("EMULE_WORKSPACE_ROOT"):
-        workspace_root = Path(os.environ["EMULE_WORKSPACE_ROOT"])
+    if os.environ.get("EMULEBB_WORKSPACE_ROOT"):
+        workspace_root = Path(os.environ["EMULEBB_WORKSPACE_ROOT"])
         candidates.extend(
             [
                 workspace_root / "repos" / "emulebb-pages",

@@ -25,10 +25,10 @@ def resolve_workspace_root(value: Path | None) -> Path:
 
     if value is not None:
         return value.resolve()
-    env_value = os.environ.get("EMULE_WORKSPACE_ROOT", "")
+    env_value = os.environ.get("EMULEBB_WORKSPACE_ROOT", "")
     if env_value.strip():
         return Path(env_value).resolve()
-    raise RuntimeError("EMULE_WORKSPACE_ROOT or --workspace-root is required.")
+    raise RuntimeError("EMULEBB_WORKSPACE_ROOT or --workspace-root is required.")
 
 
 def main(argv: list[str] | None = None) -> int:

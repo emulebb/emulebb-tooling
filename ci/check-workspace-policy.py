@@ -32,11 +32,11 @@ class GitResult:
 
 
 def workspace_root_from_env() -> Path:
-    """Returns the canonical workspace root from EMULE_WORKSPACE_ROOT."""
+    """Returns the canonical workspace root from EMULEBB_WORKSPACE_ROOT."""
 
-    value = os.environ.get("EMULE_WORKSPACE_ROOT", "")
+    value = os.environ.get("EMULEBB_WORKSPACE_ROOT", "")
     if not value.strip():
-        raise RuntimeError("EMULE_WORKSPACE_ROOT is required.")
+        raise RuntimeError("EMULEBB_WORKSPACE_ROOT is required.")
     return Path(value).resolve()
 
 
@@ -946,7 +946,7 @@ def audit_doc_paths(root: Path) -> None:
             issues,
             repo_root,
             relative_path,
-            (r"the canonical remote repo is `EMULE_WORKSPACE_ROOT\repos\emulebb-remote`", "community/v0.72a` is the imported baseline"),
+            (r"the canonical remote repo is `EMULEBB_WORKSPACE_ROOT\repos\emulebb-remote`", "community/v0.72a` is the imported baseline"),
             "AGENTS.md contains stale workspace directive text",
         )
     resume_text = get_optional_text(tooling, r"docs\RESUME.md")

@@ -1,6 +1,6 @@
 # Scripts Rules
 
-- Read `EMULE_WORKSPACE_ROOT\repos\emulebb-tooling\docs\WORKSPACE-POLICY.md`
+- Read `EMULEBB_WORKSPACE_ROOT\repos\emulebb-tooling\docs\WORKSPACE-POLICY.md`
   before workspace work.
 - Prefer Python for workspace automation.
 - Do not add tracked PowerShell scripts here. The workspace policy allows

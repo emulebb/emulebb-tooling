@@ -80,16 +80,16 @@ python scripts\docs-item-taxonomy-check.py
 Run workspace validation through the build orchestrator:
 
 ```powershell
-cd $env:EMULE_WORKSPACE_ROOT\repos\emulebb-build
+cd $env:EMULEBB_WORKSPACE_ROOT\repos\emulebb-build
 python -m emule_workspace validate
 ```
 
 ## Conventions
 
-Canonical paths are expressed through `EMULE_WORKSPACE_ROOT`:
+Canonical paths are expressed through `EMULEBB_WORKSPACE_ROOT`:
 
-- repos live under `EMULE_WORKSPACE_ROOT\repos\...`
-- app worktrees live under `EMULE_WORKSPACE_ROOT\workspaces\workspace\app\...`
+- repos live under `EMULEBB_WORKSPACE_ROOT\repos\...`
+- app worktrees live under `EMULEBB_WORKSPACE_ROOT\workspaces\workspace\app\...`
 
 Use [`docs/WORKSPACE-POLICY.md`](docs/WORKSPACE-POLICY.md) for the operating
 contract before making workspace decisions. Use
