@@ -222,6 +222,7 @@ the RC branch.
 | [BUG-127](../history/items/BUG-127.md) | Major | DONE | Fix regressions from recent C++ hardening review |
 | [BUG-128](../history/items/BUG-128.md) | Major | DONE | Bound REST compatibility hot-path serialization |
 | [BUG-129](items/BUG-129.md) | Major | DEFERRED | Follow up remaining C++ hot-path performance findings |
+| [BUG-130](../history/items/BUG-130.md) | Major | DONE | Harden RC1 hot-path worker and metadata edges |
 
 `BUG-103` through `BUG-110` were superseded internal post-tag evidence labels,
 not active item docs.
