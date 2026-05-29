@@ -151,6 +151,11 @@ Routine `validate` in `repos\emulebb-build` must run the active static audits:
   and large UI or workflow changes.
 - Put changes at the earliest layer where they are true, then let later layers
   inherit them.
+- Bug fixes that add state repair, lifetime guards, synchronization guards,
+  bounds checks, fallback paths, or other non-obvious defensive logic must carry
+  concise `WHY:` comments at the fix site. The comment should name the concrete
+  failure mode, the invariant being preserved, and why the repair belongs on
+  that path; avoid restating what the code already says.
 - Before writing custom parsing, encoding, path, filesystem, crypto, protocol,
   date/time, compression, or structured-data logic, first look for an existing
   standard library, platform API, project helper, or pinned dependency.

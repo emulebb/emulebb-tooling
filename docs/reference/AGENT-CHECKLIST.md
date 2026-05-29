@@ -72,6 +72,8 @@ python -m mkdocs build --strict
 
 - Prefer compatibility-preserving hardening, bug fixes, and maintainability
   improvements with minimal behavioral drift.
+- For bug fixes with non-obvious defensive logic, add a concise `WHY:` comment
+  at the fix site explaining the failure mode and invariant being preserved.
 - Before writing custom parsing, encoding, filesystem, crypto, protocol,
   date/time, compression, or structured-data logic, look for an existing
   standard library, platform API, project helper, or pinned dependency.
