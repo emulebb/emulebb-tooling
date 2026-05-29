@@ -279,15 +279,11 @@ Routine `validate` in `repos\emulebb-build` must run the active static audits:
 - Workspace-wide PowerShell policy is centralized in `repos\emulebb-tooling`.
 - New tracked PowerShell files must not be added in workspace-owned repos or
   managed app worktrees unless this policy explicitly allows them.
-- `repos\amutorrent\installer\windows\*.ps1` is allowed for aMuTorrent-owned
-  native Windows installer/setup assets. These scripts are product runtime
-  assets and must stay compatible with Windows PowerShell `5.1`.
-- `repos\emulebb-build\emule_workspace\release_assets\emule\scripts\*.ps1`
+- `repos\emulebb-build\emule_workspace\release_assets\emulebb\scripts\*.ps1`
   is allowed for eMuleBB package-owned native Windows setup and integration
-  assets staged into `eMule\scripts`. These scripts are product runtime assets
+  assets staged into `eMuleBB\scripts`. These scripts are product runtime assets
   and must stay compatible with Windows PowerShell `5.1`.
-- Allowed aMuTorrent and eMuleBB runtime scripts must declare
-  `#Requires -Version 5.1`.
+- Allowed eMuleBB runtime scripts must declare `#Requires -Version 5.1`.
 - Workspace hygiene checks must fail when tracked PowerShell appears outside
   the allowed path or when an allowed script omits the required header.
 
@@ -365,7 +361,7 @@ Routine `validate` in `repos\emulebb-build` must run the active static audits:
 - The compact app, UI, API, and protocol-facing mod name is `eMuleBB`.
 - The GitHub organization, code name, and URL slug are `emulebb`.
 - The first public release candidate is `0.7.3-rc.1`.
-- The first stable release target is `0.7.3`.
+- The first stable release is `0.7.3`.
 - Stable patch releases increment the patch number, starting with `0.7.4` after
   `0.7.3` if a stable hotfix is needed.
 - Future prereleases use the next target version with an explicit prerelease

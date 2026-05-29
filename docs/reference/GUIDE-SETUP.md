@@ -41,6 +41,36 @@ Do not run multiple eMule-family clients against the same live profile. Before
 reusing an existing profile, close all clients and copy the full config
 directory as a rollback backup.
 
+## Suite Bootstrap
+
+For a full suite install from GitHub releases, run the bootstrapper from a
+PowerShell prompt:
+
+```powershell
+$version = '0.7.3-rc.1'
+$env:X_LOCAL_IP = '<your LAN IPv4 address>'
+$releaseUrl = "https://github.com/emulebb/emulebb/releases/download/emulebb-v$version"
+$workRoot = Join-Path $env:TEMP "emulebb-suite-$version"
+New-Item -ItemType Directory -Force -Path $workRoot | Out-Null
+$scriptPath = Join-Path $workRoot 'Bootstrap-eMuleBBSuite.ps1'
+iwr -UseBasicParsing "$releaseUrl/Bootstrap-eMuleBBSuite.ps1" -OutFile $scriptPath
+$expected = ((irm "$releaseUrl/Bootstrap-eMuleBBSuite.ps1.sha256") -split '\s+')[0]
+$actual = (Get-FileHash -Algorithm SHA256 -LiteralPath $scriptPath).Hash.ToLowerInvariant()
+if ($actual -ne $expected) { throw "Bootstrapper SHA256 mismatch: $actual" }
+& $scriptPath -Version $version -IncludePrerelease
+```
+
+The bootstrapper is published as a release asset, so setup does not depend on
+the current `main` branch. It resolves the requested or latest stable release,
+verifies the release ZIP against its manifest SHA-256, extracts the versioned
+suite installer, and hands off to that installer. The versioned installer is
+also included in the main app ZIP under `eMuleBB\scripts`.
+
+If split-tunnel VPN software breaks loopback on the machine, set `X_LOCAL_IP`
+to the machine's LAN IPv4 address before running the bootstrapper. The suite
+installer uses that address as the default control-service bind and still warns
+when services are exposed beyond loopback.
+
 ## Choose Directories
 
 Use stable paths that will still exist after reboot:
@@ -225,7 +255,7 @@ For trusted local automation:
 1. Finish normal desktop setup first.
 2. Open `Preferences > Web Server`.
 3. Enable the WebServer/REST listener only when needed.
-4. Bind to localhost or a controlled interface.
+4. Bind to localhost, `X_LOCAL_IP`, or a controlled interface.
 5. Use a strong API key/password.
 6. Add firewall rules that match the intended exposure.
 7. Generate or configure HTTPS material if the controller path requires it.
@@ -239,11 +269,10 @@ eMuleBB plus aMuTorrent plus Prowlarr/Radarr/Sonarr setup, use the
 
 ## Release-Aware Setup
 
-Public testing currently uses nightly packages. The first public release
-candidate target is `0.7.3-rc.1`; stable `0.7.3` is not released until the
-active release dashboard says the gates have passed and the operator approves
-the tag. Treat current builds as pre-release unless they are attached to an
-approved release tag and package.
+The first official public release line is `0.7.3`. Use packages attached to an
+approved `emulebb-v0.7.3` or later release tag. Treat nightly, beta, and RC
+builds as pre-release packages unless the release notes explicitly direct a
+test run to them.
 
 Before trusting a package:
 

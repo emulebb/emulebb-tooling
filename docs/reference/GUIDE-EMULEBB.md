@@ -194,8 +194,8 @@ with evidence.
 
 - eMuleBB desktop app:
   `https://github.com/emulebb/emulebb/releases`. Nightly testing is open.
-  The first public release candidate target is `0.7.3-rc.1`; stable `0.7.3`
-  is not published until the release docs and operator approval say so.
+  The first official public release line is `0.7.3`; nightly, beta, and RC
+  packages remain pre-release test builds.
 - aMule Windows builds:
   `https://github.com/emulebb/amule/releases`. eMuleBB publishes Windows build
   and validation artifacts for aMule users. This is an ecosystem build track,

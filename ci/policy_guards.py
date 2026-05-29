@@ -333,15 +333,13 @@ def test_powershell_version_header(repo_root: Path, repo_kind: str, relative_pat
 
     is_tooling_repo = repo_root.name == "emulebb-tooling" or (repo_root / "ci" / "check-workspace-policy.py").is_file()
     normalized_path = normalize_path(relative_path)
-    is_amutorrent_installer = (repo_root.name == "amutorrent" or repo_kind == "amutorrent") and normalized_path.startswith("installer/windows/")
     is_emulebb_runtime_script = (repo_root.name == "emulebb-build" or repo_kind == "emulebb-build") and is_direct_child_of(
         normalized_path,
-        "emule_workspace/release_assets/emule/scripts/",
+        "emule_workspace/release_assets/emulebb/scripts/",
     )
     expected_version = (
         "5.1"
         if (is_tooling_repo and normalized_path.startswith("scripts/"))
-        or is_amutorrent_installer
         or is_emulebb_runtime_script
         else "7.6"
     )

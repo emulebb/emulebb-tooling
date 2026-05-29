@@ -83,7 +83,9 @@ Use a stable setup before adding controllers:
 - A small manual search works in the desktop app.
 - A small manual download can be added, paused, resumed, and removed.
 - Shared directories are deliberate and visible on the Shared Files page.
-- WebServer/REST is enabled only on the intended bind address and port.
+- WebServer/REST is enabled only on the intended bind address and port. On
+  split-tunnel VPN machines where loopback is broken, set `X_LOCAL_IP` to the
+  LAN IPv4 address and use that address consistently for local services.
 
 For an existing profile, start eMuleBB once without aMuTorrent, Prowlarr,
 Radarr, Sonarr, or scripts. Let the app load the profile, resolve paths, and
@@ -110,8 +112,9 @@ completed files through the category/incoming paths reported by the adapter.
 
 1. Open `Preferences > Web Server`.
 2. Enable the WebServer/REST listener.
-3. Bind to `127.0.0.1` for same-machine controllers, or a deliberate LAN/VPN
-   address for controlled-network controllers.
+3. Bind to `127.0.0.1` for same-machine controllers when loopback works, or a
+   deliberate LAN/VPN address. On split-tunnel VPN machines, prefer the
+   `X_LOCAL_IP` LAN address.
 4. Choose the port. The examples below use `4711`; use your configured port.
 5. Set a strong API key/password.
 6. Keep Windows Firewall closed to unwanted clients.
@@ -121,7 +124,9 @@ completed files through the category/incoming paths reported by the adapter.
 Health check from the controller machine:
 
 ```powershell
-$base = 'http://127.0.0.1:4711'
+$host = $env:X_LOCAL_IP
+if ([string]::IsNullOrWhiteSpace($host)) { $host = '127.0.0.1' }
+$base = "http://$host:4711"
 $key = '<emulebb-api-key>'
 Invoke-RestMethod -Uri "$base/api/v1/app" -Headers @{ 'X-API-Key' = $key }
 ```
@@ -160,9 +165,9 @@ entry in a compatible aMuTorrent instance through aMuTorrent's config API:
 
 ```powershell
 .\scripts\register-amutorrent.ps1 `
-  -AmutorrentUrl 'http://localhost:4000' `
+  -AmutorrentUrl "http://$host:4000" `
   -AmutorrentApiKey '<amutorrent-admin-api-key>' `
-  -EmulebbBaseUrl 'http://127.0.0.1:4711' `
+  -EmulebbBaseUrl "http://$host:4711" `
   -EmulebbApiKey '<emulebb-api-key>'
 ```
 
@@ -216,7 +221,9 @@ Category choices:
 Health check before opening Prowlarr:
 
 ```powershell
-$base = 'http://127.0.0.1:4711'
+$host = $env:X_LOCAL_IP
+if ([string]::IsNullOrWhiteSpace($host)) { $host = '127.0.0.1' }
+$base = "http://$host:4711"
 $key = '<emulebb-api-key>'
 Invoke-WebRequest -Uri "$base/indexer/emulebb/api?t=caps&apikey=$key"
 ```
@@ -227,13 +234,13 @@ or the search bridge is busy.
 
 ### Package Helper Script
 
-Release packages include a helper script under `eMule\scripts`:
+Release packages include a helper script under `eMuleBB\scripts`:
 
 ```powershell
 .\scripts\register-prowlarr.ps1 `
-  -ProwlarrUrl 'http://localhost:9696' `
+  -ProwlarrUrl "http://$host:9696" `
   -ProwlarrApiKey '<prowlarr-api-key>' `
-  -EmulebbBaseUrl 'http://127.0.0.1:4711' `
+  -EmulebbBaseUrl "http://$host:4711" `
   -EmulebbApiKey '<emulebb-api-key>'
 ```
 
@@ -257,7 +264,7 @@ Add a qBittorrent download client in Radarr or Sonarr:
 |---|---|---|
 | Name | `eMuleBB` | `eMuleBB` |
 | Enable | On | On |
-| Host | eMuleBB host, for example `127.0.0.1` | eMuleBB host |
+| Host | eMuleBB host, for example `127.0.0.1` or `X_LOCAL_IP` | eMuleBB host |
 | Port | eMuleBB WebServer/REST port, for example `4711` | Same |
 | Use SSL | On only if eMuleBB listener uses HTTPS | Same |
 | URL Base | Empty | Empty |
@@ -287,11 +294,11 @@ target per invocation:
 ```powershell
 .\scripts\register-arr-stack.ps1 `
   -Target Radarr `
-  -EmulebbBaseUrl 'http://127.0.0.1:4711' `
+  -EmulebbBaseUrl "http://$host:4711" `
   -EmulebbApiKey '<emulebb-api-key>' `
-  -ProwlarrUrl 'http://localhost:9696' `
+  -ProwlarrUrl "http://$host:9696" `
   -ProwlarrApiKey '<prowlarr-api-key>' `
-  -RadarrUrl 'http://localhost:7878' `
+  -RadarrUrl "http://$host:7878" `
   -RadarrApiKey '<radarr-api-key>'
 ```
 
@@ -300,11 +307,11 @@ Run it separately for Sonarr:
 ```powershell
 .\scripts\register-arr-stack.ps1 `
   -Target Sonarr `
-  -EmulebbBaseUrl 'http://127.0.0.1:4711' `
+  -EmulebbBaseUrl "http://$host:4711" `
   -EmulebbApiKey '<emulebb-api-key>' `
-  -ProwlarrUrl 'http://localhost:9696' `
+  -ProwlarrUrl "http://$host:9696" `
   -ProwlarrApiKey '<prowlarr-api-key>' `
-  -SonarrUrl 'http://localhost:8989' `
+  -SonarrUrl "http://$host:8989" `
   -SonarrApiKey '<sonarr-api-key>'
 ```
 
@@ -393,7 +400,8 @@ whether the query is broad enough for the network.
 
 - Treat eMuleBB, Prowlarr, Radarr, Sonarr, and aMuTorrent API keys as secrets.
 - Do not paste API keys into public issues, logs, screenshots, or chat.
-- Bind REST to localhost unless a controlled LAN/VPN path is intentional.
+- Bind REST to localhost when it works, or to `X_LOCAL_IP` / a controlled
+  LAN/VPN address when split-tunnel VPN software breaks loopback.
 - Use firewall rules that match the bind policy.
 - Avoid broad HTTPS exposure. HTTPS protects transport; it does not make an
   untrusted exposure safe.
