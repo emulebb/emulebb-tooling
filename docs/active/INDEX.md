@@ -20,9 +20,9 @@ engineering spec/evidence records, not workflow status authority.
 ## Current Snapshot
 
 **Source of truth:** `EMULE_WORKSPACE_ROOT\workspaces\workspace\app\emulebb-main` (`main` branch)
-**Current non-done count:** `89`
+**Current non-done count:** `90`
 **Latest release-doc refresh:** 2026-05-23
-**Non-done by status:** `72` OPEN, `6` IN_PROGRESS, `11` DEFERRED, `0` BLOCKED.
+**Non-done by status:** `72` OPEN, `6` IN_PROGRESS, `12` DEFERRED, `0` BLOCKED.
 **Backlog counts:** item tables below are authoritative.
 **RC 0.7.3 relevance:** Most non-done items below are future or deferred work;
 current RC gate and proof status is controlled by [RELEASE-0.7.3](RELEASE-0.7.3.md).
@@ -223,6 +223,8 @@ the RC branch.
 | [BUG-128](../history/items/BUG-128.md) | Major | DONE | Bound REST compatibility hot-path serialization |
 | [BUG-129](items/BUG-129.md) | Major | DEFERRED | Follow up remaining C++ hot-path performance findings |
 | [BUG-130](../history/items/BUG-130.md) | Major | DONE | Harden RC1 hot-path worker and metadata edges |
+| [BUG-131](../history/items/BUG-131.md) | Major | DONE | Harden RC1 completion, delete, and startup-cache lifetime edges |
+| [BUG-132](items/BUG-132.md) | Major | DEFERRED | Follow up deferred qBit session and bulk REST hardening |
 
 `BUG-103` through `BUG-110` were superseded internal post-tag evidence labels,
 not active item docs.
