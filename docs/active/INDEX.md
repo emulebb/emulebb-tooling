@@ -20,9 +20,9 @@ engineering spec/evidence records, not workflow status authority.
 ## Current Snapshot
 
 **Source of truth:** `EMULE_WORKSPACE_ROOT\workspaces\workspace\app\emulebb-main` (`main` branch)
-**Current non-done count:** `90`
+**Current non-done count:** `91`
 **Latest release-doc refresh:** 2026-05-23
-**Non-done by status:** `72` OPEN, `6` IN_PROGRESS, `12` DEFERRED, `0` BLOCKED.
+**Non-done by status:** `72` OPEN, `6` IN_PROGRESS, `13` DEFERRED, `0` BLOCKED.
 **Backlog counts:** item tables below are authoritative.
 **RC 0.7.3 relevance:** Most non-done items below are future or deferred work;
 current RC gate and proof status is controlled by [RELEASE-0.7.3](RELEASE-0.7.3.md).
@@ -229,6 +229,8 @@ the RC branch.
 | [BUG-134](../history/items/BUG-134.md) | Major | DONE | Harden final RC1 shutdown, REST bounds, and AICH repair edges |
 | [BUG-135](../history/items/BUG-135.md) | Major | DONE | Harden final RC1 runtime stabilization edges |
 | [BUG-136](../history/items/BUG-136.md) | Major | DONE | Harden final RC1 review follow-up hot paths |
+| [BUG-137](../history/items/BUG-137.md) | Major | DONE | Harden final RC1 AICH, UPnP, listener, and Kad edges |
+| [BUG-138](items/BUG-138.md) | Major | DEFERRED | Follow up deferred RC1 REST and search hot-path bounds |
 
 `BUG-103` through `BUG-110` were superseded internal post-tag evidence labels,
 not active item docs.
