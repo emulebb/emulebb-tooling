@@ -228,6 +228,7 @@ the RC branch.
 | [BUG-133](../history/items/BUG-133.md) | Major | DONE | Harden RC1 metadata bounds, REST polling, and worker shutdown edges |
 | [BUG-134](../history/items/BUG-134.md) | Major | DONE | Harden final RC1 shutdown, REST bounds, and AICH repair edges |
 | [BUG-135](../history/items/BUG-135.md) | Major | DONE | Harden final RC1 runtime stabilization edges |
+| [BUG-136](../history/items/BUG-136.md) | Major | DONE | Harden final RC1 review follow-up hot paths |
 
 `BUG-103` through `BUG-110` were superseded internal post-tag evidence labels,
 not active item docs.
