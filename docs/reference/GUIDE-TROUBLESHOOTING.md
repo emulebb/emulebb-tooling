@@ -126,7 +126,7 @@ validating cache state, or hashing.
 If startup is slow only once after a profile move or package upgrade, allow the
 derived caches to rebuild before treating it as a regression.
 
-For developer or local release builds, use the `EMULE_STARTUP_PROFILE`
+For developer or local release builds, use the `EMULEBB_STARTUP_PROFILE`
 environment switch from the [Diagnostics Guide](GUIDE-DIAGNOSTICS.md) to create
 `startup-profile.trace.json`. It separates app startup phases, shared-cache
 validation, hashing, and upload-budget setup more clearly than the ordinary

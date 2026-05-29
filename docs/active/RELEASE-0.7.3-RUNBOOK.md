@@ -53,7 +53,7 @@ python -m emule_workspace build app --variant main --config Release --platform x
 
 Output contract:
 `workspaces\workspace\app\emulebb-main\srchybrid\x64\Release`. Startup
-profiling is compiled in and runtime-gated by `EMULE_STARTUP_PROFILE`.
+profiling is compiled in and runtime-gated by `EMULEBB_STARTUP_PROFILE`.
 
 Package Release x64:
 

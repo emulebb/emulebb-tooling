@@ -81,10 +81,10 @@ internet by accident.
 ## Startup Profiling Trace
 
 Developer and local release builds can record a Chrome Trace startup profile
-when the `EMULE_STARTUP_PROFILE` environment variable is present:
+when the `EMULEBB_STARTUP_PROFILE` environment variable is present:
 
 ```powershell
-$env:EMULE_STARTUP_PROFILE = "1"
+$env:EMULEBB_STARTUP_PROFILE = "1"
 emulebb.exe -c C:\eMuleBB-Profiles\slow-startup
 ```
 
