@@ -1,6 +1,6 @@
 # Keyboard Shortcuts
 
-EMULE_KEYBOARD_SHORTCUT: this document records deliberate app-level keyboard
+EMULEBB_KEYBOARD_SHORTCUT: this document records deliberate app-level keyboard
 ownership for the native MFC shell. Update it with code changes that add,
 remove, or repurpose shortcuts.
 
@@ -193,7 +193,7 @@ When Search is the active main pane, the Search parameter bar owns:
 
 ## Mnemonic Policy
 
-- EMULE_KEYBOARD_SHORTCUT: do not reassign `Alt+X`; it is the direct app-exit
+- EMULEBB_KEYBOARD_SHORTCUT: do not reassign `Alt+X`; it is the direct app-exit
   mnemonic.
 - The old hidden hotmenu `Alt+X` button was retired; floating hotmenu ownership
   is now `Alt+U`.
