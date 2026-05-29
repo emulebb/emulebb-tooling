@@ -98,6 +98,8 @@ Status: audit and first ownership cleanup slices landed.
   multi-client proof, and Godzilla launch-scale stabilization coverage.
 - Build repo commit: expose the new named profiles through
   `python -m emule_workspace test live-e2e` and cover wrapper forwarding.
+- Test repo commit: make Godzilla write `mixed_client_evidence` so runtime
+  aMule readiness downgrades are explicit report data, not hidden weakness.
 
 Current matrix findings:
 
@@ -116,17 +118,15 @@ Current matrix findings:
     clients required.
   - `godzilla-local-swarm` is visible in `release-expanded` and
     `stabilization-stress` at `launch-scale`.
-- Remaining named gap: Godzilla can still downgrade aMule evidence based on
-  runtime mixed-client readiness.
+- The matrix currently reports no open taxonomy gaps; Godzilla runtime reports
+  classify aMule participation as `full-mixed-client` or degraded
+  `emulebb-harness-only` evidence.
 
 ### 4. Remaining Scenario Cleanup Slices
 
-Status: profile ownership cleanup landed; remaining work is the runtime proof
-loop and the remaining Godzilla mixed-client readiness gap.
+Status: profile ownership and readiness classification landed; remaining work
+is the runtime proof loop.
 
-- Test repo commit: harden Godzilla mixed-client readiness reporting so aMule
-  runtime downgrades are explicit evidence classifications, not hidden
-  weakening.
 - Test repo commit: consider a short `stabilization-stress-quick` Godzilla
   lane only after the `stabilization-stress` launch-scale runtime proof is
   repeatable enough to justify quick-gate cost.
