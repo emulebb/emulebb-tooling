@@ -86,13 +86,18 @@ Validation:
 
 ### 3. Scenario Matrix Audit Surface
 
-Status: first audit slice landed.
+Status: audit and first ownership cleanup slices landed.
 
 - Test repo commit: generate matrix rollups by network scope, topology, stress
   class, and profile visibility.
 - Test repo commit: report repeated profile coverage and classify overlap.
 - Test repo commit: report unprofiled/default-only suites and mixed-client
   downgrade risks as explicit gaps.
+- Test/build repo commit: add named ownership for default-only UI/startup
+  lanes, local controller lanes, live-process diagnostics, required optional
+  multi-client proof, and Godzilla launch-scale stabilization coverage.
+- Build repo commit: expose the new named profiles through
+  `python -m emule_workspace test live-e2e` and cover wrapper forwarding.
 
 Current matrix findings:
 
@@ -100,35 +105,31 @@ Current matrix findings:
 - Stress classes: 29 scenario, 3 matrix, 3 smoke, 2 soak, 1 chaos, 1 stress,
   1 hammer.
 - Swarm lanes: 3 local swarms plus 1 large Godzilla hammer.
-- Named gaps now visible:
-  - `config-stability-ui`, `startup-profile`, and `auto-browse-live` are
-    default aggregate only.
-  - `live-process-monitor`, `radarr-emulebb-local`, and
-    `sonarr-emulebb-local` are neither default-enabled nor profile-visible.
-  - `godzilla-local-swarm` is release-expanded only, not
-    stabilization-stress visible.
-  - mixed-client optional/readiness policy can weaken
-    `multi-client-p2p-matrix` and Godzilla evidence.
+- Named ownership now covers former unowned lanes:
+  - `config-stability-ui` and `startup-profile` are in
+    `release-expanded` and `release-expanded-quick`.
+  - `auto-browse-live` is in full `release-expanded`.
+  - `live-process-monitor` is owned by `diagnostics-soak`.
+  - `radarr-emulebb-local` and `sonarr-emulebb-local` are owned by
+    `controller-local`.
+  - `multi-client-p2p-required` runs the same local P2P matrix with optional
+    clients required.
+  - `godzilla-local-swarm` is visible in `release-expanded` and
+    `stabilization-stress` at `launch-scale`.
+- Remaining named gap: Godzilla can still downgrade aMule evidence based on
+  runtime mixed-client readiness.
 
 ### 4. Remaining Scenario Cleanup Slices
 
-Status: next work.
+Status: profile ownership cleanup landed; remaining work is the runtime proof
+loop and the remaining Godzilla mixed-client readiness gap.
 
-- Test repo commit: decide named-profile ownership for default-only suites.
-  Candidate: add `config-stability-ui` and `startup-profile` to
-  `release-expanded-quick`; keep `auto-browse-live` in full
-  `release-expanded` only unless live-wire runtime cost is acceptable.
-- Test repo commit: add a dedicated diagnostics profile or include
-  `live-process-monitor` in `stabilization-stress` when explicitly requested
-  with real-profile inputs.
-- Test repo commit: split local controller lanes from public-network controller
-  lanes so `radarr-emulebb-local` and `sonarr-emulebb-local` have visible
-  ownership without pretending to be public live-wire proof.
-- Test repo commit: add a required optional-client mode profile for
-  `multi-client-p2p-matrix`, separate from the current opportunistic profile.
-- Test repo commit: decide whether Godzilla belongs in
-  `stabilization-stress-quick` as `launch-scale`, or remains release-expanded
-  only with a documented runtime exception.
+- Test repo commit: harden Godzilla mixed-client readiness reporting so aMule
+  runtime downgrades are explicit evidence classifications, not hidden
+  weakening.
+- Test repo commit: consider a short `stabilization-stress-quick` Godzilla
+  lane only after the `stabilization-stress` launch-scale runtime proof is
+  repeatable enough to justify quick-gate cost.
 
 Each slice should update `tests\python\test_scenario_matrix.py`, run
 `python -m pytest tests\python\test_scenario_matrix.py -q`, then run the full
