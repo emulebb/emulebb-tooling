@@ -128,8 +128,9 @@ Current matrix findings:
 
 ### 4. Remaining Scenario Cleanup Slices
 
-Status: profile ownership and readiness classification landed; remaining work
-is the runtime proof loop after the installer-derived seed forwarding slice.
+Status: profile ownership, readiness classification, installer-derived seed
+forwarding, and runtime proof landed. A shorter quick gate remains an optional
+future tuning slice, not a current completion blocker.
 
 - Test repo commit: consider a short `stabilization-stress-quick` Godzilla
   lane only after the `stabilization-stress` launch-scale runtime proof is
