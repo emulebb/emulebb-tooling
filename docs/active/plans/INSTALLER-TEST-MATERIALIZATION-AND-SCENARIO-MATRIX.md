@@ -141,18 +141,49 @@ build-tests Python suite before pushing.
 
 ### 5. Whole-Install Proof Loop
 
-Status: repeat after the scenario ownership changes.
+Status: installer-backed smoke, constrained Godzilla, and profiled resource UI
+proof passed after the installer-derived seed forwarding slice.
 
-- Run the installer-backed test path with `--materialize-test-install`.
-- Run constrained Godzilla launch-scale through that install.
-- Run one profiled UI/resource scenario and confirm symbols are found beside
-  `emulebb.exe`.
-- Run `python -m emule_workspace validate`.
+- Installer-backed smoke:
+  - Command: `python -m emule_workspace test live-e2e --suite command-line-smoke --test-network offline --materialize-test-install --materialize-test-install-skip-build --live-wire-inputs-file repos\emulebb-build-tests\live-wire-inputs.local.json --startup-trace-mode optional --fail-fast`
+  - Report:
+    `state\test-reports\live-e2e-suite\20260529T200654Z-live-e2e-suite-release-14208`
+  - Result: aggregate `passed`; child `command-line-smoke` `passed`.
+  - Install root:
+    `state\test-installs\20260529T200401Z-pid12712\live-e2e-suite\main`
+  - Evidence: `profileImport.action=imported` from the operator live-wire
+    profile path; adjacent `emulebb.pdb` hash matched the package-build PDB;
+    derived `harness-profile-seed\config` contained only `nodes.dat`,
+    `preferences.dat`, `preferences.ini`, and `server.met`.
+- Constrained Godzilla:
+  - Command: `python -m emule_workspace test live-e2e --suite godzilla-local-swarm --test-network lan --admin-volume-fixtures --materialize-test-install --materialize-test-install-skip-build --live-wire-inputs-file repos\emulebb-build-tests\live-wire-inputs.local.json --startup-trace-mode optional --fail-fast --godzilla-stage launch-scale --godzilla-total-client-count 4 --godzilla-peer-transfer-count 4 --godzilla-harness-transfer-count 3 --godzilla-emulebb-files 6 --godzilla-extra-emulebb-files 2 --godzilla-harness-files 5 --godzilla-amule-files 2 --godzilla-adverse-kill-cycles 0 --godzilla-adverse-kill-warmup-seconds 0.1 --godzilla-adverse-recovery-timeout-seconds 30 --vhd-size-mb 256`
+  - Report:
+    `state\test-reports\live-e2e-suite\20260529T201051Z-live-e2e-suite-release-12328`
+  - Result: aggregate `passed`; child `godzilla-local-swarm` `passed`.
+  - Install root:
+    `state\test-installs\20260529T200759Z-pid11952\live-e2e-suite\main`
+  - Evidence: child command used the materialized `apps\eMuleBB\emulebb.exe`
+    and derived `harness-profile-seed\config`; `mixed_client_evidence`
+    recorded degraded `emulebb-harness-only` because aMule EC did not become
+    ready, rather than hiding the downgrade.
+- Profiled resource UI:
+  - Command: `python -m emule_workspace test live-e2e --suite resource-ui-smoke --test-network offline --materialize-test-install --materialize-test-install-skip-build --live-wire-inputs-file repos\emulebb-build-tests\live-wire-inputs.local.json --startup-trace-mode optional --profile-cpu --profile-cpu-stack --profile-cpu-max-file-mb 128 --profile-cpu-stack-min-hits 5 --profile-symbols-required --fail-fast`
+  - Report:
+    `state\test-reports\live-e2e-suite\20260529T201630Z-live-e2e-suite-release-6700`
+  - Result: aggregate `passed`; child `resource-ui-smoke` `passed`; 43
+    language probes passed.
+  - Install root:
+    `state\test-installs\20260529T201338Z-pid14044\live-e2e-suite\main`
+  - Evidence: child command used the materialized `apps\eMuleBB\emulebb.exe`
+    and derived `harness-profile-seed\config`; adjacent `emulebb.pdb` existed;
+    CPU stack summary contained 426 symbolized app rows with `emulebb!`
+    function names and a populated local symbol cache.
 
 ## Validation Evidence
 
 Latest completed validation before this plan update:
 
-- `python -m pytest tests\python -q`: `940 passed`.
+- `python -m pytest tests\python -q`: `945 passed`.
+- `python -m pytest -q` in `repos\emulebb-build`: `209 passed`.
 - `python -m emule_workspace validate`: passed.
 - App Debug and Release x64 builds passed after the app source fix.
