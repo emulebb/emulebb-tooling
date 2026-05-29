@@ -1,7 +1,7 @@
 # Workspace Repository Map
 
 This map documents the active repository roles in the canonical eMuleBB
-workspace. Paths are written relative to `EMULE_WORKSPACE_ROOT`; do not replace
+workspace. Paths are written relative to `EMULEBB_WORKSPACE_ROOT`; do not replace
 them with machine-local absolute paths in docs, scripts, or CI output.
 
 `workspaces/workspace/repo-roles.json` is the generated machine-readable role

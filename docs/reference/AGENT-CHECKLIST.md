@@ -20,7 +20,7 @@ appear to conflict, policy wins.
 
 ## Workspace Boundaries
 
-- Use `EMULE_WORKSPACE_ROOT` style paths in maintained docs and scripts.
+- Use `EMULEBB_WORKSPACE_ROOT` style paths in maintained docs and scripts.
 - Edit app source in `workspaces\workspace\app\emulebb-main`.
 - Treat `repos\emulebb` as the branch-store checkout, not the normal edit
   location.
@@ -44,7 +44,7 @@ appear to conflict, policy wins.
 - For docs-only edits, run:
 
 ```powershell
-cd $env:EMULE_WORKSPACE_ROOT\repos\emulebb-tooling
+cd $env:EMULEBB_WORKSPACE_ROOT\repos\emulebb-tooling
 git diff --check
 python scripts\docs-structure-check.py --fail-on-wide-tables
 $env:NO_MKDOCS_2_WARNING='1'
@@ -87,7 +87,7 @@ python -m mkdocs build --strict
 - For app code, run workspace validation and both required x64 app builds:
 
 ```powershell
-cd $env:EMULE_WORKSPACE_ROOT\repos\emulebb-build
+cd $env:EMULEBB_WORKSPACE_ROOT\repos\emulebb-build
 python -m emule_workspace validate
 python -m emule_workspace build app --variant main --config Debug --platform x64 --build-output-mode ErrorsOnly
 python -m emule_workspace build app --variant main --config Release --platform x64 --build-output-mode ErrorsOnly

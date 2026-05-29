@@ -386,7 +386,7 @@ server addresses, `server.met` files, or bootstrap guidance.
 
 ## Historical eMule Mods And Source Archives
 
-The workspace has archive evidence under `EMULE_WORKSPACE_ROOT\analysis\mods-archive`.
+The workspace has archive evidence under `EMULEBB_WORKSPACE_ROOT\analysis\mods-archive`.
 These projects are historical reference material for UX, upload policy,
 anti-leecher logic, server handling, large-share behavior, and compatibility
 hardening. Do not import behavior wholesale.
@@ -574,7 +574,7 @@ After editing, run:
 
 ```powershell
 git diff --check
-rg -n "ED2K-PROJECT-INVENTORY" EMULE_WORKSPACE_ROOT\repos\emulebb-tooling\docs
+rg -n "ED2K-PROJECT-INVENTORY" EMULEBB_WORKSPACE_ROOT\repos\emulebb-tooling\docs
 ```
 
 Run `python -m emule_workspace validate` when the workspace lock is free.

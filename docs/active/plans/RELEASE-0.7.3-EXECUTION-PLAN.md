@@ -18,7 +18,7 @@ Every actionable release task must have its own item ID.
 ## Source Decision
 
 - Release source: selected reviewed `main` commit in
-  `EMULE_WORKSPACE_ROOT\workspaces\workspace\app\emulebb-main`.
+  `EMULEBB_WORKSPACE_ROOT\workspaces\workspace\app\emulebb-main`.
 - Tag target: the same selected reviewed `main` commit after final proof passes
   and the operator gives a separate tagging instruction.
 - Release stabilization branch: `release/0.7.3` once the operator starts the

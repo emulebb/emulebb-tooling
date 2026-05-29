@@ -9,7 +9,7 @@ scenarios into strict phases and show which current commands provide evidence.
 Use the supported workspace entrypoint from the build orchestrator checkout:
 
 ```powershell
-cd $env:EMULE_WORKSPACE_ROOT\repos\emulebb-build
+cd $env:EMULEBB_WORKSPACE_ROOT\repos\emulebb-build
 python -m emule_workspace test release-campaign --campaign emulebb-0.7.3
 ```
 
@@ -56,7 +56,7 @@ them into manifests:
 
 ```powershell
 python -m emule_workspace test release-campaign --campaign emulebb-0.7.3-overnight --execute `
-  --live-wire-inputs-file $env:EMULE_WORKSPACE_ROOT\repos\emulebb-build-tests\live-wire-inputs.local.json `
+  --live-wire-inputs-file $env:EMULEBB_WORKSPACE_ROOT\repos\emulebb-build-tests\live-wire-inputs.local.json `
   --radarr-movie-root <radarr-visible-root> `
   --sonarr-series-root <sonarr-visible-root>
 ```
@@ -144,7 +144,7 @@ The quick RC campaign uses bounded stress gates:
 ```powershell
 python -m emule_workspace test live-e2e --profile cpu-heavy-quick --fail-fast
 python -m emule_workspace test live-e2e --profile stabilization-stress-quick --fail-fast `
-  --live-wire-inputs-file $env:EMULE_WORKSPACE_ROOT\repos\emulebb-build-tests\live-wire-inputs.local.json
+  --live-wire-inputs-file $env:EMULEBB_WORKSPACE_ROOT\repos\emulebb-build-tests\live-wire-inputs.local.json
 ```
 
 The overnight campaign uses full soak gates:

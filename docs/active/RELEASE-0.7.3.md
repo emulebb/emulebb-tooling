@@ -15,7 +15,7 @@ Use it for status, release-source truth, and the open RC task list.
 - Current hold: none for release proof. Continue one gate at a time and stop
   before Git tagging until the operator gives the separate RC tag instruction.
 - Release source: selected reviewed `main` commit in
-  `EMULE_WORKSPACE_ROOT\workspaces\workspace\app\emulebb-main`.
+  `EMULEBB_WORKSPACE_ROOT\workspaces\workspace\app\emulebb-main`.
 - Tag target: `emulebb-v0.7.3-rc.1` on the selected reviewed `main` commit after
   fresh proof passes and the operator gives a separate tagging instruction.
 - Stock/community comparison baseline: `baseline/community-0.72a`.

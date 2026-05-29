@@ -19,7 +19,7 @@ engineering spec/evidence records, not workflow status authority.
 
 ## Current Snapshot
 
-**Source of truth:** `EMULE_WORKSPACE_ROOT\workspaces\workspace\app\emulebb-main` (`main` branch)
+**Source of truth:** `EMULEBB_WORKSPACE_ROOT\workspaces\workspace\app\emulebb-main` (`main` branch)
 **Current non-done count:** `91`
 **Latest release-doc refresh:** 2026-05-23
 **Non-done by status:** `72` OPEN, `6` IN_PROGRESS, `13` DEFERRED, `0` BLOCKED.

@@ -10,11 +10,11 @@ for the repeatable end-to-end operating path.
 ## Contributor Model
 
 Routine work happens on `main` in the relevant repo. App source edits belong in
-`EMULE_WORKSPACE_ROOT\workspaces\workspace\app\emulebb-main`; the canonical
-`EMULE_WORKSPACE_ROOT\repos\emulebb` checkout is the branch-store anchor, not the
+`EMULEBB_WORKSPACE_ROOT\workspaces\workspace\app\emulebb-main`; the canonical
+`EMULEBB_WORKSPACE_ROOT\repos\emulebb` checkout is the branch-store anchor, not the
 normal edit location.
 
-Use `EMULE_WORKSPACE_ROOT` style paths in maintained documentation and scripts.
+Use `EMULEBB_WORKSPACE_ROOT` style paths in maintained documentation and scripts.
 Avoid machine-specific absolute paths in active docs.
 
 The product line is eMule broadband edition, compactly eMuleBB. The first
@@ -55,7 +55,7 @@ Run workspace build, validation, test, live-test, and packaging work through
 `repos\emulebb-build` orchestration:
 
 ```powershell
-cd $env:EMULE_WORKSPACE_ROOT\repos\emulebb-build
+cd $env:EMULEBB_WORKSPACE_ROOT\repos\emulebb-build
 python -m emule_workspace validate
 ```
 
@@ -88,7 +88,7 @@ need to be published as formatted HTML:
 3. Run the local publish gate:
 
    ```powershell
-   cd $env:EMULE_WORKSPACE_ROOT\repos\emulebb-tooling
+   cd $env:EMULEBB_WORKSPACE_ROOT\repos\emulebb-tooling
    python scripts\docs-publish-check.py
    ```
 
@@ -117,7 +117,7 @@ packaging, or API behavior.
 - Run:
 
 ```powershell
-cd $env:EMULE_WORKSPACE_ROOT\repos\emulebb-tooling
+cd $env:EMULEBB_WORKSPACE_ROOT\repos\emulebb-tooling
 git diff --check
 python scripts\docs-publish-check.py
 ```

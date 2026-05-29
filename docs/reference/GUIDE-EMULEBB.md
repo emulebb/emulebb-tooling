@@ -168,7 +168,7 @@ The repeatable publishing workflow is:
 2. Run the local documentation publish gate:
 
    ```powershell
-   cd $env:EMULE_WORKSPACE_ROOT\repos\emulebb-tooling
+   cd $env:EMULEBB_WORKSPACE_ROOT\repos\emulebb-tooling
    python scripts\docs-publish-check.py
    ```
 

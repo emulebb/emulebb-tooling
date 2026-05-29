@@ -34,9 +34,9 @@ Directive precedence is:
 
 ## Workspace Layout
 
-- Canonical workspace paths are expressed through `EMULE_WORKSPACE_ROOT`.
-- Repos live under `EMULE_WORKSPACE_ROOT\repos\...`.
-- App worktrees live under `EMULE_WORKSPACE_ROOT\workspaces\workspace\app\...`.
+- Canonical workspace paths are expressed through `EMULEBB_WORKSPACE_ROOT`.
+- Repos live under `EMULEBB_WORKSPACE_ROOT\repos\...`.
+- App worktrees live under `EMULEBB_WORKSPACE_ROOT\workspaces\workspace\app\...`.
 - Do not hardcode machine-specific absolute paths in workspace docs or scripts.
 - `repos\emulebb-tooling` owns shared workspace policy, helper docs, and
   engineering notes.
@@ -250,7 +250,7 @@ Routine `validate` in `repos\emulebb-build` must run the active static audits:
 - Historical handoff notes live under `docs\history`. Create or refresh a
   current handoff only when terminating a session or when explicitly asked.
 - Repo-local `AGENTS.md` files should stay thin and repo-specific.
-- Use `EMULE_WORKSPACE_ROOT` style references instead of machine-specific
+- Use `EMULEBB_WORKSPACE_ROOT` style references instead of machine-specific
   absolute paths in active docs.
 - Documentation and normalization requirements are mandatory completion
   criteria, not optional style guidance.

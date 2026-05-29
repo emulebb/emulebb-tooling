@@ -20,7 +20,7 @@ and Project #2 item.
 
 ## Preflight
 
-1. Read `EMULE_WORKSPACE_ROOT\repos\emulebb-tooling\docs\WORKSPACE-POLICY.md`.
+1. Read `EMULEBB_WORKSPACE_ROOT\repos\emulebb-tooling\docs\WORKSPACE-POLICY.md`.
 2. Check `git status --short --branch` in every repo you will read for
    current-state decisions or edit.
 3. Revalidate candidate backlog work against current `main`, current dependency
@@ -106,7 +106,7 @@ has project scope and network access.
 
 ## Validation And Commit
 
-Run these checks from `EMULE_WORKSPACE_ROOT\repos\emulebb-tooling` after backlog
+Run these checks from `EMULEBB_WORKSPACE_ROOT\repos\emulebb-tooling` after backlog
 or active-index changes:
 
 ```powershell

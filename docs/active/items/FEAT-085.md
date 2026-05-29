@@ -135,7 +135,7 @@ catalog instead of copying tests:
 - resolve `p2p-overlord-tooling` from the eMuleBB workspace
 - execute one p2p scenario or campaign by stable `scenarioId`
 - run pytest markers only through supported adapter commands
-- pass `EMULE_WORKSPACE_ROOT` and product-family repo paths explicitly
+- pass `EMULEBB_WORKSPACE_ROOT` and product-family repo paths explicitly
 - map p2p-overlord run summaries into eMuleBB campaign evidence
 - keep deterministic private tests separate from realnet confidence tests
 - route Rust build checks through `cargo fmt`, `cargo clippy`, and focused
