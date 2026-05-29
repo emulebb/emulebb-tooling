@@ -225,6 +225,7 @@ the RC branch.
 | [BUG-130](../history/items/BUG-130.md) | Major | DONE | Harden RC1 hot-path worker and metadata edges |
 | [BUG-131](../history/items/BUG-131.md) | Major | DONE | Harden RC1 completion, delete, and startup-cache lifetime edges |
 | [BUG-132](items/BUG-132.md) | Major | DEFERRED | Follow up deferred qBit session and bulk REST hardening |
+| [BUG-133](../history/items/BUG-133.md) | Major | DONE | Harden RC1 metadata bounds, REST polling, and worker shutdown edges |
 
 `BUG-103` through `BUG-110` were superseded internal post-tag evidence labels,
 not active item docs.
