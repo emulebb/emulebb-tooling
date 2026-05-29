@@ -41,6 +41,7 @@ the `eMuleBB Roadmap` Project #2 are authoritative for migrated backlog items.
 **Backlog process runbook:** [BACKLOG-PROCESS](../reference/BACKLOG-PROCESS.md)
 **RC-release execution plan:** [RELEASE-0.7.3-EXECUTION-PLAN](plans/RELEASE-0.7.3-EXECUTION-PLAN.md)
 **p2p-overlord product-family plan:** [P2P-OVERLORD-PRODUCT-FAMILY-INTEGRATION](plans/P2P-OVERLORD-PRODUCT-FAMILY-INTEGRATION.md)
+**Installer/test materialization plan:** [INSTALLER-TEST-MATERIALIZATION-AND-SCENARIO-MATRIX](plans/INSTALLER-TEST-MATERIALIZATION-AND-SCENARIO-MATRIX.md)
 **Historical beta evidence:** `docs/history/release-0.7.3/`
 **Historical reviews:** `docs/history/reviews/`
 **Closed item records:** `docs/history/items/`
