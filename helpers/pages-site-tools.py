@@ -17,7 +17,7 @@ from pathlib import Path
 SITE_BASE_URL = "https://emulebb.github.io"
 PICO_CDN = "https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.classless.min.css"
 PROHIBITED_ASSET_PATTERN = re.compile(
-    r"emule-logo|Logo\.jpg|favicon|screenshot",
+    r"emule-logo|Logo\.jpg|screenshot",
     re.IGNORECASE,
 )
 ALLOWED_IMAGE_SRC_PATTERN = re.compile(
@@ -55,6 +55,12 @@ class PageSpec:
         """Return the expected relative stylesheet href for the page."""
 
         return f"{relative_prefix(self)}styles.css"
+
+    @property
+    def favicon_href(self) -> str:
+        """Return the expected relative favicon href for the page."""
+
+        return f"{relative_prefix(self)}assets/brand/emulebb-favicon.ico"
 
 
 CANONICAL_PAGES = (
@@ -139,6 +145,7 @@ class ParsedPage(HTMLParser):
         self.canonicals: list[str] = []
         self.sitemaps: list[str] = []
         self.stylesheets: list[str] = []
+        self.icons: list[str] = []
         self.alternates: dict[str, str] = {}
         self.og_urls: list[str] = []
         self.images: list[dict[str, str]] = []
@@ -169,6 +176,8 @@ class ParsedPage(HTMLParser):
             self.sitemaps.append(href)
         if "stylesheet" in rel_tokens:
             self.stylesheets.append(href)
+        if "icon" in rel_tokens:
+            self.icons.append(href)
         if "alternate" in rel_tokens and "hreflang" in attrs_by_name:
             self.alternates[attrs_by_name["hreflang"]] = href
 
@@ -306,6 +315,7 @@ def validate_page(pages_root: Path, page: PageSpec, errors: list[str]) -> None:
     expect(errors, parsed.sitemaps == [f"{SITE_BASE_URL}/sitemap.xml"], f"{page.relative_file}: sitemap link mismatch")
     expect(errors, PICO_CDN in parsed.stylesheets, f"{page.relative_file}: missing Pico CSS CDN")
     expect(errors, page.stylesheet_href in parsed.stylesheets, f"{page.relative_file}: missing {page.stylesheet_href}")
+    expect(errors, parsed.icons == [page.favicon_href], f"{page.relative_file}: favicon link mismatch")
     expect(
         errors,
         set(parsed.alternates) == EXPECTED_HREFLANGS,
@@ -358,6 +368,7 @@ def validate_language_page(pages_root: Path, errors: list[str]) -> None:
     expect(errors, set(parsed.alternates) == EXPECTED_HREFLANGS, f"{LANGUAGE_PAGE.relative_file}: hreflang set mismatch")
     expect(errors, PICO_CDN in parsed.stylesheets, f"{LANGUAGE_PAGE.relative_file}: missing Pico CSS CDN")
     expect(errors, LANGUAGE_PAGE.stylesheet_href in parsed.stylesheets, f"{LANGUAGE_PAGE.relative_file}: missing {LANGUAGE_PAGE.stylesheet_href}")
+    expect(errors, parsed.icons == [LANGUAGE_PAGE.favicon_href], f"{LANGUAGE_PAGE.relative_file}: favicon link mismatch")
     for page in CANONICAL_PAGES:
         expected_href = f"../{page.directory}/" if page.directory else "../"
         expect(errors, expected_href in parsed.hrefs, f"{LANGUAGE_PAGE.relative_file}: missing link to {page.url}")
@@ -385,6 +396,7 @@ def validate_faq_page(pages_root: Path, page: PageSpec, errors: list[str]) -> No
     expect(errors, parsed.sitemaps == [f"{SITE_BASE_URL}/sitemap.xml"], f"{page.relative_file}: sitemap link mismatch")
     expect(errors, PICO_CDN in parsed.stylesheets, f"{page.relative_file}: missing Pico CSS CDN")
     expect(errors, page.stylesheet_href in parsed.stylesheets, f"{page.relative_file}: missing {page.stylesheet_href}")
+    expect(errors, parsed.icons == [page.favicon_href], f"{page.relative_file}: favicon link mismatch")
     expect(
         errors,
         set(parsed.alternates) == EXPECTED_FAQ_HREFLANGS,
@@ -433,6 +445,8 @@ def validate_sitemap(pages_root: Path, errors: list[str]) -> None:
 def validate_prohibited_assets(pages_root: Path, errors: list[str]) -> None:
     """Ensure static pages do not regain prohibited image dependencies."""
 
+    favicon = pages_root / "assets" / "brand" / "emulebb-favicon.ico"
+    expect(errors, favicon.is_file(), "assets/brand/emulebb-favicon.ico: missing favicon")
     paths = [pages_root / "styles.css", pages_root / "index.html", pages_root / LANGUAGE_PAGE.relative_file]
     paths.extend(pages_root / page.relative_file for page in CANONICAL_PAGES if page.directory)
     paths.extend(pages_root / page.relative_file for page in FAQ_PAGES)
