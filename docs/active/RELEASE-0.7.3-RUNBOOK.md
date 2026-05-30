@@ -1,4 +1,4 @@
-# eMule Broadband Edition 0.7.3 RC Release Runbook
+# eMule Broadband Edition 0.7.3 RC1 Release Runbook
 
 This runbook is procedure only. Use
 [RELEASE-0.7.3](RELEASE-0.7.3.md) for current release status and
@@ -29,6 +29,9 @@ local input requirements are visible:
 ```powershell
 python -m emule_workspace test release-campaign --campaign emulebb-0.7.3
 ```
+
+`emulebb-0.7.3` is the stable quick campaign ID in `emulebb-build-tests`; it is
+not the RC1 tag or package name.
 
 ## Repeatable Build Matrix
 

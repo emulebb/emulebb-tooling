@@ -335,13 +335,18 @@ filled in.
 The adapters are compatibility subsets for Arr workflows, not full clones of
 qBittorrent or a generic Newznab provider.
 
-| Surface | Supported | Not supported or no-op |
+| Surface | Supported | Boundary |
 |---|---|---|
-| qBit app/auth | Web API version, app version, login, minimal preferences | Full qBit settings management |
-| qBit categories | List and create native eMuleBB categories | Torrent label semantics beyond category mapping |
-| qBit transfers | Info, properties, files, add eD2K link, pause/resume/start/stop/delete | `.torrent` uploads, BitTorrent magnet links, HTTP torrent URLs, RSS, trackers, peer management, sync, ban lists, `hashes=all` |
-| qBit policy routes | `setsharelimits`, `topprio`, and `setforcestart` validate input | They are accepted no-ops; eMuleBB has no torrent seeding policy |
-| Torznab caps/search | `caps`, `search`, `tvsearch`, and `movie` | Provider-specific extensions beyond ignored safe parameters |
+| qBit app/auth | Web API version, app version, login, minimal preferences | No full qBit settings management |
+| qBit categories | List and create native eMuleBB categories | No torrent label semantics beyond category mapping |
+| qBit transfers | Info, properties, files, add eD2K link, pause/resume/start/stop/delete | ED2K transfer subset only |
+| qBit policy routes | `setsharelimits`, `topprio`, and `setforcestart` validate input | Accepted no-ops |
+| Torznab caps/search | `caps`, `search`, `tvsearch`, and `movie` | Only safe ignored extras |
+
+The qBittorrent-compatible transfer surface does not support `.torrent`
+uploads, BitTorrent magnet links, HTTP torrent URLs, RSS, trackers, peer
+management, sync, ban lists, or `hashes=all`. eMuleBB also has no torrent
+seeding-policy equivalent behind the accepted policy-route no-ops.
 
 Torznab search is deliberately bounded. Generic searches observe native results
 for about 12 seconds. Movie and TV searches observe for about 45 seconds because

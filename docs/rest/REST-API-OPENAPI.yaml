@@ -2,14 +2,14 @@ openapi: 3.1.0
 info:
   title: eMuleBB REST API
   version: 0.7.3
-  summary: Canonical beta 0.7.3 contract for the embedded eMuleBB REST API.
+  summary: Canonical 0.7.3 RC1 contract for the embedded eMuleBB REST API.
   description: >
     This is the source-of-truth contract for the redesigned `/api/v1` API.
     The API is served by the existing eMule WebServer listener, uses
     `X-API-Key` authentication only, and is designed for aMuTorrent and other
-    trusted local controllers. eMuleBB beta 0.7.3 is the first public beta
-    line for this contract; adapter compatibility must not weaken the native
-    route shape.
+    trusted local controllers. eMuleBB 0.7.3-rc.1 is the first public
+    release-candidate line for this contract; adapter compatibility must not
+    weaken the native route shape.
 servers:
   - url: http://{host}:{port}/api/v1
     variables:
@@ -4838,7 +4838,7 @@ components:
           type: array
           description: >
             Current native visible result snapshot. This array is not paged in
-            beta 0.7.3; controllers should poll the search resource and
+            0.7.3 RC1; controllers should poll the search resource and
             preserve eMule's stock eD2K/Kad search semantics.
           items:
             $ref: "#/components/schemas/SearchResult"

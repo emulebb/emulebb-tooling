@@ -53,16 +53,16 @@ This item also owns the next UPnP/NAT-mapping usability slice:
   lease expires, a network interface changes, the bind target changes, or
   `CloseUPnPOnExit` is enabled
 
-## Beta 0.7.3 Classification
+## 0.7.3 RC1 Classification
 
-**Release Candidate.** The code/build slice is already complete, so beta
-`0.7.3` should take the live NAT validation if the available network can prove
-it cleanly. Do not block `emulebb-v0.7.3` solely because the local network
+**Release Candidate.** The code/build slice is already complete, so 0.7.3 RC1
+should take the live NAT validation if the available network can prove
+it cleanly. Do not block `emulebb-v0.7.3-rc.1` solely because the local network
 cannot provide a PCP/NAT-PMP-capable path.
 
 ## Execution Plan
 
-Historical release context: [Beta 0.7.3 NAT Mapping execution plan](../../history/release-0.7.3/RELEASE-0.7.3-NAT-MAPPING-EXECUTION-PLAN.md).
+Historical release context: [0.7.3 NAT Mapping execution plan](../../history/release-0.7.3/RELEASE-0.7.3-NAT-MAPPING-EXECUTION-PLAN.md).
 
 ## Acceptance Criteria
 
@@ -90,10 +90,10 @@ Historical release context: [Beta 0.7.3 NAT Mapping execution plan](../../histor
 - [ ] product docs explain lease-time tradeoffs and how to interpret UPnP,
       PCP, and NAT-PMP status
 
-## Beta 0.7.3 Decision
+## 0.7.3 RC1 Decision
 
-Deferred for beta `0.7.3` live proof. The code/build slice is accepted by the
-release plan, but available release validation must not block the beta tag
+Deferred for 0.7.3 RC1 live proof. The code/build slice is accepted by the
+release plan, but available release validation must not block the RC1 tag
 solely on the absence of a PCP/NAT-PMP-capable network. Complete the remaining
 live proof when a suitable router or lab network can exercise MiniUPnP success,
 PCP/NAT-PMP fallback, explicit PCP/NAT-PMP-only mode, and WebServer TCP mapping.

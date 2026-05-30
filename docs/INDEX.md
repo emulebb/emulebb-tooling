@@ -40,7 +40,7 @@ Use these guides in order for a first real profile:
    eMuleBB plus aMuTorrent plus Arr workflow with field-level setup details.
 
 For public release testing, use the
-[0.7.3 RC release notes](active/RELEASE-0.7.3-NOTES.md) before downloading or
+[0.7.3 RC1 release notes](active/RELEASE-0.7.3-NOTES.md) before downloading or
 reporting package behavior.
 
 ## Developer And Release Operator Paths
@@ -53,8 +53,12 @@ workspace and release controls instead of the product manual:
 | Contributor or AI agent | [Workspace Policy](WORKSPACE-POLICY.md) and [Agent Checklist](reference/AGENT-CHECKLIST.md) |
 | Routine developer | [Development Guide](reference/DEVELOPMENT-GUIDE.md) |
 | Backlog owner | [Active Backlog](active/INDEX.md) and [Backlog Process](reference/BACKLOG-PROCESS.md) |
-| RC release operator | [Release 0.7.3](active/RELEASE-0.7.3.md), [Execution Plan](active/plans/RELEASE-0.7.3-EXECUTION-PLAN.md), and [Runbook](active/RELEASE-0.7.3-RUNBOOK.md) |
+| RC1 release operator | [0.7.3 RC1 Dashboard](active/RELEASE-0.7.3.md) |
 | REST/controller reviewer | [REST Contract](rest/REST-API-CONTRACT.md) and [Controller Surface Matrix](active/CONTROLLER-SURFACE-MATRIX.md) |
+
+RC1 operators should also use the
+[Execution Plan](active/plans/RELEASE-0.7.3-EXECUTION-PLAN.md) and
+[Runbook](active/RELEASE-0.7.3-RUNBOOK.md).
 
 ## Power User Paths
 
@@ -186,10 +190,10 @@ are not the best first read for users.
 | Workspace repository map | [reference/WORKSPACE-REPO-MAP](reference/WORKSPACE-REPO-MAP.md) |
 | Development and validation guide | [reference/DEVELOPMENT-GUIDE](reference/DEVELOPMENT-GUIDE.md) |
 | Active backlog and release dashboard | [active/INDEX](active/INDEX.md) |
-| RC release control document | [active/RELEASE-0.7.3](active/RELEASE-0.7.3.md) |
-| Public RC release notes | [active/RELEASE-0.7.3-NOTES](active/RELEASE-0.7.3-NOTES.md) |
-| RC release checklist | [active/RELEASE-0.7.3-CHECKLIST](active/RELEASE-0.7.3-CHECKLIST.md) |
-| RC release runbook | [active/RELEASE-0.7.3-RUNBOOK](active/RELEASE-0.7.3-RUNBOOK.md) |
+| 0.7.3 RC1 release control document | [active/RELEASE-0.7.3](active/RELEASE-0.7.3.md) |
+| Public 0.7.3 RC1 release notes | [active/RELEASE-0.7.3-NOTES](active/RELEASE-0.7.3-NOTES.md) |
+| 0.7.3 RC1 release checklist | [active/RELEASE-0.7.3-CHECKLIST](active/RELEASE-0.7.3-CHECKLIST.md) |
+| 0.7.3 RC1 release runbook | [active/RELEASE-0.7.3-RUNBOOK](active/RELEASE-0.7.3-RUNBOOK.md) |
 | Backlog process | [reference/BACKLOG-PROCESS](reference/BACKLOG-PROCESS.md) |
 | Evidence retention policy | [reference/EVIDENCE-RETENTION](reference/EVIDENCE-RETENTION.md) |
 | CI baseline workflow | [reference/CI-BASELINE](reference/CI-BASELINE.md) |

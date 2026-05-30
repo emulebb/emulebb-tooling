@@ -1,15 +1,16 @@
 # Dependency Status
 
-Reviewed on 2026-05-23 against current `main`, current
-`repos\emulebb-build` dependency topology, and the active beta release policy.
+Reviewed on 2026-05-30 against current `main`, current
+`repos\emulebb-build` dependency topology, and the active 0.7.3 RC1 release policy.
 
-This document records the current dependency decisions for the eMuleBB beta workspace.
+This document records the current dependency decisions for the eMuleBB 0.7.3
+RC1 workspace.
 It supersedes older dependency-removal notes that were written against other
 branch lines or earlier release experiments.
 
 ## Release Policy
 
-No third-party dependency upgrades or removals are planned for beta `0.7.3`.
+No third-party dependency upgrades or removals are planned for 0.7.3 RC1.
 The dependency forks below stay as-is unless a new release-critical issue is
 explicitly promoted.
 
@@ -32,7 +33,8 @@ explicitly promoted.
 The upstream Crypto++ release tracker reports a newer `CRYPTOPP_8_9_0` tag, but
 the release decision is to keep the current 8.4-based fork for now. The local fork
 delta is build-system focused, including Visual Studio and ARM64 compatibility.
-`REF-034` remains deferred informational dependency hardening, not beta scope.
+`REF-034` remains deferred informational dependency hardening, not 0.7.3 RC1
+scope.
 
 ### id3lib
 
@@ -66,4 +68,4 @@ stale for current `main`.
 ### zlib and ResizableLib
 
 Both stay in the current static-library model. No DLL conversion, inlining, or
-replacement work is planned for the beta.
+replacement work is planned for 0.7.3 RC1.

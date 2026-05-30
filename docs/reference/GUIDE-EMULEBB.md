@@ -194,8 +194,9 @@ with evidence.
 
 - eMuleBB desktop app:
   `https://github.com/emulebb/emulebb/releases`. Nightly testing is open.
-  The first official public release line is `0.7.3`; nightly, beta, and RC
-  packages remain pre-release test builds.
+  The current official public test line is 0.7.3 RC1; use
+  `emulebb-v0.7.3-rc.1` or a later approved release tag for release-candidate
+  testing. Nightly and older beta packages remain pre-release test builds.
 - aMule Windows builds:
   `https://github.com/emulebb/amule/releases`. eMuleBB publishes Windows build
   and validation artifacts for aMule users. This is an ecosystem build track,
@@ -428,7 +429,7 @@ fully documented until it has the right coverage in each owner document:
 | Network behavior | [Network Guide](GUIDE-NETWORK.md), including bind, firewall, UPnP, WebServer/REST, and diagnosis boundaries |
 | Controller behavior | [Controllers and REST Guide](GUIDE-CONTROLLERS-REST.md), REST contract, and OpenAPI |
 | Command line | [Development Guide](DEVELOPMENT-GUIDE.md), plus setup/product summary when the option affects operators |
-| Testing and release proof | [Development Guide](DEVELOPMENT-GUIDE.md), [Release Test Strategy](../active/RELEASE-TEST-STRATEGY.md), and active `0.7.3` release docs |
+| Testing and release proof | [Development Guide](DEVELOPMENT-GUIDE.md), [Release Test Strategy](../active/RELEASE-TEST-STRATEGY.md), and active 0.7.3 RC1 release docs |
 
 The product guide should describe what an operator can rely on. It should not
 turn test-only seams, future backlog, abandoned ideas, or private evidence
@@ -741,7 +742,7 @@ compatibility is tracked by [FEAT-035](../active/items/FEAT-035.md). A separate
 IPv6 Kad network is only an exploratory design note in
 [IDEA-IPV6-KAD-NETWORK](../ideas/IDEA-IPV6-KAD-NETWORK.md), inspired by the
 qBittorrent/libtorrent approach of keeping IPv4 and IPv6 DHT state separate.
-Neither track changes planned `0.7.3` release behavior unless the active release
+Neither track changes planned 0.7.3 RC1 release behavior unless the active release
 docs later say otherwise.
 
 ## Unsupported Legacy Areas
@@ -769,9 +770,9 @@ recurring tasks, and normal diagnostic snapshots for support. See
 Product usage docs do not duplicate release proof. Current release state remains
 in:
 
-- [RC 0.7.3 dashboard](../active/RELEASE-0.7.3.md)
-- [RC 0.7.3 checklist](../active/RELEASE-0.7.3-CHECKLIST.md)
-- [RC 0.7.3 runbook](../active/RELEASE-0.7.3-RUNBOOK.md)
+- [0.7.3 RC1 dashboard](../active/RELEASE-0.7.3.md)
+- [0.7.3 RC1 checklist](../active/RELEASE-0.7.3-CHECKLIST.md)
+- [0.7.3 RC1 runbook](../active/RELEASE-0.7.3-RUNBOOK.md)
 - [Active backlog index](../active/INDEX.md)
 
 When user-visible behavior changes, update the guide chapter that owns it.

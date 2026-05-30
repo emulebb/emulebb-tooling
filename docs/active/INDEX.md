@@ -24,7 +24,7 @@ engineering spec/evidence records, not workflow status authority.
 **Latest release-doc refresh:** 2026-05-23
 **Non-done by status:** `72` OPEN, `6` IN_PROGRESS, `13` DEFERRED, `0` BLOCKED.
 **Backlog counts:** item tables below are authoritative.
-**RC 0.7.3 relevance:** Most non-done items below are future or deferred work;
+**0.7.3 RC1 relevance:** Most non-done items below are future or deferred work;
 current RC gate and proof status is controlled by [RELEASE-0.7.3](RELEASE-0.7.3.md).
 **Broadband release status:** `emulebb-v0.7.3-rc.1` is the first public
 release-candidate target.
@@ -34,7 +34,7 @@ release-candidate target.
 **Release test strategy:** [RELEASE-TEST-STRATEGY](RELEASE-TEST-STRATEGY.md)
 **Release test campaigns:** [RELEASE-TEST-CAMPAIGNS](RELEASE-TEST-CAMPAIGNS.md)
 **Frozen surfaces:** [FROZEN-SURFACES](FROZEN-SURFACES.md)
-**RC controller surface matrix:** [CONTROLLER-SURFACE-MATRIX](CONTROLLER-SURFACE-MATRIX.md)
+**0.7.3 RC1 controller surface matrix:** [CONTROLLER-SURFACE-MATRIX](CONTROLLER-SURFACE-MATRIX.md)
 **Future release roadmap:** [FUTURE-ROADMAP](FUTURE-ROADMAP.md)
 **GitHub-primary backlog workflow:** GitHub issues in `emulebb/emulebb` plus
 the `eMuleBB Roadmap` Project #2 are authoritative for migrated backlog items.
@@ -83,7 +83,7 @@ regression checks. When behavior changes, compare `main` against
 `baseline/community-0.72a` as the seam-enabled parity and regression baseline
 where that comparison is meaningful.
 
-**RC 0.7.3 source rule:** the public RC tag is cut from the selected
+**0.7.3 RC1 source rule:** the public RC tag is cut from the selected
 reviewed `main` commit after refreshed proof passes and operator approval.
 The release stabilization branch is `release/0.7.3` once the operator starts
 the RC branch.
@@ -188,7 +188,7 @@ the RC branch.
 | [BUG-082](../history/items/BUG-082.md) | Major | DONE | GeoLocation and IPFilter background refresh flags can race and remain stuck |
 | [BUG-083](../history/items/BUG-083.md) | Major | DONE | Client UDP malformed-packet logging can read past a one-byte packet |
 | [BUG-084](../history/items/BUG-084.md) | Minor | DONE | Web admin high-level actions leak the process token handle |
-| [BUG-085](../history/items/BUG-085.md) | Major | DONE | Kad/client UDP encryption preference gating needs beta compatibility proof |
+| [BUG-085](../history/items/BUG-085.md) | Major | DONE | Kad/client UDP encryption preference gating needs RC1 compatibility proof |
 | [BUG-086](../history/items/BUG-086.md) | Critical | DONE | HTTPS WebSocket casts SOCKET storage to mbedtls_net_context |
 | [BUG-087](../history/items/BUG-087.md) | Critical | DONE | HTTPS WebSocket queued writes can stall after TLS WANT_READ |
 | [BUG-088](../history/items/BUG-088.md) | Major | DONE | WebSocket timeout shutdown leaves global state unsafe for restart |
@@ -271,7 +271,7 @@ not active item docs.
 | [REF-034](items/REF-034.md) | Minor | DEFERRED | Resolve Crypto++ 8.4 vs 8.9 dependency truth |
 | [REF-035](items/REF-035.md) | Minor | OPEN | Adopt WIL for narrow Windows and COM RAII cleanup |
 | [REF-036](items/REF-036.md) | Minor | OPEN | Adopt GSL contracts for buffer and pointer boundary hardening |
-| [REF-037](../history/items/REF-037.md) | Major | DONE | Beta 0.7.3 legacy and frozen feature disposition ledger |
+| [REF-037](../history/items/REF-037.md) | Major | DONE | 0.7.3 RC1 legacy and frozen feature disposition ledger |
 | [REF-038](../history/items/REF-038.md) | Minor | DONE | Harden optional MediaInfo DLL loading and metadata extraction seams |
 | [REF-039](../history/items/REF-039.md) | Minor | DONE | Classify MediaInfo loader failures and bound metadata extraction counts |
 | [REF-040](../history/items/REF-040.md) | Minor | DONE | Harden external UnRAR DLL loading |
@@ -365,9 +365,9 @@ not active item docs.
 | [FEAT-052](../history/items/FEAT-052.md) | Minor | DONE | Main-shell keyboard shortcuts and mnemonic audit |
 | [FEAT-053](../history/items/FEAT-053.md) | Minor | DONE | Classic tray balloon notification mode |
 | [FEAT-054](../history/items/FEAT-054.md) | Minor | DONE | Normalize download message filename display |
-| [FEAT-055](../history/items/FEAT-055.md) | Minor | DONE | Beta 0.7.3 improvement triage lane |
+| [FEAT-055](../history/items/FEAT-055.md) | Minor | DONE | 0.7.3 RC1 improvement triage lane |
 | [FEAT-056](items/FEAT-056.md) | Minor | DEFERRED | Post-0.7.3 release proof automation and operator evidence UX |
-| [FEAT-058](../history/items/FEAT-058.md) | Minor | DONE | Beta 0.7.3 closeout UX polish and audit report |
+| [FEAT-058](../history/items/FEAT-058.md) | Minor | DONE | 0.7.3 RC1 closeout UX polish and audit report |
 | [FEAT-059](../history/items/FEAT-059.md) | Minor | DONE | Move tray icon visibility preference next to minimize-to-tray |
 | [FEAT-060](../history/items/FEAT-060.md) | Minor | DONE | Preference inventory, mapping, clamp, and persistence audit |
 | [FEAT-061](../history/items/FEAT-061.md) | Minor | DONE | Strong preference schema validation |
@@ -433,18 +433,18 @@ not active item docs.
 | [CI-019](../history/items/CI-019.md) | Major | DONE | HTTPS and REST socket adversity stress gate |
 | [CI-020](../history/items/CI-020.md) | Major | DONE | REST and legacy WebServer error-path coverage gate |
 | [CI-021](../history/items/CI-021.md) | Major | DONE | WebSocket and legacy socket leak-churn gate |
-| [CI-022](../history/items/CI-022.md) | Major | DONE | Beta 0.7.3 community parity changed-surface ledger |
-| [CI-023](../history/items/CI-023.md) | Major | DONE | Beta 0.7.3 post-1.0 hardening regression replay gate |
-| [CI-024](../history/items/CI-024.md) | Major | DONE | Beta 0.7.3 controller integration full replay gate |
-| [CI-025](../history/items/CI-025.md) | Major | DONE | Beta 0.7.3 REST and adapter contract drift gate |
-| [CI-026](../history/items/CI-026.md) | Major | DONE | Beta 0.7.3 shared files, startup cache, and long-path parity gate |
-| [CI-027](../history/items/CI-027.md) | Major | DONE | Beta 0.7.3 download and persistence replay gate |
-| [CI-028](../history/items/CI-028.md) | Major | DONE | Beta 0.7.3 search, server, and Kad parity replay gate |
-| [CI-029](../history/items/CI-029.md) | Major | DONE | Beta 0.7.3 network socket, UDP, WebSocket, HTTPS, and UPnP adversity gate |
-| [CI-030](../history/items/CI-030.md) | Major | DONE | Beta 0.7.3 UI, preferences, tray, and language resource parity smoke gate |
-| [CI-031](../history/items/CI-031.md) | Major | DONE | Beta 0.7.3 packaging, architecture, and release asset parity gate |
-| [CI-032](../history/items/CI-032.md) | Major | DONE | Beta 0.7.3 post-tag focused coverage gaps |
-| [CI-033](../history/items/CI-033.md) | Major | DONE | Beta 0.7.3 internal pre-release proof |
+| [CI-022](../history/items/CI-022.md) | Major | DONE | 0.7.3 RC1 community parity changed-surface ledger |
+| [CI-023](../history/items/CI-023.md) | Major | DONE | 0.7.3 RC1 post-1.0 hardening regression replay gate |
+| [CI-024](../history/items/CI-024.md) | Major | DONE | 0.7.3 RC1 controller integration full replay gate |
+| [CI-025](../history/items/CI-025.md) | Major | DONE | 0.7.3 RC1 REST and adapter contract drift gate |
+| [CI-026](../history/items/CI-026.md) | Major | DONE | 0.7.3 RC1 shared files, startup cache, and long-path parity gate |
+| [CI-027](../history/items/CI-027.md) | Major | DONE | 0.7.3 RC1 download and persistence replay gate |
+| [CI-028](../history/items/CI-028.md) | Major | DONE | 0.7.3 RC1 search, server, and Kad parity replay gate |
+| [CI-029](../history/items/CI-029.md) | Major | DONE | 0.7.3 RC1 network socket, UDP, WebSocket, HTTPS, and UPnP adversity gate |
+| [CI-030](../history/items/CI-030.md) | Major | DONE | 0.7.3 RC1 UI, preferences, tray, and language resource parity smoke gate |
+| [CI-031](../history/items/CI-031.md) | Major | DONE | 0.7.3 RC1 packaging, architecture, and release asset parity gate |
+| [CI-032](../history/items/CI-032.md) | Major | DONE | 0.7.3 RC1 post-tag focused coverage gaps |
+| [CI-033](../history/items/CI-033.md) | Major | DONE | 0.7.3 RC1 internal pre-release proof |
 | [CI-034](../history/items/CI-034.md) | Major | DONE | Package-release provenance and dirty-input guard |
 | [CI-035](items/CI-035.md) | Major | OPEN | Final current-head RC proof and fresh package hashes |
 | [CI-036](../history/items/CI-036.md) | Major | DONE | Release certification test matrix |
@@ -475,10 +475,10 @@ not active item docs.
 
 ## Release Focus
 
-RC 0.7.3 hardening is controlled by [RELEASE-0.7.3](RELEASE-0.7.3.md).
+0.7.3 RC1 hardening is controlled by [RELEASE-0.7.3](RELEASE-0.7.3.md).
 Use that page for release status, source decision, and the open RC task table.
 The current implementation sequence lives in the single
-[RC 0.7.3 execution plan](plans/RELEASE-0.7.3-EXECUTION-PLAN.md).
+[0.7.3 RC1 execution plan](plans/RELEASE-0.7.3-EXECUTION-PLAN.md).
 Superseded release gate evidence and old cluster plans live under
 `docs\history\release-0.7.3`.
 

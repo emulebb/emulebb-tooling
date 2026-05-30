@@ -1,6 +1,7 @@
-# eMule Broadband Edition 0.7.3 RC Release Checklist
+# eMule Broadband Edition 0.7.3 RC1 Release Checklist
 
-This is the final operator checklist for RC target `emulebb-v0.7.3-rc.1`.
+This is the final operator checklist for the 0.7.3 RC1 target
+`emulebb-v0.7.3-rc.1`.
 Do not record stale proof here; every row must be refreshed on the selected
 reviewed `main` commit.
 
@@ -13,7 +14,7 @@ the operator gives a separate tagging instruction after this checklist is
 complete.
 
 Release freeze is active. No new feature, refactor, UI polish, warning-debt, or
-roadmap work enters RC `0.7.3`; only direct release-gate blockers may be fixed
+roadmap work enters 0.7.3 RC1; only direct release-gate blockers may be fixed
 before tag readiness. The prior documentation-only hold is lifted for release
 proof. Continue one gate at a time, record fresh evidence, and do not create
 Git tags until the operator gives a separate tagging instruction.
@@ -42,6 +43,9 @@ Run `python -m emule_workspace ...` commands from
 
 - [ ] `python -m emule_workspace test release-campaign --campaign emulebb-0.7.3`
 - [ ] `python -m emule_workspace test release-campaign --campaign emulebb-0.7.3 --execute`
+
+`emulebb-0.7.3` is the stable quick campaign ID in `emulebb-build-tests`; RC1
+release tags and assets still use `0.7.3-rc.1`.
 
 ## Campaign Expanded Rows
 
@@ -152,7 +156,7 @@ soak status cannot be confused with the repeatable RC package gate.
 
 - [ ] Release notes use `eMule broadband edition` as the public product name.
 - [ ] Release notes use `eMuleBB` as the compact app/mod/API name.
-- [ ] Package-facing README identifies reviewed `main` as the RC `0.7.3`
+- [ ] Package-facing README identifies reviewed `main` as the 0.7.3 RC1
       release source and does not depend on a broadband stabilization branch.
 - [ ] Annotated RC tag is `emulebb-v0.7.3-rc.1`.
 - [ ] Annotated RC tag points at the selected reviewed `main` commit.

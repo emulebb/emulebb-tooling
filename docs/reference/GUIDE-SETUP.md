@@ -269,10 +269,10 @@ eMuleBB plus aMuTorrent plus Prowlarr/Radarr/Sonarr setup, use the
 
 ## Release-Aware Setup
 
-The first official public release line is `0.7.3`. Use packages attached to an
-approved `emulebb-v0.7.3` or later release tag. Treat nightly, beta, and RC
-builds as pre-release packages unless the release notes explicitly direct a
-test run to them.
+The current official public test line is 0.7.3 RC1. Use packages attached to
+`emulebb-v0.7.3-rc.1` or a later approved release tag. Treat nightly and older
+beta builds as pre-release packages unless the release notes explicitly direct
+a test run to them.
 
 Before trusting a package:
 
@@ -303,7 +303,7 @@ Setup confidence comes from the same release evidence model used elsewhere:
 
 See [Release Test Strategy](../active/RELEASE-TEST-STRATEGY.md),
 [Release Test Campaigns](../active/RELEASE-TEST-CAMPAIGNS.md), and the
-[RC 0.7.3 dashboard](../active/RELEASE-0.7.3.md) for the current release
+[0.7.3 RC1 dashboard](../active/RELEASE-0.7.3.md) for the current release
 proof model.
 
 ## Unsupported Setup Targets

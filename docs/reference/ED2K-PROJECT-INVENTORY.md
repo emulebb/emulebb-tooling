@@ -1,6 +1,6 @@
 # eD2K Project Inventory
 
-Last verified: 2026-05-23
+Last verified: 2026-05-29
 
 This inventory tracks active, stale, obscure, and historical projects around
 eD2K, eDonkey2000, eMule, Kad, server software, controller tooling, protocol
@@ -9,6 +9,11 @@ libraries, and eMule mods.
 It is a research index, not an endorsement list. Projects marked historical or
 archive-only may still be valuable protocol and product references, but they
 should not be treated as maintained dependencies without a fresh review.
+
+The 2026-05-29 refresh checked the canonical workspace `repos` and
+`workspaces` directories, the generated workspace manifests, local analysis
+archives, and current public GitHub/crates metadata for the projects changed
+below.
 
 ## Status Labels
 
@@ -27,10 +32,25 @@ Server software is listed separately from server lists. A server implementation
 accepts eD2K/eMule client connections, handles login/search/source operations,
 and may expose UDP status or admin APIs.
 
+- **JEmuleServer**
+  - Status: Active, experimental
+  - Language: Java
+  - Source or archive: https://github.com/dagga/JEmuleServer
+  - Repo stats (GitHub, 2026-05-29):
+    - `dagga/JEmuleServer`: 2 stars, 0 forks, 0 open issues; default `main`; default-branch commit 2026-05-29 `8092fd2`.
+  - Notes: Modern open-source eMule/eD2K server project. The README describes a
+           Java 21 server with protocol obfuscation, compression, advanced search,
+           large-file support, Lugdunum extensions, embedded H2 storage, LowID
+           callbacks, fake-file filtering, admin CLI, and IPv6 support. Treat as
+           a fresh research lead until protocol coverage and license fit are
+           reviewed in code.
+
 - **goed2k-server**
   - Status: Active
   - Language: Go
   - Source or archive: https://github.com/chenjia404/goed2k-server
+  - Repo stats (GitHub, 2026-05-29):
+    - `chenjia404/goed2k-server`: 4 stars, 2 forks, 0 open issues; default `master`; default-branch commit 2026-04-10 `0bfe17c`.
   - Notes: Go ED2K/eMule server built around `github.com/monkeyWie/goed2k`; implements
            login, status, message, ID assignment, offer files, search, search-more,
            source lookup, callbacks, JSON/MySQL/PostgreSQL catalog storage, and admin
@@ -38,18 +58,22 @@ and may expose UDP status or admin APIs.
            `https://github.com/emulebb/goed2k-server`.
 
 - **p2p-overlord ED2K server**
-  - Status: Historical reference
+  - Status: Historical, archive-only
   - Language: Go
   - Source or archive: https://github.com/p2p-overlord/p2p-overlord-ed2k-server
-  - Notes: Renamed fork lineage retained only as historical reference; active eMuleBB
-           workspace topology tracks `goed2k-server` directly. The obsolete
-           `emulebb-ed2k-server` fork slug has no current public repository and should
-           not be used.
+  - Repo stats (GitHub, 2026-05-29):
+    - `p2p-overlord/p2p-overlord-ed2k-server`: 0 stars, 0 forks, 0 open issues; default `master`; default-branch commit 2026-05-10 `7ca18a2`; archived.
+  - Notes: Archived fork lineage retained only as historical reference; active
+           eMuleBB workspace topology tracks `goed2k-server` directly. The
+           obsolete `emulebb-ed2k-server` fork slug has no current public
+           repository and should not be used.
 
 - **ed2kd**
   - Status: Stale
   - Language: C
   - Source or archive: https://github.com/gureedo/ed2kd
+  - Repo stats (GitHub, 2026-05-29):
+    - `gureedo/ed2kd`: 14 stars, 11 forks, 0 open issues; default `master`; default-branch commit 2019-10-24 `f6c330d`.
   - Notes: eDonkey2000 server implementation using libevent, zlib, libconfig, and SQLite
            support. Local research checkout exists in archived server material.
 
@@ -57,6 +81,8 @@ and may expose UDP status or admin APIs.
   - Status: Stale
   - Language: Node.js
   - Source or archive: https://github.com/zt8989/eNode
+  - Repo stats (GitHub, 2026-05-29):
+    - `zt8989/eNode`: 8 stars, 3 forks, 0 open issues; default `master`; default-branch commit 2013-03-29 `59b81f7`.
   - Notes: Experimental eD2K/eMule server. README describes TCP/UDP opcodes,
            obfuscation, Lugdunum/eMule extended protocol, LowID callbacks, files over 4
            GiB, and pluggable storage through MySQL or MongoDB.
@@ -65,6 +91,8 @@ and may expose UDP status or admin APIs.
   - Status: Stale
   - Language: Go
   - Source or archive: https://github.com/HackLinux/gomule
+  - Repo stats (GitHub, 2026-05-29):
+    - `HackLinux/gomule`: 3 stars, 6 forks, 0 open issues; default `master`; default-branch commit 2013-12-05 `e8565a0`.
   - Notes: Go "Goroutines eMule Server" project. Treat as a small historical
            implementation reference until protocol coverage is revalidated.
 
@@ -72,6 +100,8 @@ and may expose UDP status or admin APIs.
   - Status: Historical
   - Language: Java
   - Source or archive: https://github.com/vavavr00m/ed2j
+  - Repo stats (GitHub, 2026-05-29):
+    - `vavavr00m/ed2j`: 7 stars, 1 fork, 0 open issues; default `master`; default-branch commit 2012-07-08 `c782d7a`.
   - Notes: Java repository automatically exported from Google Code. Contains an
            `ed2k/server` tree and is useful as an obscure server-side protocol
            reference.
@@ -98,9 +128,11 @@ These projects and services are not ED2K server implementations. They publish
 server addresses, `server.met` files, or bootstrap guidance.
 
 - **Bunny-Head ed2k-servers**
-  - Status: Active/stale
+  - Status: Stale
   - Type: Server-list repository
   - Link: https://github.com/Bunny-Head/ed2k-servers
+  - Repo stats (GitHub, 2026-05-29):
+    - `Bunny-Head/ed2k-servers`: 4 stars, 0 forks, 0 open issues; default `main`; default-branch commit 2023-05-25 `c643060`.
   - Notes: GitHub-hosted list of working ED2K servers. Useful for bootstrap and
            link-check examples, not a server implementation.
 
@@ -164,6 +196,8 @@ server addresses, `server.met` files, or bootstrap guidance.
   - Status: Active
   - Language/platform: Windows, C++/MFC
   - Link: https://github.com/emulebb/emulebb
+  - Repo stats (GitHub, 2026-05-29):
+    - `emulebb/emulebb`: 39 stars, 1 fork, 24 open issues; default `main`; default-branch commit 2026-05-29 `68ef812`.
   - Notes: Workspace product line; modernized eMule broadband edition with compatibility
            and release hardening.
 
@@ -171,41 +205,61 @@ server addresses, `server.met` files, or bootstrap guidance.
   - Status: Maintained
   - Language/platform: Windows, C++/MFC
   - Link: https://github.com/irwir/eMule
+  - Repo stats (GitHub, 2026-05-29):
+    - `irwir/eMule`: 1231 stars, 110 forks, 0 open issues; default `master`; default-branch commit 2016-04-10 `88a8c8f`.
   - Notes: Community continuation of classic eMule. Important compatibility and
-           user-expectation reference.
+           user-expectation reference. Local analysis checkouts track `v0.60d`
+           and `v0.72a`, while managed app worktrees carry the community
+           baseline and tracing harness branches.
 
 - **eMuleAI**
   - Status: Active
   - Language/platform: Windows, C++/MFC
   - Link: https://github.com/eMuleAI/eMuleAI
+  - Repo stats (GitHub, 2026-05-29):
+    - `eMuleAI/eMuleAI`: 35 stars, 4 forks, 11 open issues; default `master`; default-branch commit 2026-04-21 `8e34bde`.
   - Notes: Modern eMule fork with UI, performance, and feature ideas already used as
            comparative reference in tooling docs.
 
 - **eMule Qt**
   - Status: Active
-  - Language/platform: Qt/C++
+  - Language/platform: Qt 6/C++23
   - Link: https://github.com/ModderMule/emule-qt
+  - Repo stats (GitHub, 2026-05-29):
+    - `ModderMule/emule-qt`: 20 stars, 1 fork, 1 open issue; default `main`; default-branch commit 2026-04-08 `5a30f16`.
   - Notes: Qt port intended to modernize the eMule client and improve platform
-           independence. Homepage: https://emule-qt.org/
+           independence. Local analysis checkout exists under
+           `EMULEBB_WORKSPACE_ROOT\analysis\emule-qt`. Homepage:
+           https://emule-qt.org/
 
 - **eMule eSE LiveTV**
-  - Status: Active/stale
+  - Status: Active
   - Language/platform: Windows, C++/Node.js
   - Link: https://github.com/diad87/eMule-eSE-LiveTV
+  - Repo stats (GitHub, 2026-05-29):
+    - `diad87/eMule-eSE-LiveTV`: 14 stars, 4 forks, 1 open issue; default `main`; default-branch commit 2026-05-19 `4147c51`.
   - Notes: eMule mod exploring P2P live TV over Kad/eD2K with HLS and Node.js web UI.
-           Local sibling checkout was observed during research.
+           No local checkout was present in the canonical workspace during the
+           2026-05-29 refresh.
 
 - **aMule**
-  - Status: Maintained
+  - Status: Active
   - Language/platform: Cross-platform C++/wxWidgets
   - Link: https://github.com/amule-project/amule
-  - Notes: Cross-platform eMule-like client and protocol reference.
+  - Repo stats (GitHub, 2026-05-29):
+    - `amule-project/amule`: 1187 stars, 256 forks, 40 open issues; default `master`; default-branch commit 2026-05-29 `229e268`.
+  - Notes: Cross-platform eMule-like client and protocol reference. The
+           canonical workspace has an eMuleBB fork at `repos\amule` with
+           upstream remote `https://github.com/amule-project/amule.git`.
 
 - **p2p-overlord**
   - Status: Active
   - Language/platform: Rust/Node
   - Link: https://github.com/emulebb/p2p-overlord-agents and
           https://github.com/emulebb/p2p-overlord-be
+  - Repo stats (GitHub, 2026-05-29):
+    - `emulebb/p2p-overlord-agents`: 0 stars, 0 forks, 0 open issues; default `develop`; default-branch commit 2026-05-23 `045c4be`.
+    - `emulebb/p2p-overlord-be`: 0 stars, 0 forks, 0 open issues; default `develop`; default-branch commit 2026-05-24 `1b85e78`.
   - Notes: Separate headless/server-oriented product in the eMuleBB product family.
            Relevant future integration repos are `p2p-overlord-agents` and
            `p2p-overlord-be`; the ED2K server lineage is not active because eMuleBB uses
@@ -215,6 +269,8 @@ server addresses, `server.met` files, or bootstrap guidance.
   - Status: Maintained/stale
   - Language/platform: OCaml daemon
   - Link: https://github.com/ygrek/mldonkey
+  - Repo stats (GitHub, 2026-05-29):
+    - `ygrek/mldonkey`: 339 stars, 53 forks, 54 open issues; default `master`; default-branch commit 2025-01-28 `0d44635`.
   - Notes: Multi-network P2P daemon with eDonkey/eMule support; useful for headless
            daemon and controller ideas.
 
@@ -222,6 +278,8 @@ server addresses, `server.met` files, or bootstrap guidance.
   - Status: Stale
   - Language/platform: Windows C++
   - Link: https://github.com/ivan386/Shareaza
+  - Repo stats (GitHub, 2026-05-29):
+    - `ivan386/Shareaza`: 123 stars, 50 forks, 9 open issues; default `ipv6`; default-branch commit 2019-08-07 `0c2f2f5`.
   - Notes: Multi-network P2P client with eD2K support. Historical UX and protocol
            reference.
 
@@ -229,24 +287,32 @@ server addresses, `server.met` files, or bootstrap guidance.
   - Status: Stale
   - Language/platform: Windows C++
   - Link: https://github.com/GetEnvy/Envy
+  - Repo stats (GitHub, 2026-05-29):
+    - `GetEnvy/Envy`: 52 stars, 12 forks, 11 open issues; default `master`; default-branch commit 2020-03-18 `43787f3`.
   - Notes: Shareaza-derived multi-network client.
 
 - **Lphant**
   - Status: Historical
   - Language/platform: C#/.NET
   - Link: https://github.com/knocte/lphant
+  - Repo stats (GitHub, 2026-05-29):
+    - `knocte/lphant`: 25 stars, 6 forks, 0 open issues; default `master`; default-branch commit 2012-05-19 `c16be38`.
   - Notes: GPL-era lphant source mirror; useful for old client behavior comparisons.
 
 - **Hathi**
   - Status: Historical
   - Language/platform: C#/.NET
   - Link: https://github.com/lle0x/hathi
+  - Repo stats (GitHub, 2026-05-29):
+    - `lle0x/hathi`: 1 star, 0 forks, 1 open issue; default `main`; default-branch commit 2022-04-18 `b87ce11`.
   - Notes: Fork of lphant 1.0, described as an eDonkey2000 filesharing client.
 
 - **JMule**
   - Status: Historical
   - Language/platform: Java
   - Link: https://github.com/zhoushineyoung/jmule-mod
+  - Repo stats (GitHub, 2026-05-29):
+    - `zhoushineyoung/jmule-mod`: 2 stars, 3 forks, 0 open issues; default `master`; default-branch commit 2015-02-22 `b6dac44`.
   - Notes: Java implementation lineage for eMule/eD2K protocol behavior.
 
 - **eMule Plus**
@@ -274,58 +340,91 @@ server addresses, `server.met` files, or bootstrap guidance.
 
 - **aMuTorrent**
   - Status: Active
-  - Language/platform: Python/Qt
+  - Language/platform: Node.js/React/Docker
   - Link: https://github.com/emulebb/amutorrent
-  - Notes: Unified download manager for aMule and BitTorrent clients; current
-           workspace-owned controller product.
+  - Repo stats (GitHub, 2026-05-29):
+    - `emulebb/amutorrent`: 0 stars, 0 forks, 0 open issues; default `main`; default-branch commit 2026-05-28 `a79eae0`.
+  - Notes: Unified download manager for aMule, eMuleBB, and BitTorrent clients;
+           current workspace-owned controller product. It exposes ED2K workflows
+           through Torznab and qBittorrent-compatible APIs for Sonarr/Radarr. The
+           upstream `got3nks/amule-web-controller` slug redirects to
+           `got3nks/amutorrent`.
 
 - **eMulerr**
   - Status: Active
   - Language/platform: .NET/Docker
   - Link: https://github.com/isc30/eMulerr
+  - Repo stats (GitHub, 2026-05-29):
+    - `isc30/eMulerr`: 89 stars, 4 forks, 12 open issues; default `main`; default-branch commit 2026-04-17 `a6119dd`.
   - Notes: Radarr/Sonarr bridge for eD2K/Kad. Emulates a qBittorrent API and exposes a
-           web UI/Torznab surface. Local sibling checkout was observed during research.
+           web UI/Torznab surface. No local checkout was present in the canonical
+           workspace during the 2026-05-29 refresh.
 
 - **amarr**
-  - Status: Active/stale
+  - Status: Active
   - Language/platform: Java
   - Link: https://github.com/vexdev/amarr
+  - Repo stats (GitHub, 2026-05-29):
+    - `vexdev/amarr`: 59 stars, 5 forks, 25 open issues; default `main`; default-branch commit 2026-05-06 `0876bfd`.
   - Notes: aMule connector for Sonarr/Radarr that emulates a torrent client and can
-           integrate Torznab-style indexers. Local sibling checkout was observed during
-           research.
+           integrate Torznab-style indexers. No local checkout was present in the
+           canonical workspace during the 2026-05-29 refresh.
 
 - **ed2k-indexer**
-  - Status: Stale
+  - Status: Active/stale
   - Language/platform: Python
   - Link: https://github.com/tronarite/ed2k-indexer
+  - Repo stats (GitHub, 2026-05-29):
+    - `tronarite/ed2k-indexer`: 0 stars, 0 forks, 0 open issues; default `main`; default-branch commit 2026-03-17 `a3e8ccc`.
   - Notes: Self-hosted Torznab-compatible indexer for Radarr/Sonarr and eMule workflows.
 
 - **docker-amule**
   - Status: Maintained
   - Language/platform: Docker
   - Link: https://github.com/ngosang/docker-amule
+  - Repo stats (GitHub, 2026-05-29):
+    - `ngosang/docker-amule`: 225 stars, 20 forks, 4 open issues; default `master`; default-branch commit 2026-05-15 `085d0e3`.
   - Notes: Containerized aMule deployment; useful for repeatable controller and headless
            scenarios.
 
 - **GM_EmuleLinker**
-  - Status: Stale
+  - Status: Active/stale
   - Language/platform: JavaScript/userscript
   - Link: https://github.com/alo0/GM_EmuleLinker
+  - Repo stats (GitHub, 2026-05-29):
+    - `alo0/GM_EmuleLinker`: 5 stars, 1 fork, 0 open issues; default `master`; default-branch commit 2026-03-17 `7e4223d`.
   - Notes: Browser helper for sending ED2K links to remote eMule/aMule/MLDonkey/system
            handlers.
 
 - **TransMule**
-  - Status: Needs verification
-  - Language/platform: Controller/bridge
-  - Link: Public search lead
-  - Notes: Keep as a controller search term until canonical source is confirmed.
+  - Status: Active
+  - Language/platform: Vue/Node.js/Docker
+  - Link: https://github.com/Jo3l/transmule
+  - Repo stats (GitHub, 2026-05-29):
+    - `Jo3l/transmule`: 16 stars, 0 forks, 0 open issues; default `main`; default-branch commit 2026-05-28 `a12de3b`.
+  - Notes: Self-hosted download manager that unifies aMule ED2K/Kademlia,
+           Transmission, and pyLoad. Useful as a modern aMule-control UI and
+           file-management reference; verify ED2K search/indexer behavior before
+           using it as a Servarr bridge reference.
+
+- **Mularr**
+  - Status: Active
+  - Language/platform: Web/Docker
+  - Link: https://github.com/joecarl/mularr
+  - Repo stats (GitHub, 2026-05-29):
+    - `joecarl/mularr`: 20 stars, 0 forks, 1 open issue; default `main`; default-branch commit 2026-05-03 `554a5a5`.
+  - Notes: New aMule-focused web UI and automation project with *Arr, Gluetun,
+           Telegram, qBittorrent-compatible, and Torznab-compatible surfaces.
+           Treat as a fresh controller lead until source and runtime behavior are
+           reviewed.
 
 - **aMule web controllers**
   - Status: Needs verification
   - Language/platform: Web/API tooling
   - Link: Public search lead
-  - Notes: Track individual projects only after source, license, and target aMule
-           version are confirmed.
+  - Notes: Generic bucket for web/API control projects not yet split out above.
+           Current named examples include aMuTorrent, TransMule, Mularr, eMulerr,
+           and amarr.
 
 ## Protocol Libraries And Utilities
 
@@ -333,6 +432,8 @@ server addresses, `server.met` files, or bootstrap guidance.
   - Status: Active
   - Language/platform: Go
   - Link: https://github.com/monkeyWie/goed2k
+  - Repo stats (GitHub, 2026-05-29):
+    - `monkeyWie/goed2k`: 5 stars, 1 fork, 1 open issue; default `main`; default-branch commit 2026-04-03 `a8f73de`.
   - Notes: Go ED2K client/library with `server.met`, server connection, Kad
            bootstrap/source lookup, search, downloads, upload, UPnP, and terminal UI
            support.
@@ -341,27 +442,42 @@ server addresses, `server.met` files, or bootstrap guidance.
   - Status: Stale
   - Language/platform: C++
   - Link: https://github.com/qmule/libed2k
+  - Repo stats (GitHub, 2026-05-29):
+    - `qmule/libed2k`: 82 stars, 27 forks, 4 open issues; default `master`; default-branch commit 2016-06-02 `5408c65`.
   - Notes: Cross-platform eDonkey protocol library inspired by libtorrent-rasterbar.
 
 - **ed2k-ruby**
-  - Status: Stale
+  - Status: Maintained/stale
   - Language/platform: Ruby
   - Link: https://github.com/edelkas/ed2k-ruby
+  - Repo stats (GitHub, 2026-05-29):
+    - `edelkas/ed2k-ruby`: 0 stars, 0 forks, 0 open issues; default `master`; default-branch commit 2025-11-17 `2afc76f`.
   - Notes: Ruby implementation of eD2K/eDonkey2000 and extended eMule protocol concepts.
 
-- **kadkad**
-  - Status: Active/stale
+- **ed2k Rust crate**
+  - Status: Stale
   - Language/platform: Rust
-  - Link: Local sibling checkout
-  - Notes: Rust Kad2 library/daemon research project. Canonical upstream URL still needs
-           verification before linking.
+  - Link: https://github.com/Kimundi/ed2k
+  - Repo stats (GitHub, 2026-05-29):
+    - `Kimundi/ed2k`: 1 star, 0 forks, 0 open issues; default `main`; default-branch commit 2023-05-20 `73fb463`.
+  - Notes: ED2K hash implementation, not a full network protocol library. Useful
+           for hash-behavior comparison around chunk-boundary variants.
+
+- **kadkad**
+  - Status: Needs verification
+  - Language/platform: Rust
+  - Link: Public/local source not confirmed
+  - Notes: Rust Kad2 library/daemon research lead. No canonical checkout was found
+           in `repos`, `workspaces`, or the listed local analysis directories
+           during the 2026-05-29 refresh.
 
 - **rust2k**
-  - Status: Active/stale
+  - Status: Needs verification
   - Language/platform: Rust
-  - Link: Local sibling checkout
-  - Notes: Rust ED2K/Kad research project. Canonical upstream URL still needs
-           verification before linking.
+  - Link: Public/local source not confirmed
+  - Notes: Rust ED2K/Kad research lead. No canonical checkout was found in
+           `repos`, `workspaces`, or the listed local analysis directories during
+           the 2026-05-29 refresh.
 
 - **jaMule**
   - Status: Needs verification
@@ -520,12 +636,16 @@ hardening. Do not import behavior wholesale.
 - **emulefans ed2k-software**
   - Status: Archive-only
   - Link: https://github.com/emulefanscom/ed2k-software
+  - Repo stats (GitHub, 2026-05-29):
+    - `emulefanscom/ed2k-software`: 8 stars, 0 forks, 0 open issues; default `main`; default-branch commit 2024-04-23 `d0d2b09`.
   - Notes: Public archive of eD2K software packages and eMule mods. Confirm license and
            source completeness before reusing material.
 
 - **emulefans misc**
   - Status: Archive-only
   - Link: https://github.com/emulefanscom/misc
+  - Repo stats (GitHub, 2026-05-29):
+    - `emulefanscom/misc`: 5 stars, 1 fork, 0 open issues; default `master`; default-branch commit 2024-04-24 `0a18d57`.
   - Notes: Miscellaneous eMule/eD2K archive material.
 
 - **local compressed archive set**
@@ -568,6 +688,9 @@ VeryCD easyMule source
 eMule EastShare Sivka iONiX Phoenix TK4 source
 Torznab ed2k eMule
 aMule Sonarr Radarr ed2k
+aMuTorrent TransMule Mularr eMulerr amarr
+JEmuleServer goed2k-server ED2K server
+ed2k hash library Rust Ruby Go
 ```
 
 After editing, run:

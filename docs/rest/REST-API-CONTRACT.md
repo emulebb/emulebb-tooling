@@ -1,6 +1,6 @@
 # eMuleBB REST API Contract
 
-**Status:** beta 0.7.3 broadband contract
+**Status:** 0.7.3 RC1 broadband contract
 **Source of truth:** [REST-API-OPENAPI.yaml](REST-API-OPENAPI.yaml)
 **Adapter subsets:** [REST-API-ADAPTERS.md](REST-API-ADAPTERS.md)
 **Migrated action inventory:** [REST-API-PARITY-INVENTORY.md](REST-API-PARITY-INVENTORY.md)
@@ -14,10 +14,10 @@ WebServer listener. The broadband release contract is the resource-oriented
 `/api/v1` surface described by the OpenAPI document above.
 
 The API is designed for aMuTorrent and other trusted local controllers. The
-beta 0.7.3 contract intentionally prioritizes consistency and aMuTorrent
+0.7.3 RC1 contract intentionally prioritizes consistency and aMuTorrent
 completeness over preserving old command-style route names.
 
-After beta `0.7.3`, the same OpenAPI document is also the canonical
+After 0.7.3 RC1, the same OpenAPI document is also the canonical
 product-family contract for p2p-overlord implementations that choose to expose
 an eMuleBB-compatible REST surface. p2p-overlord may implement a documented
 subset, but that subset must be proven against this OpenAPI source rather than
@@ -25,7 +25,7 @@ creating a parallel contract.
 
 ## Controller Boundary
 
-aMuTorrent is the primary UI consumer and beta 0.7.3 proof target, but it is not
+aMuTorrent is the primary UI consumer and 0.7.3 RC1 proof target, but it is not
 the authority for native route shape. The aMuTorrent eMuleBB adapter must
 translate UI expectations to the clean `/api/v1` contract instead of requiring
 native aliases, qBittorrent-compatible response shapes, or legacy command-style
@@ -159,7 +159,7 @@ type, `arc`, `audio`, `iso`, `image`, `pro`, `video`, `doc`, or
 `emulecollection`. No aliases, alternate casing, or request-time type remapping
 are accepted. The route maps those public tokens directly to the existing
 eD2K/Kad search modes and file-type filters and must not change stock search
-semantics for beta 0.7.3. `automatic` resolves from live network state:
+semantics for 0.7.3 RC1. `automatic` resolves from live network state:
 connected eD2K uses `global`, Kad-only uses `kad`, and no connected network is
 rejected as not connected. Search resources echo the resolved method and
 selected REST type so
@@ -168,7 +168,7 @@ audit the selected file filter without inferring from result timing or counts.
 
 `GET /api/v1/searches` lists active native search sessions without expanding
 their result rows. `GET /api/v1/searches/{searchId}` returns the current native
-visible result snapshot for one search. RC 0.7.3 intentionally does not
+visible result snapshot for one search. 0.7.3 RC1 intentionally does not
 expose search result paging; search routes do not accept `limit` or `offset`,
 and the strict route table rejects unknown query parameters. Controllers should
 poll the search resource and treat `results` as a bounded native snapshot
@@ -220,7 +220,7 @@ Selected peer reads are available for controller drill-down through
 `GET /transfers/{hash}/sources/{clientId}`, `GET /uploads/{clientId}`, and
 `GET /upload-queue/{clientId}`. These routes use the same `clientId` selector
 as peer operations and expose read models only; chat/message APIs and peer
-shared-file browse result retrieval remain outside the beta 0.7.3 native v1
+shared-file browse result retrieval remain outside the 0.7.3 RC1 native v1
 contract.
 Transfer source rows expose `downloadState` with the same lowercase compact
 token policy as the rest of v1; native debug labels are not part of the REST
@@ -229,7 +229,7 @@ contract.
 ## Implementation Status
 
 The OpenAPI contract is the implemented target contract for the current
-beta 0.7.3 pass. Native route-seam tests cover the route schema table, strict
+0.7.3 RC1 pass. Native route-seam tests cover the route schema table, strict
 validation behavior, and the internal route execution model. The Python smoke
 harness includes OpenAPI route consistency checks, validates success/error
 envelopes, and reports whether each native route is direct or UI-thread

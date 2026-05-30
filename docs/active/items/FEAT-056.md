@@ -9,7 +9,7 @@ category: feature
 labels: [post-0.7.3, release-proof, automation, operator-evidence]
 milestone: post-0.7.3
 created: 2026-05-09
-source: FEAT-055 Beta 0.7.3 improvement triage
+source: FEAT-055 0.7.3 RC1 improvement triage
 ---
 
 
@@ -18,13 +18,13 @@ source: FEAT-055 Beta 0.7.3 improvement triage
 ## Summary
 
 Build the follow-up tooling and documentation improvements discovered while
-hardening the beta `0.7.3` release proof. These are intentionally post-release improvements:
+hardening the 0.7.3 RC1 release proof. These are intentionally post-release improvements:
 they improve future release velocity and operator evidence quality, but they do
-not fix a confirmed Beta 0.7.3 regression or missing advertised behavior.
+not fix a confirmed 0.7.3 RC1 regression or missing advertised behavior.
 
 ## Approved Workstream
 
-### One-Command Beta 0.7.3 Proof Orchestration
+### One-Command 0.7.3 RC1 Proof Orchestration
 
 Classification:
 `next-patch`.
@@ -55,7 +55,7 @@ app/build commits against the previous tagged release asset.
 ### Controller Compatibility Matrix
 
 Classification:
-`beta-closeout slice`.
+`rc1-closeout slice`.
 
 Target:
 publish a maintained matrix tying native REST, qBit, Torznab, Arr, and
@@ -85,7 +85,7 @@ Classification:
 
 Target:
 add selected language-load UI smoke beyond language DLL build/package proof if
-it remains worth the runtime cost after Beta 0.7.3.
+it remains worth the runtime cost after 0.7.3 RC1.
 
 ## Acceptance Criteria
 
@@ -99,7 +99,7 @@ it remains worth the runtime cost after Beta 0.7.3.
       features, packaging, and frozen legacy decisions.
 - [ ] Changed-surface grouping is reproducible from a command or script.
 - [ ] Representative language/resource UI smoke is added if it remains worth
-      the runtime cost after Beta 0.7.3.
+      the runtime cost after 0.7.3 RC1.
 
 ## Validation
 

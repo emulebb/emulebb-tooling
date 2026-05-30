@@ -54,8 +54,8 @@ Possible later work:
 - 2026-05-02: Added `docs/rest/REST-API-OPENAPI.yaml` as the canonical target
   contract for the pre-release resource-oriented `/api/v1` redesign. The item
   remains open until implementation and tests are aligned to that schema.
-- 2026-05-10: Refreshed the OpenAPI metadata to beta `0.7.3` and added native
-  route execution-model reporting to the REST smoke harness. The beta closure
+- 2026-05-10: Refreshed the OpenAPI metadata to 0.7.3 RC1 and added native
+  route execution-model reporting to the REST smoke harness. The RC1 closure
   path treats the checked-in OpenAPI contract plus native route drift tests as
   the supported schema surface; the optional external gateway remains deferred
   and must not become a runtime prerequisite.

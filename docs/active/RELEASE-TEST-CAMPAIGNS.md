@@ -13,6 +13,10 @@ cd $env:EMULEBB_WORKSPACE_ROOT\repos\emulebb-build
 python -m emule_workspace test release-campaign --campaign emulebb-0.7.3
 ```
 
+The `emulebb-0.7.3` and `emulebb-0.7.3-overnight` values are stable campaign
+IDs from `repos\emulebb-build-tests`. They are not release tag or asset names;
+RC1 tags and package artifacts use `0.7.3-rc.1`.
+
 Useful variants:
 
 ```powershell

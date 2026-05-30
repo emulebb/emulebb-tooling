@@ -1,6 +1,7 @@
-# eMule Broadband Edition 0.7.3 RC Release Dashboard
+# eMule Broadband Edition 0.7.3 RC1 Release Dashboard
 
-This is the current release dashboard for RC target `emulebb-v0.7.3-rc.1`.
+This is the current release dashboard for the 0.7.3 RC1 target
+`emulebb-v0.7.3-rc.1`.
 Use it for status, release-source truth, and the open RC task list.
 
 ## Current Status
@@ -10,7 +11,7 @@ Use it for status, release-source truth, and the open RC task list.
   Live proof, package refresh, and evidence recording are active; Git tagging
   still requires a later separate operator instruction.
 - Release freeze: active. No new feature, refactor, UI polish, warning-debt, or
-  roadmap work enters RC `0.7.3`; only direct release-gate blockers may be
+  roadmap work enters 0.7.3 RC1; only direct release-gate blockers may be
   fixed before the tag.
 - Current hold: none for release proof. Continue one gate at a time and stop
   before Git tagging until the operator gives the separate RC tag instruction.
@@ -20,7 +21,7 @@ Use it for status, release-source truth, and the open RC task list.
   fresh proof passes and the operator gives a separate tagging instruction.
 - Stock/community comparison baseline: `baseline/community-0.72a`.
 - Release stabilization branch: `release/0.7.3` once the operator starts the
-  RC branch.
+  0.7.3 RC1 branch.
 - Package publication: held until all RC-blocking item IDs below are closed
   or explicitly accepted, final proof passes, and fresh packages are generated.
 
@@ -60,21 +61,21 @@ Historical gate evidence and superseded cluster plans live under
 
 ## Remaining Release Backlog
 
-The RC backlog is narrowed to `CI-035`. `CI-038` is Done with a current-head
+The 0.7.3 RC1 backlog is narrowed to `CI-035`. `CI-038` is Done with a current-head
 `ui-resource-depth` pass covering all 43 release languages. Remaining work is
 final certification proof, fresh x64/ARM64 core package regeneration, optional
 aMuTorrent x64 package regeneration, package SBOM generation, hash recording,
 clean-worktree confirmation, and the later operator-controlled tag instruction.
 
 All other active `FEAT`, `REF`, warning-debt, cleanup, and polish items are
-post-`0.7.3` by default. A non-blocking item may enter the RC only if a
+post-0.7.3 RC1 by default. A non-blocking item may enter RC1 only if a
 current release gate exposes a direct blocker and the item doc records that
 promotion explicitly.
 
 `FEAT-056` remains post-`0.7.3` automation and evidence UX work. It is not an RC
 tag blocker unless a later item promotes a specific slice.
 
-Accepted non-blockers for RC `0.7.3`:
+Accepted non-blockers for 0.7.3 RC1:
 
 - [CI-034](../history/items/CI-034.md): package-release now rejects dirty
   provenance inputs and records selected `main` source/build/test/tooling
@@ -87,12 +88,12 @@ Accepted non-blockers for RC `0.7.3`:
 - [BUG-111](../history/items/BUG-111.md): release, update, and help URLs now
   use the policy-owned `emulebb` namespace.
 - [BUG-112](../history/items/BUG-112.md): legacy WebServer/qBit-compatible
-  session-token hardening is Wont-Fix for this beta.
+  session-token hardening is Wont-Fix for this RC.
 - [FEAT-057](../history/items/FEAT-057.md): qBittorrent-style download
   shortcuts and batch menu actions landed as user-facing polish; it does not
   change the final proof/package/tag gates.
 - [FEAT-058](../history/items/FEAT-058.md): final closeout copy/audit polish
-  aligned release-facing docs with the RC `0.7.3` source rule; it resets the
+  aligned release-facing docs with the 0.7.3 RC1 source rule; it resets the
   candidate head but does not replace fresh proof or package hashes.
 - [FEAT-059](../history/items/FEAT-059.md): Display preferences now keep
   `Always show tray icon` adjacent to `Minimize to system tray`; it resets the
@@ -117,7 +118,7 @@ Accepted non-blockers for RC `0.7.3`:
 
 ## Ship Rule
 
-RC `0.7.3-rc.1` can be tagged only when:
+0.7.3 RC1 can be tagged only when:
 
 - every row in **Open RC Tasks** is Done or explicitly accepted in its item
   doc;

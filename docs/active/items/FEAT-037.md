@@ -14,7 +14,7 @@ source: MorphXT FAQ; Mephisto FAQ; historical eMule feature catalogs; eMuleAI v1
 
 Add an explicit release/distribution policy layer for rare or newly published files.
 
-## Beta 0.7.3 Classification
+## 0.7.3 RC1 Classification
 
 **Deferred Beyond 1.0.** Product decision: PowerShare and adjacent
 release-oriented sharing controls are not valuable enough to delay the first

@@ -1,7 +1,7 @@
 # eMuleBB Future Roadmap
 
-This is the active post-`0.7.3` product roadmap for eMuleBB. It is not a beta
-`0.7.3` release gate, and it does not promote every historical feature idea in
+This is the active post-0.7.3 RC1 product roadmap for eMuleBB. It is not a
+0.7.3 RC1 release gate, and it does not promote every historical feature idea in
 the backlog. The purpose is to keep future work focused on the Windows MFC app
 with REST support, while making related product-family boundaries explicit and
 excluding ideas that no longer match the eMuleBB desktop product direction.

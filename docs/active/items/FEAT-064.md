@@ -17,7 +17,7 @@ source: user future-release triage, local mod analysis, community feature scan
 
 ## Summary
 
-Maintain a curated future roadmap for eMuleBB after beta `0.7.3`. This item is
+Maintain a curated future roadmap for eMuleBB after 0.7.3 RC1. This item is
 the umbrella tracking record for the grouped roadmap in
 [`FUTURE-ROADMAP`](../FUTURE-ROADMAP.md).
 

@@ -1,4 +1,4 @@
-# RC 0.7.3 Controller Surface Matrix
+# 0.7.3 RC1 Controller Surface Matrix
 
 This matrix defines the controller API surface that must stay green before the
 `emulebb-v0.7.3-rc.1` RC can be tagged. It covers the release-facing API and

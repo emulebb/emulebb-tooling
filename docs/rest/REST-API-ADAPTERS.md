@@ -1,6 +1,6 @@
 # eMuleBB REST Adapter Contracts
 
-**Status:** beta 0.7.3 adapter subset contract
+**Status:** 0.7.3 RC1 adapter subset contract
 **Native contract:** [REST-API-CONTRACT.md](REST-API-CONTRACT.md)
 
 ## Purpose
@@ -12,7 +12,7 @@ native v1 to mimic qBittorrent or Torznab quirks.
 The deprecated legacy template-based WebServer UI is frozen and compile-only
 until removal. It is not an adapter contract, no functional HTML/template
 behavior is supported, and no adapter or release campaign may add
-template-specific tests for beta 0.7.3.
+template-specific tests for 0.7.3 RC1.
 
 ## qBittorrent-Compatible `/api/v2`
 
