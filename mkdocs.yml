@@ -22,6 +22,11 @@ theme:
 extra_css:
   - assets/mkdocs.css
 
+extra:
+  analytics:
+    provider: google
+    property: G-8G02C2WFEB
+
 markdown_extensions:
   - admonition
   - attr_list
