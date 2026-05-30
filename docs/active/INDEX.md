@@ -408,6 +408,7 @@ not active item docs.
 | [FEAT-094](items/FEAT-094.md) | Major | OPEN | Improve UDP burst handling without lock-held backoff |
 | [FEAT-095](items/FEAT-095.md) | Major | OPEN | Move part-file durability work off foreground paths |
 | [FEAT-096](items/FEAT-096.md) | Minor | OPEN | Improve client and network statistics observability |
+| [FEAT-097](../history/items/FEAT-097.md) | Minor | DONE | Add connection pressure details to Network Information |
 
 ---
 
