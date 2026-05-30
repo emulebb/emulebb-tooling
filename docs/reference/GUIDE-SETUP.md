@@ -3,6 +3,37 @@
 This guide covers practical setup for eMuleBB. It complements the
 [Product Guide](GUIDE-EMULEBB.md), which remains the user-manual entry point.
 
+## Quick Install: ZIP, Extract, Run
+
+This is the recommended first path for most users and release testers:
+download the eMuleBB ZIP, extract it into a new folder, and run
+`emulebb.exe`.
+
+1. Open <https://github.com/emulebb/emulebb/releases>.
+2. Download the intended package ZIP. For RC1, use
+   `emulebb-0.7.3-rc.1-x64.zip` once that asset is published, or use the
+   approved nightly or release asset that is actually present on GitHub
+   Releases.
+3. Extract the ZIP into a new application directory, for example
+   `C:\Apps\eMuleBB\0.7.3-rc.1`.
+4. Run `emulebb.exe`.
+5. On first run, choose directories and ports before serious use.
+6. For controlled testing, launch with an explicit disposable profile:
+
+```powershell
+emulebb.exe -c "$env:TEMP\eMuleBB-TestProfile"
+```
+
+Use the x64 ZIP for normal Windows desktop installs. Use ARM64 only when you
+are intentionally testing on ARM64 Windows. Do not overwrite an older
+application directory in place; keep each package in its own directory so
+rollback is simple.
+
+For RC and nightly testing, prefer a backed-up or disposable profile before
+using a daily profile. Do not treat `0.7.3-rc.1` as published until the release
+page has the asset; use the latest approved release or nightly package actually
+listed on GitHub Releases.
+
 ## Install Model
 
 Keep the application, profile, temp, incoming, and shared directories separate.
@@ -41,10 +72,15 @@ Do not run multiple eMule-family clients against the same live profile. Before
 reusing an existing profile, close all clients and copy the full config
 directory as a rollback backup.
 
-## Suite Bootstrap
+## Full Suite Install: PowerShell Bootstrap
 
-For a full suite install from GitHub releases, run the bootstrapper from a
-PowerShell prompt:
+Use this second path when you want the full suite/bootstrapper flow instead of
+only unpacking and running the desktop app. The bootstrapper installs the
+versioned eMuleBB suite from GitHub Releases and can hand off to the bundled
+suite installer.
+
+Run the bootstrapper from a PowerShell prompt after the matching release assets
+exist:
 
 ```powershell
 $version = '0.7.3-rc.1'

@@ -20,15 +20,23 @@
 
 ## Start Here
 
+### Install Fast Path
+
+- [ZIP, extract, run](reference/GUIDE-SETUP.md#quick-install-zip-extract-run):
+  download the eMuleBB ZIP, extract it into a new app folder, and start
+  `emulebb.exe`.
+- [Full suite PowerShell bootstrap](reference/GUIDE-SETUP.md#full-suite-install-powershell-bootstrap):
+  use the release bootstrapper when you want the full suite installer flow.
+
 Use these guides in order for a first real profile:
 
-1. [Product Guide](reference/GUIDE-EMULEBB.md) explains what eMuleBB is, what it
+1. [Setup Guide](reference/GUIDE-SETUP.md) covers install layout, first launch,
+   existing profiles, isolated `-c` profiles, and release-aware testing.
+2. [Product Guide](reference/GUIDE-EMULEBB.md) explains what eMuleBB is, what it
    changes, and how to operate it as a power user.
-2. [Power User Manual](reference/GUIDE-POWER-USERS.md) teaches eMule from zero
+3. [Power User Manual](reference/GUIDE-POWER-USERS.md) teaches eMule from zero
    through full operation: eD2K, Kad, High ID, queues, credits, parts, sharing,
    automation, safety, diagnostics, and tuning.
-3. [Setup Guide](reference/GUIDE-SETUP.md) covers install layout, first launch,
-   existing profiles, isolated `-c` profiles, and release-aware testing.
 4. [Network Guide](reference/GUIDE-NETWORK.md) covers eD2K, Kad, ports, bind
    settings, UPnP, firewall behavior, and WebServer listener basics.
 5. [Downloads And Search](reference/GUIDE-DOWNLOADS-SEARCH.md) covers search
@@ -121,7 +129,7 @@ desktop app first, then layer automation on top.
 
 | Step | What To Prove | Guide |
 |---|---|---|
-| Install | App directory and profile directory are intentionally separate. | [Setup](reference/GUIDE-SETUP.md) |
+| Install | App directory and profile directory are intentionally separate. | [ZIP install](reference/GUIDE-SETUP.md#quick-install-zip-extract-run) |
 | Profile | `preferences.ini`, temp, incoming, categories, and identity files are where expected. | [Persistence Files](reference/GUIDE-PERSISTENCE-FILES.md) |
 | Network | TCP, UDP, firewall, UPnP, High ID, and Kad state are understood. | [Network](reference/GUIDE-NETWORK.md) |
 | Search | A small search returns believable results before heavy automation starts. | [Downloads And Search](reference/GUIDE-DOWNLOADS-SEARCH.md) |

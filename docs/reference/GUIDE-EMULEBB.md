@@ -107,6 +107,12 @@ released behavior summary.
 
 ## Install And Profile Model
 
+The easiest install path is to download the eMuleBB ZIP, extract it into a new
+application folder, and run `emulebb.exe`. Use the
+[Setup Guide quick install](GUIDE-SETUP.md#quick-install-zip-extract-run) for
+that path. The full suite PowerShell bootstrapper is optional and belongs to
+suite/controller installs.
+
 Keep these locations conceptually separate:
 
 | Location | Purpose |
