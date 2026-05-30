@@ -1,5 +1,7 @@
 ---
 id: FEAT-037
+workflow: github
+github_issue: https://github.com/emulebb/emulebb/issues/63
 title: Release-oriented sharing controls — PowerShare, Release Bonus, and Share Only The Need
 status: DEFERRED
 priority: Minor
@@ -9,6 +11,9 @@ milestone: ~
 created: 2026-04-20
 source: MorphXT FAQ; Mephisto FAQ; historical eMule feature catalogs; eMuleAI v1.4 notes
 ---
+
+
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/63. This local document is retained as an engineering spec/evidence record.
 
 ## Summary
 

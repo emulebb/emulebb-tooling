@@ -1,5 +1,7 @@
 ---
 id: FEAT-092
+workflow: github
+github_issue: https://github.com/emulebb/emulebb/issues/82
 title: Add layered peer behavior guard for client quarantine and IP-ban escalation
 status: OPEN
 priority: Minor
@@ -9,6 +11,9 @@ milestone: post-0.7.3
 created: 2026-05-26
 source: operator live-log review after OP_OutOfPartReqs loop suppression testing
 ---
+
+
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/82. This local document is retained as an engineering spec/evidence record.
 
 # FEAT-092 - Add Layered Peer Behavior Guard For Client Quarantine And IP-Ban Escalation
 

@@ -1,5 +1,7 @@
 ---
 id: FEAT-001
+workflow: github
+github_issue: https://github.com/emulebb/emulebb/issues/53
 title: Kad FastKad — add diversity-aware bootstrap ranking and aggressive stale decay
 status: DEFERRED
 priority: Minor
@@ -10,6 +12,9 @@ created: 2026-04-08
 updated: 2026-04-19
 source: AUDIT-KAD.md (AUD_KAD_004, AUD_KAD_005)
 ---
+
+
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/53. This local document is retained as an engineering spec/evidence record.
 
 > Historical reference only: `stale-v0.72a-experimental-clean` and
 > `analysis\stale-v0.72a-experimental-clean` are retired reference sources, not

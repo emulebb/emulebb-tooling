@@ -137,10 +137,8 @@ changes to validate item IDs, statuses, duplicate front matter IDs, and active
 index consistency.
 
 Use `python scripts\github-roadmap-sync.py` to preview and apply
-GitHub-primary imports for items listed in `docs/active/FUTURE-ROADMAP.md`. For
-GitHub-primary backlog items outside that roadmap import set, create or update
-the GitHub issue and Project #2 item directly, then add the same local
-`workflow: github` and `github_issue:` metadata. Use
+GitHub-primary issue and Project #2 synchronization for all active backlog
+items under `docs/active/items`. Use
 `python scripts\github-roadmap-check.py` after migration to validate local
 GitHub metadata; pass `--github` when the local GitHub token has `project`
 scope and network access.

@@ -1,5 +1,7 @@
 ---
 id: FEAT-091
+workflow: github
+github_issue: https://github.com/emulebb/emulebb/issues/81
 title: Downloads list expand/collapse-all peer rows
 status: OPEN
 priority: Minor
@@ -9,6 +11,9 @@ milestone: post-0.7.3
 created: 2026-05-25
 source: operator request to defer downloads-list expand/collapse-all peer controls to future backlog
 ---
+
+
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/81. This local document is retained as an engineering spec/evidence record.
 
 # FEAT-091 - Downloads List Expand/Collapse-All Peer Rows
 

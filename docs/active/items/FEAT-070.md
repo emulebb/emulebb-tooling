@@ -1,5 +1,7 @@
 ---
 id: FEAT-070
+workflow: github
+github_issue: https://github.com/emulebb/emulebb/issues/68
 title: Add targeted client UserHash and upload-lifecycle diagnostics
 status: OPEN
 priority: Minor
@@ -9,6 +11,9 @@ milestone: post-0.7.3
 created: 2026-05-21
 source: aMule issue #538 triage against current client/upload logging
 ---
+
+
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/68. This local document is retained as an engineering spec/evidence record.
 
 ## Summary
 

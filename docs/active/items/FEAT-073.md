@@ -1,5 +1,7 @@
 ---
 id: FEAT-073
+workflow: github
+github_issue: https://github.com/emulebb/emulebb/issues/70
 title: Incorporate p2p-overlord into the eMuleBB product family
 status: OPEN
 priority: Minor
@@ -9,6 +11,9 @@ milestone: post-0.7.3
 created: 2026-05-23
 source: operator product-family planning for p2p-overlord integration
 ---
+
+
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/70. This local document is retained as an engineering spec/evidence record.
 
 # FEAT-073 - Incorporate p2p-overlord Into The eMuleBB Product Family
 

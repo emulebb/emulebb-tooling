@@ -1,5 +1,7 @@
 ---
 id: FEAT-021
+workflow: github
+github_issue: https://github.com/emulebb/emulebb/issues/61
 title: SourceSaver — persist download source lists between sessions
 status: OPEN
 priority: Minor
@@ -9,6 +11,9 @@ milestone: ~
 created: 2026-04-10
 source: eMuleAI (SourceSaver.cpp/h, CSourceSaver class, 2026)
 ---
+
+
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/61. This local document is retained as an engineering spec/evidence record.
 
 ## Summary
 

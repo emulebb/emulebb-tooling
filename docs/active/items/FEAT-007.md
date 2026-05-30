@@ -1,5 +1,7 @@
 ---
 id: FEAT-007
+workflow: github
+github_issue: https://github.com/emulebb/emulebb/issues/56
 title: Windows Property Store integration for non-media file metadata
 status: OPEN
 priority: Minor
@@ -9,6 +11,9 @@ milestone: ~
 created: 2026-04-08
 source: REFACTOR-TASKS.md (REFAC_010)
 ---
+
+
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/56. This local document is retained as an engineering spec/evidence record.
 
 > Historical reference only: `stale-v0.72a-experimental-clean` and
 > `analysis\stale-v0.72a-experimental-clean` are retired reference sources, not

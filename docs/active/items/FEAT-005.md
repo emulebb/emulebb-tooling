@@ -1,5 +1,7 @@
 ---
 id: FEAT-005
+workflow: github
+github_issue: https://github.com/emulebb/emulebb/issues/55
 title: Kad — Restore network-change grace handling around routing persistence and probing
 status: OPEN
 priority: Minor
@@ -9,6 +11,9 @@ milestone: ~
 created: 2026-04-08
 source: AUDIT-KAD.md (AUD_KAD_012)
 ---
+
+
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/55. This local document is retained as an engineering spec/evidence record.
 
 ## Summary
 

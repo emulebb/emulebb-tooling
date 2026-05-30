@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Create or refresh GitHub roadmap issues from eMuleBB local specs."""
+"""Create or refresh GitHub roadmap issues from eMuleBB active local specs."""
 
 from __future__ import annotations
 
@@ -13,7 +13,6 @@ from github_roadmap_common import (
     LABEL_DEFINITIONS,
     MANAGED_LABEL_PREFIXES,
     OWNER,
-    PROJECT_RELEASE,
     PROJECT_TITLE,
     issue_body,
     load_items,
@@ -45,12 +44,11 @@ PROJECT_FIELDS = {
 
 
 def print_plan() -> None:
-    """Print the first-rollout roadmap import plan."""
+    """Print the active-backlog GitHub sync plan."""
 
     items = load_items()
     print(f"project: {OWNER}/{PROJECT_TITLE}")
     print(f"issue repo: {ISSUE_REPO}")
-    print(f"release: {PROJECT_RELEASE}")
     print(f"items: {len(items)}")
     for item in items:
         labels = ", ".join(item.github_labels)
@@ -264,7 +262,7 @@ def managed_labels_to_remove(existing_issue: dict[str, object], expected_labels:
 
 
 def ensure_issue(item) -> dict[str, object]:
-    """Create or update the GitHub issue for one roadmap item."""
+    """Create or update the GitHub issue for one backlog item."""
 
     existing = find_issue(item.item_id)
     expected_labels = set(item.github_labels)
@@ -358,13 +356,12 @@ def project_item_list(project_number: str) -> list[dict[str, object]]:
     return []
 
 
-def ensure_project_item(project_number: str, issue_url: str) -> str:
+def ensure_project_item(project_number: str, issue_url: str, project_items_by_url: dict[str, dict[str, object]]) -> str:
     """Add an issue to the roadmap project and return the project item ID."""
 
-    for project_item in project_item_list(project_number):
-        content = project_item.get("content")
-        if isinstance(content, dict) and content.get("url") == issue_url:
-            return str(project_item.get("id", ""))
+    existing = project_items_by_url.get(issue_url)
+    if existing:
+        return str(existing.get("id", ""))
 
     data = load_json(
         run_gh(
@@ -384,7 +381,9 @@ def ensure_project_item(project_number: str, issue_url: str) -> str:
     )
     if not isinstance(data, dict):
         raise SystemExit(f"error: unexpected project item response for {issue_url}")
-    return str(data.get("id", ""))
+    item_id = str(data.get("id", ""))
+    project_items_by_url[issue_url] = {"id": item_id}
+    return item_id
 
 
 def field_option_id(field: dict[str, object], option_name: str) -> str:
@@ -424,8 +423,39 @@ def set_project_field(project_id: str, item_id: str, field: dict[str, object], v
     require_success(run_gh(args), f"set project field {field.get('name')}={value}")
 
 
-def sync_project_fields(project_id: str, project_item_id: str, fields: dict[str, dict[str, object]], item) -> None:
-    """Synchronize project fields for one roadmap item."""
+def project_items_by_url(project_number: str) -> dict[str, dict[str, object]]:
+    """Return current project items keyed by issue URL."""
+
+    items_by_url: dict[str, dict[str, object]] = {}
+    for project_item in project_item_list(project_number):
+        content = project_item.get("content")
+        if isinstance(content, dict):
+            url = str(content.get("url", ""))
+            if url:
+                items_by_url[url] = project_item
+    return items_by_url
+
+
+def project_item_field_value(project_item: dict[str, object], field_name: str) -> str:
+    """Return a project item field value from gh's item-list JSON shape."""
+
+    key = field_name[:1].lower() + field_name[1:]
+    value = project_item.get(key, "")
+    if isinstance(value, dict):
+        option = value.get("name")
+        if option:
+            return str(option)
+    return str(value) if value is not None else ""
+
+
+def sync_project_fields(
+    project_id: str,
+    project_item_id: str,
+    fields: dict[str, dict[str, object]],
+    item,
+    cached_project_item: dict[str, object],
+) -> None:
+    """Synchronize project fields for one backlog item."""
 
     values = {
         "Roadmap Status": item.project_status,
@@ -433,17 +463,19 @@ def sync_project_fields(project_id: str, project_item_id: str, fields: dict[str,
         "Priority": item.priority,
         "Lane": item.lane,
         "Local ID": item.item_id,
-        "Release": PROJECT_RELEASE,
+        "Release": item.project_release,
     }
     for field_name, value in values.items():
         field = fields.get(field_name)
         if not field:
             raise SystemExit(f"error: missing project field {field_name!r}")
+        if cached_project_item and project_item_field_value(cached_project_item, field_name) == value:
+            continue
         set_project_field(project_id, project_item_id, field, value)
 
 
 def apply_sync() -> None:
-    """Apply the GitHub roadmap migration."""
+    """Apply the GitHub roadmap sync."""
 
     items = load_items()
     project_number, project_id = ensure_project()
@@ -451,6 +483,7 @@ def apply_sync() -> None:
         raise SystemExit("error: project id missing; cannot edit project fields")
     fields = ensure_project_fields(project_number)
     ensure_labels()
+    project_items = project_items_by_url(project_number)
 
     for item in items:
         issue = ensure_issue(item)
@@ -458,8 +491,9 @@ def apply_sync() -> None:
         if not issue_url:
             number = issue.get("number")
             issue_url = f"https://github.com/{ISSUE_REPO}/issues/{number}"
-        project_item_id = ensure_project_item(project_number, issue_url)
-        sync_project_fields(project_id, project_item_id, fields, item)
+        cached_project_item = project_items.get(issue_url, {})
+        project_item_id = ensure_project_item(project_number, issue_url, project_items)
+        sync_project_fields(project_id, project_item_id, fields, item, cached_project_item)
         update_item_github_metadata(item, issue_url)
         print(f"synced {item.item_id}: {issue_url}")
 

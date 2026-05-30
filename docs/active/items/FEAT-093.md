@@ -1,5 +1,7 @@
 ---
 id: FEAT-093
+workflow: github
+github_issue: https://github.com/emulebb/emulebb/issues/83
 title: Safely raise WebServer accepted-client concurrency
 status: OPEN
 priority: Minor
@@ -9,6 +11,9 @@ milestone: post-0.7.3
 created: 2026-05-27
 source: BUG-127 follow-up review of `kMaxAcceptedClientThreads == 1`
 ---
+
+
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/83. This local document is retained as an engineering spec/evidence record.
 
 # FEAT-093 - Safely Raise WebServer Accepted-Client Concurrency
 

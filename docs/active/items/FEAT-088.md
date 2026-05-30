@@ -1,5 +1,7 @@
 ---
 id: FEAT-088
+workflow: github
+github_issue: https://github.com/emulebb/emulebb/issues/78
 title: Keep completed upload rows visible briefly
 status: OPEN
 priority: Minor
@@ -9,6 +11,9 @@ milestone: post-0.7.3
 created: 2026-05-25
 source: operator request to keep completed uploads visible for a configurable number of seconds
 ---
+
+
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/78. This local document is retained as an engineering spec/evidence record.
 
 ## Summary
 

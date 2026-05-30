@@ -1,5 +1,7 @@
 ---
 id: FEAT-018
+workflow: github
+github_issue: https://github.com/emulebb/emulebb/issues/60
 title: µTP (Micro Transport Protocol) transport layer — CUtpSocket / libutp
 status: OPEN
 priority: Minor
@@ -9,6 +11,9 @@ milestone: ~
 created: 2026-04-10
 source: eMuleAI (CUtpSocket.cpp/h, UtpSocket attribution to David Xanatos / NeoLoader, 2013/2026)
 ---
+
+
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/60. This local document is retained as an engineering spec/evidence record.
 
 ## Summary
 

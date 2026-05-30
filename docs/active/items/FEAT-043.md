@@ -1,5 +1,7 @@
 ---
 id: FEAT-043
+workflow: github
+github_issue: https://github.com/emulebb/emulebb/issues/65
 title: Known Clients history and incremental list refresh performance
 status: OPEN
 priority: Minor
@@ -9,6 +11,9 @@ milestone: ~
 created: 2026-04-26
 source: eMuleAI v1.4 release notes and source comparison
 ---
+
+
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/65. This local document is retained as an engineering spec/evidence record.
 
 ## Summary
 

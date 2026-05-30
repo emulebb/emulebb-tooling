@@ -1,5 +1,7 @@
 ---
 id: FEAT-079
+workflow: github
+github_issue: https://github.com/emulebb/emulebb/issues/74
 title: Save known and cancelled metadata from immutable background snapshots
 status: OPEN
 priority: Minor
@@ -9,6 +11,9 @@ milestone: post-0.7.3
 created: 2026-05-24
 source: review of background parallel processing opportunities; 2026-05-27 senior C++ performance and I/O review
 ---
+
+
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/74. This local document is retained as an engineering spec/evidence record.
 
 # FEAT-079 - Save Known And Cancelled Metadata From Immutable Background Snapshots
 

@@ -1,5 +1,7 @@
 ---
 id: FEAT-077
+workflow: github
+github_issue: https://github.com/emulebb/emulebb/issues/73
 title: Auto-managed upload friend-slot candidates without mutating manual friends
 status: OPEN
 priority: Minor
@@ -9,6 +11,9 @@ milestone: post-0.7.3
 created: 2026-05-24
 source: GitHub issue #3 and review of historical Broadband 0.60 auto-friend logic
 ---
+
+
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/73. This local document is retained as an engineering spec/evidence record.
 
 # FEAT-077 - Auto-Managed Upload Friend-Slot Candidates Without Mutating Manual Friends
 

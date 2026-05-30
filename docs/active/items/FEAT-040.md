@@ -1,5 +1,7 @@
 ---
 id: FEAT-040
+workflow: github
+github_issue: https://github.com/emulebb/emulebb/issues/64
 title: Headless core with modern web/mobile controller and multi-user permissions
 status: OPEN
 priority: Major
@@ -9,6 +11,9 @@ milestone: ~
 created: 2026-04-20
 source: eMule Qt announcement 2026-03-05; current self-hosted ED2K controller demand
 ---
+
+
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/64. This local document is retained as an engineering spec/evidence record.
 
 ## Summary
 

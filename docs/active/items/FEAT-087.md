@@ -1,5 +1,7 @@
 ---
 id: FEAT-087
+workflow: github
+github_issue: https://github.com/emulebb/emulebb/issues/77
 title: Add inline transfer speed sparklines
 status: OPEN
 priority: Minor
@@ -9,6 +11,9 @@ milestone: post-0.7.3
 created: 2026-05-25
 source: operator request for a mini speed chart similar to the parts progress bar
 ---
+
+
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/77. This local document is retained as an engineering spec/evidence record.
 
 ## Summary
 

@@ -1,5 +1,7 @@
 ---
 id: FEAT-080
+workflow: github
+github_issue: https://github.com/emulebb/emulebb/issues/75
 title: Refresh protected-volume disk-space snapshots in the background
 status: OPEN
 priority: Minor
@@ -9,6 +11,9 @@ milestone: post-0.7.3
 created: 2026-05-24
 source: review of background parallel processing opportunities
 ---
+
+
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/75. This local document is retained as an engineering spec/evidence record.
 
 # FEAT-080 - Refresh Protected-Volume Disk-Space Snapshots In The Background
 

@@ -1,5 +1,7 @@
 ---
 id: FEAT-081
+workflow: github
+github_issue: https://github.com/emulebb/emulebb/issues/76
 title: Add a bounded source-hostname resolver pool only if profiling shows backlog
 status: DEFERRED
 priority: Trivial
@@ -9,6 +11,9 @@ milestone: post-0.7.3
 created: 2026-05-24
 source: review of background parallel processing opportunities after REF-030 landed
 ---
+
+
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/76. This local document is retained as an engineering spec/evidence record.
 
 # FEAT-081 - Add A Bounded Source-Hostname Resolver Pool Only If Profiling Shows Backlog
 

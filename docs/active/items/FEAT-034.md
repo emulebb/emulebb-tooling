@@ -1,5 +1,7 @@
 ---
 id: FEAT-034
+workflow: github
+github_issue: https://github.com/emulebb/emulebb/issues/62
 title: Shared-files reload should stop blocking the UI on large trees
 status: IN_PROGRESS
 priority: Minor
@@ -10,6 +12,9 @@ created: 2026-04-20
 updated: 2026-04-26
 source: current `main` revalidation; `analysis\emuleai` and Xtreme comparison; filtered web-demand scan; 2026-05-27 senior C++ performance and I/O review
 ---
+
+
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/62. This local document is retained as an engineering spec/evidence record.
 
 ## Summary
 

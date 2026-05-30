@@ -1,5 +1,7 @@
 ---
 id: FEAT-068
+workflow: github
+github_issue: https://github.com/emulebb/emulebb/issues/66
 title: Bound REST large-list memory and latency for very large profiles
 status: OPEN
 priority: Minor
@@ -10,6 +12,9 @@ created: 2026-05-21
 updated: 2026-05-24
 source: eMuleAI issue #86/#79 triage plus current REST large-list review
 ---
+
+
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/66. This local document is retained as an engineering spec/evidence record.
 
 ## Summary
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate eMuleBB GitHub-primary future roadmap metadata."""
+"""Validate eMuleBB GitHub-primary active backlog metadata."""
 
 from __future__ import annotations
 
@@ -20,7 +20,7 @@ from github_roadmap_common import (
 
 
 def check_local_metadata(errors: list[str]) -> None:
-    """Check local future-roadmap specs for GitHub workflow metadata."""
+    """Check local active specs for GitHub workflow metadata."""
 
     for item in load_items():
         if item.workflow != "github":
@@ -73,17 +73,88 @@ def check_github_issue(item, errors: list[str]) -> None:
             errors.append(f"{item.item_id}: stale managed issue label {label}")
 
 
-def project_exists(errors: list[str]) -> None:
-    """Check that the roadmap project is visible to the current token."""
+def project_number(errors: list[str]) -> str:
+    """Return the roadmap project number visible to the current token."""
 
     result = run_gh(["project", "list", "--owner", OWNER, "--format", "json", "--limit", "100"])
     if result.returncode != 0:
         errors.append("cannot list org projects; run `gh auth refresh -s project`")
-        return
+        return ""
     data = load_json(result, "list projects")
     projects = data.get("projects", []) if isinstance(data, dict) else []
-    if not any(isinstance(project, dict) and project.get("title") == PROJECT_TITLE for project in projects):
-        errors.append(f"missing org project {OWNER}/{PROJECT_TITLE}")
+    for project in projects:
+        if isinstance(project, dict) and project.get("title") == PROJECT_TITLE:
+            return str(project.get("number", ""))
+    errors.append(f"missing org project {OWNER}/{PROJECT_TITLE}")
+    return ""
+
+
+def project_items_by_url(project_number_value: str, errors: list[str]) -> dict[str, dict[str, object]]:
+    """Return project items keyed by GitHub issue URL."""
+
+    if not project_number_value:
+        return {}
+    result = run_gh(
+        [
+            "project",
+            "item-list",
+            project_number_value,
+            "--owner",
+            OWNER,
+            "--format",
+            "json",
+            "--limit",
+            "200",
+        ]
+    )
+    if result.returncode != 0:
+        errors.append(f"cannot list project items for {OWNER}/{PROJECT_TITLE}")
+        return {}
+    data = load_json(result, "list project items")
+    items = data.get("items", []) if isinstance(data, dict) else []
+    by_url: dict[str, dict[str, object]] = {}
+    for project_item in items:
+        if not isinstance(project_item, dict):
+            continue
+        content = project_item.get("content")
+        if isinstance(content, dict):
+            url = str(content.get("url", ""))
+            if url:
+                by_url[url] = project_item
+    return by_url
+
+
+def project_item_field_value(project_item: dict[str, object], field_name: str) -> str:
+    """Return a project item field value from gh's item-list JSON shape."""
+
+    key = field_name[:1].lower() + field_name[1:]
+    value = project_item.get(key, "")
+    if isinstance(value, dict):
+        option = value.get("name")
+        if option:
+            return str(option)
+    return str(value) if value is not None else ""
+
+
+def check_project_item(item, project_items: dict[str, dict[str, object]], errors: list[str]) -> None:
+    """Check that one GitHub-primary item is present in Project #2 with fields."""
+
+    project_item = project_items.get(item.github_issue)
+    if not project_item:
+        errors.append(f"{item.item_id}: missing Project #2 item")
+        return
+    expected_values = {
+        "Roadmap Status": item.project_status,
+        "Work Type": item.project_type,
+        "Priority": item.priority,
+        "Lane": item.lane,
+        "Local ID": item.item_id,
+        "Release": item.project_release,
+    }
+    for field_name, expected in expected_values.items():
+        actual = project_item_field_value(project_item, field_name)
+        if actual != expected:
+            errors.append(f"{item.item_id}: Project #2 {field_name} is {actual!r}, expected {expected!r}")
 
 
 def main() -> int:
@@ -98,10 +169,12 @@ def main() -> int:
     errors: list[str] = []
     check_local_metadata(errors)
     if args.github:
-        project_exists(errors)
+        number = project_number(errors)
+        project_items = project_items_by_url(number, errors)
         for item in load_items():
             if item.github_issue:
                 check_github_issue(item, errors)
+                check_project_item(item, project_items, errors)
 
     if errors:
         for error in errors:
@@ -109,7 +182,7 @@ def main() -> int:
         print(f"errors: {len(errors)}", file=sys.stderr)
         return 1
 
-    print(f"checked {len(load_items())} GitHub-primary roadmap specs")
+    print(f"checked {len(load_items())} GitHub-primary active backlog specs")
     return 0
 
 

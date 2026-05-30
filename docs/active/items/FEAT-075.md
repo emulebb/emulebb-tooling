@@ -1,5 +1,7 @@
 ---
 id: FEAT-075
+workflow: github
+github_issue: https://github.com/emulebb/emulebb/issues/71
 title: Keep startup progress responsive during daily config backup
 status: OPEN
 priority: Minor
@@ -9,6 +11,9 @@ milestone: post-0.7.3
 created: 2026-05-24
 source: operator report that the startup dialog freezes while daily config backup runs
 ---
+
+
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/71. This local document is retained as an engineering spec/evidence record.
 
 # FEAT-075 - Keep Startup Progress Responsive During Daily Config Backup
 

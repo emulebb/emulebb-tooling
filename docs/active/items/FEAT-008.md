@@ -1,5 +1,7 @@
 ---
 id: FEAT-008
+workflow: github
+github_issue: https://github.com/emulebb/emulebb/issues/57
 title: Oracle protocol guard seams — integrate stale branch test scaffolding
 status: OPEN
 priority: Trivial
@@ -9,6 +11,9 @@ milestone: ~
 created: 2026-04-08
 source: Stale branch remotes/origin/stale/v0.72a-experimental-clean (commit message: "TEST add oracle protocol guard seams")
 ---
+
+
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/57. This local document is retained as an engineering spec/evidence record.
 
 > Historical reference only: `stale-v0.72a-experimental-clean` and
 > `analysis\stale-v0.72a-experimental-clean` are retired reference sources, not

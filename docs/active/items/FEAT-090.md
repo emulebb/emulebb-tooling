@@ -1,5 +1,7 @@
 ---
 id: FEAT-090
+workflow: github
+github_issue: https://github.com/emulebb/emulebb/issues/80
 title: Tune broadband limits by drive topology and total budget
 status: OPEN
 priority: Minor
@@ -9,6 +11,9 @@ milestone: post-0.7.3
 created: 2026-05-25
 source: operator request to tune eMuleBB broadband limits per drive topology, HDD versus SSD, and total maximum budget
 ---
+
+
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/80. This local document is retained as an engineering spec/evidence record.
 
 # FEAT-090 - Tune Broadband Limits By Drive Topology And Total Budget
 

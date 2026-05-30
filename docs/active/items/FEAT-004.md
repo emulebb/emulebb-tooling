@@ -1,5 +1,7 @@
 ---
 id: FEAT-004
+workflow: github
+github_issue: https://github.com/emulebb/emulebb/issues/54
 title: Kad — Generalise KadPublishGuard abuse budget beyond PUBLISH_SOURCE
 status: OPEN
 priority: Minor
@@ -9,6 +11,9 @@ milestone: ~
 created: 2026-04-08
 source: AUDIT-KAD.md (AUD_KAD_011, AUD_KAD_020)
 ---
+
+
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/54. This local document is retained as an engineering spec/evidence record.
 
 > Historical reference only: `stale-v0.72a-experimental-clean` and
 > `analysis\stale-v0.72a-experimental-clean` are retired reference sources, not

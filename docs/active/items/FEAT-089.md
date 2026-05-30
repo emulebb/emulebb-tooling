@@ -1,5 +1,7 @@
 ---
 id: FEAT-089
+workflow: github
+github_issue: https://github.com/emulebb/emulebb/issues/79
 title: Add in-app guided Prowlarr indexer setup for eMuleBB
 status: OPEN
 priority: Minor
@@ -9,6 +11,9 @@ milestone: post-0.7.3
 created: 2026-05-25
 source: operator request for easier Prowlarr indexer setup
 ---
+
+
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/79. This local document is retained as an engineering spec/evidence record.
 
 ## Summary
 

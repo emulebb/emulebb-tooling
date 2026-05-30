@@ -1,5 +1,7 @@
 ---
 id: FEAT-069
+workflow: github
+github_issue: https://github.com/emulebb/emulebb/issues/67
 title: Shared-file include and exclude pattern rules
 status: OPEN
 priority: Minor
@@ -9,6 +11,9 @@ milestone: post-0.7.3
 created: 2026-05-21
 source: aMule issue #604 triage against current shared-file policy
 ---
+
+
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/67. This local document is retained as an engineering spec/evidence record.
 
 ## Summary
 

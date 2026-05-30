@@ -1,5 +1,7 @@
 ---
 id: FEAT-095
+workflow: github
+github_issue: https://github.com/emulebb/emulebb/issues/85
 title: Move part-file durability work off foreground paths
 status: OPEN
 priority: Major
@@ -9,6 +11,9 @@ milestone: post-0.7.3
 created: 2026-05-27
 source: senior C++ performance and I/O review of part-file write and flush paths
 ---
+
+
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/85. This local document is retained as an engineering spec/evidence record.
 
 # FEAT-095 - Move Part-File Durability Work Off Foreground Paths
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Shared helpers for eMuleBB GitHub roadmap migration scripts."""
+"""Shared helpers for eMuleBB GitHub backlog sync scripts."""
 
 from __future__ import annotations
 
@@ -20,19 +20,22 @@ FUTURE_ROADMAP = DOCS / "active" / "FUTURE-ROADMAP.md"
 OWNER = "emulebb"
 ISSUE_REPO = "emulebb/emulebb"
 PROJECT_TITLE = "eMuleBB Roadmap"
-PROJECT_RELEASE = "post-0.7.3"
 SPEC_BASE_URL = "https://github.com/emulebb/emulebb-tooling/blob/main"
 
 ID_PATTERN = re.compile(r"\b(?:BUG|FEAT|REF|CI|AMUT|ARR)-\d{3}\b")
 
 LANE_BY_TITLE = {
-    "Connectivity modernization": "Connectivity",
-    "Search and trust clarity": "Search and Trust",
-    "UI power-user polish": "UI Polish",
-    "Security and operations": "Security and Operations",
-    "Narrow anti-leecher review": "Anti-Leecher Review",
-    "Local state and configuration planning": "Planning",
-    "Planning": "Planning",
+    "connectivity modernization": "Connectivity",
+    "search and trust clarity": "Search and Trust",
+    "ui power-user polish": "UI Polish",
+    "startup and storage performance": "Security and Operations",
+    "controller surface performance": "Security and Operations",
+    "upload policy clarity": "Search and Trust",
+    "security and operations": "Security and Operations",
+    "product-family integration": "Planning",
+    "local state and configuration planning": "Planning",
+    "narrow anti-leecher review": "Anti-Leecher Review",
+    "planning": "Planning",
 }
 
 STATUS_TO_PROJECT = {
@@ -77,7 +80,10 @@ LABEL_DEFINITIONS = {
     "priority:minor": ("fbca04", "Minor priority"),
     "priority:trivial": ("cfd3d7", "Trivial priority"),
     "roadmap:future": ("1d76db", "Post-0.7.3 future roadmap item"),
+    "release:0.7.3-rc.1": ("0e8a16", "0.7.3 RC1 release planning"),
+    "release:future": ("0e8a16", "Future release planning"),
     "release:post-0.7.3": ("0e8a16", "Post-0.7.3 release planning"),
+    "release:unscheduled": ("0e8a16", "Unscheduled backlog item"),
     "lane:connectivity": ("0052cc", "Connectivity modernization roadmap lane"),
     "lane:search-trust": ("5319e7", "Search and trust clarity roadmap lane"),
     "lane:ui-polish": ("d876e3", "UI power-user polish roadmap lane"),
@@ -88,10 +94,133 @@ LABEL_DEFINITIONS = {
 
 MANAGED_LABEL_PREFIXES = ("type:", "priority:", "roadmap:", "release:", "lane:")
 
+LANE_KEYWORDS = (
+    (
+        "Anti-Leecher Review",
+        {
+            "anti-leecher",
+            "banning",
+            "cshield",
+            "quarantine",
+        },
+    ),
+    (
+        "Connectivity",
+        {
+            "async",
+            "bind-policy",
+            "cgnat",
+            "connectivity",
+            "dual-stack",
+            "ipv6",
+            "kad",
+            "lowid",
+            "miniupnp",
+            "nat-pmp",
+            "nat-traversal",
+            "network",
+            "network-binding",
+            "network-change",
+            "networking",
+            "pcp",
+            "relay",
+            "sockets",
+            "tcp",
+            "transport",
+            "udp",
+            "upnp",
+            "utp",
+            "vpn",
+            "wsapoll",
+        },
+    ),
+    (
+        "Search and Trust",
+        {
+            "blacklist",
+            "browse",
+            "clients",
+            "download",
+            "downloads",
+            "duplicates",
+            "fake",
+            "intake",
+            "search",
+            "sources",
+            "trust",
+        },
+    ),
+    (
+        "UI Polish",
+        {
+            "dark-mode",
+            "dpi",
+            "hdpi",
+            "keyboard-shortcuts",
+            "layout",
+            "localization",
+            "mfc",
+            "polish",
+            "preferences",
+            "theming",
+            "toolbar",
+            "transfers",
+            "ui",
+            "visualization",
+            "win10",
+            "windows",
+        },
+    ),
+    (
+        "Security and Operations",
+        {
+            "api",
+            "asan",
+            "automation",
+            "build",
+            "controller-surface",
+            "dependencies",
+            "diagnostics",
+            "docker",
+            "evidence",
+            "hardening",
+            "ipfilter",
+            "live-e2e",
+            "memory-safety",
+            "openapi",
+            "packaging",
+            "release",
+            "release-gate",
+            "release-proof",
+            "rest",
+            "sanitizer",
+            "security",
+            "test-campaigns",
+            "test-harness",
+            "testing",
+            "tooling",
+            "warnings",
+            "webserver",
+        },
+    ),
+    (
+        "Planning",
+        {
+            "configuration",
+            "database",
+            "future-roadmap",
+            "planning",
+            "p2p-overlord",
+            "product-family",
+            "sqlite",
+        },
+    ),
+)
+
 
 @dataclass(frozen=True)
 class Item:
-    """A local roadmap item plus the GitHub metadata derived from it."""
+    """A local backlog item plus the GitHub metadata derived from it."""
 
     item_id: str
     title: str
@@ -132,12 +261,27 @@ class Item:
             TYPE_LABELS.get(self.category, "type:planning"),
             f"priority:{self.priority.lower()}",
             "roadmap:future",
-            "release:post-0.7.3",
+            f"release:{self.project_release_label}",
             LANE_LABELS[self.lane],
         ]
         if self.item_id == "FEAT-064":
             labels[0] = "type:planning"
         return sorted(set(labels))
+
+    @property
+    def project_release(self) -> str:
+        value = self.milestone.strip()
+        if value in {"", "~"}:
+            return "unscheduled"
+        if value == "0.7.3 RC1":
+            return "0.7.3-rc.1"
+        if value == "future-release":
+            return "future"
+        return value
+
+    @property
+    def project_release_label(self) -> str:
+        return self.project_release.lower().replace(" ", "-")
 
 
 def read_text(path: Path) -> str:
@@ -183,14 +327,24 @@ def parse_label_list(raw_value: str) -> tuple[str, ...]:
 
 
 def active_item_ids_by_lane() -> dict[str, str]:
-    """Return active roadmap item IDs mapped to their approved lane."""
+    """Return active backlog item IDs mapped to their approved lane."""
 
     lanes: dict[str, str] = {}
-    table_pattern = re.compile(r"^\| ([^|]+) \| [^|]+ \| ([^|]+) \|$", re.MULTILINE)
     text = read_text(FUTURE_ROADMAP)
+    section_pattern = re.compile(r"^### ([^\n]+)\n(.*?)(?=^### |\Z)", re.MULTILINE | re.DOTALL)
+    for match in section_pattern.finditer(text):
+        lane_title = match.group(1).strip()
+        lane = LANE_BY_TITLE.get(lane_title.casefold())
+        if not lane:
+            continue
+        for item_id in ID_PATTERN.findall(match.group(2)):
+            if (ACTIVE_ITEMS / f"{item_id}.md").exists():
+                lanes[item_id] = lane
+
+    table_pattern = re.compile(r"^\| ([^|]+) \| [^|]+ \| ([^|]+) \|$", re.MULTILINE)
     for match in table_pattern.finditer(text):
         lane_title = match.group(1).strip()
-        lane = LANE_BY_TITLE.get(lane_title)
+        lane = LANE_BY_TITLE.get(lane_title.casefold())
         if not lane:
             continue
         for item_id in ID_PATTERN.findall(match.group(2)):
@@ -200,15 +354,37 @@ def active_item_ids_by_lane() -> dict[str, str]:
     return dict(sorted(lanes.items()))
 
 
+def infer_lane(fields: dict[str, str]) -> str:
+    """Return a deterministic Project lane for an active item."""
+
+    if fields.get("category", "") == "ci":
+        return "Security and Operations"
+
+    text = " ".join(
+        [
+            fields.get("id", ""),
+            fields.get("title", ""),
+            fields.get("category", ""),
+            " ".join(parse_label_list(fields.get("labels", ""))),
+        ]
+    ).casefold()
+    tokens = set(re.findall(r"[a-z0-9]+(?:-[a-z0-9]+)*", text))
+    for lane, keywords in LANE_KEYWORDS:
+        if tokens & keywords:
+            return lane
+    return "Planning"
+
+
 def load_items() -> list[Item]:
-    """Load first-rollout future-roadmap items from local docs."""
+    """Load all active backlog items from local docs."""
 
     lane_by_id = active_item_ids_by_lane()
     items: list[Item] = []
-    for item_id, lane in lane_by_id.items():
-        path = ACTIVE_ITEMS / f"{item_id}.md"
+    for path in sorted(ACTIVE_ITEMS.glob("*.md")):
         text = read_text(path)
         fields = parse_frontmatter(text)
+        item_id = fields.get("id", path.stem)
+        lane = lane_by_id.get(item_id) or infer_lane(fields)
         items.append(
             Item(
                 item_id=item_id,
@@ -263,7 +439,7 @@ def load_json(result: subprocess.CompletedProcess[str], action: str) -> object:
 
 
 def issue_body(item: Item) -> str:
-    """Build the canonical GitHub issue body for an imported roadmap item."""
+    """Build the canonical GitHub issue body for an imported backlog item."""
 
     local_status_note = (
         "This issue is the authoritative workflow record. The linked local "
@@ -271,12 +447,12 @@ def issue_body(item: Item) -> str:
     )
     return "\n".join(
         [
-            f"Imported roadmap item `{item.item_id}`.",
+            f"Imported backlog item `{item.item_id}`.",
             "",
             f"- Lane: `{item.lane}`",
             f"- Type: `{item.project_type}`",
             f"- Priority: `{item.priority}`",
-            f"- Release: `{PROJECT_RELEASE}`",
+            f"- Release: `{item.project_release}`",
             f"- Local spec: {item.spec_url}",
             "",
             local_status_note,

@@ -237,7 +237,11 @@ External references used as directional signals, not implementation authority:
 - qBittorrent/libtorrent can inform dual-stack architecture, but BitTorrent DHT
   mechanics are not eMule Kad protocol authority.
 
-## GitHub-Primary Backlog Import Set
+## GitHub-Primary Backlog Highlights
+
+The GitHub sync owns all active backlog items under `docs/active/items`.
+The table below is only a compact list of recently promoted or cross-cutting
+future-roadmap highlights; it is not the sync boundary.
 
 | Lane | Scope | Items |
 |---|---|---|

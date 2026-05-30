@@ -1,5 +1,7 @@
 ---
 id: FEAT-009
+workflow: github
+github_issue: https://github.com/emulebb/emulebb/issues/58
 title: Mirror audit guard seam — WIP work from stale branch parent commit
 status: OPEN
 priority: Trivial
@@ -9,6 +11,9 @@ milestone: ~
 created: 2026-04-08
 source: Stale branch parent commit 226356a "WIP mirror audit guard seam for oracle tests"
 ---
+
+
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/58. This local document is retained as an engineering spec/evidence record.
 
 ## Background
 

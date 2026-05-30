@@ -71,17 +71,16 @@ Use this path for normal externally actionable backlog slices:
 1. Create or update the local active item spec first, including the stable item
    ID, scope, constraints, and acceptance criteria.
 2. If the item belongs to an approved future lane, add the item ID to
-   `docs\active\FUTURE-ROADMAP.md`, then use
-   `python scripts\github-roadmap-sync.py` to preview and apply the issue and
-   Project #2 import. The sync owns managed issue labels with `type:`,
-   `priority:`, `roadmap:`, `release:`, and `lane:` prefixes.
-3. If the item is GitHub-primary but not part of the future-roadmap import set,
-   create or update the issue in `https://github.com/emulebb/emulebb/issues`
-   and add it to Project #2 (`https://github.com/orgs/emulebb/projects/2`)
-   directly.
-4. Set the project fields that mirror the local item: `Roadmap Status`,
-   `Work Type`, `Priority`, `Lane`, `Local ID`, and `Release` when applicable.
-5. Ensure the local item has `workflow: github`,
+   `docs\active\FUTURE-ROADMAP.md` so the sync can use the curated lane.
+3. Run `python scripts\github-roadmap-sync.py` to preview and
+   `python scripts\github-roadmap-sync.py --apply` to sync all active backlog
+   items to `https://github.com/emulebb/emulebb/issues` and Project #2
+   (`https://github.com/orgs/emulebb/projects/2`).
+4. The sync owns managed issue labels with `type:`, `priority:`, `roadmap:`,
+   `release:`, and `lane:` prefixes, and sets the project fields that mirror
+   the local item: `Roadmap Status`, `Work Type`, `Priority`, `Lane`,
+   `Local ID`, and `Release`.
+5. After sync, the local item must have `workflow: github`,
    `github_issue: https://github.com/emulebb/emulebb/issues/<number>`, and a
    workflow-status note that points to the issue.
 6. After migration, treat GitHub as the workflow authority for status, priority,

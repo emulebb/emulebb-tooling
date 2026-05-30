@@ -1,5 +1,7 @@
 ---
 id: FEAT-072
+workflow: github
+github_issue: https://github.com/emulebb/emulebb/issues/69
 title: Reduce startup cache UI-thread blocking on large shared libraries
 status: OPEN
 priority: Minor
@@ -9,6 +11,9 @@ milestone: post-0.7.3
 created: 2026-05-22
 source: live large-library profiling against the operator-provided profile and startup dump analysis; 2026-05-27 senior C++ performance and I/O review
 ---
+
+
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/69. This local document is retained as an engineering spec/evidence record.
 
 # FEAT-072 - Reduce Startup Cache UI-Thread Blocking On Large Shared Libraries
 

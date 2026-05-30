@@ -1,5 +1,7 @@
 ---
 id: FEAT-094
+workflow: github
+github_issue: https://github.com/emulebb/emulebb/issues/84
 title: Improve UDP burst handling without lock-held backoff
 status: OPEN
 priority: Major
@@ -9,6 +11,9 @@ milestone: post-0.7.3
 created: 2026-05-27
 source: senior C++ performance and I/O review of client and server UDP paths
 ---
+
+
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/84. This local document is retained as an engineering spec/evidence record.
 
 # FEAT-094 - Improve UDP Burst Handling Without Lock-Held Backoff
 
