@@ -1,13 +1,12 @@
 # eMule Workspace Policy
 
 This document is the single source of truth for the canonical eMule workspace.
-Repo-local docs should point here instead of restating workspace-wide policy.
-AI contributors should use the [Agent Checklist](reference/AGENT-CHECKLIST.md)
-as the repeatable operating path after reading this policy.
+Repo-local docs and `AGENTS.md` files should point here instead of restating
+workspace-wide policy. AI contributors should use the
+[Agent Checklist](reference/AGENT-CHECKLIST.md) as the repeatable operating
+path after reading this policy.
 
 ## Session Startup Contract
-
-Every workspace session starts from this contract:
 
 - Read this policy before making workspace decisions.
 - Check `git status --short --branch` in each repo that will be read for
@@ -15,14 +14,11 @@ Every workspace session starts from this contract:
 - Use repo-local `AGENTS.md` files only for local deltas after this policy has
   been read.
 - Treat historical session handoff notes under `docs\history` as provenance
-  only. They are not policy, backlog authority, or a substitute for this
-  document.
-- Revalidate backlog and release docs against current `main`, current
-  dependency pins, and this policy before implementation.
-- For backlog items that carry `workflow: github`, treat the linked
-  `emulebb/emulebb` issue and org Project #2 (`eMuleBB Roadmap`) as the
-  authoritative workflow state. The local item doc is retained as engineering
-  spec and evidence.
+  only.
+- Revalidate backlog and release docs against current `main`, dependency pins,
+  and this policy before implementation.
+- For backlog items with `workflow: github`, the linked `emulebb/emulebb` issue
+  and org Project #2 (`eMuleBB Roadmap`) are authoritative for workflow state.
 
 Directive precedence is:
 
@@ -58,22 +54,16 @@ Directive precedence is:
 - `workspaces\workspace\deps.json` is the generated dependency contract for
   the active workspace layout. Tests and helpers that need repo paths should
   prefer its `workspace.repos` map instead of reconstructing old repo names.
-
-The canonical workspace currently materializes these app worktrees:
-
-| Worktree | Branch |
-|---|---|
-| `emulebb-main` | `main` |
-| `emulebb-community-baseline` | `baseline/community-0.72a` |
-| `emulebb-community-tracing-harness` | `tracing-harness/community-0.72a` |
+- The canonical app worktrees are `emulebb-main`,
+  `emulebb-community-baseline`, and `emulebb-community-tracing-harness` with
+  branches defined by the generated dependency contract.
 
 ## Branch And History Policy
 
 - `main` is the only integration branch for the app repo.
-- Routine active work happens directly on `main` unless the user explicitly
-  requests a separate branch.
-- Short-lived working branches are exceptional. If explicitly requested, use
-  `feature/<topic>`, `fix/<topic>`, or `chore/<topic>`.
+- Routine active work happens directly on `main`; short-lived branches are
+  exceptional and, when explicitly requested, use `feature/<topic>`,
+  `fix/<topic>`, or `chore/<topic>`.
 - Release stabilization branches use `release/MAJOR.MINOR.PATCH` and are
   created from the selected reviewed `main` commit when a release candidate
   starts.
@@ -83,19 +73,18 @@ The canonical workspace currently materializes these app worktrees:
 - Do not start normal feature work directly on release branches.
 - Fixes made on release branches must be merged or cherry-picked back to `main`
   unless the fix is release-packaging metadata that does not apply to `main`.
-- Supporting repos use `main` unless a repo has an explicitly maintained branch
-  documented by setup pins.
+- Supporting repos use their setup-pinned branch.
 - `stale/*` branches are retired historical references only. Never use them as
   active development targets or validation baselines unless a task explicitly
   calls for historical comparison.
-- `analysis\stale-v0.72a-experimental-clean` may exist as a historical
-  reference checkout only. It is not a managed app worktree or active branch.
+- `analysis\stale-v0.72a-experimental-clean` is a historical reference checkout
+  only when present.
 - `repos\emulebb` exists to hold history, remotes, and worktrees. Its intended
   neutral state is detached `HEAD` at `origin/main`.
 - One `main` commit should represent one coherent outcome.
 - Do not push `WIP`, checkpoint, or debug commits to `main`.
-- Commit and push each completed coherent slice before starting the next
-  unrelated slice unless the user explicitly asks to hold local commits.
+- Commit and push each completed coherent slice before starting unrelated work
+  unless the user explicitly asks to hold local commits.
 - Feature, bug, refactor, and CI backlog commit messages must include the
   tracked item id such as `BUG-017`, `FEAT-015`, `REF-021`, or `CI-003`.
 - GitHub-tracked roadmap work should keep the stable local item id and link the
@@ -113,30 +102,22 @@ The canonical workspace currently materializes these app worktrees:
   `srchybrid`, or `repos\emulebb-build-tests`.
 - Direct `MSBuild` invocation is allowed only inside owned orchestration
   implementation called through supported `emulebb-build` entrypoints.
-- Every development change should pass scoped validation. After `validate`, run
-  the smallest relevant build and test set for the changed area.
+- Every development change should pass scoped validation plus the smallest
+  relevant build and test set for the changed area.
 - Every app code change must rebuild both active x64 app configurations before
   commit:
   - `python -m emule_workspace build app --variant main --config Debug --platform x64 --build-output-mode ErrorsOnly`
   - `python -m emule_workspace build app --variant main --config Release --platform x64 --build-output-mode ErrorsOnly`
 - Docs-only or policy-only changes may use a lighter validation path when they
   do not alter the build contract.
-- Full matrix validation is expected for build-system changes, dependency pin
-  changes, compiler/toolchain policy changes, and broad integration changes.
+- Full matrix validation is expected for build-system, dependency pin,
+  compiler/toolchain policy, and broad integration changes.
 - `check-clean-worktree.py` is a CI, release-prep, or explicit hygiene guard;
   it is not the default requirement for every in-progress feature branch.
 
-Routine `validate` in `repos\emulebb-build` must run the active static audits:
-
-- build policy
-- branch policy
-- dependency pin policy
-- active documentation path policy
-- PowerShell boundary policy
-- project entrypoint policy
-- warning policy
-- localization policy
-- normalization policy
+Routine `validate` in `repos\emulebb-build` must run the active static audits
+for build, branch, dependency pin, active documentation path, PowerShell
+boundary, project entrypoint, warning, localization, and normalization policy.
 
 ## Development And Compatibility Defaults
 
@@ -234,19 +215,18 @@ Routine `validate` in `repos\emulebb-build` must run the active static audits:
   for AI agents contributing to the workspace.
 - `docs\reference\DEVELOPMENT-GUIDE.md` is the practical guide for routine
   docs-first and light-code contribution work.
-- Backlog and planning docs are supporting specs, not workflow authority by
-  themselves for GitHub-primary items.
+- Backlog and planning docs are supporting specs; for GitHub-primary items they
+  are not workflow authority by themselves.
 - Canonical public backlog workflow endpoints are
   `https://github.com/emulebb/emulebb/issues` and
   `https://github.com/orgs/emulebb/projects/2`.
-- New externally actionable backlog items should be managed in the local
-  Markdown item, the linked `emulebb/emulebb` issue, and Project #2 as one
-  backlog-maintenance slice unless the item is explicitly local-only,
-  historical, or provenance-only.
-- For GitHub-primary backlog work, the linked GitHub issue and public
-  `eMuleBB Roadmap` project win on workflow state, priority, release placement,
-  ownership, discussion, and PR linkage. Local Markdown owns the durable
-  engineering spec, acceptance criteria, implementation notes, and evidence.
+- New externally actionable backlog items should be managed in the local item,
+  linked `emulebb/emulebb` issue, and Project #2 together unless explicitly
+  local-only, historical, or provenance-only.
+- For GitHub-primary backlog work, GitHub owns workflow state, priority,
+  release placement, ownership, discussion, and PR linkage. Local Markdown owns
+  durable engineering specs, acceptance criteria, implementation notes, and
+  evidence.
 - Historical handoff notes live under `docs\history`. Create or refresh a
   current handoff only when terminating a session or when explicitly asked.
 - Repo-local `AGENTS.md` files should stay thin and repo-specific.
@@ -274,9 +254,13 @@ Routine `validate` in `repos\emulebb-build` must run the active static audits:
 - `python -m emule_workspace sync` configures repo-local `core.hooksPath` to
   that shared hook directory.
 
-## PowerShell Runtime Policy
+## Script And Automation Runtime Policy
 
-- Workspace-wide PowerShell policy is centralized in `repos\emulebb-tooling`.
+- Repeatable workspace automation should be implemented as persisted Python
+  scripts or modules in the owning repo.
+- One-off PowerShell commands are acceptable for basic shell operations such as
+  file finding, string search, directory listing, environment inspection, and
+  invoking existing tools.
 - New tracked PowerShell files must not be added in workspace-owned repos or
   managed app worktrees unless this policy explicitly allows them.
 - `repos\emulebb-build\emule_workspace\release_assets\emulebb\scripts\*.ps1`
