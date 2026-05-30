@@ -204,11 +204,15 @@ or command lines are required for private diagnosis. See
 
 ## Links
 
-The expanded Tools popup and compact tray path expose web links under one
-Links group. Scheduler toggle/schedule actions and the first-run wizard are no
-longer appended to the expanded Tools, compact tray Tools, or floating Hotmenu
-surfaces. The underlying frozen Scheduler and wizard code still exists until
-the deletion slices tracked by `REF-025` remove it.
+The expanded Tools popup and compact tray path expose eMuleBB-owned web links
+under one Links group. The fixed entries point to the homepage, online help,
+GitHub Releases, FAQ, setup guide, network/VPN binding guide, sharing guide,
+downloads and search guide, Tools menu guide, controllers and REST guide, and
+troubleshooting guide.
+
+User-configured general actions from `webservices.dat` still appear in the
+same group after the fixed documentation links. Edit Web Services opens that
+file in the configured text editor.
 
 ## Keyboard Notes
 

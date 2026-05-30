@@ -9,6 +9,46 @@
       "id": "IDS_SF_LASTREQUEST",
       "after": "IDS_SF_REQUESTS",
       "before": "IDS_SF_ACCEPTS"
+    },
+    {
+      "id": "IDS_HM_LINK_DOC_FAQ",
+      "after": "IDS_HM_LINKVC",
+      "before": "IDS_SHAREDREQ1"
+    },
+    {
+      "id": "IDS_HM_LINK_DOC_SETUP",
+      "after": "IDS_HM_LINK_DOC_FAQ",
+      "before": "IDS_SHAREDREQ1"
+    },
+    {
+      "id": "IDS_HM_LINK_DOC_NETWORK",
+      "after": "IDS_HM_LINK_DOC_SETUP",
+      "before": "IDS_SHAREDREQ1"
+    },
+    {
+      "id": "IDS_HM_LINK_DOC_SHARING",
+      "after": "IDS_HM_LINK_DOC_NETWORK",
+      "before": "IDS_SHAREDREQ1"
+    },
+    {
+      "id": "IDS_HM_LINK_DOC_DOWNLOADS_SEARCH",
+      "after": "IDS_HM_LINK_DOC_SHARING",
+      "before": "IDS_SHAREDREQ1"
+    },
+    {
+      "id": "IDS_HM_LINK_DOC_TOOLS_MENU",
+      "after": "IDS_HM_LINK_DOC_DOWNLOADS_SEARCH",
+      "before": "IDS_SHAREDREQ1"
+    },
+    {
+      "id": "IDS_HM_LINK_DOC_CONTROLLERS_REST",
+      "after": "IDS_HM_LINK_DOC_TOOLS_MENU",
+      "before": "IDS_SHAREDREQ1"
+    },
+    {
+      "id": "IDS_HM_LINK_DOC_TROUBLESHOOTING",
+      "after": "IDS_HM_LINK_DOC_CONTROLLERS_REST",
+      "before": "IDS_SHAREDREQ1"
     }
   ]
 }
