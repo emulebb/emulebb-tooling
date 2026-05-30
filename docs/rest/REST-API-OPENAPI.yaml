@@ -3504,12 +3504,22 @@ components:
             data:
               type: object
               additionalProperties: false
-              required: [items]
+              required: [items, total, offset, limit]
               properties:
                 items:
                   type: array
                   items:
                     $ref: "#/components/schemas/Transfer"
+                total:
+                  type: integer
+                  minimum: 0
+                offset:
+                  type: integer
+                  minimum: 0
+                limit:
+                  type: integer
+                  minimum: 1
+                  maximum: 1000
     TransferEnvelope:
       unevaluatedProperties: false
       allOf:
