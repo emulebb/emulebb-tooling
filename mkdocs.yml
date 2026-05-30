@@ -9,6 +9,8 @@ site_dir: .local/mkdocs-site
 theme:
   name: material
   language: en
+  logo: assets/brand/emulebb-mkdocs-logo.png
+  favicon: assets/brand/emulebb-mkdocs-logo.png
   features:
     - navigation.indexes
     - navigation.sections

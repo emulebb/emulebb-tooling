@@ -15,7 +15,7 @@
       Prowlarr, Radarr, or Sonarr.
     </p>
   </div>
-  <img alt="eMuleBB broadband edition logo" src="assets/brand/emulebb-broadband-edition-logo.png" />
+  <img alt="eMuleBB broadband edition logo" src="../assets/brand/emulebb-broadband-edition-logo.png" />
 </section>
 
 ## Start Here

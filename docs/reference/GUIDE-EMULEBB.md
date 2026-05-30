@@ -11,7 +11,7 @@
       REST/controller surface.
     </p>
   </div>
-  <img alt="eMuleBB broadband edition logo" src="../assets/brand/emulebb-broadband-edition-logo.png" />
+  <img alt="eMuleBB broadband edition logo" src="../../assets/brand/emulebb-broadband-edition-logo.png" />
 </section>
 
 This is the product manual entry point. It links to focused guide chapters and
