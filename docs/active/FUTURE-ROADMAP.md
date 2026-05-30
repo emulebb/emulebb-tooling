@@ -6,6 +6,17 @@ the backlog. The purpose is to keep future work focused on the Windows MFC app
 with REST support, while making related product-family boundaries explicit and
 excluding ideas that no longer match the eMuleBB desktop product direction.
 
+0.7.3 is the compatibility baseline. It may still carry preserved frozen legacy
+surfaces so users can evaluate the release without a rewrite-style transition.
+After that baseline, future releases evolve deliberately: compatibility,
+profile safety, and stock eD2K/Kad behavior remain constraints, while supported
+areas modernize through the curated lanes below. Frozen legacy surfaces should
+be removed, replaced, or left explicitly unsupported through tracked work, not
+quietly revived as product commitments.
+
+See [Frozen Surfaces](FROZEN-SURFACES.md) for the current distinction between
+compatibility-preserved legacy baggage and supported release behavior.
+
 For a shorter public-readable overview, use
 [Roadmap Summary](../reference/ROADMAP-SUMMARY.md).
 

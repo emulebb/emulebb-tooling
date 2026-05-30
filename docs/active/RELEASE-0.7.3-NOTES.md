@@ -19,6 +19,26 @@ The release focuses on:
   power-user stacks
 - release packages with manifest, hash, and SBOM evidence
 
+## Compatibility And Frozen Legacy
+
+0.7.3 is the compatibility baseline before broader eMuleBB evolution. It keeps
+the native desktop app, existing profile model, and stock-compatible eD2K/Kad
+behavior as the release contract. Users should be able to evaluate the new
+broadband defaults, diagnostics, packaging, and controller workflows without
+being forced into a rewrite-style migration.
+
+Some older eMule-era surfaces may still exist in code, resources, settings, or
+old profiles. For this release, that means preserved and frozen: retained where
+needed for compatibility or until a later removal pass, but not treated as new
+support commitments. Release proof targets the native desktop workflow,
+protocol compatibility, REST/controller behavior, profile and package safety,
+and diagnostics. Frozen legacy surfaces are not release-gated support.
+
+Future releases will evolve deliberately from this baseline. The current
+roadmap favors focused modernization in connectivity, UI polish, startup and
+large-library performance, controller reliability, and operations while keeping
+profile safety and network compatibility explicit.
+
 ## Who Should Test It
 
 Use this release with a backed-up or disposable profile first. Start without
@@ -49,8 +69,9 @@ after separate stable proof and operator approval.
 
 ## Known Limits
 
-- The legacy HTML WebServer template UI is frozen and not a maintained release
-  proof target. Use the native desktop app and REST/controller docs.
+- Frozen legacy surfaces are preserved only as compatibility or pending-removal
+  baggage. They are not maintained release proof targets. Use the native
+  desktop app and REST/controller docs for supported workflows.
 - REST is a trusted local automation surface. It is not designed as a public
   internet service.
 - IPv6 Kad, broader NAT modernization, and several future roadmap items remain

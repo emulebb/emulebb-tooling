@@ -12,6 +12,13 @@ surfaces. Existing code may remain only as compile-preserved legacy baggage
 until a removal pass deletes it. Existing incidental tests may be removed when
 they stop serving supported behavior.
 
+Preserved does not mean supported. For 0.7.3, some frozen legacy code, resource
+entries, profile keys, or old menu paths may remain so the release can preserve
+compatibility while keeping risk low. That retention is a transition state, not
+a promise that the surface will receive fixes, documentation, automation, or
+release proof. Future releases may remove or replace frozen surfaces through
+explicit roadmap or refactor items.
+
 Do not add compatibility layers, shims, diagnostics, harnesses, UI automation,
 or parser/golden coverage for these surfaces unless the explicit task is to
 remove the surface or prove that its removal did not damage supported behavior.

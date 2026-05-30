@@ -48,6 +48,25 @@ eMuleBB focuses on those gaps:
 | Use modern controllers | Native REST, aMuTorrent, qBit-compatible, and Torznab adapter docs |
 | Preserve eMule behavior | Stock-compatible eD2K/Kad defaults and native desktop authority |
 
+## Compatibility Baseline And Future Evolution
+
+0.7.3 is the compatibility baseline for eMuleBB. It preserves the familiar
+native desktop workflow, stock-compatible eD2K/Kad behavior, and practical
+profile continuity while introducing the maintained broadband, diagnostics,
+packaging, and controller work described in these guides.
+
+That does not mean every old eMule-era surface is a supported feature. Some
+legacy code, resources, settings, or menu paths may still be present in 0.7.3
+because preserving them is lower risk than deleting them during the release
+candidate. Those areas are frozen: they are not release proof targets and should
+not be used as the basis for new workflows.
+
+Future releases start from the 0.7.3 baseline and evolve deliberately. The
+approved direction is focused modernization: connectivity, UI polish, startup
+and large-library performance, controller reliability, security/operations, and
+careful local-state planning. Profile safety and current network compatibility
+remain hard constraints.
+
 ## First Hour Workflow
 
 1. Unpack or install eMuleBB into its own application directory.
@@ -748,7 +767,8 @@ docs later say otherwise.
 ## Unsupported Legacy Areas
 
 Some old eMule surfaces may still appear in resources, settings, or historical
-notes. They are not maintained user workflows for eMuleBB:
+notes. In 0.7.3, their presence means compatibility-preserved and frozen, not
+supported. They are not maintained user workflows for eMuleBB:
 
 - archive preview and archive recovery
 - IRC and IRC-adjacent chat UI
