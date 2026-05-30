@@ -32,6 +32,8 @@ These shortcuts are local to the Transfers pane.
 |----------|----------|
 | `Ctrl+0` | Switches the Downloads category tab to All. |
 | `Ctrl+1` ... `Ctrl+9` | Switches to Downloads category tabs 1 through 9 when present. |
+| `Ctrl+D` | Switches to the Downloads list. |
+| `Ctrl+Shift+D` | Switches to Downloading Clients. |
 | `Ctrl+U` | Switches the Transfers list to Uploading. |
 | `Ctrl+Q` | Switches the Transfers list to Queue. |
 | `Ctrl+K` | Switches the Transfers list to Known Clients. |
@@ -40,6 +42,16 @@ These shortcuts are local to the Transfers pane.
 In split view, the list shortcuts switch the lower Transfers pane. In a
 single-list view, they switch the primary full list. Queue and Known Clients
 respect their existing disabled preferences.
+
+## Transfer Client List Shortcuts
+
+These shortcuts apply to Uploading, Queue, Known Clients, and Downloading
+Clients.
+
+| Shortcut | Behavior |
+|----------|----------|
+| `Ctrl+I` | Opens details for the selected clients. |
+| `Alt+Enter` | Opens details for the selected clients. |
 
 ## Searchable List Shortcuts
 
@@ -73,7 +85,8 @@ shortcuts when the relevant list has focus.
 | `Ctrl+F12` | Sorts by category where supported. |
 
 Repeating the same shortcut toggles ascending and descending order through the
-same path as clicking the column header. If a list does not have the requested
+same path as clicking the column header. In Search, `Ctrl+F4` closes the
+selected search-results tab instead of sorting by type. If a list does not have the requested
 semantic column, the shortcut is consumed with a native beep and no fallback
 sort is guessed. If the matching column is currently hidden, the shortcut is
 also consumed with a native beep instead of changing the visible list order
@@ -126,6 +139,9 @@ These shortcuts are local to Search Results.
 | `Ctrl+L` | Copies selected result ED2K links. |
 | `Ctrl+Shift+C` | Copies selected result summaries. |
 | `Ctrl+F` | Starts list find. |
+| `Ctrl+PageUp` / `Ctrl+PageDown` | Switches to the previous or next search-results tab. |
+| `Ctrl+W` | Closes the selected search-results tab. |
+| `Ctrl+F4` | Closes the selected search-results tab. |
 
 ## Shared Files Shortcuts
 
@@ -234,8 +250,12 @@ When Search is the active main pane, the Search parameter bar owns:
 - In Transfers, `Ctrl+U`, `Ctrl+Q`, and `Ctrl+K` should switch to Uploading,
   Queue, and Known Clients. In split view they should switch the lower pane;
   outside split view they should switch the primary list.
+- In Transfers, `Ctrl+D` should focus or switch to Downloads, and
+  `Ctrl+Shift+D` should switch to Downloading Clients.
 - In Transfers, `F5` should flush the visible transfer-list refresh without
   changing selection.
+- In Uploading, Queue, Known Clients, and Downloading Clients, `Ctrl+I` and
+  `Alt+Enter` should open client details.
 - In Downloads, `Ctrl+Shift+P`, `Ctrl+Shift+S`, and `Ctrl+Shift+T` should act on
   the current transfer category, even when no row is selected.
 - In Downloads, `Ctrl++`, `Ctrl+-`, `Ctrl+Shift++`, and `Ctrl+Shift+-` should
@@ -251,10 +271,14 @@ When Search is the active main pane, the Search parameter bar owns:
   mnemonic behavior.
 - In Search, `F6` should move focus between the Name textbox and the search
   results list.
+- In Search, `Ctrl+Tab` and `Ctrl+Shift+Tab` should cycle main toolbar panes,
+  not search-results tabs.
 - In Search Results, `Enter`, `Shift+Enter`, and `Ctrl+Enter` should download,
   download paused, and open details respectively.
 - In Search Results, `Alt+Enter` should open details through the same path as
   `Ctrl+Enter`.
+- In Search Results, `Ctrl+PageUp` and `Ctrl+PageDown` should switch result
+  tabs, and both `Ctrl+W` and `Ctrl+F4` should close the selected result tab.
 - In Search Results, `Ctrl+F7`, `Ctrl+F8`, and `Ctrl+F9` should sort
   availability, complete sources, and size respectively.
 - In searchable lists, `Ctrl+F`, `F3`, and `Shift+F3` should start find and
