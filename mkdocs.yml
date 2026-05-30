@@ -100,6 +100,7 @@ nav:
       - CI Baseline: reference/CI-BASELINE.md
       - Release Branching And Packaging: reference/RELEASE-BRANCHING-AND-PACKAGING.md
       - eD2K Inventory: reference/ED2K-PROJECT-INVENTORY.md
+      - Announcement Forums: reference/EMULEBB-ANNOUNCEMENT-FORUMS.md
   - Dependencies:
       - Status: dependencies/DEP-STATUS.md
   - Ideas:
