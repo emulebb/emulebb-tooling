@@ -11,6 +11,7 @@ import sys
 from github_roadmap_common import (
     ISSUE_REPO,
     LABEL_DEFINITIONS,
+    MANAGED_LABEL_PREFIXES,
     OWNER,
     PROJECT_RELEASE,
     PROJECT_TITLE,
@@ -231,7 +232,7 @@ def find_issue(item_id: str) -> dict[str, object] | None:
                 "--search",
                 f"{item_id} in:title",
                 "--json",
-                "number,title,url",
+                "number,title,url,labels",
                 "--limit",
                 "20",
             ]
@@ -246,32 +247,50 @@ def find_issue(item_id: str) -> dict[str, object] | None:
     return None
 
 
+def managed_labels_to_remove(existing_issue: dict[str, object], expected_labels: set[str]) -> list[str]:
+    """Return obsolete managed labels currently attached to an issue."""
+
+    existing_labels = existing_issue.get("labels", [])
+    if not isinstance(existing_labels, list):
+        return []
+    stale: list[str] = []
+    for label in existing_labels:
+        if not isinstance(label, dict):
+            continue
+        name = str(label.get("name", ""))
+        if name and name not in expected_labels and name.startswith(MANAGED_LABEL_PREFIXES):
+            stale.append(name)
+    return sorted(stale)
+
+
 def ensure_issue(item) -> dict[str, object]:
     """Create or update the GitHub issue for one roadmap item."""
 
     existing = find_issue(item.item_id)
-    labels = ",".join(item.github_labels)
+    expected_labels = set(item.github_labels)
+    labels = ",".join(sorted(expected_labels))
     body = issue_body(item)
 
     if existing:
         number = str(existing["number"])
+        args = [
+            "issue",
+            "edit",
+            number,
+            "--repo",
+            ISSUE_REPO,
+            "--title",
+            item.issue_title,
+            "--body-file",
+            "-",
+            "--add-label",
+            labels,
+        ]
+        stale_labels = managed_labels_to_remove(existing, expected_labels)
+        if stale_labels:
+            args.extend(["--remove-label", ",".join(stale_labels)])
         require_success(
-            run_gh(
-                [
-                    "issue",
-                    "edit",
-                    number,
-                    "--repo",
-                    ISSUE_REPO,
-                    "--title",
-                    item.issue_title,
-                    "--body-file",
-                    "-",
-                    "--add-label",
-                    labels,
-                ],
-                input_text=body,
-            ),
+            run_gh(args, input_text=body),
             f"update issue {item.item_id}",
         )
         return existing

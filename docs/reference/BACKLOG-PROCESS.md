@@ -73,7 +73,8 @@ Use this path for normal externally actionable backlog slices:
 2. If the item belongs to an approved future lane, add the item ID to
    `docs\active\FUTURE-ROADMAP.md`, then use
    `python scripts\github-roadmap-sync.py` to preview and apply the issue and
-   Project #2 import.
+   Project #2 import. The sync owns managed issue labels with `type:`,
+   `priority:`, `roadmap:`, `release:`, and `lane:` prefixes.
 3. If the item is GitHub-primary but not part of the future-roadmap import set,
    create or update the issue in `https://github.com/emulebb/emulebb/issues`
    and add it to Project #2 (`https://github.com/orgs/emulebb/projects/2`)

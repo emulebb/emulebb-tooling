@@ -86,6 +86,8 @@ LABEL_DEFINITIONS = {
     "lane:planning": ("fbca04", "Roadmap planning umbrella"),
 }
 
+MANAGED_LABEL_PREFIXES = ("type:", "priority:", "roadmap:", "release:", "lane:")
+
 
 @dataclass(frozen=True)
 class Item:

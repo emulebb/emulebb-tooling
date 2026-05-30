@@ -9,6 +9,7 @@ import sys
 
 from github_roadmap_common import (
     ISSUE_REPO,
+    MANAGED_LABEL_PREFIXES,
     OWNER,
     PROJECT_TITLE,
     load_items,
@@ -67,6 +68,9 @@ def check_github_issue(item, errors: list[str]) -> None:
     for expected in item.github_labels:
         if expected not in label_names:
             errors.append(f"{item.item_id}: missing issue label {expected}")
+    for label in sorted(label_names):
+        if label not in item.github_labels and label.startswith(MANAGED_LABEL_PREFIXES):
+            errors.append(f"{item.item_id}: stale managed issue label {label}")
 
 
 def project_exists(errors: list[str]) -> None:

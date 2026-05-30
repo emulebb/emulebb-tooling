@@ -241,5 +241,6 @@ External references used as directional signals, not implementation authority:
 
 | Lane | Scope | Items |
 |---|---|---|
+| Connectivity modernization | Bound VPN public-IP guard for explicit interface-bound profiles | `FEAT-098` |
 | Search and trust clarity | Remote shared-file inventory discovery and cached browse inspection | `FEAT-031`, `FEAT-078` |
 | Local state and configuration planning | SQLite metadata and structured configuration evaluation | `REF-045`, `REF-046` |
