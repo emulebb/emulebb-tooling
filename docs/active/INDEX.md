@@ -20,9 +20,9 @@ engineering spec/evidence records, not workflow status authority.
 ## Current Snapshot
 
 **Source of truth:** `EMULEBB_WORKSPACE_ROOT\workspaces\workspace\app\emulebb-main` (`main` branch)
-**Current non-done count:** `92`
+**Current non-done count:** `95`
 **Latest release-doc refresh:** 2026-05-23
-**Non-done by status:** `73` OPEN, `6` IN_PROGRESS, `13` DEFERRED, `0` BLOCKED.
+**Non-done by status:** `76` OPEN, `6` IN_PROGRESS, `13` DEFERRED, `0` BLOCKED.
 **Backlog counts:** item tables below are authoritative.
 **0.7.3 RC1 relevance:** Most non-done items below are future or deferred work;
 current RC gate and proof status is controlled by [RELEASE-0.7.3](RELEASE-0.7.3.md).
@@ -280,7 +280,7 @@ not active item docs.
 | [REF-040](../history/items/REF-040.md) | Minor | DONE | Harden external UnRAR DLL loading |
 | [REF-041](../history/items/REF-041.md) | Minor | DONE | Move remaining active app DLL probes to LoadLibraryEx |
 | [REF-042](items/REF-042.md) | Minor | OPEN | Consolidate WinInet download helpers and review URL shortcut intake |
-| [REF-043](items/REF-043.md) | Minor | OPEN | Drop the legacy HTML Web Interface and keep REST as the supported controller surface |
+| [REF-043](items/REF-043.md) | Minor | OPEN | Drop legacy Web Interface templates and keep REST as the supported controller surface |
 | [REF-044](items/REF-044.md) | Minor | OPEN | Remove remaining import-parts residue and keep legacy import flows retired |
 | [REF-045](items/REF-045.md) | Minor | OPEN | Evaluate SQLite-backed storage for local metadata structures |
 | [REF-046](items/REF-046.md) | Minor | OPEN | Evaluate JSON or TOML for operator-editable configuration |
@@ -288,6 +288,8 @@ not active item docs.
 | [REF-048](items/REF-048.md) | Minor | OPEN | Reduce queue and tracking scan cost without policy drift |
 | [REF-049](items/REF-049.md) | Major | OPEN | Shorten upload hot-path locks only after adding lifetime guards |
 | [REF-050](items/REF-050.md) | Minor | OPEN | Tune compression and hash buffers with bounded memory |
+| [REF-051](items/REF-051.md) | Minor | OPEN | Remove legacy SOCKS and proxy support |
+| [REF-052](items/REF-052.md) | Minor | OPEN | Remove archive preview and recovery surfaces |
 
 ---
 
@@ -410,6 +412,7 @@ not active item docs.
 | [FEAT-096](items/FEAT-096.md) | Minor | OPEN | Improve client and network statistics observability |
 | [FEAT-097](../history/items/FEAT-097.md) | Minor | DONE | Add connection pressure details to Network Information |
 | [FEAT-098](items/FEAT-098.md) | Major | OPEN | Add strict bound public-IP guard for VPN profiles |
+| [FEAT-099](items/FEAT-099.md) | Minor | OPEN | Add app event webhooks for controller automation |
 
 ---
 

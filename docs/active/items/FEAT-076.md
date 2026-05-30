@@ -29,7 +29,11 @@ I/O bottleneck or starving the UI.
 - Detect or classify hashing candidates by physical volume/device where
   practical.
 - Allow parallel hashing across different physical volumes.
-- Allow controlled higher parallelism for SSD-backed volumes.
+- Set per-volume hashing worker limits from storage class, with conservative
+  defaults for rotational HDDs, higher bounded limits for SSD/NVMe, and
+  fail-safe limits for network/removable or unknown storage.
+- Allow controlled higher parallelism for SSD-backed volumes and across
+  independent physical devices.
 - Keep conservative serialization or low concurrency for a single rotational
   disk by default.
 - Keep UI progress, cancellation/shutdown, and known-file persistence ordering
@@ -70,6 +74,8 @@ threads.
 
 - [ ] hashing scheduler groups candidates by physical volume/device when known
 - [ ] candidates on distinct physical volumes can hash concurrently
+- [ ] per-volume hashing thread limits differ for HDD, SSD/NVMe,
+      network/removable, and unknown storage
 - [ ] SSD-backed volumes can use controlled parallel hashing
 - [ ] single rotational-disk workloads remain conservative by default
 - [ ] cancellation, shutdown, and persistence remain safe under parallel work

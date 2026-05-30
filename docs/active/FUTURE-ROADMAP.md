@@ -59,7 +59,7 @@ Kad network remains exploratory until separately promoted.
 
 Existing anchors:
 `FEAT-018`, `FEAT-032`, `FEAT-035`, `FEAT-036`, `FEAT-081`, `FEAT-086`,
-`FEAT-098`, `REF-029`, `REF-030`,
+`FEAT-098`, `REF-029`, `REF-030`, `REF-051`,
 `ideas/IDEA-IPV6-KAD-NETWORK.md`.
 
 ### Search And Trust Clarity
@@ -96,7 +96,8 @@ background-safe metadata persistence, and protected-volume disk-space snapshot
 refresh.
 
 Existing anchors:
-`FEAT-034`, `FEAT-072`, `FEAT-075`, `FEAT-076`, `FEAT-079`, `FEAT-080`.
+`FEAT-034`, `FEAT-072`, `FEAT-075`, `FEAT-076`, `FEAT-079`, `FEAT-080`,
+`FEAT-090`, `FEAT-095`, `REF-049`, `REF-050`.
 
 ### Controller Surface Performance
 
@@ -107,7 +108,7 @@ build immutable response records, but live app objects remain owned by their
 normal app/UI/protocol paths.
 
 Existing anchors:
-`FEAT-068`.
+`FEAT-068`, `FEAT-099`.
 
 ### Upload Policy Clarity
 
@@ -129,7 +130,7 @@ automation.
 
 Existing anchors:
 `FEAT-044`, `FEAT-056`, `REF-028`, `REF-038`, `REF-039`, `REF-040`,
-`REF-041`, `REF-042`.
+`REF-041`, `REF-042`, `REF-052`.
 
 ### Product-Family Integration
 

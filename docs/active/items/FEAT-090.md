@@ -34,9 +34,12 @@ unbounded disk pressure.
 - Classify relevant paths by volume, physical device, and storage type where
   Windows can report it reliably.
 - Distinguish at least `rotational`, `ssd`, `network/removable`, and `unknown`.
+- Tune upload-slot ceilings by the storage class behind active temp/incoming
+  work, so one rotational HDD does not get the same concurrency posture as an
+  SSD/NVMe-backed or multi-drive profile.
 - Apply per-drive budgets for disk-sensitive broadband behavior, such as file
-  buffering, flush cadence, hashing concurrency hooks, part-file write pressure,
-  and concurrent move/complete work.
+  buffering, flush cadence, upload-slot pressure, hashing concurrency hooks,
+  part-file write pressure, and concurrent move/complete work.
 - Add a total maximum budget so multiple SSDs do not multiply limits without
   bound.
 - Keep operator overrides authoritative through preferences or advanced tuning.
@@ -48,15 +51,17 @@ Start with conservative buckets rather than a fully dynamic controller:
 
 | Storage class | Default posture |
 |---------------|-----------------|
-| Rotational HDD | Low parallelism, smaller per-drive write pressure, longer batching only when safe |
-| SSD/NVMe | Higher bounded parallelism and larger buffers where memory budget allows |
-| Network/removable | Conservative and fail-safe; avoid assuming low latency or reliable media |
+| Rotational HDD | Lower upload-slot cap, low parallelism, smaller per-drive write pressure, longer batching only when safe |
+| SSD/NVMe | Higher bounded upload-slot cap, higher bounded parallelism, and larger buffers where memory budget allows |
+| Network/removable | Conservative and fail-safe; avoid assuming low latency, reliable media, or stable write throughput |
 | Unknown | Treat like HDD until the operator overrides it |
 
 The total budget should be explicit, for example:
 
 - per-drive worker or queue budget
+- per-drive upload-slot budget
 - global worker or queue budget
+- global upload-slot budget
 - per-drive buffer budget
 - global memory budget for file buffers
 
@@ -93,6 +98,8 @@ lie or omit media details.
       per-volume storage classes without blocking startup on slow paths.
 - [ ] Disk-sensitive broadband defaults can differ for HDD, SSD/NVMe,
       network/removable, and unknown storage.
+- [ ] Upload-slot ceilings can differ for HDD, SSD/NVMe, network/removable,
+      and unknown storage while still respecting explicit user limits.
 - [ ] A global maximum budget bounds aggregate disk work across all drives.
 - [ ] Existing explicit preference values continue to override automatic
       defaults.
