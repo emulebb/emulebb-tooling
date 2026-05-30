@@ -20,9 +20,9 @@ engineering spec/evidence records, not workflow status authority.
 ## Current Snapshot
 
 **Source of truth:** `EMULEBB_WORKSPACE_ROOT\workspaces\workspace\app\emulebb-main` (`main` branch)
-**Current non-done count:** `91`
+**Current non-done count:** `92`
 **Latest release-doc refresh:** 2026-05-23
-**Non-done by status:** `72` OPEN, `6` IN_PROGRESS, `13` DEFERRED, `0` BLOCKED.
+**Non-done by status:** `73` OPEN, `6` IN_PROGRESS, `13` DEFERRED, `0` BLOCKED.
 **Backlog counts:** item tables below are authoritative.
 **0.7.3 RC1 relevance:** Most non-done items below are future or deferred work;
 current RC gate and proof status is controlled by [RELEASE-0.7.3](RELEASE-0.7.3.md).
@@ -409,6 +409,7 @@ not active item docs.
 | [FEAT-095](items/FEAT-095.md) | Major | OPEN | Move part-file durability work off foreground paths |
 | [FEAT-096](items/FEAT-096.md) | Minor | OPEN | Improve client and network statistics observability |
 | [FEAT-097](../history/items/FEAT-097.md) | Minor | DONE | Add connection pressure details to Network Information |
+| [FEAT-098](items/FEAT-098.md) | Major | OPEN | Add strict bound public-IP guard for VPN profiles |
 
 ---
 

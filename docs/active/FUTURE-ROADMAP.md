@@ -59,7 +59,7 @@ Kad network remains exploratory until separately promoted.
 
 Existing anchors:
 `FEAT-018`, `FEAT-032`, `FEAT-035`, `FEAT-036`, `FEAT-081`, `FEAT-086`,
-`REF-029`, `REF-030`,
+`FEAT-098`, `REF-029`, `REF-030`,
 `ideas/IDEA-IPV6-KAD-NETWORK.md`.
 
 ### Search And Trust Clarity
