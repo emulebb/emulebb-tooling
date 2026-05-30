@@ -21,7 +21,7 @@ PROHIBITED_ASSET_PATTERN = re.compile(
     re.IGNORECASE,
 )
 ALLOWED_IMAGE_SRC_PATTERN = re.compile(
-    r"^(?:\.\./)?assets/(?:team/[a-z0-9-]+|brand/emulebb-broadband-edition-logo)\.png$"
+    r"^(?:\.\./)*assets/(?:team/[a-z0-9-]+|brand/emulebb-broadband-edition-logo)\.png$"
 )
 
 
@@ -54,9 +54,7 @@ class PageSpec:
     def stylesheet_href(self) -> str:
         """Return the expected relative stylesheet href for the page."""
 
-        if self.directory:
-            return "../styles.css"
-        return "styles.css"
+        return f"{relative_prefix(self)}styles.css"
 
 
 CANONICAL_PAGES = (
@@ -106,7 +104,27 @@ CANONICAL_PAGES = (
     PageSpec("zh-TW", "zh-TW", "zh-tw", "0.8"),
 )
 LANGUAGE_PAGE = PageSpec("en", "en", "languages", "0.7")
+FAQ_LOCALE_DIRECTORIES = (
+    ("en", "en", "faq"),
+    ("it", "it", "it/faq"),
+    ("es", "es", "es/faq"),
+    ("pt-BR", "pt-BR", "pt-br/faq"),
+    ("fr", "fr", "fr/faq"),
+    ("de", "de", "de/faq"),
+    ("pl", "pl", "pl/faq"),
+    ("nl", "nl", "nl/faq"),
+    ("ru", "ru", "ru/faq"),
+    ("uk", "uk", "uk/faq"),
+    ("zh-CN", "zh-CN", "zh-cn/faq"),
+    ("ja", "ja", "ja/faq"),
+)
+FAQ_PAGES = tuple(
+    PageSpec(hreflang, html_lang, directory, "0.8")
+    for hreflang, html_lang, directory in FAQ_LOCALE_DIRECTORIES
+)
+ENGLISH_FAQ_PAGE = FAQ_PAGES[0]
 EXPECTED_HREFLANGS = {page.hreflang for page in CANONICAL_PAGES} | {"x-default"}
+EXPECTED_FAQ_HREFLANGS = {page.hreflang for page in FAQ_PAGES} | {"x-default"}
 
 
 class ParsedPage(HTMLParser):
@@ -262,6 +280,14 @@ def expect(errors: list[str], condition: bool, message: str) -> None:
         errors.append(message)
 
 
+def relative_prefix(page: PageSpec) -> str:
+    """Return the relative prefix from a generated page to the site root."""
+
+    if not page.directory:
+        return ""
+    return "../" * len(page.directory.split("/"))
+
+
 def validate_page(pages_root: Path, page: PageSpec, errors: list[str]) -> None:
     """Validate one canonical localized HTML page."""
 
@@ -339,6 +365,45 @@ def validate_language_page(pages_root: Path, errors: list[str]) -> None:
     validate_images(LANGUAGE_PAGE.relative_file, parsed, errors)
 
 
+def validate_faq_page(pages_root: Path, page: PageSpec, errors: list[str]) -> None:
+    """Validate one indexable FAQ page."""
+
+    path = pages_root / page.relative_file
+    expect(errors, path.is_file(), f"{page.relative_file}: missing FAQ page")
+    if not path.is_file():
+        return
+
+    text = read_text(path)
+    parsed = parse_page(path)
+    expect(errors, text.lower().count("<!doctype html>") == 1, f"{page.relative_file}: expected one doctype")
+    expect(errors, '"@type": "FAQPage"' in text, f"{page.relative_file}: missing FAQPage structured data")
+    expect(errors, text.count("<article>") == 9, f"{page.relative_file}: expected 9 FAQ entries")
+    expect(errors, parsed.html_lang == page.html_lang, f"{page.relative_file}: html lang should be {page.html_lang}")
+    expect(errors, parsed.robots == ["index,follow"], f"{page.relative_file}: robots should be index,follow")
+    expect(errors, parsed.canonicals == [page.url], f"{page.relative_file}: canonical should be {page.url}")
+    expect(errors, parsed.og_urls == [page.url], f"{page.relative_file}: og:url should be {page.url}")
+    expect(errors, parsed.sitemaps == [f"{SITE_BASE_URL}/sitemap.xml"], f"{page.relative_file}: sitemap link mismatch")
+    expect(errors, PICO_CDN in parsed.stylesheets, f"{page.relative_file}: missing Pico CSS CDN")
+    expect(errors, page.stylesheet_href in parsed.stylesheets, f"{page.relative_file}: missing {page.stylesheet_href}")
+    expect(
+        errors,
+        set(parsed.alternates) == EXPECTED_FAQ_HREFLANGS,
+        f"{page.relative_file}: FAQ hreflang set mismatch",
+    )
+    for alt in FAQ_PAGES:
+        expect(
+            errors,
+            parsed.alternates.get(alt.hreflang) == alt.url,
+            f"{page.relative_file}: FAQ alternate {alt.hreflang} URL mismatch",
+        )
+    expect(
+        errors,
+        parsed.alternates.get("x-default") == ENGLISH_FAQ_PAGE.url,
+        f"{page.relative_file}: FAQ x-default alternate URL mismatch",
+    )
+    validate_images(page.relative_file, parsed, errors)
+
+
 def validate_sitemap(pages_root: Path, errors: list[str]) -> None:
     """Validate sitemap.xml against the canonical page list."""
 
@@ -355,12 +420,12 @@ def validate_sitemap(pages_root: Path, errors: list[str]) -> None:
 
     namespace = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
     locs = [node.text or "" for node in root.findall(".//sm:loc", namespace)]
-    expected_locs = [page.url for page in (*CANONICAL_PAGES, LANGUAGE_PAGE)]
+    expected_locs = [page.url for page in (*CANONICAL_PAGES, LANGUAGE_PAGE, *FAQ_PAGES)]
     expect(errors, locs == expected_locs, "sitemap.xml: loc list does not match canonical locale order")
     priorities = [node.text or "" for node in root.findall(".//sm:priority", namespace)]
     expect(
         errors,
-        priorities == [page.priority for page in (*CANONICAL_PAGES, LANGUAGE_PAGE)],
+        priorities == [page.priority for page in (*CANONICAL_PAGES, LANGUAGE_PAGE, *FAQ_PAGES)],
         "sitemap.xml: priority list does not match canonical locale order",
     )
 
@@ -370,6 +435,7 @@ def validate_prohibited_assets(pages_root: Path, errors: list[str]) -> None:
 
     paths = [pages_root / "styles.css", pages_root / "index.html", pages_root / LANGUAGE_PAGE.relative_file]
     paths.extend(pages_root / page.relative_file for page in CANONICAL_PAGES if page.directory)
+    paths.extend(pages_root / page.relative_file for page in FAQ_PAGES)
     for path in paths:
         if not path.is_file():
             continue
@@ -386,6 +452,8 @@ def validate_site(pages_root: Path) -> int:
     for page in CANONICAL_PAGES:
         validate_page(pages_root, page, errors)
     validate_language_page(pages_root, errors)
+    for page in FAQ_PAGES:
+        validate_faq_page(pages_root, page, errors)
     validate_sitemap(pages_root, errors)
     validate_prohibited_assets(pages_root, errors)
 
@@ -402,7 +470,7 @@ def render_sitemap(lastmod: str) -> str:
 
     lines = ['<?xml version="1.0" encoding="UTF-8"?>']
     lines.append('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">')
-    for page in (*CANONICAL_PAGES, LANGUAGE_PAGE):
+    for page in (*CANONICAL_PAGES, LANGUAGE_PAGE, *FAQ_PAGES):
         lines.extend(
             [
                 "  <url>",
