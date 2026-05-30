@@ -32,7 +32,14 @@ These shortcuts are local to the Transfers pane.
 |----------|----------|
 | `Ctrl+0` | Switches the Downloads category tab to All. |
 | `Ctrl+1` ... `Ctrl+9` | Switches to Downloads category tabs 1 through 9 when present. |
+| `Ctrl+U` | Switches the Transfers list to Uploading. |
+| `Ctrl+Q` | Switches the Transfers list to Queue. |
+| `Ctrl+K` | Switches the Transfers list to Known Clients. |
 | `F5` | Flushes the current Transfers view refresh. |
+
+In split view, the list shortcuts switch the lower Transfers pane. In a
+single-list view, they switch the primary full list. Queue and Known Clients
+respect their existing disabled preferences.
 
 ## Searchable List Shortcuts
 
@@ -224,6 +231,9 @@ When Search is the active main pane, the Search parameter bar owns:
 - `Alt+W` should open the Tools popup.
 - In Transfers, `Ctrl+0` should select the All category tab; `Ctrl+1` through
   `Ctrl+9` should select existing category tabs and beep for missing tabs.
+- In Transfers, `Ctrl+U`, `Ctrl+Q`, and `Ctrl+K` should switch to Uploading,
+  Queue, and Known Clients. In split view they should switch the lower pane;
+  outside split view they should switch the primary list.
 - In Transfers, `F5` should flush the visible transfer-list refresh without
   changing selection.
 - In Downloads, `Ctrl+Shift+P`, `Ctrl+Shift+S`, and `Ctrl+Shift+T` should act on
