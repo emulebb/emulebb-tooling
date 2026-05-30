@@ -233,6 +233,7 @@ the RC branch.
 | [BUG-137](../history/items/BUG-137.md) | Major | DONE | Harden final RC1 AICH, UPnP, listener, and Kad edges |
 | [BUG-138](items/BUG-138.md) | Major | DEFERRED | Follow up deferred RC1 REST and search hot-path bounds |
 | [BUG-139](../history/items/BUG-139.md) | Minor | DONE | Clean exit can leave the shell tray icon behind |
+| [BUG-140](../history/items/BUG-140.md) | Major | DONE | Transfer UI updates can run on split presentation timers |
 
 `BUG-103` through `BUG-110` were superseded internal post-tag evidence labels,
 not active item docs.

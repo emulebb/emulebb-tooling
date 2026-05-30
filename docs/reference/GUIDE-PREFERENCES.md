@@ -1948,8 +1948,10 @@ above for user-facing defaults and ranges.
                                `0` pauses transfer/client list refreshes
   - UI: Tools menu
   - REST: None
-  - Notes: Native desktop transfer/client list refresh interval. Title, tray, and status
-           transfer-rate text stays on the lightweight presentation timer.
+  - Notes: Native desktop transfer/client list refresh interval. Title, tray,
+           status, MiniMule, and visible transfer-list presentation share this
+           desktop presentation timer. When set to `0`, routine presentation is
+           paused and the title speed remains on a 10-second cadence.
 
 - **`DebugClientKadUDP`**
   - Type: integer
