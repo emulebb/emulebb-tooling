@@ -315,6 +315,14 @@ boundary, project entrypoint, warning, localization, and normalization policy.
   P2P UPnP preference and bind the P2P stack through `hide.me` by writing
   `BindInterface=hide.me`.
 - Public network live-test harnesses must not write `hide.me` into `BindAddr`.
+- Public network live-test profiles must enable VPN Guard
+  (`VpnGuardMode=Block`) unless the scenario explicitly exists to prove
+  guard-off behavior. Empty `VpnGuardAllowedPublicIpCidrs` is allowed for
+  interface-only guard coverage; configured CIDRs add public-exit validation.
+- Public VPN live campaigns must take VPN Guard live configuration from
+  operator-local inputs so the harness can connect, allow-list, verify, and
+  restore the split-tunnel provider state. LAN-only suites such as local eD2K
+  and local Kad do not need VPN Guard.
 - In the canonical operator split-tunnel environment, live harness control and
   probe traffic must bind and connect through an explicit LAN address supplied
   as `--lan-bind-addr` / `X_LOCAL_IP`; do not use loopback or wildcard

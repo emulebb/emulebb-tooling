@@ -39,8 +39,9 @@ Main user-facing ports:
 | Server UDP port | legacy server UDP support |
 | WebServer/REST port | controller and optional legacy web listener |
 
-Changing peer ports while connected can be confusing. After changing TCP or UDP
-ports, reconnect or restart the session, then re-run reachability checks.
+Changing peer ports while connected can be confusing. Runtime P2P port rebinds
+are intentionally restart-only for guarded profiles, so restart the app after
+changing TCP or UDP ports, then re-run reachability checks.
 
 ## P2P Binding Policy
 
@@ -70,10 +71,13 @@ pinger-adjacent network paths, layered/proxy TCP paths, and UPnP discovery where
 applicable. The WebServer/REST bind address is intentionally separate from the
 P2P bind address.
 
-Binding is not a VPN kill switch. It chooses and verifies the local P2P socket
-path that eMuleBB controls; it does not replace the VPN provider, Windows
-Firewall, routing table, or external leak-prevention policy. Treat WebServer,
-REST, UPnP discovery, and LAN/controller exposure as separate surfaces.
+Binding by itself is not a VPN kill switch. It chooses and verifies the local
+P2P socket path that eMuleBB controls; it does not replace the VPN provider,
+Windows Firewall, routing table, or external leak-prevention policy. VPN Guard
+adds app-level fail-closed checks on top of binding, but it is still scoped to
+eMuleBB public P2P startup/runtime decisions, not the whole operating system.
+Treat WebServer, REST, UPnP discovery, and LAN/controller exposure as separate
+surfaces.
 
 If the configured bind target cannot be resolved, eMuleBB reports the active
 bind state in UI/diagnostics. With startup bind blocking enabled, P2P networking
@@ -106,11 +110,12 @@ Operational rules:
 - named interface binding resolves both the IPv4 address and adapter index; if
   `IP_UNICAST_IF` cannot be applied to required P2P sockets, that socket path
   fails closed instead of using an unintended route.
-- startup bind blocking can keep P2P networking offline for the session when
-  the required target is unavailable.
-- `ExitOnBindInterfaceLoss` can close the app if the resolved configured
-  interface is lost during runtime; it is an app lifecycle safety option, not
-  VPN route enforcement.
+- VPN Guard uses startup bind blocking and runtime bind-loss monitoring. In
+  `Block` mode it keeps P2P networking offline for the session when the
+  required interface target is unavailable, and it closes the app if the
+  resolved interface/address is lost after startup.
+- The retired standalone `ExitOnBindInterfaceLoss` policy is not the current
+  guard surface. Use VPN Guard for guarded interface-bound profiles.
 - WebServer/REST bind address is configured separately under WebServer
   settings.
 - VPN kill-switch, firewall, and route enforcement remain external operator or
@@ -126,8 +131,8 @@ Recommended VPN-profile shape:
 |---|---|
 | `BindInterface` | VPN adapter/interface name when interface binding is the policy |
 | `BindAddr` | Empty unless a specific stable local address is required |
-| Startup bind blocking | Enabled when P2P traffic must not start without the configured interface |
-| Exit on bind loss | Optional, depending on operator preference for closing the desktop app after interface loss |
+| `VpnGuardMode` | `Block` when P2P must not start without the configured interface |
+| `VpnGuardAllowedPublicIpCidrs` | Optional public IPv4 CIDR allow-list for the VPN exit address |
 | WebServer bind | Usually loopback or another deliberate controller interface, configured separately |
 
 Practical verification is straightforward:
@@ -140,6 +145,135 @@ Practical verification is straightforward:
    listener or peer-port traffic on the physical adapter.
 5. Classify WebServer/REST, UPnP discovery, LAN multicast, and the VPN tunnel
    itself separately from public P2P traffic.
+
+## VPN Guard
+
+VPN Guard is the current app-level guard for interface-bound public P2P
+profiles. It is enabled by setting `VpnGuardMode=Block` and selecting a usable
+named P2P bind interface. The UI exposes this on the Connection preferences
+page. `VpnGuardMode=Off` leaves normal eMule binding behavior in place.
+
+The guard has two layers:
+
+- **Interface availability** is always enforced when VPN Guard is enabled. The
+  selected `BindInterface` must resolve to a local IPv4 address and adapter
+  index before public P2P commands are allowed. Auto-connect, manual server
+  connect, Kad start, and Kad bootstrap are blocked while the guard is not
+  armed. If the active interface/address disappears at runtime, eMuleBB exits.
+- **Public IPv4 CIDR checking** is optional and additive. When
+  `VpnGuardAllowedPublicIpCidrs` is non-empty, eMuleBB runs a bound HTTP public
+  IPv4 probe through the resolved P2P interface. The first provider returning a
+  strict public IPv4 literal wins. The observed public address must be inside
+  the configured CIDR allow-list.
+
+An empty `VpnGuardAllowedPublicIpCidrs` is valid. In that mode VPN Guard proves
+only that the selected VPN interface is present and remains present. It does
+not prove the VPN public exit address. Use CIDRs when split-tunnel routing,
+provider allow-listing, or public egress identity matters.
+
+CIDR rules:
+
+- Values may be separated by comma, semicolon, whitespace, or newlines.
+- Entries are IPv4 CIDRs; a bare IPv4 address is treated as `/32`.
+- Private, loopback, link-local, documentation, multicast, and otherwise
+  non-public ranges are rejected for enforcement.
+- If CIDRs are configured and the startup public-IP probe cannot complete or
+  returns an address outside the allow-list, public P2P startup is blocked for
+  that session.
+- After startup approval, runtime public-IP checks are repeated periodically
+  and after bind-interface change notifications. A runtime mismatch or probe
+  failure closes the app.
+
+Current public-IP probe providers are plain HTTP IPv4 echo services. The probe
+is deliberately narrow: it binds to the resolved P2P local address and applies
+the resolved adapter index where Windows supports it. General WebServer/REST
+or controller HTTP traffic is not used as proof of the P2P public route.
+
+Diagnostics expose the guard under the REST/status network block and diagnostic
+snapshots:
+
+| JSON path | Meaning |
+|---|---|
+| `network.binding.configuredInterfaceName` | configured P2P interface name |
+| `network.binding.activeConfiguredAddress` | resolved active local P2P address |
+| `network.binding.activeInterfaceIndex` | resolved Windows adapter index |
+| `network.binding.resolveResult` | bind resolution result code |
+| `network.vpnGuard.enabled` | whether `VpnGuardMode=Block` is active |
+| `network.vpnGuard.mode` | persisted guard mode text |
+| `network.vpnGuard.allowedPublicIpCidrs` | configured public IPv4 CIDR allow-list |
+| `network.vpnGuard.startupBlocked` | whether startup P2P networking is blocked |
+| `network.vpnGuard.startupBlockReason` | reason for the startup block |
+
+Kad REST connect and bootstrap commands report `blockedByVpnGuard=true` and
+`operationQueued=false` when the guard refuses the operation.
+
+## Full VPN Versus Split Tunneling On Windows
+
+Windows VPN behavior depends on provider mode and routing policy. Treat these
+as different deployment shapes:
+
+### Full-Tunnel VPN
+
+In a full-tunnel VPN, Windows normally routes most or all outbound traffic
+through the VPN while it is connected. For eMuleBB this usually means:
+
+- P2P interface binding still matters because it prevents the app from
+  silently using a physical adapter if the VPN interface is unavailable.
+- A configured public CIDR allow-list should match the VPN exit IP returned by
+  the bound HTTP probe.
+- WebServer/REST, update checks, controller integrations, and other non-P2P
+  traffic may also route through the VPN unless they are separately bound,
+  firewalled, or controlled by the VPN provider.
+- Loopback `127.0.0.1` usually remains usable for local controllers, but that
+  is a Windows/provider behavior, not a P2P guarantee.
+
+Full-tunnel mode is simpler operationally because the process usually shares
+one public egress path, but VPN Guard is still useful as a startup/runtime
+proof that the explicit P2P interface exists and, when CIDRs are configured,
+that the public exit is the expected VPN range.
+
+### Split-Tunnel VPN
+
+In a split-tunnel VPN, only selected apps, routes, or destinations use the VPN.
+Other traffic stays on the LAN/ISP path. This is the riskier mode for P2P
+privacy and for automated testing because local adapter binding and public
+egress are separate facts:
+
+- eMuleBB can resolve and bind to a VPN adapter local address while the VPN
+  provider still fails to route `emulebb.exe` through the VPN public exit.
+- If CIDRs are configured, VPN Guard catches that by comparing the bound HTTP
+  public IPv4 result against the VPN public range.
+- If CIDRs are empty, VPN Guard cannot distinguish a correct VPN public exit
+  from an ISP public exit; it only enforces interface availability.
+- The executable may need to be explicitly allow-listed in the VPN provider's
+  split-tunnel UI before public P2P traffic uses the VPN path.
+- Non-P2P controller surfaces should be bound deliberately. In operator
+  split-tunnel environments, REST/control traffic often belongs on a LAN
+  address while public P2P belongs on the VPN interface.
+
+The canonical live-test split-tunnel machine follows that last pattern:
+`BindInterface=hide.me` and empty P2P `BindAddr` for public P2P, plus an
+explicit `--lan-bind-addr` / `X_LOCAL_IP` for non-P2P harness control and
+probes. On that machine, loopback and wildcard binds are not valid harness
+defaults. This is a harness/operator rule only; product installations still
+support deliberate loopback and wildcard bindings where the product contract
+allows them.
+
+## Guarded Startup And Disconnect Behavior
+
+Guarded startup is fail-closed:
+
+1. eMuleBB resolves the configured P2P interface/address.
+2. VPN Guard arms runtime bind-loss monitoring before auto-connect can run.
+3. If CIDRs are configured, the bound public IPv4 probe must pass before public
+   P2P connect commands are allowed.
+4. Auto-connect is posted only after the guard is armed and, when required, the
+   public-IP probe has passed.
+
+User Disconnect remains stock eMule soft-disconnect behavior. It stops active
+server/Kad connection attempts and closes current network sessions, but it is
+not the same as the fatal VPN Guard exit path. Port and bind changes that affect
+P2P listeners require an app restart for a clean guarded session.
 
 ## Windows Firewall
 

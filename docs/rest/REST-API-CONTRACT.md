@@ -89,6 +89,13 @@ listener regressions.
 - expose app lifecycle through `app.lifecycle` and `status.lifecycle` using
   lowercase compact state tokens: `starting`, `running`, `shuttingdown`, and
   `done`; the exit-confirmation dialog remains public `running` state
+- expose network binding and VPN Guard diagnostics through `status.network`
+  and `snapshot.network`; this includes configured and active P2P bind
+  interface/address fields plus `network.vpnGuard.enabled`, `mode`,
+  `allowedPublicIpCidrs`, `startupBlocked`, and `startupBlockReason`
+- report guarded Kad connect/bootstrap refusals as normal Kad DTOs extended
+  with `operationQueued: false`, `blockedByVpnGuard: true`, and `network`
+  diagnostics instead of silently queuing nothing
 - reject mutating REST requests, diagnostic unsafe requests, and
   `POST /app/shutdown` while lifecycle is `starting`, and reject all REST
   requests once lifecycle is `shuttingdown` or `done`

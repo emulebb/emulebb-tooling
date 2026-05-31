@@ -577,6 +577,33 @@ above for user-facing defaults and ranges.
   - REST: None
   - Notes: None
 
+- **`VpnGuardMode`**
+  - Type: string
+  - Access: read, write
+  - Owner/API: GetVpnGuardMode, SetVpnGuardMode
+  - Default and normalization: Defaults to `Off`; recognized values are
+    `Off` and `Block`
+  - UI: PPgConnection.cpp
+  - REST: Status/snapshot diagnostics expose the current mode under
+    `network.vpnGuard.mode`
+  - Notes: `Block` enables the app-level VPN Guard for named-interface P2P
+    profiles. The guard blocks public P2P startup unless the selected
+    interface is usable and runtime monitoring is armed.
+
+- **`VpnGuardAllowedPublicIpCidrs`**
+  - Type: string
+  - Access: read, write
+  - Owner/API: GetVpnGuardAllowedPublicIpCidrs, SetVpnGuardAllowedPublicIpCidrs
+  - Default and normalization: Empty string; comma, semicolon, whitespace, and
+    newline separated public IPv4 CIDRs are accepted
+  - UI: PPgConnection.cpp
+  - REST: Status/snapshot diagnostics expose the configured value under
+    `network.vpnGuard.allowedPublicIpCidrs`
+  - Notes: Optional additive public-exit check for VPN Guard. When empty,
+    VPN Guard enforces only the selected bind interface. When non-empty, a
+    bound public IPv4 probe must return an address in the allow-list before
+    public P2P startup is allowed.
+
 - **`BlockNetworkWhenBindUnavailableAtStartup`**
   - Type: bool
   - Access: read, write
@@ -584,7 +611,8 @@ above for user-facing defaults and ranges.
   - Default and normalization: Not explicitly declared in schema
   - UI: PPgConnection.cpp
   - REST: None
-  - Notes: None
+  - Notes: Retired compatibility key. Current guarded startup behavior is
+    controlled by `VpnGuardMode=Block`.
 
 - **`CaptureFullCrashDump`**
   - Type: bool
@@ -764,7 +792,8 @@ above for user-facing defaults and ranges.
   - Default and normalization: Not explicitly declared in schema
   - UI: PPgConnection.cpp
   - REST: None
-  - Notes: None
+  - Notes: Retired compatibility key. Current runtime bind-loss exit behavior
+    is controlled by `VpnGuardMode=Block`.
 
 - **`ExtractMetaData`**
   - Type: integer

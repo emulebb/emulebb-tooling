@@ -74,6 +74,11 @@ integration.
 ### `live-wire-release`
 
 Operator-owned real-network search, transfer, UI, and weak-path release proof.
+Public VPN lanes in this phase must separate P2P and non-P2P network policy:
+public P2P binds through the configured VPN interface and runs with VPN Guard
+enabled, while split-tunnel control/probe surfaces use the operator-provided
+LAN bind address when the machine requires it. Local-only eD2K/Kad lanes remain
+LAN scoped and do not require VPN Guard.
 
 ### `ui-resource-depth`
 

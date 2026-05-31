@@ -61,6 +61,7 @@ them into manifests:
 ```powershell
 python -m emule_workspace test release-campaign --campaign emulebb-0.7.3-overnight --execute `
   --live-wire-inputs-file $env:EMULEBB_WORKSPACE_ROOT\repos\emulebb-build-tests\live-wire-inputs.local.json `
+  --vpn-guard-live-config $env:EMULEBB_WORKSPACE_ROOT\repos\emulebb-build-tests\vpn-guard-live.local.json `
   --radarr-movie-root <radarr-visible-root> `
   --sonarr-series-root <sonarr-visible-root>
 ```
@@ -134,6 +135,21 @@ root arguments.
 The current local input schema is `emulebb-build-tests.live-wire-inputs.v1`;
 the harness accepts the pre-rename schema only to avoid breaking existing
 ignored operator-local files.
+
+Public VPN live campaigns also need an operator-local VPN Guard live config,
+for example `repos\emulebb-build-tests\vpn-guard-live.local.json`. That file
+owns the provider-specific split-tunnel hooks used to connect the VPN,
+allow-list `emulebb.exe`, check provider state, and restore it after negative
+scenarios. Public VPN lanes bind P2P through `BindInterface=hide.me` with empty
+P2P `BindAddr` and enable `VpnGuardMode=Block`; LAN-only lanes such as local
+eD2K and local Kad do not need VPN Guard.
+
+`VpnGuardAllowedPublicIpCidrs` may be empty for interface-only guard coverage.
+When CIDRs are configured, live public-IP probes must match the VPN public
+range before public P2P startup is accepted. On the canonical split-tunnel test
+machine, non-P2P harness control/probe traffic still binds to the explicit LAN
+address supplied as `--lan-bind-addr` / `X_LOCAL_IP`; do not use loopback or
+wildcard binds for those harness surfaces on that machine.
 
 The real-profile long-run monitor is intentionally separate from generated
 heavy fixtures. It uses the ignored

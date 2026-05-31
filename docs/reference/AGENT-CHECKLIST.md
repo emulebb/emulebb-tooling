@@ -130,6 +130,12 @@ python -m emule_workspace build app --variant main --config Release --platform x
 - Public network live tests that launch an eMule profile must enable the main
   P2P UPnP preference and bind through `BindInterface=hide.me`.
 - Do not write `hide.me` into `BindAddr`.
+- Enable VPN Guard for public VPN live profiles unless the lane explicitly
+  tests guard-off behavior. Empty VPN Guard CIDRs are valid interface-only
+  coverage; configured CIDRs add public-exit validation.
+- Public VPN live campaigns need operator-local VPN Guard live config for
+  provider connect/allow-list/check/restore hooks. LAN-only local eD2K/Kad
+  lanes do not need VPN Guard.
 - On the canonical split-tunnel test machine, pass the required
   `--lan-bind-addr` / `X_LOCAL_IP` to every live harness path that binds or
   probes non-P2P services. Loopback and wildcard binds remain valid product

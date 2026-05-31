@@ -3096,7 +3096,7 @@ components:
     Status:
       type: object
       additionalProperties: false
-      required: [lifecycle, stats, servers, kad, sharedStartupCache, runtimeDiagnostics]
+      required: [lifecycle, stats, servers, kad, network, sharedStartupCache, runtimeDiagnostics]
       properties:
         lifecycle:
           $ref: "#/components/schemas/AppLifecycle"
@@ -3112,6 +3112,8 @@ components:
           $ref: "#/components/schemas/ServerStatus"
         kad:
           $ref: "#/components/schemas/Kad"
+        network:
+          $ref: "#/components/schemas/NetworkStatus"
         stats:
           $ref: "#/components/schemas/Stats"
         sharedStartupCache:
@@ -3316,6 +3318,66 @@ components:
           oneOf:
             - $ref: "#/components/schemas/GeolocationRuntimeDiagnostics"
             - type: "null"
+    NetworkStatus:
+      type: object
+      additionalProperties: false
+      required: [ports, binding, vpnGuard]
+      properties:
+        ports:
+          type: object
+          additionalProperties: false
+          required: [tcp, udp, serverUdp]
+          properties:
+            tcp:
+              type: integer
+              minimum: 0
+              maximum: 65535
+            udp:
+              type: integer
+              minimum: 0
+              maximum: 65535
+            serverUdp:
+              type: integer
+              minimum: 0
+              maximum: 65535
+        binding:
+          type: object
+          additionalProperties: false
+          required: [configuredAddress, configuredInterfaceId, configuredInterfaceName, activeConfiguredAddress, activeInterfaceId, activeInterfaceName, activeInterfaceIndex, resolveResult]
+          properties:
+            configuredAddress:
+              type: string
+            configuredInterfaceId:
+              type: string
+            configuredInterfaceName:
+              type: string
+            activeConfiguredAddress:
+              type: string
+            activeInterfaceId:
+              type: string
+            activeInterfaceName:
+              type: string
+            activeInterfaceIndex:
+              type: integer
+              minimum: 0
+            resolveResult:
+              type: integer
+        vpnGuard:
+          type: object
+          additionalProperties: false
+          required: [enabled, mode, allowedPublicIpCidrs, startupBlocked, startupBlockReason]
+          properties:
+            enabled:
+              type: boolean
+            mode:
+              type: string
+              enum: [Off, Block]
+            allowedPublicIpCidrs:
+              type: string
+            startupBlocked:
+              type: boolean
+            startupBlockReason:
+              type: string
     GeolocationRuntimeDiagnostics:
       type: object
       additionalProperties: false
@@ -3363,6 +3425,7 @@ components:
                 - uploadQueue
                 - servers
                 - kad
+                - network
                 - logs
               properties:
                 app:
@@ -3391,6 +3454,8 @@ components:
                     $ref: "#/components/schemas/Server"
                 kad:
                   $ref: "#/components/schemas/Kad"
+                network:
+                  $ref: "#/components/schemas/NetworkStatus"
                 logs:
                   type: array
                   items:
