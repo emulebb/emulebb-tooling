@@ -20,9 +20,9 @@ engineering spec/evidence records, not workflow status authority.
 ## Current Snapshot
 
 **Source of truth:** `EMULEBB_WORKSPACE_ROOT\workspaces\workspace\app\emulebb-main` (`main` branch)
-**Current non-done count:** `97`
+**Current non-done count:** `98`
 **Latest release-doc refresh:** 2026-05-23
-**Non-done by status:** `78` OPEN, `6` IN_PROGRESS, `13` DEFERRED, `0` BLOCKED.
+**Non-done by status:** `79` OPEN, `6` IN_PROGRESS, `13` DEFERRED, `0` BLOCKED.
 **Backlog counts:** item tables below are authoritative.
 **0.7.3 RC1 relevance:** Most non-done items below are future or deferred work;
 current RC gate and proof status is controlled by [RELEASE-0.7.3](RELEASE-0.7.3.md).
@@ -415,6 +415,7 @@ not active item docs.
 | [FEAT-099](items/FEAT-099.md) | Minor | OPEN | Add app event webhooks for controller automation |
 | [FEAT-100](items/FEAT-100.md) | Major | OPEN | Improve startup progress and UI readiness locking |
 | [FEAT-101](items/FEAT-101.md) | Minor | OPEN | Add quick filter textbox to Downloads list |
+| [FEAT-102](items/FEAT-102.md) | Minor | OPEN | Exclude known files from search results |
 
 ---
 
