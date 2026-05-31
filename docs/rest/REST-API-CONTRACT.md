@@ -91,8 +91,10 @@ listener regressions.
   `done`; the exit-confirmation dialog remains public `running` state
 - expose network binding and VPN Guard diagnostics through `status.network`
   and `snapshot.network`; this includes configured and active P2P bind
-  interface/address fields plus `network.vpnGuard.enabled`, `mode`,
-  `allowedPublicIpCidrs`, `startupBlocked`, and `startupBlockReason`
+  interface/address fields, stable `network.binding.resolveResult` outcome
+  tokens, and `network.vpnGuard.enabled`, lowercase `mode` tokens
+  (`off`, `block`), `allowedPublicIpCidrs`, `startupBlocked`, and
+  `startupBlockReason`
 - report guarded Kad connect/bootstrap refusals as normal Kad DTOs extended
   with `operationQueued: false`, `blockedByVpnGuard: true`, and `network`
   diagnostics instead of silently queuing nothing

@@ -2795,6 +2795,7 @@ components:
     EnvelopeMeta:
       type: object
       additionalProperties: false
+      required: [apiVersion]
       properties:
         apiVersion:
           type: string
@@ -3100,14 +3101,6 @@ components:
       properties:
         lifecycle:
           $ref: "#/components/schemas/AppLifecycle"
-        connected:
-          type: boolean
-        downloadSpeedKiBps:
-          type: number
-          minimum: 0
-        uploadSpeedKiBps:
-          type: number
-          minimum: 0
         servers:
           $ref: "#/components/schemas/ServerStatus"
         kad:
@@ -3361,7 +3354,9 @@ components:
               type: integer
               minimum: 0
             resolveResult:
-              type: integer
+              type: string
+              description: Stable bind-resolution outcome token.
+              enum: [default, resolved, interfacenotfound, interfacenameambiguous, interfacehasnoaddress, addressnotfoundoninterface, addressnotfound, unknown]
         vpnGuard:
           type: object
           additionalProperties: false
@@ -3371,7 +3366,7 @@ components:
               type: boolean
             mode:
               type: string
-              enum: [Off, Block]
+              enum: ["off", block]
             allowedPublicIpCidrs:
               type: string
             startupBlocked:
@@ -4833,6 +4828,10 @@ components:
           type: boolean
         alreadyRunning:
           type: boolean
+        blockedByVpnGuard:
+          type: boolean
+        network:
+          $ref: "#/components/schemas/NetworkStatus"
     KadBootstrapRequest:
       type: object
       additionalProperties: false

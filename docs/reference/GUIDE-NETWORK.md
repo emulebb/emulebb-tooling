@@ -197,9 +197,9 @@ snapshots:
 | `network.binding.configuredInterfaceName` | configured P2P interface name |
 | `network.binding.activeConfiguredAddress` | resolved active local P2P address |
 | `network.binding.activeInterfaceIndex` | resolved Windows adapter index |
-| `network.binding.resolveResult` | bind resolution result code |
+| `network.binding.resolveResult` | stable bind-resolution token such as `default`, `resolved`, or `interfacenotfound` |
 | `network.vpnGuard.enabled` | whether `VpnGuardMode=Block` is active |
-| `network.vpnGuard.mode` | persisted guard mode text |
+| `network.vpnGuard.mode` | REST guard mode token, `off` or `block` |
 | `network.vpnGuard.allowedPublicIpCidrs` | configured public IPv4 CIDR allow-list |
 | `network.vpnGuard.startupBlocked` | whether startup P2P networking is blocked |
 | `network.vpnGuard.startupBlockReason` | reason for the startup block |

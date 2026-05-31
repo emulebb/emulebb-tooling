@@ -71,7 +71,7 @@ Use a known safe `ed2k://` or magnet link:
 ```powershell
 $body = @{
   link = '<ed2k-or-magnet-link>'
-  category = 'manual-test'
+  categoryName = 'manual-test'
   paused = $true
 } | ConvertTo-Json
 
