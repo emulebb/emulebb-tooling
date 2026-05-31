@@ -49,51 +49,6 @@
       "id": "IDS_HM_LINK_DOC_TROUBLESHOOTING",
       "after": "IDS_HM_LINK_DOC_CONTROLLERS_REST",
       "before": "IDS_SHAREDREQ1"
-    },
-    {
-      "id": "IDS_NETWORK_GUARD",
-      "after": "IDS_HM_LINK_DOC_TROUBLESHOOTING",
-      "before": "IDS_SHAREDREQ1"
-    },
-    {
-      "id": "IDS_NETWORK_GUARD_ALLOWED_CIDRS",
-      "after": "IDS_NETWORK_GUARD",
-      "before": "IDS_SHAREDREQ1"
-    },
-    {
-      "id": "IDS_NETWORK_GUARD_MODE_OFF",
-      "after": "IDS_NETWORK_GUARD_ALLOWED_CIDRS",
-      "before": "IDS_SHAREDREQ1"
-    },
-    {
-      "id": "IDS_NETWORK_GUARD_MODE_WARN",
-      "after": "IDS_NETWORK_GUARD_MODE_OFF",
-      "before": "IDS_SHAREDREQ1"
-    },
-    {
-      "id": "IDS_NETWORK_GUARD_MODE_BLOCK",
-      "after": "IDS_NETWORK_GUARD_MODE_WARN",
-      "before": "IDS_SHAREDREQ1"
-    },
-    {
-      "id": "IDS_CONNECTION_TT_NETWORK_GUARD_MODE",
-      "after": "IDS_NETWORK_GUARD_MODE_BLOCK",
-      "before": "IDS_SHAREDREQ1"
-    },
-    {
-      "id": "IDS_CONNECTION_TT_NETWORK_GUARD_CIDRS",
-      "after": "IDS_CONNECTION_TT_NETWORK_GUARD_MODE",
-      "before": "IDS_SHAREDREQ1"
-    },
-    {
-      "id": "IDS_NETWORK_GUARD_BIND_REQUIRED",
-      "after": "IDS_CONNECTION_TT_NETWORK_GUARD_CIDRS",
-      "before": "IDS_SHAREDREQ1"
-    },
-    {
-      "id": "IDS_NETWORK_GUARD_BIND_UNRESOLVED",
-      "after": "IDS_NETWORK_GUARD_BIND_REQUIRED",
-      "before": "IDS_SHAREDREQ1"
     }
   ]
 }
