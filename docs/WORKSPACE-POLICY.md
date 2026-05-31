@@ -312,6 +312,26 @@ boundary, project entrypoint, warning, localization, and normalization policy.
   P2P UPnP preference and bind the P2P stack through `hide.me` by writing
   `BindInterface=hide.me`.
 - Public network live-test harnesses must not write `hide.me` into `BindAddr`.
+- In the canonical operator split-tunnel environment, live harness control and
+  probe traffic must bind and connect through an explicit LAN address supplied
+  as `--lan-bind-addr` / `X_LOCAL_IP`; do not use loopback or wildcard
+  addresses for those harness paths on that machine.
+- The operator split-tunnel rule is harness- and machine-specific. Product
+  runtime behavior, release package scripts, and user installations must still
+  support deliberate loopback and wildcard bindings where the product contract
+  allows them.
+- `--lan-bind-addr` is the canonical harness parameter for the LAN address used
+  by all non-P2P services and control/probe surfaces. Do not reintroduce
+  ambiguous names such as `--bind-addr`, `--rest-bind-addr`, or
+  `--web-bind-addr`.
+- Public-network P2P profiles that use an interface policy must write the VPN
+  adapter name to `BindInterface` and leave the eMule P2P `BindAddr` empty. Use
+  `BindAddr` for P2P only when the profile is intentionally address-bound
+  rather than interface-bound.
+- In tests and examples, use `192.0.2.x` addresses for LAN bind examples. Use
+  `127.0.0.1` as the canonical loopback spelling where loopback compatibility
+  must be documented or tested; reserve `localhost` for explicit DNS, URL
+  parsing, UNC, or compatibility cases.
 - Local live-stack tests may bind to LAN addresses, local-only virtual
   adapters, test-specific adapters, or explicit local IP addresses when needed
   for deterministic behavior.

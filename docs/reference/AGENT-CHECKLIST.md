@@ -130,6 +130,15 @@ python -m emule_workspace build app --variant main --config Release --platform x
 - Public network live tests that launch an eMule profile must enable the main
   P2P UPnP preference and bind through `BindInterface=hide.me`.
 - Do not write `hide.me` into `BindAddr`.
+- On the canonical split-tunnel test machine, pass the required
+  `--lan-bind-addr` / `X_LOCAL_IP` to every live harness path that binds or
+  probes non-P2P services. Loopback and wildcard binds remain valid product
+  compatibility cases, but not valid operator-machine live harness defaults.
+- Keep LAN and P2P bind concepts separate: `--lan-bind-addr` is for non-P2P
+  services and control/probe traffic; VPN P2P binding is through
+  `BindInterface` unless an address-bound P2P profile is explicitly intended.
+- Do not reintroduce ambiguous live harness names such as `--bind-addr`,
+  `--rest-bind-addr`, or `--web-bind-addr`.
 - Never hardcode real media titles or search terms in tracked harness code,
   docs, or tests.
 
