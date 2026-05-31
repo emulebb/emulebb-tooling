@@ -9,6 +9,11 @@ Native `/api/v1` is the only clean JSON REST contract. The compatibility
 adapters below exist so Arr-family tools can talk to eMuleBB without forcing
 native v1 to mimic qBittorrent or Torznab quirks.
 
+The machine-readable adapter contract registry is
+`ADAPTER_CONTRACT_ROUTES` in `repos/emulebb-build-tests/scripts/rest-api-smoke.py`.
+It is generated from the qBittorrent route seam and Torznab route/parser seams,
+then tested against this document and the live adapter stress probes.
+
 The deprecated legacy template-based WebServer UI is frozen and compile-only
 until removal. It is not an adapter contract, no functional HTML/template
 behavior is supported, and no adapter or release campaign may add
