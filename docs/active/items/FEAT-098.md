@@ -35,8 +35,9 @@ user-configured public IPv4 CIDR allow-list adds public-exit validation; it is
 not required merely to enable the guard.
 
 The remaining post-RC strict work is to centralize more protocol-observed
-public-IP evidence after eD2K/Kad connect and decide whether a future
-warning-only mode is worth shipping.
+public-IP evidence after eD2K/Kad connect, centralize peer-connect gating at
+the core peer connect primitive, and decide whether a future warning-only mode
+is worth shipping.
 
 ## Current RC1 Slice
 
@@ -64,10 +65,14 @@ provider-specific split-tunnel connect, allow-list, check, and restore hooks.
 3. Run a bound HTTP public-IP probe before public P2P connect.
 4. Compare eD2K/Kad-reported public IPs against the same CIDR allow-list after
    protocol login or discovery.
-5. Fail closed in `Block` mode when the guard has a definite public-IP
+5. Gate direct peer connection attempts at `CUpDownClient::TryToConnect()` or
+   an equivalent core primitive so download reasks, upload admission, direct
+   callbacks, shared-file browse, and queued safe-send paths cannot bypass a
+   guarded block.
+6. Fail closed in `Block` mode when the guard has a definite public-IP
    mismatch or cannot complete a required public-IP check. Empty CIDRs are
    allowed and mean interface-only guard coverage.
-6. Surface the guard state in Network Information, logs, and local controller
+7. Surface the guard state in Network Information, logs, and local controller
    diagnostics.
 
 ## Preferences
@@ -126,6 +131,9 @@ accepted.
   `BindInterface=hide.me` with an empty P2P `BindAddr` for hide.me profiles.
 - Do not claim this is a full VPN kill switch. It is an app-level public-IP
   guard for public P2P networking.
+- Do not rely only on toolbar, web, REST, or Kad/server start-command gates.
+  Any peer-level path that can open a public TCP or callback path must inherit
+  the same guard decision from the core connect primitive.
 - Do not use adapter name, local VPN address, route table, UPnP success, LowID,
   or interface metrics as proof of VPN public egress by themselves.
 - Keep WebServer/REST binding separate from P2P bind policy.
@@ -180,6 +188,9 @@ This lets public live E2E runs prove:
       evidence is outside the allow-list or unavailable.
 - [ ] `Block` mode prevents or tears down public P2P when eD2K, peer, or Kad
       public-IP evidence is outside the allow-list.
+- [ ] Peer-level connect attempts are centrally guard-gated so reasks, upload
+      admission, callbacks, shared-file browse, and queued safe-send paths
+      cannot bypass a VPN Guard block or unarmed runtime monitor.
 - [ ] `Warn` mode records the same evidence without blocking if accepted for a
       future release.
 - [x] Network Information, logs, and REST status expose the guard decision and
