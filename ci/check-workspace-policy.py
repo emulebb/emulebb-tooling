@@ -586,72 +586,19 @@ def audit_warning_policy(root: Path) -> None:
 
 
 def audit_localization_policy(root: Path) -> None:
-    """Runs release localization manifest and required-id coverage checks."""
+    """Runs the aggregate release-localization preflight."""
 
     tooling_root = resolve_workspace_path(root, r"repos\emulebb-tooling")
-    helper = tooling_root / r"helpers\rc-string-table.py"
-    english_rc = resolve_workspace_path(root, r"workspaces\workspace\app\emulebb-main\srchybrid\emule.rc")
-    release_languages = tooling_root / r"helpers\rc-release-languages.json"
-    release_layouts = tooling_root / r"helpers\rc-release-localization-layout.json"
-    require_ids = tooling_root / r"helpers\rc-release-localization-ids.txt"
-    allow_identical = tooling_root / r"helpers\rc-translation-identical-ok-ids.txt"
-    quality_rules = tooling_root / r"helpers\rc-translation-quality-rules.json"
-    for path in (helper, english_rc, release_languages, release_layouts, require_ids, allow_identical, quality_rules):
-        if not path.is_file():
-            raise RuntimeError(f"Required localization policy file is missing: {path}")
-
-    commands = (
-        (
-            "release language manifest audit",
-            [
-                sys.executable,
-                str(helper),
-                "--audit-release-manifest",
-                "--english-rc",
-                str(english_rc),
-                "--release-languages",
-                str(release_languages),
-            ],
-        ),
-        (
-            "release localization layout audit",
-            [
-                sys.executable,
-                str(helper),
-                "--audit-release-layouts",
-                "--english-rc",
-                str(english_rc),
-                "--release-languages",
-                str(release_languages),
-                "--release-layouts",
-                str(release_layouts),
-            ],
-        ),
-        (
-            "release localization coverage audit",
-            [
-                sys.executable,
-                str(helper),
-                "--cross-reference",
-                "--quality-audit",
-                "--fail-on-quality-warning",
-                "--allow-identical-ids",
-                str(allow_identical),
-                "--quality-rules",
-                str(quality_rules),
-                "--english-rc",
-                str(english_rc),
-                "--require-ids",
-                str(require_ids),
-                "--release-languages",
-                str(release_languages),
-            ],
-        ),
+    preflight = tooling_root / r"helpers\rc-localization-preflight.py"
+    if not preflight.is_file():
+        raise RuntimeError(f"Required localization preflight is missing: {preflight}")
+    completed = subprocess.run(
+        [sys.executable, str(preflight), "--workspace-root", str(root)],
+        cwd=tooling_root,
+        check=False,
     )
-    for label, command in commands:
-        completed = subprocess.run(command, cwd=tooling_root, check=False)
-        if completed.returncode != 0:
-            raise RuntimeError(f"{label} failed.")
+    if completed.returncode != 0:
+        raise RuntimeError("Release localization preflight failed.")
     print("Release localization policy audit passed.")
 
 

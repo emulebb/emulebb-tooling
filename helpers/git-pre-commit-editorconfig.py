@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""Run the workspace text normalizer for staged files in a Git pre-commit hook."""
+"""Run workspace staged-file pre-commit checks."""
 
 from __future__ import annotations
 
 import argparse
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -52,6 +53,20 @@ def staged_paths(repo_root: Path) -> list[str]:
     ]
 
 
+def resolve_workspace_root(repo_root: Path) -> Path | None:
+    """Resolve the canonical workspace root when this repo is in one."""
+
+    env_root = os.environ.get("EMULEBB_WORKSPACE_ROOT")
+    if env_root:
+        root = Path(env_root).resolve()
+        if (root / "repos" / "emulebb-tooling").is_dir():
+            return root
+    for parent in (repo_root, *repo_root.parents):
+        if (parent / "repos" / "emulebb-tooling").is_dir() and (parent / "workspaces").is_dir():
+            return parent
+    return None
+
+
 def run_normalizer(repo_root: Path, files: list[str]) -> tuple[int, str]:
     """Runs source-normalizer.py for staged files and returns its output."""
 
@@ -68,8 +83,47 @@ def run_normalizer(repo_root: Path, files: list[str]) -> tuple[int, str]:
     return completed.returncode, completed.stdout
 
 
+def is_localization_sensitive_path(repo_root: Path, path: str) -> bool:
+    """Return whether a staged path should trigger localization preflight."""
+
+    normalized = path.replace("\\", "/")
+    repo_name = repo_root.name.lower()
+    if repo_name == "emulebb-tooling":
+        return (
+            normalized == "ci/check-workspace-policy.py"
+            or normalized == "hooks/pre-commit"
+            or normalized.startswith("helpers/rc-")
+        )
+    if repo_name == "emulebb-main":
+        return (
+            normalized == "srchybrid/emule.rc"
+            or normalized == "srchybrid/resource.h"
+            or (normalized.startswith("srchybrid/lang/") and normalized.endswith(".rc"))
+        )
+    return False
+
+
+def run_localization_preflight(repo_root: Path) -> tuple[int, str]:
+    """Runs the aggregate localization preflight for staged localization changes."""
+
+    workspace_root = resolve_workspace_root(repo_root)
+    if workspace_root is None:
+        return 1, "Unable to resolve EMULEBB_WORKSPACE_ROOT for localization preflight.\n"
+    preflight = workspace_root / "repos" / "emulebb-tooling" / "helpers" / "rc-localization-preflight.py"
+    if not preflight.is_file():
+        return 1, f"Missing localization preflight: {preflight}\n"
+    completed = subprocess.run(
+        [sys.executable, str(preflight), "--workspace-root", str(workspace_root)],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        text=True,
+        check=False,
+    )
+    return completed.returncode, completed.stdout
+
+
 def main(argv: list[str] | None = None) -> int:
-    """Runs staged-file normalization for a pre-commit hook."""
+    """Runs staged-file normalization and relevant workspace preflight checks."""
 
     args = build_parser().parse_args(argv)
     repo_root = resolve_repo_root(args.repo_root)
@@ -86,6 +140,12 @@ def main(argv: list[str] | None = None) -> int:
         print("Edited tracked files were normalized to match .editorconfig/.gitattributes.")
         print("Review the rewritten files, re-stage them, and retry the commit.")
         return 1
+    if any(is_localization_sensitive_path(repo_root, path) for path in files):
+        return_code, output = run_localization_preflight(repo_root)
+        if output:
+            print(output, end="" if output.endswith("\n") else "\n")
+        if return_code != 0:
+            raise RuntimeError("Release localization preflight failed.")
     return 0
 
 

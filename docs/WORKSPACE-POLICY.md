@@ -434,11 +434,18 @@ boundary, project entrypoint, warning, localization, and normalization policy.
   tree, are not authoritative translation sources for release `.rc` files.
 - `helpers\rc-string-table.py` is the canonical helper for release localization
   coverage, layout, ordering, and quality audits.
+- `helpers\rc-localization-preflight.py` is the canonical aggregate release
+  localization gate. It must run from workspace validation and from pre-commit
+  when staged localization/resource policy files change.
 - `helpers\rc-translate-missing.py` is a convenience helper for adding only
   missing managed strings while preserving existing translations.
 - `helpers\rc-release-localization-layout.json` owns source-anchored placement
   rules for managed release labels that must keep identical order across all
   release language `.rc` files.
+- `helpers\rc-release-localization-ignored-ids.txt` owns the baseline of
+  English `IDS_*` rows that are intentionally not release-gated. New English
+  string IDs must be classified in either the required-ID manifest or this
+  ignored-ID baseline before they are committed.
 - Mechanical localization edits must be generated or audited by the helpers and
   keyed on resource ids, not fragile surrounding text. A managed label may be
   inserted or normalized, but unrelated community labels must not change.
