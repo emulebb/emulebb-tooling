@@ -278,6 +278,9 @@ def run_basic_hygiene(
             header_issue = test_powershell_version_header(repo_root_path, repo_kind, relative_path, full_path)
             if header_issue:
                 add_issue(issues, "powershell-version", relative_path, header_issue)
+            name_issue = test_powershell_runtime_script_name(repo_root_path, repo_kind, relative_path)
+            if name_issue:
+                add_issue(issues, "powershell-name", relative_path, name_issue)
         elif lower_path.endswith(".psd1"):
             checked["psd1"] += 1
             psd1_issue = test_powershell_data_file_shape(full_path)
@@ -333,14 +336,10 @@ def test_powershell_version_header(repo_root: Path, repo_kind: str, relative_pat
 
     is_tooling_repo = repo_root.name == "emulebb-tooling" or (repo_root / "ci" / "check-workspace-policy.py").is_file()
     normalized_path = normalize_path(relative_path)
-    is_emulebb_runtime_script = (repo_root.name == "emulebb-build" or repo_kind == "emulebb-build") and is_direct_child_of(
-        normalized_path,
-        "emule_workspace/release_assets/emulebb/scripts/",
-    )
     expected_version = (
         "5.1"
         if (is_tooling_repo and normalized_path.startswith("scripts/"))
-        or is_emulebb_runtime_script
+        or is_emulebb_runtime_script(repo_root, repo_kind, relative_path)
         else "7.6"
     )
     expected_header = f"#Requires -Version {expected_version}"
@@ -350,6 +349,17 @@ def test_powershell_version_header(repo_root: Path, repo_kind: str, relative_pat
     if not first_non_empty_line:
         return f"Missing required PowerShell version header '{expected_header}'."
     return f"Expected PowerShell version header '{expected_header}' but found '{first_non_empty_line}'."
+
+
+def test_powershell_runtime_script_name(repo_root: Path, repo_kind: str, relative_path: str) -> str | None:
+    """Checks package runtime PowerShell filenames use the public script convention."""
+
+    if not is_emulebb_runtime_script(repo_root, repo_kind, relative_path):
+        return None
+    name = Path(relative_path.replace("\\", "/")).name
+    if re.fullmatch(r"[A-Z][A-Za-z0-9]*-[A-Za-z][A-Za-z0-9]*\.ps1", name):
+        return None
+    return "eMuleBB runtime PowerShell scripts must use Verb-Noun.ps1 names."
 
 
 def test_powershell_data_file_shape(path: Path) -> str | None:
@@ -376,6 +386,15 @@ def is_direct_child_of(normalized_path: str, directory: str) -> bool:
         return False
     child_name = normalized_path[len(directory) :]
     return bool(child_name) and "/" not in child_name
+
+
+def is_emulebb_runtime_script(repo_root: Path, repo_kind: str, relative_path: str) -> bool:
+    """Returns whether a path is an allowed eMuleBB package runtime script."""
+
+    return (repo_root.name == "emulebb-build" or repo_kind == "emulebb-build") and is_direct_child_of(
+        normalize_path(relative_path),
+        "emule_workspace/release_assets/emulebb/scripts/",
+    )
 
 
 def write_summary(summary: dict[str, Any], summary_path: Path | None) -> None:

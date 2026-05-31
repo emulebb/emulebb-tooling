@@ -31,9 +31,9 @@ Current docs and packages already provide a script-based setup path:
 
 - [Stack Integration Guide](../../reference/GUIDE-STACK-INTEGRATIONS.md)
   documents the manual Generic Torznab fields and the package helper scripts.
-- `register-prowlarr.ps1` creates or updates a Prowlarr Generic Torznab indexer
+- `Register-Prowlarr.ps1` creates or updates a Prowlarr Generic Torznab indexer
   named `eMuleBB`.
-- `register-arr-stack.ps1` can add Radarr/Sonarr qBittorrent-compatible
+- `Register-ArrStack.ps1` can add Radarr/Sonarr qBittorrent-compatible
   download clients and optionally register Prowlarr application sync.
 - The helper scripts request controller credentials at runtime and do not store
   Prowlarr, Radarr, or Sonarr credentials in eMuleBB preferences.

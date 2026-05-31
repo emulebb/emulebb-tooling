@@ -267,6 +267,9 @@ boundary, project entrypoint, warning, localization, and normalization policy.
   is allowed for eMuleBB package-owned native Windows setup and integration
   assets staged into `eMuleBB\scripts`. These scripts are product runtime assets
   and must stay compatible with Windows PowerShell `5.1`.
+- eMuleBB package-owned PowerShell runtime script filenames must use
+  `Verb-Noun.ps1` form, for example `Start-eMuleBB.ps1` or
+  `Register-Prowlarr.ps1`; lowercase kebab-case script names are not allowed.
 - Allowed eMuleBB runtime scripts must declare `#Requires -Version 5.1`.
 - Workspace hygiene checks must fail when tracked PowerShell appears outside
   the allowed path or when an allowed script omits the required header.

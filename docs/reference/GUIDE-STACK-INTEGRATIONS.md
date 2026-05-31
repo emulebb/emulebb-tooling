@@ -164,7 +164,7 @@ Release packages include a helper that registers or repairs the eMuleBB client
 entry in a compatible aMuTorrent instance through aMuTorrent's config API:
 
 ```powershell
-.\scripts\register-amutorrent.ps1 `
+.\scripts\Register-aMuTorrent.ps1 `
   -AmutorrentUrl "http://$host:4000" `
   -AmutorrentApiKey '<amutorrent-admin-api-key>' `
   -EmulebbBaseUrl "http://$host:4711" `
@@ -237,7 +237,7 @@ or the search bridge is busy.
 Release packages include a helper script under `eMuleBB\scripts`:
 
 ```powershell
-.\scripts\register-prowlarr.ps1 `
+.\scripts\Register-Prowlarr.ps1 `
   -ProwlarrUrl "http://$host:9696" `
   -ProwlarrApiKey '<prowlarr-api-key>' `
   -EmulebbBaseUrl "http://$host:4711" `
@@ -292,7 +292,7 @@ Release packages include a shared helper that registers one selected Arr
 target per invocation:
 
 ```powershell
-.\scripts\register-arr-stack.ps1 `
+.\scripts\Register-ArrStack.ps1 `
   -Target Radarr `
   -EmulebbBaseUrl "http://$host:4711" `
   -EmulebbApiKey '<emulebb-api-key>' `
@@ -305,7 +305,7 @@ target per invocation:
 Run it separately for Sonarr:
 
 ```powershell
-.\scripts\register-arr-stack.ps1 `
+.\scripts\Register-ArrStack.ps1 `
   -Target Sonarr `
   -EmulebbBaseUrl "http://$host:4711" `
   -EmulebbApiKey '<emulebb-api-key>' `

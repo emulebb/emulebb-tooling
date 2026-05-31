@@ -31,8 +31,8 @@ Keep these exact in every language:
 - file names: `preferences.ini`, `server.met`, `nodes.dat`, `known.met`
 - API routes: `/api/v1`, `/api/v2`, `/indexer/emulebb/api`
 - HTTP headers: `X-API-Key`
-- script names: `register-amutorrent.ps1`, `register-prowlarr.ps1`,
-  `register-arr-stack.ps1`
+- script names: `Register-aMuTorrent.ps1`, `Register-Prowlarr.ps1`,
+  `Register-ArrStack.ps1`
 - category identifiers used as config values: `emulebb-radarr`,
   `emulebb-sonarr`
 - Torznab categories when used as numeric values: `2000`, `5000`, `7000`

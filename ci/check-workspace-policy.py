@@ -670,6 +670,13 @@ def is_direct_child_of(normalized_path: str, directory: str) -> bool:
     return bool(child_name) and "/" not in child_name
 
 
+def is_runtime_powershell_name(path: str) -> bool:
+    """Returns whether a runtime script uses the package Verb-Noun.ps1 shape."""
+
+    name = Path(path.replace("\\", "/")).name
+    return re.fullmatch(r"[A-Z][A-Za-z0-9]*-[A-Za-z][A-Za-z0-9]*\.ps1", name) is not None
+
+
 def audit_powershell_boundary(root: Path) -> None:
     """Checks that only approved Windows runtime assets carry PowerShell."""
 
@@ -701,6 +708,8 @@ def audit_powershell_boundary(root: Path) -> None:
                 first_non_empty = next((line.strip() for line in read_text(path).splitlines() if line.strip()), "")
                 if first_non_empty != "#Requires -Version 5.1":
                     issues.append(f"{path}: eMuleBB runtime PowerShell must declare #Requires -Version 5.1.")
+                if not is_runtime_powershell_name(relative_path):
+                    issues.append(f"{path}: eMuleBB runtime PowerShell scripts must use Verb-Noun.ps1 names.")
                 continue
             issues.append(
                 f"{repo_root}\\{relative_path}: tracked PowerShell is only allowed under "

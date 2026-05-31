@@ -273,9 +273,9 @@ management, sync APIs, and `hashes=all` mutations are outside the supported
 controller contract.
 
 Release packages may include helper scripts under `eMuleBB\scripts`:
-`register-amutorrent.ps1` for aMuTorrent eMuleBB client registration,
-`register-prowlarr.ps1` for the Prowlarr indexer, and
-`register-arr-stack.ps1 -Target Radarr|Sonarr` for one selected Arr download
+`Register-aMuTorrent.ps1` for aMuTorrent eMuleBB client registration,
+`Register-Prowlarr.ps1` for the Prowlarr indexer, and
+`Register-ArrStack.ps1 -Target Radarr|Sonarr` for one selected Arr download
 client plus optional Prowlarr application sync per run. The scripts are
 conveniences over the same documented adapter surfaces; they do not add a
 separate protocol.
