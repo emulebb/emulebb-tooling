@@ -80,12 +80,12 @@ internet by accident.
 
 ## Startup Profiling Trace
 
-Developer and local release builds can record a Chrome Trace startup profile
-when the `EMULEBB_STARTUP_PROFILE` environment variable is present:
+Diagnostics release packages and explicit profiling builds can record a Chrome
+Trace startup profile. The profiling code is compile-time enabled, so no
+runtime environment variable is required:
 
 ```powershell
-$env:EMULEBB_STARTUP_PROFILE = "1"
-emulebb.exe -c C:\eMuleBB-Profiles\slow-startup
+emulebb-diagnostics.exe -c C:\eMuleBB-Profiles\slow-startup
 ```
 
 The trace is written as `startup-profile.trace.json` in the active profile/log
@@ -104,11 +104,11 @@ Privacy and availability rules:
   profile layout, shared-library shape, and startup timing.
 - Prefer a disposable or copied profile when measuring a sensitive live
   library.
-- Remove the environment variable after the run so ordinary launches do not
-  keep writing traces.
-- Public package builds strip this profiling switch from the shipped
-  executable. If a support case needs it, reproduce with a maintained local
-  developer or release build that still includes profiling support.
+- Use the standard release package for ordinary launches when profiling traces
+  are not needed.
+- Standard public package builds strip profiling support from the executable.
+  If a support case needs it, use the paired diagnostics package or rebuild
+  with `EnableStartupProfiling=true`.
 
 ## Headless Media Metadata Diagnostic
 

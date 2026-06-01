@@ -386,10 +386,12 @@ boundary, project entrypoint, warning, localization, and normalization policy.
 - Release tags use `emulebb-vMAJOR.MINOR.PATCH` for stable releases and
   `emulebb-vMAJOR.MINOR.PATCH-rc.N` or
   `emulebb-vMAJOR.MINOR.PATCH-beta.N` for prereleases.
-- Release ZIP assets use
-  `emulebb-MAJOR.MINOR.PATCH[-rc.N|-beta.N]-ARCH.zip`.
-- The executable inside packages remains `emulebb.exe`; do not put the version
-  number in the executable filename.
+- Standard release ZIP assets use
+  `emulebb-MAJOR.MINOR.PATCH[-rc.N|-beta.N]-ARCH.zip`; paired diagnostics
+  assets use `emulebb-MAJOR.MINOR.PATCH[-rc.N|-beta.N]-diagnostics-ARCH.zip`.
+- The standard package executable remains `emulebb.exe`; the diagnostics
+  package executable is `emulebb-diagnostics.exe`. Do not put the version
+  number in executable filenames.
 - Runtime diagnostic artifacts written by the app use lowercase kebab-case
   `emulebb` names. Current log names are `emulebb.log`,
   `emulebb-verbose.log`, `emulebb-crt-debug.log`,

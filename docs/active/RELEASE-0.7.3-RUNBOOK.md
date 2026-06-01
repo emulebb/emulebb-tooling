@@ -56,7 +56,8 @@ python -m emule_workspace build app --variant main --config Release --platform x
 
 Output contract:
 `workspaces\workspace\app\emulebb-main\srchybrid\x64\Release`. Startup
-profiling is compiled in and runtime-gated by `EMULEBB_STARTUP_PROFILE`.
+profiling is compile-time opt-in and is enabled in the diagnostics package, not
+by a runtime environment variable.
 
 Package Release x64:
 
@@ -207,12 +208,13 @@ architecture into the package-only app output root, builds the stock language
 resource DLLs, stages the portable ZIP, then verifies the package before
 writing the manifest. Verification covers:
 
-- `emulebb.exe`, full stock `lang\*.dll` set, package README, release notes,
+- `emulebb.exe` in the standard package, `emulebb-diagnostics.exe` in the
+  diagnostics package, full stock `lang\*.dll` set, package README, release notes,
   GPL text, third-party notices, SBOM, and REST docs;
 - absence of the legacy template-based `webserver` payload in RC assets;
 - x64 packages containing only x64 PE files and ARM64 packages containing only
-  ARM64 PE files for `emulebb.exe` and language DLLs;
-- release package `emulebb.exe` not containing startup profiling support;
+  ARM64 PE files for the selected eMuleBB executable and language DLLs;
+- standard release package `emulebb.exe` not containing startup profiling support;
 - no source files, project files, debug symbols, intermediates, or build logs in
   the ZIP; and
 - manifest fields for ZIP hash, executable hash, expected language DLL
