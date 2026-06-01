@@ -395,7 +395,8 @@ boundary, project entrypoint, warning, localization, and normalization policy.
 - Runtime diagnostic artifacts written by the app use lowercase kebab-case
   `emulebb` names. Current log names are `emulebb.log`,
   `emulebb-verbose.log`, `emulebb-crt-debug.log`,
-  `emulebb-startup-errors.log`, `emulebb-performance.csv`,
+  `emulebb-startup-errors.log`, `emulebb-packet-diagnostics.log`,
+  `emulebb-performance.csv`,
   `emulebb-performance.mrtg`, `emulebb-performance-data.mrtg`, and
   `emulebb-performance-overhead.mrtg`. Rotated logs append
   `-YYYYMMDD-HHMMSS` before the extension. Dump names use

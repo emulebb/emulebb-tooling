@@ -722,9 +722,11 @@ Collect evidence before changing many settings. Use:
 Runtime diagnostic file names are intentionally uniform and script-friendly.
 The normal log is `emulebb.log`, the verbose log is `emulebb-verbose.log`, the
 debug CRT log is `emulebb-crt-debug.log`, recoverable early startup directory
-errors use `emulebb-startup-errors.log`, and performance logs default to
+errors use `emulebb-startup-errors.log`, packet diagnostics use
+`emulebb-packet-diagnostics.log`, and performance logs default to
 `emulebb-performance.csv` or `emulebb-performance.mrtg` with
-`emulebb-performance-data.mrtg` and `emulebb-performance-overhead.mrtg` sidecars.
+`emulebb-performance-data.mrtg` and `emulebb-performance-overhead.mrtg`
+sidecars.
 Rotated logs append `-YYYYMMDD-HHMMSS` before the extension. Diagnostic dumps
 use `emulebb-dump-YYYYMMDD-HHMMSS-pid<PID>-mini|full.dmp` for operator-requested
 dumps and `emulebb-crash-YYYYMMDD-HHMMSS-pid<PID>.dmp` for crash dumps.
