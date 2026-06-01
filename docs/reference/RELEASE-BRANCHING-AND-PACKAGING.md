@@ -104,10 +104,16 @@ legacy template-based `webserver` payload is not shipped in RC/stable release
 assets; REST support is validated through the in-process API and documented
 under the packaged `docs/` directory.
 
-The executable inside every package remains:
+The executable inside the standard package remains:
 
 ```text
 emulebb.exe
+```
+
+The paired diagnostics package uses:
+
+```text
+emulebb-diagnostics.exe
 ```
 
 Do not put the version in the executable filename. Version identity belongs in

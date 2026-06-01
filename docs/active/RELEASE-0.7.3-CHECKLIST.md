@@ -169,7 +169,7 @@ soak status cannot be confused with the repeatable RC package gate.
 - [ ] Each ZIP contains package-facing README, release notes, GPL text,
       third-party notices, SPDX SBOM, and REST docs. Legacy web templates are
       frozen baggage and must not be shipped in RC assets.
-- [ ] Package manifests record the ZIP hash, `emulebb.exe` hash, expected
+- [ ] Package manifests record the ZIP hash, selected executable hash, expected
       language DLL list/count, SBOM hash, and per-file package hashes.
 - [ ] Package notes state that ZIPs are not code-signed, contain no debug
       symbols, and do not bundle optional `MediaInfo.dll`.

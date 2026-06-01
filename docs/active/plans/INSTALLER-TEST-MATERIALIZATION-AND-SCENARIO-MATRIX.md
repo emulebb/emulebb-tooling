@@ -18,7 +18,8 @@ test automation stays in Python.
 - `repos\emulebb-build-tests` owns Python scenarios, live-wire input loading,
   profile tuning for tests, scenario registries, and matrix reporting.
 - The suite installer owns deployed app layout, suite profile creation,
-  packaged scripts, manifests, and PDB placement beside `emulebb.exe`.
+  packaged scripts, manifests, and PDB placement beside the selected eMuleBB
+  executable.
 - Existing profiles are imported only when the target suite profile does not
   already exist. Refreshing an install must not overwrite or reset an existing
   profile.
