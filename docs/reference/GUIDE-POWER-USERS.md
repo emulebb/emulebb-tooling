@@ -1098,8 +1098,8 @@ completion, REST, controller, or import.
 This guide adapts concepts from old eMule and aMule user documentation, but the
 wording and eMuleBB operating rules here are maintained for this project:
 
-- Official eMule ports/firewall guide:
-  <https://www.emule-project.com/home/perl/help.cgi?l=1&rm=show_topic&topic_id=122>
+- Official eMule ports/firewall guide, topic `122` in the legacy eMule help
+  system.
 - Official eMule server and ID FAQ:
   <https://www.emule-project.net/faq/faq_server.htm>
 - Official eMule credits FAQ:
