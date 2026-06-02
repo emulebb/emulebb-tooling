@@ -8,6 +8,16 @@ Radarr, and Sonarr, start with the
 [Stack Integration Guide](GUIDE-STACK-INTEGRATIONS.md). This page is the
 controller behavior reference.
 
+## Guide Boundary
+
+Use this guide for semantics: REST trust model, lifecycle restrictions, native
+resource ownership, adapter limits, typed errors, diagnostics, and unsupported
+behavior. It explains what controller calls mean after setup exists.
+
+Use [Stack Integration Guide](GUIDE-STACK-INTEGRATIONS.md) for setup recipes:
+which fields to enter in aMuTorrent, Prowlarr, Radarr, and Sonarr; which helper
+script to run; and which manual proof flow to follow first.
+
 ## REST Is The Preferred Controller Path
 
 eMuleBB exposes JSON REST under `/api/v1` through the embedded WebServer
@@ -211,7 +221,7 @@ For sharing automation:
 The desktop app owns shared-library scanning, hashing, and cache validation.
 Controllers request state changes; they do not own the scan engine.
 
-## aMuTorrent
+## aMuTorrent Behavior
 
 aMuTorrent integration uses native REST and adapter behavior. Prove the basics
 before running long workflows:
@@ -230,7 +240,10 @@ aMuTorrent should treat the desktop app as the authority. It may present a
 modern controller workflow, but category, search, transfer, shared-file,
 upload-queue, and lifecycle semantics still come from native eMuleBB state.
 
-## Arr, qBit, And Torznab Adapters
+For field-level aMuTorrent setup and package helper usage, use
+[Stack Integration Guide](GUIDE-STACK-INTEGRATIONS.md#amutorrent).
+
+## Arr, qBit, And Torznab Adapter Behavior
 
 Adapter surfaces let Arr-family tools, qBittorrent-compatible workflows, and
 Torznab consumers talk to eMuleBB. These are compatibility layers, not the
@@ -248,23 +261,6 @@ For Arr-style automation, validate both search/indexer behavior and download
 client behavior. A working Torznab search does not prove transfer management is
 correct.
 
-The most common manual setup values are:
-
-| Surface | Value |
-|---|---|
-| Prowlarr indexer type | Generic Torznab |
-| Prowlarr base URL | `http://HOST:PORT/indexer/emulebb` |
-| Prowlarr API path | `/api` |
-| Prowlarr API key | eMuleBB REST/Web API key |
-| Movie category | `2000` |
-| TV category | `5000` |
-| Radarr/Sonarr download client type | qBittorrent |
-| qBit host and port | eMuleBB WebServer/REST host and port |
-| qBit username | `emule` |
-| qBit password | eMuleBB REST/Web API key |
-| Radarr category | `emulebb-radarr` |
-| Sonarr category | `emulebb-sonarr` |
-
 The qBittorrent-compatible download-client surface is an eMuleBB/eD2K subset.
 It is meant for Arr clients consuming eMuleBB Torznab results and adding
 `ed2k://` URLs back to eMuleBB. It is not a full qBittorrent clone: `.torrent`
@@ -272,13 +268,10 @@ uploads, BitTorrent magnet links, HTTP torrent URLs, tracker/RSS APIs, peer
 management, sync APIs, and `hashes=all` mutations are outside the supported
 controller contract.
 
-Release packages may include helper scripts under `eMuleBB\scripts`:
-`Register-aMuTorrent.ps1` for aMuTorrent eMuleBB client registration,
-`Register-Prowlarr.ps1` for the Prowlarr indexer, and
-`Register-ArrStack.ps1 -Target Radarr|Sonarr` for one selected Arr download
-client plus optional Prowlarr application sync per run. The scripts are
-conveniences over the same documented adapter surfaces; they do not add a
-separate protocol.
+Manual Prowlarr/Radarr/Sonarr fields, category conventions, and package helper
+scripts live in [Stack Integration Guide](GUIDE-STACK-INTEGRATIONS.md). Those
+scripts are conveniences over the same documented adapter surfaces; they do not
+add a separate protocol.
 
 ## Lifecycle
 

@@ -52,6 +52,7 @@ nav:
   - Quick Help: HELP.md
   - User Guides:
       - Product Guide: reference/GUIDE-EMULEBB.md
+      - Released Behavior Summary: reference/RELEASED-BEHAVIOR-SUMMARY.md
       - Setup Guide: reference/GUIDE-SETUP.md
       - Roadmap Summary: reference/ROADMAP-SUMMARY.md
       - Power User Manual: reference/GUIDE-POWER-USERS.md

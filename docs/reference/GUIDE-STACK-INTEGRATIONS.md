@@ -10,6 +10,18 @@ owns identity, network state, categories, temp files, completed files, shared
 files, and upload behavior. Controllers should make that state easier to use,
 not flatten it into generic torrent semantics.
 
+## Guide Boundary
+
+Use this guide for task-first setup recipes: the order to enable eMuleBB,
+aMuTorrent, Prowlarr, Radarr, and Sonarr; the fields to type into those tools;
+and the proof flow for one safe search or transfer.
+
+Use [Controllers And REST](GUIDE-CONTROLLERS-REST.md) for the behavior
+contract: trust model, lifecycle rules, native REST semantics, adapter
+boundaries, error handling, diagnostics, and unsupported qBit/Torznab behavior.
+When the two guides overlap, this page owns operator setup steps and
+Controllers And REST owns the API meaning behind them.
+
 ## Mental Model
 
 | Layer | Owns | Talks To |
@@ -134,6 +146,10 @@ Invoke-RestMethod -Uri "$base/api/v1/app" -Headers @{ 'X-API-Key' = $key }
 Expected result: a JSON response describing the app. If this fails, fix bind,
 port, firewall, lifecycle, or API key before configuring any adapter.
 
+For bind policy, lifecycle, HTTPS certificate behavior, and unsafe diagnostic
+routes, use [Controllers And REST](GUIDE-CONTROLLERS-REST.md). This stack guide
+keeps only the setup steps needed before wiring companion tools.
+
 ## aMuTorrent
 
 aMuTorrent should connect after native REST is healthy.
@@ -156,7 +172,8 @@ Basic proof order:
 
 If the aMuTorrent UI fails but direct `GET /api/v1/app` works, compare the UI
 adapter assumptions with [REST API contract](../rest/REST-API-CONTRACT.md) and
-[REST adapter notes](../rest/REST-API-ADAPTERS.md).
+[REST adapter notes](../rest/REST-API-ADAPTERS.md). For behavior-level REST and
+adapter expectations, use [Controllers And REST](GUIDE-CONTROLLERS-REST.md).
 
 ### Package Helper Script
 
@@ -332,8 +349,11 @@ filled in.
 
 ## Adapter Compatibility Boundaries
 
-The adapters are compatibility subsets for Arr workflows, not full clones of
-qBittorrent or a generic Newznab provider.
+The stack recipes use compatibility subsets for Arr workflows, not full clones
+of qBittorrent or a generic Newznab provider. The operator-facing boundaries are
+summarized here so setup failures are easier to diagnose; the detailed behavior
+contract lives in [Controllers And REST](GUIDE-CONTROLLERS-REST.md) and
+[REST adapter notes](../rest/REST-API-ADAPTERS.md).
 
 | Surface | Supported | Boundary |
 |---|---|---|

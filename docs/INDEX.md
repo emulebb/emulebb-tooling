@@ -141,14 +141,15 @@ desktop app first, then layer automation on top.
 | Need | Primary Doc |
 |---|---|
 | Product overview and operating model | [reference/GUIDE-EMULEBB](reference/GUIDE-EMULEBB.md) |
+| Landed behavior matrix and evidence model | [reference/RELEASED-BEHAVIOR-SUMMARY](reference/RELEASED-BEHAVIOR-SUMMARY.md) |
 | Public-readable roadmap themes | [reference/ROADMAP-SUMMARY](reference/ROADMAP-SUMMARY.md) |
 | Complete eMule manual from zero to power-user operation | [reference/GUIDE-POWER-USERS](reference/GUIDE-POWER-USERS.md) |
 | Setup, `-c` profiles, release package testing | [reference/GUIDE-SETUP](reference/GUIDE-SETUP.md) |
 | Search, downloads, categories, limits, upload policy | [reference/GUIDE-DOWNLOADS-SEARCH](reference/GUIDE-DOWNLOADS-SEARCH.md) |
 | Shared directories, monitored shares, large libraries | [reference/GUIDE-SHARING](reference/GUIDE-SHARING.md) |
 | eD2K, Kad, bind, ports, UPnP, firewall | [reference/GUIDE-NETWORK](reference/GUIDE-NETWORK.md) |
-| eMuleBB, aMuTorrent, Prowlarr, Radarr, Sonarr | [reference/GUIDE-STACK-INTEGRATIONS](reference/GUIDE-STACK-INTEGRATIONS.md) |
-| REST, qBit-compatible, Torznab, adapter behavior | [reference/GUIDE-CONTROLLERS-REST](reference/GUIDE-CONTROLLERS-REST.md) |
+| eMuleBB, aMuTorrent, Prowlarr, Radarr, Sonarr setup recipes | [reference/GUIDE-STACK-INTEGRATIONS](reference/GUIDE-STACK-INTEGRATIONS.md) |
+| REST semantics, qBit-compatible/Torznab adapter behavior | [reference/GUIDE-CONTROLLERS-REST](reference/GUIDE-CONTROLLERS-REST.md) |
 | Preferences and `preferences.ini` reference | [reference/GUIDE-PREFERENCES](reference/GUIDE-PREFERENCES.md) |
 | Runtime `.met` and `.dat` file roles | [reference/GUIDE-PERSISTENCE-FILES](reference/GUIDE-PERSISTENCE-FILES.md) |
 | IP filter setup and troubleshooting | [reference/GUIDE-IP-FILTERS](reference/GUIDE-IP-FILTERS.md) |

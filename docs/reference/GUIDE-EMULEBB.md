@@ -171,7 +171,8 @@ For an existing profile:
 | Downloads, search, categories, broadband upload policy, transfer behavior | [Downloads and Search Guide](GUIDE-DOWNLOADS-SEARCH.md) |
 | Shared directories, monitored shares, large libraries, share-ignore rules | [Sharing Guide](GUIDE-SHARING.md) |
 | eMuleBB plus aMuTorrent plus Prowlarr/Radarr/Sonarr workflows | [Stack Integration Guide](GUIDE-STACK-INTEGRATIONS.md) |
-| REST setup, aMuTorrent, Arr, qBit, Torznab, lifecycle, and controller safety | [Controllers and REST Guide](GUIDE-CONTROLLERS-REST.md) |
+| REST behavior, adapter boundaries, lifecycle, and controller safety | [Controllers and REST Guide](GUIDE-CONTROLLERS-REST.md) |
+| Landed behavior matrix, release documentation coverage, and evidence model | [Released Behavior Summary](RELEASED-BEHAVIOR-SUMMARY.md) |
 | IP filter setup, updates, manual reloads, formats, levels, and troubleshooting | [IP Filter Guide](GUIDE-IP-FILTERS.md) |
 | Deep Windows long-path behavior | [Long Path Guide](GUIDE-LONGPATHS.md) |
 | Keyboard and menu workflow | [Keyboard Shortcuts](KEYBOARD-SHORTCUTS.md) |
@@ -344,155 +345,22 @@ For controller or automation use:
 4. Use [Preferences Guide](GUIDE-PREFERENCES.md) for preference fields.
 5. Keep legacy HTML WebServer behavior out of supported automation plans.
 
-## Landed Feature Matrix
+## Released Behavior And Evidence
 
-This matrix summarizes behavior that is documented as landed on the current
-line. It is a map to the deeper guide chapters, not a replacement for the
-active release dashboard.
+The product guide stays at the operating-model level. Detailed release behavior,
+feature-to-guide mapping, documentation coverage rules, and release evidence
+belong in [Released Behavior Summary](RELEASED-BEHAVIOR-SUMMARY.md).
 
-- **Long paths**
-  - Landed behavior: Long-path hardening for important profile, temp, incoming,
-                     shared-library, package, and tooling paths
-  - Item IDs: FEAT-010
-  - Deep guide: [Long Path Guide](GUIDE-LONGPATHS.md)
+Use that companion reference when you need to answer:
 
-- **Listen-socket hardening**
-  - Landed behavior: TCP error-flood defense before the broader future shield engine
-  - Item IDs: FEAT-012
-  - Deep guide: [Network Guide](GUIDE-NETWORK.md)
-
-- **REST core**
-  - Landed behavior: Authenticated in-process JSON REST API under `/api/v1`
-  - Item IDs: FEAT-013
-  - Deep guide: [Controllers and REST Guide](GUIDE-CONTROLLERS-REST.md)
-
-- **Broadband upload**
-  - Landed behavior: Finite upload slot target, weak-slot recycling, low-ratio policy,
-                     and queue visibility
-  - Item IDs: FEAT-015, FEAT-023
-  - Deep guide: [Downloads and Search Guide](GUIDE-DOWNLOADS-SEARCH.md)
-
-- **Modern limits**
-  - Landed behavior: Updated practical defaults for queues, sources, buffers, timeouts,
-                     and search ceilings
-  - Item IDs: FEAT-016, FEAT-029
-  - Deep guide: [Downloads and Search Guide](GUIDE-DOWNLOADS-SEARCH.md)
-
-- **Geolocation**
-  - Landed behavior: DB-IP city geolocation update and display support
-  - Item IDs: FEAT-020
-  - Deep guide: [Network Guide](GUIDE-NETWORK.md)
-
-- **Profile selection**
-  - Landed behavior: `-c <base-dir>` startup profile override for isolated profiles
-  - Item IDs: FEAT-022
-  - Deep guide: [Setup Guide](GUIDE-SETUP.md)
-
-- **Sharing policy**
-  - Landed behavior: `shareignore.dat`, monitored shares, startup cache, duplicate
-                     cache, and Shared Files virtualization
-  - Item IDs: FEAT-024, FEAT-026, FEAT-027, FEAT-028, FEAT-038
-  - Deep guide: [Sharing Guide](GUIDE-SHARING.md)
-
-- **Filename hygiene**
-  - Landed behavior: Download filename cleanup, remote-intake mojibake/entity repair,
-                     and message display cleanup
-  - Item IDs: FEAT-025, FEAT-054, FEAT-071
-  - Deep guide: [Downloads and Search Guide](GUIDE-DOWNLOADS-SEARCH.md)
-
-- **Network binding**
-  - Landed behavior: Completed P2P bind coverage and separate WebServer bind behavior
-  - Item IDs: FEAT-030
-  - Deep guide: [Network Guide](GUIDE-NETWORK.md)
-
-- **Disk safety**
-  - Landed behavior: Disk-space floor hardening and legacy import-flow retirement
-  - Item IDs: FEAT-033
-  - Deep guide: [Downloads and Search Guide](GUIDE-DOWNLOADS-SEARCH.md)
-
-- **IP filters**
-  - Landed behavior: Automatic IP-filter update scheduling and reload behavior
-  - Item IDs: FEAT-042
-  - Deep guide: [IP Filter Guide](GUIDE-IP-FILTERS.md)
-
-- **REST completeness**
-  - Landed behavior: Transfer detail, server/Kad bootstrap, search, upload queue, and
-                     preference expansion
-  - Item IDs: FEAT-045, FEAT-046, FEAT-047, FEAT-048, FEAT-049
-  - Deep guide: [Controllers and REST Guide](GUIDE-CONTROLLERS-REST.md)
-
-- **Completion automation**
-  - Landed behavior: Optional external program launch on completed download
-  - Item IDs: FEAT-050
-  - Deep guide: [Downloads and Search Guide](GUIDE-DOWNLOADS-SEARCH.md)
-
-- **Power-user UX**
-  - Landed behavior: Advanced context menus, keyboard shortcuts, tray options, category
-                     polish, Web Interface preference layout, and MiniMule polish
-  - Item IDs: FEAT-051, FEAT-052, FEAT-053, FEAT-059, FEAT-062, FEAT-063, FEAT-065,
-              FEAT-066
-  - Deep guide: [Keyboard Shortcuts](KEYBOARD-SHORTCUTS.md), [Preferences
-                Guide](GUIDE-PREFERENCES.md)
-
-- **Preference quality**
-  - Landed behavior: Preference inventory, mapping, clamps, persistence audit, and
-                     strong schema validation
-  - Item IDs: FEAT-060, FEAT-061
-  - Deep guide: [Preferences Guide](GUIDE-PREFERENCES.md)
-
-- **qBit-style workflows**
-  - Landed behavior: Download shortcuts and batch menu actions that preserve eMule
-                     semantics
-  - Item IDs: FEAT-057
-  - Deep guide: [Downloads and Search Guide](GUIDE-DOWNLOADS-SEARCH.md)
-
-- **Closeout UX**
-  - Landed behavior: Release-facing UX polish and audit closeout
-  - Item IDs: FEAT-058
-  - Deep guide: [Troubleshooting Guide](GUIDE-TROUBLESHOOTING.md)
-
-## Release Documentation Coverage
-
-For enterprise-style release readiness, a landed feature is not considered
-fully documented until it has the right coverage in each owner document:
-
-| Feature surface | Required documentation |
-|---|---|
-| User workflow | This guide and the focused guide that owns the workflow |
-| Configuration | [Preferences Guide](GUIDE-PREFERENCES.md), including storage key, owner/API, UI binding, REST binding, and normalization notes |
-| Network behavior | [Network Guide](GUIDE-NETWORK.md), including bind, firewall, UPnP, WebServer/REST, and diagnosis boundaries |
-| Controller behavior | [Controllers and REST Guide](GUIDE-CONTROLLERS-REST.md), REST contract, and OpenAPI |
-| Command line | [Development Guide](DEVELOPMENT-GUIDE.md), plus setup/product summary when the option affects operators |
-| Testing and release proof | [Development Guide](DEVELOPMENT-GUIDE.md), [Release Test Strategy](../active/RELEASE-TEST-STRATEGY.md), and active 0.7.3 RC1 release docs |
+- which feature IDs back a documented behavior
+- which focused guide owns the behavior details
+- what evidence layers support release claims
+- which docs must change when a landed behavior changes
 
 The product guide should describe what an operator can rely on. It should not
 turn test-only seams, future backlog, abandoned ideas, or private evidence
 labels into product promises.
-
-## Quality And Test Evidence
-
-eMuleBB release claims are tied to the workspace evidence model rather than to
-one manual smoke test. The public hosted CI lane gives fast feedback for the
-shared Python harness, while the release campaign covers the slower and more
-environment-dependent proof that belongs on operator machines.
-
-The current release model is organized around these confidence layers:
-
-- workspace validation and fast non-live test coverage
-- native and Python harness coverage for app-facing behavior
-- REST contract, OpenAPI drift, malformed-request, and controller checks
-- UI, resource, and full stock language smoke coverage
-- eD2K/Kad protocol parity, community comparison, and live-diff evidence
-- live-wire network, search, transfer, and weak-path scenarios
-- x64 and ARM64 build/package provenance, manifests, and SHA-256 hashes
-
-Use [Release Test Strategy](../active/RELEASE-TEST-STRATEGY.md) for the generic
-testing model and [Release Test Campaigns](../active/RELEASE-TEST-CAMPAIGNS.md)
-for the current campaign view. The RC dashboard remains the release authority
-for what has passed, what is still open, and whether public packages may be
-tagged. Use [Development Guide](DEVELOPMENT-GUIDE.md) for the workflow that
-keeps product docs, development docs, CI policy, command-line behavior, and
-release evidence aligned.
 
 ## Performance Improvements
 
@@ -514,175 +382,6 @@ visible during long broadband sessions:
 These improvements are deliberately compatibility-preserving. They tune local
 policy, limits, caching, diagnostics, and controller surfaces while keeping
 stock eD2K/Kad wire behavior and the native desktop app model intact.
-
-## Released Behavior Summary
-
-Broadband operation:
-
-- upload defaults are finite and modernized for broadband operation
-- upload slot allocation uses a fixed broadband target instead of stock-style
-  unbounded slot growth on fast links
-- slow or zero-rate upload slots can be recycled after warm-up, grace, and
-  cooldown windows
-- low-ratio scoring and ratio/cooldown UI data are retained as broadband
-  policy extras
-- file, queue, source, socket, and disk-buffer defaults are raised from old
-  stock assumptions where release work landed
-
-Network and bootstrap:
-
-- eD2K and Kad remain the native network model
-- bind policy covers peer TCP, client UDP, server UDP, pinger-adjacent paths,
-  and UPnP discovery where applicable
-- VPN-aware operation is provider-neutral interface/address binding with
-  resolved-state diagnostics, startup bind blocking, and optional exit on
-  configured-interface loss; VPN kill-switch, firewall, and route enforcement
-  remain external operator or provider policy
-- WebServer/REST has its own bind address and should be configured separately
-- P2P UPnP stores enablement, close-on-exit behavior, and backend mode;
-  WebServer UPnP is configured separately from P2P listener mapping
-- server.met, nodes.dat, IP filter, and geolocation update sources use practical
-  seeded/default behavior
-- IPv6 is future connectivity work. The active future item is current-network
-  dual-stack compatibility; a distinct IPv6 Kad network remains exploratory and
-  is documented separately.
-
-Startup and command line:
-
-- `-c` can select an alternate config directory
-- `--help`, `-h`, and `/?` print command-line usage
-- `-ignoreinstances`, `-AutoStart`, and Debug-build `-assertfile` keep their
-  targeted startup semantics
-- `--generate-webserver-cert` creates WebServer TLS certificate/key material
-  and exits when `--cert` and `--key` are provided; `--host` can add one or
-  more subject alternative names
-- `--diagnose-media-metadata` probes maintained metadata extractors and exits
-  with `emulebb.mediaMetadataDiagnostic.v1` JSON
-- one positional input can be forwarded as an `ed2k` link, magnet link,
-  collection file, or command such as `exit`
-- the current update check is a GitHub Releases startup check, distinct from
-  the removed legacy stock eMule update checker
-
-Sharing and library management:
-
-- share-ignore rules are supported through `shareignore.dat`
-- peer preview is an explicit opt-in live-network sharing behavior for shared
-  video files when shares are visible and FFmpeg is configured
-- shared startup cache and duplicate-path cache accelerate large libraries
-- monitored shares can keep selected roots synchronized
-- Shared Files UI is hardened and virtualized for large lists
-- Shared Files `Last Request` uses the same list date/time formatting preference
-  as other native list timestamp columns
-
-Shared startup cache behavior:
-
-- `sharedcache.dat` is a disposable performance sidecar. It never replaces
-  `known.met`, `known2_64.met`, `shareddir.dat`, or a real scan when validation is
-  uncertain.
-- eMuleBB trusts the cache only after verifying that the configured shared
-  directory still describes the same directory state. If validation fails, that
-  directory is rescanned and the cache can be rebuilt later.
-- Local NTFS directories use the strongest fast path. The cache records the
-  containing volume identity, NTFS journal identity, a USN checkpoint, the
-  directory file reference, directory identity, directory timestamp, and the
-  cached file inventory.
-- Windows drive letters and mounted-folder paths are resolved through the
-  containing volume. A local NTFS volume reached as `D:\Shares\...` or through a
-  mounted folder can use the same trusted local-volume journal validation.
-- A UNC share mapped to a drive letter is treated as remote by Windows and does
-  not use the local NTFS journal fast path. Direct UNC paths and unsupported
-  path forms also fall back to generic cache validation.
-- Generic validation re-enumerates the directory and requires the current file
-  inventory to match the cached inventory by leaf name, file timestamp, and
-  file size before cached known-file entries are reused.
-- Network filesystems, non-NTFS volumes, journal resets, changed volume
-  identity, stale checkpoints, directory timestamp changes, share-ignore
-  changes, missing known-file metadata, pending hashes, interrupted cache saves,
-  or uncertain filesystem results cause the app to reject the affected cache
-  data and rescan.
-- Deleting `sharedcache.dat` is safe when intentionally troubleshooting slow or
-  suspicious sharing state. The next startup or rescan may be slower while the
-  derived cache is rebuilt.
-
-Downloads and search:
-
-- search result ceilings are configurable for eD2K and Kad
-- remote search and download-intake filenames repair conservative Western
-  mojibake and bounded HTML/XML entities before normal filename cleanup
-- download filename cleanup can normalize intake and completion names
-- categories remain first-class workflow state
-- qBittorrent-style shortcuts and batch menu actions preserve native delete,
-  category, and paused/started semantics
-- completed downloads can optionally run a configured external command
-- direct delete/cancel operations keep native semantics
-- Auto Broadband I/O bounds download buffer memory by sharing a 512 MiB global
-  active-download buffer budget across active buffered files
-
-Disk-space protection:
-
-- eMuleBB protects the volumes that host the config directory, every temp
-  directory, the default incoming directory, and category-specific incoming
-  directories.
-- Separate free-space floors are stored as `MinFreeDiskSpaceConfig`,
-  `MinFreeDiskSpaceTemp`, and `MinFreeDiskSpaceIncoming`. The UI shows them in
-  GiB under Tweaks; the INI stores normalized byte values.
-- The hard minimums are 1 GiB for the config volume, 5 GiB for temp volumes,
-  and 5 GiB for incoming/category volumes. Values are clamped to the supported
-  5120 GiB maximum rather than allowing a zero-floor unsafe profile.
-- Protection is volume-based, not path-text-based. If config, temp, incoming,
-  or a category path share the same volume, the largest applicable floor wins
-  for that volume.
-- The effective requirement for a protected volume is the configured floor plus
-  reserved completion demand. Completion demand accounts for remaining temp
-  growth and, when the completed file will be moved to a different incoming
-  volume, the completed file size on that incoming volume.
-- If any protected volume falls below its effective requirement, the disk-space
-  guard logs the breached volume, immediately saves part metadata, and stops
-  all active downloads so the profile and part files do not continue writing
-  into an exhausted volume.
-- `.part.met` writes have their own guard. If the target volume cannot provide
-  the required free space, metadata writes are skipped instead of risking a
-  truncated metadata file. Write failures invalidate the guard state before the
-  next attempt.
-- Downloads paused as insufficient resume only after the protected-volume block
-  is clear and enough free space exists for the relevant volume. Resume
-  decisions include a bounded headroom allowance so a file is not immediately
-  restarted into another low-space failure.
-- New-download temp placement uses protected-volume availability. It avoids
-  choosing a temp volume that cannot satisfy the file's temp demand, avoids FAT
-  candidates for files above the old FAT-safe size limit, and accounts for
-  incoming-volume demand when temp and incoming are different volumes.
-- Controller add-transfer requests use the same placement guard. When no temp
-  volume can safely accept a requested transfer, the native REST response is an
-  error/failed item rather than a success envelope.
-- The periodic disk-space check runs during queue processing and at the normal
-  15-minute disk-space recheck interval. Manual actions that add, resume,
-  complete, or flush downloads can force a fresh snapshot sooner.
-- Preview and archive-copy paths require extra free space beyond the normal
-  floor because they may copy completed bytes or archive payload before
-  opening the preview.
-
-Controllers and diagnostics:
-
-- native REST is the preferred automation surface
-- qBit/Torznab/Arr-style adapters are compatibility layers, not the source of
-  truth
-- WebServer TLS certificate generation is available from the command line with
-  explicit certificate, key, and optional host arguments
-- Tools actions expose save, reload, firewall repair, Windows maintenance,
-  diagnostics, dumps, view presets, config-file editors, and folder shortcuts
-- redacted diagnostic snapshots are the default support artifact
-- performance logging can write CSV or MRTG-style samples for bounded
-  operator diagnostics
-
-Display and date/time:
-
-- normal native UI date/time text follows the Windows user locale by default
-- users can customize general, log, and list timestamps with MFC
-  `CTime::Format` strings in `preferences.ini`
-- [Preferences Guide](GUIDE-PREFERENCES.md#date-and-time-formatting) documents
-  the supported keys, common format tokens, examples, and the distinction
-  between user-formatted UI timestamps and fixed protocol/API timestamps
 
 ## Tools And Maintenance
 
