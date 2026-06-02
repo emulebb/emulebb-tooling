@@ -104,6 +104,24 @@ legacy template-based `webserver` payload is not shipped in RC/stable release
 assets; REST support is validated through the in-process API and documented
 under the packaged `docs/` directory.
 
+Official RC and stable packages use the workspace baseline MSVC toolset
+documented in [WORKSPACE-POLICY](../WORKSPACE-POLICY.md), currently `v143`.
+The `v145` toolset is a forward-compatibility probe target. It may be published
+only as an explicitly labeled experimental CI artifact for tester feedback, not
+as an official release asset, until the operator promotes it after sustained
+green probe history, package proof, and smoke coverage.
+
+If an experimental `v145` package is produced, the artifact name must make the
+toolset status explicit, for example:
+
+```text
+emulebb-0.7.3-rc.1-v145-probe-x64.zip
+```
+
+Do not reuse the official package stem for a probe build. Probe artifacts must
+not be attached to a stable release unless the release notes and operator
+approval explicitly classify them as experimental.
+
 The executable inside the standard package remains:
 
 ```text

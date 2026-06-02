@@ -278,6 +278,12 @@ boundary, project entrypoint, warning, localization, and normalization policy.
 
 - Active compiler baseline for workspace-owned C++ builds is C++17.
 - Active MSVC toolset baseline is `v143`.
+- `v145` is a forward-compatibility probe target only. It may be used in
+  GitHub automation, local diagnosis, and explicitly labeled experimental
+  artifacts, but it is not the default release toolset.
+- Official RC/stable packages must use the active baseline toolset unless the
+  operator makes a separate release-policy decision after sustained probe,
+  smoke, and package evidence.
 - The active workspace build matrix has no `Win32` target.
 - Supported build architectures are `x64` and `ARM64`.
 - Debug builds in the active matrix must use:
@@ -303,6 +309,9 @@ boundary, project entrypoint, warning, localization, and normalization policy.
 - Project-specific structural exceptions are allowed for C-only projects,
   utility wrappers that inherit policy through orchestration, and `cryptopp`
   toolset enforcement that lives in workspace build orchestration.
+- Toolset overrides must flow through `emulebb-build` orchestration. Do not
+  hardcode a newer Visual Studio generator or `PlatformToolset` in project files
+  when a build-time override can express the probe.
 
 ## Live Test Network Policy
 
