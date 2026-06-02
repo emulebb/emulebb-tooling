@@ -20,9 +20,9 @@ engineering spec/evidence records, not workflow status authority.
 ## Current Snapshot
 
 **Source of truth:** `EMULEBB_WORKSPACE_ROOT\workspaces\workspace\app\emulebb-main` (`main` branch)
-**Current non-done count:** `99`
-**Latest release-doc refresh:** 2026-05-23
-**Non-done by status:** `80` OPEN, `6` IN_PROGRESS, `13` DEFERRED, `0` BLOCKED.
+**Current non-done count:** `109`
+**Latest release-doc refresh:** 2026-06-02
+**Non-done by status:** `90` OPEN, `6` IN_PROGRESS, `13` DEFERRED, `0` BLOCKED.
 **Backlog counts:** item tables below are authoritative.
 **0.7.3 RC1 relevance:** Most non-done items below are future or deferred work;
 current RC gate and proof status is controlled by [RELEASE-0.7.3](RELEASE-0.7.3.md).
@@ -235,6 +235,8 @@ the RC branch.
 | [BUG-139](../history/items/BUG-139.md) | Minor | DONE | Clean exit can leave the shell tray icon behind |
 | [BUG-140](../history/items/BUG-140.md) | Major | DONE | Transfer UI updates can run on split presentation timers |
 | [BUG-141](../history/items/BUG-141.md) | Minor | DONE | Source expand icons and video thumbnails can be visually oversized |
+| [BUG-142](items/BUG-142.md) | Minor | OPEN | Upload soft-queue admission ignores effective score policy |
+| [BUG-143](items/BUG-143.md) | Minor | OPEN | Upload waiting queue retains clients for unavailable shared files |
 
 `BUG-103` through `BUG-110` were superseded internal post-tag evidence labels,
 not active item docs.
@@ -290,6 +292,7 @@ not active item docs.
 | [REF-050](items/REF-050.md) | Minor | OPEN | Tune compression and hash buffers with bounded memory |
 | [REF-051](items/REF-051.md) | Minor | OPEN | Remove legacy SOCKS and proxy support |
 | [REF-052](items/REF-052.md) | Minor | OPEN | Remove archive preview and recovery surfaces |
+| [REF-053](items/REF-053.md) | Minor | OPEN | Reduce upload queue and upload list linear lookup overhead |
 
 ---
 
@@ -417,6 +420,12 @@ not active item docs.
 | [FEAT-101](items/FEAT-101.md) | Minor | OPEN | Add quick filter textbox to Downloads list |
 | [FEAT-102](items/FEAT-102.md) | Minor | OPEN | Exclude known files from search results |
 | [FEAT-103](items/FEAT-103.md) | Minor | OPEN | Publish Windows Hyper-V run guide for eMuleBB |
+| [FEAT-104](items/FEAT-104.md) | Minor | OPEN | Add optional reverse DNS peer name resolution |
+| [FEAT-105](items/FEAT-105.md) | Minor | OPEN | Add stopped upload state for shared files |
+| [FEAT-106](items/FEAT-106.md) | Major | OPEN | Add upload bandwidth ramp-up diagnostics and slot policy |
+| [FEAT-107](items/FEAT-107.md) | Minor | OPEN | Add upload under-target reason diagnostics |
+| [FEAT-108](items/FEAT-108.md) | Minor | OPEN | Add publish effectiveness feedback for shared files |
+| [FEAT-109](items/FEAT-109.md) | Minor | OPEN | Materialize suite tool dependencies deterministically |
 
 ---
 
@@ -472,6 +481,7 @@ not active item docs.
 | [CI-046](items/CI-046.md) | Minor | OPEN | Share product-family test profile and fixture hygiene |
 | [CI-047](items/CI-047.md) | Minor | OPEN | Add repeatable local package install refresh command |
 | [CI-048](../history/items/CI-048.md) | Minor | DONE | Improve documentation navigation and public release guidance |
+| [CI-049](items/CI-049.md) | Minor | OPEN | Enable CodeQL code scanning for the app repository |
 
 ---
 

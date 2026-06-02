@@ -1,5 +1,7 @@
 ---
 id: FEAT-103
+workflow: github
+github_issue: https://github.com/emulebb/emulebb/issues/117
 title: Publish Windows Hyper-V run guide for eMuleBB
 status: OPEN
 priority: Minor
@@ -9,6 +11,9 @@ milestone: post-0.7.3
 created: 2026-06-02
 source: operator request to make the local Hyper-V eMuleBB run path visible to users
 ---
+
+
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/117. This local document is retained as an engineering spec/evidence record.
 
 # FEAT-103 - Publish Windows Hyper-V Run Guide For eMuleBB
 

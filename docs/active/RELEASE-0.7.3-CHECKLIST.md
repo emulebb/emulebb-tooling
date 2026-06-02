@@ -13,6 +13,11 @@ recording on the selected reviewed `main` heads. Do not create Git tags until
 the operator gives a separate tagging instruction after this checklist is
 complete.
 
+The current operator publication target is 2026-06-03. Treat that as a
+conditional target, not a release claim: `CI-035` proof, package/SBOM/hash
+recording, clean-worktree confirmation, and the separate tag instruction must
+complete first.
+
 Release freeze is active. No new feature, refactor, UI polish, warning-debt, or
 roadmap work enters 0.7.3 RC1; only direct release-gate blockers may be fixed
 before tag readiness. The prior documentation-only hold is lifted for release

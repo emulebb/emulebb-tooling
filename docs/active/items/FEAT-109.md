@@ -1,5 +1,7 @@
 ---
 id: FEAT-109
+workflow: github
+github_issue: https://github.com/emulebb/emulebb/issues/123
 title: Materialize suite tool dependencies deterministically
 status: OPEN
 priority: Minor
@@ -9,6 +11,9 @@ milestone: post-0.7.3
 created: 2026-06-02
 source: operator request to download MediaInfo, FFmpeg, 7-Zip, and similar suite deps deterministically
 ---
+
+
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/123. This local document is retained as an engineering spec/evidence record.
 
 # FEAT-109 - Materialize Suite Tool Dependencies Deterministically
 

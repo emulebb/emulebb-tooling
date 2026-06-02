@@ -7,6 +7,9 @@ Use it for status, release-source truth, and the open RC task list.
 ## Current Status
 
 - Status: Final proof in progress.
+- Target publication window: 2026-06-03, contingent on `CI-035` proof,
+  package/SBOM/hash recording, clean-worktree confirmation, and the separate
+  operator tag instruction.
 - Proof status: release proof resumed by operator direction on 2026-05-17.
   Live proof, package refresh, and evidence recording are active; Git tagging
   still requires a later separate operator instruction.

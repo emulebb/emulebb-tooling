@@ -1,5 +1,7 @@
 ---
 id: FEAT-107
+workflow: github
+github_issue: https://github.com/emulebb/emulebb/issues/121
 title: Add upload under-target reason diagnostics
 status: OPEN
 priority: Minor
@@ -9,6 +11,9 @@ milestone: post-0.7.3
 created: 2026-06-02
 source: operator request to explain upload bandwidth underfill causes
 ---
+
+
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/121. This local document is retained as an engineering spec/evidence record.
 
 # FEAT-107 - Add Upload Under-Target Reason Diagnostics
 

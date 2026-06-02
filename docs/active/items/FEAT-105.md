@@ -1,5 +1,7 @@
 ---
 id: FEAT-105
+workflow: github
+github_issue: https://github.com/emulebb/emulebb/issues/119
 title: Add stopped upload state for shared files
 status: OPEN
 priority: Minor
@@ -9,6 +11,9 @@ milestone: post-0.7.3
 created: 2026-06-02
 source: operator request for a shared file state that prevents uploads without unsharing
 ---
+
+
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/119. This local document is retained as an engineering spec/evidence record.
 
 # FEAT-105 - Add Stopped Upload State For Shared Files
 

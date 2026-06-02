@@ -1,5 +1,7 @@
 ---
 id: FEAT-108
+workflow: github
+github_issue: https://github.com/emulebb/emulebb/issues/122
 title: Add publish effectiveness feedback for shared files
 status: OPEN
 priority: Minor
@@ -9,6 +11,9 @@ milestone: post-0.7.3
 created: 2026-06-02
 source: operator request to make shared-file publishing fill upload demand faster
 ---
+
+
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/122. This local document is retained as an engineering spec/evidence record.
 
 # FEAT-108 - Add Publish Effectiveness Feedback For Shared Files
 
