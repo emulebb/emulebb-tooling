@@ -23,14 +23,20 @@ Useful variants:
 python -m emule_workspace test release-campaign --template
 python -m emule_workspace test release-campaign --campaign emulebb-0.7.3 --phase live-wire-release
 python -m emule_workspace test release-campaign --campaign emulebb-0.7.3 --json
-python -m emule_workspace test release-campaign --campaign emulebb-0.7.3 --execute
-python -m emule_workspace test release-campaign --campaign emulebb-0.7.3-overnight --execute
+python -m emule_workspace test release-campaign --campaign emulebb-0.7.3 --execute --test-network all
+python -m emule_workspace test release-campaign --campaign emulebb-0.7.3-overnight --execute --test-network all
 ```
 
 Without `--execute`, the command reads latest known JSON artifacts when they
 exist, shows manual evidence rows where command output/checklist evidence is
 authoritative, and warns for missing required evidence. With `--execute`, it
 runs the selected campaign's blocking commands in manifest order.
+
+Release campaign execution keeps the live E2E network scope explicit. The
+default `--test-network default` includes offline and LAN suites only; required
+VPN-scoped campaign suites fail instead of being silently skipped. Use
+`--test-network vpn` for public-network-only phases, or `--test-network all`
+when refreshing the full RC campaign.
 
 ## Structure Contract
 
@@ -60,6 +66,7 @@ them into manifests:
 
 ```powershell
 python -m emule_workspace test release-campaign --campaign emulebb-0.7.3-overnight --execute `
+  --test-network all `
   --live-wire-inputs-file $env:EMULEBB_WORKSPACE_ROOT\repos\emulebb-build-tests\live-wire-inputs.local.json `
   --vpn-guard-live-config $env:EMULEBB_WORKSPACE_ROOT\repos\emulebb-build-tests\vpn-guard-live.local.json `
   --radarr-movie-root <radarr-visible-root> `
