@@ -35,12 +35,18 @@ Use it for status, release-source truth, and the open RC task list.
 - GitHub organization and URL slug: `emulebb`
 - Tag: `emulebb-v0.7.3-rc.1`
 - Assets:
+  - `Bootstrap-eMuleBBSuite.ps1`
+  - `Bootstrap-eMuleBBSuite.ps1.sha256`
   - `emulebb-0.7.3-rc.1-x64.zip`
+  - `emulebb-0.7.3-rc.1-x64.manifest.json`
   - `emulebb-0.7.3-rc.1-x64.sbom.spdx.json`
   - `emulebb-0.7.3-rc.1-arm64.zip`
+  - `emulebb-0.7.3-rc.1-arm64.manifest.json`
   - `emulebb-0.7.3-rc.1-arm64.sbom.spdx.json`
   - optional controller asset:
     `emulebb-0.7.3-rc.1-amutorrent-x64.zip`
+  - optional controller manifest:
+    `emulebb-0.7.3-rc.1-amutorrent-x64.manifest.json`
   - optional controller SBOM:
     `emulebb-0.7.3-rc.1-amutorrent-x64.sbom.spdx.json`
 

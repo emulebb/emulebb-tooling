@@ -166,16 +166,24 @@ soak status cannot be confused with the repeatable RC package gate.
 - [ ] Annotated RC tag is `emulebb-v0.7.3-rc.1`.
 - [ ] Annotated RC tag points at the selected reviewed `main` commit.
 - [ ] x64 RC asset is `emulebb-0.7.3-rc.1-x64.zip`.
+- [ ] x64 RC manifest is `emulebb-0.7.3-rc.1-x64.manifest.json`.
 - [ ] ARM64 RC asset is `emulebb-0.7.3-rc.1-arm64.zip`.
+- [ ] ARM64 RC manifest is `emulebb-0.7.3-rc.1-arm64.manifest.json`.
+- [ ] Suite bootstrapper asset is `Bootstrap-eMuleBBSuite.ps1`.
+- [ ] Suite bootstrapper hash asset is `Bootstrap-eMuleBBSuite.ps1.sha256`.
 - [ ] Optional aMuTorrent x64 controller asset is
       `emulebb-0.7.3-rc.1-amutorrent-x64.zip`.
+- [ ] Optional aMuTorrent x64 controller manifest is
+      `emulebb-0.7.3-rc.1-amutorrent-x64.manifest.json`.
 - [ ] Each ZIP contains exactly the full stock language DLL set under
       `eMule\lang`.
 - [ ] Each ZIP contains package-facing README, release notes, GPL text,
       third-party notices, SPDX SBOM, and REST docs. Legacy web templates are
       frozen baggage and must not be shipped in RC assets.
 - [ ] Package manifests record the ZIP hash, selected executable hash, expected
-      language DLL list/count, SBOM hash, and per-file package hashes.
+      language DLL list/count, SBOM hash, per-file package hashes,
+      bootstrapper asset name, bootstrapper SHA-256, and bootstrapper SHA-256
+      path.
 - [ ] Package notes state that ZIPs are not code-signed, contain no debug
       symbols, and do not bundle optional `MediaInfo.dll`.
 
@@ -185,6 +193,8 @@ soak status cannot be confused with the repeatable RC package gate.
 - [ ] Confirm fresh x64 and ARM64 package hashes are recorded in
       [CI-035](items/CI-035.md).
 - [ ] Confirm fresh x64 and ARM64 package SBOM hashes are recorded in
+      [CI-035](items/CI-035.md).
+- [ ] Confirm the suite bootstrapper SHA-256 is recorded in
       [CI-035](items/CI-035.md).
 - [ ] Confirm the optional aMuTorrent x64 package hash is recorded in
       [CI-035](items/CI-035.md) if that asset is published.

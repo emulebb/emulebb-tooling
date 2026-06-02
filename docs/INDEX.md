@@ -26,7 +26,8 @@
   download the eMuleBB ZIP, extract it into a new app folder, and start
   `emulebb.exe`.
 - [Full suite PowerShell bootstrap](reference/GUIDE-SETUP.md#full-suite-install-powershell-bootstrap):
-  use the release bootstrapper when you want the full suite installer flow.
+  download `Bootstrap-eMuleBBSuite.ps1` from GitHub Releases and run it when
+  you want the full suite installer flow.
 
 Use these guides in order for a first real profile:
 

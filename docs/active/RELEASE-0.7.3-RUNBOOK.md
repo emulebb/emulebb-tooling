@@ -81,9 +81,10 @@ The packaged binary must not contain startup profiling support.
 
 `package-release` stages ZIP contents under
 `workspaces\workspace\state\release\emulebb-v0.7.3-rc.1\staging\<arch>` and writes
-the final ZIP, manifest, and SBOM next to that staging directory. Package app
-outputs are intentionally separate from developer app outputs so profiling
-builds cannot be reused for release ZIPs.
+the final ZIP, manifest, SBOM, standalone suite bootstrapper, and bootstrapper
+SHA-256 file next to that staging directory. Package app outputs are
+intentionally separate from developer app outputs so profiling builds cannot be
+reused for release ZIPs.
 
 ## Certification Proof
 
@@ -196,11 +197,17 @@ Package manifests are written next to the ZIP assets under:
 workspaces\workspace\state\release\emulebb-v0.7.3-rc.1
 ```
 
-The release ZIP assets must be named:
+The release publication assets must be named:
 
 ```text
+Bootstrap-eMuleBBSuite.ps1
+Bootstrap-eMuleBBSuite.ps1.sha256
 emulebb-0.7.3-rc.1-x64.zip
+emulebb-0.7.3-rc.1-x64.manifest.json
+emulebb-0.7.3-rc.1-x64.sbom.spdx.json
 emulebb-0.7.3-rc.1-arm64.zip
+emulebb-0.7.3-rc.1-arm64.manifest.json
+emulebb-0.7.3-rc.1-arm64.sbom.spdx.json
 ```
 
 The packaging command is intentionally strict. It builds the selected
@@ -218,7 +225,8 @@ writing the manifest. Verification covers:
 - no source files, project files, debug symbols, intermediates, or build logs in
   the ZIP; and
 - manifest fields for ZIP hash, executable hash, expected language DLL
-  list/count, and per-file package hashes.
+  list/count, per-file package hashes, bootstrapper asset name, bootstrapper
+  SHA-256, and bootstrapper SHA-256 path.
 
 `MediaInfo.dll` remains optional and external. The release ZIPs are not
 code-signed and do not include debug symbols.

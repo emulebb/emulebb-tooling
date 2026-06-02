@@ -79,33 +79,49 @@ only unpacking and running the desktop app. The bootstrapper installs the
 versioned eMuleBB suite from GitHub Releases and can hand off to the bundled
 suite installer.
 
-Run the bootstrapper from a PowerShell prompt after the matching release assets
-exist:
+Download `Bootstrap-eMuleBBSuite.ps1` from the release page, open PowerShell in
+that download folder, and run the bootstrapper.
+
+For the latest nightly or prerelease:
 
 ```powershell
-$version = '0.7.3-rc.1'
-$env:X_LOCAL_IP = '<your LAN IPv4 address>'
-$releaseUrl = "https://github.com/emulebb/emulebb/releases/download/emulebb-v$version"
-$workRoot = Join-Path $env:TEMP "emulebb-suite-$version"
-New-Item -ItemType Directory -Force -Path $workRoot | Out-Null
-$scriptPath = Join-Path $workRoot 'Bootstrap-eMuleBBSuite.ps1'
-iwr -UseBasicParsing "$releaseUrl/Bootstrap-eMuleBBSuite.ps1" -OutFile $scriptPath
-$expected = ((irm "$releaseUrl/Bootstrap-eMuleBBSuite.ps1.sha256") -split '\s+')[0]
-$actual = (Get-FileHash -Algorithm SHA256 -LiteralPath $scriptPath).Hash.ToLowerInvariant()
-if ($actual -ne $expected) { throw "Bootstrapper SHA256 mismatch: $actual" }
-& $scriptPath -Version $version -IncludePrerelease
+.\Bootstrap-eMuleBBSuite.ps1 -IncludePrerelease
+```
+
+For RC1 after it is published:
+
+```powershell
+.\Bootstrap-eMuleBBSuite.ps1 -Version 0.7.3-rc.1 -IncludePrerelease
 ```
 
 The bootstrapper is published as a release asset, so setup does not depend on
-the current `main` branch. It resolves the requested or latest stable release,
-verifies the release ZIP against its manifest SHA-256, extracts the versioned
-suite installer, and hands off to that installer. The versioned installer is
-also included in the main app ZIP under `eMuleBB\scripts`.
+the current `main` branch. It resolves the requested release, latest stable
+release, or latest prerelease when `-IncludePrerelease` is used. It verifies
+the release ZIP against its manifest SHA-256, extracts the versioned suite
+installer, and hands off to that installer. The versioned installer is also
+included in the main app ZIP under `eMuleBB\scripts`.
 
-If split-tunnel VPN software breaks loopback on the machine, set `X_LOCAL_IP`
-to the machine's LAN IPv4 address before running the bootstrapper. The suite
-installer uses that address as the default control-service bind and still warns
-when services are exposed beyond loopback.
+To verify the bootstrapper itself before running it, compare the local hash
+with the adjacent `Bootstrap-eMuleBBSuite.ps1.sha256` release asset:
+
+```powershell
+Get-FileHash -Algorithm SHA256 .\Bootstrap-eMuleBBSuite.ps1
+```
+
+### Advanced Split-Tunnel Or Remote Bind
+
+Use this only when a split-tunnel VPN or remote-control setup makes loopback
+unsuitable. Set `X_LOCAL_IP` to the machine's LAN IPv4 address before running
+the bootstrapper:
+
+```powershell
+$env:X_LOCAL_IP = '192.0.2.10'
+.\Bootstrap-eMuleBBSuite.ps1 -IncludePrerelease
+```
+
+The suite installer uses that address as the default control-service bind and
+still warns when services are exposed beyond loopback. Keep ordinary local
+installs on the default loopback-oriented path.
 
 ## Choose Directories
 
