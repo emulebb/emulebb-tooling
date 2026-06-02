@@ -314,6 +314,13 @@ Before trusting a package:
 
 - Confirm the tag name matches the documented release family.
 - Confirm the package architecture matches the machine.
+- For eMuleBB nightly assets, verify the GitHub artifact attestation when you
+  can:
+
+  ```powershell
+  gh attestation verify PATH_TO_ASSET -R emulebb/emulebb
+  ```
+
 - Keep a copy of the previous working package.
 - Back up the profile before first launch.
 - Check release notes for frozen, removed, or unsupported legacy surfaces.

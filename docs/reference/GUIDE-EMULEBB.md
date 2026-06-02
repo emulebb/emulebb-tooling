@@ -206,9 +206,10 @@ The repeatable publishing workflow is:
 Release-facing product claims are backed by evidence, not by homepage copy.
 Current quality signals include extensive automated testing, native and Python
 harness coverage, REST/OpenAPI checks, live E2E lanes, package manifests,
-SHA-256 hashes, and SPDX SBOM files for release packages. The homepage may
-advertise those strengths only after the source guide and release docs describe
-the same evidence.
+SHA-256 hashes, SPDX SBOM files for release packages, and GitHub artifact
+attestations for eMuleBB nightly assets. The homepage may advertise those
+strengths only after the source guide and release docs describe the same
+evidence.
 
 ## Public Testing And Downloads
 
@@ -216,6 +217,14 @@ Public testing currently runs through GitHub Releases and nightly prerelease
 packages. Treat nightly packages as test builds: keep the previous working
 package, use a disposable or backed-up profile, and report repeatable failures
 with evidence.
+
+eMuleBB nightly release assets are published with GitHub artifact attestations
+so testers can verify that a downloaded ZIP, manifest, or SBOM asset matches a
+signed GitHub Actions provenance claim:
+
+```powershell
+gh attestation verify PATH_TO_ASSET -R emulebb/emulebb
+```
 
 - eMuleBB desktop app:
   `https://github.com/emulebb/emulebb/releases`. Nightly testing is open.
