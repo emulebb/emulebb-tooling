@@ -95,9 +95,10 @@ listener regressions.
   tokens, and `network.vpnGuard.enabled`, lowercase `mode` tokens
   (`off`, `block`), `allowedPublicIpCidrs`, `startupBlocked`, and
   `startupBlockReason`
-- report guarded Kad connect/bootstrap refusals as normal Kad DTOs extended
-  with `operationQueued: false`, `blockedByVpnGuard: true`, and `network`
-  diagnostics instead of silently queuing nothing
+- report guarded eD2K server connect and Kad connect/bootstrap refusals as
+  normal network DTOs extended with `operationQueued: false`,
+  `blockedByVpnGuard: true`, and `network` diagnostics instead of silently
+  queuing nothing
 - reject mutating REST requests, diagnostic unsafe requests, and
   `POST /app/shutdown` while lifecycle is `starting`, and reject all REST
   requests once lifecycle is `shuttingdown` or `done`

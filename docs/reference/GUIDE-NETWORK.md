@@ -204,8 +204,9 @@ snapshots:
 | `network.vpnGuard.startupBlocked` | whether startup P2P networking is blocked |
 | `network.vpnGuard.startupBlockReason` | reason for the startup block |
 
-Kad REST connect and bootstrap commands report `blockedByVpnGuard=true` and
-`operationQueued=false` when the guard refuses the operation.
+REST eD2K server connect, Kad connect, and Kad bootstrap commands report
+`blockedByVpnGuard=true` and `operationQueued=false` when the guard refuses the
+operation.
 
 ## Full VPN Versus Split Tunneling On Windows
 
