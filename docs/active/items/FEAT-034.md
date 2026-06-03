@@ -9,7 +9,7 @@ category: feature
 labels: [performance, shared-files, reload, threading, ui]
 milestone: ~
 created: 2026-04-20
-updated: 2026-04-26
+updated: 2026-06-03
 source: current `main` revalidation; `analysis\emuleai` and Xtreme comparison; filtered web-demand scan; 2026-05-27 senior C++ performance and I/O review
 ---
 
@@ -81,6 +81,19 @@ hashing can still fall into the existing timeout/leak-and-exit shutdown path if
 a read wedges hard enough. Add diagnostics or cancellation hardening there
 before treating FEAT-034 as complete.
 
+The large-list scope is also intentionally limited to Shared Files. Current
+evidence does not justify a generic list-control substrate across Transfers,
+Uploading, Queue, Search Results, or Known Clients. Those surfaces can keep their
+current shape unless profiling or a concrete bug shows a local problem. Focused
+improvements for those lists should stay in their owning items, such as upload
+queue/list overhead in `REF-053`, download queue instrumentation in `REF-054`,
+and downloads filtering in `FEAT-101`.
+
+Shared Files remains different because it is the persistent large-library view:
+operator profiles can keep tens of thousands of complete files visible, with
+hashing, publishing, status labels, aggregate counters, sorting, and refresh
+work all competing for the same UI path.
+
 The next implementation direction should be background directory enumeration
 with immutable scan results:
 
@@ -115,6 +128,39 @@ This item stays intentionally narrow:
 - allow a bounded worker or coalesced background scan
 - do not change share policy, duplicate policy, or startup cache ownership
 - keep behavior close to stock outside responsiveness improvements
+- do not build a broad virtual-list framework for unrelated lists
+- keep Uploading, Queue, Downloads, Search Results, and Known Clients on their
+  current list-control shape unless a measured, list-local bottleneck appears
+
+## Shared Files UI Refresh Scope
+
+The Shared Files list should be the only large-list UI hardening target for this
+item. The goal is to make large-library display and status updates predictable,
+not to redesign every list surface.
+
+Candidate follow-up work:
+
+- ensure every Shared Files list refresh/update path honors
+  `DesktopUiRefreshIntervalMs`
+- avoid resorting unless a sort-relevant displayed field changed or the user
+  requested a new sort
+- keep status-label updates independent from full list repaint where practical
+- cache or rate-limit expensive aggregate display values such as total shared
+  size, hashing progress, eD2K published count, Kad published count, requested
+  count, and active upload count
+- refresh only affected rows or visible rows where the existing control model
+  can support it without a broad rewrite
+- add diagnostics under a flag for file count, visible row count, refresh
+  duration, sort duration, status-label duration, and scan/hash/publish phase
+  counters
+
+Non-goals for this item:
+
+- no broad eMuleAI-style virtual-list import
+- no shared abstraction across all list controls
+- no upload/download/search queue policy changes
+- no unrelated UI refresh work outside Shared Files unless tied to a concrete
+  bug or existing owning item
 
 ## Web-Demand Fit
 
@@ -129,6 +175,13 @@ broader `eMuleAI` shared-files feature import.
 ## Acceptance Criteria
 
 - [ ] manual shared-files reload returns control quickly on large trees
+- [ ] Shared Files list refresh/update paths honor `DesktopUiRefreshIntervalMs`
+- [ ] Shared Files status-label and aggregate-counter updates do not force full
+      list repaint when row data did not change
+- [ ] Shared Files sort work is skipped unless the active sort fields can have
+      changed or the user requests sorting
+- [ ] diagnostics can explain Shared Files refresh, sort, status-label,
+      scan/hash, and publish-counter costs on large-library profiles
 - [x] repeated reload requests coalesce instead of starting overlapping scans while hashing is active
 - [ ] directory enumeration can run in the background and produce an immutable
       candidate list
@@ -139,3 +192,5 @@ broader `eMuleAI` shared-files feature import.
 - [ ] general final shared-file results converge to the same set as the synchronous path across broader reload scenarios
 - [x] uploads, share state, and GUI counters remain stable while shared hashes drain in the background
 - [x] watcher/live recursive sync is tracked separately in `FEAT-038`
+- [x] unrelated lists are explicitly excluded from broad large-list substrate
+      work unless their owning item identifies a measured local problem
