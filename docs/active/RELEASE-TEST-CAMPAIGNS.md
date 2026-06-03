@@ -38,6 +38,20 @@ VPN-scoped campaign suites fail instead of being silently skipped. Use
 `--test-network vpn` for public-network-only phases, or `--test-network all`
 when refreshing the full RC campaign.
 
+Reusable local/VM swarm rows keep two choices explicit. `localCommand` runs the
+same scenario on the host with `--local-swarm-mode execute`. `vmCommand` stages
+the same scenario for clean Hyper-V guests with `--local-swarm-mode plan
+--dry-run` unless the operator intentionally forces execution:
+
+```powershell
+python -m emule_workspace test release-campaign --campaign emulebb-0.7.3 --execute `
+  --local-vm-swarm-mode vm `
+  --local-vm-swarm-execution-mode execute
+```
+
+Use `--local-vm-swarm-mode local` to run the reusable swarm rows on the host
+instead. Keep live-wire/VPN phases separate from deterministic LAN swarm rows.
+
 ## Structure Contract
 
 Every campaign instance uses the same strict phase taxonomy from
