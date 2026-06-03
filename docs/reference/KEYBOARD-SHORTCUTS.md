@@ -22,6 +22,8 @@ remove, or repurpose shortcuts.
 | `Alt+W` | main shell | Opens the Tools popup. |
 | `Alt+X` | main shell | Cleanly exits through `CemuleDlg::OnClose()` and respects Prompt on exit. |
 | `Alt+U` | main shell | Opens the floating Hotmenu quick-navigation menu. |
+| `Alt+1` ... `Alt+9` | main shell | Opens toolbar panes 1 through 9 in visible toolbar order. |
+| `Alt+0` | main shell | Opens the Options toolbar pane. |
 | `Ctrl+Tab` / `Ctrl+Shift+Tab` | main shell | Cycles primary toolbar panes. |
 
 ## Transfers Navigation Shortcuts
@@ -136,7 +138,7 @@ These shortcuts are local to Search Results.
 | `Shift+Enter` | Downloads selected search results paused. |
 | `Ctrl+Enter` | Opens details for selected results. |
 | `Alt+Enter` | Opens details for selected results. |
-| `Ctrl+L` | Copies selected result ED2K links. |
+| `Ctrl+L` / `Ctrl+C` | Copies selected result ED2K links. |
 | `Ctrl+Shift+C` | Copies selected result summaries. |
 | `Ctrl+F` | Starts list find. |
 | `Ctrl+PageUp` / `Ctrl+PageDown` | Switches to the previous or next search-results tab. |
@@ -152,7 +154,7 @@ These shortcuts are local to the Shared Files list.
 | `Ctrl+O` | Opens the selected shared file. |
 | `Ctrl+Shift+O` | Opens the selected shared file's folder. |
 | `Ctrl+I` | Opens details for selected shared files. |
-| `Ctrl+L` | Copies selected shared-file ED2K links. |
+| `Ctrl+L` / `Ctrl+C` | Copies selected shared-file ED2K links. |
 | `Ctrl+Shift+C` | Copies selected shared-file summaries. |
 | `Ctrl+F` | Starts list find. |
 | `F5` | Reloads the shared-files list. |
@@ -170,6 +172,24 @@ These shortcuts are local to the Shared Directories tree.
 Shared Directories intentionally keeps keyboard ownership tree-native. File
 details and ED2K copy shortcuts are handled by the Shared Files list, where the
 file selection is visible.
+
+## Legacy Local Shortcuts
+
+These shortcuts are inherited from existing local controls. They stay local to
+their pane or dialog and do not become global app accelerators.
+
+| Context | Shortcut | Behavior |
+|---------|----------|----------|
+| Category Manager | `Insert` | Adds a category. |
+| Category Manager | `Enter` | Edits the selected category. |
+| Category Manager | `Delete` | Removes the selected category. |
+| Category Manager | `F5` | Refreshes the category list. |
+| Category Manager | `Alt+Up` / `Alt+Down` | Moves the selected category up or down. |
+| Friends list | `Insert` | Adds a friend. |
+| Friends list | `Delete` | Removes the selected friend. |
+| Server pane | `Enter` | Adds a server from the focused new-server field or updates from the focused server.met URL field. |
+| Server pane | `Delete` | Removes the selected server.met URL history entry when the URL field's autocomplete list has focus. |
+| Server pane | `Ctrl+Delete` / `Alt+Delete` | Clears the server.met URL history. |
 
 ## File Copy Menus
 
@@ -192,7 +212,8 @@ These native Alt mnemonics are treated as main-shell toolbar or hotmenu
 ownership and should not be reused by modeless child panes:
 
 `Alt+C`, `Alt+K`, `Alt+V`, `Alt+T`, `Alt+S`, `Alt+F`, `Alt+M`, `Alt+I`,
-`Alt+A`, `Alt+O`, `Alt+H`, `Alt+U`, `Alt+W`, `Alt+X`.
+`Alt+A`, `Alt+O`, `Alt+H`, `Alt+U`, `Alt+W`, `Alt+X`, `Alt+1` through
+`Alt+9`, and `Alt+0`.
 
 ## Search Pane Mnemonics
 
@@ -223,8 +244,12 @@ When Search is the active main pane, the Search parameter bar owns:
 - Main-shell pane shortcuts deliberately reuse the reviewed English toolbar
   mnemonics as app-level commands so they work consistently across languages.
   Localized `&` markers are not the authority for these main-shell shortcuts.
+- Numeric main-shell shortcuts deliberately mirror visible toolbar order:
+  `Alt+1` through `Alt+9` open Connect through Statistics and `Alt+0` opens
+  Options.
 - `Alt+T` belongs to Transfers, matching the community baseline English
-  toolbar mnemonic. Tools uses `Alt+W` to avoid that collision.
+  toolbar mnemonic. Tools uses `Alt+W` to avoid that collision, and the Tools
+  popup title advertises that shortcut.
 - Search-local mnemonics deliberately avoid the reserved main-shell letters.
 - Shortcut reference stays in this document; do not duplicate it in a Tools
   menu dialog.
@@ -244,7 +269,10 @@ When Search is the active main pane, the Search parameter bar owns:
   Search, Shared Files, Messages, IRC, Statistics, Options, and Help in every
   active language.
 - `Alt+U` should open the floating hotmenu.
-- `Alt+W` should open the Tools popup.
+- `Alt+W` should open the Tools popup, and the Tools popup title should show
+  the `Alt+W` hint.
+- `Alt+1` through `Alt+9` should open Connect, Kad, Servers, Transfers, Search,
+  Shared Files, Messages, IRC, and Statistics; `Alt+0` should open Options.
 - In Transfers, `Ctrl+0` should select the All category tab; `Ctrl+1` through
   `Ctrl+9` should select existing category tabs and beep for missing tabs.
 - In Transfers, `Ctrl+U`, `Ctrl+Q`, and `Ctrl+K` should switch to Uploading,
@@ -281,6 +309,8 @@ When Search is the active main pane, the Search parameter bar owns:
   tabs, and both `Ctrl+W` and `Ctrl+F4` should close the selected result tab.
 - In Search Results, `Ctrl+F7`, `Ctrl+F8`, and `Ctrl+F9` should sort
   availability, complete sources, and size respectively.
+- In Search Results, both `Ctrl+L` and `Ctrl+C` should copy selected result
+  ED2K links.
 - In searchable lists, `Ctrl+F`, `F3`, and `Shift+F3` should start find and
   navigate matches without changing transfer state.
 - In searchable lists, `Esc` should clear the active find text when one is set,
@@ -289,6 +319,15 @@ When Search is the active main pane, the Search parameter bar owns:
   path as the existing reload button.
 - In Shared Files, the context menu should show native hints for `F2` rename
   and `Delete`.
+- In Shared Files, both `Ctrl+L` and `Ctrl+C` should copy selected shared-file
+  ED2K links.
+- In Category Manager, `Insert`, `Enter`, `Delete`, `F5`, `Alt+Up`, and
+  `Alt+Down` should drive their existing local category actions.
+- In Friends, `Insert` and `Delete` should add and remove friends through the
+  existing list commands.
+- In Servers, `Enter` should submit the focused new-server or server.met URL
+  field, while `Delete`, `Ctrl+Delete`, and `Alt+Delete` should affect only the
+  server.met URL history when that local field has focus.
 - Outside Search, `Alt+N` should not switch panes or steal focus.
 - Preferences, About, and confirmation dialogs should retain their normal
   local keyboard handling.
