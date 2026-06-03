@@ -11,6 +11,14 @@ turn it into a headless daemon or a new network. The goal is to keep classic
 eD2K/Kad behavior understandable while making modern Windows, broadband,
 large-library, and controller workflows reliable.
 
+## Release Line Direction
+
+`0.7.3` is the compatibility baseline. Its public train is fixed as
+`0.7.3-rc.1`, `0.7.3-rc.2`, `0.7.3-rc.3`, then stable `0.7.3`. After that,
+`0.7.x` becomes the legacy support line with a frozen public surface, while
+`0.8.x` becomes the modernization line. The first `0.8.0` objective is removing
+legacy surfaces that were intentionally frozen for the `0.7.x` transition.
+
 ## Five Themes
 
 ### 1. Better Connectivity Without Protocol Forks

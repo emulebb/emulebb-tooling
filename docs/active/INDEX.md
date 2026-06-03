@@ -27,7 +27,11 @@ engineering spec/evidence records, not workflow status authority.
 **0.7.3 RC1 relevance:** Most non-done items below are future or deferred work;
 current RC gate and proof status is controlled by [RELEASE-0.7.3](RELEASE-0.7.3.md).
 **Broadband release status:** `emulebb-v0.7.3-rc.1` is the first public
-release-candidate target.
+release-candidate target in the fixed `0.7.3-rc.1`, `0.7.3-rc.2`,
+`0.7.3-rc.3`, stable `0.7.3` train.
+**Post-stable line split:** after stable `0.7.3`, `release/0.7.x` carries the
+frozen-surface legacy support line and `main` opens for `0.8.0` frozen-surface
+removal work.
 **RC-release backlog view:** [RELEASE-0.7.3](RELEASE-0.7.3.md)
 **RC-release checklist:** [RELEASE-0.7.3-CHECKLIST](RELEASE-0.7.3-CHECKLIST.md)
 **RC-release runbook:** [RELEASE-0.7.3-RUNBOOK](RELEASE-0.7.3-RUNBOOK.md)
@@ -83,10 +87,10 @@ regression checks. When behavior changes, compare `main` against
 `baseline/community-0.72a` as the seam-enabled parity and regression baseline
 where that comparison is meaningful.
 
-**0.7.3 RC1 source rule:** the public RC tag is cut from the selected
-reviewed `main` commit after refreshed proof passes and operator approval.
-The release stabilization branch is `release/0.7.3` once the operator starts
-the RC branch.
+**0.7.3 RC source rule:** public RC tags are cut from the selected reviewed
+candidate commit after refreshed proof passes and operator approval. The
+release stabilization branch is `release/0.7.3` once the operator starts the
+RC branch; after stable `0.7.3`, `release/0.7.x` carries legacy maintenance.
 
 **Baseline stack rule:**
 

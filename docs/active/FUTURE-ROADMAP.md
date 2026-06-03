@@ -1,18 +1,23 @@
 # eMuleBB Future Roadmap
 
-This is the active post-0.7.3 RC1 product roadmap for eMuleBB. It is not a
-0.7.3 RC1 release gate, and it does not promote every historical feature idea in
-the backlog. The purpose is to keep future work focused on the Windows MFC app
-with REST support, while making related product-family boundaries explicit and
-excluding ideas that no longer match the eMuleBB desktop product direction.
+This is the active post-0.7.3 product roadmap for eMuleBB. It is not a
+0.7.3 release-candidate gate, and it does not promote every historical feature
+idea in the backlog. The purpose is to keep future work focused on the Windows
+MFC app with REST support, while making related product-family boundaries
+explicit and excluding ideas that no longer match the eMuleBB desktop product
+direction.
 
-0.7.3 is the compatibility baseline. It may still carry preserved frozen legacy
-surfaces so users can evaluate the release without a rewrite-style transition.
-After that baseline, future releases evolve deliberately: compatibility,
-profile safety, and stock eD2K/Kad behavior remain constraints, while supported
-areas modernize through the curated lanes below. Frozen legacy surfaces should
-be removed, replaced, or left explicitly unsupported through tracked work, not
-quietly revived as product commitments.
+0.7.3 is the compatibility baseline. The fixed public train is
+`0.7.3-rc.1`, `0.7.3-rc.2`, `0.7.3-rc.3`, then stable `0.7.3`. After stable
+`0.7.3`, the `0.7.x` series becomes the legacy support line with a frozen
+public surface. It may carry compatibility-preserved legacy baggage, but it
+does not expand product, UI, API, controller, or configuration surface.
+
+`0.8.0` is the first modernization release. Once stable `0.7.3` ships, `main`
+opens for `0.8.0` work, and the immediate `0.8.0` objective is removing the
+currently frozen legacy surfaces listed in [Frozen Surfaces](FROZEN-SURFACES.md).
+Compatibility, profile safety, and stock eD2K/Kad wire behavior remain
+constraints unless a later explicit protocol decision changes them.
 
 See [Frozen Surfaces](FROZEN-SURFACES.md) for the current distinction between
 compatibility-preserved legacy baggage and supported release behavior.
@@ -44,6 +49,21 @@ operator explicitly promotes them. p2p-overlord is a separate Rust/Node product
 in that family: it can share REST contracts, test-campaign infrastructure, and
 selected dependency forks, but it does not become part of the desktop app.
 See [P2P-OVERLORD-PRODUCT-FAMILY-INTEGRATION](plans/P2P-OVERLORD-PRODUCT-FAMILY-INTEGRATION.md).
+
+## Release Line Model
+
+- `0.7.3` release candidates are fixed milestones: `rc.1`, `rc.2`, `rc.3`,
+  then stable. Each candidate absorbs only release blockers, proof refreshes,
+  packaging fixes, and approved regression fixes.
+- `0.7.x` is the legacy support line after stable `0.7.3`. It accepts low-risk
+  bug fixes on supported surfaces plus security, crash/data-loss, packaging,
+  update-check, release-proof, and release-documentation fixes.
+- Frozen legacy surfaces are not fixed in `0.7.x` unless the issue affects
+  supported shared infrastructure, security, or app stability.
+- `0.8.x` is the modernization line. `0.8.0` removes the currently frozen
+  surfaces first, then continues through the curated lanes below.
+- After stable `0.7.3`, `main` targets `0.8.0`; `release/0.7.x` carries
+  legacy maintenance.
 
 ## Approved Lanes
 

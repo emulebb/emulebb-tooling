@@ -28,6 +28,20 @@ Use it for status, release-source truth, and the open RC task list.
 - Package publication: held until all RC-blocking item IDs below are closed
   or explicitly accepted, final proof passes, and fresh packages are generated.
 
+## Release Train
+
+The public `0.7.3` candidate train is fixed:
+
+1. `emulebb-v0.7.3-rc.1`
+2. `emulebb-v0.7.3-rc.2`
+3. `emulebb-v0.7.3-rc.3`
+4. `emulebb-v0.7.3`
+
+Each RC absorbs only release blockers, proof refreshes, packaging fixes, and
+approved regression fixes. After stable `0.7.3`, `main` opens for `0.8.0`
+surface-removal work and `release/0.7.x` carries legacy support for the frozen
+`0.7.x` public surface.
+
 ## Release Identity
 
 - Public product name: `eMule broadband edition`

@@ -66,10 +66,20 @@ Directive precedence is:
   `fix/<topic>`, or `chore/<topic>`.
 - Release stabilization branches use `release/MAJOR.MINOR.PATCH` and are
   created from the selected reviewed `main` commit when a release candidate
-  starts.
-- Patch maintenance branches use the next patch version, branch from the latest
-  stable tag when `main` has moved on, and accept only low-risk bug, packaging,
-  documentation, and release-proof fixes.
+  starts. The `0.7.3` train is fixed as `0.7.3-rc.1`, `0.7.3-rc.2`,
+  `0.7.3-rc.3`, then stable `0.7.3`.
+- After stable `0.7.3`, `main` opens for `0.8.0` work and
+  `release/0.7.x` carries the legacy support line.
+- The `0.7.x` legacy line accepts only compatibility-preserving, low-risk bug
+  fixes on supported surfaces plus security, crash/data-loss, packaging,
+  update-check, release-proof, and release-documentation fixes. It must not add
+  new product surface, new controller/API capability, or feature expansion.
+- Frozen legacy surfaces remain unsupported in `0.7.x`; do not fix them unless
+  the issue affects supported shared infrastructure, security, or app
+  stability.
+- Patch maintenance on `release/0.7.x` publishes stable patch tags such as
+  `emulebb-v0.7.4`. If a separate one-off patch branch is needed, branch from
+  the latest stable tag when `main` has moved on.
 - Do not start normal feature work directly on release branches.
 - Fixes made on release branches must be merged or cherry-picked back to `main`
   unless the fix is release-packaging metadata that does not apply to `main`.
@@ -384,8 +394,13 @@ boundary, project entrypoint, warning, localization, and normalization policy.
 - The full public product name is `eMule broadband edition`.
 - The compact app, UI, API, and protocol-facing mod name is `eMuleBB`.
 - The GitHub organization, code name, and URL slug are `emulebb`.
-- The first public release candidate is `0.7.3-rc.1`.
+- The fixed `0.7.3` release-candidate train is `0.7.3-rc.1`,
+  `0.7.3-rc.2`, and `0.7.3-rc.3`.
 - The first stable release is `0.7.3`.
+- After stable `0.7.3`, the `0.7.x` series is the legacy support version with
+  a frozen public surface.
+- The `0.8.x` series is the modernization line; `0.8.0` is the first release
+  expected to remove currently frozen legacy surfaces.
 - Stable patch releases increment the patch number, starting with `0.7.4` after
   `0.7.3` if a stable hotfix is needed.
 - Future prereleases use the next target version with an explicit prerelease
