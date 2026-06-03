@@ -105,6 +105,9 @@ Status: audit and first ownership cleanup slices landed.
   `python -m emule_workspace test live-e2e` and cover wrapper forwarding.
 - Test repo commit: make Godzilla write `mixed_client_evidence` so runtime
   aMule readiness downgrades are explicit report data, not hidden weakness.
+- Build/test repo commit: stage reusable local-swarm VM harness inputs as an
+  explicit ZIP payload plus release assets, instead of recursively copying
+  live repository trees into guests.
 
 Current matrix findings:
 
