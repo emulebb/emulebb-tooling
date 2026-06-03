@@ -38,8 +38,8 @@ commands. It must not describe eMuleBB itself as a headless daemon.
 - Tell users to provide their own legal Windows ISO.
 - Point users from `vm-lab.example.json` to an ignored `vm-lab.local.json`.
 - Show the supported orchestration commands:
-  - `python -m emule_workspace vm-lab prepare --matrix win11`
-  - `python -m emule_workspace test windows-vm --matrix win11 --profile package-smoke`
+  - `python -m emule_workspace vm-lab prepare --matrix win10,win11`
+  - `python -m emule_workspace test windows-vm --profile package-helper-install`
 - Explain the clean-checkpoint workflow: build once, restore often.
 - Keep the guide clear that first image preparation is slow, while repeat runs
   are intended to be cheap and mostly unattended.
@@ -61,23 +61,39 @@ commands. It must not describe eMuleBB itself as a headless daemon.
   the canonical guide.
 - Include troubleshooting for missing Hyper-V commands, non-elevated shells,
   Windows Home hosts, ISO edition mismatches, and failed checkpoint restores.
-- Prefer `win11` as the first example matrix and mention `win10` only where the
-  local config supports it.
+- Use the current supported target matrix, `win10,win11`, unless the VM profile
+  catalog changes to support narrower matrices.
 
 ## Acceptance Criteria
 
-- [ ] A current reference guide documents local Hyper-V setup for eMuleBB.
-- [ ] The guide clearly states that users must supply their own Windows ISO.
-- [ ] The guide uses supported `python -m emule_workspace` commands.
-- [ ] The guide distinguishes headless VM automation from a headless eMuleBB
+- [x] A current reference guide documents local Hyper-V setup for eMuleBB.
+- [x] The guide clearly states that users must supply their own Windows ISO.
+- [x] The guide uses supported `python -m emule_workspace` commands.
+- [x] The guide distinguishes headless VM automation from a headless eMuleBB
       runtime.
-- [ ] The guide explains clean checkpoints and repeatable package smoke runs.
-- [ ] The guide includes practical troubleshooting for common host and ISO
+- [x] The guide explains clean checkpoints and repeatable package smoke runs.
+- [x] The guide includes practical troubleshooting for common host and ISO
       failures.
-- [ ] Current documentation checks pass after the guide is added.
+- [x] Current documentation checks pass after the guide is added.
+
+## Implementation Evidence
+
+- Added `docs/reference/GUIDE-HYPERV-WINDOWS.md` as the current user-facing
+  Hyper-V suite isolation guide.
+- Linked the guide from `docs/INDEX.md`, `docs/reference/GUIDE-SETUP.md`, and
+  `mkdocs.yml`.
+- The guide uses the current command contract from `repos/emulebb-build`:
+  `python -m emule_workspace vm-lab prepare`, `python -m emule_workspace test
+  windows-vm`, and `python -m emule_workspace test campaign-scenario`.
 
 ## Validation
 
-- `python scripts\docs-item-taxonomy-check.py`
-- `python scripts\docs-structure-check.py`
-- manual read-through of the guide from a clean-user perspective
+- 2026-06-03: `python scripts\docs-item-taxonomy-check.py` passed with
+  historical status warnings only.
+- 2026-06-03: `python scripts\docs-structure-check.py` passed with pre-existing
+  wide-table warnings in `docs/reference/WORKSPACE-REPO-MAP.md`.
+- 2026-06-03: `python -m mkdocs build --strict` passed; output retained
+  existing informational messages for historical links.
+- 2026-06-03: manual read-through checked the guide from a clean-user
+  perspective against current `emulebb-build` CLI help and VM profile
+  requirements.

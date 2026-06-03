@@ -28,6 +28,9 @@
 - [Full suite PowerShell bootstrap](reference/GUIDE-SETUP.md#full-suite-install-powershell-bootstrap):
   download `Bootstrap-eMuleBBSuite.ps1` from GitHub Releases and run it when
   you want the full suite installer flow.
+- [Hyper-V isolated suite runs](reference/GUIDE-HYPERV-WINDOWS.md):
+  prepare clean local Windows guests and run package or suite checks without
+  touching the host's daily eMuleBB profile.
 
 Use these guides in order for a first real profile:
 

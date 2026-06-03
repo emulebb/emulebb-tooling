@@ -123,6 +123,14 @@ The suite installer uses that address as the default control-service bind and
 still warns when services are exposed beyond loopback. Keep ordinary local
 installs on the default loopback-oriented path.
 
+## Hyper-V Isolated Suite Runs
+
+Use [Windows Hyper-V Suite Isolation](GUIDE-HYPERV-WINDOWS.md) when you want to
+test the eMuleBB package or suite installer inside clean Windows guests instead
+of touching the host machine's daily profile, downloads, controllers, and
+runtime state. That path is for release/package confidence and cautious suite
+experiments; it is not required for a normal desktop install.
+
 ## Choose Directories
 
 Use stable paths that will still exist after reboot:

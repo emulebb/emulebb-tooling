@@ -54,6 +54,7 @@ nav:
       - Product Guide: reference/GUIDE-EMULEBB.md
       - Released Behavior Summary: reference/RELEASED-BEHAVIOR-SUMMARY.md
       - Setup Guide: reference/GUIDE-SETUP.md
+      - Hyper-V Suite Isolation: reference/GUIDE-HYPERV-WINDOWS.md
       - Roadmap Summary: reference/ROADMAP-SUMMARY.md
       - Power User Manual: reference/GUIDE-POWER-USERS.md
       - Downloads And Search: reference/GUIDE-DOWNLOADS-SEARCH.md
