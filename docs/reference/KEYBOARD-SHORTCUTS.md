@@ -255,8 +255,8 @@ When Search is the active main pane, the Search parameter bar owns:
   menu dialog.
 - Modal dialogs keep local keyboard behavior. The app-level shortcuts are for
   the main shell and its primary modeless UI.
-- Localized `.rc` files are not normalized in this pass; default English
-  resources define the reviewed policy.
+- Default English resources define the app-level shortcut policy; localized
+  `.rc` mnemonic markers must not override the reserved main-shell shortcuts.
 
 ## Manual Verification
 
