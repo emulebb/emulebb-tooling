@@ -78,6 +78,28 @@ setup, but they are not edited as part of normal product work.
 | `analysis/stale-v0.72a-experimental-clean` | Historical eMuleBB branch snapshot for comparison |
 | `analysis/emuleai` | eMuleAI comparison source |
 
+## GitHub Repository Governance
+
+The GitHub organization uses these repo classes for settings consistency:
+
+| Class | Repositories | GitHub surfaces |
+|---|---|---|
+| Product | `emulebb`, `amutorrent` | Product issues/discussions belong on `emulebb`; aMuTorrent remains a product-family peer unless promoted to first-class roadmap tracking. |
+| Build, test, tooling, docs | `emulebb-build`, `emulebb-build-tests`, `emulebb-tooling`, `.github`, `emulebb.github.io` | Issues stay enabled for active work intake; repo projects and wikis are non-authoritative. |
+| Dependency forks | `emulebb-*` dependency forks under `repos/third_party` | Issues, projects, discussions, and wikis are disabled unless a fork needs active upstream-facing maintenance. |
+| Research, archive, and mirrors | `emulebb-mods-archive`, `emulebb-ai`, `amule`, `goed2k-server`, `JEmuleServer`, p2p-overlord repos | Repo surfaces stay off unless the repo owns active product-family work. |
+
+All non-archived public repos should have Dependabot alerts, Dependabot security
+updates, secret scanning, and push protection enabled where GitHub supports
+those features. Official eMuleBB release tag rules target `emulebb-v*` only;
+nightly tags such as `emulebb-nightly-*` must remain workflow-managed.
+
+License metadata is provenance, not decoration. Repos with missing or
+`NOASSERTION` license metadata must not receive new license files until the
+correct upstream or project license is identified. For dependency forks, record
+the upstream project, fork purpose, pinned branch, and known license source in
+the repo README or this map before making legal metadata changes.
+
 ## Operational Rules
 
 - Run `python -m emule_workspace sync` after topology changes so generated
