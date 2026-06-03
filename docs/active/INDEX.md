@@ -293,6 +293,7 @@ not active item docs.
 | [REF-051](items/REF-051.md) | Minor | OPEN | Remove legacy SOCKS and proxy support |
 | [REF-052](items/REF-052.md) | Minor | OPEN | Remove archive preview and recovery surfaces |
 | [REF-053](items/REF-053.md) | Minor | OPEN | Reduce upload queue and upload list linear lookup overhead |
+| [REF-054](items/REF-054.md) | Minor | OPEN | Stabilize and instrument download queue behavior |
 
 ---
 
@@ -426,6 +427,7 @@ not active item docs.
 | [FEAT-107](items/FEAT-107.md) | Minor | OPEN | Add upload under-target reason diagnostics |
 | [FEAT-108](items/FEAT-108.md) | Minor | OPEN | Add publish effectiveness feedback for shared files |
 | [FEAT-109](items/FEAT-109.md) | Minor | OPEN | Materialize suite tool dependencies deterministically |
+| [FEAT-110](items/FEAT-110.md) | Minor | OPEN | Add configurable title bar status format |
 
 ---
 
