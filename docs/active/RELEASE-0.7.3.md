@@ -14,8 +14,9 @@ Use it for status, release-source truth, and the open RC task list.
 - Proof status: release proof resumed by operator direction on 2026-05-17.
   The 2026-06-04 installer-controller VM proof passed on Win10 and Win11 with
   fresh x64, ARM64, and optional aMuTorrent x64 package hashes recorded in
-  [CI-035](items/CI-035.md). Git tagging still requires a later separate
-  operator instruction.
+  [CI-035](items/CI-035.md). GitHub controlled smoke run `26959062075` passed
+  both x64 and ARM64 package smoke lanes. Git tagging still requires a later
+  separate operator instruction.
 - Release freeze: active. No new feature, refactor, UI polish, warning-debt, or
   roadmap work enters 0.7.3 RC1; only direct release-gate blockers may be
   fixed before the tag.
@@ -91,10 +92,10 @@ Historical gate evidence and superseded cluster plans live under
 The 0.7.3 RC1 backlog is narrowed to `CI-035`. `CI-038` is Done with a
 current-head `ui-resource-depth` pass covering all 43 release languages. Fresh
 x64/ARM64 core package hashes, package SBOM hashes, optional aMuTorrent x64
-hashes, and the installer-controller VM proof are recorded. Remaining work is
-the quick release-campaign proof or explicit acceptance, final checklist
-confirmation, clean-worktree confirmation, and the later operator-controlled
-tag instruction.
+hashes, the installer-controller VM proof, and the GitHub x64/ARM64 controlled
+smoke pass are recorded. Remaining work is the quick release-campaign proof or
+explicit acceptance, final checklist confirmation, clean-worktree confirmation,
+and the later operator-controlled tag instruction.
 
 All other active `FEAT`, `REF`, warning-debt, cleanup, and polish items are
 post-0.7.3 RC1 by default. A non-blocking item may enter RC1 only if a

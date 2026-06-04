@@ -88,8 +88,10 @@ package, manifest, ZIP SHA-256, and SBOM SHA-256 evidence for x64, ARM64, and
 optional aMuTorrent x64 assets. [CI-035](items/CI-035.md) also records the
 2026-06-04 installer-controller VM proof passing on clean Win10 and Win11
 guests, plus the controlled GitHub smoke workflow extension that adds an ARM64
-`windows-11-arm` package/offline command-line smoke lane. The canonical quick
-release-campaign gate still remains open until
+`windows-11-arm` package/offline command-line smoke lane. GitHub controlled
+smoke run `26959062075` passed both the x64 `windows-2022` lane and the ARM64
+`windows-11-arm` lane. The canonical quick release-campaign gate still remains
+open until
 `python -m emule_workspace test release-campaign --campaign emulebb-0.7.3
 --execute` passes or the operator explicitly accepts narrower evidence. A
 2026-05-23 fast certification attempt first stopped on the external `hide.me`
