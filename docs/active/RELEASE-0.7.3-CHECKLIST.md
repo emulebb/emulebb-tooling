@@ -65,7 +65,7 @@ release tags and assets still use `0.7.3-rc.1`.
 - [ ] `python -m emule_workspace package-release --config Release --platform x64`
 - [ ] `python -m emule_workspace package-release --config Release --platform ARM64`
 - [ ] `python -m emule_workspace package-amutorrent --config Release --platform x64`
-- [ ] `python repos\emulebb-tooling\ci\check-clean-worktree.py`
+- [x] `python repos\emulebb-tooling\ci\check-clean-worktree.py`
 
 Run certification with the required local live inputs and Arr roots when those
 are needed by the operator environment, for example
@@ -99,7 +99,9 @@ open until
 completed and reported the expected open gate surface: missing or failed
 required evidence remains in controller-surface, live-wire-release,
 ui-resource-depth, and stabilization-stress phases, while packaging-provenance
-rows are present/passed except the clean-worktree row, which remains manual.
+rows are present/passed except the clean-worktree row, which was still manual.
+The follow-up `python repos\emulebb-tooling\ci\check-clean-worktree.py` tracked
+worktree cleanliness audit passed on 2026-06-04.
 The 2026-05-23 fast certification attempt first stopped on the external `hide.me`
 adapter precondition; [CI-035](items/CI-035.md) records that failed report and
 the follow-up harness classification commit. After the `hide.me` interface was

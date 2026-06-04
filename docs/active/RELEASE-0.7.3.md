@@ -96,8 +96,10 @@ current-head `ui-resource-depth` pass covering all 43 release languages. Fresh
 x64/ARM64 core package hashes, package SBOM hashes, optional aMuTorrent x64
 hashes, the installer-controller VM proof, and the GitHub x64/ARM64 controlled
 smoke pass are recorded. Remaining work is the quick release-campaign proof or
-explicit acceptance, final checklist confirmation, clean-worktree confirmation,
-and the later operator-controlled tag instruction.
+explicit acceptance, final checklist confirmation, and the later
+operator-controlled tag instruction. The tracked clean-worktree audit passed on
+2026-06-04 and should be rerun only if later proof or publication prep changes
+workspace state before tag instruction.
 
 All other active `FEAT`, `REF`, warning-debt, cleanup, and polish items are
 post-0.7.3 RC1 by default. A non-blocking item may enter RC1 only if a
