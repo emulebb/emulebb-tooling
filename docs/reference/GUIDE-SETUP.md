@@ -104,13 +104,18 @@ off to that installer. The versioned installer is also included in the main app
 ZIP under `eMuleBB\scripts`.
 
 `-Bundle Full` installs eMuleBB, aMuTorrent, Node, Prowlarr, Radarr, and Sonarr.
-Node and the Arr applications are downloaded from pinned public upstream URLs by
-default; pass `-DependencyManifest` to the installer only when you need a
-pre-hashed local or mirrored dependency set. Full and Controller installs require
-the selected release or nightly to publish the matching
-`emulebb-<version>-amutorrent-x64.zip` and manifest assets. If those assets are
-missing, non-interactive bootstrap runs fail before installing anything; an
-interactive run can choose to install `-Bundle Core` instead.
+The bootstrapper resolves the eMuleBB desktop package from
+`emulebb/emulebb/releases` and resolves the aMuTorrent controller package from
+`emulebb/amutorrent/releases`. Node and the Arr applications are downloaded from
+pinned public upstream URLs by default; pass `-DependencyManifest` to the
+installer only when you need a pre-hashed local or mirrored dependency set. Full
+and Controller bootstrap runs require the selected aMuTorrent release or nightly
+to publish `emulebb-<amutorrent-version>-amutorrent-x64.zip` and its manifest.
+If those assets are missing, non-interactive bootstrap runs fail before
+installing anything; an interactive run can choose to install `-Bundle Core`
+instead. Direct installer runs can override the aMuTorrent source with
+`-AmutorrentReleaseBaseUrl` and `-AmutorrentVersion`; if omitted, the installer
+uses the same release root and version as the eMuleBB desktop package.
 
 To verify the bootstrapper itself before running it, compare the local hash
 with the adjacent `Bootstrap-eMuleBBSuite.ps1.sha256` release asset:
