@@ -97,11 +97,15 @@ open until
 2026-06-04 plan-only audit of
 `python -m emule_workspace test release-campaign --campaign emulebb-0.7.3`
 completed and reported the expected open gate surface: missing or failed
-required evidence remains in controller-surface, live-wire-release,
-ui-resource-depth, and stabilization-stress phases, while packaging-provenance
+required evidence remains in controller-surface, live-wire-release, and
+stabilization-stress phases, while packaging-provenance
 rows are present/passed except the clean-worktree row, which was still manual.
 The follow-up `python repos\emulebb-tooling\ci\check-clean-worktree.py` tracked
 worktree cleanliness audit passed on 2026-06-04.
+After the stale preference UI harness label was aligned with the release
+resource text, `python -m emule_workspace test live-e2e --profile
+ui-resource-depth --fail-fast` passed on 2026-06-04 with report
+`workspaces\workspace\state\test-reports\live-e2e-suite\20260604T152240Z-emulebb-main-release-11344`.
 The 2026-05-23 fast certification attempt first stopped on the external `hide.me`
 adapter precondition; [CI-035](items/CI-035.md) records that failed report and
 the follow-up harness classification commit. After the `hide.me` interface was

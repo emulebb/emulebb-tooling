@@ -17,8 +17,10 @@ Use it for status, release-source truth, and the open RC task list.
   [CI-035](items/CI-035.md). GitHub controlled smoke run `26959062075` passed
   both x64 and ARM64 package smoke lanes. The 2026-06-04 plan-only
   `emulebb-0.7.3` release-campaign audit completed and still reports open
-  required evidence before the execute gate can pass. Git tagging still
-  requires a later separate operator instruction.
+  required evidence before the execute gate can pass. The 2026-06-04
+  `ui-resource-depth` rerun passed after a stale harness label was aligned with
+  the release resource text. Git tagging still requires a later separate
+  operator instruction.
 - Release freeze: active. No new feature, refactor, UI polish, warning-debt, or
   roadmap work enters 0.7.3 RC1; only direct release-gate blockers may be
   fixed before the tag.
@@ -97,7 +99,9 @@ x64/ARM64 core package hashes, package SBOM hashes, optional aMuTorrent x64
 hashes, the installer-controller VM proof, and the GitHub x64/ARM64 controlled
 smoke pass are recorded. Remaining work is the quick release-campaign proof or
 explicit acceptance, final checklist confirmation, and the later
-operator-controlled tag instruction. The tracked clean-worktree audit passed on
+operator-controlled tag instruction. The latest campaign plan audit reports
+open required evidence in controller-surface, live-wire-release, and
+stabilization-stress phases. The tracked clean-worktree audit passed on
 2026-06-04 and should be rerun only if later proof or publication prep changes
 workspace state before tag instruction.
 
