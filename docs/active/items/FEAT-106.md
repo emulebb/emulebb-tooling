@@ -61,6 +61,29 @@ opening or replacing slots faster during underfilled periods.
 - Use live logs to distinguish "no demand" from "demand exists but slots are
   not filling bandwidth".
 
+## Implementation Notes
+
+- 2026-06-04: A focused underfill slice shortened stalled zero-rate upload slot
+  replacement for peers with queued local upload data but no network progress.
+  The change keeps friend slots and pending disk I/O protected, preserves the
+  configured slot cap, and leaves Kad/eD2K wire behavior unchanged.
+- 2026-06-04: The upload bandwidth throttler's control-queue removal, merge,
+  pop, and shutdown cleanup paths were routed through the existing tested seam
+  helpers so the hot-path queue mechanics stay covered by native tests.
+
+## Evidence
+
+- 2026-06-04: `python -m emule_workspace test native --test-run-variant main
+  --suite-name parity --config Release --platform x64 --build-output-mode
+  ErrorsOnly` passed: 806 test cases, 5055 assertions.
+- 2026-06-04: `python -m emule_workspace build app --variant main --config
+  Debug --platform x64 --build-output-mode ErrorsOnly` passed.
+- 2026-06-04: `python -m emule_workspace build app --variant main --config
+  Release --platform x64 --build-output-mode ErrorsOnly` passed.
+- 2026-06-04: Fresh Release x64 process launched with
+  `-c F:\M\H06T01\dldz\EMULE_BIN`; startup reached VPN Guard success and shared
+  hash progress with no startup-error log output observed.
+
 ## Acceptance Criteria
 
 - [ ] Upload underfill with eligible queued clients enters ramp-up mode after a
