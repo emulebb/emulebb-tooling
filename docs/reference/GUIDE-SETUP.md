@@ -85,7 +85,7 @@ that download folder, and run the bootstrapper.
 For the latest nightly or prerelease:
 
 ```powershell
-.\Bootstrap-eMuleBBSuite.ps1 -IncludePrerelease
+.\Bootstrap-eMuleBBSuite.ps1 -IncludePrerelease -Bundle Full
 ```
 
 For RC1 after it is published:
@@ -96,10 +96,21 @@ For RC1 after it is published:
 
 The bootstrapper is published as a release asset, so setup does not depend on
 the current `main` branch. It resolves the requested release, latest stable
-release, or latest prerelease when `-IncludePrerelease` is used. It verifies
-the release ZIP against its manifest SHA-256, extracts the versioned suite
-installer, and hands off to that installer. The versioned installer is also
-included in the main app ZIP under `eMuleBB\scripts`.
+release, or latest prerelease when `-IncludePrerelease` is used. If no supported
+stable eMuleBB release exists yet, it can fall back to the latest supported
+nightly and ignores legacy pre-eMuleBB release tags. It verifies the release ZIP
+against its manifest SHA-256, extracts the versioned suite installer, and hands
+off to that installer. The versioned installer is also included in the main app
+ZIP under `eMuleBB\scripts`.
+
+`-Bundle Full` installs eMuleBB, aMuTorrent, Node, Prowlarr, Radarr, and Sonarr.
+Node and the Arr applications are downloaded from pinned public upstream URLs by
+default; pass `-DependencyManifest` to the installer only when you need a
+pre-hashed local or mirrored dependency set. Full and Controller installs require
+the selected release or nightly to publish the matching
+`emulebb-<version>-amutorrent-x64.zip` and manifest assets. If those assets are
+missing, non-interactive bootstrap runs fail before installing anything; an
+interactive run can choose to install `-Bundle Core` instead.
 
 To verify the bootstrapper itself before running it, compare the local hash
 with the adjacent `Bootstrap-eMuleBBSuite.ps1.sha256` release asset:
