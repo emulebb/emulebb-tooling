@@ -15,8 +15,10 @@ Use it for status, release-source truth, and the open RC task list.
   The 2026-06-04 installer-controller VM proof passed on Win10 and Win11 with
   fresh x64, ARM64, and optional aMuTorrent x64 package hashes recorded in
   [CI-035](items/CI-035.md). GitHub controlled smoke run `26959062075` passed
-  both x64 and ARM64 package smoke lanes. Git tagging still requires a later
-  separate operator instruction.
+  both x64 and ARM64 package smoke lanes. The 2026-06-04 plan-only
+  `emulebb-0.7.3` release-campaign audit completed and still reports open
+  required evidence before the execute gate can pass. Git tagging still
+  requires a later separate operator instruction.
 - Release freeze: active. No new feature, refactor, UI polish, warning-debt, or
   roadmap work enters 0.7.3 RC1; only direct release-gate blockers may be
   fixed before the tag.

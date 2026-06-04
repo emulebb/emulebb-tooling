@@ -46,7 +46,7 @@ Run `python -m emule_workspace ...` commands from
 `$env:EMULEBB_WORKSPACE_ROOT\repos\emulebb-build`. Use absolute
 `$env:EMULEBB_WORKSPACE_ROOT\...` paths when passing local input files.
 
-- [ ] `python -m emule_workspace test release-campaign --campaign emulebb-0.7.3`
+- [x] `python -m emule_workspace test release-campaign --campaign emulebb-0.7.3`
 - [ ] `python -m emule_workspace test release-campaign --campaign emulebb-0.7.3 --execute`
 
 `emulebb-0.7.3` is the stable quick campaign ID in `emulebb-build-tests`; RC1
@@ -94,7 +94,13 @@ smoke run `26959062075` passed both the x64 `windows-2022` lane and the ARM64
 open until
 `python -m emule_workspace test release-campaign --campaign emulebb-0.7.3
 --execute` passes or the operator explicitly accepts narrower evidence. A
-2026-05-23 fast certification attempt first stopped on the external `hide.me`
+2026-06-04 plan-only audit of
+`python -m emule_workspace test release-campaign --campaign emulebb-0.7.3`
+completed and reported the expected open gate surface: missing or failed
+required evidence remains in controller-surface, live-wire-release,
+ui-resource-depth, and stabilization-stress phases, while packaging-provenance
+rows are present/passed except the clean-worktree row, which remains manual.
+The 2026-05-23 fast certification attempt first stopped on the external `hide.me`
 adapter precondition; [CI-035](items/CI-035.md) records that failed report and
 the follow-up harness classification commit. After the `hide.me` interface was
 restored, `python -m emule_workspace test certification --profile fast` passed
