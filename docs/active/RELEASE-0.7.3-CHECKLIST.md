@@ -80,22 +80,27 @@ the wrong architecture, contains source/build/debug artifacts, or cannot record
 per-file SHA-256 hashes and SPDX SBOM provenance in the package manifest.
 
 Current state: non-live build/test rows have partial historical evidence in
-[CI-035](items/CI-035.md), [CI-037](../history/items/CI-037.md) records a passed expanded
-weak-path live run, [CI-038](../history/items/CI-038.md) records a passed 2026-05-23
-current-head `ui-resource-depth` run for all 43 release languages, and
-[CI-035](items/CI-035.md) records 2026-05-17 non-UI package evidence for x64,
-ARM64, and optional aMuTorrent x64 assets. Final certification proof and fresh
-RC package hashes remain incomplete until rerun and recorded on the selected
-heads. A 2026-05-23 fast certification attempt first stopped on the external
-`hide.me` adapter precondition; [CI-035](items/CI-035.md) records that failed
-report and the follow-up harness classification commit. After the `hide.me`
-interface was restored, `python -m emule_workspace test certification --profile
-fast` passed on the selected heads and is recorded in
-[CI-035](items/CI-035.md). Quick expanded live-wire proof, quick heavy/stress
-rows, aMuTorrent add-on rows, fresh RC packages, SBOMs, and hash recording
-remain incomplete. Full overnight certification and real-profile monitoring are
-formal `overnight-full` evidence for confidence and failure diagnosis, while
-`emulebb-0.7.3` remains the repeatable RC package gate.
+[CI-035](items/CI-035.md), [CI-037](../history/items/CI-037.md) records a
+passed expanded weak-path live run, [CI-038](../history/items/CI-038.md)
+records a passed 2026-05-23 current-head `ui-resource-depth` run for all 43
+release languages, and [CI-035](items/CI-035.md) records 2026-06-04 fresh
+package, manifest, ZIP SHA-256, and SBOM SHA-256 evidence for x64, ARM64, and
+optional aMuTorrent x64 assets. [CI-035](items/CI-035.md) also records the
+2026-06-04 installer-controller VM proof passing on clean Win10 and Win11
+guests, plus the controlled GitHub smoke workflow extension that adds an ARM64
+`windows-11-arm` package/offline command-line smoke lane. The canonical quick
+release-campaign gate still remains open until
+`python -m emule_workspace test release-campaign --campaign emulebb-0.7.3
+--execute` passes or the operator explicitly accepts narrower evidence. A
+2026-05-23 fast certification attempt first stopped on the external `hide.me`
+adapter precondition; [CI-035](items/CI-035.md) records that failed report and
+the follow-up harness classification commit. After the `hide.me` interface was
+restored, `python -m emule_workspace test certification --profile fast` passed
+on the selected heads and is recorded in [CI-035](items/CI-035.md). Quick
+expanded live-wire proof, quick heavy/stress rows, and aMuTorrent add-on rows
+remain incomplete. Full overnight certification and real-profile monitoring
+are formal `overnight-full` evidence for confidence and failure diagnosis,
+while `emulebb-0.7.3` remains the repeatable RC package gate.
 
 2026-05-14 closeout prep did not run live E2E, regenerate packages, or create
 tags. Existing package manifests are rehearsal artifacts from older commits and
@@ -130,13 +135,15 @@ hardening lands.
 Run the remaining queue in this order:
 
 1. Revalidate the active release docs and item dispositions.
-2. Run the required command rows above on the selected current app `main` head,
+2. Run the required campaign command rows above on the selected current app
+   `main` head,
    including the quick expanded weak-path live gate, quick disposable heavy and
    stabilization profiles, aMuTorrent add-ons, and `ui-resource-depth`.
-3. Regenerate x64, ARM64, and optional aMuTorrent x64 packages only after proof
-   succeeds.
-4. Record fresh package paths, manifests, SBOMs, SHA-256 hashes, and repo
-   commits in [CI-035](items/CI-035.md).
+3. Rebuild package assets again only if the campaign proof changes the selected
+   commit set or the operator requests a final publication refresh.
+4. Confirm the 2026-06-04 package paths, manifests, SBOMs, SHA-256 hashes, and
+   repo commits recorded in [CI-035](items/CI-035.md) are the intended
+   publication inputs.
 5. Leave the annotated tag step blocked until the operator gives a separate tag
    instruction.
 

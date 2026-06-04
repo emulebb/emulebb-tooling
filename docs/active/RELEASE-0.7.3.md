@@ -6,13 +6,16 @@ Use it for status, release-source truth, and the open RC task list.
 
 ## Current Status
 
-- Status: Final proof in progress.
+- Status: Installer-controller VM proof passed; final release-campaign proof
+  and operator tag instruction still pending.
 - Target publication window: 2026-06-03, contingent on `CI-035` proof,
   package/SBOM/hash recording, clean-worktree confirmation, and the separate
   operator tag instruction.
 - Proof status: release proof resumed by operator direction on 2026-05-17.
-  Live proof, package refresh, and evidence recording are active; Git tagging
-  still requires a later separate operator instruction.
+  The 2026-06-04 installer-controller VM proof passed on Win10 and Win11 with
+  fresh x64, ARM64, and optional aMuTorrent x64 package hashes recorded in
+  [CI-035](items/CI-035.md). Git tagging still requires a later separate
+  operator instruction.
 - Release freeze: active. No new feature, refactor, UI polish, warning-debt, or
   roadmap work enters 0.7.3 RC1; only direct release-gate blockers may be
   fixed before the tag.
@@ -25,8 +28,9 @@ Use it for status, release-source truth, and the open RC task list.
 - Stock/community comparison baseline: `baseline/community-0.72a`.
 - Release stabilization branch: `release/0.7.3` once the operator starts the
   0.7.3 RC1 branch.
-- Package publication: held until all RC-blocking item IDs below are closed
-  or explicitly accepted, final proof passes, and fresh packages are generated.
+- Package publication: held until the remaining quick release-campaign proof is
+  run or explicitly accepted, final checklist rows are confirmed, and the
+  operator gives the separate tag/publication instruction.
 
 ## Release Train
 
@@ -80,15 +84,17 @@ Historical gate evidence and superseded cluster plans live under
 
 | ID | Priority | Area | Required outcome |
 |----|----------|------|------------------|
-| [CI-035](items/CI-035.md) | Major | Final proof | Current-head RC proof passes and fresh x64/ARM64 core package hashes plus optional aMuTorrent x64 hash are recorded. |
+| [CI-035](items/CI-035.md) | Major | Final proof | Fresh x64/ARM64 core package hashes plus optional aMuTorrent x64 hash are recorded; remaining quick release-campaign proof, checklist confirmation, and operator-controlled tag instruction are still open. |
 
 ## Remaining Release Backlog
 
-The 0.7.3 RC1 backlog is narrowed to `CI-035`. `CI-038` is Done with a current-head
-`ui-resource-depth` pass covering all 43 release languages. Remaining work is
-final certification proof, fresh x64/ARM64 core package regeneration, optional
-aMuTorrent x64 package regeneration, package SBOM generation, hash recording,
-clean-worktree confirmation, and the later operator-controlled tag instruction.
+The 0.7.3 RC1 backlog is narrowed to `CI-035`. `CI-038` is Done with a
+current-head `ui-resource-depth` pass covering all 43 release languages. Fresh
+x64/ARM64 core package hashes, package SBOM hashes, optional aMuTorrent x64
+hashes, and the installer-controller VM proof are recorded. Remaining work is
+the quick release-campaign proof or explicit acceptance, final checklist
+confirmation, clean-worktree confirmation, and the later operator-controlled
+tag instruction.
 
 All other active `FEAT`, `REF`, warning-debt, cleanup, and polish items are
 post-0.7.3 RC1 by default. A non-blocking item may enter RC1 only if a
