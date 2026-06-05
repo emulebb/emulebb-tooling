@@ -135,8 +135,8 @@ Current remaining queue:
 2. Optionally run the literal aggregate `release-campaign --execute` wrapper if
    the operator wants the campaign wrapper itself to restamp the already-passed
    leaf rows.
-3. Leave the annotated tag step blocked until the operator gives a separate tag
-   instruction.
+3. Annotated RC1 tag was created and pushed after the operator gave the
+   separate tag instruction on 2026-06-05.
 
 ## Overnight-Full Campaign
 
@@ -198,5 +198,12 @@ soak status cannot be confused with the repeatable RC package gate.
       [CI-035](items/CI-035.md) if that asset is published.
 - [x] Confirm the optional aMuTorrent x64 package SBOM hash is recorded in
       [CI-035](items/CI-035.md) if that asset is published.
-- [ ] Create the annotated RC tag only after package verification and a
+- [x] Create the annotated RC tag only after package verification and a
       separate operator instruction.
+
+Tag closure:
+
+- tag: `emulebb-v0.7.3-rc.1`
+- target: `abe374dd3378e6a1b292a363f9dfe1ae6f2f74dc`
+- tag object: `6f251ec88f72deafa1a32c8df79d6ae9dcaf559b`
+- remote: `origin`
