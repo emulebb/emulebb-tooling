@@ -1567,6 +1567,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/Limit"
         - $ref: "#/components/parameters/Offset"
+        - $ref: "#/components/parameters/IncludeScoreBreakdown"
       responses:
         "200":
           $ref: "#/components/responses/UploadQueueListResponse"
@@ -2515,6 +2516,13 @@ components:
         minimum: 0
         maximum: 2147483647
         default: 0
+    IncludeScoreBreakdown:
+      name: includeScoreBreakdown
+      in: query
+      schema:
+        type: boolean
+        default: false
+      description: Include per-client upload score diagnostics such as cooldown availability and cooldown remaining time.
     SearchId:
       name: searchId
       in: path
