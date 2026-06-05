@@ -56,16 +56,46 @@ Start with exact ED2K hash matches against current downloads, completed known
 files, and shared files. Near-duplicate heuristics should be later and
 user-visible because filename/size similarity can produce false positives.
 
+## Additional Hashes And MD4 Uniqueness
+
+The ED2K file hash should remain the compatibility identity. It is MD4-based,
+which means it is old and cryptographically broken, but still extremely useful
+for accidental exact-file uniqueness.
+
+For normal media-library and download-queue use, accidental MD4 collisions are
+not the practical risk. A 128-bit hash space is large enough that exact-byte
+duplicate detection across realistic local libraries, shared inventories, and
+download histories is effectively unique. Even at internet-scale catalog sizes,
+random collision odds stay tiny compared with ordinary operator problems such
+as duplicate encodes, renamed files, tag changes, bad metadata, fake search
+results, and partial or corrupt downloads.
+
+The important boundary is adversarial input. MD4 must not be treated as modern
+security proof: a motivated attacker can create different byte streams with the
+same MD4 far more cheaply than with SHA-256 or BLAKE3. That does not make ED2K
+identity useless; it means new stronger hashes should be additive. Use MD4/ED2K
+for stock network compatibility and exact-byte legacy identity, then use
+SHA-256, BLAKE3, or another strong local sidecar hash when eMuleBB needs extra
+confidence for local duplicate checking, diagnostics, or controller metadata.
+
+For "same media" detection, no cryptographic hash is enough by itself. Different
+encodes, remuxes, subtitles, tags, cover art, or container metadata will produce
+different MD4, SHA-256, and BLAKE3 values. Near-duplicate media detection should
+stay a separate optional heuristic or fingerprinting feature, not a property of
+the ED2K hash.
+
 ## Scope Constraints
 
 - exact-duplicate checks should be deterministic and cheap
 - near-duplicate mode must stay optional because false positives are possible
 - this feature should complement, not replace, the `KnownFileList` correctness fixes under
   `BUG-037`
-- a local strong-hash cache such as a BLAKE3 sidecar is a valid future implementation aid
-  for exact-duplicate confidence, but it is not required for the first version
-- if a BLAKE3 value is ever exposed on the network, it should start as advisory extra
-  metadata for upgraded peers only, not as a replacement for MD4 identity
+- a local strong-hash cache such as a SHA-256 or BLAKE3 sidecar is a valid
+  future implementation aid for exact-duplicate confidence, but it is not
+  required for the first version
+- if a stronger hash is ever exposed on the network, it should start as
+  advisory extra metadata for upgraded peers only, not as a replacement for
+  MD4/ED2K identity
 
 ## Acceptance Criteria
 
