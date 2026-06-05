@@ -30,7 +30,10 @@ python -m emule_workspace test release-campaign --campaign emulebb-0.7.3-overnig
 Without `--execute`, the command reads latest known JSON artifacts when they
 exist, shows manual evidence rows where command output/checklist evidence is
 authoritative, and warns for missing required evidence. With `--execute`, it
-runs the selected campaign's blocking commands in manifest order.
+runs the selected campaign's blocking commands in manifest order and writes a
+run-owned `release-campaign-run-result.json` with repo heads, command status,
+per-scenario evidence paths, and package hash summaries when package manifests
+are present.
 
 Release campaign execution keeps the live E2E network scope explicit. The
 default `--test-network default` includes offline and LAN suites only; required
@@ -51,6 +54,11 @@ python -m emule_workspace test release-campaign --campaign emulebb-0.7.3 --execu
 
 Use `--local-vm-swarm-mode local` to run the reusable swarm rows on the host
 instead. Keep live-wire/VPN phases separate from deterministic LAN swarm rows.
+
+Hyper-V proof is on-demand confidence evidence for RC1, not part of the default
+quick RC gate. Default `emulebb-0.7.3 --execute` skips nonblocking VM rows. Use
+`--include-nonblocking`, a direct `test windows-vm ...` command, or the
+explicit local/VM swarm override above when clean guest proof is needed.
 
 ## Structure Contract
 
@@ -127,6 +135,11 @@ across:
 - x64 package, ARM64 package, optional aMuTorrent package, clean worktree, and
   hash recording.
 
+The `installer-controller-surface` profile is the quick installer-backed
+controller proof. The long `live-process-monitor` lane is intentionally split
+out into `installer-controller-surface-soak` and the overnight/full soak
+surface so it cannot stretch the repeatable RC quick loop.
+
 `emulebb-0.7.3-overnight` is the full overnight campaign. It is deliberately
 longer and runs:
 
@@ -193,7 +206,7 @@ The overnight campaign uses full soak gates:
 ```powershell
 python -m emule_workspace test certification --profile overnight
 python -m emule_workspace test live-e2e --profile cpu-heavy --fail-fast
-python -m emule_workspace test live-e2e --suite live-process-monitor --fail-fast
+python -m emule_workspace test live-e2e --profile installer-controller-surface-soak --fail-fast
 ```
 
 The real monitor launches the operator-owned live-wire profile for at least 30

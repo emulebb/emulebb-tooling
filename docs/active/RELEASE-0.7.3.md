@@ -6,22 +6,22 @@ Use it for status, release-source truth, and the open RC task list.
 
 ## Current Status
 
-- Status: Installer-controller VM proof passed; final release-campaign proof
-  and operator tag instruction still pending.
-- Target publication window: 2026-06-03, contingent on `CI-035` proof,
-  package/SBOM/hash recording, clean-worktree confirmation, and the separate
-  operator tag instruction.
+- Status: RC quick campaign shape fixed; latest aggregate quick campaign
+  attempt failed on public-network connectivity. Operator tag instruction is
+  still pending and no tag should be created.
+- Target publication window: blocked until `CI-035` quick proof,
+  package/SBOM/hash confirmation, clean-worktree confirmation, successful push
+  of pending build commit `fb6e286`, and the separate operator tag instruction.
 - Proof status: release proof resumed by operator direction on 2026-05-17.
-  The 2026-06-05 package refresh regenerated x64, ARM64, and optional
-  aMuTorrent x64 package hashes recorded in [CI-035](items/CI-035.md). The
-  2026-06-04 installer-controller VM proof remains the latest clean Win10 and
-  Win11 installer-controller pass. GitHub controlled smoke run `26959062075`
-  passed both x64 and ARM64 package smoke lanes. The 2026-06-04 plan-only
-  `emulebb-0.7.3` release-campaign audit completed and still reports open
-  required evidence before the execute gate can pass. The 2026-06-04
-  `ui-resource-depth` rerun passed after a stale harness label was aligned with
-  the release resource text. Git tagging still requires a later separate
-  operator instruction.
+  On 2026-06-05 the quick campaign was reduced to the repeatable RC gate:
+  Hyper-V VM proof is now on-demand/nonblocking and `live-process-monitor` is
+  isolated behind the `installer-controller-surface-soak` profile. The latest
+  dry-run planned `18/18` commands. The latest execute run completed `18/18`
+  commands with `--continue-on-failure` but failed while outbound HTTPS/public
+  network access was unavailable (`WinError 10051` against GitHub, nodejs.org,
+  public seed refresh, and REST probes). Candidate x64, ARM64, diagnostics,
+  and optional aMuTorrent x64 packages were regenerated during that failed run
+  and are recorded in [CI-035](items/CI-035.md).
 - Release freeze: active. No new feature, refactor, UI polish, warning-debt, or
   roadmap work enters 0.7.3 RC1; only direct release-gate blockers may be
   fixed before the tag.
@@ -34,9 +34,9 @@ Use it for status, release-source truth, and the open RC task list.
 - Stock/community comparison baseline: `baseline/community-0.72a`.
 - Release stabilization branch: `release/0.7.3` once the operator starts the
   0.7.3 RC1 branch.
-- Package publication: held until the remaining quick release-campaign proof is
-  run or explicitly accepted, final checklist rows are confirmed, and the
-  operator gives the separate tag/publication instruction.
+- Package publication: held until the quick release-campaign proof passes or is
+  explicitly accepted, final checklist rows are confirmed, and the operator
+  gives the separate tag/publication instruction.
 
 ## Release Train
 
@@ -93,25 +93,21 @@ Historical gate evidence and superseded cluster plans live under
 | [CI-035](items/CI-035.md) | Major | Final proof |
 
 Required outcome:
-fresh x64/ARM64 core package hashes plus optional aMuTorrent x64 hash are
-recorded; remaining quick release-campaign proof, checklist confirmation, and
-operator-controlled tag instruction are still open.
+restore public network connectivity, push pending build commit `fb6e286`, rerun
+the quick aggregate campaign, confirm or regenerate package hashes, rerun the
+clean-worktree audit, then wait for the operator-controlled tag instruction.
 
 ## Remaining Release Backlog
 
 The 0.7.3 RC1 backlog is narrowed to `CI-035`. `CI-038` is Done with a
-current-head `ui-resource-depth` pass covering all 43 release languages. Fresh
-x64/ARM64 core package hashes, package SBOM hashes, optional aMuTorrent x64
-hashes, the installer-controller VM proof, and the GitHub x64/ARM64 controlled
-smoke pass are recorded. Remaining work is the quick release-campaign proof or
-explicit acceptance, final checklist confirmation, and the later
-operator-controlled tag instruction. The latest campaign plan audit reports
-open required evidence in controller-surface, live-wire-release, and
-stabilization-stress phases. The tracked clean-worktree audit passed on
-2026-06-04 and should be rerun only if later proof or publication prep changes
-workspace state before tag instruction. A final clean-worktree audit is still
-needed after the 2026-06-05 documentation refresh is committed or otherwise
-cleared.
+current-head `ui-resource-depth` pass covering all 43 release languages. The
+latest quick campaign dry-run reports the intended 18-command RC gate with VM
+proof on-demand. Candidate x64/ARM64 core package hashes, package SBOM hashes,
+and optional aMuTorrent x64 hashes are recorded, but the aggregate quick proof
+failed under public-network outage conditions. Remaining work is network
+restoration, push of `fb6e286`, quick release-campaign proof or explicit
+acceptance, final checklist confirmation, clean-worktree audit, and the later
+operator-controlled tag instruction.
 
 All other active `FEAT`, `REF`, warning-debt, cleanup, and polish items are
 post-0.7.3 RC1 by default. A non-blocking item may enter RC1 only if a

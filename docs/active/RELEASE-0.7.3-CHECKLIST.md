@@ -13,10 +13,10 @@ recording on the selected reviewed `main` heads. Do not create Git tags until
 the operator gives a separate tagging instruction after this checklist is
 complete.
 
-The current operator publication target is 2026-06-03. Treat that as a
-conditional target, not a release claim: `CI-035` proof, package/SBOM/hash
-recording, clean-worktree confirmation, and the separate tag instruction must
-complete first.
+The previous operator publication target has passed. Treat publication as
+blocked until `CI-035` proof, package/SBOM/hash recording, clean-worktree
+confirmation, successful push of pending build evidence work, and the separate
+tag instruction complete.
 
 Release freeze is active. No new feature, refactor, UI polish, warning-debt, or
 roadmap work enters 0.7.3 RC1; only direct release-gate blockers may be fixed
@@ -54,13 +54,13 @@ release tags and assets still use `0.7.3-rc.1`.
 
 ## Campaign Expanded Rows
 
-- [x] `python -m emule_workspace test certification --profile fast`
-- [x] `python -m emule_workspace test live-e2e --profile release-expanded-quick --fail-fast --live-wire-inputs-file $env:EMULEBB_WORKSPACE_ROOT\repos\emulebb-build-tests\live-wire-inputs.local.json`
-- [x] `python -m emule_workspace test live-e2e --profile cpu-heavy-quick --fail-fast`
-- [x] `python -m emule_workspace test live-e2e --profile stabilization-stress-quick --fail-fast --live-wire-inputs-file $env:EMULEBB_WORKSPACE_ROOT\repos\emulebb-build-tests\live-wire-inputs.local.json`
-- [x] `python -m emule_workspace test amutorrent-clean-startup --live-wire-inputs-file $env:EMULEBB_WORKSPACE_ROOT\repos\emulebb-build-tests\live-wire-inputs.local.json --rest-webserver-scheme https --keep-artifacts`
-- [x] `python -m emule_workspace test amutorrent-emulebb-ui --live-wire-inputs-file $env:EMULEBB_WORKSPACE_ROOT\repos\emulebb-build-tests\live-wire-inputs.local.json --rest-webserver-scheme https --keep-artifacts`
-- [x] `python -m emule_workspace test amutorrent-resilience --live-wire-inputs-file $env:EMULEBB_WORKSPACE_ROOT\repos\emulebb-build-tests\live-wire-inputs.local.json --rest-webserver-scheme https --keep-artifacts`
+- [ ] `python -m emule_workspace test certification --profile fast`
+- [ ] `python -m emule_workspace test live-e2e --profile release-expanded-quick --fail-fast --live-wire-inputs-file $env:EMULEBB_WORKSPACE_ROOT\repos\emulebb-build-tests\live-wire-inputs.local.json`
+- [ ] `python -m emule_workspace test live-e2e --profile cpu-heavy-quick --fail-fast`
+- [ ] `python -m emule_workspace test live-e2e --profile stabilization-stress-quick --fail-fast --live-wire-inputs-file $env:EMULEBB_WORKSPACE_ROOT\repos\emulebb-build-tests\live-wire-inputs.local.json`
+- [ ] `python -m emule_workspace test amutorrent-clean-startup --live-wire-inputs-file $env:EMULEBB_WORKSPACE_ROOT\repos\emulebb-build-tests\live-wire-inputs.local.json --rest-webserver-scheme https --keep-artifacts`
+- [ ] `python -m emule_workspace test amutorrent-emulebb-ui --live-wire-inputs-file $env:EMULEBB_WORKSPACE_ROOT\repos\emulebb-build-tests\live-wire-inputs.local.json --rest-webserver-scheme https --keep-artifacts`
+- [ ] `python -m emule_workspace test amutorrent-resilience --live-wire-inputs-file $env:EMULEBB_WORKSPACE_ROOT\repos\emulebb-build-tests\live-wire-inputs.local.json --rest-webserver-scheme https --keep-artifacts`
 - [x] `python -m emule_workspace test live-e2e --profile ui-resource-depth --fail-fast`
 - [x] `python -m emule_workspace package-release --config Release --platform x64`
 - [x] `python -m emule_workspace package-release --config Release --platform ARM64`
@@ -79,23 +79,27 @@ does not contain the full stock language DLL set, contains a language DLL for
 the wrong architecture, contains source/build/debug artifacts, or cannot record
 per-file SHA-256 hashes and SPDX SBOM provenance in the package manifest.
 
-Current state: [CI-035](items/CI-035.md) records 2026-06-05 final current-head
-quick RC1 proof on app `abe374dd`, build orchestration `bb432ca`, build-tests
-`c8336f5`, tooling `e9d3fc5`, and aMuTorrent `d25452a`. The refreshed fast
-certification, `ui-resource-depth`, `controller-surface`,
-`release-expanded-quick`, `cpu-heavy-quick`, `stabilization-stress-quick`, and
-three aMuTorrent live add-on rows all passed using the operator-provided
-`hide.me` bind interface and VPN guard allow list. Final x64, ARM64, and
-optional aMuTorrent x64 RC packages were regenerated with
-`--release-version 0.7.3-rc.1 --clean`, and [CI-035](items/CI-035.md) records
-the final ZIP, diagnostics ZIP, bootstrapper, SBOM, manifest, and provenance
-hashes. The tracked clean-worktree audit passed on 2026-06-05.
+Current state: [CI-035](items/CI-035.md) records a 2026-06-05 campaign-shape
+fix and a failed aggregate quick campaign attempt. The default quick campaign
+now plans 18 commands: Hyper-V VM proof is on-demand/nonblocking, and the
+long-running `live-process-monitor` is isolated behind
+`installer-controller-surface-soak`. Candidate x64, ARM64, diagnostics, and
+optional aMuTorrent x64 packages were regenerated during the failed aggregate
+run, but the quick campaign failed while outbound HTTPS/public-network access
+was unavailable (`WinError 10051` for GitHub, nodejs.org, public seed refresh,
+and REST probes). Build commit `fb6e286` fixes VPN Guard config forwarding
+through certification and is waiting for network restoration before it can be
+pushed.
 
-The literal aggregate command
-`python -m emule_workspace test release-campaign --campaign emulebb-0.7.3
---execute` was not rerun after the leaf rows passed; leave that row visible if
-the operator wants one more aggregate campaign wrapper invocation. Full
-overnight certification and real-profile monitoring are formal
+The next required aggregate command is:
+
+```powershell
+python -m emule_workspace test release-campaign --campaign emulebb-0.7.3 --execute --test-network all --continue-on-failure `
+  --live-wire-inputs-file $env:EMULEBB_WORKSPACE_ROOT\repos\emulebb-build-tests\live-wire-inputs.local.json `
+  --vpn-guard-live-config $env:EMULEBB_WORKSPACE_ROOT\repos\emulebb-build-tests\vpn-guard-live.local.json
+```
+
+Full overnight certification and real-profile monitoring are formal
 `overnight-full` soak/confidence evidence for failure diagnosis and are not
 part of the quick RC1 package gate.
 
@@ -131,12 +135,13 @@ hardening lands.
 
 Current remaining queue:
 
-1. Commit this evidence update and rerun the tracked clean-worktree audit.
-2. Optionally run the literal aggregate `release-campaign --execute` wrapper if
-   the operator wants the campaign wrapper itself to restamp the already-passed
-   leaf rows.
-3. Annotated RC1 tag was created and pushed after the operator gave the
-   separate tag instruction on 2026-06-05.
+1. Restore outbound HTTPS/public-network connectivity.
+2. Push build commit `fb6e286`.
+3. Rerun the quick aggregate campaign and record the run-owned evidence result.
+4. Confirm candidate package hashes after a passing campaign or regenerate
+   packages if the selected heads change.
+5. Rerun the tracked clean-worktree audit.
+6. Wait for the separate operator tag instruction.
 
 ## Overnight-Full Campaign
 
@@ -148,7 +153,7 @@ confidence:
 - [ ] `python -m emule_workspace test release-campaign --campaign emulebb-0.7.3-overnight --execute`
 - [ ] `python -m emule_workspace test live-e2e --profile release-expanded --fail-fast --live-wire-inputs-file $env:EMULEBB_WORKSPACE_ROOT\repos\emulebb-build-tests\live-wire-inputs.local.json`
 - [ ] `python -m emule_workspace test live-e2e --profile cpu-heavy --fail-fast`
-- [ ] `python -m emule_workspace test live-e2e --suite live-process-monitor --fail-fast`
+- [ ] `python -m emule_workspace test live-e2e --profile installer-controller-surface-soak --fail-fast`
 - [ ] `python -m emule_workspace test live-e2e --profile stabilization-stress --fail-fast --live-wire-inputs-file $env:EMULEBB_WORKSPACE_ROOT\repos\emulebb-build-tests\live-wire-inputs.local.json`
 
 The blocking release campaign uses the quick variants plus targeted aMuTorrent
@@ -161,8 +166,8 @@ soak status cannot be confused with the repeatable RC package gate.
 - [ ] Release notes use `eMuleBB` as the compact app/mod/API name.
 - [ ] Package-facing README identifies reviewed `main` as the 0.7.3 RC1
       release source and does not depend on a broadband stabilization branch.
-- [x] Annotated RC tag is `emulebb-v0.7.3-rc.1`.
-- [x] Annotated RC tag points at the selected reviewed `main` commit.
+- [ ] Annotated RC tag is `emulebb-v0.7.3-rc.1`.
+- [ ] Annotated RC tag points at the selected reviewed `main` commit.
 - [x] x64 RC asset is `emulebb-0.7.3-rc.1-x64.zip`.
 - [x] x64 RC manifest is `emulebb-0.7.3-rc.1-x64.manifest.json`.
 - [x] ARM64 RC asset is `emulebb-0.7.3-rc.1-arm64.zip`.
@@ -187,23 +192,19 @@ soak status cannot be confused with the repeatable RC package gate.
 
 ## Final Operator Steps
 
-- [x] Confirm no active workspace repo has unrelated uncommitted changes.
-- [x] Confirm fresh x64 and ARM64 package hashes are recorded in
+- [ ] Confirm no active workspace repo has unrelated uncommitted changes.
+- [ ] Confirm fresh x64 and ARM64 package hashes are recorded in
       [CI-035](items/CI-035.md).
-- [x] Confirm fresh x64 and ARM64 package SBOM hashes are recorded in
+- [ ] Confirm fresh x64 and ARM64 package SBOM hashes are recorded in
       [CI-035](items/CI-035.md).
 - [x] Confirm the suite bootstrapper SHA-256 is recorded in
       [CI-035](items/CI-035.md).
-- [x] Confirm the optional aMuTorrent x64 package hash is recorded in
+- [ ] Confirm the optional aMuTorrent x64 package hash is recorded in
       [CI-035](items/CI-035.md) if that asset is published.
-- [x] Confirm the optional aMuTorrent x64 package SBOM hash is recorded in
+- [ ] Confirm the optional aMuTorrent x64 package SBOM hash is recorded in
       [CI-035](items/CI-035.md) if that asset is published.
-- [x] Create the annotated RC tag only after package verification and a
+- [ ] Create the annotated RC tag only after package verification and a
       separate operator instruction.
 
-Tag closure:
-
-- tag: `emulebb-v0.7.3-rc.1`
-- target: `abe374dd3378e6a1b292a363f9dfe1ae6f2f74dc`
-- tag object: `6f251ec88f72deafa1a32c8df79d6ae9dcaf559b`
-- remote: `origin`
+Tag closure: not started. Wait for separate operator confirmation before
+creating or pushing any tag.
