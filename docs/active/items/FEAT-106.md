@@ -81,7 +81,7 @@ opening or replacing slots faster during underfilled periods.
 - 2026-06-04: `python -m emule_workspace build app --variant main --config
   Release --platform x64 --build-output-mode ErrorsOnly` passed.
 - 2026-06-04: Fresh Release x64 process launched with
-  `-c F:\M\H06T01\dldz\EMULE_BIN`; startup reached VPN Guard success and shared
+  `-c $env:EMULEBB_LOCAL_TEST_PROFILE_PATH`; startup reached VPN Guard success and shared
   hash progress with no startup-error log output observed.
 
 ## Acceptance Criteria
