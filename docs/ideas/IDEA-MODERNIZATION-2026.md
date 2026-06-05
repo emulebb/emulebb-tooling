@@ -74,7 +74,7 @@ Where we have proven implementations to port from, we say so. Where we are propo
 | MediaInfo refactored into per-format files | ✅ In progress |
 | Preferences documentation (40 keys) | ✅ Done |
 | DEFECTS.md catalogued | ✅ Done |
-| firewall-opener.ps1 / enable-long-paths.ps1 | ✅ Done |
+| Repair-Firewall.ps1 / Enable-LongPaths.ps1 | ✅ Done |
 
 ### Known defects to fix first (from DEFECTS.md / CODEREVIEW.md)
 
@@ -179,7 +179,7 @@ The 15 pillars below are grouped by engineering domain. Each pillar has:
 
 ### A-04 Windows Long-Path & Unicode Path Hardening
 
-**Why:** eMuleBB added `enable-long-paths.ps1` but the code still uses `MAX_PATH`-sized `TCHAR` arrays in many file operations.
+**Why:** eMuleBB added `Enable-LongPaths.ps1` but the code still uses `MAX_PATH`-sized `TCHAR` arrays in many file operations.
 
 **What:**
 - Audit all `TCHAR szPath[MAX_PATH]` declarations
@@ -1562,7 +1562,7 @@ jobs:
 - Register `ed2k://` URI handler (`HKLM\SOFTWARE\Classes\ed2k`)
 - Register `.emulecollection` file association
 - Start Menu shortcut + optional Desktop shortcut
-- Add Windows Firewall rules during install (replaces `firewall-opener.ps1`)
+- Add Windows Firewall rules during install (replaces `Repair-Firewall.ps1`)
 - Signed with EV code signing certificate
 
 **Effort:** M
