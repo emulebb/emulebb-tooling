@@ -82,12 +82,23 @@ setup, but they are not edited as part of normal product work.
 
 The GitHub organization uses these repo classes for settings consistency:
 
-| Class | Repositories | GitHub surfaces |
-|---|---|---|
-| Product | `emulebb`, `amutorrent` | Product issues/discussions belong on `emulebb`; aMuTorrent remains a product-family peer unless promoted to first-class roadmap tracking. |
-| Build, test, tooling, docs | `emulebb-build`, `emulebb-build-tests`, `emulebb-tooling`, `.github`, `emulebb.github.io` | Issues stay enabled for active work intake; repo projects and wikis are non-authoritative. |
-| Dependency forks | `emulebb-*` dependency forks under `repos/third_party` | Issues, projects, discussions, and wikis are disabled unless a fork needs active upstream-facing maintenance. |
-| Research, archive, and mirrors | `emulebb-mods-archive`, `emulebb-ai`, `amule`, `goed2k-server`, `JEmuleServer`, p2p-overlord repos | Repo surfaces stay off unless the repo owns active product-family work. |
+| Class | Repositories |
+|---|---|
+| Product | `emulebb`, `amutorrent` |
+| Build, test, tooling, docs | `emulebb-build`, `emulebb-build-tests`, `emulebb-tooling`, `.github`, `emulebb.github.io` |
+| Dependency forks | `emulebb-*` dependency forks under `repos/third_party` |
+| Research, archive, and mirrors | `emulebb-mods-archive`, `emulebb-ai`, `amule`, `goed2k-server`, `JEmuleServer`, p2p-overlord repos |
+
+GitHub surfaces:
+
+- Product issues/discussions belong on `emulebb`; aMuTorrent remains a
+  product-family peer unless promoted to first-class roadmap tracking.
+- Build, test, tooling, and docs repos keep issues enabled for active work
+  intake; repo projects and wikis are non-authoritative.
+- Dependency fork issues, projects, discussions, and wikis are disabled unless
+  a fork needs active upstream-facing maintenance.
+- Research, archive, and mirror repo surfaces stay off unless the repo owns
+  active product-family work.
 
 All non-archived public repos should have Dependabot alerts, Dependabot security
 updates, secret scanning, and push protection enabled where GitHub supports

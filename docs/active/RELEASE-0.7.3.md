@@ -88,9 +88,14 @@ Historical gate evidence and superseded cluster plans live under
 
 ## Open RC Tasks
 
-| ID | Priority | Area | Required outcome |
-|----|----------|------|------------------|
-| [CI-035](items/CI-035.md) | Major | Final proof | Fresh x64/ARM64 core package hashes plus optional aMuTorrent x64 hash are recorded; remaining quick release-campaign proof, checklist confirmation, and operator-controlled tag instruction are still open. |
+| ID | Priority | Area |
+|----|----------|------|
+| [CI-035](items/CI-035.md) | Major | Final proof |
+
+Required outcome:
+fresh x64/ARM64 core package hashes plus optional aMuTorrent x64 hash are
+recorded; remaining quick release-campaign proof, checklist confirmation, and
+operator-controlled tag instruction are still open.
 
 ## Remaining Release Backlog
 

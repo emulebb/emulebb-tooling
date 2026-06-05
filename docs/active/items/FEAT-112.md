@@ -1,5 +1,7 @@
 ---
 id: FEAT-112
+workflow: github
+github_issue: https://github.com/emulebb/emulebb/issues/138
 title: Add Torrent search type convenience filter and refresh file-type extensions
 status: OPEN
 priority: Minor
@@ -9,6 +11,9 @@ milestone: post-0.7.3
 created: 2026-06-05
 source: operator request to add Torrent search without changing ED2K server behavior
 ---
+
+
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/138. This local document is retained as an engineering spec/evidence record.
 
 # FEAT-112 - Add Torrent Search Type Convenience Filter And Refresh File-Type Extensions
 
