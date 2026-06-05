@@ -20,9 +20,9 @@ engineering spec/evidence records, not workflow status authority.
 ## Current Snapshot
 
 **Source of truth:** `EMULEBB_WORKSPACE_ROOT\workspaces\workspace\app\emulebb-main` (`main` branch)
-**Current non-done count:** `112`
+**Current non-done count:** `113`
 **Latest release-doc refresh:** 2026-06-02
-**Non-done by status:** `93` OPEN, `6` IN_PROGRESS, `13` DEFERRED, `0` BLOCKED.
+**Non-done by status:** `94` OPEN, `6` IN_PROGRESS, `13` DEFERRED, `0` BLOCKED.
 **Backlog counts:** item tables below are authoritative.
 **0.7.3 RC1 relevance:** Most non-done items below are future or deferred work;
 current RC gate and proof status is controlled by [RELEASE-0.7.3](RELEASE-0.7.3.md).
@@ -499,6 +499,7 @@ not active item docs.
 | [AMUT-001](../history/items/AMUT-001.md) | Major | PASSED | aMuTorrent eMuleBB browser smoke coverage |
 | [AMUT-002](../history/items/AMUT-002.md) | Major | PASSED | aMuTorrent transfer detail hydration |
 | [ARR-001](../history/items/ARR-001.md) | Major | PASSED | Full Arr release E2E validation |
+| [ARR-002](items/ARR-002.md) | Major | OPEN | Make Arr automatic search cache-backed and network-friendly |
 
 ---
 
