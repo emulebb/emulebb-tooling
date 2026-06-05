@@ -62,9 +62,9 @@ release tags and assets still use `0.7.3-rc.1`.
 - [ ] `python -m emule_workspace test amutorrent-emulebb-ui --live-wire-inputs-file $env:EMULEBB_WORKSPACE_ROOT\repos\emulebb-build-tests\live-wire-inputs.local.json --rest-webserver-scheme https --keep-artifacts`
 - [ ] `python -m emule_workspace test amutorrent-resilience --live-wire-inputs-file $env:EMULEBB_WORKSPACE_ROOT\repos\emulebb-build-tests\live-wire-inputs.local.json --rest-webserver-scheme https --keep-artifacts`
 - [x] `python -m emule_workspace test live-e2e --profile ui-resource-depth --fail-fast`
-- [ ] `python -m emule_workspace package-release --config Release --platform x64`
-- [ ] `python -m emule_workspace package-release --config Release --platform ARM64`
-- [ ] `python -m emule_workspace package-amutorrent --config Release --platform x64`
+- [x] `python -m emule_workspace package-release --config Release --platform x64`
+- [x] `python -m emule_workspace package-release --config Release --platform ARM64`
+- [x] `python -m emule_workspace package-amutorrent --config Release --platform x64`
 - [x] `python repos\emulebb-tooling\ci\check-clean-worktree.py`
 
 Run certification with the required local live inputs and Arr roots when those
@@ -83,7 +83,7 @@ Current state: non-live build/test rows have partial historical evidence in
 [CI-035](items/CI-035.md), [CI-037](../history/items/CI-037.md) records a
 passed expanded weak-path live run, [CI-038](../history/items/CI-038.md)
 records a passed 2026-05-23 current-head `ui-resource-depth` run for all 43
-release languages, and [CI-035](items/CI-035.md) records 2026-06-04 fresh
+release languages, and [CI-035](items/CI-035.md) records 2026-06-05 fresh
 package, manifest, ZIP SHA-256, and SBOM SHA-256 evidence for x64, ARM64, and
 optional aMuTorrent x64 assets. [CI-035](items/CI-035.md) also records the
 2026-06-04 installer-controller VM proof passing on clean Win10 and Win11
@@ -155,7 +155,7 @@ Run the remaining queue in this order:
    stabilization profiles, aMuTorrent add-ons, and `ui-resource-depth`.
 3. Rebuild package assets again only if the campaign proof changes the selected
    commit set or the operator requests a final publication refresh.
-4. Confirm the 2026-06-04 package paths, manifests, SBOMs, SHA-256 hashes, and
+4. Confirm the 2026-06-05 package paths, manifests, SBOMs, SHA-256 hashes, and
    repo commits recorded in [CI-035](items/CI-035.md) are the intended
    publication inputs.
 5. Leave the annotated tag step blocked until the operator gives a separate tag

@@ -12,10 +12,11 @@ Use it for status, release-source truth, and the open RC task list.
   package/SBOM/hash recording, clean-worktree confirmation, and the separate
   operator tag instruction.
 - Proof status: release proof resumed by operator direction on 2026-05-17.
-  The 2026-06-04 installer-controller VM proof passed on Win10 and Win11 with
-  fresh x64, ARM64, and optional aMuTorrent x64 package hashes recorded in
-  [CI-035](items/CI-035.md). GitHub controlled smoke run `26959062075` passed
-  both x64 and ARM64 package smoke lanes. The 2026-06-04 plan-only
+  The 2026-06-05 package refresh regenerated x64, ARM64, and optional
+  aMuTorrent x64 package hashes recorded in [CI-035](items/CI-035.md). The
+  2026-06-04 installer-controller VM proof remains the latest clean Win10 and
+  Win11 installer-controller pass. GitHub controlled smoke run `26959062075`
+  passed both x64 and ARM64 package smoke lanes. The 2026-06-04 plan-only
   `emulebb-0.7.3` release-campaign audit completed and still reports open
   required evidence before the execute gate can pass. The 2026-06-04
   `ui-resource-depth` rerun passed after a stale harness label was aligned with
@@ -103,7 +104,9 @@ operator-controlled tag instruction. The latest campaign plan audit reports
 open required evidence in controller-surface, live-wire-release, and
 stabilization-stress phases. The tracked clean-worktree audit passed on
 2026-06-04 and should be rerun only if later proof or publication prep changes
-workspace state before tag instruction.
+workspace state before tag instruction. A final clean-worktree audit is still
+needed after the 2026-06-05 documentation refresh is committed or otherwise
+cleared.
 
 All other active `FEAT`, `REF`, warning-debt, cleanup, and polish items are
 post-0.7.3 RC1 by default. A non-blocking item may enter RC1 only if a
