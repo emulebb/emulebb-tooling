@@ -55,12 +55,12 @@ release tags and assets still use `0.7.3-rc.1`.
 ## Campaign Expanded Rows
 
 - [x] `python -m emule_workspace test certification --profile fast`
-- [ ] `python -m emule_workspace test live-e2e --profile release-expanded-quick --fail-fast --live-wire-inputs-file $env:EMULEBB_WORKSPACE_ROOT\repos\emulebb-build-tests\live-wire-inputs.local.json`
-- [ ] `python -m emule_workspace test live-e2e --profile cpu-heavy-quick --fail-fast`
-- [ ] `python -m emule_workspace test live-e2e --profile stabilization-stress-quick --fail-fast --live-wire-inputs-file $env:EMULEBB_WORKSPACE_ROOT\repos\emulebb-build-tests\live-wire-inputs.local.json`
-- [ ] `python -m emule_workspace test amutorrent-clean-startup --live-wire-inputs-file $env:EMULEBB_WORKSPACE_ROOT\repos\emulebb-build-tests\live-wire-inputs.local.json --rest-webserver-scheme https --keep-artifacts`
-- [ ] `python -m emule_workspace test amutorrent-emulebb-ui --live-wire-inputs-file $env:EMULEBB_WORKSPACE_ROOT\repos\emulebb-build-tests\live-wire-inputs.local.json --rest-webserver-scheme https --keep-artifacts`
-- [ ] `python -m emule_workspace test amutorrent-resilience --live-wire-inputs-file $env:EMULEBB_WORKSPACE_ROOT\repos\emulebb-build-tests\live-wire-inputs.local.json --rest-webserver-scheme https --keep-artifacts`
+- [x] `python -m emule_workspace test live-e2e --profile release-expanded-quick --fail-fast --live-wire-inputs-file $env:EMULEBB_WORKSPACE_ROOT\repos\emulebb-build-tests\live-wire-inputs.local.json`
+- [x] `python -m emule_workspace test live-e2e --profile cpu-heavy-quick --fail-fast`
+- [x] `python -m emule_workspace test live-e2e --profile stabilization-stress-quick --fail-fast --live-wire-inputs-file $env:EMULEBB_WORKSPACE_ROOT\repos\emulebb-build-tests\live-wire-inputs.local.json`
+- [x] `python -m emule_workspace test amutorrent-clean-startup --live-wire-inputs-file $env:EMULEBB_WORKSPACE_ROOT\repos\emulebb-build-tests\live-wire-inputs.local.json --rest-webserver-scheme https --keep-artifacts`
+- [x] `python -m emule_workspace test amutorrent-emulebb-ui --live-wire-inputs-file $env:EMULEBB_WORKSPACE_ROOT\repos\emulebb-build-tests\live-wire-inputs.local.json --rest-webserver-scheme https --keep-artifacts`
+- [x] `python -m emule_workspace test amutorrent-resilience --live-wire-inputs-file $env:EMULEBB_WORKSPACE_ROOT\repos\emulebb-build-tests\live-wire-inputs.local.json --rest-webserver-scheme https --keep-artifacts`
 - [x] `python -m emule_workspace test live-e2e --profile ui-resource-depth --fail-fast`
 - [x] `python -m emule_workspace package-release --config Release --platform x64`
 - [x] `python -m emule_workspace package-release --config Release --platform ARM64`
@@ -79,42 +79,25 @@ does not contain the full stock language DLL set, contains a language DLL for
 the wrong architecture, contains source/build/debug artifacts, or cannot record
 per-file SHA-256 hashes and SPDX SBOM provenance in the package manifest.
 
-Current state: non-live build/test rows have partial historical evidence in
-[CI-035](items/CI-035.md), [CI-037](../history/items/CI-037.md) records a
-passed expanded weak-path live run, [CI-038](../history/items/CI-038.md)
-records a passed 2026-05-23 current-head `ui-resource-depth` run for all 43
-release languages, and [CI-035](items/CI-035.md) records 2026-06-05 fresh
-package, manifest, ZIP SHA-256, and SBOM SHA-256 evidence for x64, ARM64, and
-optional aMuTorrent x64 assets. [CI-035](items/CI-035.md) also records the
-2026-06-04 installer-controller VM proof passing on clean Win10 and Win11
-guests, plus the controlled GitHub smoke workflow extension that adds an ARM64
-`windows-11-arm` package/offline command-line smoke lane. GitHub controlled
-smoke run `26959062075` passed both the x64 `windows-2022` lane and the ARM64
-`windows-11-arm` lane. The canonical quick release-campaign gate still remains
-open until
+Current state: [CI-035](items/CI-035.md) records 2026-06-05 final current-head
+quick RC1 proof on app `abe374dd`, build orchestration `bb432ca`, build-tests
+`c8336f5`, tooling `e9d3fc5`, and aMuTorrent `d25452a`. The refreshed fast
+certification, `ui-resource-depth`, `controller-surface`,
+`release-expanded-quick`, `cpu-heavy-quick`, `stabilization-stress-quick`, and
+three aMuTorrent live add-on rows all passed using the operator-provided
+`hide.me` bind interface and VPN guard allow list. Final x64, ARM64, and
+optional aMuTorrent x64 RC packages were regenerated with
+`--release-version 0.7.3-rc.1 --clean`, and [CI-035](items/CI-035.md) records
+the final ZIP, diagnostics ZIP, bootstrapper, SBOM, manifest, and provenance
+hashes. The tracked clean-worktree audit passed on 2026-06-05.
+
+The literal aggregate command
 `python -m emule_workspace test release-campaign --campaign emulebb-0.7.3
---execute` passes or the operator explicitly accepts narrower evidence. A
-2026-06-04 plan-only audit of
-`python -m emule_workspace test release-campaign --campaign emulebb-0.7.3`
-completed and reported the expected open gate surface: missing or failed
-required evidence remains in controller-surface, live-wire-release, and
-stabilization-stress phases, while packaging-provenance
-rows are present/passed except the clean-worktree row, which was still manual.
-The follow-up `python repos\emulebb-tooling\ci\check-clean-worktree.py` tracked
-worktree cleanliness audit passed on 2026-06-04.
-After the stale preference UI harness label was aligned with the release
-resource text, `python -m emule_workspace test live-e2e --profile
-ui-resource-depth --fail-fast` passed on 2026-06-04 with report
-`workspaces\workspace\state\test-reports\live-e2e-suite\20260604T152240Z-emulebb-main-release-11344`.
-The 2026-05-23 fast certification attempt first stopped on the external `hide.me`
-adapter precondition; [CI-035](items/CI-035.md) records that failed report and
-the follow-up harness classification commit. After the `hide.me` interface was
-restored, `python -m emule_workspace test certification --profile fast` passed
-on the selected heads and is recorded in [CI-035](items/CI-035.md). Quick
-expanded live-wire proof, quick heavy/stress rows, and aMuTorrent add-on rows
-remain incomplete. Full overnight certification and real-profile monitoring
-are formal `overnight-full` evidence for confidence and failure diagnosis,
-while `emulebb-0.7.3` remains the repeatable RC package gate.
+--execute` was not rerun after the leaf rows passed; leave that row visible if
+the operator wants one more aggregate campaign wrapper invocation. Full
+overnight certification and real-profile monitoring are formal
+`overnight-full` soak/confidence evidence for failure diagnosis and are not
+part of the quick RC1 package gate.
 
 2026-05-14 closeout prep did not run live E2E, regenerate packages, or create
 tags. Existing package manifests are rehearsal artifacts from older commits and
@@ -146,19 +129,13 @@ changed the app and build-tests candidates. Treat all final proof rows as
 pending until rerun on the pushed heads that exist after this filename-intake
 hardening lands.
 
-Run the remaining queue in this order:
+Current remaining queue:
 
-1. Revalidate the active release docs and item dispositions.
-2. Run the required campaign command rows above on the selected current app
-   `main` head,
-   including the quick expanded weak-path live gate, quick disposable heavy and
-   stabilization profiles, aMuTorrent add-ons, and `ui-resource-depth`.
-3. Rebuild package assets again only if the campaign proof changes the selected
-   commit set or the operator requests a final publication refresh.
-4. Confirm the 2026-06-05 package paths, manifests, SBOMs, SHA-256 hashes, and
-   repo commits recorded in [CI-035](items/CI-035.md) are the intended
-   publication inputs.
-5. Leave the annotated tag step blocked until the operator gives a separate tag
+1. Commit this evidence update and rerun the tracked clean-worktree audit.
+2. Optionally run the literal aggregate `release-campaign --execute` wrapper if
+   the operator wants the campaign wrapper itself to restamp the already-passed
+   leaf rows.
+3. Leave the annotated tag step blocked until the operator gives a separate tag
    instruction.
 
 ## Overnight-Full Campaign
@@ -184,42 +161,42 @@ soak status cannot be confused with the repeatable RC package gate.
 - [ ] Release notes use `eMuleBB` as the compact app/mod/API name.
 - [ ] Package-facing README identifies reviewed `main` as the 0.7.3 RC1
       release source and does not depend on a broadband stabilization branch.
-- [ ] Annotated RC tag is `emulebb-v0.7.3-rc.1`.
-- [ ] Annotated RC tag points at the selected reviewed `main` commit.
-- [ ] x64 RC asset is `emulebb-0.7.3-rc.1-x64.zip`.
-- [ ] x64 RC manifest is `emulebb-0.7.3-rc.1-x64.manifest.json`.
-- [ ] ARM64 RC asset is `emulebb-0.7.3-rc.1-arm64.zip`.
-- [ ] ARM64 RC manifest is `emulebb-0.7.3-rc.1-arm64.manifest.json`.
-- [ ] Suite bootstrapper asset is `Bootstrap-eMuleBBSuite.ps1`.
-- [ ] Suite bootstrapper hash asset is `Bootstrap-eMuleBBSuite.ps1.sha256`.
-- [ ] Optional aMuTorrent x64 controller asset is
+- [x] Annotated RC tag is `emulebb-v0.7.3-rc.1`.
+- [x] Annotated RC tag points at the selected reviewed `main` commit.
+- [x] x64 RC asset is `emulebb-0.7.3-rc.1-x64.zip`.
+- [x] x64 RC manifest is `emulebb-0.7.3-rc.1-x64.manifest.json`.
+- [x] ARM64 RC asset is `emulebb-0.7.3-rc.1-arm64.zip`.
+- [x] ARM64 RC manifest is `emulebb-0.7.3-rc.1-arm64.manifest.json`.
+- [x] Suite bootstrapper asset is `Bootstrap-eMuleBBSuite.ps1`.
+- [x] Suite bootstrapper hash asset is `Bootstrap-eMuleBBSuite.ps1.sha256`.
+- [x] Optional aMuTorrent x64 controller asset is
       `emulebb-0.7.3-rc.1-amutorrent-x64.zip`.
-- [ ] Optional aMuTorrent x64 controller manifest is
+- [x] Optional aMuTorrent x64 controller manifest is
       `emulebb-0.7.3-rc.1-amutorrent-x64.manifest.json`.
-- [ ] Each ZIP contains exactly the full stock language DLL set under
+- [x] Each ZIP contains exactly the full stock language DLL set under
       `eMule\lang`.
-- [ ] Each ZIP contains package-facing README, release notes, GPL text,
+- [x] Each ZIP contains package-facing README, release notes, GPL text,
       third-party notices, SPDX SBOM, and REST docs. Legacy web templates are
       frozen baggage and must not be shipped in RC assets.
-- [ ] Package manifests record the ZIP hash, selected executable hash, expected
+- [x] Package manifests record the ZIP hash, selected executable hash, expected
       language DLL list/count, SBOM hash, per-file package hashes,
       bootstrapper asset name, bootstrapper SHA-256, and bootstrapper SHA-256
       path.
-- [ ] Package notes state that ZIPs are not code-signed, contain no debug
+- [x] Package notes state that ZIPs are not code-signed, contain no debug
       symbols, and do not bundle optional `MediaInfo.dll`.
 
 ## Final Operator Steps
 
-- [ ] Confirm no active workspace repo has unrelated uncommitted changes.
-- [ ] Confirm fresh x64 and ARM64 package hashes are recorded in
+- [x] Confirm no active workspace repo has unrelated uncommitted changes.
+- [x] Confirm fresh x64 and ARM64 package hashes are recorded in
       [CI-035](items/CI-035.md).
-- [ ] Confirm fresh x64 and ARM64 package SBOM hashes are recorded in
+- [x] Confirm fresh x64 and ARM64 package SBOM hashes are recorded in
       [CI-035](items/CI-035.md).
-- [ ] Confirm the suite bootstrapper SHA-256 is recorded in
+- [x] Confirm the suite bootstrapper SHA-256 is recorded in
       [CI-035](items/CI-035.md).
-- [ ] Confirm the optional aMuTorrent x64 package hash is recorded in
+- [x] Confirm the optional aMuTorrent x64 package hash is recorded in
       [CI-035](items/CI-035.md) if that asset is published.
-- [ ] Confirm the optional aMuTorrent x64 package SBOM hash is recorded in
+- [x] Confirm the optional aMuTorrent x64 package SBOM hash is recorded in
       [CI-035](items/CI-035.md) if that asset is published.
 - [ ] Create the annotated RC tag only after package verification and a
       separate operator instruction.
