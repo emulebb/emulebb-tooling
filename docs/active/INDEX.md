@@ -20,9 +20,9 @@ engineering spec/evidence records, not workflow status authority.
 ## Current Snapshot
 
 **Source of truth:** `EMULEBB_WORKSPACE_ROOT\workspaces\workspace\app\emulebb-main` (`main` branch)
-**Current non-done count:** `111`
+**Current non-done count:** `112`
 **Latest release-doc refresh:** 2026-06-02
-**Non-done by status:** `92` OPEN, `6` IN_PROGRESS, `13` DEFERRED, `0` BLOCKED.
+**Non-done by status:** `93` OPEN, `6` IN_PROGRESS, `13` DEFERRED, `0` BLOCKED.
 **Backlog counts:** item tables below are authoritative.
 **0.7.3 RC1 relevance:** Most non-done items below are future or deferred work;
 current RC gate and proof status is controlled by [RELEASE-0.7.3](RELEASE-0.7.3.md).
@@ -432,6 +432,7 @@ not active item docs.
 | [FEAT-108](items/FEAT-108.md) | Minor | OPEN | Add publish effectiveness feedback for shared files |
 | [FEAT-109](items/FEAT-109.md) | Minor | OPEN | Materialize suite tool dependencies deterministically |
 | [FEAT-110](items/FEAT-110.md) | Minor | OPEN | Add configurable title bar status format |
+| [FEAT-111](items/FEAT-111.md) | Minor | OPEN | Add peer and queue diagnostics columns |
 
 ---
 
