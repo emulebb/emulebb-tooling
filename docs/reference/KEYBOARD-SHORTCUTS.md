@@ -134,6 +134,7 @@ These shortcuts are local to Search Results.
 | `Ctrl+D` | Downloads selected search results. |
 | `Ctrl+Shift+D` | Downloads selected search results paused. |
 | `Ctrl+I` | Opens details for selected results. |
+| `Insert` | Downloads selected search results and moves selection to the next visible result. |
 | `Enter` | Downloads selected search results. |
 | `Shift+Enter` | Downloads selected search results paused. |
 | `Ctrl+Enter` | Opens details for selected results. |
@@ -303,6 +304,8 @@ When Search is the active main pane, the Search parameter bar owns:
   not search-results tabs.
 - In Search Results, `Enter`, `Shift+Enter`, and `Ctrl+Enter` should download,
   download paused, and open details respectively.
+- In Search Results, `Insert` should download selected results and advance the
+  list selection to the next visible result.
 - In Search Results, `Alt+Enter` should open details through the same path as
   `Ctrl+Enter`.
 - In Search Results, `Ctrl+PageUp` and `Ctrl+PageDown` should switch result
