@@ -93,7 +93,7 @@ through compatible browse/share behavior.
 
 Existing anchors:
 `FEAT-002`, `FEAT-003`, `FEAT-006`, `FEAT-031`, `FEAT-039`, `FEAT-041`,
-`FEAT-078`.
+`FEAT-078`, `FEAT-112`.
 
 ### UI Power-User Polish
 
