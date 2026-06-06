@@ -20,9 +20,9 @@ engineering spec/evidence records, not workflow status authority.
 ## Current Snapshot
 
 **Source of truth:** `EMULEBB_WORKSPACE_ROOT\workspaces\workspace\app\emulebb-main` (`main` branch)
-**Current non-done count:** `115`
+**Current non-done count:** `116`
 **Latest release-doc refresh:** 2026-06-02
-**Non-done by status:** `96` OPEN, `6` IN_PROGRESS, `13` DEFERRED, `0` BLOCKED.
+**Non-done by status:** `97` OPEN, `6` IN_PROGRESS, `13` DEFERRED, `0` BLOCKED.
 **Backlog counts:** item tables below are authoritative.
 **0.7.3 RC1 relevance:** Most non-done items below are future or deferred work;
 current RC gate and proof status is controlled by [RELEASE-0.7.3](RELEASE-0.7.3.md).
@@ -434,6 +434,7 @@ not active item docs.
 | [FEAT-110](items/FEAT-110.md) | Minor | OPEN | Add configurable title bar status format |
 | [FEAT-111](items/FEAT-111.md) | Minor | OPEN | Add peer and queue diagnostics columns |
 | [FEAT-112](items/FEAT-112.md) | Minor | OPEN | Add Torrent search type convenience filter and refresh file-type extensions |
+| [FEAT-113](items/FEAT-113.md) | Minor | OPEN | Persist peer upload performance history for slot selection |
 
 ---
 

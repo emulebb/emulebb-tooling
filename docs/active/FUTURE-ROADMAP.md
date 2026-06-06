@@ -139,7 +139,7 @@ remain user-directed by default; any automatic promotion must be opt-in,
 diagnosable, and safe for manual Friends.
 
 Existing anchors:
-`FEAT-015`, `FEAT-023`, `FEAT-077`.
+`FEAT-015`, `FEAT-023`, `FEAT-077`, `FEAT-106`, `FEAT-107`, `FEAT-113`.
 
 ### Security And Operations
 
