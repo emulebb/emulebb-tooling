@@ -25,6 +25,10 @@ template-specific tests for 0.7.3 RC1.
 qBittorrent Web API clone. It uses qBittorrent-shaped content types, text
 responses, session cookies, and form bodies where Arr clients expect them, but
 the accepted acquisition payload is still eMuleBB's native eD2K model.
+qBittorrent-compatible paths are matched case-insensitively after URL path
+validation, so canonical qBittorrent spellings such as `webapiVersion`,
+`createCategory`, `setCategory`, and `setForceStart` are accepted alongside the
+lowercase-normalized routes listed below.
 
 Reference surface used for compatibility decisions:
 

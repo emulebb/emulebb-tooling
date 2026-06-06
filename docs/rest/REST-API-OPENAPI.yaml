@@ -3039,7 +3039,7 @@ components:
           type: boolean
         networkEd2k:
           type: boolean
-        autoBroadbandIo:
+        downloadAutoBroadbandIo:
           type: boolean
     PreferencesPatch:
       type: object
@@ -3092,7 +3092,7 @@ components:
           type: boolean
         networkEd2k:
           type: boolean
-        autoBroadbandIo:
+        downloadAutoBroadbandIo:
           type: boolean
     StatusEnvelope:
       unevaluatedProperties: false
