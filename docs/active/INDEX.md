@@ -20,9 +20,9 @@ engineering spec/evidence records, not workflow status authority.
 ## Current Snapshot
 
 **Source of truth:** `EMULEBB_WORKSPACE_ROOT\workspaces\workspace\app\emulebb-main` (`main` branch)
-**Current non-done count:** `116`
+**Current non-done count:** `117`
 **Latest release-doc refresh:** 2026-06-02
-**Non-done by status:** `97` OPEN, `6` IN_PROGRESS, `13` DEFERRED, `0` BLOCKED.
+**Non-done by status:** `98` OPEN, `6` IN_PROGRESS, `13` DEFERRED, `0` BLOCKED.
 **Backlog counts:** item tables below are authoritative.
 **0.7.3 RC1 relevance:** Most non-done items below are future or deferred work;
 current RC gate and proof status is controlled by [RELEASE-0.7.3](RELEASE-0.7.3.md).
@@ -241,6 +241,7 @@ RC branch; after stable `0.7.3`, `release/0.7.x` carries legacy maintenance.
 | [BUG-141](../history/items/BUG-141.md) | Minor | DONE | Source expand icons and video thumbnails can be visually oversized |
 | [BUG-142](items/BUG-142.md) | Minor | OPEN | Upload soft-queue admission ignores effective score policy |
 | [BUG-143](items/BUG-143.md) | Minor | OPEN | Upload waiting queue retains clients for unavailable shared files |
+| [BUG-146](items/BUG-146.md) | Minor | OPEN | Upload title rate does not match visible uploading row totals |
 
 `BUG-103` through `BUG-110` were superseded internal post-tag evidence labels,
 not active item docs.
