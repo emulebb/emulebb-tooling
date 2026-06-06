@@ -3,11 +3,21 @@
 This guide covers practical setup for eMuleBB. It complements the
 [Product Guide](GUIDE-EMULEBB.md), which remains the user-manual entry point.
 
-## Quick Install: ZIP, Extract, Run
+## Quick Setup Options
 
-This is the recommended first path for most users and release testers:
-download the eMuleBB ZIP, extract it into a new folder, and run
-`emulebb.exe`.
+Both public setup paths are supported. Use the ZIP for a standalone eMuleBB
+desktop install. Use the suite bootstrapper when you want the quick bundled
+eMuleBB suite flow.
+
+Public build and packaging happens in GitHub Actions. Release assets are built
+by the shared workspace packaging pipeline and published through GitHub Releases
+with package manifests, SPDX SBOMs, SHA-256 package evidence, a bootstrapper
+hash asset, and GitHub artifact attestations for nightly assets.
+
+### Option 1: Standalone ZIP Install {#quick-install-zip-extract-run}
+
+Use this path when you only want the eMuleBB desktop app: download the eMuleBB
+ZIP, extract it into a new folder, and run `emulebb.exe`.
 
 1. Open <https://github.com/emulebb/emulebb/releases>.
 2. Download the intended package ZIP. For RC1, use
@@ -72,15 +82,22 @@ Do not run multiple eMule-family clients against the same live profile. Before
 reusing an existing profile, close all clients and copy the full config
 directory as a rollback backup.
 
-## Full Suite Install: PowerShell Bootstrap
+### Option 2: Suite Bootstrap Quick Setup {#full-suite-install-powershell-bootstrap}
 
-Use this second path when you want the full suite/bootstrapper flow instead of
-only unpacking and running the desktop app. The bootstrapper installs the
-versioned eMuleBB suite from GitHub Releases and can hand off to the bundled
-suite installer.
+Use this path when you want the full suite/bootstrapper flow instead of only
+unpacking and running the desktop app. The bootstrapper installs the versioned
+eMuleBB suite from GitHub Releases and can hand off to the bundled suite
+installer.
 
-Download `Bootstrap-eMuleBBSuite.ps1` from the release page, open PowerShell in
-that download folder, and run the bootstrapper.
+Quick setup can run the release bootstrapper directly:
+
+```powershell
+irm ((irm https://api.github.com/repos/emulebb/emulebb/releases | ? { -not $_.draft -and $_.tag_name -match '^emulebb-(v|nightly-)' } | select -First 1).assets | ? name -eq Bootstrap-eMuleBBSuite.ps1).browser_download_url | iex
+```
+
+For manual verification, download `Bootstrap-eMuleBBSuite.ps1` and
+`Bootstrap-eMuleBBSuite.ps1.sha256` from the same GitHub Release page, compare
+the hash, then run the bootstrapper.
 
 For the latest nightly or prerelease:
 
