@@ -3650,6 +3650,11 @@ components:
         partsTotal:
           type: integer
           minimum: 0
+        partsObtained:
+          type: integer
+          minimum: 0
+        partsProgressText:
+          type: string
         partsAvailable:
           type: integer
           minimum: 0
@@ -4435,7 +4440,7 @@ components:
     Upload:
       type: object
       additionalProperties: false
-      required: [clientId, userName, userHash, clientSoftware, clientMod, uploadState, uploadSpeedKiBps, uploadedBytes, queueSessionUploaded, payloadBuffered, waitTimeMs, waitStartedTick, score, address, port, serverIp, serverPort, lowId, friendSlot, uploading, waitingQueue, requestedFileHash, requestedFileName, requestedFileSizeBytes]
+      required: [clientId, userName, userHash, clientSoftware, clientMod, uploadState, uploadSpeedKiBps, uploadedBytes, queueSessionUploaded, payloadBuffered, waitTimeMs, waitStartedTick, score, address, port, serverIp, serverPort, lowId, friendSlot, uploading, waitingQueue, requestedFileHash, requestedFileName, requestedFileSizeBytes, requestedPartsObtained, requestedPartsTotal, requestedPartsProgressText]
       properties:
         clientId:
           type: string
@@ -4510,6 +4515,14 @@ components:
             - integer
             - "null"
           minimum: 0
+        requestedPartsObtained:
+          type: integer
+          minimum: 0
+        requestedPartsTotal:
+          type: integer
+          minimum: 0
+        requestedPartsProgressText:
+          type: string
         scoreBreakdown:
           $ref: "#/components/schemas/UploadScoreBreakdown"
     UploadEnvelope:
