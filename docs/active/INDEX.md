@@ -499,7 +499,7 @@ not active item docs.
 | [CI-049](items/CI-049.md) | Minor | OPEN | Enable CodeQL code scanning for the app repository |
 | [CI-050](items/CI-050.md) | Minor | OPEN | REST surface semantic proof and adapter hardening follow-up |
 | [CI-051](items/CI-051.md) | Major | OPEN | Move generated workspace outputs outside repos and worktrees |
-| [CI-052](items/CI-052.md) | Major | OPEN | RC2+ installer-backed test gate rationalization |
+| [CI-052](items/CI-052.md) | Major | DONE | RC2+ installer-backed test gate rationalization |
 
 ---
 

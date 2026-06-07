@@ -171,26 +171,24 @@ Historical gate evidence and superseded cluster plans live under
 | ID | Priority | Area |
 |----|----------|------|
 | [CI-035](items/CI-035.md) | Major | Final proof |
-| [CI-052](items/CI-052.md) | Major | RC2+ installer-backed test gate |
 
 Required outcome:
-restore public network connectivity, push pending build commit `fb6e286`, rerun
-the quick aggregate campaign against the RC2+ installer-backed gate, confirm or
-regenerate package hashes, rerun the clean-worktree audit, then wait for the
-operator-controlled tag instruction.
+restore public network connectivity, rerun the quick aggregate campaign against
+the RC2+ installer-backed gate, confirm or regenerate package hashes, rerun the
+clean-worktree audit, then wait for the operator-controlled tag instruction.
 
 ## Remaining Release Backlog
 
-The 0.7.3 RC2+ backlog is narrowed to `CI-035` and `CI-052`. `CI-038` is Done with a
-current-head `ui-resource-depth` pass covering all 43 release languages. The
-latest quick campaign dry-run reports the intended 18-command RC gate with VM
-proof on-demand. Candidate x64/ARM64 core package hashes, package SBOM hashes,
-and optional aMuTorrent x64 hashes are recorded, but the aggregate quick proof
-failed under public-network outage conditions. Remaining work is network
-restoration, push of `fb6e286`, quick release-campaign proof or explicit
-acceptance, RC2+ installer-backed campaign rationalization, final checklist
-confirmation, clean-worktree audit, and the later operator-controlled tag
-instruction.
+The 0.7.3 RC2+ backlog is narrowed to `CI-035`. `CI-038` is Done with a
+current-head `ui-resource-depth` pass covering all 43 release languages, and
+`CI-052` is Done with the installer-backed RC2+ campaign rationalization on
+`main`. The latest quick campaign dry-run reports the intended 18-command RC
+gate with VM proof on-demand. Candidate x64/ARM64 core package hashes, package
+SBOM hashes, and optional aMuTorrent x64 hashes are recorded, but the aggregate
+quick proof failed under public-network outage conditions. Remaining work is
+network restoration, quick release-campaign proof or explicit acceptance, final
+checklist confirmation, clean-worktree audit, and the later operator-controlled
+tag instruction.
 
 All other active `FEAT`, `REF`, warning-debt, cleanup, and polish items are
 post-0.7.3 by default. A non-blocking item may enter RC2+ only if a current
