@@ -126,6 +126,13 @@ controller add-transfer requests:
 
 - Western UTF-8 text that was decoded as Windows-1252 or Latin-1, such as
   `cittÃ `, `EspaÃ±a`, `canciÃ³n`, and `Â¿QuÃ©?`
+- Lowercased Western mojibake markers seen in remote names, such as
+  `Tamaã±o`, `cafã©`, `Mã¼nchen`, and `informaã§ã£o`
+- Complete CJK UTF-8 mojibake triplets, such as `ä¸­`, `æ—¥`, `å¤§`, and
+  `æ·±å¤§`; incomplete fragments such as `masteræ·å¤` are treated as
+  suspicious residue but are not guessed
+- Percent-encoded UTF-8 that leaked into filenames, such as `caf%C3%A9.mp3`,
+  `Tama%C3%B1o.avi`, and `master%E6%B7%B1%E5%A4%A7.bin`
 - Windows-1252 punctuation mojibake such as `â€™`, `â€œ`, `â€¦`, and en/em dashes
 - bounded HTML/XML entities in filenames, including `&amp;`, `&lt;`, `&gt;`,
   `&quot;`, `&apos;`, `&nbsp;`, decimal numeric entities such as `&#241;`, and
@@ -133,9 +140,12 @@ controller add-transfer requests:
 
 Entity decoding runs first, with at most two passes so double-escaped numeric
 entities can be repaired without turning the filename parser into a browser.
-Mojibake repair then runs only when known damage markers are present. If the
-candidate repair does not clearly reduce those markers, or if numeric entities
-decode to invalid Unicode/control values, the original text is kept.
+Percent-encoded UTF-8 repair is limited to valid `%HH` runs that contain
+non-ASCII UTF-8 bytes; ordinary ASCII percent sequences such as `%20` are left
+alone. Mojibake repair then runs only when known damage markers are present. If
+the candidate repair does not clearly reduce those markers, or if numeric
+entities and percent bytes decode to invalid Unicode/control values, the
+original text is kept.
 
 The repaired name becomes the primary remote-intake name shown by search,
 download creation, REST add-transfer, and later download filename cleanup. The
