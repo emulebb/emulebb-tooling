@@ -41,8 +41,13 @@
       "before": "IDS_SHAREDREQ1"
     },
     {
-      "id": "IDS_HM_LINK_DOC_CONTROLLERS_REST",
+      "id": "IDS_HM_LINK_DOC_KEYBOARD_SHORTCUTS",
       "after": "IDS_HM_LINK_DOC_TOOLS_MENU",
+      "before": "IDS_SHAREDREQ1"
+    },
+    {
+      "id": "IDS_HM_LINK_DOC_CONTROLLERS_REST",
+      "after": "IDS_HM_LINK_DOC_KEYBOARD_SHORTCUTS",
       "before": "IDS_SHAREDREQ1"
     },
     {
