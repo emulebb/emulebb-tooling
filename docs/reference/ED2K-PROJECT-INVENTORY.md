@@ -1,6 +1,6 @@
 # eD2K Project Inventory
 
-Last verified: 2026-05-29
+Last verified: 2026-06-07
 
 This inventory tracks active, stale, obscure, and historical projects around
 eD2K, eDonkey2000, eMule, Kad, server software, controller tooling, protocol
@@ -10,10 +10,10 @@ It is a research index, not an endorsement list. Projects marked historical or
 archive-only may still be valuable protocol and product references, but they
 should not be treated as maintained dependencies without a fresh review.
 
-The 2026-05-29 refresh checked the canonical workspace `repos` and
+The 2026-06-07 refresh checked the canonical workspace `repos` and
 `workspaces` directories, the generated workspace manifests, local analysis
-archives, and current public GitHub/crates metadata for the projects changed
-below.
+archives, current public GitHub metadata, eMule-Security live server-list
+metadata, and current public forum/site leads for the projects changed below.
 
 ## Status Labels
 
@@ -25,6 +25,15 @@ below.
 | Historical | Important for provenance or protocol behavior, but no longer a current project. |
 | Archive-only | Local or public archive evidence exists; upstream may be gone or binary-only. |
 | Needs verification | Name or lead is useful, but source, license, or project identity still needs confirmation. |
+
+## Status Markers
+
+| Marker | Meaning |
+|---|---|
+| 🟢 | Active, maintained, or visibly current. |
+| 🟡 | Needs verification before use as evidence or dependency. |
+| 🟣 | Archive/reference material. |
+| ⚫ | Historical or stale lead. |
 
 ## ED2K Server Software
 
@@ -56,6 +65,17 @@ and may expose UDP status or admin APIs.
            source lookup, callbacks, JSON/MySQL/PostgreSQL catalog storage, and admin
            UI/API. The eMuleBB managed fork lives at
            `https://github.com/emulebb/goed2k-server`.
+
+- **ed2k-rust test server**
+  - Status: 🟡 Active test server, needs source verification
+  - Language: Rust, inferred from server name
+  - Source or archive: Public source not confirmed
+  - Public network evidence: `ed2k-rust test server`, `45.87.41.16:6262`, listed
+    on https://www.emule-security.org/serverlist on 2026-06-07.
+  - Notes: eMule-Security's live server list reports this as a reachable ED2K
+           server with active users and indexed files. Track as a current
+           ecosystem lead until the implementation repository, maintainer,
+           protocol coverage, and license are found.
 
 - **p2p-overlord ED2K server**
   - Status: Historical, archive-only
@@ -137,11 +157,21 @@ server addresses, `server.met` files, or bootstrap guidance.
            link-check examples, not a server implementation.
 
 - **eMule Security server.met**
-  - Status: Maintained
+  - Status: 🟢 Maintained
   - Type: Server-list service
-  - Link: http://upd.emule-security.org/server.met
+  - Link: http://upd.emule-security.org/server.met and
+          https://www.emule-security.org/serverlist
   - Notes: Common `server.met` bootstrap URL used by clients and examples. Validate
-           availability before relying on it in tests.
+           availability before relying on it in tests. The 2026-06-07 server-list
+           page also exposed the `ed2k-rust test server` lead.
+
+- **nodes.dat**
+  - Status: 🟢 Maintained
+  - Type: Kad bootstrap and server-list portal
+  - Link: https://www.nodes-dat.com/
+  - Notes: Publishes live Kad `nodes.dat` links and related eMule/eDonkey server-list
+           references, including eMule-Security and Kademlia.Ru node sources. Treat as
+           runtime bootstrap infrastructure, not source code.
 
 - **server-met.net**
   - Status: Maintained
@@ -149,6 +179,14 @@ server addresses, `server.met` files, or bootstrap guidance.
   - Link: https://www.server-met.net/
   - Notes: Public server list site. Treat as runtime bootstrap infrastructure, not
            source code.
+
+- **shortypower eD2K ServerList**
+  - Status: 🟢 Maintained
+  - Type: Server-list service
+  - Link: https://emule.shortypower.org/
+  - Notes: Public eD2K server-list mirror with active server capability, user, file,
+           and port metadata. Useful for cross-checking eMule-Security and other
+           public server-list snapshots.
 
 - **aMule safe server list guidance**
   - Status: Historical
@@ -205,12 +243,15 @@ server addresses, `server.met` files, or bootstrap guidance.
   - Status: Maintained
   - Language/platform: Windows, C++/MFC
   - Link: https://github.com/irwir/eMule
-  - Repo stats (GitHub, 2026-05-29):
-    - `irwir/eMule`: 1231 stars, 110 forks, 0 open issues; default `master`; default-branch commit 2016-04-10 `88a8c8f`.
+  - Repo stats (GitHub, 2026-06-07):
+    - `irwir/eMule`: 1239 stars, 112 forks, 0 open issues; default `master`; repository pushed 2026-01-10.
   - Notes: Community continuation of classic eMule. Important compatibility and
            user-expectation reference. Local analysis checkouts track `v0.60d`
            and `v0.72a`, while managed app worktrees carry the community
-           baseline and tracing harness branches.
+           baseline and tracing harness branches. The `eMule_v0.72a-community`
+           prerelease was updated on 2026-05-31 to beta 8 with Windows ARM64
+           binaries, Visual Studio 2026 builds, `mbedTLS 4.1.0`, and updated
+           MediaInfo allowance.
 
 - **eMuleAI**
   - Status: Active
@@ -230,7 +271,30 @@ server addresses, `server.met` files, or bootstrap guidance.
   - Notes: Qt port intended to modernize the eMule client and improve platform
            independence. Local analysis checkout exists under
            `EMULEBB_WORKSPACE_ROOT\analysis\emule-qt`. Homepage:
-           https://emule-qt.org/
+           https://emule-qt.org/. The public repository was still active in the
+           2026-06-07 GitHub refresh.
+
+- **rucio**
+  - Status: 🟢 Active, early
+  - Language/platform: Rust
+  - Link: https://github.com/ogarcia/rucio
+  - Repo stats (GitHub, 2026-06-07):
+    - `ogarcia/rucio`: 18 stars, 0 forks, 2 open issues; default `master`; latest
+      release `0.14.0` on 2026-06-05.
+  - Notes: New Rust P2P file-sharing daemon inspired by eMule and MLDonkey. It
+           uses its own Kademlia/Gossipsub/libp2p-style stack and optionally
+           builds eMule/Kad2 compatibility for Kad search and `ed2k://` download
+           workflows. Treat as a fresh monitoring lead until Kad2 and ED2K
+           compatibility are reviewed in code and network traces.
+
+- **HydraP2P**
+  - Status: 🟡 Needs verification
+  - Language/platform: Unknown
+  - Link: Public discussion lead only
+  - Notes: Mentioned in 2026 I2P/eMule discussion as a beta project associated
+           with Sharing-Devils and possible I2P-oriented evolution. No canonical
+           source, binary, website, protocol scope, or license was confirmed in
+           the 2026-06-07 search pass.
 
 - **eMule eSE LiveTV**
   - Status: Active
@@ -426,6 +490,17 @@ server addresses, `server.met` files, or bootstrap guidance.
            Current named examples include aMuTorrent, TransMule, Mularr, eMulerr,
            and amarr.
 
+- **aMule M26**
+  - Status: 🟢 Active, needs runtime review
+  - Language/platform: Web template / Docker
+  - Link: https://github.com/jjling2011/amule-m26
+  - Repo stats (GitHub, 2026-06-07):
+    - `jjling2011/amule-m26`: 0 stars, 0 forks; latest release `v0.1.3` on
+      2026-06-07.
+  - Notes: Modern aMule WebUI template packaged around the `ngosang/docker-amule`
+           configuration model. Useful UI/packaging lead; not a protocol
+           implementation by itself.
+
 ## Protocol Libraries And Utilities
 
 - **goed2k**
@@ -499,6 +574,17 @@ server addresses, `server.met` files, or bootstrap guidance.
   - Link: Local archive evidence
   - Notes: Archived ED2K implementation material observed in local research archives.
            Confirm canonical source before linking.
+
+- **KadGlobe**
+  - Status: 🟡 Active, needs protocol review
+  - Language/platform: Python/JavaScript
+  - Link: https://github.com/floatingbit23/KadGlobe
+  - Repo stats (GitHub, 2026-06-07):
+    - `floatingbit23/KadGlobe`: 0 stars, 0 forks; repository pushed 2026-05-19; no
+      releases.
+  - Notes: Kademlia visualization and telemetry tool that claims live UDP/Kad probes
+           and eMule metrics. Track as a diagnostics idea lead until packet behavior,
+           data sources, and compatibility are reviewed.
 
 ## Historical eMule Mods And Source Archives
 
@@ -633,6 +719,33 @@ hardening. Do not import behavior wholesale.
 
 ## Public Archive Collections
 
+- **eMule Mods / emule-mods.de**
+  - Status: 🟣 Archive/reference
+  - Link: http://www.emule-mods.de/
+  - Notes: Historically important German eMule mod index repeatedly referenced by
+           mod docs, forums, and academic papers. Verify live availability and mirrors
+           before relying on it as a download/source archive.
+
+- **eMule Mods Italia**
+  - Status: 🟢 Maintained reference/forum
+  - Link: https://emulemods.altervista.org/
+  - Notes: Italian eMule mods forum and guide site with current activity around
+           Community releases, eMuleAI, nodes.dat, and mod guides.
+
+- **Leechermods**
+  - Status: 🟢 Maintained mod/news archive
+  - Link: https://www.leechermods.com/
+  - Notes: Long-running file-sharing and mod news blog with current 2026 activity
+           and deep historical archives. Include neutrally as research evidence, not
+           as an endorsement of any specific mod behavior.
+
+- **eMule Fans**
+  - Status: 🟢 Maintained reference/archive
+  - Link: https://www.emulefans.com/
+  - Notes: Chinese eMule/eD2K site covering official/community releases, mods,
+           server lists, Kad nodes, IP filters, DLP libraries, language packs, and
+           historical software references.
+
 - **emulefans ed2k-software**
   - Status: Archive-only
   - Link: https://github.com/emulefanscom/ed2k-software
@@ -691,6 +804,17 @@ aMule Sonarr Radarr ed2k
 aMuTorrent TransMule Mularr eMulerr amarr
 JEmuleServer goed2k-server ED2K server
 ed2k hash library Rust Ruby Go
+site:github.com ed2k pushed after current year
+site:github.com eMule Kad pushed after current year
+site:github.com "Kad2" "eMule" "Rust"
+eMule Security ed2k-rust test server
+rucio eMule Kad2 Rust
+eMule 0.72a community beta
+emule-qt GitHub
+KadGlobe eMule Kademlia
+aMule WebUI template ed2k
+HydraP2P Sharing-Devils eD2K I2P
+shortypower eD2K ServerList
 ```
 
 After editing, run:

@@ -212,7 +212,7 @@ are not the best first read for users.
 | CI baseline workflow | [reference/CI-BASELINE](reference/CI-BASELINE.md) |
 | Release branching and packaging | [reference/RELEASE-BRANCHING-AND-PACKAGING](reference/RELEASE-BRANCHING-AND-PACKAGING.md) |
 | eD2K ecosystem inventory | [reference/ED2K-PROJECT-INVENTORY](reference/ED2K-PROJECT-INVENTORY.md) |
-| Announcement forum inventory | [reference/EMULEBB-ANNOUNCEMENT-FORUMS](reference/EMULEBB-ANNOUNCEMENT-FORUMS.md) |
+| eD2K forums and sites inventory | [reference/ED2K-FORUMS-AND-SITES](reference/ED2K-FORUMS-AND-SITES.md) |
 | Dependency status | [dependencies/DEP-STATUS](dependencies/DEP-STATUS.md) |
 | Historical-reference rules | [HISTORICAL-REFERENCES](HISTORICAL-REFERENCES.md) |
 
