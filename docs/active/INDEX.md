@@ -20,9 +20,9 @@ engineering spec/evidence records, not workflow status authority.
 ## Current Snapshot
 
 **Source of truth:** `EMULEBB_WORKSPACE_ROOT\workspaces\workspace\app\emulebb-main` (`main` branch)
-**Current non-done count:** `117`
+**Current non-done count:** `118`
 **Latest release-doc refresh:** 2026-06-02
-**Non-done by status:** `98` OPEN, `6` IN_PROGRESS, `13` DEFERRED, `0` BLOCKED.
+**Non-done by status:** `99` OPEN, `6` IN_PROGRESS, `13` DEFERRED, `0` BLOCKED.
 **Backlog counts:** item tables below are authoritative.
 **0.7.3 RC1 relevance:** Most non-done items below are future or deferred work;
 current RC gate and proof status is controlled by [RELEASE-0.7.3](RELEASE-0.7.3.md).
@@ -494,6 +494,7 @@ not active item docs.
 | [CI-048](../history/items/CI-048.md) | Minor | DONE | Improve documentation navigation and public release guidance |
 | [CI-049](items/CI-049.md) | Minor | OPEN | Enable CodeQL code scanning for the app repository |
 | [CI-050](items/CI-050.md) | Minor | OPEN | REST surface semantic proof and adapter hardening follow-up |
+| [CI-051](items/CI-051.md) | Major | OPEN | Move generated workspace outputs outside repos and worktrees |
 
 ---
 
