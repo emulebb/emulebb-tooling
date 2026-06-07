@@ -17,6 +17,29 @@ source of truth is [REST-API-OPENAPI.yaml](REST-API-OPENAPI.yaml).
 The examples below use HTTP on port `4711`. Use HTTPS only when the listener is
 configured for it and the controller trusts the certificate.
 
+## Installed PowerShell Examples
+
+Suite bootstrap installs first-class Windows PowerShell 5.1 examples when the
+matching `automation-examples-<version>.zip` release asset is available. They
+land beside the installed suite, not inside the core eMuleBB ZIP:
+
+```powershell
+cd C:\eMuleBBSuite
+.\examples\automation\Get-eMuleBBStatus.ps1
+.\examples\automation\Set-eMuleBBLimits.ps1 -UploadLimitKiBps 2048 -DownloadLimitKiBps 8192
+.\examples\automation\Search-eMuleBB.ps1 -Query 'ubuntu iso' -Method global
+.\examples\automation\Download-ReleaseGroup.ps1 -ReleaseGroup 'RELEASE_GROUP' -Paused $true
+```
+
+The examples read bind information and the REST API key from
+`manifests\suite-config.json` first. If the suite manifest is not present, they
+fall back to `profiles\emulebb\config\preferences.ini` and then
+`config\preferences.ini`.
+
+`Download-ReleaseGroup.ps1` is an on-demand example. It stores seen result
+hashes under `examples\automation\state`, but it does not install a scheduled
+task. Use authorized search terms and review results before broad automation.
+
 ## First Status Call
 
 ```powershell

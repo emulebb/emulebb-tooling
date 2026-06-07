@@ -2,8 +2,8 @@
 
 This guide shows how to operate eMuleBB as part of a local power-user stack:
 native eMuleBB for eD2K/Kad state, aMuTorrent for a modern controller UI, and
-Prowlarr/Radarr/Sonarr for Torznab search and qBittorrent-compatible download
-client workflows.
+Prowlarr plus selected Arr apps for Torznab search and qBittorrent-compatible
+download-client workflows.
 
 The goal is not to hide eMuleBB behind another tool. The native desktop app
 owns identity, network state, categories, temp files, completed files, shared
@@ -13,8 +13,8 @@ not flatten it into generic torrent semantics.
 ## Guide Boundary
 
 Use this guide for task-first setup recipes: the order to enable eMuleBB,
-aMuTorrent, Prowlarr, Radarr, and Sonarr; the fields to type into those tools;
-and the proof flow for one safe search or transfer.
+aMuTorrent, Prowlarr, and selected Arr apps; the fields to type into those
+tools; and the proof flow for one safe search or transfer.
 
 Use [Controllers And REST](GUIDE-CONTROLLERS-REST.md) for the behavior
 contract: trust model, lifecycle rules, native REST semantics, adapter
@@ -28,8 +28,8 @@ Controllers And REST owns the API meaning behind them.
 |---|---|---|
 | eMuleBB desktop | Profile, eD2K/Kad, searches, transfers, sharing, logs | Native UI, REST, adapters |
 | Native REST `/api/v1` | JSON automation, diagnostics, app state | aMuTorrent, scripts, custom tools |
-| qBit adapter `/api/v2` | Arr download-client compatibility | Radarr, Sonarr, qBit-compatible probes |
-| Torznab adapter `/indexer/emulebb/api` | Prowlarr/Radarr/Sonarr search bridge | Prowlarr Generic Torznab |
+| qBit adapter `/api/v2` | Arr download-client compatibility | Selected Arr apps, qBit-compatible probes |
+| Torznab adapter `/indexer/emulebb/api` | Prowlarr and selected Arr search bridge | Prowlarr Generic Torznab |
 | aMuTorrent | Web controller and multi-client UI | eMuleBB REST and adapter surfaces |
 
 ```mermaid
@@ -42,6 +42,7 @@ flowchart LR
     Prowlarr["Prowlarr<br/>indexer"]
     Radarr["Radarr<br/>movies"]
     Sonarr["Sonarr<br/>series"]
+    OtherArr["Lidarr, Readarr,<br/>Whisparr"]
 
     Desktop --> Rest
     Desktop --> Qbit
@@ -50,8 +51,10 @@ flowchart LR
     Torznab --> Prowlarr
     Prowlarr --> Radarr
     Prowlarr --> Sonarr
+    Prowlarr --> OtherArr
     Radarr --> Qbit
     Sonarr --> Qbit
+    OtherArr --> Qbit
     Qbit --> Desktop
 ```
 
@@ -99,9 +102,9 @@ Use a stable setup before adding controllers:
   split-tunnel VPN machines where loopback is broken, set `X_LOCAL_IP` to the
   LAN IPv4 address and use that address consistently for local services.
 
-For an existing profile, start eMuleBB once without aMuTorrent, Prowlarr,
-Radarr, Sonarr, or scripts. Let the app load the profile, resolve paths, and
-write current sidecars before adding automation.
+For an existing profile, start eMuleBB once without aMuTorrent, Prowlarr, Arr
+apps, or scripts. Let the app load the profile, resolve paths, and write current
+sidecars before adding automation.
 
 ## Recommended Local Layout
 
@@ -114,10 +117,10 @@ Keep application binaries, profile state, and media storage separate.
 | Temp | Fast local disk with enough free space | `.part` files are write-heavy. |
 | Incoming | Final storage path visible to Arr import if used | Completed files are predictable. |
 | aMuTorrent | Separate package or service directory | Web UI updates do not mutate the eMuleBB profile. |
-| Arr apps | Existing Radarr/Sonarr/Prowlarr installs | They own media import policy. |
+| Arr apps | Existing Radarr/Sonarr/Lidarr/Readarr/Whisparr installs | They own media import policy. |
 
 Do not run two eMule-family clients against the same profile. Do not point
-Radarr or Sonarr at eMuleBB temp directories for final import. They should see
+selected Arr apps at eMuleBB temp directories for final import. They should see
 completed files through the category/incoming paths reported by the adapter.
 
 ## Enable eMuleBB REST
@@ -205,7 +208,7 @@ Current eMuleBB packages expose two setup paths:
 
 The Tools launchers are convenience wrappers around scripts, not the future
 guided setup tracked by `FEAT-089`. They still require the operator to provide
-Prowlarr, Radarr, or Sonarr URLs and API keys at runtime.
+Prowlarr and selected Arr app URLs and API keys at runtime.
 
 ### Manual Fields
 
@@ -270,27 +273,27 @@ From the desktop app, use
 launch this helper with the current local eMuleBB connection details already
 filled in.
 
-## Radarr And Sonarr Download Client Setup
+## Arr Download Client Setup
 
-Use this when Radarr or Sonarr should send selected releases to eMuleBB and
-track them through the qBittorrent-compatible adapter.
+Use this when Radarr, Sonarr, Lidarr, Readarr, or Whisparr should send selected
+releases to eMuleBB and track them through the qBittorrent-compatible adapter.
 
-Add a qBittorrent download client in Radarr or Sonarr:
+Add a qBittorrent download client in the selected Arr app:
 
-| Field | Radarr Value | Sonarr Value |
-|---|---|---|
-| Name | `eMuleBB` | `eMuleBB` |
-| Enable | On | On |
-| Host | eMuleBB host, for example `127.0.0.1` or `X_LOCAL_IP` | eMuleBB host |
-| Port | eMuleBB WebServer/REST port, for example `4711` | Same |
-| Use SSL | On only if eMuleBB listener uses HTTPS | Same |
-| URL Base | Empty | Empty |
-| Username | `emule` | Same |
-| Password | eMuleBB REST/Web API key | Same |
-| Category | `emulebb-radarr` | `emulebb-sonarr` |
-| Initial State | Start | Start |
-| Remove Completed | Off for first proof | Off for first proof |
-| Remove Failed | Off for first proof | Off for first proof |
+| Field | Value |
+|---|---|
+| Name | `eMuleBB` |
+| Enable | On |
+| Host | eMuleBB host, for example `127.0.0.1` or `X_LOCAL_IP` |
+| Port | eMuleBB WebServer/REST port, for example `4711` |
+| Use SSL | On only if eMuleBB listener uses HTTPS |
+| URL Base | Empty |
+| Username | `emule` |
+| Password | eMuleBB REST/Web API key |
+| Category | App-specific category, for example `emulebb-radarr` |
+| Initial State | Start |
+| Remove Completed | Off for first proof |
+| Remove Failed | Off for first proof |
 
 Then test the download client. A successful test proves only the qBit adapter
 login and basic route shape. It does not prove that search, category paths,
@@ -319,17 +322,17 @@ target per invocation:
   -RadarrApiKey '<radarr-api-key>'
 ```
 
-Run it separately for Sonarr:
+Run it separately for each selected Arr app:
 
 ```powershell
 .\scripts\Register-ArrStack.ps1 `
-  -Target Sonarr `
+  -Target Lidarr `
   -EmulebbBaseUrl "http://$host:4711" `
   -EmulebbApiKey '<emulebb-api-key>' `
   -ProwlarrUrl "http://$host:9696" `
   -ProwlarrApiKey '<prowlarr-api-key>' `
-  -SonarrUrl "http://$host:8989" `
-  -SonarrApiKey '<sonarr-api-key>'
+  -LidarrUrl "http://$host:8686" `
+  -LidarrApiKey '<lidarr-api-key>'
 ```
 
 The script can:
@@ -338,14 +341,12 @@ The script can:
 - trigger Prowlarr application indexer sync when Prowlarr details are supplied
 - add or update the selected target's qBittorrent-compatible download client
 
-Use `-Target Radarr` for Radarr or `-Target Sonarr` for Sonarr. Leave the
+Use `-Target Radarr`, `Sonarr`, `Lidarr`, `Readarr`, or `Whisparr`. Leave the
 Prowlarr URL blank when you want to skip Prowlarr sync for that run.
 
 From the desktop app, use
-`Tools > Controllers and Integrations > Register Radarr integration...` or
-`Tools > Controllers and Integrations > Register Sonarr integration...` to
-launch this helper with the current local eMuleBB connection details already
-filled in.
+`Tools > Controllers and Integrations > Register Arr integration...` to launch
+this helper with the current local eMuleBB connection details already filled in.
 
 ## Adapter Compatibility Boundaries
 
@@ -385,11 +386,14 @@ Use stable categories:
 |---|---|---|
 | `emulebb-radarr` | Radarr | Movie acquisitions |
 | `emulebb-sonarr` | Sonarr | TV acquisitions |
+| `emulebb-lidarr` | Lidarr | Music acquisitions |
+| `emulebb-readarr` | Readarr | Book acquisitions |
+| `emulebb-whisparr` | Whisparr | Whisparr acquisitions |
 | User categories | eMuleBB operator | Manual downloads or sharing workflows |
 
 Rules:
 
-- Keep Radarr and Sonarr categories separate.
+- Keep each Arr app category separate.
 - Make sure each category resolves to an incoming/completed path that the
   matching Arr app can read.
 - Do not point Arr import at eMuleBB temp files.
@@ -409,11 +413,11 @@ Manual proof flow:
 
 1. In eMuleBB, confirm connected eD2K or Kad state.
 2. In Prowlarr, test the `eMuleBB` Generic Torznab indexer.
-3. In Radarr or Sonarr, run an interactive search.
+3. In the selected Arr app, run an interactive search.
 4. Pick one result that is safe and expected for the test profile.
 5. Add it through the `eMuleBB` qBittorrent-compatible download client.
 6. Watch the transfer appear in eMuleBB.
-7. Confirm the transfer appears in Radarr/Sonarr queue.
+7. Confirm the transfer appears in the selected Arr queue.
 8. Confirm the reported category and path match your import plan.
 9. Let completion/import run only after the path is proven.
 
@@ -423,7 +427,7 @@ whether the query is broad enough for the network.
 
 ## Security Rules
 
-- Treat eMuleBB, Prowlarr, Radarr, Sonarr, and aMuTorrent API keys as secrets.
+- Treat eMuleBB, Prowlarr, Arr, and aMuTorrent API keys as secrets.
 - Do not paste API keys into public issues, logs, screenshots, or chat.
 - Bind REST to localhost when it works, or to `X_LOCAL_IP` / a controlled
   LAN/VPN address when split-tunnel VPN software breaks loopback.
@@ -439,7 +443,7 @@ whether the query is broad enough for the network.
 |---|---|---|
 | Prowlarr returns `401` | Wrong eMuleBB API key | Test `/indexer/emulebb/api?t=caps&apikey=...` directly |
 | Prowlarr returns `503` | eMuleBB not ready or search bridge busy | Check desktop lifecycle and REST `/api/v1/app` |
-| Radarr/Sonarr qBit test fails | Host, port, SSL, URL base, or password mismatch | Test `/api/v2/app/webapiversion` and login route |
+| Arr qBit test fails | Host, port, SSL, URL base, or password mismatch | Test `/api/v2/app/webapiversion` and login route |
 | Search works but add fails | qBit adapter rejected the link or category | Check adapter response body and eMuleBB logs |
 | Transfer appears but import fails | Arr cannot see the completed path | Fix category path or remote path mapping |
 | Downloads land in the wrong folder | Category path mismatch | Verify eMuleBB category path and Arr category field |
@@ -461,7 +465,7 @@ For a support report, include:
 
 Avoid enabling these until the basic flow is proven:
 
-- automatic search in Prowlarr/Radarr/Sonarr
+- automatic search in Prowlarr or selected Arr apps
 - remove-completed behavior
 - broad shared-directory reloads
 - batch destructive transfer deletes

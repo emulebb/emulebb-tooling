@@ -9,8 +9,8 @@ RC1 is published on GitHub Releases. Pick one path:
 
 ### Option 1: Full Suite One-Liner {#full-suite-install-powershell-bootstrap}
 
-Fastest setup for the x64 suite: eMuleBB, aMuTorrent, Prowlarr, Radarr, and
-Sonarr integration in one bootstrap flow.
+Fastest setup for the x64 suite: eMuleBB, aMuTorrent, Prowlarr, and selected
+Arr integration in one bootstrap flow.
 
 ```powershell
 irm https://github.com/emulebb/emulebb/releases/download/emulebb-v0.7.3-rc.1/Bootstrap-eMuleBBSuite.ps1 | iex
@@ -44,8 +44,11 @@ emulebb.exe -c "$env:TEMP\eMuleBB-TestProfile"
 All RC1 builds and packaging happen in GitHub Actions and are published through
 GitHub Releases. The release carries ZIPs, package manifests, SHA-256 evidence,
 SPDX SBOMs, diagnostics packages, the standalone suite bootstrapper, and the
-bootstrapper SHA-256 asset. The bootstrapper verifies package hashes from the
-release manifests before installing.
+bootstrapper SHA-256 asset. Suite releases also publish
+`automation-examples-<version>.zip` and
+`automation-examples-<version>.manifest.json` when REST automation examples are
+available. The bootstrapper verifies package hashes from the release manifests
+before installing.
 
 ## Install Model
 
@@ -115,7 +118,13 @@ against its manifest SHA-256, extracts the versioned suite installer, and hands
 off to that installer. The versioned installer is also included in the main app
 ZIP under `eMuleBB\scripts`.
 
-`-Bundle Full` installs eMuleBB, aMuTorrent, Node, Prowlarr, Radarr, and Sonarr.
+When the matching automation examples asset exists, the bootstrapper passes it
+to the installer and the examples are staged under
+`<install-root>\examples\automation`. These examples are a bootstrap-installed
+component only; the standalone app ZIP does not carry them.
+
+`-Bundle Full` installs eMuleBB, aMuTorrent, Node, Prowlarr, Radarr, Sonarr,
+Lidarr, Readarr, and Whisparr.
 The bootstrapper resolves the eMuleBB desktop package from
 `emulebb/emulebb/releases` and resolves the aMuTorrent controller package from
 `emulebb/amutorrent/releases`. Node and the Arr applications are downloaded from
@@ -352,7 +361,7 @@ For trusted local automation:
 REST is the supported controller surface. The legacy HTML template UI is frozen
 pending removal and should not be treated as a maintained setup target. See
 [Controllers and REST Guide](GUIDE-CONTROLLERS-REST.md). For a full
-eMuleBB plus aMuTorrent plus Prowlarr/Radarr/Sonarr setup, use the
+eMuleBB plus aMuTorrent plus Prowlarr/Arr setup, use the
 [Stack Integration Guide](GUIDE-STACK-INTEGRATIONS.md).
 
 ## Release-Aware Setup
