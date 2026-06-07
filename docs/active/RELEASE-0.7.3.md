@@ -1,8 +1,9 @@
-# eMule Broadband Edition 0.7.3 RC1 Release Dashboard
+# eMule Broadband Edition 0.7.3 Release Train Dashboard
 
-This is the current release dashboard for the 0.7.3 RC1 target
-`emulebb-v0.7.3-rc.1`.
-Use it for status, release-source truth, and the open RC task list.
+This is the current release-train dashboard for the fixed 0.7.3 candidate
+sequence. The active candidate remains `emulebb-v0.7.3-rc.1` until it is
+tagged or explicitly superseded by operator direction. Use this document for
+status, release-source truth, and the open RC task list.
 
 ## Current Status
 
@@ -51,6 +52,74 @@ Each RC absorbs only release blockers, proof refreshes, packaging fixes, and
 approved regression fixes. After stable `0.7.3`, `main` opens for `0.8.0`
 surface-removal work and `release/0.7.x` carries legacy support for the frozen
 `0.7.x` public surface.
+
+## Candidate Structure
+
+This structure keeps RC evidence separate from future-roadmap planning. Fill
+only the active candidate section during release execution; later candidate
+sections are scaffolds until the operator starts them.
+
+### RC1 Active Gate
+
+Purpose:
+finish the first public candidate from the selected reviewed `main` commit.
+
+Allowed changes:
+direct release-gate blockers, packaging/provenance failures, release-doc drift,
+and severe app defects found by required proof.
+
+Primary task:
+[CI-035](items/CI-035.md).
+
+Evidence owner:
+[RELEASE-0.7.3-CHECKLIST](RELEASE-0.7.3-CHECKLIST.md) plus the artifact and
+hash records in `CI-035`.
+
+### RC2 Delta Gate
+
+Purpose:
+absorb only the delta from RC1 after `emulebb-v0.7.3-rc.1` is published or
+explicitly accepted as superseded.
+
+Allowed changes:
+release blockers reported from RC1, proof refreshes invalidated by those
+changes, packaging fixes, release-documentation corrections, and approved
+regression fixes.
+
+Required scaffold before RC2 work starts:
+
+- identify the RC1 evidence that carries forward unchanged;
+- list every RC1 artifact, proof row, or hash invalidated by the RC2 delta;
+- create or promote item IDs for every RC2 blocker;
+- record the exact package and SBOM regeneration scope;
+- keep all future-roadmap and `0.8.0` removal work out of RC2 unless it fixes a
+  direct release blocker on a supported surface.
+
+### RC3 Delta Gate
+
+Purpose:
+absorb only final release-candidate corrections after RC2. RC3 should be
+smaller than RC2 and should not reopen product scope.
+
+Required scaffold before RC3 work starts:
+
+- identify RC2 evidence that carries forward unchanged;
+- list every proof or artifact invalidated by the RC3 delta;
+- record any explicit operator acceptance for proof that cannot be rerun;
+- confirm stable `0.7.3` documentation can be produced from the RC3 state.
+
+### Stable 0.7.3 Closeout
+
+Purpose:
+turn the accepted RC state into stable `emulebb-v0.7.3`.
+
+Required scaffold before stable tagging:
+
+- stable release notes derived from the accepted RC notes;
+- package names changed from `0.7.3-rc.N` to `0.7.3`;
+- final package, manifest, SBOM, and hash evidence;
+- branch split confirmation for `release/0.7.x` legacy maintenance and `main`
+  opening for `0.8.0` frozen-surface removal.
 
 ## Release Identity
 

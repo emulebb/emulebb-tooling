@@ -24,8 +24,9 @@ engineering spec/evidence records, not workflow status authority.
 **Latest release-doc refresh:** 2026-06-02
 **Non-done by status:** `99` OPEN, `6` IN_PROGRESS, `13` DEFERRED, `0` BLOCKED.
 **Backlog counts:** item tables below are authoritative.
-**0.7.3 RC1 relevance:** Most non-done items below are future or deferred work;
-current RC gate and proof status is controlled by [RELEASE-0.7.3](RELEASE-0.7.3.md).
+**0.7.3 release-train relevance:** Most non-done items below are future or
+deferred work; current RC gate and proof status is controlled by
+[RELEASE-0.7.3](RELEASE-0.7.3.md).
 **Broadband release status:** `emulebb-v0.7.3-rc.1` is the first public
 release-candidate target in the fixed `0.7.3-rc.1`, `0.7.3-rc.2`,
 `0.7.3-rc.3`, stable `0.7.3` train.
@@ -38,8 +39,9 @@ removal work.
 **Release test strategy:** [RELEASE-TEST-STRATEGY](RELEASE-TEST-STRATEGY.md)
 **Release test campaigns:** [RELEASE-TEST-CAMPAIGNS](RELEASE-TEST-CAMPAIGNS.md)
 **Frozen surfaces:** [FROZEN-SURFACES](FROZEN-SURFACES.md)
-**0.7.3 RC1 controller surface matrix:** [CONTROLLER-SURFACE-MATRIX](CONTROLLER-SURFACE-MATRIX.md)
+**Controller surface matrix:** [CONTROLLER-SURFACE-MATRIX](CONTROLLER-SURFACE-MATRIX.md)
 **Future release roadmap:** [FUTURE-ROADMAP](FUTURE-ROADMAP.md)
+**Roadmap consolidation scaffold:** [FUTURE-ROADMAP#roadmap-consolidation-structure](FUTURE-ROADMAP.md#roadmap-consolidation-structure)
 **GitHub-primary backlog workflow:** GitHub issues in `emulebb/emulebb` plus
 the `eMuleBB Roadmap` Project #2 are authoritative for migrated backlog items.
 **Backlog process runbook:** [BACKLOG-PROCESS](../reference/BACKLOG-PROCESS.md)
@@ -59,6 +61,7 @@ Current release trail:
 - [RELEASE-TEST-CAMPAIGNS](RELEASE-TEST-CAMPAIGNS.md)
 - [CONTROLLER-SURFACE-MATRIX](CONTROLLER-SURFACE-MATRIX.md)
 - [RELEASE-0.7.3 execution plan](plans/RELEASE-0.7.3-EXECUTION-PLAN.md)
+- [FUTURE-ROADMAP consolidation structure](FUTURE-ROADMAP.md#roadmap-consolidation-structure)
 
 ## Operating Rules
 

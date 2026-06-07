@@ -65,6 +65,94 @@ See [P2P-OVERLORD-PRODUCT-FAMILY-INTEGRATION](plans/P2P-OVERLORD-PRODUCT-FAMILY-
 - After stable `0.7.3`, `main` targets `0.8.0`; `release/0.7.x` carries
   legacy maintenance.
 
+## Roadmap Consolidation Structure
+
+Use this structure when triaging active items for RC2 and the post-0.7.3 line
+split. It is a planning scaffold, not a status override for GitHub-primary
+items.
+
+### RC Candidate Delta
+
+Definition:
+work allowed into an active `0.7.3` release candidate because it directly
+protects the candidate.
+
+Allowed shape:
+release blockers, packaging/provenance fixes, proof refreshes, release-doc
+drift, and approved regression fixes on supported surfaces.
+
+Not allowed:
+future product work, broad refactors, warning-debt cleanup, dependency
+refreshes without a release blocker, new controller/API capability, or frozen
+surface fixes that do not affect supported shared infrastructure.
+
+Current structure owner:
+[0.7.3 Release Train Dashboard](RELEASE-0.7.3.md#candidate-structure).
+
+### 0.7.x Legacy Maintenance
+
+Definition:
+post-stable maintenance for the frozen public `0.7.x` surface.
+
+Allowed shape:
+compatibility-preserving, low-risk fixes on supported surfaces plus security,
+crash/data-loss, packaging, update-check, release-proof, and release-doc fixes.
+
+Not allowed:
+new product surface, new controller/API capability, feature expansion, or
+normal feature work directly on release branches.
+
+### 0.8.0 Frozen-Surface Removal
+
+Definition:
+the first modernization wave after stable `0.7.3`.
+
+Allowed shape:
+remove or replace frozen legacy surfaces listed in
+[Frozen Surfaces](FROZEN-SURFACES.md), with proof focused on supported shared
+infrastructure that remains after removal.
+
+Initial buckets:
+archive preview/recovery, IRC and chat UI, legacy scheduler, SMTP/email
+notifications, first-run wizard, splash screen, legacy WebServer HTML UI, and
+proxy support.
+
+### Post-0.7.3 Tooling And Security
+
+Definition:
+release-proof, CI, diagnostics, security, dependency, and generated-output
+hygiene that improves the workspace without changing the 0.7.3 public product
+surface.
+
+Allowed shape:
+CodeQL, static-analysis integration, release proof UX, deterministic suite
+materialization, generated-output hygiene, dependency hardening, and REST
+semantic proof that does not expand capability.
+
+### Future Product Lanes
+
+Definition:
+curated product work after the release line split, grouped by the approved
+lanes below.
+
+Allowed shape:
+narrow, observable improvements that preserve stock/community protocol
+behavior unless a future decision explicitly approves drift.
+
+### External Or Product-Family Tracks
+
+Definition:
+work that can belong to the broader eMuleBB product family without becoming
+part of the Windows MFC desktop app.
+
+Allowed shape:
+p2p-overlord alignment, shared campaign infrastructure, shared REST
+conformance, and other explicitly promoted family work.
+
+Not allowed inside the desktop app:
+headless-only, daemon-only, server-only, cross-platform, or mobile-controller
+product scope.
+
 ## Approved Lanes
 
 ### Connectivity Modernization
