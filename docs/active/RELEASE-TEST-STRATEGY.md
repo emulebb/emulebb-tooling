@@ -20,6 +20,18 @@ release strategy, not a `0.7.3`-only checklist.
 - V1 supports both reporting and execution through
   `python -m emule_workspace test release-campaign`. It makes the release
   matrix visible, reads latest known evidence when safe, and warns on gaps.
+- RC1 is frozen historical evidence. Active campaign modules, command shapes,
+  schema details, and tests may evolve for RC2+ without preserving RC1
+  compatibility. Any further bugfix or improvement targets RC2+.
+- RC2+ release-relevant local/live scenarios should start from the packaged
+  PowerShell suite installer by default. This makes package layout, suite
+  profile materialization, packaged scripts, manifests, and adjacent PDB
+  placement part of normal release validation.
+- Local host and Windows VM tests should stay mostly paritetic by sharing
+  scenario ids, profile catalogs, release versions, fixture controls, and
+  local-swarm modes. VM execution is confidence proof by default and becomes
+  blocking only when a package, installer, or guest-only delta invalidates the
+  clean guest evidence.
 - Missing evidence is warn-only in V1 because historical reports, local
   live-wire inputs, Arr roots, and package artifacts are operator/environment
   dependent. Future releases may add strict audit mode once the matrix has

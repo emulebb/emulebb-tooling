@@ -15,7 +15,8 @@ python -m emule_workspace test release-campaign --campaign emulebb-0.7.3
 
 The `emulebb-0.7.3` and `emulebb-0.7.3-overnight` values are stable campaign
 IDs from `repos\emulebb-build-tests`. They are not release tag or asset names;
-RC1 tags and package artifacts use `0.7.3-rc.1`.
+the active RC2+ manifests currently target `0.7.3-rc.2`. RC1 evidence is
+frozen and is no longer an active campaign compatibility target.
 
 Useful variants:
 
@@ -42,9 +43,11 @@ VPN-scoped campaign suites fail instead of being silently skipped. Use
 when refreshing the full RC campaign.
 
 Reusable local/VM swarm rows keep two choices explicit. `localCommand` runs the
-same scenario on the host with `--local-swarm-mode execute`. `vmCommand` stages
-the same scenario for clean Hyper-V guests with `--local-swarm-mode plan
---dry-run` unless the operator intentionally forces execution:
+same scenario on the host with `--local-swarm-mode execute`; local reusable
+scenario execution materializes an installer-backed test install by default.
+`vmCommand` stages the same scenario for clean Hyper-V guests with
+`--local-swarm-mode plan --dry-run` unless the operator intentionally forces
+execution:
 
 ```powershell
 python -m emule_workspace test release-campaign --campaign emulebb-0.7.3 --execute `
@@ -55,8 +58,9 @@ python -m emule_workspace test release-campaign --campaign emulebb-0.7.3 --execu
 Use `--local-vm-swarm-mode local` to run the reusable swarm rows on the host
 instead. Keep live-wire/VPN phases separate from deterministic LAN swarm rows.
 
-Hyper-V proof is on-demand confidence evidence for RC1, not part of the default
-quick RC gate. Default `emulebb-0.7.3 --execute` skips nonblocking VM rows. Use
+Hyper-V proof is on-demand confidence evidence for RC2+, not part of the
+default quick RC gate unless a package, installer, or guest-only delta promotes
+it. Default `emulebb-0.7.3 --execute` skips nonblocking VM rows. Use
 `--include-nonblocking`, a direct `test windows-vm ...` command, or the
 explicit local/VM swarm override above when clean guest proof is needed.
 
@@ -103,7 +107,7 @@ Proof tier:
 `rc-blocking-quick`.
 
 Purpose:
-current RC-blocking package readiness campaign.
+current RC2+ blocking package readiness campaign.
 
 ### `emulebb-0.7.3-overnight`
 

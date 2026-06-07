@@ -20,16 +20,16 @@ engineering spec/evidence records, not workflow status authority.
 ## Current Snapshot
 
 **Source of truth:** `EMULEBB_WORKSPACE_ROOT\workspaces\workspace\app\emulebb-main` (`main` branch)
-**Current non-done count:** `119`
+**Current non-done count:** `120`
 **Latest release-doc refresh:** 2026-06-02
-**Non-done by status:** `100` OPEN, `6` IN_PROGRESS, `13` DEFERRED, `0` BLOCKED.
+**Non-done by status:** `101` OPEN, `6` IN_PROGRESS, `13` DEFERRED, `0` BLOCKED.
 **Backlog counts:** item tables below are authoritative.
 **0.7.3 release-train relevance:** Most non-done items below are future or
 deferred work; current RC gate and proof status is controlled by
 [RELEASE-0.7.3](RELEASE-0.7.3.md).
-**Broadband release status:** `emulebb-v0.7.3-rc.1` is the first public
-release-candidate target in the fixed `0.7.3-rc.1`, `0.7.3-rc.2`,
-`0.7.3-rc.3`, stable `0.7.3` train.
+**Broadband release status:** RC1 evidence is frozen. Active release-test
+planning and any further bugfix or improvement target RC2+ in the fixed
+`0.7.3-rc.1`, `0.7.3-rc.2`, `0.7.3-rc.3`, stable `0.7.3` train.
 **Post-stable line split:** after stable `0.7.3`, `release/0.7.x` carries the
 frozen-surface legacy support line and `main` opens for `0.8.0` frozen-surface
 removal work.
@@ -499,6 +499,7 @@ not active item docs.
 | [CI-049](items/CI-049.md) | Minor | OPEN | Enable CodeQL code scanning for the app repository |
 | [CI-050](items/CI-050.md) | Minor | OPEN | REST surface semantic proof and adapter hardening follow-up |
 | [CI-051](items/CI-051.md) | Major | OPEN | Move generated workspace outputs outside repos and worktrees |
+| [CI-052](items/CI-052.md) | Major | OPEN | RC2+ installer-backed test gate rationalization |
 
 ---
 
@@ -515,10 +516,10 @@ not active item docs.
 
 ## Release Focus
 
-0.7.3 RC1 hardening is controlled by [RELEASE-0.7.3](RELEASE-0.7.3.md).
+0.7.3 RC2+ hardening is controlled by [RELEASE-0.7.3](RELEASE-0.7.3.md).
 Use that page for release status, source decision, and the open RC task table.
 The current implementation sequence lives in the single
-[0.7.3 RC1 execution plan](plans/RELEASE-0.7.3-EXECUTION-PLAN.md).
+[0.7.3 release execution plan](plans/RELEASE-0.7.3-EXECUTION-PLAN.md).
 Superseded release gate evidence and old cluster plans live under
 `docs\history\release-0.7.3`.
 

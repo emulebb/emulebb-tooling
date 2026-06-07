@@ -1,18 +1,18 @@
 # eMule Broadband Edition 0.7.3 Release Train Dashboard
 
 This is the current release-train dashboard for the fixed 0.7.3 candidate
-sequence. The active candidate remains `emulebb-v0.7.3-rc.1` until it is
-tagged or explicitly superseded by operator direction. Use this document for
+sequence. RC1 is frozen historical evidence. Active release testing, bugfixes,
+and improvements now target RC2 and later candidates. Use this document for
 status, release-source truth, and the open RC task list.
 
 ## Current Status
 
-- Status: RC quick campaign shape fixed; latest aggregate quick campaign
-  attempt failed on public-network connectivity. Operator tag instruction is
-  still pending and no tag should be created.
+- Status: RC1 evidence is frozen; RC2+ test-gate rationalization is active.
+  Operator tag instruction is still pending and no tag should be created.
 - Target publication window: blocked until `CI-035` quick proof,
   package/SBOM/hash confirmation, clean-worktree confirmation, successful push
-  of pending build commit `fb6e286`, and the separate operator tag instruction.
+  of pending build commit `fb6e286`, `CI-052` RC2+ test-gate rationalization,
+  and the separate operator tag instruction.
 - Proof status: release proof resumed by operator direction on 2026-05-17.
   On 2026-06-05 the quick campaign was reduced to the repeatable RC gate:
   Hyper-V VM proof is now on-demand/nonblocking and `live-process-monitor` is
@@ -24,17 +24,18 @@ status, release-source truth, and the open RC task list.
   and optional aMuTorrent x64 packages were regenerated during that failed run
   and are recorded in [CI-035](items/CI-035.md).
 - Release freeze: active. No new feature, refactor, UI polish, warning-debt, or
-  roadmap work enters 0.7.3 RC1; only direct release-gate blockers may be
-  fixed before the tag.
+  roadmap work enters RC2+ unless it is a direct release-gate blocker, package
+  or proof fix, approved regression fix, or release-documentation correction.
 - Current hold: none for release proof. Continue one gate at a time and stop
   before Git tagging until the operator gives the separate RC tag instruction.
 - Release source: selected reviewed `main` commit in
   `EMULEBB_WORKSPACE_ROOT\workspaces\workspace\app\emulebb-main`.
-- Tag target: `emulebb-v0.7.3-rc.1` on the selected reviewed `main` commit after
-  fresh proof passes and the operator gives a separate tagging instruction.
+- Tag target: the active RC2+ candidate on the selected reviewed `main` commit
+  after fresh proof passes and the operator gives a separate tagging
+  instruction.
 - Stock/community comparison baseline: `baseline/community-0.72a`.
 - Release stabilization branch: `release/0.7.3` once the operator starts the
-  0.7.3 RC1 branch.
+  0.7.3 RC branch.
 - Package publication: held until the quick release-campaign proof passes or is
   explicitly accepted, final checklist rows are confirmed, and the operator
   gives the separate tag/publication instruction.
@@ -56,35 +57,37 @@ surface-removal work and `release/0.7.x` carries legacy support for the frozen
 ## Candidate Structure
 
 This structure keeps RC evidence separate from future-roadmap planning. Fill
-only the active candidate section during release execution; later candidate
-sections are scaffolds until the operator starts them.
+only the active candidate section during release execution; frozen candidate
+sections are historical scaffolds.
 
-### RC1 Active Gate
+### RC1 Frozen Gate
 
 Purpose:
-finish the first public candidate from the selected reviewed `main` commit.
+preserve historical evidence from the first candidate. RC1 is no longer an
+active test-compatibility or bugfix target.
 
 Allowed changes:
-direct release-gate blockers, packaging/provenance failures, release-doc drift,
-and severe app defects found by required proof.
+none. Any further bugfix, test campaign change, packaging improvement, or proof
+refresh goes to RC2+.
 
-Primary task:
+Historical task:
 [CI-035](items/CI-035.md).
 
 Evidence owner:
 [RELEASE-0.7.3-CHECKLIST](RELEASE-0.7.3-CHECKLIST.md) plus the artifact and
 hash records in `CI-035`.
 
-### RC2 Delta Gate
+### RC2+ Active Gate
 
 Purpose:
-absorb only the delta from RC1 after `emulebb-v0.7.3-rc.1` is published or
-explicitly accepted as superseded.
+absorb only the delta from frozen RC1 evidence and rationalize release proof
+around installer-backed, reusable local/VM campaign scenarios.
 
 Allowed changes:
 release blockers reported from RC1, proof refreshes invalidated by those
 changes, packaging fixes, release-documentation corrections, and approved
-regression fixes.
+regression fixes. Campaign modules and schemas may evolve for RC2+ without
+preserving RC1 command compatibility.
 
 Required scaffold before RC2 work starts:
 
@@ -93,7 +96,11 @@ Required scaffold before RC2 work starts:
 - create or promote item IDs for every RC2 blocker;
 - record the exact package and SBOM regeneration scope;
 - keep all future-roadmap and `0.8.0` removal work out of RC2 unless it fixes a
-  direct release blocker on a supported surface.
+  direct release blocker on a supported surface;
+- make the packaged PowerShell suite installer the default starting point for
+  release-relevant local/live tests;
+- keep local host and VM campaign scenarios mostly paritetic, with VM proof
+  nonblocking unless a package/installer delta invalidates guest evidence.
 
 ### RC3 Delta Gate
 
@@ -121,7 +128,11 @@ Required scaffold before stable tagging:
 - branch split confirmation for `release/0.7.x` legacy maintenance and `main`
   opening for `0.8.0` frozen-surface removal.
 
-## Release Identity
+## Historical RC1 Release Identity
+
+This block records the frozen RC1 asset shape. RC2+ package names and hashes
+must be regenerated from the active RC2+ gate rather than inferred from this
+historical list.
 
 - Public product name: `eMule broadband edition`
 - Compact app/mod/API name: `eMuleBB`
@@ -160,33 +171,36 @@ Historical gate evidence and superseded cluster plans live under
 | ID | Priority | Area |
 |----|----------|------|
 | [CI-035](items/CI-035.md) | Major | Final proof |
+| [CI-052](items/CI-052.md) | Major | RC2+ installer-backed test gate |
 
 Required outcome:
 restore public network connectivity, push pending build commit `fb6e286`, rerun
-the quick aggregate campaign, confirm or regenerate package hashes, rerun the
-clean-worktree audit, then wait for the operator-controlled tag instruction.
+the quick aggregate campaign against the RC2+ installer-backed gate, confirm or
+regenerate package hashes, rerun the clean-worktree audit, then wait for the
+operator-controlled tag instruction.
 
 ## Remaining Release Backlog
 
-The 0.7.3 RC1 backlog is narrowed to `CI-035`. `CI-038` is Done with a
+The 0.7.3 RC2+ backlog is narrowed to `CI-035` and `CI-052`. `CI-038` is Done with a
 current-head `ui-resource-depth` pass covering all 43 release languages. The
 latest quick campaign dry-run reports the intended 18-command RC gate with VM
 proof on-demand. Candidate x64/ARM64 core package hashes, package SBOM hashes,
 and optional aMuTorrent x64 hashes are recorded, but the aggregate quick proof
 failed under public-network outage conditions. Remaining work is network
 restoration, push of `fb6e286`, quick release-campaign proof or explicit
-acceptance, final checklist confirmation, clean-worktree audit, and the later
-operator-controlled tag instruction.
+acceptance, RC2+ installer-backed campaign rationalization, final checklist
+confirmation, clean-worktree audit, and the later operator-controlled tag
+instruction.
 
 All other active `FEAT`, `REF`, warning-debt, cleanup, and polish items are
-post-0.7.3 RC1 by default. A non-blocking item may enter RC1 only if a
-current release gate exposes a direct blocker and the item doc records that
-promotion explicitly.
+post-0.7.3 by default. A non-blocking item may enter RC2+ only if a current
+release gate exposes a direct blocker and the item doc records that promotion
+explicitly.
 
 `FEAT-056` remains post-`0.7.3` automation and evidence UX work. It is not an RC
 tag blocker unless a later item promotes a specific slice.
 
-Accepted non-blockers for 0.7.3 RC1:
+Historical accepted non-blockers for 0.7.3 RC1:
 
 - [CI-034](../history/items/CI-034.md): package-release now rejects dirty
   provenance inputs and records selected `main` source/build/test/tooling
@@ -229,7 +243,7 @@ Accepted non-blockers for 0.7.3 RC1:
 
 ## Ship Rule
 
-0.7.3 RC1 can be tagged only when:
+0.7.3 RC2+ can be tagged only when:
 
 - every row in **Open RC Tasks** is Done or explicitly accepted in its item
   doc;

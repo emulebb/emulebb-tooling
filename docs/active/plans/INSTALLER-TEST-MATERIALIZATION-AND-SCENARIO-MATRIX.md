@@ -4,6 +4,11 @@ This plan tracks the active goal to reuse the packaged eMuleBB suite installer
 for local development installs and test materialization, while making the live
 E2E scenario structure easier to audit and repeat.
 
+Current RC2+ follow-up: [CI-052](../items/CI-052.md) promotes this installer
+materialization contract into the release gate. RC1 is frozen; active local and
+VM campaign scenarios may evolve for RC2+ and should reuse the installer-backed
+path for release-relevant proof.
+
 ## Goal
 
 Materialize fully configured local and test installs through the suite
