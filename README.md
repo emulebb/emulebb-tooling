@@ -21,6 +21,9 @@ It is not the app repo and it is not the build orchestrator:
   [`docs/HELP.md`](docs/HELP.md)
 - rendered docs site:
   <https://emulebb.github.io/emulebb-tooling/>
+- public setup:
+  [`docs/reference/GUIDE-SETUP.md`](docs/reference/GUIDE-SETUP.md)
+  (RC1 standalone ZIP, suite one-liner, and release provenance)
 - workspace policy:
   [`docs/WORKSPACE-POLICY.md`](docs/WORKSPACE-POLICY.md)
 - agent checklist:

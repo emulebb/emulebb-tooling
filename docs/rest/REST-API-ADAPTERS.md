@@ -68,11 +68,16 @@ Compatibility summary:
 | App/auth probes | Supported | Enough for Arr qBittorrent client setup and health checks. |
 | Categories | Supported | Native eMuleBB categories are exposed through qBit-shaped routes. |
 | Transfer list/details | Supported subset | Rows are shaped for Arr queue and completed-download handling. |
-| Add transfer | Supported for eD2K links and controlled eMuleBB magnets | Raw eD2K links are accepted. Torznab emits BTIH-shaped magnets with `x.emulebb-ed2k` so Arr validates them as torrent-style links while eMuleBB converts them back to eD2K. `.torrent` uploads, unrelated BitTorrent magnet links, and HTTP torrent URLs are rejected. |
+| Add transfer | Supported subset | Accepts eD2K links and controlled eMuleBB magnets. |
 | Pause/resume/delete | Supported subset | `delete` maps to native destructive transfer-file deletion semantics. |
 | Priority/share-limit/force-start | Accepted no-op | Validated for Arr compatibility; no torrent seeding policy exists. |
 | RSS/search/tracker/peer/sync/log APIs | Unsupported | These qBittorrent families are outside the adapter contract. |
 | `hashes=all` | Unsupported | Hash mutations require one to 100 explicit eD2K hashes. |
+
+For add-transfer calls, raw eD2K links are accepted. Torznab emits BTIH-shaped
+magnets with `x.emulebb-ed2k` so Arr validates them as torrent-style links while
+eMuleBB converts them back to eD2K. `.torrent` uploads, unrelated BitTorrent
+magnet links, and HTTP torrent URLs are rejected.
 
 - **`GET`**
   - Route: `/api/v2/app/webapiversion`

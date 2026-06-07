@@ -241,6 +241,7 @@ RC branch; after stable `0.7.3`, `release/0.7.x` carries legacy maintenance.
 | [BUG-141](../history/items/BUG-141.md) | Minor | DONE | Source expand icons and video thumbnails can be visually oversized |
 | [BUG-142](items/BUG-142.md) | Minor | OPEN | Upload soft-queue admission ignores effective score policy |
 | [BUG-143](items/BUG-143.md) | Minor | OPEN | Upload waiting queue retains clients for unavailable shared files |
+| [BUG-145](../history/items/BUG-145.md) | Major | DONE | Suite bootstrap flow misses LAN, credential, category, and Arr sync polish |
 | [BUG-146](items/BUG-146.md) | Minor | OPEN | Upload title rate does not match visible uploading row totals |
 
 `BUG-103` through `BUG-110` were superseded internal post-tag evidence labels,

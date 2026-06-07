@@ -22,12 +22,12 @@
 
 ### Install Fast Path
 
-- [ZIP, extract, run](reference/GUIDE-SETUP.md#quick-install-zip-extract-run):
-  download the eMuleBB ZIP, extract it into a new app folder, and start
+- [Full suite one-liner](reference/GUIDE-SETUP.md#full-suite-install-powershell-bootstrap):
+  run the RC1 PowerShell bootstrapper directly from GitHub Releases when you
+  want eMuleBB plus aMuTorrent, Prowlarr, Radarr, and Sonarr integration.
+- [Manual standalone ZIP](reference/GUIDE-SETUP.md#quick-install-zip-extract-run):
+  download the RC1 eMuleBB ZIP, extract it into a new app folder, and start
   `emulebb.exe`.
-- [Full suite PowerShell bootstrap](reference/GUIDE-SETUP.md#full-suite-install-powershell-bootstrap):
-  download `Bootstrap-eMuleBBSuite.ps1` from GitHub Releases and run it when
-  you want the full suite installer flow.
 - [Hyper-V isolated suite runs](reference/GUIDE-HYPERV-WINDOWS.md):
   prepare clean local Windows guests and run package or suite checks without
   touching the host's daily eMuleBB profile.
