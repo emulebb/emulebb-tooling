@@ -20,9 +20,9 @@ engineering spec/evidence records, not workflow status authority.
 ## Current Snapshot
 
 **Source of truth:** `EMULEBB_WORKSPACE_ROOT\workspaces\workspace\app\emulebb-main` (`main` branch)
-**Current non-done count:** `118`
+**Current non-done count:** `119`
 **Latest release-doc refresh:** 2026-06-02
-**Non-done by status:** `99` OPEN, `6` IN_PROGRESS, `13` DEFERRED, `0` BLOCKED.
+**Non-done by status:** `100` OPEN, `6` IN_PROGRESS, `13` DEFERRED, `0` BLOCKED.
 **Backlog counts:** item tables below are authoritative.
 **0.7.3 release-train relevance:** Most non-done items below are future or
 deferred work; current RC gate and proof status is controlled by
@@ -246,6 +246,7 @@ RC branch; after stable `0.7.3`, `release/0.7.x` carries legacy maintenance.
 | [BUG-143](items/BUG-143.md) | Minor | OPEN | Upload waiting queue retains clients for unavailable shared files |
 | [BUG-145](../history/items/BUG-145.md) | Major | DONE | Suite bootstrap flow misses LAN, credential, category, and Arr sync polish |
 | [BUG-146](items/BUG-146.md) | Minor | OPEN | Upload title rate does not match visible uploading row totals |
+| [BUG-147](items/BUG-147.md) | Major | OPEN | Recursive shared-directory add performs a foreground full shared-file reload |
 
 `BUG-103` through `BUG-110` were superseded internal post-tag evidence labels,
 not active item docs.
