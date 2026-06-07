@@ -277,6 +277,10 @@ boundary, project entrypoint, warning, localization, and normalization policy.
   is allowed for eMuleBB package-owned native Windows setup and integration
   assets staged into `eMuleBB\scripts`. These scripts are product runtime assets
   and must stay compatible with Windows PowerShell `5.1`.
+- `repos\emulebb-build\emule_workspace\release_assets\emulebb_automation_examples\automation\*.ps1`
+  is allowed for eMuleBB package-owned REST automation examples staged by the
+  bootstrapper into `examples\automation`. These scripts are example assets and
+  must stay compatible with Windows PowerShell `5.1`.
 - eMuleBB package-owned PowerShell runtime script filenames must use
   `Verb-Noun.ps1` form, for example `Start-eMuleBB.ps1` or
   `Register-Prowlarr.ps1`; lowercase kebab-case script names are not allowed.

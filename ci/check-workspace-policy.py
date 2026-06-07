@@ -624,6 +624,15 @@ def is_runtime_powershell_name(path: str) -> bool:
     return re.fullmatch(r"[A-Z][A-Za-z0-9]*-[A-Za-z][A-Za-z0-9]*\.ps1", name) is not None
 
 
+def is_automation_example_path(path: str) -> bool:
+    """Returns whether a path is a direct automation example PowerShell asset."""
+
+    return is_direct_child_of(
+        path.replace("\\", "/"),
+        "emule_workspace/release_assets/emulebb_automation_examples/automation/",
+    )
+
+
 def audit_powershell_boundary(root: Path) -> None:
     """Checks that only approved Windows runtime assets carry PowerShell."""
 
@@ -658,9 +667,15 @@ def audit_powershell_boundary(root: Path) -> None:
                 if not is_runtime_powershell_name(relative_path):
                     issues.append(f"{path}: eMuleBB runtime PowerShell scripts must use Verb-Noun.ps1 names.")
                 continue
+            if repo_root == build_root and is_automation_example_path(normalized):
+                first_non_empty = next((line.strip() for line in read_text(path).splitlines() if line.strip()), "")
+                if first_non_empty != "#Requires -Version 5.1":
+                    issues.append(f"{path}: eMuleBB automation example PowerShell must declare #Requires -Version 5.1.")
+                continue
             issues.append(
                 f"{repo_root}\\{relative_path}: tracked PowerShell is only allowed under "
-                "repos\\emulebb-build\\emule_workspace\\release_assets\\emulebb\\scripts."
+                "repos\\emulebb-build\\emule_workspace\\release_assets\\emulebb\\scripts or "
+                "repos\\emulebb-build\\emule_workspace\\release_assets\\emulebb_automation_examples\\automation."
             )
     if issues:
         raise RuntimeError("\n".join(issues))

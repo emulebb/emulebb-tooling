@@ -340,6 +340,7 @@ def test_powershell_version_header(repo_root: Path, repo_kind: str, relative_pat
         "5.1"
         if (is_tooling_repo and normalized_path.startswith("scripts/"))
         or is_emulebb_runtime_script(repo_root, repo_kind, relative_path)
+        or is_emulebb_automation_example(repo_root, repo_kind, relative_path)
         or is_emulebb_host_network_script(repo_root, repo_kind, relative_path)
         else "7.6"
     )
@@ -395,6 +396,15 @@ def is_emulebb_runtime_script(repo_root: Path, repo_kind: str, relative_path: st
     return (repo_root.name == "emulebb-build" or repo_kind == "emulebb-build") and is_direct_child_of(
         normalize_path(relative_path),
         "emule_workspace/release_assets/emulebb/scripts/",
+    )
+
+
+def is_emulebb_automation_example(repo_root: Path, repo_kind: str, relative_path: str) -> bool:
+    """Returns whether a path is an allowed eMuleBB automation example script."""
+
+    return (repo_root.name == "emulebb-build" or repo_kind == "emulebb-build") and is_direct_child_of(
+        normalize_path(relative_path),
+        "emule_workspace/release_assets/emulebb_automation_examples/automation/",
     )
 
 
