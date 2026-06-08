@@ -114,10 +114,11 @@ Directive precedence is:
   implementation called through supported `emulebb-build` entrypoints.
 - Every development change should pass scoped validation plus the smallest
   relevant build and test set for the changed area.
-- Every app code change must rebuild both active x64 app configurations before
-  commit:
+- Every app code change must rebuild both active x64 app configurations and the
+  diagnostics Release executable before commit:
   - `python -m emule_workspace build app --variant main --config Debug --platform x64 --build-output-mode ErrorsOnly`
   - `python -m emule_workspace build app --variant main --config Release --platform x64 --build-output-mode ErrorsOnly`
+  - `python -m emule_workspace build app --variant main --config Release --platform x64 --build-output-mode ErrorsOnly --diagnostics`
 - Docs-only or policy-only changes may use a lighter validation path when they
   do not alter the build contract.
 - Full matrix validation is expected for build-system, dependency pin,

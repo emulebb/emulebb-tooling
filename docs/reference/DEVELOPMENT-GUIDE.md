@@ -62,12 +62,13 @@ python -m emule_workspace validate
 Do not run ad hoc direct `MSBuild` from the app worktree, `srchybrid`, or
 `repos\emulebb-build-tests`.
 
-Every app code change must rebuild both active x64 app configurations before
-commit:
+Every app code change must rebuild both active x64 app configurations and the
+diagnostics Release executable before commit:
 
 ```powershell
 python -m emule_workspace build app --variant main --config Debug --platform x64 --build-output-mode ErrorsOnly
 python -m emule_workspace build app --variant main --config Release --platform x64 --build-output-mode ErrorsOnly
+python -m emule_workspace build app --variant main --config Release --platform x64 --build-output-mode ErrorsOnly --diagnostics
 ```
 
 Documentation-only changes do not require an app build when they do not alter

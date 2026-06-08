@@ -84,13 +84,15 @@ python -m mkdocs build --strict
   product-family work to inspect dirty state across all managed repos.
 - Do not run ad hoc direct `MSBuild` from app worktrees, `srchybrid`, or
   `repos\emulebb-build-tests`.
-- For app code, run workspace validation and both required x64 app builds:
+- For app code, run workspace validation, both required x64 app builds, and
+  the diagnostics Release build:
 
 ```powershell
 cd $env:EMULEBB_WORKSPACE_ROOT\repos\emulebb-build
 python -m emule_workspace validate
 python -m emule_workspace build app --variant main --config Debug --platform x64 --build-output-mode ErrorsOnly
 python -m emule_workspace build app --variant main --config Release --platform x64 --build-output-mode ErrorsOnly
+python -m emule_workspace build app --variant main --config Release --platform x64 --build-output-mode ErrorsOnly --diagnostics
 ```
 
 ## Tests And Evidence

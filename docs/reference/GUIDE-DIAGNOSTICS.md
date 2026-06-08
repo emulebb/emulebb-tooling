@@ -108,7 +108,13 @@ Privacy and availability rules:
   are not needed.
 - Standard public package builds strip diagnostics instrumentation from the
   executable. If a support case needs it, use the paired diagnostics package.
-  A local Release build with all diagnostics instrumentation flags enabled
+  For local support builds, use the canonical diagnostics build command:
+
+  ```powershell
+  python -m emule_workspace build app --variant main --config Release --platform x64 --build-output-mode ErrorsOnly --diagnostics
+  ```
+
+  The local diagnostics build enables all diagnostics instrumentation flags and
   emits `emulebb-diagnostics.exe` so it is distinguishable from the standard
   `emulebb.exe`.
 
