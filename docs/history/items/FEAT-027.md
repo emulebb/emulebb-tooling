@@ -38,8 +38,8 @@ Visible implementation points:
 - `UserMsgs.h` adds `UM_STARTUP_NEXT_STAGE`
 - `CemuleDlg::OnStartupNextStage(...)` posts startup progression back through the UI
   message loop
-- `Emule.cpp` writes `startup-profile.trace.json` in Chrome Trace Event format when
-  startup profiling is enabled
+- `Emule.cpp` writes `emulebb-diagnostics-startup.trace.json` in Chrome Trace Event
+  format when startup profiling is enabled
 - startup profiling is gated by the `EMULE_STARTUP_PROFILE` environment variable
 - the trace carries stable phase families for:
   - `ui.shared_files_ready` readiness milestones

@@ -88,9 +88,9 @@ runtime environment variable is required:
 emulebb-diagnostics.exe -c C:\eMuleBB-Profiles\slow-startup
 ```
 
-The trace is written as `startup-profile.trace.json` in the active profile/log
-area. Open it with `chrome://tracing`, Perfetto, or another Chrome Trace
-viewer.
+The trace is written as `emulebb-diagnostics-startup.trace.json` in the active
+profile `logs` directory. Open it with `chrome://tracing`, Perfetto, or another
+Chrome Trace viewer.
 
 Use this when a profile is slow before the normal UI feels usable, especially
 with large shared libraries, monitored shares, broad IP filters, startup
@@ -106,9 +106,11 @@ Privacy and availability rules:
   library.
 - Use the standard release package for ordinary launches when profiling traces
   are not needed.
-- Standard public package builds strip profiling support from the executable.
-  If a support case needs it, use the paired diagnostics package or rebuild
-  with `EnableStartupProfiling=true`.
+- Standard public package builds strip diagnostics instrumentation from the
+  executable. If a support case needs it, use the paired diagnostics package.
+  A local Release build with all diagnostics instrumentation flags enabled
+  emits `emulebb-diagnostics.exe` so it is distinguishable from the standard
+  `emulebb.exe`.
 
 ## Headless Media Metadata Diagnostic
 

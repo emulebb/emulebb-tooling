@@ -67,7 +67,7 @@ python -m emule_workspace package-release --config Release --platform x64 --clea
 
 Output contract:
 `workspaces\workspace\state\package-build\emulebb-v0.7.3-rc.1\x64`.
-The packaged binary must not contain startup profiling support.
+The packaged binary must not contain startup diagnostics support.
 
 Package Release ARM64:
 
@@ -77,7 +77,7 @@ python -m emule_workspace package-release --config Release --platform ARM64 --cl
 
 Output contract:
 `workspaces\workspace\state\package-build\emulebb-v0.7.3-rc.1\arm64`.
-The packaged binary must not contain startup profiling support.
+The packaged binary must not contain startup diagnostics support.
 
 `package-release` stages ZIP contents under
 `workspaces\workspace\state\release\emulebb-v0.7.3-rc.1\staging\<arch>` and writes
@@ -218,10 +218,12 @@ writing the manifest. Verification covers:
 - `emulebb.exe` in the standard package, `emulebb-diagnostics.exe` in the
   diagnostics package, full stock `lang\*.dll` set, package README, release notes,
   GPL text, third-party notices, SBOM, and REST docs;
+- diagnostics package executable contains startup, packet, upload-slot,
+  download-slot, and bad-peer diagnostics support;
 - absence of the legacy template-based `webserver` payload in RC assets;
 - x64 packages containing only x64 PE files and ARM64 packages containing only
   ARM64 PE files for the selected eMuleBB executable and language DLLs;
-- standard release package `emulebb.exe` not containing startup profiling support;
+- standard release package `emulebb.exe` not containing startup diagnostics support;
 - no source files, project files, debug symbols, intermediates, or build logs in
   the ZIP; and
 - manifest fields for ZIP hash, executable hash, expected language DLL

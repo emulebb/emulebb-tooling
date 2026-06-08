@@ -127,8 +127,9 @@ If startup is slow only once after a profile move or package upgrade, allow the
 derived caches to rebuild before treating it as a regression.
 
 Use a diagnostics release package or an explicit profiling build from the
-[Diagnostics Guide](GUIDE-DIAGNOSTICS.md) to create `startup-profile.trace.json`.
-It separates app startup phases, shared-cache validation, hashing, and
+[Diagnostics Guide](GUIDE-DIAGNOSTICS.md) to create
+`emulebb-diagnostics-startup.trace.json` in the profile `logs` directory. It
+separates app startup phases, shared-cache validation, hashing, and
 upload-budget setup more clearly than the ordinary log.
 
 If the profile uses monitored shares, confirm the monitored roots are stable
