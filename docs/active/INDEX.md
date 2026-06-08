@@ -20,9 +20,9 @@ engineering spec/evidence records, not workflow status authority.
 ## Current Snapshot
 
 **Source of truth:** `EMULEBB_WORKSPACE_ROOT\workspaces\workspace\app\emulebb-main` (`main` branch)
-**Current non-done count:** `120`
+**Current non-done count:** `119`
 **Latest release-doc refresh:** 2026-06-02
-**Non-done by status:** `101` OPEN, `6` IN_PROGRESS, `13` DEFERRED, `0` BLOCKED.
+**Non-done by status:** `100` OPEN, `6` IN_PROGRESS, `13` DEFERRED, `0` BLOCKED.
 **Backlog counts:** item tables below are authoritative.
 **0.7.3 release-train relevance:** Most non-done items below are future or
 deferred work; current RC gate and proof status is controlled by
@@ -499,7 +499,7 @@ not active item docs.
 | [CI-049](items/CI-049.md) | Minor | OPEN | Enable CodeQL code scanning for the app repository |
 | [CI-050](items/CI-050.md) | Minor | OPEN | REST surface semantic proof and adapter hardening follow-up |
 | [CI-051](items/CI-051.md) | Major | OPEN | Move generated workspace outputs outside repos and worktrees |
-| [CI-052](items/CI-052.md) | Major | DONE | RC2+ installer-backed test gate rationalization |
+| [CI-052](../history/items/CI-052.md) | Major | DONE | RC2+ installer-backed test gate rationalization |
 
 ---
 
