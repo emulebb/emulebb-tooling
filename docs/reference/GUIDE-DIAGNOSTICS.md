@@ -34,6 +34,11 @@ Snapshot data is organized by field families, not by one opaque text dump:
   investigations
 - loaded module names and paths
 
+The I/O section reports Auto Broadband I/O state, the available physical RAM
+used for adaptive download-buffer sizing, the adaptive global budget, effective
+file-buffer allowance, total buffered download bytes, active buffered download
+file count, and the largest buffered download file.
+
 Redaction is best-effort support hygiene. It does not turn a diagnostic
 snapshot into an anonymous public telemetry record. Review snapshots before
 posting them to public trackers.

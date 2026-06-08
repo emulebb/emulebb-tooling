@@ -131,8 +131,8 @@ Downloads and disk safety:
 - qBittorrent-style shortcuts and batch menu actions preserve native delete,
   category, and paused/started semantics
 - completed downloads can optionally run a configured external command
-- Auto Broadband I/O bounds download buffer memory by sharing a 512 MiB global
-  active-download buffer budget across active buffered files
+- Auto Broadband I/O bounds download buffer memory with an adaptive global
+  budget derived from currently available physical RAM
 - protected-volume disk-space floors cover config, temp, incoming, and
   category-specific incoming volumes
 - `.part.met` writes have their own free-space guard

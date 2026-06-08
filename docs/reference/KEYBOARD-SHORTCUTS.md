@@ -40,6 +40,8 @@ These shortcuts are local to the Transfers pane.
 | `Ctrl+Q` | Switches the Transfers list to Queue. |
 | `Ctrl+K` | Switches the Transfers list to Known Clients. |
 | `F5` | Flushes the current Transfers view refresh. |
+| `Numpad +` / `Alt+Right` | Expands the focused download row's source list. |
+| `Numpad -` / `Alt+Left` | Collapses the focused download row's source list. |
 
 In split view, the list shortcuts switch the lower Transfers pane. In a
 single-list view, they switch the primary full list. Queue and Known Clients
@@ -108,6 +110,7 @@ selected downloads and do not become global app accelerators.
 | `Ctrl+Shift+P` | Pauses all pausable downloads in the current category. |
 | `Ctrl+Shift+S` | Resumes all resumable downloads in the current category. |
 | `Ctrl+Shift+T` | Stops all stoppable downloads in the current category. |
+| `Ctrl+R` | Clears completed downloads from the current category. |
 | `Ctrl++` / `Ctrl+-` | Raises or lowers selected download priority one manual step. |
 | `Ctrl+Shift++` / `Ctrl+Shift+-` | Sets selected download priority to High or Low. |
 | `Ctrl+M` | Opens the category picker for selected downloads. |
@@ -145,6 +148,8 @@ These shortcuts are local to Search Results.
 | `Ctrl+PageUp` / `Ctrl+PageDown` | Switches to the previous or next search-results tab. |
 | `Ctrl+W` | Closes the selected search-results tab. |
 | `Ctrl+F4` | Closes the selected search-results tab. |
+| `Numpad +` / `Alt+Right` | Expands the focused grouped result row. |
+| `Numpad -` / `Alt+Left` | Collapses the focused grouped result row. |
 
 ## Shared Files Shortcuts
 
@@ -161,6 +166,7 @@ These shortcuts are local to the Shared Files list.
 | `F5` | Reloads the shared-files list. |
 | `F2` | Renames the selected shared file through the existing rename action. |
 | `Delete` | Runs the existing Delete action for selected shared files. |
+| `Space` | Toggles selected shared-file checkboxes when checkbox mode is enabled. |
 
 ## Shared Directories Shortcuts
 
@@ -235,6 +241,8 @@ When Search is the active main pane, the Search parameter bar owns:
 | Shortcut | Behavior |
 |----------|----------|
 | `F6` | Toggles focus between the Search Name textbox and the search results list. |
+| `Tab` from the last enabled Search parameter control | Moves focus to the search results list. |
+| `Shift+Tab` from the search results list | Moves focus back to the last enabled Search parameter control. |
 
 ## Mnemonic Policy
 
@@ -283,12 +291,17 @@ When Search is the active main pane, the Search parameter bar owns:
   `Ctrl+Shift+D` should switch to Downloading Clients.
 - In Transfers, `F5` should flush the visible transfer-list refresh without
   changing selection.
+- In Transfers, `Numpad +`, `Numpad -`, `Alt+Right`, and `Alt+Left` should
+  expand and collapse the focused download row's source list without changing
+  download state.
 - In Uploading, Queue, Known Clients, and Downloading Clients, `Ctrl+I` and
   `Alt+Enter` should open client details.
 - In Downloads, `Ctrl+Shift+P`, `Ctrl+Shift+S`, and `Ctrl+Shift+T` should act on
   the current transfer category, even when no row is selected.
 - In Downloads, `Ctrl++`, `Ctrl+-`, `Ctrl+Shift++`, and `Ctrl+Shift+-` should
   update selected download priorities without changing unrelated rows.
+- In Downloads, `Ctrl+R` should clear completed rows in the current category
+  through the existing Clear Completed command.
 - In Downloads, `Ctrl+F7` through `Ctrl+F12` should sort status, progress,
   sources, speed, priority, and category respectively.
 - In Downloads, `Shift+F10` should open the same context menu as right-click,
@@ -300,6 +313,9 @@ When Search is the active main pane, the Search parameter bar owns:
   mnemonic behavior.
 - In Search, `F6` should move focus between the Name textbox and the search
   results list.
+- In Search, forward `Tab` from the last enabled parameter control should move
+  to results, and `Shift+Tab` from results should return to the last enabled
+  parameter control.
 - In Search, `Ctrl+Tab` and `Ctrl+Shift+Tab` should cycle main toolbar panes,
   not search-results tabs.
 - In Search Results, `Enter`, `Shift+Enter`, and `Ctrl+Enter` should download,
@@ -314,6 +330,8 @@ When Search is the active main pane, the Search parameter bar owns:
   availability, complete sources, and size respectively.
 - In Search Results, both `Ctrl+L` and `Ctrl+C` should copy selected result
   ED2K links.
+- In Search Results, `Numpad +`, `Numpad -`, `Alt+Right`, and `Alt+Left`
+  should expand and collapse the focused grouped result row.
 - In searchable lists, `Ctrl+F`, `F3`, and `Shift+F3` should start find and
   navigate matches without changing transfer state.
 - In searchable lists, `Esc` should clear the active find text when one is set,
@@ -324,6 +342,8 @@ When Search is the active main pane, the Search parameter bar owns:
   and `Delete`.
 - In Shared Files, both `Ctrl+L` and `Ctrl+C` should copy selected shared-file
   ED2K links.
+- In Shared Files, `Space` should toggle selected checkboxes only when checkbox
+  mode is enabled.
 - In Category Manager, `Insert`, `Enter`, `Delete`, `F5`, `Alt+Up`, and
   `Alt+Down` should drive their existing local category actions.
 - In Friends, `Insert` and `Delete` should add and remove friends through the

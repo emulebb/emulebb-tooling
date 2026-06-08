@@ -154,6 +154,7 @@ desktop app first, then layer automation on top.
 | eD2K, Kad, bind, ports, UPnP, firewall | [reference/GUIDE-NETWORK](reference/GUIDE-NETWORK.md) |
 | eMuleBB, aMuTorrent, Prowlarr, Radarr, Sonarr setup recipes | [reference/GUIDE-STACK-INTEGRATIONS](reference/GUIDE-STACK-INTEGRATIONS.md) |
 | REST semantics, qBit-compatible/Torznab adapter behavior | [reference/GUIDE-CONTROLLERS-REST](reference/GUIDE-CONTROLLERS-REST.md) |
+| p2p-overlord eMule agent boundary and source docs | [reference/GUIDE-P2P-OVERLORD-EMULE-AGENT](reference/GUIDE-P2P-OVERLORD-EMULE-AGENT.md) |
 | Preferences and `preferences.ini` reference | [reference/GUIDE-PREFERENCES](reference/GUIDE-PREFERENCES.md) |
 | Runtime `.met` and `.dat` file roles | [reference/GUIDE-PERSISTENCE-FILES](reference/GUIDE-PERSISTENCE-FILES.md) |
 | IP filter setup and troubleshooting | [reference/GUIDE-IP-FILTERS](reference/GUIDE-IP-FILTERS.md) |
@@ -177,6 +178,7 @@ authority for live state.
 | qBit, Torznab, Arr, and aMuTorrent adapter notes | [rest/REST-API-ADAPTERS](rest/REST-API-ADAPTERS.md) |
 | REST parity inventory | [rest/REST-API-PARITY-INVENTORY](rest/REST-API-PARITY-INVENTORY.md) |
 | Controller surface matrix | [active/CONTROLLER-SURFACE-MATRIX](active/CONTROLLER-SURFACE-MATRIX.md) |
+| p2p-overlord claimed-subset contract boundary | [reference/GUIDE-P2P-OVERLORD-EMULE-AGENT](reference/GUIDE-P2P-OVERLORD-EMULE-AGENT.md) |
 
 ## Translations
 
@@ -203,6 +205,7 @@ are not the best first read for users.
 | Workspace repository map | [reference/WORKSPACE-REPO-MAP](reference/WORKSPACE-REPO-MAP.md) |
 | Development and validation guide | [reference/DEVELOPMENT-GUIDE](reference/DEVELOPMENT-GUIDE.md) |
 | Active backlog and release dashboard | [active/INDEX](active/INDEX.md) |
+| p2p-overlord product-family integration plan | [active/plans/P2P-OVERLORD-PRODUCT-FAMILY-INTEGRATION](active/plans/P2P-OVERLORD-PRODUCT-FAMILY-INTEGRATION.md) |
 | 0.7.3 RC1 release control document | [active/RELEASE-0.7.3](active/RELEASE-0.7.3.md) |
 | Public 0.7.3 RC1 release notes | [active/RELEASE-0.7.3-NOTES](active/RELEASE-0.7.3-NOTES.md) |
 | 0.7.3 RC1 release checklist | [active/RELEASE-0.7.3-CHECKLIST](active/RELEASE-0.7.3-CHECKLIST.md) |

@@ -225,14 +225,14 @@ disk, or UI behavior worse even on a fast machine.
 ## Auto Broadband I/O
 
 `AutoBroadbandIO` is enabled by default for new broadband profiles. It keeps
-download buffering bounded by dividing a 512 MiB global download-buffer budget
-across active buffered files, then using the smaller value between that share
-and the manual file-buffer setting.
+download buffering bounded by deriving a global download-buffer budget from
+25% of currently available physical RAM, clamped between 512 MiB and 4 GiB.
 
-The practical result is predictable memory use during many active downloads:
-one or two large active files can use larger buffers, while a broad active
-queue does not allocate a large buffer per file. Disable it only when comparing
-old manual-buffer behavior or diagnosing a specific I/O issue.
+The practical result is demand-based memory use during active downloads: one
+hot file can use most of the adaptive budget, while quiet active files retain a
+small minimum share. Auto mode can exceed the manual file-buffer setting within
+that adaptive budget. Disable it only when comparing old manual-buffer behavior
+or diagnosing a specific I/O issue.
 
 ## Disk-Space Protection
 

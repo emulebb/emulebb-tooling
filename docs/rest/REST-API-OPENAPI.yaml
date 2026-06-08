@@ -3045,6 +3045,7 @@ components:
           type: boolean
         downloadAutoBroadbandIo:
           type: boolean
+          description: Enables adaptive broadband download write buffering based on currently available RAM.
     PreferencesPatch:
       type: object
       additionalProperties: false
@@ -3102,6 +3103,7 @@ components:
           type: boolean
         downloadAutoBroadbandIo:
           type: boolean
+          description: Enables adaptive broadband download write buffering based on currently available RAM.
     StatusEnvelope:
       unevaluatedProperties: false
       allOf:

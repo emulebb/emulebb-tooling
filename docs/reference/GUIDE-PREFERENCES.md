@@ -94,13 +94,13 @@ tell the operator that a newer package is available.
 ### Auto Broadband I/O
 
 `AutoBroadbandIO` is the REST/UI-facing switch for bounded broadband download
-buffering. When enabled, eMuleBB divides a 512 MiB global download-buffer budget
-across active buffered files and uses the smaller value between that share and
-the manual file-buffer preference.
+buffering. When enabled, eMuleBB builds a global download-buffer budget from
+25% of currently available physical RAM, clamped between 512 MiB and 4 GiB.
 
-This keeps memory bounded as active download count rises. The manual file
-buffer still matters: it is the per-file ceiling when the automatic share would
-be larger.
+Hot files can use more of that budget while quiet active files retain a small
+minimum share. The manual file buffer still matters only when Auto Broadband
+I/O is disabled; when it is enabled, effective buffering may exceed the manual
+value within the adaptive global budget.
 
 ### Performance Logging
 
@@ -1745,9 +1745,9 @@ above for user-facing defaults and ranges.
   - Default and normalization: Not explicitly declared in schema
   - UI: PPgTweaks.cpp
   - REST: autoBroadbandIo
-  - Notes: Enabled behavior divides a 512 MiB global download-buffer budget across
-           active buffered files and caps each file by the manual file-buffer
-           setting.
+  - Notes: Enabled behavior derives a global download-buffer budget from
+           currently available physical RAM, clamps it between 512 MiB and
+           4 GiB, and distributes it by active download demand.
 
 - **`Autoconnect`**
   - Type: bool
