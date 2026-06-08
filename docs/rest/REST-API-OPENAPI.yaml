@@ -3020,7 +3020,11 @@ components:
         maxUploadSlots:
           type: integer
           minimum: 1
-          maximum: 32
+          maximum: 64
+        uploadSlotElasticPercent:
+          type: integer
+          minimum: 0
+          maximum: 100
         queueSize:
           type: integer
           minimum: 2000
@@ -3073,7 +3077,11 @@ components:
         maxUploadSlots:
           type: integer
           minimum: 1
-          maximum: 32
+          maximum: 64
+        uploadSlotElasticPercent:
+          type: integer
+          minimum: 0
+          maximum: 100
         queueSize:
           type: integer
           minimum: 2000
