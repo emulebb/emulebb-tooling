@@ -98,9 +98,9 @@ buffering. When enabled, eMuleBB builds a global download-buffer budget from
 25% of currently available physical RAM, clamped between 512 MiB and 4 GiB.
 
 Hot files can use more of that budget while quiet active files retain a small
-minimum share. The manual file buffer still matters only when Auto Broadband
-I/O is disabled; when it is enabled, effective buffering may exceed the manual
-value within the adaptive global budget.
+minimum share. The manual file buffer is a normal target in Auto Broadband I/O,
+not a hard floor: effective buffering may go below it when the global budget is
+tight or above it when a hot file has adaptive headroom.
 
 ### Performance Logging
 

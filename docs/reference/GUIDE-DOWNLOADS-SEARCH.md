@@ -230,9 +230,11 @@ download buffering bounded by deriving a global download-buffer budget from
 
 The practical result is demand-based memory use during active downloads: one
 hot file can use most of the adaptive budget, while quiet active files retain a
-small minimum share. Auto mode can exceed the manual file-buffer setting within
-that adaptive budget. Disable it only when comparing old manual-buffer behavior
-or diagnosing a specific I/O issue.
+small minimum share. Auto mode treats the manual file-buffer setting as a
+normal target rather than a hard floor, so effective buffering can go below it
+under budget pressure or above it when a hot file has adaptive headroom.
+Disable it only when comparing old manual-buffer behavior or diagnosing a
+specific I/O issue.
 
 ## Disk-Space Protection
 
