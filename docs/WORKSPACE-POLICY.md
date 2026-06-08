@@ -428,6 +428,7 @@ boundary, project entrypoint, warning, localization, and normalization policy.
   `emulebb-diagnostics-upload-slot.log`,
   `emulebb-diagnostics-download-slot.log`,
   `emulebb-diagnostics-bad-peer.log`,
+  `emulebb-diagnostics-kad.log`,
   `emulebb-diagnostics-startup.trace.json`, `emulebb-performance.csv`,
   `emulebb-performance.mrtg`, `emulebb-performance-data.mrtg`, and
   `emulebb-performance-overhead.mrtg`. Rotated logs append
