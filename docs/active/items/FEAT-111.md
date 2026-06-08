@@ -96,7 +96,7 @@ Candidate download/source fields:
 - requested block count where already available
 - A4AF ownership/alternate-file state where already displayed or tracked
 - last request/reask age where already tracked
-- stale-source repair or cleanup reason if instrumentation added under
+- stale-source repair or cleanup reason if diagnostics added under
   `REF-054`
 
 Candidate aggregate queue diagnostics:
@@ -110,7 +110,7 @@ Candidate aggregate queue diagnostics:
 - count of queued clients for stopped/unavailable files
 - count of candidate clients rejected by soft queue policy
 - count of active slots blocked by bandwidth, socket, disk, or no-demand reasons
-  where existing instrumentation can support it
+  where existing diagnostics can support it
 
 ## Scope Constraints
 
@@ -143,7 +143,7 @@ Candidate aggregate queue diagnostics:
   state exists.
 - `FEAT-106` and `FEAT-107` own upload bandwidth ramp-up and under-target
   diagnostics. This item may expose their results in UI/REST, but should not
-  redefine their instrumentation.
+  redefine their diagnostics.
 - `BUG-142` owns soft-queue admission policy consistency for low-ratio boosted
   candidates. This item may show admission/rejection diagnostics but must not
   change admission policy.
@@ -153,7 +153,7 @@ Candidate aggregate queue diagnostics:
 - `REF-053` owns upload queue and upload list lookup overhead. If a diagnostics
   column creates measurable lookup cost, fix the local lookup path there or in a
   focused slice, not through a generic list rewrite.
-- `REF-054` owns download queue instrumentation and A4AF stale ownership
+- `REF-054` owns download queue diagnostics and A4AF stale ownership
   hardening. Download-source diagnostics should reuse that work.
 
 ## Candidate Implementation Notes
@@ -178,7 +178,7 @@ Candidate aggregate queue diagnostics:
 - Prefer details dialogs or tooltips for verbose multi-reason explanations.
 - Preserve sort behavior. Sorting by diagnostics columns should use cached
   primitive values and must not trigger live recomputation.
-- Add instrumentation counters only where they answer a specific operator
+- Add diagnostics counters only where they answer a specific operator
   question.
 
 ## Suggested First Slice

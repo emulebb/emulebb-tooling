@@ -356,7 +356,7 @@ not active item docs.
 | [FEAT-024](../history/items/FEAT-024.md) | Minor | DONE | Share-ignore policy with additive `shareignore.dat` |
 | [FEAT-025](../history/items/FEAT-025.md) | Minor | DONE | Normalize download filenames on intake and completion |
 | [FEAT-026](../history/items/FEAT-026.md) | Minor | DONE | Shared startup cache with known.met lookup index and `sharedcache.dat` |
-| [FEAT-027](../history/items/FEAT-027.md) | Minor | DONE | Startup sequencing fix, startup profiling, and shared-view startup churn cleanup |
+| [FEAT-027](../history/items/FEAT-027.md) | Minor | DONE | Startup sequencing fix, startup diagnostics, and shared-view startup churn cleanup |
 | [FEAT-028](../history/items/FEAT-028.md) | Minor | DONE | Virtualize and harden shared files list |
 | [FEAT-029](../history/items/FEAT-029.md) | Minor | DONE | Search result ceilings — configurable ed2k expansion plus moderate Kad totals/lifetimes |
 | [FEAT-030](../history/items/FEAT-030.md) | Minor | DONE | Bind policy completion — global `BindAddr` everywhere else, separate `WebBindAddr` for WebServer |

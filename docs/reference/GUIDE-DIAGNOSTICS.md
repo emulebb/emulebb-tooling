@@ -78,10 +78,10 @@ firewall rules, and controller proxying scoped so these routes cannot be
 reached by Prowlarr, Radarr, Sonarr, a general LAN client, or the public
 internet by accident.
 
-## Startup Profiling Trace
+## Startup Diagnostics Trace
 
 Diagnostics release packages and explicit profiling builds can record a Chrome
-Trace startup profile. The profiling code is compile-time enabled, so no
+Trace startup diagnostics. The profiling code is compile-time enabled, so no
 runtime environment variable is required:
 
 ```powershell
@@ -106,7 +106,7 @@ Privacy and availability rules:
   library.
 - Use the standard release package for ordinary launches when profiling traces
   are not needed.
-- Standard public package builds strip diagnostics instrumentation from the
+- Standard public package builds strip diagnostics from the
   executable. If a support case needs it, use the paired diagnostics package.
   For local support builds, use the canonical diagnostics build command:
 
@@ -114,7 +114,7 @@ Privacy and availability rules:
   python -m emule_workspace build app --variant main --config Release --platform x64 --build-output-mode ErrorsOnly --diagnostics
   ```
 
-  The local diagnostics build enables all diagnostics instrumentation flags and
+  The local diagnostics build enables all diagnostics flags and
   emits `emulebb-diagnostics.exe` so it is distinguishable from the standard
   `emulebb.exe`.
 

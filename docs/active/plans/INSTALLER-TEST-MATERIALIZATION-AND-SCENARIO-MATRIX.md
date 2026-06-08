@@ -121,7 +121,7 @@ Current matrix findings:
   1 hammer.
 - Swarm lanes: 3 local swarms plus 1 large Godzilla hammer.
 - Named ownership now covers former unowned lanes:
-  - `config-stability-ui` and `startup-profile` are in
+  - `config-stability-ui` and `startup-diagnostics` are in
     `release-expanded` and `release-expanded-quick`.
   - `auto-browse-live` is in full `release-expanded`.
   - `live-process-monitor` is owned by `diagnostics-soak`.

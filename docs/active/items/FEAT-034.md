@@ -41,7 +41,7 @@ So the expensive directory walk still happens on the immediate reload path.
 The first implementation slice landed on `main` on 2026-04-21:
 
 - `f5da4c5` — app-lifetime shared-file hash worker replaces per-file shared hash threads
-- `7f5b207` — full shared reloads are deferred/coalesced while shared hashing is active, Shared Files UI refresh is throttled during active hashing, and startup profiling now separates `ui.shared_files_ready` from `ui.shared_files_hashing_done`
+- `7f5b207` — full shared reloads are deferred/coalesced while shared hashing is active, Shared Files UI refresh is throttled during active hashing, and startup diagnostics now separates `ui.shared_files_ready` from `ui.shared_files_hashing_done`
 - `0aaadbe` — shared reload deferral policy is exposed through seams for native tests
 - `f138856` in `repos\emulebb-build-tests` — native seam coverage and live-profile summary parsing were updated for the new readiness/hash-drain split
 
@@ -51,7 +51,7 @@ The follow-up hardening slice landed after review:
 - `85fcaf6` — the shared hash worker waits for the UI thread to consume each posted completion before starting the next job
 - `ff254ab` — shared hash completion posting retries while the UI is still alive before discarding a result during shutdown/error paths
 - `67d85de` and `306bb63` in `repos\emulebb-build-tests` — native seam coverage for the deferred-list reload gate and worker backpressure
-- `f711688` in `repos\emulebb-build-tests` — live startup-profile coverage now fails if the Shared Files list rebuilds repeatedly during hash drain
+- `f711688` in `repos\emulebb-build-tests` — live startup-diagnostics coverage now fails if the Shared Files list rebuilds repeatedly during hash drain
 
 The shutdown and startup-cache completion hardening slices landed on 2026-04-23
 and 2026-04-24:
@@ -86,7 +86,7 @@ evidence does not justify a generic list-control substrate across Transfers,
 Uploading, Queue, Search Results, or Known Clients. Those surfaces can keep their
 current shape unless profiling or a concrete bug shows a local problem. Focused
 improvements for those lists should stay in their owning items, such as upload
-queue/list overhead in `REF-053`, download queue instrumentation in `REF-054`,
+queue/list overhead in `REF-053`, download queue diagnostics in `REF-054`,
 and downloads filtering in `FEAT-101`.
 
 Shared Files remains different because it is the persistent large-library view:

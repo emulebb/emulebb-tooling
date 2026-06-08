@@ -26,7 +26,7 @@ Current release state remains in the
   [Downloads And Search](GUIDE-DOWNLOADS-SEARCH.md).
 - **Geolocation:** DB-IP city geolocation update and display support.
   Evidence: FEAT-020. Guide: [Network](GUIDE-NETWORK.md).
-- **Profile selection:** `-c <base-dir>` startup profile override for isolated
+- **Profile selection:** `-c <base-dir>` startup diagnostics override for isolated
   profiles. Evidence: FEAT-022. Guide: [Setup](GUIDE-SETUP.md).
 - **Sharing policy:** `shareignore.dat`, monitored shares, startup cache,
   duplicate cache, and Shared Files virtualization. Evidence: FEAT-024,

@@ -72,7 +72,7 @@ peer-behavior memory and can admit the same poor performers again.
   persistence file with versioned records.
 - Keep the first policy conservative: apply history only during sustained
   upload underfill and only as a tie-breaker or small score modifier.
-- Make the live instrumentation report:
+- Make the live diagnostics report:
   - count of active peers with poor persisted history
   - count of queued peers skipped or delayed by history
   - count of historically fast peers promoted
@@ -92,7 +92,7 @@ peer-behavior memory and can admit the same poor performers again.
 - [ ] Good newer behavior can recover a previously poor peer.
 - [ ] Friend slots, bans, file priority, credits, and existing hard upload caps
       remain respected.
-- [ ] Upload instrumentation and/or diagnostics explain when persisted peer
+- [ ] Upload diagnostics and/or diagnostics explain when persisted peer
       history influenced admission or recycling.
 
 ## Validation

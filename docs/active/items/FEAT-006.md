@@ -65,7 +65,7 @@ bootstrap is making progress, or how much abuse is being dropped.
 
 ## Protocol Compatibility
 
-All counters are local instrumentation — no protocol changes.
+All counters are local diagnostics — no protocol changes.
 
 ## Files
 

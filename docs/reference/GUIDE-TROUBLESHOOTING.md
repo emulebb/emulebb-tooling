@@ -24,7 +24,7 @@ Collect the support artifact that matches the problem:
 Prefer redacted diagnostic snapshots for support. Use raw snapshots only when
 the recipient is trusted and the data sensitivity is understood.
 The [Diagnostics Guide](GUIDE-DIAGNOSTICS.md) explains snapshot field families,
-dump types, unsafe diagnostic REST routes, startup profiling traces, and the
+dump types, unsafe diagnostic REST routes, startup diagnostics traces, and the
 headless media metadata diagnostic command.
 
 ## Public Test Report Checklist
