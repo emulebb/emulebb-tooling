@@ -57,6 +57,17 @@ Directive precedence is:
 - The canonical app worktrees are `emulebb-main`,
   `emulebb-community-baseline`, and `emulebb-community-tracing-harness` with
   branches defined by the generated dependency contract.
+- Generated build, test, release, and runtime output belongs under
+  `EMULEBB_WORKSPACE_OUTPUT_ROOT`, not under `repos\...` or
+  `workspaces\workspace\state`.
+- The canonical output-root children are `builds`, `logs`, `reports`,
+  `artifacts`, `packages`, `release`, `tmp`, `tools`, `cache`, and `profiles`.
+- Orchestrated third-party dependency output should prefer
+  `EMULEBB_WORKSPACE_OUTPUT_ROOT\builds\third_party`; repo-local third-party
+  build directories are tolerated only for upstream/manual tooling and must be
+  ignored plus covered by cleanup/audit.
+- Orchestrated Rust builds must set `CARGO_TARGET_DIR` to
+  `EMULEBB_WORKSPACE_OUTPUT_ROOT\builds\rust\target`.
 
 ## Branch And History Policy
 
