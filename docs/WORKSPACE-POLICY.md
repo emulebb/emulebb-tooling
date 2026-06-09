@@ -62,6 +62,17 @@ Directive precedence is:
   `workspaces\workspace\state`.
 - The canonical output-root children are `builds`, `logs`, `reports`,
   `artifacts`, `packages`, `release`, `tmp`, `tools`, `cache`, and `profiles`.
+- Canonical build-output subtrees include
+  `EMULEBB_WORKSPACE_OUTPUT_ROOT\builds\app`,
+  `EMULEBB_WORKSPACE_OUTPUT_ROOT\builds\tests`,
+  `EMULEBB_WORKSPACE_OUTPUT_ROOT\builds\amule`,
+  `EMULEBB_WORKSPACE_OUTPUT_ROOT\builds\third_party`, and
+  `EMULEBB_WORKSPACE_OUTPUT_ROOT\builds\rust\target`.
+- Package-only generated inputs belong under
+  `EMULEBB_WORKSPACE_OUTPUT_ROOT\packages\build`; this includes aMuTorrent
+  frontend bundles staged under `packages\build\amutorrent`.
+- Runtime tool payloads staged for tests and VM workflows belong under
+  `EMULEBB_WORKSPACE_OUTPUT_ROOT\tools`, such as `tools\amule`.
 - Orchestrated third-party dependency output should prefer
   `EMULEBB_WORKSPACE_OUTPUT_ROOT\builds\third_party`; repo-local third-party
   build directories are tolerated only for upstream/manual tooling and must be
