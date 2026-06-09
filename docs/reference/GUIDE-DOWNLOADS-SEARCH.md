@@ -236,6 +236,49 @@ under budget pressure or above it when a hot file has adaptive headroom.
 Disable it only when comparing old manual-buffer behavior or diagnosing a
 specific I/O issue.
 
+## Transfer Window Metrics
+
+The Transfers window uses compact technical status text for download buffering
+and upload queue state. The values are display telemetry only; they do not
+change transfer policy.
+
+Download buffer metrics appear near the top transfer toolbar:
+
+| Format | Meaning |
+|---|---|
+| `DL buf <buffered>/<budget> <pct>% \| f=<files> lg=<largest> \| RAM <free> free <load>%` | Auto broadband I/O mode. |
+| `DL buf <buffered>/<budget> <pct>% \| f=<files> lg=<largest> \| RAM n/a` | Auto mode when Windows memory status is unavailable. |
+| `DL buf <buffered> \| cap=<file-cap> \| f=<files> lg=<largest> \| RAM <free> free <load>%` | Manual file-buffer mode. |
+| `DL buf <buffered> \| cap=<file-cap> \| f=<files> lg=<largest> \| RAM n/a` | Manual mode when Windows memory status is unavailable. |
+
+Download fields:
+
+- `buf`: total download data currently buffered before or around disk I/O.
+- `budget`: adaptive global download-buffer budget in auto mode.
+- `pct`: `buf` utilization against the adaptive budget.
+- `cap`: manual per-file buffer cap when auto broadband I/O is off.
+- `f`: count of files currently contributing buffered download data.
+- `lg`: largest buffered amount held by one file.
+- `RAM free`: available physical memory, sampled periodically.
+- `RAM <load>%`: Windows physical memory load percentage.
+
+Upload queue metrics appear in the lower queue footer:
+
+| Format | Meaning |
+|---|---|
+| `<waiting> (<banned> banned) \| UL <active>/<base>-<cap> +<elastic>% \| <current>/<budget> MB/s <pct>%` | Waiting clients, active upload slots, slot policy, and upload budget utilization. |
+
+Upload fields:
+
+- `waiting`: clients currently waiting in the local upload queue.
+- `banned`: clients counted as banned by the local client list.
+- `UL active/base-cap`: active upload slots, configured base slot target, and
+  effective slot cap.
+- `elastic`: temporary slot headroom allowed by the broadband upload policy.
+- `current`: current upload data rate in MiB/s.
+- `budget`: configured upload budget in MiB/s.
+- `pct`: current upload rate utilization against the configured budget.
+
 ## Disk-Space Protection
 
 eMuleBB treats low disk space as a profile-safety problem, not just a transfer
