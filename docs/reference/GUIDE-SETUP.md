@@ -39,6 +39,13 @@ profile:
 emulebb.exe -c "$env:TEMP\eMuleBB-TestProfile"
 ```
 
+### Other Platforms (macOS, Linux) {#other-platforms}
+
+eMuleBB is a Windows desktop app. To run or use it on macOS or Linux, see
+[Running on macOS and Linux](GUIDE-CROSS-PLATFORM.md), which covers virtual
+machines, Wine, a Windows-hosted core with a cross-platform controller, and
+aMule.
+
 ### Security And Provenance
 
 All RC1 builds and packaging happen in GitHub Actions and are published through

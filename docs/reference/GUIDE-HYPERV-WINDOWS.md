@@ -9,6 +9,9 @@ Hyper-V is useful for release testing, package smoke testing, and cautious
 suite experimentation. It is not the normal first install path. For normal use,
 start with the [Setup Guide](GUIDE-SETUP.md).
 
+This guide is host-side Windows test isolation. To run or use eMuleBB on macOS
+or Linux, see [Running on macOS and Linux](GUIDE-CROSS-PLATFORM.md) instead.
+
 ## What Hyper-V Isolation Provides
 
 The workspace VM lab treats each guest as a clean install target:

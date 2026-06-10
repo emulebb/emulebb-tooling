@@ -31,6 +31,9 @@
 - [Hyper-V isolated suite runs](reference/GUIDE-HYPERV-WINDOWS.md):
   prepare clean local Windows guests and run package or suite checks without
   touching the host's daily eMuleBB profile.
+- [Running on macOS and Linux](reference/GUIDE-CROSS-PLATFORM.md):
+  options for using eMuleBB off Windows through a virtual machine, Wine, a
+  Windows-hosted core with a cross-platform controller, or aMule.
 
 Use these guides in order for a first real profile:
 
@@ -149,6 +152,7 @@ desktop app first, then layer automation on top.
 | Public-readable roadmap themes | [reference/ROADMAP-SUMMARY](reference/ROADMAP-SUMMARY.md) |
 | Complete eMule manual from zero to power-user operation | [reference/GUIDE-POWER-USERS](reference/GUIDE-POWER-USERS.md) |
 | Setup, `-c` profiles, release package testing | [reference/GUIDE-SETUP](reference/GUIDE-SETUP.md) |
+| Running on macOS or Linux via VM, Wine, or remote control | [reference/GUIDE-CROSS-PLATFORM](reference/GUIDE-CROSS-PLATFORM.md) |
 | Search, downloads, categories, limits, upload policy | [reference/GUIDE-DOWNLOADS-SEARCH](reference/GUIDE-DOWNLOADS-SEARCH.md) |
 | Shared directories, monitored shares, large libraries | [reference/GUIDE-SHARING](reference/GUIDE-SHARING.md) |
 | eD2K, Kad, bind, ports, UPnP, firewall | [reference/GUIDE-NETWORK](reference/GUIDE-NETWORK.md) |
