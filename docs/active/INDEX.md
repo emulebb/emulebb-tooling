@@ -304,6 +304,7 @@ not active item docs.
 | [REF-052](items/REF-052.md) | Minor | OPEN | Remove archive preview and recovery surfaces |
 | [REF-053](items/REF-053.md) | Minor | OPEN | Reduce upload queue and upload list linear lookup overhead |
 | [REF-054](items/REF-054.md) | Minor | OPEN | Stabilize and instrument download queue behavior |
+| [REF-055](items/REF-055.md) | Minor | OPEN | Post-RC2 code-quality and C++ modernization backlog |
 
 ---
 
