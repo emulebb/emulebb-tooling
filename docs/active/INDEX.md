@@ -22,7 +22,7 @@ engineering spec/evidence records, not workflow status authority.
 **Source of truth:** `EMULEBB_WORKSPACE_ROOT\workspaces\workspace\app\emulebb-main` (`main` branch)
 **Current non-done count:** `125`
 **Latest release-doc refresh:** 2026-06-10
-**Non-done by status:** `104` OPEN, `8` IN_PROGRESS, `13` DEFERRED, `0` BLOCKED.
+**Non-done by status:** `103` OPEN, `9` IN_PROGRESS, `13` DEFERRED, `0` BLOCKED.
 **Backlog counts:** item tables below are authoritative.
 **0.7.3 release-train relevance:** Most non-done items below are future or
 deferred work; current RC gate and proof status is controlled by
@@ -426,7 +426,7 @@ not active item docs.
 | [FEAT-093](items/FEAT-093.md) | Minor | OPEN | Safely raise WebServer accepted-client concurrency |
 | [FEAT-094](items/FEAT-094.md) | Major | OPEN | Improve UDP burst handling without lock-held backoff |
 | [FEAT-095](items/FEAT-095.md) | Major | OPEN | Move part-file durability work off foreground paths |
-| [FEAT-096](items/FEAT-096.md) | Minor | OPEN | Improve client and network statistics observability |
+| [FEAT-096](items/FEAT-096.md) | Minor | IN_PROGRESS | Improve client and network statistics observability |
 | [FEAT-097](../history/items/FEAT-097.md) | Minor | DONE | Add connection pressure details to Network Information |
 | [FEAT-098](items/FEAT-098.md) | Major | OPEN | Add strict bound public-IP guard for VPN profiles |
 | [FEAT-099](items/FEAT-099.md) | Minor | OPEN | Add app event webhooks for controller automation |

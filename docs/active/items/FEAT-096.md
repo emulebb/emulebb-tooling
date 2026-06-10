@@ -3,7 +3,7 @@ id: FEAT-096
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/86
 title: Improve client and network statistics observability
-status: OPEN
+status: IN_PROGRESS
 priority: Minor
 category: feature
 labels: [statistics, observability, clients, network, rest, ui, post-0.7.3]
@@ -73,6 +73,27 @@ improvement, not a client-specific detector.
       that prevent drift.
 - [ ] Tests cover empty mod strings, integer `ModID` strings, mixed-case names,
       duplicate identity labels, and peers with no eMule-compatible mod tag.
+
+## Delivered Increment (2026-06-10)
+
+First slice landed: a **Mods** breakdown in the Statistics view.
+
+- `CClientList::GetClientModStatistics(CClientModMap&)` tallies non-empty
+  self-reported mod strings (`GetClientModVer`) across known clients, reusing the
+  same client-list walk as `GetStatistics`.
+- `CStatisticsDlg` adds a `Mods` node under Client Software (`hclimods`) whose
+  children are rebuilt on refresh from the tally: a bounded top-20 of
+  `"<mod>: <count> (<pct>)"` rows, parent shows the total. The label and rows use
+  hardcoded literals, consistent with the existing Client Software section (which
+  hardcodes `eMule`/`aMule`/`Shareaza`/…), so no new gated `.rc` string was added.
+
+Honest scope of this slice: it's a **sample of the local peer population**, not a
+network census, and only counts peers that advertise a mod tag.
+
+Remaining FEAT work: explicit aggregate "other" row beyond the top-N; consistent
+REST `clientSoftware`/`clientMod`/full-display fields across upload/queue/source
+rows; a shared normalized counting helper for UI+REST parity; and the tests in
+the acceptance criteria.
 
 ## Validation
 
