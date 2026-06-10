@@ -1,5 +1,7 @@
 ---
 id: FEAT-117
+workflow: local
+github_issue:
 title: Indicate already-shared files in the unshared-folder share preview
 status: OPEN
 priority: Minor

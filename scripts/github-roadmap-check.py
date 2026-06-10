@@ -23,6 +23,10 @@ def check_local_metadata(errors: list[str]) -> None:
     """Check local active specs for GitHub workflow metadata."""
 
     for item in load_items():
+        if item.workflow == "local":
+            # Explicitly local-only specs (e.g. deferred 0.8.x items, or already-shipped
+            # local fixes) are exempt from GitHub-primary metadata until promoted.
+            continue
         if item.workflow != "github":
             errors.append(f"{item.item_id}: missing workflow: github front matter")
         if not item.github_issue:
