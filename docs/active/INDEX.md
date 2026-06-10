@@ -20,9 +20,9 @@ engineering spec/evidence records, not workflow status authority.
 ## Current Snapshot
 
 **Source of truth:** `EMULEBB_WORKSPACE_ROOT\workspaces\workspace\app\emulebb-main` (`main` branch)
-**Current non-done count:** `125`
+**Current non-done count:** `126`
 **Latest release-doc refresh:** 2026-06-10
-**Non-done by status:** `103` OPEN, `9` IN_PROGRESS, `13` DEFERRED, `0` BLOCKED.
+**Non-done by status:** `104` OPEN, `9` IN_PROGRESS, `13` DEFERRED, `0` BLOCKED.
 **Backlog counts:** item tables below are authoritative.
 **0.7.3 release-train relevance:** Most non-done items below are future or
 deferred work; current RC gate and proof status is controlled by
