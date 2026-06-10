@@ -30,7 +30,6 @@ broadly.
 
 ## Reference Docs
 
-- `docs/architecture/`: durable architecture notes
 - `docs/rest/`: current REST contract and API reference
 - `docs/reference/`: durable current product guides and specialist references
 - `docs/dependencies/`: current dependency health and decision records
