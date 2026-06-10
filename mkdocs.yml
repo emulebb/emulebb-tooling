@@ -114,6 +114,8 @@ nav:
       - IPv6 Kad Network: ideas/IDEA-IPV6-KAD-NETWORK.md
       - Modernization: ideas/IDEA-MODERNIZATION-2026.md
       - Restructure: ideas/IDEA-RESTRUCTURE.md
+      - NAT Traversal And uTP: ideas/IDEA-NAT-TRAVERSAL-UTP.md
+      - libtorrent Content Mesh: ideas/IDEA-LIBTORRENT-MESH.md
   - History:
       - Historical References: HISTORICAL-REFERENCES.md
       - Abandoned Boost / POCO Adoption: history/ideas/IDEA-BOOST.md
