@@ -20,9 +20,9 @@ engineering spec/evidence records, not workflow status authority.
 ## Current Snapshot
 
 **Source of truth:** `EMULEBB_WORKSPACE_ROOT\workspaces\workspace\app\emulebb-main` (`main` branch)
-**Current non-done count:** `124`
+**Current non-done count:** `125`
 **Latest release-doc refresh:** 2026-06-10
-**Non-done by status:** `103` OPEN, `8` IN_PROGRESS, `13` DEFERRED, `0` BLOCKED.
+**Non-done by status:** `104` OPEN, `8` IN_PROGRESS, `13` DEFERRED, `0` BLOCKED.
 **Backlog counts:** item tables below are authoritative.
 **0.7.3 release-train relevance:** Most non-done items below are future or
 deferred work; current RC gate and proof status is controlled by
@@ -447,6 +447,7 @@ not active item docs.
 | [FEAT-114](items/FEAT-114.md) | Minor | OPEN | Add storage-aware hash and verify throttling |
 | [FEAT-115](items/FEAT-115.md) | Minor | OPEN | Add per-volume storage policy hints and diagnostics |
 | [FEAT-116](items/FEAT-116.md) | Minor | OPEN | Throttle background share scanning on active slow volumes |
+| [FEAT-117](items/FEAT-117.md) | Minor | OPEN | Indicate already-shared files in the unshared-folder share preview |
 
 ---
 
