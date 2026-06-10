@@ -2905,8 +2905,21 @@ components:
               description: Human-readable error summary.
             details:
               type: object
-              description: Bounded structured diagnostic fields. Empty when no details are available.
+              description: >-
+                Bounded structured diagnostic fields, empty when no details are
+                available. For INVALID_ARGUMENT failures on a bounded scalar
+                parameter (such as an out-of-range limit or offset), details
+                carries the offending "field" name and a "constraint" string of
+                the form "min..max" (for example {"field": "limit", "constraint":
+                "1..1000"}).
               additionalProperties: true
+              properties:
+                field:
+                  type: string
+                  description: Name of the request parameter that failed validation.
+                constraint:
+                  type: string
+                  description: Inclusive numeric bounds the field must satisfy, formatted as "min..max".
     Collection:
       type: object
       additionalProperties: false
