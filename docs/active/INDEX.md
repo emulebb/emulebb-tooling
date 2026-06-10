@@ -20,9 +20,9 @@ engineering spec/evidence records, not workflow status authority.
 ## Current Snapshot
 
 **Source of truth:** `EMULEBB_WORKSPACE_ROOT\workspaces\workspace\app\emulebb-main` (`main` branch)
-**Current non-done count:** `119`
+**Current non-done count:** `122`
 **Latest release-doc refresh:** 2026-06-02
-**Non-done by status:** `100` OPEN, `6` IN_PROGRESS, `13` DEFERRED, `0` BLOCKED.
+**Non-done by status:** `103` OPEN, `6` IN_PROGRESS, `13` DEFERRED, `0` BLOCKED.
 **Backlog counts:** item tables below are authoritative.
 **0.7.3 release-train relevance:** Most non-done items below are future or
 deferred work; current RC gate and proof status is controlled by
@@ -441,6 +441,9 @@ not active item docs.
 | [FEAT-111](items/FEAT-111.md) | Minor | OPEN | Add peer and queue diagnostics columns |
 | [FEAT-112](items/FEAT-112.md) | Minor | OPEN | Add Torrent search type convenience filter and refresh file-type extensions |
 | [FEAT-113](items/FEAT-113.md) | Minor | OPEN | Persist peer upload performance history for slot selection |
+| [FEAT-114](items/FEAT-114.md) | Minor | OPEN | Add storage-aware hash and verify throttling |
+| [FEAT-115](items/FEAT-115.md) | Minor | OPEN | Add per-volume storage policy hints and diagnostics |
+| [FEAT-116](items/FEAT-116.md) | Minor | OPEN | Throttle background share scanning on active slow volumes |
 
 ---
 

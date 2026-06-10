@@ -266,7 +266,7 @@ Upload queue metrics appear in the lower queue footer:
 
 | Format | Meaning |
 |---|---|
-| `<waiting> (<banned> banned) \| UL <active>/<base>-<cap> +<elastic>% \| <current>/<budget> MB/s <pct>%` | Waiting clients, active upload slots, slot policy, and upload budget utilization. |
+| `<waiting> (<banned> banned) \| UL <active>/<base>-<cap> +<elastic>% \| <current>/<budget> MB/s <pct>%` | Queue, slot policy, and budget utilization. |
 
 Upload fields:
 

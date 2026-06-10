@@ -1,7 +1,7 @@
 ---
 id: FEAT-110
 workflow: github
-github_issue: https://github.com/emulebb/emulebb/issues/129
+github_issue: https://github.com/emulebb/emulebb/issues/144
 title: Add configurable title bar status format
 status: OPEN
 priority: Minor

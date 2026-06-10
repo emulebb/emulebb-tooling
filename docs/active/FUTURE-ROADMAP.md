@@ -205,7 +205,8 @@ refresh.
 
 Existing anchors:
 `FEAT-034`, `FEAT-072`, `FEAT-075`, `FEAT-076`, `FEAT-079`, `FEAT-080`,
-`FEAT-090`, `FEAT-095`, `REF-049`, `REF-050`.
+`FEAT-090`, `FEAT-095`, `FEAT-114`, `FEAT-115`, `FEAT-116`, `REF-049`,
+`REF-050`.
 
 ### Controller Surface Performance
 
