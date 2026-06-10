@@ -362,6 +362,24 @@ The product guide should describe what an operator can rely on. It should not
 turn test-only seams, future backlog, abandoned ideas, or private evidence
 labels into product promises.
 
+## Storage Allocation Defaults
+
+Sparse part files and full preallocation are both off by default. This keeps the
+default storage profile neutral across SSDs, mechanical disks, removable
+volumes, and space-constrained temp directories.
+
+Operators can tune these settings deliberately:
+
+- enable sparse part files on NTFS when conserving temp space matters more than
+  contiguous layout
+- keep sparse part files off on mechanical or SMR HDDs when upload/read
+  smoothness matters, because out-of-order download writes can fragment sparse
+  files
+- enable full allocation only for non-sparse part files on mechanical HDDs with
+  enough free space, where reserving the target size can reduce fragmentation
+  and improve later sequential reads/uploads
+- leave both settings off when unsure
+
 ## Performance Improvements
 
 Performance messaging should be read as operational behavior, not as a synthetic
