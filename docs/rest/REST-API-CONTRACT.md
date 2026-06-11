@@ -193,19 +193,23 @@ Search results expose grouped `SearchResult.evidence` instead of a single
 risk score. Controllers must treat this as explanatory evidence, not a
 safety guarantee:
 
-- `riskEvidence` covers local fake-file, spam, rating, header, media-plausibility,
-  and AICH-conflict warnings.
+- `confidence` is a single non-authoritative summary axis that folds local
+  fake-file heuristics, spam/rating signals, and Kad publisher consistency into
+  one symmetric `band` (`spam`, `likely_fake`, `suspect`, `caution`, `looks_good`,
+  `genuine`) plus a 0-100 `score` (higher = more confident). It also carries the
+  underlying `fakeScore`, `severity`, `spam`, `userRating`, contributing `kadBand`,
+  and the local fake-file `reasons`.
 - `availabilityEvidence` covers source counts, complete-source counts, observed
   clients/servers, and Kad publisher counts.
 - `nameEvidence` covers observed names, canonical names, ignored tokens, and
   meaningful name divergence groups.
-- `kadPublisherEvidence` decodes Kad publish metadata into publisher count,
-  different-name count, raw Kad value, and a low/normal/high evidence band.
 - `integrityEvidence` covers AICH presence, multiple-AICH conflicts, pending or
   cached header checks, and claimed/detected file type evidence.
 
-Unknown evidence is neutral, not positive; clients must not display it as
-trusted or safe. Search creation does not clear existing searches as a side
+The retired `riskEvidence` and `kadPublisherEvidence` objects are removed; their
+signals are now folded into `confidence` (band/score) and `availabilityEvidence`
+(`kadPublishers`). A `looks_good`/`genuine` band is not a positive safety
+guarantee; clients must not display it as trusted or safe. Search creation does not clear existing searches as a side
 effect; controllers must call `DELETE /api/v1/searches?confirm=true` when they
 need a clean search set.
 

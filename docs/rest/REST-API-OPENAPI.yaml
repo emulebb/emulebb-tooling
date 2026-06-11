@@ -3768,31 +3768,33 @@ components:
     SearchResultEvidence:
       type: object
       additionalProperties: false
-      required: [riskEvidence, availabilityEvidence, nameEvidence, kadPublisherEvidence, integrityEvidence]
+      required: [confidence, availabilityEvidence, nameEvidence, integrityEvidence]
       properties:
-        riskEvidence:
-          $ref: "#/components/schemas/SearchRiskEvidence"
+        confidence:
+          $ref: "#/components/schemas/SearchConfidence"
         availabilityEvidence:
           $ref: "#/components/schemas/SearchAvailabilityEvidence"
         nameEvidence:
           $ref: "#/components/schemas/SearchNameEvidence"
-        kadPublisherEvidence:
-          $ref: "#/components/schemas/SearchKadPublisherEvidence"
         integrityEvidence:
           $ref: "#/components/schemas/SearchIntegrityEvidence"
-    SearchRiskEvidence:
+    SearchConfidence:
       type: object
+      description: >-
+        Non-authoritative summary axis folding fake-file heuristics, user ratings
+        and Kad publisher consistency into one symmetric confidence band. Higher
+        score = more confident.
       additionalProperties: false
-      required: [band, bucket, score, severity, spam, reasons]
+      required: [band, score, fakeScore, severity, spam, userRating, kadBand, reasons]
       properties:
         band:
           type: string
-          enum: [ok, caution, warning, high_risk, spam]
-        bucket:
+          enum: [spam, likely_fake, suspect, caution, looks_good, genuine]
+        score:
           type: integer
           minimum: 0
-          maximum: 4
-        score:
+          maximum: 100
+        fakeScore:
           type: integer
           minimum: 0
           maximum: 100
@@ -3801,6 +3803,13 @@ components:
           enum: [none, low, medium, high, critical]
         spam:
           type: boolean
+        userRating:
+          type: integer
+          minimum: 0
+          maximum: 6
+        kadBand:
+          type: string
+          enum: [unknown, low, normal, high]
         reasons:
           type: array
           items:
@@ -3856,31 +3865,6 @@ components:
             type: string
         divergent:
           type: boolean
-    SearchKadPublisherEvidence:
-      type: object
-      additionalProperties: false
-      required: [available, band, publishers, differentNames, rawTrustValueCent, rawTrustValue, source]
-      properties:
-        available:
-          type: boolean
-        band:
-          type: string
-          enum: [unknown, low, normal, high]
-        publishers:
-          type: integer
-          minimum: 0
-        differentNames:
-          type: integer
-          minimum: 0
-        rawTrustValueCent:
-          type: integer
-          minimum: 0
-        rawTrustValue:
-          type: number
-          minimum: 0
-        source:
-          type: string
-          enum: [kad_publish_info, not_kad]
     SearchIntegrityEvidence:
       type: object
       additionalProperties: false
