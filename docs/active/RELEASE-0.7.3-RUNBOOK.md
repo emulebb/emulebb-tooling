@@ -268,8 +268,9 @@ After the final proof:
 - confirm [RELEASE-0.7.3](RELEASE-0.7.3.md) has no open RC-blocking task
   without item-level acceptance;
 - confirm release notes use `eMule broadband edition` and `eMuleBB`;
-- after the operator gives the RC2 go, produce
-  `RELEASE-0.7.3-RC2-CHANGELOG.md` with a separate
-  RC1-vs-stock/community-baseline section and the RC1 release date; and
+- before the operator gives the RC2 go, maintain
+  `RELEASE-0.7.3-RC2-CHANGELOG.md`; at RC2 go, finalize its RC2 delta and
+  separate RC1-vs-stock/community-baseline section, including the RC1 release
+  date from the GitHub release record; and
 - create the active candidate tag only after package verification and a
   separate operator instruction.

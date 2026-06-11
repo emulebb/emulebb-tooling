@@ -165,10 +165,10 @@ soak status cannot be confused with the repeatable RC package gate.
 - [ ] Release notes use `eMule broadband edition` as the public product name.
 - [ ] Release notes use `eMuleBB` as the compact app/mod/API name.
 - [ ] RC2 release notes are refreshed only after the operator gives the RC2 go.
-- [ ] RC2 changelog is produced at RC2 go as
-      `RELEASE-0.7.3-RC2-CHANGELOG.md`.
+- [ ] RC2 changelog is maintained during RC2 preparation as
+      `RELEASE-0.7.3-RC2-CHANGELOG.md` and finalized at RC2 go.
 - [ ] RC2 changelog includes a separate RC1-vs-stock/community-baseline section
-      with the RC1 release date.
+      with the RC1 release date from the GitHub release record.
 - [ ] Package-facing README identifies reviewed `main` as the 0.7.3 RC1
       release source and does not depend on a broadband stabilization branch.
 - [ ] Annotated RC tag is `emulebb-v0.7.3-rc.1`.

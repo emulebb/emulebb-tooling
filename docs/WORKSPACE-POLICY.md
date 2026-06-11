@@ -529,9 +529,13 @@ module):
 - Public release documentation must include a version-specific changelog for
   every actual published release from `0.7.3-rc.2` onward. Release notes explain
   the release for users; changelogs enumerate material changes in the released
-  artifact set. The `0.7.3-rc.2` changelog must be produced when the operator
-  gives the RC2 go, and must include a separate RC1-vs-stock/community-baseline
-  section with the RC1 release date.
+  artifact set. Changelogs are power-user release documents, not Git logs or
+  commit lists: describe operationally relevant changes, compatibility
+  boundaries, packaging/controller changes, diagnostics, defaults, risks, and
+  migration/testing notes that users or administrators need to know. Start the
+  active-candidate changelog during RC preparation and finalize it only when the
+  operator gives the release go. The `0.7.3-rc.2` changelog must include a
+  separate RC1-vs-stock/community-baseline section with the RC1 release date.
 - Official release tags are annotated tags on selected reviewed commits only
   after release proof passes and the operator gives a separate tagging
   instruction.

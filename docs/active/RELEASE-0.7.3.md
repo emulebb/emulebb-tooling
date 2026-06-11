@@ -95,9 +95,10 @@ Required scaffold before RC2 work starts:
 - list every RC1 artifact, proof row, or hash invalidated by the RC2 delta;
 - create or promote item IDs for every RC2 blocker;
 - record the exact package and SBOM regeneration scope;
-- produce `RELEASE-0.7.3-RC2-CHANGELOG.md` when the operator gives the RC2 go;
+- maintain `RELEASE-0.7.3-RC2-CHANGELOG.md` during RC2 preparation and
+  finalize it only when the operator gives the RC2 go;
 - include a separate RC1-vs-stock/community-baseline section in that changelog,
-  with the RC1 release date;
+  with the RC1 release date from the GitHub release record;
 - keep all future-roadmap and `0.8.0` removal work out of RC2 unless it fixes a
   direct release blocker on a supported surface;
 - make the packaged PowerShell suite installer the default starting point for
@@ -255,7 +256,7 @@ Historical accepted non-blockers for 0.7.3 RC1:
   artifact, commit, and package evidence;
 - the active candidate has version-specific release notes and changelog, with
   the RC2 changelog carrying the RC1-vs-stock/community-baseline section and
-  RC1 release date;
+  RC1 release date from the GitHub release record;
 - no active workspace repo has unrelated uncommitted changes; and
 - the operator gives a separate tagging instruction.
 
