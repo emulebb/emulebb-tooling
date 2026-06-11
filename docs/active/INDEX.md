@@ -20,9 +20,9 @@ engineering spec/evidence records, not workflow status authority.
 ## Current Snapshot
 
 **Source of truth:** `EMULEBB_WORKSPACE_ROOT\workspaces\workspace\app\emulebb-main` (`main` branch)
-**Current non-done count:** `128`
+**Current non-done count:** `129`
 **Latest release-doc refresh:** 2026-06-11
-**Non-done by status:** `105` OPEN, `9` IN_PROGRESS, `14` DEFERRED, `0` BLOCKED.
+**Non-done by status:** `106` OPEN, `9` IN_PROGRESS, `14` DEFERRED, `0` BLOCKED.
 **Backlog counts:** item tables below are authoritative.
 **0.7.3 release-train relevance:** Most non-done items below are future or
 deferred work; current RC gate and proof status is controlled by
@@ -309,6 +309,7 @@ not active item docs.
 | [REF-055](items/REF-055.md) | Minor | OPEN | Post-RC2 code-quality and C++ modernization backlog |
 | [REF-056](items/REF-056.md) | Minor | OPEN | Standardize agent on-ramp and AGENTS.md pointer layer |
 | [REF-057](items/REF-057.md) | Minor | DEFERRED | Defer GeoLocation MMDB load off the pre-window startup path |
+| [REF-058](items/REF-058.md) | Minor | OPEN | Async known-file and shared-file startup load to unblock the UI thread |
 
 ---
 
