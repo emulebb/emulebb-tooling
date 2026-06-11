@@ -216,8 +216,9 @@ resource DLLs, stages the portable ZIP, then verifies the package before
 writing the manifest. Verification covers:
 
 - `emulebb.exe` in the standard package, `emulebb-diagnostics.exe` in the
-  diagnostics package, full stock `lang\*.dll` set, package README, release notes,
-  GPL text, third-party notices, SBOM, and REST docs;
+  diagnostics package, full stock `lang\*.dll` set, package README, release
+  notes, release changelog link or payload, GPL text, third-party notices,
+  SBOM, and REST docs;
 - diagnostics package executable contains startup, packet, upload-slot,
   download-slot, and bad-peer diagnostics support;
 - absence of the legacy template-based `webserver` payload in RC assets;
@@ -266,6 +267,9 @@ After the final proof:
   [RELEASE-0.7.3-CHECKLIST](RELEASE-0.7.3-CHECKLIST.md);
 - confirm [RELEASE-0.7.3](RELEASE-0.7.3.md) has no open RC-blocking task
   without item-level acceptance;
-- confirm release notes use `eMule broadband edition` and `eMuleBB`; and
-- create `emulebb-v0.7.3-rc.1` only after package verification and a separate
-  operator instruction.
+- confirm release notes use `eMule broadband edition` and `eMuleBB`;
+- after the operator gives the RC2 go, produce
+  `RELEASE-0.7.3-RC2-CHANGELOG.md` with a separate
+  RC1-vs-stock/community-baseline section and the RC1 release date; and
+- create the active candidate tag only after package verification and a
+  separate operator instruction.

@@ -526,6 +526,12 @@ module):
   publish timestamped run folders plus `<suite>\latest` snapshots, and suite
   leaves use `<suite>-result.json`, `<suite>-result.partial.json`, and
   `<suite>-summary.json`.
+- Public release documentation must include a version-specific changelog for
+  every actual published release from `0.7.3-rc.2` onward. Release notes explain
+  the release for users; changelogs enumerate material changes in the released
+  artifact set. The `0.7.3-rc.2` changelog must be produced when the operator
+  gives the RC2 go, and must include a separate RC1-vs-stock/community-baseline
+  section with the RC1 release date.
 - Official release tags are annotated tags on selected reviewed commits only
   after release proof passes and the operator gives a separate tagging
   instruction.

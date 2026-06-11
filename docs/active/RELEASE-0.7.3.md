@@ -95,6 +95,9 @@ Required scaffold before RC2 work starts:
 - list every RC1 artifact, proof row, or hash invalidated by the RC2 delta;
 - create or promote item IDs for every RC2 blocker;
 - record the exact package and SBOM regeneration scope;
+- produce `RELEASE-0.7.3-RC2-CHANGELOG.md` when the operator gives the RC2 go;
+- include a separate RC1-vs-stock/community-baseline section in that changelog,
+  with the RC1 release date;
 - keep all future-roadmap and `0.8.0` removal work out of RC2 unless it fixes a
   direct release blocker on a supported surface;
 - make the packaged PowerShell suite installer the default starting point for
@@ -112,6 +115,7 @@ Required scaffold before RC3 work starts:
 
 - identify RC2 evidence that carries forward unchanged;
 - list every proof or artifact invalidated by the RC3 delta;
+- produce the version-specific RC3 changelog before RC3 tag approval;
 - record any explicit operator acceptance for proof that cannot be rerun;
 - confirm stable `0.7.3` documentation can be produced from the RC3 state.
 
@@ -123,6 +127,8 @@ turn the accepted RC state into stable `emulebb-v0.7.3`.
 Required scaffold before stable tagging:
 
 - stable release notes derived from the accepted RC notes;
+- stable `0.7.3` changelog derived from the accepted RC changelog and stable
+  deltas;
 - package names changed from `0.7.3-rc.N` to `0.7.3`;
 - final package, manifest, SBOM, and hash evidence;
 - branch split confirmation for `release/0.7.x` legacy maintenance and `main`
@@ -247,6 +253,9 @@ Historical accepted non-blockers for 0.7.3 RC1:
   doc;
 - [RELEASE-0.7.3-CHECKLIST](RELEASE-0.7.3-CHECKLIST.md) records fresh command,
   artifact, commit, and package evidence;
+- the active candidate has version-specific release notes and changelog, with
+  the RC2 changelog carrying the RC1-vs-stock/community-baseline section and
+  RC1 release date;
 - no active workspace repo has unrelated uncommitted changes; and
 - the operator gives a separate tagging instruction.
 

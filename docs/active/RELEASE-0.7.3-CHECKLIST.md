@@ -164,6 +164,11 @@ soak status cannot be confused with the repeatable RC package gate.
 
 - [ ] Release notes use `eMule broadband edition` as the public product name.
 - [ ] Release notes use `eMuleBB` as the compact app/mod/API name.
+- [ ] RC2 release notes are refreshed only after the operator gives the RC2 go.
+- [ ] RC2 changelog is produced at RC2 go as
+      `RELEASE-0.7.3-RC2-CHANGELOG.md`.
+- [ ] RC2 changelog includes a separate RC1-vs-stock/community-baseline section
+      with the RC1 release date.
 - [ ] Package-facing README identifies reviewed `main` as the 0.7.3 RC1
       release source and does not depend on a broadband stabilization branch.
 - [ ] Annotated RC tag is `emulebb-v0.7.3-rc.1`.
@@ -203,6 +208,8 @@ soak status cannot be confused with the repeatable RC package gate.
       [CI-035](items/CI-035.md) if that asset is published.
 - [ ] Confirm the optional aMuTorrent x64 package SBOM hash is recorded in
       [CI-035](items/CI-035.md) if that asset is published.
+- [ ] Confirm release artifacts include or link the active candidate release
+      notes and changelog before tag approval.
 - [ ] Create the annotated RC tag only after package verification and a
       separate operator instruction.
 
