@@ -530,8 +530,9 @@ module):
   every actual published release from `0.7.3-rc.2` onward. Release notes explain
   the release for users; changelogs enumerate material changes in the released
   artifact set. Changelogs are power-user release documents, not Git logs or
-  commit lists: describe operationally relevant changes, compatibility
-  boundaries, packaging/controller changes, diagnostics, defaults, risks, and
+  commit lists: use a compact one-line-per-item format that describes
+  operationally relevant changes, compatibility boundaries,
+  packaging/controller changes, diagnostics, defaults, risks, and
   migration/testing notes that users or administrators need to know. Start the
   active-candidate changelog during RC preparation and finalize it only when the
   operator gives the release go. The `0.7.3-rc.2` changelog must include a
