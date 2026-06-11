@@ -130,10 +130,10 @@ fixtures, docs, comments), every commit message, and every PR/issue description.
 - **NEVER commit private data:** real API keys, tokens, passwords, credentials,
   cookies, private IP/host names, account identifiers, email addresses, or any
   personal information. Use obvious placeholders.
-- **NEVER commit private or machine-specific filesystem paths:** real user profile
-  paths, absolute local paths (e.g. `C:\Users\<name>\...`, operator profile/library
-  roots, drive-letter test roots). Use relative paths, documented variables
-  (`EMULEBB_WORKSPACE_ROOT`), or clearly fake example paths.
+- **NEVER commit private or machine-specific filesystem paths:** real Windows
+  user-profile paths, other absolute local paths, operator profile/library roots, or
+  drive-letter test roots. Use relative paths or documented variables
+  (`EMULEBB_WORKSPACE_ROOT`).
 - **NEVER commit real media titles:** actual movie, series, show, episode, album,
   artist, game, or release names — anywhere, including test fixtures, sample
   filenames, comments, and commit messages. These are operator-owned runtime inputs
