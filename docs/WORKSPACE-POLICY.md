@@ -248,11 +248,14 @@ knobs.
 
 Canonical workspace variables:
 
-- `EMULEBB_WORKSPACE_ROOT` is the absolute workspace root. Maintained docs,
-  scripts, and helpers express paths relative to it and must not hardcode
-  machine-specific absolute paths.
-- `EMULEBB_WORKSPACE_OUTPUT_ROOT` is the generated-output root. All build, test,
-  release, and runtime output belongs under it, never under `repos\...` or
+- `EMULEBB_WORKSPACE_ROOT` (required) is the absolute workspace root;
+  orchestration fails if it is unset. Maintained docs, scripts, and helpers
+  express paths relative to it and must not hardcode machine-specific absolute
+  paths.
+- `EMULEBB_WORKSPACE_OUTPUT_ROOT` (required) is the generated-output root and
+  must resolve outside `EMULEBB_WORKSPACE_ROOT`; orchestration fails if it is
+  unset or nested inside the workspace root. All build, test, release, and
+  runtime output belongs under it, never under `repos\...` or
   `workspaces\workspace\state`.
 - `EMULEBB_RELEASE_VERSION` selects the release version for build, package, and
   release orchestration; the active default is pinned in `repos\emulebb-build`.
