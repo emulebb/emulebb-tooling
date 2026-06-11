@@ -20,9 +20,9 @@ engineering spec/evidence records, not workflow status authority.
 ## Current Snapshot
 
 **Source of truth:** `EMULEBB_WORKSPACE_ROOT\workspaces\workspace\app\emulebb-main` (`main` branch)
-**Current non-done count:** `130`
+**Current non-done count:** `129`
 **Latest release-doc refresh:** 2026-06-11
-**Non-done by status:** `106` OPEN, `10` IN_PROGRESS, `14` DEFERRED, `0` BLOCKED.
+**Non-done by status:** `106` OPEN, `9` IN_PROGRESS, `14` DEFERRED, `0` BLOCKED.
 **Backlog counts:** item tables below are authoritative.
 **0.7.3 release-train relevance:** Most non-done items below are future or
 deferred work; current RC gate and proof status is controlled by
@@ -510,7 +510,7 @@ not active item docs.
 | [CI-050](items/CI-050.md) | Minor | OPEN | REST surface semantic proof and adapter hardening follow-up |
 | [CI-051](items/CI-051.md) | Major | OPEN | Move generated workspace outputs outside repos and worktrees |
 | [CI-052](../history/items/CI-052.md) | Major | DONE | RC2+ installer-backed test gate rationalization |
-| [CI-053](items/CI-053.md) | Major | IN_PROGRESS | Fix ARM64 controlled-smoke PCH virtual-memory exhaustion (native host toolchain) |
+| [CI-053](../history/items/CI-053.md) | Major | DONE | Fix ARM64 controlled-smoke PCH virtual-memory exhaustion (native host toolchain) |
 
 ---
 
