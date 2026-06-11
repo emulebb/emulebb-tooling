@@ -1,9 +1,12 @@
 # Agent Checklist
 
-This checklist is the repeatable operating path for AI agents contributing to
-the canonical eMuleBB workspace. It does not replace
-[Workspace Policy](../WORKSPACE-POLICY.md); when this checklist and policy
-appear to conflict, policy wins.
+This checklist is the single **start-here** on-ramp and repeatable operating
+path for any agent contributing to the canonical eMuleBB workspace, independent
+of which tool or assistant is used. Read it first, identify your change family in
+[Startup](#startup), then jump to the matching section below and to the
+authoritative section of [Workspace Policy](../WORKSPACE-POLICY.md) for that
+area. It does not replace the policy; when this checklist and policy appear to
+conflict, policy wins.
 
 ## Startup
 
@@ -84,16 +87,11 @@ python -m mkdocs build --strict
   product-family work to inspect dirty state across all managed repos.
 - Do not run ad hoc direct `MSBuild` from app worktrees, `srchybrid`, or
   `repos\emulebb-build-tests`.
-- For app code, run workspace validation, both required x64 app builds, and
-  the diagnostics Release build:
-
-```powershell
-cd $env:EMULEBB_WORKSPACE_ROOT\repos\emulebb-build
-python -m emule_workspace validate
-python -m emule_workspace build app --variant main --config Debug --platform x64 --build-output-mode ErrorsOnly
-python -m emule_workspace build app --variant main --config Release --platform x64 --build-output-mode ErrorsOnly
-python -m emule_workspace build app --variant main --config Release --platform x64 --build-output-mode ErrorsOnly --diagnostics
-```
+- For app code, run workspace validation plus the required x64 app builds and
+  the diagnostics Release build from `repos\emulebb-build`
+  (`python -m emule_workspace`), exactly as defined in
+  [Workspace Policy](../WORKSPACE-POLICY.md#build-validation-and-test-policy).
+  That section is the single source of those commands.
 
 ## Tests And Evidence
 
