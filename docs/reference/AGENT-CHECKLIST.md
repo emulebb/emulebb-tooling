@@ -32,6 +32,10 @@ conflict, policy wins.
 - Prefer `workspaces\workspace\repo-roles.json` when tooling needs
   machine-readable repository roles instead of parsing Markdown tables.
 - Do not hardcode machine-local absolute paths in active docs or helpers.
+- Use the environment variables defined in
+  [Workspace Policy](../WORKSPACE-POLICY.md#environment-variables); rely on the
+  canonical variables and treat override knobs as shell/CI-boundary diagnosis
+  only.
 - Do not use `stale/*` branches as active work targets unless the task is
   explicitly historical analysis.
 

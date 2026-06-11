@@ -236,6 +236,62 @@ boundary, project entrypoint, warning, localization, and normalization policy.
 - Repo-local docs must not redefine dependency pin authority or workspace
   topology.
 
+## Environment Variables
+
+Canonical workspace paths and supported orchestration knobs are expressed
+through environment variables. Agents and CI must rely on the canonical
+variables below and treat override knobs as shell- or CI-boundary diagnosis
+tools, not as committed workspace state. `repos\emulebb-build\README.md`
+(`Environment Overrides`) is the authoritative reference for toolchain override
+knobs, and the owning orchestration module is authoritative for command-scoped
+knobs.
+
+Canonical workspace variables:
+
+- `EMULEBB_WORKSPACE_ROOT` is the absolute workspace root. Maintained docs,
+  scripts, and helpers express paths relative to it and must not hardcode
+  machine-specific absolute paths.
+- `EMULEBB_WORKSPACE_OUTPUT_ROOT` is the generated-output root. All build, test,
+  release, and runtime output belongs under it, never under `repos\...` or
+  `workspaces\workspace\state`.
+- `EMULEBB_RELEASE_VERSION` selects the release version for build, package, and
+  release orchestration; the active default is pinned in `repos\emulebb-build`.
+- `CARGO_TARGET_DIR` is set by orchestration to
+  `EMULEBB_WORKSPACE_OUTPUT_ROOT\builds\rust\target` for orchestrated Rust
+  builds; do not redirect Rust output back inside a repo tree.
+
+Toolchain override knobs (shell or CI boundary only; leave unset for release and
+CI unless the run evidence records why an override was needed):
+
+- `EMULEBB_VS_PLATFORM_TOOLSET` forces the Visual Studio toolset (default
+  `v143`) for compatibility diagnosis.
+- `EMULEBB_MSYS2_ROOT` points the aMule Windows client build at a nonstandard
+  MSYS2 install.
+- `EMULEBB_CMAKE_GENERATOR` and `EMULEBB_CMAKE_PLATFORM` override the CMake
+  generator and platform for dependency builds.
+
+Command-scoped knobs (owned by, and authoritative in, their orchestration
+module):
+
+- Diagnostics build flags `EMULEBB_ENABLE_STARTUP_DIAGNOSTICS`,
+  `EMULEBB_ENABLE_PACKET_DIAGNOSTICS`,
+  `EMULEBB_ENABLE_UPLOAD_SLOT_DIAGNOSTICS`,
+  `EMULEBB_ENABLE_DOWNLOAD_SLOT_DIAGNOSTICS`,
+  `EMULEBB_ENABLE_BAD_PEER_DIAGNOSTICS`, and `EMULEBB_ENABLE_KAD_DIAGNOSTICS`
+  enable diagnostics instrumentation for the `--diagnostics` app build.
+- Local package install knobs `EMULEBB_PACKAGE_ROOT_NAME`,
+  `EMULEBB_RELEASE_ASSET_ROOT_NAME`, and `EMULEBB_RUNTIME_SCRIPT_PATHS` control
+  package staging and runtime script resolution.
+- Windows VM lab knobs `EMULEBB_VM_TEST_PASSWORD`,
+  `EMULEBB_VM_HIDE_ME_SETTINGS_PATH`, `EMULEBB_OFFLINE_SOFTWARE`,
+  `EMULEBB_OFFLINE_SYSTEM`, and `EMULEBB_OFFLINE_DEFAULT_USER` configure the
+  windowed VM test lab.
+- The live-test harness uses `X_LOCAL_IP` as the LAN bind address (equivalent to
+  `--lan-bind-addr`) for non-P2P control and probe traffic on the operator
+  split-tunnel machine.
+- Documentation builds may set `NO_MKDOCS_2_WARNING` to silence the MkDocs
+  upgrade notice.
+
 ## Documentation Policy
 
 - Workspace-wide development rules belong only in this document.
