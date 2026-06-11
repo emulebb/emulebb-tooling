@@ -20,9 +20,9 @@ engineering spec/evidence records, not workflow status authority.
 ## Current Snapshot
 
 **Source of truth:** `EMULEBB_WORKSPACE_ROOT\workspaces\workspace\app\emulebb-main` (`main` branch)
-**Current non-done count:** `126`
-**Latest release-doc refresh:** 2026-06-10
-**Non-done by status:** `104` OPEN, `9` IN_PROGRESS, `13` DEFERRED, `0` BLOCKED.
+**Current non-done count:** `127`
+**Latest release-doc refresh:** 2026-06-11
+**Non-done by status:** `105` OPEN, `9` IN_PROGRESS, `13` DEFERRED, `0` BLOCKED.
 **Backlog counts:** item tables below are authoritative.
 **0.7.3 release-train relevance:** Most non-done items below are future or
 deferred work; current RC gate and proof status is controlled by
@@ -307,6 +307,7 @@ not active item docs.
 | [REF-053](items/REF-053.md) | Minor | OPEN | Reduce upload queue and upload list linear lookup overhead |
 | [REF-054](items/REF-054.md) | Minor | OPEN | Stabilize and instrument download queue behavior |
 | [REF-055](items/REF-055.md) | Minor | OPEN | Post-RC2 code-quality and C++ modernization backlog |
+| [REF-056](items/REF-056.md) | Minor | OPEN | Standardize agent on-ramp and AGENTS.md pointer layer |
 
 ---
 
