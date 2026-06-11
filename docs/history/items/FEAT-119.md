@@ -70,3 +70,19 @@ offers this — they only tint known rows — so this is a new eMuleBB affordanc
   languages; state items reuse existing `IDS_SHARED/DOWNLOADING/DOWNLOADED/CANCELLED`.
 - Verification: 3 x64 builds clean; native doctest + python (1333) suites pass;
   `validate` + `rc-localization-preflight.py` green.
+
+## Follow-up (2026-06-11)
+
+Operator review: the dropdown must be **one level** (no flyout submenu) and the
+states **single-select**, not independent checkboxes. Reworked to a flat radio group
+appended directly to the filter dropdown — `Known` / `Downloaded` / `Shared` /
+`Downloaded/Shared` / `No filter` (default) — where `Known` hides all known states
+and `Downloaded/Shared` hides both. Added `IDS_SEARCH_HIDE_NO_FILTER` ("No filter")
+across all 43 languages; the "Downloaded/Shared" label is composed from the existing
+`IDS_DOWNLOADED`/`IDS_SHARED` strings.
+
+Root cause of "filtering didn't work": the hide-command id block started at
+`MP_FILTERCOLUMNS + 50` (11350), but `CEditDelayed::OnCommand` claimed
+`<= MP_FILTERCOLUMNS + 50` as a filter-column selection, so the boundary hide id was
+swallowed instead of forwarded to the parent. Moved the block clear to 11400 and
+corrected the off-by-one bound to `< MP_FILTERCOLUMNS + 50`.
