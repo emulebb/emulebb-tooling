@@ -122,6 +122,29 @@ Directive precedence is:
 - GitHub-tracked roadmap work should keep the stable local item id and link the
   GitHub issue when the work closes or materially advances it.
 
+## Commit Content And Privacy Hygiene
+
+This is an absolute, non-negotiable rule for every tracked file (source, tests,
+fixtures, docs, comments), every commit message, and every PR/issue description.
+
+- **NEVER commit private data:** real API keys, tokens, passwords, credentials,
+  cookies, private IP/host names, account identifiers, email addresses, or any
+  personal information. Use obvious placeholders.
+- **NEVER commit private or machine-specific filesystem paths:** real user profile
+  paths, absolute local paths (e.g. `C:\Users\<name>\...`, operator profile/library
+  roots, drive-letter test roots). Use relative paths, documented variables
+  (`EMULEBB_WORKSPACE_ROOT`), or clearly fake example paths.
+- **NEVER commit real media titles:** actual movie, series, show, episode, album,
+  artist, game, or release names — anywhere, including test fixtures, sample
+  filenames, comments, and commit messages. These are operator-owned runtime inputs
+  only. Use synthetic placeholders (`Sample Title`, `Alpha Beta`, generic tokens).
+- Generic, non-identifying technical release tags are allowed where a test must
+  exercise them (e.g. `ITA`, `HDTV`, `WEBRip`, `XviD`, `x264`, `1080p`, `AC3`,
+  release-group placeholders) because they are scene/encoding metadata, not titles.
+- Scrub copied operator screenshots, live-session logs, and search results before
+  any of their content lands in a tracked file or message. When in doubt, invent a
+  neutral synthetic example that reproduces the same structure.
+
 ## Build, Validation, And Test Policy
 
 - Interactive build, validation, test, live-test, and packaging commands must
