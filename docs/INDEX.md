@@ -215,6 +215,7 @@ are not the best first read for users.
 | 0.7.3 RC1 release checklist | [active/RELEASE-0.7.3-CHECKLIST](active/RELEASE-0.7.3-CHECKLIST.md) |
 | 0.7.3 RC1 release runbook | [active/RELEASE-0.7.3-RUNBOOK](active/RELEASE-0.7.3-RUNBOOK.md) |
 | Backlog process | [reference/BACKLOG-PROCESS](reference/BACKLOG-PROCESS.md) |
+| Backlog item template | [reference/BACKLOG-ITEM-TEMPLATE](reference/BACKLOG-ITEM-TEMPLATE.md) |
 | Evidence retention policy | [reference/EVIDENCE-RETENTION](reference/EVIDENCE-RETENTION.md) |
 | CI baseline workflow | [reference/CI-BASELINE](reference/CI-BASELINE.md) |
 | Release branching and packaging | [reference/RELEASE-BRANCHING-AND-PACKAGING](reference/RELEASE-BRANCHING-AND-PACKAGING.md) |

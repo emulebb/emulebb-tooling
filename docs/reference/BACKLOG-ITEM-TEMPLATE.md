@@ -29,7 +29,7 @@ source: short provenance note
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/<number>. This local document is retained as an engineering spec/evidence record.
 
-# FEAT-000 - Short sentence-case item title
+[body H1 goes here as "# <ID> - <title>" -- see Title And Heading Rules below]
 
 ## Summary
 
