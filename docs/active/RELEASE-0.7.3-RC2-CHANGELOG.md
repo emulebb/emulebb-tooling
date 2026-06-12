@@ -35,6 +35,13 @@ where noted. Final package hashes and proof status are recorded in
   `got3nks/amutorrent` v3.8.5 (footer KAD/ED2K port tooltips, qBittorrent-compat
   Bearer API-key + SID auth) with the eMuleBB integration on top; categories are
   imported from eMuleBB on connect and ED2K client labels are clarified.
+- RC2/aMuTorrent: Deleting a still-downloading transfer from the controller UI no
+  longer fails with the raw core message about `confirm=true`; an incomplete
+  download is removed together with its in-progress data, matching the
+  auto-delete-on-cancel behavior the delete dialog already advertises.
+- RC2/aMuTorrent: Pause, resume, and stop now report the core's actual refusal
+  (e.g. "transfer cannot be paused") instead of silently showing success when
+  eMuleBB declines the action.
 - RC2/Family: A headless `emulebb-rust` eD2K/Kad core that implements the shared
   `/api/v1` controller contract is added as a build target with aMuTorrent
   Rust-session wiring. This is lab/preview work, not a shipped end-user product
