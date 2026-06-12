@@ -84,8 +84,8 @@ nav:
       - Product-Family Integration Plan: active/plans/P2P-OVERLORD-PRODUCT-FAMILY-INTEGRATION.md
   - Active Release:
       - Backlog Index: active/INDEX.md
-      - 0.7.3 RC1 Dashboard: active/RELEASE-0.7.3.md
-      - 0.7.3 RC1 Release Notes: active/RELEASE-0.7.3-NOTES.md
+      - 0.7.3 Release Dashboard: active/RELEASE-0.7.3.md
+      - 0.7.3 Release Notes: active/RELEASE-0.7.3-NOTES.md
       - 0.7.3 RC2 Changelog: active/RELEASE-0.7.3-RC2-CHANGELOG.md
       - Current Execution Plan: active/plans/RELEASE-0.7.3-EXECUTION-PLAN.md
       - Release Checklist: active/RELEASE-0.7.3-CHECKLIST.md

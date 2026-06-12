@@ -7,7 +7,7 @@ dashboard.
 
 Open, deferred, exploratory, and historical items are not product promises.
 Current release state remains in the
-[0.7.3 RC1 dashboard](../active/RELEASE-0.7.3.md).
+[0.7.3 release dashboard](../active/RELEASE-0.7.3.md).
 
 ## Landed Feature Matrix
 

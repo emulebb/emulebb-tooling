@@ -1,11 +1,14 @@
-# eMuleBB 0.7.3-rc.1 Release Notes
+# eMuleBB 0.7.3 Release Notes
 
-These are public-facing notes for the first official eMuleBB public release
-candidate: `emulebb-v0.7.3-rc.1`.
+These are public-facing notes for the eMuleBB 0.7.3 release line. The current
+public release candidate is `emulebb-v0.7.3-rc.2` (with the matching
+`amutorrent-v3.8.5-emulebb-v0.7.3-rc.2` controller companion). For the
+RC2-specific delta over RC1, see the
+[0.7.3 RC2 Changelog](RELEASE-0.7.3-RC2-CHANGELOG.md).
 
 ## Why This Release Matters
 
-`0.7.3-rc.1` is the first public eMuleBB release candidate for users who want a
+`0.7.3-rc.2` is the current public eMuleBB release candidate for users who want a
 native Windows eMule client that keeps stock-compatible eD2K/Kad behavior while
 making long-running broadband operation easier to manage.
 
@@ -50,14 +53,14 @@ existing profile before first launch.
 
 ## Package Expectations
 
-Expected 0.7.3 RC1 core packages are:
+Expected 0.7.3 RC2 core packages are:
 
-- `emulebb-0.7.3-rc.1-x64.zip`
-- `emulebb-0.7.3-rc.1-arm64.zip`
+- `emulebb-0.7.3-rc.2-x64.zip`
+- `emulebb-0.7.3-rc.2-arm64.zip`
 
 The optional controller package is:
 
-- `emulebb-0.7.3-rc.1-amutorrent-x64.zip`
+- `emulebb-0.7.3-rc.2-amutorrent-x64.zip`
 
 All published packages should have:
 

@@ -381,7 +381,7 @@ live SX1 packet support. The durable decision record is
 ## IPv6 And Kad Roadmap
 
 Current eMuleBB product behavior remains stock-compatible IPv4 eD2K/Kad. IPv6
-work is future connectivity modernization, not a shipped 0.7.3 RC1 capability.
+work is future connectivity modernization, not a shipped 0.7.3 capability.
 
 The docs intentionally split IPv6 Kad into two tracks:
 

@@ -1,6 +1,6 @@
 # eMuleBB 0.7.3-rc.2 Changelog
 
-Status: draft for RC2 preparation; finalize at RC2 go after final artifact names, hashes, proof status, and accepted deviations are recorded.
+Status: RELEASED. `emulebb-v0.7.3-rc.2` published 2026-06-12, with the version-matched `amutorrent-v3.8.5-emulebb-v0.7.3-rc.2` controller companion. Final artifact hashes and proof are recorded in [CI-035](items/CI-035.md).
 
 Format: one line per item, grouped by area; this is a power-user changelog, not a Git log.
 
@@ -67,20 +67,23 @@ where noted. Final package hashes and proof status are recorded in
 
 ### Packages
 
-- RC2/Packages: x64 and ARM64 standard + diagnostics ZIPs, the suite
-  bootstrapper, and the optional aMuTorrent x64 controller package are
-  regenerated from the selected RC2 head. Refreshed manifests, SPDX SBOMs, and
-  SHA-256 hashes are recorded in the release checklist. *(Final hashes pending
-  the RC2 candidate build.)*
+- RC2/Packages: x64 and ARM64 standard + diagnostics ZIPs and the suite
+  bootstrapper were built by the publish-release CI from app `38827709` and
+  published on the `emulebb-v0.7.3-rc.2` release; the aMuTorrent x64 controller
+  package ships as the version-matched companion release
+  `amutorrent-v3.8.5-emulebb-v0.7.3-rc.2`. Manifests, SPDX SBOMs, and the final
+  SHA-256 hashes are recorded in [CI-035](items/CI-035.md).
 - RC2/Packages: Release ZIPs remain **unsigned** (accepted posture); package
   verification continues through manifests, SBOMs, SHA-256 evidence, and GitHub
   artifact attestations.
 
 ### Proof
 
-- RC2/Proof: Pending — fresh quick release-campaign proof, package/hash
-  confirmation, and the clean-worktree audit on the selected RC2 head before the
-  operator tag instruction. Tracked by [CI-035](items/CI-035.md).
+- RC2/Proof: Passed. Under the relaxed RC2 gate (operator decision 2026-06-12),
+  the fast certification passed for the shipped scope on app `38827709`, the
+  clean-worktree audit passed, CI is green on all heads, and the operator tagged
+  and published rc.2 on 2026-06-12. Final hashes and evidence in
+  [CI-035](items/CI-035.md).
 
 ### Risk and Testing Focus
 

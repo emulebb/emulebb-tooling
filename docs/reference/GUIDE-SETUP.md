@@ -5,7 +5,7 @@ This guide covers practical setup for eMuleBB. It complements the
 
 ## Quick Setup Options
 
-RC1 is published on GitHub Releases. Pick one path:
+RC2 is published on GitHub Releases. Pick one path:
 
 ### Option 1: Full Suite One-Liner {#full-suite-install-powershell-bootstrap}
 
@@ -13,11 +13,11 @@ Fastest setup for the x64 suite: eMuleBB, aMuTorrent, Prowlarr, and selected
 Arr integration in one bootstrap flow.
 
 ```powershell
-irm https://github.com/emulebb/emulebb/releases/download/emulebb-v0.7.3-rc.1/Bootstrap-eMuleBBSuite.ps1 | iex
+irm https://github.com/emulebb/emulebb/releases/download/emulebb-v0.7.3-rc.2/Bootstrap-eMuleBBSuite.ps1 | iex
 ```
 
-The bootstrapper defaults to the `Full` bundle. It downloads the published RC1
-eMuleBB package from `emulebb/emulebb`, resolves the matching aMuTorrent RC1
+The bootstrapper defaults to the `Full` bundle. It downloads the published RC2
+eMuleBB package from `emulebb/emulebb`, resolves the matching aMuTorrent RC2
 package from `emulebb/amutorrent`, installs the suite, and wires local
 controller integration through native REST, Torznab, and qBittorrent-compatible
 adapter paths.
@@ -25,8 +25,8 @@ adapter paths.
 ### Option 2: Manual Standalone ZIP {#quick-install-zip-extract-run}
 
 Best when you only want the eMuleBB desktop app: download
-`emulebb-0.7.3-rc.1-x64.zip` from
-<https://github.com/emulebb/emulebb/releases/tag/emulebb-v0.7.3-rc.1>, extract
+`emulebb-0.7.3-rc.2-x64.zip` from
+<https://github.com/emulebb/emulebb/releases/tag/emulebb-v0.7.3-rc.2>, extract
 it into a new folder, and run `emulebb.exe`.
 
 Use the x64 ZIP for normal Windows desktop installs. Use ARM64 only when you
@@ -48,7 +48,7 @@ aMule.
 
 ### Security And Provenance
 
-All RC1 builds and packaging happen in GitHub Actions and are published through
+All RC2 builds and packaging happen in GitHub Actions and are published through
 GitHub Releases. The release carries ZIPs, package manifests, SHA-256 evidence,
 SPDX SBOMs, diagnostics packages, the standalone suite bootstrapper, and the
 bootstrapper SHA-256 asset. Suite releases also publish
@@ -114,7 +114,7 @@ default. To opt into the latest nightly build instead:
 For a specific published release after manual download:
 
 ```powershell
-.\Bootstrap-eMuleBBSuite.ps1 -Version 0.7.3-rc.1
+.\Bootstrap-eMuleBBSuite.ps1 -Version 0.7.3-rc.2
 ```
 
 The bootstrapper is published as a release asset, so setup does not depend on
@@ -374,8 +374,8 @@ eMuleBB plus aMuTorrent plus Prowlarr/Arr setup, use the
 
 ## Release-Aware Setup
 
-The current official public test line is 0.7.3 RC1. Use packages attached to
-`emulebb-v0.7.3-rc.1` or a later approved release tag. Treat nightly and older
+The current official public test line is 0.7.3 RC2. Use packages attached to
+`emulebb-v0.7.3-rc.2` or a later approved release tag. Treat nightly and older
 beta builds as pre-release packages unless the release notes explicitly direct
 a test run to them.
 
@@ -415,7 +415,7 @@ Setup confidence comes from the same release evidence model used elsewhere:
 
 See [Release Test Strategy](../active/RELEASE-TEST-STRATEGY.md),
 [Release Test Campaigns](../active/RELEASE-TEST-CAMPAIGNS.md), and the
-[0.7.3 RC1 dashboard](../active/RELEASE-0.7.3.md) for the current release
+[0.7.3 RC2 dashboard](../active/RELEASE-0.7.3.md) for the current release
 proof model.
 
 ## Unsupported Setup Targets
