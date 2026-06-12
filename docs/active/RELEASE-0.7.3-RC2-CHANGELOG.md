@@ -25,6 +25,11 @@ where noted. Final package hashes and proof status are recorded in
   installs RC2 once it is published.
 - RC2/Bootstrapper: The eD2K server list (`server.met`) seed is fetched over
   **HTTPS** instead of plain HTTP.
+- RC2/Bootstrapper: Fixed the one-liner install failing under `irm <url> | iex`
+  (BUG-017). The bootstrapper and installer declared an optional `-UiLanguage`
+  with a `[ValidateSet]` that rejected its own empty default, which only failed
+  under `Invoke-Expression`, not `& script.ps1`. A param-block `irm|iex`
+  regression now gates both scripts in the release certification.
 - RC2/Suite: Renamed two suite helper scripts to match behavior —
   `Update-Suite` → `Repair-Suite` (re-applies the saved config) and
   `Test-Suite` → `Get-SuiteInfo` (shows config paths and suite status).
