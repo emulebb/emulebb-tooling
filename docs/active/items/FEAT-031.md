@@ -15,6 +15,8 @@ source: current `main` auto-browse implementation branch, live-network validatio
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/24. This local document is retained as an engineering spec/evidence record.
 
+# FEAT-031 - Auto-browse peers that expose remote shared-file inventories
+
 ## Summary
 
 Add an Advanced opt-in feature that automatically detects compatible peers that

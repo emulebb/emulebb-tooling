@@ -14,7 +14,7 @@ source: operator compatibility review of eMuleAI private IPv6 and NAT traversal 
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/33. This local document is retained as an engineering spec/evidence record.
 
-# FEAT-086 - Parse eMuleAI Extension Hints Without Advertising Protocol Support
+# FEAT-086 - Parse eMuleAI extension hints without advertising protocol support
 
 ## Summary
 

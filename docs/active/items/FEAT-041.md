@@ -15,6 +15,8 @@ source: `analysis\emuleai` v1.4 release notes
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/17. This local document is retained as an engineering spec/evidence record.
 
+# FEAT-041 - Download Inspector automation for stale downloads and majority-name rename
+
 ## Summary
 
 Track the eMuleAI v1.4 Download Inspector additions as a future product

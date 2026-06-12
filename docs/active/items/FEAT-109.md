@@ -15,7 +15,7 @@ source: operator request to download MediaInfo, FFmpeg, 7-Zip, and similar suite
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/123. This local document is retained as an engineering spec/evidence record.
 
-# FEAT-109 - Materialize Suite Tool Dependencies Deterministically
+# FEAT-109 - Materialize suite tool dependencies deterministically
 
 ## Summary
 

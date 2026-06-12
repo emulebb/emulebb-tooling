@@ -15,7 +15,7 @@ source: operator request after reviewing startup progress dialog and UI locking 
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/107. This local document is retained as an engineering spec/evidence record.
 
-# FEAT-100 - Improve Startup Progress And UI Readiness Locking
+# FEAT-100 - Improve startup progress and UI readiness locking
 
 ## Summary
 

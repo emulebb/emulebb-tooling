@@ -11,8 +11,7 @@ milestone: 0.8.x
 created: 2026-06-10
 source: operator report - unshared folder shows an empty file list when its files are already shared from another folder
 ---
-
-# FEAT-117 - Indicate Already-Shared Files In The Unshared-Folder Share Preview
+# FEAT-117 - Indicate already-shared files in the unshared-folder share preview
 
 ## Summary
 

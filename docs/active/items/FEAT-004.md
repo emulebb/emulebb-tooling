@@ -15,6 +15,8 @@ source: AUDIT-KAD.md (AUD_KAD_011, AUD_KAD_020)
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/54. This local document is retained as an engineering spec/evidence record.
 
+# FEAT-004 - Kad — Generalise KadPublishGuard abuse budget beyond PUBLISH_SOURCE
+
 > Historical reference only: `stale-v0.72a-experimental-clean` and
 > `analysis\stale-v0.72a-experimental-clean` are retired reference sources, not
 > active branch targets or current baselines. Use them only as provenance or

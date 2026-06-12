@@ -15,7 +15,7 @@ source: operator request for a Downloads-list quick filter textbox
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/108. This local document is retained as an engineering spec/evidence record.
 
-# FEAT-101 - Add Quick Filter Textbox To Downloads List
+# FEAT-101 - Add quick filter textbox to Downloads list
 
 ## Summary
 

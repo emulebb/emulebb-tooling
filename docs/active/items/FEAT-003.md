@@ -15,6 +15,8 @@ source: AUDIT-KAD.md (AUD_KAD_008, AUD_KAD_009)
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/8. This local document is retained as an engineering spec/evidence record.
 
+# FEAT-003 - Kad — Add response usefulness scoring and subnet-diversity search fanout
+
 ## Summary
 
 Search progression currently relies on XOR closeness, pending/timeout state,

@@ -15,6 +15,8 @@ source: aMule issue #604 triage against current shared-file policy
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/67. This local document is retained as an engineering spec/evidence record.
 
+# FEAT-069 - Shared-file include and exclude pattern rules
+
 ## Summary
 
 Add optional include/exclude pattern rules for shared-file discovery so users

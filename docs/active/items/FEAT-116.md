@@ -15,7 +15,7 @@ source: operator I/O and filesystem performance review
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/155. This local document is retained as an engineering spec/evidence record.
 
-# FEAT-116 - Throttle Background Share Scanning On Active Slow Volumes
+# FEAT-116 - Throttle background share scanning on active slow volumes
 
 ## Summary
 

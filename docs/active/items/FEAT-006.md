@@ -15,6 +15,8 @@ source: AUDIT-KAD.md (AUD_KAD_013, AUD_KAD_014)
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/9. This local document is retained as an engineering spec/evidence record.
 
+# FEAT-006 - Kad — Add explicit trust, budget, and bootstrap observability counters
+
 ## Summary
 
 The Kad subsystem has limited runtime observability. There is no easy way to

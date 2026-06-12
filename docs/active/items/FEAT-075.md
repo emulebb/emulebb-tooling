@@ -15,7 +15,7 @@ source: operator report that the startup dialog freezes while daily config backu
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/71. This local document is retained as an engineering spec/evidence record.
 
-# FEAT-075 - Keep Startup Progress Responsive During Daily Config Backup
+# FEAT-075 - Keep startup progress responsive during daily config backup
 
 ## Summary
 

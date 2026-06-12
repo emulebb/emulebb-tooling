@@ -15,7 +15,7 @@ source: operator I/O and filesystem performance review
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/154. This local document is retained as an engineering spec/evidence record.
 
-# FEAT-115 - Add Per-Volume Storage Policy Hints And Diagnostics
+# FEAT-115 - Add per-volume storage policy hints and diagnostics
 
 ## Summary
 

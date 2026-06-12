@@ -15,6 +15,8 @@ source: AUDIT-WWMOD.md (WWMOD_010, P0 severity)
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/11. This local document is retained as an engineering spec/evidence record.
 
+# FEAT-017 - DPI awareness — Per-Monitor V2 manifest + hardcoded pixel audit
+
 ## Summary
 
 The project explicitly sets `<EnableDpiAwareness>false</EnableDpiAwareness>` in

@@ -15,7 +15,7 @@ source: user request after reviewing peer client and mod identity visibility
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/86. This local document is retained as an engineering spec/evidence record.
 
-# FEAT-096 - Improve Client And Network Statistics Observability
+# FEAT-096 - Improve client and network statistics observability
 
 ## Summary
 

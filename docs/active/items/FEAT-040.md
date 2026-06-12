@@ -15,6 +15,8 @@ source: eMule Qt announcement 2026-03-05; current self-hosted ED2K controller de
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/64. This local document is retained as an engineering spec/evidence record.
 
+# FEAT-040 - Headless core with modern web/mobile controller and multi-user permissions
+
 ## Summary
 
 Add a product-level remote-control mode where the transfer engine can run headless and be

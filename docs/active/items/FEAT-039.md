@@ -15,6 +15,8 @@ source: eMuleAI release notes
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/16. This local document is retained as an engineering spec/evidence record.
 
+# FEAT-039 - Download checker — duplicate and near-duplicate intake guard
+
 ## Summary
 
 Add an intake-time checker that evaluates a new download against existing downloads,

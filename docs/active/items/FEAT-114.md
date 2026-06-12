@@ -15,7 +15,7 @@ source: operator I/O and filesystem performance review
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/153. This local document is retained as an engineering spec/evidence record.
 
-# FEAT-114 - Add Storage-Aware Hash And Verify Throttling
+# FEAT-114 - Add storage-aware hash and verify throttling
 
 ## Summary
 

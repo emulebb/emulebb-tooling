@@ -15,7 +15,7 @@ source: operator request to tune eMuleBB broadband limits per drive topology, HD
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/80. This local document is retained as an engineering spec/evidence record.
 
-# FEAT-090 - Tune Broadband Limits By Drive Topology And Total Budget
+# FEAT-090 - Tune broadband limits by drive topology and total budget
 
 ## Summary
 

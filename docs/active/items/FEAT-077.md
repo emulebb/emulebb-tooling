@@ -15,7 +15,7 @@ source: GitHub issue #3 and review of historical Broadband 0.60 auto-friend logi
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/73. This local document is retained as an engineering spec/evidence record.
 
-# FEAT-077 - Auto-Managed Upload Friend-Slot Candidates Without Mutating Manual Friends
+# FEAT-077 - Auto-managed upload friend-slot candidates without mutating manual friends
 
 ## Summary
 

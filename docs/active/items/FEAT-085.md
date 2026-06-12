@@ -14,7 +14,7 @@ source: operator request to bring p2p-overlord campaigns into one eMuleBB worksp
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/32. This local document is retained as an engineering spec/evidence record.
 
-# FEAT-085 - Establish A Shared Campaign Core For eMuleBB Product-Family Test Orchestration
+# FEAT-085 - Establish a shared campaign core for eMuleBB product-family test orchestration
 
 ## Summary
 

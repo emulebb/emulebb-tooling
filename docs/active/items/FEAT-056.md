@@ -15,6 +15,8 @@ source: FEAT-055 0.7.3 RC1 improvement triage
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/19. This local document is retained as an engineering spec/evidence record.
 
+# FEAT-056 - Post-0.7.3 release proof automation and operator evidence UX
+
 ## Summary
 
 Build the follow-up tooling and documentation improvements discovered while

@@ -14,6 +14,8 @@ source: eMuleAI v1.4 release notes and `analysis\emuleai` list-control compariso
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/31. This local document is retained as an engineering spec/evidence record.
 
+# FEAT-082 - Virtualize high-volume downloads, search results, and client-history lists
+
 ## Summary
 
 Extend the high-volume list-performance work beyond the already-hardened Shared

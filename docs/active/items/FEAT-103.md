@@ -15,7 +15,7 @@ source: operator request to make the local Hyper-V eMuleBB run path visible to u
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/117. This local document is retained as an engineering spec/evidence record.
 
-# FEAT-103 - Publish Windows Hyper-V Run Guide For eMuleBB
+# FEAT-103 - Publish Windows Hyper-V run guide for eMuleBB
 
 ## Summary
 

@@ -15,6 +15,8 @@ source: Stale branch parent commit 226356a "WIP mirror audit guard seam for orac
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/58. This local document is retained as an engineering spec/evidence record.
 
+# FEAT-009 - Mirror audit guard seam — WIP work from stale branch parent commit
+
 ## Background
 
 The parent of the oracle seam work (commit `226356a`, "WIP mirror audit guard seam

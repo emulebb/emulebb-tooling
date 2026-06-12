@@ -15,6 +15,8 @@ source: REFACTOR-TASKS.md (REFAC_010)
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/56. This local document is retained as an engineering spec/evidence record.
 
+# FEAT-007 - Windows Property Store integration for non-media file metadata
+
 > Historical reference only: `stale-v0.72a-experimental-clean` and
 > `analysis\stale-v0.72a-experimental-clean` are retired reference sources, not
 > active branch targets or current baselines. Use them only as provenance or

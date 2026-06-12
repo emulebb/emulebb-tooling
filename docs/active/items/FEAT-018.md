@@ -15,6 +15,8 @@ source: eMuleAI (CUtpSocket.cpp/h, UtpSocket attribution to David Xanatos / NeoL
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/60. This local document is retained as an engineering spec/evidence record.
 
+# FEAT-018 - µTP (Micro Transport Protocol) transport layer — CUtpSocket / libutp
+
 ## Summary
 
 µTP (Micro Transport Protocol, also known as uTorrent Transport Protocol) is a UDP-based

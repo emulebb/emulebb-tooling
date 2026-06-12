@@ -15,6 +15,8 @@ source: Stale branch remotes/origin/stale/v0.72a-experimental-clean (commit mess
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/57. This local document is retained as an engineering spec/evidence record.
 
+# FEAT-008 - Oracle protocol guard seams — integrate stale branch test scaffolding
+
 > Historical reference only: `stale-v0.72a-experimental-clean` and
 > `analysis\stale-v0.72a-experimental-clean` are retired reference sources, not
 > active branch targets or current baselines. Use them only as provenance or

@@ -15,7 +15,7 @@ source: operator request for app events webhook backlog coverage
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/104. This local document is retained as an engineering spec/evidence record.
 
-# FEAT-099 - Add App Event Webhooks For Controller Automation
+# FEAT-099 - Add app event webhooks for controller automation
 
 ## Summary
 

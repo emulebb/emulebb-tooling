@@ -15,6 +15,8 @@ source: user future-release triage, local mod analysis, community feature scan
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/20. This local document is retained as an engineering spec/evidence record.
 
+# FEAT-064 - Curated post-0.7.3 future release roadmap
+
 ## Summary
 
 Maintain a curated future roadmap for eMuleBB after 0.7.3. This item is

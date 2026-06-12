@@ -15,7 +15,7 @@ source: operator request for parallel hashing from different physical volumes an
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/72. This local document is retained as an engineering spec/evidence record.
 
-# FEAT-076 - Parallelize Shared-File Hashing Across Physical Volumes And SSDs
+# FEAT-076 - Parallelize shared-file hashing across physical volumes and SSDs
 
 ## Summary
 

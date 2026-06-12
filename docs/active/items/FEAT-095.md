@@ -15,7 +15,7 @@ source: senior C++ performance and I/O review of part-file write and flush paths
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/85. This local document is retained as an engineering spec/evidence record.
 
-# FEAT-095 - Move Part-File Durability Work Off Foreground Paths
+# FEAT-095 - Move part-file durability work off foreground paths
 
 ## Summary
 

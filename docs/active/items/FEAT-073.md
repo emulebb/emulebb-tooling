@@ -15,7 +15,7 @@ source: operator product-family planning for p2p-overlord integration
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/70. This local document is retained as an engineering spec/evidence record.
 
-# FEAT-073 - Incorporate p2p-overlord Into The eMuleBB Product Family
+# FEAT-073 - Incorporate p2p-overlord into the eMuleBB product family
 
 ## Summary
 

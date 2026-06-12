@@ -15,6 +15,8 @@ source: AUDIT-KAD.md (AUD_KAD_006, AUD_KAD_007)
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/7. This local document is retained as an engineering spec/evidence record.
 
+# FEAT-002 - Kad SafeKad — evolve from coarse same-IP gate into layered trust model (CGNAT fix)
+
 > Historical reference only: `stale-v0.72a-experimental-clean` and
 > `analysis\stale-v0.72a-experimental-clean` are retired reference sources, not
 > active branch targets or current baselines. Use them only as provenance or

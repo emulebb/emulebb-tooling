@@ -15,7 +15,7 @@ source: operator request to maximize upload bandwidth fill rate
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/120. This local document is retained as an engineering spec/evidence record.
 
-# FEAT-106 - Add Upload Bandwidth Ramp-Up Diagnostics And Slot Policy
+# FEAT-106 - Add upload bandwidth ramp-up diagnostics and slot policy
 
 ## Summary
 

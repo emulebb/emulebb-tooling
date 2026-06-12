@@ -15,6 +15,8 @@ source: eMuleAI IPFilter comparison and historical mod scan
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/18. This local document is retained as an engineering spec/evidence record.
 
+# FEAT-044 - IP filter input policy - PeerGuardian lists, whitelist, and private-IP exemption
+
 ## Summary
 
 Extend the now-safe IP-filter update foundation with optional input-policy

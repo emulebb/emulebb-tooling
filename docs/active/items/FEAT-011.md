@@ -15,6 +15,8 @@ source: FEATURE-PEERS-BANS.md (FEAT_011)
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/10. This local document is retained as an engineering spec/evidence record.
 
+# FEAT-011 - CShield — integrate ED2K anti-leecher engine (44 bad-client categories)
+
 ## Summary
 
 Port `CShield` from eMuleAI — an ED2K anti-leecher engine with 44 named bad-client categories, graduated punishment levels, and per-category configurable responses. Not started. Complements the existing binary ban system with score-based queue demotion.

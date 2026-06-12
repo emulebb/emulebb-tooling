@@ -15,6 +15,8 @@ source: 2026-04-12 backlog review pivot from pipe/sidecar-first plan
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/59. This local document is retained as an engineering spec/evidence record.
 
+# FEAT-014 - REST API follow-up — OpenAPI docs and optional external gateway
+
 ## Summary
 
 After `FEAT-013` lands an in-process REST surface in `WebServer.cpp`, a second phase can

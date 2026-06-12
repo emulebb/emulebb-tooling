@@ -15,6 +15,8 @@ source: user-requested future backlog item for cached auto-browse results
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/25. This local document is retained as an engineering spec/evidence record.
 
+# FEAT-078 - Persist auto-browse inventories in a local queryable database
+
 ## Summary
 
 Persist successful remote shared-file browse results in a local queryable store

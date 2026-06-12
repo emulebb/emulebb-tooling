@@ -14,7 +14,7 @@ source: operator request during live upload-fill monitoring
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/139. This local document is retained as an engineering spec/evidence record.
 
-# FEAT-113 - Persist Peer Upload Performance History For Slot Selection
+# FEAT-113 - Persist peer upload performance history for slot selection
 
 ## Summary
 

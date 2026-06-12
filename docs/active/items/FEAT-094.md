@@ -15,7 +15,7 @@ source: senior C++ performance and I/O review of client and server UDP paths
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/84. This local document is retained as an engineering spec/evidence record.
 
-# FEAT-094 - Improve UDP Burst Handling Without Lock-Held Backoff
+# FEAT-094 - Improve UDP burst handling without lock-held backoff
 
 ## Summary
 

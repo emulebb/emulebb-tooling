@@ -15,6 +15,8 @@ source: eMuleAI release notes; eMule Qt announcement 2026-03-05
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/15. This local document is retained as an engineering spec/evidence record.
 
+# FEAT-036 - NAT traversal and extended source exchange for LowID-to-LowID connectivity
+
 ## Summary
 
 Add a broader connectivity layer for LowID-to-LowID sessions instead of relying almost

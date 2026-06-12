@@ -15,7 +15,7 @@ source: operator request to consider resolving peer IP addresses to names
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/118. This local document is retained as an engineering spec/evidence record.
 
-# FEAT-104 - Add Optional Reverse DNS Peer Name Resolution
+# FEAT-104 - Add optional reverse DNS peer name resolution
 
 ## Summary
 

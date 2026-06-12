@@ -15,6 +15,8 @@ source: aMule issue #538 triage against current client/upload logging
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/68. This local document is retained as an engineering spec/evidence record.
 
+# FEAT-070 - Add targeted client UserHash and upload-lifecycle diagnostics
+
 ## Summary
 
 Add a narrow diagnostic pass for client identity and upload-queue lifecycle

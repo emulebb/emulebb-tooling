@@ -15,6 +15,8 @@ source: eMuleAI (DarkMode.cpp/h, CDarkMode class, 2026)
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/12. This local document is retained as an engineering spec/evidence record.
 
+# FEAT-019 - Dark mode UI — system-aware Windows 10 dark theme integration
+
 ## Summary
 
 Windows 10 (1809+) supports a system-wide dark mode toggle. Applications that do not opt in

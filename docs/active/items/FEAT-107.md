@@ -15,7 +15,7 @@ source: operator request to explain upload bandwidth underfill causes
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/121. This local document is retained as an engineering spec/evidence record.
 
-# FEAT-107 - Add Upload Under-Target Reason Diagnostics
+# FEAT-107 - Add upload under-target reason diagnostics
 
 ## Summary
 

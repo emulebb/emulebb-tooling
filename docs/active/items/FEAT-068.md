@@ -16,6 +16,8 @@ source: eMuleAI issue #86/#79 triage plus current REST large-list review
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/66. This local document is retained as an engineering spec/evidence record.
 
+# FEAT-068 - Bound REST large-list memory and latency for very large profiles
+
 ## Summary
 
 Add focused guards for large lists exposed through REST. The initial risk was

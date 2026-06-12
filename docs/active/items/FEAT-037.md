@@ -15,6 +15,8 @@ source: MorphXT FAQ; Mephisto FAQ; historical eMule feature catalogs; eMuleAI v1
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/63. This local document is retained as an engineering spec/evidence record.
 
+# FEAT-037 - Release-oriented sharing controls — PowerShare, Release Bonus, and Share Only The Need
+
 ## Summary
 
 Add an explicit release/distribution policy layer for rare or newly published files.

@@ -15,7 +15,7 @@ source: review of background parallel processing opportunities
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/75. This local document is retained as an engineering spec/evidence record.
 
-# FEAT-080 - Refresh Protected-Volume Disk-Space Snapshots In The Background
+# FEAT-080 - Refresh protected-volume disk-space snapshots in the background
 
 ## Summary
 

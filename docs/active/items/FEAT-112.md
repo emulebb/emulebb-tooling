@@ -15,7 +15,7 @@ source: operator request to add Torrent search without changing ED2K server beha
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/138. This local document is retained as an engineering spec/evidence record.
 
-# FEAT-112 - Add Torrent Search Type Convenience Filter And Refresh File-Type Extensions
+# FEAT-112 - Add Torrent search type convenience filter and refresh file-type extensions
 
 ## Summary
 

@@ -15,6 +15,8 @@ source: operator request to keep completed uploads visible for a configurable nu
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/78. This local document is retained as an engineering spec/evidence record.
 
+# FEAT-088 - Keep completed upload rows visible briefly
+
 ## Summary
 
 Keep recently completed uploads visible in the Uploading list for a short,

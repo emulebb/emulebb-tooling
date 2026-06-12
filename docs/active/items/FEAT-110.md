@@ -15,7 +15,7 @@ source: operator request to show additional runtime info in the title bar
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/129. This local document is retained as an engineering spec/evidence record.
 
-# FEAT-110 - Add Configurable Title Bar Status Format
+# FEAT-110 - Add configurable title bar status format
 
 ## Summary
 

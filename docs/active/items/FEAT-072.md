@@ -15,7 +15,7 @@ source: live large-library profiling against the operator-provided profile and s
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/69. This local document is retained as an engineering spec/evidence record.
 
-# FEAT-072 - Reduce Startup Cache UI-Thread Blocking On Large Shared Libraries
+# FEAT-072 - Reduce startup cache UI-thread blocking on large shared libraries
 
 ## Summary
 

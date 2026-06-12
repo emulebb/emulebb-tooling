@@ -15,7 +15,7 @@ source: operator request after eMuleAI and mods-archive review
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/130. This local document is retained as an engineering spec/evidence record.
 
-# FEAT-111 - Add Peer And Queue Diagnostics Columns
+# FEAT-111 - Add peer and queue diagnostics columns
 
 ## Summary
 

@@ -15,6 +15,8 @@ source: operator request for easier Prowlarr indexer setup
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/79. This local document is retained as an engineering spec/evidence record.
 
+# FEAT-089 - Add in-app guided Prowlarr indexer setup for eMuleBB
+
 ## Summary
 
 Make it easy for users to add eMuleBB as a Prowlarr indexer from the product UI

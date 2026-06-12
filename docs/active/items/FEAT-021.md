@@ -15,6 +15,8 @@ source: eMuleAI (SourceSaver.cpp/h, CSourceSaver class, 2026)
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/61. This local document is retained as an engineering spec/evidence record.
 
+# FEAT-021 - SourceSaver — persist download source lists between sessions
+
 ## Summary
 
 When eMule restarts, all active sources for in-progress downloads are lost. The client must

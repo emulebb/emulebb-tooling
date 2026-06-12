@@ -15,7 +15,7 @@ source: operator request to make shared-file publishing fill upload demand faste
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/122. This local document is retained as an engineering spec/evidence record.
 
-# FEAT-108 - Add Publish Effectiveness Feedback For Shared Files
+# FEAT-108 - Add publish effectiveness feedback for shared files
 
 ## Summary
 

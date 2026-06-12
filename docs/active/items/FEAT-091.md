@@ -15,7 +15,7 @@ source: operator request to defer downloads-list expand/collapse-all peer contro
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/81. This local document is retained as an engineering spec/evidence record.
 
-# FEAT-091 - Downloads List Expand/Collapse-All Peer Rows
+# FEAT-091 - Downloads list expand/collapse-all peer rows
 
 ## Summary
 

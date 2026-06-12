@@ -15,6 +15,8 @@ source: 2026-04-20 UPnP robustness review plus PCP/NAT-PMP dependency follow-thr
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/13. This local document is retained as an engineering spec/evidence record.
 
+# FEAT-032 - NAT mapping modernization — lease controls, status visibility, and PCP/NAT-PMP
+
 ## Summary
 
 Current `main` historically carried two UPnP codepaths:

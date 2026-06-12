@@ -15,7 +15,7 @@ source: review of background parallel processing opportunities; 2026-05-27 senio
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/74. This local document is retained as an engineering spec/evidence record.
 
-# FEAT-079 - Save Known And Cancelled Metadata From Immutable Background Snapshots
+# FEAT-079 - Save known and cancelled metadata from immutable background snapshots
 
 ## Summary
 

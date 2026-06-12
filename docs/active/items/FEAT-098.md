@@ -15,7 +15,7 @@ source: operator review of split-tunnel VPN public-IP mismatch risk
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/35. This local document is retained as an engineering spec/evidence record.
 
-# FEAT-098 - Add Strict Bound Public-IP Guard For VPN Profiles
+# FEAT-098 - Add strict bound public-IP guard for VPN profiles
 
 ## Summary
 

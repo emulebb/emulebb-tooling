@@ -15,6 +15,8 @@ source: operator requests for transfer minicharts and total progress/ratio
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/77. This local document is retained as an engineering spec/evidence record.
 
+# FEAT-087 - Add transfer minicharts and aggregate progress metrics
+
 ## Summary
 
 Add compact transfer minicharts plus aggregate transfer-progress metrics,

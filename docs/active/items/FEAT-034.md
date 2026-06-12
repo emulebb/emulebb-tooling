@@ -16,6 +16,8 @@ source: current `main` revalidation; `analysis\emuleai` and Xtreme comparison; f
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/62. This local document is retained as an engineering spec/evidence record.
 
+# FEAT-034 - Shared-files reload should stop blocking the UI on large trees
+
 ## Summary
 
 Current `main` still handles `CSharedFileList::Reload()` synchronously. The current path

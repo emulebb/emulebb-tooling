@@ -15,7 +15,7 @@ source: operator request to focus search results on files not already known loca
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/109. This local document is retained as an engineering spec/evidence record.
 
-# FEAT-102 - Exclude Known Files From Search Results
+# FEAT-102 - Exclude known files from search results
 
 ## Summary
 

@@ -15,6 +15,8 @@ source: AUDIT-KAD.md (AUD_KAD_012)
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/55. This local document is retained as an engineering spec/evidence record.
 
+# FEAT-005 - Kad — Restore network-change grace handling around routing persistence and probing
+
 ## Summary
 
 `eMuleAI` had a useful network-change grace period that the current target

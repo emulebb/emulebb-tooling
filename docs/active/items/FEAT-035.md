@@ -15,6 +15,8 @@ source: eMuleAI release notes; eMule Qt announcement 2026-03-05; qBittorrent/lib
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/14. This local document is retained as an engineering spec/evidence record.
 
+# FEAT-035 - IPv6 dual-stack compatibility for current eD2K/Kad networking
+
 ## Summary
 
 Add real IPv6 support across the current eD2K/Kad networking stack instead of

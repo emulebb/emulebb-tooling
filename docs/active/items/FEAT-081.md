@@ -15,7 +15,7 @@ source: review of background parallel processing opportunities after REF-030 lan
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/76. This local document is retained as an engineering spec/evidence record.
 
-# FEAT-081 - Add A Bounded Source-Hostname Resolver Pool Only If Profiling Shows Backlog
+# FEAT-081 - Add a bounded source-hostname resolver pool only if profiling shows backlog
 
 ## Summary
 
