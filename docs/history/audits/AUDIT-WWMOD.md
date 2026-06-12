@@ -15,9 +15,9 @@
 ## Table of Contents
 
 - [Purpose](#purpose)
-- [Category A — Dead Code](#category-a---dead-code) (WWMOD_001–009)
-- [Category B — Upgrade Targets](#category-b---upgrade-targets) (WWMOD_010–047)
-- [Category C — Archaic Limits & Approaches](#category-c---archaic-limits--approaches) (WWMOD_048–050)
+- [Category A — Dead Code](#category-a-dead-code) (WWMOD_001–009)
+- [Category B — Upgrade Targets](#category-b-upgrade-targets) (WWMOD_010–047)
+- [Category C — Archaic Limits & Approaches](#category-c-archaic-limits-approaches) (WWMOD_048–050)
 
 ---
 

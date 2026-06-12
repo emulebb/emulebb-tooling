@@ -24,7 +24,7 @@
 - [6. REST API Endpoints](#6-rest-api-endpoints)
   - [6.1 Auth](#61-auth) — [6.2 Application](#62-application) — [6.3 Stats](#63-stats) — [6.4 Transfers](#64-transfers) — [6.5 Uploads, Servers, Kad, Shared](#65-uploads-servers-kad-shared) — [6.6 Log](#66-log) — [6.7 Search](#67-search) — [6.8 Events (SSE)](#68-events-sse) — [6.9 eMule Extensions](#69-emule-extensions)
 - [7. TypeScript Project Structure](#7-typescript-project-structure)
-- [8. C++ Side — CPipeApiServer](#8-c-side--cpipeapiserver)
+- [8. C++ Side — CPipeApiServer](#8-c-side-cpipeapiserver)
   - [8.1 Class Design](#81-class-design) — [8.2 Pipe Lifecycle](#82-pipe-lifecycle) — [8.3 Event Hook Points](#83-event-hook-points-in-emule) — [8.4 Thread Safety](#84-thread-safety-model) — [8.5 JSON Library](#85-json-library)
 - [9. HTTP Error Convention](#9-http-error-convention)
 - [10. Implementation Order](#10-implementation-order)

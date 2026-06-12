@@ -14,15 +14,15 @@
 ## Table of Contents
 
 - [Executive Summary](#executive-summary)
-- [1. TLS / SSL / HTTPS](#1-tls--ssl--https) — **[STALE]** web server + SMTP removed
+- [1. TLS / SSL / HTTPS](#1-tls-ssl-https) — **[STALE]** web server + SMTP removed
 - [2. Cryptographic Algorithms](#2-cryptographic-algorithms)
 - [3. Random Number Generation](#3-random-number-generation)
-- [4. Buffer Overflow & Memory Safety](#4-buffer-overflow--memory-safety)
+- [4. Buffer Overflow & Memory Safety](#4-buffer-overflow-memory-safety)
 - [5. Network Security](#5-network-security)
-- [6. Protocol Obfuscation — Detailed Analysis](#6-protocol-obfuscation--detailed-analysis)
-- [7. Input Validation & Injection](#7-input-validation--injection)
-- [8. Hardcoded Values & Secrets](#8-hardcoded-values--secrets)
-- [9. Known Issues & TODOs in Code](#9-known-issues--todos-in-code)
+- [6. Protocol Obfuscation — Detailed Analysis](#6-protocol-obfuscation-detailed-analysis)
+- [7. Input Validation & Injection](#7-input-validation-injection)
+- [8. Hardcoded Values & Secrets](#8-hardcoded-values-secrets)
+- [9. Known Issues & TODOs in Code](#9-known-issues-todos-in-code)
 - [10. Consolidated Findings Table](#10-consolidated-findings-table)
 - [11. Recommendations](#11-recommendations)
 

@@ -13,7 +13,7 @@ This document describes every change required to allow eMule to share, hash, dow
 1. [Background](#1-background)
 2. [Prerequisites](#2-prerequisites)
 3. [How it works](#3-how-it-works)
-4. [Infrastructure — new helpers](#4-infrastructure--new-helpers)
+4. [Infrastructure — new helpers](#4-infrastructure-new-helpers)
 5. [Initialization](#5-initialization)
 6. [Manifests](#6-manifests)
 7. [Call-site changes by file](#7-call-site-changes-by-file)

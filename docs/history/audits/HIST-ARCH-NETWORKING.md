@@ -10,7 +10,7 @@
 
 - [Executive Summary](#executive-summary)
 - [1. Socket Class Hierarchy](#1-socket-class-hierarchy)
-- [2. Async I/O Model — WSAPoll Backend](#2-async-io-model--shared-wsapoll-backend)
+- [2. Async I/O Model — WSAPoll Backend](#2-async-io-model-shared-wsapoll-backend)
 - [3. Send Queue Architecture](#3-send-queue-architecture)
 - [4. Packet Framing and Protocol Parsing](#4-packet-framing-and-protocol-parsing)
 - [5. Upload Bandwidth Throttler](#5-upload-bandwidth-throttler)

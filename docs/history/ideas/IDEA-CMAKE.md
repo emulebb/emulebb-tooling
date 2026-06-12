@@ -14,17 +14,17 @@
 
 ## Table of Contents
 
-1. [Overview & Goals](#1-overview--goals)
-2. [Prerequisites & Tooling Setup](#2-prerequisites--tooling-setup)
+1. [Overview & Goals](#1-overview-goals)
+2. [Prerequisites & Tooling Setup](#2-prerequisites-tooling-setup)
 3. [Repository Structure After Migration](#3-repository-structure-after-migration)
-4. [Phase 1 — Dependency CMakeLists](#4-phase-1--dependency-cmakelists)
-5. [Phase 2 — vcpkg Integration](#5-phase-2--vcpkg-integration)
-6. [Phase 3 — Root CMakeLists.txt](#6-phase-3--root-cmakeliststxt)
-7. [Phase 4 — Main App CMakeLists.txt](#7-phase-4--main-app-cmakeliststxt)
-8. [Phase 5 — Build & Configure Commands](#8-phase-5--build--configure-commands)
-9. [Phase 6 — VS Code Integration](#9-phase-6--vs-code-integration)
+4. [Phase 1 — Dependency CMakeLists](#4-phase-1-dependency-cmakelists)
+5. [Phase 2 — vcpkg Integration](#5-phase-2-vcpkg-integration)
+6. [Phase 3 — Root CMakeLists.txt](#6-phase-3-root-cmakeliststxt)
+7. [Phase 4 — Main App CMakeLists.txt](#7-phase-4-main-app-cmakeliststxt)
+8. [Phase 5 — Build & Configure Commands](#8-phase-5-build-configure-commands)
+9. [Phase 6 — VS Code Integration](#9-phase-6-vs-code-integration)
 10. [Killing the Old VS Files](#10-killing-the-old-vs-files)
-11. [Known Pain Points & Gotchas](#11-known-pain-points--gotchas)
+11. [Known Pain Points & Gotchas](#11-known-pain-points-gotchas)
 12. [Migration Checklist](#12-migration-checklist)
 
 ---

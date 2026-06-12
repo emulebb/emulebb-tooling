@@ -11,9 +11,9 @@
 - [Executive Summary](#executive-summary)
 - [1. MFC-Specific Dead Code Patterns](#1-mfc-specific-dead-code-patterns)
 - [2. Deprecated Protocol Code](#2-deprecated-protocol-code)
-- [3. ASSERT(0) Dead / Unhandled Code Paths](#3-assert0-dead--unhandled-code-paths)
-- [4. TODO / FIXME — Abandoned Work Inventory](#4-todo--fixme--abandoned-work-inventory)
-- [5. Stale Compatibility Comments](#5-stale-compatibility-comments--deadlake-proxysupport)
+- [3. ASSERT(0) Dead / Unhandled Code Paths](#3-assert0-dead-unhandled-code-paths)
+- [4. TODO / FIXME — Abandoned Work Inventory](#4-todo-fixme-abandoned-work-inventory)
+- [5. Stale Compatibility Comments](#5-stale-compatibility-comments-deadlake-proxysupport)
 - [6. Legacy Windows Compatibility Code](#6-legacy-windows-compatibility-code)
 - [7. Commented-Out Code Blocks (Large)](#7-commented-out-code-blocks-large)
 - [8. Upload Compression Removal](#8-upload-compression-removal-done) **[DONE]**

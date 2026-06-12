@@ -86,6 +86,7 @@ nav:
       - Backlog Index: active/INDEX.md
       - 0.7.3 RC1 Dashboard: active/RELEASE-0.7.3.md
       - 0.7.3 RC1 Release Notes: active/RELEASE-0.7.3-NOTES.md
+      - 0.7.3 RC2 Changelog: active/RELEASE-0.7.3-RC2-CHANGELOG.md
       - Current Execution Plan: active/plans/RELEASE-0.7.3-EXECUTION-PLAN.md
       - Release Checklist: active/RELEASE-0.7.3-CHECKLIST.md
       - Release Runbook: active/RELEASE-0.7.3-RUNBOOK.md
@@ -106,6 +107,7 @@ nav:
       - Release Branching And Packaging: reference/RELEASE-BRANCHING-AND-PACKAGING.md
       - eD2K Inventory: reference/ED2K-PROJECT-INVENTORY.md
       - eD2K Forums And Sites: reference/ED2K-FORUMS-AND-SITES.md
+      - eMuleBB Rust Scope: active/EMULEBB-RUST-SCOPE.md
   - Dependencies:
       - Status: dependencies/DEP-STATUS.md
   - Ideas:
@@ -123,8 +125,6 @@ nav:
 
 not_in_nav: |
   /active/items/**
-  /architecture/**
-  /audits/**
   /history/**
   /rest/REST-API-OPENAPI.yaml
 

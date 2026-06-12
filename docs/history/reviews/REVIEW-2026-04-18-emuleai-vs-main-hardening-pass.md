@@ -100,7 +100,7 @@ This pass refreshed the active backlog to match current `main` and promoted only
 remaining narrow hardening deltas that still look worth bringing in:
 
 - [BUG-030](../items/BUG-030.md)
-- [BUG-031](../../active/items/BUG-031.md)
+- [BUG-031](../items/BUG-031.md)
 - [BUG-032](../items/BUG-032.md)
 
 It also closed or corrected stale backlog state for already-landed work on `main`.
