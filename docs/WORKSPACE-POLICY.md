@@ -271,6 +271,11 @@ knobs.
 
 Canonical workspace variables:
 
+- Agents and automation must never override an already-available `EMULEBB_*`
+  environment variable. If a required `EMULEBB_*` variable is present in the
+  process environment, use that exact value. Only set a missing required
+  variable at an explicit shell or CI boundary where the run evidence records
+  why it was absent.
 - `EMULEBB_WORKSPACE_ROOT` (required) is the absolute workspace root;
   orchestration fails if it is unset. Maintained docs, scripts, and helpers
   express paths relative to it and must not hardcode machine-specific absolute
