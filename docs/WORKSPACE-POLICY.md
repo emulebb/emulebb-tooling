@@ -269,6 +269,12 @@ tools, not as committed workspace state. `repos\emulebb-build\README.md`
 knobs, and the owning orchestration module is authoritative for command-scoped
 knobs.
 
+**Hard rule: DO NOT OVERRIDE ALREADY AVAILABLE `EMULEBB_*` ENVIRONMENT
+VARIABLES, EVER.** If the process environment already provides an `EMULEBB_*`
+variable, agents, scripts, tests, and automation must use that exact value.
+Reassigning it, shadowing it with a fallback, or substituting a guessed default
+is a policy violation.
+
 Canonical workspace variables:
 
 - Agents and automation must never override an already-available `EMULEBB_*`
