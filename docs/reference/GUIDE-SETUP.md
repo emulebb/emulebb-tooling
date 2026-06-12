@@ -104,26 +104,27 @@ For manual verification, download `Bootstrap-eMuleBBSuite.ps1` and
 `Bootstrap-eMuleBBSuite.ps1.sha256` from the same GitHub Release page, compare
 the hash, then run the bootstrapper.
 
-For the latest nightly or prerelease:
+The bootstrapper installs the latest release candidate or stable release by
+default. To opt into the latest nightly build instead:
 
 ```powershell
-.\Bootstrap-eMuleBBSuite.ps1 -IncludePrerelease -Bundle Full
+.\Bootstrap-eMuleBBSuite.ps1 -IncludeNightly -Bundle Full
 ```
 
-For the published RC1 release after manual download:
+For a specific published release after manual download:
 
 ```powershell
-.\Bootstrap-eMuleBBSuite.ps1 -Version 0.7.3-rc.1 -IncludePrerelease
+.\Bootstrap-eMuleBBSuite.ps1 -Version 0.7.3-rc.1
 ```
 
 The bootstrapper is published as a release asset, so setup does not depend on
-the current `main` branch. It resolves the requested release, latest stable
-release, or latest prerelease when `-IncludePrerelease` is used. If no supported
-stable eMuleBB release exists yet, it can fall back to the latest supported
-nightly and ignores legacy pre-eMuleBB release tags. It verifies the release ZIP
-against its manifest SHA-256, extracts the versioned suite installer, and hands
-off to that installer. The versioned installer is also included in the main app
-ZIP under `eMuleBB\scripts`.
+the current `main` branch. It resolves the requested `-Version`, or otherwise
+the latest release candidate or stable release, whichever is newest. Nightly
+builds are never selected automatically; pass `-IncludeNightly` to opt into the
+latest supported nightly. Legacy pre-eMuleBB release tags are ignored. It
+verifies the release ZIP against its manifest SHA-256, extracts the versioned
+suite installer, and hands off to that installer. The versioned installer is
+also included in the main app ZIP under `eMuleBB\scripts`.
 
 When the matching automation examples asset exists, the bootstrapper passes it
 to the installer and the examples are staged under
@@ -160,7 +161,7 @@ the bootstrapper:
 
 ```powershell
 $env:X_LOCAL_IP = '192.0.2.10'
-.\Bootstrap-eMuleBBSuite.ps1 -IncludePrerelease
+.\Bootstrap-eMuleBBSuite.ps1
 ```
 
 The suite installer uses that address as the default control-service bind and

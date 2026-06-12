@@ -99,7 +99,7 @@ iwr -UseBasicParsing "$releaseUrl/Bootstrap-eMuleBBSuite.ps1" -OutFile $scriptPa
 $expected = ((irm "$releaseUrl/Bootstrap-eMuleBBSuite.ps1.sha256") -split '\s+')[0]
 $actual = (Get-FileHash -Algorithm SHA256 -LiteralPath $scriptPath).Hash.ToLowerInvariant()
 if ($actual -ne $expected) { throw "Bootstrapper SHA256 mismatch: $actual" }
-& $scriptPath -Version $version -IncludePrerelease -Bundle Full -NonInteractive -NoStart
+& $scriptPath -Version $version -Bundle Full -NonInteractive -NoStart
 ```
 
 After installation, run the generated suite check from the install root:
