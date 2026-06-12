@@ -13,11 +13,12 @@ status, release-source truth, and the open RC task list.
   desktop behavior and package shape are unchanged from RC1 except as recorded in
   the [RC2 changelog](RELEASE-0.7.3-RC2-CHANGELOG.md). Operator tag instruction
   is still pending and no tag should be created.
-- Locked candidate heads: app `78d5250e`, `emulebb-build` `fefff3f`,
-  `emulebb-build-tests` `804a5f3`, `amutorrent` `8259273` (rebased on upstream
-  `got3nks/amutorrent` v3.8.5, plus the RC2 controller delete and
-  pause/resume/stop fixes), `emulebb-rust` `656c9a2`, plus `emulebb-tooling`
-  `2a5c411`. All repos are clean and on origin.
+- Locked candidate heads: app `38827709` (FEAT-015 broadband upload tuning,
+  FEAT-027 diagnostics flush), `emulebb-build` `fefff3f`, `emulebb-build-tests`
+  `2f936c9`, `amutorrent` `8259273` (rebased on upstream `got3nks/amutorrent`
+  v3.8.5, plus the RC2 controller delete and pause/resume/stop fixes),
+  `emulebb-rust` `656c9a2`, plus current `emulebb-tooling` main. All repos are
+  clean and on origin.
 - Relaxed proof gate (operator decision 2026-06-12): the shipped app is stable,
   so a passing `test certification --profile fast` is sufficient to gate the RC.
   The full live-network quick release-campaign is downgraded from a hard blocker
@@ -29,14 +30,17 @@ status, release-source truth, and the open RC task list.
   shipped scope, the clean-worktree audit passed, and the RC2 changelog is
   finalized.
 - Proof status: PASSED for shipped scope. `test certification --profile fast
-  --test-network offline` on the locked heads (app `78d5250e`, build `fefff3f`,
-  build-tests `804a5f3`, tooling `2a5c411`) passed `validate` and all build
+  --test-network offline` on the locked heads (app `38827709`, build `fefff3f`,
+  build-tests `2f936c9`, tooling `7996733`) passed `validate` and all build
   steps (x64 Debug/Release, ARM64 Release, build-tests Debug/Release) on
   2026-06-12; report
-  `emulebb_out/reports/certification/20260612T144045Z-fast/certification-result.json`.
-  The only `python-harness` failures are two `emulebb-rust` preview local tests
-  (resume-manifest write + local-swarm exchange), accepted out of RC2 scope.
-  Clean-worktree audit passed; CI is green on all candidate heads. Final
+  `emulebb_out/reports/certification/20260612T194324Z-fast/certification-result.json`.
+  The python-harness ran 1387 tests: 1385 passed (including the new FEAT-015 and
+  FEAT-027 coverage); the only 2 failures are `emulebb-rust` preview local tests
+  (resume-manifest write + local-swarm exchange), accepted out of RC2 scope. The
+  candidate package set (x64/ARM64 standard + diagnostics, aMuTorrent x64) was
+  rebuilt clean from these heads. Clean-worktree audit passed; CI is green on all
+  candidate heads. Final
   published package SHA-256/SBOM hashes are recorded at tag time from the
   publish-release CI; local candidate hashes are tracked in
   [CI-035](items/CI-035.md) as candidate evidence only. Historical proof trail:

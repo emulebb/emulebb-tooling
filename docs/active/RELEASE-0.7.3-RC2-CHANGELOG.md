@@ -5,8 +5,8 @@ Status: draft for RC2 preparation; finalize at RC2 go after final artifact names
 Format: one line per item, grouped by area; this is a power-user changelog, not a Git log.
 
 RC2 is a delta over the published RC1 artifact set: installer/bootstrapper
-correctness, controller refresh, and licensing. The core eMuleBB desktop
-behavior, protocol surface, and package shape are unchanged from RC1 except
+correctness, a controller refresh, broadband upload-queue tuning, and licensing.
+The core eMuleBB protocol surface and package shape are unchanged from RC1 except
 where noted. Final package hashes and proof status are recorded in
 [RELEASE-0.7.3-CHECKLIST](RELEASE-0.7.3-CHECKLIST.md) and tracked by
 [CI-035](items/CI-035.md).
@@ -46,6 +46,18 @@ where noted. Final package hashes and proof status are recorded in
   `/api/v1` controller contract is added as a build target with aMuTorrent
   Rust-session wiring. This is lab/preview work, not a shipped end-user product
   in this RC.
+
+### Core and Broadband
+
+- RC2/Upload: Broadband upload-slot management is tuned to hold capacity nearer
+  the configured target under sparse demand — no-request slots are retained
+  instead of being dropped and replaced, slot refill is softened while the queue
+  is underfilled, and the no-request repeat cooldown is capped — so upload
+  bandwidth stays closer to the limit instead of collapsing when few peers are
+  actively requesting.
+- RC2/Upload: Default broadband upload parameters are retuned for current links.
+- RC2/Diagnostics: Diagnostics-build logs are flushed during live runs so
+  captured traces remain complete if a session ends abruptly.
 
 ### Licensing
 
