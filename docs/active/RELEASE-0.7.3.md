@@ -7,18 +7,24 @@ status, release-source truth, and the open RC task list.
 
 ## Current Status
 
-- Status: RC2 is PUBLISHED. The annotated tag `emulebb-v0.7.3-rc.2` was created
-  on app `38827709` and the GitHub prerelease published 2026-06-12T20:48:22Z
-  (<https://github.com/emulebb/emulebb/releases/tag/emulebb-v0.7.3-rc.2>) via the
-  `Publish release` workflow after the relaxed-gate fast certification passed for
-  the shipped scope. The RC2 delta over RC1 is installer/bootstrapper
+- Status: RC2 is PUBLISHED. The annotated tag `emulebb-v0.7.3-rc.2` peels to app
+  `38827709`; GitHub prerelease at
+  <https://github.com/emulebb/emulebb/releases/tag/emulebb-v0.7.3-rc.2>, built by
+  the `Publish release` workflow after the relaxed-gate fast certification passed
+  for the shipped scope. The first publish (2026-06-12T20:48:22Z) shipped BUG-017
+  — the `irm | iex` one-liner install failed on an optional `-UiLanguage`
+  ValidateSet without a valid default — so that release/tag were deleted and rc.2
+  was rebuilt with the fix (`emulebb-build` `0fceae7`) and re-published
+  2026-06-12T21:36:15Z; the published bootstrapper is verified to bind under
+  `irm | iex`. The RC2 delta over RC1 is installer/bootstrapper
   correctness, an aMuTorrent controller refresh, broadband upload-queue tuning
   (FEAT-015) and diagnostics flush (FEAT-027), and the GPL-2.0 relicense; the
   protocol surface and package shape are unchanged from RC1 except as recorded in
   the [RC2 changelog](RELEASE-0.7.3-RC2-CHANGELOG.md). Final published artifact
   SHA-256 hashes are recorded in [CI-035](items/CI-035.md).
 - Locked candidate heads: app `38827709` (FEAT-015 broadband upload tuning,
-  FEAT-027 diagnostics flush), `emulebb-build` `fefff3f`, `emulebb-build-tests`
+  FEAT-027 diagnostics flush), `emulebb-build` `0fceae7` (the rc.2 build_ref:
+  fefff3f plus the BUG-017 `irm|iex` fix), `emulebb-build-tests`
   `2f936c9`, `amutorrent` `8259273` (rebased on upstream `got3nks/amutorrent`
   v3.8.5, plus the RC2 controller delete and pause/resume/stop fixes),
   `emulebb-rust` `656c9a2`, plus current `emulebb-tooling` main. All repos are
