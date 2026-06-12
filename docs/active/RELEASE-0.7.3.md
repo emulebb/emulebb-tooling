@@ -34,11 +34,12 @@ status, release-source truth, and the open RC task list.
   The full live-network quick release-campaign is downgraded from a hard blocker
   to operator-accepted/non-blocking, and `emulebb-rust` is out of RC2 ship scope
   (lab/preview per the RC2 changelog), so its tests do not gate the ship.
-- Target publication window: blocked only until the operator gives the separate
-  tag instruction. The candidate package set is rebuilt clean from the locked
-  heads (Node-24-pinned aMuTorrent), the fast certification proof passed for all
-  shipped scope, the clean-worktree audit passed, and the RC2 changelog is
-  finalized.
+- Publication: DONE. rc.2 is shipped — the operator gave the tag instruction and
+  `emulebb-v0.7.3-rc.2` (with the `amutorrent-v3.8.5-emulebb-v0.7.3-rc.2`
+  controller companion) is published on GitHub Releases. The candidate was built
+  clean from the locked heads (Node-24-pinned aMuTorrent), the fast certification
+  passed for the shipped scope, the clean-worktree audit passed, and the RC2
+  changelog is finalized.
 - Proof status: PASSED for shipped scope. `test certification --profile fast
   --test-network offline` on the locked heads (app `38827709`, build `fefff3f`,
   build-tests `2f936c9`, tooling `7996733`) passed `validate` and all build
@@ -50,27 +51,26 @@ status, release-source truth, and the open RC task list.
   (resume-manifest write + local-swarm exchange), accepted out of RC2 scope. The
   candidate package set (x64/ARM64 standard + diagnostics, aMuTorrent x64) was
   rebuilt clean from these heads. Clean-worktree audit passed; CI is green on all
-  candidate heads. Final
-  published package SHA-256/SBOM hashes are recorded at tag time from the
-  publish-release CI; local candidate hashes are tracked in
-  [CI-035](items/CI-035.md) as candidate evidence only. Historical proof trail:
+  candidate heads. Final published package SHA-256/SBOM hashes (for the shipped
+  re-published rc.2 built from `emulebb-build` `0fceae7`) are recorded in
+  [CI-035](items/CI-035.md). Historical proof trail:
   [CI-035 evidence log](../history/release-0.7.3/CI-035-PROOF-EVIDENCE-LOG.md).
 - Release freeze: active. No new feature, refactor, UI polish, warning-debt, or
   roadmap work enters RC2+ unless it is a direct release-gate blocker, package
   or proof fix, approved regression fix, or release-documentation correction.
-- Current hold: none for release proof. Continue one gate at a time and stop
-  before Git tagging until the operator gives the separate RC tag instruction.
+- Current hold: none. rc.2 is shipped; the next train milestone (rc.3 or stable)
+  absorbs only release blockers, proof refreshes, and approved fixes.
 - Release source: selected reviewed `main` commit in
   `EMULEBB_WORKSPACE_ROOT\workspaces\workspace\app\emulebb-main`.
-- Tag target: the active RC2+ candidate on the selected reviewed `main` commit
-  after fresh proof passes and the operator gives a separate tagging
-  instruction.
+- Tag target: rc.2 is tagged at `emulebb-v0.7.3-rc.2` (annotated, peels to app
+  `38827709`). Future candidates tag on the selected reviewed `main` commit after
+  fresh proof and a separate operator tag instruction.
 - Stock/community comparison baseline: `baseline/community-0.72a`.
 - Release stabilization branch: `release/0.7.3` once the operator starts the
   0.7.3 RC branch.
-- Package publication: held until the quick release-campaign proof passes or is
-  explicitly accepted, final checklist rows are confirmed, and the operator
-  gives the separate tag/publication instruction.
+- Package publication: rc.2 core packages and the aMuTorrent companion are
+  published on GitHub Releases with manifests, SPDX SBOMs, and GitHub artifact
+  attestations; final hashes are recorded in [CI-035](items/CI-035.md).
 
 ## Release Train
 
