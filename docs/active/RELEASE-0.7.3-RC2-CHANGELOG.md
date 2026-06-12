@@ -4,13 +4,73 @@ Status: draft for RC2 preparation; finalize at RC2 go after final artifact names
 
 Format: one line per item, grouped by area; this is a power-user changelog, not a Git log.
 
-## RC2 Changes Since RC1
+RC2 is a delta over the published RC1 artifact set: installer/bootstrapper
+correctness, controller refresh, and licensing. The core eMuleBB desktop
+behavior, protocol surface, and package shape are unchanged from RC1 except
+where noted. Final package hashes and proof status are recorded in
+[RELEASE-0.7.3-CHECKLIST](RELEASE-0.7.3-CHECKLIST.md) and tracked by
+[CI-035](items/CI-035.md).
 
-- RC2/Delta: Pending final proof; add only behavior, package, controller, proof, or compatibility changes that differ from the published RC1 artifact set.
-- RC2/Packages: Pending final proof; record refreshed ZIP, bootstrapper, manifest, SBOM, attestation, and hash changes when RC2 assets are selected.
-- RC2/Proof: Pending final proof; record local, VM, live-network, and operator-accepted inconclusive gate changes that affect release confidence.
-- RC2/Controllers: Pending final proof; record REST, aMuTorrent, Torznab, Arr, WebServer, and qBit-compat deltas that affect automation users.
-- RC2/Risk: Pending final proof; record new shutdown, upload/download, shared-file, WebServer, package, or profile risks that should guide RC2 testing.
+### Installer and Bootstrapper
+
+- RC2/Installer: Fixed the interactive suite installer dropping the bundle
+  choice — selecting **Controller** or **Core** no longer reverts to **Full**
+  and installs the Arr apps. This is the primary RC2 fix; re-test the bundle
+  prompt on a fresh install root.
+- RC2/Installer: Hardened suite-config handling so wizard selections (bundle,
+  selected apps, ports, bind, media tools) persist reliably end to end.
+- RC2/Bootstrapper: The suite bootstrapper now installs the latest **release
+  candidate or stable release by default**; nightly builds are opt-in via
+  `-IncludeNightly`. `-IncludePrerelease` is deprecated, so the bare one-liner
+  installs RC2 once it is published.
+- RC2/Bootstrapper: The eD2K server list (`server.met`) seed is fetched over
+  **HTTPS** instead of plain HTTP.
+- RC2/Suite: Renamed two suite helper scripts to match behavior —
+  `Update-Suite` → `Repair-Suite` (re-applies the saved config) and
+  `Test-Suite` → `Get-SuiteInfo` (shows config paths and suite status).
+
+### Controllers
+
+- RC2/aMuTorrent: The aMuTorrent controller fork is rebased on upstream
+  `got3nks/amutorrent` v3.8.5 (footer KAD/ED2K port tooltips, qBittorrent-compat
+  Bearer API-key + SID auth) with the eMuleBB integration on top; categories are
+  imported from eMuleBB on connect and ED2K client labels are clarified.
+- RC2/Family: A headless `emulebb-rust` eD2K/Kad core that implements the shared
+  `/api/v1` controller contract is added as a build target with aMuTorrent
+  Rust-session wiring. This is lab/preview work, not a shipped end-user product
+  in this RC.
+
+### Licensing
+
+- RC2/License: eMuleBB and the owned repositories are relicensed to
+  **GPL-2.0-or-later** (previously Unlicense); release packages carry the
+  GPL-2.0 license text.
+
+### Packages
+
+- RC2/Packages: x64 and ARM64 standard + diagnostics ZIPs, the suite
+  bootstrapper, and the optional aMuTorrent x64 controller package are
+  regenerated from the selected RC2 head. Refreshed manifests, SPDX SBOMs, and
+  SHA-256 hashes are recorded in the release checklist. *(Final hashes pending
+  the RC2 candidate build.)*
+- RC2/Packages: Release ZIPs remain **unsigned** (accepted posture); package
+  verification continues through manifests, SBOMs, SHA-256 evidence, and GitHub
+  artifact attestations.
+
+### Proof
+
+- RC2/Proof: Pending — fresh quick release-campaign proof, package/hash
+  confirmation, and the clean-worktree audit on the selected RC2 head before the
+  operator tag instruction. Tracked by [CI-035](items/CI-035.md).
+
+### Risk and Testing Focus
+
+- RC2/Risk: Re-test the **suite installer bundle selection** (Core / Controller
+  / Full) on a fresh install root — this is the primary RC2 fix.
+- RC2/Risk: Re-validate suite bootstrap (RC-default selection, HTTPS
+  `server.met`) and the renamed `Repair-Suite` / `Get-SuiteInfo` scripts.
+- RC2/Risk: Confirm the regenerated package set and the aMuTorrent v3.8.5
+  controller package install and run cleanly before publication.
 
 ## RC1 vs Stock/Community Baseline
 

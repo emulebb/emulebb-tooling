@@ -7,22 +7,29 @@ status, release-source truth, and the open RC task list.
 
 ## Current Status
 
-- Status: RC1 evidence is frozen; RC2+ test-gate rationalization is active.
-  Operator tag instruction is still pending and no tag should be created.
-- Target publication window: blocked until `CI-035` quick proof,
-  package/SBOM/hash confirmation, clean-worktree confirmation, successful push
-  of pending build commit `fb6e286`, `CI-052` RC2+ test-gate rationalization,
-  and the separate operator tag instruction.
-- Proof status: release proof resumed by operator direction on 2026-05-17.
-  On 2026-06-05 the quick campaign was reduced to the repeatable RC gate:
-  Hyper-V VM proof is now on-demand/nonblocking and `live-process-monitor` is
-  isolated behind the `installer-controller-surface-soak` profile. The latest
-  dry-run planned `18/18` commands. The latest execute run completed `18/18`
-  commands with `--continue-on-failure` but failed while outbound HTTPS/public
-  network access was unavailable (`WinError 10051` against GitHub, nodejs.org,
-  public seed refresh, and REST probes). Candidate x64, ARM64, diagnostics,
-  and optional aMuTorrent x64 packages were regenerated during that failed run
-  and are recorded in [CI-035](items/CI-035.md).
+- Status: The RC2 candidate is locked across the active repos (clean `main`
+  heads, CI green). The RC2 delta over RC1 is installer/bootstrapper
+  correctness, an aMuTorrent controller refresh, and the GPL-2.0 relicense; core
+  desktop behavior and package shape are unchanged from RC1 except as recorded in
+  the [RC2 changelog](RELEASE-0.7.3-RC2-CHANGELOG.md). Operator tag instruction
+  is still pending and no tag should be created.
+- Locked candidate heads: app `78d5250e`, `emulebb-build` `bedd78e`,
+  `emulebb-build-tests` `804a5f3`, `amutorrent` `55ff450` (rebased on upstream
+  `got3nks/amutorrent` v3.8.5), `emulebb-rust` `656c9a2`, plus current
+  `emulebb-tooling` main. All repos are clean and on origin.
+- Target publication window: blocked until the definitive RC2 candidate package
+  set is rebuilt clean from the locked head, the quick release-campaign proof
+  passes or is operator-accepted with confirmed package/SBOM/hash evidence, the
+  clean-worktree audit passes, the RC2 changelog is finalized, and the operator
+  gives the separate tag instruction.
+- Proof status: the definitive RC2 candidate package set (x64 and ARM64 standard
+  plus diagnostics, and the optional aMuTorrent x64 controller package) is being
+  rebuilt clean from the locked head; the earlier RC2 candidate packages predate
+  the GPL relicense and Rust build commits and are superseded. The quick
+  release-campaign proof, final package/SBOM/hash confirmation, and the
+  clean-worktree audit remain the open gates ([CI-035](items/CI-035.md)). CI is
+  green on the locked candidate heads; the historical proof trail is in the
+  [CI-035 evidence log](../history/release-0.7.3/CI-035-PROOF-EVIDENCE-LOG.md).
 - Release freeze: active. No new feature, refactor, UI polish, warning-debt, or
   roadmap work enters RC2+ unless it is a direct release-gate blocker, package
   or proof fix, approved regression fix, or release-documentation correction.
