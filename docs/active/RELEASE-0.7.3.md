@@ -7,12 +7,16 @@ status, release-source truth, and the open RC task list.
 
 ## Current Status
 
-- Status: The RC2 candidate is locked across the active repos (clean `main`
-  heads, CI green). The RC2 delta over RC1 is installer/bootstrapper
-  correctness, an aMuTorrent controller refresh, and the GPL-2.0 relicense; core
-  desktop behavior and package shape are unchanged from RC1 except as recorded in
-  the [RC2 changelog](RELEASE-0.7.3-RC2-CHANGELOG.md). Operator tag instruction
-  is still pending and no tag should be created.
+- Status: RC2 is PUBLISHED. The annotated tag `emulebb-v0.7.3-rc.2` was created
+  on app `38827709` and the GitHub prerelease published 2026-06-12T20:48:22Z
+  (<https://github.com/emulebb/emulebb/releases/tag/emulebb-v0.7.3-rc.2>) via the
+  `Publish release` workflow after the relaxed-gate fast certification passed for
+  the shipped scope. The RC2 delta over RC1 is installer/bootstrapper
+  correctness, an aMuTorrent controller refresh, broadband upload-queue tuning
+  (FEAT-015) and diagnostics flush (FEAT-027), and the GPL-2.0 relicense; the
+  protocol surface and package shape are unchanged from RC1 except as recorded in
+  the [RC2 changelog](RELEASE-0.7.3-RC2-CHANGELOG.md). Final published artifact
+  SHA-256 hashes are recorded in [CI-035](items/CI-035.md).
 - Locked candidate heads: app `38827709` (FEAT-015 broadband upload tuning,
   FEAT-027 diagnostics flush), `emulebb-build` `fefff3f`, `emulebb-build-tests`
   `2f936c9`, `amutorrent` `8259273` (rebased on upstream `got3nks/amutorrent`
