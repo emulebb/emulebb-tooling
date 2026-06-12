@@ -13,22 +13,33 @@ status, release-source truth, and the open RC task list.
   desktop behavior and package shape are unchanged from RC1 except as recorded in
   the [RC2 changelog](RELEASE-0.7.3-RC2-CHANGELOG.md). Operator tag instruction
   is still pending and no tag should be created.
-- Locked candidate heads: app `78d5250e`, `emulebb-build` `bedd78e`,
-  `emulebb-build-tests` `804a5f3`, `amutorrent` `55ff450` (rebased on upstream
-  `got3nks/amutorrent` v3.8.5), `emulebb-rust` `656c9a2`, plus current
-  `emulebb-tooling` main. All repos are clean and on origin.
-- Target publication window: blocked until the definitive RC2 candidate package
-  set is rebuilt clean from the locked head, the quick release-campaign proof
-  passes or is operator-accepted with confirmed package/SBOM/hash evidence, the
-  clean-worktree audit passes, the RC2 changelog is finalized, and the operator
-  gives the separate tag instruction.
-- Proof status: the definitive RC2 candidate package set (x64 and ARM64 standard
-  plus diagnostics, and the optional aMuTorrent x64 controller package) is being
-  rebuilt clean from the locked head; the earlier RC2 candidate packages predate
-  the GPL relicense and Rust build commits and are superseded. The quick
-  release-campaign proof, final package/SBOM/hash confirmation, and the
-  clean-worktree audit remain the open gates ([CI-035](items/CI-035.md)). CI is
-  green on the locked candidate heads; the historical proof trail is in the
+- Locked candidate heads: app `78d5250e`, `emulebb-build` `fefff3f`,
+  `emulebb-build-tests` `804a5f3`, `amutorrent` `8259273` (rebased on upstream
+  `got3nks/amutorrent` v3.8.5, plus the RC2 controller delete and
+  pause/resume/stop fixes), `emulebb-rust` `656c9a2`, plus `emulebb-tooling`
+  `2a5c411`. All repos are clean and on origin.
+- Relaxed proof gate (operator decision 2026-06-12): the shipped app is stable,
+  so a passing `test certification --profile fast` is sufficient to gate the RC.
+  The full live-network quick release-campaign is downgraded from a hard blocker
+  to operator-accepted/non-blocking, and `emulebb-rust` is out of RC2 ship scope
+  (lab/preview per the RC2 changelog), so its tests do not gate the ship.
+- Target publication window: blocked only until the operator gives the separate
+  tag instruction. The candidate package set is rebuilt clean from the locked
+  heads (Node-24-pinned aMuTorrent), the fast certification proof passed for all
+  shipped scope, the clean-worktree audit passed, and the RC2 changelog is
+  finalized.
+- Proof status: PASSED for shipped scope. `test certification --profile fast
+  --test-network offline` on the locked heads (app `78d5250e`, build `fefff3f`,
+  build-tests `804a5f3`, tooling `2a5c411`) passed `validate` and all build
+  steps (x64 Debug/Release, ARM64 Release, build-tests Debug/Release) on
+  2026-06-12; report
+  `emulebb_out/reports/certification/20260612T144045Z-fast/certification-result.json`.
+  The only `python-harness` failures are two `emulebb-rust` preview local tests
+  (resume-manifest write + local-swarm exchange), accepted out of RC2 scope.
+  Clean-worktree audit passed; CI is green on all candidate heads. Final
+  published package SHA-256/SBOM hashes are recorded at tag time from the
+  publish-release CI; local candidate hashes are tracked in
+  [CI-035](items/CI-035.md) as candidate evidence only. Historical proof trail:
   [CI-035 evidence log](../history/release-0.7.3/CI-035-PROOF-EVIDENCE-LOG.md).
 - Release freeze: active. No new feature, refactor, UI polish, warning-debt, or
   roadmap work enters RC2+ unless it is a direct release-gate blocker, package

@@ -42,6 +42,12 @@ The canonical RC-blocking proof is the quick campaign execution. The rows under
 or executes; keep them visible so failures can be assigned to the correct
 phase.
 
+Relaxed gate (operator decision 2026-06-12): for RC2 the binding proof is a
+passing `test certification --profile fast` for the shipped scope. The live
+quick-campaign `--execute` row and the live-network expanded rows are
+operator-accepted/non-blocking, and `emulebb-rust` preview tests are out of RC2
+ship scope. See [CI-035](items/CI-035.md) for the recorded proof.
+
 Run `python -m emule_workspace ...` commands from
 `$env:EMULEBB_WORKSPACE_ROOT\repos\emulebb-build`. Use absolute
 `$env:EMULEBB_WORKSPACE_ROOT\...` paths when passing local input files.
@@ -54,7 +60,7 @@ release tags and assets still use `0.7.3-rc.1`.
 
 ## Campaign Expanded Rows
 
-- [ ] `python -m emule_workspace test certification --profile fast`
+- [x] `python -m emule_workspace test certification --profile fast` (2026-06-12, `--test-network offline`; passed shipped scope: `validate` + all build steps; `emulebb-rust` preview failures accepted out of scope)
 - [ ] `python -m emule_workspace test live-e2e --profile release-expanded-quick --fail-fast --live-wire-inputs-file $env:EMULEBB_WORKSPACE_ROOT\repos\emulebb-build-tests\live-wire-inputs.local.json`
 - [ ] `python -m emule_workspace test live-e2e --profile cpu-heavy-quick --fail-fast`
 - [ ] `python -m emule_workspace test live-e2e --profile stabilization-stress-quick --fail-fast --live-wire-inputs-file $env:EMULEBB_WORKSPACE_ROOT\repos\emulebb-build-tests\live-wire-inputs.local.json`
