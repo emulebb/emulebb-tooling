@@ -83,7 +83,7 @@ workspace test harness.
 7. Take a clean checkpoint before installing eMuleBB.
 8. Download the eMuleBB suite bootstrapper inside the guest.
 9. Install the suite inside the guest.
-10. Run `Test-Suite.ps1` inside the guest.
+10. Run `Get-SuiteInfo.ps1` inside the guest.
 
 Inside the guest, use the same full suite bootstrap pattern as the setup guide:
 replace the version with a release or nightly that is actually published on
@@ -105,7 +105,7 @@ if ($actual -ne $expected) { throw "Bootstrapper SHA256 mismatch: $actual" }
 After installation, run the generated suite check from the install root:
 
 ```powershell
-.\scripts\Test-Suite.ps1
+.\scripts\Get-SuiteInfo.ps1
 ```
 
 Keep all eMuleBB incoming, temp, profile, controller, and suite data inside the
