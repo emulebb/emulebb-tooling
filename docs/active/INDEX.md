@@ -20,9 +20,9 @@ engineering spec/evidence records, not workflow status authority.
 ## Current Snapshot
 
 **Source of truth:** `EMULEBB_WORKSPACE_ROOT\workspaces\workspace\app\emulebb-main` (`main` branch)
-**Current non-done count:** `129`
-**Latest release-doc refresh:** 2026-06-11
-**Non-done by status:** `106` OPEN, `9` IN_PROGRESS, `14` DEFERRED, `0` BLOCKED.
+**Current non-done count:** `127`
+**Latest release-doc refresh:** 2026-06-13
+**Non-done by status:** `106` OPEN, `7` IN_PROGRESS, `14` DEFERRED, `0` BLOCKED.
 **Backlog counts:** item tables below are authoritative.
 **0.7.3 release-train relevance:** Most non-done items below are future or
 deferred work; current RC gate and proof status is controlled by
@@ -247,8 +247,8 @@ RC branch; after stable `0.7.3`, `release/0.7.x` carries legacy maintenance.
 | [BUG-145](../history/items/BUG-145.md) | Major | DONE | Suite bootstrap flow misses LAN, credential, category, and Arr sync polish |
 | [BUG-146](items/BUG-146.md) | Minor | OPEN | Upload title rate does not match visible uploading row totals |
 | [BUG-147](items/BUG-147.md) | Major | OPEN | Recursive shared-directory add performs a foreground full shared-file reload |
-| [BUG-148](items/BUG-148.md) | Major | IN_PROGRESS | Shared Files directory tree node stuck expanded after collapse and cannot re-expand |
-| [BUG-149](items/BUG-149.md) | Major | IN_PROGRESS | Shared directory tree rebuild is slow and UI-blocking on large shared sets |
+| [BUG-148](../history/items/BUG-148.md) | Major | DONE | Shared Files directory tree node stuck expanded after collapse and cannot re-expand |
+| [BUG-149](../history/items/BUG-149.md) | Major | DONE | Shared directory tree rebuild is slow and UI-blocking on large shared sets |
 | [BUG-151](items/BUG-151.md) | Major | OPEN | REST category mutations time out (503) because they block on the main UI thread under load |
 
 `BUG-103` through `BUG-110` were superseded internal post-tag evidence labels,
