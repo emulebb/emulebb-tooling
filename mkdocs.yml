@@ -120,6 +120,8 @@ nav:
       - Restructure: ideas/IDEA-RESTRUCTURE.md
       - NAT Traversal And uTP: ideas/IDEA-NAT-TRAVERSAL-UTP.md
       - libtorrent Content Mesh: ideas/IDEA-LIBTORRENT-MESH.md
+      - qBittorrentBB Mesh: ideas/IDEA-QBITTORRENTBB-MESH.md
+      - emulebb-libtorrent Fork: ideas/IDEA-EMULEBB-LIBTORRENT-FORK.md
   - History:
       - Historical References: HISTORICAL-REFERENCES.md
       - Abandoned Boost / POCO Adoption: history/ideas/IDEA-BOOST.md

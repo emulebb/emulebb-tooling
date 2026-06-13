@@ -143,3 +143,9 @@ into BT or accelerated among eMuleBB peers via the surrogate overlay.
 - Connectivity alternative to [IDEA-NAT-TRAVERSAL-UTP](IDEA-NAT-TRAVERSAL-UTP.md).
 - Belongs to the emulebb-rust modernization line; controller/REST bridge to the
   desktop app.
+- **Superseded packaging:** the "dual-network client" building block here
+  (embed libtorrent headless inside `emulebb-rust`) is superseded by a standalone
+  forked client — [IDEA-QBITTORRENTBB-MESH](IDEA-QBITTORRENTBB-MESH.md) — over a
+  forked engine, [IDEA-EMULEBB-LIBTORRENT-FORK](IDEA-EMULEBB-LIBTORRENT-FORK.md).
+  The content-mesh *theory* in this doc still stands as the basis for that work;
+  only where the engine lives changes (`emulebb-rust` stays eD2K/Kad-focused).
