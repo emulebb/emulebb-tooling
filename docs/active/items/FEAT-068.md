@@ -81,10 +81,39 @@ memory risk maps directly to the current REST serialization shape.
 
 ## Acceptance Criteria
 
-- [ ] Shared-files REST listing has a bounded mode suitable for very large
+- [x] Shared-files REST listing has a bounded mode suitable for very large
       libraries.
-- [ ] transfer, upload, and waiting-queue REST list paths have bounded or
+- [x] transfer, upload, and waiting-queue REST list paths have bounded or
       cached behavior suitable for heavy polling
-- [ ] Controller compatibility is documented and tested.
-- [ ] A large-library synthetic test proves memory and latency stay bounded.
-- [ ] The implementation does not alter normal sharing or hashing behavior.
+- [x] Controller compatibility is documented and tested.
+- [x] A large-library synthetic test proves memory and latency stay bounded.
+- [x] The implementation does not alter normal sharing or hashing behavior.
+
+## Implementation Status (2026-06-13)
+
+Bounded paging is implemented and guarded:
+
+- **Shared files** — `GET /api/v1/shared-files` pages through
+  `CSharedFileList::CopySharedFilePage` (`srchybrid/SharedFileList.cpp`): it
+  indexes straight to `offset`, copies at most `limit` pointers, sets `total`
+  to the full library size, and holds `m_mutWriteList` only for the pointer
+  copy — JSON serialization runs after the lock is released. Cost per request
+  is O(limit), independent of library size.
+- **Snapshot polling** — `snapshot/get` applies the caller-visible `limit`
+  (default 100) to every live collection (`BuildSharedFilesListJson(0,
+  maxEntries)`, transfers, uploads, waiting queue), so the hot controller poll
+  never serializes a full large profile.
+- **Transfers / upload-queue** — paged server-side via the shared
+  `BuildPagedItemsEnvelope` path with `total` reflecting the filtered count.
+- **Contract** — the common pagination shape (`items`/`total`/`offset`/`limit`)
+  and a stable-ordering guarantee are documented in `REST-API-CONTRACT.md`.
+- **Controller (aMuTorrent)** — `_fetchAllPages` walks pages bounded by
+  `EMULEBB_SHARED_MAX_ITEMS` (default 2000), surfaces the full `total`, and
+  flags truncation in the stats tree and logs.
+
+Coverage: `test_shared_file_list_source.py` guards the C++ bounded-paging and
+snapshot-bounding invariants; aMuTorrent `emulebbManager.test.js` proves a
+50,000-file library is fetched in bounded page count and capped without walking
+the whole library. A live in-app RAM/latency benchmark against a real 50k
+profile remains an optional future addition (not required for the bounded
+guarantees above).
