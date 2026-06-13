@@ -77,8 +77,12 @@ Directive precedence is:
   `EMULEBB_WORKSPACE_OUTPUT_ROOT\builds\third_party`; repo-local third-party
   build directories are tolerated only for upstream/manual tooling and must be
   ignored plus covered by cleanup/audit.
-- Orchestrated Rust builds must set `CARGO_TARGET_DIR` to
-  `EMULEBB_WORKSPACE_OUTPUT_ROOT\builds\rust\target`.
+- ALL Rust builds — orchestrated, ad-hoc, manual, scripted, debug AND release —
+  must set `CARGO_TARGET_DIR` to `EMULEBB_WORKSPACE_OUTPUT_ROOT\builds\rust\target`.
+  Never run `cargo build`/`test`/`run` without it. A `repos\...\target` directory,
+  or any build/scratch output under the source tree or anywhere in `c:\prj`, is a
+  policy violation and must be removed. Personal scratch/lab folders go under
+  `c:\tools\...`, never under `c:\prj`.
 
 ## Branch And History Policy
 
