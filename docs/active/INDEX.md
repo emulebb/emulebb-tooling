@@ -249,6 +249,7 @@ RC branch; after stable `0.7.3`, `release/0.7.x` carries legacy maintenance.
 | [BUG-147](items/BUG-147.md) | Major | OPEN | Recursive shared-directory add performs a foreground full shared-file reload |
 | [BUG-148](items/BUG-148.md) | Major | IN_PROGRESS | Shared Files directory tree node stuck expanded after collapse and cannot re-expand |
 | [BUG-149](items/BUG-149.md) | Major | IN_PROGRESS | Shared directory tree rebuild is slow and UI-blocking on large shared sets |
+| [BUG-151](items/BUG-151.md) | Major | OPEN | REST category mutations time out (503) because they block on the main UI thread under load |
 
 `BUG-103` through `BUG-110` were superseded internal post-tag evidence labels,
 not active item docs.
