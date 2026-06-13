@@ -91,8 +91,13 @@ listener regressions.
   accepts the boolean `includeEvidence` (default true) to omit the heavy
   per-result `evidence` block and `exactTotal` (default true) to allow an
   estimated `total`.
-- emit paged lists in a stable order across requests so a given `offset`/`limit`
-  page does not skip or duplicate rows between polls
+- emit paged lists in a stable order while the underlying collection is
+  unchanged, so sequential `offset`/`limit` pages of a static list do not skip or
+  duplicate rows. Paging is plain offset/limit over the live list, not a
+  snapshot/cursor: if the collection is mutated (a file unshared, a transfer
+  added/removed) between page reads, later offsets shift and a single walk may
+  skip or repeat rows. Controllers that need a coherent full enumeration should
+  detect a changed `total` between pages and restart the walk from `offset` 0.
 - expose `limit` without `offset` only for bounded snapshots/tails such as
   `GET /snapshot` and `GET /logs`
 - expose shared-files startup readiness through `status.stats.sharedFilesReady`
