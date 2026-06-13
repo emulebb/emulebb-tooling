@@ -104,4 +104,11 @@ jobs:
         shell: pwsh
         working-directory: repo
         run: |
+          # Fail the step on any command failure. Without this, pwsh keeps going
+          # after a non-zero native command (e.g. a failed `npm run build`) and
+          # the step's result is only the LAST command's exit code, so a broken
+          # build can be masked by a later passing command and falsely report
+          # success.
+          $ErrorActionPreference = 'Stop'
+          $PSNativeCommandUseErrorActionPreference = $true
           ${{ inputs.extra_commands }}
