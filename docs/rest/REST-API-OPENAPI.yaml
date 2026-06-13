@@ -2952,6 +2952,24 @@ components:
         data: {}
         meta:
           $ref: "#/components/schemas/EnvelopeMeta"
+    Pagination:
+      type: object
+      description: >
+        Shared pagination metadata for every paged response (`items` plus
+        these fields). `total` is the full count across all pages, bounded by
+        the same `offset`/`limit` query parameters that produced the page.
+      required: [total, offset, limit]
+      properties:
+        total:
+          type: integer
+          minimum: 0
+        offset:
+          type: integer
+          minimum: 0
+        limit:
+          type: integer
+          minimum: 1
+          maximum: 1000
     App:
       type: object
       additionalProperties: false
@@ -3605,23 +3623,15 @@ components:
           properties:
             data:
               type: object
-              additionalProperties: false
-              required: [items, total, offset, limit]
+              unevaluatedProperties: false
+              required: [items]
               properties:
                 items:
                   type: array
                   items:
                     $ref: "#/components/schemas/Transfer"
-                total:
-                  type: integer
-                  minimum: 0
-                offset:
-                  type: integer
-                  minimum: 0
-                limit:
-                  type: integer
-                  minimum: 1
-                  maximum: 1000
+              allOf:
+                - $ref: "#/components/schemas/Pagination"
     TransferEnvelope:
       unevaluatedProperties: false
       allOf:
@@ -4157,22 +4167,15 @@ components:
           properties:
             data:
               type: object
-              additionalProperties: false
-              required: [items, total, offset, limit]
+              unevaluatedProperties: false
+              required: [items]
               properties:
                 items:
                   type: array
                   items:
                     $ref: "#/components/schemas/SharedFile"
-                total:
-                  type: integer
-                  minimum: 0
-                offset:
-                  type: integer
-                  minimum: 0
-                limit:
-                  type: integer
-                  minimum: 0
+              allOf:
+                - $ref: "#/components/schemas/Pagination"
     SharedFileEnvelope:
       unevaluatedProperties: false
       allOf:
@@ -4615,23 +4618,15 @@ components:
           properties:
             data:
               type: object
-              additionalProperties: false
-              required: [items, total, offset, limit]
+              unevaluatedProperties: false
+              required: [items]
               properties:
                 items:
                   type: array
                   items:
                     $ref: "#/components/schemas/UploadQueueEntry"
-                total:
-                  type: integer
-                  minimum: 0
-                offset:
-                  type: integer
-                  minimum: 0
-                limit:
-                  type: integer
-                  minimum: 1
-                  maximum: 1000
+              allOf:
+                - $ref: "#/components/schemas/Pagination"
     UploadQueueEntry:
       unevaluatedProperties: false
       allOf:
@@ -4933,8 +4928,8 @@ components:
               $ref: "#/components/schemas/Search"
     Search:
       type: object
-      additionalProperties: false
-      required: [id, query, method, type, status, results]
+      unevaluatedProperties: false
+      required: [id, query, method, type, status, items]
       properties:
         id:
           type: string
@@ -4950,14 +4945,18 @@ components:
         status:
           type: string
           enum: [running, stopped, complete, error]
-        results:
+        items:
           type: array
           description: >
-            Current native visible result snapshot, bounded by the `offset` and
-            `limit` query parameters. Controllers should poll the search
-            resource and preserve eMule's stock eD2K/Kad search semantics.
+            Current native visible result snapshot for this page, bounded by the
+            `offset` and `limit` query parameters. The search resource shares the
+            common pagination fields (`total`/`offset`/`limit`); controllers
+            should poll the resource and preserve eMule's stock eD2K/Kad search
+            semantics.
           items:
             $ref: "#/components/schemas/SearchResult"
+      allOf:
+        - $ref: "#/components/schemas/Pagination"
     SearchCreateRequest:
       type: object
       additionalProperties: false

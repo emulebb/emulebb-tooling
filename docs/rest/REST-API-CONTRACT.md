@@ -78,14 +78,21 @@ listener regressions.
 - return transfer add and transfer pause/resume/stop/delete operations as
   stable per-item operation envelopes, including the single-link and single-hash
   routes
-- expose `offset`/`limit` pagination with the paged collection envelope
+- expose pagination through one common shape: every paged response carries
+  `items` plus the shared `total`/`offset`/`limit` fields, with the canonical
+  query parameters `offset` (0..2147483647, default 0) and `limit` (1..1000,
+  default 100). `total` is the full count across all pages.
+- page the collections `GET /transfers`, `GET /shared-files`, and
+  `GET /upload-queue` with the envelope
   `{ "data": { "items": [...], "total": n, "offset": n, "limit": n }, "meta": ... }`
-  on `GET /transfers`, `GET /shared-files`, and `GET /upload-queue`
-- expose `offset`/`limit` on `GET /searches/{searchId}` to bound the returned
-  result rows; this route returns the search resource (with its `results`
-  array), not the paged collection envelope. It also accepts the boolean
-  `includeEvidence` (default true) to omit the heavy per-result `evidence`
-  block and `exactTotal` (default true) to allow an estimated total
+- page `GET /searches/{searchId}` with the same fields: the search resource
+  embeds its result page as `items` alongside `total`/`offset`/`limit` (the
+  resource also carries `id`/`query`/`method`/`type`/`status`). It additionally
+  accepts the boolean `includeEvidence` (default true) to omit the heavy
+  per-result `evidence` block and `exactTotal` (default true) to allow an
+  estimated `total`.
+- emit paged lists in a stable order across requests so a given `offset`/`limit`
+  page does not skip or duplicate rows between polls
 - expose `limit` without `offset` only for bounded snapshots/tails such as
   `GET /snapshot` and `GET /logs`
 - expose shared-files startup readiness through `status.stats.sharedFilesReady`
@@ -183,12 +190,14 @@ audit the selected file filter without inferring from result timing or counts.
 
 `GET /api/v1/searches` lists active native search sessions without expanding
 their result rows and accepts no query parameters. `GET /api/v1/searches/{searchId}`
-returns the current native visible result snapshot for one search and accepts
-`offset`/`limit` to bound the returned result rows, plus `includeEvidence`
-(default true) and `exactTotal` (default true) to shape the payload; the strict
-route table rejects any other query parameter. Controllers should poll the
-search resource and treat `results` as a bounded native snapshot governed by
-eMule's existing search-result retention and visibility behavior.
+returns the current native visible result snapshot for one search as a paged
+resource: the result rows are in `items` (renamed from the pre-RC2 `results`),
+alongside the shared `total`/`offset`/`limit` fields. It accepts `offset`/`limit`
+to bound the returned rows, plus `includeEvidence` (default true) and
+`exactTotal` (default true) to shape the payload; the strict route table rejects
+any other query parameter. Controllers should poll the search resource and treat
+`items` as a bounded native snapshot governed by eMule's existing search-result
+retention and visibility behavior.
 Each native result also carries the resolved search method and selected search
 type when the result is returned through a search resource. `SearchResult.fileType`
 is the raw native file-type tag reported for that row; `SearchResult.fileType`
