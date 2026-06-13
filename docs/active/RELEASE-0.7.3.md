@@ -22,9 +22,12 @@ status, release-source truth, and the open RC task list.
   protocol surface and package shape are unchanged from RC1 except as recorded in
   the [RC2 changelog](RELEASE-0.7.3-RC2-CHANGELOG.md). Final published artifact
   SHA-256 hashes are recorded in [CI-035](items/CI-035.md).
-- Next milestone: **rc.3** is the active next candidate — stabilization-first,
-  with optional very-minimal operator-approved Upload Policy Clarity and UI
-  Power-User Polish slices, then stable `0.7.3`. Draft delta:
+- Next milestone: **rc.3** is the active next candidate — **stabilization-only**
+  (operator decision 2026-06-13; the optional Upload Policy Clarity and UI
+  Power-User Polish lanes are not taken for RC3, and #147/#158/#159 are deferred
+  post-0.7.3), then stable `0.7.3`. `main` currently carries no app-behavior delta
+  over rc.2 — only the publish-release `irm|iex` CI gate (`f83072e6`) and the
+  README install sync (`bf599469`). Draft delta:
   [RC3 changelog](RELEASE-0.7.3-RC3-CHANGELOG.md).
 - Locked candidate heads: app `38827709` (FEAT-015 broadband upload tuning,
   FEAT-027 diagnostics flush), `emulebb-build` `0fceae7` (the rc.2 build_ref:
