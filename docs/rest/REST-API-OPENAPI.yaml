@@ -2,12 +2,12 @@ openapi: 3.1.0
 info:
   title: eMuleBB REST API
   version: 0.7.3
-  summary: Canonical 0.7.3 RC1 contract for the embedded eMuleBB REST API.
+  summary: Canonical 0.7.3 RC2 contract for the embedded eMuleBB REST API.
   description: >
     This is the source-of-truth contract for the redesigned `/api/v1` API.
     The API is served by the existing eMule WebServer listener, uses
     `X-API-Key` authentication only, and is designed for aMuTorrent and other
-    trusted local controllers. eMuleBB 0.7.3-rc.1 is the first public
+    trusted local controllers. eMuleBB 0.7.3-rc.2 is the current
     release-candidate line for this contract; adapter compatibility must not
     weaken the native route shape.
 servers:
@@ -2252,6 +2252,8 @@ paths:
       parameters:
         - $ref: "#/components/parameters/Offset"
         - $ref: "#/components/parameters/Limit"
+        - $ref: "#/components/parameters/IncludeEvidence"
+        - $ref: "#/components/parameters/ExactTotal"
       responses:
         "200":
           $ref: "#/components/responses/SearchResponse"
@@ -2523,6 +2525,20 @@ components:
         type: boolean
         default: false
       description: Include per-client upload score diagnostics such as cooldown availability and cooldown remaining time.
+    IncludeEvidence:
+      name: includeEvidence
+      in: query
+      schema:
+        type: boolean
+        default: true
+      description: Include the grouped SearchResult.evidence block on each result. Set false to omit the heavy evidence payload when only basic result metadata is needed.
+    ExactTotal:
+      name: exactTotal
+      in: query
+      schema:
+        type: boolean
+        default: true
+      description: Return an exact result total. Set false to allow an estimated total when computing the exact count is expensive.
     SearchId:
       name: searchId
       in: path
@@ -2920,24 +2936,6 @@ components:
                 constraint:
                   type: string
                   description: Inclusive numeric bounds the field must satisfy, formatted as "min..max".
-    Collection:
-      type: object
-      additionalProperties: false
-      required: [items, total, offset, limit]
-      properties:
-        items:
-          type: array
-          items: {}
-        total:
-          type: integer
-          minimum: 0
-        offset:
-          type: integer
-          minimum: 0
-        limit:
-          type: integer
-          minimum: 1
-          maximum: 1000
     AppEnvelope:
       unevaluatedProperties: false
       allOf:
@@ -4632,7 +4630,8 @@ components:
                   minimum: 0
                 limit:
                   type: integer
-                  minimum: 0
+                  minimum: 1
+                  maximum: 1000
     UploadQueueEntry:
       unevaluatedProperties: false
       allOf:
@@ -4811,8 +4810,10 @@ components:
       properties:
         ok:
           type: boolean
+          const: true
         imported:
           type: boolean
+          const: true
     KadEnvelope:
       unevaluatedProperties: false
       allOf:
@@ -4952,9 +4953,9 @@ components:
         results:
           type: array
           description: >
-            Current native visible result snapshot. This array is not paged in
-            0.7.3 RC1; controllers should poll the search resource and
-            preserve eMule's stock eD2K/Kad search semantics.
+            Current native visible result snapshot, bounded by the `offset` and
+            `limit` query parameters. Controllers should poll the search
+            resource and preserve eMule's stock eD2K/Kad search semantics.
           items:
             $ref: "#/components/schemas/SearchResult"
     SearchCreateRequest:

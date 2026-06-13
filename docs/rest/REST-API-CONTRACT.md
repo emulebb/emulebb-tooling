@@ -1,6 +1,6 @@
 # eMuleBB REST API Contract
 
-**Status:** 0.7.3 RC1 broadband contract
+**Status:** 0.7.3 RC2 broadband contract
 **Source of truth:** [REST-API-OPENAPI.yaml](REST-API-OPENAPI.yaml)
 **Adapter subsets:** [REST-API-ADAPTERS.md](REST-API-ADAPTERS.md)
 **Migrated action inventory:** [REST-API-PARITY-INVENTORY.md](REST-API-PARITY-INVENTORY.md)
@@ -14,7 +14,7 @@ WebServer listener. The broadband release contract is the resource-oriented
 `/api/v1` surface described by the OpenAPI document above.
 
 The API is designed for aMuTorrent and other trusted local controllers. The
-0.7.3 RC1 contract intentionally prioritizes consistency and aMuTorrent
+0.7.3 RC2 contract intentionally prioritizes consistency and aMuTorrent
 completeness over preserving old command-style route names.
 
 After 0.7.3 RC1, the same OpenAPI document is also the canonical
@@ -25,7 +25,7 @@ creating a parallel contract.
 
 ## Controller Boundary
 
-aMuTorrent is the primary UI consumer and 0.7.3 RC1 proof target, but it is not
+aMuTorrent is the primary UI consumer and 0.7.3 RC2 proof target, but it is not
 the authority for native route shape. The aMuTorrent eMuleBB adapter must
 translate UI expectations to the clean `/api/v1` contract instead of requiring
 native aliases, qBittorrent-compatible response shapes, or legacy command-style
@@ -78,9 +78,14 @@ listener regressions.
 - return transfer add and transfer pause/resume/stop/delete operations as
   stable per-item operation envelopes, including the single-link and single-hash
   routes
-- expose `offset`/`limit` pagination only on `GET /shared-files` and
-  `GET /upload-queue`, with responses shaped as
+- expose `offset`/`limit` pagination with the paged collection envelope
   `{ "data": { "items": [...], "total": n, "offset": n, "limit": n }, "meta": ... }`
+  on `GET /transfers`, `GET /shared-files`, and `GET /upload-queue`
+- expose `offset`/`limit` on `GET /searches/{searchId}` to bound the returned
+  result rows; this route returns the search resource (with its `results`
+  array), not the paged collection envelope. It also accepts the boolean
+  `includeEvidence` (default true) to omit the heavy per-result `evidence`
+  block and `exactTotal` (default true) to allow an estimated total
 - expose `limit` without `offset` only for bounded snapshots/tails such as
   `GET /snapshot` and `GET /logs`
 - expose shared-files startup readiness through `status.stats.sharedFilesReady`
@@ -169,7 +174,7 @@ type, `arc`, `audio`, `iso`, `image`, `pro`, `video`, `doc`, or
 `emulecollection`. No aliases, alternate casing, or request-time type remapping
 are accepted. The route maps those public tokens directly to the existing
 eD2K/Kad search modes and file-type filters and must not change stock search
-semantics for 0.7.3 RC1. `automatic` resolves from live network state:
+semantics for 0.7.3 RC2. `automatic` resolves from live network state:
 connected eD2K uses `global`, Kad-only uses `kad`, and no connected network is
 rejected as not connected. Search resources echo the resolved method and
 selected REST type so
@@ -177,12 +182,13 @@ controllers can distinguish eD2K server/global searches from Kad searches and
 audit the selected file filter without inferring from result timing or counts.
 
 `GET /api/v1/searches` lists active native search sessions without expanding
-their result rows. `GET /api/v1/searches/{searchId}` returns the current native
-visible result snapshot for one search. 0.7.3 RC1 intentionally does not
-expose search result paging; search routes do not accept `limit` or `offset`,
-and the strict route table rejects unknown query parameters. Controllers should
-poll the search resource and treat `results` as a bounded native snapshot
-governed by eMule's existing search-result retention and visibility behavior.
+their result rows and accepts no query parameters. `GET /api/v1/searches/{searchId}`
+returns the current native visible result snapshot for one search and accepts
+`offset`/`limit` to bound the returned result rows, plus `includeEvidence`
+(default true) and `exactTotal` (default true) to shape the payload; the strict
+route table rejects any other query parameter. Controllers should poll the
+search resource and treat `results` as a bounded native snapshot governed by
+eMule's existing search-result retention and visibility behavior.
 Each native result also carries the resolved search method and selected search
 type when the result is returned through a search resource. `SearchResult.fileType`
 is the raw native file-type tag reported for that row; `SearchResult.fileType`
@@ -234,7 +240,7 @@ Selected peer reads are available for controller drill-down through
 `GET /transfers/{hash}/sources/{clientId}`, `GET /uploads/{clientId}`, and
 `GET /upload-queue/{clientId}`. These routes use the same `clientId` selector
 as peer operations and expose read models only; chat/message APIs and peer
-shared-file browse result retrieval remain outside the 0.7.3 RC1 native v1
+shared-file browse result retrieval remain outside the 0.7.3 RC2 native v1
 contract.
 Transfer source rows expose `downloadState` with the same lowercase compact
 token policy as the rest of v1; native debug labels are not part of the REST
@@ -243,7 +249,7 @@ contract.
 ## Implementation Status
 
 The OpenAPI contract is the implemented target contract for the current
-0.7.3 RC1 pass. Native route-seam tests cover the route schema table, strict
+0.7.3 RC2 pass. Native route-seam tests cover the route schema table, strict
 validation behavior, and the internal route execution model. The Python smoke
 harness includes OpenAPI route consistency checks, validates success/error
 envelopes, and reports whether each native route is direct or UI-thread
