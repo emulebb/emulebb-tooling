@@ -108,8 +108,10 @@ Bounded paging is implemented and guarded:
 - **Contract** — the common pagination shape (`items`/`total`/`offset`/`limit`)
   and a stable-ordering guarantee are documented in `REST-API-CONTRACT.md`.
 - **Controller (aMuTorrent)** — `_fetchAllPages` walks pages bounded by
-  `EMULEBB_SHARED_MAX_ITEMS` (default 2000), surfaces the full `total`, and
-  flags truncation in the stats tree and logs.
+  `AMUTORRENT_EMULEBB_SHARED_MAX_ITEMS` (default 2000), surfaces the full `total`,
+  and flags truncation in the stats tree and logs. All adapter list bounds (page
+  size, snapshot/logs limits, shared/transfers caps, refresh throttle) live
+  centrally in `config.js` `EMULEBB_REST`, overridable via `AMUTORRENT_EMULEBB_*`.
 
 Coverage: `test_shared_file_list_source.py` guards the C++ bounded-paging and
 snapshot-bounding invariants; aMuTorrent `emulebbManager.test.js` proves a
