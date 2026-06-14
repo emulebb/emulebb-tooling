@@ -1,384 +1,196 @@
-# eMuleBB Future Roadmap
+# eMuleBB (MFC) Future Roadmap
 
-This is the active post-0.7.3 product roadmap for eMuleBB. It is not a
-0.7.3 release-candidate gate, and it does not promote every historical feature
-idea in the backlog. The purpose is to keep future work focused on the Windows
-MFC app with REST support, while making related product-family boundaries
-explicit and excluding ideas that no longer match the eMuleBB desktop product
-direction.
+> **eMuleBB — the C++ MFC desktop app — is closing with `0.7.3` final and
+> entering permanent `0.7.x` maintenance.** Forward development has shifted to
+> **emulebb-rust** (the multiplatform eD2K/Kad core), **qBittorrentBB**, and the
+> suite integrations. The active forward program lives in
+> [SUITE-JOINT-ROADMAP](SUITE-JOINT-ROADMAP.md). This document now governs only
+> what remains for the MFC app: `0.7.x` maintenance plus the family/packaging
+> tracks the MFC participates in as a packaged component.
 
-0.7.3 is the compatibility baseline. The fixed public train is
-`0.7.3-rc.1`, `0.7.3-rc.2`, `0.7.3-rc.3`, then stable `0.7.3`. After stable
-`0.7.3`, the `0.7.x` series becomes the legacy support line with a frozen
-public surface. It may carry compatibility-preserved legacy baggage, but it
-does not expand product, UI, API, controller, or configuration surface.
-
-`0.8.0` is the first modernization release. Once stable `0.7.3` ships, `main`
-opens for `0.8.0` work, and the immediate `0.8.0` objective is removing the
-currently frozen legacy surfaces listed in [Frozen Surfaces](FROZEN-SURFACES.md).
-Compatibility, profile safety, and stock eD2K/Kad wire behavior remain
-constraints unless a later explicit protocol decision changes them.
-
-See [Frozen Surfaces](FROZEN-SURFACES.md) for the current distinction between
-compatibility-preserved legacy baggage and supported release behavior.
+This is the post-0.7.3 roadmap for the eMuleBB MFC desktop app. It is not a
+`0.7.3` release-candidate gate (that is owned by [RELEASE-0.7.3](RELEASE-0.7.3.md)).
+With the forward focus on emulebb-rust, the MFC product surface is intentionally
+frozen at `0.7.3`: new product, UI, protocol, and configuration work is out of
+scope for this app and — where still wanted — is tracked on the rust/suite
+roadmap instead. See [Frozen Surfaces](FROZEN-SURFACES.md) for the
+compatibility-preserved legacy baggage versus supported behavior split.
 
 For a shorter public-readable overview, use
 [Roadmap Summary](../reference/ROADMAP-SUMMARY.md).
 
+## Release Line Model
+
+- `0.7.3` is the **final eMuleBB MFC feature release**. The fixed candidate train
+  is `0.7.3-rc.1`, `0.7.3-rc.2`, `0.7.3-rc.3`, then stable `0.7.3`. Each candidate
+  absorbs only release blockers, proof refreshes, packaging fixes, and approved
+  regression fixes.
+- After stable `0.7.3`, `release/0.7.x` is the **permanent maintenance line** and
+  `main` carries only `0.7.x` maintenance. Allowed: compatibility-preserving,
+  low-risk bug fixes on supported surfaces plus security, crash/data-loss,
+  packaging, update-check, release-proof, and release-documentation fixes. Not
+  allowed: new product surface, new controller/API capability, or feature
+  expansion.
+- Frozen legacy surfaces stay frozen; they are not fixed in `0.7.x` unless the
+  issue affects supported shared infrastructure, security, or app stability.
+- Stable patch maintenance increments the patch number (for example
+  `emulebb-v0.7.4`) for hotfixes on the maintenance line.
+- **`0.8.0` (MFC modernization) is ON HOLD / UNDER REVIEW — not retired, not
+  active.** The previous plan to open `main` for a `0.8.0` MFC modernization wave
+  (frozen-surface removal first, then product lanes) is **suspended** pending a
+  decision on whether the MFC app continues at all given the emulebb-rust pivot.
+  Do not start `0.8.0` MFC work without an explicit operator decision to revive
+  the line. The frozen-surface inventory is retained in
+  [Frozen Surfaces](FROZEN-SURFACES.md) for that future decision.
+
 ## GitHub Workflow Authority
 
-Future-roadmap workflow is GitHub-primary after migration. Promoted roadmap
-slices are tracked as issues in `emulebb/emulebb` and as items in the public
-`eMuleBB Roadmap` org project. Local item docs remain engineering specs and
-evidence records; for files marked `workflow: github`, current status, priority,
-release placement, discussion, ownership, and PR linkage live in GitHub.
+Roadmap workflow is GitHub-primary. Promoted MFC slices are tracked as issues in
+`emulebb/emulebb` and as items in the public `eMuleBB Roadmap` org project (#2).
+Local item docs remain engineering specs and evidence records; for files marked
+`workflow: github`, current status, priority, release placement, discussion,
+ownership, and PR linkage live in GitHub. The forward program (emulebb-rust,
+qBittorrentBB) is tracked separately on the public **eMuleBB Suite** board
+(`https://github.com/orgs/emulebb/projects/3`); see
+[SUITE-JOINT-ROADMAP](SUITE-JOINT-ROADMAP.md#backlog--tracking-structure).
 
-Use `python scripts\github-roadmap-sync.py` from `repos\emulebb-tooling` to preview
-or apply the initial GitHub import, and use
-`python scripts\github-roadmap-check.py` to validate migrated metadata.
+Use `python scripts\github-roadmap-sync.py` from `repos\emulebb-tooling` to
+preview or apply the MFC import, and `python scripts\github-roadmap-check.py` to
+validate migrated metadata.
 
 ## Product Boundary
 
-eMuleBB remains a Windows MFC desktop client with a first-class UI, tray
-workflow, and in-process REST surface for controllers. Headless-only, daemon,
+eMuleBB remains a Windows MFC desktop client with a first-class UI, tray workflow,
+and in-process REST surface for controllers. Headless-only, daemon,
 cross-platform, server-only, and mobile-controller product tracks belong outside
-the eMuleBB desktop app.
+this app — they are the emulebb-rust / qBittorrentBB / Gluetun tracks of the
+broader product family. `emulebb-rust` is the headless eD2K/Kad core behind the
+shared `/api/v1` contract and is now the **forward core**; qBittorrentBB is the
+BitTorrent companion; the Gluetun bundle is a headless Docker packaging track.
+p2p-overlord is a separate Rust/Node product in the family that can share REST
+contracts, test infrastructure, and selected dependency forks without becoming
+part of the desktop app. See
+[ECOSYSTEM-SUITE-BOOTSTRAP-PLAN](plans/ECOSYSTEM-SUITE-BOOTSTRAP-PLAN.md) and
+[SUITE-JOINT-ROADMAP](SUITE-JOINT-ROADMAP.md).
 
-Those tracks may still belong to the broader eMuleBB product family when the
-operator explicitly promotes them. `emulebb-rust` is the headless eD2K/Kad core
-track behind the shared `/api/v1` contract, qBittorrentBB is the BitTorrent
-companion track, and the Gluetun headless bundle is a Docker packaging track for
-operators who want a fully headless stack. p2p-overlord is a separate Rust/Node
-product in that family: it can share REST contracts, test-campaign
-infrastructure, and selected dependency forks, but it does not become part of
-the desktop app. See
-[P2P-OVERLORD-PRODUCT-FAMILY-INTEGRATION](plans/P2P-OVERLORD-PRODUCT-FAMILY-INTEGRATION.md)
-and
-[ECOSYSTEM-SUITE-BOOTSTRAP-PLAN](plans/ECOSYSTEM-SUITE-BOOTSTRAP-PLAN.md).
+## Active Lanes (MFC, slimmed)
 
-## Release Line Model
+Only the lanes below remain in scope for the MFC app. Everything else from the
+prior roadmap is superseded by the rust/suite program (see Superseded Lanes).
+Lanes are grouped intentionally: do not create a new detailed `FEAT-*` file from a
+lane until the operator approves that specific slice.
 
-- `0.7.3` release candidates are fixed milestones: `rc.1`, `rc.2`, `rc.3`,
-  then stable. Each candidate absorbs only release blockers, proof refreshes,
-  packaging fixes, and approved regression fixes.
-- `0.7.x` is the legacy support line after stable `0.7.3`. It accepts low-risk
-  bug fixes on supported surfaces plus security, crash/data-loss, packaging,
-  update-check, release-proof, and release-documentation fixes.
-- Frozen legacy surfaces are not fixed in `0.7.x` unless the issue affects
-  supported shared infrastructure, security, or app stability.
-- `0.8.x` is the modernization line. `0.8.0` removes the currently frozen
-  surfaces first, then continues through the curated lanes below.
-- After stable `0.7.3`, `main` targets `0.8.0`; `release/0.7.x` carries
-  legacy maintenance.
+### Security And Operations (0.7.x maintenance)
 
-## Roadmap Consolidation Structure
-
-Use this structure when triaging active items for RC2 and the post-0.7.3 line
-split. It is a planning scaffold, not a status override for GitHub-primary
-items.
-
-### RC Candidate Delta
-
-Definition:
-work allowed into an active `0.7.3` release candidate because it directly
-protects the candidate.
-
-Allowed shape:
-release blockers, packaging/provenance fixes, proof refreshes, release-doc
-drift, and approved regression fixes on supported surfaces.
-
-Not allowed:
-future product work, broad refactors, warning-debt cleanup, dependency
-refreshes without a release blocker, new controller/API capability, or frozen
-surface fixes that do not affect supported shared infrastructure.
-
-Current structure owner:
-[0.7.3 Release Train Dashboard](RELEASE-0.7.3.md#candidate-structure).
-
-### 0.7.x Legacy Maintenance
-
-Definition:
-post-stable maintenance for the frozen public `0.7.x` surface.
-
-Allowed shape:
-compatibility-preserving, low-risk fixes on supported surfaces plus security,
-crash/data-loss, packaging, update-check, release-proof, and release-doc fixes.
-
-Not allowed:
-new product surface, new controller/API capability, feature expansion, or
-normal feature work directly on release branches.
-
-### 0.8.0 Frozen-Surface Removal
-
-Definition:
-the first modernization wave after stable `0.7.3`.
-
-Allowed shape:
-remove or replace frozen legacy surfaces listed in
-[Frozen Surfaces](FROZEN-SURFACES.md), with proof focused on supported shared
-infrastructure that remains after removal.
-
-Initial buckets:
-archive preview/recovery, IRC and chat UI, legacy scheduler, SMTP/email
-notifications, first-run wizard, splash screen, legacy WebServer HTML UI, and
-proxy support.
-
-### Post-0.7.3 Tooling And Security
-
-Definition:
-release-proof, CI, diagnostics, security, dependency, and generated-output
-hygiene that improves the workspace without changing the 0.7.3 public product
-surface.
-
-Allowed shape:
-CodeQL, static-analysis integration, release proof UX, deterministic suite
-materialization, generated-output hygiene, dependency hardening, and REST
-semantic proof that does not expand capability.
-
-### Future Product Lanes
-
-Definition:
-curated product work after the release line split, grouped by the approved
-lanes below.
-
-Allowed shape:
-narrow, observable improvements that preserve stock/community protocol
-behavior unless a future decision explicitly approves drift.
-
-### External Or Product-Family Tracks
-
-Definition:
-work that can belong to the broader eMuleBB product family without becoming
-part of the Windows MFC desktop app.
-
-Allowed shape:
-p2p-overlord alignment, shared campaign infrastructure, shared REST
-conformance, ecosystem suite packaging, and other explicitly promoted family
-work.
-
-Not allowed inside the desktop app:
-headless-only, daemon-only, server-only, cross-platform, or mobile-controller
-product scope.
-
-## Approved Lanes
-
-### Connectivity Modernization
-
-Scope:
-IPv6 dual-stack compatibility for the current eD2K/Kad network, NAT/LowID
-relief, UPnP/PCP/NAT-PMP lease controls and status visibility, safer
-bind/interface behavior, low-risk connection diagnostics, WSAPoll async-socket
-readiness modernization, and narrowly profiled source-hostname resolver
-scaling. Stock eD2K/Kad protocol semantics remain the boundary. A distinct IPv6
-Kad network remains exploratory until separately promoted.
-
-Existing anchors:
-`FEAT-018`, `FEAT-032`, `FEAT-035`, `FEAT-036`, `FEAT-081`, `FEAT-086`,
-`FEAT-098`, `REF-029`, `REF-030`, `REF-051`,
-`ideas/IDEA-IPV6-KAD-NETWORK.md`.
-
-### Search And Trust Clarity
-
-Scope:
-Clearer fake-file confidence wording, Kad/search popularity and consistency
-explanations, source-name divergence handling, and media plausibility checks
-when evidence is local and cheap. The lane also includes opt-in remote
-shared-file inventory discovery when a peer already exposes that inventory
-through compatible browse/share behavior.
-
-Existing anchors:
-`FEAT-002`, `FEAT-003`, `FEAT-006`, `FEAT-031`, `FEAT-039`, `FEAT-041`,
-`FEAT-078`, `FEAT-112`.
-
-### UI Power-User Polish
-
-Scope:
-Dark mode, Per-Monitor DPI, category-management polish, table/menu consistency,
-keyboard-friendly workflows, preference clarity, statistics clarity, and visible
-progress for long-running startup maintenance.
-
-Existing anchors:
-`FEAT-017`, `FEAT-019`, `FEAT-062`, `FEAT-075`, `FEAT-082`, `FEAT-096`.
-
-### Startup And Storage Performance
-
-Scope:
-Compatibility-preserving startup and shared-file performance work where the
-behavior remains explainable and safe under large real profiles. This includes
-responsive startup maintenance, large-library startup cache cleanup, and
-storage-aware shared-file hashing across independent physical volumes or SSDs,
-background-safe metadata persistence, and protected-volume disk-space snapshot
-refresh.
-
-Existing anchors:
-`FEAT-034`, `FEAT-072`, `FEAT-075`, `FEAT-076`, `FEAT-079`, `FEAT-080`,
-`FEAT-090`, `FEAT-095`, `FEAT-114`, `FEAT-115`, `FEAT-116`, `REF-049`,
-`REF-050`.
-
-### Controller Surface Performance
-
-Scope:
-REST/controller maintenance that bounds memory use and latency for large
-profiles without expanding the public capability surface. Snapshot workers may
-build immutable response records, but live app objects remain owned by their
-normal app/UI/protocol paths.
-
-Existing anchors:
-`FEAT-068`, `FEAT-099`.
-
-### Upload Policy Clarity
-
-Scope:
-Compatibility-preserving upload/seeding policy improvements that make Broadband
-behavior clearer without silently mutating user-managed state. Friend slots
-remain user-directed by default; any automatic promotion must be opt-in,
-diagnosable, and safe for manual Friends.
-
-Existing anchors:
-`FEAT-015`, `FEAT-023`, `FEAT-077`, `FEAT-106`, `FEAT-107`, `FEAT-113`.
-
-### Security And Operations
-
-Scope:
 IP-filter input policy, PeerGuardian-style imports, whitelist/private-network
-policy, dependency/DLL loading hardening, diagnostics, and release-proof
-automation.
+policy, dependency/DLL loading hardening, diagnostics, the bound VPN public-IP
+guard, and release-proof automation. This is maintenance, not feature expansion.
 
-Existing anchors:
-`FEAT-044`, `FEAT-056`, `REF-028`, `REF-038`, `REF-039`, `REF-040`,
-`REF-041`, `REF-042`, `REF-052`.
+Existing anchors: `FEAT-044`, `FEAT-056`, `FEAT-098`, `REF-028`, `REF-038`,
+`REF-039`, `REF-040`, `REF-041`, `REF-042`, `REF-052`.
+
+### Controller Surface Performance (bounded maintenance)
+
+REST/controller maintenance that bounds memory use and latency for large profiles
+without expanding the public capability surface, only where it protects the
+shipped `0.7.3` controller. Snapshot workers may build immutable response records;
+live app objects stay owned by their normal app/UI/protocol paths. New forward
+controller capability belongs on emulebb-rust, not here.
+
+Existing anchors: `FEAT-068`, `FEAT-099`.
 
 ### Product-Family Integration
 
-Scope:
 Post-`0.7.3` alignment for p2p-overlord repos, shared REST conformance, shared
 campaign variants, shared campaign/runtime core infrastructure, and shared
-MiniUPnP source ownership without merging products.
+MiniUPnP source ownership — without merging products.
 
-Existing anchors:
-`FEAT-073`, `FEAT-085`.
+Existing anchors: `FEAT-073`, `FEAT-085`.
 
-### Ecosystem Suite Packaging
+### Ecosystem Suite Packaging (forward focus)
 
-Scope:
-Post-`0.7.3` packaging and setup planning with qBittorrentBB first: a
-preselected optional local-machine BitTorrent companion in the future Windows
-`Full` suite, shipping with its fork DHT index/RSS/Torznab identity enabled.
-After that companion path is packaged and proven, this lane continues with
-`emulebb-rust` as an alternative eMule-family core behind `/api/v1` and a
-separate Gluetun Docker bundle for fully headless operation. This lane expands
-the product-family suite, not the Windows MFC desktop app itself.
+The MFC app as a packaged suite component: the Windows bootstrap, local Arr
+integration, and aMuTorrent. The suite itself (emulebb-rust core, qBittorrentBB
+companion, Gluetun headless bundle) is governed by
+[SUITE-JOINT-ROADMAP](SUITE-JOINT-ROADMAP.md) and
+[ECOSYSTEM-SUITE-BOOTSTRAP-PLAN](plans/ECOSYSTEM-SUITE-BOOTSTRAP-PLAN.md), not by
+this MFC roadmap.
 
-Existing anchors:
-`plans/ECOSYSTEM-SUITE-BOOTSTRAP-PLAN.md`,
-`ideas/IDEA-QBITTORRENTBB-MESH.md`,
-`active/EMULEBB-RUST-SCOPE.md`.
+Existing anchors: `plans/ECOSYSTEM-SUITE-BOOTSTRAP-PLAN.md`,
+`active/EMULEBB-RUST-SCOPE.md`, `ideas/IDEA-QBITTORRENTBB-MESH.md`.
 
-### Local State And Configuration Planning
+### Post-0.7.3 Tooling And Security (workspace hygiene)
 
-Scope:
-Evaluate local persistence changes before implementation. This includes
-SQLite-backed local metadata structures, queryable auto-browse inventory
-caches, and operator-editable JSON or TOML configuration where a structured
-format is more robust than legacy INI text. Existing profile compatibility,
-backup behavior, downgrade behavior, and stock-compatible `.met`/`.dat`
-semantics remain hard constraints.
+Release-proof, CI, diagnostics, security, dependency, and generated-output hygiene
+that improves the workspace without changing the `0.7.3` public product surface
+(CodeQL, static analysis, release-proof UX, deterministic materialization,
+dependency hardening, REST semantic proof that does not expand capability).
 
-Existing anchors:
-`FEAT-078`, `REF-045`, `REF-046`.
+## Superseded Lanes (retired from the MFC roadmap)
 
-### Narrow Anti-Leecher Review
+These prior product lanes are **no longer MFC roadmap scope**. Where the value is
+still wanted it is carried by the rust/suite program; the rest is dropped. None is
+promoted on the MFC app without an explicit operator decision to revive it.
 
-Scope:
-CShield-style anti-leecher ideas only where the reasons are observable,
-explainable, and low false-positive risk. Layered peer behavior guards should
-prefer log-only evidence, client-local cooldown/quarantine, and only use the
-classic IP ban list for high-confidence IP-level abuse.
+| Retired lane | Disposition |
+|---|---|
+| Connectivity Modernization (IPv6, NAT/LowID, µTP, UPnP/PCP) | Dropped for MFC; ideas only (`IDEA-IPV6-KAD-NETWORK`, `IDEA-NAT-TRAVERSAL-UTP`). rust is IPv4-only. |
+| Search And Trust Clarity (fake-file confidence, Kad popularity, remote inventory) | Superseded by the rust Kad/eD2K indexer (FEAT-002) + the suite metadata fabric. |
+| Local State And Configuration Planning (SQLite metadata, JSON/TOML config) | Superseded by emulebb-rust `emulebb-metadata` and the qBittorrentBB harvester index. |
+| UI Power-User Polish (dark mode, Per-Monitor DPI, category/table polish) | Dropped — MFC-GUI-specific on a closing app. |
+| Startup And Storage Performance | Dropped, except crash/data-loss/stability fixes, which fall under `0.7.x` maintenance. |
+| Upload Policy Clarity (broadband slots, friend slots) | Dropped; may inform emulebb-rust upload policy later. |
+| Narrow Anti-Leecher Review (CShield) | Dropped. |
 
-Existing anchors:
-`FEAT-011`, `FEAT-092`.
+The `FEAT-*`/`REF-*` anchors previously listed under these lanes remain in the
+backlog index as records; they are not active MFC roadmap work unless re-promoted.
 
 ## Explicit Non-Goals
 
-These ideas should not be added to the eMuleBB future backlog unless the user
-explicitly reopens them:
+Do not add these to the eMuleBB MFC backlog unless the operator explicitly reopens
+them:
 
+- New MFC product/feature work in any Superseded Lane above.
+- `0.8.0` MFC modernization or frozen-surface removal until the line is explicitly
+  revived (it is on hold, not active).
 - Headless core, server-only mode, cross-platform client work, or mobile-first
-  controller scope inside the Windows MFC desktop app. These can be separate
-  product-family tracks only when explicitly promoted.
+  controller scope inside the MFC desktop app. These are emulebb-rust /
+  qBittorrentBB / Gluetun family tracks.
 - New REST capability expansion beyond contract maintenance, drift checks, bug
-  fixes, and compatibility repairs.
-- Historical releaser controls such as PowerShare, Share Only The Need, release
-  bonus, or default share-permission rewrites.
-- Public-reachability polling as a background Connection Checker. Local and
-  user-triggered diagnostics remain acceptable; the eMuleAI-style checker is
-  recorded as `FEAT-083` WONT_DO.
-- Startup profile-copy/import wizards that automatically mutate legacy
-  profiles. The eMuleAI migration wizard is recorded as `FEAT-084` WONT_DO.
-- Large-library or background-worker performance roadmap expansion outside the
-  approved startup and storage performance lane.
-- Metadata/file-intelligence expansion. MediaInfo remains an external DLL in
-  this release line. Operator-approved local persistence planning in
-  `FEAT-078`, `REF-045`, and `REF-046` is allowed only as storage/configuration
-  evaluation, not as a broad metadata-intelligence feature.
-- Bundled MediaInfo, Windows Property Store expansion, or webservice metadata
-  growth.
-- Protocol forks, proprietary Kad/eD2K extensions, opcode or packet/tag shape
-  changes, Kad state-machine drift, or broad transport rewrites that cannot be
-  validated against current community semantics.
-- Distinct IPv6 Kad network behavior in the current roadmap lane. The approved
-  lane is dual-stack compatibility on the current network; the separate IPv6
-  Kad network design stays in `docs/ideas/IDEA-IPV6-KAD-NETWORK.md` until
-  explicitly promoted.
-
-## Evidence Used
-
-Local references:
-
-- `analysis\emuleai\Release_Notes.txt`
-- `analysis\emuleai\srchybrid`
-- `docs\ideas\IDEA-MODERNIZATION-2026.md`
-- `docs\history\reviews\REVIEW-2026-04-20-feature-expansion-beyond-stock.md`
-- `docs\history\reviews\REVIEW-2026-04-26-emuleai-mods-broadband-scan.md`
-
-External references used as directional signals, not implementation authority:
-
-- [eMule Qt](https://emule-qt.org/)
-- [eMule Qt 2026 announcement](https://emule-qt.org/2026/03/05/hello-emule-2026/)
-- [MorphXT feature FAQ](https://wiki.emule-web.de/Morphxt_faq)
-- [ScarAngel feature FAQ](https://scarangel.sourceforge.net/eng_faq.html)
-- [eMule feature category wiki](https://wiki.emule-web.de/Category%3AFeatures)
-- [irwir eMule releases](https://github.com/irwir/eMule/releases/)
-- [aMule FAQ](https://wiki.amule.org/wiki/FAQ_aMule)
-- [BEP 32: IPv6 extension for DHT](https://www.bittorrent.org/beps/bep_0032.html)
-- [libtorrent DHT reference](https://libtorrent.org/reference-DHT.html)
-- [libtorrent settings reference](https://libtorrent.org/reference-Settings.html)
+  fixes, and compatibility repairs. Forward controller capability is emulebb-rust.
+- Historical releaser controls (PowerShare, Share Only The Need, release bonus,
+  default share-permission rewrites). `FEAT-083` and `FEAT-084` remain `WONT_DO`.
+- Protocol forks, proprietary Kad/eD2K extensions, opcode/packet/tag shape
+  changes, Kad state-machine drift, or transport rewrites that cannot be validated
+  against current community semantics.
+- Distinct IPv6 Kad network behavior. It stays in
+  `ideas/IDEA-IPV6-KAD-NETWORK.md` until explicitly promoted (and on a forward
+  core, not the MFC app).
+- Metadata/file-intelligence expansion in the MFC app. MediaInfo stays an external
+  DLL; the indexing/metadata direction is the rust/suite program.
 
 ## Promotion Rules
 
 - This roadmap is grouped intentionally. Do not create a new detailed `FEAT-*`
-  file from a lane until the user approves that specific slice.
-- After GitHub migration, a promoted future-roadmap slice must have a
-  `emulebb/emulebb` issue and `eMuleBB Roadmap` project item before
-  implementation starts.
+  file from a lane until the operator approves that specific slice.
+- MFC promotions are limited to `0.7.x` maintenance plus the four active lanes
+  above. Anything resembling a Superseded Lane is re-homed to the rust/suite
+  roadmap, not promoted here.
+- A promoted MFC slice must have an `emulebb/emulebb` issue and `eMuleBB Roadmap`
+  (#2) project item before implementation starts.
 - Before implementation, revalidate the slice against current `main`, current
   dependency pins, and `WORKSPACE-POLICY.md`.
-- Prefer narrow, observable improvements over broad behavioral rewrites.
-- Keep stock/community behavior intact unless the feature explicitly documents
-  the product reason for drift.
-- Any promoted slice must define targeted validation before implementation
-  starts.
-- qBittorrent/libtorrent can inform dual-stack architecture, but BitTorrent DHT
-  mechanics are not eMule Kad protocol authority.
+- Prefer narrow, observable maintenance over behavioral rewrites; keep
+  stock/community eD2K/Kad behavior intact.
 
 ## GitHub-Primary Backlog Highlights
 
-The GitHub sync owns all active backlog items under `docs/active/items`.
-The table below is only a compact list of recently promoted or cross-cutting
-future-roadmap highlights; it is not the sync boundary.
+The GitHub sync owns all active backlog items under `docs/active/items`. The table
+below is a compact list of cross-cutting MFC highlights; it is not the sync
+boundary.
 
 | Lane | Scope | Items |
 |---|---|---|
-| Connectivity modernization | Bound VPN public-IP guard for explicit interface-bound profiles | `FEAT-098` |
-| Search and trust clarity | Remote shared-file inventory discovery and cached browse inspection | `FEAT-031`, `FEAT-078` |
-| Local state and configuration planning | SQLite metadata and structured configuration evaluation | `REF-045`, `REF-046` |
+| Security and operations | Bound VPN public-IP guard for interface-bound profiles | `FEAT-098` |
+| Controller surface performance | Bounded large-list REST memory/latency | `FEAT-068`, `FEAT-099` |
+| Product-family integration | Shared campaign core; p2p-overlord alignment | `FEAT-073`, `FEAT-085` |
