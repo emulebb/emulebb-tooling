@@ -183,6 +183,11 @@ of the long-tail eD2K-exclusive catalogue is the true limiter.
 
 ## Relationship to other items
 
+- Cooperative protocol-level mechanisms + BEP-46 library publishing (note 11/12
+  candidate set, libtorrent fork now on the table):
+  [IDEA-COOPERATIVE-DHT-COOPERATION](IDEA-COOPERATIVE-DHT-COOPERATION.md).
+- Suite program / phasing:
+  [SUITE-JOINT-ROADMAP](../active/SUITE-JOINT-ROADMAP.md).
 - BT-engine half: [IDEA-EMULEBB-LIBTORRENT-FORK](IDEA-EMULEBB-LIBTORRENT-FORK.md).
 - Theory base / supersedes the "embed in emulebb-rust" packaging of
   [IDEA-LIBTORRENT-MESH](IDEA-LIBTORRENT-MESH.md).
