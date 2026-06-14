@@ -192,6 +192,34 @@ eMuleBB-MFC `FUTURE-ROADMAP.md` lanes (dark mode, IPv6 dual-stack, µTP, NAT-PMP
 etc.) are **parked-by-freeze**: `0.8.x` material only if the MFC app is not
 retired in favour of emulebb-rust.
 
+## Backlog & tracking structure
+
+Decided + set up 2026-06-14:
+
+- **Issues live in each product's own repo** (release-train correctness): rust →
+  `emulebb/emulebb-rust`, qBittorrentBB → `emulebb/qbittorrentbb`. The local MD
+  item under `docs/active/items` is the durable engineering spec; the GitHub issue
+  owns workflow state (`workflow: github`).
+- **One org board aggregates them:** **eMuleBB Suite**,
+  `https://github.com/orgs/emulebb/projects/3`, with single-select fields
+  `Product` (eMuleBB-MFC / emulebb-rust / qBittorrentBB / aMuTorrent / tooling) and
+  `Phase` (Phase 0/1/2). Phase 0 = rust issues #1–#4; Phase 1 = qBittorrentBB
+  issues #1–#3.
+- **The MFC `eMuleBB Roadmap` board (#2) stays as-is** for the frozen 0.7.x line;
+  it is not polluted with forward work.
+- **Parked ideas stay out of the tracker** — they remain `IDEA-*.md` and become
+  backlog only when a slice is promoted.
+
+**Pending tooling task (not yet done):** generalize the GitHub sync scripts
+(`emulebb-tooling/scripts/github_roadmap_common.py`, `github-roadmap-sync.py`,
+`github-roadmap-check.py`) from their hardcoded single product
+(`OWNER`/`ISSUE_REPO=emulebb/emulebb`/`PROJECT_TITLE=eMuleBB Roadmap`, scanning
+only `emulebb-tooling/docs/active/items`) to a **per-product config** (repo +
+items path + project + Product/Phase field mapping), so each product's
+`docs/active/items` syncs to its own repo issues and onto the Suite board. This
+mutates live GitHub state, so it needs its own focused, tested change — do not
+bolt it on untested.
+
 ## Index of program docs
 
 | Area | Doc | Repo |
