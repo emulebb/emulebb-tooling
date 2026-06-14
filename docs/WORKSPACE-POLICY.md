@@ -369,6 +369,15 @@ the shared test suite.
 
 ## Documentation Policy
 
+- **English is the only language for tracked content.** All documentation,
+  engineering and design notes, README and diagram text, code comments, and
+  commit / PR / issue text across every workspace-owned repo are written in
+  English. The conversation language with the operator may differ (for example
+  Italian), but no non-English prose may land in a tracked file or in git
+  history. Exceptions: intentional product-localization resources
+  (`srchybrid\lang\*.rc` and other deliberate UI translation assets, governed by
+  the Release Localization Policy) and pre-existing upstream text inside vendored
+  or fork files that originated upstream.
 - Workspace-wide development rules belong only in this document.
 - Workspace-wide hooks and policy helpers must be centralized in
   `repos\emulebb-tooling`.
