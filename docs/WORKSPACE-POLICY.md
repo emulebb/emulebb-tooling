@@ -367,6 +367,27 @@ Enforcement: the `output-root` and `emulebb-env-override` audits in
 the `doc-paths` audit, and the static `test_live_bind_policy_static.py` gate in
 the shared test suite.
 
+## Network Safety (No Clearnet Leak) — P0 Invariant
+
+This is a **P0 cross-product invariant** for every networked product in the suite
+(emulebb-rust, qBittorrentBB, eMuleBB MFC). It protects the suite's central
+"safe / anonymous" promise: the operator's real IP must never reach a public
+swarm. If this fails once in public, it breaks the product's core trust claim.
+
+- **Fail-closed:** with the VPN tunnel down or unavailable, a networked product
+  must emit **zero P2P data-plane traffic** — no eD2K TCP, no Kad/eD2K UDP, no
+  BitTorrent peer/DHT egress. The data plane is pinned to the tunnel interface;
+  the control/REST plane stays on the local IP. UPnP/port-forwarding over the VPN
+  interface remains allowed.
+- **Automated leak-test gate:** each networked product must carry an automated
+  leak-test that asserts the above (tunnel down → no data egress off the tunnel).
+  This gate is **release-blocking**; an open leak-test gap blocks a release.
+- **Known release-blocking gaps (must close before declaring the product safe):**
+  the emulebb-rust eD2K TCP egress pin (`RUST-FEAT-003`) and the emulebb-rust
+  leak-test (`RUST-FEAT-005`); the qBittorrentBB `vpnReady()` fail-closed gap
+  (`QBBB-FEAT-004`). VPN binding mechanics live under Managed Fork Hygiene and the
+  Live Test Network Policy.
+
 ## Documentation Policy
 
 - **English is the only language for tracked content.** All documentation,
