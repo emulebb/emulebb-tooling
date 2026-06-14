@@ -9,6 +9,14 @@ disk**, all cross-referenced by one parseable tag convention. It is built mostly
 as a **report/produce-only Python tooling package**; clients read what it writes,
 and the controller (`amutorrent`) actuates.
 
+## Naming (exact)
+
+**eMuleBB** = the C++ MFC desktop app. **emulebb-rust** = the Rust eD2K/Kad core.
+Where this doc says "the eD2K share" or "the eD2K shared-hash DB," the **primary
+target is emulebb-rust's `emulebb-metadata` SQLite** (the strategic forward core;
+eMuleBB MFC `known.met` is a compatibility path only). "eMuleBB stack" below means
+whichever eMule-family core is active, named `emulebb` in suite config.
+
 ## Foundational invariants
 
 - **Disk is the pivot.** A BT `infohash` cannot be derived from an eD2K hash or
@@ -107,7 +115,8 @@ per-file (ed2k hash, filename, size). Converters are symmetric and both require
 - `collection → torrent`: files a collection references (resolved to disk paths)
   → `create_torrent` → `.torrent`.
 - **ed2k hashes** come from a **join with recompute fallback**: read from the
-  eMuleBB shared-files DB when the file is already shared (note 1), recompute from
+  active core's shared-hash store (primarily emulebb-rust `emulebb-metadata`; MFC
+  `known.met` as compat) when the file is already shared (note 1), recompute from
   disk bytes otherwise.
 - Collection name carries the suite brand **and** a parseable tag back to the
   source torrent infohash (and the created torrent's comment references the
@@ -123,6 +132,12 @@ file_membership(ed2k_hash, torrent_infohash, file_index, torrent_name,
                 file_count, total_size, first_seen_ms, last_seen_ms)
 ```
 
+- **`file_membership` IS the local `eD2K ↔ btih ↔ v2-file-root` equivalence map**
+  from [IDEA-LIBTORRENT-MESH](../ideas/IDEA-LIBTORRENT-MESH.md), populated the
+  "verify, don't derive" way: a BT infohash is never computed from an ed2k hash;
+  the link is proven by hashing the bytes that are local (the torrent's files on
+  disk) — which is exactly what notes 2/5 already do. Treat this table as that
+  map's local store, not a second parallel structure.
 - Many-to-many (one file can belong to several torrents → the offer may present
   several options).
 - **Live-library torrents only.** "Download the torrent instead" only ever offers

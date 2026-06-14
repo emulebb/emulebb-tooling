@@ -51,6 +51,14 @@ BitTorrent's DHT finds peers for an infohash you already know; it has no native
   resolving to an index-of-catalogs for large ones).
 - libtorrent supports BEP-44/46 (`dht_put_item`/`dht_get_item`) and v2/hybrid
   creation stock — no fork needed for note 11 itself.
+- **Not the poisonable case.** [IDEA-LIBTORRENT-MESH](IDEA-LIBTORRENT-MESH.md)
+  warns that a BEP-46 item keyed on a *public/derivable* value (e.g. an ed2k-
+  derived salt under a well-known pubkey) is overwrite-poisonable because the
+  write key is effectively public. Note 11 is the **safe** variant: the library
+  pointer is keyed on the operator's **own minted private key**, so only the
+  operator can write it; peers learn the public key out-of-band. The poisoning
+  caveat applies only to the ed2k-derived discovery-cache use, not to operator-
+  owned library publishing.
 
 ## Note 12 — Cooperation candidate set
 

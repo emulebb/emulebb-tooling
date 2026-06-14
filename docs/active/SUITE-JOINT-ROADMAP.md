@@ -4,14 +4,32 @@ Status: planning / direction. This is the cross-product forward program for the
 BB suite captured from an operator design session (2026-06-14). It is **not** a
 0.7.3 gate and it does **not** touch the frozen eMuleBB MFC app.
 
+## Naming (exact, do not conflate)
+
+- **eMuleBB** = the **C++ MFC Windows desktop app** (`emulebb-main`). The current
+  flagship eD2K/Kad client.
+- **emulebb-rust** = the **Rust eD2K/Kad core** — headless, multiplatform. The
+  strategic forward core (and the autonomous indexer of notes 13–15).
+- **qBittorrentBB** = the BitTorrent-side client (fork) with the DHT harvester +
+  Torznab index.
+- **aMuTorrent** = the cross-network web-UI controller.
+
 ## Freeze scope (read first)
 
-The only frozen product is the **eMuleBB Windows MFC app**, which closes out with
+The only frozen product is the **eMuleBB (MFC) app**, which closes out with
 `0.7.3` final (see [FUTURE-ROADMAP](FUTURE-ROADMAP.md) and
 [FROZEN-SURFACES](FROZEN-SURFACES.md)). Every other product in the family —
 `emulebb-rust`, `qBittorrentBB`, `goed2k-server`, the Python metadata-fabric
 tooling, and `amutorrent` — is in **full development mode, no limits**. This
 program lives entirely in that unfrozen space and begins after `0.7.3` ships.
+
+**eMuleBB 0.7.3 final scope:** the PowerShell suite bootstrap + local Arr
+integration + aMuTorrent. That is the whole of it — no further MFC feature scope.
+**`0.7.3` may be the last eMuleBB (MFC) release:** the strategic direction is to
+move heavily to **emulebb-rust** as the forward eD2K/Kad core. Consequently the
+metadata-fabric eD2K integrations (notes 1/5/6) target **emulebb-rust's
+`emulebb-metadata` SQLite as the primary** share/hash source; MFC `known.met` is a
+compatibility path only.
 
 ## North star
 
@@ -145,5 +163,5 @@ deliverable #1; the indexer is not a later phase.
 | Kad/eD2K indexer (notes 13–15) | `docs/design/kad-ed2k-indexer.md` | emulebb-rust |
 | Branded export + harvest store (notes 1,3) | `docs/BB-TORRENT-EXPORT-AND-HARVEST.md` | qBittorrentBB |
 | Suite automation (notes 6,16,17) | `docs/SUITE-AUTOMATION.md` | amutorrent |
-| Library publishing (note 11) | IDEA-QBITTORRENTBB-MESH + cooperation doc | emulebb-tooling |
+| Library publishing (note 11) | `docs/ideas/IDEA-COOPERATIVE-DHT-COOPERATION.md` | emulebb-tooling |
 | Suite packaging | `docs/active/plans/ECOSYSTEM-SUITE-BOOTSTRAP-PLAN.md` | emulebb-tooling |
