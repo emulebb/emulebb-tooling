@@ -336,6 +336,26 @@ The same lifecycle command policy is reused by qBit-compatible and Torznab
 bridge calls that invoke native REST commands in-process, so adapter bridges do
 not bypass startup/shutdown safety gates.
 
+The embedded WebServer listener is single-flight: it serves one HTTP connection
+at a time across every surface behind it (`/api/v1`, the qBit-compatible
+`/api/v2` adapter, the Torznab adapter, and the frozen legacy templates). This
+is a deliberate resource and concurrency-safety budget because accepted web
+workers still share request/session state and reach broad main-thread eMule
+objects. While one request is in flight, additional connections are refused at
+accept time with `503 Service Unavailable` and `Retry-After: 10`; a long
+operation such as a native or Torznab search holds the slot until it returns.
+The Torznab bridge adds its own single-flight guard (one native search at a
+time, a brief wait for the slot, then a cached page or `503`, with successful
+result sets cached for about ten minutes). Each request uses its own connection
+(`Connection: close`); the listener does not offer HTTP keep-alive. Transport
+limits are shared by all surfaces: request headers are capped at 64 KB, request
+bodies at 16 MB (an over-limit request is dropped without a normal status), and
+idle accepted connections close after about 30 seconds. Controllers must honor
+`Retry-After`, use bounded backoff on `503`, and stagger independent pollers
+rather than issuing concurrent bursts at the same listener. See
+[Controllers And REST](../reference/GUIDE-CONTROLLERS-REST.md) for the
+operator-facing concurrency and request-limit contract.
+
 Use [REST-API-PARITY-INVENTORY.md](REST-API-PARITY-INVENTORY.md) for the
 completed WebServer-to-REST action parity ledger. Runtime route completeness is expected to
 match [REST-API-OPENAPI.yaml](REST-API-OPENAPI.yaml).

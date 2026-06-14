@@ -303,6 +303,63 @@ Controllers should:
 Unattended controllers should use bounded retry with backoff. A tight retry loop
 during startup can make diagnostics harder.
 
+## Concurrency And Request Limits
+
+The embedded WebServer is a single-flight listener by design: it serves one
+HTTP connection at a time across every surface behind it (`/api/v1`, the
+qBittorrent-compatible `/api/v2` adapter, the Torznab adapter, and the frozen
+legacy templates). This is a deliberate resource and safety budget, not a
+tuning gap. Accepted web workers still share request and session state and
+reach broad main-thread eMule objects, so the listener is kept single-flight
+until that state is made per-connection. Controllers should treat this as a
+stable part of the contract rather than something to defeat with parallelism.
+
+What this means in practice:
+
+- **One in-flight request wins; others are told to wait.** While a request is
+  being served, a second connection is refused at accept time with
+  `503 Service Unavailable` carrying `Retry-After: 10`, `Cache-Control:
+  no-store`, and `Connection: close`. The `503` is the normal busy signal, not
+  an error to escalate.
+- **Long operations hold the slot.** A native search dispatched through REST or
+  through the Torznab bridge occupies the single slot until it returns. Torznab
+  generic searches observe native results for about 12 seconds; movie and TV
+  searches observe for about 45 seconds. For that whole window, other
+  controllers polling the same listener receive `503`.
+- **The Torznab bridge adds its own single-flight guard.** Only one native
+  search runs at a time behind the adapter. A caller that arrives while a search
+  is in flight waits briefly (about 15 seconds) for the slot, then either
+  receives a cached page or a `503` busy response. Successful result sets are
+  cached for about 10 minutes, so repeated identical queries are served from
+  cache instead of starting another native search.
+- **Each request uses its own connection.** Responses close the connection
+  (`Connection: close`); the listener does not keep connections alive for reuse.
+  Open a fresh connection per request rather than expecting HTTP keep-alive or
+  pipelining.
+
+Controllers must therefore:
+
+- honor `Retry-After` and use bounded backoff on `503`, exactly as for lifecycle
+  unavailability above
+- stagger independent pollers (for example aMuTorrent status polling, Prowlarr,
+  and a second Arr app) instead of issuing concurrent bursts at the same listener
+- expect that issuing a search makes the listener briefly busy for other callers,
+  and size poll intervals with that in mind
+- treat a `503` with `Retry-After` as transient and retryable, distinct from a
+  `4xx` request error that should not be retried unchanged
+
+Request size and timeout limits round out the transport contract:
+
+- **Request headers** are capped at 64 KB and the **request body** at 16 MB. A
+  request that exceeds either limit has its connection dropped without a normal
+  HTTP status, so keep request bodies well under the body cap.
+- **Idle accepted connections** are closed after about 30 seconds of socket
+  inactivity. Send the full request promptly after connecting; do not hold an
+  open connection waiting to send.
+
+These limits are intentional and shared by all surfaces behind the listener.
+They are not per-route tunables and do not vary by adapter.
+
 ## Legacy WebServer
 
 The legacy WebServer template UI is frozen pending removal. It receives no
