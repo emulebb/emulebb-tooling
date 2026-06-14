@@ -21,6 +21,16 @@ The BT engine underneath is itself forked — see
 [IDEA-EMULEBB-LIBTORRENT-FORK](IDEA-EMULEBB-LIBTORRENT-FORK.md) — so the indexing
 hooks live in the engine, not bolted onto the client.
 
+## Current ecosystem packaging note
+
+The first promoted product-family step is narrower than the mesh idea in this
+document: qBittorrentBB should become a Windows suite companion, optional in the
+model but preselected for a normal local-machine `Full` install. The current
+planning home for that packaging direction is
+[ECOSYSTEM-SUITE-BOOTSTRAP-PLAN](../active/plans/ECOSYSTEM-SUITE-BOOTSTRAP-PLAN.md).
+The DHT indexing and equivalence-map work below remains exploratory until a
+separate active item promotes it.
+
 ## Relationship to IDEA-LIBTORRENT-MESH (deliberate divergence)
 
 This **supersedes the "dual-network client" building block** of

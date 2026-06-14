@@ -210,6 +210,7 @@ are not the best first read for users.
 | Development and validation guide | [reference/DEVELOPMENT-GUIDE](reference/DEVELOPMENT-GUIDE.md) |
 | Active backlog and release dashboard | [active/INDEX](active/INDEX.md) |
 | p2p-overlord product-family integration plan | [active/plans/P2P-OVERLORD-PRODUCT-FAMILY-INTEGRATION](active/plans/P2P-OVERLORD-PRODUCT-FAMILY-INTEGRATION.md) |
+| Ecosystem suite bootstrap planning | [active/plans/ECOSYSTEM-SUITE-BOOTSTRAP-PLAN](active/plans/ECOSYSTEM-SUITE-BOOTSTRAP-PLAN.md) |
 | 0.7.3 RC1 release control document | [active/RELEASE-0.7.3](active/RELEASE-0.7.3.md) |
 | Public 0.7.3 RC1 release notes | [active/RELEASE-0.7.3-NOTES](active/RELEASE-0.7.3-NOTES.md) |
 | 0.7.3 RC1 release checklist | [active/RELEASE-0.7.3-CHECKLIST](active/RELEASE-0.7.3-CHECKLIST.md) |

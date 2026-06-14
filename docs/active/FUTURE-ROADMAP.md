@@ -45,10 +45,16 @@ cross-platform, server-only, and mobile-controller product tracks belong outside
 the eMuleBB desktop app.
 
 Those tracks may still belong to the broader eMuleBB product family when the
-operator explicitly promotes them. p2p-overlord is a separate Rust/Node product
-in that family: it can share REST contracts, test-campaign infrastructure, and
-selected dependency forks, but it does not become part of the desktop app.
-See [P2P-OVERLORD-PRODUCT-FAMILY-INTEGRATION](plans/P2P-OVERLORD-PRODUCT-FAMILY-INTEGRATION.md).
+operator explicitly promotes them. `emulebb-rust` is the headless eD2K/Kad core
+track behind the shared `/api/v1` contract, qBittorrentBB is the BitTorrent
+companion track, and the Gluetun headless bundle is a Docker packaging track for
+operators who want a fully headless stack. p2p-overlord is a separate Rust/Node
+product in that family: it can share REST contracts, test-campaign
+infrastructure, and selected dependency forks, but it does not become part of
+the desktop app. See
+[P2P-OVERLORD-PRODUCT-FAMILY-INTEGRATION](plans/P2P-OVERLORD-PRODUCT-FAMILY-INTEGRATION.md)
+and
+[ECOSYSTEM-SUITE-BOOTSTRAP-PLAN](plans/ECOSYSTEM-SUITE-BOOTSTRAP-PLAN.md).
 
 ## Release Line Model
 
@@ -147,7 +153,8 @@ part of the Windows MFC desktop app.
 
 Allowed shape:
 p2p-overlord alignment, shared campaign infrastructure, shared REST
-conformance, and other explicitly promoted family work.
+conformance, ecosystem suite packaging, and other explicitly promoted family
+work.
 
 Not allowed inside the desktop app:
 headless-only, daemon-only, server-only, cross-platform, or mobile-controller
@@ -251,6 +258,20 @@ MiniUPnP source ownership without merging products.
 Existing anchors:
 `FEAT-073`, `FEAT-085`.
 
+### Ecosystem Suite Packaging
+
+Scope:
+Post-`0.7.3` packaging and setup planning for qBittorrentBB as a preselected
+optional local-machine companion, `emulebb-rust` as an alternative eMule-family
+core behind `/api/v1`, and a separate Gluetun Docker bundle for fully headless
+operation. This lane expands the product-family suite, not the Windows MFC
+desktop app itself.
+
+Existing anchors:
+`plans/ECOSYSTEM-SUITE-BOOTSTRAP-PLAN.md`,
+`ideas/IDEA-QBITTORRENTBB-MESH.md`,
+`active/EMULEBB-RUST-SCOPE.md`.
+
 ### Local State And Configuration Planning
 
 Scope:
@@ -281,7 +302,8 @@ These ideas should not be added to the eMuleBB future backlog unless the user
 explicitly reopens them:
 
 - Headless core, server-only mode, cross-platform client work, or mobile-first
-  controller scope inside the eMuleBB desktop app.
+  controller scope inside the Windows MFC desktop app. These can be separate
+  product-family tracks only when explicitly promoted.
 - New REST capability expansion beyond contract maintenance, drift checks, bug
   fixes, and compatibility repairs.
 - Historical releaser controls such as PowerShare, Share Only The Need, release

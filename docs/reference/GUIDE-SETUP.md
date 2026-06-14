@@ -22,6 +22,12 @@ package from `emulebb/amutorrent`, installs the suite, and wires local
 controller integration through native REST, Torznab, and qBittorrent-compatible
 adapter paths.
 
+Future ecosystem planning for qBittorrentBB as a preselected optional companion,
+`emulebb-rust` as an alternative core, and a separate Gluetun Docker bundle is
+tracked in
+[Ecosystem Suite Bootstrap Plan](../active/plans/ECOSYSTEM-SUITE-BOOTSTRAP-PLAN.md).
+Those components are not part of the published RC2 bootstrapper.
+
 ### Option 2: Manual Standalone ZIP {#quick-install-zip-extract-run}
 
 Best when you only want the eMuleBB desktop app: download

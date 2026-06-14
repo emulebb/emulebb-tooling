@@ -82,6 +82,7 @@ nav:
   - p2p-overlord:
       - eMule Agent Guide: reference/GUIDE-P2P-OVERLORD-EMULE-AGENT.md
       - Product-Family Integration Plan: active/plans/P2P-OVERLORD-PRODUCT-FAMILY-INTEGRATION.md
+      - Ecosystem Suite Bootstrap Plan: active/plans/ECOSYSTEM-SUITE-BOOTSTRAP-PLAN.md
   - Active Release:
       - Backlog Index: active/INDEX.md
       - 0.7.3 Release Dashboard: active/RELEASE-0.7.3.md
