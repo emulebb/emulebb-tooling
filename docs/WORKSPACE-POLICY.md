@@ -80,9 +80,10 @@ Directive precedence is:
 - ALL Rust builds — orchestrated, ad-hoc, manual, scripted, debug AND release —
   must set `CARGO_TARGET_DIR` to `EMULEBB_WORKSPACE_OUTPUT_ROOT\builds\rust\target`.
   Never run `cargo build`/`test`/`run` without it. A `repos\...\target` directory,
-  or any build/scratch output under the source tree or anywhere in `c:\prj`, is a
-  policy violation and must be removed. Personal scratch/lab folders go under
-  `c:\tools\...`, never under `c:\prj`.
+  or any build/scratch output under a source tree (including anywhere under
+  `EMULEBB_WORKSPACE_ROOT` or a sibling source checkout), is a policy violation
+  and must be removed. Personal scratch/lab folders go under a dedicated scratch
+  root outside every source checkout, never inside one.
 
 ## Branch And History Policy
 
@@ -332,6 +333,39 @@ module):
   split-tunnel machine.
 - Documentation builds may set `NO_MKDOCS_2_WARNING` to silence the MkDocs
   upgrade notice.
+
+## Managed Fork Hygiene
+
+These rules apply uniformly to every managed fork: the `emulebb` app worktree,
+`emulebb-rust`, `amutorrent`, `qbittorrentbb`, `amule`, `goed2k-server`, and the
+`emulebb-build` / `emulebb-build-tests` / `emulebb-tooling` support repos. The
+`p2p-overlord-*` family is a separate product line and is out of scope here.
+Each fork's `AGENTS.md` stays thin and points back to this document; do not
+restate these rules per repo.
+
+- **Build output** lands under `EMULEBB_WORKSPACE_OUTPUT_ROOT` only — never in a
+  source tree or under the source root. Rust sets `CARGO_TARGET_DIR` to
+  `EMULEBB_WORKSPACE_OUTPUT_ROOT\builds\rust\target` (orchestration pins it; set
+  it explicitly for ad-hoc cargo). CMake forks configure an out-of-source build
+  directory under the output root; Go forks build into
+  `EMULEBB_WORKSPACE_OUTPUT_ROOT\tools\<fork>`.
+- **Authoritative environment variables** (`EMULEBB_WORKSPACE_ROOT`,
+  `EMULEBB_WORKSPACE_OUTPUT_ROOT`) are read, never assigned. Command-scoped knobs
+  stay owned by their orchestration modules.
+- **Public P2P live tests** bind through the hide.me VPN interface, allow-list
+  the client executable in the shared hide.me split-tunnel settings, and restart
+  the VPN as needed through the centralized helper — never a bespoke restart.
+- **LAN / control / probe traffic** binds through `X_LOCAL_IP` /
+  `--lan-bind-addr`; loopback and wildcard are forbidden for harness paths on the
+  operator split-tunnel machine, though product runtime may still use them.
+- **Tests** reuse and extend the shared Python suite in `emulebb-build-tests`;
+  do not fork a parallel per-client suite.
+
+Enforcement: the `output-root` and `emulebb-env-override` audits in
+`repos\emulebb-tooling\ci\check-workspace-policy.py` (run by
+`python -m emule_workspace validate`), the per-fork `AGENTS.md` pointer check in
+the `doc-paths` audit, and the static `test_live_bind_policy_static.py` gate in
+the shared test suite.
 
 ## Documentation Policy
 

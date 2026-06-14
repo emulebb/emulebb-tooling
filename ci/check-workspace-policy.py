@@ -912,6 +912,19 @@ def audit_doc_paths(root: Path) -> None:
     )
     for repo_root, relative_path in agent_files:
         assert_text_contains(issues, repo_root, relative_path, policy_text, "AGENTS.md must point to the central workspace policy.")
+    # In-scope downstream/sibling forks must also point at the central policy, but
+    # only when the fork is materialized in this workspace (minimal checkouts may
+    # omit them). p2p-overlord-* is a separate product family and is excluded.
+    for relative_repo in (
+        r"repos\emulebb-rust",
+        r"repos\amutorrent",
+        r"repos\qbittorrentbb",
+        r"repos\amule",
+        r"repos\goed2k-server",
+    ):
+        fork_root = resolve_workspace_path(root, relative_repo)
+        if fork_root.is_dir():
+            assert_text_contains(issues, fork_root, "AGENTS.md", policy_text, "AGENTS.md must point to the central workspace policy.")
     for repo_root, relative_path in agent_files[:6]:
         assert_text_not_contains(
             issues,
@@ -941,6 +954,158 @@ def audit_clean_worktree(root: Path) -> None:
     print("Tracked worktree cleanliness audit passed.")
 
 
+# In-scope managed forks for the cross-fork hygiene audits. Each entry is a
+# (label, workspace-relative path) pair. The p2p-overlord-* family is a separate
+# product line and is intentionally excluded. The emulebb app is audited through
+# its managed worktree, not the detached repos\emulebb anchor.
+HYGIENE_SCOPE_REPOS: tuple[tuple[str, str], ...] = (
+    ("app-main", r"workspaces\workspace\app\emulebb-main"),
+    ("emulebb-rust", r"repos\emulebb-rust"),
+    ("amutorrent", r"repos\amutorrent"),
+    ("qbittorrentbb", r"repos\qbittorrentbb"),
+    ("amule", r"repos\amule"),
+    ("goed2k-server", r"repos\goed2k-server"),
+    ("emulebb-build", r"repos\emulebb-build"),
+    ("emulebb-build-tests", r"repos\emulebb-build-tests"),
+    ("emulebb-tooling", r"repos\emulebb-tooling"),
+)
+
+# Script/source globs scanned by the cross-fork hygiene audits.
+HYGIENE_SOURCE_GLOBS: tuple[str, ...] = (
+    "*.py", "*.ps1", "*.psm1", "*.bat", "*.cmd", "*.sh",
+    "*.rs", "*.mjs", "*.js", "*.toml", "*.md",
+)
+
+# The only authoritative workspace path variables an agent must never assign;
+# they are machine-level inputs that orchestration only ever reads.
+AUTHORITATIVE_ENV_VARS: tuple[str, ...] = (
+    "EMULEBB_WORKSPACE_ROOT",
+    "EMULEBB_WORKSPACE_OUTPUT_ROOT",
+)
+
+# (repo-relative path suffix, variable) writes that are sanctioned boundary
+# bootstraps and therefore allowlisted from the env-override audit.
+ENV_OVERRIDE_ALLOWLIST: frozenset[tuple[str, str]] = frozenset(
+    {
+        (r"emule_workspace\materialize.py", "EMULEBB_WORKSPACE_ROOT"),
+    }
+)
+
+
+def _scoped_repo_roots(root: Path) -> list[tuple[str, Path]]:
+    """Returns existing (label, path) roots for the in-scope managed forks."""
+
+    roots: list[tuple[str, Path]] = []
+    for label, relative_path in HYGIENE_SCOPE_REPOS:
+        repo_root = resolve_workspace_path(root, relative_path)
+        if repo_root.is_dir():
+            roots.append((label, repo_root))
+    return roots
+
+
+def _tracked_source_files(repo_root: Path) -> tuple[str, ...]:
+    """Returns tracked source/script files under one repo as posix-ish paths."""
+
+    return run_git(repo_root, ["ls-files", "--", *HYGIENE_SOURCE_GLOBS]).lines
+
+
+def _env_write_patterns() -> tuple[tuple[re.Pattern[str], str], ...]:
+    """Builds (regex, variable) pairs matching env writes across shells/langs."""
+
+    forms = (
+        r"\$env:{var}\s*=",                                # PowerShell
+        r"(?:^|\s)set\s+{var}\s*=",                        # cmd/batch
+        r"(?:^|\s)export\s+{var}\s*=",                     # POSIX sh
+        r"os\.environ\[\s*[\"']{var}[\"']\s*\]\s*=",       # python assignment
+        r"os\.environ\.setdefault\(\s*[\"']{var}[\"']",    # python setdefault
+        r"os\.putenv\(\s*[\"']{var}[\"']",                 # python putenv
+        r"(?:std::)?env::set_var\(\s*\"{var}\"",           # rust
+        r"process\.env\.{var}\s*=[^=]",                    # node assignment
+    )
+    pairs: list[tuple[re.Pattern[str], str]] = []
+    for var in AUTHORITATIVE_ENV_VARS:
+        for form in forms:
+            pairs.append((re.compile(form.format(var=re.escape(var))), var))
+    return tuple(pairs)
+
+
+def audit_emulebb_env_override(root: Path) -> None:
+    """Rejects writes to the authoritative EMULEBB_* workspace path variables.
+
+    Orchestration, scripts, and tests must read ``EMULEBB_WORKSPACE_ROOT`` and
+    ``EMULEBB_WORKSPACE_OUTPUT_ROOT`` from the process environment and never
+    reassign, shadow, or default them. Command-scoped knobs such as
+    ``EMULEBB_TEST_*`` and ``EMULEBB_REST_*`` are owned by their orchestration
+    modules and are out of scope for this audit.
+    """
+
+    patterns = _env_write_patterns()
+    issues: list[str] = []
+    for _label, repo_root in _scoped_repo_roots(root):
+        for relative_path in _tracked_source_files(repo_root):
+            path = repo_root / relative_path
+            if not path.is_file():
+                continue
+            normalized = relative_path.replace("/", "\\")
+            for index, line in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1):
+                for pattern, var in patterns:
+                    if not pattern.search(line):
+                        continue
+                    if any(normalized.endswith(suffix) and var == allowed_var for suffix, allowed_var in ENV_OVERRIDE_ALLOWLIST):
+                        continue
+                    issues.append(
+                        f"{path}:{index}: assigns authoritative {var} (read it, never override): {line.strip()}"
+                    )
+    if issues:
+        raise RuntimeError("\n".join(issues))
+    print("EMULEBB_* env override audit passed.")
+
+
+def audit_output_root(root: Path) -> None:
+    """Checks that build output is redirected under EMULEBB_WORKSPACE_OUTPUT_ROOT.
+
+    Concretely: the Rust fork must keep its ``target/`` out of the source tree,
+    no tracked script may redirect ``CARGO_TARGET_DIR`` back inside a repo, and
+    no tracked build command may target the retired
+    ``workspaces\\workspace\\state\\tools`` location instead of the output root.
+    """
+
+    issues: list[str] = []
+
+    # Rust fork: target/ must be gitignored and untracked so ad-hoc cargo cannot
+    # pollute the source tree. CARGO_TARGET_DIR is pinned to the output root by
+    # emulebb-build orchestration (process.py:_ensure_cargo_target_dir).
+    rust_root = resolve_workspace_path(root, r"repos\emulebb-rust")
+    if rust_root.is_dir():
+        gitignore = rust_root / ".gitignore"
+        ignore_text = gitignore.read_text(encoding="utf-8") if gitignore.is_file() else ""
+        if not re.search(r"(?m)^/?target/?\s*$", ignore_text):
+            issues.append(f"{gitignore}: emulebb-rust must gitignore the build target/ directory")
+        tracked_target = run_git(rust_root, ["ls-files", "--", "target", "target/**"]).lines
+        if tracked_target:
+            issues.append(f"{rust_root}: tracked files exist under target/ (build output in source tree): {tracked_target[0]} ...")
+
+    # No tracked script may redirect Cargo output to a non-output-root path.
+    cargo_re = re.compile(r"CARGO_TARGET_DIR")
+    state_tools_re = re.compile(r"workspaces[\\/]workspace[\\/]state[\\/]tools", re.IGNORECASE)
+    build_verb_re = re.compile(r"build\s+-o|/p:OutDir|target-dir|CARGO_TARGET_DIR", re.IGNORECASE)
+    prj_path_re = re.compile(r"[\\/]prj[\\/]|repos[\\/]", re.IGNORECASE)
+    for _label, repo_root in _scoped_repo_roots(root):
+        for relative_path in _tracked_source_files(repo_root):
+            path = repo_root / relative_path
+            if not path.is_file():
+                continue
+            for index, line in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1):
+                if cargo_re.search(line) and "=" in line and "EMULEBB_WORKSPACE_OUTPUT_ROOT" not in line and prj_path_re.search(line):
+                    issues.append(f"{path}:{index}: CARGO_TARGET_DIR points inside a source tree, not the output root: {line.strip()}")
+                if state_tools_re.search(line) and build_verb_re.search(line):
+                    issues.append(f"{path}:{index}: build output targets retired state\\tools instead of EMULEBB_WORKSPACE_OUTPUT_ROOT\\tools: {line.strip()}")
+
+    if issues:
+        raise RuntimeError("\n".join(issues))
+    print("Output-root build redirection audit passed.")
+
+
 AUDITS = {
     "build-policy": audit_build_policy,
     "branch-policy": audit_branch_policy,
@@ -948,7 +1113,9 @@ AUDITS = {
     "dependency-pins": audit_dependency_pins,
     "doc-paths": audit_doc_paths,
     "editorconfig-policy": audit_editorconfig_policy,
+    "emulebb-env-override": audit_emulebb_env_override,
     "localization-policy": audit_localization_policy,
+    "output-root": audit_output_root,
     "project-entrypoints": audit_project_entrypoints,
     "powershell-boundary": audit_powershell_boundary,
     "warning-policy": audit_warning_policy,
