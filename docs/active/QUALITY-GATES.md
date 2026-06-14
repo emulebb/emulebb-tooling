@@ -10,7 +10,7 @@ of per-repo folklore. Tiers are defined in [PRODUCT-PORTFOLIO](PRODUCT-PORTFOLIO
 |---|---|---|---|---|---|
 | Build (matrix) | ✅ 3-OS | ✅ (fork CI) | ✅ x64 Debug+Release+diag | ⛔ while lab | ✅ |
 | Unit/integration tests | ✅ blocking | ✅ | ✅ shared harness | ⛔ while lab | ✅ |
-| Lint | ✅ clippy `-D warnings` + fmt | ✅ (upstream + fork checks) | warning-debt cleanup | — | — |
+| Lint | 🔸 clippy advisory (relaxed; → `-D warnings` at Phase 0 close) + fmt ✅ | ✅ (upstream + fork checks) | warning-debt cleanup | — | — |
 | Supply chain | ✅ cargo-deny advisories | dependency-review | dependency-review | — | dependency-review |
 | Policy guard | ✅ rust-client policy | fork hygiene (output-root, env, bind) | workspace validate | — | workspace validate |
 | Privacy guard | ✅ no private data / titles | ✅ | ✅ | ✅ | ✅ tracked-file-privacy-guard |
@@ -21,9 +21,11 @@ of per-repo folklore. Tiers are defined in [PRODUCT-PORTFOLIO](PRODUCT-PORTFOLIO
 
 ## Current gaps (tracked)
 
-- **Core (rust):** leak-test gate not yet implemented (`RUST-FEAT-005`); eD2K TCP
-  egress pin open (`RUST-FEAT-003`); `kad_swarm` tests non-blocking (`RUST-BUG-001`).
-  cargo-deny enforces advisories only; bans/licenses pending a dep audit.
+- **Core (rust):** clippy is **relaxed to advisory** during active development —
+  re-enable blocking `-D warnings` before the Phase 0 close. Leak-test gate not yet
+  implemented (`RUST-FEAT-005`); eD2K TCP egress pin open (`RUST-FEAT-003`);
+  `kad_swarm` tests non-blocking (`RUST-BUG-001`). cargo-deny enforces advisories
+  only; bans/licenses pending a dep audit.
 - **Companion (qBittorrentBB):** `vpnReady()` not truly fail-closed (`QBBB-FEAT-004`).
 - **Lab (goed2k):** no build/test CI by decision; promotion adds the Service bar.
 
