@@ -1106,9 +1106,54 @@ def audit_output_root(root: Path) -> None:
     print("Output-root build redirection audit passed.")
 
 
+# High-precision non-English (Italian) marker words. The English-only tracked-
+# content rule (WORKSPACE-POLICY Documentation Policy) forbids non-English prose in
+# tracked files. UI-localization and vendored/fork/translation paths are exempt.
+LANGUAGE_DENYLIST_FRAGMENTS: tuple[str, ...] = (
+    "/doc/", "/lang/", "/translations/", "/locale/", "/3rdparty/",
+    "/node_modules/", "/readme-", "/changelog-",
+)
+ITALIAN_MARKERS: tuple[str, ...] = (
+    "perché", "perchè", "perciò", "abbiamo", "dovremmo", "vorrei", "qualcosa",
+    "soltanto", "faremo", "facciamo", "dobbiamo", "vogliamo", "questo", "questa",
+    "queste", "questi", "anche", "così", "adesso", "invece", "oppure",
+)
+
+
+def audit_language_policy(root: Path) -> None:
+    """Tracked Markdown prose must be English (WORKSPACE-POLICY Documentation Policy).
+
+    Scans authored Markdown across the managed repos for high-precision Italian
+    marker words. UI-localization resources and vendored/fork or translation paths
+    are exempt.
+    """
+
+    pattern = re.compile(
+        r"(?<!\w)(" + "|".join(re.escape(w) for w in ITALIAN_MARKERS) + r")(?!\w)",
+        re.IGNORECASE,
+    )
+    issues: list[str] = []
+    for label, repo_root in _scoped_repo_roots(root):
+        for rel in run_git(repo_root, ["ls-files", "--", "*.md"]).lines:
+            if any(fragment in "/" + rel.lower() for fragment in LANGUAGE_DENYLIST_FRAGMENTS):
+                continue
+            text = read_text(repo_root / rel)
+            for index, line in enumerate(text.splitlines(), start=1):
+                match = pattern.search(line)
+                if match:
+                    issues.append(
+                        f"{label}\\{rel}:{index}: non-English marker "
+                        f"'{match.group(1)}' — tracked content must be English"
+                    )
+                    break
+    if issues:
+        raise RuntimeError("\n".join(issues))
+
+
 AUDITS = {
     "build-policy": audit_build_policy,
     "branch-policy": audit_branch_policy,
+    "language-policy": audit_language_policy,
     "clean-worktree": audit_clean_worktree,
     "dependency-pins": audit_dependency_pins,
     "doc-paths": audit_doc_paths,

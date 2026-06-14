@@ -6,6 +6,30 @@ workspace-wide policy. AI contributors should use the
 [Agent Checklist](reference/AGENT-CHECKLIST.md) as the repeatable operating
 path after reading this policy.
 
+## Policy Scope (core vs product annex)
+
+This document mixes **product-neutral core** rules (binding on every repo) with
+**product-specific** rules. To keep it readable as the suite grows, treat the
+sections by scope:
+
+- **Core (all products):** Workspace Layout, Branch and History Policy, Commit
+  Content and Privacy Hygiene, Network Safety, Environment Variables, Managed Fork
+  Hygiene, Documentation Policy (incl. English-only), File Normalization, Script
+  and Automation Runtime, Setup and Dependency Authority.
+- **Product annex — eMuleBB MFC:** Active Build Policy (MSVC/v143), Release
+  Localization Policy, Live Test Storage and Path Capability, and the MFC parts of
+  Protocol Compatibility / Baseline and Harness. These bind only the MFC app and
+  its build.
+- **Product annex — emulebb-rust:** file-size budget and cargo/omissions policy
+  live in `repos\emulebb-rust\policy` and its `AGENTS.md`.
+- **Product annex — forks (qBittorrentBB, amutorrent, amule, goed2k):** Managed
+  Fork Hygiene plus each fork's `AGENTS.md`.
+
+Physical extraction of the MFC build/localization sections into a separate
+`WORKSPACE-POLICY-MFC.md` annex is a tracked follow-up; until then this scope map
+is the authority on what binds which product. New rules go in the narrowest scope
+that is true.
+
 ## Session Startup Contract
 
 - Read this policy before making workspace decisions.
@@ -178,7 +202,8 @@ fixtures, docs, comments), every commit message, and every PR/issue description.
 
 Routine `validate` in `repos\emulebb-build` must run the active static audits
 for build, branch, dependency pin, active documentation path, PowerShell
-boundary, project entrypoint, warning, localization, and normalization policy.
+boundary, project entrypoint, warning, localization, English-only language, and
+normalization policy.
 
 ## Development And Compatibility Defaults
 
