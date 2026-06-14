@@ -1,8 +1,10 @@
 # Suite Joint Roadmap (post-0.7.3)
 
-Status: planning / direction. This is the cross-product forward program for the
-BB suite captured from an operator design session (2026-06-14). It is **not** a
-0.7.3 gate and it does **not** touch the frozen eMuleBB MFC app.
+Status: planning / direction. This is the **canonical top-level roadmap** for the
+BB suite (post-0.7.3). The MFC [FUTURE-ROADMAP](FUTURE-ROADMAP.md) is a subordinate
+maintenance annex. Companion governance: [PRODUCT-PORTFOLIO](PRODUCT-PORTFOLIO.md),
+[QUALITY-GATES](QUALITY-GATES.md), [API-V1-COMPATIBILITY](API-V1-COMPATIBILITY.md).
+It is **not** a 0.7.3 gate and does **not** touch the frozen eMuleBB MFC app.
 
 ## Naming (exact, do not conflate)
 
@@ -129,6 +131,41 @@ deliverable #1; the indexer is not a later phase.
   decisions, reconcile/orphan actuation, "download the torrent instead" handoff.
   Optional layer — clients + Prowlarr stay fully standalone. See `amutorrent`
   `docs/SUITE-AUTOMATION.md`.
+
+## Phase exit criteria (Definition of Done)
+
+Each phase has a measurable, checkable DoD. A phase is "done" only when all its
+criteria pass. Phase ↔ the board `Phase` field ↔ a release milestone are the same
+axis: an item's `Phase` on the eMuleBB Suite board must match the phase it serves
+here, and a phase closes a suite milestone.
+
+**Phase 0 — emulebb-rust perfectly functional (gate for everything after):**
+- [ ] Connects (server + Kad), handles HighID/LowID.
+- [ ] Searches (server + Kad/global) and returns results.
+- [ ] Downloads a file end-to-end from ≥3 real sources, including queue/reask with
+      `enable_udp_reask` **on** and live-validated (`RUST-FEAT-001`).
+- [ ] Uploads/shares and serves sources.
+- [ ] **Network Safety green:** eD2K TCP egress pinned to the tunnel
+      (`RUST-FEAT-003`) and the automated leak-test passes blocking (`RUST-FEAT-005`).
+- [ ] Autonomous Kad/eD2K indexer populates the index and serves Torznab
+      (`RUST-FEAT-002`).
+- [ ] Arr drives rust as a qBittorrent download client (`RUST-FEAT-004`).
+- [ ] CI quality bar green (clippy `-D warnings`, cargo-deny advisories,
+      `kad_swarm` blocking or `RUST-BUG-001` resolved).
+
+**Phase 1 — qBittorrentBB:**
+- [ ] Branded idempotent export of non-private live torrents to the eD2K share
+      (`QBBB-FEAT-001`).
+- [ ] Harvested torrents persisted to the sharded local store (`QBBB-FEAT-002`).
+- [ ] Indexer/Torznab parity with rust (`QBBB-FEAT-003`).
+- [ ] **Network Safety green:** `vpnReady()` truly fail-closed + leak-test
+      (`QBBB-FEAT-004`).
+
+**Phase 2 — fabric + controller:**
+- [ ] Python fabric produces reconcile/orphan reports + torrent⇄collection +
+      `file_membership` (notes 1–6).
+- [ ] aMuTorrent actuates a cross-network intent handoff and acts on a fabric
+      report (`AMUT-FEAT-001`, `AMUT-FEAT-002`), staying an optional layer.
 
 ## Cross-cutting principles (decided this session)
 
