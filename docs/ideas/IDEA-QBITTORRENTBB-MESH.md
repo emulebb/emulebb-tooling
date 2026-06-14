@@ -25,11 +25,13 @@ hooks live in the engine, not bolted onto the client.
 
 The first promoted product-family step is narrower than the mesh idea in this
 document: qBittorrentBB should become a Windows suite companion, optional in the
-model but preselected for a normal local-machine `Full` install. The current
-planning home for that packaging direction is
+model but preselected for a normal local-machine `Full` install. This early
+companion package should carry the fork's DHT harvester/index, DHT Index UI/RSS,
+and Torznab endpoint as enabled product identity. The current planning home for
+that packaging direction is
 [ECOSYSTEM-SUITE-BOOTSTRAP-PLAN](../active/plans/ECOSYSTEM-SUITE-BOOTSTRAP-PLAN.md).
-The DHT indexing and equivalence-map work below remains exploratory until a
-separate active item promotes it.
+The deeper equivalence-map and cross-network bridge work below remains
+exploratory until a separate active item promotes it.
 
 ## Relationship to IDEA-LIBTORRENT-MESH (deliberate divergence)
 

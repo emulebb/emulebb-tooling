@@ -261,11 +261,13 @@ Existing anchors:
 ### Ecosystem Suite Packaging
 
 Scope:
-Post-`0.7.3` packaging and setup planning for qBittorrentBB as a preselected
-optional local-machine companion, `emulebb-rust` as an alternative eMule-family
-core behind `/api/v1`, and a separate Gluetun Docker bundle for fully headless
-operation. This lane expands the product-family suite, not the Windows MFC
-desktop app itself.
+Post-`0.7.3` packaging and setup planning with qBittorrentBB first: a
+preselected optional local-machine BitTorrent companion in the future Windows
+`Full` suite, shipping with its fork DHT index/RSS/Torznab identity enabled.
+After that companion path is packaged and proven, this lane continues with
+`emulebb-rust` as an alternative eMule-family core behind `/api/v1` and a
+separate Gluetun Docker bundle for fully headless operation. This lane expands
+the product-family suite, not the Windows MFC desktop app itself.
 
 Existing anchors:
 `plans/ECOSYSTEM-SUITE-BOOTSTRAP-PLAN.md`,
