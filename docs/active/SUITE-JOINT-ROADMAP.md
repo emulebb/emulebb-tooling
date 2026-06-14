@@ -247,6 +247,15 @@ Decided + set up 2026-06-14:
 - **Parked ideas stay out of the tracker** — they remain `IDEA-*.md` and become
   backlog only when a slice is promoted.
 
+**Approved but deferred migration — move the MFC backlog into the `emulebb`
+repo.** The eMuleBB MFC app backlog currently lives in
+`emulebb-tooling/docs/active/items` (a structural smell: the frozen app's backlog
+sits in the tooling repo). The agreed end state is to move it into the `emulebb`
+repo, leaving only cross-cutting/workspace items in `emulebb-tooling`. This is a
+127-item cross-repo move that also rewires the GitHub sync (`github_roadmap_common.py`
+`ACTIVE_ITEMS` path + the Project #2 linkage), so it must be a **focused, tested
+migration**, not a blind bulk move. Deferred deliberately; do it as its own task.
+
 **Pending tooling task (not yet done):** generalize the GitHub sync scripts
 (`emulebb-tooling/scripts/github_roadmap_common.py`, `github-roadmap-sync.py`,
 `github-roadmap-check.py`) from their hardcoded single product
