@@ -153,6 +153,45 @@ deliverable #1; the indexer is not a later phase.
   key and operator data live under the user data path, never in build output,
   never committed.
 
+## Active vs Parked (scope ledger)
+
+This program has a deliberately small **active** surface. Everything else we have
+written down is an **idea, parked** — captured so it is not lost, explicitly not
+scheduled, and not in any backlog or GitHub board until an operator promotes a
+specific slice.
+
+### Active (the only scheduled work)
+
+- Close **eMuleBB (MFC) 0.7.3 final**: PowerShell bootstrap + local Arr +
+  aMuTorrent. Then frozen.
+- **Phase 0 — emulebb-rust** perfectly functional: enable UDP reask (FEAT-001),
+  eD2K TCP VPN egress pin, download/upload parity hardening, the Kad/eD2K indexer,
+  Arr surfaces. Tracked in `emulebb-rust/docs/active`.
+- **Phase 1 — qBittorrentBB**: branded export, harvested disk store, indexer /
+  Torznab parity. Tracked in `qbittorrentbb/docs/active`.
+- **Phase 2 — metadata fabric + aMuTorrent automation** (notes 1–6, 16–17).
+
+### Parked (ideas only — not scope, not backlog)
+
+Promote a slice into a product backlog before any of these becomes work.
+
+| Parked idea | Doc |
+|---|---|
+| Cooperative-DHT mechanisms (15-item menu) + BEP-46 library publishing (notes 11–12) | `ideas/IDEA-COOPERATIVE-DHT-COOPERATION.md` |
+| libtorrent fork for the deep cooperation plays | `ideas/IDEA-COOPERATIVE-DHT-COOPERATION.md`, `ideas/IDEA-EMULEBB-LIBTORRENT-FORK.md` |
+| eD2K↔BT mesh at scale: surrogate overlay, gateway/republisher, transfer bridging | `ideas/IDEA-LIBTORRENT-MESH.md`, `ideas/IDEA-QBITTORRENTBB-MESH.md` |
+| IPv6 Kad network | `ideas/IDEA-IPV6-KAD-NETWORK.md` |
+| Kad protocol modernization | `ideas/IDEA-KAD-PROTOCOL-MODERNIZATION.md` |
+| NAT traversal / µTP | `ideas/IDEA-NAT-TRAVERSAL-UTP.md` |
+| aMule watchlist | `ideas/IDEA-AMULE-WATCHLIST.md` |
+| Broad modernization / restructure surveys | `ideas/IDEA-MODERNIZATION-2026.md`, `ideas/IDEA-RESTRUCTURE.md` |
+| A4AF cross-file source dedup (rust) | `emulebb-rust/docs/design/source-management-and-a4af.md` |
+| aMuTorrent owning all generic download rules (scope split) | `amutorrent/docs/SUITE-AUTOMATION.md` |
+
+eMuleBB-MFC `FUTURE-ROADMAP.md` lanes (dark mode, IPv6 dual-stack, µTP, NAT-PMP,
+etc.) are **parked-by-freeze**: `0.8.x` material only if the MFC app is not
+retired in favour of emulebb-rust.
+
 ## Index of program docs
 
 | Area | Doc | Repo |
