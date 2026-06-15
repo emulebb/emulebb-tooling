@@ -1,5 +1,5 @@
-site_name: eMuleBB Documentation
-site_description: eMuleBB user, integration, release, and REST documentation.
+site_name: eMuleBB Suite Documentation
+site_description: eMuleBB Suite — eD2K/Kad and BitTorrent clients, controller, REST, integration, and release documentation.
 site_url: https://emulebb.github.io/emulebb-tooling/
 repo_url: https://github.com/emulebb/emulebb-tooling
 edit_uri: blob/main/docs/
@@ -50,19 +50,25 @@ plugins:
 nav:
   - Home: INDEX.md
   - Quick Help: HELP.md
-  - User Guides:
+  - eMuleBB Suite:
+      - Roadmap: active/SUITE-JOINT-ROADMAP.md
+      - Brand & Naming: active/BRAND-AND-NAMING.md
+      - Roadmap Summary: reference/ROADMAP-SUMMARY.md
+      - Product Portfolio: active/PRODUCT-PORTFOLIO.md
+      - Quality Gates: active/QUALITY-GATES.md
+      - API v1 Compatibility: active/API-V1-COMPATIBILITY.md
+      - Metadata Fabric: active/SUITE-METADATA-FABRIC.md
+      - Ecosystem Bootstrap Plan: active/plans/ECOSYSTEM-SUITE-BOOTSTRAP-PLAN.md
+      - Suite Board (GitHub): https://github.com/orgs/emulebb/projects/3
+  - eMuleBB Client (Windows):
       - Product Guide: reference/GUIDE-EMULEBB.md
       - Released Behavior Summary: reference/RELEASED-BEHAVIOR-SUMMARY.md
       - Setup Guide: reference/GUIDE-SETUP.md
       - Hyper-V Suite Isolation: reference/GUIDE-HYPERV-WINDOWS.md
-      - Running On macOS And Linux: reference/GUIDE-CROSS-PLATFORM.md
-      - Roadmap Summary: reference/ROADMAP-SUMMARY.md
       - Power User Manual: reference/GUIDE-POWER-USERS.md
       - Downloads And Search: reference/GUIDE-DOWNLOADS-SEARCH.md
       - Sharing Guide: reference/GUIDE-SHARING.md
       - Network Guide: reference/GUIDE-NETWORK.md
-      - Stack Integrations: reference/GUIDE-STACK-INTEGRATIONS.md
-      - Controllers And REST: reference/GUIDE-CONTROLLERS-REST.md
       - Preferences Guide: reference/GUIDE-PREFERENCES.md
       - Persistence Files: reference/GUIDE-PERSISTENCE-FILES.md
       - IP Filters: reference/GUIDE-IP-FILTERS.md
@@ -72,6 +78,16 @@ nav:
       - Diagnostics: reference/GUIDE-DIAGNOSTICS.md
       - Troubleshooting: reference/GUIDE-TROUBLESHOOTING.md
       - Translations: reference/GUIDE-TRANSLATIONS.md
+  - emulebb-rust (Core):
+      - Rust Scope: active/EMULEBB-RUST-SCOPE.md
+      - Running On macOS And Linux: reference/GUIDE-CROSS-PLATFORM.md
+      - Source And Backlog (GitHub): https://github.com/emulebb/emulebb-rust
+  - qBittorrentBB (Companion):
+      - Source And Backlog (GitHub): https://github.com/emulebb/qbittorrentbb
+  - aMuTorrent (Controller):
+      - Stack Integrations: reference/GUIDE-STACK-INTEGRATIONS.md
+      - Controllers And REST: reference/GUIDE-CONTROLLERS-REST.md
+      - Source And Backlog (GitHub): https://github.com/emulebb/amutorrent
   - API And Automation:
       - REST Quickstart: rest/REST-API-QUICKSTART.md
       - REST Contract: rest/REST-API-CONTRACT.md
@@ -79,11 +95,7 @@ nav:
       - OpenAPI Contract: rest/REST-API-OPENAPI.yaml
       - Parity Inventory: rest/REST-API-PARITY-INVENTORY.md
       - Controller Surface Matrix: active/CONTROLLER-SURFACE-MATRIX.md
-  - p2p-overlord:
-      - eMule Agent Guide: reference/GUIDE-P2P-OVERLORD-EMULE-AGENT.md
-      - Product-Family Integration Plan: active/plans/P2P-OVERLORD-PRODUCT-FAMILY-INTEGRATION.md
-      - Ecosystem Suite Bootstrap Plan: active/plans/ECOSYSTEM-SUITE-BOOTSTRAP-PLAN.md
-  - Active Release:
+  - Active Release (eMuleBB 0.7.x):
       - Backlog Index: active/INDEX.md
       - 0.7.3 Release Dashboard: active/RELEASE-0.7.3.md
       - 0.7.3 Release Notes: active/RELEASE-0.7.3-NOTES.md
@@ -96,7 +108,7 @@ nav:
       - Release Test Campaigns: active/RELEASE-TEST-CAMPAIGNS.md
       - Installer Test Materialization Plan: active/plans/INSTALLER-TEST-MATERIALIZATION-AND-SCENARIO-MATRIX.md
       - Frozen Surfaces: active/FROZEN-SURFACES.md
-      - Future Roadmap: active/FUTURE-ROADMAP.md
+      - Future Roadmap (MFC): active/FUTURE-ROADMAP.md
   - Developer And Workspace:
       - Workspace Policy: WORKSPACE-POLICY.md
       - Documentation Policy: DOCS-POLICY.md
@@ -110,10 +122,10 @@ nav:
       - Release Branching And Packaging: reference/RELEASE-BRANCHING-AND-PACKAGING.md
       - eD2K Inventory: reference/ED2K-PROJECT-INVENTORY.md
       - eD2K Forums And Sites: reference/ED2K-FORUMS-AND-SITES.md
-      - eMuleBB Rust Scope: active/EMULEBB-RUST-SCOPE.md
   - Dependencies:
       - Status: dependencies/DEP-STATUS.md
   - Ideas:
+      - Cooperative DHT: ideas/IDEA-COOPERATIVE-DHT-COOPERATION.md
       - aMule Watchlist: ideas/IDEA-AMULE-WATCHLIST.md
       - Kad Protocol Modernization: ideas/IDEA-KAD-PROTOCOL-MODERNIZATION.md
       - IPv6 Kad Network: ideas/IDEA-IPV6-KAD-NETWORK.md
@@ -127,6 +139,9 @@ nav:
       - Historical References: HISTORICAL-REFERENCES.md
       - Abandoned Boost / POCO Adoption: history/ideas/IDEA-BOOST.md
       - Abandoned CMake / Ninja / vcpkg Adoption: history/ideas/IDEA-CMAKE.md
+  - Separate Family — p2p-overlord:
+      - eMule Agent Guide: reference/GUIDE-P2P-OVERLORD-EMULE-AGENT.md
+      - Product-Family Integration Plan: active/plans/P2P-OVERLORD-PRODUCT-FAMILY-INTEGRATION.md
 
 not_in_nav: |
   /active/items/**
