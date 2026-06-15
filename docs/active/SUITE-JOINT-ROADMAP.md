@@ -13,8 +13,10 @@ forward cross-network controller "in full development mode".
 
 1. **eMuleBB (MFC) `0.7.3` is the final MFC release** and enters **sustainability
    maintenance** — bug fixes only, no features or evolution. Its final package,
-   delivered via the PowerShell suite bootstrap, **also bundles qBittorrentBB and
-   emulebb-rust**.
+   delivered via the PowerShell suite bootstrap, **also bundles qBittorrentBB** (a
+   frozen snapshot) and the Arr stack. **emulebb-rust is NOT in this bootstrap** —
+   it is forward-only and ships separately with TrackMuleBB; the frozen bundle's
+   eD2K side is the MFC client itself.
 2. **aMuTorrent is frozen on the `0.7.3` line** — sustainability only, **no
    evolutive development**. It ships with the final MFC package and is **not** the
    forward controller.
