@@ -40,3 +40,7 @@ of per-repo folklore. Tiers are defined in [PRODUCT-PORTFOLIO](PRODUCT-PORTFOLIO
   visible debt, never silent.
 - New networked products inherit the Core/Companion bar at promotion time (see
   [PRODUCT-PORTFOLIO](PRODUCT-PORTFOLIO.md) lifecycle transitions).
+- The **test gating set** (which test tiers gate which release: suite vs MFC
+  `0.7.x` vs on-demand reference) is defined in
+  [TEST-STRATEGY](TEST-STRATEGY.md#gating-matrix-per-release). MFC-source, parity,
+  and VM/public tests are reference-only and do not gate a suite release.
