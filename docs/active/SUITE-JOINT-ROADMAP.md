@@ -18,10 +18,11 @@ forward cross-network controller "in full development mode".
 2. **aMuTorrent is frozen on the `0.7.3` line** — sustainability only, **no
    evolutive development**. It ships with the final MFC package and is **not** the
    forward controller.
-3. **The forward stack is: emulebb-rust + qBittorrentBB + a new Python
-   coordination controller with an integrated web UI** (Python-only, e.g.
-   NiceGUI; no Node/JS toolchain). The Python controller's coordination scope is
-   **exclusively emulebb-rust and qBittorrentBB** — no other clients, no MFC.
+3. **The forward stack is: emulebb-rust + qBittorrentBB + TrackMuleBB** — a new
+   Python coordination controller with an integrated web UI (Python-only, e.g.
+   NiceGUI; no Node/JS toolchain). Product **TrackMuleBB** (repo `trackmulebb`,
+   first-party, `-BB` family). Its coordination scope is **exclusively
+   emulebb-rust and qBittorrentBB** — no other clients, no MFC.
 4. Per qBittorrentBB's core-vs-REST policy, orchestration the generic Arr/REST
    stack can express stays external; the Python controller owns only the
    cross-network (eD2K <-> BT) suite logic that no single client can.
@@ -37,8 +38,8 @@ forward cross-network controller "in full development mode".
 - **aMuTorrent** = the cross-network web-UI controller of the `0.7.3` line, now
   **frozen** (sustainability only). Superseded as the forward controller by the
   Python coordinator — see Decision (2026-06-15).
-- **Python coordinator** = the forward controller for the emulebb-rust +
-  qBittorrentBB stack, Python-only with an integrated web UI (no Node).
+- **TrackMuleBB** = the forward controller for the emulebb-rust + qBittorrentBB
+  stack, Python-only with an integrated web UI (no Node); repo `trackmulebb`.
 
 ## Freeze scope (read first)
 

@@ -31,10 +31,13 @@ When there is any ambiguity, qualify the client. A BitTorrent client living unde
 | eMuleBB client | "the eMuleBB client" / "eMuleBB Windows client" | eD2K/Kad desktop (Windows; maintenance `0.7.x`) |
 | emulebb-rust | "emulebb-rust" | multiplatform eD2K/Kad core (forward core) |
 | qBittorrentBB | "qBittorrentBB" | BitTorrent companion |
-| aMuTorrent | "aMuTorrent" (the eMuleBB Suite controller) | cross-network web-UI controller |
+| aMuTorrent | "aMuTorrent" (the `0.7.3` Suite controller) | cross-network web-UI controller, **frozen** on `0.7.3` (sustainability) |
+| TrackMuleBB | "TrackMuleBB" (the eMuleBB Suite controller) | forward cross-network controller; Python, integrated web UI; repo `trackmulebb` |
 
 - aMuTorrent keeps its fork name (a controller, not a `-BB` client); tag it
-  "the eMuleBB Suite controller" where context helps.
+  "the `0.7.3` Suite controller". The forward controller is **TrackMuleBB**
+  (name = tracker + mule + `-BB`; first-party, built in-house, not a fork) — tag
+  it "the eMuleBB Suite controller".
 - **Upstream courtesy:** qBittorrentBB and aMuTorrent are **unofficial forks** of
   qBittorrent and aMuTorrent-upstream; say so where a newcomer might confuse them
   with the upstream projects.
