@@ -13,10 +13,12 @@ forward cross-network controller "in full development mode".
 
 1. **eMuleBB (MFC) `0.7.3` is the final MFC release** and enters **sustainability
    maintenance** — bug fixes only, no features or evolution. Its final package,
-   delivered via the PowerShell suite bootstrap, **also bundles qBittorrentBB** (a
-   frozen snapshot) and the Arr stack. **emulebb-rust is NOT in this bootstrap** —
-   it is forward-only and ships separately with TrackMuleBB; the frozen bundle's
-   eD2K side is the MFC client itself.
+   delivered via the PowerShell suite bootstrap, **also bundles qBittorrentBB**
+   and the Arr stack. The bundled qBittorrentBB **tracks its latest release as long
+   as it stays REST-API-compatible** (the REST API is the long-term compatibility
+   contract) — it is not pinned to an immutable snapshot. **emulebb-rust is NOT in
+   this bootstrap** — it is forward-only and ships separately with TrackMuleBB; the
+   frozen bundle's eD2K side is the MFC client itself.
 2. **aMuTorrent is frozen on the `0.7.3` line** — sustainability only, **no
    evolutive development**. It ships with the final MFC package and is **not** the
    forward controller.
@@ -28,6 +30,10 @@ forward cross-network controller "in full development mode".
 4. Per qBittorrentBB's core-vs-REST policy, orchestration the generic Arr/REST
    stack can express stays external; the Python controller owns only the
    cross-network (eD2K <-> BT) suite logic that no single client can.
+5. The **cross-network metadata-fabric automation** (notes 1–6) is a
+   **forward-only** experience (emulebb-rust + qBittorrentBB + TrackMuleBB). The
+   frozen Windows bundle gives side-by-side dual management via the frozen
+   aMuTorrent, **not** the new fabric.
 
 ## Naming (exact, do not conflate)
 
@@ -73,7 +79,7 @@ Each clause is a load-bearing constraint, not a slogan:
 - **Full suite** — integrated set, not isolated clients: eD2K/Kad client
   (`emulebb-rust`), BT client (`qBittorrentBB`), optional server
   (`goed2k-server`), indexers (Torznab/Prowlarr), Python tooling, and the
-  `amutorrent` controller. The notes 1–6 metadata fabric is what makes it a
+  **TrackMuleBB** controller. The notes 1–6 metadata fabric is what makes it a
   *suite* rather than two unrelated clients.
 - **Safe** — operationally (VPN-fail-closed binding, control plane on the local
   IP, data plane pinned to the tunnel) and content-wise (harvested content is
@@ -101,7 +107,7 @@ Each clause is a load-bearing constraint, not a slogan:
 ## Layered architecture
 
 ```
-Policy / orchestration ── amutorrent controller (optional layer)         notes 6,16,17
+Policy / orchestration ── TrackMuleBB controller (optional layer)        notes 6,16,17
 Discovery / index ─────── rust Kad/eD2K indexer + qBittorrentBB DHT       notes 11-15
                           harvester + Prowlarr federation
 Clients / transport ───── emulebb-rust (eD2K/Kad) + qBittorrentBB (BT)    Phase 0/1
@@ -133,7 +139,7 @@ deliverable #1; the indexer is not a later phase.
   `emulebb-rust` `docs/design/kad-ed2k-indexer.md`.
 - **Arr surfaces** (note 15): native `/api/v1` REST (control + search) + a Torznab
   endpoint + a qBittorrent-WebUI-emulating download-client API, so the Arr stack
-  and `amutorrent` drive rust exactly as they drive a qBittorrent (same pattern
+  and **TrackMuleBB** drive rust exactly as they drive a qBittorrent (same pattern
   eMuleBB already proved with its `/api/v2` compat layer).
 
 ### Phase 1 — `qBittorrentBB`
@@ -156,10 +162,10 @@ deliverable #1; the indexer is not a later phase.
   library pointer under a minted publisher key, resolving to v2/hybrid catalog
   torrents; cooperative-client mechanisms. See
   [ideas/IDEA-COOPERATIVE-DHT-COOPERATION](../ideas/IDEA-COOPERATIVE-DHT-COOPERATION.md).
-- **`amutorrent` suite automation** (notes 6, 16, 17): cross-network grab
+- **TrackMuleBB suite automation** (notes 6, 16, 17): cross-network grab
   decisions, reconcile/orphan actuation, "download the torrent instead" handoff.
-  Optional layer — clients + Prowlarr stay fully standalone. See `amutorrent`
-  `docs/SUITE-AUTOMATION.md`.
+  Optional layer — clients + Prowlarr stay fully standalone. Design reference
+  (carried over from the frozen aMuTorrent): `amutorrent/docs/SUITE-AUTOMATION.md`.
 
 ## Phase exit criteria (Definition of Done)
 
@@ -193,8 +199,9 @@ here, and a phase closes a suite milestone.
 **Phase 2 — fabric + controller:**
 - [ ] Python fabric produces reconcile/orphan reports + torrent⇄collection +
       `file_membership` (notes 1–6).
-- [ ] aMuTorrent actuates a cross-network intent handoff and acts on a fabric
-      report (`AMUT-FEAT-001`, `AMUT-FEAT-002`), staying an optional layer.
+- [ ] TrackMuleBB actuates a cross-network intent handoff and acts on a fabric
+      report (design captured in `AMUT-FEAT-001`/`AMUT-FEAT-002`), staying an
+      optional layer.
 
 ## Cross-cutting principles (decided this session)
 
@@ -235,7 +242,7 @@ specific slice.
   Arr surfaces. Tracked in `emulebb-rust/docs/active`.
 - **Phase 1 — qBittorrentBB**: branded export, harvested disk store, indexer /
   Torznab parity. Tracked in `qbittorrentbb/docs/active`.
-- **Phase 2 — metadata fabric + aMuTorrent automation** (notes 1–6, 16–17).
+- **Phase 2 — metadata fabric + TrackMuleBB automation** (notes 1–6, 16–17).
 
 ### Parked (ideas only — not scope, not backlog)
 
@@ -252,7 +259,7 @@ Promote a slice into a product backlog before any of these becomes work.
 | aMule watchlist | `ideas/IDEA-AMULE-WATCHLIST.md` |
 | Broad modernization / restructure surveys | `ideas/IDEA-MODERNIZATION-2026.md`, `ideas/IDEA-RESTRUCTURE.md` |
 | A4AF cross-file source dedup (rust) | `emulebb-rust/docs/design/source-management-and-a4af.md` |
-| aMuTorrent owning all generic download rules (scope split) | `amutorrent/docs/SUITE-AUTOMATION.md` |
+| TrackMuleBB owning all generic download rules (scope split) | `amutorrent/docs/SUITE-AUTOMATION.md` (frozen-aMuTorrent design reference) |
 
 eMuleBB-MFC `FUTURE-ROADMAP.md` lanes (dark mode, IPv6 dual-stack, µTP, NAT-PMP,
 etc.) are **parked-by-freeze**: `0.8.x` material only if the MFC app is not
@@ -268,7 +275,8 @@ Decided + set up 2026-06-14:
   owns workflow state (`workflow: github`).
 - **One org board aggregates them:** **eMuleBB Suite**,
   `https://github.com/orgs/emulebb/projects/3`, with single-select fields
-  `Product` (eMuleBB-MFC / emulebb-rust / qBittorrentBB / aMuTorrent / tooling) and
+  `Product` (eMuleBB-MFC / emulebb-rust / qBittorrentBB / TrackMuleBB / aMuTorrent /
+  tooling) and
   `Phase` (Phase 0/1/2). Phase 0 = rust issues #1–#4; Phase 1 = qBittorrentBB
   issues #1–#3.
 - **The MFC `eMuleBB Roadmap` board (#2) stays as-is** for the frozen 0.7.x line;
