@@ -6,6 +6,26 @@ maintenance annex. Companion governance: [PRODUCT-PORTFOLIO](PRODUCT-PORTFOLIO.m
 [QUALITY-GATES](QUALITY-GATES.md), [API-V1-COMPATIBILITY](API-V1-COMPATIBILITY.md).
 It is **not** a 0.7.3 gate and does **not** touch the frozen eMuleBB MFC app.
 
+## Decision (2026-06-15): forward stack supersedes the prior controller plan
+
+This decision supersedes the earlier framing below where aMuTorrent was the
+forward cross-network controller "in full development mode".
+
+1. **eMuleBB (MFC) `0.7.3` is the final MFC release** and enters **sustainability
+   maintenance** — bug fixes only, no features or evolution. Its final package,
+   delivered via the PowerShell suite bootstrap, **also bundles qBittorrentBB and
+   emulebb-rust**.
+2. **aMuTorrent is frozen on the `0.7.3` line** — sustainability only, **no
+   evolutive development**. It ships with the final MFC package and is **not** the
+   forward controller.
+3. **The forward stack is: emulebb-rust + qBittorrentBB + a new Python
+   coordination controller with an integrated web UI** (Python-only, e.g.
+   NiceGUI; no Node/JS toolchain). The Python controller's coordination scope is
+   **exclusively emulebb-rust and qBittorrentBB** — no other clients, no MFC.
+4. Per qBittorrentBB's core-vs-REST policy, orchestration the generic Arr/REST
+   stack can express stays external; the Python controller owns only the
+   cross-network (eD2K <-> BT) suite logic that no single client can.
+
 ## Naming (exact, do not conflate)
 
 - **eMuleBB** = the **C++ MFC Windows desktop app** (`emulebb-main`). The current
@@ -14,16 +34,22 @@ It is **not** a 0.7.3 gate and does **not** touch the frozen eMuleBB MFC app.
   strategic forward core (and the autonomous indexer of notes 13–15).
 - **qBittorrentBB** = the BitTorrent-side client (fork) with the DHT harvester +
   Torznab index.
-- **aMuTorrent** = the cross-network web-UI controller.
+- **aMuTorrent** = the cross-network web-UI controller of the `0.7.3` line, now
+  **frozen** (sustainability only). Superseded as the forward controller by the
+  Python coordinator — see Decision (2026-06-15).
+- **Python coordinator** = the forward controller for the emulebb-rust +
+  qBittorrentBB stack, Python-only with an integrated web UI (no Node).
 
 ## Freeze scope (read first)
 
-The only frozen product is the **eMuleBB (MFC) app**, which closes out with
-`0.7.3` final (see [FUTURE-ROADMAP](FUTURE-ROADMAP.md) and
-[FROZEN-SURFACES](FROZEN-SURFACES.md)). Every other product in the family —
+The frozen products are the **eMuleBB (MFC) app** and **aMuTorrent**, which both
+close out with the `0.7.3` final and enter **sustainability maintenance** (bug
+fixes only — see Decision 2026-06-15, [FUTURE-ROADMAP](FUTURE-ROADMAP.md) and
+[FROZEN-SURFACES](FROZEN-SURFACES.md)). The unfrozen forward products —
 `emulebb-rust`, `qBittorrentBB`, `goed2k-server`, the Python metadata-fabric
-tooling, and `amutorrent` — is in **full development mode, no limits**. This
-program lives entirely in that unfrozen space and begins after `0.7.3` ships.
+tooling, and the **new Python coordinator** — are in **full development mode, no
+limits**. This program lives entirely in that unfrozen space and begins after
+`0.7.3` ships.
 
 **eMuleBB 0.7.3 final scope:** the PowerShell suite bootstrap + local Arr
 integration + aMuTorrent. That is the whole of it — no further MFC feature scope.
