@@ -1,15 +1,21 @@
 openapi: 3.1.0
 info:
-  title: eMuleBB REST API
+  title: eMuleBB REST API (0.7.3, FROZEN)
   version: 0.7.3
-  summary: Canonical 0.7.3 RC2 contract for the embedded eMuleBB REST API.
+  summary: Frozen 0.7.3 contract for the eMuleBB MFC client (legacy lineage).
   description: >
-    This is the source-of-truth contract for the redesigned `/api/v1` API.
-    The API is served by the existing eMule WebServer listener, uses
-    `X-API-Key` authentication only, and is designed for aMuTorrent and other
-    trusted local controllers. eMuleBB 0.7.3-rc.2 is the current
-    release-candidate line for this contract; adapter compatibility must not
-    weaken the native route shape.
+    FROZEN ARTIFACT (decision 2026-06-15). This is the contract spoken by the
+    frozen eMuleBB MFC `0.7.3` client and its frozen consumer aMuTorrent. It is
+    no longer the shared/forward contract: the MFC client closed out at `0.7.3`
+    and entered sustainability maintenance, so this document changes only for
+    maintenance-compat repairs, never new capability.
+    The FORWARD `/api/v1` contract is owned by emulebb-rust and evolves on its
+    own independent contract version line (baselined on this 0.7.3 document) —
+    see `emulebb-rust/docs/rest/REST-API-OPENAPI.yaml` and
+    `emulebb-tooling/docs/active/API-V1-COMPATIBILITY.md`.
+    The API is served by the eMule WebServer listener, uses `X-API-Key`
+    authentication only, and was designed for aMuTorrent and other trusted local
+    controllers; adapter compatibility must not weaken the native route shape.
 servers:
   - url: http://{host}:{port}/api/v1
     variables:

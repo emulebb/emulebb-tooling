@@ -1,50 +1,65 @@
-# /api/v1 Compatibility Matrix
+# /api/v1 Contract Lineages
 
-Status: governance. Captured 2026-06-14. `/api/v1` is the **integration seam** that
-makes the family a suite: it is the shared controller contract implemented by
-**both** eD2K cores — the eMuleBB MFC app and emulebb-rust — so controllers
-(aMuTorrent, the Arr stack) drive either interchangeably. This page tracks which
-core implements which version of the contract, and the versioning policy.
+Status: governance. Updated 2026-06-15 (split decision). Supersedes the prior
+single-shared-contract / two-implementer "compatibility matrix" model.
 
-The matrix always lists **both eMuleBB (MFC) and emulebb-rust** as the two
-implementers of the contract.
+`/api/v1` used to be one shared contract implemented by **both** eD2K cores so a
+controller could drive either interchangeably. With the eMuleBB MFC client's fate
+decided (final `0.7.3`, sustainability freeze) and the forward controller
+(**TrackMuleBB**) scoped to **emulebb-rust + qBittorrentBB only — never the MFC
+client**, that interchangeability requirement is obsolete. The contract is
+therefore **split into two independent lineages**.
 
-## Contract versioning policy
+## The split (decision 2026-06-15)
 
-- `/api/v1` is **versioned explicitly** as a contract, independent of any product's
-  release tag. The contract spec + OpenAPI live with the MFC app
-  (`docs/rest/REST-API-CONTRACT.md`, `docs/rest/REST-API-OPENAPI.yaml`); the
-  contract version is the source of truth, not a client version.
-- Each implementer advertises the contract version range it supports. Controllers
-  target a **range**, not a product tag — so a frozen MFC at `0.7.x` and a
-  forward emulebb-rust can both satisfy the same controller.
-- Additive endpoints/fields bump the minor contract version; breaking changes bump
-  major and require a documented migration. The MFC app (frozen) does not gain new
-  capability; emulebb-rust leads contract evolution.
-- aMuTorrent pins to the **contract version range**, not to the frozen MFC tag (see
-  `amutorrent/docs/SUITE-AUTOMATION.md`).
+| Lineage | Owner / implementer | OpenAPI source of truth | Versioning | Evolves? |
+|---|---|---|---|---|
+| **Frozen `0.7.3`** | eMuleBB **MFC** client + its frozen consumer **aMuTorrent** | `emulebb-tooling/docs/rest/REST-API-OPENAPI.yaml` (`version: 0.7.3`, marked FROZEN) | pinned to `0.7.3` | **No** — maintenance-compat repairs only, never new capability |
+| **Forward** | **emulebb-rust** (drives **TrackMuleBB**) | `emulebb-rust/docs/rest/REST-API-OPENAPI.yaml` (`x-contract-version`, semver) | independent **contract semver**, decoupled from product tags | **Yes** — emulebb-rust leads, baselined on the `0.7.3` contract |
 
-## Implementation matrix
+The two lineages share a baseline (the forward contract starts as a copy of the
+frozen `0.7.3` document) and then diverge. There is **no cross-lineage
+interchangeability guarantee** and no shared version range to satisfy.
 
-| Capability area | eMuleBB (MFC) | emulebb-rust |
-|---|---|---|
-| Contract version | shipped at `0.7.3` (frozen) | tracks forward (leads evolution) |
-| Native `/api/v1` REST (search, shared files, transfers, categories, kad) | ✅ | ✅ |
-| qBittorrent-compat adapter (`/api/v2`, Arr download client) | ✅ (`WebServerQBitCompat`) | planned (`RUST-FEAT-004`) |
-| Torznab indexer adapter | ✅ (`WebServerArrCompat`) | planned (`RUST-FEAT-004`, served from the indexer `RUST-FEAT-002`) |
-| Autonomous Kad/eD2K index behind the search surface | — | planned (`RUST-FEAT-002`) |
-| Platform | Windows only | multiplatform |
+## Forward contract versioning policy (emulebb-rust)
 
-Legend: ✅ implemented · planned = tracked backlog item · — not applicable.
+- The forward contract is versioned as a **contract semver** via
+  `x-contract-version`, **independent of any product release tag** and of the
+  frozen MFC client. Baseline `1.0.0`.
+- Additive endpoints/fields bump the **minor**; breaking changes bump the
+  **major** with a documented migration.
+- emulebb-rust **advertises its contract version** at runtime (e.g. on `/app` and
+  a capabilities surface). **TrackMuleBB targets a contract version range and
+  degrades by capability** — it does not pin to a product tag.
+- Adapter compatibility (`/api/v2` qBit-compat, Torznab) must not broaden or
+  weaken the native forward contract.
 
-## How to keep it true
+## Frozen contract (MFC + aMuTorrent)
 
-- When emulebb-rust lands a `/api/v1` change, update the contract spec + version and
-  this matrix in the same change; re-run the REST contract/drift checks.
-- The frozen MFC column changes only for maintenance/compat repairs, never new
-  capability.
-- Controllers and the compatibility matrix are validated against the contract, not
-  against product tags.
+- A static artifact describing what the frozen MFC client and frozen aMuTorrent
+  speak. It does not gain capability. The `0.7.3` final package ships that frozen
+  pair together via the PowerShell bootstrap.
+- aMuTorrent is frozen with it; no forward consumer depends on the MFC `/api/v1`.
+
+## Conformance (replaces the hand-maintained matrix)
+
+- The **forward** contract gets an automated OpenAPI conformance/drift check in
+  **emulebb-rust CI** (responses validated against
+  `emulebb-rust/docs/rest/REST-API-OPENAPI.yaml`). One implementation, one spec —
+  the check, not a table, keeps them aligned. (Tracked as a REST contract item.)
+- The **frozen** contract needs no drift check beyond not regressing the MFC
+  shared listener; it is a snapshot.
+
+## Why this is simpler and more future-proof
+
+- Removes the constraint that created the future-proofness gaps: no need to keep a
+  dead client interchangeable, no cross-implementer version negotiation.
+- Resolves contract-version-vs-product-tag coupling: the forward line owns its
+  own semver; the frozen line is honestly pinned to `0.7.3`.
+- Lets emulebb-rust add forward-only capabilities (e.g. cursor pagination for the
+  autonomous index, new search evidence) without backward obligations to the MFC.
 
 Related: [SUITE-JOINT-ROADMAP](SUITE-JOINT-ROADMAP.md),
-[PRODUCT-PORTFOLIO](PRODUCT-PORTFOLIO.md), `docs/rest/REST-API-ADAPTERS` (MFC repo).
+[PRODUCT-PORTFOLIO](PRODUCT-PORTFOLIO.md),
+[REST-API-CONTRACT](../rest/REST-API-CONTRACT.md) (frozen `0.7.3`),
+`emulebb-rust/docs/rest/REST-API-OPENAPI.yaml` (forward).

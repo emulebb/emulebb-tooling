@@ -1,6 +1,14 @@
-# eMuleBB REST API Contract
+# eMuleBB REST API Contract (frozen `0.7.3`)
 
-**Status:** 0.7.3 RC2 broadband contract
+> **FROZEN lineage (decision 2026-06-15).** This document describes the `0.7.3`
+> contract spoken by the frozen eMuleBB **MFC** client and its frozen consumer
+> **aMuTorrent**. It does not evolve (maintenance-compat only). The **forward**
+> `/api/v1` contract is owned by **emulebb-rust** and evolves on its own
+> independent contract-version line —
+> `emulebb-rust/docs/rest/REST-API-OPENAPI.yaml`. The split and versioning policy
+> live in [API-V1-COMPATIBILITY](../active/API-V1-COMPATIBILITY.md).
+
+**Status:** 0.7.3 contract — FROZEN (MFC + aMuTorrent lineage)
 **Source of truth:** [REST-API-OPENAPI.yaml](REST-API-OPENAPI.yaml)
 **Adapter subsets:** [REST-API-ADAPTERS.md](REST-API-ADAPTERS.md)
 **Migrated action inventory:** [REST-API-PARITY-INVENTORY.md](REST-API-PARITY-INVENTORY.md)
