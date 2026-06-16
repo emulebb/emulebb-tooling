@@ -23,7 +23,7 @@ cognitive load of a 14-repo workspace and makes ownership of each decision obvio
 | `emulebb-rust` | Core | forward, Phase 0 | `docs/active` (`RUST-*`) | emulebb-rust |
 | `qbittorrentbb` | Companion | active, Phase 1 | `docs/active` (`QBBB-*`) | qBittorrentBB |
 | `trackmulebb` | Companion (controller) | forward, Phase 2 (Python; new) | `docs/active` (`TMBB-*`) | TrackMuleBB |
-| `amutorrent` | Frozen / Maintenance | ships with 0.7.3; sustainability only | `docs/active` (`AMUT-*` ref) | aMuTorrent |
+| `amutorrent` | Deprecated | superseded by TrackMuleBB (capability-driven); legacy-only in the 0.7.3 bundle | `docs/active` (`AMUT-*` ref) | aMuTorrent |
 | `emulebb` (MFC) | Frozen / Maintenance | closes 0.7.3 → 0.7.x | `emulebb-tooling/docs/active` (legacy IDs) | eMuleBB-MFC |
 | `goed2k-server` | Service / Lab | lab (no CI gate) | `docs/active` lab index (`GOED2K-*` reserved) | — (not on board while lab) |
 | `emulebb-build` | Infra | active | — | tooling |
@@ -39,9 +39,11 @@ cognitive load of a 14-repo workspace and makes ownership of each decision obvio
 
 The forward investment is **Core + Companion**. The historically heaviest-resourced
 product (`emulebb` MFC) is **Frozen** — its CI and 127-item backlog are maintenance,
-not growth. The forward cross-network controller is **TrackMuleBB** (new, Python);
-**aMuTorrent** is frozen with the `0.7.3` bundle (its automation design is retained
-as the TrackMuleBB reference). The bundled qBittorrentBB tracks its latest
+not growth. The forward cross-network controller is **TrackMuleBB** (new, Python,
+**capability-driven**: it drives any `/api/v1` core — emulebb-rust full, eMuleBB
+MFC frozen subset — plus qBittorrentBB). **aMuTorrent is deprecated** as a
+separate controller (legacy-only inside the `0.7.3` bundle; its automation design
+is retained as the TrackMuleBB reference). The bundled qBittorrentBB tracks its latest
 REST-API-compatible release rather than a pinned snapshot. Quality investment (CI gates, leak-tests, backlog depth) should track
 the tier, not history: Core/Companion get the strongest gates; the Frozen app gets
 only maintenance gates; Lab gets the lightest touch until promoted.

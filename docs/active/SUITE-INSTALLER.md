@@ -32,8 +32,11 @@ The artifact itself is hosted on the org pages site; this is its design record.
 2. **eD2K core** by `-Core`: `mfc` → `emulebb` (MFC client, default); `rust` →
    `emulebb-rust` instead.
 3. Always install the BitTorrent companion `qBittorrentBB`.
-4. Optionally install the controller `aMuTorrent` (`-IncludeController`). The
-   forward controller TrackMuleBB is added to the manifest when it ships.
+4. Optionally install the **single controller TrackMuleBB** (`-IncludeController`)
+   — capability-driven, it drives whichever core was installed (MFC frozen subset
+   or rust full) plus qBittorrentBB, via `/api/v1` capability negotiation (see
+   [API-V1-COMPATIBILITY](API-V1-COMPATIBILITY.md)). **aMuTorrent is deprecated**
+   (legacy-only inside the frozen `0.7.3` bundle).
 5. For each product: resolve **`GET /repos/<repo>/releases/latest`**, pick the
    asset matching `assetPattern`, download, **verify SHA-256** against a
    `<asset>.sha256` sibling asset when published, extract under
