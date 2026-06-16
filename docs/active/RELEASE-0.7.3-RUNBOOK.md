@@ -1,8 +1,13 @@
-# eMule Broadband Edition 0.7.3 RC1 Release Runbook
+# eMule Broadband Edition 0.7.3 RC Release Runbook
 
 This runbook is procedure only. Use
 [RELEASE-0.7.3](RELEASE-0.7.3.md) for current release status and
 [RELEASE-0.7.3-CHECKLIST](RELEASE-0.7.3-CHECKLIST.md) for final evidence.
+
+The `<rc>` token in the paths and asset names below is a placeholder for the
+**active release candidate** (e.g. `rc.2`, `rc.3`); the current candidate is
+named in [RELEASE-0.7.3](RELEASE-0.7.3.md). Substitute it when running the
+commands.
 
 ## Preflight
 
@@ -31,7 +36,7 @@ python -m emule_workspace test release-campaign --campaign emulebb-0.7.3
 ```
 
 `emulebb-0.7.3` is the stable quick campaign ID in `emulebb-build-tests`; it is
-not the RC1 tag or package name.
+not the RC tag or package name.
 
 ## Repeatable Build Matrix
 
@@ -66,7 +71,7 @@ python -m emule_workspace package-release --config Release --platform x64 --clea
 ```
 
 Output contract:
-`workspaces\workspace\state\package-build\emulebb-v0.7.3-rc.1\x64`.
+`workspaces\workspace\state\package-build\emulebb-v0.7.3-<rc>\x64`.
 The packaged binary must not contain startup diagnostics support.
 
 Package Release ARM64:
@@ -76,11 +81,11 @@ python -m emule_workspace package-release --config Release --platform ARM64 --cl
 ```
 
 Output contract:
-`workspaces\workspace\state\package-build\emulebb-v0.7.3-rc.1\arm64`.
+`workspaces\workspace\state\package-build\emulebb-v0.7.3-<rc>\arm64`.
 The packaged binary must not contain startup diagnostics support.
 
 `package-release` stages ZIP contents under
-`workspaces\workspace\state\release\emulebb-v0.7.3-rc.1\staging\<arch>` and writes
+`workspaces\workspace\state\release\emulebb-v0.7.3-<rc>\staging\<arch>` and writes
 the final ZIP, manifest, SBOM, standalone suite bootstrapper, and bootstrapper
 SHA-256 file next to that staging directory. Package app outputs are
 intentionally separate from developer app outputs so profiling builds cannot be
@@ -194,7 +199,7 @@ python -m emule_workspace package-release --config Release --platform ARM64 --cl
 Package manifests are written next to the ZIP assets under:
 
 ```text
-workspaces\workspace\state\release\emulebb-v0.7.3-rc.1
+workspaces\workspace\state\release\emulebb-v0.7.3-<rc>
 ```
 
 The release publication assets must be named:
@@ -202,12 +207,12 @@ The release publication assets must be named:
 ```text
 Bootstrap-eMuleBBSuite.ps1
 Bootstrap-eMuleBBSuite.ps1.sha256
-emulebb-0.7.3-rc.1-x64.zip
-emulebb-0.7.3-rc.1-x64.manifest.json
-emulebb-0.7.3-rc.1-x64.sbom.spdx.json
-emulebb-0.7.3-rc.1-arm64.zip
-emulebb-0.7.3-rc.1-arm64.manifest.json
-emulebb-0.7.3-rc.1-arm64.sbom.spdx.json
+emulebb-0.7.3-<rc>-x64.zip
+emulebb-0.7.3-<rc>-x64.manifest.json
+emulebb-0.7.3-<rc>-x64.sbom.spdx.json
+emulebb-0.7.3-<rc>-arm64.zip
+emulebb-0.7.3-<rc>-arm64.manifest.json
+emulebb-0.7.3-<rc>-arm64.sbom.spdx.json
 ```
 
 The packaging command is intentionally strict. It builds the selected
@@ -247,8 +252,8 @@ python -m emule_workspace package-amutorrent --config Release --platform x64
 The optional controller assets are written next to the core package assets:
 
 ```text
-workspaces\workspace\state\release\emulebb-v0.7.3-rc.1\emulebb-0.7.3-rc.1-amutorrent-x64.zip
-workspaces\workspace\state\release\emulebb-v0.7.3-rc.1\emulebb-0.7.3-rc.1-amutorrent-x64.manifest.json
+workspaces\workspace\state\release\emulebb-v0.7.3-<rc>\emulebb-0.7.3-<rc>-amutorrent-x64.zip
+workspaces\workspace\state\release\emulebb-v0.7.3-<rc>\emulebb-0.7.3-<rc>-amutorrent-x64.manifest.json
 ```
 
 The aMuTorrent package command requires clean provenance inputs for
@@ -268,9 +273,9 @@ After the final proof:
 - confirm [RELEASE-0.7.3](RELEASE-0.7.3.md) has no open RC-blocking task
   without item-level acceptance;
 - confirm release notes use `eMule broadband edition` and `eMuleBB`;
-- before the operator gives the RC2 go, maintain
-  `RELEASE-0.7.3-RC2-CHANGELOG.md`; at RC2 go, finalize its RC2 delta and
-  separate RC1-vs-stock/community-baseline section, including the RC1 release
-  date from the GitHub release record; and
+- before the operator gives the go for the active RC, maintain that
+  candidate's `RELEASE-0.7.3-RC<N>-CHANGELOG.md`; at RC go, finalize its RC
+  delta and the separate RC1-vs-stock/community-baseline section, including the
+  RC1 release date from the GitHub release record; and
 - create the active candidate tag only after package verification and a
   separate operator instruction.
