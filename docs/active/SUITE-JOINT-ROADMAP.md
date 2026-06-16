@@ -283,7 +283,7 @@ Promote a slice into a product backlog before any of these becomes work.
 | Kad protocol modernization | `ideas/IDEA-KAD-PROTOCOL-MODERNIZATION.md` |
 | NAT traversal / µTP | `ideas/IDEA-NAT-TRAVERSAL-UTP.md` |
 | aMule watchlist | `ideas/IDEA-AMULE-WATCHLIST.md` |
-| Broad modernization / restructure surveys | `ideas/IDEA-MODERNIZATION-2026.md`, `ideas/IDEA-RESTRUCTURE.md` |
+| Broad modernization / restructure surveys (archived — MFC frozen) | `history/ideas/IDEA-MODERNIZATION-2026.md`, `history/ideas/IDEA-RESTRUCTURE.md` |
 | A4AF cross-file source dedup (rust) | `emulebb-rust/docs/design/source-management-and-a4af.md` |
 | TrackMuleBB owning all generic download rules (scope split) | `amutorrent/docs/SUITE-AUTOMATION.md` (frozen-aMuTorrent design reference) |
 

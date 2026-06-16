@@ -1,7 +1,11 @@
-# Restructure Guidance
+# Restructure Guidance (archived)
 
-> Exploratory idea material. This is not an active implementation plan unless a
-> future `docs/active/` item explicitly promotes a specific slice.
+> **Archived / superseded historical idea (operator decision 2026-06-16).** This
+> targets module restructuring and god-file splits **inside the eMuleBB MFC
+> (`srchybrid`) tree**, which is now **frozen** at `0.7.3` — conflicting with the
+> MFC freeze and the frozen-file policy (no big refactors of large legacy `.cpp`
+> files). Retained as historical exploratory material only; the forward codebase
+> is **emulebb-rust**, which has its own file-size policy.
 
 ## Table of Contents
 

@@ -2,7 +2,9 @@
 
 Exploratory idea material. This is not an active implementation plan, release
 scope, or current product claim unless a future `docs/active/` item explicitly
-promotes a specific slice.
+promotes a specific slice. Any forward implementation targets **emulebb-rust**
+(the forward eD2K/Kad core); the eMuleBB MFC app is frozen, so the MFC code
+observations below are reference, not a work plan for that app.
 
 ## Summary
 
@@ -28,7 +30,8 @@ improvements, and a cleaner contact model.
 
 ## Current Constraints And Local Observations
 
-The current app worktree keeps the classic Kad shape:
+The frozen eMuleBB MFC app keeps the classic Kad shape (these are reference
+observations; forward changes land in emulebb-rust):
 
 - contacts are IPv4-shaped, with `CContact` carrying a `uint32` IP, UDP port,
   TCP port, Kad version, UDP key, and verification state

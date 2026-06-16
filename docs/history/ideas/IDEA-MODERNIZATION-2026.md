@@ -1,8 +1,12 @@
-# eMule 2026 — Full Modernization Engineering Roadmap
+# eMule 2026 — Full Modernization Engineering Roadmap (archived)
 
-> Exploratory idea material. This is not an active implementation plan or
-> release scope unless a future `docs/active/` item explicitly promotes a
-> specific slice.
+> **Archived / superseded historical idea (operator decision 2026-06-16).** This
+> is a 12-month modernization roadmap for the **eMuleBB MFC (`srchybrid`) app**,
+> which is now **frozen** at `0.7.3` (final, possibly the last MFC release).
+> Forward development moved to **emulebb-rust + qBittorrentBB + TrackMuleBB**, so
+> this MFC-centric plan is **not active scope**. It is retained as historical
+> exploratory material only; if a specific pillar is still wanted, re-express it
+> as a forward (rust) idea rather than scheduled MFC work.
 
 **Audience:** Engineering team
 **Horizon:** 12 months of sustained effort

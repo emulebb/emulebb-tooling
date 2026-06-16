@@ -134,8 +134,6 @@ nav:
       - aMule Watchlist: ideas/IDEA-AMULE-WATCHLIST.md
       - Kad Protocol Modernization: ideas/IDEA-KAD-PROTOCOL-MODERNIZATION.md
       - IPv6 Kad Network: ideas/IDEA-IPV6-KAD-NETWORK.md
-      - Modernization: ideas/IDEA-MODERNIZATION-2026.md
-      - Restructure: ideas/IDEA-RESTRUCTURE.md
       - NAT Traversal And uTP: ideas/IDEA-NAT-TRAVERSAL-UTP.md
       - libtorrent Content Mesh: ideas/IDEA-LIBTORRENT-MESH.md
       - qBittorrentBB Mesh: ideas/IDEA-QBITTORRENTBB-MESH.md
@@ -144,6 +142,8 @@ nav:
       - Historical References: HISTORICAL-REFERENCES.md
       - Abandoned Boost / POCO Adoption: history/ideas/IDEA-BOOST.md
       - Abandoned CMake / Ninja / vcpkg Adoption: history/ideas/IDEA-CMAKE.md
+      - Abandoned eMule 2026 Modernization Roadmap: history/ideas/IDEA-MODERNIZATION-2026.md
+      - Abandoned MFC Restructure Guidance: history/ideas/IDEA-RESTRUCTURE.md
   - Separate Family — p2p-overlord:
       - eMule Agent Guide: reference/GUIDE-P2P-OVERLORD-EMULE-AGENT.md
       - Product-Family Integration Plan: active/plans/P2P-OVERLORD-PRODUCT-FAMILY-INTEGRATION.md
