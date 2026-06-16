@@ -87,7 +87,9 @@ nav:
       - Source And Backlog (GitHub): https://github.com/emulebb/emulebb-rust
   - qBittorrentBB (Companion):
       - Source And Backlog (GitHub): https://github.com/emulebb/qbittorrentbb
-  - aMuTorrent (Controller):
+  - TrackMuleBB (Controller):
+      - Source And Backlog (GitHub): https://github.com/emulebb/trackmulebb
+  - aMuTorrent (Controller — frozen 0.7.3, legacy):
       - Stack Integrations: reference/GUIDE-STACK-INTEGRATIONS.md
       - Controllers And REST: reference/GUIDE-CONTROLLERS-REST.md
       - Source And Backlog (GitHub): https://github.com/emulebb/amutorrent

@@ -1,12 +1,19 @@
 # eMuleBB Rust Scope
 
+> **Forward spec — not in the 0.7.3 ship scope.** emulebb-rust is the forward
+> multiplatform eD2K/Kad core; it is out of the eMuleBB MFC `0.7.3` release
+> train. This document is the rust scope target, not current release truth.
+
 `emulebb-rust` is a headless eMuleBB-family core client with local indexing.
 The 0.0.3 target is not full historical eMule application parity. It is the
 search, share, download, upload, queue, ED2K, Kad, persistence, and controller
-surface needed for a real local client behind controllers such as aMuTorrent.
+surface needed for a real local client driven by **TrackMuleBB** (the forward
+eMuleBB Suite controller).
 
-eMuleBB owns the common `/api/v1` REST contract; Rust implements that contract
-directly and must not add private aliases or shims.
+emulebb-rust is the **canonical superset / source of truth** for the one
+capability-gated `/api/v1` contract (see
+[API-V1-COMPATIBILITY](API-V1-COMPATIBILITY.md)); it must not add private
+aliases or shims outside that contract.
 
 ## Required Capability Target
 

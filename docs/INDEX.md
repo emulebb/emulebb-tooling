@@ -18,16 +18,30 @@
   <img alt="eMuleBB broadband edition logo" src="../assets/brand/emulebb-broadband-edition-logo.png" />
 </section>
 
+## The eMuleBB Suite
+
+This guide covers the **eMuleBB Windows client** (the frozen `0.7.3` eD2K/Kad
+desktop app). It is one product in the broader **eMuleBB Suite**: the forward
+multiplatform core **emulebb-rust**, the BitTorrent companion **qBittorrentBB**,
+and the forward cross-network controller + installer **TrackMuleBB** (which
+supersedes the now-frozen aMuTorrent and drives any `/api/v1` core by advertised
+capability). For the suite as a whole — roadmap, the three-network bundle
+(eD2K / BitTorrent / Usenet), and install/Docker delivery — see the
+[Suite Roadmap](active/SUITE-JOINT-ROADMAP.md),
+[Suite Bundle & Installer](active/SUITE-INSTALLER.md), and
+[Suite Docker Delivery](active/SUITE-DOCKER.md).
+
 ## Start Here
 
 ### Install Fast Path
 
 - [Full suite one-liner](reference/GUIDE-SETUP.md#full-suite-install-powershell-bootstrap):
-  run the RC1 PowerShell bootstrapper directly from GitHub Releases when you
-  want eMuleBB plus aMuTorrent, Prowlarr, Radarr, and Sonarr integration.
+  run the current `0.7.3` RC PowerShell bootstrapper directly from GitHub
+  Releases when you want eMuleBB plus aMuTorrent, Prowlarr, Radarr, and Sonarr
+  integration.
 - [Manual standalone ZIP](reference/GUIDE-SETUP.md#quick-install-zip-extract-run):
-  download the RC1 eMuleBB ZIP, extract it into a new app folder, and start
-  `emulebb.exe`.
+  download the current `0.7.3` RC eMuleBB ZIP, extract it into a new app folder,
+  and start `emulebb.exe`.
 - [Hyper-V isolated suite runs](reference/GUIDE-HYPERV-WINDOWS.md):
   prepare clean local Windows guests and run package or suite checks without
   touching the host's daily eMuleBB profile.
@@ -55,7 +69,7 @@ Use these guides in order for a first real profile:
    eMuleBB plus aMuTorrent plus Arr workflow with field-level setup details.
 
 For public release testing, use the
-[0.7.3 RC1 release notes](active/RELEASE-0.7.3-NOTES.md) before downloading or
+[0.7.3 RC release notes](active/RELEASE-0.7.3-NOTES.md) before downloading or
 reporting package behavior.
 
 ## Developer And Release Operator Paths
@@ -68,10 +82,10 @@ workspace and release controls instead of the product manual:
 | Contributor or AI agent | [Workspace Policy](WORKSPACE-POLICY.md) and [Agent Checklist](reference/AGENT-CHECKLIST.md) |
 | Routine developer | [Development Guide](reference/DEVELOPMENT-GUIDE.md) |
 | Backlog owner | [Active Backlog](active/INDEX.md) and [Backlog Process](reference/BACKLOG-PROCESS.md) |
-| RC1 release operator | [0.7.3 RC1 Dashboard](active/RELEASE-0.7.3.md) |
+| RC release operator | [0.7.3 Release Train Dashboard](active/RELEASE-0.7.3.md) |
 | REST/controller reviewer | [REST Contract](rest/REST-API-CONTRACT.md) and [Controller Surface Matrix](active/CONTROLLER-SURFACE-MATRIX.md) |
 
-RC1 operators should also use the
+RC operators should also use the
 [Execution Plan](active/plans/RELEASE-0.7.3-EXECUTION-PLAN.md) and
 [Runbook](active/RELEASE-0.7.3-RUNBOOK.md).
 
@@ -211,10 +225,10 @@ are not the best first read for users.
 | Active backlog and release dashboard | [active/INDEX](active/INDEX.md) |
 | p2p-overlord product-family integration plan | [active/plans/P2P-OVERLORD-PRODUCT-FAMILY-INTEGRATION](active/plans/P2P-OVERLORD-PRODUCT-FAMILY-INTEGRATION.md) |
 | Ecosystem suite bootstrap planning | [active/plans/ECOSYSTEM-SUITE-BOOTSTRAP-PLAN](active/plans/ECOSYSTEM-SUITE-BOOTSTRAP-PLAN.md) |
-| 0.7.3 RC1 release control document | [active/RELEASE-0.7.3](active/RELEASE-0.7.3.md) |
-| Public 0.7.3 RC1 release notes | [active/RELEASE-0.7.3-NOTES](active/RELEASE-0.7.3-NOTES.md) |
-| 0.7.3 RC1 release checklist | [active/RELEASE-0.7.3-CHECKLIST](active/RELEASE-0.7.3-CHECKLIST.md) |
-| 0.7.3 RC1 release runbook | [active/RELEASE-0.7.3-RUNBOOK](active/RELEASE-0.7.3-RUNBOOK.md) |
+| 0.7.3 release-train control document | [active/RELEASE-0.7.3](active/RELEASE-0.7.3.md) |
+| Public 0.7.3 RC release notes | [active/RELEASE-0.7.3-NOTES](active/RELEASE-0.7.3-NOTES.md) |
+| 0.7.3 RC release checklist | [active/RELEASE-0.7.3-CHECKLIST](active/RELEASE-0.7.3-CHECKLIST.md) |
+| 0.7.3 RC release runbook | [active/RELEASE-0.7.3-RUNBOOK](active/RELEASE-0.7.3-RUNBOOK.md) |
 | Backlog process | [reference/BACKLOG-PROCESS](reference/BACKLOG-PROCESS.md) |
 | Backlog item template | [reference/BACKLOG-ITEM-TEMPLATE](reference/BACKLOG-ITEM-TEMPLATE.md) |
 | Evidence retention policy | [reference/EVIDENCE-RETENTION](reference/EVIDENCE-RETENTION.md) |
