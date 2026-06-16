@@ -4,16 +4,16 @@ Status: planning only. This document records intended post-0.7.3 ecosystem
 packaging direction. It does not describe the current 0.7.3 RC2 bootstrapper or
 any shipped release asset.
 
-> **Installer direction (decision 2026-06-16):** the Windows suite bootstrap is a
-> **generic, version-independent installer hosted on the org pages site**
-> (`emulebb/emulebb.github.io` → `irm https://emulebb.github.io/install.ps1 | iex`),
-> resolving each product's **latest** GitHub release at runtime with a
-> `-Core mfc|rust` switch. It is **decoupled from any product release train**
-> (notably the frozen `emulebb` MFC release the RC bootstrapper used). The
-> mechanics and migration are specified in
-> [SUITE-INSTALLER](../SUITE-INSTALLER.md); the RC-coupled `Bootstrap-eMuleBBSuite.ps1`
-> asset is superseded by it. The sections below describe packaging intent and
-> stay valid; the *delivery* is the pages-hosted generic installer.
+> **Installer & bundle direction (updated 2026-06-16):** the canonical design is
+> now [SUITE-INSTALLER](../SUITE-INSTALLER.md). The Windows one-liner
+> (`irm https://emulebb.github.io/install.ps1 | iex`) is a **minimal bootstrap**
+> (installs `uv` self-contained, fetches TrackMuleBB, runs its setup CLI); the real
+> install is the **Python setup CLI inside TrackMuleBB** (TUI + `suite.toml`),
+> which installs/auto-wires the **ready-to-use bundle** across **three networks**
+> (eD2K, BitTorrent, Usenet) plus the Arr stack, Bountarr, and (Docker) Plex —
+> self-contained, no host interference, `-Core mfc|rust`, decoupled from any
+> product release train. The RC-coupled `Bootstrap-eMuleBBSuite.ps1` is superseded.
+> The packaging-intent sections below stay valid; SUITE-INSTALLER is the delivery.
 
 ## Summary
 

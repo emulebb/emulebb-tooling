@@ -138,6 +138,11 @@ file_membership(ed2k_hash, torrent_infohash, file_index, torrent_name,
   the link is proven by hashing the bytes that are local (the torrent's files on
   disk) — which is exactly what notes 2/5 already do. Treat this table as that
   map's local store, not a second parallel structure.
+- **TrackMuleBB search dedup consumes this map** as the **authoritative** source:
+  cross-network results (an eD2K hit and a BT hit for the same content) **merge**
+  into one row when the map relates them; unmapped results fall back to **exact
+  file size + normalized name** (non-destructive — the user can expand the merged
+  group). See [SUITE-INSTALLER](SUITE-INSTALLER.md) and the TrackMuleBB backlog.
 - Many-to-many (one file can belong to several torrents → the offer may present
   several options).
 - **Live-library torrents only.** "Download the torrent instead" only ever offers

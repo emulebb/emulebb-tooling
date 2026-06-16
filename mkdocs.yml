@@ -57,7 +57,7 @@ nav:
       - Product Portfolio: active/PRODUCT-PORTFOLIO.md
       - Quality Gates: active/QUALITY-GATES.md
       - Test Strategy: active/TEST-STRATEGY.md
-      - Suite Installer: active/SUITE-INSTALLER.md
+      - Suite Bundle & Installer: active/SUITE-INSTALLER.md
       - API v1 Compatibility: active/API-V1-COMPATIBILITY.md
       - Metadata Fabric: active/SUITE-METADATA-FABRIC.md
       - Ecosystem Bootstrap Plan: active/plans/ECOSYSTEM-SUITE-BOOTSTRAP-PLAN.md

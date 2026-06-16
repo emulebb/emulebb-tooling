@@ -74,6 +74,26 @@ metadata-fabric eD2K integrations (notes 1/5/6) target **emulebb-rust's
 `emulebb-metadata` SQLite as the primary** share/hash source; MFC `known.met` is a
 compatibility path only.
 
+## Suite bundle & three networks (decision 2026-06-16)
+
+The suite grows into a **ready-to-use bundle** spanning **three networks** —
+eD2K (emulebb-rust / eMuleBB MFC), BitTorrent (qBittorrentBB), Usenet (SABnzbd) —
+plus the Arr automation stack, **Bountarr** (our household media-grab UI over
+Radarr/Sonarr+Plex), and (Docker) Plex.
+
+- **TrackMuleBB is the single pane and the installer.** Its Python setup CLI
+  installs/auto-wires the bundle; its web UI is the runtime single pane (unified
+  transfers/search, **dynamic global bandwidth coordination**, cross-network
+  **dedup** via the equivalence map). The PowerShell one-liner becomes a **minimal
+  bootstrap**. Full design: [SUITE-INSTALLER](SUITE-INSTALLER.md).
+- **Search** aggregates the clients natively (rust index + qBittorrentBB harvest,
+  via a native path) plus **Prowlarr** for third-party/Usenet indexers, excluding
+  the **tagged** TrackMuleBB indexers to avoid duplicates.
+- **Phasing:** automate our components first (rust/MFC/qBittorrentBB/TrackMuleBB/
+  Bountarr) + pre-configure base settings for the third-party stack; deeper
+  third-party automation later. **Self-contained, no host interference**
+  (uv-managed Python, Node only for Bountarr).
+
 ## North star
 
 > A full, safe, peer-to-peer file-sharing suite for sharing professionals, with

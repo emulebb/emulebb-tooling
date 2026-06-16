@@ -1,87 +1,133 @@
-# Suite Installer (generic Windows bootstrap)
+# Suite Bundle & Installer
 
-Status: design / direction. Captured 2026-06-16. Defines the generic,
-version-independent Windows installer for the eMuleBB Suite and where it lives.
-The artifact itself is hosted on the org pages site; this is its design record.
+Status: design / direction. Rewritten 2026-06-16 to integrate the bundle notes.
+Defines the ready-to-use eMuleBB Suite bundle and how it is installed. Supersedes
+the earlier "generic pages-hosted `install.ps1` does the whole install" model: the
+PowerShell one-liner is now a **minimal bootstrap**, and the real setup is a
+**Python CLI inside TrackMuleBB**.
 
-## Decision
-
-- The installer is **generic and version-independent**: it pins no product
-  version and is **not** an asset of any product release (notably **not** the
-  frozen `emulebb` MFC release). It always installs the **latest** of each product.
-- **Home (artifact):** the org root pages repo **`emulebb/emulebb.github.io`**
-  (checked out locally as `repos/emulebb-pages`), served at the site root. Chosen
-  over `emulebb-tooling` because it gives the clean root URL **and** sits outside
-  the `powershell-boundary` policy scope (no tracked-`.ps1` restriction, no policy
-  amendment, no CI conflict).
-- **Home (governance):** this doc + `ECOSYSTEM-SUITE-BOOTSTRAP-PLAN.md` in
-  `emulebb-tooling`. Tooling documents how it works; pages hosts the artifact.
-- **Entry point:** `irm https://emulebb.github.io/install.ps1 | iex`.
-
-## Artifacts (in `emulebb.github.io` root)
-
-| File | Purpose |
-|---|---|
-| `install.ps1` | the generic bootstrap (PS 5.1; `-Core mfc\|rust`, `-IncludeController`, `-DryRun`) |
-| `suite-manifest.json` | source of truth for products, repos, asset patterns, core mapping |
-| `install.ps1.sha256` | script integrity (verify-before-`iex` for the security-conscious) |
-
-## How it works
-
-1. Fetch `suite-manifest.json` from the same origin (`$BaseUrl`).
-2. **eD2K core** by `-Core`: `mfc` → `emulebb` (MFC client, default); `rust` →
-   `emulebb-rust` instead.
-3. Always install the BitTorrent companion `qBittorrentBB`.
-4. Optionally install the **single controller TrackMuleBB** (`-IncludeController`)
-   — capability-driven, it drives whichever core was installed (MFC frozen subset
-   or rust full) plus qBittorrentBB, via `/api/v1` capability negotiation (see
-   [API-V1-COMPATIBILITY](API-V1-COMPATIBILITY.md)). **aMuTorrent is deprecated**
-   (legacy-only inside the frozen `0.7.3` bundle).
-5. For each product: resolve **`GET /repos/<repo>/releases/latest`**, pick the
-   asset matching `assetPattern`, download, **verify SHA-256** against a
-   `<asset>.sha256` sibling asset when published, extract under
-   `%LOCALAPPDATA%\eMuleBB-Suite\<product>`.
-6. Products with no published release yet are **skipped with a warning** (so the
-   installer is safe to run before `emulebb-rust`/`qBittorrentBB` cut releases).
-
-## Integrity
-
-- The script is fetched over HTTPS from GitHub Pages; `install.ps1.sha256` lets a
-  user verify it before `iex`.
-- Each product download is SHA-256-verified against its own release's published
-  checksum. **Recommendation:** every product release should publish a
-  `<asset>.sha256` sibling so the installer's verification is always active.
-- Artifacts remain **unsigned** (org policy); no code signing.
-
-## Manifest shape
-
-`cores` maps `mfc`/`rust` → a product key. `products.<key>` carries `repo`,
-`role`, `assetPattern`. `alwaysInstall` lists products installed regardless of
-core; `optional` lists opt-in products. Adding a product (e.g. `trackmulebb`) or
-changing an asset pattern is a manifest edit only — `install.ps1` stays generic.
-
-## Migration & status
-
-- **Scaffold today.** `install.ps1` parses clean and is structured for real use,
-  but the end-to-end flow is **not yet validated** (and `emulebb-rust`/
-  `qBittorrentBB` have no releases yet).
-- The org README one-liner still points at the **tested** RC bootstrap
-  (`emulebb/releases/.../Bootstrap-eMuleBBSuite.ps1`). **Do not flip the public
-  README to `emulebb.github.io/install.ps1` until the installer is validated**
-  end-to-end against real releases (at minimum: MFC core install + qBittorrentBB).
-  That flip is the final step.
-- `ECOSYSTEM-SUITE-BOOTSTRAP-PLAN.md` is updated to reference this generic,
-  pages-hosted approach as the target (superseding the RC-coupled bootstrap).
-
-## Validation plan (before the README flip)
-
-- [ ] `-DryRun` resolves latest releases for `emulebb` + `qBittorrentBB` and
-      reports the correct assets.
-- [ ] Real install of the MFC core + qBittorrentBB under a throwaway root.
-- [ ] `-Core rust` path once `emulebb-rust` cuts a Windows release.
-- [ ] SHA-256 verification exercised against a release that publishes `<asset>.sha256`.
-- [ ] PSScriptAnalyzer / a smoke test wired into the shared harness.
-
-Related: [PRODUCT-PORTFOLIO](PRODUCT-PORTFOLIO.md),
-[SUITE-JOINT-ROADMAP](SUITE-JOINT-ROADMAP.md),
+Governance companions: [SUITE-JOINT-ROADMAP](SUITE-JOINT-ROADMAP.md),
+[PRODUCT-PORTFOLIO](PRODUCT-PORTFOLIO.md),
+[API-V1-COMPATIBILITY](API-V1-COMPATIBILITY.md),
 `plans/ECOSYSTEM-SUITE-BOOTSTRAP-PLAN.md`.
+
+## Goal
+
+A **ready-to-use bundle** that combines our P2P/Usenet download stack with the Arr
+automation stack in one setup: emulebb-rust (or eMuleBB MFC on Windows),
+qBittorrentBB, TrackMuleBB, the Arr stack, SABnzbd, Bountarr, and (Docker) Plex.
+**Self-contained** in the install directory, **no interference** with the host,
+with all inter-app connections **auto-wired**.
+
+## Bundle composition
+
+Two tiers, by who can install/wire them reliably:
+
+| Tier | Components | Install |
+|---|---|---|
+| **Ours (auto-scripted)** | emulebb-rust, eMuleBB MFC (Windows only), qBittorrentBB, TrackMuleBB, Bountarr | installed + fully auto-wired by TrackMuleBB's setup |
+| **Third-party (phase 1: manual + docs)** | Arr stack (Prowlarr/Sonarr/Radarr), SABnzbd, Plex (Docker) | manual install with high-level docs, but **base settings pre-configured** (paths, language, API wiring templates). Full automation is a later phase |
+
+- **Phasing (decision 2026-06-16):** phase 1 fully automates *our* components and
+  **pre-configures base settings** (paths/language/wiring) for the rest; deeper
+  third-party install automation comes later.
+- **eD2K core:** on Windows the bundle offers **MFC or emulebb-rust** (selectable);
+  the strategic direction replaces the eMule backend with emulebb-rust. Docker is
+  **rust-only** (MFC is Windows-only).
+- **Bountarr** is ours but needs the Arr stack (it pulls Radarr/Sonarr as a
+  dependency) and is the **only Node** component (Node confined to Bountarr; the
+  rest is Python).
+
+## Selection rules
+
+- **TrackMuleBB is always installed; its start is optional** (additive, never a
+  required hop — clients work standalone).
+- Components are **selectable**; the selector **enforces dependencies** (e.g.
+  Bountarr → Radarr/Sonarr; SAB → a Usenet indexer in Prowlarr).
+- **At least one P2P download client** must be selected (emulebb-rust / eMuleBB MFC
+  / qBittorrentBB). SABnzbd (Usenet) is additive and does not satisfy the rule
+  alone.
+- Whether optional-start applies to non-controller components too is **TBD**.
+
+## Delivery forms (same TrackMuleBB brain, two targets)
+
+- **Windows-local:** `install.ps1` minimal bootstrap → TrackMuleBB Python **setup
+  CLI** does the native install.
+- **Docker:** a committed `docker-compose.yml` driven by **compose profiles**
+  (`COMPOSE_PROFILES=rust,qbbb,arr,sab,gluetun`) + a tiny `setup.sh` (prompts →
+  `.env`, picks profiles, `up`). TrackMuleBB's CLI can generate/update this compose
+  (`setup --target docker`) so there is **one source of truth, no wiring drift**.
+  - **Gluetun yes/no** is the Docker network-safety mechanism: when on, **only the
+    P2P containers** (rust, qbbb) route through Gluetun (`network_mode:
+    service:gluetun`, fail-closed) — the Docker analog of the hide.me split-tunnel.
+    Control plane, Arr, SAB, Bountarr, Plex stay on the normal network. Any
+    Gluetun-supported VPN provider.
+  - **Plex** is Docker-only (on Windows users run Plex natively); pre-wired
+    library paths + Bountarr token, but the **plex.tv claim** stays a manual step.
+
+## Two-stage installer (Windows-local)
+
+1. **`install.ps1` (minimal bootstrap, on pages):** download the **`uv`** binary
+   directly into the install dir, fetch the TrackMuleBB setup, and invoke its CLI.
+   Nothing else (no per-product download/wiring in the ps1).
+2. **TrackMuleBB setup CLI (Python, in the `trackmulebb` repo):** the real
+   installer — component selection, install, **auto-wiring of every connection**
+   (API keys, Prowlarr/Arr/download-client registration, the TrackMuleBB
+   indexer-exclusion tag), profile import, and start.
+
+### CLI shape
+
+- **TUI** (rich, interactive) by default; **non-interactive** via flags + a
+  declarative **`suite.toml`** (reproducible, CI-able).
+- **CLI owns install/lifecycle; the web UI owns app settings only** (never
+  installation). Add a component later = re-run the CLI.
+- Lifecycle: **install / update / repair** (no uninstall command — removal = delete
+  the self-contained dir, by design). Initial phase = install only.
+
+## Self-contained & host isolation
+
+- **Everything under the install dir:** runtimes, component binaries, config, data,
+  state, logs.
+- **Python via `uv`, only-managed:** the bootstrap puts the `uv` binary in the
+  install dir; `uv python install <pinned> --python-preference only-managed` uses a
+  standalone CPython and **never touches or requires a system Python**. `UV_*` dirs
+  point inside the install dir. No global PATH, no admin.
+- **Node only for Bountarr:** TrackMuleBB downloads a self-contained Node (v22+)
+  into the install dir when Bountarr is selected; never global.
+- **Data paths:** default under the install dir, **overridable at setup** (large
+  media can live on another disk).
+- **Firewall:** the setup does a **basic check** and, on Windows with the firewall
+  active, **points the user to documentation** (UPnP/NAT-PMP preferred; manual
+  inbound rules as a documented, opt-in admin step) — never a silent system change.
+- **No Windows services** (user processes); avoid local port clashes.
+
+## Profile import
+
+- Optional **import of existing profiles**: copy only an **allowlist of relevant
+  keys** and **rewrite the path parameters** to the install-dir layout. One-time
+  **copy + rewrite**, never a link; the original profile is untouched.
+- Phase 1 scope: **P2P clients first** (eD2K profile for eMuleBB/rust +
+  qBittorrentBB), the rest later. **Cross-core mapping** (MFC profile ↔ rust) is
+  **TBD**.
+
+## Networks & bandwidth
+
+The bundle spans **three networks** — eD2K (rust/MFC), BitTorrent (qBittorrentBB),
+Usenet (SABnzbd). TrackMuleBB is the **single pane**: unified transfers/search,
+**dynamic global bandwidth coordination** (rebalances per-client limits under a
+configurable global cap; upload-coordination is eD2K+BT only since Usenet is
+download-only), and cross-network **dedup** (see TrackMuleBB backlog). Search
+aggregates the clients natively + Prowlarr (excluding the tagged TrackMuleBB
+indexers); results merge by the metadata-fabric equivalence map, falling back to
+exact-size + name.
+
+## Migration / status
+
+- `install.ps1` becomes the minimal bootstrap; `suite-manifest.json` moves into
+  TrackMuleBB (a bundled default + an optional remote-override copy on pages). The
+  setup logic lives in `trackmulebb` (`setup/` CLI + `web/` UI + `coordinator/`).
+- **Scaffold:** the TrackMuleBB setup CLI and the bundle wiring are not built yet;
+  the org README one-liner stays on the tested RC bootstrap until this is validated.
+- Tracked work: TrackMuleBB `TMBB-FEAT-*` (search/dedup/bandwidth/SAB/settings/
+  setup-CLI/profile-import); the cores' `/api/v1` capability work (FEAT-122,
+  RUST/QBBB items).
