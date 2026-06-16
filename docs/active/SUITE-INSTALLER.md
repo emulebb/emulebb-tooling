@@ -26,7 +26,7 @@ Two tiers, by who can install/wire them reliably:
 | Tier | Components | Install |
 |---|---|---|
 | **Ours (auto-scripted)** | emulebb-rust, eMuleBB MFC (Windows only), qBittorrentBB, TrackMuleBB, Bountarr | installed + fully auto-wired by TrackMuleBB's setup |
-| **Third-party (phase 1: manual + docs)** | Arr (Prowlarr/Sonarr/Radarr), SABnzbd, Plex (Docker) | manual install + high-level docs; **base settings pre-configured** (paths/language/wiring) |
+| Third-party (manual, phase 1) | Arr, SABnzbd, Plex (Docker) | manual install + docs; base settings pre-configured (paths/language/wiring) |
 
 - **Phasing (decision 2026-06-16):** phase 1 fully automates *our* components and
   **pre-configures base settings** (paths/language/wiring) for the rest; deeper
