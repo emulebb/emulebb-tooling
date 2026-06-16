@@ -33,6 +33,13 @@ the MFC is simply a **subset** that advertises fewer capabilities.
   ```
   - eMuleBB MFC returns `core.*` only (its frozen subset).
   - emulebb-rust returns `core.* + indexing.* + arr.*` (and grows additively).
+- **The soft-frozen MFC includes `/capabilities` too (decision 2026-06-16).** The
+  capabilities endpoint is a **contract-discovery primitive, not a product
+  capability**, so it is allowed as contract maintenance under the MFC soft freeze.
+  This is precisely what guarantees clean evolution: **every** core — frozen or
+  forward — is discoverable the same way, so the controller never special-cases a
+  product and new cores/capabilities slot in without touching it. (Tracked for the
+  MFC as `FEAT-122`.)
 - **Capability negotiation in the controller.** TrackMuleBB reads `/capabilities`
   on connect, builds a feature set, and **only calls operations whose capability
   is advertised**. The UI hides unsupported features (e.g. no indexer/Torznab tab
@@ -95,8 +102,9 @@ Legend: ✅ advertised + conformant · — not advertised (controller hides it).
       `GET /api/v1/capabilities` operation (emulebb-rust owns the spec).
 - [ ] emulebb-rust CI: capability-aware conformance/drift check (extend the
       existing REST contract item).
-- [ ] eMuleBB MFC: a conformance run against its advertised subset (it already
-      ships `/api/v1`; only the capabilities endpoint + the test are new).
+- [ ] eMuleBB MFC: add `GET /api/v1/capabilities` (advertising its frozen `core.*`
+      subset) under the soft freeze as contract maintenance, plus a conformance run
+      against that subset. Tracked as `FEAT-122`.
 - [ ] TrackMuleBB: capability negotiation + UI gating (see `TMBB-FEAT-*`).
 
 Related: [SUITE-JOINT-ROADMAP](SUITE-JOINT-ROADMAP.md),
