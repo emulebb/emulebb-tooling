@@ -22,8 +22,9 @@ sections by scope:
   its build.
 - **Product annex — emulebb-rust:** file-size budget and cargo/omissions policy
   live in `repos\emulebb-rust\policy` and its `AGENTS.md`.
-- **Product annex — forks (qBittorrentBB, amutorrent, amule, goed2k):** Managed
-  Fork Hygiene plus each fork's `AGENTS.md`.
+- **Product annex — forks / managed products (qBittorrentBB, amutorrent
+  [frozen], trackmulebb, amule, goed2k):** Managed Fork Hygiene plus each repo's
+  `AGENTS.md`.
 
 Physical extraction of the MFC build/localization sections into a separate
 `WORKSPACE-POLICY-MFC.md` annex is a tracked follow-up; until then this scope map
@@ -239,8 +240,10 @@ normalization policy.
   persistence semantics that affect network identity, and default network
   behavior.
 - Protocol-adjacent evolution is limited to compatibility-preserving
-  connectivity work such as IPv6 support, NAT traversal, safer bind/interface
-  selection, and diagnostics or tracing that do not alter default behavior.
+  connectivity work such as NAT traversal, safer bind/interface selection, and
+  diagnostics or tracing that do not alter default behavior. (IPv6 is currently
+  **parked/deferred** — the cores stay IPv4-only for now; do not lift the IPv6
+  omission without an explicit decision.)
 - Do not introduce protocol forks, proprietary Kad/eD2K extensions,
   incompatible opcode or packet changes, default scheduling or routing policy
   drift, or peer/server behavior that cannot be validated against
@@ -361,9 +364,10 @@ module):
 
 ## Managed Fork Hygiene
 
-These rules apply uniformly to every managed fork: the `emulebb` app worktree,
-`emulebb-rust`, `amutorrent`, `qbittorrentbb`, `amule`, `goed2k-server`, and the
-`emulebb-build` / `emulebb-build-tests` / `emulebb-tooling` support repos. The
+These rules apply uniformly to every managed fork / managed product repo: the
+`emulebb` app worktree, `emulebb-rust`, `amutorrent` (frozen), `trackmulebb`,
+`qbittorrentbb`, `amule`, `goed2k-server`, and the `emulebb-build` /
+`emulebb-build-tests` / `emulebb-tooling` support repos. The
 `p2p-overlord-*` family is a separate product line and is out of scope here.
 Each fork's `AGENTS.md` stays thin and points back to this document; do not
 restate these rules per repo.

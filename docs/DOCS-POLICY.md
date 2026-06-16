@@ -12,7 +12,9 @@ path, not by filename alone.
   and release operator docs
 - `docs/active/items/`: active item records for `OPEN`, `IN_PROGRESS`,
   `BLOCKED`, and `DEFERRED` work
-- `docs/active/plans/`: the single current RC release execution plan
+- `docs/active/plans/`: current execution/integration plans (the RC release
+  execution plan plus suite/cross-product plans such as the ecosystem bootstrap
+  and product-family integration plans)
 
 If another doc conflicts with `docs/active/`, `docs/active/` wins for current
 status.
