@@ -1,5 +1,5 @@
 ---
-id: FEAT-118
+id: FEAT-121
 workflow: local
 github_issue:
 title: STUN UDP egress gate for the VPN guard (eMuleBB, emulebb-rust, libtorrent)
@@ -11,7 +11,7 @@ milestone: 0.8.x
 created: 2026-06-14
 source: operator request - the VPN guard's egress public-IP check only covered TCP/HTTP, leaving the UDP data-plane egress unverified
 ---
-# FEAT-118 - STUN UDP egress gate for the VPN guard
+# FEAT-121 - STUN UDP egress gate for the VPN guard
 
 ## Summary
 
