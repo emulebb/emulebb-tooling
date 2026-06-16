@@ -1,10 +1,18 @@
 # Controllers And REST Guide
 
-This guide explains how eMuleBB should be used with trusted local controllers,
-automation, and compatibility adapters.
+This guide explains how the eMuleBB client should be used with trusted local
+controllers, automation, and compatibility adapters.
 
-For a task-first product walkthrough of eMuleBB with aMuTorrent, Prowlarr, and
-selected Arr apps, start with the
+> **Controllers in the suite.** The forward eMuleBB Suite controller is
+> **TrackMuleBB** (`emulebb/trackmulebb`), a generic `/api/v1` + capability
+> consumer that drives any core by advertised capability. **aMuTorrent** is the
+> browser-UI controller **bundled with the frozen `0.7.3` release** (legacy). The
+> REST/adapter semantics on this page are the same regardless of which controller
+> calls them — controllers are clients of the native contract, not part of it.
+> Suite/forward setup: [SUITE-INSTALLER](../active/SUITE-INSTALLER.md).
+
+For a task-first product walkthrough of the eMuleBB client with a controller,
+Prowlarr, and selected Arr apps, start with the
 [Stack Integration Guide](GUIDE-STACK-INTEGRATIONS.md). This page is the
 controller behavior reference.
 
@@ -235,27 +243,29 @@ For sharing automation:
 The desktop app owns shared-library scanning, hashing, and cache validation.
 Controllers request state changes; they do not own the scan engine.
 
-## aMuTorrent Behavior
+## Controller Behavior (TrackMuleBB / aMuTorrent)
 
-aMuTorrent integration uses native REST and adapter behavior. Prove the basics
-before running long workflows:
+A controller integration uses native REST and adapter behavior. **TrackMuleBB**
+(forward) reads `GET /api/v1/capabilities` and calls only advertised operations;
+**aMuTorrent** (frozen `0.7.3` bundle) is a fixed REST/UI consumer. Either way,
+prove the basics before running long workflows:
 
 - app status reads correctly
 - preferences read correctly
 - search dispatch works
-- add/download flow reaches eMuleBB
+- add/download flow reaches the eMuleBB client
 - upload and queue data remain meaningful when consumed
 - typed error envelopes are handled
 
-If browser/UI tests fail, compare aMuTorrent assumptions with the current
+If browser/UI tests fail, compare the controller's assumptions with the current
 OpenAPI contract and live REST smoke evidence.
 
-aMuTorrent should treat the desktop app as the authority. It may present a
-modern controller workflow, but category, search, transfer, shared-file,
-upload-queue, and lifecycle semantics still come from native eMuleBB state.
+A controller should treat the desktop app as the authority. It may present a
+modern workflow, but category, search, transfer, shared-file, upload-queue, and
+lifecycle semantics still come from native eMuleBB state.
 
-For field-level aMuTorrent setup and package helper usage, use
-[Stack Integration Guide](GUIDE-STACK-INTEGRATIONS.md#amutorrent).
+For field-level setup of the bundled aMuTorrent controller and package helper
+usage, use [Stack Integration Guide](GUIDE-STACK-INTEGRATIONS.md#amutorrent-legacy-073-bundle).
 
 ## Arr, qBit, And Torznab Adapter Behavior
 

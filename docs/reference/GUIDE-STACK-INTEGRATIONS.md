@@ -1,14 +1,22 @@
 # eMuleBB Stack Integration Guide
 
-This guide shows how to operate eMuleBB as part of a local power-user stack:
-native eMuleBB for eD2K/Kad state, aMuTorrent for a modern controller UI, and
+This guide shows how to operate the eMuleBB client as part of a local power-user
+stack: the native eMuleBB client for eD2K/Kad state, a controller UI, and
 Prowlarr plus selected Arr apps for Torznab search and qBittorrent-compatible
 download-client workflows.
 
-The goal is not to hide eMuleBB behind another tool. The native desktop app
-owns identity, network state, categories, temp files, completed files, shared
-files, and upload behavior. Controllers should make that state easier to use,
-not flatten it into generic torrent semantics.
+> **Which controller.** These recipes target the controller **bundled with the
+> frozen `0.7.3` release — aMuTorrent** (legacy). The **forward** eMuleBB Suite
+> controller is **TrackMuleBB** (`emulebb/trackmulebb`), which drives the same
+> `/api/v1` by advertised capability and also installs/wires the wider suite
+> bundle; for the forward path see [SUITE-INSTALLER](../active/SUITE-INSTALLER.md)
+> and [SUITE-DOCKER](../active/SUITE-DOCKER.md). The eMuleBB-side setup below (REST,
+> Prowlarr, Arr) is the same regardless of controller.
+
+The goal is not to hide the eMuleBB client behind another tool. The native
+desktop app owns identity, network state, categories, temp files, completed
+files, shared files, and upload behavior. Controllers should make that state
+easier to use, not flatten it into generic torrent semantics.
 
 ## Guide Boundary
 
@@ -30,7 +38,7 @@ Controllers And REST owns the API meaning behind them.
 | Native REST `/api/v1` | JSON automation, diagnostics, app state | aMuTorrent, scripts, custom tools |
 | qBit adapter `/api/v2` | Arr download-client compatibility | Selected Arr apps, qBit-compatible probes |
 | Torznab adapter `/indexer/emulebb/api` | Prowlarr and selected Arr search bridge | Prowlarr Generic Torznab |
-| aMuTorrent | Web controller and multi-client UI | eMuleBB REST and adapter surfaces |
+| Controller (TrackMuleBB forward / aMuTorrent legacy `0.7.3`) | Web controller and multi-client UI | eMuleBB REST and adapter surfaces |
 
 ```mermaid
 flowchart LR
@@ -153,9 +161,10 @@ For bind policy, lifecycle, HTTPS certificate behavior, and unsafe diagnostic
 routes, use [Controllers And REST](GUIDE-CONTROLLERS-REST.md). This stack guide
 keeps only the setup steps needed before wiring companion tools.
 
-## aMuTorrent
+## aMuTorrent (legacy 0.7.3 bundle)
 
-aMuTorrent should connect after native REST is healthy.
+aMuTorrent is the controller bundled with the frozen `0.7.3` release; the forward
+controller is TrackMuleBB. It should connect after native REST is healthy.
 
 Use aMuTorrent when you want:
 
