@@ -4,6 +4,17 @@ Status: planning only. This document records intended post-0.7.3 ecosystem
 packaging direction. It does not describe the current 0.7.3 RC2 bootstrapper or
 any shipped release asset.
 
+> **Installer direction (decision 2026-06-16):** the Windows suite bootstrap is a
+> **generic, version-independent installer hosted on the org pages site**
+> (`emulebb/emulebb.github.io` → `irm https://emulebb.github.io/install.ps1 | iex`),
+> resolving each product's **latest** GitHub release at runtime with a
+> `-Core mfc|rust` switch. It is **decoupled from any product release train**
+> (notably the frozen `emulebb` MFC release the RC bootstrapper used). The
+> mechanics and migration are specified in
+> [SUITE-INSTALLER](../SUITE-INSTALLER.md); the RC-coupled `Bootstrap-eMuleBBSuite.ps1`
+> asset is superseded by it. The sections below describe packaging intent and
+> stay valid; the *delivery* is the pages-hosted generic installer.
+
 ## Summary
 
 The eMuleBB suite should grow from a Windows desktop client plus controller
