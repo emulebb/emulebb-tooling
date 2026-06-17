@@ -21,6 +21,10 @@ Verdict vocabulary: **KEEP**, **WIRED-IN** (was dormant, now gated), **OPTIONAL*
 - **Three dormant suites were actually failing** and nobody noticed because no tier ran
   them: `fake_file_detector` (1 failed of 129) and `startup` (1 of 61) were stale assertions
   — both fixed and wired — and `divergence` (8 of 431) is a deliberate 0.8.0 removal guard.
+- **The gate backbone `parity` was also red** on a stale `mule_list_ctrl` search-column test
+  (not updated after FEAT-118 merged Risk + Kad Confidence and FEAT-120 added the Extension
+  column). Fixed to match `MuleListCtrlViewPresets.h`; the full 22-suite native gate is now
+  green.
 - **The "duplicate profile" was a false positive.** `multi-client-p2p` and
   `multi-client-p2p-required` share a suite list but differ in semantics — the `-required`
   variant enforces optional third-party clients as mandatory (`live_e2e_suite.py`
