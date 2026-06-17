@@ -67,12 +67,32 @@ every tier:
 | All modules | **KEEP (quick/fast)** | Fast unit tests, no app/network. |
 | 56 modules self-testing a live script | **KEEP** | Unit-vs-integration pairing, intentional. When a live suite/script is cut, cut its self-test too (mapping in the catalog `selfTestsScript`). |
 
+## Triage of the failing suites
+
+The failures were diagnosed against the built test binary (the relevant source had not
+changed since it was built, so they are real on current source — not stale-binary noise):
+
+- **`divergence` / `scheduler_removal`** — **deliberate, keep dormant.** These are
+  compile-time guards (`#if __has_include("Scheduler.h")`, `#ifdef IDS_SCHEDULER`, …) that
+  assert the legacy scheduler is *removed*. It is still present, so they are red by design
+  until the 0.8.0 legacy-surface removal lands. Correctly excluded from the 0.7.3 gate.
+- **`startup` / `app_command_line`** — **stale test, fixed.** The product was rebranded to
+  emit "…canonical absolute **eMuleBB** base directory…" (`AppCommandLineSeams.h`), but the
+  test still expected "eMule". Updated the expected string; the suite goes 61/61 and becomes
+  a wire-in candidate after a test rebuild confirms green.
+- **`fake_file_detector`** — **test expectation vs analyzer design.** BUG-150 added
+  year-token stripping under broad release metadata, so `Sports Madness 2000 XviD 1080p`
+  canonicalizes to `sports madness` (year dropped). The divergence itself is still flagged
+  (2 groups, `multiple_names`); only the assertion expecting the year retained
+  (`sports madness 2000`) fails. Recommend updating the assertion to match the year-stripping
+  behavior — pending confirmation of BUG-150 intent before touching the assertion.
+
 ## Remaining / deferred
 
-1. **Triage the 3 failing native suites** (`fake_file_detector`, `startup`, `divergence`) —
-   real failing assertions; decide bug-fix vs stale-test removal, then gate.
-2. **`kad-broadband`** — confirm the build flag, then wire or document.
-3. **`shared-directory-browse-stress`** — wire into `stabilization-stress` or delete with its self-test.
+1. **Rebuild + wire `startup`** once the test build confirms 61/61 after the rebrand fix.
+2. **`fake_file_detector`** — confirm BUG-150 intent, then update the assertion and wire.
+3. **`kad-broadband`** — confirm the build flag, then wire or document.
+4. **`shared-directory-browse-stress`** — wire into `stabilization-stress` or delete with its self-test.
 
 Regenerate the catalog after any change with
 `python scripts/show-test-inventory.py --markdown` and re-run
