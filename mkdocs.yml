@@ -123,6 +123,7 @@ nav:
       - Evidence Retention: reference/EVIDENCE-RETENTION.md
       - Workspace Repository Map: reference/WORKSPACE-REPO-MAP.md
       - Development Guide: reference/DEVELOPMENT-GUIDE.md
+      - Test Tiers: reference/TEST-TIERS.md
       - CI Baseline: reference/CI-BASELINE.md
       - Release Branching And Packaging: reference/RELEASE-BRANCHING-AND-PACKAGING.md
       - eD2K Inventory: reference/ED2K-PROJECT-INVENTORY.md
