@@ -1,14 +1,19 @@
 # eMuleBB REST API Contract (frozen `0.7.3`)
 
-> **FROZEN lineage (decision 2026-06-15).** This document describes the `0.7.3`
-> contract spoken by the frozen eMuleBB **MFC** client and its frozen consumer
-> **aMuTorrent**. It does not evolve (maintenance-compat only). The **forward**
-> `/api/v1` contract is owned by **emulebb-rust** and evolves on its own
-> independent contract-version line —
-> `emulebb-rust/docs/rest/REST-API-OPENAPI.yaml`. The split and versioning policy
-> live in [API-V1-COMPATIBILITY](../active/API-V1-COMPATIBILITY.md).
+> **Frozen `core.*` subset of the one capability-gated `/api/v1` contract.** This
+> document describes the `0.7.3` contract spoken by the frozen eMuleBB **MFC**
+> client: the stable `core.*` subset it advertises through
+> `GET /api/v1/capabilities`. There is a **single** `/api/v1` contract;
+> implementations differ by the **capabilities** they advertise, not by a
+> separate spec. **emulebb-rust** owns the canonical **superset**
+> (`emulebb-rust/docs/rest/REST-API-OPENAPI.yaml`) and leads the contract
+> version; this MFC subset is frozen and does not evolve. Forward controller:
+> **TrackMuleBB** (aMuTorrent is the frozen `0.7.3` bundle consumer). Capability
+> and versioning policy:
+> [API-V1-COMPATIBILITY](../active/API-V1-COMPATIBILITY.md).
 
-**Status:** 0.7.3 contract — FROZEN (MFC + aMuTorrent lineage)
+**Status:** 0.7.3 contract — FROZEN (MFC `core.*` subset of the one
+capability-gated `/api/v1`)
 **Source of truth:** [REST-API-OPENAPI.yaml](REST-API-OPENAPI.yaml)
 **Adapter subsets:** [REST-API-ADAPTERS.md](REST-API-ADAPTERS.md)
 **Migrated action inventory:** [REST-API-PARITY-INVENTORY.md](REST-API-PARITY-INVENTORY.md)
@@ -21,9 +26,10 @@
 WebServer listener. The broadband release contract is the resource-oriented
 `/api/v1` surface described by the OpenAPI document above.
 
-The API is designed for aMuTorrent and other trusted local controllers. The
-0.7.3 RC2 contract intentionally prioritizes consistency and aMuTorrent
-completeness over preserving old command-style route names.
+The API is designed for trusted local controllers — TrackMuleBB (forward) and
+the aMuTorrent consumer bundled with `0.7.3`. The 0.7.3 contract intentionally
+prioritizes consistency and controller completeness over preserving old
+command-style route names.
 
 After 0.7.3 RC1, the same OpenAPI document is also the canonical
 product-family contract for p2p-overlord implementations that choose to expose
