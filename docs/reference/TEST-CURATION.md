@@ -1,74 +1,78 @@
 # Test Curation — Necessary vs Not
 
 Companion to the generated [Test Inventory](TEST-INVENTORY.md) and the
-[Test Tiers](TEST-TIERS.md). It applies four lenses, in priority order, to decide
-what the maintained test surface should run and where:
+[Test Tiers](TEST-TIERS.md). It records how the maintained test surface was
+curated through four lenses, in priority order:
 
 1. **Non-redundancy** — cut where multiple layers cover the same thing.
 2. **Minimize runtime** — push slow load/soak/stress to the highest tier.
 3. **Forward program** — rust / qBittorrentBB / TrackMuleBB coverage, not just the frozen MFC app.
 4. **0.7.3 correctness gate** — what proves the shipped surface.
 
-Verdict vocabulary: **KEEP** (necessary, stays where it is), **OPTIONAL** (gate to a
-higher tier or default-off), **WIRE-IN** (necessary but currently not auto-run — connect
-it to a tier), **CUT** (redundant or dead — remove/merge). All numbers come from the
-inventory catalog.
+Verdict vocabulary: **KEEP**, **WIRED-IN** (was dormant, now gated), **OPTIONAL**
+(targeted-only / higher tier), **TRIAGE** (failing — fix before gating), **CUT**.
 
 ## Headline findings
 
-- **At the native layer the problem is dormancy, not redundancy.** 30 of 34 doctest
-  suites — **305 cases** — are reached only by `test native --suite-name` and run by **no
-  tier or campaign**. That is a coverage hole, not waste.
-- **Live-e2e tiering is already clean.** The quick/fast live set is entirely low-stress
-  (`stressClass = scenario`); every soak/stress/hammer/chaos suite is overnight-tier only —
-  with one exception below.
-- **One concrete profile duplication:** `multi-client-p2p` and `multi-client-p2p-required`
-  are the *same* 7-suite list.
-- **One dead live suite:** `shared-directory-browse-stress` (558 LOC) belongs to no profile
-  and is not default-enabled.
+- **The native layer's real problem was dormancy, not redundancy.** 30 of 34 doctest
+  suites (305 cases) ran by *no* tier or campaign — reachable only via
+  `test native --suite-name`. Probing the built test binary showed most are fast
+  (sub-100ms), seam-driven, and green.
+- **Three dormant suites are actually failing** and nobody noticed because no tier runs
+  them: `fake_file_detector` (1 failed of 129), `startup` (1 of 61), `divergence`
+  (8 of 431). These are coverage *and* correctness gaps.
+- **The "duplicate profile" was a false positive.** `multi-client-p2p` and
+  `multi-client-p2p-required` share a suite list but differ in semantics — the `-required`
+  variant enforces optional third-party clients as mandatory (`live_e2e_suite.py`
+  branch on `multi-client-p2p-required`). Both are kept.
+- **Live-e2e tiering is already clean:** the quick/fast set is entirely low-stress; every
+  soak/stress/hammer/chaos suite is overnight-tier only (one orphan noted below).
 
-## Native layer (34 suites, 1165 cases)
+## Native layer — executed
 
-| Group | Verdict | Notes |
-| --- | --- | --- |
-| `parity` (117 files, 859 cases), `web_api` (87), `protocol-parity` (13) | **KEEP** | `runBy = test-all`; the 0.7.3 gate backbone. |
-| `community-core-divergence` (3) | **KEEP** | Orchestrated by community-core coverage (overnight). Correctly tier-gated. |
-| Behavior suites currently dormant — e.g. `fake_file_detector` (32), `kad-broadband` (33), `kad-base` (6), `packets` (9), `startup` (13), `startup_storage` (5), `version_check_launch` (8), `server_connect`/`server_info` (3+4), `part_file_hash_launch` (8), `part_file_majority_name` (10), `search_trust_hint` (8), `process_launch`/`restart_app` (3+4), `windows_firewall_repair` (2), `background_refresh` (6), `async_dns_resolve` (4), `diagnostic_snapshot` (3) | **WIRE-IN** | Real shipped behavior with **no tier running it**. Recommend tagging into `parity` (or a new auto-run suite) so it gates. Highest-value native action. |
-| `benchmark` (11), `pipeline` (11), `pipeline-benchmark` (11) | **KEEP targeted-only** | Performance, not correctness — never in a tier (runtime lens). |
-| Frozen MFC UI suites — `download_list_keyboard_shortcuts` (5), `file_list_keyboard_shortcuts` (9), `download_progress_bar` (4), `status_bar` (5), `pro_user_menu_copy` (4), `shared_dirs_tree_ctrl` (1) | **OPTIONAL** | Frozen, low-churn UI surface; fine as targeted-only, out of quick. |
-| `divergence` (6 files, 78 cases) | **REVIEW → possible CUT/merge** | Large dormant suite; verify overlap against `community-core-divergence` and the in-`parity` divergence checks; merge or drop if duplicated. |
+17 dormant suites were verified green and sub-100ms against the built test binary and
+**wired into `test all`** (`TEST_ALL_NATIVE_SUITES` in `test_runs.py`), so they now gate at
+every tier:
 
-## Live-e2e layer (41 suites, 8 default-enabled)
-
-| Group | Verdict | Notes |
-| --- | --- | --- |
-| Fast set — `preference-ui`, `shared-files-ui`, `config-stability-ui`, `shared-hash-ui`, `startup-diagnostics`, `shared-directories-rest`, `rest-api` (+ `auto-browse-live`) | **KEEP (quick/fast)** | All `stressClass = scenario`; necessary core UI/REST. |
-| Soak/stress/hammer/chaos — `godzilla-local-swarm`, `local-ed2k-search-soak`, `local-ed2k-chaos-mode`, `rest-cold-start-dump-stress`, `live-process-monitor`, swarms, `category-incoming-path-matrix` | **KEEP (overnight only)** | Already overnight-tier profiles; confirm none leak into quick/fast (catalog: none do). |
-| Storage suites (10: vhd/unc/shared-cache/disk-space) — all `default_enabled=False` | **OPTIONAL** | Heavy filesystem; overnight/storage profiles only. Correct as-is. |
-| `shared-directory-browse-stress` | **CUT (or WIRE-IN)** | Orphan: no profile, not default-enabled. Delete (with its self-test) or attach to `stabilization-stress`. |
-| `multi-client-p2p` vs `multi-client-p2p-required` profiles | **CUT (dedup)** | Identical 7-suite lists; collapse to the `-required` variant (stronger evidence). |
-| `deterministic-two-client-transfer` | **REVIEW** | Overlaps `multi-client-p2p-matrix` on local transfer; lives in 3 profiles. Consider OPTIONAL. |
-| Live-wire ARR — `radarr-emulebb`, `sonarr-emulebb`, `prowlarr-emulebb` | **KEEP (live-wire/release only)** | Forward/controller surface; never in quick/fast. |
-
-## Python-harness layer (124 modules, 56 self-test a live script)
+`async_dns_resolve`, `background_refresh`, `diagnostic_snapshot`, `kad-base`,
+`known_file_hash_open`, `packets`, `part_file_hash_launch`, `part_file_majority_name`,
+`process_launch`, `restart_app`, `search_trust_hint`, `server_connect`, `server_info`,
+`standby_prevention`, `startup_storage`, `version_check_launch`, `windows_firewall_repair`.
 
 | Group | Verdict | Notes |
 | --- | --- | --- |
-| All harness modules | **KEEP (quick/fast)** | Fast unit tests, no app/network. The big ones (`test_rest_api_smoke` 4398 LOC, `test_master_source_parity` 4264) are still app-free. |
-| 56 modules that self-test a live script | **KEEP** | Unit-vs-integration pairing is intentional, not redundant. |
-| Coupling rule | — | When a live suite/script is CUT, cut its self-test module too (mapping is in the catalog `selfTestsScript`). |
+| `parity` (859 cases), `web_api` (87), `protocol-parity` (13) | **KEEP** | The 0.7.3 gate backbone. |
+| `community-core-divergence` | **KEEP** | Orchestrated by community-core coverage (overnight). |
+| The 17 suites above | **WIRED-IN** | Were dormant; verified green; now in `test all`. |
+| `fake_file_detector`, `startup`, `divergence` | **TRIAGE** | Failing assertions; left dormant until fixed — wiring them would break the gate. |
+| `benchmark`, `pipeline`, `pipeline-benchmark` | **OPTIONAL** | Performance, not correctness; stay targeted-only. |
+| `kad-broadband` | **OPTIONAL** | Cases are behind a build flag (0 assertions in the standard build); investigate before gating. |
+| Frozen MFC UI suites (`*_keyboard_shortcuts`, `download_progress_bar`, `status_bar`, `pro_user_menu_copy`, `shared_dirs_tree_ctrl`) | **OPTIONAL** | Frozen low-churn UI; targeted-only, out of the tiers. |
 
-## Phase 3 — action list (separate approval; freeze-sensitive)
+## Live-e2e layer
 
-Ordered by value, each citing catalog evidence:
+| Group | Verdict | Notes |
+| --- | --- | --- |
+| Fast set — `preference-ui`, `shared-files-ui`, `config-stability-ui`, `shared-hash-ui`, `startup-diagnostics`, `shared-directories-rest`, `rest-api` (+ `auto-browse-live`) | **KEEP (quick/fast)** | All `stressClass = scenario`. |
+| Soak/stress/hammer/chaos + storage (10) | **KEEP (overnight only)** | Already overnight-tier profiles; none leak into quick/fast. |
+| `multi-client-p2p` vs `multi-client-p2p-required` | **KEEP (both)** | Same suites, different evidence policy — intentional, not redundant. |
+| `shared-directory-browse-stress` | **OPTIONAL (orphan)** | In no profile and not default-enabled; has fixture support. Wire into `stabilization-stress` or remove with its self-test — deferred (needs the long-paths fixture pipeline). |
+| `deterministic-two-client-transfer` | **KEEP (review)** | Overlaps `multi-client-p2p-matrix` on local transfer; acceptable as a deterministic baseline. |
+| Live-wire ARR (`radarr`/`sonarr`/`prowlarr-emulebb`) | **KEEP (live-wire/release only)** | Forward/controller surface; never quick/fast. |
 
-1. **Native dormancy (biggest win):** wire the ~20 behavior suites above (~250 cases) into an
-   auto-run tier so they gate. Touches shipped-surface test execution during the freeze →
-   explicit per-suite approval.
-2. **Live cleanup:** delete or wire `shared-directory-browse-stress`; collapse the duplicate
-   `multi-client-p2p` profile into `multi-client-p2p-required`.
-3. **Native redundancy:** resolve `divergence` (78 cases) vs `community-core-divergence`; merge or cut.
-4. **Coupling:** when cutting any live suite/script, remove its python self-test module.
+## Python-harness layer
+
+| Group | Verdict | Notes |
+| --- | --- | --- |
+| All modules | **KEEP (quick/fast)** | Fast unit tests, no app/network. |
+| 56 modules self-testing a live script | **KEEP** | Unit-vs-integration pairing, intentional. When a live suite/script is cut, cut its self-test too (mapping in the catalog `selfTestsScript`). |
+
+## Remaining / deferred
+
+1. **Triage the 3 failing native suites** (`fake_file_detector`, `startup`, `divergence`) —
+   real failing assertions; decide bug-fix vs stale-test removal, then gate.
+2. **`kad-broadband`** — confirm the build flag, then wire or document.
+3. **`shared-directory-browse-stress`** — wire into `stabilization-stress` or delete with its self-test.
 
 Regenerate the catalog after any change with
 `python scripts/show-test-inventory.py --markdown` and re-run
