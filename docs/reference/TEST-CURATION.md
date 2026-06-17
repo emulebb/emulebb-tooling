@@ -18,9 +18,9 @@ Verdict vocabulary: **KEEP**, **WIRED-IN** (was dormant, now gated), **OPTIONAL*
   suites (305 cases) ran by *no* tier or campaign — reachable only via
   `test native --suite-name`. Probing the built test binary showed most are fast
   (sub-100ms), seam-driven, and green.
-- **Three dormant suites are actually failing** and nobody noticed because no tier runs
-  them: `fake_file_detector` (1 failed of 129), `startup` (1 of 61), `divergence`
-  (8 of 431). These are coverage *and* correctness gaps.
+- **Three dormant suites were actually failing** and nobody noticed because no tier ran
+  them: `fake_file_detector` (1 failed of 129) and `startup` (1 of 61) were stale assertions
+  — both fixed and wired — and `divergence` (8 of 431) is a deliberate 0.8.0 removal guard.
 - **The "duplicate profile" was a false positive.** `multi-client-p2p` and
   `multi-client-p2p-required` share a suite list but differ in semantics — the `-required`
   variant enforces optional third-party clients as mandatory (`live_e2e_suite.py`
@@ -30,21 +30,25 @@ Verdict vocabulary: **KEEP**, **WIRED-IN** (was dormant, now gated), **OPTIONAL*
 
 ## Native layer — executed
 
-17 dormant suites were verified green and sub-100ms against the built test binary and
+19 dormant suites were verified green and fast against the built test binary and
 **wired into `test all`** (`TEST_ALL_NATIVE_SUITES` in `test_runs.py`), so they now gate at
 every tier:
 
-`async_dns_resolve`, `background_refresh`, `diagnostic_snapshot`, `kad-base`,
-`known_file_hash_open`, `packets`, `part_file_hash_launch`, `part_file_majority_name`,
-`process_launch`, `restart_app`, `search_trust_hint`, `server_connect`, `server_info`,
-`standby_prevention`, `startup_storage`, `version_check_launch`, `windows_firewall_repair`.
+`async_dns_resolve`, `background_refresh`, `diagnostic_snapshot`, `fake_file_detector`,
+`kad-base`, `known_file_hash_open`, `packets`, `part_file_hash_launch`,
+`part_file_majority_name`, `process_launch`, `restart_app`, `search_trust_hint`,
+`server_connect`, `server_info`, `standby_prevention`, `startup`, `startup_storage`,
+`version_check_launch`, `windows_firewall_repair`.
+
+`fake_file_detector` and `startup` were failing on stale assertions; both were fixed,
+re-verified green against a fresh test build, and wired in with the rest.
 
 | Group | Verdict | Notes |
 | --- | --- | --- |
 | `parity` (859 cases), `web_api` (87), `protocol-parity` (13) | **KEEP** | The 0.7.3 gate backbone. |
 | `community-core-divergence` | **KEEP** | Orchestrated by community-core coverage (overnight). |
-| The 17 suites above | **WIRED-IN** | Were dormant; verified green; now in `test all`. |
-| `fake_file_detector`, `startup`, `divergence` | **TRIAGE** | Failing assertions; left dormant until fixed — wiring them would break the gate. |
+| The 19 suites above | **WIRED-IN** | Were dormant; verified green; now in `test all`. |
+| `divergence` | **KEEP DORMANT** | A deliberate 0.8.0 scheduler-removal guard; red by design until the removal lands. |
 | `benchmark`, `pipeline`, `pipeline-benchmark` | **OPTIONAL** | Performance, not correctness; stay targeted-only. |
 | `kad-broadband` | **OPTIONAL** | Cases are behind a build flag (0 assertions in the standard build); investigate before gating. |
 | Frozen MFC UI suites (`*_keyboard_shortcuts`, `download_progress_bar`, `status_bar`, `pro_user_menu_copy`, `shared_dirs_tree_ctrl`) | **OPTIONAL** | Frozen low-churn UI; targeted-only, out of the tiers. |
@@ -76,23 +80,23 @@ changed since it was built, so they are real on current source — not stale-bin
   compile-time guards (`#if __has_include("Scheduler.h")`, `#ifdef IDS_SCHEDULER`, …) that
   assert the legacy scheduler is *removed*. It is still present, so they are red by design
   until the 0.8.0 legacy-surface removal lands. Correctly excluded from the 0.7.3 gate.
-- **`startup` / `app_command_line`** — **stale test, fixed.** The product was rebranded to
-  emit "…canonical absolute **eMuleBB** base directory…" (`AppCommandLineSeams.h`), but the
-  test still expected "eMule". Updated the expected string; the suite goes 61/61 and becomes
-  a wire-in candidate after a test rebuild confirms green.
-- **`fake_file_detector`** — **test expectation vs analyzer design.** BUG-150 added
-  year-token stripping under broad release metadata, so `Sports Madness 2000 XviD 1080p`
-  canonicalizes to `sports madness` (year dropped). The divergence itself is still flagged
-  (2 groups, `multiple_names`); only the assertion expecting the year retained
-  (`sports madness 2000`) fails. Recommend updating the assertion to match the year-stripping
-  behavior — pending confirmation of BUG-150 intent before touching the assertion.
+- **`startup` / `app_command_line`** — **stale test, fixed and wired.** The product was
+  rebranded to emit "…canonical absolute **eMuleBB** base directory…"
+  (`AppCommandLineSeams.h`), but the test still expected "eMule". Updated the expected
+  string; a fresh test build confirmed 61/61 and the suite is now in `test all`.
+- **`fake_file_detector`** — **stale expectation, fixed and wired.** BUG-150 added
+  year-token stripping under broad release metadata, and the operator confirmed `2000` is the
+  film's release year, so `Sports Madness 2000 XviD 1080p` correctly canonicalizes to
+  `sports madness` (year dropped) while the title divergence is still flagged. Updated the
+  assertion to expect `sports madness`; a fresh build confirmed 129/129 and the suite is now
+  in `test all`.
 
 ## Remaining / deferred
 
-1. **Rebuild + wire `startup`** once the test build confirms 61/61 after the rebrand fix.
-2. **`fake_file_detector`** — confirm BUG-150 intent, then update the assertion and wire.
-3. **`kad-broadband`** — confirm the build flag, then wire or document.
-4. **`shared-directory-browse-stress`** — wire into `stabilization-stress` or delete with its self-test.
+1. **`kad-broadband`** — cases are behind a build flag (0 assertions in the standard build);
+   confirm the flag, then wire or document.
+2. **`shared-directory-browse-stress`** — wire into `stabilization-stress` or delete with its self-test.
+3. **`divergence`** stays dormant by design until the 0.8.0 scheduler removal lands.
 
 Regenerate the catalog after any change with
 `python scripts/show-test-inventory.py --markdown` and re-run
