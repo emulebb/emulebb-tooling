@@ -107,6 +107,13 @@ design** (not gaps):
 Performance suites (`benchmark`, `pipeline`, `pipeline-benchmark`) and the frozen MFC
 UI-shortcut suites remain targeted-only on purpose.
 
+**Stock/community parity is on-demand only.** `test protocol-parity` (surface diff +
+goldens + live-diff vs the community baseline) and `test community-core-coverage` were
+removed from the overnight certification and from the `emulebb-0.7.3` campaign. eMuleBB is
+protocol-stable and stock-compatible, so these baseline-build comparisons are run
+deliberately when protocol-adjacent code changes — not on every automated run. They remain
+fully available as the two standalone commands.
+
 Regenerate the catalog after any change with
 `python scripts/show-test-inventory.py --markdown` and re-run
 `python -m pytest tests/python/test_test_inventory.py`.

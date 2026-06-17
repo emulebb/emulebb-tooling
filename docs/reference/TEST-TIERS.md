@@ -42,8 +42,14 @@ release-blocking RC certification; its contents are intentionally unchanged so
 
 ### Overnight — full proof
 
-Fast plus protocol-parity, community-core coverage, the expanded live, UI
-resource-depth, stabilization-stress, and aMuTorrent live suites.
+Fast plus the expanded live, UI resource-depth, stabilization-stress, and
+aMuTorrent live suites.
+
+Stock/community parity comparisons (`test protocol-parity`,
+`test community-core-coverage`) are **on-demand only** and not part of any tier.
+eMuleBB is protocol-stable and stock-compatible, so these baseline-build
+comparisons are run deliberately when protocol-adjacent code changes, not on
+every overnight.
 
 ## Tiers vs the release campaign
 
