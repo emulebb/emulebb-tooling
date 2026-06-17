@@ -50,7 +50,7 @@ re-verified green against a fresh test build, and wired in with the rest.
 | The 19 suites above | **WIRED-IN** | Were dormant; verified green; now in `test all`. |
 | `divergence` | **KEEP DORMANT** | A deliberate 0.8.0 scheduler-removal guard; red by design until the removal lands. |
 | `benchmark`, `pipeline`, `pipeline-benchmark` | **OPTIONAL** | Performance, not correctness; stay targeted-only. |
-| `kad-broadband` | **OPTIONAL** | Cases are behind a build flag (0 assertions in the standard build); investigate before gating. |
+| `kad-broadband` | **KEEP DORMANT** | `fastkad_flow`/`kad_guards` are `<ClCompile>` gated on `Condition="Exists(...)"` for `KadPublishGuard.h`/`SafeKad.h` (absent here) and an `afximpl.h` path; they are conditionally excluded from the build by design, so the suite registers zero cases. Not a gap. |
 | Frozen MFC UI suites (`*_keyboard_shortcuts`, `download_progress_bar`, `status_bar`, `pro_user_menu_copy`, `shared_dirs_tree_ctrl`) | **OPTIONAL** | Frozen low-churn UI; targeted-only, out of the tiers. |
 
 ## Live-e2e layer
@@ -60,7 +60,7 @@ re-verified green against a fresh test build, and wired in with the rest.
 | Fast set — `preference-ui`, `shared-files-ui`, `config-stability-ui`, `shared-hash-ui`, `startup-diagnostics`, `shared-directories-rest`, `rest-api` (+ `auto-browse-live`) | **KEEP (quick/fast)** | All `stressClass = scenario`. |
 | Soak/stress/hammer/chaos + storage (10) | **KEEP (overnight only)** | Already overnight-tier profiles; none leak into quick/fast. |
 | `multi-client-p2p` vs `multi-client-p2p-required` | **KEEP (both)** | Same suites, different evidence policy — intentional, not redundant. |
-| `shared-directory-browse-stress` | **OPTIONAL (orphan)** | In no profile and not default-enabled; has fixture support. Wire into `stabilization-stress` or remove with its self-test — deferred (needs the long-paths fixture pipeline). |
+| `shared-directory-browse-stress` | **WIRED-IN** | Was an orphan (BUG-144 harness, self-contained fixture, unit-tested) in no profile. Added to `stabilization-stress` (overnight only); confirm on the next overnight run. |
 | `deterministic-two-client-transfer` | **KEEP (review)** | Overlaps `multi-client-p2p-matrix` on local transfer; acceptable as a deterministic baseline. |
 | Live-wire ARR (`radarr`/`sonarr`/`prowlarr-emulebb`) | **KEEP (live-wire/release only)** | Forward/controller surface; never quick/fast. |
 
@@ -93,10 +93,15 @@ changed since it was built, so they are real on current source — not stale-bin
 
 ## Remaining / deferred
 
-1. **`kad-broadband`** — cases are behind a build flag (0 assertions in the standard build);
-   confirm the flag, then wire or document.
-2. **`shared-directory-browse-stress`** — wire into `stabilization-stress` or delete with its self-test.
-3. **`divergence`** stays dormant by design until the 0.8.0 scheduler removal lands.
+The native dormancy and the live orphan are now resolved. Two suites stay dormant **by
+design** (not gaps):
+
+- **`divergence`** — red until the 0.8.0 scheduler removal lands.
+- **`kad-broadband`** — conditionally excluded from the build until `KadPublishGuard.h` /
+  `SafeKad.h` exist and the `afximpl.h` path gate is satisfied.
+
+Performance suites (`benchmark`, `pipeline`, `pipeline-benchmark`) and the frozen MFC
+UI-shortcut suites remain targeted-only on purpose.
 
 Regenerate the catalog after any change with
 `python scripts/show-test-inventory.py --markdown` and re-run
