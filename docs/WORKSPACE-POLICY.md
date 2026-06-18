@@ -419,15 +419,17 @@ swarm. If this fails once in public, it breaks the product's core trust claim.
 
 ## Documentation Policy
 
-- **English is the only language for tracked content.** All documentation,
-  engineering and design notes, README and diagram text, code comments, and
-  commit / PR / issue text across every workspace-owned repo are written in
-  English. The conversation language with the operator may differ (for example
-  Italian), but no non-English prose may land in a tracked file or in git
-  history. Exceptions: intentional product-localization resources
-  (`srchybrid\lang\*.rc` and other deliberate UI translation assets, governed by
-  the Release Localization Policy) and pre-existing upstream text inside vendored
-  or fork files that originated upstream.
+- **English is the only language for workspace artifacts, regardless of prompt
+  language.** The operator may prompt in any language, but all code identifiers
+  that carry prose, code comments, documentation, engineering/design notes,
+  README and diagram text, commit messages, PR/issue text, generated diagnostics,
+  runtime log messages, trace/event names and bodies, fixtures, sample data, and
+  persisted logs across every workspace-owned repo must be written in English.
+  No non-English prose may land in a tracked file, generated artifact intended
+  for retention, or git history. Exceptions: intentional product-localization
+  resources (`srchybrid\lang\*.rc` and other deliberate UI translation assets,
+  governed by the Release Localization Policy) and pre-existing upstream text
+  inside vendored or fork files that originated upstream.
 - Workspace-wide development rules belong only in this document.
 - Workspace-wide hooks and policy helpers must be centralized in
   `repos\emulebb-tooling`.
