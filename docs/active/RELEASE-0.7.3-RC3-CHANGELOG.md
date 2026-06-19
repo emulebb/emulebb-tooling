@@ -22,9 +22,11 @@ history, see [RELEASE-0.7.3-RC2-CHANGELOG](RELEASE-0.7.3-RC2-CHANGELOG.md).
   one-liner-install regressions at CI time.
 - RC3/Docs: README install commands synced to the published `0.7.3-rc.2` assets
   (app `bf599469`).
-- _(No app-behavior delta over RC2 is queued yet. Further crash/data-loss,
-  packaging/provenance, regression, and release-doc fixes land here as approved
-  and merged.)_
+- RC3/Shared files: shared directories now auto-check for new direct child files
+  every 5 minutes using bounded one-level polling; recursive monitored sharing
+  remains opt-in and unchanged ([FEAT-123](items/FEAT-123.md), issue #148).
+- _(Further crash/data-loss, packaging/provenance, regression, and release-doc
+  fixes land here as approved and merged.)_
 
 ### Upload Policy Clarity
 

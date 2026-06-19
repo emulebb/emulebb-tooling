@@ -20,9 +20,9 @@ engineering spec/evidence records, not workflow status authority.
 ## Current Snapshot
 
 **Source of truth:** `EMULEBB_WORKSPACE_ROOT\workspaces\workspace\app\emulebb-main` (`main` branch)
-**Current non-done count:** `131`
+**Current non-done count:** `132`
 **Latest release-doc refresh:** 2026-06-13
-**Non-done by status:** `110` OPEN, `7` IN_PROGRESS, `14` DEFERRED, `0` BLOCKED.
+**Non-done by status:** `110` OPEN, `8` IN_PROGRESS, `14` DEFERRED, `0` BLOCKED.
 **Backlog counts:** item tables below are authoritative.
 **0.7.3 release-train relevance:** Most non-done items below are future or
 deferred work; current RC gate and proof status is controlled by
@@ -457,6 +457,7 @@ not active item docs.
 | [FEAT-117](items/FEAT-117.md) | Minor | OPEN | Indicate already-shared files in the unshared-folder share preview |
 | [FEAT-121](items/FEAT-121.md) | Major | OPEN | STUN UDP egress gate for the VPN guard (eMuleBB, emulebb-rust, libtorrent) |
 | [FEAT-122](items/FEAT-122.md) | Minor | OPEN | Expose GET /api/v1/capabilities (contract-discovery primitive) under the soft freeze |
+| [FEAT-123](items/FEAT-123.md) | Major | IN_PROGRESS | Shared files one-level auto-updater |
 
 ---
 
