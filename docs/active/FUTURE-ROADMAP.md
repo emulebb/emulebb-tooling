@@ -1,47 +1,58 @@
 # eMuleBB (MFC) Future Roadmap
 
-> **eMuleBB — the C++ MFC desktop app — is closing with `0.7.3` final and
-> entering permanent `0.7.x` maintenance.** Forward development has shifted to
-> **emulebb-rust** (the multiplatform eD2K/Kad core), **qBittorrentBB**, and the
-> suite integrations. The active forward program lives in
-> [SUITE-JOINT-ROADMAP](SUITE-JOINT-ROADMAP.md). This document now governs only
-> what remains for the MFC app: `0.7.x` maintenance plus the family/packaging
+> **eMuleBB — the C++ MFC desktop app — closes its `0.7.x` line with `0.7.3`
+> final, then continues in a revived `0.8.x` MFC modernization line (operator
+> decision 2026-06-20).** `0.7.3` is the final `0.7.x` *feature* release, not the
+> end of MFC development. The forward suite (**emulebb-rust**, **qBittorrentBB**,
+> **TrackMuleBB**) is sequenced **after** `0.8.x` — its program lives in
+> [SUITE-JOINT-ROADMAP](SUITE-JOINT-ROADMAP.md). This document governs the MFC app:
+> `0.7.x` maintenance, the `0.8.x` modernization line, and the family/packaging
 > tracks the MFC participates in as a packaged component.
 
 This is the post-0.7.3 roadmap for the eMuleBB MFC desktop app. It is not a
 `0.7.3` release-candidate gate (that is owned by [RELEASE-0.7.3](RELEASE-0.7.3.md)).
-With the forward focus on emulebb-rust, the MFC product surface is intentionally
-frozen at `0.7.3`: new product, UI, protocol, and configuration work is out of
-scope for this app and — where still wanted — is tracked on the rust/suite
-roadmap instead. See [Frozen Surfaces](FROZEN-SURFACES.md) for the
-compatibility-preserved legacy baggage versus supported behavior split.
+The MFC product surface stays **frozen for the `0.7.x` line** — new product, UI,
+protocol, and configuration work is out of scope there — but **reopens in the
+revived `0.8.x` modernization line** (operator decision 2026-06-20). See
+[Frozen Surfaces](FROZEN-SURFACES.md) for the compatibility-preserved legacy
+baggage versus supported behavior split, which also seeds the `0.8.x`
+frozen-surface-removal scope.
 
 For a shorter public-readable overview, use
 [Roadmap Summary](../reference/ROADMAP-SUMMARY.md).
 
 ## Release Line Model
 
-- `0.7.3` is the **final eMuleBB MFC feature release**. The fixed candidate train
-  is `0.7.3-rc.1`, `0.7.3-rc.2`, `0.7.3-rc.3`, then stable `0.7.3`. Each candidate
+- `0.7.3` is the **final `0.7.x` feature release** (it is no longer the final MFC
+  release outright — MFC continues in `0.8.x`). The fixed candidate train is
+  `0.7.3-rc.1`, `0.7.3-rc.2`, `0.7.3-rc.3`, then stable `0.7.3`. Each candidate
   absorbs only release blockers, proof refreshes, packaging fixes, and approved
   regression fixes.
-- After stable `0.7.3`, `release/0.7.x` is the **permanent maintenance line** and
-  `main` carries only `0.7.x` maintenance. Allowed: compatibility-preserving,
-  low-risk bug fixes on supported surfaces plus security, crash/data-loss,
-  packaging, update-check, release-proof, and release-documentation fixes. Not
-  allowed: new product surface, new controller/API capability, or feature
-  expansion.
+- After stable `0.7.3`, `release/0.7.x` is the **permanent maintenance line**
+  (compatibility-preserving, low-risk bug fixes plus security, crash/data-loss,
+  packaging, update-check, release-proof, and release-documentation fixes; no new
+  product surface, controller/API capability, or feature expansion), and **`main`
+  opens for the revived `0.8.x` MFC modernization line** (see the `0.8.0` bullet
+  below).
 - Frozen legacy surfaces stay frozen; they are not fixed in `0.7.x` unless the
   issue affects supported shared infrastructure, security, or app stability.
 - Stable patch maintenance increments the patch number (for example
   `emulebb-v0.7.4`) for hotfixes on the maintenance line.
-- **`0.8.0` (MFC modernization) is ON HOLD / UNDER REVIEW — not retired, not
-  active.** The previous plan to open `main` for a `0.8.0` MFC modernization wave
-  (frozen-surface removal first, then product lanes) is **suspended** pending a
-  decision on whether the MFC app continues at all given the emulebb-rust pivot.
-  Do not start `0.8.0` MFC work without an explicit operator decision to revive
-  the line. The frozen-surface inventory is retained in
-  [Frozen Surfaces](FROZEN-SURFACES.md) for that future decision.
+- **`0.8.0` (MFC modernization) is REVIVED / ACTIVE (operator decision
+  2026-06-20).** The line previously held under review is back on: after stable
+  `0.7.3` and the `release/0.7.x` split, `main` opens for the `0.8.x` MFC
+  modernization wave (frozen-surface removal first, then product lanes) following
+  the plan retained in [Frozen Surfaces](FROZEN-SURFACES.md). This supersedes the
+  earlier "0.7.3 is the final MFC release / MFC may not continue" framing:
+  **`0.7.3` is the final `0.7.x` feature release, and MFC development continues in
+  `0.8.x`.** Detailed `0.8.x` scope/lane content is still to be specified by the
+  operator before work starts; do not infer it beyond the retained frozen-surface
+  plan.
+- **Sequencing (operator decision 2026-06-20):** order is `0.7.x` maintenance →
+  **`0.8.x` MFC modernization** → the forward suite (qBittorrentBB, emulebb-rust,
+  TrackMuleBB), which is therefore **post-`0.8.*`** rather than immediately
+  post-`0.7.3` (see
+  [SUITE-JOINT-ROADMAP](SUITE-JOINT-ROADMAP.md#decision-2026-06-20-forward-stack-is-post-08-not-immediately-post-073)).
 
 ## GitHub Workflow Authority
 

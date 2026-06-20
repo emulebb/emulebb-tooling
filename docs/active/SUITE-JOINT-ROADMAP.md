@@ -39,6 +39,27 @@ forward cross-network controller "in full development mode".
    frozen Windows bundle gives side-by-side dual management via the frozen
    aMuTorrent, **not** the new fabric.
 
+## Decision (2026-06-20): forward stack is post-`0.8.*`, not immediately post-`0.7.3`
+
+This refines the sequencing of the Decision (2026-06-15) without changing the
+freeze scope or product roles.
+
+1. **qBittorrentBB and emulebb-rust stay out of the entire `0.7.x` line** (RC3,
+   stable `0.7.3`, and `0.7.x` maintenance) and are now positioned **post-`0.8.*`**
+   — they no longer begin "right after `0.7.3` ships". The `0.7.3`/`0.7.x` bundle
+   is and remains MFC client + frozen aMuTorrent + Arr plumbing, delivered by the
+   Pages `install.ps1` thin wrapper over the release `Bootstrap-eMuleBBSuite.ps1`.
+2. The **`0.8.*` line that now sits between `0.7.x` and the forward suite is a
+   revived MFC modernization line** (operator decision 2026-06-20 — this reactivates
+   the previously on-hold `0.8.0`; see
+   [FUTURE-ROADMAP](FUTURE-ROADMAP.md#release-line-model)). Order is therefore:
+   `0.7.x` maintenance → `0.8.x` MFC modernization → this forward suite. Detailed
+   `0.8.x` lane content is still to be specified by the operator; do not infer it
+   beyond the retained frozen-surface-removal plan, and do not start the forward
+   suite ahead of `0.8.x`.
+3. TrackMuleBB, `uv`, and the Python installer remain forward-only and inherit the
+   same post-`0.8.*` positioning as the stack they coordinate.
+
 ## Naming (exact, do not conflate)
 
 - **eMuleBB** = the **C++ MFC Windows desktop app** (`emulebb-main`). The current
@@ -63,8 +84,9 @@ fixes only — see Decision 2026-06-15, [FUTURE-ROADMAP](FUTURE-ROADMAP.md) and
 [FROZEN-SURFACES](FROZEN-SURFACES.md)). The unfrozen forward products —
 `emulebb-rust`, `qBittorrentBB`, `goed2k-server`, the Python metadata-fabric
 tooling, and the **new Python coordinator** — are in **full development mode, no
-limits**. This program lives entirely in that unfrozen space and begins after
-`0.7.3` ships.
+limits**. This program lives entirely in that unfrozen space; per the Decision
+(2026-06-20) above it is positioned **post-`0.8.*`** (it does not begin the moment
+`0.7.3` ships).
 
 **eMuleBB 0.7.3 final scope:** the PowerShell suite bootstrap + local Arr
 integration + aMuTorrent. That is the whole of it — no further MFC feature scope.

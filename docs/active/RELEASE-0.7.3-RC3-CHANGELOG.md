@@ -9,10 +9,15 @@ RC3 is a delta over the published RC2 artifact set. **Operator decision
 regression, and release-documentation fixes on supported surfaces. Operator
 decision 2026-06-19 keeps the release train on the existing PowerShell
 MFC+aMuTorrent bundle: qBittorrentBB, emulebb-rust, TrackMuleBB, `uv`, and the
-Python installer are out of RC3/final scope. The two optional lanes (Upload
-Policy Clarity, UI Power-User Polish) are **not taken** for RC3; their candidate
-inbound issues (#147/#158 upload slots, #159 Customize Toolbar) are deferred
-post-0.7.3. The core eMuleBB protocol surface and package shape are unchanged
+Python installer are out of RC3/final scope. **Operator decision 2026-06-20**
+keeps a **soft freeze** (small bug fixes and small features may still land) and
+reconfirms the scope as: Pages `install.ps1` as a thin wrapper over the release
+`Bootstrap-eMuleBBSuite.ps1`; MFC client + aMuTorrent + Arr suite as currently
+shipped; **qBittorrentBB and emulebb-rust stay out and are now positioned
+post-`0.8.*`** (beyond the `0.7.x` line, not merely post-`0.7.3`). The two
+optional lanes (Upload Policy Clarity, UI Power-User Polish) are **not taken**
+for RC3; their candidate inbound issues (#147/#158 upload slots, #159 Customize
+Toolbar) are deferred post-0.7.3. The core eMuleBB protocol surface and package shape are unchanged
 from RC2 except where noted. Final package hashes and proof status are recorded in
 [RELEASE-0.7.3-CHECKLIST](RELEASE-0.7.3-CHECKLIST.md) and tracked by
 [CI-035](items/CI-035.md). For the RC2-and-earlier delta and the RC1-vs-baseline
@@ -30,9 +35,12 @@ history, see [RELEASE-0.7.3-RC2-CHANGELOG](RELEASE-0.7.3-RC2-CHANGELOG.md).
   scaffold is documented as post-0.7.3 only.
 - RC3/Installer: qBittorrentBB is parked outside the RC3/final suite manifest and
   cannot be selected by the packaged MFC+aMuTorrent installer.
-- RC3/Shared files: shared directories now auto-check for new direct child files
+- RC3/Shared files (in flight — the soft-freeze small feature for RC3, **not yet
+  merged to `main`**): shared directories auto-check for new direct child files
   every 5 minutes using bounded one-level polling; recursive monitored sharing
-  remains opt-in and unchanged ([FEAT-123](items/FEAT-123.md), issue #148).
+  remains opt-in and unchanged ([FEAT-123](items/FEAT-123.md), issue #148). This
+  bullet finalizes only once the implementation lands and its acceptance criteria
+  pass.
 - _(Further crash/data-loss, packaging/provenance, regression, and release-doc
   fixes land here as approved and merged.)_
 
@@ -67,6 +75,12 @@ history, see [RELEASE-0.7.3-RC2-CHANGELOG](RELEASE-0.7.3-RC2-CHANGELOG.md).
 - RC3/Proof: Pending — Pages wrapper dry-run/parse proof that the public one-liner
   resolves `Bootstrap-eMuleBBSuite.ps1`, verifies the sidecar hash when present,
   and forwards existing bootstrapper parameters.
+- RC3/Proof: **Pre-tag blocker** — current `main` CI is red. The
+  `0.7.3-nightly.20260615` nightly (commit `72a6f7e`) has a failing Nightly
+  build (issue #160) and failing x64+ARM64 Controlled Smoke (issue #161). RC3 is
+  cut from `main`, so both must be green (or the failures triaged as
+  non-blocking with recorded operator acceptance) before the RC3 candidate head
+  is locked. The locked rc.2 heads remain green; this is a newer-`main` delta.
 
 ### Risk and Testing Focus
 

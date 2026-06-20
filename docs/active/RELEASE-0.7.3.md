@@ -33,6 +33,20 @@ status, release-source truth, and the open RC task list.
   currently carries no app-behavior delta over rc.2 — only the publish-release
   `irm|iex` CI gate (`f83072e6`) and the README install sync (`bf599469`). Draft
   delta: [RC3 changelog](RELEASE-0.7.3-RC3-CHANGELOG.md).
+- Scope reconfirm (operator decision 2026-06-20): RC3 stays a **soft freeze**
+  (small bug fixes and small features may still land — e.g. FEAT-123 / issue
+  #148, the only feature lane taken, still in flight). Scope is the Pages
+  `install.ps1` thin wrapper over the release `Bootstrap-eMuleBBSuite.ps1`, the
+  MFC client + aMuTorrent + Arr suite as currently shipped. **qBittorrentBB and
+  emulebb-rust stay out and are repositioned post-`0.8.*`** (beyond the `0.7.x`
+  line). See the forward roadmap repositioning in
+  [SUITE-JOINT-ROADMAP](SUITE-JOINT-ROADMAP.md).
+- CI status (pre-tag blocker): current `main` CI is red. The
+  `0.7.3-nightly.20260615` nightly (commit `72a6f7e`) failed the Nightly build
+  (issue #160) and x64+ARM64 Controlled Smoke (issue #161). Because RC3 is cut
+  from `main`, these must be green — or triaged as non-blocking with recorded
+  operator acceptance — before the RC3 candidate head is locked. The locked rc.2
+  heads below remain green; this is a newer-`main` regression to resolve.
 - Locked candidate heads: app `38827709` (FEAT-015 broadband upload tuning,
   FEAT-027 diagnostics flush), `emulebb-build` `0fceae7` (the rc.2 build_ref:
   fefff3f plus the BUG-017 `irm|iex` fix), `emulebb-build-tests`
