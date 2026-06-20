@@ -14,10 +14,11 @@ keeps a **soft freeze** (small bug fixes and small features may still land) and
 reconfirms the scope as: Pages `install.ps1` as a thin wrapper over the release
 `Bootstrap-eMuleBBSuite.ps1`; MFC client + aMuTorrent + Arr suite as currently
 shipped; **qBittorrentBB and emulebb-rust stay out and are now positioned
-post-`0.8.*`** (beyond the `0.7.x` line, not merely post-`0.7.3`). The two
-optional lanes (Upload Policy Clarity, UI Power-User Polish) are **not taken**
-for RC3; their candidate inbound issues (#147/#158 upload slots, #159 Customize
-Toolbar) are deferred post-0.7.3. The core eMuleBB protocol surface and package shape are unchanged
+post-`0.8.*`** (beyond the `0.7.x` line, not merely post-`0.7.3`). The Upload
+Policy Clarity lane is **not taken** for RC3 (#147/#158 upload slots deferred
+post-0.7.3). From the UI Power-User Polish lane, the **#159 toolbar button-reorder
+regression is fixed** in RC3 under the soft freeze; the remaining #159 cosmetic
+request (bold the active category tab) stays deferred post-0.7.3. The core eMuleBB protocol surface and package shape are unchanged
 from RC2 except where noted. Final package hashes and proof status are recorded in
 [RELEASE-0.7.3-CHECKLIST](RELEASE-0.7.3-CHECKLIST.md) and tracked by
 [CI-035](items/CI-035.md). For the RC2-and-earlier delta and the RC1-vs-baseline
@@ -51,8 +52,14 @@ history, see [RELEASE-0.7.3-RC2-CHANGELOG](RELEASE-0.7.3-RC2-CHANGELOG.md).
 
 ### UI Power-User Polish
 
-- None for RC3. Lane not taken (operator decision 2026-06-13); #159 Customize
-  Toolbar deferred post-0.7.3.
+- RC3/UI: Customize Toolbar **button reordering fixed** (app `ff81a810`, issue
+  #159). `TBN_GETBUTTONINFO` returned its result inverted — a regression from the
+  ARM64 merge (`24d1de79`) — so the customize button-info enumeration came back
+  empty and the dialog could not reorder existing buttons; only separators could
+  be added. The fix also removes the related out-of-bounds read. Built green on
+  x64 Debug + Release + Release-diagnostics.
+- Deferred: the remaining #159 cosmetic request (bold the active category tab)
+  stays post-0.7.3.
 
 ### Packages
 
@@ -84,9 +91,11 @@ history, see [RELEASE-0.7.3-RC2-CHANGELOG](RELEASE-0.7.3-RC2-CHANGELOG.md).
 
 ### Risk and Testing Focus
 
-- RC3/Risk: With no optional slice taken, RC3 risk is confined to the
-  release-tooling/doc delta. Confirm the regenerated package set and the
-  aMuTorrent companion install and run cleanly on a fresh install, including the
-  `irm | iex` one-liner that the new CI gate protects.
+- RC3/Risk: Beyond the release-tooling/doc delta, RC3 now carries the #159
+  toolbar button-reorder fix (and the in-flight FEAT-123 shared-file lane).
+  Confirm the regenerated package set and the aMuTorrent companion install and run
+  cleanly on a fresh install, including the `irm | iex` one-liner that the new CI
+  gate protects, and verify Customize Toolbar can reorder buttons (not just add
+  separators).
 - RC3/Risk: Confirm no qBittorrentBB folder, process, config, service entry, or
   public install claim is produced by the default Full bundle.
