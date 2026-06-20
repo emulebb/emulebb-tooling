@@ -247,7 +247,7 @@ Controllers request state changes; they do not own the scan engine.
 
 A controller integration uses native REST and adapter behavior. **TrackMuleBB**
 (forward) reads `GET /api/v1/capabilities` and calls only advertised operations;
-**aMuTorrent** (frozen `0.7.3` bundle) is a fixed REST/UI consumer. Either way,
+**aMuTorrent** (the `0.7.3` bundle controller) is a fixed REST/UI consumer. Either way,
 prove the basics before running long workflows:
 
 - app status reads correctly

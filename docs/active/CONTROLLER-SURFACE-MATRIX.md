@@ -63,9 +63,10 @@ feed behavior, synced indexers, and redacted live-wire diagnostics.
 Public role:
 **TrackMuleBB** is the forward cross-network controller — a generic
 `/api/v1` + `/capabilities` consumer that never special-cases a product.
-**aMuTorrent** is the frozen browser-UI controller bundled with `0.7.3`; it
-consumes native `/api/v1` and must not drive native route aliases or adapter
-quirks.
+**aMuTorrent** is the browser-UI controller bundled with `0.7.3` (actively
+maintained until `0.7.3` final, then frozen and replaced by TrackMuleBB in the
+`0.8.*` program); it consumes native `/api/v1` and must not drive native route
+aliases or adapter quirks.
 
 Required proof:
 `amutorrent-browser-smoke` proves the legacy `0.7.3` bundle path (connection

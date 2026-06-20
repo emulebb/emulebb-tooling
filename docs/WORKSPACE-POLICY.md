@@ -373,7 +373,7 @@ module):
 ## Managed Fork Hygiene
 
 These rules apply uniformly to every managed fork / managed product repo: the
-`emulebb` app worktree, `emulebb-rust`, `amutorrent` (frozen), `trackmulebb`,
+`emulebb` app worktree, `emulebb-rust`, `amutorrent` (maintained until 0.7.3 final), `trackmulebb`,
 `qbittorrentbb`, `amule`, `goed2k-server`, and the `emulebb-build` /
 `emulebb-build-tests` / `emulebb-tooling` support repos. The
 `p2p-overlord-*` family is a separate product line and is out of scope here.
