@@ -13,8 +13,9 @@ Python installer are out of RC3/final scope. **Operator decision 2026-06-20**
 keeps a **soft freeze** (small bug fixes and small features may still land) and
 reconfirms the scope as: Pages `install.ps1` as a thin wrapper over the release
 `Bootstrap-eMuleBBSuite.ps1`; MFC client + aMuTorrent + Arr suite as currently
-shipped; **qBittorrentBB and emulebb-rust stay out and are now positioned
-post-`0.8.*`** (beyond the `0.7.x` line, not merely post-`0.7.3`). The Upload
+shipped; **qBittorrentBB and emulebb-rust stay out of the `0.7.x` line entirely
+and ship in the `0.8.*` program** (the forward suite + MFC modernization wave that
+begins after `0.7.3`). The Upload
 Policy Clarity lane is **not taken** for RC3 (#147/#158 upload slots deferred
 post-0.7.3). From the UI Power-User Polish lane, the **#159 toolbar button-reorder
 regression is fixed** in RC3 under the soft freeze; the remaining #159 cosmetic

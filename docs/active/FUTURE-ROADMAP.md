@@ -3,8 +3,9 @@
 > **eMuleBB — the C++ MFC desktop app — closes its `0.7.x` line with `0.7.3`
 > final, then continues in a revived `0.8.x` MFC modernization line (operator
 > decision 2026-06-20).** `0.7.3` is the final `0.7.x` *feature* release, not the
-> end of MFC development. The forward suite (**emulebb-rust**, **qBittorrentBB**,
-> **TrackMuleBB**) is sequenced **after** `0.8.x` — its program lives in
+> end of MFC development. The `0.8.x` MFC modernization runs **together with** the
+> forward suite (**emulebb-rust**, **qBittorrentBB**, **TrackMuleBB** replacing
+> aMuTorrent) as one **`0.8.*` program** — the suite half lives in
 > [SUITE-JOINT-ROADMAP](SUITE-JOINT-ROADMAP.md). This document governs the MFC app:
 > `0.7.x` maintenance, the `0.8.x` modernization line, and the family/packaging
 > tracks the MFC participates in as a packaged component.
@@ -49,10 +50,11 @@ For a shorter public-readable overview, use
   operator before work starts; do not infer it beyond the retained frozen-surface
   plan.
 - **Sequencing (operator decision 2026-06-20):** order is `0.7.x` maintenance →
-  **`0.8.x` MFC modernization** → the forward suite (qBittorrentBB, emulebb-rust,
-  TrackMuleBB), which is therefore **post-`0.8.*`** rather than immediately
-  post-`0.7.3` (see
-  [SUITE-JOINT-ROADMAP](SUITE-JOINT-ROADMAP.md#decision-2026-06-20-forward-stack-is-post-08-not-immediately-post-073)).
+  the **`0.8.*` program**, which runs `0.8.x` MFC modernization **together with**
+  the forward suite (qBittorrentBB, emulebb-rust, and TrackMuleBB replacing
+  aMuTorrent). The suite is part of the `0.8.*` program, not a later phase after
+  it; both begin after `0.7.3` ships (see
+  [SUITE-JOINT-ROADMAP](SUITE-JOINT-ROADMAP.md#decision-2026-06-20-the-08-program-runs-mfc-modernization-and-the-forward-suite-together)).
 
 ## GitHub Workflow Authority
 
@@ -162,8 +164,10 @@ Do not add these to the eMuleBB MFC backlog unless the operator explicitly reope
 them:
 
 - New MFC product/feature work in any Superseded Lane above.
-- `0.8.0` MFC modernization or frozen-surface removal until the line is explicitly
-  revived (it is on hold, not active).
+- `0.8.x` MFC modernization or frozen-surface removal work landing on the
+  shipping `0.7.x` line. The `0.8.x` line is revived/active (decision 2026-06-20)
+  but opens on `main` only after stable `0.7.3` and the `release/0.7.x` split —
+  keep it out of the `0.7.x` maintenance line.
 - Headless core, server-only mode, cross-platform client work, or mobile-first
   controller scope inside the MFC desktop app. These are emulebb-rust /
   qBittorrentBB / Gluetun family tracks.

@@ -20,11 +20,13 @@
 
 ## The eMuleBB Suite
 
-This guide covers the **eMuleBB Windows client** (the frozen `0.7.3` eD2K/Kad
-desktop app). It is one product in the broader **eMuleBB Suite**: the forward
-multiplatform core **emulebb-rust**, the BitTorrent companion **qBittorrentBB**,
-and the forward cross-network controller + installer **TrackMuleBB** (which
-supersedes the now-frozen aMuTorrent and drives any `/api/v1` core by advertised
+This guide covers the **eMuleBB Windows client** (the `0.7.3` eD2K/Kad desktop
+app; the `0.7.x` feature line closes at `0.7.3`, with MFC modernization continuing
+in the `0.8.x` line). It is one product in the broader **eMuleBB Suite**: the
+forward multiplatform core **emulebb-rust**, the BitTorrent companion
+**qBittorrentBB**, and the forward cross-network controller + installer
+**TrackMuleBB** (which replaces aMuTorrent in the `0.8.*` program — aMuTorrent
+stays maintained until `0.7.3` final — and drives any `/api/v1` core by advertised
 capability). For the suite as a whole — roadmap, the three-network bundle
 (eD2K / BitTorrent / Usenet), and install/Docker delivery — see the
 [Suite Roadmap](active/SUITE-JOINT-ROADMAP.md),

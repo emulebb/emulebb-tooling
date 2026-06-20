@@ -24,8 +24,8 @@ cognitive load of a 14-repo workspace and makes ownership of each decision obvio
 | `qbittorrentbb` | Companion | active, Phase 1 | `docs/active` (`QBBB-*`) | qBittorrentBB |
 | `trackmulebb` | Companion (controller + installer) | forward, Phase 2 (Python; new) | `docs/active` (`TMBB-*`) | TrackMuleBB |
 | `itlezy/bountarr` | Companion (household media-grab UI) | forward, Phase 2 (TS/Node) | own repo | TrackMuleBB-suite |
-| `amutorrent` | Deprecated | superseded by TrackMuleBB (capability-driven); legacy-only in the 0.7.3 bundle | `docs/active` (`AMUT-*` ref) | aMuTorrent |
-| `emulebb` (MFC) | Frozen / Maintenance | closes 0.7.3 → 0.7.x | `emulebb-tooling/docs/active` (legacy IDs) | eMuleBB-MFC |
+| `amutorrent` | Active → freezes at 0.7.3 final | actively maintained + upstream-synced through the 0.7.3 train (decision 2026-06-20); then deprecated, superseded by TrackMuleBB | `docs/active` (`AMUT-*` ref) | aMuTorrent |
+| `emulebb` (MFC) | Active (0.7.x → revived 0.8.x) | closes 0.7.x at 0.7.3, then 0.8.x MFC modernization (decision 2026-06-20) | `emulebb-tooling/docs/active` (legacy IDs) | eMuleBB-MFC |
 | `goed2k-server` | Service / Lab | lab (no CI gate) | `docs/active` lab index (`GOED2K-*` reserved) | — (not on board while lab) |
 | `emulebb-build` | Infra | active | — | tooling |
 | `emulebb-build-tests` | Infra | active | — | tooling |
@@ -39,12 +39,14 @@ cognitive load of a 14-repo workspace and makes ownership of each decision obvio
 ## Strategic note
 
 The forward investment is **Core + Companion**. The historically heaviest-resourced
-product (`emulebb` MFC) is **Frozen** — its CI and 127-item backlog are maintenance,
-not growth. The forward cross-network controller is **TrackMuleBB** (new, Python,
-**capability-driven**: it drives any `/api/v1` core — emulebb-rust full, eMuleBB
-MFC frozen subset — plus qBittorrentBB). **aMuTorrent is deprecated** as a
-separate controller (legacy-only inside the `0.7.3` bundle; its automation design
-is retained as the TrackMuleBB reference). The bundled qBittorrentBB tracks its latest
+product (`emulebb` MFC) closes its `0.7.x` line at `0.7.3` and then **continues in
+the revived `0.8.x` modernization line** (decision 2026-06-20). The forward
+cross-network controller is **TrackMuleBB** (new, Python, **capability-driven**: it
+drives any `/api/v1` core — emulebb-rust full, eMuleBB MFC frozen subset — plus
+qBittorrentBB). **aMuTorrent stays actively maintained and upstream-synced through
+the `0.7.3` train and freezes at `0.7.3` final**, after which it is deprecated as a
+separate controller (its automation design is retained as the TrackMuleBB
+reference). The bundled qBittorrentBB tracks its latest
 REST-API-compatible release rather than a pinned snapshot. The ready-to-use
 **suite bundle** also pulls in third-party stacks we do **not** own — the Arr apps
 (Prowlarr/Sonarr/Radarr), SABnzbd (Usenet), and Plex (Docker) — installed/wired by

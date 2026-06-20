@@ -19,18 +19,18 @@ not the Windows MFC app.
 
 ## Release Line Direction
 
-`0.7.3` is the **final eMuleBB MFC feature release**. Its public train is fixed as
+`0.7.3` is the **final `0.7.x` feature release**. Its public train is fixed as
 `0.7.3-rc.1`, `0.7.3-rc.2`, `0.7.3-rc.3`, then stable `0.7.3`. After that, `0.7.x`
 is the permanent maintenance line with a frozen public surface (security,
 crash/data-loss, packaging, update-check, release-proof, and documentation fixes
-only). Per the operator decision of 2026-06-20, the `0.8.0` MFC modernization
-line is **revived/active**: after stable `0.7.3` and the `release/0.7.x` split,
-`main` opens for `0.8.x` MFC modernization, so `0.7.3` is the final `0.7.x`
-feature release rather than the end of MFC development. The forward suite
-(emulebb-rust, qBittorrentBB, TrackMuleBB) is sequenced **after `0.8.x`** (i.e.
-post-`0.8.*`) and stays out of the whole `0.7.x` line; the `0.7.3`/`0.7.x` bundle
-remains MFC client + aMuTorrent + Arr only, delivered by the `install.ps1` thin
-wrapper.
+only). Per the operator decision of 2026-06-20, the `0.8.x` MFC modernization
+line is **revived/active** and runs as one **`0.8.*` program together with the
+forward suite**: after stable `0.7.3` and the `release/0.7.x` split, `main` opens
+for `0.8.x` MFC modernization alongside qBittorrentBB, emulebb-rust, and
+TrackMuleBB (which replaces aMuTorrent). So `0.7.3` is the final `0.7.x` feature
+release, not the end of MFC development. The forward suite stays out of the whole
+`0.7.x` line; the `0.7.3`/`0.7.x` bundle remains MFC client + aMuTorrent + Arr
+only, delivered by the `install.ps1` thin wrapper.
 
 ## Where The Future Work Is
 

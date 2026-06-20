@@ -14,9 +14,9 @@ PowerShell suite bootstrap:
    does **not** install qBittorrentBB, emulebb-rust, TrackMuleBB, `uv`, or the
    Python setup CLI.
 
-The TrackMuleBB/`uv`/Python installer design below is future, post-`0.7.3`
-direction only. It must not be described as the current Pages one-liner until it
-is built, packaged, and release-proven.
+The TrackMuleBB/`uv`/Python installer design below is future `0.8.*`-program
+direction only (it begins after `0.7.3` ships). It must not be described as the
+current Pages one-liner until it is built, packaged, and release-proven.
 
 Governance companions: [SUITE-JOINT-ROADMAP](SUITE-JOINT-ROADMAP.md),
 [PRODUCT-PORTFOLIO](PRODUCT-PORTFOLIO.md),
@@ -25,10 +25,11 @@ Governance companions: [SUITE-JOINT-ROADMAP](SUITE-JOINT-ROADMAP.md),
 
 ## Current 0.7.3 Goal
 
-A release-stable Windows bundle that closes the MFC line with the existing
-PowerShell installer: eMuleBB MFC as the eD2K/Kad core, aMuTorrent as the frozen
-controller, and the local Arr setup scripts. The RC3/final path is
-stabilization-only and avoids new product surface.
+A release-stable Windows bundle that closes the `0.7.x` feature line with the
+existing PowerShell installer: eMuleBB MFC as the eD2K/Kad core, aMuTorrent as the
+controller (actively maintained until `0.7.3` final, then frozen), and the local
+Arr setup scripts. The RC3/final path is stabilization-only and avoids new product
+surface.
 
 ## Future Goal
 

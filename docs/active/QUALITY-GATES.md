@@ -6,7 +6,7 @@ of per-repo folklore. Tiers are defined in [PRODUCT-PORTFOLIO](PRODUCT-PORTFOLIO
 
 ## Gate matrix
 
-| Gate | Core (rust) | Companion (qBittorrentBB / aMuTorrent) | Frozen (MFC) | Lab (goed2k) | Infra |
+| Gate | Core (rust) | Companion (qBittorrentBB / aMuTorrent) | MFC (eMuleBB, 0.7.x → 0.8.x) | Lab (goed2k) | Infra |
 |---|---|---|---|---|---|
 | Build (matrix) | ✅ 3-OS | ✅ (fork CI) | ✅ x64 Debug+Release+diag | ⛔ while lab | ✅ |
 | Unit/integration tests | ✅ blocking | ✅ | ✅ shared harness | ⛔ while lab | ✅ |
@@ -32,7 +32,8 @@ of per-repo folklore. Tiers are defined in [PRODUCT-PORTFOLIO](PRODUCT-PORTFOLIO
 ## Principles
 
 - **Invest by tier, not by history.** Core/Companion carry the strongest gates; the
-  Frozen MFC app gets maintenance gates only; Lab stays light until promoted.
+  MFC app gets maintenance gates only on the shipping `0.7.x` line (heavier gates
+  return with the `0.8.x` modernization line); Lab stays light until promoted.
 - **The leak-test is non-negotiable for any networked product** — it is the
   automated form of the P0 Network Safety invariant
   ([WORKSPACE-POLICY](../WORKSPACE-POLICY.md#network-safety-no-clearnet-leak--p0-invariant)).

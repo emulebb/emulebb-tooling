@@ -42,7 +42,7 @@ removal work.
 **Controller surface matrix:** [CONTROLLER-SURFACE-MATRIX](CONTROLLER-SURFACE-MATRIX.md)
 **Future release roadmap:** [FUTURE-ROADMAP](FUTURE-ROADMAP.md)
 **Roadmap consolidation scaffold:** [FUTURE-ROADMAP#roadmap-consolidation-structure](FUTURE-ROADMAP.md#roadmap-consolidation-structure)
-**Suite joint roadmap (post-0.7.3, non-MFC):** [SUITE-JOINT-ROADMAP](SUITE-JOINT-ROADMAP.md)
+**Suite joint roadmap (0.8.* forward program, non-MFC):** [SUITE-JOINT-ROADMAP](SUITE-JOINT-ROADMAP.md)
 **Suite metadata fabric (torrent⇄collection⇄eD2K):** [SUITE-METADATA-FABRIC](SUITE-METADATA-FABRIC.md)
 **GitHub-primary backlog workflow:** GitHub issues in `emulebb/emulebb` plus
 the `eMuleBB Roadmap` Project #2 are authoritative for migrated backlog items.

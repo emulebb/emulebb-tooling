@@ -1,14 +1,15 @@
 # Ecosystem Suite Bootstrap Plan
 
-Status: planning only. This document records intended post-0.7.3 ecosystem
-packaging direction. It does not describe a shipped release asset.
+Status: planning only. This document records intended `0.8.*`-program ecosystem
+packaging direction (it begins after `0.7.3` ships). It does not describe a
+shipped release asset.
 
 > **Current release installer (updated 2026-06-19):** for `0.7.3-rc.3` and
 > stable `0.7.3`, the public Pages one-liner remains a PowerShell wrapper around
 > the GitHub Release `Bootstrap-eMuleBBSuite.ps1`. That bootstrapper installs the
-> MFC eMuleBB package, the frozen aMuTorrent controller package, and the local Arr
-> plumbing. It does **not** install qBittorrentBB, emulebb-rust, TrackMuleBB, `uv`,
-> or the Python setup CLI.
+> MFC eMuleBB package, the aMuTorrent controller package (actively maintained
+> until `0.7.3` final), and the local Arr plumbing. It does **not** install
+> qBittorrentBB, emulebb-rust, TrackMuleBB, `uv`, or the Python setup CLI.
 >
 > **Future installer direction:** after `0.7.3`, [SUITE-INSTALLER](../SUITE-INSTALLER.md)
 > owns the TrackMuleBB/`uv`/Python setup design. The packaging-intent sections
@@ -21,7 +22,7 @@ stack into a broader local-machine and headless ecosystem:
 
 - eMuleBB MFC remains the default Windows core until a later release proof
   explicitly promotes another default.
-- qBittorrentBB is the first planned post-`0.7.3` Windows bootstrap expansion. It becomes a
+- qBittorrentBB is a first-wave `0.8.*`-program Windows bootstrap expansion. It becomes a
   BitTorrent companion in the suite: optional in the model, but preselected for
   normal local-machine `Full` installs.
 - qBittorrentBB ships early with the fork identity enabled: DHT harvester/index,
@@ -36,9 +37,9 @@ stack into a broader local-machine and headless ecosystem:
 ## Windows Bootstrap Direction
 
 The future Windows bootstrapper should keep the existing `Core`, `Controller`,
-and `Full` bundle names. The first post-`0.7.3` `Full` local-machine expansion
-should preselect eMuleBB MFC, aMuTorrent, qBittorrentBB, Prowlarr, and the
-default Arr apps. Operators can still remove qBittorrentBB through explicit app
+and `Full` bundle names. The first `0.8.*`-program `Full` local-machine expansion
+should preselect eMuleBB MFC, qBittorrentBB, Prowlarr, and the
+default Arr apps (with TrackMuleBB as the controller in place of aMuTorrent). Operators can still remove qBittorrentBB through explicit app
 selection.
 
 The `0.7.3-rc.3`/final PowerShell bootstrapper must preserve the existing

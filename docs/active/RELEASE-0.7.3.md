@@ -38,9 +38,9 @@ status, release-source truth, and the open RC task list.
   #148, the only feature lane taken, still in flight). Scope is the Pages
   `install.ps1` thin wrapper over the release `Bootstrap-eMuleBBSuite.ps1`, the
   MFC client + aMuTorrent + Arr suite as currently shipped. **qBittorrentBB and
-  emulebb-rust stay out and are repositioned post-`0.8.*`** (beyond the `0.7.x`
-  line). See the forward roadmap repositioning in
-  [SUITE-JOINT-ROADMAP](SUITE-JOINT-ROADMAP.md).
+  emulebb-rust stay out of the `0.7.x` line entirely and ship in the `0.8.*`
+  program** (the forward suite + MFC modernization wave that begins after `0.7.3`).
+  See [SUITE-JOINT-ROADMAP](SUITE-JOINT-ROADMAP.md).
 - CI status (pre-tag blocker): current `main` CI is red. The
   `0.7.3-nightly.20260615` nightly (commit `72a6f7e`) failed the Nightly build
   (issue #160) and x64+ARM64 Controlled Smoke (issue #161). Because RC3 is cut
