@@ -13,12 +13,12 @@ forward cross-network controller "in full development mode".
 
 1. **eMuleBB (MFC) `0.7.3` is the final MFC release** and enters **sustainability
    maintenance** — bug fixes only, no features or evolution. Its final package,
-   delivered via the PowerShell suite bootstrap, **also bundles qBittorrentBB**
-   and the Arr stack. The bundled qBittorrentBB **tracks its latest release as long
-   as it stays REST-API-compatible** (the REST API is the long-term compatibility
-   contract) — it is not pinned to an immutable snapshot. **emulebb-rust is NOT in
-   this bootstrap** — it is forward-only and ships separately with TrackMuleBB; the
-   frozen bundle's eD2K side is the MFC client itself.
+   delivered via the proven PowerShell suite bootstrap, bundles the MFC client,
+   the frozen aMuTorrent controller, and the Arr setup plumbing only.
+   **qBittorrentBB, emulebb-rust, TrackMuleBB, `uv`, and the Python setup CLI are
+   not in the `0.7.3-rc.3`/final bootstrap** — they are forward-only and ship
+   separately after this release train. The frozen bundle's eD2K side is the MFC
+   client itself.
 2. **aMuTorrent is frozen on the `0.7.3` line** — sustainability only, **no
    evolutive development**. It ships with the final MFC package and is **not** the
    forward controller.
@@ -74,18 +74,19 @@ metadata-fabric eD2K integrations (notes 1/5/6) target **emulebb-rust's
 `emulebb-metadata` SQLite as the primary** share/hash source; MFC `known.met` is a
 compatibility path only.
 
-## Suite bundle & three networks (decision 2026-06-16)
+## Future suite bundle & three networks (decision 2026-06-16, deferred after 0.7.3)
 
-The suite grows into a **ready-to-use bundle** spanning **three networks** —
+After `0.7.3`, the suite grows into a **ready-to-use bundle** spanning **three networks** —
 eD2K (emulebb-rust / eMuleBB MFC), BitTorrent (qBittorrentBB), Usenet (SABnzbd) —
 plus the Arr automation stack, **Bountarr** (our household media-grab UI over
 Radarr/Sonarr+Plex), and (Docker) Plex.
 
-- **TrackMuleBB is the single pane and the installer.** Its Python setup CLI
+- **TrackMuleBB is the future single pane and installer.** Its Python setup CLI
   installs/auto-wires the bundle; its web UI is the runtime single pane (unified
   transfers/search, **dynamic global bandwidth coordination**, cross-network
   **dedup** via the equivalence map). The PowerShell one-liner becomes a **minimal
-  bootstrap**. Full design: [SUITE-INSTALLER](SUITE-INSTALLER.md).
+  bootstrap** only after the future installer is release-proven. Full design:
+  [SUITE-INSTALLER](SUITE-INSTALLER.md).
 - **Search** aggregates the clients natively (rust index + qBittorrentBB harvest,
   via a native path) plus **Prowlarr** for third-party/Usenet indexers, excluding
   the **tagged** TrackMuleBB indexers to avoid duplicates.

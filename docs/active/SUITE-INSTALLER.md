@@ -1,17 +1,36 @@
 # Suite Bundle & Installer
 
-Status: design / direction. Rewritten 2026-06-16 to integrate the bundle notes.
-Defines the ready-to-use eMuleBB Suite bundle and how it is installed. Supersedes
-the earlier "generic pages-hosted `install.ps1` does the whole install" model: the
-PowerShell one-liner is now a **minimal bootstrap**, and the real setup is a
-**Python CLI inside TrackMuleBB**.
+Status: split current/future direction. Updated 2026-06-19 for the `0.7.3-rc.3`
+release path.
+
+For `0.7.3-rc.3` and stable `0.7.3`, the current installer remains the proven
+PowerShell suite bootstrap:
+
+1. Pages `install.ps1` is a small wrapper for the GitHub Release
+   `Bootstrap-eMuleBBSuite.ps1` asset.
+2. `Bootstrap-eMuleBBSuite.ps1` resolves the matching eMuleBB and aMuTorrent
+   package assets, then invokes the packaged `Install-eMuleBBSuite.ps1`.
+3. The shipped bundle is eMuleBB MFC + aMuTorrent + the local Arr plumbing. It
+   does **not** install qBittorrentBB, emulebb-rust, TrackMuleBB, `uv`, or the
+   Python setup CLI.
+
+The TrackMuleBB/`uv`/Python installer design below is future, post-`0.7.3`
+direction only. It must not be described as the current Pages one-liner until it
+is built, packaged, and release-proven.
 
 Governance companions: [SUITE-JOINT-ROADMAP](SUITE-JOINT-ROADMAP.md),
 [PRODUCT-PORTFOLIO](PRODUCT-PORTFOLIO.md),
 [API-V1-COMPATIBILITY](API-V1-COMPATIBILITY.md),
 `plans/ECOSYSTEM-SUITE-BOOTSTRAP-PLAN.md`.
 
-## Goal
+## Current 0.7.3 Goal
+
+A release-stable Windows bundle that closes the MFC line with the existing
+PowerShell installer: eMuleBB MFC as the eD2K/Kad core, aMuTorrent as the frozen
+controller, and the local Arr setup scripts. The RC3/final path is
+stabilization-only and avoids new product surface.
+
+## Future Goal
 
 A **ready-to-use bundle** that combines our P2P/Usenet download stack with the Arr
 automation stack in one setup: emulebb-rust (or eMuleBB MFC on Windows),
@@ -19,7 +38,7 @@ qBittorrentBB, TrackMuleBB, the Arr stack, SABnzbd, Bountarr, and (Docker) Plex.
 **Self-contained** in the install directory, **no interference** with the host,
 with all inter-app connections **auto-wired**.
 
-## Bundle composition
+## Future Bundle Composition
 
 Two tiers, by who can install/wire them reliably:
 
@@ -38,7 +57,7 @@ Two tiers, by who can install/wire them reliably:
   dependency) and is the **only Node** component (Node confined to Bountarr; the
   rest is Python).
 
-## Selection rules
+## Future Selection Rules
 
 - **TrackMuleBB is always installed; its start is optional** (additive, never a
   required hop — clients work standalone).
@@ -49,10 +68,10 @@ Two tiers, by who can install/wire them reliably:
   alone.
 - Whether optional-start applies to non-controller components too is **TBD**.
 
-## Delivery forms (same TrackMuleBB brain, two targets)
+## Future Delivery Forms (same TrackMuleBB brain, two targets)
 
-- **Windows-local:** `install.ps1` minimal bootstrap → TrackMuleBB Python **setup
-  CLI** does the native install.
+- **Windows-local:** a later `install.ps1` minimal bootstrap → TrackMuleBB Python
+  **setup CLI** does the native install.
 - **Docker:** a committed `docker-compose.yml` driven by **compose profiles**
   (`COMPOSE_PROFILES=rust,qbbb,arr,sab,gluetun`) + a tiny `setup.sh` (prompts →
   `.env`, picks profiles, `up`). TrackMuleBB's CLI can generate/update this compose
@@ -65,9 +84,9 @@ Two tiers, by who can install/wire them reliably:
   - **Plex** is Docker-only (on Windows users run Plex natively); pre-wired
     library paths + Bountarr token, but the **plex.tv claim** stays a manual step.
 
-## Two-stage installer (Windows-local)
+## Future Two-stage Installer (Windows-local)
 
-1. **`install.ps1` (minimal bootstrap, on pages):** download the **`uv`** binary
+1. **Future `install.ps1` (minimal bootstrap, on pages):** download the **`uv`** binary
    directly into the install dir, fetch the TrackMuleBB setup, and invoke its CLI.
    Nothing else (no per-product download/wiring in the ps1).
 2. **TrackMuleBB setup CLI (Python, in the `trackmulebb` repo):** the real
@@ -123,9 +142,12 @@ exact-size + name.
 
 ## Migration / status
 
-- `install.ps1` becomes the minimal bootstrap; `suite-manifest.json` moves into
-  TrackMuleBB (a bundled default + an optional remote-override copy on pages). The
-  setup logic lives in `trackmulebb` (`setup/` CLI + `web/` UI + `coordinator/`).
+- For `0.7.3-rc.3` and stable `0.7.3`, Pages `install.ps1` is the release
+  bootstrap wrapper for `Bootstrap-eMuleBBSuite.ps1`.
+- After `0.7.3`, `install.ps1` may become the TrackMuleBB minimal bootstrap;
+  `suite-manifest.json` then moves into TrackMuleBB (a bundled default + an
+  optional remote-override copy on pages). The setup logic lives in
+  `trackmulebb` (`setup/` CLI + `web/` UI + `coordinator/`).
 - **Scaffold:** the TrackMuleBB setup CLI and the bundle wiring are not built yet;
   the org README one-liner stays on the tested RC bootstrap until this is validated.
 - Tracked work: TrackMuleBB `TMBB-FEAT-*` (search/dedup/bandwidth/SAB/settings/

@@ -6,11 +6,14 @@ Format: one line per item, grouped by area; this is a power-user changelog, not 
 
 RC3 is a delta over the published RC2 artifact set. **Operator decision
 2026-06-13: RC3 is stabilization-only** — crash/data-loss, packaging/provenance,
-regression, and release-documentation fixes on supported surfaces. The two
-optional lanes (Upload Policy Clarity, UI Power-User Polish) are **not taken**
-for RC3; their candidate inbound issues (#147/#158 upload slots, #159 Customize
-Toolbar) are deferred post-0.7.3. The core eMuleBB protocol surface and package
-shape are unchanged from RC2 except where noted. Final package hashes and proof status are recorded in
+regression, and release-documentation fixes on supported surfaces. Operator
+decision 2026-06-19 keeps the release train on the existing PowerShell
+MFC+aMuTorrent bundle: qBittorrentBB, emulebb-rust, TrackMuleBB, `uv`, and the
+Python installer are out of RC3/final scope. The two optional lanes (Upload
+Policy Clarity, UI Power-User Polish) are **not taken** for RC3; their candidate
+inbound issues (#147/#158 upload slots, #159 Customize Toolbar) are deferred
+post-0.7.3. The core eMuleBB protocol surface and package shape are unchanged
+from RC2 except where noted. Final package hashes and proof status are recorded in
 [RELEASE-0.7.3-CHECKLIST](RELEASE-0.7.3-CHECKLIST.md) and tracked by
 [CI-035](items/CI-035.md). For the RC2-and-earlier delta and the RC1-vs-baseline
 history, see [RELEASE-0.7.3-RC2-CHANGELOG](RELEASE-0.7.3-RC2-CHANGELOG.md).
@@ -22,6 +25,11 @@ history, see [RELEASE-0.7.3-RC2-CHANGELOG](RELEASE-0.7.3-RC2-CHANGELOG.md).
   one-liner-install regressions at CI time.
 - RC3/Docs: README install commands synced to the published `0.7.3-rc.2` assets
   (app `bf599469`).
+- RC3/Installer: GitHub Pages `install.ps1` is restored to a thin wrapper around
+  the release `Bootstrap-eMuleBBSuite.ps1` asset. The future TrackMuleBB/`uv`
+  scaffold is documented as post-0.7.3 only.
+- RC3/Installer: qBittorrentBB is parked outside the RC3/final suite manifest and
+  cannot be selected by the packaged MFC+aMuTorrent installer.
 - RC3/Shared files: shared directories now auto-check for new direct child files
   every 5 minutes using bounded one-level polling; recursive monitored sharing
   remains opt-in and unchanged ([FEAT-123](items/FEAT-123.md), issue #148).
@@ -44,6 +52,8 @@ history, see [RELEASE-0.7.3-RC2-CHANGELOG](RELEASE-0.7.3-RC2-CHANGELOG.md).
   and the optional aMuTorrent x64 controller companion are regenerated from the
   selected RC3 head with refreshed manifests, SPDX SBOMs, and SHA-256 hashes.
   *(Final names and hashes pending the RC3 candidate build.)*
+- RC3/Packages: no qBittorrentBB, emulebb-rust, TrackMuleBB, `uv`, or Python
+  setup assets are part of the RC3/final package set.
 - RC3/Packages: Release ZIPs remain **unsigned** (accepted posture); verification
   continues through manifests, SBOMs, SHA-256 evidence, and GitHub artifact
   attestations.
@@ -54,6 +64,9 @@ history, see [RELEASE-0.7.3-RC2-CHANGELOG](RELEASE-0.7.3-RC2-CHANGELOG.md).
   (shipped scope) on the selected RC3 head, the clean-worktree audit, and the
   publish-release `irm|iex` gate before the operator tag instruction. Tracked by
   [CI-035](items/CI-035.md).
+- RC3/Proof: Pending — Pages wrapper dry-run/parse proof that the public one-liner
+  resolves `Bootstrap-eMuleBBSuite.ps1`, verifies the sidecar hash when present,
+  and forwards existing bootstrapper parameters.
 
 ### Risk and Testing Focus
 
@@ -61,3 +74,5 @@ history, see [RELEASE-0.7.3-RC2-CHANGELOG](RELEASE-0.7.3-RC2-CHANGELOG.md).
   release-tooling/doc delta. Confirm the regenerated package set and the
   aMuTorrent companion install and run cleanly on a fresh install, including the
   `irm | iex` one-liner that the new CI gate protects.
+- RC3/Risk: Confirm no qBittorrentBB folder, process, config, service entry, or
+  public install claim is produced by the default Full bundle.

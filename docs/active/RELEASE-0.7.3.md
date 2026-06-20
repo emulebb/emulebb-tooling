@@ -25,10 +25,14 @@ status, release-source truth, and the open RC task list.
 - Next milestone: **rc.3** is the active next candidate — **stabilization-only**
   (operator decision 2026-06-13; the optional Upload Policy Clarity and UI
   Power-User Polish lanes are not taken for RC3, and #147/#158/#159 are deferred
-  post-0.7.3), then stable `0.7.3`. `main` currently carries no app-behavior delta
-  over rc.2 — only the publish-release `irm|iex` CI gate (`f83072e6`) and the
-  README install sync (`bf599469`). Draft delta:
-  [RC3 changelog](RELEASE-0.7.3-RC3-CHANGELOG.md).
+  post-0.7.3), then stable `0.7.3`. The operator re-confirmed on 2026-06-19 that
+  RC3/final ships the MFC suite through the existing PowerShell bootstrapper with
+  aMuTorrent still bundled, and **without qBittorrentBB, emulebb-rust,
+  TrackMuleBB, `uv`, or the Python installer**. The Pages one-liner moves back to
+  the release bootstrap wrapper instead of the future TrackMuleBB scaffold. `main`
+  currently carries no app-behavior delta over rc.2 — only the publish-release
+  `irm|iex` CI gate (`f83072e6`) and the README install sync (`bf599469`). Draft
+  delta: [RC3 changelog](RELEASE-0.7.3-RC3-CHANGELOG.md).
 - Locked candidate heads: app `38827709` (FEAT-015 broadband upload tuning,
   FEAT-027 diagnostics flush), `emulebb-build` `0fceae7` (the rc.2 build_ref:
   fefff3f plus the BUG-017 `irm|iex` fix), `emulebb-build-tests`
@@ -157,6 +161,10 @@ Required scaffold before RC3 work starts:
 - list every proof or artifact invalidated by the RC3 delta;
 - produce the version-specific RC3 changelog before RC3 tag approval;
 - record any explicit operator acceptance for proof that cannot be rerun;
+- confirm Pages `install.ps1` resolves and forwards to the GitHub Release
+  `Bootstrap-eMuleBBSuite.ps1`;
+- confirm qBittorrentBB remains out of the RC3/final installer manifest,
+  lifecycle scripts, package proof, and public release claims;
 - confirm stable `0.7.3` documentation can be produced from the RC3 state.
 
 ### Stable 0.7.3 Closeout

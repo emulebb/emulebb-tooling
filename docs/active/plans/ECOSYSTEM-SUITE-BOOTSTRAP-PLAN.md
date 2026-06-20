@@ -1,19 +1,18 @@
 # Ecosystem Suite Bootstrap Plan
 
 Status: planning only. This document records intended post-0.7.3 ecosystem
-packaging direction. It does not describe the current 0.7.3 RC2 bootstrapper or
-any shipped release asset.
+packaging direction. It does not describe a shipped release asset.
 
-> **Installer & bundle direction (updated 2026-06-16):** the canonical design is
-> now [SUITE-INSTALLER](../SUITE-INSTALLER.md). The Windows one-liner
-> (`irm https://emulebb.github.io/install.ps1 | iex`) is a **minimal bootstrap**
-> (installs `uv` self-contained, fetches TrackMuleBB, runs its setup CLI); the real
-> install is the **Python setup CLI inside TrackMuleBB** (TUI + `suite.toml`),
-> which installs/auto-wires the **ready-to-use bundle** across **three networks**
-> (eD2K, BitTorrent, Usenet) plus the Arr stack, Bountarr, and (Docker) Plex —
-> self-contained, no host interference, `-Core mfc|rust`, decoupled from any
-> product release train. The RC-coupled `Bootstrap-eMuleBBSuite.ps1` is superseded.
-> The packaging-intent sections below stay valid; SUITE-INSTALLER is the delivery.
+> **Current release installer (updated 2026-06-19):** for `0.7.3-rc.3` and
+> stable `0.7.3`, the public Pages one-liner remains a PowerShell wrapper around
+> the GitHub Release `Bootstrap-eMuleBBSuite.ps1`. That bootstrapper installs the
+> MFC eMuleBB package, the frozen aMuTorrent controller package, and the local Arr
+> plumbing. It does **not** install qBittorrentBB, emulebb-rust, TrackMuleBB, `uv`,
+> or the Python setup CLI.
+>
+> **Future installer direction:** after `0.7.3`, [SUITE-INSTALLER](../SUITE-INSTALLER.md)
+> owns the TrackMuleBB/`uv`/Python setup design. The packaging-intent sections
+> below stay valid for that future delivery.
 
 ## Summary
 
@@ -22,7 +21,7 @@ stack into a broader local-machine and headless ecosystem:
 
 - eMuleBB MFC remains the default Windows core until a later release proof
   explicitly promotes another default.
-- qBittorrentBB is the first planned Windows bootstrap expansion. It becomes a
+- qBittorrentBB is the first planned post-`0.7.3` Windows bootstrap expansion. It becomes a
   BitTorrent companion in the suite: optional in the model, but preselected for
   normal local-machine `Full` installs.
 - qBittorrentBB ships early with the fork identity enabled: DHT harvester/index,
@@ -36,10 +35,14 @@ stack into a broader local-machine and headless ecosystem:
 
 ## Windows Bootstrap Direction
 
-The Windows bootstrapper should keep the existing `Core`, `Controller`, and
-`Full` bundle names. The first future `Full` local-machine expansion should
-preselect eMuleBB MFC, aMuTorrent, qBittorrentBB, Prowlarr, and the default Arr
-apps. Operators can still remove qBittorrentBB through explicit app selection.
+The future Windows bootstrapper should keep the existing `Core`, `Controller`,
+and `Full` bundle names. The first post-`0.7.3` `Full` local-machine expansion
+should preselect eMuleBB MFC, aMuTorrent, qBittorrentBB, Prowlarr, and the
+default Arr apps. Operators can still remove qBittorrentBB through explicit app
+selection.
+
+The `0.7.3-rc.3`/final PowerShell bootstrapper must preserve the existing
+MFC+aMuTorrent+Arr behavior and keep qBittorrentBB unselectable.
 
 Future installer shape:
 
@@ -105,7 +108,7 @@ should include:
 - Docs checks that keep current release setup text separate from future suite
   claims.
 - Package content checks for qBittorrentBB Windows x64 assets.
-- Bootstrap dry runs proving default `Full` includes qBittorrentBB and explicit
+- Future bootstrap dry runs proving default `Full` includes qBittorrentBB and explicit
   app selection can omit it.
 - Runtime smoke evidence for qBittorrentBB WebUI/API, DHT Index UI/RSS, and
   Torznab endpoint readiness.

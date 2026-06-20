@@ -9,6 +9,10 @@ The `<rc>` token in the paths and asset names below is a placeholder for the
 named in [RELEASE-0.7.3](RELEASE-0.7.3.md). Substitute it when running the
 commands.
 
+For `0.7.3-rc.3` and stable `0.7.3`, the release scope is the existing
+PowerShell MFC+aMuTorrent suite. Do not add qBittorrentBB, emulebb-rust,
+TrackMuleBB, `uv`, or Python setup assets to the RC package/proof flow.
+
 ## Preflight
 
 Run build, test, and package commands from the build orchestrator checkout so
@@ -27,6 +31,13 @@ git -C $env:EMULEBB_WORKSPACE_ROOT\workspaces\workspace\app\emulebb-main rev-par
 
 Do not continue to tagging if validation fails or if any active repo has
 unrelated uncommitted changes.
+
+Before package proof, verify the public Pages wrapper parses and forwards to the
+release bootstrapper path:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File $env:EMULEBB_WORKSPACE_ROOT\repos\emulebb-pages\install.ps1 -DryRun -Bundle Full
+```
 
 Show the release campaign matrix before running proof so missing evidence and
 local input requirements are visible:
@@ -215,6 +226,9 @@ emulebb-0.7.3-<rc>-arm64.manifest.json
 emulebb-0.7.3-<rc>-arm64.sbom.spdx.json
 ```
 
+No qBittorrentBB, emulebb-rust, TrackMuleBB, `uv`, or Python setup asset belongs
+in the RC3/final publication set.
+
 The packaging command is intentionally strict. It builds the selected
 architecture into the package-only app output root, builds the stock language
 resource DLLs, stages the portable ZIP, then verifies the package before
@@ -263,6 +277,17 @@ dependencies, rejects generated runtime state and source maps, and records
 package-local runtime policy in the manifest. ARM64 aMuTorrent packaging must
 run from a native ARM64 Node environment until a deliberate cross-architecture
 native-module build path exists.
+
+## Public Pages Wrapper
+
+For RC3/final, `https://emulebb.github.io/install.ps1` is a wrapper around the
+GitHub Release `Bootstrap-eMuleBBSuite.ps1` asset. It should select the requested
+`-Version` when provided, otherwise the newest non-draft, non-nightly release;
+verify `Bootstrap-eMuleBBSuite.ps1.sha256` when that sidecar is present; and pass
+the existing bootstrapper parameters through unchanged.
+
+The wrapper must not download `uv`, fetch TrackMuleBB, read a TrackMuleBB suite
+manifest, or install qBittorrentBB.
 
 ## Ship Decision
 

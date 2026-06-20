@@ -1,7 +1,8 @@
-# eMule Broadband Edition 0.7.3 RC1 Release Checklist
+# eMule Broadband Edition 0.7.3 Release Checklist
 
-This is the final operator checklist for the 0.7.3 RC1 target
-`emulebb-v0.7.3-rc.1`.
+This is the operator checklist for the 0.7.3 release train. RC1/RC2 rows are
+historical where marked; active rows now target `emulebb-v0.7.3-rc.3` and then
+stable `emulebb-v0.7.3`.
 Do not record stale proof here; every row must be refreshed on the selected
 reviewed `main` commit.
 
@@ -19,10 +20,13 @@ confirmation, successful push of pending build evidence work, and the separate
 tag instruction complete.
 
 Release freeze is active. No new feature, refactor, UI polish, warning-debt, or
-roadmap work enters 0.7.3 RC1; only direct release-gate blockers may be fixed
-before tag readiness. The prior documentation-only hold is lifted for release
-proof. Continue one gate at a time, record fresh evidence, and do not create
-Git tags until the operator gives a separate tagging instruction.
+roadmap work enters RC3/final; only direct release-gate blockers, package/proof
+fixes, and release-documentation corrections may land before tag readiness. The
+2026-06-19 operator scope decision keeps RC3/final on the existing PowerShell
+MFC+aMuTorrent bundle and excludes qBittorrentBB, emulebb-rust, TrackMuleBB,
+`uv`, and the Python installer. Continue one gate at a time, record fresh
+evidence, and do not create Git tags until the operator gives a separate tagging
+instruction.
 
 ## Gate Revalidation
 
@@ -34,6 +38,11 @@ Git tags until the operator gives a separate tagging instruction.
       validation evidence, and final disposition.
 - [ ] Any accepted inconclusive live-network result records the external
       condition that blocked proof.
+- [ ] Pages `install.ps1` is proven to resolve and invoke the GitHub Release
+      `Bootstrap-eMuleBBSuite.ps1` asset, with hash-sidecar verification when the
+      sidecar exists.
+- [ ] qBittorrentBB is absent from RC3/final suite defaults, package proof,
+      lifecycle scripts, Pages install claims, and generated release copy.
 
 ## Required Campaign Gate
 
@@ -71,6 +80,7 @@ release tags and assets still use `0.7.3-rc.1`.
 - [x] `python -m emule_workspace package-release --config Release --platform x64`
 - [x] `python -m emule_workspace package-release --config Release --platform ARM64`
 - [x] `python -m emule_workspace package-amutorrent --config Release --platform x64`
+- [ ] `powershell -NoProfile -ExecutionPolicy Bypass -File $env:EMULEBB_WORKSPACE_ROOT\repos\emulebb-pages\install.ps1 -DryRun -Bundle Full`
 - [x] `python repos\emulebb-tooling\ci\check-clean-worktree.py`
 
 Run certification with the required local live inputs and Arr roots when those
@@ -189,6 +199,9 @@ soak status cannot be confused with the repeatable RC package gate.
       `emulebb-0.7.3-rc.1-amutorrent-x64.zip`.
 - [x] Optional aMuTorrent x64 controller manifest is
       `emulebb-0.7.3-rc.1-amutorrent-x64.manifest.json`.
+- [x] qBittorrentBB is not an RC3/final asset.
+- [x] emulebb-rust, TrackMuleBB, `uv`, and the Python setup CLI are not
+      RC3/final assets.
 - [x] Each ZIP contains exactly the full stock language DLL set under
       `eMule\lang`.
 - [x] Each ZIP contains package-facing README, release notes, GPL text,
