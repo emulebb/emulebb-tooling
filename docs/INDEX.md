@@ -235,6 +235,9 @@ are not the best first read for users.
 | Backlog item template | [reference/BACKLOG-ITEM-TEMPLATE](reference/BACKLOG-ITEM-TEMPLATE.md) |
 | Evidence retention policy | [reference/EVIDENCE-RETENTION](reference/EVIDENCE-RETENTION.md) |
 | CI baseline workflow | [reference/CI-BASELINE](reference/CI-BASELINE.md) |
+| Test tiers runbook | [reference/TEST-TIERS](reference/TEST-TIERS.md) |
+| Test suite inventory | [reference/TEST-INVENTORY](reference/TEST-INVENTORY.md) |
+| Test curation decisions | [reference/TEST-CURATION](reference/TEST-CURATION.md) |
 | Release branching and packaging | [reference/RELEASE-BRANCHING-AND-PACKAGING](reference/RELEASE-BRANCHING-AND-PACKAGING.md) |
 | eD2K ecosystem inventory | [reference/ED2K-PROJECT-INVENTORY](reference/ED2K-PROJECT-INVENTORY.md) |
 | eD2K forums and sites inventory | [reference/ED2K-FORUMS-AND-SITES](reference/ED2K-FORUMS-AND-SITES.md) |
