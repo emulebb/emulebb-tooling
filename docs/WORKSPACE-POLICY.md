@@ -143,10 +143,18 @@ Directive precedence is:
   only when present.
 - `repos\emulebb` exists to hold history, remotes, and worktrees. Its intended
   neutral state is detached `HEAD` at `origin/main`.
-- One `main` commit should represent one coherent outcome.
-- Do not push `WIP`, checkpoint, or debug commits to `main`.
-- Commit and push each completed coherent slice before starting unrelated work
-  unless the user explicitly asks to hold local commits.
+- **Granular commits bind every managed repo**, not just the MFC app `main`.
+  This applies to the app worktree and to every repo named in `Policy Scope`
+  (emulebb, emulebb-rust, qBittorrentBB, amutorrent, trackmulebb, amule,
+  goed2k-server, and the emulebb-build/-tests/-tooling/-pages repos). Each
+  commit on any managed repo must represent exactly one coherent outcome.
+- Stage explicit paths. Never `git add -A`/`git add .` a mixed working tree, and
+  never bundle unrelated or pre-existing edits into a commit. When a working tree
+  mixes concerns, split it into separate commits — one coherent slice each — even
+  when the changes share a file (stage the wanted hunks surgically).
+- Do not push `WIP`, checkpoint, or debug commits to any managed repo.
+- Commit (and push, when pushing) each completed coherent slice before starting
+  unrelated work unless the user explicitly asks to hold local commits.
 - Feature, bug, refactor, and CI backlog commit messages must include the
   tracked item id such as `BUG-017`, `FEAT-015`, `REF-021`, or `CI-003`.
 - GitHub-tracked roadmap work should keep the stable local item id and link the
