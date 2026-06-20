@@ -279,7 +279,7 @@ The change from pointer to reference is semantically correct (a null `CDC*` woul
 
 ---
 
-### 11. `Ring.h` — `SetBuffer()` may copy wrong element count when fully wrapped — **`CODEREV_011`** **[DONE]**
+### 11. `Ring.h` — `SetBuffer()` wrapped-copy count now derives from logical count — **`CODEREV_011`** **[DONE]**
 
 **File:** `srchybrid/Ring.h`, `SetBuffer()`:
 
@@ -292,7 +292,7 @@ if (m_nCount)
         memcpy(dst, m_pHead, (m_pTail - m_pHead + 1) * sizeof TYPE);
 ```
 
-Due to the initialization issue in finding 3 (`m_pTail = &dst[-1]` on construction), if the ring starts fresh and `AddTail` is called exactly `m_nSize` times (fully filling it), the wrapped-case path (`m_pHead > m_pTail`) triggers. The second `memcpy` copies `(m_pTail - m_pData + 1)` elements. If `m_pTail` was left at `m_pData - 1` by a prior `RemoveAll()`, this evaluates to `0` — silently losing the oldest element during reallocation. The `m_nCount` counter stays correct but the data is off by one.
+Follow-up review found the originally suspected stale-copy state unproven for valid ring operations. In particular, `m_pHead > m_pTail` cannot coexist with `m_pTail == m_pEnd - 1`, because `m_pEnd - 1` is the highest valid slot. The landed mainline fix still replaced the wrapped-copy pointer split with counts derived from `m_nCount`, making the copy bound explicit and keeping `SetBuffer()` tied to logical content rather than stale backing-store positions.
 
 ---
 
@@ -339,7 +339,7 @@ Passing `-1` tells `DrawText` to compute the string length with `lstrlen()` on e
 | 8 | **`CODEREV_008`** | `OtherFunctions.cpp` | **HIGH** | `bmp2mem` exception-unsafe; `mem2bmp` ownership contract remains brittle |
 | 9 | **`CODEREV_009`** | `CaptchaGenerator.cpp` | MEDIUM | Local variable named `m_LF` — misleading member prefix on a stack variable |
 | 10 | **`CODEREV_010`** | `BarShader.cpp/h` | MEDIUM | `CDC*` → `CDC&` is a source-breaking API change for external consumers |
-| 11 | **`CODEREV_011`** **[DONE]** | `Ring.h` | MEDIUM | `SetBuffer()` realloc may copy wrong element count when ring is fully wrapped |
+| 11 | **`CODEREV_011`** **[DONE]** | `Ring.h` | MEDIUM | `SetBuffer()` wrapped-copy count now derives from the logical element count |
 | 12 | **`CODEREV_012`** | `CreditsThread.cpp` | LOW | `DrawText` with `-1` re-scans for null terminator on every animation frame |
 
 ---
