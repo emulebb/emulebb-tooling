@@ -3,7 +3,7 @@ id: FEAT-123
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/148
 title: Shared files one-level auto-updater
-status: IN_PROGRESS
+status: DONE
 priority: Major
 category: feature
 labels: [shared-files, scanning, rc3, compatibility]

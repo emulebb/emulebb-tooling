@@ -20,9 +20,9 @@ engineering spec/evidence records, not workflow status authority.
 ## Current Snapshot
 
 **Source of truth:** `EMULEBB_WORKSPACE_ROOT\workspaces\workspace\app\emulebb-main` (`main` branch)
-**Current non-done count:** `132`
+**Current non-done count:** `129`
 **Latest release-doc refresh:** 2026-06-13
-**Non-done by status:** `110` OPEN, `8` IN_PROGRESS, `14` DEFERRED, `0` BLOCKED.
+**Non-done by status:** `108` OPEN, `7` IN_PROGRESS, `14` DEFERRED, `0` BLOCKED.
 **Backlog counts:** item tables below are authoritative.
 **0.7.3 release-train relevance:** Most non-done items below are future or
 deferred work; current RC gate and proof status is controlled by
@@ -308,7 +308,7 @@ not active item docs.
 | [REF-051](items/REF-051.md) | Minor | OPEN | Remove legacy SOCKS and proxy support |
 | [REF-052](items/REF-052.md) | Minor | OPEN | Remove archive preview and recovery surfaces |
 | [REF-053](items/REF-053.md) | Minor | OPEN | Reduce upload queue and upload list linear lookup overhead |
-| [REF-054](items/REF-054.md) | Minor | OPEN | Stabilize and instrument download queue behavior |
+| [REF-054](../history/items/REF-054.md) | Minor | DONE | Stabilize and instrument download queue behavior |
 | [REF-055](items/REF-055.md) | Minor | OPEN | Post-RC2 code-quality and C++ modernization backlog |
 | [REF-056](items/REF-056.md) | Minor | OPEN | Standardize agent on-ramp and AGENTS.md pointer layer |
 | [REF-057](items/REF-057.md) | Minor | DEFERRED | Defer GeoLocation MMDB load off the pre-window startup path |
@@ -457,7 +457,7 @@ not active item docs.
 | [FEAT-117](items/FEAT-117.md) | Minor | OPEN | Indicate already-shared files in the unshared-folder share preview |
 | [FEAT-121](items/FEAT-121.md) | Major | OPEN | STUN UDP egress gate for the VPN guard (eMuleBB, emulebb-rust, libtorrent) |
 | [FEAT-122](items/FEAT-122.md) | Minor | OPEN | Expose GET /api/v1/capabilities (contract-discovery primitive) under the soft freeze |
-| [FEAT-123](items/FEAT-123.md) | Major | IN_PROGRESS | Shared files one-level auto-updater |
+| [FEAT-123](../history/items/FEAT-123.md) | Major | DONE | Shared files one-level auto-updater |
 
 ---
 
@@ -515,7 +515,7 @@ not active item docs.
 | [CI-048](../history/items/CI-048.md) | Minor | DONE | Improve documentation navigation and public release guidance |
 | [CI-049](items/CI-049.md) | Minor | OPEN | Enable CodeQL code scanning for the app repository |
 | [CI-050](items/CI-050.md) | Minor | OPEN | REST surface semantic proof and adapter hardening follow-up |
-| [CI-051](items/CI-051.md) | Major | OPEN | Move generated workspace outputs outside repos and worktrees |
+| [CI-051](../history/items/CI-051.md) | Major | DONE | Move generated workspace outputs outside repos and worktrees |
 | [CI-052](../history/items/CI-052.md) | Major | DONE | RC2+ installer-backed test gate rationalization |
 | [CI-053](../history/items/CI-053.md) | Major | DONE | Fix ARM64 controlled-smoke PCH virtual-memory exhaustion (native host toolchain) |
 
