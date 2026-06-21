@@ -1,6 +1,6 @@
 # eMuleBB 0.7.3-rc.3 Changelog
 
-Status: PUBLISHED 2026-06-21 as the `emulebb-v0.7.3-rc.3` prerelease (app `fd17a04`). Final published hashes are recorded below; the aMuTorrent companion release is pending.
+Status: PUBLISHED 2026-06-21 as the `emulebb-v0.7.3-rc.3` prerelease (app `fd17a04`) with the `amutorrent-v3.8.8-emulebb-v0.7.3-rc.3` companion. Final published hashes are recorded below.
 
 Format: one line per item, grouped by area; this is a power-user changelog, not a Git log.
 
@@ -59,8 +59,11 @@ sidecars; the bootstrapper ships its `.sha256`):
 - diagnostics-x64: `8eff68bfe9c73e37d967cfb04662829ed88cad7629b5c2117cfdce4cf5144726`
 - diagnostics-arm64: `e632df928ce2a96f98a841617516ef7d02003253c616689aabd2d839028e2452`
 
-The aMuTorrent x64 controller companion (`emulebb-0.7.3-rc.3-amutorrent-x64.zip`)
-publishes as a separate `amutorrent-v*-emulebb-v0.7.3-rc.3` release; **pending**.
+The aMuTorrent x64 controller companion is published as
+[`amutorrent-v3.8.8-emulebb-v0.7.3-rc.3`](https://github.com/emulebb/amutorrent/releases/tag/amutorrent-v3.8.8-emulebb-v0.7.3-rc.3)
+(built deterministically against pinned Node 24.16.0):
+`emulebb-0.7.3-rc.3-amutorrent-x64.zip` SHA-256
+`3e7aaf65c570361fa8ef6fcf52bc21b041bb9dda793ac4a85fa2eccaefee897d`.
 
 ### Stabilization
 
