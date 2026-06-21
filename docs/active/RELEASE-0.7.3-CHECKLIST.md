@@ -51,11 +51,28 @@ The canonical RC-blocking proof is the quick campaign execution. The rows under
 or executes; keep them visible so failures can be assigned to the correct
 phase.
 
-Relaxed gate (operator decision 2026-06-12): for RC2 the binding proof is a
-passing `test certification --profile fast` for the shipped scope. The live
-quick-campaign `--execute` row and the live-network expanded rows are
-operator-accepted/non-blocking, and `emulebb-rust` preview tests are out of RC2
-ship scope. See [CI-035](items/CI-035.md) for the recorded proof.
+Relaxed gate (operator decision 2026-06-12): for RC candidates the binding
+proof is a passing `test certification --profile fast` for the shipped scope.
+The live quick-campaign `--execute` row and the live-network expanded rows are
+operator-accepted/non-blocking, and `emulebb-rust` preview tests are out of
+ship scope. See [CI-035](items/CI-035.md) for the recorded proof. The campaign
+report itself is `warn-only`; after the rc.3 reconciliation the campaign's five
+binding rows are the Fast certification, the x64/ARM64/aMuTorrent package
+gates, and the clean-worktree provenance check.
+
+Final release gate (stable `0.7.3`): the relaxed RC gate does **not** carry
+over to the stable tag. For final, raise the bar beyond Fast cert + packaging:
+
+- Run the quick-campaign live rows for real and require them to pass:
+  `installer-controller-surface`, `release-expanded-quick`,
+  `stabilization-stress-quick` (for the unique `local-dumps-crash-smoke`), and
+  the aMuTorrent live trio (`amutorrent-clean-startup` / `-emulebb-ui` /
+  `-resilience`), with `--live-wire-inputs-file`.
+- Run the `emulebb-0.7.3-overnight` campaign once as soak sign-off (overnight
+  certification + `cpu-heavy` + `live-process-monitor`).
+- Run at least one Windows-VM matrix smoke on win10+win11 (`package-smoke` and
+  `package-helper-install`) to prove the installer on clean OS images.
+- `emulebb-rust` stays out of `0.7.x` ship scope (forward `0.8.*` only).
 
 Run `python -m emule_workspace ...` commands from
 `$env:EMULEBB_WORKSPACE_ROOT\repos\emulebb-build`. Use absolute
