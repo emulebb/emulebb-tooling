@@ -44,12 +44,14 @@ status, release-source truth, and the open RC task list.
   emulebb-rust stay out of the `0.7.x` line entirely and ship in the `0.8.*`
   program** (the forward suite + MFC modernization wave that begins after `0.7.3`).
   See [SUITE-JOINT-ROADMAP](SUITE-JOINT-ROADMAP.md).
-- CI status (pre-tag blocker): current `main` CI is red. The
-  `0.7.3-nightly.20260615` nightly (commit `72a6f7e`) failed the Nightly build
-  (issue #160) and x64+ARM64 Controlled Smoke (issue #161). Because RC3 is cut
-  from `main`, these must be green — or triaged as non-blocking with recorded
-  operator acceptance — before the RC3 candidate head is locked. The locked rc.2
-  heads below remain green; this is a newer-`main` regression to resolve.
+- CI status: **green on current `main`.** The earlier `0.7.3-nightly.20260615`
+  failure (commit `72a6f7e`, issues #160/#161) is resolved and both issues are
+  closed; subsequent `main` fixes (package `preferences.ini` requirement, the
+  controlled-smoke LAN-transfer retry) restored the gates. As of 2026-06-21 the
+  scheduled Nightly is green, and the 2026-06-20 Controlled Smoke and RC Package
+  Proof workflow runs passed on `main`. The named pre-tag CI blocker is cleared;
+  the RC3 candidate head still needs locking plus a fresh certification and
+  package refresh per [RELEASE-0.7.3-CHECKLIST](RELEASE-0.7.3-CHECKLIST.md).
 - Locked candidate heads: app `38827709` (FEAT-015 broadband upload tuning,
   FEAT-027 diagnostics flush), `emulebb-build` `0fceae7` (the rc.2 build_ref:
   fefff3f plus the BUG-017 `irm|iex` fix), `emulebb-build-tests`
