@@ -126,6 +126,7 @@ nav:
       - Test Tiers: reference/TEST-TIERS.md
       - Test Inventory: reference/TEST-INVENTORY.md
       - Test Curation: reference/TEST-CURATION.md
+      - Test Campaign Architecture Plan: active/plans/TEST-CAMPAIGN-ARCHITECTURE-PLAN.md
       - CI Baseline: reference/CI-BASELINE.md
       - Release Branching And Packaging: reference/RELEASE-BRANCHING-AND-PACKAGING.md
       - eD2K Inventory: reference/ED2K-PROJECT-INVENTORY.md
@@ -159,9 +160,9 @@ not_in_nav: |
 
 validation:
   nav:
-    omitted_files: info
+    omitted_files: warn
     not_found: warn
   links:
-    not_found: info
-    anchors: info
-    unrecognized_links: info
+    not_found: warn
+    anchors: warn
+    unrecognized_links: warn
