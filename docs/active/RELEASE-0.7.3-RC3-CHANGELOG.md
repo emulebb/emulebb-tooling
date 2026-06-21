@@ -28,7 +28,7 @@ history, see [RELEASE-0.7.3-RC2-CHANGELOG](RELEASE-0.7.3-RC2-CHANGELOG.md).
 ### Published Heads And Artifacts
 
 Published on app `fd17a04` (origin/main) via the `Publish release` workflow
-(run 27905947687), built with `build_ref=main` (deterministic pinned Node for the
+(run 27909074408), built with `build_ref=main` (deterministic pinned Node for the
 aMuTorrent package). Locked heads:
 
 | Repo | Head | Notes |
@@ -45,19 +45,19 @@ published 2026-06-21:
 
 | Asset | SHA-256 |
 | --- | --- |
-| `emulebb-0.7.3-rc.3-x64.zip` | `1e6a3a4e4603c39564fc17c6ee47482fd1e1757cac62d0af9d76f72c8cd75d2d` |
-| `emulebb-0.7.3-rc.3-arm64.zip` | `8e00aecc25c694ccaedb522b16fcb39179674ec93f5a0cba76058be1c2ff1efb` |
-| `emulebb-0.7.3-rc.3-diagnostics-x64.zip` | `bd7a5eb0bd43c2f44a7878344e0cdd12655d33c8b6d4ee3bd04101be36453069` |
-| `emulebb-0.7.3-rc.3-diagnostics-arm64.zip` | `8eeb9ea6a718f04574fa395184d957e92999fccd76b421887d604b04c0f3d4f6` |
-| `Bootstrap-eMuleBBSuite.ps1` | `dc39cbc599e7532b47f58a05525dd4f7bec6c644a0e327b3b233dacb3ef631b6` |
+| `emulebb-0.7.3-rc.3-x64.zip` | `0a10276a690aeb7b603a6cb3c864b0328be72d6f6645679b8fe7ec8b0c7e4d53` |
+| `emulebb-0.7.3-rc.3-arm64.zip` | `f571eca7f8179dd4794fec8f98c49a82597ed9a032c821b6eeca63912e81b8e6` |
+| `emulebb-0.7.3-rc.3-diagnostics-x64.zip` | `6d3c0cf8f420608b54bdb4b11321ff12cf7dd85596aebe8e890a2573553b762f` |
+| `emulebb-0.7.3-rc.3-diagnostics-arm64.zip` | `a8ce7a91ddf9e1bb700766debb4c8adf8db63043a04d78cd7039d649911f01be` |
+| `Bootstrap-eMuleBBSuite.ps1` | `edf901f4362639bb842d3fa8278a96fe35b76a57d8a6a2ec3da6701ecfb28429` |
 
 SPDX SBOM SHA-256 (each ZIP ships its `.manifest.json` + `.sbom.spdx.json`
 sidecars; the bootstrapper ships its `.sha256`):
 
-- x64: `5be22b32330b3348535eb121eac489e20ca4d95a05604b034916fef180ca9c9c`
-- arm64: `4d83e4564d8a3f19dba27abbcbace00fd087208a26ebd82b0f9370269631ed97`
-- diagnostics-x64: `8eff68bfe9c73e37d967cfb04662829ed88cad7629b5c2117cfdce4cf5144726`
-- diagnostics-arm64: `e632df928ce2a96f98a841617516ef7d02003253c616689aabd2d839028e2452`
+- x64: `c53762f1197953abc507fd520bbe04f3bed0a72b0edbe9f70e31931e0832f000`
+- arm64: `e7baba2c542ab8307f468186f37e3713017de8adebc289e381f46b52c8998d56`
+- diagnostics-x64: `27619fc2013aecb7b805baa2fc140403efc7383a10881d909658f1a4ed28b613`
+- diagnostics-arm64: `962d89af6c9050acaa7485a9d21b5aa628c7d892460ea3b4726da54bf65de3a4`
 
 The aMuTorrent x64 controller companion is published as
 [`amutorrent-v3.8.8-emulebb-v0.7.3-rc.3`](https://github.com/emulebb/amutorrent/releases/tag/amutorrent-v3.8.8-emulebb-v0.7.3-rc.3)
@@ -105,7 +105,7 @@ The aMuTorrent x64 controller companion is published as
 - RC3/Packages: x64 and ARM64 standard + diagnostics ZIPs, the suite bootstrapper,
   and the optional aMuTorrent x64 controller companion are regenerated from the
   selected RC3 head with refreshed manifests, SPDX SBOMs, and SHA-256 hashes.
-  *(Final names and hashes pending the RC3 candidate build.)*
+  Final published hashes are recorded in "Published Heads And Artifacts" above.
 - RC3/Packages: no qBittorrentBB, emulebb-rust, TrackMuleBB, `uv`, or Python
   setup assets are part of the RC3/final package set.
 - RC3/Packages: Release ZIPs remain **unsigned** (accepted posture); verification
@@ -114,13 +114,16 @@ The aMuTorrent x64 controller companion is published as
 
 ### Proof
 
-- RC3/Proof: Pending — `test certification --profile fast --test-network offline`
-  (shipped scope) on the selected RC3 head, the clean-worktree audit, and the
-  publish-release `irm|iex` gate before the operator tag instruction. Tracked by
-  [CI-035](items/CI-035.md).
-- RC3/Proof: Pending — Pages wrapper dry-run/parse proof that the public one-liner
-  resolves `Bootstrap-eMuleBBSuite.ps1`, verifies the sidecar hash when present,
-  and forwards existing bootstrapper parameters.
+- RC3/Proof: Done — `test certification --profile fast --test-network offline`
+  passed for shipped scope (1436/1439; 3 out-of-scope `emulebb-rust` failures
+  accepted), clean-worktree audit passed, and the publish-release `irm|iex` gate
+  passed. Recorded in [CI-035](items/CI-035.md).
+- RC3/Proof: Done — the Pages `install.ps1` one-liner resolves the release and the
+  bootstrapper resolves rc.3 + the aMuTorrent companion and plans the Full install
+  end-to-end (verified by `-DryRun` against the published release). Both the wrapper
+  and bootstrapper were hardened to resolve from the `/releases` list with retry,
+  after GitHub's `/releases/tags/<tag>` endpoint flapped 504; rc.3 was re-published
+  with the by-tag-free bootstrapper.
 - RC3/Proof: CI is **green** on current `main`. The earlier
   `0.7.3-nightly.20260615` failure (commit `72a6f7e`, issues #160/#161) is
   resolved and both issues are closed; the scheduled Nightly (2026-06-21) and the
