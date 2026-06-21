@@ -8,7 +8,7 @@ clearly separated from reference-only tests kept on demand.
 
 Companion governance: [QUALITY-GATES](QUALITY-GATES.md),
 [PRODUCT-PORTFOLIO](PRODUCT-PORTFOLIO.md),
-[WORKSPACE-POLICY Network Safety](../WORKSPACE-POLICY.md#network-safety-no-clearnet-leak--p0-invariant).
+[WORKSPACE-POLICY Network Safety](../WORKSPACE-POLICY.md#network-safety-no-clearnet-leak-p0-invariant).
 
 ## Goal
 

@@ -65,7 +65,7 @@ Local item docs remain engineering specs and evidence records; for files marked
 ownership, and PR linkage live in GitHub. The forward program (emulebb-rust,
 qBittorrentBB) is tracked separately on the public **eMuleBB Suite** board
 (`https://github.com/orgs/emulebb/projects/3`); see
-[SUITE-JOINT-ROADMAP](SUITE-JOINT-ROADMAP.md#backlog--tracking-structure).
+[SUITE-JOINT-ROADMAP](SUITE-JOINT-ROADMAP.md#backlog-tracking-structure).
 
 Use `python scripts\github-roadmap-sync.py` from `repos\emulebb-tooling` to
 preview or apply the MFC import, and `python scripts\github-roadmap-check.py` to

@@ -36,7 +36,7 @@ of per-repo folklore. Tiers are defined in [PRODUCT-PORTFOLIO](PRODUCT-PORTFOLIO
   return with the `0.8.x` modernization line); Lab stays light until promoted.
 - **The leak-test is non-negotiable for any networked product** — it is the
   automated form of the P0 Network Safety invariant
-  ([WORKSPACE-POLICY](../WORKSPACE-POLICY.md#network-safety-no-clearnet-leak--p0-invariant)).
+  ([WORKSPACE-POLICY](../WORKSPACE-POLICY.md#network-safety-no-clearnet-leak-p0-invariant)).
 - **A non-blocking gate must have an owning item** (e.g. `RUST-BUG-001`) so it is
   visible debt, never silent.
 - New networked products inherit the Core/Companion bar at promotion time (see
