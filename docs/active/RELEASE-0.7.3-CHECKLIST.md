@@ -95,17 +95,16 @@ does not contain the full stock language DLL set, contains a language DLL for
 the wrong architecture, contains source/build/debug artifacts, or cannot record
 per-file SHA-256 hashes and SPDX SBOM provenance in the package manifest.
 
-Current state: [CI-035](items/CI-035.md) records a 2026-06-05 campaign-shape
-fix and a failed aggregate quick campaign attempt. The default quick campaign
-now plans 18 commands: Hyper-V VM proof is on-demand/nonblocking, and the
+Current state: CI is green on current `main` (Nightly 2026-06-21; Controlled
+Smoke and RC Package Proof 2026-06-20), and build commit `fb6e286` (VPN Guard
+config forwarding through certification) is pushed — `emulebb-build` main is now
+`a7e1aa4`. The earlier blockers (the failed 2026-06-05 aggregate quick campaign
+and the `WinError 10051` outbound-network outage) are resolved. The default quick
+campaign plans 18 commands: Hyper-V VM proof is on-demand/nonblocking, and the
 long-running `live-process-monitor` is isolated behind
-`installer-controller-surface-soak`. Candidate x64, ARM64, diagnostics, and
-optional aMuTorrent x64 packages were regenerated during the failed aggregate
-run, but the quick campaign failed while outbound HTTPS/public-network access
-was unavailable (`WinError 10051` for GitHub, nodejs.org, public seed refresh,
-and REST probes). Build commit `fb6e286` fixes VPN Guard config forwarding
-through certification and is waiting for network restoration before it can be
-pushed.
+`installer-controller-surface-soak`. The RC3 candidate heads are identified in
+the [RC3 changelog](RELEASE-0.7.3-RC3-CHANGELOG.md); they still need a fresh
+certification and package refresh before tag.
 
 The next required aggregate command is:
 
@@ -119,45 +118,26 @@ Full overnight certification and real-profile monitoring are formal
 `overnight-full` soak/confidence evidence for failure diagnosis and are not
 part of the quick RC1 package gate.
 
-2026-05-14 closeout prep did not run live E2E, regenerate packages, or create
-tags. Existing package manifests are rehearsal artifacts from older commits and
-must not be used as final release hashes. Recent live reports may be cited as
-supporting signal only where [CI-035](items/CI-035.md) classifies them; they do
-not complete the required current-head proof rows.
-
-The accepted [FEAT-058](../history/items/FEAT-058.md) closeout copy/audit
-polish changed release-facing docs after the previous prep audit. Treat all
-final proof rows as pending until rerun on the pushed heads that exist after
-that polish lands.
-
-The accepted [FEAT-059](../history/items/FEAT-059.md) tray preference UI polish
-also changed the app candidate. Treat all final proof rows as pending until
-rerun on the pushed heads that exist after that polish lands.
-
-The accepted [FEAT-060](../history/items/FEAT-060.md) preference inventory and
-REST preference metadata hardening also changed the app and build-tests
-candidates. Treat all final proof rows as pending until rerun on the pushed
-heads that exist after this hardening lands.
-
-The accepted [FEAT-061](../history/items/FEAT-061.md) strong preference schema
-validation changed the build-tests candidate. Treat all final proof rows as
-pending until rerun on the pushed heads that exist after this schema hardening
-lands.
-
-The accepted [FEAT-071](../history/items/FEAT-071.md) filename mojibake repair
-changed the app and build-tests candidates. Treat all final proof rows as
-pending until rerun on the pushed heads that exist after this filename-intake
-hardening lands.
+Proof rows are head-sensitive: treat every proof row as pending a rerun on the
+locked RC3 candidate heads. Older package manifests are rehearsal artifacts and
+must not be reused as final release hashes; recent live reports are supporting
+signal only where [CI-035](items/CI-035.md) classifies them. (The rc.2-era
+proof-invalidation notes for FEAT-058/059/060/061/071 are now historical — those
+features shipped in rc.2.)
 
 Current remaining queue:
 
-1. Restore outbound HTTPS/public-network connectivity.
-2. Push build commit `fb6e286`.
-3. Rerun the quick aggregate campaign and record the run-owned evidence result.
-4. Confirm candidate package hashes after a passing campaign or regenerate
-   packages if the selected heads change.
+1. Lock the RC3 candidate heads (operator) — see the
+   [RC3 changelog](RELEASE-0.7.3-RC3-CHANGELOG.md).
+2. Run `test certification --profile fast` on the locked heads (binding
+   relaxed-gate proof) and record the result in [CI-035](items/CI-035.md).
+3. Regenerate the x64/ARM64/diagnostics (and optional aMuTorrent x64) packages
+   and record SHA-256 + SBOM hashes in [CI-035](items/CI-035.md).
+4. Run the Pages `install.ps1` dry-run wrapper proof.
 5. Rerun the tracked clean-worktree audit.
-6. Wait for the separate operator tag instruction.
+6. Finalize the RC3 changelog (heads, package names, hashes, accepted
+   deviations).
+7. Wait for the separate operator tag instruction.
 
 ## Overnight-Full Campaign
 
