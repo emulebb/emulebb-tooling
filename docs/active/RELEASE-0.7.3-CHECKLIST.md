@@ -94,9 +94,9 @@ release tags and assets still use `0.7.3-rc.1`.
 - [ ] `python -m emule_workspace test amutorrent-emulebb-ui --live-wire-inputs-file $env:EMULEBB_WORKSPACE_ROOT\repos\emulebb-build-tests\live-wire-inputs.local.json --rest-webserver-scheme https --keep-artifacts`
 - [ ] `python -m emule_workspace test amutorrent-resilience --live-wire-inputs-file $env:EMULEBB_WORKSPACE_ROOT\repos\emulebb-build-tests\live-wire-inputs.local.json --rest-webserver-scheme https --keep-artifacts`
 - [x] `python -m emule_workspace test live-e2e --profile ui-resource-depth --fail-fast`
-- [x] `python -m emule_workspace package-release --config Release --platform x64`
-- [x] `python -m emule_workspace package-release --config Release --platform ARM64`
-- [x] `python -m emule_workspace package-amutorrent --config Release --platform x64`
+- [ ] `python -m emule_workspace package-release --config Release --platform x64 --release-version 0.7.3-rc.3`
+- [ ] `python -m emule_workspace package-release --config Release --platform ARM64 --release-version 0.7.3-rc.3`
+- [ ] `python -m emule_workspace package-amutorrent --config Release --platform x64 --release-version 0.7.3-rc.3`
 - [ ] `powershell -NoProfile -ExecutionPolicy Bypass -File $env:EMULEBB_WORKSPACE_ROOT\repos\emulebb-pages\install.ps1 -DryRun -Bundle Full`
 - [x] `python repos\emulebb-tooling\ci\check-clean-worktree.py`
 
@@ -111,6 +111,15 @@ writing accepted manifests when a ZIP is missing a required runtime/doc file,
 does not contain the full stock language DLL set, contains a language DLL for
 the wrong architecture, contains source/build/debug artifacts, or cannot record
 per-file SHA-256 hashes and SPDX SBOM provenance in the package manifest.
+
+Release-version note: the `emulebb-build` default
+`ACTIVE_EMULEBB_RELEASE_VERSION` is still `0.7.3-rc.2`, so packaging commands
+**must pass `--release-version 0.7.3-rc.3`** (the rows above do) or run via
+`release-campaign --campaign emulebb-0.7.3` (its baked commands already pin
+rc.3); otherwise bare `package-release` would emit rc.2-named artifacts.
+Bumping `ACTIVE_EMULEBB_RELEASE_VERSION` to `0.7.3-rc.3` is the operator's
+deliberate RC-cut step — it cascades into version-specific harness tests and
+should be done with a full `pytest tests/` pass, not as an incidental edit.
 
 Current state: CI is green on current `main` (Nightly 2026-06-21; Controlled
 Smoke and RC Package Proof 2026-06-20), and build commit `fb6e286` (VPN Guard
