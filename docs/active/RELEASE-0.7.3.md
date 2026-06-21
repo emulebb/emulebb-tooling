@@ -22,17 +22,20 @@ status, release-source truth, and the open RC task list.
   protocol surface and package shape are unchanged from RC1 except as recorded in
   the [RC2 changelog](RELEASE-0.7.3-RC2-CHANGELOG.md). Final published artifact
   SHA-256 hashes are recorded in [CI-035](items/CI-035.md).
-- Next milestone: **rc.3** is the active next candidate — **stabilization-only**
-  (operator decision 2026-06-13; the optional Upload Policy Clarity and UI
-  Power-User Polish lanes are not taken for RC3, and #147/#158/#159 are deferred
-  post-0.7.3), then stable `0.7.3`. The operator re-confirmed on 2026-06-19 that
-  RC3/final ships the MFC suite through the existing PowerShell bootstrapper with
-  aMuTorrent still bundled, and **without qBittorrentBB, emulebb-rust,
-  TrackMuleBB, `uv`, or the Python installer**. The Pages one-liner moves back to
-  the release bootstrap wrapper instead of the future TrackMuleBB scaffold. `main`
-  currently carries no app-behavior delta over rc.2 — only the publish-release
-  `irm|iex` CI gate (`f83072e6`) and the README install sync (`bf599469`). Draft
-  delta: [RC3 changelog](RELEASE-0.7.3-RC3-CHANGELOG.md).
+- Next milestone: **rc.3** is the active next candidate under a **soft freeze**
+  (operator decision 2026-06-13, refined 2026-06-20; see the scope-reconfirm
+  bullet below), then stable `0.7.3`. The optional Upload Policy Clarity lane is
+  not taken (#147/#158 upload slots deferred post-0.7.3); the #159 toolbar
+  button-reorder regression is fixed in RC3, with the remaining #159 cosmetic
+  request deferred. The operator re-confirmed on 2026-06-19 that RC3/final ships
+  the MFC suite through the existing PowerShell bootstrapper with aMuTorrent still
+  bundled, and **without qBittorrentBB, emulebb-rust, TrackMuleBB, `uv`, or the
+  Python installer**. The Pages one-liner moves back to the release bootstrap
+  wrapper instead of the future TrackMuleBB scaffold. `main` now carries an
+  app-behavior delta over rc.2 — FEAT-123 (shared-files one-level auto-updater)
+  and the #159 toolbar regression fix, plus the publish-release `irm|iex` CI gate
+  (`f83072e6`) and the README install sync (`bf599469`). Draft delta:
+  [RC3 changelog](RELEASE-0.7.3-RC3-CHANGELOG.md).
 - Scope reconfirm (operator decision 2026-06-20): RC3 stays a **soft freeze**
   (small bug fixes and small features may still land — e.g. FEAT-123 / issue
   #148, the only feature lane taken, now landed). Scope is the Pages
