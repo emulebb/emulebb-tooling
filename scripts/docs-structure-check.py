@@ -187,6 +187,16 @@ def find_wide_table_rows(limit: int) -> list[WideTableRow]:
 def main() -> int:
     """Run the Markdown structure audit."""
 
+    # Markdown samples can carry non-cp1252 characters (em dashes, arrows); force
+    # UTF-8 output so reporting them does not crash on a Windows console codepage.
+    for stream in (sys.stdout, sys.stderr):
+        reconfigure = getattr(stream, "reconfigure", None)
+        if reconfigure is not None:
+            try:
+                reconfigure(encoding="utf-8")
+            except (OSError, ValueError):
+                pass
+
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--wide-table-limit",
