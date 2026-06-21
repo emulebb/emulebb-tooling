@@ -84,10 +84,17 @@ nav:
   - emulebb-rust (Core):
       - Rust Scope: active/EMULEBB-RUST-SCOPE.md
       - Running On macOS And Linux: reference/GUIDE-CROSS-PLATFORM.md
+      - REST API — OpenAPI (GitHub): https://github.com/emulebb/emulebb-rust/blob/main/docs/rest/REST-API-OPENAPI.yaml
+      - REST API — Notes (GitHub): https://github.com/emulebb/emulebb-rust/blob/main/docs/rest/README.md
+      - Design — Kad/eD2K Indexer (GitHub): https://github.com/emulebb/emulebb-rust/blob/main/docs/design/kad-ed2k-indexer.md
+      - Design — Source Management & A4AF (GitHub): https://github.com/emulebb/emulebb-rust/blob/main/docs/design/source-management-and-a4af.md
+      - Design — UDP Source Reask (GitHub): https://github.com/emulebb/emulebb-rust/blob/main/docs/design/udp-source-reask.md
       - Source And Backlog (GitHub): https://github.com/emulebb/emulebb-rust
   - qBittorrentBB (Companion):
+      - Torrent Export & DHT Harvest (GitHub): https://github.com/emulebb/qbittorrentbb/blob/master/docs/BB-TORRENT-EXPORT-AND-HARVEST.md
       - Source And Backlog (GitHub): https://github.com/emulebb/qbittorrentbb
   - TrackMuleBB (Controller):
+      - MVP Unified Transfers — Design (GitHub): https://github.com/emulebb/trackmulebb/blob/main/docs/design/MVP-UNIFIED-TRANSFERS.md
       - Source And Backlog (GitHub): https://github.com/emulebb/trackmulebb
   - aMuTorrent (Controller — frozen 0.7.3, legacy):
       - Stack Integrations: reference/GUIDE-STACK-INTEGRATIONS.md
