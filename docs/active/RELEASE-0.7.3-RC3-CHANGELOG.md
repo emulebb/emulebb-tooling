@@ -25,6 +25,33 @@ from RC2 except where noted. Final package hashes and proof status are recorded 
 [CI-035](items/CI-035.md). For the RC2-and-earlier delta and the RC1-vs-baseline
 history, see [RELEASE-0.7.3-RC2-CHANGELOG](RELEASE-0.7.3-RC2-CHANGELOG.md).
 
+### Candidate Heads And Artifacts (finalize at go)
+
+Candidate heads to lock for the RC3 build (current `main`; replace if heads move
+before go):
+
+| Repo | Head | Notes |
+| --- | --- | --- |
+| `emulebb` (app) | `9a0cfffa` | MFC client; FEAT-123 + #159 toolbar fix over rc.2 |
+| `emulebb-build` | `a7e1aa4` | build orchestration; carries `fb6e286` cert VPN-guard forwarding |
+| `emulebb-build-tests` | `a4cb096` | harness and campaigns |
+| `amutorrent` | `2da7c19` | bundled controller companion |
+| `emulebb-tooling` | `55636c9` | docs and proof tracking |
+
+Artifact set (names follow the rc.2 template; SHA-256 and SBOM hashes recorded in
+[CI-035](items/CI-035.md) at the candidate build). Each ZIP ships its
+`.manifest.json` and `.sbom.spdx.json` sidecar; the bootstrapper ships its
+`.sha256` sidecar.
+
+| Asset | SHA-256 | SBOM SHA-256 |
+| --- | --- | --- |
+| `emulebb-0.7.3-rc.3-x64.zip` | _pending_ | _pending_ |
+| `emulebb-0.7.3-rc.3-arm64.zip` | _pending_ | _pending_ |
+| `emulebb-0.7.3-rc.3-diagnostics-x64.zip` | _pending_ | _pending_ |
+| `emulebb-0.7.3-rc.3-diagnostics-arm64.zip` | _pending_ | _pending_ |
+| `Bootstrap-eMuleBBSuite.ps1` | _pending_ | — |
+| `emulebb-0.7.3-rc.3-amutorrent-x64.zip` (optional) | _pending_ | _pending_ |
+
 ### Stabilization
 
 - RC3/Release-tooling: `Publish release` now gates on the install scripts binding
@@ -81,12 +108,12 @@ history, see [RELEASE-0.7.3-RC2-CHANGELOG](RELEASE-0.7.3-RC2-CHANGELOG.md).
 - RC3/Proof: Pending — Pages wrapper dry-run/parse proof that the public one-liner
   resolves `Bootstrap-eMuleBBSuite.ps1`, verifies the sidecar hash when present,
   and forwards existing bootstrapper parameters.
-- RC3/Proof: **Pre-tag blocker** — current `main` CI is red. The
-  `0.7.3-nightly.20260615` nightly (commit `72a6f7e`) has a failing Nightly
-  build (issue #160) and failing x64+ARM64 Controlled Smoke (issue #161). RC3 is
-  cut from `main`, so both must be green (or the failures triaged as
-  non-blocking with recorded operator acceptance) before the RC3 candidate head
-  is locked. The locked rc.2 heads remain green; this is a newer-`main` delta.
+- RC3/Proof: CI is **green** on current `main`. The earlier
+  `0.7.3-nightly.20260615` failure (commit `72a6f7e`, issues #160/#161) is
+  resolved and both issues are closed; the scheduled Nightly (2026-06-21) and the
+  2026-06-20 Controlled Smoke and RC Package Proof runs pass. The pre-tag CI
+  blocker is cleared — lock the RC3 candidate head, then run the pending
+  certification and package refresh above.
 
 ### Risk and Testing Focus
 
