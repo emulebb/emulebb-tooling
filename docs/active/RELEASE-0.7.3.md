@@ -35,7 +35,7 @@ status, release-source truth, and the open RC task list.
   delta: [RC3 changelog](RELEASE-0.7.3-RC3-CHANGELOG.md).
 - Scope reconfirm (operator decision 2026-06-20): RC3 stays a **soft freeze**
   (small bug fixes and small features may still land — e.g. FEAT-123 / issue
-  #148, the only feature lane taken, still in flight). Scope is the Pages
+  #148, the only feature lane taken, now landed). Scope is the Pages
   `install.ps1` thin wrapper over the release `Bootstrap-eMuleBBSuite.ps1`, the
   MFC client + aMuTorrent + Arr suite as currently shipped. **qBittorrentBB and
   emulebb-rust stay out of the `0.7.x` line entirely and ship in the `0.8.*`

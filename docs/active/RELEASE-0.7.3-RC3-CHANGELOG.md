@@ -37,12 +37,10 @@ history, see [RELEASE-0.7.3-RC2-CHANGELOG](RELEASE-0.7.3-RC2-CHANGELOG.md).
   scaffold is documented as post-0.7.3 only.
 - RC3/Installer: qBittorrentBB is parked outside the RC3/final suite manifest and
   cannot be selected by the packaged MFC+aMuTorrent installer.
-- RC3/Shared files (in flight — the soft-freeze small feature for RC3, **not yet
-  merged to `main`**): shared directories auto-check for new direct child files
+- RC3/Shared files: shared directories auto-check for new direct child files
   every 5 minutes using bounded one-level polling; recursive monitored sharing
-  remains opt-in and unchanged ([FEAT-123](items/FEAT-123.md), issue #148). This
-  bullet finalizes only once the implementation lands and its acceptance criteria
-  pass.
+  remains opt-in and unchanged ([FEAT-123](../history/items/FEAT-123.md), issue
+  #148). Landed and accepted for RC3.
 - _(Further crash/data-loss, packaging/provenance, regression, and release-doc
   fixes land here as approved and merged.)_
 
@@ -93,7 +91,7 @@ history, see [RELEASE-0.7.3-RC2-CHANGELOG](RELEASE-0.7.3-RC2-CHANGELOG.md).
 ### Risk and Testing Focus
 
 - RC3/Risk: Beyond the release-tooling/doc delta, RC3 now carries the #159
-  toolbar button-reorder fix (and the in-flight FEAT-123 shared-file lane).
+  toolbar button-reorder fix (and the landed FEAT-123 shared-file lane).
   Confirm the regenerated package set and the aMuTorrent companion install and run
   cleanly on a fresh install, including the `irm | iex` one-liner that the new CI
   gate protects, and verify Customize Toolbar can reorder buttons (not just add
