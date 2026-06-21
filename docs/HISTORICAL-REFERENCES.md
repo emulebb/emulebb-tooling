@@ -57,6 +57,7 @@ Those all point at the same historical source family.
 
 ## Related Docs
 
+- [History Archive](history/INDEX.md)
 - [WORKSPACE-POLICY](WORKSPACE-POLICY.md)
 - [active/INDEX](active/INDEX.md)
 - [GitHub README](https://github.com/emulebb/emulebb-tooling/blob/main/README.md)

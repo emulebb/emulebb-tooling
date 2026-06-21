@@ -142,6 +142,7 @@ nav:
       - qBittorrentBB Mesh: ideas/IDEA-QBITTORRENTBB-MESH.md
       - emulebb-libtorrent Fork: ideas/IDEA-EMULEBB-LIBTORRENT-FORK.md
   - History:
+      - History Archive: history/INDEX.md
       - Historical References: HISTORICAL-REFERENCES.md
       - Abandoned Boost / POCO Adoption: history/ideas/IDEA-BOOST.md
       - Abandoned CMake / Ninja / vcpkg Adoption: history/ideas/IDEA-CMAKE.md
