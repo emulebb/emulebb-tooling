@@ -15,7 +15,7 @@ This is the map of `docs/history/` — the workspace's provenance archive.
 
 | Section | Contents |
 | --- | --- |
-| `items/` | Closed item records (`DONE`, `PASSED`, `WONT_DO`) — 253 files: 132 BUG, 48 FEAT, 40 CI, 30 REF, 2 AMUT, 1 ARR. Stable item-ID filenames; IDs are never reused. |
+| [`items/`](items/INDEX.md) | Closed item records (`DONE`, `PASSED`, `WONT_DO`) — 253 files: 132 BUG, 48 FEAT, 40 CI, 30 REF, 2 AMUT, 1 ARR. Stable item-ID filenames; IDs are never reused. |
 | `reviews/` | 19 dated review reports (2026-04 → 2026-05) plus the mods/eMuleAI scan, kept after they stopped driving active execution. |
 | `release-0.7.3/` | Superseded 0.7.3 execution plans, gate history, community-parity audit, proof-evidence log, and 8 dated beta-readiness audits in `release-0.7.3/audits/`. |
 | `audits/` | 13 standalone audit snapshots covering bugs, code quality, code review, dead code, defects, Kad, security, C++ safety, architecture, and REST custom code. |
