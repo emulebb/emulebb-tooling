@@ -24,8 +24,8 @@ cognitive load of a 14-repo workspace and makes ownership of each decision obvio
 | `qbittorrentbb` | Companion | active, Phase 1 | `docs/active` (`QBBB-*`) | qBittorrentBB |
 | `trackmulebb` | Companion (controller + installer) | forward, Phase 2 (Python; new) | `docs/active` (`TMBB-*`) | TrackMuleBB |
 | `itlezy/bountarr` | Companion (household media-grab UI) | forward, Phase 2 (TS/Node) | own repo | TrackMuleBB-suite |
-| `amutorrent` | Active → freezes at 0.7.3 final | actively maintained + upstream-synced through the 0.7.3 train (decision 2026-06-20); then deprecated, superseded by TrackMuleBB | `docs/active` (`AMUT-*` ref) | aMuTorrent |
-| `emulebb` (MFC) | Active (0.7.x → revived 0.8.x) | closes 0.7.x at 0.7.3, then 0.8.x MFC modernization (decision 2026-06-20) | `emulebb-tooling/docs/active` (legacy IDs) | eMuleBB-MFC |
+| `amutorrent` | Companion (legacy) | active → freezes at 0.7.3 final | `docs/active` (`AMUT-*` ref) | aMuTorrent |
+| `emulebb` (MFC) | Client (MFC) | active, 0.7.x → revived 0.8.x | `emulebb-tooling/docs/active` (legacy IDs) | eMuleBB-MFC |
 | `goed2k-server` | Service / Lab | lab (no CI gate) | `docs/active` lab index (`GOED2K-*` reserved) | — (not on board while lab) |
 | `emulebb-build` | Infra | active | — | tooling |
 | `emulebb-build-tests` | Infra | active | — | tooling |
@@ -35,6 +35,13 @@ cognitive load of a 14-repo workspace and makes ownership of each decision obvio
 | `emulebb-miniupnp` | Vendored-fork | build track | — | — |
 | `emulebb-pages` / `emulebb-org-profile` | Infra (public) | active | — | — |
 | `p2p-overlord-*` | Separate family | out of scope | own repos | — |
+
+Stage notes (decision 2026-06-20):
+
+- `amutorrent` is actively maintained and upstream-synced through the 0.7.3
+  train, then deprecated and superseded by TrackMuleBB.
+- `emulebb` (MFC) closes the 0.7.x line at 0.7.3, then resumes as the 0.8.x MFC
+  modernization wave.
 
 ## Strategic note
 

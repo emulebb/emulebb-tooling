@@ -54,26 +54,41 @@ re-verified green against a fresh test build, and wired in with the rest.
 | The 19 suites above | **WIRED-IN** | Were dormant; verified green; now in `test all`. |
 | `divergence` | **KEEP DORMANT** | A deliberate 0.8.0 scheduler-removal guard; red by design until the removal lands. |
 | `benchmark`, `pipeline`, `pipeline-benchmark` | **OPTIONAL** | Performance, not correctness; stay targeted-only. |
-| `kad-broadband` | **KEEP DORMANT** | `fastkad_flow`/`kad_guards` are `<ClCompile>` gated on `Condition="Exists(...)"` for `KadPublishGuard.h`/`SafeKad.h` (absent here) and an `afximpl.h` path; they are conditionally excluded from the build by design, so the suite registers zero cases. Not a gap. |
-| Frozen MFC UI suites (`*_keyboard_shortcuts`, `download_progress_bar`, `status_bar`, `pro_user_menu_copy`, `shared_dirs_tree_ctrl`) | **OPTIONAL** | Frozen low-churn UI; targeted-only, out of the tiers. |
+| `kad-broadband` | **KEEP DORMANT** | Conditionally excluded from the build by design, so it registers zero cases — not a gap (detail below). |
+| Frozen MFC UI suites | **OPTIONAL** | Frozen low-churn UI; targeted-only, out of the tiers (suites listed below). |
+
+- `kad-broadband`: `fastkad_flow`/`kad_guards` are `<ClCompile>` entries gated on
+  `Condition="Exists(...)"` for `KadPublishGuard.h`/`SafeKad.h` (absent here) and
+  an `afximpl.h` path, so they are conditionally excluded from the build.
+- Frozen MFC UI suites: `*_keyboard_shortcuts`, `download_progress_bar`,
+  `status_bar`, `pro_user_menu_copy`, `shared_dirs_tree_ctrl`.
 
 ## Live-e2e layer
 
 | Group | Verdict | Notes |
 | --- | --- | --- |
-| Fast set — `preference-ui`, `shared-files-ui`, `config-stability-ui`, `shared-hash-ui`, `startup-diagnostics`, `shared-directories-rest`, `rest-api` (+ `auto-browse-live`) | **KEEP (quick/fast)** | All `stressClass = scenario`. |
+| Fast set (8 suites, listed below) | **KEEP (quick/fast)** | All `stressClass = scenario`. |
 | Soak/stress/hammer/chaos + storage (10) | **KEEP (overnight only)** | Already overnight-tier profiles; none leak into quick/fast. |
 | `multi-client-p2p` vs `multi-client-p2p-required` | **KEEP (both)** | Same suites, different evidence policy — intentional, not redundant. |
-| `shared-directory-browse-stress` | **WIRED-IN** | Was an orphan (BUG-144 harness, self-contained fixture, unit-tested) in no profile. Added to `stabilization-stress` (overnight only); confirm on the next overnight run. |
+| `shared-directory-browse-stress` | **WIRED-IN** | Was an orphan; added to `stabilization-stress` (overnight only). Detail below. |
 | `deterministic-two-client-transfer` | **KEEP (review)** | Overlaps `multi-client-p2p-matrix` on local transfer; acceptable as a deterministic baseline. |
 | Live-wire ARR (`radarr`/`sonarr`/`prowlarr-emulebb`) | **KEEP (live-wire/release only)** | Forward/controller surface; never quick/fast. |
+
+- Fast set: `preference-ui`, `shared-files-ui`, `config-stability-ui`,
+  `shared-hash-ui`, `startup-diagnostics`, `shared-directories-rest`, `rest-api`
+  (plus `auto-browse-live`).
+- `shared-directory-browse-stress` was a BUG-144 harness orphan (self-contained
+  fixture, unit-tested) in no profile; confirm it on the next overnight run.
 
 ## Python-harness layer
 
 | Group | Verdict | Notes |
 | --- | --- | --- |
 | All modules | **KEEP (quick/fast)** | Fast unit tests, no app/network. |
-| 56 modules self-testing a live script | **KEEP** | Unit-vs-integration pairing, intentional. When a live suite/script is cut, cut its self-test too (mapping in the catalog `selfTestsScript`). |
+| 56 modules self-testing a live script | **KEEP** | Unit-vs-integration pairing, intentional (mapping note below). |
+
+- When a live suite/script is cut, cut its self-test too (mapping in the catalog
+  `selfTestsScript`).
 
 ## Triage of the failing suites
 
