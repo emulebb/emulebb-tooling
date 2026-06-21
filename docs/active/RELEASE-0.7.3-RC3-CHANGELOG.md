@@ -1,6 +1,6 @@
 # eMuleBB 0.7.3-rc.3 Changelog
 
-Status: draft for RC3 preparation; finalize at RC3 go after the candidate heads, package names, hashes, proof status, and accepted deviations are recorded.
+Status: PUBLISHED 2026-06-21 as the `emulebb-v0.7.3-rc.3` prerelease (app `fd17a04`). Final published hashes are recorded below; the aMuTorrent companion release is pending.
 
 Format: one line per item, grouped by area; this is a power-user changelog, not a Git log.
 
@@ -25,32 +25,42 @@ from RC2 except where noted. Final package hashes and proof status are recorded 
 [CI-035](items/CI-035.md). For the RC2-and-earlier delta and the RC1-vs-baseline
 history, see [RELEASE-0.7.3-RC2-CHANGELOG](RELEASE-0.7.3-RC2-CHANGELOG.md).
 
-### Candidate Heads And Artifacts (finalize at go)
+### Published Heads And Artifacts
 
-Candidate heads to lock for the RC3 build (current `main`; replace if heads move
-before go):
+Published on app `fd17a04` (origin/main) via the `Publish release` workflow
+(run 27905947687), built with `build_ref=main` (deterministic pinned Node for the
+aMuTorrent package). Locked heads:
 
 | Repo | Head | Notes |
 | --- | --- | --- |
-| `emulebb` (app) | `9a0cfffa` | MFC client; FEAT-123 + #159 toolbar fix over rc.2 |
-| `emulebb-build` | `a7e1aa4` | build orchestration; carries `fb6e286` cert VPN-guard forwarding |
-| `emulebb-build-tests` | current `main` | harness and campaigns; carries the rc.3 campaign bump + cpu-heavy-quick trim |
-| `amutorrent` | `2da7c19` | bundled controller companion |
+| `emulebb` (app) | `fd17a04` | MFC client; FEAT-123 + #159 toolbar fix over rc.2 |
+| `emulebb-build` | `af19faa` | build orchestration; deterministic pinned-Node aMuTorrent build |
+| `emulebb-build-tests` | current `main` | harness and campaigns; rc.3 campaign + cpu-heavy-quick trim |
+| `amutorrent` | `2da7c19` | controller companion (rc.3 companion release pending) |
 | `emulebb-tooling` | current `main` | docs and proof tracking |
 
-Artifact set (names follow the rc.2 template; SHA-256 and SBOM hashes recorded in
-[CI-035](items/CI-035.md) at the candidate build). Each ZIP ships its
-`.manifest.json` and `.sbom.spdx.json` sidecar; the bootstrapper ships its
-`.sha256` sidecar.
+Published artifact SHA-256 (authoritative, from the GitHub release assets), tag
+[`emulebb-v0.7.3-rc.3`](https://github.com/emulebb/emulebb/releases/tag/emulebb-v0.7.3-rc.3),
+published 2026-06-21:
 
-| Asset | SHA-256 | SBOM SHA-256 |
-| --- | --- | --- |
-| `emulebb-0.7.3-rc.3-x64.zip` | _pending_ | _pending_ |
-| `emulebb-0.7.3-rc.3-arm64.zip` | _pending_ | _pending_ |
-| `emulebb-0.7.3-rc.3-diagnostics-x64.zip` | _pending_ | _pending_ |
-| `emulebb-0.7.3-rc.3-diagnostics-arm64.zip` | _pending_ | _pending_ |
-| `Bootstrap-eMuleBBSuite.ps1` | _pending_ | — |
-| `emulebb-0.7.3-rc.3-amutorrent-x64.zip` (optional) | _pending_ | _pending_ |
+| Asset | SHA-256 |
+| --- | --- |
+| `emulebb-0.7.3-rc.3-x64.zip` | `1e6a3a4e4603c39564fc17c6ee47482fd1e1757cac62d0af9d76f72c8cd75d2d` |
+| `emulebb-0.7.3-rc.3-arm64.zip` | `8e00aecc25c694ccaedb522b16fcb39179674ec93f5a0cba76058be1c2ff1efb` |
+| `emulebb-0.7.3-rc.3-diagnostics-x64.zip` | `bd7a5eb0bd43c2f44a7878344e0cdd12655d33c8b6d4ee3bd04101be36453069` |
+| `emulebb-0.7.3-rc.3-diagnostics-arm64.zip` | `8eeb9ea6a718f04574fa395184d957e92999fccd76b421887d604b04c0f3d4f6` |
+| `Bootstrap-eMuleBBSuite.ps1` | `dc39cbc599e7532b47f58a05525dd4f7bec6c644a0e327b3b233dacb3ef631b6` |
+
+SPDX SBOM SHA-256 (each ZIP ships its `.manifest.json` + `.sbom.spdx.json`
+sidecars; the bootstrapper ships its `.sha256`):
+
+- x64: `5be22b32330b3348535eb121eac489e20ca4d95a05604b034916fef180ca9c9c`
+- arm64: `4d83e4564d8a3f19dba27abbcbace00fd087208a26ebd82b0f9370269631ed97`
+- diagnostics-x64: `8eff68bfe9c73e37d967cfb04662829ed88cad7629b5c2117cfdce4cf5144726`
+- diagnostics-arm64: `e632df928ce2a96f98a841617516ef7d02003253c616689aabd2d839028e2452`
+
+The aMuTorrent x64 controller companion (`emulebb-0.7.3-rc.3-amutorrent-x64.zip`)
+publishes as a separate `amutorrent-v*-emulebb-v0.7.3-rc.3` release; **pending**.
 
 ### Stabilization
 
