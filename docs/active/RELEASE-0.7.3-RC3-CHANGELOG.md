@@ -34,9 +34,9 @@ before go):
 | --- | --- | --- |
 | `emulebb` (app) | `9a0cfffa` | MFC client; FEAT-123 + #159 toolbar fix over rc.2 |
 | `emulebb-build` | `a7e1aa4` | build orchestration; carries `fb6e286` cert VPN-guard forwarding |
-| `emulebb-build-tests` | `a4cb096` | harness and campaigns |
+| `emulebb-build-tests` | `3934801` | harness and campaigns; carries the rc.3 campaign bump |
 | `amutorrent` | `2da7c19` | bundled controller companion |
-| `emulebb-tooling` | `55636c9` | docs and proof tracking |
+| `emulebb-tooling` | current `main` | docs and proof tracking |
 
 Artifact set (names follow the rc.2 template; SHA-256 and SBOM hashes recorded in
 [CI-035](items/CI-035.md) at the candidate build). Each ZIP ships its
