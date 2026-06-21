@@ -15,12 +15,12 @@
 
 - [Context](#context)
 - [Dependency Inventory](#dependency-inventory)
-- [1. Crypto++ 8.9.0](#1-crypto-890--dep_001) — Medium risk
-- [2. id3lib 3.9.1](#2-id3lib-391--dep_002) — Do not convert
-- [3. miniupnpc 2.3.3](#3-miniupnpc-233--dep_003) — **Good DLL candidate**
-- [4. ResizableLib](#4-resizablelib-master--v153--dep_005) — Incompatible
-- [5. zlib 1.3.2](#5-zlib-132--dep_004) — **Good DLL candidate**
-- [6. MbedTLS + TF-PSA-Crypto](#6-mbedtls-400--tf-psa-crypto-100--dep_006-stale--removed) — **[STALE — REMOVED]**
+- [1. Crypto++ 8.9.0](#1-crypto-890-dep_001) — Medium risk
+- [2. id3lib 3.9.1](#2-id3lib-391-dep_002) — Do not convert
+- [3. miniupnpc 2.3.3](#3-miniupnpc-233-dep_003) — **Good DLL candidate**
+- [4. ResizableLib](#4-resizablelib-master-v153-dep_005) — Incompatible
+- [5. zlib 1.3.2](#5-zlib-132-dep_004) — **Good DLL candidate**
+- [6. MbedTLS + TF-PSA-Crypto](#6-mbedtls-400-tf-psa-crypto-100-dep_006-stale-removed) — **[STALE — REMOVED]**
 - [Summary Table](#summary-table)
 - [Recommended Action Plan](#recommended-action-plan)
 

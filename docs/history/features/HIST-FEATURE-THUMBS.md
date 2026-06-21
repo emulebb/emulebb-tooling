@@ -9,8 +9,8 @@ migrated to Media Foundation or FFmpeg.
 - [Feature Tracking](#feature-tracking)
 - [Background](#background)
 - [Current architecture](#current-architecture-for-reference)
-- [Option 2 — Windows Media Foundation](#option-2----windows-media-foundation-imfsourcereader-feat_022)
-- [Option 3 — FFmpeg](#option-3----ffmpeg-libavcodec--libavformat--libswscale-feat_023)
+- [Option 2 — Windows Media Foundation](#option-2-windows-media-foundation-imfsourcereader-feat_022)
+- [Option 3 — FFmpeg](#option-3-ffmpeg-libavcodec-libavformat-libswscale-feat_023)
 - [Comparison](#comparison)
 - [MediaInfo Integration](#mediainfo-integration-from-emuleai-analysis-feat_024)
 

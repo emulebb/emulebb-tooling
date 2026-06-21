@@ -16,12 +16,12 @@ This document covers each dependency in full: what it is, where it is used, what
 
 ## Contents
 
-1. [Crypto++ (cryptopp)](#1-crypto-cryptopp) — **`DEP_001`**
-2. [Mbed TLS (mbedtls)](#2-mbed-tls-mbedtls--dep_006-done--removed) — **`DEP_006` [DONE - REMOVED]**
-3. [id3lib](#3-id3lib) — **`DEP_002`**
-4. [miniupnpc (miniupnp)](#4-miniupnpc-miniupnp) — **`DEP_003`**
-5. [zlib](#5-zlib) — **`DEP_004`**
-6. [ResizableLib](#6-resizablelib) — **`DEP_005`**
+1. [Crypto++ (cryptopp)](#1-crypto-cryptopp-dep_001) — **`DEP_001`**
+2. [Mbed TLS (mbedtls)](#2-mbed-tls-mbedtls-dep_006-done-removed) — **`DEP_006` [DONE - REMOVED]**
+3. [id3lib](#3-id3lib-dep_002-done-removed) — **`DEP_002`**
+4. [miniupnpc (miniupnp)](#4-miniupnpc-miniupnp-dep_003) — **`DEP_003`**
+5. [zlib](#5-zlib-dep_004) — **`DEP_004`**
+6. [ResizableLib](#6-resizablelib-dep_005) — **`DEP_005`**
 7. [Removal Impact Matrix](#7-removal-impact-matrix)
 
 ---

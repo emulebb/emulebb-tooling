@@ -18,7 +18,7 @@ are not stale for current `main`. `CODEREV_001` is done in current `main`.
 - [Scope](#scope)
 - [CRITICAL — Bugs](#critical-bugs-that-will-silently-misbehave-or-cause-resource-leaks) (CODEREV_001–005)
 - [HIGH — Issues requiring attention](#high-issues-requiring-attention-before-release) (CODEREV_006–008)
-- [MEDIUM — Code quality](#medium) (CODEREV_009–012)
+- [MEDIUM — Worth fixing but not blocking](#medium-worth-fixing-but-not-blocking) (CODEREV_009–012)
 - [Summary Table](#summary-table)
 
 ---
