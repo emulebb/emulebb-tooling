@@ -63,9 +63,11 @@ def frontmatter_field(text: str, name: str) -> str:
 
 
 def item_files() -> list[Path]:
-    return sorted((DOCS / "active" / "items").glob("*.md")) + sorted(
+    # INDEX.md under an items dir is a navigation index, not an item record.
+    paths = sorted((DOCS / "active" / "items").glob("*.md")) + sorted(
         (DOCS / "history" / "items").glob("*.md")
     )
+    return [path for path in paths if path.name != "INDEX.md"]
 
 
 def parse_active_index() -> dict[str, dict[str, str]]:
