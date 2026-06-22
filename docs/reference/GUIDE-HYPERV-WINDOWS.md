@@ -90,7 +90,7 @@ replace the version with a release or nightly that is actually published on
 GitHub Releases.
 
 ```powershell
-$version = '0.7.3-rc.2'
+$version = '0.7.3-rc.3'
 $releaseUrl = "https://github.com/emulebb/emulebb/releases/download/emulebb-v$version"
 $workRoot = Join-Path $env:TEMP "emulebb-suite-$version"
 New-Item -ItemType Directory -Force -Path $workRoot | Out-Null
@@ -200,7 +200,7 @@ packaged PowerShell helpers and suite installer path inside isolated guests:
 ```powershell
 python -m emule_workspace test windows-vm `
   --profile package-helper-install `
-  --release-version 0.7.3-rc.2
+  --release-version 0.7.3-rc.3
 ```
 
 This builds or refreshes the release package through the workspace
@@ -214,7 +214,7 @@ state, use `--skip-build` to prove the package path without rebuilding:
 ```powershell
 python -m emule_workspace test windows-vm `
   --profile package-helper-install `
-  --release-version 0.7.3-rc.2 `
+  --release-version 0.7.3-rc.3 `
   --skip-build
 ```
 
@@ -232,7 +232,7 @@ guests:
 python -m emule_workspace test campaign-scenario `
   --scenario emulebb.flow.controller.installer-swarm.v1 `
   --mode vm `
-  --release-version 0.7.3-rc.2 `
+  --release-version 0.7.3-rc.3 `
   --skip-build `
   --swarm-tier 1 `
   --local-swarm-mode execute
@@ -250,7 +250,7 @@ payload staging:
 python -m emule_workspace test campaign-scenario `
   --scenario emulebb.flow.controller.installer-swarm.v1 `
   --mode vm `
-  --release-version 0.7.3-rc.2 `
+  --release-version 0.7.3-rc.3 `
   --skip-build `
   --swarm-tier 1 `
   --local-swarm-mode plan `
@@ -265,7 +265,7 @@ the run finishes. To inspect a failure interactively, add `--keep-running`:
 ```powershell
 python -m emule_workspace test windows-vm `
   --profile package-helper-install `
-  --release-version 0.7.3-rc.2 `
+  --release-version 0.7.3-rc.3 `
   --skip-build `
   --keep-running
 ```

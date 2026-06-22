@@ -56,7 +56,7 @@ Use the same SHA-256-verified bootstrap pattern as the Setup Guide. Replace the
 version with a release or nightly that is actually published on GitHub Releases.
 
 ```powershell
-$version = '0.7.3-rc.2'
+$version = '0.7.3-rc.3'
 $releaseUrl = "https://github.com/emulebb/emulebb/releases/download/emulebb-v$version"
 $workRoot = Join-Path $env:TEMP "emulebb-suite-$version"
 New-Item -ItemType Directory -Force -Path $workRoot | Out-Null

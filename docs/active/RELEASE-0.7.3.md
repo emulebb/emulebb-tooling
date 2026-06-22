@@ -1,41 +1,37 @@
 # eMule Broadband Edition 0.7.3 Release Train Dashboard
 
 This is the current release-train dashboard for the fixed 0.7.3 candidate
-sequence. RC1 is frozen historical evidence. Active release testing, bugfixes,
-and improvements now target RC2 and later candidates. Use this document for
-status, release-source truth, and the open RC task list.
+sequence. RC1 and RC2 are frozen historical evidence. RC3 is the current
+published candidate; active release work now targets stable `0.7.3`. Use this
+document for status, release-source truth, and the open RC task list.
 
 ## Current Status
 
-- Status: RC2 is PUBLISHED. The annotated tag `emulebb-v0.7.3-rc.2` peels to app
-  `38827709`; GitHub prerelease at
-  <https://github.com/emulebb/emulebb/releases/tag/emulebb-v0.7.3-rc.2>, built by
-  the `Publish release` workflow after the relaxed-gate fast certification passed
-  for the shipped scope. The first publish (2026-06-12T20:48:22Z) shipped BUG-017
-  — the `irm | iex` one-liner install failed on an optional `-UiLanguage`
-  ValidateSet without a valid default — so that release/tag were deleted and rc.2
-  was rebuilt with the fix (`emulebb-build` `0fceae7`) and re-published
-  2026-06-12T21:36:15Z; the published bootstrapper is verified to bind under
-  `irm | iex`. The RC2 delta over RC1 is installer/bootstrapper
-  correctness, an aMuTorrent controller refresh, broadband upload-queue tuning
-  (FEAT-015) and diagnostics flush (FEAT-027), and the GPL-2.0 relicense; the
-  protocol surface and package shape are unchanged from RC1 except as recorded in
-  the [RC2 changelog](RELEASE-0.7.3-RC2-CHANGELOG.md). Final published artifact
-  SHA-256 hashes are recorded in [CI-035](items/CI-035.md).
-- Next milestone: **rc.3** is the active next candidate under a **soft freeze**
-  (operator decision 2026-06-13, refined 2026-06-20; see the scope-reconfirm
-  bullet below), then stable `0.7.3`. The optional Upload Policy Clarity lane is
-  not taken (#147/#158 upload slots deferred post-0.7.3); the #159 toolbar
-  button-reorder regression is fixed in RC3, with the remaining #159 cosmetic
-  request deferred. The operator re-confirmed on 2026-06-19 that RC3/final ships
-  the MFC suite through the existing PowerShell bootstrapper with aMuTorrent still
-  bundled, and **without qBittorrentBB, emulebb-rust, TrackMuleBB, `uv`, or the
-  Python installer**. The Pages one-liner moves back to the release bootstrap
-  wrapper instead of the future TrackMuleBB scaffold. `main` now carries an
-  app-behavior delta over rc.2 — FEAT-123 (shared-files one-level auto-updater)
-  and the #159 toolbar regression fix, plus the publish-release `irm|iex` CI gate
-  (`f83072e6`) and the README install sync (`bf599469`). Draft delta:
-  [RC3 changelog](RELEASE-0.7.3-RC3-CHANGELOG.md).
+- Status: **RC3 is PUBLISHED** (2026-06-21). The annotated tag
+  `emulebb-v0.7.3-rc.3` peels to app `fd17a04`; GitHub prerelease at
+  <https://github.com/emulebb/emulebb/releases/tag/emulebb-v0.7.3-rc.3>, built by
+  the `Publish release` workflow (run 27909074408, `build_ref=main`) after the
+  relaxed-gate fast certification passed for the shipped scope. The matching
+  `amutorrent-v3.8.8-emulebb-v0.7.3-rc.3` controller companion is published
+  alongside it. After GitHub's `/releases/tags/<tag>` endpoint flapped 504, the
+  Pages wrapper and bootstrapper were hardened to resolve from the `/releases`
+  list and rc.3 was re-published with the by-tag-free bootstrapper. The RC3 delta
+  over RC2 is FEAT-123 (shared-files one-level auto-updater), the #159 toolbar
+  button-reorder regression fix, the publish-release `irm|iex` CI gate
+  (`f83072e6`), and the README install sync (`bf599469`); the protocol surface and
+  package shape are unchanged from RC2 except as recorded in the
+  [RC3 changelog](RELEASE-0.7.3-RC3-CHANGELOG.md). Final published artifact
+  SHA-256 hashes are recorded there and in [CI-035](items/CI-035.md).
+- Next milestone: **stable `0.7.3`** under a **soft freeze** (operator decision
+  2026-06-13, refined 2026-06-20; see the scope-reconfirm bullet below). The
+  optional Upload Policy Clarity lane is not taken (#147/#158 upload slots
+  deferred post-0.7.3); both the #159 toolbar button-reorder regression fix and
+  the #159 active-category-tab bold (an opt-in Tweaks option) shipped in rc.3.
+  The operator re-confirmed on 2026-06-19 that
+  RC3/final ships the MFC suite through the existing PowerShell bootstrapper with
+  aMuTorrent still bundled, and **without qBittorrentBB, emulebb-rust,
+  TrackMuleBB, `uv`, or the Python installer**. The Pages one-liner uses the
+  release bootstrap wrapper instead of the future TrackMuleBB scaffold.
 - Scope reconfirm (operator decision 2026-06-20): RC3 stays a **soft freeze**
   (small bug fixes and small features may still land — e.g. FEAT-123 / issue
   #148, the only feature lane taken, now landed). Scope is the Pages
@@ -49,58 +45,55 @@ status, release-source truth, and the open RC task list.
   closed; subsequent `main` fixes (package `preferences.ini` requirement, the
   controlled-smoke LAN-transfer retry) restored the gates. As of 2026-06-21 the
   scheduled Nightly is green, and the 2026-06-20 Controlled Smoke and RC Package
-  Proof workflow runs passed on `main`. The named pre-tag CI blocker is cleared;
-  the RC3 candidate head still needs locking plus a fresh certification and
-  package refresh per [RELEASE-0.7.3-CHECKLIST](RELEASE-0.7.3-CHECKLIST.md).
-- Locked candidate heads: app `38827709` (FEAT-015 broadband upload tuning,
-  FEAT-027 diagnostics flush), `emulebb-build` `0fceae7` (the rc.2 build_ref:
-  fefff3f plus the BUG-017 `irm|iex` fix), `emulebb-build-tests`
-  `2f936c9`, `amutorrent` `8259273` (rebased on upstream `got3nks/amutorrent`
-  v3.8.5, plus the RC2 controller delete and pause/resume/stop fixes),
-  `emulebb-rust` `656c9a2`, plus current `emulebb-tooling` main. All repos are
-  clean and on origin.
+  Proof workflow runs passed on `main`. The pre-tag CI blocker is cleared; the
+  RC3 candidate head was locked, certified, packaged, and published per
+  [RELEASE-0.7.3-CHECKLIST](RELEASE-0.7.3-CHECKLIST.md).
+- Locked candidate heads (rc.3): app `fd17a04` (FEAT-123 shared-files
+  auto-reload + #159 toolbar fix over rc.2), `emulebb-build` `af19faa`
+  (deterministic pinned-Node aMuTorrent build), `emulebb-build-tests` current
+  `main` (rc.3 campaign + cpu-heavy-quick trim), `amutorrent` `2da7c19`
+  (controller companion, published as `amutorrent-v3.8.8-emulebb-v0.7.3-rc.3`),
+  plus current `emulebb-tooling` main. All repos are clean and on origin.
 - Relaxed proof gate (operator decision 2026-06-12): the shipped app is stable,
   so a passing `test certification --profile fast` is sufficient to gate the RC.
   The full live-network quick release-campaign is downgraded from a hard blocker
-  to operator-accepted/non-blocking, and `emulebb-rust` is out of RC2 ship scope
-  (lab/preview per the RC2 changelog), so its tests do not gate the ship.
-- Publication: DONE. rc.2 is shipped — the operator gave the tag instruction and
-  `emulebb-v0.7.3-rc.2` (with the `amutorrent-v3.8.5-emulebb-v0.7.3-rc.2`
+  to operator-accepted/non-blocking, and `emulebb-rust` is out of RC ship scope
+  (lab/preview), so its tests do not gate the ship.
+- Publication: DONE. rc.3 is shipped — the operator gave the tag instruction and
+  `emulebb-v0.7.3-rc.3` (with the `amutorrent-v3.8.8-emulebb-v0.7.3-rc.3`
   controller companion) is published on GitHub Releases. The candidate was built
   clean from the locked heads (Node-24-pinned aMuTorrent), the fast certification
-  passed for the shipped scope, the clean-worktree audit passed, and the RC2
+  passed for the shipped scope, the clean-worktree audit passed, and the RC3
   changelog is finalized.
 - Proof status: PASSED for shipped scope. `test certification --profile fast
-  --test-network offline` on the locked heads (app `38827709`, build `fefff3f`,
-  build-tests `2f936c9`, tooling `7996733`) passed `validate` and all build
-  steps (x64 Debug/Release, ARM64 Release, build-tests Debug/Release) on
-  2026-06-12; report
-  `emulebb_out/reports/certification/20260612T194324Z-fast/certification-result.json`.
-  The python-harness ran 1387 tests: 1385 passed (including the new FEAT-015 and
-  FEAT-027 coverage); the only 2 failures are `emulebb-rust` preview local tests
-  (resume-manifest write + local-swarm exchange), accepted out of RC2 scope. The
+  --test-network offline` on the rc.3 locked heads passed `validate` and all
+  build steps; the python-harness ran 1439 tests, 1436 passed, and the only 3
+  failures are `emulebb-rust` preview local tests accepted out of RC scope. The
   candidate package set (x64/ARM64 standard + diagnostics, aMuTorrent x64) was
-  rebuilt clean from these heads. Clean-worktree audit passed; CI is green on all
-  candidate heads. Final published package SHA-256/SBOM hashes (for the shipped
-  re-published rc.2 built from `emulebb-build` `0fceae7`) are recorded in
-  [CI-035](items/CI-035.md). Historical proof trail:
+  rebuilt clean from these heads, the Pages `install.ps1` one-liner dry-run
+  resolved rc.3 + the aMuTorrent companion end-to-end, and the clean-worktree
+  audit passed. Final published package SHA-256/SBOM hashes are recorded in the
+  [RC3 changelog](RELEASE-0.7.3-RC3-CHANGELOG.md) and [CI-035](items/CI-035.md).
+  Historical proof trail:
   [CI-035 evidence log](../history/release-0.7.3/CI-035-PROOF-EVIDENCE-LOG.md).
 - Release freeze: active. No new feature, refactor, UI polish, warning-debt, or
-  roadmap work enters RC2+ unless it is a direct release-gate blocker, package
-  or proof fix, approved regression fix, or release-documentation correction.
-- Current hold: none. rc.2 is shipped; the next train milestone (rc.3 or stable)
+  roadmap work enters RC3/final unless it is a direct release-gate blocker,
+  package or proof fix, approved regression fix, or release-documentation
+  correction.
+- Current hold: none. rc.3 is shipped; the next train milestone (stable `0.7.3`)
   absorbs only release blockers, proof refreshes, and approved fixes.
 - Release source: selected reviewed `main` commit in
   `EMULEBB_WORKSPACE_ROOT\workspaces\workspace\app\emulebb-main`.
-- Tag target: rc.2 is tagged at `emulebb-v0.7.3-rc.2` (annotated, peels to app
-  `38827709`). Future candidates tag on the selected reviewed `main` commit after
+- Tag target: rc.3 is tagged at `emulebb-v0.7.3-rc.3` (annotated, peels to app
+  `fd17a04`). Stable `0.7.3` tags on the selected reviewed `main` commit after
   fresh proof and a separate operator tag instruction.
 - Stock/community comparison baseline: `baseline/community-0.72a`.
 - Release stabilization branch: `release/0.7.3` once the operator starts the
-  0.7.3 RC branch.
-- Package publication: rc.2 core packages and the aMuTorrent companion are
+  0.7.3 stable branch.
+- Package publication: rc.3 core packages and the aMuTorrent companion are
   published on GitHub Releases with manifests, SPDX SBOMs, and GitHub artifact
-  attestations; final hashes are recorded in [CI-035](items/CI-035.md).
+  attestations; final hashes are recorded in the
+  [RC3 changelog](RELEASE-0.7.3-RC3-CHANGELOG.md) and [CI-035](items/CI-035.md).
 
 ## Release Train
 
@@ -246,25 +239,26 @@ Historical gate evidence and superseded cluster plans live under
 | [CI-035](items/CI-035.md) | Major | Final proof |
 
 Required outcome:
-restore public network connectivity, rerun the quick aggregate campaign against
-the RC2+ installer-backed gate, confirm or regenerate package hashes, rerun the
-clean-worktree audit, then wait for the operator-controlled tag instruction.
+the rc.3 relaxed-gate proof is DONE (Fast certification passed for shipped
+scope, package hashes recorded, Pages `install.ps1` dry-run passed,
+clean-worktree audit passed, operator tag given, `emulebb-v0.7.3-rc.3`
+published). `CI-035` now carries forward as the stable `0.7.3` final-proof
+tracker, whose bar is higher than the relaxed RC gate.
 
 ## Remaining Release Backlog
 
-The 0.7.3 RC2+ backlog is narrowed to `CI-035`. `CI-038` is Done with a
-current-head `ui-resource-depth` pass covering all 43 release languages, and
-`CI-052` is Done with the installer-backed RC2+ campaign rationalization on
-`main`. The latest quick campaign dry-run reports the intended 18-command RC
-gate with VM proof on-demand. Candidate x64/ARM64 core package hashes, package
-SBOM hashes, and optional aMuTorrent x64 hashes are recorded, but the aggregate
-quick proof failed under public-network outage conditions. Remaining work is
-network restoration, quick release-campaign proof or explicit acceptance, final
-checklist confirmation, clean-worktree audit, and the later operator-controlled
-tag instruction.
+The published rc.3 backlog is closed; `CI-035` continues as the stable `0.7.3`
+final-proof tracker. `CI-038` is Done with a current-head `ui-resource-depth`
+pass covering all 43 release languages, and `CI-052` is Done with the
+installer-backed RC2+ campaign rationalization on `main`. Candidate x64/ARM64
+core package hashes, package SBOM hashes, and optional aMuTorrent x64 hashes are
+recorded for the published rc.3. Remaining work belongs to the stable `0.7.3`
+cut: the higher final gate (live release-campaign rows, overnight soak, and a
+Windows-VM matrix smoke), final checklist confirmation, clean-worktree audit,
+and the later operator-controlled stable tag instruction.
 
 All other active `FEAT`, `REF`, warning-debt, cleanup, and polish items are
-post-0.7.3 by default. A non-blocking item may enter RC2+ only if a current
+post-0.7.3 by default. A non-blocking item may enter RC3/final only if a current
 release gate exposes a direct blocker and the item doc records that promotion
 explicitly.
 

@@ -15,7 +15,7 @@ python -m emule_workspace test release-campaign --campaign emulebb-0.7.3
 
 The `emulebb-0.7.3` and `emulebb-0.7.3-overnight` values are stable campaign
 IDs from `repos\emulebb-build-tests`. They are not release tag or asset names;
-the active RC2+ manifests currently target `0.7.3-rc.2`. RC1 evidence is
+the active RC2+ manifests currently target `0.7.3-rc.3`. RC1 evidence is
 frozen and is no longer an active campaign compatibility target.
 
 Useful variants:

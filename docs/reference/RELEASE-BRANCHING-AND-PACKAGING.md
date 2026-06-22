@@ -118,7 +118,7 @@ package from the build repo and use the deterministic release output directory:
 if ([string]::IsNullOrWhiteSpace($env:EMULEBB_WORKSPACE_ROOT)) {
   throw 'Set EMULEBB_WORKSPACE_ROOT to the canonical workspace root first.'
 }
-$version = '0.7.3-rc.2'
+$version = '0.7.3-rc.3'
 cd "$env:EMULEBB_WORKSPACE_ROOT\repos\emulebb-build"
 
 python -m emule_workspace package-release `
@@ -140,17 +140,17 @@ The artifacts are written to:
 %EMULEBB_WORKSPACE_ROOT%\workspaces\workspace\state\release\emulebb-v<VERSION>
 ```
 
-For `0.7.3-rc.2`, the local Full-suite input assets are:
+For `0.7.3-rc.3`, the local Full-suite input assets are:
 
 ```text
-emulebb-0.7.3-rc.2-x64.zip
-emulebb-0.7.3-rc.2-x64.manifest.json
-emulebb-0.7.3-rc.2-amutorrent-x64.zip
-emulebb-0.7.3-rc.2-amutorrent-x64.manifest.json
-suite-scripts-0.7.3-rc.2.zip
-suite-scripts-0.7.3-rc.2.manifest.json
-automation-examples-0.7.3-rc.2.zip
-automation-examples-0.7.3-rc.2.manifest.json
+emulebb-0.7.3-rc.3-x64.zip
+emulebb-0.7.3-rc.3-x64.manifest.json
+emulebb-0.7.3-rc.3-amutorrent-x64.zip
+emulebb-0.7.3-rc.3-amutorrent-x64.manifest.json
+suite-scripts-0.7.3-rc.3.zip
+suite-scripts-0.7.3-rc.3.manifest.json
+automation-examples-0.7.3-rc.3.zip
+automation-examples-0.7.3-rc.3.manifest.json
 Bootstrap-eMuleBBSuite.ps1
 ```
 

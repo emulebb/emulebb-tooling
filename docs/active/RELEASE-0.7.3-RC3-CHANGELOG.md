@@ -18,8 +18,9 @@ and ship in the `0.8.*` program** (the forward suite + MFC modernization wave th
 begins after `0.7.3`). The Upload
 Policy Clarity lane is **not taken** for RC3 (#147/#158 upload slots deferred
 post-0.7.3). From the UI Power-User Polish lane, the **#159 toolbar button-reorder
-regression is fixed** in RC3 under the soft freeze; the remaining #159 cosmetic
-request (bold the active category tab) stays deferred post-0.7.3. The core eMuleBB protocol surface and package shape are unchanged
+regression is fixed** in RC3 under the soft freeze, and the #159 cosmetic request
+(bold the active category tab) **also landed** in RC3 as an opt-in Tweaks option.
+The core eMuleBB protocol surface and package shape are unchanged
 from RC2 except where noted. Final package hashes and proof status are recorded in
 [RELEASE-0.7.3-CHECKLIST](RELEASE-0.7.3-CHECKLIST.md) and tracked by
 [CI-035](items/CI-035.md). For the RC2-and-earlier delta and the RC1-vs-baseline
@@ -97,8 +98,10 @@ The aMuTorrent x64 controller companion is published as
   empty and the dialog could not reorder existing buttons; only separators could
   be added. The fix also removes the related out-of-bounds read. Built green on
   x64 Debug + Release + Release-diagnostics.
-- Deferred: the remaining #159 cosmetic request (bold the active category tab)
-  stays post-0.7.3.
+- RC3/UI: the remaining #159 cosmetic request (bold the active category tab)
+  **landed** as an opt-in Tweaks option (app `e7c63ef8`), with the category tabs
+  widened to fit the bold active-tab label (`0a0f669e`) and the new Tweaks labels
+  localized (`30b2a976`). Built green on x64 Debug + Release + Release-diagnostics.
 
 ### Packages
 

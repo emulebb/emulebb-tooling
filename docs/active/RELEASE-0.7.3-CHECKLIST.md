@@ -14,10 +14,14 @@ recording on the selected reviewed `main` heads. Do not create Git tags until
 the operator gives a separate tagging instruction after this checklist is
 complete.
 
-The previous operator publication target has passed. Treat publication as
-blocked until `CI-035` proof, package/SBOM/hash recording, clean-worktree
-confirmation, successful push of pending build evidence work, and the separate
-tag instruction complete.
+`emulebb-v0.7.3-rc.3` is PUBLISHED (2026-06-21, app `fd17a04`, with the
+`amutorrent-v3.8.8-emulebb-v0.7.3-rc.3` companion). The relaxed-gate Fast
+certification, package/SBOM/hash recording, the Pages `install.ps1` dry-run
+proof, the clean-worktree audit, and the operator tag instruction are all
+complete; the authoritative recorded evidence is in
+[CI-035](items/CI-035.md) and the
+[RC3 changelog](RELEASE-0.7.3-RC3-CHANGELOG.md). The unchecked rows below now
+serve the **stable `0.7.3`** gate, whose bar is higher than the relaxed RC gate.
 
 Release freeze is active. No new feature, refactor, UI polish, warning-debt, or
 roadmap work enters RC3/final; only direct release-gate blockers, package/proof
@@ -128,9 +132,11 @@ config forwarding through certification) is pushed — `emulebb-build` main is n
 and the `WinError 10051` outbound-network outage) are resolved. The default quick
 campaign plans 18 commands: Hyper-V VM proof is on-demand/nonblocking, and the
 long-running `live-process-monitor` is isolated behind
-`installer-controller-surface-soak`. The RC3 candidate heads are identified in
-the [RC3 changelog](RELEASE-0.7.3-RC3-CHANGELOG.md); they still need a fresh
-certification and package refresh before tag.
+`installer-controller-surface-soak`. The RC3 candidate heads are recorded in
+the [RC3 changelog](RELEASE-0.7.3-RC3-CHANGELOG.md); the Fast certification and
+package refresh on those locked heads are done and published (see
+[CI-035](items/CI-035.md)). The remaining unrun rows below are the stable
+`0.7.3` final-gate work.
 
 The next required aggregate command is:
 
@@ -144,26 +150,26 @@ Full overnight certification and real-profile monitoring are formal
 `overnight-full` soak/confidence evidence for failure diagnosis and are not
 part of the quick RC1 package gate.
 
-Proof rows are head-sensitive: treat every proof row as pending a rerun on the
-locked RC3 candidate heads. Older package manifests are rehearsal artifacts and
-must not be reused as final release hashes; recent live reports are supporting
-signal only where [CI-035](items/CI-035.md) classifies them. (The rc.2-era
-proof-invalidation notes for FEAT-058/059/060/061/071 are now historical — those
-features shipped in rc.2.)
+Proof rows are head-sensitive: every stable-gate proof row must be rerun on the
+locked stable `0.7.3` heads when that cut starts. Older package manifests are
+rehearsal artifacts and must not be reused as final release hashes; recent live
+reports are supporting signal only where [CI-035](items/CI-035.md) classifies
+them. (The rc.2-era proof-invalidation notes for FEAT-058/059/060/061/071 are
+now historical — those features shipped in rc.2.)
 
-Current remaining queue:
+RC3 queue (DONE — published 2026-06-21):
 
-1. Lock the RC3 candidate heads (operator) — see the
+1. ~~Lock the RC3 candidate heads~~ — recorded in the
    [RC3 changelog](RELEASE-0.7.3-RC3-CHANGELOG.md).
-2. Run `test certification --profile fast` on the locked heads (binding
-   relaxed-gate proof) and record the result in [CI-035](items/CI-035.md).
-3. Regenerate the x64/ARM64/diagnostics (and optional aMuTorrent x64) packages
-   and record SHA-256 + SBOM hashes in [CI-035](items/CI-035.md).
-4. Run the Pages `install.ps1` dry-run wrapper proof.
-5. Rerun the tracked clean-worktree audit.
-6. Finalize the RC3 changelog (heads, package names, hashes, accepted
-   deviations).
-7. Wait for the separate operator tag instruction.
+2. ~~Run `test certification --profile fast` on the locked heads~~ — passed for
+   shipped scope, recorded in [CI-035](items/CI-035.md).
+3. ~~Regenerate the x64/ARM64/diagnostics (and aMuTorrent x64) packages~~ —
+   SHA-256 + SBOM hashes recorded in [CI-035](items/CI-035.md) and the RC3
+   changelog.
+4. ~~Run the Pages `install.ps1` dry-run wrapper proof~~ — passed.
+5. ~~Rerun the tracked clean-worktree audit~~ — passed.
+6. ~~Finalize the RC3 changelog~~ — done.
+7. ~~Operator tag instruction~~ — given; `emulebb-v0.7.3-rc.3` published.
 
 ## Overnight-Full Campaign
 
@@ -238,5 +244,6 @@ soak status cannot be confused with the repeatable RC package gate.
 - [ ] Create the annotated RC tag only after package verification and a
       separate operator instruction.
 
-Tag closure: not started. Wait for separate operator confirmation before
-creating or pushing any tag.
+Tag closure: `emulebb-v0.7.3-rc.3` is created and published (2026-06-21). The
+next tag is stable `emulebb-v0.7.3`; do not create it before the stable gate
+above passes and the operator gives a separate tag instruction.
