@@ -93,6 +93,42 @@ prior roadmap is superseded by the rust/suite program (see Superseded Lanes).
 Lanes are grouped intentionally: do not create a new detailed `FEAT-*` file from a
 lane until the operator approves that specific slice.
 
+### Performance And Async (0.8.x modernization)
+
+The first specified `0.8.x` MFC lane content (operator decision 2026-06-24): make
+startup reach an interactive window fast, move the networking off the UI message
+pump, and move the 100ms `Process()` scheduling loop off the UI thread. This
+**revives** the previously *Dropped* "Startup And Storage Performance" lane (see
+Superseded Lanes) under the revived `0.8.x` line — it opens on `main` only after
+stable `0.7.3` and the `release/0.7.x` split, and is **out of scope for the `0.7.x`
+maintenance line** (see Explicit Non-Goals). The network half is a **forward-port of
+the operator's own tested `WSAPoll` network-thread migration** from the
+`v0.72a-broadband-dev` lineage (`analysis/stale-v0.72a-experimental-clean`), not a
+from-scratch design; full IOCP stays a later `0.8.x` end-state. eMuleBB additionally
+keeps the web server / `/api/v1` REST the reference removed, so the port adds
+controller-surface read-locking.
+
+Lane spec and design docs: [MFC-0.8.0-PERF-ASYNC-PLAN](plans/MFC-0.8.0-PERF-ASYNC-PLAN.md),
+[startup](plans/MFC-0.8.0-STARTUP-TIME-TO-INTERACTIVE.md),
+[network core thread](plans/MFC-0.8.0-NETWORK-CORE-THREAD.md),
+[Process() migration](plans/MFC-0.8.0-PROCESS-LOOP-MIGRATION.md).
+
+### Lean line — frozen-surface removal (0.8.x modernization)
+
+The companion `0.8.x` lane (operator decision 2026-06-24): once `0.7.3` final ships
+and `0.7.x` becomes the **LTSC** line, `0.8.0` deletes the dead/legacy subsystems
+instead of carrying them forward. Scope consolidates the existing removal items —
+IRC/Scheduler/wizard/legacy-splash/SMTP (`REF-025`), legacy WebServer HTML templates
+keeping REST (`REF-043`), SOCKS/proxy (`REF-051`), archive preview/recovery
+(`REF-052`) — plus operator additions: **drop mbedTLS and serve REST over plaintext
+HTTP bound local-only** (proposed `REF-060`), and remove 3D-preview-control, id3lib,
+and TextToSpeech/SAPI. The supported controller/protocol surface (REST listener +
+`/api/v1`/`/api/v2`, MiniMule, `LifecycleProgressDlg`, UPnP/VPN-guard) is **kept**.
+Removals land on `main` only — never on the `0.7.x` LTSC line.
+
+Lane spec: [MFC-0.8.0-LEAN-REMOVAL-PLAN](plans/MFC-0.8.0-LEAN-REMOVAL-PLAN.md);
+register: [FROZEN-SURFACES](FROZEN-SURFACES.md).
+
 ### Security And Operations (0.7.x maintenance)
 
 IP-filter input policy, PeerGuardian-style imports, whitelist/private-network
@@ -151,7 +187,7 @@ promoted on the MFC app without an explicit operator decision to revive it.
 | Search And Trust Clarity (fake-file confidence, Kad popularity, remote inventory) | Superseded by the rust Kad/eD2K indexer (FEAT-002) + the suite metadata fabric. |
 | Local State And Configuration Planning (SQLite metadata, JSON/TOML config) | Superseded by emulebb-rust `emulebb-metadata` and the qBittorrentBB harvester index. |
 | UI Power-User Polish (dark mode, Per-Monitor DPI, category/table polish) | Dropped — MFC-GUI-specific on a closing app. |
-| Startup And Storage Performance | Dropped, except crash/data-loss/stability fixes, which fall under `0.7.x` maintenance. |
+| Startup And Storage Performance | **Revived for `0.8.x`** (operator decision 2026-06-24) as the [Performance And Async](#performance-and-async-08x-modernization) lane. Remained `0.7.x`-maintenance-only for crash/data-loss/stability fixes. |
 | Upload Policy Clarity (broadband slots, friend slots) | Dropped; may inform emulebb-rust upload policy later. |
 | Narrow Anti-Leecher Review (CShield) | Dropped. |
 

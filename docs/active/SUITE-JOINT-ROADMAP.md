@@ -330,7 +330,12 @@ Promote a slice into a product backlog before any of these becomes work.
 
 eMuleBB-MFC `FUTURE-ROADMAP.md` lanes (dark mode, IPv6 dual-stack, µTP, NAT-PMP,
 etc.) are **parked-by-freeze**: `0.8.x` material only if the MFC app is not
-retired in favour of emulebb-rust.
+retired in favour of emulebb-rust. **Exception (operator decision 2026-06-24):** the
+first specified `0.8.x` MFC lane is now active — **Performance & Async** (fast
+startup, networking + `Process()` off the UI thread), forward-porting the tested
+`WSAPoll` network-thread migration from the `v0.72a-broadband-dev` lineage. See
+`FUTURE-ROADMAP.md` and
+[MFC-0.8.0-PERF-ASYNC-PLAN](plans/MFC-0.8.0-PERF-ASYNC-PLAN.md).
 
 ## Backlog & tracking structure
 

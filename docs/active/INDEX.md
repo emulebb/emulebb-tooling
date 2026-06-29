@@ -41,6 +41,11 @@ removal work.
 **Frozen surfaces:** [FROZEN-SURFACES](FROZEN-SURFACES.md)
 **Controller surface matrix:** [CONTROLLER-SURFACE-MATRIX](CONTROLLER-SURFACE-MATRIX.md)
 **Future release roadmap:** [FUTURE-ROADMAP](FUTURE-ROADMAP.md)
+**MFC 0.8.0 Performance & Async lane:** [MFC-0.8.0-PERF-ASYNC-PLAN](plans/MFC-0.8.0-PERF-ASYNC-PLAN.md)
+(design docs: [startup](plans/MFC-0.8.0-STARTUP-TIME-TO-INTERACTIVE.md),
+[network core thread](plans/MFC-0.8.0-NETWORK-CORE-THREAD.md),
+[Process() migration](plans/MFC-0.8.0-PROCESS-LOOP-MIGRATION.md))
+**MFC 0.8.0 Lean line (frozen-surface removal):** [MFC-0.8.0-LEAN-REMOVAL-PLAN](plans/MFC-0.8.0-LEAN-REMOVAL-PLAN.md)
 **Roadmap consolidation scaffold:** [FUTURE-ROADMAP#release-line-model](FUTURE-ROADMAP.md#release-line-model)
 **Suite joint roadmap (0.8.* forward program, non-MFC):** [SUITE-JOINT-ROADMAP](SUITE-JOINT-ROADMAP.md)
 **Suite metadata fabric (torrent⇄collection⇄eD2K):** [SUITE-METADATA-FABRIC](SUITE-METADATA-FABRIC.md)
