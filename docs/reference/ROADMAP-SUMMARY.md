@@ -7,15 +7,15 @@ the [Active Backlog](../active/INDEX.md); the MFC roadmap is the
 
 ## Product Direction
 
-The eMuleBB **MFC desktop app** closes its `0.7.x` line with `0.7.3` final, then
-continues in a revived `0.8.x` MFC modernization line (operator decision
-2026-06-20); the broader forward development is **emulebb-rust**
-— the multiplatform eD2K/Kad core behind the shared `/api/v1` contract — together
-with **qBittorrentBB** (the BitTorrent companion) and the suite integrations. The
-goal is unchanged at the product level: keep classic eD2K/Kad behavior
-understandable, make discovery and automation reliable, and stay
-stock-compatible — but the place that work happens is now the rust/suite program,
-not the Windows MFC app.
+The eMuleBB **MFC desktop app** closes its `0.7.x` feature line with stable
+`0.7.3`. There is still a roadmap and retained ideas for MFC evolution, but MFC
+`0.8.x` is now a possibility rather than a committed next line. The MFC client is
+valuable, but it is expensive to evolve properly, so near-term forward
+development focuses on **emulebb-rust** — the multiplatform eD2K/Kad core behind
+the shared `/api/v1` contract — together with **qBittorrentBB** (the BitTorrent
+companion) and the suite integrations. The goal is unchanged at the product
+level: keep classic eD2K/Kad behavior understandable, make discovery and
+automation reliable, and stay stock-compatible.
 
 ## Release Line Direction
 
@@ -23,22 +23,20 @@ not the Windows MFC app.
 `0.7.3-rc.1`, `0.7.3-rc.2`, `0.7.3-rc.3`, then stable `0.7.3`. After that, `0.7.x`
 is the permanent maintenance line with a frozen public surface (security,
 crash/data-loss, packaging, update-check, release-proof, and documentation fixes
-only). Per the operator decision of 2026-06-20, the `0.8.x` MFC modernization
-line is **revived/active** and runs as one **`0.8.*` program together with the
-forward suite**: after stable `0.7.3` and the `release/0.7.x` split, `main` opens
-for `0.8.x` MFC modernization alongside qBittorrentBB, emulebb-rust, and
-TrackMuleBB (which replaces aMuTorrent). So `0.7.3` is the final `0.7.x` feature
-release, not the end of MFC development. The forward suite stays out of the whole
-`0.7.x` line; the `0.7.3`/`0.7.x` bundle remains MFC client + aMuTorrent + Arr
-only, delivered by the `install.ps1` thin wrapper.
+only). Per the operator decision of 2026-07-05, MFC `0.8.x` is an open question.
+The recorded MFC lean/performance/async ideas stay available for later review,
+but active forward development now prioritizes emulebb-rust and qBittorrentBB.
+The forward suite stays out of the whole `0.7.x` line; the `0.7.3`/`0.7.x`
+bundle remains MFC client + aMuTorrent + Arr only, delivered by the `install.ps1`
+thin wrapper.
 
 ## Where The Future Work Is
 
 The forward program lives in the [Suite Joint Roadmap](../active/SUITE-JOINT-ROADMAP.md):
 
-- **emulebb-rust** — perfectly functional eD2K/Kad client plus an autonomous
-  Kad/eD2K indexer, with native `/api/v1`, Torznab, and a
-  qBittorrent-compatible download-client surface.
+- **emulebb-rust** — near-public-beta eD2K/Kad client plus an autonomous Kad/eD2K
+  indexer, with native `/api/v1`, Torznab, and a qBittorrent-compatible
+  download-client surface.
 - **qBittorrentBB** — a BitTorrent client with a DHT harvester, a branded
   idempotent export to the eD2K share, and a Torznab index.
 - **Suite integrations** — a disk-grounded metadata fabric bridging torrents,
@@ -47,7 +45,8 @@ The forward program lives in the [Suite Joint Roadmap](../active/SUITE-JOINT-ROA
 
 ## What Remains On The MFC App
 
-Only maintenance and family/packaging work:
+Only maintenance and family/packaging work unless MFC `0.8.x` is explicitly
+reactivated:
 
 1. **Security and operations** — IP-filter policy, dependency/DLL hardening,
    diagnostics, the bound VPN public-IP guard, and release proof (as `0.7.x`

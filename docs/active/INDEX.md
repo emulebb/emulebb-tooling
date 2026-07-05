@@ -31,8 +31,8 @@ deferred work; stable `0.7.3` is published and final proof status is recorded in
 `emulebb-v0.7.3` is published, and further `0.7.x` work is limited to legacy
 maintenance.
 **Post-stable line split:** after stable `0.7.3`, `release/0.7.x` carries the
-frozen-surface legacy support line and `main` opens for `0.8.0` frozen-surface
-removal work.
+frozen-surface legacy support line. MFC `0.8.x` remains a possible future lane,
+but current forward focus is `emulebb-rust` and `qBittorrentBB`.
 **Release backlog view:** [RELEASE-0.7.3](RELEASE-0.7.3.md)
 **Release checklist:** [RELEASE-0.7.3-CHECKLIST](RELEASE-0.7.3-CHECKLIST.md)
 **Release runbook:** [RELEASE-0.7.3-RUNBOOK](RELEASE-0.7.3-RUNBOOK.md)

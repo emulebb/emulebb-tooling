@@ -1,60 +1,51 @@
 # eMuleBB (MFC) Future Roadmap
 
-> **eMuleBB — the C++ MFC desktop app — closes its `0.7.x` line with `0.7.3`
-> final, then continues in a revived `0.8.x` MFC modernization line (operator
-> decision 2026-06-20).** `0.7.3` is the final `0.7.x` *feature* release, not the
-> end of MFC development. The `0.8.x` MFC modernization runs **together with** the
-> forward suite (**emulebb-rust**, **qBittorrentBB**, **TrackMuleBB** replacing
-> aMuTorrent) as one **`0.8.*` program** — the suite half lives in
-> [SUITE-JOINT-ROADMAP](SUITE-JOINT-ROADMAP.md). This document governs the MFC app:
-> `0.7.x` maintenance, the `0.8.x` modernization line, and the family/packaging
-> tracks the MFC participates in as a packaged component.
+> **Current direction (operator decision 2026-07-05):** eMuleBB MFC closes its
+> `0.7.x` feature line with stable `0.7.3`. The MFC `0.8.x` roadmap and lean/
+> async ideas remain recorded here, but `0.8.x` is now a possibility rather than
+> a committed next line. The MFC client is valuable but expensive to evolve
+> cleanly, so near-term forward development focuses on **emulebb-rust** and
+> **qBittorrentBB**. Larger evolution should move there unless a later explicit
+> decision reactivates MFC `0.8.x`.
 
 This is the post-0.7.3 roadmap for the eMuleBB MFC desktop app. It is not a
 `0.7.3` release-candidate gate (that is owned by [RELEASE-0.7.3](RELEASE-0.7.3.md)).
 The MFC product surface stays **frozen for the `0.7.x` line** — new product, UI,
-protocol, and configuration work is out of scope there — but **reopens in the
-revived `0.8.x` modernization line** (operator decision 2026-06-20). See
+protocol, and configuration work is out of scope there. The recorded `0.8.x`
+ideas are retained as roadmap material, not as an active commitment. See
 [Frozen Surfaces](FROZEN-SURFACES.md) for the compatibility-preserved legacy
-baggage versus supported behavior split, which also seeds the `0.8.x`
-frozen-surface-removal scope.
+baggage versus supported behavior split that would inform any later MFC `0.8.x`
+decision.
 
 For a shorter public-readable overview, use
 [Roadmap Summary](../reference/ROADMAP-SUMMARY.md).
 
 ## Release Line Model
 
-- `0.7.3` is the **final `0.7.x` feature release** (it is no longer the final MFC
-  release outright — MFC continues in `0.8.x`). The fixed candidate train is
+- `0.7.3` is the **final `0.7.x` feature release**. The fixed candidate train is
   `0.7.3-rc.1`, `0.7.3-rc.2`, `0.7.3-rc.3`, then stable `0.7.3`. Each candidate
   absorbs only release blockers, proof refreshes, packaging fixes, and approved
   regression fixes.
 - After stable `0.7.3`, `release/0.7.x` is the **permanent maintenance line**
   (compatibility-preserving, low-risk bug fixes plus security, crash/data-loss,
   packaging, update-check, release-proof, and release-documentation fixes; no new
-  product surface, controller/API capability, or feature expansion), and **`main`
-  opens for the revived `0.8.x` MFC modernization line** (see the `0.8.0` bullet
-  below).
+  product surface, controller/API capability, or feature expansion). `main`
+  remains the integration branch, but major new evolution is expected to focus on
+  `emulebb-rust` and `qBittorrentBB` unless MFC `0.8.x` is explicitly reactivated.
 - Frozen legacy surfaces stay frozen; they are not fixed in `0.7.x` unless the
   issue affects supported shared infrastructure, security, or app stability.
 - Stable patch maintenance increments the patch number (for example
   `emulebb-v0.7.4`) for hotfixes on the maintenance line.
-- **`0.8.0` (MFC modernization) is REVIVED / ACTIVE (operator decision
-  2026-06-20).** The line previously held under review is back on: after stable
-  `0.7.3` and the `release/0.7.x` split, `main` opens for the `0.8.x` MFC
-  modernization wave (frozen-surface removal first, then product lanes) following
-  the plan retained in [Frozen Surfaces](FROZEN-SURFACES.md). This supersedes the
-  earlier "0.7.3 is the final MFC release / MFC may not continue" framing:
-  **`0.7.3` is the final `0.7.x` feature release, and MFC development continues in
-  `0.8.x`.** Detailed `0.8.x` scope/lane content is still to be specified by the
-  operator before work starts; do not infer it beyond the retained frozen-surface
-  plan.
-- **Sequencing (operator decision 2026-06-20):** order is `0.7.x` maintenance →
-  the **`0.8.*` program**, which runs `0.8.x` MFC modernization **together with**
-  the forward suite (qBittorrentBB, emulebb-rust, and TrackMuleBB replacing
-  aMuTorrent). The suite is part of the `0.8.*` program, not a later phase after
-  it; both begin after `0.7.3` ships (see
-  [SUITE-JOINT-ROADMAP](SUITE-JOINT-ROADMAP.md#decision-2026-06-20-the-08-program-runs-mfc-modernization-and-the-forward-suite-together)).
+- **`0.8.0` (MFC modernization) is an open question (operator decision
+  2026-07-05).** The prior 2026-06-20 revival decision is superseded for planning
+  purposes. The frozen-surface removal, performance, and async plans remain useful
+  design material, but they are not active implementation commitments. A later
+  operator decision must explicitly reopen MFC `0.8.x` before broad MFC evolution
+  starts.
+- **Forward sequencing (operator decision 2026-07-05):** after stable `0.7.3`,
+  focus moves to `emulebb-rust` and `qBittorrentBB`. The Rust client is the likely
+  home for larger eD2K/Kad evolution and is approaching public beta after the
+  private test cycle; qBittorrentBB carries the BitTorrent-side companion work.
 
 ## GitHub Workflow Authority
 
@@ -201,9 +192,9 @@ them:
 
 - New MFC product/feature work in any Superseded Lane above.
 - `0.8.x` MFC modernization or frozen-surface removal work landing on the
-  shipping `0.7.x` line. The `0.8.x` line is revived/active (decision 2026-06-20)
-  but opens on `main` only after stable `0.7.3` and the `release/0.7.x` split —
-  keep it out of the `0.7.x` maintenance line.
+  shipping `0.7.x` line. The `0.8.x` line is currently an open question
+  (decision 2026-07-05); keep it out of the `0.7.x` maintenance line unless a
+  later operator decision explicitly reopens MFC evolution.
 - Headless core, server-only mode, cross-platform client work, or mobile-first
   controller scope inside the MFC desktop app. These are emulebb-rust /
   qBittorrentBB / Gluetun family tracks.
