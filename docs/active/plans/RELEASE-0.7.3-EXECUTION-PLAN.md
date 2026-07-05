@@ -1,52 +1,43 @@
-# 0.7.3 RC1 Execution Plan
+# 0.7.3 Release Execution Plan
 
-This is the only active execution plan for 0.7.3 RC1
-`emulebb-v0.7.3-rc.1`.
-Every actionable release task must have its own item ID.
+Stable `emulebb-v0.7.3` is published. This plan is retained as the release
+execution record for the 0.7.3 train; every actionable release task had its own
+item ID.
 
 ## Release Freeze
 
-- Freeze status: active.
+- Freeze status: closed for `0.7.3` final.
 - No new feature, refactor, UI polish, warning-debt, dependency refresh, or
-  roadmap work may enter 0.7.3 RC1.
-- Allowed pre-tag changes are limited to direct release-gate blockers,
-  packaging/provenance failures, release-doc drift, or severe app defects found
-  by the required release proof.
-- Current operator hold: none for release proof. Continue one gate at a time,
-  keep commits granular, and stop before Git tagging until the operator gives
-  the separate RC tag instruction.
+  roadmap work may enter the published `0.7.x` line unless it is an approved
+  compatibility-preserving maintenance fix.
+- Stable publication, package hashes, and release evidence are complete.
+- Current operator hold: none for `0.7.3`.
 
 ## Source Decision
 
-- Release source: selected reviewed `main` commit in
+- Release source: selected reviewed `main` commit
+  `9402251c2dc986dfc2346e5c80046e22d5c7e3d6` in
   `EMULEBB_WORKSPACE_ROOT\workspaces\workspace\app\emulebb-main`.
-- Tag target: the same selected reviewed `main` commit after final proof passes
-  and the operator gives a separate tagging instruction.
-- Release stabilization branch: `release/0.7.3` once the operator starts the
-  0.7.3 RC1 branch.
+- Tag target: stable `emulebb-v0.7.3` published from the selected reviewed
+  commit after the operator's 2026-07-05 ship instruction and waiver.
+- Release maintenance branch: `release/0.7.x` carries legacy maintenance after
+  stable `0.7.3`.
 - Stock/community comparison baseline: `baseline/community-0.72a`.
 
 ## Blocking Work
 
-- **1**
-  - ID: [CI-035](../items/CI-035.md)
-  - Owner repo: build/tests/tooling
-  - Required outcome: Fresh current-head proof and x64/ARM64 core package hashes plus
-                      optional aMuTorrent x64 package hash are recorded before tag
-                      creation.
-
-Execution resumed by operator direction on 2026-05-17. Run the proof and
-packaging commands in the checklist order, then stop before Git tagging until
-the operator gives a separate tag instruction.
+None. [CI-035](../../history/items/CI-035.md) is closed by stable `0.7.3` publication,
+published package hashes, and the explicit 2026-07-05 operator waiver for the
+remaining stable live, soak, and Windows-VM proof rows.
 
 ## Known Deferred Proof Gaps
 
 - `CI-038` is Done. The 2026-05-23 current-head `ui-resource-depth` run passed
   `resource-ui-smoke` for all 43 release languages and passed the Preferences
   companion.
-- `CI-035`: latest observed fast certification artifact failed, the latest
-  overnight artifact was not final release evidence, and final package hashes
-  must be regenerated from the selected heads after proof passes.
+- `CI-035`: final stable package hashes are recorded from the published GitHub
+  release assets. Remaining stable live, soak, and Windows-VM proof rows were
+  waived by the operator on 2026-07-05.
 - Controller/live rows that depend on Radarr, Sonarr, or live-wire inputs must
   be rerun later with operator-owned local inputs and explicit Arr roots.
 
@@ -64,9 +55,8 @@ the operator gives a separate tag instruction.
   and help URLs now point at `emulebb` destinations with focused update-check
   coverage.
 - [FEAT-056](../items/FEAT-056.md) owns post-`0.7.3` proof automation and
-  operator evidence UX. Do not block 0.7.3 RC1 on it unless a later release
-  decision promotes a specific slice into a new RC-blocking item ID.
-- [BUG-112](../../history/items/BUG-112.md) is Wont-Fix for 0.7.3 RC1;
+  operator evidence UX.
+- [BUG-112](../../history/items/BUG-112.md) is Wont-Fix for 0.7.3;
   legacy WebServer/qBit-compatible session-token hardening is not release
   scope.
 - [REF-034](../items/REF-034.md) is deferred; the Crypto++ 8.9 refresh is

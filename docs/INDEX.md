@@ -38,12 +38,12 @@ capability). For the suite as a whole — roadmap, the three-network bundle
 ### Install Fast Path
 
 - [Full suite one-liner](reference/GUIDE-SETUP.md#full-suite-install-powershell-bootstrap):
-  run the current `0.7.3` RC PowerShell bootstrapper directly from GitHub
+  run the current stable `0.7.3` PowerShell bootstrapper directly from GitHub
   Releases when you want eMuleBB plus aMuTorrent, Prowlarr, Radarr, and Sonarr
   integration.
 - [Manual standalone ZIP](reference/GUIDE-SETUP.md#quick-install-zip-extract-run):
-  download the current `0.7.3` RC eMuleBB ZIP, extract it into a new app folder,
-  and start `emulebb.exe`.
+  download the current stable `0.7.3` eMuleBB ZIP, extract it into a new app
+  folder, and start `emulebb.exe`.
 - [Hyper-V isolated suite runs](reference/GUIDE-HYPERV-WINDOWS.md):
   prepare clean local Windows guests and run package or suite checks without
   touching the host's daily eMuleBB profile.
@@ -84,10 +84,10 @@ workspace and release controls instead of the product manual:
 | Contributor or AI agent | [Workspace Policy](WORKSPACE-POLICY.md) and [Agent Checklist](reference/AGENT-CHECKLIST.md) |
 | Routine developer | [Development Guide](reference/DEVELOPMENT-GUIDE.md) |
 | Backlog owner | [Active Backlog](active/INDEX.md) and [Backlog Process](reference/BACKLOG-PROCESS.md) |
-| RC release operator | [0.7.3 Release Train Dashboard](active/RELEASE-0.7.3.md) |
+| Release operator | [0.7.3 Release Train Dashboard](active/RELEASE-0.7.3.md) |
 | REST/controller reviewer | [REST Contract](rest/REST-API-CONTRACT.md) and [Controller Surface Matrix](active/CONTROLLER-SURFACE-MATRIX.md) |
 
-RC operators should also use the
+Release operators should also use the
 [Execution Plan](active/plans/RELEASE-0.7.3-EXECUTION-PLAN.md) and
 [Runbook](active/RELEASE-0.7.3-RUNBOOK.md).
 

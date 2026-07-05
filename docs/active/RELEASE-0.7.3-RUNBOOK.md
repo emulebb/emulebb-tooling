@@ -142,7 +142,7 @@ python -m emule_workspace test release-campaign --campaign emulebb-0.7.3-overnig
 The certification command records a single aggregate report under
 `workspaces\workspace\state\certification\<timestamp>-<profile>\certification-result.json`.
 Record that report path and the child report paths it references in
-[CI-035](items/CI-035.md).
+[CI-035](../history/items/CI-035.md).
 
 No release-blocking campaign step may fail. A live-network step may be accepted
 as inconclusive only when the aggregate and child reports prove the app and
@@ -293,7 +293,7 @@ manifest, or install qBittorrentBB.
 
 After the final proof:
 
-- update [CI-035](items/CI-035.md) and
+- update [CI-035](../history/items/CI-035.md) and
   [RELEASE-0.7.3-CHECKLIST](RELEASE-0.7.3-CHECKLIST.md);
 - confirm [RELEASE-0.7.3](RELEASE-0.7.3.md) has no open RC-blocking task
   without item-level acceptance;

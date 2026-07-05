@@ -23,7 +23,7 @@ regression is fixed** in RC3 under the soft freeze, and the #159 cosmetic reques
 The core eMuleBB protocol surface and package shape are unchanged
 from RC2 except where noted. Final package hashes and proof status are recorded in
 [RELEASE-0.7.3-CHECKLIST](RELEASE-0.7.3-CHECKLIST.md) and tracked by
-[CI-035](items/CI-035.md). For the RC2-and-earlier delta and the RC1-vs-baseline
+[CI-035](../history/items/CI-035.md). For the RC2-and-earlier delta and the RC1-vs-baseline
 history, see [RELEASE-0.7.3-RC2-CHANGELOG](RELEASE-0.7.3-RC2-CHANGELOG.md).
 
 ### Published Heads And Artifacts
@@ -120,7 +120,7 @@ The aMuTorrent x64 controller companion is published as
 - RC3/Proof: Done — `test certification --profile fast --test-network offline`
   passed for shipped scope (1436/1439; 3 out-of-scope `emulebb-rust` failures
   accepted), clean-worktree audit passed, and the publish-release `irm|iex` gate
-  passed. Recorded in [CI-035](items/CI-035.md).
+  passed. Recorded in [CI-035](../history/items/CI-035.md).
 - RC3/Proof: Done — the Pages `install.ps1` one-liner resolves the release and the
   bootstrapper resolves rc.3 + the aMuTorrent companion and plans the Full install
   end-to-end (verified by `-DryRun` against the published release). Both the wrapper

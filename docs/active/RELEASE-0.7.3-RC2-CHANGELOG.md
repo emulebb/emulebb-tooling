@@ -1,6 +1,6 @@
 # eMuleBB 0.7.3-rc.2 Changelog
 
-Status: RELEASED. `emulebb-v0.7.3-rc.2` published 2026-06-12, with the version-matched `amutorrent-v3.8.5-emulebb-v0.7.3-rc.2` controller companion. Final artifact hashes and proof are recorded in [CI-035](items/CI-035.md).
+Status: RELEASED. `emulebb-v0.7.3-rc.2` published 2026-06-12, with the version-matched `amutorrent-v3.8.5-emulebb-v0.7.3-rc.2` controller companion. Final artifact hashes and proof are recorded in [CI-035](../history/items/CI-035.md).
 
 Format: one line per item, grouped by area; this is a power-user changelog, not a Git log.
 
@@ -9,7 +9,7 @@ correctness, a controller refresh, broadband upload-queue tuning, and licensing.
 The core eMuleBB protocol surface and package shape are unchanged from RC1 except
 where noted. Final package hashes and proof status are recorded in
 [RELEASE-0.7.3-CHECKLIST](RELEASE-0.7.3-CHECKLIST.md) and tracked by
-[CI-035](items/CI-035.md).
+[CI-035](../history/items/CI-035.md).
 
 ### Installer and Bootstrapper
 
@@ -77,7 +77,7 @@ where noted. Final package hashes and proof status are recorded in
   published on the `emulebb-v0.7.3-rc.2` release; the aMuTorrent x64 controller
   package ships as the version-matched companion release
   `amutorrent-v3.8.5-emulebb-v0.7.3-rc.2`. Manifests, SPDX SBOMs, and the final
-  SHA-256 hashes are recorded in [CI-035](items/CI-035.md).
+  SHA-256 hashes are recorded in [CI-035](../history/items/CI-035.md).
 - RC2/Packages: Release ZIPs remain **unsigned** (accepted posture); package
   verification continues through manifests, SBOMs, SHA-256 evidence, and GitHub
   artifact attestations.
@@ -88,7 +88,7 @@ where noted. Final package hashes and proof status are recorded in
   the fast certification passed for the shipped scope on app `38827709`, the
   clean-worktree audit passed, CI is green on all heads, and the operator tagged
   and published rc.2 on 2026-06-12. Final hashes and evidence in
-  [CI-035](items/CI-035.md).
+  [CI-035](../history/items/CI-035.md).
 
 ### Risk and Testing Focus
 

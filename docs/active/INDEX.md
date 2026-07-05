@@ -20,22 +20,22 @@ engineering spec/evidence records, not workflow status authority.
 ## Current Snapshot
 
 **Source of truth:** `EMULEBB_WORKSPACE_ROOT\workspaces\workspace\app\emulebb-main` (`main` branch)
-**Current non-done count:** `129`
+**Current non-done count:** `130`
 **Latest release-doc refresh:** 2026-06-13
-**Non-done by status:** `108` OPEN, `7` IN_PROGRESS, `14` DEFERRED, `0` BLOCKED.
+**Non-done by status:** `109` OPEN, `7` IN_PROGRESS, `14` DEFERRED, `0` BLOCKED.
 **Backlog counts:** item tables below are authoritative.
 **0.7.3 release-train relevance:** Most non-done items below are future or
-deferred work; current RC gate and proof status is controlled by
+deferred work; stable `0.7.3` is published and final proof status is recorded in
 [RELEASE-0.7.3](RELEASE-0.7.3.md).
-**Broadband release status:** RC1 evidence is frozen. Active release-test
-planning and any further bugfix or improvement target RC2+ in the fixed
-`0.7.3-rc.1`, `0.7.3-rc.2`, `0.7.3-rc.3`, stable `0.7.3` train.
+**Broadband release status:** RC1/RC2/RC3 evidence is frozen. Stable
+`emulebb-v0.7.3` is published, and further `0.7.x` work is limited to legacy
+maintenance.
 **Post-stable line split:** after stable `0.7.3`, `release/0.7.x` carries the
 frozen-surface legacy support line and `main` opens for `0.8.0` frozen-surface
 removal work.
-**RC-release backlog view:** [RELEASE-0.7.3](RELEASE-0.7.3.md)
-**RC-release checklist:** [RELEASE-0.7.3-CHECKLIST](RELEASE-0.7.3-CHECKLIST.md)
-**RC-release runbook:** [RELEASE-0.7.3-RUNBOOK](RELEASE-0.7.3-RUNBOOK.md)
+**Release backlog view:** [RELEASE-0.7.3](RELEASE-0.7.3.md)
+**Release checklist:** [RELEASE-0.7.3-CHECKLIST](RELEASE-0.7.3-CHECKLIST.md)
+**Release runbook:** [RELEASE-0.7.3-RUNBOOK](RELEASE-0.7.3-RUNBOOK.md)
 **Release test strategy:** [RELEASE-TEST-STRATEGY](RELEASE-TEST-STRATEGY.md)
 **Release test campaigns:** [RELEASE-TEST-CAMPAIGNS](RELEASE-TEST-CAMPAIGNS.md)
 **Frozen surfaces:** [FROZEN-SURFACES](FROZEN-SURFACES.md)
@@ -52,7 +52,7 @@ removal work.
 **GitHub-primary backlog workflow:** GitHub issues in `emulebb/emulebb` plus
 the `eMuleBB Roadmap` Project #2 are authoritative for migrated backlog items.
 **Backlog process runbook:** [BACKLOG-PROCESS](../reference/BACKLOG-PROCESS.md)
-**RC-release execution plan:** [RELEASE-0.7.3-EXECUTION-PLAN](plans/RELEASE-0.7.3-EXECUTION-PLAN.md)
+**Release execution plan:** [RELEASE-0.7.3-EXECUTION-PLAN](plans/RELEASE-0.7.3-EXECUTION-PLAN.md)
 **p2p-overlord product-family plan:** [P2P-OVERLORD-PRODUCT-FAMILY-INTEGRATION](plans/P2P-OVERLORD-PRODUCT-FAMILY-INTEGRATION.md)
 **Installer/test materialization plan:** [INSTALLER-TEST-MATERIALIZATION-AND-SCENARIO-MATRIX](plans/INSTALLER-TEST-MATERIALIZATION-AND-SCENARIO-MATRIX.md)
 **Historical beta evidence:** `docs/history/release-0.7.3/`
@@ -97,10 +97,10 @@ regression checks. When behavior changes, compare `main` against
 `baseline/community-0.72a` as the seam-enabled parity and regression baseline
 where that comparison is meaningful.
 
-**0.7.3 RC source rule:** public RC tags are cut from the selected reviewed
-candidate commit after refreshed proof passes and operator approval. The
-release stabilization branch is `release/0.7.3` once the operator starts the
-RC branch; after stable `0.7.3`, `release/0.7.x` carries legacy maintenance.
+**0.7.3 release source rule:** public RC/stable tags are cut from the selected
+reviewed candidate commit after refreshed proof passes or explicit operator
+acceptance and operator approval. After stable `0.7.3`, `release/0.7.x` carries
+legacy maintenance.
 
 **Baseline stack rule:**
 
@@ -257,6 +257,7 @@ RC branch; after stable `0.7.3`, `release/0.7.x` carries legacy maintenance.
 | [BUG-148](../history/items/BUG-148.md) | Major | DONE | Shared Files directory tree node stuck expanded after collapse and cannot re-expand |
 | [BUG-149](../history/items/BUG-149.md) | Major | DONE | Shared directory tree rebuild is slow and UI-blocking on large shared sets |
 | [BUG-151](items/BUG-151.md) | Major | OPEN | REST category mutations time out (503) because they block on the main UI thread under load |
+| [BUG-152](items/BUG-152.md) | Major | OPEN | CServerConnect::DestroySocket can leave a freed CServerSocket pointer in the connectionattempts map |
 
 `BUG-103` through `BUG-110` were superseded internal post-tag evidence labels,
 not active item docs.
@@ -463,6 +464,7 @@ not active item docs.
 | [FEAT-121](items/FEAT-121.md) | Major | OPEN | STUN UDP egress gate for the VPN guard (eMuleBB, emulebb-rust, libtorrent) |
 | [FEAT-122](items/FEAT-122.md) | Minor | OPEN | Expose GET /api/v1/capabilities (contract-discovery primitive) under the soft freeze |
 | [FEAT-123](../history/items/FEAT-123.md) | Major | DONE | Shared files one-level auto-updater |
+| [FEAT-124](items/FEAT-124.md) | Minor | OPEN | Leech mode - monitoring-only build that observes the network without sharing |
 
 ---
 
@@ -504,7 +506,7 @@ not active item docs.
 | [CI-032](../history/items/CI-032.md) | Major | DONE | 0.7.3 RC1 post-tag focused coverage gaps |
 | [CI-033](../history/items/CI-033.md) | Major | DONE | 0.7.3 RC1 internal pre-release proof |
 | [CI-034](../history/items/CI-034.md) | Major | DONE | Package-release provenance and dirty-input guard |
-| [CI-035](items/CI-035.md) | Major | OPEN | Final current-head RC proof and fresh package hashes |
+| [CI-035](../history/items/CI-035.md) | Major | DONE | Final current-head RC proof and fresh package hashes |
 | [CI-036](../history/items/CI-036.md) | Major | DONE | Release certification test matrix |
 | [CI-037](../history/items/CI-037.md) | Major | PASSED | Expanded live UI and E2E weak-path stress gate |
 | [CI-038](../history/items/CI-038.md) | Major | DONE | UI resource-depth and language smoke gate |
