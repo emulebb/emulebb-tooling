@@ -4,11 +4,11 @@ Status: planning only. This document records intended `0.8.*`-program ecosystem
 packaging direction (it begins after `0.7.3` ships). It does not describe a
 shipped release asset.
 
-> **Current release installer (updated 2026-06-19):** for `0.7.3-rc.3` and
-> stable `0.7.3`, the public Pages one-liner remains a PowerShell wrapper around
+> **Current release installer (updated 2026-07-05):** for stable `0.7.3`, the
+> public Pages one-liner remains a PowerShell wrapper around
 > the GitHub Release `Bootstrap-eMuleBBSuite.ps1`. That bootstrapper installs the
-> MFC eMuleBB package, the aMuTorrent controller package (actively maintained
-> until `0.7.3` final), and the local Arr plumbing. It does **not** install
+> MFC eMuleBB package, the frozen aMuTorrent `0.7.3` controller companion, and
+> the local Arr plumbing. It does **not** install
 > qBittorrentBB, emulebb-rust, TrackMuleBB, `uv`, or the Python setup CLI.
 >
 > **Future installer direction:** after `0.7.3`, [SUITE-INSTALLER](../SUITE-INSTALLER.md)
@@ -42,8 +42,8 @@ should preselect eMuleBB MFC, qBittorrentBB, Prowlarr, and the
 default Arr apps (with TrackMuleBB as the controller in place of aMuTorrent). Operators can still remove qBittorrentBB through explicit app
 selection.
 
-The `0.7.3-rc.3`/final PowerShell bootstrapper must preserve the existing
-MFC+aMuTorrent+Arr behavior and keep qBittorrentBB unselectable.
+The stable `0.7.3` and `0.7.x` PowerShell bootstrapper must preserve the
+existing MFC+aMuTorrent+Arr behavior and keep qBittorrentBB unselectable.
 
 Future installer shape:
 

@@ -278,8 +278,8 @@ Use this posture consistently:
 - eMuleBB is the product name; "eMule broadband edition" is the descriptive
   expansion.
 - eMuleBB is a maintained Windows eMule fork/product, not a protocol fork.
-- `0.7.3-rc.1` is the planned release candidate; do not call it released until
-  the release docs and tag say so.
+- Stable `0.7.3` is the current public release; older release-candidate tags are
+  historical test packages.
 - Nightlies are available for public testing.
 - The project preserves compatibility where eD2K/Kad behavior matters, while
   improving local operation around broadband upload, binding, large libraries,

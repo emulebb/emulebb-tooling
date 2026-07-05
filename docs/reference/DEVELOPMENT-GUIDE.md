@@ -18,7 +18,7 @@ Use `EMULEBB_WORKSPACE_ROOT` style paths in maintained documentation and scripts
 Avoid machine-specific absolute paths in active docs.
 
 The product line is eMule broadband edition, compactly eMuleBB. The first
-public release candidate is `0.7.3-rc.1`; release tags use
+stable public release is `0.7.3`; release tags use
 `emulebb-vMAJOR.MINOR.PATCH[-rc.N]`, and package assets use
 `emulebb-MAJOR.MINOR.PATCH[-rc.N]-ARCH.zip`.
 

@@ -17,10 +17,10 @@ forward cross-network controller "in full development mode".
    continues in the revived `0.8.x` modernization line (decision 2026-06-20), so
    it is *not* the end of MFC development. Through the `0.7.x` line the MFC app's
    package, delivered via the proven PowerShell suite bootstrap, bundles the MFC
-   client, the aMuTorrent controller (actively maintained until `0.7.3` final),
-   and the Arr setup plumbing only. **qBittorrentBB, emulebb-rust, TrackMuleBB,
-   `uv`, and the Python setup CLI are not in the `0.7.3-rc.3`/final bootstrap** —
-   they ship in the `0.8.*` program after this release train. The `0.7.x` bundle's
+   client, the frozen aMuTorrent `0.7.3` controller companion, and the Arr setup
+   plumbing only. **qBittorrentBB, emulebb-rust, TrackMuleBB, `uv`, and the
+   Python setup CLI are not in the stable `0.7.3` or `0.7.x` bootstrap** — they
+   ship in the `0.8.*` program after this release train. The `0.7.x` bundle's
    eD2K side is the MFC client itself.
 2. **aMuTorrent closes out on the `0.7.3` line** — it ships with the final MFC
    package and is **not** the forward controller. *(Timing refined by Decision
@@ -52,7 +52,7 @@ qBittorrentBB and TrackMuleBB (TrackMuleBB replacing aMuTorrent), with
 emulebb-rust as the forward eD2K/Kad core TrackMuleBB drives.
 
 1. **qBittorrentBB, emulebb-rust, and TrackMuleBB stay out of the entire `0.7.x`
-   line** (RC3, stable `0.7.3`, and `0.7.x` maintenance). They are **part of the
+   line** (stable `0.7.3` and `0.7.x` maintenance). They are **part of the
    `0.8.*` program**, which begins after `0.7.3` ships — not "post-`0.8.*`" and not
    strictly after MFC `0.8.x` work. The `0.7.x` bundle is and remains MFC client +
    aMuTorrent + Arr plumbing, delivered by the Pages `install.ps1` thin wrapper

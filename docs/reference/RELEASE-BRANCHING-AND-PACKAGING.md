@@ -18,12 +18,11 @@ Use explicit prerelease suffixes for public builds that are not stable:
 0.8.0
 ```
 
-The first public eMuleBB release candidate is `0.7.3-rc.1`. The first stable
-release target remains `0.7.3`. The `0.7.3` candidate train is fixed:
-publish `rc.1`, `rc.2`, `rc.3`, then stable `0.7.3`. If a stable hotfix is
-needed after `0.7.3`, ship it as `0.7.4` from the `0.7.x` legacy support
-line. `0.8.0` is the next modernization line and may remove surfaces that were
-frozen during `0.7.x`.
+The first stable eMuleBB release is `0.7.3`. The historical `0.7.3` candidate
+train was fixed as `rc.1`, `rc.2`, `rc.3`, then stable `0.7.3`. If a stable
+hotfix is needed after `0.7.3`, ship it as `0.7.4` from the `0.7.x` legacy
+support line. `0.8.0` is the next modernization line and may remove surfaces
+that were frozen during `0.7.x`.
 
 ## Branches
 
@@ -118,7 +117,7 @@ package from the build repo and use the deterministic release output directory:
 if ([string]::IsNullOrWhiteSpace($env:EMULEBB_WORKSPACE_ROOT)) {
   throw 'Set EMULEBB_WORKSPACE_ROOT to the canonical workspace root first.'
 }
-$version = '0.7.3-rc.3'
+$version = '0.7.3'
 cd "$env:EMULEBB_WORKSPACE_ROOT\repos\emulebb-build"
 
 python -m emule_workspace package-release `
@@ -140,17 +139,17 @@ The artifacts are written to:
 %EMULEBB_WORKSPACE_ROOT%\workspaces\workspace\state\release\emulebb-v<VERSION>
 ```
 
-For `0.7.3-rc.3`, the local Full-suite input assets are:
+For stable `0.7.3`, the local Full-suite input assets are:
 
 ```text
-emulebb-0.7.3-rc.3-x64.zip
-emulebb-0.7.3-rc.3-x64.manifest.json
-emulebb-0.7.3-rc.3-amutorrent-x64.zip
-emulebb-0.7.3-rc.3-amutorrent-x64.manifest.json
-suite-scripts-0.7.3-rc.3.zip
-suite-scripts-0.7.3-rc.3.manifest.json
-automation-examples-0.7.3-rc.3.zip
-automation-examples-0.7.3-rc.3.manifest.json
+emulebb-0.7.3-x64.zip
+emulebb-0.7.3-x64.manifest.json
+emulebb-0.7.3-amutorrent-x64.zip
+emulebb-0.7.3-amutorrent-x64.manifest.json
+suite-scripts-0.7.3.zip
+suite-scripts-0.7.3.manifest.json
+automation-examples-0.7.3.zip
+automation-examples-0.7.3.manifest.json
 Bootstrap-eMuleBBSuite.ps1
 ```
 
@@ -162,7 +161,7 @@ $release = "$env:EMULEBB_WORKSPACE_ROOT\workspaces\workspace\state\release\emule
 powershell -NoProfile -ExecutionPolicy Bypass `
   -File "$release\Bootstrap-eMuleBBSuite.ps1" `
   -Bundle Full `
-  -InstallRoot 'C:\eMuleBBSuite-rc2-local' `
+  -InstallRoot 'C:\eMuleBBSuite-0.7.3-local' `
   -EmulebbPackageZip "$release\emulebb-$version-x64.zip" `
   -EmulebbPackageManifest "$release\emulebb-$version-x64.manifest.json" `
   -AmutorrentPackageZip "$release\emulebb-$version-amutorrent-x64.zip" `

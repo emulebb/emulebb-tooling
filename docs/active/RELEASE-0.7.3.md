@@ -268,9 +268,9 @@ hashes are recorded in [CI-035](../history/items/CI-035.md) and the
 [stable changelog](RELEASE-0.7.3-STABLE-CHANGELOG.md).
 
 All other active `FEAT`, `REF`, warning-debt, cleanup, and polish items are
-post-0.7.3 by default. A non-blocking item may enter RC3/final only if a current
-release gate exposes a direct blocker and the item doc records that promotion
-explicitly.
+post-0.7.3 by default. A non-blocking item may enter the `0.7.x` support line
+only if a current release gate exposes a direct blocker and the item doc records
+that promotion explicitly.
 
 `FEAT-056` remains post-`0.7.3` automation and evidence UX work. It is not an RC
 tag blocker unless a later item promotes a specific slice.

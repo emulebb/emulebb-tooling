@@ -1,17 +1,18 @@
-# eMule Broadband Edition 0.7.3 RC Release Runbook
+# eMule Broadband Edition 0.7.3 Release Runbook
 
 This runbook is procedure only. Use
 [RELEASE-0.7.3](RELEASE-0.7.3.md) for current release status and
 [RELEASE-0.7.3-CHECKLIST](RELEASE-0.7.3-CHECKLIST.md) for final evidence.
 
-The `<rc>` token in the paths and asset names below is a placeholder for the
-**active release candidate** (e.g. `rc.2`, `rc.3`); the current candidate is
-named in [RELEASE-0.7.3](RELEASE-0.7.3.md). Substitute it when running the
-commands.
+Version tokens in the paths and asset names below are placeholders for the
+release being prepared. Stable `0.7.3` is published; use
+[RELEASE-0.7.3](RELEASE-0.7.3.md) for the current shipped state before reusing
+this runbook for patch maintenance.
 
-For `0.7.3-rc.3` and stable `0.7.3`, the release scope is the existing
-PowerShell MFC+aMuTorrent suite. Do not add qBittorrentBB, emulebb-rust,
-TrackMuleBB, `uv`, or Python setup assets to the RC package/proof flow.
+For stable `0.7.3` and the `0.7.x` support line, the release scope is the
+existing PowerShell MFC+aMuTorrent suite. Do not add qBittorrentBB,
+emulebb-rust, TrackMuleBB, `uv`, or Python setup assets to the package/proof
+flow.
 
 ## Preflight
 
@@ -227,7 +228,7 @@ emulebb-0.7.3-<rc>-arm64.sbom.spdx.json
 ```
 
 No qBittorrentBB, emulebb-rust, TrackMuleBB, `uv`, or Python setup asset belongs
-in the RC3/final publication set.
+in the stable `0.7.3` or `0.7.x` publication set.
 
 The packaging command is intentionally strict. It builds the selected
 architecture into the package-only app output root, builds the stock language
@@ -280,11 +281,12 @@ native-module build path exists.
 
 ## Public Pages Wrapper
 
-For RC3/final, `https://emulebb.github.io/install.ps1` is a wrapper around the
-GitHub Release `Bootstrap-eMuleBBSuite.ps1` asset. It should select the requested
-`-Version` when provided, otherwise the newest non-draft, non-nightly release;
-verify `Bootstrap-eMuleBBSuite.ps1.sha256` when that sidecar is present; and pass
-the existing bootstrapper parameters through unchanged.
+For stable `0.7.3` and `0.7.x`, `https://emulebb.github.io/install.ps1` is a
+wrapper around the GitHub Release `Bootstrap-eMuleBBSuite.ps1` asset. It should
+select the requested `-Version` when provided, otherwise the newest non-draft,
+non-nightly stable release; verify `Bootstrap-eMuleBBSuite.ps1.sha256` when that
+sidecar is present; and pass the existing bootstrapper parameters through
+unchanged.
 
 The wrapper must not download `uv`, fetch TrackMuleBB, read a TrackMuleBB suite
 manifest, or install qBittorrentBB.

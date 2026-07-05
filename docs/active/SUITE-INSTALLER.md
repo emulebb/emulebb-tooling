@@ -1,9 +1,9 @@
 # Suite Bundle & Installer
 
-Status: split current/future direction. Updated 2026-06-19 for the `0.7.3-rc.3`
-release path.
+Status: split current/future direction. Updated 2026-07-05 for the stable
+`0.7.3` release path.
 
-For `0.7.3-rc.3` and stable `0.7.3`, the current installer remains the proven
+For stable `0.7.3`, the current installer remains the proven
 PowerShell suite bootstrap:
 
 1. Pages `install.ps1` is a small wrapper for the GitHub Release
@@ -26,10 +26,9 @@ Governance companions: [SUITE-JOINT-ROADMAP](SUITE-JOINT-ROADMAP.md),
 ## Current 0.7.3 Goal
 
 A release-stable Windows bundle that closes the `0.7.x` feature line with the
-existing PowerShell installer: eMuleBB MFC as the eD2K/Kad core, aMuTorrent as the
-controller (actively maintained until `0.7.3` final, then frozen), and the local
-Arr setup scripts. The RC3/final path is stabilization-only and avoids new product
-surface.
+existing PowerShell installer: eMuleBB MFC as the eD2K/Kad core, aMuTorrent as
+the frozen `0.7.3` controller companion, and the local Arr setup scripts. The
+`0.7.x` path is stabilization-only and avoids new product surface.
 
 ## Future Goal
 
@@ -143,14 +142,15 @@ exact-size + name.
 
 ## Migration / status
 
-- For `0.7.3-rc.3` and stable `0.7.3`, Pages `install.ps1` is the release
+- For stable `0.7.3` and `0.7.x`, Pages `install.ps1` is the release
   bootstrap wrapper for `Bootstrap-eMuleBBSuite.ps1`.
 - After `0.7.3`, `install.ps1` may become the TrackMuleBB minimal bootstrap;
   `suite-manifest.json` then moves into TrackMuleBB (a bundled default + an
   optional remote-override copy on pages). The setup logic lives in
   `trackmulebb` (`setup/` CLI + `web/` UI + `coordinator/`).
 - **Scaffold:** the TrackMuleBB setup CLI and the bundle wiring are not built yet;
-  the org README one-liner stays on the tested RC bootstrap until this is validated.
+  the org README one-liner stays on the tested stable bootstrap until this is
+  validated.
 - Tracked work: TrackMuleBB `TMBB-FEAT-*` (search/dedup/bandwidth/SAB/settings/
   setup-CLI/profile-import); the cores' `/api/v1` capability work (FEAT-122,
   RUST/QBBB items).

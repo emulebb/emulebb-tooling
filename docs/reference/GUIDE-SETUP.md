@@ -5,7 +5,7 @@ This guide covers practical setup for eMuleBB. It complements the
 
 ## Quick Setup Options
 
-RC3 is published on GitHub Releases. Pick one path:
+Stable `0.7.3` is published on GitHub Releases. Pick one path:
 
 ### Option 1: Full Suite One-Liner {#full-suite-install-powershell-bootstrap}
 
@@ -13,14 +13,14 @@ Fastest setup for the x64 suite: eMuleBB, aMuTorrent, Prowlarr, and selected
 Arr integration in one bootstrap flow.
 
 ```powershell
-irm https://github.com/emulebb/emulebb/releases/download/emulebb-v0.7.3-rc.3/Bootstrap-eMuleBBSuite.ps1 | iex
+irm https://github.com/emulebb/emulebb/releases/download/emulebb-v0.7.3/Bootstrap-eMuleBBSuite.ps1 | iex
 ```
 
-The bootstrapper defaults to the `Full` bundle. It downloads the published RC3
-eMuleBB package from `emulebb/emulebb`, resolves the matching aMuTorrent RC3
-package from `emulebb/amutorrent`, installs the suite, and wires local
-controller integration through native REST, Torznab, and qBittorrent-compatible
-adapter paths.
+The bootstrapper defaults to the `Full` bundle. It downloads the published
+stable eMuleBB package from `emulebb/emulebb`, resolves the matching
+aMuTorrent `0.7.3` companion package from `emulebb/amutorrent`, installs the
+suite, and wires local controller integration through native REST, Torznab, and
+qBittorrent-compatible adapter paths.
 
 Future ecosystem planning makes qBittorrentBB the first planned Windows suite
 companion expansion: optional in the model, preselected for future normal
@@ -28,14 +28,14 @@ local-machine `Full` installs, and carrying its fork DHT index/RSS/Torznab
 identity. Later planning covers `emulebb-rust` as an alternative core and a
 separate Gluetun Docker bundle. This is tracked in
 [Ecosystem Suite Bootstrap Plan](../active/plans/ECOSYSTEM-SUITE-BOOTSTRAP-PLAN.md).
-Those future components are not part of the published RC3 bootstrapper.
+Those future components are not part of the published `0.7.3` bootstrapper.
 
 ### Option 2: Manual Standalone ZIP {#quick-install-zip-extract-run}
 
 Best when you only want the eMuleBB desktop app: download
-`emulebb-0.7.3-rc.3-x64.zip` from
-<https://github.com/emulebb/emulebb/releases/tag/emulebb-v0.7.3-rc.3>, extract
-it into a new folder, and run `emulebb.exe`.
+`emulebb-0.7.3-x64.zip` from
+<https://github.com/emulebb/emulebb/releases/tag/emulebb-v0.7.3>, extract it
+into a new folder, and run `emulebb.exe`.
 
 Use the x64 ZIP for normal Windows desktop installs. Use ARM64 only when you
 are intentionally testing on ARM64 Windows. Do not overwrite an older
@@ -56,10 +56,10 @@ aMule.
 
 ### Security And Provenance
 
-All RC3 builds and packaging happen in GitHub Actions and are published through
-GitHub Releases. The release carries ZIPs, package manifests, SHA-256 evidence,
-SPDX SBOMs, diagnostics packages, the standalone suite bootstrapper, and the
-bootstrapper SHA-256 asset. Suite releases also publish
+Stable release builds and packaging happen in GitHub Actions and are published
+through GitHub Releases. The `0.7.3` release carries ZIPs, package manifests,
+SHA-256 evidence, SPDX SBOMs, diagnostics packages, the standalone suite
+bootstrapper, and the bootstrapper SHA-256 asset. Suite releases also publish
 `automation-examples-<version>.zip` and
 `automation-examples-<version>.manifest.json` when REST automation examples are
 available. The bootstrapper verifies package hashes from the release manifests
@@ -112,8 +112,8 @@ For manual verification, download `Bootstrap-eMuleBBSuite.ps1` and
 `Bootstrap-eMuleBBSuite.ps1.sha256` from the same GitHub Release page, compare
 the hash, then run the bootstrapper.
 
-The bootstrapper installs the latest release candidate or stable release by
-default. To opt into the latest nightly build instead:
+The bootstrapper installs the latest stable release by default. To opt into the
+latest nightly build instead:
 
 ```powershell
 .\Bootstrap-eMuleBBSuite.ps1 -IncludeNightly -Bundle Full
@@ -122,14 +122,14 @@ default. To opt into the latest nightly build instead:
 For a specific published release after manual download:
 
 ```powershell
-.\Bootstrap-eMuleBBSuite.ps1 -Version 0.7.3-rc.3
+.\Bootstrap-eMuleBBSuite.ps1 -Version 0.7.3
 ```
 
 The bootstrapper is published as a release asset, so setup does not depend on
 the current `main` branch. It resolves the requested `-Version`, or otherwise
-the latest release candidate or stable release, whichever is newest. Nightly
-builds are never selected automatically; pass `-IncludeNightly` to opt into the
-latest supported nightly. Legacy pre-eMuleBB release tags are ignored. It
+the latest stable release. Nightly builds are never selected automatically; pass
+`-IncludeNightly` to opt into the latest supported nightly. Legacy pre-eMuleBB
+release tags are ignored. It
 verifies the release ZIP against its manifest SHA-256, extracts the versioned
 suite installer, and hands off to that installer. The versioned installer is
 also included in the main app ZIP under `eMuleBB\scripts`.
@@ -382,10 +382,10 @@ eMuleBB plus aMuTorrent plus Prowlarr/Arr setup, use the
 
 ## Release-Aware Setup
 
-The current official public test line is 0.7.3 RC3. Use packages attached to
-`emulebb-v0.7.3-rc.3` or a later approved release tag. Treat nightly and older
-beta builds as pre-release packages unless the release notes explicitly direct
-a test run to them.
+The current official public release line is stable `0.7.3`. Use packages
+attached to `emulebb-v0.7.3` or a later approved stable release tag. Treat
+nightly and older beta or release-candidate builds as pre-release packages
+unless the release notes explicitly direct a test run to them.
 
 Before trusting a package:
 
@@ -423,7 +423,7 @@ Setup confidence comes from the same release evidence model used elsewhere:
 
 See [Release Test Strategy](../active/RELEASE-TEST-STRATEGY.md),
 [Release Test Campaigns](../active/RELEASE-TEST-CAMPAIGNS.md), and the
-[0.7.3 RC3 dashboard](../active/RELEASE-0.7.3.md) for the current release
+[0.7.3 release dashboard](../active/RELEASE-0.7.3.md) for the current release
 proof model.
 
 ## Unsupported Setup Targets

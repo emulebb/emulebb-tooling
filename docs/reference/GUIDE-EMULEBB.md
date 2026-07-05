@@ -229,9 +229,10 @@ gh attestation verify PATH_TO_ASSET -R emulebb/emulebb
 
 - eMuleBB desktop app:
   `https://github.com/emulebb/emulebb/releases`. Nightly testing is open.
-  The current official public test line is 0.7.3 RC3; use
-  `emulebb-v0.7.3-rc.3` or a later approved release tag for release-candidate
-  testing. Nightly and older beta packages remain pre-release test builds.
+  The current official public release line is stable `0.7.3`; use
+  `emulebb-v0.7.3` or a later approved stable release tag for package testing.
+  Nightly, beta, and older release-candidate packages remain pre-release test
+  builds.
 - aMule Windows builds:
   `https://github.com/emulebb/amule/releases`. eMuleBB publishes Windows build
   and validation artifacts for aMule users. This is an ecosystem build track,
