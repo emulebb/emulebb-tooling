@@ -1,8 +1,10 @@
 # eMuleBB 0.7.3 Release Notes
 
 These are public-facing notes for the eMuleBB 0.7.3 release line. The current
-public release candidate is `emulebb-v0.7.3-rc.3` (with the matching
-`amutorrent-v3.8.8-emulebb-v0.7.3-rc.3` controller companion). For the
+stable release is `emulebb-v0.7.3` (with the matching
+`amutorrent-v3.8.8-emulebb-v0.7.3` controller companion). For the stable
+delta over RC3, see the
+[0.7.3 Stable Changelog](RELEASE-0.7.3-STABLE-CHANGELOG.md). For the
 RC3-specific delta over RC2, see the
 [0.7.3 RC3 Changelog](RELEASE-0.7.3-RC3-CHANGELOG.md); for the earlier
 RC2-vs-RC1 and RC1-vs-baseline history, see the
@@ -10,9 +12,9 @@ RC2-vs-RC1 and RC1-vs-baseline history, see the
 
 ## Why This Release Matters
 
-`0.7.3-rc.3` is the current public eMuleBB release candidate for users who want a
-native Windows eMule client that keeps stock-compatible eD2K/Kad behavior while
-making long-running broadband operation easier to manage.
+`0.7.3` is the stable eMuleBB release for users who want a native Windows eMule
+client that keeps stock-compatible eD2K/Kad behavior while making long-running
+broadband operation easier to manage.
 
 The release focuses on:
 
@@ -55,22 +57,21 @@ existing profile before first launch.
 
 ## Package Expectations
 
-Expected 0.7.3 RC3 core packages are:
+Expected 0.7.3 core packages are:
 
-- `emulebb-0.7.3-rc.3-x64.zip`
-- `emulebb-0.7.3-rc.3-arm64.zip`
+- `emulebb-0.7.3-x64.zip`
+- `emulebb-0.7.3-arm64.zip`
 
 The optional controller package is:
 
-- `emulebb-0.7.3-rc.3-amutorrent-x64.zip`
+- `emulebb-0.7.3-amutorrent-x64.zip`
 
 All published packages should have:
 
 - matching manifest, SHA-256, and SPDX SBOM artifacts where applicable
 
-Do not treat a nightly or older beta package as this RC. Do not treat this RC as
-the later stable `0.7.3` release; the stable tag will be `emulebb-v0.7.3` only
-after separate stable proof and operator approval.
+Do not treat a nightly, beta, or older release-candidate package as this stable
+release. The stable tag is `emulebb-v0.7.3`.
 
 ## Known Limits
 

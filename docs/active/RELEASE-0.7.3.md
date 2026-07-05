@@ -7,7 +7,14 @@ document for status, release-source truth, and the open RC task list.
 
 ## Current Status
 
-- Status: **RC3 is PUBLISHED** (2026-06-21). The annotated tag
+- Status: **stable `0.7.3` publication prepared** (2026-07-05). The selected
+  stable app head is `9402251c`, the selected aMuTorrent companion head is
+  `2da7c19`, and the selected build workflow ref is current `main`
+  (`d9cf587`). The operator accepted the remaining stable live, soak, and
+  Windows-VM proof rows as waived on 2026-07-05; these rows are recorded as
+  waived, not passed. Stable publication uses the existing GitHub Actions
+  `Publish release` workflows with `release_version=0.7.3`.
+- RC3 is PUBLISHED (2026-06-21). The annotated tag
   `emulebb-v0.7.3-rc.3` peels to app `fd17a04`; GitHub prerelease at
   <https://github.com/emulebb/emulebb/releases/tag/emulebb-v0.7.3-rc.3>, built by
   the `Publish release` workflow (run 27909074408, `build_ref=main`) after the
@@ -22,8 +29,9 @@ document for status, release-source truth, and the open RC task list.
   package shape are unchanged from RC2 except as recorded in the
   [RC3 changelog](RELEASE-0.7.3-RC3-CHANGELOG.md). Final published artifact
   SHA-256 hashes are recorded there and in [CI-035](items/CI-035.md).
-- Next milestone: **stable `0.7.3`** under a **soft freeze** (operator decision
-  2026-06-13, refined 2026-06-20; see the scope-reconfirm bullet below). The
+- Next milestone: **publish stable `0.7.3` assets and record hashes** under a
+  **soft freeze** (operator decision 2026-06-13, refined 2026-06-20 and
+  2026-07-05; see the scope-reconfirm bullet below). The
   optional Upload Policy Clarity lane is not taken (#147/#158 upload slots
   deferred post-0.7.3); both the #159 toolbar button-reorder regression fix and
   the #159 active-category-tab bold (an opt-in Tweaks option) shipped in rc.3.
@@ -80,13 +88,14 @@ document for status, release-source truth, and the open RC task list.
   roadmap work enters RC3/final unless it is a direct release-gate blocker,
   package or proof fix, approved regression fix, or release-documentation
   correction.
-- Current hold: none. rc.3 is shipped; the next train milestone (stable `0.7.3`)
-  absorbs only release blockers, proof refreshes, and approved fixes.
+- Current hold: none. Stable `0.7.3` publication is authorized by the
+  2026-07-05 operator decision; remaining work is publication and hash/evidence
+  recording.
 - Release source: selected reviewed `main` commit in
   `EMULEBB_WORKSPACE_ROOT\workspaces\workspace\app\emulebb-main`.
 - Tag target: rc.3 is tagged at `emulebb-v0.7.3-rc.3` (annotated, peels to app
-  `fd17a04`). Stable `0.7.3` tags on the selected reviewed `main` commit after
-  fresh proof and a separate operator tag instruction.
+  `fd17a04`). Stable `0.7.3` tags on the selected reviewed `main` commit
+  `9402251c` under the 2026-07-05 operator ship instruction.
 - Stock/community comparison baseline: `baseline/community-0.72a`.
 - Release stabilization branch: `release/0.7.3` once the operator starts the
   0.7.3 stable branch.

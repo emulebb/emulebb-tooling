@@ -71,7 +71,7 @@ Use these guides in order for a first real profile:
    eMuleBB plus aMuTorrent plus Arr workflow with field-level setup details.
 
 For public release testing, use the
-[0.7.3 RC release notes](active/RELEASE-0.7.3-NOTES.md) before downloading or
+[0.7.3 release notes](active/RELEASE-0.7.3-NOTES.md) before downloading or
 reporting package behavior.
 
 ## Developer And Release Operator Paths
@@ -228,9 +228,10 @@ are not the best first read for users.
 | p2p-overlord product-family integration plan | [active/plans/P2P-OVERLORD-PRODUCT-FAMILY-INTEGRATION](active/plans/P2P-OVERLORD-PRODUCT-FAMILY-INTEGRATION.md) |
 | Ecosystem suite bootstrap planning | [active/plans/ECOSYSTEM-SUITE-BOOTSTRAP-PLAN](active/plans/ECOSYSTEM-SUITE-BOOTSTRAP-PLAN.md) |
 | 0.7.3 release-train control document | [active/RELEASE-0.7.3](active/RELEASE-0.7.3.md) |
-| Public 0.7.3 RC release notes | [active/RELEASE-0.7.3-NOTES](active/RELEASE-0.7.3-NOTES.md) |
-| 0.7.3 RC release checklist | [active/RELEASE-0.7.3-CHECKLIST](active/RELEASE-0.7.3-CHECKLIST.md) |
-| 0.7.3 RC release runbook | [active/RELEASE-0.7.3-RUNBOOK](active/RELEASE-0.7.3-RUNBOOK.md) |
+| Public 0.7.3 release notes | [active/RELEASE-0.7.3-NOTES](active/RELEASE-0.7.3-NOTES.md) |
+| 0.7.3 stable changelog | [active/RELEASE-0.7.3-STABLE-CHANGELOG](active/RELEASE-0.7.3-STABLE-CHANGELOG.md) |
+| 0.7.3 release checklist | [active/RELEASE-0.7.3-CHECKLIST](active/RELEASE-0.7.3-CHECKLIST.md) |
+| 0.7.3 release runbook | [active/RELEASE-0.7.3-RUNBOOK](active/RELEASE-0.7.3-RUNBOOK.md) |
 | Backlog process | [reference/BACKLOG-PROCESS](reference/BACKLOG-PROCESS.md) |
 | Backlog item template | [reference/BACKLOG-ITEM-TEMPLATE](reference/BACKLOG-ITEM-TEMPLATE.md) |
 | Evidence retention policy | [reference/EVIDENCE-RETENTION](reference/EVIDENCE-RETENTION.md) |

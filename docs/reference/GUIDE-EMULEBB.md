@@ -450,8 +450,9 @@ The normal log is `emulebb.log`, the verbose log is `emulebb-verbose.log`, the
 debug CRT log is `emulebb-crt-debug.log`, recoverable early startup directory
 errors use `emulebb-startup-errors.log`, diagnostics logs use
 `emulebb-diagnostics-packet.log`, `emulebb-diagnostics-upload-slot.log`,
-`emulebb-diagnostics-download-slot.log`, and
-`emulebb-diagnostics-bad-peer.log`, and performance logs default to
+`emulebb-diagnostics-download-slot.log`, `emulebb-diagnostics-bad-peer.log`,
+`emulebb-diagnostics-kad.log`, `emulebb-diagnostics-diag.log`, and
+`emulebb-diagnostics-startup.trace.json`, and performance logs default to
 `emulebb-performance.csv` or `emulebb-performance.mrtg` with
 `emulebb-performance-data.mrtg` and `emulebb-performance-overhead.mrtg`
 sidecars.
@@ -526,9 +527,9 @@ recurring tasks, and normal diagnostic snapshots for support. See
 Product usage docs do not duplicate release proof. Current release state remains
 in:
 
-- [0.7.3 RC2 dashboard](../active/RELEASE-0.7.3.md)
-- [0.7.3 RC2 checklist](../active/RELEASE-0.7.3-CHECKLIST.md)
-- [0.7.3 RC2 runbook](../active/RELEASE-0.7.3-RUNBOOK.md)
+- [0.7.3 release-train dashboard](../active/RELEASE-0.7.3.md)
+- [0.7.3 release checklist](../active/RELEASE-0.7.3-CHECKLIST.md)
+- [0.7.3 release runbook](../active/RELEASE-0.7.3-RUNBOOK.md)
 - [Active backlog index](../active/INDEX.md)
 
 When user-visible behavior changes, update the guide chapter that owns it.
