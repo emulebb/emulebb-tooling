@@ -111,6 +111,7 @@ nav:
       - Backlog Index: active/INDEX.md
       - 0.7.3 Release Dashboard: active/RELEASE-0.7.3.md
       - 0.7.3 Release Notes: active/RELEASE-0.7.3-NOTES.md
+      - 0.7.3 Stable Changelog: active/RELEASE-0.7.3-STABLE-CHANGELOG.md
       - 0.7.3 RC2 Changelog: active/RELEASE-0.7.3-RC2-CHANGELOG.md
       - 0.7.3 RC3 Changelog: active/RELEASE-0.7.3-RC3-CHANGELOG.md
       - Current Execution Plan: active/plans/RELEASE-0.7.3-EXECUTION-PLAN.md
@@ -121,6 +122,11 @@ nav:
       - Installer Test Materialization Plan: active/plans/INSTALLER-TEST-MATERIALIZATION-AND-SCENARIO-MATRIX.md
       - Frozen Surfaces: active/FROZEN-SURFACES.md
       - Future Roadmap (MFC): active/FUTURE-ROADMAP.md
+      - MFC 0.8.0 Lean Removal Plan: active/plans/MFC-0.8.0-LEAN-REMOVAL-PLAN.md
+      - MFC 0.8.0 Network Core Thread: active/plans/MFC-0.8.0-NETWORK-CORE-THREAD.md
+      - MFC 0.8.0 Performance Async Plan: active/plans/MFC-0.8.0-PERF-ASYNC-PLAN.md
+      - MFC 0.8.0 Process Loop Migration: active/plans/MFC-0.8.0-PROCESS-LOOP-MIGRATION.md
+      - MFC 0.8.0 Startup Time To Interactive: active/plans/MFC-0.8.0-STARTUP-TIME-TO-INTERACTIVE.md
   - Developer And Workspace:
       - Workspace Policy: WORKSPACE-POLICY.md
       - Documentation Policy: DOCS-POLICY.md

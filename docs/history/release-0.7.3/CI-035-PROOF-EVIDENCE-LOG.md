@@ -1,7 +1,7 @@
 # CI-035 RC1 Proof Evidence Log
 
 Dated proof, package-hash, and reset evidence for the `0.7.3-rc.1` final
-proof item [CI-035](../../active/items/CI-035.md). This is the historical
+proof item [CI-035](../items/CI-035.md). This is the historical
 evidence trail moved out of the active item to keep the item a current
 spec; current status lives in CI-035 `Current Proof`. Entries are in the
 order they were recorded and may reference superseded heads.
