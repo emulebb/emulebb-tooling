@@ -1,5 +1,9 @@
 # Three-way protocol parity matrix — stock vs emulebb-mfc vs emulebb-rust
 
+> Current policy note (2026-07-08): this matrix is retained as evidence. The
+> active product target is stock eMule parity; emulebb-mfc remains a frozen
+> witness, not the forward parity oracle.
+
 Date: 2026-07-05. References: **STOCK** = community eMule 0.72.0
 (`analysis/community-0.72/srchybrid`), **MFC** = emulebb-mfc fork
 (`workspaces/workspace/app/emulebb-main/srchybrid`, 0.72.0), **RUST** =

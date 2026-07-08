@@ -17,6 +17,11 @@ cross-network controller surface.
 the Rust-forward `/api/v1` contract. qBittorrentBB, SABnzbd, installer, and
 cross-network automation remain later suite work. emulebb-mfc stays on its
 legacy controller path.
+**Beta acceptance:** the first beta requires the full Rust console surface:
+status, transfers, uploads, search/download, shared files, servers/Kad, and
+settings. TrackMuleBB remains source-run for the first Rust prerelease; the
+`rust-v0.1.0-beta.1` release notes name the compatible TrackMuleBB commit rather
+than tagging or packaging TrackMuleBB.
 **Tracking:** issues live in `emulebb/trackmulebb` and aggregate on the org
 **eMuleBB Suite** board (`https://github.com/orgs/emulebb/projects/3`,
 `Product = TrackMuleBB`).

@@ -51,9 +51,11 @@ The beta targets Rust only and uses polling against the Rust-forward OpenAPI
 contract in this tooling docs tree.
 
 Core gates remain first-class: stock-wire parity, fail-closed VPN proof,
-responsive REST, upload/download/search/share evidence, and soak evidence.
-Indexer/Torznab/Arr work stays active forward scope but is not the first UI beta
-gate unless separately promoted.
+responsive REST, upload/download/search/share evidence, and soak evidence. The
+beta may ship with a signed-off non-critical parity backlog, but P0 safety and
+stock-wire-critical findings block the tag. Indexer/Torznab/Arr work stays
+active forward scope but is not the first UI beta gate unless separately
+promoted.
 
 ## Phase 0 — "perfectly functional" gate
 
@@ -93,13 +95,13 @@ stay active-only; see [Closed Items](#closed-items-archive) for the archive.
 | [RUST-FEAT-030](items/RUST-FEAT-030.md) | Minor | OPEN | Kad — implement KADEMLIA_FIND_VALUE_MORE re-ask in lookup traversal |
 | [RUST-FEAT-031](items/RUST-FEAT-031.md) | Minor | OPEN | Kad — handle inbound legacy KADEMLIA_FIREWALLED_ACK_RES (0x59) |
 | [RUST-FEAT-032](items/RUST-FEAT-032.md) | Minor | OPEN | Kad — routing-zone consolidation (merge sparse sibling leaf bins on the 45-minute timer) |
-| [RUST-FEAT-033](items/RUST-FEAT-033.md) | Critical | OPEN | Release — first usable release rust-v0.1.0-beta.1 (scope doc, GH release workflow, soak-gated tag) |
+| [RUST-FEAT-033](items/RUST-FEAT-033.md) | Critical | OPEN | Release — first usable release rust-v0.1.0-beta.1 (Rust tag, TrackMuleBB console proof, soak-gated) |
 
 ### Refactors / Evidence (`REF`)
 
 | ID | Priority | Status | Title |
 |----|----------|--------|-------|
-| [RUST-REF-002](items/RUST-REF-002.md) | Major | OPEN | Parity sweep for the 0.1.0-beta.1 release — enumerate and disposition every unregistered divergence |
+| [RUST-REF-004](items/RUST-REF-004.md) | Critical | OPEN | Re-audit every non-SX1 Rust divergence under stock eMule parity policy |
 
 ### Bugs (`BUG`)
 
@@ -118,6 +120,7 @@ stay active-only; see [Closed Items](#closed-items-archive) for the archive.
 
 Closed items keep their full engineering record under
 [`../history/items/`](../history/items/INDEX.md). As of 2026-06-26 the archive holds the
-DONE set: `RUST-FEAT-003`, `RUST-REF-001`, `RUST-CI-001`, and the
-`RUST-BUG-002`…`RUST-BUG-099` parity wave. Browse that directory for the
-per-item detail; this index intentionally does not re-list closed items.
+DONE set: `RUST-FEAT-003`, `RUST-REF-001`, `RUST-REF-002`,
+`RUST-REF-003`, `RUST-CI-001`, and the `RUST-BUG-002`...`RUST-BUG-099`
+parity wave. Browse that directory for the per-item detail; this index
+intentionally does not re-list closed items.

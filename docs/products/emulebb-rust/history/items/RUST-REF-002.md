@@ -52,7 +52,7 @@ Every finding gets exactly one disposition:
 ## Verdict (2026-07-05)
 
 Full three-lane review recorded in
-[`docs/active/PARITY-REVIEW-2026-07-05.md`](../PARITY-REVIEW-2026-07-05.md).
+[`docs/products/emulebb-rust/active/PARITY-REVIEW-2026-07-05.md`](../../active/PARITY-REVIEW-2026-07-05.md).
 Rust is an oracle-faithful port **at wire parity** across Kad / eD2K transfer /
 server / REST / persistence; **no blocker-class divergence**; FEAT-025 verified
 conformant. 13 unregistered divergences dispositioned:

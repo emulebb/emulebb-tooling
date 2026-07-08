@@ -1,10 +1,15 @@
 # emulebb-rust ⇄ emulebb-mfc — Full Parity Review (2026-07-05)
 
+> Current policy note (2026-07-08): this is retained evidence from the pre-reset
+> emulebb-mfc parity lane. The active product target is stock eMule parity with
+> SX1 as the only pre-approved permanent drop; RUST-REF-004 owns the non-SX1
+> re-audit.
+
 RUST-REF-002 evidence. A three-lane read-only audit of the Rust client against
 the MFC oracle (`workspaces/workspace/app/emulebb-main/srchybrid`), scoped to
-find **unregistered** divergences — the 15 registered omissions in
-`policy/rust-client-omissions.toml` (mirrored in the `[review_reporting]`
-excluded list) are suppressed. This is the pre-live-test parity baseline.
+find **unregistered** divergences. At the time of this review, the registered
+omissions in `policy/rust-client-omissions.toml` were suppressed; current audits
+must follow RUST-REF-004 instead.
 
 ## Verdict
 
@@ -118,10 +123,10 @@ Sequenced; each step lands on `main` with the gate green.
    still returns it; server: obfuscation ports survive an upsert→reload round
    trip). One coherent commit each.
 2. **P-2** — correct the OP_SERVERLIST comment; register the always-on behavior.
-3. **P-4** — add the four register-as-omission entries to
-   `rust-client-omissions.toml` + the `[review_reporting]` excluded list; extend
-   `RELEASE-SCOPE.md` (permanent-omissions section) to match. Policy checker keeps
-   them consistent.
+3. **P-4** — historical step: add the four register-as-omission entries to
+   `rust-client-omissions.toml` and extend `RELEASE-SCOPE.md` under the old
+   omission model. Current audits must re-run those dispositions through
+   RUST-REF-004.
 4. **P-5 / P-6** — record the deferred anti-abuse items against the defensive-
    measures plan and add the memory-safety/stat cosmetics to the RELEASE-SCOPE
    deferred list with the parking rationale.

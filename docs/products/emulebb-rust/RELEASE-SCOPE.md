@@ -3,14 +3,16 @@
 This document is the unambiguous, human-facing statement of what the
 `emulebb-rust` client **does**, what it **intentionally omits**, and what is
 **deferred** for a later release. It is the companion to the machine-readable
-authority `policy/rust-client-omissions.toml` — that registry is the source of
-truth; this doc must not drift from it (the `[review_reporting]` excluded list in
-`policy/rust-client.toml` mirrors the same ids). `tools/check_rust_client_policy.py`
-keeps the registry and excluded list consistent.
+divergence registry `policy/rust-client-omissions.toml`. That registry records
+known stock-vs-Rust differences; this document and the active re-audit backlog
+decide whether each difference is a permanent drop, release-blocking gap, or
+deferred backlog item.
 
-`emulebb-rust` is a **headless eD2K/Kad client** driven over its `/api/v1` REST
-contract. It stays stock-compatible on the eD2K and Kad wire; divergences below
-are deliberate and either compatibility-neutral or strictly gentler than stock.
+`emulebb-rust` is a **headless eD2K/Kad client** driven over its Rust-forward
+`/api/v1` REST contract. It targets stock eMule protocol and behavior parity by
+default. SX1 live source exchange is the only pre-approved permanent protocol
+drop; every other divergence must be re-audited and dispositioned before it can
+be treated as intentional product scope.
 
 ## Supported surface
 
@@ -33,8 +35,9 @@ are deliberate and either compatibility-neutral or strictly gentler than stock.
   interface (`IP_UNICAST_IF`); with the tunnel down, zero P2P data-plane traffic
   and the control plane still answers (RUST-FEAT-003 pin + RUST-FEAT-005 leak
   test).
-- **Control plane:** the eMuleBB-compatible `/api/v1` REST contract (contract
-  version `1.0.0`, `x-contract-version`), API-key auth, driven by TrackMuleBB.
+- **Control plane:** the Rust-forward `/api/v1` REST contract
+  (`x-contract-version`), API-key auth, driven by TrackMuleBB. The frozen
+  emulebb-mfc REST contract is not a forward compatibility constraint.
 - **Persistence:** single SQLite store (the `known.met` / `clients.met` /
   `server.met` / `preferences.dat` equivalent) — known files, peer credits,
   servers, categories, preferences, local identity/secure-ident, and the local
@@ -45,49 +48,32 @@ are deliberate and either compatibility-neutral or strictly gentler than stock.
   repeat-request tracking, identity-change / file-request-flood bans, upload/
   download recycle and timeout measures).
 
-## Permanent omissions (intentional, will not be added)
+## Permanent omissions
 
-These are product decisions, not open gaps (20 registered entries). Each has a
-full `stock_behavior` / `rust_behavior` / `reason` / `compatibility` record in
-`policy/rust-client-omissions.toml` (id in parentheses).
+These are product decisions, not open gaps. Anything not listed here remains
+subject to re-audit.
 
 - **Source Exchange v1** (`sx1-live-source-exchange`) — SX2-only; SX1 never sent,
   answered, or ingested (operator decision REF-002).
-- **Peer chat / captcha** (`peer-chat-messaging`) — no `OP_MESSAGE`; captcha
-  hello bit unadvertised. No REST surface for interactive chat.
-- **Media preview** (`ed2k-preview`) — inbound preview opcodes decoded/logged,
-  never answered; no frame extraction.
-- **IPv6** (`ipv6-ed2k-kad`) — IPv4-only for eD2K, Kad, transfer, NAT, bootstrap.
-- **Legacy HTML WebServer** (`legacy-html-webserver`) — REST `/api/v1` only.
-- **Server UDP description poll** (`server-udp-description-poll`) — cosmetic
-  server name/description refresh not sent (server metadata comes from
-  server.met import + the connected-server ident).
-- **Time-based scheduler** (`time-based-scheduler`) — delegated to the external
-  controller over REST (every scheduled effect is a first-class REST operation).
-- **Gentler network pacing** — sliding 5s connection-rate window
-  (`conn-rate-rolling-five-second-window`), no spike modifier
-  (`conn-rate-spike-modifier`), FIFO upload-bandwidth share instead of focus-slot
-  (`upload-throttle-focus-slot-distribution`), scarcity-gated global source
-  supplement (`source-supplement-scarcity-gate`), unconditional LAN flood
-  exemption (`kad-flood-lan-exemption`), and demote-to-tail instead of
-  cooldown-suppression for slow uploaders (`upload-slow-cooldown-suppression`).
-  All strictly equal-or-gentler than stock, for the VPN'd headless no-ban posture.
-- **Synchronous-serve model artifacts** — a cross-packet queued-duplicate block
-  is rejected but may be labeled as a done-duplicate
-  (`upload-duplicate-queued-intra-packet`); partial-file preview is not a headless
-  action (`ed2k-partial-file-preview`). Wire-neutral.
-- **Server obfuscation on non-config servers** — obfuscation ports/flags are
-  honored for configured servers (kept from config on every restart) but not
-  carried through the REST/state/SQLite server model
-  (`server-obfuscation-metadata-non-config`), which stays at `/api/v1` contract
-  parity without obfuscation fields.
-- **Inert GUI preference knobs** — `pref-safe-server-connect`, `pref-new-auto-up`,
-  `pref-new-auto-down`, `pref-download-auto-broadband-io` are round-tripped over
-  REST for contract compatibility but drive no GUI-tuning behavior.
+
+## Re-audit candidates
+
+The registry currently carries additional known divergences. They are no longer
+pre-approved permanent omissions. `RUST-REF-004` owns the re-audit and must assign
+each one to `fix`, `defer`, or `permanent drop requested` before beta sign-off:
+
+- peer chat/captcha and media preview behavior;
+- IPv6 scope and legacy HTML WebServer scope;
+- time-based scheduler and GUI preference knobs;
+- server UDP description polling and non-config server obfuscation metadata;
+- gentler connection/upload/source pacing differences;
+- synchronous-serve diagnostic/classification artifacts;
+- partial-file preview behavior.
 
 ## Deferred (not omitted — parked for a later release)
 
-Real future capability, intentionally out of `0.1.0-beta.1`:
+Real future capability, intentionally out of `0.1.0-beta.1` unless the re-audit
+promotes it to a beta blocker:
 
 - **A4AF full model** — A4AF-lite (cross-transfer source reuse + No-Needed-Parts
   swap) ships; the full eMule A4AF source-set/hijacking model is parked pending a
@@ -112,6 +98,24 @@ Real future capability, intentionally out of `0.1.0-beta.1`:
   base firewalled constants instead of a live-ratio blend, and the 128-entry
   per-slot DoneBlocks history (MFC unbounded). Documented, effectively
   non-binding, no wire impact.
+
+## Rust Console Beta gate
+
+`rust-v0.1.0-beta.1` may ship with a signed-off non-critical parity backlog, but
+not with unresolved P0 safety or critical stock-wire parity findings. The beta
+gate is:
+
+- automated fail-closed VPN leak proof is passing;
+- stock eMule wire-critical parity review has no undispositioned P0 findings;
+- the non-SX1 omission re-audit has an explicit backlog disposition for every
+  registered divergence;
+- Rust OpenAPI conformance is enforced for TrackMuleBB's required adapter shape;
+- TrackMuleBB full console pass is green against the candidate daemon: status,
+  transfers, uploads, search/download, shared files, servers/Kad, and settings.
+
+The published prerelease artifact is the emulebb-rust Windows x64 zip. The
+release notes name the compatible TrackMuleBB source commit; TrackMuleBB is not
+tagged or packaged for this first Rust beta.
 
 ## Platform tier
 

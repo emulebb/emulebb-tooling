@@ -22,6 +22,8 @@ source: API lineage reset 2026-07-08
 Update TrackMuleBB to target the emulebb-rust forward `/api/v1` contract
 directly. The first TrackMuleBB beta is a Rust Console UI; it does not need to
 drive frozen emulebb-mfc and does not need generic `/capabilities` negotiation.
+The beta is accepted as a full Rust console: status, transfers, uploads,
+search/download, shared files, servers/Kad, and settings.
 
 ## Why This Matters
 
@@ -47,7 +49,8 @@ shared files, servers/Kad, and settings.
 ## Acceptance Criteria
 
 - [ ] TrackMuleBB Rust adapter tests align with the Rust OpenAPI fixture shape.
-- [ ] First-beta UI pages call Rust-native routes directly.
+- [ ] First-beta UI pages for status, transfers, uploads, search/download,
+      shared files, servers/Kad, and settings call Rust-native routes directly.
 - [ ] No first-beta code path branches for emulebb-mfc support.
 - [ ] Any remaining `/capabilities` usage is either removed or documented as a
       later optional resilience feature, not a product requirement.

@@ -9,7 +9,7 @@ category: feature
 labels: [release, packaging, docs, ci]
 milestone: release-0.1.0-beta.1
 created: 2026-07-05
-source: Operator decision 2026-07-05 (plan fuzzy-wondering-moore); WORKSPACE-POLICY release + network-safety rules
+source: Operator decision 2026-07-05; product-direction reset 2026-07-08; WORKSPACE-POLICY release + network-safety rules
 ---
 
 > Workflow status is tracked in GitHub. This local document is retained as an engineering spec/evidence record.
@@ -20,9 +20,9 @@ source: Operator decision 2026-07-05 (plan fuzzy-wondering-moore); WORKSPACE-POL
 
 Ship the first usable emulebb-rust release: an unsigned Windows x64 zip built
 by a GitHub Actions release workflow, tagged `rust-v0.1.0-beta.1`, with the
-supported/omitted/deferred surface documented unambiguously. Packaging is
-**workflow-only by operator direction (2026-07-05)** — no local packaging
-scripts.
+supported, permanent-drop, deferred, and beta-backlog surface documented
+unambiguously. Packaging is **workflow-only by operator direction
+(2026-07-05)** - no local packaging scripts.
 
 ## Locked Decisions
 
@@ -31,17 +31,17 @@ scripts.
 - Tag scheme `rust-vX.Y.Z[-pre.N]`, distinct from MFC `emulebb-v*`.
 - Artifact `emulebb-rust-v<version>-windows-x64.zip` + `SHA256SUMS`, always
   unsigned.
-- A **full converged rust-vs-MFC soak blocks the tag**; the annotated tag is
-  created only after soak-evidence review and an explicit operator go.
+- TrackMuleBB is required for beta acceptance but is not tagged or packaged for
+  this first Rust prerelease; release notes name the compatible TrackMuleBB
+  source commit.
+- The annotated tag is created only after stock-parity, safety, REST-contract,
+  TrackMuleBB console, and soak evidence review plus an explicit operator go.
 
 ## Intended Shape
 
-1. **Scope doc** `docs/RELEASE-SCOPE.md` — the human-facing authority, checked
-   entry-for-entry against `policy/rust-client-omissions.toml` (which stays the
-   machine-readable authority): supported surface; permanent omissions;
-   deferred-not-omitted list (A4AF [parked pending design], IPv6 [parked],
-   Docker RUST-FEAT-006, SSE RUST-FEAT-007, indexer/Arr RUST-FEAT-002/004,
-   parser fuzzing, UPnP-IGD backend stub); platform tier (Windows x64
+1. **Scope doc** `docs/RELEASE-SCOPE.md` - the human-facing authority:
+   supported surface; SX1 as the only pre-approved permanent drop; explicit
+   deferred backlog; beta-allowed parity backlog; platform tier (Windows x64
    release-supported; Linux runtime-proven unpackaged; macOS compile-only).
 2. **Version bump** `0.0.3` -> `0.1.0-beta.1` + regenerated `Cargo.lock`.
 3. **Release workflow** `.github/workflows/release.yml` on `rust-v*` tags:
@@ -51,20 +51,26 @@ scripts.
    VPN defaults verified) + `RELEASE-SCOPE.md` + `LICENSE`, zip + `SHA256SUMS`,
    attach to the GitHub release.
 4. **Release documentation:** version-specific changelog (compact
-   one-line-per-item, operational focus) + release notes.
+   one-line-per-item, operational focus) + release notes naming the compatible
+   TrackMuleBB source commit and source-run UI instructions.
 
 ## Release Gate (all must hold before the tag)
 
-- [ ] RUST-FEAT-025/030/031/032 closed; A3 registered as an omission.
-- [ ] RUST-FEAT-005 closed (dynamic leak evidence incl. the operator
-      tunnel-pull gate).
-- [ ] RUST-REF-002 parity sweep: zero undispositioned findings.
-- [ ] Converged soak gate passed: multi-day rust-vs-MFC soak on the candidate
-      build, `diag_event_diff` clean (incl. FEAT-025 `repeatCount` alignment),
-      live witness of UDP reask / buddy-callback / firewall-check
-      (closes or materially advances RUST-CI-002), HighID + LowID coverage,
-      finished-file delivery observed end-to-end, REST responsive throughout.
-- [ ] `RELEASE-SCOPE.md` drift-checked against the omissions registry.
+- [ ] RUST-FEAT-005 fail-closed VPN leak gate passes in CI and candidate
+      evidence.
+- [ ] RUST-REF-004 re-audits every non-SX1 registry entry with no
+      undispositioned P0 or stock-wire-critical findings.
+- [ ] RUST-CI-003 OpenAPI conformance/drift gate passes against the Rust-forward
+      OpenAPI artifact.
+- [ ] TrackMuleBB full console pass is green against the candidate daemon:
+      status, transfers, uploads, search/download, shared files, servers/Kad,
+      and settings.
+- [ ] Stock-parity soak evidence covers UDP reask, buddy callback,
+      firewall-check, HighID + LowID, finished-file delivery, and sustained REST
+      responsiveness. emulebb-mfc may be a frozen witness but is not the product
+      parity target.
+- [ ] `RELEASE-SCOPE.md` matches the re-audit dispositions and does not imply
+      full stock parity where beta backlog remains.
 - [ ] Operator gives the explicit tagging go.
 
 ## Notes

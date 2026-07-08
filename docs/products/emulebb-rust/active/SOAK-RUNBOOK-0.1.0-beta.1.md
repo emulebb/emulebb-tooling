@@ -1,9 +1,10 @@
 # Converged Soak Runbook — `rust-v0.1.0-beta.1` release gate
 
-RUST-FEAT-033 Phase-4 gate. This is the operator-driven live validation that
-must pass before the `rust-v0.1.0-beta.1` tag. The parity baseline is validated
-(RUST-REF-002 done; see `PARITY-REVIEW-2026-07-05.md`); this soak witnesses the
-shipped behavior on the live network and captures the release evidence.
+RUST-FEAT-033 release gate. This is the operator-driven live validation that
+must pass before the `rust-v0.1.0-beta.1` tag. After the 2026-07-08 direction
+reset, stock eMule parity is the product target and RUST-REF-004 owns the
+non-SX1 divergence re-audit. emulebb-mfc may still be used as a frozen witness,
+but it is not the forward parity target.
 
 Live-wire conduct is binding: **be gentle** — a few widely-spaced actions, no
 run spamming ([[live-wire-be-gentle-no-ban]]); both clients ALWAYS on the
@@ -18,7 +19,7 @@ tunnels; well-sourced ubuntu/linux ISO fixtures only ([[live-test-content-well-s
    `cargo build --release --locked -p emulebb-daemon --bin emulebb-rust-diagnostics --features packet-diagnostics`
    → `%EMULEBB_WORKSPACE_OUTPUT_ROOT%\builds\rust\target\release\emulebb-rust-diagnostics.exe`.
    The soak harness resolves it via `resolve_rust_diagnostics_exe`.
-2. **MFC diagnostics build** (operator, MSVC): the `main` variant Release
+2. **emulebb-mfc diagnostics build** (operator, MSVC): the `main` variant Release
    `--diagnostics` build → `builds/app/main/x64/Release/diagnostics/bin/emulebb-diagnostics.exe`
    via `python -m emule_workspace build app --variant main --config Release --platform x64 --diagnostics`.
    Must be current (post the FEAT-025 oracle seams).
@@ -59,10 +60,10 @@ clean per-campaign profile).
 
 ## Gate criteria (record all as release evidence)
 
-- [ ] **Parity diff clean** — `diag_event_diff` shows no unregistered
-      divergence; in particular the FEAT-025 `upload_duplicate_done_block_rejected`
-      / `_queued_` events align with MFC on `repeatCount` + `windowSeconds` (the
-      exact conformance check that caught the original revert).
+- [ ] **Divergence ledger clean** — live evidence shows no undispositioned P0 or
+      stock-wire-critical divergence. emulebb-mfc `diag_event_diff` findings are
+      accepted only when RUST-REF-004 has explicitly classified them as stock-
+      irrelevant, beta-allowed backlog, or a requested permanent drop.
 - [ ] **Subsystem witness** — UDP source reask, buddy / buddy-relayed callback,
       and Kad UDP+TCP firewall self-check observed live (advances/closes
       RUST-CI-002). HighID **and** LowID sessions both covered.
@@ -74,6 +75,9 @@ clean per-campaign profile).
       Guard reports active + not blocked, and rust's `egressVerified=true` (bound
       HTTP+STUN probes resolved an allowlisted public IP); recorded under
       `vpnExitValidation` in the run summary.
+- [ ] **TrackMuleBB console proof** — source-run TrackMuleBB exercises status,
+      transfers, uploads, search/download, shared files, servers/Kad, and
+      settings against the candidate daemon over the Rust-forward OpenAPI shape.
 - [ ] **Leak gate (operator wire-truth)** — with the daemon bound to the live
       hide.me tunnel, pull the tunnel mid-soak and confirm (pktmon on the
       physical NIC) **zero** off-tunnel eD2K/Kad packets. This is the Windows
@@ -83,7 +87,9 @@ clean per-campaign profile).
 
 ## On pass
 
-Record the evidence bundle, then (and only then) the operator gives the explicit
-tag go: annotate `rust-v0.1.0-beta.1` on the reviewed commit → the
-`release.yml` workflow builds and publishes the unsigned Windows x64 zip.
-Close RUST-FEAT-005 (leak gate witnessed) and RUST-FEAT-033.
+Record the evidence bundle, including the compatible TrackMuleBB source commit.
+Then (and only then) the operator gives the explicit tag go: annotate
+`rust-v0.1.0-beta.1` on the reviewed Rust commit -> the `release.yml` workflow
+builds and publishes the unsigned Windows x64 zip. Close RUST-FEAT-033 after
+the release proof is recorded; close RUST-FEAT-005 only if its GitHub workflow
+state also confirms the leak gate is complete.
