@@ -14,7 +14,7 @@ and the controller (`amutorrent`) actuates.
 **eMuleBB** = the C++ MFC desktop app. **emulebb-rust** = the Rust eD2K/Kad core.
 Where this doc says "the eD2K share" or "the eD2K shared-hash DB," the **primary
 target is emulebb-rust's `emulebb-metadata` SQLite** (the strategic forward core;
-eMuleBB MFC `known.met` is a compatibility path only). "eMuleBB stack" below means
+emulebb-mfc `known.met` is a compatibility path only). "eMuleBB stack" below means
 whichever eMule-family core is active, named `emulebb` in suite config.
 
 ## Foundational invariants

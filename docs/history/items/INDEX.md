@@ -7,7 +7,7 @@ Browsable index of closed backlog records under `docs/history/items/`.
     never reused. Current work lives in [`docs/active/`](../../active/INDEX.md).
     Back to the [History Archive](../INDEX.md).
 
-Total: 253 closed items.
+Total: 254 closed items.
 
 ## BUG — defects (132)
 
@@ -146,7 +146,7 @@ Total: 253 closed items.
 | [BUG-149](BUG-149.md) | Shared directory tree rebuild is slow and UI-blocking on large shared sets | DONE |
 | [BUG-150](BUG-150.md) | False multiple_names Caution on cosmetic search-name differences | DONE |
 
-## FEAT — features (48)
+## FEAT — features (49)
 
 | ID | Title | Status |
 | --- | --- | --- |
@@ -197,6 +197,7 @@ Total: 253 closed items.
 | [FEAT-118](FEAT-118.md) | Composite Confidence indicator replacing the Risk + Kad-Confidence columns | DONE |
 | [FEAT-119](FEAT-119.md) | Quick hide already-known files filter in search results | DONE |
 | [FEAT-120](FEAT-120.md) | Sortable Extension column in search results | DONE |
+| [FEAT-122](FEAT-122.md) | Do not add GET /api/v1/capabilities to emulebb-mfc | WONT_DO |
 | [FEAT-123](FEAT-123.md) | Shared files one-level auto-updater | DONE |
 
 ## REF — refactors (30)

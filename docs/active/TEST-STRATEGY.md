@@ -125,7 +125,7 @@ how a repeated operation is packaged.
 | Release gate | Selection (intent) |
 |---|---|
 | **Suite / forward** (rust, qBittorrentBB, amutorrent) | `unit or contract or e2e_local` — excludes `reference`, `mfc_source`, `vm`, `live_public`, `slow` |
-| **eMuleBB MFC 0.7.x patch** | the above **plus** `mfc_source`, `native`, and community parity |
+| **emulebb-mfc 0.7.x patch** | the above **plus** `mfc_source`, `native`, and community parity |
 | **On demand / manual** | `mfc_source`, `reference`, `vm or live_public`, `slow` (run explicitly) |
 
 This row should be added to [QUALITY-GATES](QUALITY-GATES.md) as the "test gating

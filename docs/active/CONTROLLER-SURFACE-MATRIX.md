@@ -5,12 +5,12 @@ current `0.7.3` RC can be tagged. It covers the release-facing API and controlle
 integrations only; Source Exchange protocol validation is tracked by the
 search/server/Kad parity gates.
 
-The `/api/v1` surface follows the **one capability-gated contract** model (see
-[API-V1-COMPATIBILITY](API-V1-COMPATIBILITY.md)): the frozen eMuleBB MFC client
-advertises the `core.*` **subset** and answers `GET /api/v1/capabilities`
-(`FEAT-122`); emulebb-rust is the forward superset. The forward controller is
-**TrackMuleBB**, which drives any core by advertised capability; **aMuTorrent**
-is the frozen controller bundled with `0.7.3` (legacy proof only).
+The `/api/v1` surface now has two contract lineages (see
+[API-V1-COMPATIBILITY](API-V1-COMPATIBILITY.md)): emulebb-mfc is frozen on its
+`0.7.3` OpenAPI contract, while emulebb-rust owns the forward Rust contract. The
+forward controller is **TrackMuleBB**, which targets emulebb-rust for its first
+beta; **aMuTorrent** is the frozen controller bundled with `0.7.3` (legacy proof
+only).
 
 ## Proof Command
 
@@ -29,14 +29,15 @@ fast, while controller compatibility still has a named release proof.
 ### Native REST `/api/v1`
 
 Public role:
-trusted local controller API. The MFC advertises the `core.*` subset of the one
-capability-gated contract (plus `GET /api/v1/capabilities` for discovery);
-TrackMuleBB negotiates capabilities and calls only advertised operations.
+trusted local controller API. For `0.7.3`, emulebb-mfc is validated against the
+frozen emulebb-mfc OpenAPI contract. emulebb-rust is validated against its
+forward Rust OpenAPI contract. TrackMuleBB's first beta calls the Rust contract
+directly.
 
 Required proof:
 `rest-api` passes OpenAPI/registry parity, safe route coverage, typed JSON
-success/error envelopes, destructive intent checks, smoke stress, and the
-`/capabilities` discovery response.
+success/error envelopes, destructive intent checks, and smoke stress against the
+relevant product contract.
 
 ### qBittorrent-Compatible `/api/v2`
 
@@ -61,8 +62,8 @@ feed behavior, synced indexers, and redacted live-wire diagnostics.
 ### Controller consumers
 
 Public role:
-**TrackMuleBB** is the forward cross-network controller — a generic
-`/api/v1` + `/capabilities` consumer that never special-cases a product.
+**TrackMuleBB** is the forward controller. Its first beta is an emulebb-rust
+console over the Rust-forward `/api/v1` contract.
 **aMuTorrent** is the browser-UI controller bundled with `0.7.3` (actively
 maintained until `0.7.3` final, then frozen and replaced by TrackMuleBB in the
 `0.8.*` program); it consumes native `/api/v1` and must not drive native route
@@ -71,8 +72,8 @@ aliases or adapter quirks.
 Required proof:
 `amutorrent-browser-smoke` proves the legacy `0.7.3` bundle path (connection
 state, categories, searches, transfers, shared files/directories, uploads,
-transfer detail hydration, and add/delete). TrackMuleBB capability negotiation
-is validated as it lands (forward, not a `0.7.3` release blocker).
+transfer detail hydration, and add/delete). TrackMuleBB Rust-console validation
+is forward work, not a `0.7.3` release blocker.
 
 ## Closeout Evidence
 

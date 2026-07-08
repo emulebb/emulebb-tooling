@@ -1,6 +1,6 @@
 # eMuleBB (MFC) Future Roadmap
 
-> **Current direction (operator decision 2026-07-05):** eMuleBB MFC closes its
+> **Current direction (operator decision 2026-07-05):** emulebb-mfc closes its
 > `0.7.x` feature line with stable `0.7.3`. The MFC `0.8.x` roadmap and lean/
 > async ideas remain recorded here, but `0.8.x` is now a possibility rather than
 > a committed next line. The MFC client is valuable but expensive to evolve
@@ -8,7 +8,7 @@
 > **qBittorrentBB**. Larger evolution should move there unless a later explicit
 > decision reactivates MFC `0.8.x`.
 
-This is the post-0.7.3 roadmap for the eMuleBB MFC desktop app. It is not a
+This is the post-0.7.3 roadmap for the emulebb-mfc desktop app. It is not a
 `0.7.3` release-candidate gate (that is owned by [RELEASE-0.7.3](RELEASE-0.7.3.md)).
 The MFC product surface stays **frozen for the `0.7.x` line** — new product, UI,
 protocol, and configuration work is out of scope there. The recorded `0.8.x`
@@ -187,7 +187,7 @@ backlog index as records; they are not active MFC roadmap work unless re-promote
 
 ## Explicit Non-Goals
 
-Do not add these to the eMuleBB MFC backlog unless the operator explicitly reopens
+Do not add these to the emulebb-mfc backlog unless the operator explicitly reopens
 them:
 
 - New MFC product/feature work in any Superseded Lane above.

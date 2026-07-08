@@ -20,7 +20,7 @@ shipped release asset.
 The eMuleBB suite should grow from a Windows desktop client plus controller
 stack into a broader local-machine and headless ecosystem:
 
-- eMuleBB MFC remains the default Windows core until a later release proof
+- emulebb-mfc remains the default Windows core until a later release proof
   explicitly promotes another default.
 - qBittorrentBB is a first-wave `0.8.*`-program Windows bootstrap expansion. It becomes a
   BitTorrent companion in the suite: optional in the model, but preselected for
@@ -38,7 +38,7 @@ stack into a broader local-machine and headless ecosystem:
 
 The future Windows bootstrapper should keep the existing `Core`, `Controller`,
 and `Full` bundle names. The first `0.8.*`-program `Full` local-machine expansion
-should preselect eMuleBB MFC, qBittorrentBB, Prowlarr, and the
+should preselect emulebb-mfc, qBittorrentBB, Prowlarr, and the
 default Arr apps (with TrackMuleBB as the controller in place of aMuTorrent). Operators can still remove qBittorrentBB through explicit app
 selection.
 

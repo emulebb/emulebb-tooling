@@ -10,7 +10,7 @@ PowerShell suite bootstrap:
    `Bootstrap-eMuleBBSuite.ps1` asset.
 2. `Bootstrap-eMuleBBSuite.ps1` resolves the matching eMuleBB and aMuTorrent
    package assets, then invokes the packaged `Install-eMuleBBSuite.ps1`.
-3. The shipped bundle is eMuleBB MFC + aMuTorrent + the local Arr plumbing. It
+3. The shipped bundle is emulebb-mfc + aMuTorrent + the local Arr plumbing. It
    does **not** install qBittorrentBB, emulebb-rust, TrackMuleBB, `uv`, or the
    Python setup CLI.
 
@@ -26,14 +26,14 @@ Governance companions: [SUITE-JOINT-ROADMAP](SUITE-JOINT-ROADMAP.md),
 ## Current 0.7.3 Goal
 
 A release-stable Windows bundle that closes the `0.7.x` feature line with the
-existing PowerShell installer: eMuleBB MFC as the eD2K/Kad core, aMuTorrent as
+existing PowerShell installer: emulebb-mfc as the eD2K/Kad core, aMuTorrent as
 the frozen `0.7.3` controller companion, and the local Arr setup scripts. The
 `0.7.x` path is stabilization-only and avoids new product surface.
 
 ## Future Goal
 
 A **ready-to-use bundle** that combines our P2P/Usenet download stack with the Arr
-automation stack in one setup: emulebb-rust (or eMuleBB MFC on Windows),
+automation stack in one setup: emulebb-rust (or emulebb-mfc on Windows),
 qBittorrentBB, TrackMuleBB, the Arr stack, SABnzbd, Bountarr, and (Docker) Plex.
 **Self-contained** in the install directory, **no interference** with the host,
 with all inter-app connections **auto-wired**.
@@ -44,7 +44,7 @@ Two tiers, by who can install/wire them reliably:
 
 | Tier | Components | Install |
 |---|---|---|
-| **Ours (auto-scripted)** | emulebb-rust, eMuleBB MFC (Windows only), qBittorrentBB, TrackMuleBB, Bountarr | installed + fully auto-wired by TrackMuleBB's setup |
+| **Ours (auto-scripted)** | emulebb-rust, emulebb-mfc (Windows only), qBittorrentBB, TrackMuleBB, Bountarr | installed + fully auto-wired by TrackMuleBB's setup |
 | Third-party (manual, phase 1) | Arr, SABnzbd, Plex (Docker) | manual install + docs; base settings pre-configured (paths/language/wiring) |
 
 - **Phasing (decision 2026-06-16):** phase 1 fully automates *our* components and
@@ -63,7 +63,7 @@ Two tiers, by who can install/wire them reliably:
   required hop — clients work standalone).
 - Components are **selectable**; the selector **enforces dependencies** (e.g.
   Bountarr → Radarr/Sonarr; SAB → a Usenet indexer in Prowlarr).
-- **At least one P2P download client** must be selected (emulebb-rust / eMuleBB MFC
+- **At least one P2P download client** must be selected (emulebb-rust / emulebb-mfc
   / qBittorrentBB). SABnzbd (Usenet) is additive and does not satisfy the rule
   alone.
 - Whether optional-start applies to non-controller components too is **TBD**.

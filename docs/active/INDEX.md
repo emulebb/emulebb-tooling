@@ -20,9 +20,9 @@ engineering spec/evidence records, not workflow status authority.
 ## Current Snapshot
 
 **Source of truth:** `EMULEBB_WORKSPACE_ROOT\workspaces\workspace\app\emulebb-main` (`main` branch)
-**Current non-done count:** `130`
+**Current non-done count:** `129`
 **Latest release-doc refresh:** 2026-06-13
-**Non-done by status:** `109` OPEN, `7` IN_PROGRESS, `14` DEFERRED, `0` BLOCKED.
+**Non-done by status:** `108` OPEN, `7` IN_PROGRESS, `14` DEFERRED, `0` BLOCKED.
 **Backlog counts:** item tables below are authoritative.
 **0.7.3 release-train relevance:** Most non-done items below are future or
 deferred work; stable `0.7.3` is published and final proof status is recorded in
@@ -31,7 +31,7 @@ deferred work; stable `0.7.3` is published and final proof status is recorded in
 `emulebb-v0.7.3` is published, and further `0.7.x` work is limited to legacy
 maintenance.
 **Post-stable line split:** after stable `0.7.3`, `release/0.7.x` carries the
-frozen-surface legacy support line. MFC `0.8.x` remains a possible future lane,
+frozen-surface legacy support line. emulebb-mfc `0.8.x` remains a possible future lane,
 but current forward focus is `emulebb-rust` and `qBittorrentBB`.
 **Release backlog view:** [RELEASE-0.7.3](RELEASE-0.7.3.md)
 **Release checklist:** [RELEASE-0.7.3-CHECKLIST](RELEASE-0.7.3-CHECKLIST.md)
@@ -41,13 +41,13 @@ but current forward focus is `emulebb-rust` and `qBittorrentBB`.
 **Frozen surfaces:** [FROZEN-SURFACES](FROZEN-SURFACES.md)
 **Controller surface matrix:** [CONTROLLER-SURFACE-MATRIX](CONTROLLER-SURFACE-MATRIX.md)
 **Future release roadmap:** [FUTURE-ROADMAP](FUTURE-ROADMAP.md)
-**MFC 0.8.0 Performance & Async lane:** [MFC-0.8.0-PERF-ASYNC-PLAN](plans/MFC-0.8.0-PERF-ASYNC-PLAN.md)
+**emulebb-mfc 0.8.0 Performance & Async lane:** [MFC-0.8.0-PERF-ASYNC-PLAN](plans/MFC-0.8.0-PERF-ASYNC-PLAN.md)
 (design docs: [startup](plans/MFC-0.8.0-STARTUP-TIME-TO-INTERACTIVE.md),
 [network core thread](plans/MFC-0.8.0-NETWORK-CORE-THREAD.md),
 [Process() migration](plans/MFC-0.8.0-PROCESS-LOOP-MIGRATION.md))
-**MFC 0.8.0 Lean line (frozen-surface removal):** [MFC-0.8.0-LEAN-REMOVAL-PLAN](plans/MFC-0.8.0-LEAN-REMOVAL-PLAN.md)
+**emulebb-mfc 0.8.0 Lean line (frozen-surface removal):** [MFC-0.8.0-LEAN-REMOVAL-PLAN](plans/MFC-0.8.0-LEAN-REMOVAL-PLAN.md)
 **Roadmap consolidation scaffold:** [FUTURE-ROADMAP#release-line-model](FUTURE-ROADMAP.md#release-line-model)
-**Suite joint roadmap (0.8.* forward program, non-MFC):** [SUITE-JOINT-ROADMAP](SUITE-JOINT-ROADMAP.md)
+**Suite joint roadmap (0.8.* forward program, non-emulebb-mfc):** [SUITE-JOINT-ROADMAP](SUITE-JOINT-ROADMAP.md)
 **Suite metadata fabric (torrent⇄collection⇄eD2K):** [SUITE-METADATA-FABRIC](SUITE-METADATA-FABRIC.md)
 **GitHub-primary backlog workflow:** GitHub issues in `emulebb/emulebb` plus
 the `eMuleBB Roadmap` Project #2 are authoritative for migrated backlog items.
@@ -462,7 +462,6 @@ not active item docs.
 | [FEAT-116](items/FEAT-116.md) | Minor | OPEN | Throttle background share scanning on active slow volumes |
 | [FEAT-117](items/FEAT-117.md) | Minor | OPEN | Indicate already-shared files in the unshared-folder share preview |
 | [FEAT-121](items/FEAT-121.md) | Major | OPEN | STUN UDP egress gate for the VPN guard (eMuleBB, emulebb-rust, libtorrent) |
-| [FEAT-122](items/FEAT-122.md) | Minor | OPEN | Expose GET /api/v1/capabilities (contract-discovery primitive) under the soft freeze |
 | [FEAT-123](../history/items/FEAT-123.md) | Major | DONE | Shared files one-level auto-updater |
 | [FEAT-124](items/FEAT-124.md) | Minor | OPEN | Leech mode - monitoring-only build that observes the network without sharing |
 

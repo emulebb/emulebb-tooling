@@ -1,7 +1,7 @@
 # eMuleBB Rust Scope
 
 > **Forward spec — not in the 0.7.3 ship scope.** emulebb-rust is the forward
-> multiplatform eD2K/Kad core; it is out of the eMuleBB MFC `0.7.3` release
+> multiplatform eD2K/Kad core; it is out of the emulebb-mfc `0.7.3` release
 > train. This document is the rust scope target, not current release truth.
 
 `emulebb-rust` is a headless eMuleBB-family core client with local indexing.
@@ -10,17 +10,17 @@ search, share, download, upload, queue, ED2K, Kad, persistence, and controller
 surface needed for a real local client driven by **TrackMuleBB** (the forward
 eMuleBB Suite controller).
 
-emulebb-rust is the **canonical superset / source of truth** for the one
-capability-gated `/api/v1` contract (see
-[API-V1-COMPATIBILITY](API-V1-COMPATIBILITY.md)); it must not add private
-aliases or shims outside that contract.
+emulebb-rust owns the forward Rust `/api/v1` contract (see
+[API-V1-COMPATIBILITY](API-V1-COMPATIBILITY.md)). It is no longer a shared
+superset contract for emulebb-mfc, and it must not add private aliases or shims
+outside the Rust contract.
 
 ## Required Capability Target
 
-- REST parity for the eMuleBB `/api/v1` controller surface: app, status,
+- REST conformance for the Rust `/api/v1` controller surface: app, status,
   preferences, Kad, servers, searches, transfers, shared files/directories,
   uploads, upload queue, categories, friends, logs, and diagnostics where those
-  resources are part of the common contract.
+  resources are part of the Rust contract.
 - Configured binding only: harnesses may pass operator-local inputs such as
   `X_LOCAL_IP` into generated config, but product code must not hardcode
   `X_LOCAL_IP`, loopback, wildcard, or machine-local listener assumptions.
@@ -51,11 +51,12 @@ aliases or shims outside that contract.
 Rust 0.0.3 parity requires deterministic local evidence for:
 
 - Rust to Rust bidirectional transfer.
-- eMuleBB to Rust bidirectional transfer through the common REST contract.
+- emulebb-mfc to Rust bidirectional transfer as a protocol/interoperability
+  witness, not as shared REST-contract proof.
 - Rust to aMule bidirectional transfer with the staged aMule daemon/control
   adapter.
-- Rust REST route, envelope, validation, and capability behavior against the
-  eMuleBB OpenAPI contract.
+- Rust REST route, envelope, validation, and behavior against the Rust OpenAPI
+  contract.
 
 The aMule leg is compatibility proof only. It must use short deterministic
 paths, configured LAN control binding, the shared goed2k launcher, and the
@@ -67,8 +68,7 @@ when the aMule scenario is required.
 - Coordinator/control-plane APIs, remote indexer fleet behavior, and any REST
   contract not owned by eMuleBB.
 - qBittorrent-compatible `/api/v2` and Torznab-compatible adapters inside Rust
-  unless explicitly promoted later; Rust's common controller surface is
-  `/api/v1`.
+  unless explicitly promoted later; Rust's native controller surface is `/api/v1`.
 - Legacy HTML WebServer behavior: sessions, cookies, template state, low-rights
   mode, sort/refresh UI state, and host shutdown/reboot.
 - Chat/captcha, IRC, social/buddy UI, rich remote shared-file browsing, and

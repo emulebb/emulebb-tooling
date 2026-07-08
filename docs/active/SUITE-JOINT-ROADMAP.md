@@ -44,12 +44,11 @@ forward cross-network controller "in full development mode".
 3. **The forward stack is: emulebb-rust + qBittorrentBB + TrackMuleBB** — a new
    Python coordination controller with an integrated web UI (Python-only, e.g.
    NiceGUI; no Node/JS toolchain). Product **TrackMuleBB** (repo `trackmulebb`,
-   first-party, `-BB` family). **Scope is capability-driven** (decision
-   2026-06-16): TrackMuleBB drives **any `/api/v1` core by advertised capability**
-   — emulebb-rust (full) and the eMuleBB MFC (frozen subset) — plus qBittorrentBB
-   over its own API. MFC support is free fallout of the capability-gated contract
-   (see [API-V1-COMPATIBILITY](API-V1-COMPATIBILITY.md)), so **aMuTorrent is
-   deprecated** as a separate controller; one controller (TrackMuleBB) covers all.
+   first-party, `-BB` family). TrackMuleBB now targets emulebb-rust's forward
+   `/api/v1` contract for the first Rust Console UI beta; emulebb-mfc stays on
+   its frozen `0.7.3` contract and legacy controller path. qBittorrentBB support
+   remains later suite scope over its own API. aMuTorrent is deprecated as the
+   forward controller after the `0.7.3` line.
 4. Per qBittorrentBB's core-vs-REST policy, orchestration the generic Arr/REST
    stack can express stays external; the Python controller owns only the
    cross-network (eD2K <-> BT) suite logic that no single client can.
@@ -62,7 +61,7 @@ forward cross-network controller "in full development mode".
 
 This decision is superseded by the 2026-07-05 focus decision above. It refined
 the sequencing of the Decision (2026-06-15) without changing the product roles.
-The earlier plan was: **ship `0.7.3` eMuleBB MFC first, then start the
+The earlier plan was: **ship `0.7.3` emulebb-mfc first, then start the
 `0.8.*` program** — and that program runs MFC modernization **together with**
 qBittorrentBB and TrackMuleBB (TrackMuleBB replacing aMuTorrent), with
 emulebb-rust as the forward eD2K/Kad core TrackMuleBB drives.
@@ -101,10 +100,10 @@ emulebb-rust as the forward eD2K/Kad core TrackMuleBB drives.
   **Actively maintained / upstream-synced until `0.7.3` final, then frozen**
   (sustainability only) — see Decision (2026-06-20). Superseded as the forward
   controller by the Python coordinator after `0.7.3` final.
-- **TrackMuleBB** = the forward, capability-driven controller (Python-only,
-  integrated web UI, no Node; repo `trackmulebb`). Drives any `/api/v1` core by
-  advertised capability (emulebb-rust full, eMuleBB MFC frozen subset) + qBittorrentBB.
-  Deprecates aMuTorrent as a separate controller.
+- **TrackMuleBB** = the forward controller (Python-only, integrated web UI, no
+  Node; repo `trackmulebb`). First beta targets emulebb-rust's forward `/api/v1`
+  as a Rust Console UI; later phases add qBittorrentBB and cross-network suite
+  work. Deprecates aMuTorrent as a separate forward controller.
 
 ## Freeze scope (read first)
 
@@ -128,7 +127,7 @@ the primary** share/hash source; MFC `known.met` is a compatibility path only.
 ## Future suite bundle & three networks (decision 2026-06-16, deferred after 0.7.3)
 
 After `0.7.3`, the suite grows into a **ready-to-use bundle** spanning **three networks** —
-eD2K (emulebb-rust / eMuleBB MFC), BitTorrent (qBittorrentBB), Usenet (SABnzbd) —
+eD2K (emulebb-rust / emulebb-mfc), BitTorrent (qBittorrentBB), Usenet (SABnzbd) —
 plus the Arr automation stack, **Bountarr** (our household media-grab UI over
 Radarr/Sonarr+Plex), and (Docker) Plex.
 
@@ -370,7 +369,7 @@ Decided + set up 2026-06-14:
   backlog only when a slice is promoted.
 
 **Approved but deferred migration — move the MFC backlog into the `emulebb`
-repo.** The eMuleBB MFC app backlog currently lives in
+repo.** The emulebb-mfc app backlog currently lives in
 `emulebb-tooling/docs/active/items` (a structural smell: the frozen app's backlog
 sits in the tooling repo). The agreed end state is to move it into the `emulebb`
 repo, leaving only cross-cutting/workspace items in `emulebb-tooling`. This is a

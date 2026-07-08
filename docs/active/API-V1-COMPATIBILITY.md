@@ -1,113 +1,75 @@
-# /api/v1 — One Capability-Gated Contract
+# REST API Contract Lineage
 
-Status: governance. Rewritten 2026-06-16 (capability model). **Supersedes the
-prior "two divergent lineages" split** (2026-06-15): there is **one** `/api/v1`
-contract; implementations differ by the **capabilities** they advertise, not by a
-separate spec.
+Status: governance. Rewritten 2026-07-08. This supersedes the 2026-06-16
+shared `/api/v1` compatibility model.
 
-## Why one contract (not two)
+## Decision
 
-The split model declared a frozen MFC spec and a forward rust spec with **no
-interchangeability**. But we want the opposite: a single controller (TrackMuleBB)
-that drives **both** eMuleBB MFC and emulebb-rust, with guaranteed alignment,
-while emulebb-rust adds indexing endpoints the MFC will never implement. A
-divergent-spec model cannot give that. A **capability-gated single contract** can:
-the MFC is simply a **subset** that advertises fewer capabilities.
+There are now **two separate OpenAPI contracts**:
 
-## The model
+- **Frozen emulebb-mfc contract:** `docs/products/emulebb-mfc/api/REST-API-OPENAPI.yaml`
+- **Forward Rust contract:** `docs/products/emulebb-rust/api/REST-API-OPENAPI.yaml`
 
-- **One canonical OpenAPI document.** emulebb-rust is the **superset / source of
-  truth**; the MFC implements a subset of the same spec. The indexing endpoints
-  live in this one spec, tagged as the `indexing.*` capability — the MFC just does
-  not advertise them.
-- **Per-operation capability tags.** Each operation carries
-  `x-capability: <group.feature>` and `x-since: <contract-version>` extensions, so
-  the spec itself records which capability (and since which version) each
-  operation belongs to. Examples: `core.search`, `core.transfers`, `core.shared`,
-  `core.kad`, `indexing.snoop`, `indexing.torznab`, `arr.qbit-compat`.
-- **Runtime discovery.** Every implementation answers:
-  ```json
-  GET /api/v1/capabilities
-  { "contractVersion": "1.2.0",
-    "capabilities": ["core.search","core.transfers","core.shared","core.kad"] }
-  ```
-  - eMuleBB MFC returns `core.*` only (its frozen subset).
-  - emulebb-rust returns `core.* + indexing.* + arr.*` (and grows additively).
-- **The soft-frozen MFC includes `/capabilities` too (decision 2026-06-16).** The
-  capabilities endpoint is a **contract-discovery primitive, not a product
-  capability**, so it is allowed as contract maintenance under the MFC soft freeze.
-  This is precisely what guarantees clean evolution: **every** core — frozen or
-  forward — is discoverable the same way, so the controller never special-cases a
-  product and new cores/capabilities slot in without touching it. (Tracked for the
-  MFC as `FEAT-122`.)
-- **Capability negotiation in the controller.** TrackMuleBB reads `/capabilities`
-  on connect, builds a feature set, and **only calls operations whose capability
-  is advertised**. The UI hides unsupported features (e.g. no indexer/Torznab tab
-  for an MFC core). No `if (client == "mfc")` branching — behaviour is
-  capability-driven.
+The legacy path `docs/rest/REST-API-OPENAPI.yaml` remains a compatibility alias
+for the frozen emulebb-mfc contract because existing emulebb-mfc release,
+package, VM, and REST smoke tooling still loads that path. Do not use it as a
+shared forward contract.
 
-## Versioning
+## emulebb-mfc Contract
 
-- The contract is versioned as a **contract semver** (`contractVersion` /
-  `x-contract-version`), independent of any product release tag.
-- **Additive** endpoints/fields (e.g. new indexing operations) bump the **minor**;
-  breaking changes bump the **major** with a documented migration.
-- The MFC, frozen, advertises whatever it shipped (a stable subset at a pinned
-  `contractVersion`); it never grows. emulebb-rust leads the version forward.
-- Controllers target a **contract-version range + capabilities**, never a product
-  tag, and degrade by capability.
+The emulebb-mfc contract is pinned to the `0.7.3` line. It is maintained only
+for release proof, compatibility repairs, and documentation corrections. It does
+not grow new controller capabilities, does not need a `/capabilities` discovery
+endpoint, and is not a constraint on TrackMuleBB's forward UI.
 
-## Alignment guarantee = conformance tests (not the spec alone)
+Primary consumers:
 
-The spec declares the contract; **CI conformance proves alignment**:
+- emulebb-mfc `0.7.x`
+- aMuTorrent `0.7.3` / sustainability maintenance
+- emulebb-mfc package and release validation tooling
 
-- **emulebb-rust** validates its live `/api/v1` responses against the **full**
-  canonical OpenAPI (drift check in rust CI).
-- **eMuleBB MFC** validates its live responses against the **subset it advertises**
-  (only the operations for its `/capabilities`).
-- **Subset invariant:** `capabilities(MFC) ⊆ capabilities(rust) ⊆ capabilities(spec)`.
-- **Capabilities-endpoint contract:** every implementation must answer
-  `/capabilities`, and every advertised capability must map to operations present
-  and conformant.
+## Rust Contract
 
-Tooling: a property-based/contract validator against the OpenAPI (e.g.
-Schemathesis, Dredd, or `openapi-core`), run per advertised capability. This
-replaces the hand-maintained compatibility matrix.
+The Rust contract is the forward first-party control API for `emulebb-rust` and
+TrackMuleBB. It may evolve freely, including breaking schema or route changes,
+while those two products are the only stability audience. The API should model
+native eD2K/Kad daemon concepts rather than preserving emulebb-mfc
+compatibility.
 
-## Implementation matrix (informational; the tests are authoritative)
+Primary consumers:
 
-| Capability group | eMuleBB MFC | emulebb-rust |
-|---|---|---|
-| `core.*` (search, transfers, shared, kad) | ✅ (frozen subset) | ✅ |
-| `indexing.*` (autonomous Kad/eD2K index, Torznab) | — (never) | ✅ (additive) |
-| `arr.qbit-compat` (qBittorrent-compatible download client) | adapter (frozen) | ✅ |
-| Contract version | pinned (frozen) | leads (semver) |
+- emulebb-rust
+- TrackMuleBB Rust Console UI beta
+- first-party local test and release tooling
 
-Legend: ✅ advertised + conformant · — not advertised (controller hides it).
+Any later third-party stability promise requires a separate API-freeze decision,
+versioning policy, migration notes, and conformance gate.
 
-## Consequences
+## TrackMuleBB Direction
 
-- **One controller suffices.** Because the MFC is just a low-capability `/api/v1`
-  client, TrackMuleBB drives it for free via capability negotiation — so
-  **aMuTorrent is deprecated** as a separate controller (see
-  [SUITE-JOINT-ROADMAP](SUITE-JOINT-ROADMAP.md) / [PRODUCT-PORTFOLIO](PRODUCT-PORTFOLIO.md)).
-- emulebb-rust can add indexing (and future) capabilities **additively** without
-  any obligation to the MFC and without breaking the controller.
-- MFC support is **free fallout of the generic path**, not a feature investment —
-  the MFC stays frozen.
+TrackMuleBB's first beta targets `emulebb-rust` only. It no longer needs generic
+emulebb-mfc capability negotiation as a product requirement. emulebb-mfc remains
+on its own frozen legacy controller path.
 
-## Next steps (tracked, not done here)
+The first TrackMuleBB beta is a Rust eD2K/Kad console: status, transfers,
+uploads, search, shared files, servers/Kad, and settings. It uses polling first;
+SSE/event streaming is deferred until the Rust API and UI behavior settle.
 
-- [ ] Add `x-capability` + `x-since` to the canonical OpenAPI and a
-      `GET /api/v1/capabilities` operation (emulebb-rust owns the spec).
-- [ ] emulebb-rust CI: capability-aware conformance/drift check (extend the
-      existing REST contract item).
-- [ ] eMuleBB MFC: add `GET /api/v1/capabilities` (advertising its frozen `core.*`
-      subset) under the soft freeze as contract maintenance, plus a conformance run
-      against that subset. Tracked as `FEAT-122`.
-- [ ] TrackMuleBB: capability negotiation + UI gating (see `TMBB-FEAT-*`).
+## Conformance
 
-Related: [SUITE-JOINT-ROADMAP](SUITE-JOINT-ROADMAP.md),
-[PRODUCT-PORTFOLIO](PRODUCT-PORTFOLIO.md),
-[REST-API-CONTRACT](../rest/REST-API-CONTRACT.md),
-`emulebb-rust/docs/rest/REST-API-OPENAPI.yaml` (canonical superset).
+- emulebb-mfc REST conformance validates emulebb-mfc live responses against the
+  frozen emulebb-mfc OpenAPI artifact.
+- Rust REST conformance validates Rust live responses against the Rust OpenAPI
+  artifact.
+- TrackMuleBB adapter tests should use Rust contract fixtures for the first beta.
+- No conformance test should require a subset relation between emulebb-mfc and
+  Rust.
+
+## Migration Notes
+
+- Active product docs for Rust and TrackMuleBB live under
+  `docs/products/emulebb-rust` and `docs/products/trackmulebb`.
+- Repo-local docs directories in `repos/emulebb-rust` and `repos/trackmulebb`
+  are pointers only.
+- Historical docs may still mention the old single-contract model as provenance;
+  active governance follows this document.

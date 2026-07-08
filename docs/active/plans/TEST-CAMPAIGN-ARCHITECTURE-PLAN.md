@@ -7,7 +7,7 @@ Companion docs: [Test Tiers](../../reference/TEST-TIERS.md),
 
 ## Context
 
-We run two products with opposite test needs. **eMuleBB MFC** is in maintenance
+We run two products with opposite test needs. **emulebb-mfc** is in maintenance
 (0.7.3 shipped, stable, stock-compatible; 0.8.0 is the future legacy-removal line):
 its tests are **regression guards** — cheap, stable, run often, with the heavy
 stock-parity comparisons already moved on-demand. **eMuleBB-rust** is under active

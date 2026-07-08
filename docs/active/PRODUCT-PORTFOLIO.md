@@ -48,12 +48,13 @@ Stage notes (decision 2026-06-20):
 The forward investment is **Core + Companion**. The historically heaviest-resourced
 product (`emulebb` MFC) closes its `0.7.x` line at `0.7.3` and then **continues in
 the revived `0.8.x` modernization line** (decision 2026-06-20). The forward
-cross-network controller is **TrackMuleBB** (new, Python, **capability-driven**: it
-drives any `/api/v1` core — emulebb-rust full, eMuleBB MFC frozen subset — plus
-qBittorrentBB). **aMuTorrent stays actively maintained and upstream-synced through
-the `0.7.3` train and freezes at `0.7.3` final**, after which it is deprecated as a
-separate controller (its automation design is retained as the TrackMuleBB
-reference). The bundled qBittorrentBB tracks its latest
+cross-network controller is **TrackMuleBB** (new, Python). Its first beta targets
+emulebb-rust's forward `/api/v1` as a Rust Console UI; later phases add
+qBittorrentBB and cross-network automation. **aMuTorrent stays actively
+maintained and upstream-synced through the `0.7.3` train and freezes at `0.7.3`
+final**, after which it is deprecated as a separate controller (its automation
+design is retained as the TrackMuleBB reference). The bundled qBittorrentBB tracks
+its latest
 REST-API-compatible release rather than a pinned snapshot. The ready-to-use
 **suite bundle** also pulls in third-party stacks we do **not** own — the Arr apps
 (Prowlarr/Sonarr/Radarr), SABnzbd (Usenet), and Plex (Docker) — installed/wired by
@@ -67,7 +68,7 @@ only maintenance gates; Lab gets the lightest touch until promoted.
   leak-test if networked), itemize the backlog with the product prefix, and put it
   on the Suite board. (goed2k's promotion trigger lives in its lab index.)
 - **Active → Frozen:** declare the final release, move to maintenance gates only,
-  slim the roadmap to maintenance + family lanes (see eMuleBB MFC precedent).
+  slim the roadmap to maintenance + family lanes (see emulebb-mfc precedent).
 
 Related: [SUITE-JOINT-ROADMAP](SUITE-JOINT-ROADMAP.md),
 [QUALITY-GATES](QUALITY-GATES.md), [WORKSPACE-POLICY](../WORKSPACE-POLICY.md).
