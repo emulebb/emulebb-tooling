@@ -3,7 +3,7 @@ id: RUST-FEAT-031
 workflow: github
 github_issue: TBD - file on emulebb/emulebb-rust when scheduled
 title: Kad - handle inbound legacy KADEMLIA_FIREWALLED_ACK_RES (0x59)
-status: IN_PROGRESS
+status: DONE
 priority: Minor
 category: feature
 labels: [kad, firewall-check, legacy-interop, parity]
@@ -46,18 +46,18 @@ equivalent since only v7+ peers emit FIREWALLED2_REQ.
 
 ## Acceptance Criteria
 
-- [ ] Unit test: 0x59 from the probed helper is accepted and counted by the
+- [x] Unit test: 0x59 from the probed helper is accepted and counted by the
       firewall-check accounting.
-- [ ] Unit test: 0x59 from an unrelated source is dropped.
-- [ ] No change to the outbound legs (0x50->0x59, 0x53->TCP ack), which stay
+- [x] Unit test: 0x59 from an unrelated source is dropped.
+- [x] No change to the outbound legs (0x50->0x59, 0x53->TCP ack), which stay
       covered by existing tests.
 
 ## Notes
 
 - Dispatch and zero-length decode handling landed in emulebb-rust commit
-  `26d523b`. The item remains active because its two source-accounting dispatch
-  tests are not yet present; the prior OPEN state incorrectly implied the code
-  path itself was absent.
+  `26d523b`. `tcp_recheck_settles_open_after_two_open_acks` and
+  `tcp_open_ack_rejected_from_unprobed_ip` cover the shared dispatch accounting;
+  the full Rust CI test gate passed on 2026-07-10.
 
 Practical impact is legacy tolerance + diagnostics only: rust advertises a
 modern Kad version, so live helpers answer its own checks over TCP.

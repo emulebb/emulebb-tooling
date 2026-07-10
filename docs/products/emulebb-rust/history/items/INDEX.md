@@ -13,4 +13,6 @@ Known closed refactor/evidence items:
 Known closed feature items include:
 
 - `RUST-FEAT-030`
+- `RUST-FEAT-031`
+- `RUST-FEAT-032`
 - `RUST-FEAT-035`

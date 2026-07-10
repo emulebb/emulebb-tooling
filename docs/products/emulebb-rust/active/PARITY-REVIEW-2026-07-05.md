@@ -25,9 +25,9 @@ buddy ID without a buddy endpoint. RUST-FEAT-035 closed that gap in emulebb-rust
 commit `41b139a`.
 
 The audit also reconciled implementation state for RUST-FEAT-025/030/031/032.
-RUST-FEAT-030 is complete; 025, 031, and 032 now accurately remain in progress
-only for their outstanding live or dispatch-test evidence instead of implying
-that their implementation is absent.
+RUST-FEAT-030/031/032 are complete after focused accounting tests and the full
+serialized Kad swarm gate passed; RUST-FEAT-025 remains in progress for its
+captured-event assertion and live converged-soak comparison.
 
 The same pass closed three registered state/protocol divergences:
 
