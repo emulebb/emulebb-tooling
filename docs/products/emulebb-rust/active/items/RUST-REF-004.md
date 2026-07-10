@@ -53,3 +53,12 @@ Each non-SX1 registry entry gets exactly one disposition:
 - `python tools\check_rust_client_policy.py`
 - `python tools\rust_quality_gate.py quick`
 - Rust OpenAPI conformance gate once `RUST-CI-003` lands.
+
+## 2026-07-10 Progress
+
+The protocol/state-machine audit closed the unregistered Kad FINDSOURCE gap
+(`RUST-FEAT-035`) and converted three registered deferrals to implemented fixes:
+connection-spike suppression (`RUST-PAR-026`), safe server connection cycling
+(`RUST-PAR-027`), and UDP server-description polling (`RUST-PAR-028`). The
+remaining acceptance criteria stay open for the release-scope and release-notes
+reconciliation.

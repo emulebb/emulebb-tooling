@@ -28,6 +28,14 @@ The audit also reconciled implementation state for RUST-FEAT-025/030/031/032.
 RUST-FEAT-030 is complete; 025, 031, and 032 now accurately remain in progress
 only for their outstanding live or dispatch-test evidence instead of implying
 that their implementation is absent.
+
+The same pass closed three registered state/protocol divergences:
+
+- RUST-PAR-026 implements MFC's adaptive connection-spike suppressor.
+- RUST-PAR-027 wires `safeServerConnect` to one-versus-two automatic server
+  attempts, first-login-wins selection, and immediate failed-server cycling.
+- RUST-PAR-028 implements paced, challenge-validated UDP server description
+  polling and persistence for non-connected server metadata.
 FEAT-025 (duplicate-done/queued block rejection) was verified line-by-line
 conformant with the oracle ledger. Thirteen unregistered divergences were found;
 **two warrant a code fix**, the rest are register-as-omission or defer.
