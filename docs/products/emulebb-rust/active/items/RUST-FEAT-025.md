@@ -3,7 +3,7 @@ id: RUST-FEAT-025
 workflow: github
 github_issue: TBD - file on emulebb/emulebb-rust when scheduled
 title: Anti-abuse - redo upload_duplicate_done_block_rejected (+ queued sibling) with conformant ledger semantics
-status: OPEN
+status: IN_PROGRESS
 priority: Major
 category: feature
 labels: [ed2k, upload, anti-abuse, diagnostics, parity]
@@ -62,17 +62,20 @@ avoid this time:
 
 ## Acceptance Criteria
 
-- [ ] Ledger unit tests: first rejection => repeatCount 1, second => 2, window
+- [x] Ledger unit tests: first rejection => repeatCount 1, second => 2, window
       prune, bounded size.
 - [ ] Listener test: request -> complete -> re-request asserts the drop and
       (with packet diagnostics enabled) a captured event body containing
       `repeatCount: 1, windowSeconds: 3600` and **no** `behavior` key.
-- [ ] Offline oracle-conformance diff (`emulebb-build-tests` `diag_event_diff`)
+- [x] Offline oracle-conformance diff (`emulebb-build-tests` `diag_event_diff`)
       clean for both events — the exact check that caught the revert.
 - [ ] Live converged-soak `repeatCount` alignment vs MFC observed during the
       release soak (RUST-FEAT-033 gate evidence).
 
 ## Notes
+
+- Implementation landed in emulebb-rust commit `b1c732c`; the captured-event
+  listener assertion and live converged-soak comparison remain before archival.
 
 - Oracle references: `srchybrid/UploadClient.cpp:752` (done), `:771` (queued),
   `srchybrid/BadPeerDiagnosticsSeams.cpp:400-455`

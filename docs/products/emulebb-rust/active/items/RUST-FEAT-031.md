@@ -3,7 +3,7 @@ id: RUST-FEAT-031
 workflow: github
 github_issue: TBD - file on emulebb/emulebb-rust when scheduled
 title: Kad - handle inbound legacy KADEMLIA_FIREWALLED_ACK_RES (0x59)
-status: OPEN
+status: IN_PROGRESS
 priority: Minor
 category: feature
 labels: [kad, firewall-check, legacy-interop, parity]
@@ -53,6 +53,11 @@ equivalent since only v7+ peers emit FIREWALLED2_REQ.
       covered by existing tests.
 
 ## Notes
+
+- Dispatch and zero-length decode handling landed in emulebb-rust commit
+  `26d523b`. The item remains active because its two source-accounting dispatch
+  tests are not yet present; the prior OPEN state incorrectly implied the code
+  path itself was absent.
 
 Practical impact is legacy tolerance + diagnostics only: rust advertises a
 modern Kad version, so live helpers answer its own checks over TCP.

@@ -91,10 +91,9 @@ stay active-only; see [Closed Items](#closed-items-archive) for the archive.
 | [RUST-FEAT-005](items/RUST-FEAT-005.md) | Critical | OPEN | Automated VPN leak-test — assert no data egress off the tunnel (release-blocking) |
 | [RUST-FEAT-006](items/RUST-FEAT-006.md) | Major | OPEN | Docker — publish a linuxserver-style GHCR image (suite bundle prerequisite) |
 | [RUST-FEAT-007](items/RUST-FEAT-007.md) | Minor | OPEN | REST push — SSE stream for live transfer updates (+ transfers.sse capability) |
-| [RUST-FEAT-025](items/RUST-FEAT-025.md) | Major | OPEN | Anti-abuse — redo upload_duplicate_done_block_rejected (+ queued sibling) with conformant ledger semantics |
-| [RUST-FEAT-030](items/RUST-FEAT-030.md) | Minor | OPEN | Kad — implement KADEMLIA_FIND_VALUE_MORE re-ask in lookup traversal |
-| [RUST-FEAT-031](items/RUST-FEAT-031.md) | Minor | OPEN | Kad — handle inbound legacy KADEMLIA_FIREWALLED_ACK_RES (0x59) |
-| [RUST-FEAT-032](items/RUST-FEAT-032.md) | Minor | OPEN | Kad — routing-zone consolidation (merge sparse sibling leaf bins on the 45-minute timer) |
+| [RUST-FEAT-025](items/RUST-FEAT-025.md) | Major | IN_PROGRESS | Anti-abuse — redo upload_duplicate_done_block_rejected (+ queued sibling) with conformant ledger semantics |
+| [RUST-FEAT-031](items/RUST-FEAT-031.md) | Minor | IN_PROGRESS | Kad — validate inbound legacy KADEMLIA_FIREWALLED_ACK_RES (0x59) dispatch |
+| [RUST-FEAT-032](items/RUST-FEAT-032.md) | Minor | IN_PROGRESS | Kad — validate routing-zone consolidation with kad_swarm smoke |
 | [RUST-FEAT-033](items/RUST-FEAT-033.md) | Critical | OPEN | Release — first usable release rust-v0.1.0-beta.1 (Rust tag, TrackMuleBB console proof, soak-gated) |
 
 ### Refactors / Evidence (`REF`)
@@ -120,8 +119,8 @@ stay active-only; see [Closed Items](#closed-items-archive) for the archive.
 ## Closed Items (archive)
 
 Closed items keep their full engineering record under
-[`../history/items/`](../history/items/INDEX.md). As of 2026-06-26 the archive holds the
-DONE set: `RUST-FEAT-003`, `RUST-REF-001`, `RUST-REF-002`,
+[`../history/items/`](../history/items/INDEX.md). As of 2026-07-10 the archive holds the
+DONE set: `RUST-FEAT-003`, `RUST-FEAT-030`, `RUST-FEAT-035`, `RUST-REF-001`, `RUST-REF-002`,
 `RUST-REF-003`, `RUST-CI-001`, and the `RUST-BUG-002`...`RUST-BUG-099`
 parity wave. Browse that directory for the per-item detail; this index
 intentionally does not re-list closed items.

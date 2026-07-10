@@ -3,7 +3,7 @@ id: RUST-FEAT-032
 workflow: github
 github_issue: TBD - file on emulebb/emulebb-rust when scheduled
 title: Kad - routing-zone consolidation (merge sparse sibling leaf bins on the 45-minute timer)
-status: OPEN
+status: IN_PROGRESS
 priority: Minor
 category: feature
 labels: [kad, routing, parity]
@@ -47,9 +47,15 @@ re-`AddContact`ing every child contact (rejects are dropped).
 
 ## Acceptance Criteria
 
-- [ ] Sparse sibling leaves merge; every surviving contact is preserved.
-- [ ] Combined count exactly K/2 does **not** merge (strict less-than).
-- [ ] Multi-level tree consolidates bottom-up in one pass.
-- [ ] IP-bookkeeping and `total_contacts` stay consistent when the merged bin
+- [x] Sparse sibling leaves merge; every surviving contact is preserved.
+- [x] Combined count exactly K/2 does **not** merge (strict less-than).
+- [x] Multi-level tree consolidates bottom-up in one pass.
+- [x] IP-bookkeeping and `total_contacts` stay consistent when the merged bin
       rejects a contact on re-add.
 - [ ] Existing split/maintenance tests unaffected; kad_swarm smoke passes.
+
+## Implementation Evidence
+
+Implementation landed in emulebb-rust commit `8336e93`. The four focused
+consolidation tests passed again on 2026-07-10; the item remains active only for
+the explicit `kad_swarm` smoke criterion.

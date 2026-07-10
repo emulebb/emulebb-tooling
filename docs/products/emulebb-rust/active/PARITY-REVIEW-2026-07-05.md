@@ -16,6 +16,18 @@ must follow RUST-REF-004 instead.
 The Rust client is an **oracle-faithful port at wire parity** across Kad, the
 eD2K client-to-client transfer protocol, the eD2K server protocol, the `/api/v1`
 REST contract, and SQLite persistence. **No blocker-class divergence.**
+
+## 2026-07-10 Reconciliation
+
+The later code audit found one Major reachability gap not represented in this
+snapshot: the missing Kad `FINDSOURCE` fallback when a LowID source carried a
+buddy ID without a buddy endpoint. RUST-FEAT-035 closed that gap in emulebb-rust
+commit `41b139a`.
+
+The audit also reconciled implementation state for RUST-FEAT-025/030/031/032.
+RUST-FEAT-030 is complete; 025, 031, and 032 now accurately remain in progress
+only for their outstanding live or dispatch-test evidence instead of implying
+that their implementation is absent.
 FEAT-025 (duplicate-done/queued block rejection) was verified line-by-line
 conformant with the oracle ledger. Thirteen unregistered divergences were found;
 **two warrant a code fix**, the rest are register-as-omission or defer.

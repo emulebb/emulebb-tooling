@@ -3,7 +3,7 @@ id: RUST-FEAT-030
 workflow: github
 github_issue: TBD - file on emulebb/emulebb-rust when scheduled
 title: Kad - implement KADEMLIA_FIND_VALUE_MORE re-ask in lookup traversal
-status: OPEN
+status: DONE
 priority: Minor
 category: feature
 labels: [kad, traversal, search, parity]
@@ -46,9 +46,14 @@ inbound guard then admits <= 11 contacts from exactly that contact.
 
 ## Acceptance Criteria
 
-- [ ] Unit test: stalled FIND_VALUE lookup with dead best-2 fires exactly one
+- [x] Unit test: stalled FIND_VALUE lookup with dead best-2 fires exactly one
       re-ask with count 11 to the closest responded contact.
-- [ ] Unit test: an 11-contact response is accepted from the more-asked contact
+- [x] Unit test: an 11-contact response is accepted from the more-asked contact
       and truncated/dropped from any other contact.
-- [ ] Existing traversal tests unaffected; wire shape unchanged
+- [x] Existing traversal tests unaffected; wire shape unchanged
       (`KADEMLIA2_SEARCH_KEY/SOURCE` req count byte only).
+
+## Closure Evidence
+
+Implemented by emulebb-rust commit `0551e75`. The focused three-test
+`reask_more` suite passed again on 2026-07-10.
