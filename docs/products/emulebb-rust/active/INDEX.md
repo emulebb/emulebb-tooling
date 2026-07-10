@@ -102,6 +102,7 @@ stay active-only; see [Closed Items](#closed-items-archive) for the archive.
 | ID | Priority | Status | Title |
 |----|----------|--------|-------|
 | [RUST-REF-004](items/RUST-REF-004.md) | Critical | OPEN | Re-audit every non-SX1 Rust divergence under stock eMule parity policy |
+| [RUST-REF-005](items/RUST-REF-005.md) | Major | IN_PROGRESS | Decompose oversized Rust modules by responsibility |
 
 ### Bugs (`BUG`)
 
