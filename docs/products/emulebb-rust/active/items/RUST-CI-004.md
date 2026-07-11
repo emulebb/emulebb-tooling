@@ -36,13 +36,13 @@ Git dependencies are removed.
 
 ## Acceptance Criteria
 
-- [ ] Local development and every CI job use Rust 1.97.0 from one pin.
+- [x] Local development and every CI job use Rust 1.97.0 from one pin.
 - [ ] The default daemon, diagnostics binary, and isolated egress-audit test
       configuration each have an explicit gate.
-- [ ] All internal crates are `publish = false` and `GPL-2.0-only`.
-- [ ] Cargo-deny rejects unapproved Git/registry sources and incompatible
+- [x] All internal crates are `publish = false` and `GPL-2.0-only`.
+- [x] Cargo-deny rejects unapproved Git/registry sources and incompatible
       licenses.
-- [ ] The repository documents and checks a repeatable toolchain update cadence.
+- [x] The repository documents and checks a repeatable toolchain update cadence.
 - [ ] Policy advisories remain non-failing and prioritize changed files.
 
 ## Validation
@@ -50,3 +50,14 @@ Git dependencies are removed.
 - `python tools\rust_quality_gate.py policy`
 - Supported workspace Rust format, Clippy, build, and test orchestration.
 - Cargo-deny advisories, sources, licenses, and the reviewed bans baseline.
+
+## Evidence
+
+- `0d236f2` pins Rust 1.97.0 and adds toolchain-drift checks.
+- `1b8e06d` makes all 14 workspace crates GPL-2.0-only and non-publishable.
+- `a9c0790` centralizes registry dependency versions.
+- `94a5607` removes Tokio `full`; all eight Tokio-using crates passed isolated
+  all-target Clippy with per-crate features.
+- `ecc3081` enables Cargo-deny advisories/licenses/sources, pins the action by
+  commit, records the Slint royalty-free license selection and attribution, and
+  passes cargo-deny 0.20.2 against the locked graph.
