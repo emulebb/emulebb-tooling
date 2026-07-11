@@ -37,7 +37,7 @@ Git dependencies are removed.
 ## Acceptance Criteria
 
 - [x] Local development and every CI job use Rust 1.97.0 from one pin.
-- [ ] The default daemon, diagnostics binary, and isolated egress-audit test
+- [x] The default daemon, diagnostics binary, and isolated egress-audit test
       configuration each have an explicit gate.
 - [x] All internal crates are `publish = false` and `GPL-2.0-only`.
 - [x] Cargo-deny rejects unapproved Git/registry sources and incompatible
@@ -61,3 +61,6 @@ Git dependencies are removed.
 - `ecc3081` enables Cargo-deny advisories/licenses/sources, pins the action by
   commit, records the Slint royalty-free license selection and attribution, and
   passes cargo-deny 0.20.2 against the locked graph.
+- `f31eb99` adds a named diagnostics gate to the canonical quality runner and
+  includes its exact `packet-diagnostics` build in every quick/CI quality run;
+  tests ensure `egress-audit` and `--all-features` cannot leak into that command.
