@@ -37,8 +37,8 @@ changing eD2K/Kad behavior.
 
 ## Acceptance Criteria
 
-- [ ] MiniUPnPc is the only compiled and configurable UPnP provider.
-- [ ] `rupnp`, `ssdp-client`, and the unimplemented IGD provider are absent from
+- [x] MiniUPnPc is the only compiled and configurable UPnP provider.
+- [x] `rupnp`, `ssdp-client`, and the unimplemented IGD provider are absent from
       source, manifests, and the lockfile.
 - [ ] Short synchronous runtime state cannot cascade through mutex poisoning.
 - [ ] Security-sensitive failure paths are explicitly fail-closed.

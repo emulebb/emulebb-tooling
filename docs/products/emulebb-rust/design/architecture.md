@@ -169,7 +169,7 @@ graph TB
 
     subgraph natstack[NAT / reachability]
         direction LR
-        n_nat[nat<br/>igd · miniupnpc · rupnp] ~~~ n_stun[stun] ~~~ n_reach[reachability] ~~~ n_kfw[kad_firewall]
+        n_nat[nat<br/>MiniUPnPc] ~~~ n_stun[stun] ~~~ n_reach[reachability] ~~~ n_kfw[kad_firewall]
     end
 
     natstack --> tcp
@@ -194,8 +194,9 @@ graph TB
   scheduler).
 - `ed2k_client_udp/` — UDP source reask: registry, source set, runtime/service,
   and buddy relay for firewalled peers.
-- NAT stack: `nat/` (IGD via `miniupnpc` or `rupnp`), `stun`, `reachability`
-  (the resolved public IP/ports), and `kad_firewall` (UDP/TCP firewall verdict).
+- NAT stack: `nat/` (the sole supported MiniUPnPc mapping provider), `stun`,
+  `reachability` (the resolved public IP/ports), and `kad_firewall` (UDP/TCP
+  firewall verdict).
 
 ---
 
