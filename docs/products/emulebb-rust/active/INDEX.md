@@ -100,6 +100,7 @@ stay active-only; see [Closed Items](#closed-items-archive) for the archive.
 |----|----------|--------|-------|
 | [RUST-REF-004](items/RUST-REF-004.md) | Critical | OPEN | Re-audit every non-SX1 Rust divergence under stock eMule parity policy |
 | [RUST-REF-005](items/RUST-REF-005.md) | Major | IN_PROGRESS | Decompose oversized Rust modules by responsibility |
+| [RUST-REF-006](items/RUST-REF-006.md) | Major | IN_PROGRESS | Consolidate Rust NAT and runtime safety internals |
 
 ### Bugs (`BUG`)
 
@@ -113,6 +114,7 @@ stay active-only; see [Closed Items](#closed-items-archive) for the archive.
 |----|----------|--------|-------|
 | [RUST-CI-002](items/RUST-CI-002.md) | Major | OPEN | Rationalize and close the core stock-eMule parity evidence gate |
 | [RUST-CI-003](items/RUST-CI-003.md) | Minor | OPEN | Wire the /api/v1 OpenAPI conformance/drift check into CI |
+| [RUST-CI-004](items/RUST-CI-004.md) | Major | IN_PROGRESS | Harden Rust toolchain, feature, and supply-chain gates |
 
 ## Closed Items (archive)
 
