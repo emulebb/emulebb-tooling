@@ -52,9 +52,22 @@ substantial inline test modules as non-failing advisories. These reports are
 review prompts, not exception mechanisms and not authorization to perform an
 unrelated refactor.
 
+Advisories list changed Rust files first (working tree and index, or the latest
+commit when the tree has no Rust changes), followed by repository-wide context.
+Changed-file reporting is capped only to keep CI output reviewable; it does not
+create a source-size or file-count limit.
+
 When an advisory applies to a changed file, review whether the change adds an
 independently nameable responsibility. A reviewer may accept a cohesive large
 file without an allowlist entry or written size exception.
+
+## Lint Suppressions
+
+Fix a warning when practical. When a protocol-shaped or orchestration boundary
+deliberately triggers a lint, use the narrowest `#[expect(..., reason = "...")]`
+on that item. Checked expectations fail when they become obsolete. Permanent
+broad `#[allow(clippy::...)]`, dead-code, or unused-code suppressions are not
+accepted by repository policy.
 
 ## Policy Maintenance
 

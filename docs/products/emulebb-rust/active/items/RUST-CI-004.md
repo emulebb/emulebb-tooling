@@ -43,7 +43,7 @@ Git dependencies are removed.
 - [x] Cargo-deny rejects unapproved Git/registry sources and incompatible
       licenses.
 - [x] The repository documents and checks a repeatable toolchain update cadence.
-- [ ] Policy advisories remain non-failing and prioritize changed files.
+- [x] Policy advisories remain non-failing and prioritize changed files.
 
 ## Validation
 
@@ -64,3 +64,6 @@ Git dependencies are removed.
 - `f31eb99` adds a named diagnostics gate to the canonical quality runner and
   includes its exact `packet-diagnostics` build in every quick/CI quality run;
   tests ensure `egress-audit` and `--all-features` cannot leak into that command.
+- `6e7a347` prioritizes working-tree/index Rust changes (or the latest clean-tree
+  commit) ahead of repository-wide context, retains non-failing size signals,
+  and rejects permanent broad lint allows.
