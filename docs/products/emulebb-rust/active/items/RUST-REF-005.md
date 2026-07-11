@@ -60,3 +60,16 @@ responsibility-mixed production and test modules.
 - `python -m emule_workspace validate --include-product-family --product-family-tier full`
 - Rust workspace, isolated Kad swarm, and VPN leak gates through supported
   workspace orchestration.
+
+## Current Evidence
+
+- `fcd6f36` makes the UI executable a three-line entry point over a library
+  application boundary.
+- `86b64da`, `4a94087`, `8caaef7`, `5087dab`, and `8a326e2` separate UI
+  presentation, models, REST transport, background commands, and rendering from
+  application wiring. Each extraction passed isolated all-target UI Clippy.
+- `50070b3` moves the 1,796-line `kad_store` test suite into a sibling test
+  module; all 41 focused tests pass and the production module is 539 lines.
+- `cf380fd` replaces permanent lint allows with checked, reasoned expectations;
+  two obsolete expectations and one ownership-only dead-code field suppression
+  were removed during the review.
