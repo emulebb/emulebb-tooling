@@ -451,8 +451,9 @@ What remains is the wiring, and the safe hook is precise:
   is still recommended.**
 - **Phase 2:** LowID buddy reask (`OP_REASKCALLBACKUDP` — **codec done**, buddy-
   relay transport pending) and `OP_DIRECTCALLBACKREQ`.
-- New code lands as new modules within the per-module size budget
-  (`policy/rust-client.toml`); no big-refactor of the legacy-shaped `.rs` files.
+- New independently nameable responsibilities land in focused modules under the
+  responsibility-based code-quality policy; no prerequisite big-refactor of
+  legacy-shaped `.rs` files.
 
 ---
 

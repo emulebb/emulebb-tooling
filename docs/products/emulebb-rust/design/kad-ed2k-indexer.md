@@ -103,6 +103,7 @@ enumeration.
 
 - New module(s) hooking `emulebb-kad-net`'s receive loop (passive snoop) and
   driving searches through the existing Kad/eD2K search paths.
-- Respect the rust file-size policy: new modules ≤600 lines; no big-refactor of
-  legacy `.rs`. Splits are post-parity, as-touched.
+- Respect the responsibility-based Rust code-quality policy: introduce focused
+  modules for independently nameable responsibilities, with legacy splits done
+  incrementally as touched rather than as prerequisite refactors.
 - Builds under the output root only.

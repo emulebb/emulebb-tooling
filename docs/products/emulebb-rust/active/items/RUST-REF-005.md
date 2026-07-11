@@ -37,7 +37,8 @@ responsibility-mixed production and test modules.
 1. Split the inline `emulebb-core` tests into responsibility-focused modules.
 2. Move the `EmulebbCore` facade and API implementations into focused modules.
 3. Split download and Kad orchestration into explicit runtime responsibilities.
-4. Ratchet source-size policy limits down after every successful extraction.
+4. Use non-failing maintainability advisories to identify files that deserve a
+   responsibility review; do not treat line count as a validation limit.
 5. Continue with the largest mixed-responsibility modules in the core and
    protocol crates.
 
@@ -48,12 +49,14 @@ responsibility-mixed production and test modules.
 - [ ] Static IPv4 and P2P binding audits cover every relocated boundary.
 - [ ] No repository-local Cargo `target` directory is created.
 - [ ] Workspace format, Clippy, tests, Kad swarm, and VPN leak gates pass.
-- [ ] Remaining oversized files have responsibility-based rationales and ratcheted
-      hard limits instead of the temporary 20,000-line ceiling.
+- [ ] Remaining large files are reviewed by responsibility without hard limits
+      or per-file allowlist rationales.
+- [ ] Substantial tests live in sibling test modules or integration-test trees;
+      only focused white-box tests remain inline with production code.
 
 ## Validation
 
-- `python tools\check_rust_client_policy.py`
+- `python tools\rust_quality_gate.py policy`
 - `python -m emule_workspace validate --include-product-family --product-family-tier full`
 - Rust workspace, isolated Kad swarm, and VPN leak gates through supported
   workspace orchestration.

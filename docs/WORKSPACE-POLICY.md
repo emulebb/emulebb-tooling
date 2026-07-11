@@ -20,8 +20,10 @@ sections by scope:
   Localization Policy, Live Test Storage and Path Capability, and the MFC parts of
   Protocol Compatibility / Baseline and Harness. These bind only the MFC app and
   its build.
-- **Product annex — emulebb-rust:** file-size budget and cargo/omissions policy
-  live in `repos\emulebb-rust\policy` and its `AGENTS.md`.
+- **Product annex — emulebb-rust:** responsibility-based code quality and test
+  placement live in `docs\products\emulebb-rust\reference\CODE-QUALITY.md`;
+  machine policy, cargo, and omission rules live in `repos\emulebb-rust\policy`
+  and its `AGENTS.md`.
 - **Product annex — forks / managed products (qBittorrentBB, amutorrent
   [frozen], trackmulebb, amule, goed2k):** Managed Fork Hygiene plus each repo's
   `AGENTS.md`.

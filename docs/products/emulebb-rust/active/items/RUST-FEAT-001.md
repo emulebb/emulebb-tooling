@@ -93,8 +93,9 @@ tails) and stock obfuscation choice. Phase the LowID buddy reask
 ## Scope Constraints
 
 - **Out of RC2 scope** — capture and stage; do not build under the freeze.
-- IPv4-only; reuse existing obfuscation primitives; new modules within the
-  `policy/rust-client.toml` size budget; no big-refactor of legacy `.rs` files.
+- IPv4-only; reuse existing obfuscation primitives; introduce focused modules
+  for independently nameable responsibilities; no prerequisite big-refactor of
+  legacy `.rs` files.
 - Phase 1 = HighID UDP reask + TCP fallback + reciprocity. Phase 2 = LowID buddy
   reask + direct callback.
 - Non-goal: A4AF cross-file source dedup (separate parked design); the two

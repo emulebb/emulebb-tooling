@@ -45,8 +45,9 @@ harvesting. The index is the eD2K half of the suite's Prowlarr-federated search.
 
 ## Scope Constraints
 
-- New modules within the `policy/rust-client.toml` size budget; no big-refactor of
-  legacy `.rs`. SQLite-only (no on-disk metadata-file mirror).
+- Introduce focused modules for independently nameable responsibilities; no
+  prerequisite big-refactor of legacy `.rs`. SQLite-only (no on-disk
+  metadata-file mirror).
 - Active querying must respect [[live-wire-be-gentle-no-ban]]: no aggressive
   enumeration, protocol-compliant.
 - Out of scope: cooperative-DHT mechanisms and BEP-46 publishing (parked, see

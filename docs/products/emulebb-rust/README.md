@@ -8,5 +8,7 @@ backlog, design notes, history, release scope, and forward REST contract.
 - Forward OpenAPI contract:
   [`api/REST-API-OPENAPI.yaml`](api/REST-API-OPENAPI.yaml)
 - Architecture: [`design/architecture.md`](design/architecture.md)
+- Code quality and test placement:
+  [`reference/CODE-QUALITY.md`](reference/CODE-QUALITY.md)
 
 Repo-local docs under `repos/emulebb-rust/docs` are pointers only.
