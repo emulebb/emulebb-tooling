@@ -21,8 +21,9 @@ source: Operator decision 2026-07-05; product-direction reset 2026-07-08; WORKSP
 Ship the first usable emulebb-rust release: an unsigned Windows x64 zip built
 by a GitHub Actions release workflow, tagged `rust-v0.1.0-beta.1`, with the
 supported, permanent-drop, deferred, and beta-backlog surface documented
-unambiguously. Packaging is **workflow-only by operator direction
-(2026-07-05)** - no local packaging scripts.
+unambiguously. Release publication is **workflow-only by operator direction
+(2026-07-05)**. The workflow-owned packaging helper requires explicit absolute
+target and archive directories outside the source workspace.
 
 ## Locked Decisions
 
@@ -49,7 +50,9 @@ unambiguously. Packaging is **workflow-only by operator direction
    default features (assert the `egress-audit` test feature is absent from the
    resolved feature set), stage exe + `emulebb-rust.example.toml` (fail-closed
    VPN defaults verified) + `RELEASE-SCOPE.md` + `LICENSE`, zip + `SHA256SUMS`,
-   attach to the GitHub release.
+   attach to the GitHub release. Cargo output and staged release artifacts use
+   runner-temporary directories rather than `target/` or `dist/` in the source
+   checkout.
 4. **Release documentation:** version-specific changelog (compact
    one-line-per-item, operational focus) + release notes naming the compatible
    TrackMuleBB source commit and source-run UI instructions.
@@ -75,6 +78,8 @@ unambiguously. Packaging is **workflow-only by operator direction
 
 ## Notes
 
+- Release-output hygiene landed in emulebb-rust commit `0d12f91`; the policy
+  checker and packaging-helper tests guard the external-output requirement.
 - The INDEX scope note "emulebb-rust is out of RC2 ship scope" remains true for
   the MFC RC2 train; this item creates the rust client's own release gate.
 - Docker/GHCR (RUST-FEAT-006) intentionally stays out of this release.
