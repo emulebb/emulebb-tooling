@@ -42,7 +42,7 @@ changing eD2K/Kad behavior.
       source, manifests, and the lockfile.
 - [ ] Short synchronous runtime state cannot cascade through mutex poisoning.
 - [ ] Security-sensitive failure paths are explicitly fail-closed.
-- [ ] Every unsafe block and unsafe implementation has a concrete safety proof.
+- [x] Every unsafe block and unsafe implementation has a concrete safety proof.
 - [ ] Broad lint suppressions are removed or reduced to justified items.
 
 ## Validation
@@ -50,3 +50,14 @@ changing eD2K/Kad behavior.
 - NAT provider unit tests plus MiniUPnPc discovery/map/release coverage.
 - Supported workspace Rust format, Clippy, build, tests, Kad swarm, and VPN leak
   gates.
+
+## Evidence
+
+- `6348bb0`, `1c81311`, `e334933`, `8ad2668`, and `b56bc95` move the credit
+  ledger, Kad rate limiter, Kad peer state, Kad RPC tracking, and eD2K connection
+  budget to non-poisoning synchronous locks with focused tests.
+- `e1c3705` removes the unnecessary unsafe `Gateway: Send` implementation after
+  isolated MiniUPnPc and eD2K compilation proved it was not required.
+- `2c97349` makes all 14 crates inherit deny-level `unsafe_op_in_unsafe_fn` and
+  `undocumented_unsafe_blocks`, with concrete FFI safety invariants at each
+  remaining unsafe block.
