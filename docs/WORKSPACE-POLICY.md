@@ -111,6 +111,14 @@ Directive precedence is:
   `EMULEBB_WORKSPACE_ROOT` or a sibling source checkout), is a policy violation
   and must be removed. Personal scratch/lab folders go under a dedicated scratch
   root outside every source checkout, never inside one.
+- `emulebb-rust.exe` has exactly one runnable workspace path:
+  `EMULEBB_WORKSPACE_OUTPUT_ROOT\tools\emulebb-rust\bin\emulebb-rust.exe`.
+  Cargo target directories under `EMULEBB_WORKSPACE_OUTPUT_ROOT\builds\rust\target`
+  are intermediate build cache only. Soak, live-wire, profiling, manual launches,
+  split-tunnel allow-listing, and operator runbooks must never launch
+  `emulebb-rust.exe` from a Cargo target directory. Orchestrated Rust client
+  staging copies the built executable to the canonical tools path and prunes
+  runnable Cargo-target copies to prevent duplicate runtime entrypoints.
 
 ## Branch And History Policy
 
