@@ -169,13 +169,17 @@ Directive precedence is:
 - Do not push `WIP`, checkpoint, or debug commits to any managed repo.
 - Commit (and push, when pushing) each completed coherent slice before starting
   unrelated work unless the user explicitly asks to hold local commits.
-- Never finish a task, handoff, or final response with completed local changes
-  left uncommitted. Before reporting done, re-run `git status --short --branch`
-  in every touched repo; if any completed work remains dirty, split it into
-  granular coherent commits first. The only acceptable exceptions are explicit
+- **Never finish dirty.** A task, handoff, or final response must not leave
+  completed local changes uncommitted in any touched repo. This is a mandatory
+  completion gate, not a preference: before reporting done, re-run
+  `git status --short --branch` in every touched repo and commit every completed
+  coherent slice with explicit paths. If multiple concerns are dirty, make
+  multiple granular commits before final response.
+- The only acceptable exceptions to the no-dirty completion gate are explicit
   user instructions to hold commits, genuinely incomplete work that is called out
   as still in progress, or unrelated pre-existing user changes that must not be
-  staged.
+  staged. When an exception applies, name the repo and dirty paths in the final
+  response.
 - Feature, bug, refactor, and CI backlog commit messages must include the
   tracked item id such as `BUG-017`, `FEAT-015`, `REF-021`, or `CI-003`.
 - GitHub-tracked roadmap work should keep the stable local item id and link the
