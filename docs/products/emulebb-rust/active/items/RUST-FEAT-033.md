@@ -32,11 +32,11 @@ target and archive directories outside the source workspace.
 - Tag scheme `rust-vX.Y.Z[-pre.N]`, distinct from MFC `emulebb-v*`.
 - Artifact `emulebb-rust-v<version>-windows-x64.zip` + `SHA256SUMS`, always
   unsigned.
-- TrackMuleBB is required for beta acceptance but is not tagged or packaged for
-  this first Rust prerelease; release notes name the compatible TrackMuleBB
-  source commit.
+- `emulebb-rust-ui` proof is required for beta acceptance. TrackMuleBB is parked
+  future controller work and is not tagged, packaged, or required for this first
+  Rust prerelease.
 - The annotated tag is created only after stock-parity, safety, REST-contract,
-  TrackMuleBB console, and soak evidence review plus an explicit operator go.
+  Rust-native UI, and soak evidence review plus an explicit operator go.
 
 ## Intended Shape
 
@@ -54,8 +54,7 @@ target and archive directories outside the source workspace.
    runner-temporary directories rather than `target/` or `dist/` in the source
    checkout.
 4. **Release documentation:** version-specific changelog (compact
-   one-line-per-item, operational focus) + release notes naming the compatible
-   TrackMuleBB source commit and source-run UI instructions.
+   one-line-per-item, operational focus) + source-run UI instructions.
 
 ## Release Gate (all must hold before the tag)
 
@@ -65,9 +64,9 @@ target and archive directories outside the source workspace.
       undispositioned P0 or stock-wire-critical findings.
 - [ ] RUST-CI-003 OpenAPI conformance/drift gate passes against the Rust-forward
       OpenAPI artifact.
-- [ ] TrackMuleBB full console pass is green against the candidate daemon:
-      status, transfers, uploads, search/download, shared files, servers/Kad,
-      and settings.
+- [ ] `emulebb-rust-ui` pass is green against the candidate daemon: status,
+      transfers, uploads, search/download, shared files, servers/Kad, settings,
+      logs, and diagnostics.
 - [ ] Stock-parity soak evidence covers UDP reask, buddy callback,
       firewall-check, HighID + LowID, finished-file delivery, and sustained REST
       responsiveness. emulebb-mfc may be a frozen witness but is not the product

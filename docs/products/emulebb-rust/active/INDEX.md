@@ -43,12 +43,12 @@ emulebb-mfc keeps its legacy unprefixed IDs. IDs are allocated per class and nev
 reused. Scan both `docs/active/items` and `docs/history/items` before
 allocating the next number.
 
-## First Beta — Rust Console UI
+## First Beta — Rust Headless + Native UI
 
-The first forward milestone is a Rust Console UI beta. emulebb-rust and
-TrackMuleBB move in parallel, but release waits for both core proof and UI proof.
-The beta targets Rust only and uses polling against the Rust-forward OpenAPI
-contract in this tooling docs tree.
+The first forward milestone is a Rust headless client + native UI beta. Release
+waits for both core proof and `emulebb-rust-ui` proof. TrackMuleBB is parked
+future controller work and is not a beta dependency. The beta targets Rust only
+and uses the Rust-forward OpenAPI contract in this tooling docs tree.
 
 Core gates remain first-class: stock-wire parity, fail-closed VPN proof,
 responsive REST, upload/download/search/share evidence, and soak evidence. The

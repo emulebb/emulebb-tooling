@@ -140,9 +140,8 @@ Use `python scripts\docs-item-taxonomy-check.py` after item or active-index
 changes to validate item IDs, statuses, duplicate front matter IDs, and active
 index consistency.
 
-Use `python scripts\github-roadmap-sync.py` to preview and apply
-GitHub-primary issue and Project #2 synchronization for all active backlog
-items under `docs/active/items`. Use
+Treat `python scripts\github-roadmap-sync.py` as legacy MFC archive tooling until
+it is generalized for per-product Suite synchronization. Use
 `python scripts\github-roadmap-check.py` after migration to validate local
 GitHub metadata; pass `--github` when the local GitHub token has `project`
 scope and network access.

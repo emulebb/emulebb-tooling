@@ -4,19 +4,20 @@ This runbook is the repeatable workflow for creating, updating, validating, and
 closing eMuleBB backlog records.
 
 `docs/active/` is the current local spec and evidence layer. For
-GitHub-primary items marked `workflow: github`, GitHub issues in
-`emulebb/emulebb` and org Project #2 (`eMuleBB Roadmap`) own workflow state;
-the local Markdown file remains the engineering spec and evidence record.
+GitHub-primary forward items marked `workflow: github`, the owning product repo
+issue and org Project #3 (`eMuleBB Suite`) own workflow state; the local
+Markdown file remains the engineering spec and evidence record. Project #2
+(`eMuleBB Roadmap MFC (archive)`) is MFC archive/provenance only unless an item
+is explicitly approved as frozen-line maintenance.
 
-Canonical public backlog workflow endpoints:
+Canonical forward backlog workflow endpoint:
 
-- issue tracker: `https://github.com/emulebb/emulebb/issues`
-- project board: `https://github.com/orgs/emulebb/projects/2`
+- project board: `https://github.com/orgs/emulebb/projects/3`
 
 When adding or materially updating an externally actionable backlog item,
 manage all three records together unless the item is explicitly local-only,
-historical, exploratory, or provenance-only: local Markdown spec, GitHub issue,
-and Project #2 item.
+historical, exploratory, or provenance-only: local Markdown spec, owning product
+repo issue, and Suite Project #3 item.
 
 ## Preflight
 
@@ -73,19 +74,16 @@ Use this path for normal externally actionable backlog slices:
 
 1. Create or update the local active item spec first, including the stable item
    ID, scope, constraints, and acceptance criteria.
-2. If the item belongs to an approved future lane, add the item ID to
-   `docs\active\FUTURE-ROADMAP.md` so the sync can use the curated lane.
-3. Run `python scripts\github-roadmap-sync.py` to preview and
-   `python scripts\github-roadmap-sync.py --apply` to sync all active backlog
-   items to `https://github.com/emulebb/emulebb/issues` and Project #2
-   (`https://github.com/orgs/emulebb/projects/2`).
-4. The sync owns managed issue labels with `type:`, `priority:`, `roadmap:`,
-   `release:`, and `lane:` prefixes, and sets the project fields that mirror
-   the local item: `Roadmap Status`, `Work Type`, `Priority`, `Lane`,
-   `Local ID`, and `Release`.
-5. After sync, the local item must have `workflow: github`,
-   `github_issue: https://github.com/emulebb/emulebb/issues/<number>`, and a
-   workflow-status note that points to the issue.
+2. Put the item in the owning product repo and add it to the Suite Project #3
+   with the correct `Product` and `Phase` fields.
+3. The local item must have `workflow: github`, `github_issue:` pointing to the
+   owning repo issue, and a workflow-status note that points to the issue.
+4. The current `github-roadmap-sync.py` path is legacy MFC archive tooling until
+   generalized for per-product Suite sync. Do not use it for forward Rust,
+   qBittorrentBB, or TrackMuleBB items without a focused tooling update.
+5. Managed labels and project fields should mirror the product's local item:
+   priority, work type, local ID, product, phase, and release/milestone where
+   applicable.
 6. After migration, treat GitHub as the workflow authority for status, priority,
    release placement, discussion, ownership, and PR linkage. Keep the Markdown
    item as the durable spec/evidence record.

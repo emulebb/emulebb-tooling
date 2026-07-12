@@ -12,12 +12,12 @@ lives separately at
 The near-term stability audience is first-party only:
 
 - emulebb-rust
-- TrackMuleBB Rust Console UI
+- emulebb-rust-ui
 - first-party tests and release tooling
 
-Breaking route or schema changes are allowed while Rust and TrackMuleBB move in
-lockstep. A later third-party API promise needs a separate freeze and migration
-decision.
+Breaking route or schema changes are allowed while the Rust daemon and native UI
+move in lockstep. A later third-party API promise needs a separate freeze and
+migration decision.
 
 ## Conformance
 
