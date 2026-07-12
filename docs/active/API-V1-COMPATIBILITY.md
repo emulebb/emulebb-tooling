@@ -30,30 +30,30 @@ Primary consumers:
 
 ## Rust Contract
 
-The Rust contract is the forward first-party control API for `emulebb-rust` and
-TrackMuleBB. It may evolve freely, including breaking schema or route changes,
-while those two products are the only stability audience. The API should model
-native eD2K/Kad daemon concepts rather than preserving emulebb-mfc
-compatibility.
+The Rust contract is the forward first-party control API for `emulebb-rust`, its
+Rust-native UI, and first-party tests/tooling. It may evolve freely, including
+breaking schema or route changes, while that is the only stability audience. The
+API should model native eD2K/Kad daemon concepts rather than preserving
+emulebb-mfc compatibility.
 
 Primary consumers:
 
 - emulebb-rust
-- TrackMuleBB Rust Console UI beta
+- emulebb-rust-ui
 - first-party local test and release tooling
 
 Any later third-party stability promise requires a separate API-freeze decision,
 versioning policy, migration notes, and conformance gate.
 
-## TrackMuleBB Direction
+## Controller Direction
 
-TrackMuleBB's first beta targets `emulebb-rust` only. It no longer needs generic
-emulebb-mfc capability negotiation as a product requirement. emulebb-mfc remains
-on its own frozen legacy controller path.
+TrackMuleBB is parked future controller work. It no longer needs generic
+emulebb-mfc capability negotiation as a product requirement, and it is not a Rust
+beta dependency. emulebb-mfc remains on its own frozen legacy controller path.
 
-The first TrackMuleBB beta is a Rust eD2K/Kad console: status, transfers,
-uploads, search, shared files, servers/Kad, and settings. It uses polling first;
-SSE/event streaming is deferred until the Rust API and UI behavior settle.
+The active Rust UI target is `emulebb-rust-ui`: status, transfers, uploads,
+search, shared files, servers/Kad, settings, logs, and diagnostics. SSE/event
+streaming is deferred until the Rust API and UI behavior settle.
 
 ## Conformance
 
@@ -61,7 +61,7 @@ SSE/event streaming is deferred until the Rust API and UI behavior settle.
   frozen emulebb-mfc OpenAPI artifact.
 - Rust REST conformance validates Rust live responses against the Rust OpenAPI
   artifact.
-- TrackMuleBB adapter tests should use Rust contract fixtures for the first beta.
+- Rust UI/API tests should use Rust contract fixtures for the first beta.
 - No conformance test should require a subset relation between emulebb-mfc and
   Rust.
 

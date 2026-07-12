@@ -9,7 +9,7 @@ cognitive load of a 14-repo workspace and makes ownership of each decision obvio
 | Tier | Meaning | Quality bar (merge gate) |
 |---|---|---|
 | **Core** | The strategic forward client | build + test (3-OS) + clippy `-D warnings` + cargo-deny + policy guard + leak-test |
-| **Companion** | Active client/controller shipped beside Core | build + test + lint + fork hygiene + leak-test (networked) |
+| **Companion** | Future client/controller staged beside Core | build + test + lint + fork hygiene + leak-test (networked) |
 | **Service / Lab** | Useful but experimental; not a shipped client | green build (when promoted); narrative tracking while lab |
 | **Frozen / Maintenance** | Shipping but closed to features | release proof + security/crash/packaging gates only |
 | **Infra** | Build, test, docs, policy tooling | its own checks (privacy guard, docs/policy audits) |
@@ -21,11 +21,11 @@ cognitive load of a 14-repo workspace and makes ownership of each decision obvio
 | Repo | Tier | Stage | Backlog home | Board Product |
 |---|---|---|---|---|
 | `emulebb-rust` | Core | forward, Phase 0 | `docs/active` (`RUST-*`) | emulebb-rust |
-| `qbittorrentbb` | Companion | active, Phase 1 | `docs/active` (`QBBB-*`) | qBittorrentBB |
-| `trackmulebb` | Companion (controller + installer) | forward, Phase 2 (Python; new) | `docs/active` (`TMBB-*`) | TrackMuleBB |
-| `itlezy/bountarr` | Companion (household media-grab UI) | forward, Phase 2 (TS/Node) | own repo | TrackMuleBB-suite |
-| `amutorrent` | Companion (legacy) | active → freezes at 0.7.3 final | `docs/active` (`AMUT-*` ref) | aMuTorrent |
-| `emulebb` (MFC) | Client (MFC) | active, 0.7.x → revived 0.8.x | `emulebb-tooling/docs/active` (legacy IDs) | eMuleBB-MFC |
+| `qbittorrentbb` | Companion | future, Phase 1 | `docs/active` (`QBBB-*`) | qBittorrentBB |
+| `trackmulebb` | Companion (controller + installer) | parked, Phase 2 (Python; new) | `docs/active` (`TMBB-*`) | TrackMuleBB |
+| `itlezy/bountarr` | Companion (household media-grab UI) | parked, Phase 2 (TS/Node) | own repo | TrackMuleBB-suite |
+| `amutorrent` | Companion (legacy) | frozen with 0.7.3 | `docs/active` (`AMUT-*` ref) | aMuTorrent |
+| `emulebb` (MFC) | Client (MFC) | frozen 0.7.x maintenance | `emulebb-tooling/docs/active` (legacy IDs) | eMuleBB-MFC |
 | `goed2k-server` | Service / Lab | lab (no CI gate) | `docs/active` lab index (`GOED2K-*` reserved) | — (not on board while lab) |
 | `emulebb-build` | Infra | active | — | tooling |
 | `emulebb-build-tests` | Infra | active | — | tooling |
@@ -36,31 +36,28 @@ cognitive load of a 14-repo workspace and makes ownership of each decision obvio
 | `emulebb-pages` / `emulebb-org-profile` | Infra (public) | active | — | — |
 | `p2p-overlord-*` | Separate family | out of scope | own repos | — |
 
-Stage notes (decision 2026-06-20):
+Stage notes (decision 2026-07-12):
 
-- `amutorrent` is actively maintained and upstream-synced through the 0.7.3
-  train, then deprecated and superseded by TrackMuleBB.
-- `emulebb` (MFC) closes the 0.7.x line at 0.7.3, then resumes as the 0.8.x MFC
-  modernization wave.
+- `emulebb-rust` is the active forward lane: headless client stabilization plus
+  Rust-native UI.
+- `emulebb` (MFC) closes the 0.7.x line at 0.7.3 and stays frozen except for
+  critical maintenance plus non-behavior-expanding diagnostics/instrumentation.
+- `amutorrent` freezes with the 0.7.3 Windows suite.
+- `qbittorrentbb` is future companion work; `trackmulebb` is parked until that
+  companion work progresses.
 
 ## Strategic note
 
-The forward investment is **Core + Companion**. The historically heaviest-resourced
-product (`emulebb` MFC) closes its `0.7.x` line at `0.7.3` and then **continues in
-the revived `0.8.x` modernization line** (decision 2026-06-20). The forward
-cross-network controller is **TrackMuleBB** (new, Python). Its first beta targets
-emulebb-rust's forward `/api/v1` as a Rust Console UI; later phases add
-qBittorrentBB and cross-network automation. **aMuTorrent stays actively
-maintained and upstream-synced through the `0.7.3` train and freezes at `0.7.3`
-final**, after which it is deprecated as a separate controller (its automation
-design is retained as the TrackMuleBB reference). The bundled qBittorrentBB tracks
-its latest
-REST-API-compatible release rather than a pinned snapshot. The ready-to-use
-**suite bundle** also pulls in third-party stacks we do **not** own — the Arr apps
-(Prowlarr/Sonarr/Radarr), SABnzbd (Usenet), and Plex (Docker) — installed/wired by
-TrackMuleBB but maintained upstream (see [SUITE-INSTALLER](SUITE-INSTALLER.md)). Quality investment (CI gates, leak-tests, backlog depth) should track
-the tier, not history: Core/Companion get the strongest gates; the Frozen app gets
-only maintenance gates; Lab gets the lightest touch until promoted.
+The forward investment is **Core first**. The historically heaviest-resourced
+product (`emulebb` MFC) closes its `0.7.x` line at `0.7.3` and is now frozen.
+Current development concentrates on `emulebb-rust` headless client stability and
+Rust-native UI. qBittorrentBB is the later BitTorrent companion; TrackMuleBB is a
+parked future controller/integration layer, not a Rust beta dependency and not an
+MFC integration path. The ready-to-use **suite bundle** remains a future design
+reference (see [SUITE-INSTALLER](SUITE-INSTALLER.md)). Quality investment (CI
+gates, leak-tests, backlog depth) should track the tier and active lifecycle:
+Core gets the strongest gates; the Frozen app gets only maintenance gates; Lab
+gets the lightest touch until promoted.
 
 ## Lifecycle transitions
 
