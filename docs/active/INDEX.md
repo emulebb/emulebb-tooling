@@ -4,12 +4,14 @@ This directory is the active local backlog/spec and revalidation layer for this
 repo. Use [`../INDEX.md`](../INDEX.md) for long-form background and reference
 reading.
 
-GitHub-primary backlog workflow uses `emulebb/emulebb` issues
-(`https://github.com/emulebb/emulebb/issues`) and the public `eMuleBB Roadmap`
-org Project #2 (`https://github.com/orgs/emulebb/projects/2`) as current
-status, priority, release placement, discussion, ownership, and PR linkage
-authority for migrated items. Local item docs marked `workflow: github` are
-engineering spec/evidence records, not workflow status authority.
+MFC GitHub-primary backlog workflow is archived. The `emulebb/emulebb` issues
+and public `eMuleBB Roadmap MFC (archive)` org Project #2
+(`https://github.com/orgs/emulebb/projects/2`) are provenance for the frozen MFC
+line, not forward workflow authority. Forward work uses owning product repo
+issues and the public `eMuleBB Suite` org Project #3
+(`https://github.com/orgs/emulebb/projects/3`). Local item docs marked
+`workflow: github` are engineering spec/evidence records, not workflow status
+authority.
 
 > Historical reference only: `stale-v0.72a-experimental-clean` and
 > `analysis\stale-v0.72a-experimental-clean` are retired reference sources, not
@@ -20,19 +22,23 @@ engineering spec/evidence records, not workflow status authority.
 ## Current Snapshot
 
 **Source of truth:** `EMULEBB_WORKSPACE_ROOT\workspaces\workspace\app\emulebb-main` (`main` branch)
-**Current non-done count:** `129`
-**Latest release-doc refresh:** 2026-06-13
-**Non-done by status:** `108` OPEN, `7` IN_PROGRESS, `14` DEFERRED, `0` BLOCKED.
-**Backlog counts:** item tables below are authoritative.
+**Current MFC GitHub issue count:** `0` open; the MFC issue backlog was closed as
+not planned when the roadmap was archived.
+**Latest roadmap/archive refresh:** 2026-07-12
+**Local non-done item inventory:** retained below as engineering/spec archive,
+not workflow authority.
+**Backlog counts:** item tables below are retained for provenance and future
+manual promotion only.
 **0.7.3 release-train relevance:** Most non-done items below are future or
 deferred work; stable `0.7.3` is published and final proof status is recorded in
 [RELEASE-0.7.3](RELEASE-0.7.3.md).
 **Broadband release status:** RC1/RC2/RC3 evidence is frozen. Stable
 `emulebb-v0.7.3` is published, and further `0.7.x` work is limited to legacy
 maintenance.
-**Post-stable line split:** after stable `0.7.3`, `release/0.7.x` carries the
-frozen-surface legacy support line. emulebb-mfc `0.8.x` remains a possible future lane,
-but current forward focus is `emulebb-rust` and `qBittorrentBB`.
+**Post-stable line split:** after stable `0.7.3`, MFC is frozen on the `0.7.x`
+legacy support line. Accept only critical maintenance plus
+non-behavior-expanding diagnostics/instrumentation. Forward focus is
+`emulebb-rust` headless client stabilization and Rust-native UI.
 **Release backlog view:** [RELEASE-0.7.3](RELEASE-0.7.3.md)
 **Release checklist:** [RELEASE-0.7.3-CHECKLIST](RELEASE-0.7.3-CHECKLIST.md)
 **Release runbook:** [RELEASE-0.7.3-RUNBOOK](RELEASE-0.7.3-RUNBOOK.md)
@@ -41,16 +47,17 @@ but current forward focus is `emulebb-rust` and `qBittorrentBB`.
 **Frozen surfaces:** [FROZEN-SURFACES](FROZEN-SURFACES.md)
 **Controller surface matrix:** [CONTROLLER-SURFACE-MATRIX](CONTROLLER-SURFACE-MATRIX.md)
 **Future release roadmap:** [FUTURE-ROADMAP](FUTURE-ROADMAP.md)
-**emulebb-mfc 0.8.0 Performance & Async lane:** [MFC-0.8.0-PERF-ASYNC-PLAN](plans/MFC-0.8.0-PERF-ASYNC-PLAN.md)
+**Archived emulebb-mfc 0.8.0 Performance & Async notes:** [MFC-0.8.0-PERF-ASYNC-PLAN](plans/MFC-0.8.0-PERF-ASYNC-PLAN.md)
 (design docs: [startup](plans/MFC-0.8.0-STARTUP-TIME-TO-INTERACTIVE.md),
 [network core thread](plans/MFC-0.8.0-NETWORK-CORE-THREAD.md),
 [Process() migration](plans/MFC-0.8.0-PROCESS-LOOP-MIGRATION.md))
-**emulebb-mfc 0.8.0 Lean line (frozen-surface removal):** [MFC-0.8.0-LEAN-REMOVAL-PLAN](plans/MFC-0.8.0-LEAN-REMOVAL-PLAN.md)
+**Archived emulebb-mfc 0.8.0 Lean notes:** [MFC-0.8.0-LEAN-REMOVAL-PLAN](plans/MFC-0.8.0-LEAN-REMOVAL-PLAN.md)
 **Roadmap consolidation scaffold:** [FUTURE-ROADMAP#release-line-model](FUTURE-ROADMAP.md#release-line-model)
-**Suite joint roadmap (0.8.* forward program, non-emulebb-mfc):** [SUITE-JOINT-ROADMAP](SUITE-JOINT-ROADMAP.md)
+**Suite joint roadmap (Rust-first forward program):** [SUITE-JOINT-ROADMAP](SUITE-JOINT-ROADMAP.md)
 **Suite metadata fabric (torrent⇄collection⇄eD2K):** [SUITE-METADATA-FABRIC](SUITE-METADATA-FABRIC.md)
-**GitHub-primary backlog workflow:** GitHub issues in `emulebb/emulebb` plus
-the `eMuleBB Roadmap` Project #2 are authoritative for migrated backlog items.
+**GitHub-primary backlog workflow:** forward items use owning product repo issues
+plus the `eMuleBB Suite` Project #3. The archived MFC Project #2 is provenance
+only.
 **Backlog process runbook:** [BACKLOG-PROCESS](../reference/BACKLOG-PROCESS.md)
 **Release execution plan:** [RELEASE-0.7.3-EXECUTION-PLAN](plans/RELEASE-0.7.3-EXECUTION-PLAN.md)
 **p2p-overlord product-family plan:** [P2P-OVERLORD-PRODUCT-FAMILY-INTEGRATION](plans/P2P-OVERLORD-PRODUCT-FAMILY-INTEGRATION.md)

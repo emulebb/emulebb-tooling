@@ -1,23 +1,42 @@
-# Suite Joint Roadmap (0.8.* forward program)
+# Suite Joint Roadmap (Rust-first forward program)
 
 Status: planning / direction. This is the **canonical top-level roadmap** for the
-BB suite after stable `0.7.3`. The current focus is **emulebb-rust** and
-**qBittorrentBB**; MFC `0.8.x` remains possible but is no longer a committed
-companion lane. The MFC [FUTURE-ROADMAP](FUTURE-ROADMAP.md) records retained MFC
-ideas and any later MFC decision. Companion governance:
+BB suite after stable `0.7.3`. The current implementation focus is
+**emulebb-rust**: stabilize the headless eD2K/Kad client and the Rust-native UI.
+MFC is frozen on the `0.7.x` line. **qBittorrentBB** remains future companion
+work, and **TrackMuleBB** is parked until qBittorrentBB progresses enough to
+justify a cross-network controller. The MFC
+[FUTURE-ROADMAP](FUTURE-ROADMAP.md) records retained ideas and any later MFC
+decision. Companion governance:
 [PRODUCT-PORTFOLIO](PRODUCT-PORTFOLIO.md), [QUALITY-GATES](QUALITY-GATES.md),
 [API-V1-COMPATIBILITY](API-V1-COMPATIBILITY.md). It is **not** a `0.7.3` gate and
 does **not** touch the shipping `0.7.x` MFC line.
 
+## Decision (2026-07-12): rust headless + native UI is the active lane
+
+The MFC roadmap is archived as **eMuleBB Roadmap MFC (archive)**. MFC `0.7.3`
+and its matching aMuTorrent package are the shipped line; MFC accepts only
+critical maintenance and non-behavior-expanding diagnostics/instrumentation. Do
+not create or schedule MFC feature backlog by default.
+
+Forward development concentrates on `emulebb-rust`: the headless client,
+protocol parity/stability, persistence, safety gates, REST contract, and the
+Rust-native UI in `emulebb-rust-ui`. The Suite board is the active cross-product
+board, but only the Rust phase is active now.
+
+`qBittorrentBB` is still the intended BitTorrent-side companion, but it is not
+the current implementation priority. `TrackMuleBB` is on hold as a future
+controller/integration layer; it should not be linked to MFC, and it should not
+drive Rust beta scope until the qBittorrentBB side is ready to make a controller
+useful.
+
 ## Decision (2026-07-05): focus rust and qBittorrentBB first
 
-Stable `0.7.3` promotes the MFC client into the frozen `0.7.x` compatibility
-line. There is still a roadmap and a set of ideas for future MFC evolution, but
-MFC `0.8.x` is now an open question rather than the assumed next product wave.
-The MFC codebase is a heavy burden to evolve cleanly, so near-term forward work
-focuses on `emulebb-rust` and `qBittorrentBB`. The Rust client is the likely
-home for larger eD2K/Kad evolution and is nearing public beta after months of
-testing; qBittorrentBB remains the BitTorrent-side companion track.
+Superseded by the 2026-07-12 decision above. The useful part remains: stable
+`0.7.3` promotes the MFC client into the frozen `0.7.x` compatibility line, and
+larger eD2K/Kad evolution moves to `emulebb-rust`. The qBittorrentBB companion
+track remains real future work, but it is no longer named as an equal current
+focus beside Rust.
 
 This supersedes the 2026-06-20 planning assumption that MFC `0.8.x` and the
 forward suite begin together. A later explicit operator decision is required
@@ -29,33 +48,27 @@ This decision supersedes the earlier framing below where aMuTorrent was the
 forward cross-network controller "in full development mode".
 
 1. **eMuleBB (MFC) `0.7.3` is the final `0.7.x` feature release**. MFC `0.8.x`
-   remains possible, but the 2026-07-05 focus decision puts near-term evolution
-   on `emulebb-rust` and `qBittorrentBB`. Through the `0.7.x` line the MFC app's
+   is not active; the 2026-07-12 focus decision puts near-term evolution on
+   `emulebb-rust`. Through the `0.7.x` line the MFC app's
    package, delivered via the proven PowerShell suite bootstrap, bundles the MFC
    client, the frozen aMuTorrent `0.7.3` controller companion, and the Arr setup
    plumbing only. **qBittorrentBB, emulebb-rust, TrackMuleBB, `uv`, and the
-   Python setup CLI are not in the stable `0.7.3` or `0.7.x` bootstrap** — they
-   ship in the `0.8.*` program after this release train. The `0.7.x` bundle's
-   eD2K side is the MFC client itself.
+   Python setup CLI are not in the stable `0.7.3` or `0.7.x` bootstrap**. The
+   `0.7.x` bundle's eD2K side is the MFC client itself.
 2. **aMuTorrent closes out on the `0.7.3` line** — it ships with the final MFC
    package and is **not** the forward controller. *(Timing refined by Decision
    2026-06-20 below: it stays actively maintained and upstream-synced until `0.7.3`
    final, and only then freezes into sustainability-only maintenance.)*
-3. **The forward stack is: emulebb-rust + qBittorrentBB + TrackMuleBB** — a new
-   Python coordination controller with an integrated web UI (Python-only, e.g.
-   NiceGUI; no Node/JS toolchain). Product **TrackMuleBB** (repo `trackmulebb`,
-   first-party, `-BB` family). TrackMuleBB now targets emulebb-rust's forward
-   `/api/v1` contract for the first Rust Console UI beta; emulebb-mfc stays on
-   its frozen `0.7.3` contract and legacy controller path. qBittorrentBB support
-   remains later suite scope over its own API. aMuTorrent is deprecated as the
-   forward controller after the `0.7.3` line.
+3. **The forward stack is staged, not concurrent**. `emulebb-rust` is active now
+   and owns the forward eD2K/Kad client plus Rust-native UI. qBittorrentBB is
+   later BitTorrent-side companion work. TrackMuleBB is parked future controller
+   work and must not be wired into MFC or treated as Rust beta scope.
 4. Per qBittorrentBB's core-vs-REST policy, orchestration the generic Arr/REST
    stack can express stays external; the Python controller owns only the
    cross-network (eD2K <-> BT) suite logic that no single client can.
-5. The **cross-network metadata-fabric automation** (notes 1–6) is a
-   **forward-only** experience (emulebb-rust + qBittorrentBB + TrackMuleBB). The
-   frozen Windows bundle gives side-by-side dual management via the frozen
-   aMuTorrent, **not** the new fabric.
+5. The **cross-network metadata-fabric automation** (notes 1–6) is a future
+   forward-only experience. It resumes only after the Rust client is stable and
+   qBittorrentBB is active enough to make cross-network automation concrete.
 
 ## Historical Decision (2026-06-20): the `0.8.*` program ran MFC modernization and the forward suite together
 
@@ -90,39 +103,36 @@ emulebb-rust as the forward eD2K/Kad core TrackMuleBB drives.
 
 ## Naming (exact, do not conflate)
 
-- **eMuleBB** = the **C++ MFC Windows desktop app** (`emulebb-main`). The current
-  flagship eD2K/Kad client.
+- **eMuleBB** = the **C++ MFC Windows desktop app** (`emulebb-main`). The shipped
+  `0.7.3` Windows client, frozen on the `0.7.x` line.
 - **emulebb-rust** = the **Rust eD2K/Kad core** — headless, multiplatform. The
-  strategic forward core (and the autonomous indexer of notes 13–15).
+  strategic forward client, including the Rust-native UI work in
+  `emulebb-rust-ui`.
 - **qBittorrentBB** = the BitTorrent-side client (fork) with the DHT harvester +
-  Torznab index.
+  Torznab index. Future companion work, not the current implementation lane.
 - **aMuTorrent** = the cross-network web-UI controller of the `0.7.3` line.
-  **Actively maintained / upstream-synced until `0.7.3` final, then frozen**
-  (sustainability only) — see Decision (2026-06-20). Superseded as the forward
-  controller by the Python coordinator after `0.7.3` final.
-- **TrackMuleBB** = the forward controller (Python-only, integrated web UI, no
-  Node; repo `trackmulebb`). First beta targets emulebb-rust's forward `/api/v1`
-  as a Rust Console UI; later phases add qBittorrentBB and cross-network suite
-  work. Deprecates aMuTorrent as a separate forward controller.
+  Frozen with the MFC `0.7.3` release.
+- **TrackMuleBB** = parked future controller work (Python-only, integrated web UI,
+  no Node; repo `trackmulebb`). It is not linked to MFC and is not current Rust
+  beta scope.
 
 ## Freeze scope (read first)
 
 The **eMuleBB (MFC) app** closes its `0.7.x` *feature* line at stable `0.7.3`.
-Further MFC evolution is possible but not certain; the retained `0.8.x` ideas
-must not be treated as active implementation commitments without a later
-operator decision. **aMuTorrent** freezes after `0.7.3` into sustainability
-maintenance. See [FUTURE-ROADMAP](FUTURE-ROADMAP.md) and
-[FROZEN-SURFACES](FROZEN-SURFACES.md). The forward products —
-`emulebb-rust`, `qBittorrentBB`, `TrackMuleBB`, `goed2k-server`, and the Python
-metadata-fabric tooling — remain the active evolution tracks.
+Further MFC evolution is not active; retained `0.8.x` ideas must not be treated
+as implementation commitments without a later operator decision. **aMuTorrent**
+freezes with `0.7.3`. See [FUTURE-ROADMAP](FUTURE-ROADMAP.md) and
+[FROZEN-SURFACES](FROZEN-SURFACES.md). The active evolution track is
+`emulebb-rust` headless + Rust-native UI. qBittorrentBB and TrackMuleBB are
+future/parked tracks.
 
 **eMuleBB 0.7.3 final scope:** the PowerShell suite bootstrap + local Arr
 integration + aMuTorrent. That is the whole of it — **no further `0.7.x` feature
 scope**.
-**Forward eD2K/Kad direction:** the strategic forward core is **emulebb-rust**.
-Consequently the metadata-fabric eD2K
-integrations (notes 1/5/6) target **emulebb-rust's `emulebb-metadata` SQLite as
-the primary** share/hash source; MFC `known.met` is a compatibility path only.
+**Forward eD2K/Kad direction:** the strategic forward client is
+**emulebb-rust**. Its immediate scope is headless stability, safety, protocol
+parity, persistence, REST, and Rust-native UI. Metadata-fabric integrations
+remain future work.
 
 ## Future suite bundle & three networks (decision 2026-06-16, deferred after 0.7.3)
 
