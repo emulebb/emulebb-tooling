@@ -8,11 +8,11 @@ known stock-vs-Rust differences; this document and the active re-audit backlog
 decide whether each difference is a permanent drop, release-blocking gap, or
 deferred backlog item.
 
-`emulebb-rust` is a **headless eD2K/Kad client** driven over its Rust-forward
-`/api/v1` REST contract. It targets stock eMule protocol and behavior parity by
-default. SX1 live source exchange is the only pre-approved permanent protocol
-drop; every other divergence must be re-audited and dispositioned before it can
-be treated as intentional product scope.
+`emulebb-rust` is a **headless eD2K/Kad client** with a Rust-native UI, driven
+over its Rust-forward `/api/v1` REST contract. It targets stock eMule protocol
+and behavior parity by default. SX1 live source exchange is the only
+pre-approved permanent protocol drop; every other divergence must be re-audited
+and dispositioned before it can be treated as intentional product scope.
 
 ## Supported surface
 
@@ -36,8 +36,9 @@ be treated as intentional product scope.
   and the control plane still answers (RUST-FEAT-003 pin + RUST-FEAT-005 leak
   test).
 - **Control plane:** the Rust-forward `/api/v1` REST contract
-  (`x-contract-version`), API-key auth, driven by TrackMuleBB. The frozen
-  emulebb-mfc REST contract is not a forward compatibility constraint.
+  (`x-contract-version`), API-key auth, and Rust-native UI operation. The frozen
+  emulebb-mfc REST contract is not a forward compatibility constraint, and
+  TrackMuleBB is not a beta dependency.
 - **Persistence:** single SQLite store (the `known.met` / `clients.met` /
   `server.met` / `preferences.dat` equivalent) — known files, peer credits,
   servers, categories, preferences, local identity/secure-ident, and the local
@@ -99,7 +100,7 @@ promotes it to a beta blocker:
   per-slot DoneBlocks history (MFC unbounded). Documented, effectively
   non-binding, no wire impact.
 
-## Rust Console Beta gate
+## Rust Beta gate
 
 `rust-v0.1.0-beta.1` may ship with a signed-off non-critical parity backlog, but
 not with unresolved P0 safety or critical stock-wire parity findings. The beta
@@ -109,13 +110,14 @@ gate is:
 - stock eMule wire-critical parity review has no undispositioned P0 findings;
 - the non-SX1 omission re-audit has an explicit backlog disposition for every
   registered divergence;
-- Rust OpenAPI conformance is enforced for TrackMuleBB's required adapter shape;
-- TrackMuleBB full console pass is green against the candidate daemon: status,
-  transfers, uploads, search/download, shared files, servers/Kad, and settings.
+- Rust OpenAPI conformance is enforced for the native daemon/UI boundary;
+- the Rust-native UI is green against the candidate daemon for status,
+  transfers, uploads, search/download, shared files, servers/Kad, settings,
+  logs, and diagnostics.
 
-The published prerelease artifact is the emulebb-rust Windows x64 zip. The
-release notes name the compatible TrackMuleBB source commit; TrackMuleBB is not
-tagged or packaged for this first Rust beta.
+The published prerelease artifact is the emulebb-rust Windows x64 zip.
+TrackMuleBB is parked and is not tagged, packaged, or required for this first
+Rust beta.
 
 ## Platform tier
 

@@ -8,45 +8,44 @@ the [Active Backlog](../active/INDEX.md); the MFC roadmap is the
 ## Product Direction
 
 The eMuleBB **MFC desktop app** closes its `0.7.x` feature line with stable
-`0.7.3`. There is still a roadmap and retained ideas for MFC evolution, but MFC
-`0.8.x` is now a possibility rather than a committed next line. The MFC client is
-valuable, but it is expensive to evolve properly, so near-term forward
-development focuses on **emulebb-rust** — the multiplatform eD2K/Kad core behind
-the shared `/api/v1` contract — together with **qBittorrentBB** (the BitTorrent
-companion) and the suite integrations. The goal is unchanged at the product
-level: keep classic eD2K/Kad behavior understandable, make discovery and
-automation reliable, and stay stock-compatible.
+`0.7.3`. The MFC line is frozen except for critical maintenance and
+non-behavior-expanding diagnostics/instrumentation. The MFC client is valuable,
+but it is expensive to evolve properly, so near-term forward development focuses
+on **emulebb-rust** — the multiplatform eD2K/Kad headless client plus
+Rust-native UI. **qBittorrentBB** remains future BitTorrent companion work, and
+**TrackMuleBB** is parked until that companion track progresses enough to justify
+a cross-network controller. The goal is unchanged at the product level: keep
+classic eD2K/Kad behavior understandable, make discovery reliable, and stay
+stock-compatible.
 
 ## Release Line Direction
 
 `0.7.3` is the **final `0.7.x` feature release**. Its public train is fixed as
-`0.7.3-rc.1`, `0.7.3-rc.2`, `0.7.3-rc.3`, then stable `0.7.3`. After that, `0.7.x`
-is the permanent maintenance line with a frozen public surface (security,
-crash/data-loss, packaging, update-check, release-proof, and documentation fixes
-only). Per the operator decision of 2026-07-05, MFC `0.8.x` is an open question.
-The recorded MFC lean/performance/async ideas stay available for later review,
-but active forward development now prioritizes emulebb-rust and qBittorrentBB.
-The forward suite stays out of the whole `0.7.x` line; the `0.7.3`/`0.7.x`
-bundle remains MFC client + aMuTorrent + Arr only, delivered by the `install.ps1`
-thin wrapper.
+`0.7.3-rc.1`, `0.7.3-rc.2`, `0.7.3-rc.3`, then stable `0.7.3`. After that,
+`0.7.x` is the permanent maintenance line with a frozen public surface. Accept
+only security, crash/data-loss, packaging, update-check, release-proof,
+documentation fixes, and non-behavior-expanding diagnostics/instrumentation.
+The recorded MFC lean/performance/async ideas stay available as archived notes,
+but active forward development now prioritizes emulebb-rust. The forward suite
+stays out of the whole `0.7.x` line; the `0.7.3`/`0.7.x` bundle remains MFC
+client + aMuTorrent + Arr only, delivered by the `install.ps1` thin wrapper.
 
 ## Where The Future Work Is
 
 The forward program lives in the [Suite Joint Roadmap](../active/SUITE-JOINT-ROADMAP.md):
 
-- **emulebb-rust** — near-public-beta eD2K/Kad client plus an autonomous Kad/eD2K
-  indexer, with native `/api/v1`, Torznab, and a qBittorrent-compatible
-  download-client surface.
-- **qBittorrentBB** — a BitTorrent client with a DHT harvester, a branded
-  idempotent export to the eD2K share, and a Torznab index.
-- **Suite integrations** — a disk-grounded metadata fabric bridging torrents,
-  eMule collections, and eD2K shares; Prowlarr/Arr federation; and aMuTorrent as
-  the optional cross-network controller.
+- **emulebb-rust** — active near-public-beta eD2K/Kad client work: headless
+  daemon stability, Rust-native UI, safety, persistence, REST correctness, and
+  parity proof.
+- **qBittorrentBB** — future BitTorrent companion work: DHT harvester, branded
+  export to the eD2K share, and Torznab index.
+- **TrackMuleBB / suite integrations** — parked future work: metadata fabric,
+  cross-network handoff, and controller/setup automation after the Rust and
+  BitTorrent foundations are ready.
 
 ## What Remains On The MFC App
 
-Only maintenance and family/packaging work unless MFC `0.8.x` is explicitly
-reactivated:
+Only narrow maintenance remains:
 
 1. **Security and operations** — IP-filter policy, dependency/DLL hardening,
    diagnostics, the bound VPN public-IP guard, and release proof (as `0.7.x`

@@ -134,26 +134,22 @@ scope**.
 parity, persistence, REST, and Rust-native UI. Metadata-fabric integrations
 remain future work.
 
-## Future suite bundle & three networks (decision 2026-06-16, deferred after 0.7.3)
+## Future suite bundle & three networks (parked)
 
-After `0.7.3`, the suite grows into a **ready-to-use bundle** spanning **three networks** —
-eD2K (emulebb-rust / emulebb-mfc), BitTorrent (qBittorrentBB), Usenet (SABnzbd) —
-plus the Arr automation stack, **Bountarr** (our household media-grab UI over
+This remains the long-range direction, not current implementation scope. The
+suite can later grow into a **ready-to-use bundle** spanning eD2K/Kad
+(`emulebb-rust`), BitTorrent (qBittorrentBB), Usenet (SABnzbd), the Arr
+automation stack, **Bountarr** (our household media-grab UI over
 Radarr/Sonarr+Plex), and (Docker) Plex.
 
-- **TrackMuleBB is the future single pane and installer.** Its Python setup CLI
-  installs/auto-wires the bundle; its web UI is the runtime single pane (unified
-  transfers/search, **dynamic global bandwidth coordination**, cross-network
-  **dedup** via the equivalence map). The PowerShell one-liner becomes a **minimal
-  bootstrap** only after the future installer is release-proven. Full design:
+- **TrackMuleBB may become the future single pane and installer**, but it is on
+  hold. Do not spend implementation effort there until qBittorrentBB is active
+  and the cross-network workflow is concrete. Full design reference:
   [SUITE-INSTALLER](SUITE-INSTALLER.md).
-- **Search** aggregates the clients natively (rust index + qBittorrentBB harvest,
-  via a native path) plus **Prowlarr** for third-party/Usenet indexers, excluding
-  the **tagged** TrackMuleBB indexers to avoid duplicates.
-- **Phasing:** automate our components first (rust/MFC/qBittorrentBB/TrackMuleBB/
-  Bountarr) + pre-configure base settings for the third-party stack; deeper
-  third-party automation later. **Self-contained, no host interference**
-  (uv-managed Python, Node only for Bountarr).
+- **Search** may later aggregate clients natively (rust index + qBittorrentBB
+  harvest) plus **Prowlarr** for third-party/Usenet indexers.
+- **Phasing:** stabilize Rust first; then revisit qBittorrentBB; then decide
+  whether TrackMuleBB and the metadata fabric are justified.
 
 ## North star
 
@@ -164,10 +160,10 @@ Radarr/Sonarr+Plex), and (Docker) Plex.
 Each clause is a load-bearing constraint, not a slogan:
 
 - **Full suite** — integrated set, not isolated clients: eD2K/Kad client
-  (`emulebb-rust`), BT client (`qBittorrentBB`), optional server
-  (`goed2k-server`), indexers (Torznab/Prowlarr), Python tooling, and the
-  **TrackMuleBB** controller. The notes 1–6 metadata fabric is what makes it a
-  *suite* rather than two unrelated clients.
+  (`emulebb-rust`), later BT client (`qBittorrentBB`), optional server
+  (`goed2k-server`), indexers (Torznab/Prowlarr), Python tooling, and a possible
+  future **TrackMuleBB** controller. The notes 1–6 metadata fabric is what would
+  make it a *suite* rather than two unrelated clients.
 - **Safe** — operationally (VPN-fail-closed binding, control plane on the local
   IP, data plane pinned to the tunnel) and content-wise (harvested content is
   strictly separated from shared content; private torrents never leave the box).
@@ -183,10 +179,10 @@ Each clause is a load-bearing constraint, not a slogan:
   agreed definition; there is **no** I2P/onion-overlay track. The work is to
   *maintain and verify* the binding discipline, not to build a new anonymity
   layer.
-- **Multiplatform** — the strategic reason the forward program is rust- and
-  qBittorrentBB-centric: the eD2K client future is portable `emulebb-rust`, not
-  the Windows-only MFC app. The MFC app is the one Windows-only piece, and it is
-  frozen out of this program by design.
+- **Multiplatform** — the strategic reason the active program is Rust-first: the
+  eD2K client future is portable `emulebb-rust`, not the Windows-only MFC app.
+  The MFC app is the one Windows-only piece, and it is frozen out of this program
+  by design.
 - **Highest automation** — the controller plus report-only tooling plus
   autonomous indexing: the operator sets policy and the suite discovers,
   reconciles, downloads, shares, and bridges across networks unattended.
@@ -194,23 +190,24 @@ Each clause is a load-bearing constraint, not a slogan:
 ## Layered architecture
 
 ```
-Policy / orchestration ── TrackMuleBB controller (optional layer)        notes 6,16,17
-Discovery / index ─────── rust Kad/eD2K indexer + qBittorrentBB DHT       notes 11-15
-                          harvester + Prowlarr federation
-Clients / transport ───── emulebb-rust (eD2K/Kad) + qBittorrentBB (BT)    Phase 0/1
-Bridging / library ────── Python fabric + branded export + membership DB  notes 1-6
+Policy / orchestration ── TrackMuleBB controller (parked optional layer)  future
+Discovery / index ─────── rust Kad/eD2K indexer now; qBittorrentBB DHT     future
+                          harvester + Prowlarr federation later
+Clients / transport ───── emulebb-rust (eD2K/Kad) active; qBittorrentBB    Phase 0/1
+                          (BT) later
+Bridging / library ────── Python fabric + branded export + membership DB  future
 Safety substrate ──────── VPN-fail-closed binding; harvested != shared    cross-cutting
 ```
 
 ## Deliverable ordering (strict, component-level)
 
-The operator set a strict serial order at the component level: **rust →
-qBittorrentBB → everything else.**
+The operator set a strict serial order at the component level:
+**emulebb-rust headless + Rust-native UI → qBittorrentBB → TrackMuleBB/fabric**.
 
-### Phase 0 — `emulebb-rust` perfectly functional (gate)
+### Phase 0 — `emulebb-rust` headless + Rust-native UI (active gate)
 
-"Perfectly functional" = client parity **plus the indexer role**. Both are inside
-deliverable #1; the indexer is not a later phase.
+"Perfectly functional" means the Rust daemon is credible as a real local eD2K/Kad
+client and the Rust-native UI can operate it without depending on TrackMuleBB.
 
 - Client parity: connect (server + Kad), search (server + Kad/global), download
   end-to-end from multiple sources including queue/reask, upload/share + serve
@@ -220,14 +217,11 @@ deliverable #1; the indexer is not a later phase.
   `enable_udp_reask` on. See `emulebb-rust` `docs/design/udp-source-reask.md`.
 - **Finish the VPN egress pin for eD2K TCP** (Kad UDP is done; eD2K TCP pending).
   Close the network-level anonymity guarantee.
-- **The autonomous Kad/eD2K indexer** (note 13). Passive-first snoop of routed
-  Kad traffic + gentle/compliant active replay and extension sweeps + opportunistic
-  source capture + optional server-search enrichment → one FTS SQLite index. See
-  `emulebb-rust` `docs/design/kad-ed2k-indexer.md`.
-- **Arr surfaces** (note 15): native `/api/v1` REST (control + search) + a Torznab
-  endpoint + a qBittorrent-WebUI-emulating download-client API, so the Arr stack
-  and **TrackMuleBB** drive rust exactly as they drive a qBittorrent (same pattern
-  eMuleBB already proved with its `/api/v2` compat layer).
+- Rust-native UI: status, searches, transfers, uploads, shared files, server/Kad
+  state, settings, logs, and diagnostics needed for daily operation.
+- **Autonomous Kad/eD2K indexer** and Arr-facing surfaces remain tracked Rust
+  capabilities, but they should not outrank core client stability and UI
+  usability.
 
 ### Phase 1 — `qBittorrentBB`
 
@@ -261,7 +255,7 @@ criteria pass. Phase ↔ the board `Phase` field ↔ a release milestone are the
 axis: an item's `Phase` on the eMuleBB Suite board must match the phase it serves
 here, and a phase closes a suite milestone.
 
-**Phase 0 — emulebb-rust perfectly functional (gate for everything after):**
+**Phase 0 — emulebb-rust headless + Rust-native UI (active gate):**
 - [ ] Connects (server + Kad), handles HighID/LowID.
 - [ ] Searches (server + Kad/global) and returns results.
 - [ ] Downloads a file end-to-end from ≥3 real sources, including queue/reask with
@@ -269,9 +263,12 @@ here, and a phase closes a suite milestone.
 - [ ] Uploads/shares and serves sources.
 - [ ] **Network Safety green:** eD2K TCP egress pinned to the tunnel
       (`RUST-FEAT-003`) and the automated leak-test passes blocking (`RUST-FEAT-005`).
-- [ ] Autonomous Kad/eD2K indexer populates the index and serves Torznab
-      (`RUST-FEAT-002`).
-- [ ] Arr drives rust as a qBittorrent download client (`RUST-FEAT-004`).
+- [ ] Rust-native UI covers daily operation: status, searches, transfers,
+      uploads, shared files, server/Kad state, settings, logs, and diagnostics.
+- [ ] Autonomous Kad/eD2K indexer backlog is dispositioned against current beta
+      scope (`RUST-FEAT-002`).
+- [ ] Arr/qBittorrent-compatible surfaces are dispositioned against current beta
+      scope (`RUST-FEAT-004`).
 - [ ] CI quality bar green (clippy `-D warnings`, cargo-deny advisories,
       `kad_swarm` blocking or `RUST-BUG-001` resolved).
 
@@ -322,16 +319,12 @@ specific slice.
 
 ### Active (the only scheduled work)
 
-- Close **eMuleBB (MFC) 0.7.3 final** (the `0.7.x` feature line): PowerShell
-  bootstrap + local Arr + aMuTorrent. After `0.7.3` final, aMuTorrent freezes and
-  the MFC continues in the `0.8.x` modernization line (part of the `0.8.*` program
-  below).
-- **Phase 0 — emulebb-rust** perfectly functional: enable UDP reask (FEAT-001),
-  eD2K TCP VPN egress pin, download/upload parity hardening, the Kad/eD2K indexer,
-  Arr surfaces. Tracked in `emulebb-rust/docs/active`.
-- **Phase 1 — qBittorrentBB**: branded export, harvested disk store, indexer /
-  Torznab parity. Tracked in `qbittorrentbb/docs/active`.
-- **Phase 2 — metadata fabric + TrackMuleBB automation** (notes 1–6, 16–17).
+- **Phase 0 — emulebb-rust**: headless client stabilization, safety gates,
+  protocol parity, persistence, REST correctness, release proof, and
+  Rust-native UI. Tracked in `emulebb-rust/docs/active` and the Suite board.
+- **MFC 0.7.x maintenance only**: critical fixes plus
+  non-behavior-expanding diagnostics/instrumentation for the shipped `0.7.3`
+  line. The MFC roadmap board is archive/provenance.
 
 ### Parked (ideas only — not scope, not backlog)
 
@@ -349,43 +342,38 @@ Promote a slice into a product backlog before any of these becomes work.
 | Broad modernization / restructure surveys (archived — MFC frozen) | `history/ideas/IDEA-MODERNIZATION-2026.md`, `history/ideas/IDEA-RESTRUCTURE.md` |
 | A4AF cross-file source dedup (rust) | `emulebb-rust/docs/design/source-management-and-a4af.md` |
 | TrackMuleBB owning all generic download rules (scope split) | `amutorrent/docs/SUITE-AUTOMATION.md` (frozen-aMuTorrent design reference) |
+| qBittorrentBB branded export, harvested store, and Torznab parity | qBittorrentBB product backlog, to be reactivated after Rust stabilizes |
+| TrackMuleBB controller and setup CLI | TrackMuleBB product backlog, to be reactivated only after qBittorrentBB progresses |
 
 eMuleBB-MFC `FUTURE-ROADMAP.md` lanes (dark mode, IPv6 dual-stack, µTP, NAT-PMP,
-etc.) are **parked-by-freeze**: `0.8.x` material only if the MFC app is not
-retired in favour of emulebb-rust. **Exception (operator decision 2026-06-24):** the
-first specified `0.8.x` MFC lane is now active — **Performance & Async** (fast
-startup, networking + `Process()` off the UI thread), forward-porting the tested
-`WSAPoll` network-thread migration from the `v0.72a-broadband-dev` lineage. See
-`FUTURE-ROADMAP.md` and
+etc.) are **parked-by-freeze**. The earlier 2026-06-24 Performance & Async lane
+is now archived with the rest of the MFC `0.8.x` notes; it is not active
+implementation work. See `FUTURE-ROADMAP.md` and
 [MFC-0.8.0-PERF-ASYNC-PLAN](plans/MFC-0.8.0-PERF-ASYNC-PLAN.md).
 
 ## Backlog & tracking structure
 
-Decided + set up 2026-06-14:
+Current structure after the 2026-07-12 cleanup:
 
 - **Issues live in each product's own repo** (release-train correctness): rust →
-  `emulebb/emulebb-rust`, qBittorrentBB → `emulebb/qbittorrentbb`. The local MD
-  item under `docs/active/items` is the durable engineering spec; the GitHub issue
-  owns workflow state (`workflow: github`).
+  `emulebb/emulebb-rust`, qBittorrentBB → `emulebb/qbittorrentbb`, TrackMuleBB →
+  `emulebb/trackmulebb` when reactivated. The local MD item is the durable
+  engineering spec; the GitHub issue owns workflow state (`workflow: github`).
 - **One org board aggregates them:** **eMuleBB Suite**,
   `https://github.com/orgs/emulebb/projects/3`, with single-select fields
   `Product` (eMuleBB-MFC / emulebb-rust / qBittorrentBB / TrackMuleBB / aMuTorrent /
   tooling) and
-  `Phase` (Phase 0/1/2). Phase 0 = rust issues #1–#4; Phase 1 = qBittorrentBB
-  issues #1–#3.
-- **The MFC `eMuleBB Roadmap` board (#2) stays as-is** for the frozen 0.7.x line;
-  it is not polluted with forward work.
+  `Phase` (Phase 0/1/2). Phase 0 is the active Rust lane. Phase 1/2 are future
+  planning buckets until explicitly promoted.
+- **The MFC `eMuleBB Roadmap MFC (archive)` board (#2)** is archive/provenance
+  for the frozen MFC line; it is not used for forward work.
 - **Parked ideas stay out of the tracker** — they remain `IDEA-*.md` and become
   backlog only when a slice is promoted.
 
-**Approved but deferred migration — move the MFC backlog into the `emulebb`
-repo.** The emulebb-mfc app backlog currently lives in
-`emulebb-tooling/docs/active/items` (a structural smell: the frozen app's backlog
-sits in the tooling repo). The agreed end state is to move it into the `emulebb`
-repo, leaving only cross-cutting/workspace items in `emulebb-tooling`. This is a
-127-item cross-repo move that also rewires the GitHub sync (`github_roadmap_common.py`
-`ACTIVE_ITEMS` path + the Project #2 linkage), so it must be a **focused, tested
-migration**, not a blind bulk move. Deferred deliberately; do it as its own task.
+**MFC backlog migration is no longer a forward requirement.** The MFC GitHub
+backlog is closed and the Project #2 board is archived. Local MFC item files can
+be retained as engineering/spec provenance unless a later archival cleanup moves
+them under `docs/history`.
 
 **Pending tooling task (not yet done):** generalize the GitHub sync scripts
 (`emulebb-tooling/scripts/github_roadmap_common.py`, `github-roadmap-sync.py`,
@@ -395,7 +383,8 @@ only `emulebb-tooling/docs/active/items`) to a **per-product config** (repo +
 items path + project + Product/Phase field mapping), so each product's
 `docs/active/items` syncs to its own repo issues and onto the Suite board. This
 mutates live GitHub state, so it needs its own focused, tested change — do not
-bolt it on untested.
+bolt it on untested. Treat the existing Project #2 sync path as legacy MFC
+archive tooling until generalized.
 
 ## Index of program docs
 

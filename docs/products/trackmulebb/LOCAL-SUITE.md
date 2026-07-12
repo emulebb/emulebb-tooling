@@ -1,5 +1,9 @@
 # Local suite bring-up (emulebb-rust + TrackMuleBB)
 
+> Archived dev experiment. TrackMuleBB is on hold and is not part of the current
+> emulebb-rust stabilization lane. Use this only as historical/reference material
+> if TrackMuleBB is reactivated after qBittorrentBB progresses.
+
 A repeatable, one-command local install of the forward core: it builds the
 **emulebb-rust** daemon, runs it bound to the VPN tunnel with the REST control
 plane on `X_LOCAL_IP`, seeds Kad + eD2K servers live from **emule-security**, and
