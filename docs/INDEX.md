@@ -21,14 +21,12 @@
 ## The eMuleBB Suite
 
 This guide covers the **eMuleBB Windows client** (the `0.7.3` eD2K/Kad desktop
-app; the `0.7.x` feature line closes at `0.7.3`, with MFC modernization continuing
-in the `0.8.x` line). It is one product in the broader **eMuleBB Suite**: the
-forward multiplatform core **emulebb-rust**, the BitTorrent companion
-**qBittorrentBB**, and the forward cross-network controller + installer
-**TrackMuleBB** (which replaces aMuTorrent in the `0.8.*` program — aMuTorrent
-stays maintained until `0.7.3` final — and drives any `/api/v1` core by advertised
-capability). For the suite as a whole — roadmap, the three-network bundle
-(eD2K / BitTorrent / Usenet), and install/Docker delivery — see the
+app). The MFC `0.7.x` line is frozen except for critical maintenance and
+non-behavior-expanding diagnostics/instrumentation. Forward development now lives
+in **emulebb-rust**: the headless eD2K/Kad client plus Rust-native UI. The
+broader **eMuleBB Suite** remains the product direction, but **qBittorrentBB** is
+future companion work and **TrackMuleBB** is parked until the BitTorrent side is
+ready to justify a cross-network controller. For the suite as a whole, see the
 [Suite Roadmap](active/SUITE-JOINT-ROADMAP.md),
 [Suite Bundle & Installer](active/SUITE-INSTALLER.md), and
 [Suite Docker Delivery](active/SUITE-DOCKER.md).
@@ -247,9 +245,10 @@ are not the best first read for users.
 
 If a status claim outside `docs/active/` conflicts with `docs/active/`, treat
 `docs/active/` as authoritative for current local backlog and release state.
-For GitHub-primary backlog items marked `workflow: github`, the linked
-`emulebb/emulebb` issue and the public `eMuleBB Roadmap` org Project #2 are
-authoritative for workflow state.
+For GitHub-primary forward backlog items marked `workflow: github`, the owning
+product repo issue and the public `eMuleBB Suite` org Project #3 are
+authoritative for workflow state. Project #2 is now the MFC archive board:
+`eMuleBB Roadmap MFC (archive)`.
 
 ## Browser Site
 

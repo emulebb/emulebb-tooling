@@ -19,16 +19,18 @@ path, not by filename alone.
 If another doc conflicts with `docs/active/`, `docs/active/` wins for current
 status.
 
-For GitHub-primary backlog items, workflow status is an exception: the linked
-`emulebb/emulebb` issue and the public org-level `eMuleBB Roadmap` Project #2
-own current state, priority, release placement, discussion, ownership, and PR
-linkage. The canonical endpoints are
-`https://github.com/emulebb/emulebb/issues` and
-`https://github.com/orgs/emulebb/projects/2`. The local active item doc remains
-the engineering spec/evidence record. Such files carry `workflow: github` and
-`github_issue:` front matter. Their legacy `status:` field is retained only for
-the current taxonomy tooling until the active-doc model is migrated more
-broadly.
+For GitHub-primary backlog items, workflow status is an exception: the owning
+product repo issue and the public org-level `eMuleBB Suite` Project #3 own
+current state, priority, release placement, discussion, ownership, and PR
+linkage for forward work. The canonical forward board is
+`https://github.com/orgs/emulebb/projects/3`. MFC-era items in
+`emulebb/emulebb` and Project #2 (`eMuleBB Roadmap MFC (archive)`) are
+archive/provenance only unless they are critical maintenance or
+non-behavior-expanding diagnostics/instrumentation. The local active item doc
+remains the engineering spec/evidence record. Such files carry
+`workflow: github` and `github_issue:` front matter. Their legacy `status:` field
+is retained only for the current taxonomy tooling until the active-doc model is
+migrated more broadly.
 
 ## Reference Docs
 
@@ -82,9 +84,10 @@ as provenance only.
   `docs/active/items/`; release dashboards and plans should point to item IDs
   instead of carrying anonymous task rows.
 - New externally actionable backlog items should be GitHub-primary by default:
-  create or update the local item, the `emulebb/emulebb` issue, and membership
-  in the `eMuleBB Roadmap` Project #2 unless the item is explicitly local-only,
-  historical, exploratory, or provenance-only.
+  create or update the local item, the owning product repo issue, and membership
+  in the `eMuleBB Suite` Project #3 unless the item is explicitly local-only,
+  historical, exploratory, or provenance-only. Do not add new MFC items to the
+  archived roadmap unless they meet the frozen-line maintenance rule.
 - Do not create new top-level Markdown files in `docs/` unless they are policy
   or navigation entry points.
 - Add new exploratory proposals under `docs/ideas/` with an explicit

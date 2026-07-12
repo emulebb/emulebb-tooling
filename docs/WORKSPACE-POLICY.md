@@ -44,8 +44,10 @@ that is true.
   only.
 - Revalidate backlog and release docs against current `main`, dependency pins,
   and this policy before implementation.
-- For backlog items with `workflow: github`, the linked `emulebb/emulebb` issue
-  and org Project #2 (`eMuleBB Roadmap`) are authoritative for workflow state.
+- For MFC backlog items, the linked `emulebb/emulebb` issue and org Project #2
+  (`eMuleBB Roadmap MFC (archive)`) are archive/provenance only. Forward
+  GitHub-primary work uses the owning product repo issue and org Project #3
+  (`eMuleBB Suite`) for workflow state.
 
 Directive precedence is:
 
@@ -130,8 +132,9 @@ Directive precedence is:
   created from the selected reviewed `main` commit when a release candidate
   starts. The `0.7.3` train is fixed as `0.7.3-rc.1`, `0.7.3-rc.2`,
   `0.7.3-rc.3`, then stable `0.7.3`.
-- After stable `0.7.3`, `main` opens for `0.8.0` work and
-  `release/0.7.x` carries the legacy support line.
+- After stable `0.7.3`, the MFC app is frozen on the `0.7.x` legacy support
+  line. No MFC `0.8.x` implementation lane is active unless an explicit later
+  operator decision reopens it.
 - The `0.7.x` legacy line accepts only compatibility-preserving, low-risk bug
   fixes on supported surfaces plus security, crash/data-loss, packaging,
   update-check, release-proof, and release-documentation fixes. It must not add
@@ -145,6 +148,7 @@ Directive precedence is:
 - Do not start normal feature work directly on release branches.
 - Fixes made on release branches must be merged or cherry-picked back to `main`
   unless the fix is release-packaging metadata that does not apply to `main`.
+  For MFC, `main` remains a maintenance branch, not a feature-development lane.
 - Supporting repos use their setup-pinned branch.
 - `stale/*` branches are retired historical references only. Never use them as
   active development targets or validation baselines unless a task explicitly
@@ -467,12 +471,16 @@ swarm. If this fails once in public, it breaks the product's core trust claim.
   docs-first and light-code contribution work.
 - Backlog and planning docs are supporting specs; for GitHub-primary items they
   are not workflow authority by themselves.
-- Canonical public backlog workflow endpoints are
-  `https://github.com/emulebb/emulebb/issues` and
-  `https://github.com/orgs/emulebb/projects/2`.
+- Canonical forward backlog workflow endpoint is org Project #3:
+  `https://github.com/orgs/emulebb/projects/3`. Use the owning product repo for
+  issues, for example `emulebb/emulebb-rust` for Rust client work.
+- The MFC archive endpoints are `https://github.com/emulebb/emulebb/issues` and
+  `https://github.com/orgs/emulebb/projects/2`. They are not the default for new
+  work; the MFC repo accepts only critical maintenance plus
+  non-behavior-expanding diagnostic/instrumentation items.
 - New externally actionable backlog items should be managed in the local item,
-  linked `emulebb/emulebb` issue, and Project #2 together unless explicitly
-  local-only, historical, or provenance-only.
+  owning product repo issue, and the eMuleBB Suite board together unless
+  explicitly local-only, historical, or provenance-only.
 - For GitHub-primary backlog work, GitHub owns workflow state, priority,
   release placement, ownership, discussion, and PR linkage. Local Markdown owns
   durable engineering specs, acceptance criteria, implementation notes, and
@@ -656,8 +664,9 @@ swarm. If this fails once in public, it breaks the product's core trust claim.
 - The first stable release is `0.7.3`.
 - After stable `0.7.3`, the `0.7.x` series is the legacy support version with
   a frozen public surface.
-- The `0.8.x` series is the modernization line; `0.8.0` is the first release
-  expected to remove currently frozen legacy surfaces.
+- No MFC `0.8.x` modernization line is active. Retained `0.8.x` design notes are
+  historical or parked references unless a later operator decision reopens a
+  narrow MFC lane.
 - Stable patch releases increment the patch number, starting with `0.7.4` after
   `0.7.3` if a stable hotfix is needed.
 - Future prereleases use the next target version with an explicit prerelease
