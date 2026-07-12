@@ -504,6 +504,11 @@ swarm. If this fails once in public, it breaks the product's core trust claim.
 - One-off PowerShell commands are acceptable for basic shell operations such as
   file finding, string search, directory listing, environment inspection, and
   invoking existing tools.
+- Soak, live-wire, profiling, monitoring, build orchestration, packaging, and
+  persisted support workflows must not be implemented as PowerShell scripts or
+  inline PowerShell programs. Extend the owning Python scripts/modules instead;
+  use PowerShell only as the interactive shell for trivial command invocation and
+  inspection.
 - New tracked PowerShell files must not be added in workspace-owned repos or
   managed app worktrees unless this policy explicitly allows them.
 - `repos\emulebb-build\emule_workspace\release_assets\emulebb\scripts\*.ps1`
