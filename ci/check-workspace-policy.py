@@ -976,9 +976,10 @@ HYGIENE_SOURCE_GLOBS: tuple[str, ...] = (
     "*.rs", "*.mjs", "*.js", "*.toml", "*.md",
 )
 
-# The only authoritative workspace path variables an agent must never assign;
-# they are machine-level inputs that orchestration only ever reads.
+# The authoritative workspace path variables an agent must never assign; they
+# are machine-level inputs that orchestration only ever reads.
 AUTHORITATIVE_ENV_VARS: tuple[str, ...] = (
+    "CARGO_TARGET_DIR",
     "EMULEBB_WORKSPACE_ROOT",
     "EMULEBB_WORKSPACE_OUTPUT_ROOT",
 )
@@ -1030,12 +1031,13 @@ def _env_write_patterns() -> tuple[tuple[re.Pattern[str], str], ...]:
 
 
 def audit_emulebb_env_override(root: Path) -> None:
-    """Rejects writes to the authoritative EMULEBB_* workspace path variables.
+    """Rejects writes to authoritative workspace path environment variables.
 
     Orchestration, scripts, and tests must read ``EMULEBB_WORKSPACE_ROOT`` and
-    ``EMULEBB_WORKSPACE_OUTPUT_ROOT`` from the process environment and never
-    reassign, shadow, or default them. Command-scoped knobs such as
-    ``EMULEBB_TEST_*`` and ``EMULEBB_REST_*`` are owned by their orchestration
+    ``EMULEBB_WORKSPACE_OUTPUT_ROOT`` from the process environment and must read
+    ``CARGO_TARGET_DIR`` as the operator-provided Rust target root. They must
+    never reassign, shadow, or default those variables. Command-scoped knobs such
+    as ``EMULEBB_TEST_*`` and ``EMULEBB_REST_*`` are owned by their orchestration
     modules and are out of scope for this audit.
     """
 
@@ -1058,7 +1060,7 @@ def audit_emulebb_env_override(root: Path) -> None:
                     )
     if issues:
         raise RuntimeError("\n".join(issues))
-    print("EMULEBB_* env override audit passed.")
+    print("Authoritative env override audit passed.")
 
 
 def audit_output_root(root: Path) -> None:
@@ -1073,8 +1075,8 @@ def audit_output_root(root: Path) -> None:
     issues: list[str] = []
 
     # Rust fork: target/ must be gitignored and untracked so ad-hoc cargo cannot
-    # pollute the source tree. CARGO_TARGET_DIR is pinned to the output root by
-    # emulebb-build orchestration (process.py:_ensure_cargo_target_dir).
+    # pollute the source tree. CARGO_TARGET_DIR must be pre-set by the operator
+    # to EMULEBB_WORKSPACE_OUTPUT_ROOT\builds\rust\target.
     rust_root = resolve_workspace_path(root, r"repos\emulebb-rust")
     if rust_root.is_dir():
         gitignore = rust_root / ".gitignore"
