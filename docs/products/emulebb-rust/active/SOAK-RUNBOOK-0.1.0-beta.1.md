@@ -84,9 +84,10 @@ under the output soak root).
       Guard reports active + not blocked, and rust's `egressVerified=true` (bound
       HTTP+STUN probes resolved an allowlisted public IP); recorded under
       `vpnExitValidation` in the run summary.
-- [ ] **TrackMuleBB console proof** — source-run TrackMuleBB exercises status,
-      transfers, uploads, search/download, shared files, servers/Kad, and
-      settings against the candidate daemon over the Rust-forward OpenAPI shape.
+- [ ] **Rust-native UI proof** — `emulebb-rust-ui` exercises status, transfers,
+      uploads, search/download, shared files, servers/Kad, settings, logs, and
+      diagnostics against the candidate daemon over the Rust-forward OpenAPI
+      shape.
 - [ ] **Leak gate (operator wire-truth)** — with the daemon bound to the live
       hide.me tunnel, pull the tunnel mid-soak and confirm (pktmon on the
       physical NIC) **zero** off-tunnel eD2K/Kad packets. This is the Windows
@@ -96,9 +97,8 @@ under the output soak root).
 
 ## On pass
 
-Record the evidence bundle, including the compatible TrackMuleBB source commit.
-Then (and only then) the operator gives the explicit tag go: annotate
-`rust-v0.1.0-beta.1` on the reviewed Rust commit -> the `release.yml` workflow
-builds and publishes the unsigned Windows x64 zip. Close RUST-FEAT-033 after
-the release proof is recorded; close RUST-FEAT-005 only if its GitHub workflow
-state also confirms the leak gate is complete.
+Record the evidence bundle. Then (and only then) the operator gives the explicit
+tag go: annotate `rust-v0.1.0-beta.1` on the reviewed Rust commit -> the
+`release.yml` workflow builds and publishes the unsigned Windows x64 zip. Close
+RUST-FEAT-033 after the release proof is recorded; close RUST-FEAT-005 only if
+its GitHub workflow state also confirms the leak gate is complete.

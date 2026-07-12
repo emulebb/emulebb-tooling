@@ -415,7 +415,7 @@ not active item docs.
 | [FEAT-061](../history/items/FEAT-061.md) | Minor | DONE | Strong preference schema validation |
 | [FEAT-062](../history/items/FEAT-062.md) | Minor | DONE | Category management dialog polish and robustness |
 | [FEAT-063](../history/items/FEAT-063.md) | Minor | DONE | Web Interface preferences layout polish |
-| [FEAT-064](items/FEAT-064.md) | Minor | OPEN | Curated post-0.7.3 future release roadmap |
+| [FEAT-064](items/FEAT-064.md) | Minor | DEFERRED | Archived post-0.7.3 MFC future roadmap |
 | [FEAT-065](../history/items/FEAT-065.md) | Minor | DONE | Polish the native MiniMule tray popup |
 | [FEAT-066](../history/items/FEAT-066.md) | Minor | DONE | Replace MiniMule chrome with table and speed chart |
 | [FEAT-068](items/FEAT-068.md) | Minor | OPEN | Bound REST large-list memory and latency for very large profiles |

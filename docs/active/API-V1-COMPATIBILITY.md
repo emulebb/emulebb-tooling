@@ -20,7 +20,7 @@ shared forward contract.
 The emulebb-mfc contract is pinned to the `0.7.3` line. It is maintained only
 for release proof, compatibility repairs, and documentation corrections. It does
 not grow new controller capabilities, does not need a `/capabilities` discovery
-endpoint, and is not a constraint on TrackMuleBB's forward UI.
+endpoint, and is not a constraint on any future controller UI.
 
 Primary consumers:
 

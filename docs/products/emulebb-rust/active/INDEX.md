@@ -92,7 +92,7 @@ stay active-only; see [Closed Items](#closed-items-archive) for the archive.
 | [RUST-FEAT-006](items/RUST-FEAT-006.md) | Major | OPEN | Docker — publish a linuxserver-style GHCR image (suite bundle prerequisite) |
 | [RUST-FEAT-007](items/RUST-FEAT-007.md) | Minor | OPEN | REST push — SSE stream for live transfer updates (+ transfers.sse capability) |
 | [RUST-FEAT-025](items/RUST-FEAT-025.md) | Major | IN_PROGRESS | Anti-abuse — redo upload_duplicate_done_block_rejected (+ queued sibling) with conformant ledger semantics |
-| [RUST-FEAT-033](items/RUST-FEAT-033.md) | Critical | OPEN | Release — first usable release rust-v0.1.0-beta.1 (Rust tag, TrackMuleBB console proof, soak-gated) |
+| [RUST-FEAT-033](items/RUST-FEAT-033.md) | Critical | OPEN | Release — first usable release rust-v0.1.0-beta.1 (Rust tag, native UI proof, soak-gated) |
 
 ### Refactors / Evidence (`REF`)
 

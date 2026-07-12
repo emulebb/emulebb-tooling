@@ -2,8 +2,8 @@
 id: TMBB-FEAT-004
 workflow: github
 github_issue: https://github.com/emulebb/trackmulebb/issues/4
-title: Rust API alignment - remove legacy capability-negotiation assumptions
-status: OPEN
+title: Parked Rust API alignment - remove legacy capability-negotiation assumptions
+status: DEFERRED
 priority: Major
 category: feature
 labels: [controller, api-v1, rust, compatibility, suite]
@@ -15,42 +15,45 @@ source: API lineage reset 2026-07-08
 > Workflow status is tracked in GitHub. This local document is retained as an
 > engineering spec/evidence record.
 
-# TMBB-FEAT-004 - Rust API alignment
+# TMBB-FEAT-004 - Parked Rust API alignment
 
 ## Summary
 
-Update TrackMuleBB to target the emulebb-rust forward `/api/v1` contract
-directly. The first TrackMuleBB beta is a Rust Console UI; it does not need to
-drive frozen emulebb-mfc and does not need generic `/capabilities` negotiation.
-The beta is accepted as a full Rust console: status, transfers, uploads,
-search/download, shared files, servers/Kad, and settings.
+When TrackMuleBB is reactivated, update it to target the emulebb-rust forward
+`/api/v1` contract directly. TrackMuleBB is parked future controller work; it
+does not drive the current Rust beta, does not link to frozen emulebb-mfc, and
+does not need generic `/capabilities` negotiation as a first-order product
+requirement.
 
 ## Why This Matters
 
 The old item assumed one shared contract where emulebb-mfc was a subset of Rust.
-That direction is retired. TrackMuleBB should now be simpler:
-use Rust-native routes and schemas for status, transfers, uploads, search,
-shared files, servers/Kad, and settings.
+That direction is retired. If TrackMuleBB resumes, it should use Rust-native
+routes and schemas for status, transfers, uploads, search, shared files,
+servers/Kad, settings, logs, and diagnostics.
 
 ## Intended Shape
 
 - Remove product-agnostic `/capabilities` assumptions from the Rust adapter path.
 - Treat the Rust OpenAPI in tooling docs as the adapter contract fixture source.
-- Gate the first beta around Rust-only pages and poll-based refresh.
+- Keep TrackMuleBB out of the Rust beta gate; if reactivated later, start with
+  Rust-only pages and poll-based refresh.
 - Leave qBittorrentBB, SABnzbd, installer, and cross-network automation for later
   suite phases.
 
 ## Scope Constraints
 
-- No emulebb-mfc adapter or compatibility layer in the first beta.
-- No SSE/event-stream requirement for this item; polling is the beta transport.
+- No emulebb-mfc adapter or compatibility layer.
+- No SSE/event-stream requirement for this item; polling is the initial
+  transport if the item is reactivated.
 - Do not make TrackMuleBB a required hop for Rust itself.
 
 ## Acceptance Criteria
 
 - [ ] TrackMuleBB Rust adapter tests align with the Rust OpenAPI fixture shape.
-- [ ] First-beta UI pages for status, transfers, uploads, search/download,
-      shared files, servers/Kad, and settings call Rust-native routes directly.
-- [ ] No first-beta code path branches for emulebb-mfc support.
+- [ ] UI pages for status, transfers, uploads, search/download, shared files,
+      servers/Kad, settings, logs, and diagnostics call Rust-native routes
+      directly when TrackMuleBB is reactivated.
+- [ ] No code path branches for emulebb-mfc support.
 - [ ] Any remaining `/capabilities` usage is either removed or documented as a
       later optional resilience feature, not a product requirement.
