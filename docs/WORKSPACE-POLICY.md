@@ -501,6 +501,10 @@ swarm. If this fails once in public, it breaks the product's core trust claim.
 
 - Repeatable workspace automation should be implemented as persisted Python
   scripts or modules in the owning repo.
+- Before adding any new Python script or helper, search the owning repo's
+  existing Python scripts/modules for the needed capability. Prefer reusing or
+  extending an existing Python entrypoint or module; add a new Python file only
+  when no existing owner fits.
 - One-off PowerShell commands are acceptable for basic shell operations such as
   file finding, string search, directory listing, environment inspection, and
   invoking existing tools.
