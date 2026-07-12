@@ -509,6 +509,10 @@ swarm. If this fails once in public, it breaks the product's core trust claim.
   inline PowerShell programs. Extend the owning Python scripts/modules instead;
   use PowerShell only as the interactive shell for trivial command invocation and
   inspection.
+- CMD/batch is even more restricted than PowerShell: do not add `.cmd`/`.bat`
+  launchers or inline batch programs for workspace automation. Operator launch,
+  soak, live-wire, profiling, monitoring, build, and packaging workflows belong
+  in Python.
 - New tracked PowerShell files must not be added in workspace-owned repos or
   managed app worktrees unless this policy explicitly allows them.
 - `repos\emulebb-build\emule_workspace\release_assets\emulebb\scripts\*.ps1`
