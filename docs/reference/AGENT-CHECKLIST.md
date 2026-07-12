@@ -177,6 +177,10 @@ python -m mkdocs build --strict
   changes.
 - Commit and push each completed coherent slice before starting unrelated work
   unless the user explicitly asks to hold local commits.
+- Before saying a task is done, run `git status --short --branch` in every
+  touched repo. Do not final-handoff completed work while it is still
+  uncommitted; make granular commits first, or explicitly state that work is
+  incomplete/held by user request.
 - Include tracked item IDs in feature, bug, refactor, and CI backlog commits.
 - Record skipped validation with a concrete reason.
 - Refresh a handoff note only when terminating a session or when explicitly
