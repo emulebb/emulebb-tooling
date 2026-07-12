@@ -1,12 +1,13 @@
 # eMuleBB (MFC) Future Roadmap
 
-> **Current direction (operator decision 2026-07-05):** emulebb-mfc closes its
+> **Current direction (operator decision 2026-07-12):** emulebb-mfc closes its
 > `0.7.x` feature line with stable `0.7.3`. The MFC `0.8.x` roadmap and lean/
-> async ideas remain recorded here, but `0.8.x` is now a possibility rather than
-> a committed next line. The MFC client is valuable but expensive to evolve
-> cleanly, so near-term forward development focuses on **emulebb-rust** and
-> **qBittorrentBB**. Larger evolution should move there unless a later explicit
-> decision reactivates MFC `0.8.x`.
+> async ideas remain recorded here, but no MFC `0.8.x` lane is active. The MFC
+> client is valuable but expensive to evolve cleanly, so near-term forward
+> development focuses on **emulebb-rust** headless client stabilization and
+> Rust-native UI. **qBittorrentBB** is future companion work; **TrackMuleBB** is
+> parked until qBittorrentBB progresses. Larger evolution should move out of MFC
+> unless a later explicit decision reactivates a narrow MFC lane.
 
 This is the post-0.7.3 roadmap for the emulebb-mfc desktop app. It is not a
 `0.7.3` release-candidate gate (that is owned by [RELEASE-0.7.3](RELEASE-0.7.3.md)).
@@ -28,10 +29,10 @@ For a shorter public-readable overview, use
   regression fixes.
 - After stable `0.7.3`, `release/0.7.x` is the **permanent maintenance line**
   (compatibility-preserving, low-risk bug fixes plus security, crash/data-loss,
-  packaging, update-check, release-proof, and release-documentation fixes; no new
-  product surface, controller/API capability, or feature expansion). `main`
-  remains the integration branch, but major new evolution is expected to focus on
-  `emulebb-rust` and `qBittorrentBB` unless MFC `0.8.x` is explicitly reactivated.
+  packaging, update-check, release-proof, release-documentation fixes, and
+  non-behavior-expanding diagnostics/instrumentation; no new product surface,
+  controller/API capability, or feature expansion). `main` remains a maintenance
+  integration branch, not an MFC feature lane.
 - Frozen legacy surfaces stay frozen; they are not fixed in `0.7.x` unless the
   issue affects supported shared infrastructure, security, or app stability.
 - Stable patch maintenance increments the patch number (for example
@@ -42,25 +43,24 @@ For a shorter public-readable overview, use
   design material, but they are not active implementation commitments. A later
   operator decision must explicitly reopen MFC `0.8.x` before broad MFC evolution
   starts.
-- **Forward sequencing (operator decision 2026-07-05):** after stable `0.7.3`,
-  focus moves to `emulebb-rust` and `qBittorrentBB`. The Rust client is the likely
-  home for larger eD2K/Kad evolution and is approaching public beta after the
-  private test cycle; qBittorrentBB carries the BitTorrent-side companion work.
+- **Forward sequencing (operator decision 2026-07-12):** after stable `0.7.3`,
+  focus moves to `emulebb-rust` headless client stabilization and Rust-native UI.
+  qBittorrentBB is later BitTorrent-side companion work, and TrackMuleBB is
+  parked future controller work.
 
 ## GitHub Workflow Authority
 
-Roadmap workflow is GitHub-primary. Promoted MFC slices are tracked as issues in
-`emulebb/emulebb` and as items in the public `eMuleBB Roadmap` org project (#2).
-Local item docs remain engineering specs and evidence records; for files marked
-`workflow: github`, current status, priority, release placement, discussion,
-ownership, and PR linkage live in GitHub. The forward program (emulebb-rust,
-qBittorrentBB) is tracked separately on the public **eMuleBB Suite** board
-(`https://github.com/orgs/emulebb/projects/3`); see
+MFC roadmap workflow is archived. The `emulebb/emulebb` issues and public
+`eMuleBB Roadmap MFC (archive)` org project (#2) are provenance for the frozen
+line. New MFC items require a critical-maintenance or diagnostic/instrumentation
+justification. Forward program work (emulebb-rust now; qBittorrentBB and
+TrackMuleBB later) is tracked on the public **eMuleBB Suite** board
+(`https://github.com/orgs/emulebb/projects/3`) and in the owning product repo; see
 [SUITE-JOINT-ROADMAP](SUITE-JOINT-ROADMAP.md#backlog-tracking-structure).
 
-Use `python scripts\github-roadmap-sync.py` from `repos\emulebb-tooling` to
-preview or apply the MFC import, and `python scripts\github-roadmap-check.py` to
-validate migrated metadata.
+Treat `python scripts\github-roadmap-sync.py` and
+`python scripts\github-roadmap-check.py` as legacy MFC archive tooling until the
+sync path is generalized for product-owned Suite work.
 
 ## Product Boundary
 
@@ -218,8 +218,9 @@ them:
 - MFC promotions are limited to `0.7.x` maintenance plus the four active lanes
   above. Anything resembling a Superseded Lane is re-homed to the rust/suite
   roadmap, not promoted here.
-- A promoted MFC slice must have an `emulebb/emulebb` issue and `eMuleBB Roadmap`
-  (#2) project item before implementation starts.
+- A promoted MFC slice must have an `emulebb/emulebb` issue and archived
+  Project #2 item before implementation starts, unless the operator explicitly
+  keeps the item local-only.
 - Before implementation, revalidate the slice against current `main`, current
   dependency pins, and `WORKSPACE-POLICY.md`.
 - Prefer narrow, observable maintenance over behavioral rewrites; keep
