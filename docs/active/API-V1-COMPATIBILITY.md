@@ -36,6 +36,19 @@ breaking schema or route changes, while that is the only stability audience. The
 API should model native eD2K/Kad daemon concepts rather than preserving
 emulebb-mfc compatibility.
 
+Pre-beta rule: there is no external Rust REST consumer and no compatibility
+freeze. The Rust daemon, Rust-native UI, OpenAPI artifact, route/body validators,
+and first-party tests are one owned surface and may be changed together whenever
+that makes the API cleaner. Do not keep aliases, legacy fields, or awkward route
+shapes solely for hypothetical external consumers before an explicit API-freeze
+decision exists.
+
+The Rust REST API is not an emulebb-mfc, stock GUI, or legacy preference mirror.
+It should expose the best Rust-native async daemon model for eD2K/Kad operation.
+Legacy names and inert compatibility fields should be removed or replaced with
+real Rust-native concepts before beta. Broadband-oriented async IO is the daemon
+baseline, not a compatibility preference or runtime toggle.
+
 Primary consumers:
 
 - emulebb-rust

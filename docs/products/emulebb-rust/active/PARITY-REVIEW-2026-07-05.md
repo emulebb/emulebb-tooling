@@ -59,7 +59,7 @@ confirmed at parity (full per-subsystem tables are in the review transcripts).
 | eD2K | download_queue_rank_flood ban missing | MISSING | DEFER → defensive Phase C-rem (P-5) |
 | Server | OP_SERVERLIST auto-add not gated by an "add-servers-from-server" pref | PARTIAL | FIX comment + REGISTER (P-2) |
 | Server | Server obfuscation ports/flags not persisted across restart | PARTIAL | REGISTER (P-4, re-dispositioned) |
-| REST | `/transfers/{hash}/operations/preview` has no partial-file semantics | PARTIAL | REGISTER (P-4) |
+| eD2K | Peer media-preview capability/metadata behavior is not implemented | PARTIAL | REGISTER (P-4) |
 
 Registered intentional omissions (15) and the reserved-but-unwritten forward
 SQLite tables were excluded per scope and are not gaps.
@@ -111,8 +111,8 @@ neutral-or-gentler divergences so they stop surfacing in future audits:
   per-request-batch (synchronous serve model); cross-packet queued duplicates
   collapse into the done-block reject path — anti-abuse coverage preserved, event
   label can differ.
-- **ed2k-partial-file-preview** — `operations/preview` returns the transfer view
-  only; no incomplete-file preview action (GUI concept, headless-inapplicable).
+- **ed2k-preview** — peer media-preview capability/metadata behavior is not
+  implemented; no local preview REST operation is carried forward.
 
 ## Fix + register (P-2)
 

@@ -23,10 +23,15 @@ conformance/drift check into CI so the Rust contract stays honest.
 
 ## Why This Matters
 
-TrackMuleBB's first beta drives emulebb-rust directly from the Rust-forward
-contract. If a response shape diverges from the spec, the first-party UI breaks
-with no early signal. A drift gate converts the "remember to update the YAML"
-convention into an enforced invariant.
+The Rust-native UI and first-party tests drive emulebb-rust directly from the
+Rust-forward contract. If a response shape diverges from the spec, the owned UI
+breaks with no early signal. A drift gate converts the "remember to update the
+YAML" convention into an enforced invariant.
+
+This is not an API-freeze item. Before an explicit Rust REST freeze decision,
+there is no external consumer to preserve: the daemon, Rust-native UI, OpenAPI,
+validators, and tests may change together whenever a cleaner contract is useful.
+The gate exists to keep the current chosen contract honest.
 
 ## Intended Shape
 
@@ -41,7 +46,9 @@ convention into an enforced invariant.
 
 ## Scope Constraints
 
-- Conformance only; do not broaden or weaken the contract.
+- Conformance only; do not broaden or weaken the contract inside this item.
+  Separate feature/API changes may intentionally reshape the contract, but must
+  update the daemon, Rust-native UI, OpenAPI, validators, and tests together.
 - Adapter surfaces (`/api/v2` qBit-compat, Torznab) are out of scope for this
   native-contract gate.
 - No new tracked PowerShell; harness in Python via the shared suite.

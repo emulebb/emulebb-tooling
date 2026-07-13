@@ -151,12 +151,12 @@ paths:
   /app/shutdown:
     post:
       tags: [App]
-      summary: Request clean eMule process shutdown.
+      summary: Request clean daemon shutdown.
       operationId: shutdownApp
       description: >
-        This endpoint closes eMule only. Operating-system shutdown and reboot
-        actions from the legacy WebServer are intentionally not part of the
-        REST API.
+        Requests an orderly stop of the Rust daemon. Host power management is an
+        operator or service-manager responsibility, not an application REST
+        operation.
       requestBody:
         required: true
         content:
@@ -185,11 +185,11 @@ paths:
   /diagnostics/dumps:
     post:
       tags: [Diagnostics]
-      summary: Capture an operator-requested eMule diagnostic dump.
+      summary: Capture an operator-requested daemon diagnostic dump.
       operationId: captureDiagnosticDump
       description: >
-        Unsafe diagnostic endpoint. It is available only when diagnostic REST
-        endpoints are explicitly enabled in the WebServer configuration.
+        Unsafe diagnostic endpoint. It requires API-key authorization and an
+        explicit confirmation field in the request body.
       requestBody:
         required: true
         content:
@@ -221,10 +221,10 @@ paths:
       summary: Trigger a diagnostic crash to verify dump generation.
       operationId: triggerDiagnosticCrashTest
       description: >
-        Unsafe diagnostic endpoint. It is available only when diagnostic REST
-        endpoints are explicitly enabled in the WebServer configuration. A
-        successful request intentionally terminates the process, so clients
-        should treat connection loss after acceptance as the expected result.
+        Unsafe diagnostic endpoint. It requires API-key authorization and an
+        explicit confirmation field in the request body. A successful request
+        intentionally terminates the process, so clients should treat connection
+        loss after acceptance as the expected result.
       requestBody:
         required: true
         content:
@@ -1023,32 +1023,6 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/OkAcceptedResponse"
-        "400":
-          $ref: "#/components/responses/ErrorResponse"
-        "401":
-          $ref: "#/components/responses/ErrorResponse"
-        "404":
-          $ref: "#/components/responses/ErrorResponse"
-        "405":
-          $ref: "#/components/responses/MethodNotAllowedResponse"
-        "409":
-          $ref: "#/components/responses/ErrorResponse"
-        "500":
-          $ref: "#/components/responses/ErrorResponse"
-        "503":
-          $ref: "#/components/responses/ErrorResponse"
-        default:
-          $ref: "#/components/responses/ErrorResponse"
-  /transfers/{hash}/operations/preview:
-    parameters:
-      - $ref: "#/components/parameters/FileHash"
-    post:
-      tags: [Transfers]
-      summary: Start the configured preview action for one transfer.
-      operationId: previewTransfer
-      responses:
-        "200":
-          $ref: "#/components/responses/TransferResponse"
         "400":
           $ref: "#/components/responses/ErrorResponse"
         "401":
@@ -3136,10 +3110,6 @@ components:
           type: boolean
         reconnect:
           type: boolean
-        newAutoUp:
-          type: boolean
-        newAutoDown:
-          type: boolean
         creditSystem:
           type: boolean
         safeServerConnect:
@@ -3151,9 +3121,6 @@ components:
           type: boolean
         networkEd2k:
           type: boolean
-        downloadAutoBroadbandIo:
-          type: boolean
-          description: Enables adaptive broadband download write buffering based on currently available RAM.
     PreferencesPatch:
       type: object
       additionalProperties: false
@@ -3199,10 +3166,6 @@ components:
           type: boolean
         reconnect:
           type: boolean
-        newAutoUp:
-          type: boolean
-        newAutoDown:
-          type: boolean
         creditSystem:
           type: boolean
         safeServerConnect:
@@ -3214,9 +3177,6 @@ components:
           type: boolean
         networkEd2k:
           type: boolean
-        downloadAutoBroadbandIo:
-          type: boolean
-          description: Enables adaptive broadband download write buffering based on currently available RAM.
     StatusEnvelope:
       unevaluatedProperties: false
       allOf:
