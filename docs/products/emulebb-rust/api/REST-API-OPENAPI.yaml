@@ -3134,6 +3134,8 @@ components:
           maximum: 10000
         autoConnect:
           type: boolean
+        reconnect:
+          type: boolean
         newAutoUp:
           type: boolean
         newAutoDown:
@@ -3194,6 +3196,8 @@ components:
           minimum: 2000
           maximum: 10000
         autoConnect:
+          type: boolean
+        reconnect:
           type: boolean
         newAutoUp:
           type: boolean
