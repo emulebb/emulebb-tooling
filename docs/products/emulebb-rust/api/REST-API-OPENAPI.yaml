@@ -148,6 +148,30 @@ paths:
           $ref: "#/components/responses/ErrorResponse"
         default:
           $ref: "#/components/responses/ErrorResponse"
+  /app/preferences/schema:
+    get:
+      tags: [App]
+      summary: Return shared preference metadata used by the daemon, REST validation, and first-party UI.
+      operationId: getPreferencesSchema
+      responses:
+        "200":
+          $ref: "#/components/responses/PreferencesSchemaResponse"
+        "400":
+          $ref: "#/components/responses/ErrorResponse"
+        "401":
+          $ref: "#/components/responses/ErrorResponse"
+        "404":
+          $ref: "#/components/responses/ErrorResponse"
+        "405":
+          $ref: "#/components/responses/MethodNotAllowedResponse"
+        "409":
+          $ref: "#/components/responses/ErrorResponse"
+        "500":
+          $ref: "#/components/responses/ErrorResponse"
+        "503":
+          $ref: "#/components/responses/ErrorResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /app/shutdown:
     post:
       tags: [App]
@@ -2683,6 +2707,12 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/PreferencesEnvelope"
+    PreferencesSchemaResponse:
+      description: Preference schema envelope.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/PreferencesSchemaEnvelope"
     SearchResponse:
       description: Search envelope.
       content:
@@ -3066,6 +3096,51 @@ components:
           properties:
             data:
               $ref: "#/components/schemas/Preferences"
+    PreferencesSchemaEnvelope:
+      unevaluatedProperties: false
+      allOf:
+        - $ref: "#/components/schemas/EnvelopeBase"
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: "#/components/schemas/PreferenceSpec"
+    PreferenceSpec:
+      type: object
+      additionalProperties: false
+      required: [key, label, group, kind, min, max, unit, defaultValue, restartRequired, advanced, description]
+      properties:
+        key:
+          type: string
+          description: Stable JSON preference key used by GET/PATCH preferences.
+        label:
+          type: string
+          description: Short UI label.
+        group:
+          type: string
+          enum: [network, transfers, server, kad, safety]
+        kind:
+          type: string
+          enum: [number, boolean]
+        min:
+          type: [integer, "null"]
+          minimum: 0
+        max:
+          type: [integer, "null"]
+          minimum: 0
+        unit:
+          type: [string, "null"]
+        defaultValue:
+          oneOf:
+            - type: integer
+            - type: boolean
+        restartRequired:
+          type: boolean
+        advanced:
+          type: boolean
+        description:
+          type: string
     Preferences:
       type: object
       additionalProperties: false
