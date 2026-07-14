@@ -4924,6 +4924,8 @@ components:
           enum: [low, normal, high]
         static:
           type: boolean
+        enabled:
+          type: boolean
     UrlImportRequest:
       type: object
       additionalProperties: false
