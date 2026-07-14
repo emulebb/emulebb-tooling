@@ -40,7 +40,7 @@ Do not split the product into hidden preferences/config/settings surfaces.
   operations are settings sections in the UI, not duplicate setting keys.
 - The UI should use regular, explicit controls. Reuse `emulebb-settings`
   validation/default metadata where it is already available or simple to add,
-  but do not block the UI on a schema-driven renderer.
+  but do not block the UI on a generic metadata renderer.
 - Protocol parity remains mandatory for eD2K/Kad behavior; local REST/UI shape
   should stay Rust-native and clean.
 
