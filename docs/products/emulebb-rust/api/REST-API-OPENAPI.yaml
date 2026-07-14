@@ -3290,7 +3290,7 @@ components:
     Stats:
       type: object
       additionalProperties: false
-      required: [connected, downloadSpeedKiBps, uploadSpeedKiBps, sessionDownloadedBytes, sessionUploadedBytes, activeUploads, waitingUploads, downloadCount, ed2kConnected, ed2kHighId, kadRunning, kadConnected, kadFirewalled]
+      required: [connected, downloadSpeedKiBps, uploadSpeedKiBps, sessionDownloadedBytes, sessionUploadedBytes, activeUploads, waitingUploads, downloadCount, ed2kConnected, ed2kHighId, kadRunning, kadConnected, kadFirewallState]
       properties:
         connected:
           type: boolean
@@ -3339,10 +3339,11 @@ components:
           type: boolean
         kadConnected:
           type: boolean
-        kadFirewalled:
-          type:
-            - boolean
-            - "null"
+        kadFirewallState:
+          $ref: "#/components/schemas/FirewallState"
+    FirewallState:
+      type: string
+      enum: [unknown, open, firewalled]
     SharedStartupCache:
       type: object
       additionalProperties: false
@@ -4959,16 +4960,14 @@ components:
     Kad:
       type: object
       additionalProperties: false
-      required: [running, connected, firewalled, bootstrapping, bootstrapProgress, contactCount, lanMode, users, files]
+      required: [running, connected, firewallState, bootstrapping, bootstrapProgress, contactCount, lanMode, users, files]
       properties:
         running:
           type: boolean
         connected:
           type: boolean
-        firewalled:
-          type:
-            - boolean
-            - "null"
+        firewallState:
+          $ref: "#/components/schemas/FirewallState"
         nodes:
           type: integer
           minimum: 0
