@@ -4868,7 +4868,7 @@ components:
     ServerStatus:
       type: object
       additionalProperties: false
-      required: [connected, connecting, currentServer, lowId, serverCount]
+      required: [connected, connecting, currentServer, ed2kIdState, serverCount]
       properties:
         connected:
           type: boolean
@@ -4878,15 +4878,16 @@ components:
           oneOf:
             - $ref: "#/components/schemas/Server"
             - type: "null"
-        lowId:
-          type:
-            - boolean
-            - "null"
+        ed2kIdState:
+          $ref: "#/components/schemas/Ed2kIdState"
         serverCount:
           type: integer
           minimum: 0
         active:
           $ref: "#/components/schemas/Server"
+    Ed2kIdState:
+      type: string
+      enum: [unknown, high, low]
     ServerCreateRequest:
       type: object
       additionalProperties: false
