@@ -4811,7 +4811,7 @@ components:
     Server:
       type: object
       additionalProperties: false
-      required: [address, port, name, priority, static, connected, connecting, current, description, dynIp, failedCount, hardFiles, ip, ping, softFiles, version, users, files]
+      required: [address, port, name, priority, static, enabled, connected, connecting, current, description, dynIp, failedCount, hardFiles, ip, ping, softFiles, version, users, files]
       properties:
         address:
           type: string
@@ -4825,6 +4825,8 @@ components:
           type: string
           enum: [low, normal, high]
         static:
+          type: boolean
+        enabled:
           type: boolean
         connected:
           type: boolean
