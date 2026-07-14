@@ -3965,7 +3965,7 @@ components:
     SearchAvailabilityEvidence:
       type: object
       additionalProperties: false
-      required: [sources, completeSources, complete, clientCount, serverCount, kadPublishers]
+      required: [sources, completeSources, completionState, clientCount, serverCount, kadPublishers]
       properties:
         sources:
           type: integer
@@ -3973,10 +3973,8 @@ components:
         completeSources:
           type: integer
           minimum: 0
-        complete:
-          type:
-            - boolean
-            - "null"
+        completionState:
+          $ref: "#/components/schemas/SearchCompletionState"
         clientCount:
           type: integer
           minimum: 0
@@ -3986,6 +3984,9 @@ components:
         kadPublishers:
           type: integer
           minimum: 0
+    SearchCompletionState:
+      type: string
+      enum: [unknown, complete, incomplete]
     SearchNameEvidence:
       type: object
       additionalProperties: false
@@ -5184,9 +5185,7 @@ components:
         extension:
           type: string
         complete:
-          type:
-            - boolean
-            - "null"
+          type: boolean
         knownType:
           type: string
           enum: [shared, downloading, downloaded, cancelled, unknown, undetermined]
