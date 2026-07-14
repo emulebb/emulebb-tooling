@@ -15,7 +15,7 @@ machines, persistence needed for network correctness, and safety properties
 required to operate cleanly with stock-compatible peers, servers, and Kad nodes.
 It is not an MFC, stock GUI, legacy WebServer, or legacy preference mirror. Local
 controller shape, REST names, UI behavior, scheduling, diagnostics, and
-non-protocol preferences must evolve as clean Rust-native async daemon surfaces.
+non-protocol settings must evolve as clean Rust-native async daemon surfaces.
 The active registry is the beta gap board: implemented fixes live in audit
 history, while current defers and approved drops remain in
 `policy/rust-client-omissions.toml`.
@@ -48,13 +48,13 @@ history, while current defers and approved drops remain in
   the Rust daemon, Rust-native UI, OpenAPI artifact, validators, and tests are
   one owned surface: breaking REST shape changes are allowed when they make the
   contract cleaner, provided the owned consumers and conformance evidence move
-  in the same change. Do not keep no-op legacy preference fields, legacy route
+  in the same change. Do not keep no-op legacy settings fields, legacy route
   names, or compatibility aliases for non-existent external Rust consumers.
 - **Runtime IO:** broadband-oriented async IO is the daemon baseline, not a
   compatibility preference or runtime toggle.
 - **Persistence:** single SQLite store (the `known.met` / `clients.met` /
   `server.met` / `preferences.dat` equivalent) — known files, peer credits,
-  servers, categories, preferences, local identity/secure-ident, and the local
+  servers, categories, settings, local identity/secure-ident, and the local
   Kad index.
 - **Anti-abuse:** IP + user-hash ban store (4h TTL), IP filter (`ipfilter.dat`),
   upload-queue admission gates, Kad flood detection / rate limiting, packet

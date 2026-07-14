@@ -61,8 +61,8 @@ graph TD
 
 **Legend**
 
-- `emulebb-daemon` — the binary (`bin/emulebb-rust.rs`); wires config → stores →
-  core → axum router. See `crates/emulebb-daemon/src/lib.rs`.
+- `emulebb-daemon` — the binary (`bin/emulebb-rust.rs`); wires profile bootstrap
+  settings → stores → core → axum router. See `crates/emulebb-daemon/src/lib.rs`.
 - `emulebb-core` — orchestration brain (`EmulebbCore`); owns live session state
   and drives the subsystems. `crates/emulebb-core/src/lib.rs`.
 - `emulebb-rest` — axum router + handlers/DTOs over the core.
@@ -86,7 +86,7 @@ network subsystems. Node names match the `EmulebbCore` struct
 ```mermaid
 %%{init: {'flowchart': {'nodeSpacing': 45, 'rankSpacing': 80}}}%%
 graph TB
-    cfg[DaemonConfig<br/>emulebb-rust.toml] --> boot[daemon::run]
+    cfg[DaemonProfile<br/>--profile dir<br/>emulebb-rust-settings.toml] --> boot[daemon::run]
     ctrl[External controller<br/>TrackMuleBB / scripts] -->|REST| router
 
     boot --> coreobj[EmulebbCore]
@@ -120,8 +120,8 @@ graph TB
 
 **Legend**
 
-- `daemon::run` reads `DaemonConfig`, opens the `MetadataStore`, builds the
-  `FileIndex` and `EmulebbCore`, then serves the axum router
+- `daemon::run` reads `DaemonProfile` from the fixed profile directory, opens the
+  `MetadataStore`, builds the `FileIndex` and `EmulebbCore`, then serves the axum router
   (`router_with_shutdown`) — see `crates/emulebb-daemon/src/lib.rs`.
 - `EmulebbCore` holds the persistent pieces (`metadata_store`, `index`,
   `ed2k_transfers`) and the optional live session `ed2k_runtime`, plus the Kad
@@ -265,10 +265,10 @@ with typed sub-stores. The runtime objects are hydrated from these on boot.
 ```mermaid
 %%{init: {'flowchart': {'nodeSpacing': 50, 'rankSpacing': 70}}}%%
 graph TD
-    db[(SQLite DB<br/>migrations · schema)] --> store[MetadataStore]
+    db[(SQLite DB<br/>fresh schema)] --> store[MetadataStore]
     store --> id[identity_store]
     store --> peer[peer_store]
-    store --> prof[profile_store — preferences]
+    store --> prof[profile_store — settings]
     store --> srch[search_store]
     store --> xfer[transfer_store]
     store --> kpub[kad_publish_store]
@@ -282,10 +282,11 @@ graph TD
 **Legend**
 
 - `MetadataStore` (`crates/emulebb-metadata/src/store.rs`) wraps the rusqlite
-  connection; `migrations.rs` / `schema.rs` manage the schema.
+  connection; `schema.sql` is the current development schema. During the Rust
+  dev phase, mismatched local databases are reset rather than migrated.
 - Typed sub-stores: identity (user hash / secure-ident keys), peers, profile
-  (REST preferences), searches, transfers, and the Kad publish cache.
-- On boot the core reads preferences via `profile_state::load_core_state`,
+  settings, searches, transfers, and the Kad publish cache.
+- On boot the core reads settings via `profile_state::load_core_state`,
   rebuilds the `Ed2kTransferRuntime` from the transfer store, and hydrates the
   `KadLocalStore` from the Kad publish cache (see `EmulebbCore::new_with_network`
   at `crates/emulebb-core/src/lib.rs:353`).

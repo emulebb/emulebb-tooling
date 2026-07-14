@@ -17,7 +17,7 @@ The near-term stability audience is first-party only:
 
 Breaking route or schema changes are allowed while the Rust daemon and native UI
 move in lockstep. A later third-party API promise needs a separate freeze and
-migration decision.
+compatibility decision.
 
 ## Conformance
 
