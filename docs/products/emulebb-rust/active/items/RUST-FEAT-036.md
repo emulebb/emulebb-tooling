@@ -32,6 +32,10 @@ Do not force every setting into `Preferences`.
   settings resource, not hidden live-preference fields.
 - Existing resources such as shared directories, categories, servers, and Kad
   operations are settings sections in the UI, not duplicate preference keys.
+- ED2K servers are profile configuration in SQLite, not daemon TOML. The daemon
+  TOML owns the process envelope and startup safety boundary; the server list,
+  static flag, priority, enabled state, and imported metadata live in the
+  profile repository.
 - Protocol parity remains mandatory for eD2K/Kad behavior; local REST/UI shape
   should stay Rust-native and clean.
 
@@ -69,8 +73,8 @@ restart-required/startup settings:
 - IP filter - enabled, path, level, reload/status.
 - REST bind/API key - setup/security section, restart-required and handled
   carefully.
-- Server bootstrap list/import - existing server routes should become a clear
-  settings section.
+- Server repository/import - existing server routes should become a clear
+  settings section backed by the SQLite profile.
 - Kad bootstrap nodes/import - existing Kad routes should become a clear
   settings section.
 
@@ -158,6 +162,14 @@ Do not put these in the normal Settings UI for beta:
 - [ ] Existing settings-adjacent resources are reachable from the Settings UI.
 - [ ] No inert compatibility fields or legacy preference names are introduced.
 - [ ] REST OpenAPI matches implementation and test coverage.
+
+## Implementation Notes
+
+- 2026-07-14: `RUST-FEAT-036 keep ED2K servers in SQLite profile` removed normal
+  daemon TOML server ownership. File-loaded daemon TOML now rejects
+  `ed2k.serverEndpoints` and `ed2k.serverEntries`; enabled SQLite profile
+  servers decide whether an ED2K server session can be configured. The example
+  TOML keeps listener/bind settings only.
 
 ## Next Implementation Slice
 
