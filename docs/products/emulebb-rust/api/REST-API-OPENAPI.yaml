@@ -95,14 +95,14 @@ paths:
           $ref: "#/components/responses/ErrorResponse"
         default:
           $ref: "#/components/responses/ErrorResponse"
-  /app/preferences:
+  /app/settings:
     get:
       tags: [App]
-      summary: Return controller-relevant preferences.
-      operationId: getPreferences
+      summary: Return DB-backed daemon settings.
+      operationId: getSettings
       responses:
         "200":
-          $ref: "#/components/responses/PreferencesResponse"
+          $ref: "#/components/responses/SettingsResponse"
         "400":
           $ref: "#/components/responses/ErrorResponse"
         "401":
@@ -121,41 +121,17 @@ paths:
           $ref: "#/components/responses/ErrorResponse"
     patch:
       tags: [App]
-      summary: Update controller-relevant preferences.
-      operationId: patchPreferences
+      summary: Update DB-backed daemon settings.
+      operationId: patchSettings
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/PreferencesPatch"
+              $ref: "#/components/schemas/AppSettingsUpdate"
       responses:
         "200":
-          $ref: "#/components/responses/PreferencesResponse"
-        "400":
-          $ref: "#/components/responses/ErrorResponse"
-        "401":
-          $ref: "#/components/responses/ErrorResponse"
-        "404":
-          $ref: "#/components/responses/ErrorResponse"
-        "405":
-          $ref: "#/components/responses/MethodNotAllowedResponse"
-        "409":
-          $ref: "#/components/responses/ErrorResponse"
-        "500":
-          $ref: "#/components/responses/ErrorResponse"
-        "503":
-          $ref: "#/components/responses/ErrorResponse"
-        default:
-          $ref: "#/components/responses/ErrorResponse"
-  /app/preferences/schema:
-    get:
-      tags: [App]
-      summary: Return shared preference metadata used by the daemon, REST validation, and first-party UI.
-      operationId: getPreferencesSchema
-      responses:
-        "200":
-          $ref: "#/components/responses/PreferencesSchemaResponse"
+          $ref: "#/components/responses/SettingsResponse"
         "400":
           $ref: "#/components/responses/ErrorResponse"
         "401":
@@ -2701,18 +2677,12 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/PeerBanEnvelope"
-    PreferencesResponse:
-      description: Preferences envelope.
+    SettingsResponse:
+      description: Settings envelope.
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/PreferencesEnvelope"
-    PreferencesSchemaResponse:
-      description: Preference schema envelope.
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/PreferencesSchemaEnvelope"
+            $ref: "#/components/schemas/AppSettingsEnvelope"
     SearchResponse:
       description: Search envelope.
       content:
@@ -3088,60 +3058,52 @@ components:
           type: boolean
         shutdownInProgress:
           type: boolean
-    PreferencesEnvelope:
+    AppSettingsEnvelope:
       unevaluatedProperties: false
       allOf:
         - $ref: "#/components/schemas/EnvelopeBase"
         - type: object
           properties:
             data:
-              $ref: "#/components/schemas/Preferences"
-    PreferencesSchemaEnvelope:
-      unevaluatedProperties: false
-      allOf:
-        - $ref: "#/components/schemas/EnvelopeBase"
-        - type: object
-          properties:
-            data:
-              type: array
-              items:
-                $ref: "#/components/schemas/PreferenceSpec"
-    PreferenceSpec:
+              $ref: "#/components/schemas/AppSettings"
+    AppSettings:
       type: object
       additionalProperties: false
-      required: [key, label, group, kind, min, max, unit, defaultValue, restartRequired, advanced, description]
       properties:
-        key:
-          type: string
-          description: Stable JSON preference key used by GET/PATCH preferences.
-        label:
-          type: string
-          description: Short UI label.
-        group:
-          type: string
-          enum: [network, transfers, server, kad, safety]
-        kind:
-          type: string
-          enum: [number, boolean]
-        min:
-          type: [integer, "null"]
-          minimum: 0
-        max:
-          type: [integer, "null"]
-          minimum: 0
-        unit:
-          type: [string, "null"]
-        defaultValue:
-          oneOf:
-            - type: integer
-            - type: boolean
-        restartRequired:
-          type: boolean
-        advanced:
-          type: boolean
-        description:
-          type: string
-    Preferences:
+        core:
+          $ref: "#/components/schemas/CoreSettings"
+        daemon:
+          $ref: "#/components/schemas/DaemonSettings"
+        ed2k:
+          $ref: "#/components/schemas/Ed2kSettings"
+        kad:
+          $ref: "#/components/schemas/KadSettings"
+        nat:
+          $ref: "#/components/schemas/NatSettings"
+        vpnGuard:
+          $ref: "#/components/schemas/VpnGuardSettings"
+        ipFilter:
+          $ref: "#/components/schemas/IpFilterSettings"
+    AppSettingsUpdate:
+      type: object
+      additionalProperties: false
+      minProperties: 1
+      properties:
+        core:
+          $ref: "#/components/schemas/CoreSettingsUpdate"
+        daemon:
+          $ref: "#/components/schemas/DaemonSettings"
+        ed2k:
+          $ref: "#/components/schemas/Ed2kSettings"
+        kad:
+          $ref: "#/components/schemas/KadSettings"
+        nat:
+          $ref: "#/components/schemas/NatSettings"
+        vpnGuard:
+          $ref: "#/components/schemas/VpnGuardSettings"
+        ipFilter:
+          $ref: "#/components/schemas/IpFilterSettings"
+    CoreSettings:
       type: object
       additionalProperties: false
       properties:
@@ -3196,7 +3158,7 @@ components:
           type: boolean
         networkEd2k:
           type: boolean
-    PreferencesPatch:
+    CoreSettingsUpdate:
       type: object
       additionalProperties: false
       minProperties: 1
@@ -3252,6 +3214,259 @@ components:
           type: boolean
         networkEd2k:
           type: boolean
+    DaemonSettings:
+      type: object
+      additionalProperties: false
+      properties:
+        incomingDir:
+          type: [string, "null"]
+        p2pBindIp:
+          type: [string, "null"]
+          format: ipv4
+        p2pBindInterface:
+          type: [string, "null"]
+        ed2kUserHash:
+          type: [string, "null"]
+    Ed2kSettings:
+      type: object
+      additionalProperties: false
+      properties:
+        listenPort:
+          type: [integer, "null"]
+          minimum: 0
+          maximum: 65535
+        obfuscationEnabled:
+          type: boolean
+        probeSearchTerm:
+          type: [string, "null"]
+        connectTimeoutSecs:
+          type: integer
+          minimum: 0
+        serverConnectTimeoutSecs:
+          type: integer
+          minimum: 0
+        callbackTimeoutSecs:
+          type: integer
+          minimum: 0
+        reconnectIntervalSecs:
+          type: integer
+          minimum: 0
+        reconnectEnabled:
+          type: boolean
+        safeServerConnect:
+          type: boolean
+        keepaliveSecs:
+          type: integer
+          minimum: 0
+        sessionRotationSecs:
+          type: integer
+          minimum: 0
+        maxConcurrentDownloads:
+          type: integer
+          minimum: 0
+        maxNewConnectionsPerFiveSeconds:
+          type: integer
+          minimum: 0
+        maxHalfOpenConnections:
+          type: integer
+          minimum: 0
+        maxSourcesPerFile:
+          type: integer
+          minimum: 0
+        maxParallelDownloadPeers:
+          type: integer
+          minimum: 0
+        keywordServerAttemptBudget:
+          type: integer
+          minimum: 0
+        exactHashKeywordServerAttemptBudget:
+          type: integer
+          minimum: 0
+        sourceServerAttemptBudget:
+          type: integer
+          minimum: 0
+        uploadQueue:
+          $ref: "#/components/schemas/Ed2kUploadQueueSettings"
+        downloadLimitBytesPerSec:
+          type: integer
+          minimum: 0
+        enableUdpReask:
+          type: boolean
+        publishEmuleRustIdentity:
+          type: boolean
+        addServersFromServer:
+          type: boolean
+        deadServerRetries:
+          type: integer
+          minimum: 0
+    Ed2kUploadQueueSettings:
+      type: object
+      additionalProperties: false
+      properties:
+        activeSlots:
+          type: integer
+          minimum: 0
+        elasticPercent:
+          type: integer
+          minimum: 0
+        uploadLimitBytesPerSec:
+          type: integer
+          minimum: 0
+        elasticUnderfillBytesPerSec:
+          type: integer
+          minimum: 0
+        elasticUnderfillSecs:
+          type: integer
+          minimum: 0
+        waitingCapacity:
+          type: integer
+          minimum: 0
+        waitingTimeoutSecs:
+          type: integer
+          minimum: 0
+        grantedTimeoutSecs:
+          type: integer
+          minimum: 0
+        uploadTimeoutSecs:
+          type: integer
+          minimum: 0
+        sessionTransferPercent:
+          type: integer
+          minimum: 0
+        sessionTimeLimitSecs:
+          type: integer
+          minimum: 0
+    KadSettings:
+      type: object
+      additionalProperties: false
+      properties:
+        listenPort:
+          type: [integer, "null"]
+          minimum: 0
+          maximum: 65535
+        bootstrapMinRoutingContacts:
+          type: integer
+          minimum: 0
+        localStoreEnabled:
+          type: boolean
+        localStoreKeywordTtlSecs:
+          type: integer
+          minimum: 0
+        localStoreSourceTtlSecs:
+          type: integer
+          minimum: 0
+        localStoreNotesTtlSecs:
+          type: integer
+          minimum: 0
+        localStoreKeywordCapacity:
+          type: integer
+          minimum: 0
+        localStoreSourceCapacity:
+          type: integer
+          minimum: 0
+        localStoreNotesCapacity:
+          type: integer
+          minimum: 0
+        localStoreSourcePerFileCapacity:
+          type: integer
+          minimum: 0
+        localStoreNotesPerFileCapacity:
+          type: integer
+          minimum: 0
+        publishSharedFilesEnabled:
+          type: boolean
+        republishIntervalSecs:
+          type: integer
+          minimum: 0
+        publishContactFanout:
+          type: integer
+          minimum: 0
+        udpFirewallCheckEnabled:
+          type: boolean
+        udpFirewallCheckIntervalSecs:
+          type: integer
+          minimum: 0
+        tcpFirewallCheckEnabled:
+          type: boolean
+        tcpFirewallCheckIntervalSecs:
+          type: integer
+          minimum: 0
+        buddyEnabled:
+          type: boolean
+        routingMaintenanceEnabled:
+          type: boolean
+        snoopQueueDedupWindowSecs:
+          type: integer
+          minimum: 0
+        snoopQueueGeneralMaxQueriesPer600s:
+          type: integer
+          minimum: 0
+        snoopQueueGeneralDrainCooldownSecs:
+          type: integer
+          minimum: 0
+        snoopQueueSourceMaxQueriesPer600s:
+          type: integer
+          minimum: 0
+        snoopQueueSourceDrainCooldownSecs:
+          type: integer
+          minimum: 0
+        snoopQueueSourceStopAfterResults:
+          type: integer
+          minimum: 0
+    NatSettings:
+      type: object
+      additionalProperties: false
+      properties:
+        enabled:
+          type: boolean
+        requireInitialMapping:
+          type: boolean
+        backendOrder:
+          type: array
+          items:
+            type: string
+        bindIp:
+          type: [string, "null"]
+        igdIp:
+          type: [string, "null"]
+        minissdpdSocket:
+          type: [string, "null"]
+        ssdpLocalPort:
+          type: [integer, "null"]
+          minimum: 0
+          maximum: 65535
+        discoveryTimeoutSecs:
+          type: integer
+          minimum: 0
+        leaseDurationSecs:
+          type: integer
+          minimum: 0
+        renewMarginSecs:
+          type: integer
+          minimum: 0
+        externalIpOverride:
+          type: [string, "null"]
+    VpnGuardSettings:
+      type: object
+      additionalProperties: false
+      properties:
+        enabled:
+          type: boolean
+        mode:
+          type: string
+        allowedPublicIpCidrs:
+          type: string
+    IpFilterSettings:
+      type: object
+      additionalProperties: false
+      properties:
+        enabled:
+          type: boolean
+        path:
+          type: [string, "null"]
+        level:
+          type: integer
+          minimum: 0
     StatusEnvelope:
       unevaluatedProperties: false
       allOf:
