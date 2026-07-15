@@ -106,18 +106,21 @@ Owner repo: `repos/emulebb-rust`
 - Done: did not change stock eMule references such as `CPreferences`, `thePrefs`, or
   `preferences.dat`.
 
-## To Be Reviewed / Implemented
-
 ### UI settings surface review
 
 Owner repo: `repos/emulebb-rust`
 
-- Confirm all important DB-backed Rust settings are reachable from the UI.
-- VPN binding and guard controls must be visible and explicit.
-- Server list UI must include disabled servers.
-- Server enable/disable must be available from the list.
-- The UI should make it clear that the client can connect to only one eD2K
-  server at a time.
+- Done: confirmed the Rust UI exposes the current DB-backed settings surface for
+  core limits, daemon incoming/bind settings, eD2K, Kad, NAT, VPN Guard, and IP
+  filter controls.
+- Done: confirmed VPN binding and guard controls are visible and explicit.
+- Done: kept server enable/disable available through the selected server form.
+- Done: added a visible server-table `Enabled` column so disabled servers are
+  visible in the list, not only in the selected-server detail.
+- Done: changed the server summary to show the one-active-eD2K-server constraint
+  as `N known | X/1 active | Y disabled`.
+
+## To Be Reviewed / Implemented
 
 ### Upload, speed, and I/O review
 
@@ -134,9 +137,7 @@ Owner repo: `repos/emulebb-rust`
 
 ## Suggested Execution Order
 
-1. Review and extend UI settings controls now that backend/test naming is
-   consistent.
-2. Review upload, speed, and I/O improvements separately with protocol-parity
+1. Review upload, speed, and I/O improvements separately with protocol-parity
    evidence.
 
 ## Validation Expectations
@@ -147,4 +148,7 @@ Owner repo: `repos/emulebb-rust`
   `EMULEBB_WORKSPACE_OUTPUT_ROOT/builds/rust/target` and run the smallest
   relevant `cargo test` set plus `python tools/rust_quality_gate.py quick` when
   Rust code is touched.
+- Rust UI local process smoke should launch a REST-only daemon plus the native
+  UI against `/api/v1`; the 2026-07-15 attempt was blocked by this shell returning
+  WinError 10049 for even raw `127.0.0.1`/`localhost` sockets.
 - Keep commits granular by repo and concern.
