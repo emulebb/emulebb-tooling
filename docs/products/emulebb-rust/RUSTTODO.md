@@ -120,25 +120,35 @@ Owner repo: `repos/emulebb-rust`
 - Done: changed the server summary to show the one-active-eD2K-server constraint
   as `N known | X/1 active | Y disabled`.
 
-## To Be Reviewed / Implemented
-
 ### Upload, speed, and I/O review
 
 Owner repo: `repos/emulebb-rust`
 
-- Review upload scheduling and bandwidth cap usage against stock/community
-  behavior before changing performance-sensitive paths.
-- Review read/write buffering and DB/file I/O hotspots for possible speed
-  improvements.
-- Treat every speed or I/O improvement as "to be reviewed" until protocol parity
-  evidence exists.
-- Do not alter wire semantics, queue behavior, slot behavior, packet shape, or
-  peer/server visible behavior for optimization alone.
+- Done: reviewed upload scheduling and bandwidth cap usage against the current
+  parity-oriented implementation.
+- Done: reviewed read/write buffering and DB/file I/O hotspots.
+- Done: made no code change from this review because the current code already
+  has the important low-risk protections: bounded upload request ranges,
+  per-fragment upload throttling, sliding-window upload rate meters, global
+  download throttling, cached verified upload readers, cached download payload
+  handles, targeted progress checkpoints, and batched credit/file-upload counter
+  flushes.
+- Future speed/I/O work must start from live CPU/I/O evidence and must not alter
+  wire semantics, queue behavior, slot behavior, packet shape, or peer/server
+  visible behavior for optimization alone.
+
+## To Be Reviewed / Implemented
+
+- No open profile/settings/UI/upload review item remains in this tracker as of
+  2026-07-15. New Rust work should be added here as concrete, evidence-backed
+  follow-up items.
 
 ## Suggested Execution Order
 
-1. Review upload, speed, and I/O improvements separately with protocol-parity
-   evidence.
+1. Collect live CPU/I/O evidence before opening any new speed or I/O optimization
+   task.
+2. Add each new Rust work item here as a concrete behavior, evidence, and
+   validation target.
 
 ## Validation Expectations
 
