@@ -159,6 +159,9 @@ Owner repo: `repos/emulebb-rust`
   relevant `cargo test` set plus `python tools/rust_quality_gate.py quick` when
   Rust code is touched.
 - Rust UI local process smoke should launch a REST-only daemon plus the native
-  UI against `/api/v1`; the 2026-07-15 attempt was blocked by this shell returning
-  WinError 10049 for even raw `127.0.0.1`/`localhost` sockets.
+  UI against `/api/v1`. On the operator split-tunnel workstation, bind the REST
+  control plane to `X_LOCAL_IP` instead of loopback. The 2026-07-15 LAN-bound
+  smoke passed against `http://X_LOCAL_IP:48731/api/v1`: the daemon served
+  `/app`, `/app/settings`, and `/snapshot`, and the native UI process stayed live
+  against that API.
 - Keep commits granular by repo and concern.
