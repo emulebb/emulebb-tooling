@@ -1,10 +1,9 @@
 # emulebb-rust TODO
 
-Last reviewed: 2026-07-14
+Last reviewed: 2026-07-15
 
-This note captures the remaining Rust profile/settings naming cleanup found
-after the `--profile`, `emulebb-rust-settings.toml`,
-`emulebb-rust-metadata.db`, and `/api/v1/app/settings` alignment work.
+This note tracks the remaining Rust profile/settings work after the
+2026-07-15 harness/profile and wording cleanup commits.
 
 ## Standing Development Rules
 
@@ -32,24 +31,24 @@ after the `--profile`, `emulebb-rust-settings.toml`,
   stay stock/community-compatible unless an intentional compatibility exception
   is documented and accepted.
 
-## To Be Reviewed / Implemented
+## Completed 2026-07-15
 
 ### Rust build-test harness profile alignment
 
 Owner repo: `repos/emulebb-build-tests`
 
-- Replace `write_rust_config(...)` with a profile-oriented helper such as
+- Done: replaced `write_rust_config(...)` with a profile-oriented helper,
   `write_rust_profile(...)`.
-- The helper should create the profile directory, write
+- Done: the helper creates the profile directory, writes
   `emulebb-rust-settings.toml` with only REST bind/authentication bootstrap
-  fields, and seed `emulebb-rust-metadata.db`.
-- Seed settings into the DB using the Rust metadata schema and canonical section
-  names such as `core`, `daemon`, `ed2k`, `kad`, `nat`, `vpn.guard`, and
-  `ip.filter`.
-- Seed server rows into the Rust DB `servers` table instead of writing server
-  lists to TOML.
-- Launch Rust daemon paths with `--profile <profile-dir>`, not `--config`.
-- Rename local harness variables from `runtime_dir` to `profile_dir` where the
+  fields, and seeds `emulebb-rust-metadata.db`.
+- Done: settings are seeded into the DB using the Rust metadata schema and
+  canonical section names such as `core`, `daemon`, `ed2k`, `kad`, `nat`,
+  `vpn.guard`, and `ip.filter`.
+- Done: server rows are seeded into the Rust DB `servers` table instead of
+  writing server lists to TOML.
+- Done: Rust daemon paths launch with `--profile <profile-dir>`, not `--config`.
+- Done: local harness variables were renamed from `runtime_dir` to `profile_dir` where the
   value is the Rust profile root.
 
 Known files to review:
@@ -62,12 +61,12 @@ Known files to review:
 
 Owner repo: `repos/emulebb-build-tests`
 
-- Replace Rust `/api/v1/app/preferences` calls with
+- Done: replaced Rust `/api/v1/app/preferences` calls with
   `/api/v1/app/settings`.
-- Update PATCH payloads to the canonical settings shape, including nested
+- Done: updated PATCH payloads to the canonical settings shape, including nested
   `core` settings where applicable.
-- Remove old `downloadAutoBroadbandIo` usage from Rust-native tests.
-- Keep `/api/v2/app/preferences` only where it belongs to non-Rust compatibility
+- Done: removed old `downloadAutoBroadbandIo` usage from Rust-native tests.
+- Done: kept `/api/v2/app/preferences` only where it belongs to non-Rust compatibility
   surfaces.
 
 Known files to review:
@@ -80,12 +79,12 @@ Known files to review:
 
 Owner repo: `repos/emulebb-build-tests`
 
-- Replace Rust profile contract names:
+- Done: replaced Rust profile contract names:
   - `runtimeDir` -> `profileDir`
   - `metadata.sqlite` -> `emulebb-rust-metadata.db`
   - `emulebb-rust.toml` -> `emulebb-rust-settings.toml`
-- Update Rust soak launch/control paths to pass `--profile`.
-- Do not rename unrelated MFC, qBittorrentBB, or build-system `--config`
+- Done: updated Rust soak launch/control paths to pass `--profile`.
+- Done: did not rename unrelated MFC, qBittorrentBB, or build-system `--config`
   concepts.
 
 Known files to review:
@@ -98,23 +97,16 @@ Known files to review:
 
 Owner repo: `repos/emulebb-rust`
 
-- Change user-facing `core_settings` error text to `settings.core` or another
+- Done: changed user-facing `core_settings` error text to `settings.core` or another
   explicit canonical settings path.
-- Replace metadata tests that use `"core.core_settings"` with `"core"` or a
+- Done: replaced metadata tests that use `"core.core_settings"` with `"core"` or a
   neutral non-legacy section name.
-- Replace comments that describe Rust live settings as "preferences" with
+- Done: replaced comments that describe Rust live settings as "preferences" with
   "settings".
-- Do not change stock eMule references such as `CPreferences`, `thePrefs`, or
+- Done: did not change stock eMule references such as `CPreferences`, `thePrefs`, or
   `preferences.dat`.
 
-Known files to review:
-
-- `crates/emulebb-core/src/network_api.rs`
-- `crates/emulebb-core/src/kad_control.rs`
-- `crates/emulebb-metadata/src/profile_store.rs`
-- `crates/emulebb-core/src/ed2k_transfer.rs`
-- `crates/emulebb-core/src/download_coordinator.rs`
-- `crates/emulebb-core/src/inbound_admission.rs`
+## To Be Reviewed / Implemented
 
 ### UI settings surface review
 
@@ -142,13 +134,9 @@ Owner repo: `repos/emulebb-rust`
 
 ## Suggested Execution Order
 
-1. Update build-test harness profile creation and Rust launch arguments.
-2. Update Rust REST tests, smoke checks, and manifests to `/app/settings`.
-3. Update soak/live harness naming and Rust profile DB filename usage.
-4. Apply Rust repo wording cleanup.
-5. Review and extend UI settings controls only after the backend/test naming is
+1. Review and extend UI settings controls now that backend/test naming is
    consistent.
-6. Review upload, speed, and I/O improvements separately with protocol-parity
+2. Review upload, speed, and I/O improvements separately with protocol-parity
    evidence.
 
 ## Validation Expectations
