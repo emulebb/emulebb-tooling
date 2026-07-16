@@ -13,8 +13,12 @@ conflict, policy wins.
 - Read [Workspace Policy](../WORKSPACE-POLICY.md) before making workspace
   decisions.
 - Read the nearest repo-local `AGENTS.md` only after the central policy.
-- Check `git status --short --branch` in every repo that will be read for
-  current-state decisions or edited.
+- Identify the active project from the operator's wording before broad
+  exploration. `emulebb rust`, `emulebb mfc`, and `qbittorrentbb` select
+  different default scopes under the
+  [Project Focus Contract](../WORKSPACE-POLICY.md#project-focus-contract).
+- Check `git status --short --branch` only in the active project repo and in
+  support repos that will be read for current-state decisions or edited.
 - Identify the change family before editing: docs, backlog, app code, build
   orchestration, tests, REST/API, localization/resources, release/package,
   website/org-profile, or handoff.
@@ -24,7 +28,11 @@ conflict, policy wins.
 ## Workspace Boundaries
 
 - Use `EMULEBB_WORKSPACE_ROOT` style paths in maintained docs and scripts.
-- Edit app source in `workspaces\workspace\app\emulebb-main`.
+- Focus first on the active project. Pull in support repos only when the task
+  needs their source, docs, harnesses, or orchestration state.
+- Edit MFC app source in `workspaces\workspace\app\emulebb-main`.
+- Edit Rust client and Rust-native UI source in `repos\emulebb-rust`.
+- Edit qBittorrentBB source in `repos\qbittorrentbb`.
 - Treat `repos\emulebb` as the branch-store checkout, not the normal edit
   location.
 - Use [Workspace Repository Map](WORKSPACE-REPO-MAP.md) for repo roles,

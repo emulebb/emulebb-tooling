@@ -14,8 +14,29 @@ the Python topology in `repos/emulebb-build`.
 |---|---|---|---|
 | `repos/emulebb` | `main` seed | Canonical app branch-store clone. | `validate` |
 | `workspaces/workspace/app/emulebb-main` | `main` | Active app development worktree. | `build app --variant main` |
+| `repos/emulebb-rust` | `main` | Forward Rust eD2K/Kad client and Rust-native UI. | Cargo checks via workspace policy |
 | `workspaces/workspace/app/emulebb-community-baseline` | `baseline/community-0.72a` | Community baseline worktree. | compare/live-diff |
 | `workspaces/workspace/app/emulebb-community-tracing-harness` | `tracing-harness/community-0.72a` | Tracing baseline worktree. | harness tests |
+
+## Project Focus Map
+
+Use this map after the operator names an active project. Start in the primary
+scope and pull in support repos only when the task needs them.
+
+- `emulebb rust`, `rust`, or `emulebb-rust`:
+  primary scope is `repos/emulebb-rust`, including Rust-native UI crates.
+  Support scope is `repos/emulebb-build-tests` for harnesses and live profile
+  scripts, `repos/emulebb-tooling/docs/products/emulebb-rust` for docs, and
+  `repos/emulebb-build` for orchestration.
+- `emulebb mfc`, `mfc`, or `emulebb`:
+  primary scope is `workspaces/workspace/app/emulebb-main`. Support scope is
+  `repos/emulebb` as branch-store only, `repos/emulebb-build` for orchestration,
+  `repos/emulebb-build-tests` for harnesses, and
+  `repos/emulebb-tooling/docs/products/emulebb-mfc` for docs.
+- `qbittorrentbb`, `qbit`, or `qbbb`:
+  primary scope is `repos/qbittorrentbb`. Support scope is shared build,
+  harness, and tooling docs only when the task needs workspace integration,
+  live-wire, or policy context.
 
 ## Workspace Orchestration
 
@@ -40,6 +61,7 @@ subdirectories of the eMuleBB app.
 | Path | Branch | Role | Validation |
 |---|---|---|---|
 | `repos/amutorrent` | `main` | aMuTorrent controller UI fork. | Node checks; live UI harness |
+| `repos/qbittorrentbb` | `master` | qBittorrentBB companion fork. | product-family quality checks |
 | `repos/goed2k-server` | `master` | Active Go eD2K server fork. | `go test ./...` |
 | `repos/amule` | `master` | aMule fork for eMuleBB-published builds. | package/rebase checks |
 | `repos/p2p-overlord-agents` | `develop` | Rust p2p-overlord agent code. | `cargo fmt --all --check` |
@@ -84,7 +106,7 @@ The GitHub organization uses these repo classes for settings consistency:
 
 | Class | Repositories |
 |---|---|
-| Product | `emulebb`, `amutorrent` |
+| Product | `emulebb`, `emulebb-rust`, `qbittorrentbb`, `amutorrent` |
 | Build, test, tooling, docs | `emulebb-build`, `emulebb-build-tests`, `emulebb-tooling`, `.github`, `emulebb.github.io` |
 | Dependency forks | `emulebb-*` dependency forks under `repos/third_party` |
 | Research, archive, and mirrors | `emulebb-mods-archive`, `emulebb-ai`, `amule`, `goed2k-server`, `JEmuleServer`, p2p-overlord repos |

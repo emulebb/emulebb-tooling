@@ -49,6 +49,36 @@ that is true.
   GitHub-primary work uses the owning product repo issue and org Project #3
   (`eMuleBB Suite`) for workflow state.
 
+## Project Focus Contract
+
+The workspace is broad, but normal work is project-scoped. When the operator
+names a product or project, that project becomes the active focus for default
+reads, edits, tests, status checks, and reporting. Agents must not sweep all of
+`repos` and `workspaces` after the active project is clear.
+
+Project focus aliases and default scope:
+
+- `emulebb rust`, `rust`, or `emulebb-rust`:
+  primary edit scope is `repos\emulebb-rust`, including its Rust-native UI
+  crates. Support scope is `repos\emulebb-build-tests` for harness, live, and
+  profile scripts; `repos\emulebb-tooling\docs\products\emulebb-rust` for
+  docs; and `repos\emulebb-build` for orchestration.
+- `emulebb mfc`, `mfc`, or `emulebb`:
+  primary edit scope is `workspaces\workspace\app\emulebb-main`. Support scope
+  is `repos\emulebb` as branch-store only, `repos\emulebb-build` for
+  orchestration, `repos\emulebb-build-tests` for harnesses, and
+  `repos\emulebb-tooling\docs\products\emulebb-mfc` for docs.
+- `qbittorrentbb`, `qbit`, or `qbbb`:
+  primary edit scope is `repos\qbittorrentbb`. Support scope is
+  `repos\emulebb-build`, `repos\emulebb-build-tests`, and tooling docs only
+  when the task needs shared orchestration, live-wire, or policy context.
+
+Support repos are pulled in deliberately, not by habit. Read or check status in
+a support repo only when the focused task needs that repo's files or current
+state. Broad workspace scans are appropriate only when the operator asks for
+workspace-wide status, dependency topology is unclear, build/test orchestration
+requires it, or the requested behavior is explicitly cross-product.
+
 Directive precedence is:
 
 1. system and developer instructions from the active session
