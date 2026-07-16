@@ -57,6 +57,9 @@ stock-wire-critical findings block the tag. Indexer/Torznab/Arr work stays
 active forward scope but is not the first UI beta gate unless separately
 promoted.
 
+Current soak upload/download gap analysis is tracked in
+[Rust Soak Upload/Download Gap Analysis](RUST-SOAK-UPLOAD-DOWNLOAD-GAP-ANALYSIS.md).
+
 ## Phase 0 — "perfectly functional" gate
 
 emulebb-rust is the strategic forward eD2K/Kad core. "Perfectly functional" =
