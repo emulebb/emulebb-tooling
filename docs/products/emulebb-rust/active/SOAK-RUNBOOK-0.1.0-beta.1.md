@@ -6,6 +6,13 @@ reset, stock eMule parity is the product target and RUST-REF-004 owns the
 non-SX1 divergence re-audit. emulebb-mfc may still be used as a frozen witness,
 but it is not the forward parity target.
 
+For the routine Rust-only persisted upload/live profile, do not use this runbook
+as a separate command source. Use the
+[Workspace Policy Rust-only persisted live profile quickstart](../../../WORKSPACE-POLICY.md#rust-only-persisted-live-profile-quickstart):
+run `scripts\start-rust-soak-profile.py --describe` first, then use the reported
+launch, status, and stop paths. This file covers the broader beta release-gate
+soak context.
+
 Live-wire conduct is binding: **be gentle** — a few widely-spaced actions, no
 run spamming ([[live-wire-be-gentle-no-ban]]); both clients ALWAYS on the
 operator server + Kad ([[both-clients-operator-server-and-kad]]); LAN in the

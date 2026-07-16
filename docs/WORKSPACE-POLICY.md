@@ -641,6 +641,31 @@ swarm. If this fails once in public, it breaks the product's core trust claim.
   Never hardcode real movie, series, or release titles in tracked harness code,
   docs, or tests.
 
+### Rust-only persisted live profile quickstart
+
+The Rust-only long upload/live soak profile is an operator workflow owned by
+`repos\emulebb-build-tests`. Agents must use the persisted Python entrypoints
+below and must not inspect or re-create launch logic before running the
+describing command. The required environment variables
+`EMULEBB_WORKSPACE_ROOT`, `EMULEBB_WORKSPACE_OUTPUT_ROOT`, `CARGO_TARGET_DIR`,
+and `X_LOCAL_IP` must already be present and valid in the inherited process
+environment; do not set or repair them inline.
+
+```powershell
+cd $env:EMULEBB_WORKSPACE_ROOT\repos\emulebb-build-tests
+python scripts\start-rust-soak-profile.py --describe
+python scripts\start-rust-soak-profile.py --seconds 86400
+python scripts\rust-soak-control.py profile-status --include-vpn-status
+python scripts\rust-soak-control.py stop-profile-launch
+```
+
+`--describe` is the canonical way to discover the effective profile path,
+runtime executable, REST binding, VPN guard config, bootstrap counts, launch
+command, and stop command. Routine monitoring uses `profile-status`; stopping
+uses `stop-profile-launch`. Soak, live-wire, profiling, and monitoring work
+must stay in persisted Python scripts/modules, not `.ps1`, inline Python, or
+ad-hoc shell programs.
+
 ## Live Test Storage And Path Capability Policy
 
 - eMuleBB is the only active Windows P2P client under test that is treated as

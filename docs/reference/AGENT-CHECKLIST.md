@@ -36,6 +36,10 @@ conflict, policy wins.
   [Workspace Policy](../WORKSPACE-POLICY.md#environment-variables); rely on the
   canonical variables and treat override knobs as shell/CI-boundary diagnosis
   only.
+- Do not set or repair `EMULEBB_WORKSPACE_ROOT`,
+  `EMULEBB_WORKSPACE_OUTPUT_ROOT`, `CARGO_TARGET_DIR`, or `X_LOCAL_IP` inline.
+  If a live/build/profile task needs one and it is missing or wrong, stop and
+  report the preflight failure.
 - Do not use `stale/*` branches as active work targets unless the task is
   explicitly historical analysis.
 
@@ -152,6 +156,17 @@ python -m mkdocs build --strict
   `--rest-bind-addr`, or `--web-bind-addr`.
 - Never hardcode real media titles or search terms in tracked harness code,
   docs, or tests.
+- For the Rust-only persisted live profile, do not inspect harness source first:
+  run the persisted command description from `repos\emulebb-build-tests` and use
+  its reported paths and stop command.
+
+```powershell
+cd $env:EMULEBB_WORKSPACE_ROOT\repos\emulebb-build-tests
+python scripts\start-rust-soak-profile.py --describe
+python scripts\start-rust-soak-profile.py --seconds 86400
+python scripts\rust-soak-control.py profile-status --include-vpn-status
+python scripts\rust-soak-control.py stop-profile-launch
+```
 
 ## Release And Package Work
 
