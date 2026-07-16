@@ -35,11 +35,11 @@ visibility unless publishing stalls.
 
 **Kad source visibility maturity**
 
-Current outcome: open. Source publishing is paced and may lag ED2K visibility
-for large catalogs.
+Current outcome: understood as a parity-aligned ramp cost. Source publishing is
+paced and may lag ED2K visibility for large catalogs.
 
-Next action: analyze the Kad source publish scheduler and compare against
-MFC/Kad behavior.
+Next action: keep monitoring source-publish progress and gate state. Investigate
+only if source publishes stall while Kad is connected and the gate is allowed.
 
 **Server startup and fallback**
 
@@ -146,3 +146,82 @@ Use these soak rules:
 Use the current regular Rust parity-watch output when assessing this soak.
 Older live-watch output from a previous run can be stale and should not be mixed
 into current status conclusions.
+
+## Gap 2: Kad Source Visibility Maturity
+
+Outcome: understood; no Rust code defect identified yet.
+
+Kad source visibility is expected to mature more slowly than ED2K server
+visibility for a large shared catalog. The Rust code intentionally mirrors the
+MFC Kad source-store cadence and safety caps:
+
+- `repos/emulebb-rust/crates/emulebb-core/src/kad_publish_schedule.rs`
+  uses the stock Kad intervals:
+  - source republish interval: 5 hours;
+  - keyword republish interval: 24 hours;
+  - notes republish interval: 24 hours.
+- `repos/emulebb-rust/crates/emulebb-core/src/lib.rs` runs the shared-file Kad
+  publish loop every 2 seconds.
+- The same Rust loop inspects a bounded scan window, starts at most one new
+  source publish per tick, and allows up to four source publishes in flight.
+- The Rust DHT config reserves search capacity for non-publish work and applies
+  a low publish packet budget so large-library publishing does not monopolize
+  Kad traffic.
+- Source publish admission records the source clock at start time, not after an
+  ACK, matching MFC behavior. If a store cannot be created because the DHT is
+  busy, Rust rolls the clock back for retry.
+
+MFC has the same effective shape:
+
+- `workspaces/workspace/app/emulebb-main/srchybrid/Opcodes.h` defines:
+  - `KADEMLIAPUBLISHTIME = 2s`;
+  - `KADEMLIATOTALSTORESRC = 4`;
+  - `KADEMLIAREPUBLISHTIMES = 5h`.
+- `workspaces/workspace/app/emulebb-main/srchybrid/SharedFileList.cpp`
+  `Publish` selects one best-ranked due source file per source publish tick,
+  only when total active store-source searches are below four.
+- `workspaces/workspace/app/emulebb-main/srchybrid/KnownFile.cpp`
+  `PublishSrc` advances the file's Kad source publish clock when the source
+  store is admitted.
+- If MFC cannot create the Kad store lookup, it resets the file's source publish
+  clock so it can retry.
+
+Therefore, source-publish totals can remain much lower than the ED2K published
+count during a large-library startup soak. This is especially visible because
+one source publish is one file, while a keyword publish can store many file IDs
+under one keyword and an ED2K `OP_OFFERFILES` batch can carry up to 200 files.
+
+## Gap 2 Live Interpretation
+
+Use the source-publish counters as progress/gate evidence, not as a requirement
+that Kad should keep pace with ED2K:
+
+- Healthy signs:
+  - Kad connected;
+  - publish gate allowed;
+  - source publish total increasing;
+  - attempted contacts and ACKed contacts increasing;
+  - low source failure count relative to attempts.
+- Investigate if:
+  - `kadGateAllowed` is false for repeated samples;
+  - source due count is non-zero but source attempts stay at zero while active
+    source publishes are below the cap;
+  - source publish total stops increasing for several monitor windows;
+  - source failures/timeouts dominate ACKed contacts.
+
+The current MFC fixture baseline does not prove public Kad source visibility
+because that fixture disables Kad and shares only a tiny local corpus. Use it
+for upload serving behavior, not for Kad source-publish parity.
+
+## Gap 2 Decision Rule
+
+Do not loosen Kad publish caps just to make large-catalog startup look faster.
+The current Rust caps match the MFC witness and are safer for the public Kad
+network.
+
+If upload/download demand remains weak after ED2K visibility matures, treat Kad
+source maturity as one discovery factor, but debug it through gate/counter
+evidence first. A code change is justified only if Rust is not starting source
+publishes under the same conditions where MFC would, or if Rust's published
+source tags are incompatible with the expected open, direct-UDP-callback, or
+buddy-relay source forms.
