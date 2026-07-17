@@ -2,7 +2,7 @@
 id: RUST-FEAT-033
 workflow: github
 github_issue: TBD - file on emulebb/emulebb-rust when scheduled
-title: Release - first usable release rust-v0.1.0-beta.1 (scope doc, GH release workflow, soak-gated tag)
+title: Release - first usable release rust-v0.1.0-beta.1 (scope doc, GH release workflow, WebUI proof, soak-gated tag)
 status: OPEN
 priority: Critical
 category: feature
@@ -32,11 +32,11 @@ target and archive directories outside the source workspace.
 - Tag scheme `rust-vX.Y.Z[-pre.N]`, distinct from MFC `emulebb-v*`.
 - Artifact `emulebb-rust-v<version>-windows-x64.zip` + `SHA256SUMS`, always
   unsigned.
-- `emulebb-rust-ui` proof is required for beta acceptance. TrackMuleBB is parked
-  future controller work and is not tagged, packaged, or required for this first
-  Rust prerelease.
+- Embedded SPA WebUI proof is required for beta acceptance. TrackMuleBB is
+  parked future controller work and is not tagged, packaged, or required for
+  this first Rust prerelease.
 - The annotated tag is created only after stock-parity, safety, REST-contract,
-  Rust-native UI, and soak evidence review plus an explicit operator go.
+  WebUI, and soak evidence review plus an explicit operator go.
 
 ## Intended Shape
 
@@ -54,7 +54,7 @@ target and archive directories outside the source workspace.
    runner-temporary directories rather than `target/` or `dist/` in the source
    checkout.
 4. **Release documentation:** version-specific changelog (compact
-   one-line-per-item, operational focus) + source-run UI instructions.
+   one-line-per-item, operational focus) + source-run WebUI instructions.
 
 ## Release Gate (all must hold before the tag)
 
@@ -64,9 +64,9 @@ target and archive directories outside the source workspace.
       undispositioned P0 or stock-wire-critical findings.
 - [ ] RUST-CI-003 OpenAPI conformance/drift gate passes against the Rust-forward
       OpenAPI artifact.
-- [ ] `emulebb-rust-ui` pass is green against the candidate daemon: status,
-      transfers, uploads, search/download, shared files, servers/Kad, settings,
-      logs, and diagnostics.
+- [ ] The packaged embedded SPA WebUI is green against the candidate daemon:
+      status, transfers, uploads, search/download, shared files, servers/Kad,
+      settings, logs, and diagnostics.
 - [ ] Stock-parity soak evidence covers UDP reask, buddy callback,
       firewall-check, HighID + LowID, finished-file delivery, and sustained REST
       responsiveness. emulebb-mfc may be a frozen witness but is not the product

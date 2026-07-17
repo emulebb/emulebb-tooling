@@ -1,8 +1,8 @@
 # emulebb-rust
 
 This section is the canonical home for active emulebb-rust product docs,
-backlog, design notes, history, release scope, Rust-native UI scope, and forward
-REST contract.
+backlog, design notes, history, release scope, embedded SPA WebUI scope, and
+forward REST contract.
 
 - Active backlog: [`active/INDEX.md`](active/INDEX.md)
 - Release scope: [`RELEASE-SCOPE.md`](RELEASE-SCOPE.md)

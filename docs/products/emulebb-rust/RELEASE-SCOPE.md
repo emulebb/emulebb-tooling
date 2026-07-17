@@ -8,8 +8,8 @@ known stock-vs-Rust differences; this document and the active re-audit backlog
 decide whether each difference is a permanent drop, release-blocking gap, or
 deferred backlog item.
 
-`emulebb-rust` is a **headless eD2K/Kad client** with a Rust-native UI, driven
-over its Rust-forward `/api/v1` REST contract. It targets eD2K/Kad
+`emulebb-rust` is a **headless eD2K/Kad client** with an embedded SPA WebUI,
+driven over its Rust-forward `/api/v1` REST contract. It targets eD2K/Kad
 protocol-operational parity: the wire behavior, advertised capabilities, state
 machines, persistence needed for network correctness, and safety properties
 required to operate cleanly with stock-compatible peers, servers, and Kad nodes.
@@ -42,14 +42,15 @@ history, while current defers and approved drops remain in
   and the control plane still answers (RUST-FEAT-003 pin + RUST-FEAT-005 leak
   test).
 - **Control plane:** the Rust-forward `/api/v1` REST contract
-  (`x-contract-version`), API-key auth, and Rust-native UI operation. The frozen
-  emulebb-mfc REST contract is not a forward compatibility constraint, and
-  TrackMuleBB is not a beta dependency. Before an explicit API-freeze decision,
-  the Rust daemon, Rust-native UI, OpenAPI artifact, validators, and tests are
-  one owned surface: breaking REST shape changes are allowed when they make the
-  contract cleaner, provided the owned consumers and conformance evidence move
-  in the same change. Do not keep no-op legacy settings fields, legacy route
-  names, or compatibility aliases for non-existent external Rust consumers.
+  (`x-contract-version`), API-key auth, and embedded SPA WebUI operation. The
+  frozen emulebb-mfc REST contract is not a forward compatibility constraint,
+  and TrackMuleBB is not a beta dependency. Before an explicit API-freeze
+  decision, the Rust daemon, embedded SPA WebUI, OpenAPI artifact, validators,
+  and tests are one owned surface: breaking REST shape changes are allowed when
+  they make the contract cleaner, provided the owned consumers and conformance
+  evidence move in the same change. Do not keep no-op legacy settings fields,
+  legacy route names, or compatibility aliases for non-existent external Rust
+  consumers.
 - **Runtime IO:** broadband-oriented async IO is the daemon baseline, not a
   compatibility preference or runtime toggle.
 - **Persistence:** single SQLite store (the `known.met` / `clients.met` /
@@ -148,7 +149,7 @@ gate is:
 - the non-SX1 omission re-audit has an explicit backlog disposition for every
   registered divergence;
 - Rust OpenAPI conformance is enforced for the native daemon/UI boundary;
-- the Rust-native UI is green against the candidate daemon for status,
+- the embedded SPA WebUI is green against the candidate daemon for status,
   transfers, uploads, search/download, shared files, servers/Kad, settings,
   logs, and diagnostics.
 

@@ -6,7 +6,7 @@ notes, and local suite runbooks.
 **Current status:** TrackMuleBB is on hold. It is future controller/integration
 work for a later suite phase, likely after qBittorrentBB progresses. It is not
 linked to MFC, and it is not required for the current emulebb-rust headless
-client + Rust-native UI work.
+client + embedded SPA WebUI work.
 
 - Parked backlog: [`active/INDEX.md`](active/INDEX.md)
 - Rust console UI direction:

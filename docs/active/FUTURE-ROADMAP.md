@@ -5,7 +5,7 @@
 > async ideas remain recorded here, but no MFC `0.8.x` lane is active. The MFC
 > client is valuable but expensive to evolve cleanly, so near-term forward
 > development focuses on **emulebb-rust** headless client stabilization and
-> Rust-native UI. **qBittorrentBB** is future companion work; **TrackMuleBB** is
+> embedded SPA WebUI. **qBittorrentBB** is future companion work; **TrackMuleBB** is
 > parked until qBittorrentBB progresses. Larger evolution should move out of MFC
 > unless a later explicit decision reactivates a narrow MFC lane.
 
@@ -44,7 +44,8 @@ For a shorter public-readable overview, use
   operator decision must explicitly reopen MFC `0.8.x` before broad MFC evolution
   starts.
 - **Forward sequencing (operator decision 2026-07-12):** after stable `0.7.3`,
-  focus moves to `emulebb-rust` headless client stabilization and Rust-native UI.
+  focus moves to `emulebb-rust` headless client stabilization and embedded SPA
+  WebUI.
   qBittorrentBB is later BitTorrent-side companion work, and TrackMuleBB is
   parked future controller work.
 

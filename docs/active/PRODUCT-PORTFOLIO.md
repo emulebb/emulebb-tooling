@@ -39,7 +39,7 @@ cognitive load of a 14-repo workspace and makes ownership of each decision obvio
 Stage notes (decision 2026-07-12):
 
 - `emulebb-rust` is the active forward lane: headless client stabilization plus
-  Rust-native UI.
+  embedded SPA WebUI.
 - `emulebb` (MFC) closes the 0.7.x line at 0.7.3 and stays frozen except for
   critical maintenance plus non-behavior-expanding diagnostics/instrumentation.
 - `amutorrent` freezes with the 0.7.3 Windows suite.
@@ -51,10 +51,10 @@ Stage notes (decision 2026-07-12):
 The forward investment is **Core first**. The historically heaviest-resourced
 product (`emulebb` MFC) closes its `0.7.x` line at `0.7.3` and is now frozen.
 Current development concentrates on `emulebb-rust` headless client stability and
-Rust-native UI. qBittorrentBB is the later BitTorrent companion; TrackMuleBB is a
-parked future controller/integration layer, not a Rust beta dependency and not an
-MFC integration path. The ready-to-use **suite bundle** remains a future design
-reference (see [SUITE-INSTALLER](SUITE-INSTALLER.md)). Quality investment (CI
+embedded SPA WebUI. qBittorrentBB is the later BitTorrent companion; TrackMuleBB
+is a parked future controller/integration layer, not a Rust beta dependency and
+not an MFC integration path. The ready-to-use **suite bundle** remains a future
+design reference (see [SUITE-INSTALLER](SUITE-INSTALLER.md)). Quality investment (CI
 gates, leak-tests, backlog depth) should track the tier and active lifecycle:
 Core gets the strongest gates; the Frozen app gets only maintenance gates; Lab
 gets the lightest touch until promoted.

@@ -14,7 +14,7 @@ the Python topology in `repos/emulebb-build`.
 |---|---|---|---|
 | `repos/emulebb` | `main` seed | Canonical app branch-store clone. | `validate` |
 | `workspaces/workspace/app/emulebb-main` | `main` | Active app development worktree. | `build app --variant main` |
-| `repos/emulebb-rust` | `main` | Forward Rust eD2K/Kad client and Rust-native UI. | Cargo checks via workspace policy |
+| `repos/emulebb-rust` | `main` | Forward Rust eD2K/Kad client and embedded SPA WebUI. | Cargo checks via workspace policy |
 | `workspaces/workspace/app/emulebb-community-baseline` | `baseline/community-0.72a` | Community baseline worktree. | compare/live-diff |
 | `workspaces/workspace/app/emulebb-community-tracing-harness` | `tracing-harness/community-0.72a` | Tracing baseline worktree. | harness tests |
 
@@ -24,7 +24,7 @@ Use this map after the operator names an active project. Start in the primary
 scope and pull in support repos only when the task needs them.
 
 - `emulebb rust`, `rust`, or `emulebb-rust`:
-  primary scope is `repos/emulebb-rust`, including Rust-native UI crates.
+  primary scope is `repos/emulebb-rust`, including the embedded SPA WebUI.
   Support scope is `repos/emulebb-build-tests` for harnesses and live profile
   scripts, `repos/emulebb-tooling/docs/products/emulebb-rust` for docs, and
   `repos/emulebb-build` for orchestration.

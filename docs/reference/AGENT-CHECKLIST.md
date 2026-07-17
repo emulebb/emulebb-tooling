@@ -31,7 +31,7 @@ conflict, policy wins.
 - Focus first on the active project. Pull in support repos only when the task
   needs their source, docs, harnesses, or orchestration state.
 - Edit MFC app source in `workspaces\workspace\app\emulebb-main`.
-- Edit Rust client and Rust-native UI source in `repos\emulebb-rust`.
+- Edit Rust client and embedded SPA WebUI source in `repos\emulebb-rust`.
 - Edit qBittorrentBB source in `repos\qbittorrentbb`.
 - Treat `repos\emulebb` as the branch-store checkout, not the normal edit
   location.

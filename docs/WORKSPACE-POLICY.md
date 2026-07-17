@@ -59,10 +59,11 @@ reads, edits, tests, status checks, and reporting. Agents must not sweep all of
 Project focus aliases and default scope:
 
 - `emulebb rust`, `rust`, or `emulebb-rust`:
-  primary edit scope is `repos\emulebb-rust`, including its Rust-native UI
-  crates. Support scope is `repos\emulebb-build-tests` for harness, live, and
-  profile scripts; `repos\emulebb-tooling\docs\products\emulebb-rust` for
-  docs; and `repos\emulebb-build` for orchestration.
+  primary edit scope is `repos\emulebb-rust`, including its UI successor
+  surfaces such as the embedded SPA WebUI. Support scope is
+  `repos\emulebb-build-tests` for harness, live, and profile scripts;
+  `repos\emulebb-tooling\docs\products\emulebb-rust` for docs; and
+  `repos\emulebb-build` for orchestration.
 - `emulebb mfc`, `mfc`, or `emulebb`:
   primary edit scope is `workspaces\workspace\app\emulebb-main`. Support scope
   is `repos\emulebb` as branch-store only, `repos\emulebb-build` for

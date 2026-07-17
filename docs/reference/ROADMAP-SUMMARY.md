@@ -11,8 +11,8 @@ The eMuleBB **MFC desktop app** closes its `0.7.x` feature line with stable
 `0.7.3`. The MFC line is frozen except for critical maintenance and
 non-behavior-expanding diagnostics/instrumentation. The MFC client is valuable,
 but it is expensive to evolve properly, so near-term forward development focuses
-on **emulebb-rust** — the multiplatform eD2K/Kad headless client plus
-Rust-native UI. **qBittorrentBB** remains future BitTorrent companion work, and
+on **emulebb-rust** — the multiplatform eD2K/Kad headless client plus embedded
+SPA WebUI. **qBittorrentBB** remains future BitTorrent companion work, and
 **TrackMuleBB** is parked until that companion track progresses enough to justify
 a cross-network controller. The goal is unchanged at the product level: keep
 classic eD2K/Kad behavior understandable, make discovery reliable, and stay
@@ -35,8 +35,8 @@ client + aMuTorrent + Arr only, delivered by the `install.ps1` thin wrapper.
 The forward program lives in the [Suite Joint Roadmap](../active/SUITE-JOINT-ROADMAP.md):
 
 - **emulebb-rust** — active near-public-beta eD2K/Kad client work: headless
-  daemon stability, Rust-native UI, safety, persistence, REST correctness, and
-  parity proof.
+  daemon stability, embedded SPA WebUI, safety, persistence, REST correctness,
+  and parity proof.
 - **qBittorrentBB** — future BitTorrent companion work: DHT harvester, branded
   export to the eD2K share, and Torznab index.
 - **TrackMuleBB / suite integrations** — parked future work: metadata fabric,

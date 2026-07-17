@@ -38,7 +38,7 @@ maintenance.
 **Post-stable line split:** after stable `0.7.3`, MFC is frozen on the `0.7.x`
 legacy support line. Accept only critical maintenance plus
 non-behavior-expanding diagnostics/instrumentation. Forward focus is
-`emulebb-rust` headless client stabilization and Rust-native UI.
+`emulebb-rust` headless client stabilization and embedded SPA WebUI.
 **Release backlog view:** [RELEASE-0.7.3](RELEASE-0.7.3.md)
 **Release checklist:** [RELEASE-0.7.3-CHECKLIST](RELEASE-0.7.3-CHECKLIST.md)
 **Release runbook:** [RELEASE-0.7.3-RUNBOOK](RELEASE-0.7.3-RUNBOOK.md)

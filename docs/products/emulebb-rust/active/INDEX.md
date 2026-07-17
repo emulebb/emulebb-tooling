@@ -43,12 +43,12 @@ emulebb-mfc keeps its legacy unprefixed IDs. IDs are allocated per class and nev
 reused. Scan both `docs/active/items` and `docs/history/items` before
 allocating the next number.
 
-## First Beta — Rust Headless + Native UI
+## First Beta — Rust Headless + Embedded SPA WebUI
 
-The first forward milestone is a Rust headless client + native UI beta. Release
-waits for both core proof and `emulebb-rust-ui` proof. TrackMuleBB is parked
-future controller work and is not a beta dependency. The beta targets Rust only
-and uses the Rust-forward OpenAPI contract in this tooling docs tree.
+The first forward milestone is a Rust headless client + embedded SPA WebUI beta.
+Release waits for both core proof and WebUI proof. TrackMuleBB is parked future
+controller work and is not a beta dependency. The beta targets Rust only and
+uses the Rust-forward OpenAPI contract in this tooling docs tree.
 
 Core gates remain first-class: stock-wire parity, fail-closed VPN proof,
 responsive REST, upload/download/search/share evidence, and soak evidence. The
@@ -95,7 +95,7 @@ stay active-only; see [Closed Items](#closed-items-archive) for the archive.
 | [RUST-FEAT-006](items/RUST-FEAT-006.md) | Major | OPEN | Docker — publish a linuxserver-style GHCR image (suite bundle prerequisite) |
 | [RUST-FEAT-007](items/RUST-FEAT-007.md) | Minor | OPEN | REST push — SSE stream for live transfer updates (+ transfers.sse capability) |
 | [RUST-FEAT-025](items/RUST-FEAT-025.md) | Major | IN_PROGRESS | Anti-abuse — redo upload_duplicate_done_block_rejected (+ queued sibling) with conformant ledger semantics |
-| [RUST-FEAT-033](items/RUST-FEAT-033.md) | Critical | OPEN | Release — first usable release rust-v0.1.0-beta.1 (Rust tag, native UI proof, soak-gated) |
+| [RUST-FEAT-033](items/RUST-FEAT-033.md) | Critical | OPEN | Release — first usable release rust-v0.1.0-beta.1 (Rust tag, WebUI proof, soak-gated) |
 | [RUST-FEAT-036](items/RUST-FEAT-036.md) | Critical | OPEN | Settings UI v2 — profile settings and beta-ready controls |
 
 ### Refactors / Evidence (`REF`)

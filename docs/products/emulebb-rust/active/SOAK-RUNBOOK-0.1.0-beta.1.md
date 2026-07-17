@@ -91,10 +91,10 @@ under the output soak root).
       Guard reports active + not blocked, and rust's `egressVerified=true` (bound
       HTTP+STUN probes resolved an allowlisted public IP); recorded under
       `vpnExitValidation` in the run summary.
-- [ ] **Rust-native UI proof** — `emulebb-rust-ui` exercises status, transfers,
-      uploads, search/download, shared files, servers/Kad, settings, logs, and
-      diagnostics against the candidate daemon over the Rust-forward OpenAPI
-      shape.
+- [ ] **Embedded SPA WebUI proof** — the packaged browser WebUI exercises
+      status, transfers, uploads, search/download, shared files, servers/Kad,
+      settings, logs, and diagnostics against the candidate daemon over the
+      Rust-forward OpenAPI shape.
 - [ ] **Leak gate (operator wire-truth)** — with the daemon bound to the live
       hide.me tunnel, pull the tunnel mid-soak and confirm (pktmon on the
       physical NIC) **zero** off-tunnel eD2K/Kad packets. This is the Windows

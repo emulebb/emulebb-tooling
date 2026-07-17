@@ -23,7 +23,7 @@
 This guide covers the **eMuleBB Windows client** (the `0.7.3` eD2K/Kad desktop
 app). The MFC `0.7.x` line is frozen except for critical maintenance and
 non-behavior-expanding diagnostics/instrumentation. Forward development now lives
-in **emulebb-rust**: the headless eD2K/Kad client plus Rust-native UI. The
+in **emulebb-rust**: the headless eD2K/Kad client plus embedded SPA WebUI. The
 broader **eMuleBB Suite** remains the product direction, but **qBittorrentBB** is
 future companion work and **TrackMuleBB** is parked until the BitTorrent side is
 ready to justify a cross-network controller. For the suite as a whole, see the

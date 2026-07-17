@@ -12,12 +12,12 @@ lives separately at
 The near-term stability audience is first-party only:
 
 - emulebb-rust
-- emulebb-rust-ui
+- embedded SPA WebUI
 - first-party tests and release tooling
 
-Breaking route or schema changes are allowed while the Rust daemon and native UI
-move in lockstep. A later third-party API promise needs a separate freeze and
-compatibility decision.
+Breaking route or schema changes are allowed while the Rust daemon and embedded
+SPA WebUI move in lockstep. A later third-party API promise needs a separate
+freeze and compatibility decision.
 
 ## Conformance
 

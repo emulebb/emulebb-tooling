@@ -14,12 +14,12 @@ Follows the eMuleBB backlog convention
 `EMULEBB_WORKSPACE_ROOT\repos\emulebb-tooling\docs\products\trackmulebb`.
 **Phase:** parked Phase 2 future work. TrackMuleBB resumes only after
 qBittorrentBB progresses enough to make cross-network controller work concrete.
-**Scope:** not part of the current emulebb-rust headless client + Rust-native UI
+**Scope:** not part of the current emulebb-rust headless client + embedded SPA WebUI
 beta. qBittorrentBB, SABnzbd, installer, and cross-network automation remain
 later suite work. emulebb-mfc stays on its legacy controller path and is not
 linked to TrackMuleBB.
 **Beta acceptance:** no current TrackMuleBB beta gate. The first Rust prerelease
-is gated by emulebb-rust daemon and Rust-native UI proof.
+is gated by emulebb-rust daemon and embedded SPA WebUI proof.
 **Tracking:** issues live in `emulebb/trackmulebb` and aggregate on the org
 **eMuleBB Suite** board (`https://github.com/orgs/emulebb/projects/3`,
 `Product = TrackMuleBB`).

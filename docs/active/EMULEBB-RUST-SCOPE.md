@@ -5,11 +5,11 @@
 > train. This document is the rust scope target, not current release truth.
 
 `emulebb-rust` is a headless eMuleBB-family core client with local indexing and
-a Rust-native UI.
+an embedded SPA WebUI.
 The 0.0.3 target is not full historical eMule application parity. It is the
 search, share, download, upload, queue, ED2K, Kad, persistence, and controller
 surface needed for a real local client operated by its daemon REST contract and
-native Rust UI. **TrackMuleBB is parked future work**, not a 0.0.x driver.
+embedded SPA WebUI. **TrackMuleBB is parked future work**, not a 0.0.x driver.
 
 emulebb-rust owns the forward Rust `/api/v1` contract (see
 [API-V1-COMPATIBILITY](API-V1-COMPATIBILITY.md)). It is no longer a shared
@@ -22,7 +22,7 @@ outside the Rust contract.
   preferences, Kad, servers, searches, transfers, shared files/directories,
   uploads, upload queue, categories, friends, logs, and diagnostics where those
   resources are part of the Rust contract.
-- Rust-native UI coverage for daily operation over the Rust contract: status,
+- Embedded SPA WebUI coverage for daily operation over the Rust contract: status,
   searches, transfers, uploads, shared files, server/Kad state, settings, logs,
   and diagnostics.
 - Configured binding only: harnesses may pass operator-local inputs such as

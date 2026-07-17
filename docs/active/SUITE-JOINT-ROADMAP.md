@@ -2,7 +2,8 @@
 
 Status: planning / direction. This is the **canonical top-level roadmap** for the
 BB suite after stable `0.7.3`. The current implementation focus is
-**emulebb-rust**: stabilize the headless eD2K/Kad client and the Rust-native UI.
+**emulebb-rust**: stabilize the headless eD2K/Kad client and the embedded SPA
+WebUI.
 MFC is frozen on the `0.7.x` line. **qBittorrentBB** remains future companion
 work, and **TrackMuleBB** is parked until qBittorrentBB progresses enough to
 justify a cross-network controller. The MFC
@@ -12,7 +13,7 @@ decision. Companion governance:
 [API-V1-COMPATIBILITY](API-V1-COMPATIBILITY.md). It is **not** a `0.7.3` gate and
 does **not** touch the shipping `0.7.x` MFC line.
 
-## Decision (2026-07-12): rust headless + native UI is the active lane
+## Decision (2026-07-12): rust headless + embedded SPA WebUI is the active lane
 
 The MFC roadmap is archived as **eMuleBB Roadmap MFC (archive)**. MFC `0.7.3`
 and its matching aMuTorrent package are the shipped line; MFC accepts only
@@ -21,8 +22,8 @@ not create or schedule MFC feature backlog by default.
 
 Forward development concentrates on `emulebb-rust`: the headless client,
 protocol parity/stability, persistence, safety gates, REST contract, and the
-Rust-native UI in `emulebb-rust-ui`. The Suite board is the active cross-product
-board, but only the Rust phase is active now.
+embedded SPA WebUI. The Suite board is the active cross-product board, but only
+the Rust phase is active now.
 
 `qBittorrentBB` is still the intended BitTorrent-side companion, but it is not
 the current implementation priority. `TrackMuleBB` is on hold as a future
@@ -60,7 +61,7 @@ forward cross-network controller "in full development mode".
    2026-06-20 below: it stays actively maintained and upstream-synced until `0.7.3`
    final, and only then freezes into sustainability-only maintenance.)*
 3. **The forward stack is staged, not concurrent**. `emulebb-rust` is active now
-   and owns the forward eD2K/Kad client plus Rust-native UI. qBittorrentBB is
+   and owns the forward eD2K/Kad client plus embedded SPA WebUI. qBittorrentBB is
    later BitTorrent-side companion work. TrackMuleBB is parked future controller
    work and must not be wired into MFC or treated as Rust beta scope.
 4. Per qBittorrentBB's core-vs-REST policy, orchestration the generic Arr/REST
@@ -106,8 +107,7 @@ emulebb-rust as the forward eD2K/Kad core TrackMuleBB drives.
 - **eMuleBB** = the **C++ MFC Windows desktop app** (`emulebb-main`). The shipped
   `0.7.3` Windows client, frozen on the `0.7.x` line.
 - **emulebb-rust** = the **Rust eD2K/Kad core** — headless, multiplatform. The
-  strategic forward client, including the Rust-native UI work in
-  `emulebb-rust-ui`.
+  strategic forward client, including the embedded SPA WebUI.
 - **qBittorrentBB** = the BitTorrent-side client (fork) with the DHT harvester +
   Torznab index. Future companion work, not the current implementation lane.
 - **aMuTorrent** = the cross-network web-UI controller of the `0.7.3` line.
@@ -123,7 +123,7 @@ Further MFC evolution is not active; retained `0.8.x` ideas must not be treated
 as implementation commitments without a later operator decision. **aMuTorrent**
 freezes with `0.7.3`. See [FUTURE-ROADMAP](FUTURE-ROADMAP.md) and
 [FROZEN-SURFACES](FROZEN-SURFACES.md). The active evolution track is
-`emulebb-rust` headless + Rust-native UI. qBittorrentBB and TrackMuleBB are
+`emulebb-rust` headless + embedded SPA WebUI. qBittorrentBB and TrackMuleBB are
 future/parked tracks.
 
 **eMuleBB 0.7.3 final scope:** the PowerShell suite bootstrap + local Arr
@@ -131,7 +131,7 @@ integration + aMuTorrent. That is the whole of it — **no further `0.7.x` featu
 scope**.
 **Forward eD2K/Kad direction:** the strategic forward client is
 **emulebb-rust**. Its immediate scope is headless stability, safety, protocol
-parity, persistence, REST, and Rust-native UI. Metadata-fabric integrations
+parity, persistence, REST, and embedded SPA WebUI. Metadata-fabric integrations
 remain future work.
 
 ## Future suite bundle & three networks (parked)
@@ -202,12 +202,12 @@ Safety substrate ──────── VPN-fail-closed binding; harvested != 
 ## Deliverable ordering (strict, component-level)
 
 The operator set a strict serial order at the component level:
-**emulebb-rust headless + Rust-native UI → qBittorrentBB → TrackMuleBB/fabric**.
+**emulebb-rust headless + embedded SPA WebUI → qBittorrentBB → TrackMuleBB/fabric**.
 
-### Phase 0 — `emulebb-rust` headless + Rust-native UI (active gate)
+### Phase 0 — `emulebb-rust` headless + embedded SPA WebUI (active gate)
 
 "Perfectly functional" means the Rust daemon is credible as a real local eD2K/Kad
-client and the Rust-native UI can operate it without depending on TrackMuleBB.
+client and the embedded SPA WebUI can operate it without depending on TrackMuleBB.
 
 - Client parity: connect (server + Kad), search (server + Kad/global), download
   end-to-end from multiple sources including queue/reask, upload/share + serve
@@ -217,7 +217,7 @@ client and the Rust-native UI can operate it without depending on TrackMuleBB.
   `enable_udp_reask` on. See `emulebb-rust` `docs/design/udp-source-reask.md`.
 - **Finish the VPN egress pin for eD2K TCP** (Kad UDP is done; eD2K TCP pending).
   Close the network-level anonymity guarantee.
-- Rust-native UI: status, searches, transfers, uploads, shared files, server/Kad
+- Embedded SPA WebUI: status, searches, transfers, uploads, shared files, server/Kad
   state, settings, logs, and diagnostics needed for daily operation.
 - **Autonomous Kad/eD2K indexer** and Arr-facing surfaces remain tracked Rust
   capabilities, but they should not outrank core client stability and UI
@@ -255,7 +255,7 @@ criteria pass. Phase ↔ the board `Phase` field ↔ a release milestone are the
 axis: an item's `Phase` on the eMuleBB Suite board must match the phase it serves
 here, and a phase closes a suite milestone.
 
-**Phase 0 — emulebb-rust headless + Rust-native UI (active gate):**
+**Phase 0 — emulebb-rust headless + embedded SPA WebUI (active gate):**
 - [ ] Connects (server + Kad), handles HighID/LowID.
 - [ ] Searches (server + Kad/global) and returns results.
 - [ ] Downloads a file end-to-end from ≥3 real sources, including queue/reask with
@@ -263,7 +263,7 @@ here, and a phase closes a suite milestone.
 - [ ] Uploads/shares and serves sources.
 - [ ] **Network Safety green:** eD2K TCP egress pinned to the tunnel
       (`RUST-FEAT-003`) and the automated leak-test passes blocking (`RUST-FEAT-005`).
-- [ ] Rust-native UI covers daily operation: status, searches, transfers,
+- [ ] Embedded SPA WebUI covers daily operation: status, searches, transfers,
       uploads, shared files, server/Kad state, settings, logs, and diagnostics.
 - [ ] Autonomous Kad/eD2K indexer backlog is dispositioned against current beta
       scope (`RUST-FEAT-002`).
@@ -321,7 +321,7 @@ specific slice.
 
 - **Phase 0 — emulebb-rust**: headless client stabilization, safety gates,
   protocol parity, persistence, REST correctness, release proof, and
-  Rust-native UI. Tracked in `emulebb-rust/docs/active` and the Suite board.
+  embedded SPA WebUI. Tracked in `emulebb-rust/docs/active` and the Suite board.
 - **MFC 0.7.x maintenance only**: critical fixes plus
   non-behavior-expanding diagnostics/instrumentation for the shipped `0.7.3`
   line. The MFC roadmap board is archive/provenance.
