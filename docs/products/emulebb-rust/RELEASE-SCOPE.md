@@ -37,6 +37,9 @@ history, while current defers and approved drops remain in
   the per-transfer category path, else the configured `incomingDir` (hard-link
   on the same volume, copy+atomic-rename across volumes; the internal piece
   store is retained for continued seeding).
+- **Sharing:** sharing is configured only by shared folder roots. Each root is a
+  monitored folder tree and is always scanned recursively; single-file sharing
+  and non-recursive folder sharing are not supported Rust surfaces.
 - **Safety:** fail-closed VPN egress pinning of every P2P socket to the tunnel
   interface (`IP_UNICAST_IF`); with the tunnel down, zero P2P data-plane traffic
   and the control plane still answers (RUST-FEAT-003 pin + RUST-FEAT-005 leak

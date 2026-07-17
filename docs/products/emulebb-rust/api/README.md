@@ -19,6 +19,15 @@ Breaking route or schema changes are allowed while the Rust daemon and embedded
 SPA WebUI move in lockstep. A later third-party API promise needs a separate
 freeze and compatibility decision.
 
+## Sharing Contract
+
+Sharing management is folder-tree only:
+
+- configure roots with `/api/v1/shared-directories`;
+- every root is recursively scanned and monitored;
+- single-file share/unshare/delete-sharing routes are not part of the Rust
+  public contract.
+
 ## Conformance
 
 Change this spec in the same change as the implementation. The Rust conformance

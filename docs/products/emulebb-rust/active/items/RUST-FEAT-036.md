@@ -66,7 +66,9 @@ Expose these before beta through regular Settings UI controls or existing
 section resources:
 
 - Downloads/storage: `incomingDir` and related path validation.
-- Shared directories: already supported by REST; manage as a primary section.
+- Sharing: manage shared folder roots as a primary section. Every root is a
+  monitored folder tree; do not expose single-file sharing or a non-recursive
+  sharing mode.
 - Categories and category paths: already supported by REST; manage with clear
   path semantics.
 - eD2K listen port and Kad listen port: settings that require restart or

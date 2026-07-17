@@ -1066,59 +1066,6 @@ paths:
           $ref: "#/components/responses/ErrorResponse"
         default:
           $ref: "#/components/responses/ErrorResponse"
-    post:
-      tags: [SharedFiles]
-      summary: Add one local file to the known shared file set.
-      operationId: createSharedFile
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/SharedFileCreateRequest"
-      responses:
-        "200":
-          $ref: "#/components/responses/SharedFileCreateResponse"
-        "400":
-          $ref: "#/components/responses/ErrorResponse"
-        "401":
-          $ref: "#/components/responses/ErrorResponse"
-        "404":
-          $ref: "#/components/responses/ErrorResponse"
-        "405":
-          $ref: "#/components/responses/MethodNotAllowedResponse"
-        "409":
-          $ref: "#/components/responses/ErrorResponse"
-        "500":
-          $ref: "#/components/responses/ErrorResponse"
-        "503":
-          $ref: "#/components/responses/ErrorResponse"
-        default:
-          $ref: "#/components/responses/ErrorResponse"
-  /shared-files/operations/reload:
-    post:
-      tags: [SharedFiles]
-      summary: Request a shared-file reload.
-      operationId: reloadSharedFiles
-      responses:
-        "200":
-          $ref: "#/components/responses/OkAcceptedResponse"
-        "400":
-          $ref: "#/components/responses/ErrorResponse"
-        "401":
-          $ref: "#/components/responses/ErrorResponse"
-        "404":
-          $ref: "#/components/responses/ErrorResponse"
-        "405":
-          $ref: "#/components/responses/MethodNotAllowedResponse"
-        "409":
-          $ref: "#/components/responses/ErrorResponse"
-        "500":
-          $ref: "#/components/responses/ErrorResponse"
-        "503":
-          $ref: "#/components/responses/ErrorResponse"
-        default:
-          $ref: "#/components/responses/ErrorResponse"
   /shared-files/{hash}:
     parameters:
       - $ref: "#/components/parameters/FileHash"
@@ -1158,61 +1105,6 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/SharedFileResponse"
-        "400":
-          $ref: "#/components/responses/ErrorResponse"
-        "401":
-          $ref: "#/components/responses/ErrorResponse"
-        "404":
-          $ref: "#/components/responses/ErrorResponse"
-        "405":
-          $ref: "#/components/responses/MethodNotAllowedResponse"
-        "409":
-          $ref: "#/components/responses/ErrorResponse"
-        "500":
-          $ref: "#/components/responses/ErrorResponse"
-        "503":
-          $ref: "#/components/responses/ErrorResponse"
-        default:
-          $ref: "#/components/responses/ErrorResponse"
-    delete:
-      tags: [SharedFiles]
-      summary: Unshare a file without deleting it from disk.
-      operationId: deleteSharedFile
-      responses:
-        "200":
-          $ref: "#/components/responses/SharedFileDeleteResponse"
-        "400":
-          $ref: "#/components/responses/ErrorResponse"
-        "401":
-          $ref: "#/components/responses/ErrorResponse"
-        "404":
-          $ref: "#/components/responses/ErrorResponse"
-        "405":
-          $ref: "#/components/responses/MethodNotAllowedResponse"
-        "409":
-          $ref: "#/components/responses/ErrorResponse"
-        "500":
-          $ref: "#/components/responses/ErrorResponse"
-        "503":
-          $ref: "#/components/responses/ErrorResponse"
-        default:
-          $ref: "#/components/responses/ErrorResponse"
-  /shared-files/{hash}/file:
-    parameters:
-      - $ref: "#/components/parameters/FileHash"
-    delete:
-      tags: [SharedFiles]
-      summary: Delete one shared file from disk.
-      description: >
-        Deletes the local file and removes it from the shared-file set. This
-        route is the REST v1 replacement for the pre-RC body-required
-        destructive shared-file delete payload.
-      operationId: deleteSharedFileContent
-      parameters:
-        - $ref: "#/components/parameters/Confirm"
-      responses:
-        "200":
-          $ref: "#/components/responses/SharedFileDeleteResponse"
         "400":
           $ref: "#/components/responses/ErrorResponse"
         "401":
@@ -2737,18 +2629,6 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/SharedFileEnvelope"
-    SharedFileCreateResponse:
-      description: Shared-file create operation envelope.
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/SharedFileCreateEnvelope"
-    SharedFileDeleteResponse:
-      description: Shared-file delete result envelope.
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/SharedFileDeleteEnvelope"
     SnapshotResponse:
       description: Snapshot envelope.
       content:
@@ -4540,56 +4420,6 @@ components:
           properties:
             data:
               $ref: "#/components/schemas/SharedFile"
-    SharedFileCreateEnvelope:
-      unevaluatedProperties: false
-      allOf:
-        - $ref: "#/components/schemas/EnvelopeBase"
-        - type: object
-          properties:
-            data:
-              $ref: "#/components/schemas/SharedFileCreateResult"
-    SharedFileCreateResult:
-      type: object
-      additionalProperties: false
-      required: [ok, path, alreadyShared, queued, file]
-      properties:
-        ok:
-          type: boolean
-          const: true
-        path:
-          type: string
-        alreadyShared:
-          type: boolean
-        queued:
-          type: boolean
-        file:
-          oneOf:
-            - $ref: "#/components/schemas/SharedFile"
-            - type: "null"
-    SharedFileDeleteEnvelope:
-      unevaluatedProperties: false
-      allOf:
-        - $ref: "#/components/schemas/EnvelopeBase"
-        - type: object
-          properties:
-            data:
-              $ref: "#/components/schemas/SharedFileDelete"
-    SharedFileDelete:
-      type: object
-      additionalProperties: false
-      required: [ok, deletedFiles, path, hash]
-      properties:
-        ok:
-          type: boolean
-          const: true
-        deletedFiles:
-          type: boolean
-        path:
-          type: string
-        hash:
-          type:
-            - string
-            - "null"
     SharedFile:
       type: object
       additionalProperties: false
@@ -4652,14 +4482,6 @@ components:
         transferredBytes:
           type: integer
           minimum: 0
-    SharedFileCreateRequest:
-      type: object
-      additionalProperties: false
-      required: [path]
-      properties:
-        path:
-          type: string
-          minLength: 1
     SharedFilePatch:
       type: object
       additionalProperties: false
@@ -4758,16 +4580,11 @@ components:
     SharedDirectory:
       type: object
       additionalProperties: false
-      required: [path, recursive]
+      required: [path, monitorOwned, shareable, accessible]
+      description: Shared directories are configured as folder trees; every root is recursively scanned and monitored.
       properties:
         path:
           type: string
-        recursive:
-          type: boolean
-        exists:
-          type: boolean
-        monitored:
-          type: boolean
         monitorOwned:
           type: boolean
         shareable:
@@ -4797,8 +4614,6 @@ components:
             path:
               type: string
               minLength: 1
-            recursive:
-              type: boolean
     UploadListEnvelope:
       unevaluatedProperties: false
       allOf:
