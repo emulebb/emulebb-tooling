@@ -254,3 +254,11 @@ the top-level tag taxonomy, top-level tags must be unique and named, and unused
 declared tags fail the route contract check. This keeps generated client
 groupings and power-user documentation navigation aligned with the Rust-native
 controller surface.
+
+## 2026-07-18 Progress - Static Response Component Gate
+
+Extended the static OpenAPI drift checker so every shared response component
+must have a non-empty description, must carry the shared contract-version
+header reference, and must expose the expected media type and schema. The gate
+preserves the intentional `EventStreamResponse` `text/event-stream` exception
+while keeping all other reusable response components JSON-envelope based.
