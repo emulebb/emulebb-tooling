@@ -237,3 +237,12 @@ Extended the static OpenAPI drift checker so every `$ref` must be a local
 `#/components/...` reference and must resolve to an existing component. This
 gives missing or external schema, response, parameter, and header refs a
 precise drift report instead of failing later during response or schema checks.
+
+## 2026-07-18 Progress - Static Parameter Metadata Gate
+
+Extended the static OpenAPI drift checker so every inline or component
+parameter must publish an explicit boolean `required` value, a valid `in`
+location, a non-empty name, and a schema object. The OpenAPI contract now marks
+the existing optional query filters as `required: false` instead of relying on
+implicit OpenAPI defaults, which keeps generated clients and adapter manifests
+honest without changing Rust runtime behavior.

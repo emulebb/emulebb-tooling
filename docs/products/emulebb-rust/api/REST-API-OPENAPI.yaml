@@ -561,10 +561,12 @@ paths:
       parameters:
         - name: state
           in: query
+          required: false
           schema:
             $ref: "#/components/schemas/TransferState"
         - name: categoryId
           in: query
+          required: false
           schema:
             type: integer
             minimum: 0
@@ -2534,6 +2536,7 @@ components:
     Limit:
       name: limit
       in: query
+      required: false
       schema:
         type: integer
         minimum: 1
@@ -2542,6 +2545,7 @@ components:
     Offset:
       name: offset
       in: query
+      required: false
       schema:
         type: integer
         minimum: 0
@@ -2550,6 +2554,7 @@ components:
     IncludeScoreBreakdown:
       name: includeScoreBreakdown
       in: query
+      required: false
       schema:
         type: boolean
         default: false
@@ -2557,6 +2562,7 @@ components:
     IncludeEvidence:
       name: includeEvidence
       in: query
+      required: false
       schema:
         type: boolean
         default: true
@@ -2564,6 +2570,7 @@ components:
     ExactTotal:
       name: exactTotal
       in: query
+      required: false
       schema:
         type: boolean
         default: true
