@@ -185,9 +185,9 @@ paths:
       tags: [App]
       summary: Return settings surface metadata.
       description: |
-        Describes the DB-backed `AppSettings` fields and settings-adjacent
-        section resources. Bootstrap-only TOML secrets are intentionally not
-        exposed through this route.
+        Describes the DB-backed `AppSettings` fields, redacted bootstrap-only
+        setting paths, and settings-adjacent section resources. Bootstrap-only
+        TOML secret values are intentionally not exposed through this route.
       operationId: getSettingsSurface
       responses:
         "200":
@@ -3340,9 +3340,13 @@ components:
     SettingsSurface:
       type: object
       additionalProperties: false
-      required: [settings, sectionResources]
+      required: [settings, bootstrapSettings, sectionResources]
       properties:
         settings:
+          type: array
+          items:
+            $ref: "#/components/schemas/SettingSurfaceSpec"
+        bootstrapSettings:
           type: array
           items:
             $ref: "#/components/schemas/SettingSurfaceSpec"
@@ -3357,7 +3361,7 @@ components:
       properties:
         path:
           type: string
-          description: Dot-separated path in the `/app/settings` JSON document.
+          description: Dot-separated settings path in the DB-backed settings document or bootstrap TOML file.
         class:
           $ref: "#/components/schemas/SettingSurfaceClass"
         restartRequired:
@@ -3366,7 +3370,7 @@ components:
           type: string
         route:
           type: string
-          enum: [/api/v1/app/settings]
+          enum: [/api/v1/app/settings, emulebb-rust-settings.toml]
         description:
           type: string
     SettingsSectionResourceSpec:

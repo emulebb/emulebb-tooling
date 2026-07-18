@@ -250,6 +250,11 @@ Do not put these in the normal Settings UI for beta:
   to re-read the configured `ipfilter.dat` into the live shared filter. The
   Settings UI shows the runtime status and reload action next to the IP Filter
   controls, with OpenAPI and route/body validation aligned.
+- 2026-07-18: Added redacted bootstrap REST/security inventory to
+  `GET /api/v1/app/settings/surface` as `bootstrapSettings`. The Settings UI now
+  shows the `rest.bindAddr`, `rest.apiKey`, and `rest.webRootDir` TOML-owned
+  fields as restart-required Bootstrap REST entries without exposing secret
+  values or making them mutable through REST.
 - 2026-07-14: `RUST-FEAT-036 keep ED2K servers in SQLite profile` removed normal
   daemon TOML server ownership. Enabled SQLite profile servers decide whether an
   ED2K server session can be configured.
