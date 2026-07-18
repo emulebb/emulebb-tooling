@@ -370,6 +370,10 @@ Do not put these in the normal Settings UI for beta:
   `keywordServerAttemptBudget`, `exactHashKeywordServerAttemptBudget`, and
   `sourceServerAttemptBudget`, matching the runtime paths that already force
   those values to at least one effective attempt or peer.
+- 2026-07-18: Tightened `ed2k.deadServerRetries` to the stock retry range.
+  REST PATCH, OpenAPI, and the embedded Settings UI now require `1..10`, matching
+  the eD2K runtime contract for non-static server removal after consecutive
+  connect or ping failures.
 - 2026-07-14: `RUST-FEAT-036 keep ED2K servers in SQLite profile` removed normal
   daemon TOML server ownership. Enabled SQLite profile servers decide whether an
   ED2K server session can be configured.

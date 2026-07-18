@@ -3878,7 +3878,8 @@ components:
           type: boolean
         deadServerRetries:
           type: integer
-          minimum: 0
+          minimum: 1
+          maximum: 10
     Ed2kSettings:
       type: object
       additionalProperties: false
@@ -3950,7 +3951,8 @@ components:
           type: boolean
         deadServerRetries:
           type: integer
-          minimum: 0
+          minimum: 1
+          maximum: 10
     Ed2kUploadQueueSettings:
       type: object
       additionalProperties: false
