@@ -411,6 +411,9 @@ Do not put these in the normal Settings UI for beta:
 - 2026-07-18: Aligned the `NatStatus.ssdpLocalPort` response schema with the
   nullable configured-port contract. OpenAPI now advertises `null` or `1..65535`
   instead of allowing an impossible configured port `0`.
+- 2026-07-18: Aligned the bulk transfer-add request schema with the REST link
+  validator. OpenAPI now advertises the existing `links` ceiling of 100 eD2K
+  links per request instead of only requiring a non-empty array.
 - 2026-07-14: `RUST-FEAT-036 keep ED2K servers in SQLite profile` removed normal
   daemon TOML server ownership. Enabled SQLite profile servers decide whether an
   ED2K server session can be configured.
