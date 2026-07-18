@@ -69,3 +69,15 @@ this just surfaces them.
 - Controller side: trackmulebb **TMBB-FEAT-014** (capability-gated push adapter,
   poll fallback). qBittorrentBB has no SSE; its push-ish path is the `/sync/maindata`
   delta (trackmulebb TMBB-FEAT-005) — both unify behind one adapter abstraction.
+
+## Progress
+
+- 2026-07-18: Implemented the first Rust-native SSE slice.
+  `GET /api/v1/events` now requires normal REST auth and serves
+  `text/event-stream`; transfer add/update/remove changes publish through a Tokio
+  broadcast bus with monotonically increasing event ids; lagged subscribers receive
+  `sync.reset` with an event id and instructions to re-baseline via
+  `GET /transfers`. `GET /capabilities` now advertises `transfers.sse`.
+  The OpenAPI route/schema, route metadata, REST tests, core lifecycle test, WebUI
+  API type, and smoke-test operation filtering were updated together. Per current
+  Rust forward-lineage policy, the contract version was not bumped in this slice.

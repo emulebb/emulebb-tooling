@@ -95,6 +95,34 @@ paths:
           $ref: "#/components/responses/ErrorResponse"
         default:
           $ref: "#/components/responses/ErrorResponse"
+  /events:
+    get:
+      tags: [App]
+      summary: Stream live daemon events.
+      description: |
+        Server-Sent Events stream for live controller updates. The current stream
+        emits transfer add/update/remove payloads and `sync.reset` events when a
+        subscriber has lagged and must re-baseline through `GET /transfers`.
+      operationId: getEvents
+      responses:
+        "200":
+          $ref: "#/components/responses/EventStreamResponse"
+        "400":
+          $ref: "#/components/responses/ErrorResponse"
+        "401":
+          $ref: "#/components/responses/ErrorResponse"
+        "404":
+          $ref: "#/components/responses/ErrorResponse"
+        "405":
+          $ref: "#/components/responses/MethodNotAllowedResponse"
+        "409":
+          $ref: "#/components/responses/ErrorResponse"
+        "500":
+          $ref: "#/components/responses/ErrorResponse"
+        "503":
+          $ref: "#/components/responses/ErrorResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /app/settings:
     get:
       tags: [App]
@@ -2505,6 +2533,12 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/CapabilityDiscoveryEnvelope"
+    EventStreamResponse:
+      description: Server-Sent Events stream. Each `data:` line is a TransferEvent JSON object.
+      content:
+        text/event-stream:
+          schema:
+            type: string
     CategoryListResponse:
       description: Category collection envelope.
       content:
@@ -3940,6 +3974,27 @@ components:
           properties:
             data:
               $ref: "#/components/schemas/Transfer"
+    TransferEvent:
+      type: object
+      additionalProperties: false
+      required: [id, type]
+      properties:
+        id:
+          type: integer
+          minimum: 1
+        type:
+          type: string
+          enum: [transfer.added, transfer.updated, transfer.removed, sync.reset]
+        transfer:
+          $ref: "#/components/schemas/Transfer"
+        hash:
+          type: string
+          pattern: "^[0-9a-f]{32}$"
+        reason:
+          type: string
+        missed:
+          type: integer
+          minimum: 1
     Transfer:
       type: object
       additionalProperties: false
