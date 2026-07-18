@@ -102,3 +102,6 @@ this just surfaces them.
   fetch-based event stream so it can send `X-API-Key` and `Last-Event-ID`.
   Transfer events and `sync.reset` now trigger immediate dashboard refreshes
   while the existing poll loop remains as fallback.
+- 2026-07-18: Restored the full WebUI unit gate after the SSE consumer work by
+  updating stale component expectations to the current Tabler badge classes;
+  `npm run test:unit`, e2e smoke, typecheck, and production build now pass.
