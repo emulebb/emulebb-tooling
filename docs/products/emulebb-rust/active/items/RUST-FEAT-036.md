@@ -232,6 +232,10 @@ Do not put these in the normal Settings UI for beta:
   `GET /status`, with OpenAPI, route metadata, REST tests, WebUI model/refresh
   wiring, mock API coverage, and Diagnostics tab rendering aligned in the same
   slice.
+- 2026-07-18: Added static OpenAPI drift coverage for destructive confirmation
+  sentinels so operator actions such as shutdown, diagnostics capture/crash,
+  log clearing, transfer clearing, and shared-root replacement remain documented
+  as required explicit `true` confirmations.
 - 2026-07-14: `RUST-FEAT-036 keep ED2K servers in SQLite profile` removed normal
   daemon TOML server ownership. Enabled SQLite profile servers decide whether an
   ED2K server session can be configured.

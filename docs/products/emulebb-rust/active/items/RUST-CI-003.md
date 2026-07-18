@@ -308,3 +308,11 @@ operation-level parameter must reference a shared `#/components/parameters/...`
 component. The remaining inline parameters, including `Last-Event-ID` and the
 transfer list filters, were moved into reusable components so adapter manifests
 and generated clients get one canonical parameter definition.
+
+## 2026-07-18 Progress - Static Destructive Confirmation Gate
+
+Extended the static OpenAPI drift checker so the shared destructive `confirm`
+query parameter must be required and every confirm-prefixed request-body field
+must be required with a boolean `enum: [true]` schema. This keeps shutdown,
+diagnostic dump/crash, log clearing, completed-transfer clearing, and shared-root
+replacement confirmations machine-readable and aligned with Rust validators.
