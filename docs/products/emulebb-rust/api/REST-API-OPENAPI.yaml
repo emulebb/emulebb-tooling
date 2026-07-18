@@ -464,6 +464,34 @@ paths:
           $ref: "#/components/responses/ErrorResponse"
         default:
           $ref: "#/components/responses/ErrorResponse"
+  /nat/operations/refresh:
+    post:
+      tags: [Nat]
+      summary: Refresh live NAT mappings.
+      operationId: refreshNat
+      description: >
+        Runs one live NAT reconcile pass when the ED2K/Kad runtime is active and
+        returns the current NAT status. Mapping failures are reported in the
+        `lastError` field of the returned status body.
+      responses:
+        "200":
+          $ref: "#/components/responses/NatResponse"
+        "400":
+          $ref: "#/components/responses/ErrorResponse"
+        "401":
+          $ref: "#/components/responses/ErrorResponse"
+        "404":
+          $ref: "#/components/responses/ErrorResponse"
+        "405":
+          $ref: "#/components/responses/MethodNotAllowedResponse"
+        "409":
+          $ref: "#/components/responses/ErrorResponse"
+        "500":
+          $ref: "#/components/responses/ErrorResponse"
+        "503":
+          $ref: "#/components/responses/ErrorResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /vpn-guard:
     get:
       tags: [VpnGuard]
