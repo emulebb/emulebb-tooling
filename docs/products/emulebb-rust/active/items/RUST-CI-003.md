@@ -132,3 +132,10 @@ Added the persisted Python command
 validating an already-running emulebb-rust daemon against the OpenAPI response
 schemas. It reuses the shared REST completeness runner and performs no ad-hoc
 launching, so CI/profile orchestration can own daemon startup separately.
+
+## 2026-07-18 Progress - Contract Header Metadata Gate
+
+Extended the static OpenAPI drift checker to fail any documented native
+operation response that omits `X-Contract-Version`. The shared CI guard now
+covers route, query, body, and response-header metadata drift before live daemon
+schema conformance runs.
