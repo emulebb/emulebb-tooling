@@ -189,6 +189,34 @@ paths:
           $ref: "#/components/responses/ErrorResponse"
         default:
           $ref: "#/components/responses/ErrorResponse"
+  /app/settings/surface:
+    get:
+      tags: [App]
+      summary: Return settings surface metadata.
+      description: |
+        Describes the DB-backed `AppSettings` fields and settings-adjacent
+        section resources. Bootstrap-only TOML secrets are intentionally not
+        exposed through this route.
+      operationId: getSettingsSurface
+      responses:
+        "200":
+          $ref: "#/components/responses/SettingsSurfaceResponse"
+        "400":
+          $ref: "#/components/responses/ErrorResponse"
+        "401":
+          $ref: "#/components/responses/ErrorResponse"
+        "404":
+          $ref: "#/components/responses/ErrorResponse"
+        "405":
+          $ref: "#/components/responses/MethodNotAllowedResponse"
+        "409":
+          $ref: "#/components/responses/ErrorResponse"
+        "500":
+          $ref: "#/components/responses/ErrorResponse"
+        "503":
+          $ref: "#/components/responses/ErrorResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /app/shutdown:
     post:
       tags: [App]
@@ -2684,6 +2712,12 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/AppSettingsEnvelope"
+    SettingsSurfaceResponse:
+      description: Settings surface metadata envelope.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/SettingsSurfaceEnvelope"
     SearchResponse:
       description: Search envelope.
       content:
@@ -3061,6 +3095,65 @@ components:
           properties:
             data:
               $ref: "#/components/schemas/AppSettings"
+    SettingsSurfaceEnvelope:
+      unevaluatedProperties: false
+      allOf:
+        - $ref: "#/components/schemas/EnvelopeBase"
+        - type: object
+          properties:
+            data:
+              $ref: "#/components/schemas/SettingsSurface"
+    SettingsSurface:
+      type: object
+      additionalProperties: false
+      required: [settings, sectionResources]
+      properties:
+        settings:
+          type: array
+          items:
+            $ref: "#/components/schemas/SettingSurfaceSpec"
+        sectionResources:
+          type: array
+          items:
+            $ref: "#/components/schemas/SettingsSectionResourceSpec"
+    SettingSurfaceSpec:
+      type: object
+      additionalProperties: false
+      required: [path, class, restartRequired, uiSection, route, description]
+      properties:
+        path:
+          type: string
+          description: Dot-separated path in the `/app/settings` JSON document.
+        class:
+          $ref: "#/components/schemas/SettingSurfaceClass"
+        restartRequired:
+          type: boolean
+        uiSection:
+          type: string
+        route:
+          type: string
+          enum: [/api/v1/app/settings]
+        description:
+          type: string
+    SettingsSectionResourceSpec:
+      type: object
+      additionalProperties: false
+      required: [name, class, route, uiSection, description]
+      properties:
+        name:
+          type: string
+        class:
+          type: string
+          enum: [existingSectionResource]
+        route:
+          type: string
+        uiSection:
+          type: string
+        description:
+          type: string
+    SettingSurfaceClass:
+      type: string
+      enum: [normalControl, advancedControl, existingSectionResource, bootstrapOnly, notUserFacing]
     AppSettings:
       type: object
       additionalProperties: false

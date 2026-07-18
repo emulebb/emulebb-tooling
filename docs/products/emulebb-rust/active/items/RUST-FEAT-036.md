@@ -166,6 +166,11 @@ Do not put these in the normal Settings UI for beta:
 
 ## Implementation Notes
 
+- 2026-07-18: Exposed the DB-backed settings inventory through
+  `GET /api/v1/app/settings/surface`. The route returns classified
+  `/app/settings` field metadata and existing settings-section resources while
+  keeping bootstrap-only TOML secrets out of REST. Rust route metadata, REST
+  tests, and OpenAPI are aligned.
 - 2026-07-18: Added a machine-readable settings surface inventory in
   `emulebb-settings` for all serialized `AppSettings` fields, plus existing
   settings-section resources. Added a daemon bootstrap TOML inventory for the
