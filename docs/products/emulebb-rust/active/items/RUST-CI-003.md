@@ -182,3 +182,12 @@ to the canonical JSON error envelope and contract-version header.
 Extended the static OpenAPI drift checker to fail if any native operation loses
 its `405` response or stops referencing `MethodNotAllowedResponse`, and to fail
 if that shared response component drops the documented `Allow` header.
+
+## 2026-07-18 Progress - Static Contract-Version Gate
+
+Pinned the OpenAPI contract-version values as schema constants and extended the
+shared route drift checker so Rust `CONTRACT_VERSION`, OpenAPI
+`info.version`/`info.x-contract-version`, the documented contract-version
+header, the capability discovery payload, and harness constants must all agree.
+The same gate also rejects inline `X-Contract-Version` response-header
+definitions that bypass the shared OpenAPI header component.
