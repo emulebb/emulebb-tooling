@@ -230,3 +230,10 @@ body must explicitly state `required: true` or `required: false`, expose only
 `application/json`, and reference a shared schema component. This preserves the
 current optional-body route where intentional while keeping JSON request payloads
 generator-ready and aligned with the Rust validators.
+
+## 2026-07-18 Progress - Static Component Reference Gate
+
+Extended the static OpenAPI drift checker so every `$ref` must be a local
+`#/components/...` reference and must resolve to an existing component. This
+gives missing or external schema, response, parameter, and header refs a
+precise drift report instead of failing later during response or schema checks.
