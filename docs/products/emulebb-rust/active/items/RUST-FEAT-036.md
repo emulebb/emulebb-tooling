@@ -443,6 +443,9 @@ Do not put these in the normal Settings UI for beta:
   type tokens. The Search view now sends `""`, `arc`, `doc`, `iso`, `image`,
   `pro`, `audio`, `video`, or `emulecollection` instead of unsupported friendly
   aliases, and normalizes/validates query text before `POST /api/v1/searches`.
+- 2026-07-18: Tightened WebUI shared-file metadata validation. The Shared Files
+  editor now offers only REST/OpenAPI upload-priority tokens and blocks ratings
+  outside `0..5` before sending `PATCH /api/v1/shared-files/{hash}`.
 - 2026-07-14: `RUST-FEAT-036 keep ED2K servers in SQLite profile` removed normal
   daemon TOML server ownership. Enabled SQLite profile servers decide whether an
   ED2K server session can be configured.
