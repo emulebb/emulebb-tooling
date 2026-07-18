@@ -82,3 +82,11 @@ emulebb-rust router path/method inventory against the Rust OpenAPI artifact and
 fails on implemented-but-undocumented or documented-but-unimplemented route
 inventory drift. This covers the route inventory part of the item; live response
 schema conformance and CI wiring remain open.
+
+## 2026-07-18 Progress - CI Route Inventory Gate
+
+The static route inventory guard now runs in
+`repos\emulebb-build-tests\.github\workflows\fast-harness-ci.yml` after the
+shared harness checks out `emulebb-rust` and `emulebb-tooling`. This moves the
+implemented/spec route-inventory drift check into CI. Live response schema
+validation remains the next uncovered part of this item.
