@@ -414,6 +414,9 @@ Do not put these in the normal Settings UI for beta:
 - 2026-07-18: Aligned the bulk transfer-add request schema with the REST link
   validator. OpenAPI now advertises the existing `links` ceiling of 100 eD2K
   links per request instead of only requiring a non-empty array.
+- 2026-07-18: Tightened WebUI transfer-add link validation to match the REST and
+  OpenAPI batch contract. The Transfers view now blocks non-eD2K, whitespace,
+  overlong, and over-100-link batches before sending `POST /api/v1/transfers`.
 - 2026-07-18: Tightened WebUI validation for core numeric settings to match the
   shared REST/OpenAPI core settings schema maxima. The Settings UI now rejects
   out-of-range power-user values such as `core.maxConnections` before sending a
