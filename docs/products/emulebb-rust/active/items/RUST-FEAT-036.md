@@ -166,6 +166,10 @@ Do not put these in the normal Settings UI for beta:
 
 ## Implementation Notes
 
+- 2026-07-18: Marked shadowed `ed2k.safeServerConnect` and
+  `ed2k.addServersFromServer` settings surface entries as not-user-facing, with
+  a guard test. The visible Settings controls remain the canonical `core.*`
+  server toggles used by runtime state.
 - 2026-07-18: Added an advanced WebUI Search settings section for existing
   eD2K keyword, exact-hash keyword, and source server attempt budgets. The
   controls PATCH the existing `ed2k` settings object and stay hidden until
