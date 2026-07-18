@@ -98,3 +98,11 @@ Rust middleware query-parameter allowlists in
 `crates\emulebb-rest\src\route_metadata.rs` against OpenAPI query parameter
 names. This covers static query-name drift for implemented/documented routes;
 live response schema validation remains open.
+
+## 2026-07-18 Progress - Static Body Inventory Gate
+
+Extended the same shared-harness metadata drift guard to compare Rust top-level
+JSON body field allowlists in
+`crates\emulebb-rest\src\route_body_metadata.rs` against OpenAPI request-body
+schema property names. The CI gate now covers static route, query, and body
+metadata drift; live response schema validation remains open.
