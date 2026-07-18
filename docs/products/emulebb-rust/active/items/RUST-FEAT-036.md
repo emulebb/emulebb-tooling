@@ -316,6 +316,12 @@ Do not put these in the normal Settings UI for beta:
   subscriber count, queued events, and cursor state without opening the
   long-lived stream or fetching full runtime diagnostics; capabilities advertise
   this as `transfers.sse.status`.
+- 2026-07-18: Tightened `PATCH /api/v1/app/settings` semantics to be true
+  field-level partial updates for every non-core settings section. Power-user
+  scripts can now change one NAT, Kad, eD2K, daemon, VPN Guard, or IP Filter
+  field without accidentally restoring omitted fields to defaults; explicit JSON
+  `null` still clears nullable fields. OpenAPI now documents named
+  `*SettingsUpdate` request DTOs separately from full settings response DTOs.
 - 2026-07-14: `RUST-FEAT-036 keep ED2K servers in SQLite profile` removed normal
   daemon TOML server ownership. Enabled SQLite profile servers decide whether an
   ED2K server session can be configured.
