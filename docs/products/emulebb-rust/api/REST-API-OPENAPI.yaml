@@ -130,6 +130,33 @@ paths:
           $ref: "#/components/responses/ErrorResponse"
         default:
           $ref: "#/components/responses/ErrorResponse"
+  /events/status:
+    get:
+      tags: [App]
+      summary: Return live event-stream diagnostics.
+      description: >
+        Returns the current transfer-event stream counters and cursor state
+        without opening the long-lived Server-Sent Events stream.
+      operationId: getEventStatus
+      responses:
+        "200":
+          $ref: "#/components/responses/TransferEventDiagnosticsResponse"
+        "400":
+          $ref: "#/components/responses/ErrorResponse"
+        "401":
+          $ref: "#/components/responses/ErrorResponse"
+        "404":
+          $ref: "#/components/responses/ErrorResponse"
+        "405":
+          $ref: "#/components/responses/MethodNotAllowedResponse"
+        "409":
+          $ref: "#/components/responses/ErrorResponse"
+        "500":
+          $ref: "#/components/responses/ErrorResponse"
+        "503":
+          $ref: "#/components/responses/ErrorResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /app/settings:
     get:
       tags: [App]
@@ -2827,6 +2854,15 @@ components:
         text/event-stream:
           schema:
             type: string
+    TransferEventDiagnosticsResponse:
+      description: Transfer event-stream diagnostics envelope.
+      headers:
+        X-Contract-Version:
+          $ref: "#/components/headers/ContractVersionHeader"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/TransferEventDiagnosticsEnvelope"
     CategoryListResponse:
       description: Category collection envelope.
       headers:
@@ -4102,6 +4138,14 @@ components:
           properties:
             data:
               $ref: "#/components/schemas/RuntimeDiagnostics"
+    TransferEventDiagnosticsEnvelope:
+      unevaluatedProperties: false
+      allOf:
+        - $ref: "#/components/schemas/EnvelopeBase"
+        - type: object
+          properties:
+            data:
+              $ref: "#/components/schemas/TransferEventRuntimeDiagnostics"
     Status:
       type: object
       additionalProperties: false
