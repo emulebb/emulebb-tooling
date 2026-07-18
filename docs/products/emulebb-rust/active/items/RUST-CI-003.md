@@ -332,3 +332,12 @@ Extended the persisted running-daemon REST conformance command so the
 it against the Rust OpenAPI `TransferEvent` schema component. This keeps the
 live resume `sync.reset` frame honest beyond text-snippet checks and reports
 schema failures as `getEvents` conformance failures.
+
+## 2026-07-18 Progress - Rust OpenAPI Conformance Pin
+
+Pinned the persisted running-daemon REST conformance wrapper to load
+`rest-api-smoke.py` with `EMULEBB_REST_OPENAPI_CONTRACT_PATH` set to the Rust
+product OpenAPI artifact under `docs/products/emulebb-rust/api`. The wrapper
+restores any inherited operator value after import, but the smoke module's
+import-time route inventory and response validators now use the Rust-forward
+contract instead of the older shared REST contract by accident.
