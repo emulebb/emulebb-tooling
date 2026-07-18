@@ -6961,6 +6961,7 @@ components:
         name:
           type: string
           maxLength: 128
+          pattern: '^[^\x00-\x1F\x7F-\x9F]*$'
     LogListEnvelope:
       unevaluatedProperties: false
       allOf:

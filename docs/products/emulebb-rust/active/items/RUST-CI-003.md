@@ -361,6 +361,12 @@ and `KadBootstrapRequest` address fields must document the REST validator's
 non-empty-after-trim endpoint address contract with a machine-readable
 non-whitespace pattern.
 
+## 2026-07-18 Progress - Static Friend Name Schema Gate
+
+Extended the static OpenAPI schema-component checker so
+`FriendCreateRequest.name` must document the REST validator's 128-character,
+control-free display-name contract.
+
 ## 2026-07-18 Progress - Rust OpenAPI Conformance Pin
 
 Pinned the persisted running-daemon REST conformance wrapper to load
