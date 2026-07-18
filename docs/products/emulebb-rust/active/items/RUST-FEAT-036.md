@@ -365,6 +365,11 @@ Do not put these in the normal Settings UI for beta:
   download cap, new-connection rate cap, half-open cap, and per-file source cap,
   matching the REST/OpenAPI contract and runtime semantics for disabled or
   uncapped limits.
+- 2026-07-18: Tightened eD2K min-one peer/search budgets. REST PATCH and OpenAPI
+  now reject `0` for `maxParallelDownloadPeers`,
+  `keywordServerAttemptBudget`, `exactHashKeywordServerAttemptBudget`, and
+  `sourceServerAttemptBudget`, matching the runtime paths that already force
+  those values to at least one effective attempt or peer.
 - 2026-07-14: `RUST-FEAT-036 keep ED2K servers in SQLite profile` removed normal
   daemon TOML server ownership. Enabled SQLite profile servers decide whether an
   ED2K server session can be configured.

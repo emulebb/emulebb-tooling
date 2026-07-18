@@ -3855,16 +3855,16 @@ components:
           minimum: 0
         maxParallelDownloadPeers:
           type: integer
-          minimum: 0
+          minimum: 1
         keywordServerAttemptBudget:
           type: integer
-          minimum: 0
+          minimum: 1
         exactHashKeywordServerAttemptBudget:
           type: integer
-          minimum: 0
+          minimum: 1
         sourceServerAttemptBudget:
           type: integer
-          minimum: 0
+          minimum: 1
         uploadQueue:
           $ref: "#/components/schemas/Ed2kUploadQueueSettingsUpdate"
         downloadLimitBytesPerSec:
@@ -3927,16 +3927,16 @@ components:
           minimum: 0
         maxParallelDownloadPeers:
           type: integer
-          minimum: 0
+          minimum: 1
         keywordServerAttemptBudget:
           type: integer
-          minimum: 0
+          minimum: 1
         exactHashKeywordServerAttemptBudget:
           type: integer
-          minimum: 0
+          minimum: 1
         sourceServerAttemptBudget:
           type: integer
-          minimum: 0
+          minimum: 1
         uploadQueue:
           $ref: "#/components/schemas/Ed2kUploadQueueSettings"
         downloadLimitBytesPerSec:
