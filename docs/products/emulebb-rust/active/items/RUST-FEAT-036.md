@@ -421,6 +421,10 @@ Do not put these in the normal Settings UI for beta:
 - 2026-07-18: Aligned the category priority OpenAPI schema with the REST
   validator and Rust model. Numeric category priorities and category ids now
   advertise the `u32` ceiling instead of only documenting the lower bound.
+- 2026-07-18: Tightened WebUI section-resource operation port validation.
+  Server add and Kad bootstrap forms now enforce `1..65535` before sending
+  requests, matching the REST/OpenAPI request contracts for those existing
+  section resources.
 - 2026-07-14: `RUST-FEAT-036 keep ED2K servers in SQLite profile` removed normal
   daemon TOML server ownership. Enabled SQLite profile servers decide whether an
   ED2K server session can be configured.
