@@ -4361,7 +4361,7 @@ components:
           minLength: 1
         ssdpLocalPort:
           type: [integer, "null"]
-          minimum: 0
+          minimum: 1
           maximum: 65535
         externalIpOverride:
           type: [string, "null"]

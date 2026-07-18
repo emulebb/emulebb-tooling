@@ -408,6 +408,9 @@ Do not put these in the normal Settings UI for beta:
   empty string as "no CIDR gate" or a whitespace/comma/semicolon-separated list
   of public IPv4 CIDRs or host addresses; malformed, IPv6, and non-public ranges
   are rejected before persistence.
+- 2026-07-18: Aligned the `NatStatus.ssdpLocalPort` response schema with the
+  nullable configured-port contract. OpenAPI now advertises `null` or `1..65535`
+  instead of allowing an impossible configured port `0`.
 - 2026-07-14: `RUST-FEAT-036 keep ED2K servers in SQLite profile` removed normal
   daemon TOML server ownership. Enabled SQLite profile servers decide whether an
   ED2K server session can be configured.
