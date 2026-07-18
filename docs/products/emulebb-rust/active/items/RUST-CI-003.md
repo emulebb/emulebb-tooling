@@ -73,3 +73,12 @@ is useful. The gate exists to keep the current chosen contract honest.
 
 - Local item: it records an internal CI gate rather than a product feature.
   Promote to a GitHub-tracked CI item if it needs public workflow visibility.
+
+## 2026-07-18 Progress
+
+Added the first shared-harness drift guard:
+`repos\emulebb-build-tests\scripts\check-rust-openapi-routes.py` compares the
+emulebb-rust router path/method inventory against the Rust OpenAPI artifact and
+fails on implemented-but-undocumented or documented-but-unimplemented route
+inventory drift. This covers the route inventory part of the item; live response
+schema conformance and CI wiring remain open.
