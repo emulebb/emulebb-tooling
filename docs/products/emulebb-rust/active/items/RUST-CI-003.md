@@ -90,3 +90,11 @@ The static route inventory guard now runs in
 shared harness checks out `emulebb-rust` and `emulebb-tooling`. This moves the
 implemented/spec route-inventory drift check into CI. Live response schema
 validation remains the next uncovered part of this item.
+
+## 2026-07-18 Progress - Static Query Inventory Gate
+
+Extended the shared-harness route drift guard so the same CI step also compares
+Rust middleware query-parameter allowlists in
+`crates\emulebb-rest\src\route_metadata.rs` against OpenAPI query parameter
+names. This covers static query-name drift for implemented/documented routes;
+live response schema validation remains open.
