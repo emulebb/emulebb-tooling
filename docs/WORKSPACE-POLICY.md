@@ -296,6 +296,25 @@ normalization policy.
 - New reusable code should include succinct Doxygen-style documentation. Short
   private glue code may stay undocumented when it is truly trivial.
 
+## Rust Metadata Schema Policy
+
+- `emulebb-rust` metadata databases must always match the current checked-in
+  Rust metadata schema. The Rust product code must not carry legacy schema
+  branches, compatibility reads for retired columns, or in-product schema
+  migrations.
+- When a persistent operator soak profile needs to be preserved across a Rust
+  metadata schema bump, repair that operator-owned database outside the Rust
+  product with an explicit, bounded Python migration in `repos\emulebb-build-tests`.
+  The migration must be run intentionally against the soak profile, create a
+  backup before mutation, and leave the database in the exact current schema.
+- Do not make Rust startup silently accept stale schema versions or extra legacy
+  fields. A stale profile that has not been externally migrated should fail
+  visibly during preflight/startup.
+- Retired Rust REST, settings, and metadata fields are hard errors. Do not
+  deserialize-and-ignore, alias, remap, or bridge old field names in Rust product
+  code. If a persisted live-soak profile or harness still emits retired fields,
+  fix that outside the Rust product path.
+
 ## Protocol Compatibility Policy
 
 - eMuleBB stays stock-compatible at the eD2K and Kad protocol layer.

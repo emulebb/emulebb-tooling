@@ -1925,6 +1925,33 @@ paths:
           $ref: "#/components/responses/ErrorResponse"
         default:
           $ref: "#/components/responses/ErrorResponse"
+  /kad/nodes:
+    get:
+      tags: [Kad]
+      summary: Return a paged Kad routing node list.
+      operationId: listKadNodes
+      parameters:
+        - $ref: "#/components/parameters/Offset"
+        - $ref: "#/components/parameters/Limit"
+      responses:
+        "200":
+          $ref: "#/components/responses/KadNodeListResponse"
+        "400":
+          $ref: "#/components/responses/ErrorResponse"
+        "401":
+          $ref: "#/components/responses/ErrorResponse"
+        "404":
+          $ref: "#/components/responses/ErrorResponse"
+        "405":
+          $ref: "#/components/responses/MethodNotAllowedResponse"
+        "409":
+          $ref: "#/components/responses/ErrorResponse"
+        "500":
+          $ref: "#/components/responses/ErrorResponse"
+        "503":
+          $ref: "#/components/responses/ErrorResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /kad/operations/import-nodes-url:
     post:
       tags: [Kad]
@@ -2545,6 +2572,12 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/KadEnvelope"
+    KadNodeListResponse:
+      description: Kad node page envelope.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/KadNodeListEnvelope"
     LogListResponse:
       description: Log collection envelope.
       content:
@@ -3107,6 +3140,28 @@ components:
           type: [string, "null"]
         ed2kUserHash:
           type: [string, "null"]
+        hostnameLookup:
+          $ref: "#/components/schemas/HostnameLookupSettings"
+    HostnameLookupSettings:
+      type: object
+      additionalProperties: false
+      properties:
+        enabled:
+          type: boolean
+        dnsServers:
+          type: array
+          items:
+            type: string
+          description: Explicit DNS server IPv4 or IPv4:port entries for bound reverse-DNS lookup.
+        cacheTtlSecs:
+          type: integer
+          minimum: 1
+        maxLookupsPerTick:
+          type: integer
+          minimum: 1
+        tickIntervalSecs:
+          type: integer
+          minimum: 5
     Ed2kSettings:
       type: object
       additionalProperties: false
@@ -5174,6 +5229,16 @@ components:
         files:
           type: integer
           minimum: 0
+        hostName:
+          type: [string, "null"]
+        hostNameStatus:
+          type: [string, "null"]
+          enum: [unknown, queued, resolved, notFound, failed, blockedByBindPolicy, null]
+        hostNameResolvedAt:
+          type: [string, "null"]
+          format: date-time
+        hostNameError:
+          type: [string, "null"]
     ServerStatusEnvelope:
       unevaluatedProperties: false
       allOf:
@@ -5327,6 +5392,92 @@ components:
           type: boolean
         network:
           $ref: "#/components/schemas/NetworkStatus"
+    KadNodeListEnvelope:
+      unevaluatedProperties: false
+      allOf:
+        - $ref: "#/components/schemas/EnvelopeBase"
+        - type: object
+          properties:
+            data:
+              type: object
+              additionalProperties: false
+              required: [items, total, offset, limit]
+              properties:
+                items:
+                  type: array
+                  items:
+                    $ref: "#/components/schemas/KadNode"
+                total:
+                  type: integer
+                  minimum: 0
+                offset:
+                  type: integer
+                  minimum: 0
+                limit:
+                  type: integer
+                  minimum: 1
+                  maximum: 1000
+    KadNode:
+      type: object
+      additionalProperties: false
+      required: [nodeId, ip, hostName, hostNameStatus, hostNameResolvedAt, hostNameError, udpPort, tcpPort, kadVersion, verified, contactType, probeType, udpKeyKnown, helloSourceUdpPort, udpFirewalled, tcpFirewalled, receivedHelloPacket, bootstrap, createdAt, lastSeen]
+      properties:
+        nodeId:
+          type: string
+        ip:
+          type: string
+          format: ipv4
+        hostName:
+          type: [string, "null"]
+        hostNameStatus:
+          type: string
+          enum: [unknown, queued, resolved, notFound, failed, blockedByBindPolicy]
+        hostNameResolvedAt:
+          type: [string, "null"]
+          format: date-time
+        hostNameError:
+          type: [string, "null"]
+        udpPort:
+          type: integer
+          minimum: 0
+          maximum: 65535
+        tcpPort:
+          type: integer
+          minimum: 0
+          maximum: 65535
+        kadVersion:
+          type: integer
+          minimum: 0
+          maximum: 255
+        verified:
+          type: boolean
+        contactType:
+          type: string
+          enum: [active, inactive, dead]
+        probeType:
+          type: integer
+          minimum: 0
+          maximum: 255
+        udpKeyKnown:
+          type: boolean
+        helloSourceUdpPort:
+          type: [integer, "null"]
+          minimum: 0
+          maximum: 65535
+        udpFirewalled:
+          type: boolean
+        tcpFirewalled:
+          type: boolean
+        receivedHelloPacket:
+          type: boolean
+        bootstrap:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        lastSeen:
+          type: string
+          format: date-time
     KadBootstrapRequest:
       type: object
       additionalProperties: false
