@@ -432,6 +432,9 @@ Do not put these in the normal Settings UI for beta:
   list and Kad nodes import forms now require HTTP(S) URLs with a host before
   sending requests, matching the shared `UrlImportRequest` REST/OpenAPI
   contract.
+- 2026-07-18: Tightened WebUI friend-create validation. The Friends view now
+  requires canonical lowercase eD2K user hashes and bounded display names before
+  sending `POST /api/v1/friends`, matching the REST/OpenAPI request contract.
 - 2026-07-14: `RUST-FEAT-036 keep ED2K servers in SQLite profile` removed normal
   daemon TOML server ownership. Enabled SQLite profile servers decide whether an
   ED2K server session can be configured.
