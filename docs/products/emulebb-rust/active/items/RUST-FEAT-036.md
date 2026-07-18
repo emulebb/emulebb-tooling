@@ -332,6 +332,11 @@ Do not put these in the normal Settings UI for beta:
   empty nested update objects such as `daemon.hostnameLookup` and
   `ed2k.uploadQueue` now fail before the handler, matching the OpenAPI
   `minProperties` contract.
+- 2026-07-18: Tightened REST body validation for non-core partial settings
+  updates. Unknown fields inside `daemon`, `ed2k`, `kad`, `nat`, `vpnGuard`,
+  `ipFilter`, and nested update objects now fail in the route-body layer with
+  deterministic `unknown settings.<path> field` errors, matching the OpenAPI
+  closed-object contract before serde or handler parsing.
 - 2026-07-14: `RUST-FEAT-036 keep ED2K servers in SQLite profile` removed normal
   daemon TOML server ownership. Enabled SQLite profile servers decide whether an
   ED2K server session can be configured.
