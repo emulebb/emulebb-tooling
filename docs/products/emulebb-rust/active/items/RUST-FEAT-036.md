@@ -374,6 +374,11 @@ Do not put these in the normal Settings UI for beta:
   REST PATCH, OpenAPI, and the embedded Settings UI now require `1..10`, matching
   the eD2K runtime contract for non-static server removal after consecutive
   connect or ping failures.
+- 2026-07-18: Tightened eD2K upload-queue settings around the runtime-effective
+  bounds. REST PATCH and OpenAPI now reject clamped-away startup slot, elasticity,
+  underfill, timeout, and session-transfer values, while the Settings UI now
+  preserves zero-policy controls for an empty retained waiting queue, disabled
+  session-transfer rotation, and disabled session-time rotation.
 - 2026-07-14: `RUST-FEAT-036 keep ED2K servers in SQLite profile` removed normal
   daemon TOML server ownership. Enabled SQLite profile servers decide whether an
   ED2K server session can be configured.

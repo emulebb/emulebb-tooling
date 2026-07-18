@@ -3959,10 +3959,12 @@ components:
       properties:
         activeSlots:
           type: integer
-          minimum: 0
+          minimum: 1
+          maximum: 64
         elasticPercent:
           type: integer
           minimum: 0
+          maximum: 100
         uploadLimitBytesPerSec:
           type: integer
           minimum: 0
@@ -3971,22 +3973,23 @@ components:
           minimum: 0
         elasticUnderfillSecs:
           type: integer
-          minimum: 0
+          minimum: 1
         waitingCapacity:
           type: integer
           minimum: 0
         waitingTimeoutSecs:
           type: integer
-          minimum: 0
+          minimum: 1
         grantedTimeoutSecs:
           type: integer
-          minimum: 0
+          minimum: 1
         uploadTimeoutSecs:
           type: integer
-          minimum: 0
+          minimum: 1
         sessionTransferPercent:
           type: integer
           minimum: 0
+          maximum: 100
         sessionTimeLimitSecs:
           type: integer
           minimum: 0
@@ -3997,10 +4000,12 @@ components:
       properties:
         activeSlots:
           type: integer
-          minimum: 0
+          minimum: 1
+          maximum: 64
         elasticPercent:
           type: integer
           minimum: 0
+          maximum: 100
         uploadLimitBytesPerSec:
           type: integer
           minimum: 0
@@ -4009,22 +4014,23 @@ components:
           minimum: 0
         elasticUnderfillSecs:
           type: integer
-          minimum: 0
+          minimum: 1
         waitingCapacity:
           type: integer
           minimum: 0
         waitingTimeoutSecs:
           type: integer
-          minimum: 0
+          minimum: 1
         grantedTimeoutSecs:
           type: integer
-          minimum: 0
+          minimum: 1
         uploadTimeoutSecs:
           type: integer
-          minimum: 0
+          minimum: 1
         sessionTransferPercent:
           type: integer
           minimum: 0
+          maximum: 100
         sessionTimeLimitSecs:
           type: integer
           minimum: 0
