@@ -341,6 +341,13 @@ it against the Rust OpenAPI `TransferEvent` schema component. This keeps the
 live resume `sync.reset` frame honest beyond text-snippet checks and reports
 schema failures as `getEvents` conformance failures.
 
+## 2026-07-18 Progress - Static Transfer Link Schema Gate
+
+Extended the static OpenAPI schema-component checker so
+`TransferCreateRequest.link` and `TransferCreateRequest.links[]` must document
+the REST validator's eD2K-only, no-whitespace, 2048-character link text
+contract, and the batch form must keep its 100-link ceiling.
+
 ## 2026-07-18 Progress - Rust OpenAPI Conformance Pin
 
 Pinned the persisted running-daemon REST conformance wrapper to load
