@@ -341,6 +341,10 @@ Do not put these in the normal Settings UI for beta:
   body layer now rejects `daemon.hostnameLookup.cacheTtlSecs` and
   `maxLookupsPerTick` values below `1`, plus `tickIntervalSecs` values below
   `5`, matching the OpenAPI minima before settings are persisted.
+- 2026-07-18: Tightened VPN Guard mode as a finite Rust-native settings enum.
+  The default DB-backed setting now uses `off`, OpenAPI documents `off` and
+  `block`, REST PATCH rejects other mode strings before persistence, and the
+  embedded WebUI renders the mode as a selector instead of a free text field.
 - 2026-07-14: `RUST-FEAT-036 keep ED2K servers in SQLite profile` removed normal
   daemon TOML server ownership. Enabled SQLite profile servers decide whether an
   ED2K server session can be configured.
