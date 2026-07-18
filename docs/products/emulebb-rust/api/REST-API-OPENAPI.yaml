@@ -2497,6 +2497,7 @@ components:
       description: emulebb-rust `/api/v1` contract version for adapter gating.
       schema:
         type: string
+        const: "1.2.0"
         example: "1.2.0"
   parameters:
     CategoryId:
@@ -3212,7 +3213,8 @@ components:
         contractVersion:
           type: string
           description: Independent `/api/v1` contract version from `info.x-contract-version`.
-          example: "1.0.0"
+          const: "1.2.0"
+          example: "1.2.0"
         apiVersion:
           type: string
           example: "1"
