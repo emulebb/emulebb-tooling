@@ -261,6 +261,11 @@ Do not put these in the normal Settings UI for beta:
   boundary; shared-directory root replacement canonicalizes through the same
   long-path content boundary used by shared-tree scanning. OpenAPI documents
   `incomingDir` as a non-empty nullable path string.
+- 2026-07-18: Added the VPN Guard settings section resource. The Rust REST
+  surface now exposes `GET /api/v1/vpn-guard` for startup block state, egress
+  verification, public IP, and bound STUN/HTTP probe outcomes; Settings renders
+  the live verdict beside the existing VPN Guard controls without duplicating
+  status inside `AppSettings`.
 - 2026-07-14: `RUST-FEAT-036 keep ED2K servers in SQLite profile` removed normal
   daemon TOML server ownership. Enabled SQLite profile servers decide whether an
   ED2K server session can be configured.

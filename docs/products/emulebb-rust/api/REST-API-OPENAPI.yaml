@@ -46,6 +46,7 @@ tags:
   - name: Searches
   - name: Friends
   - name: IpFilter
+  - name: VpnGuard
   - name: Logs
 paths:
   /app:
@@ -397,6 +398,30 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/StatsResponse"
+        "400":
+          $ref: "#/components/responses/ErrorResponse"
+        "401":
+          $ref: "#/components/responses/ErrorResponse"
+        "404":
+          $ref: "#/components/responses/ErrorResponse"
+        "405":
+          $ref: "#/components/responses/MethodNotAllowedResponse"
+        "409":
+          $ref: "#/components/responses/ErrorResponse"
+        "500":
+          $ref: "#/components/responses/ErrorResponse"
+        "503":
+          $ref: "#/components/responses/ErrorResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
+  /vpn-guard:
+    get:
+      tags: [VpnGuard]
+      summary: Return live VPN Guard status.
+      operationId: getVpnGuard
+      responses:
+        "200":
+          $ref: "#/components/responses/VpnGuardResponse"
         "400":
           $ref: "#/components/responses/ErrorResponse"
         "401":
@@ -2976,6 +3001,15 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/StatusEnvelope"
+    VpnGuardResponse:
+      description: VPN Guard status envelope.
+      headers:
+        X-Contract-Version:
+          $ref: "#/components/headers/ContractVersionHeader"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/VpnGuardStatusEnvelope"
     RuntimeDiagnosticsResponse:
       description: Runtime diagnostics envelope.
       headers:
@@ -3842,6 +3876,14 @@ components:
           properties:
             data:
               $ref: "#/components/schemas/Status"
+    VpnGuardStatusEnvelope:
+      unevaluatedProperties: false
+      allOf:
+        - $ref: "#/components/schemas/EnvelopeBase"
+        - type: object
+          properties:
+            data:
+              $ref: "#/components/schemas/VpnGuardStatus"
     RuntimeDiagnosticsEnvelope:
       unevaluatedProperties: false
       allOf:
@@ -4155,35 +4197,37 @@ components:
               description: Stable bind-resolution outcome token.
               enum: [default, resolved, interfacenotfound, interfacenameambiguous, interfacehasnoaddress, addressnotfoundoninterface, addressnotfound, unknown]
         vpnGuard:
-          type: object
-          additionalProperties: false
-          required: [enabled, mode, allowedPublicIpCidrs, startupBlocked, startupBlockReason, publicIp, egressVerified, egressBlockReason, stunProbe, httpProbe]
-          properties:
-            enabled:
-              type: boolean
-            mode:
-              type: string
-              enum: ["off", block]
-            allowedPublicIpCidrs:
-              type: string
-            startupBlocked:
-              type: boolean
-            startupBlockReason:
-              type: string
-            publicIp:
-              type: string
-              nullable: true
-              description: Probe-confirmed public egress IPv4 (from the bound STUN/HTTP probes), when known.
-            egressVerified:
-              type: boolean
-              description: Whether both bound egress probes resolved an allowlisted public IP.
-            egressBlockReason:
-              type: string
-              description: Why the egress is not verified (empty when verified or no CIDR gate).
-            stunProbe:
-              $ref: '#/components/schemas/VpnGuardEgressProbe'
-            httpProbe:
-              $ref: '#/components/schemas/VpnGuardEgressProbe'
+          $ref: "#/components/schemas/VpnGuardStatus"
+    VpnGuardStatus:
+      type: object
+      additionalProperties: false
+      required: [enabled, mode, allowedPublicIpCidrs, startupBlocked, startupBlockReason, publicIp, egressVerified, egressBlockReason, stunProbe, httpProbe]
+      properties:
+        enabled:
+          type: boolean
+        mode:
+          type: string
+          enum: ["off", block]
+        allowedPublicIpCidrs:
+          type: string
+        startupBlocked:
+          type: boolean
+        startupBlockReason:
+          type: string
+        publicIp:
+          type: string
+          nullable: true
+          description: Probe-confirmed public egress IPv4 (from the bound STUN/HTTP probes), when known.
+        egressVerified:
+          type: boolean
+          description: Whether both bound egress probes resolved an allowlisted public IP.
+        egressBlockReason:
+          type: string
+          description: Why the egress is not verified (empty when verified or no CIDR gate).
+        stunProbe:
+          $ref: '#/components/schemas/VpnGuardEgressProbe'
+        httpProbe:
+          $ref: '#/components/schemas/VpnGuardEgressProbe'
     VpnGuardEgressProbe:
       type: object
       additionalProperties: false
