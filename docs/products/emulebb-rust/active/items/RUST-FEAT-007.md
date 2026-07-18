@@ -98,3 +98,7 @@ this just surfaces them.
 - 2026-07-18: Added route-level REST proof that `/api/v1/events` emits a real
   `transfer.added` SSE frame after a transfer is created, covering the handler,
   Tokio broadcast subscription, SSE formatting, and transfer DTO payload together.
+- 2026-07-18: Wired the embedded WebUI to consume `transfers.sse` with a
+  fetch-based event stream so it can send `X-API-Key` and `Last-Event-ID`.
+  Transfer events and `sync.reset` now trigger immediate dashboard refreshes
+  while the existing poll loop remains as fallback.
