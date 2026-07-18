@@ -394,6 +394,11 @@ Do not put these in the normal Settings UI for beta:
 - 2026-07-18: Tightened `daemon.p2pBindIp` PATCH handling to match its typed
   settings DTO and existing OpenAPI `ipv4` format. REST route-body validation and
   the embedded Settings UI now reject malformed bind-IP text before persistence.
+- 2026-07-18: Tightened `daemon.ed2kUserHash` as a canonical eD2K identity
+  override. REST PATCH and OpenAPI now require a marker-normalized
+  32-character lowercase hex user hash, preserving `null` as the explicit clear
+  value and rejecting values the daemon would otherwise normalize or reject at
+  network bootstrap.
 - 2026-07-14: `RUST-FEAT-036 keep ED2K servers in SQLite profile` removed normal
   daemon TOML server ownership. Enabled SQLite profile servers decide whether an
   ED2K server session can be configured.

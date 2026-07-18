@@ -3746,6 +3746,8 @@ components:
           type: [string, "null"]
         ed2kUserHash:
           type: [string, "null"]
+          pattern: "^[0-9a-f]{10}0e[0-9a-f]{16}6f[0-9a-f]{2}$"
+          description: Marker-normalized local eD2K user hash; `null` clears the override.
         hostnameLookup:
           $ref: "#/components/schemas/HostnameLookupSettingsUpdate"
     DaemonSettings:
@@ -3763,6 +3765,8 @@ components:
           type: [string, "null"]
         ed2kUserHash:
           type: [string, "null"]
+          pattern: "^[0-9a-f]{10}0e[0-9a-f]{16}6f[0-9a-f]{2}$"
+          description: Marker-normalized local eD2K user hash; `null` means no configured override.
         hostnameLookup:
           $ref: "#/components/schemas/HostnameLookupSettings"
     HostnameLookupSettings:
