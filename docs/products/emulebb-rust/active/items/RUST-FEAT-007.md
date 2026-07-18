@@ -136,6 +136,11 @@ this just surfaces them.
   streaming, or reconnecting, plus the last event type/id, reconnect count, poll
   interval, and last stream error. The browser smoke fixture asserts the
   diagnostic values from a mocked `sync.reset` frame.
+- 2026-07-18: Added daemon-side transfer event bus metrics to
+  `/api/v1/diagnostics`. The Rust runtime now reports SSE enablement, channel
+  capacity, queued event count, subscriber count, latest/next event ids, and
+  reset resume behavior through a closed OpenAPI schema, and the WebUI shows the
+  values alongside its client-side stream state.
 - 2026-07-18: Restored the full WebUI unit gate after the SSE consumer work by
   updating stale component expectations to the current Tabler badge classes;
   `npm run test:unit`, e2e smoke, typecheck, and production build now pass.

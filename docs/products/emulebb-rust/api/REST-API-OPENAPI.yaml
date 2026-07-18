@@ -3954,7 +3954,7 @@ components:
     RuntimeDiagnostics:
       type: object
       additionalProperties: false
-      required: [processId, knownFileCount, sharedFileCount, sharedHashingCount, sharedDirectoryReloadProgress, ed2kPublish, kadPublish, downloadFileCount, activeUploads, waitingUploads, geolocation]
+      required: [processId, knownFileCount, sharedFileCount, sharedHashingCount, sharedDirectoryReloadProgress, ed2kPublish, kadPublish, transferEvents, downloadFileCount, activeUploads, waitingUploads, geolocation]
       properties:
         processId:
           type: integer
@@ -3976,6 +3976,8 @@ components:
         kadPublish:
           type: object
           additionalProperties: true
+        transferEvents:
+          $ref: "#/components/schemas/TransferEventRuntimeDiagnostics"
         downloadFileCount:
           type: integer
           minimum: 0
@@ -3989,6 +3991,34 @@ components:
           oneOf:
             - $ref: "#/components/schemas/GeolocationRuntimeDiagnostics"
             - type: "null"
+    TransferEventRuntimeDiagnostics:
+      type: object
+      additionalProperties: false
+      required: [enabled, stream, channelCapacity, queuedEventCount, subscriberCount, latestEventId, nextEventId, resumeBehavior]
+      properties:
+        enabled:
+          type: boolean
+        stream:
+          type: string
+          enum: [sse]
+        channelCapacity:
+          type: integer
+          minimum: 0
+        queuedEventCount:
+          type: integer
+          minimum: 0
+        subscriberCount:
+          type: integer
+          minimum: 0
+        latestEventId:
+          type: integer
+          minimum: 0
+        nextEventId:
+          type: integer
+          minimum: 1
+        resumeBehavior:
+          type: string
+          enum: [reset]
     NetworkStatus:
       type: object
       additionalProperties: false
