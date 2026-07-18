@@ -80,6 +80,9 @@ this just surfaces them.
   `X-Contract-Version: 1.2.0` on native JSON success and error envelopes whenever
   live transport headers are present. This closes the gap between the documented
   all-`/api/v1` header contract and the non-SSE smoke path.
+- 2026-07-18: Added Rust route-validation coverage for router-generated
+  `NOT_FOUND` and `METHOD_NOT_ALLOWED` responses so fallback errors are locked to
+  the same `X-Contract-Version: 1.2.0` contract header as handler responses.
 - 2026-07-18: Extended the persisted Rust REST response-conformance probe to
   assert the `/api/v1/events` SSE response headers promised by the contract:
   `Cache-Control: no-cache, no-transform` and `X-Accel-Buffering: no`.
