@@ -391,6 +391,9 @@ Do not put these in the normal Settings UI for beta:
   PATCH, OpenAPI, and the embedded Settings UI now reject malformed
   `nat.bindIp`, `nat.igdIp`, and `nat.externalIpOverride` values before the UPnP
   adapter has to reinterpret or fail them later.
+- 2026-07-18: Tightened `daemon.p2pBindIp` PATCH handling to match its typed
+  settings DTO and existing OpenAPI `ipv4` format. REST route-body validation and
+  the embedded Settings UI now reject malformed bind-IP text before persistence.
 - 2026-07-14: `RUST-FEAT-036 keep ED2K servers in SQLite profile` removed normal
   daemon TOML server ownership. Enabled SQLite profile servers decide whether an
   ED2K server session can be configured.
