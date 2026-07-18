@@ -300,3 +300,11 @@ Extended the static OpenAPI response-component checker so the shared
 `Cache-Control` and `X-Accel-Buffering` headers in addition to the
 contract-version header. This keeps the live-events reverse-proxy contract
 locked in the same drift gate as the JSON response components.
+
+## 2026-07-18 Progress - Static Parameter Reference Gate
+
+Extended the static OpenAPI drift checker so every path-level and
+operation-level parameter must reference a shared `#/components/parameters/...`
+component. The remaining inline parameters, including `Last-Event-ID` and the
+transfer list filters, were moved into reusable components so adapter manifests
+and generated clients get one canonical parameter definition.

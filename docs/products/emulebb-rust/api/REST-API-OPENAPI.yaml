@@ -106,17 +106,7 @@ paths:
         re-baseline through `GET /transfers` after any `sync.reset`.
       operationId: getEvents
       parameters:
-        - name: Last-Event-ID
-          in: header
-          required: false
-          description: |
-            SSE resume cursor from a previous stream. The current daemon does not
-            replay historical events; when this header is present, the stream
-            starts with a `sync.reset` event carrying the supplied cursor in
-            `lastEventId` so clients can re-baseline through `GET /transfers`.
-          schema:
-            type: string
-            minLength: 1
+        - $ref: "#/components/parameters/LastEventId"
       responses:
         "200":
           $ref: "#/components/responses/EventStreamResponse"
@@ -559,18 +549,8 @@ paths:
       summary: List incomplete and completed download transfers.
       operationId: listTransfers
       parameters:
-        - name: state
-          in: query
-          required: false
-          schema:
-            $ref: "#/components/schemas/TransferState"
-        - name: categoryId
-          in: query
-          required: false
-          schema:
-            type: integer
-            minimum: 0
-            maximum: 4294967295
+        - $ref: "#/components/parameters/TransferStateFilter"
+        - $ref: "#/components/parameters/TransferCategoryIdFilter"
         - $ref: "#/components/parameters/Offset"
         - $ref: "#/components/parameters/Limit"
       responses:
@@ -2559,6 +2539,18 @@ components:
         type: boolean
         default: false
       description: Include per-client upload score diagnostics such as cooldown availability and cooldown remaining time.
+    LastEventId:
+      name: Last-Event-ID
+      in: header
+      required: false
+      description: |
+        SSE resume cursor from a previous stream. The current daemon does not
+        replay historical events; when this header is present, the stream starts
+        with a `sync.reset` event carrying the supplied cursor in `lastEventId`
+        so clients can re-baseline through `GET /transfers`.
+      schema:
+        type: string
+        minLength: 1
     IncludeEvidence:
       name: includeEvidence
       in: query
@@ -2575,6 +2567,20 @@ components:
         type: boolean
         default: true
       description: Return an exact result total. Set false to allow `total` to be a lower-bound estimate when computing the exact count is expensive.
+    TransferStateFilter:
+      name: state
+      in: query
+      required: false
+      schema:
+        $ref: "#/components/schemas/TransferState"
+    TransferCategoryIdFilter:
+      name: categoryId
+      in: query
+      required: false
+      schema:
+        type: integer
+        minimum: 0
+        maximum: 4294967295
     SearchId:
       name: searchId
       in: path
