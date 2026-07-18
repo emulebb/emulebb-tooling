@@ -300,6 +300,12 @@ Do not put these in the normal Settings UI for beta:
   bound dual-plane egress probe when the runtime has a probeable VPN Guard CIDR
   gate and returns the refreshed `VpnGuardStatus` envelope. The Settings UI now
   offers the same probe action beside the VPN Guard controls.
+- 2026-07-18: Added a NAT power-user refresh operation. The Rust REST surface
+  now exposes `POST /api/v1/nat/operations/refresh`, which asks the live NAT
+  manager for one reconcile pass and returns the refreshed `NatStatus` envelope.
+  Mapping failures stay diagnostic by landing in `lastError`, so the Settings UI
+  can show the live gateway/mapping result without treating a missing IGD as a
+  transport-level API failure.
 - 2026-07-14: `RUST-FEAT-036 keep ED2K servers in SQLite profile` removed normal
   daemon TOML server ownership. Enabled SQLite profile servers decide whether an
   ED2K server session can be configured.
