@@ -289,6 +289,12 @@ Do not put these in the normal Settings UI for beta:
   `SETTINGS_SECTION_RESOURCES` from `emulebb-settings` and fail when an
   advertised Settings section resource is not documented as a GET operation in
   the Rust OpenAPI artifact.
+- 2026-07-18: Tightened Settings section-resource OpenAPI response shapes. The
+  static checker now rejects generic or inline section-resource success schemas
+  and requires each advertised Settings section resource to expose a named
+  closed `data` DTO; category, shared-directory, and server collection envelopes
+  now reference named `CategoryList`, `SharedDirectoryList`, and `ServerList`
+  DTO schemas without changing the wire shape.
 - 2026-07-14: `RUST-FEAT-036 keep ED2K servers in SQLite profile` removed normal
   daemon TOML server ownership. Enabled SQLite profile servers decide whether an
   ED2K server session can be configured.
