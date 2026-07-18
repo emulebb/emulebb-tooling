@@ -4502,14 +4502,16 @@ components:
         - type: object
           properties:
             data:
-              type: object
-              additionalProperties: false
-              required: [items]
-              properties:
-                items:
-                  type: array
-                  items:
-                    $ref: "#/components/schemas/Category"
+              $ref: "#/components/schemas/CategoryList"
+    CategoryList:
+      type: object
+      additionalProperties: false
+      required: [items]
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/Category"
     Category:
       type: object
       additionalProperties: false
@@ -5630,36 +5632,38 @@ components:
         - type: object
           properties:
             data:
-              type: object
-              additionalProperties: false
-              required: [items, roots, monitorOwned, hashingCount, reloadProgress]
-              properties:
-                items:
-                  type: array
-                  items:
-                    $ref: "#/components/schemas/SharedDirectory"
-                roots:
-                  type: array
-                  items:
-                    $ref: "#/components/schemas/SharedDirectory"
-                monitorOwned:
-                  type: array
-                  items:
-                    type: string
-                hashingCount:
-                  type: integer
-                  minimum: 0
-                reloadProgress:
-                  $ref: "#/components/schemas/SharedDirectoryReloadProgress"
-                total:
-                  type: integer
-                  minimum: 0
-                offset:
-                  type: integer
-                  minimum: 0
-                limit:
-                  type: integer
-                  minimum: 0
+              $ref: "#/components/schemas/SharedDirectoryList"
+    SharedDirectoryList:
+      type: object
+      additionalProperties: false
+      required: [items, roots, monitorOwned, hashingCount, reloadProgress]
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/SharedDirectory"
+        roots:
+          type: array
+          items:
+            $ref: "#/components/schemas/SharedDirectory"
+        monitorOwned:
+          type: array
+          items:
+            type: string
+        hashingCount:
+          type: integer
+          minimum: 0
+        reloadProgress:
+          $ref: "#/components/schemas/SharedDirectoryReloadProgress"
+        total:
+          type: integer
+          minimum: 0
+        offset:
+          type: integer
+          minimum: 0
+        limit:
+          type: integer
+          minimum: 0
     SharedDirectory:
       type: object
       additionalProperties: false
@@ -5905,14 +5909,16 @@ components:
         - type: object
           properties:
             data:
-              type: object
-              additionalProperties: false
-              required: [items]
-              properties:
-                items:
-                  type: array
-                  items:
-                    $ref: "#/components/schemas/Server"
+              $ref: "#/components/schemas/ServerList"
+    ServerList:
+      type: object
+      additionalProperties: false
+      required: [items]
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/Server"
     ServerEnvelope:
       unevaluatedProperties: false
       allOf:
