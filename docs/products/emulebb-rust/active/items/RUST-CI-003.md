@@ -176,3 +176,9 @@ security scheme remains valid.
 Extended the REST smoke harness so the representative native `405
 METHOD_NOT_ALLOWED` probe must carry the documented `Allow` header in addition
 to the canonical JSON error envelope and contract-version header.
+
+## 2026-07-18 Progress - Static 405 Contract Gate
+
+Extended the static OpenAPI drift checker to fail if any native operation loses
+its `405` response or stops referencing `MethodNotAllowedResponse`, and to fail
+if that shared response component drops the documented `Allow` header.
