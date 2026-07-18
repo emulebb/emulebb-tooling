@@ -2462,7 +2462,7 @@ components:
       schema:
         type: boolean
         default: true
-      description: Return an exact result total. Set false to allow an estimated total when computing the exact count is expensive.
+      description: Return an exact result total. Set false to allow `total` to be a lower-bound estimate when computing the exact count is expensive.
     SearchId:
       name: searchId
       in: path
@@ -5559,7 +5559,8 @@ components:
           description: >
             Current native visible result snapshot for this page, bounded by the
             `offset` and `limit` query parameters. The search resource shares the
-            common pagination fields (`total`/`offset`/`limit`); controllers
+            common pagination fields (`total`/`offset`/`limit`). When
+            `exactTotal=false`, `total` may be a lower-bound estimate; controllers
             should poll the resource and preserve eMule's stock eD2K/Kad search
             semantics.
           items:
@@ -5623,7 +5624,6 @@ components:
         - rating
         - hasComment
         - spam
-        - evidence
       properties:
         searchId:
           type: string
@@ -5691,6 +5691,7 @@ components:
         spam:
           type: boolean
         evidence:
+          description: Present unless the caller sets `includeEvidence=false`.
           $ref: "#/components/schemas/SearchResultEvidence"
     SearchResultDownloadRequest:
       type: object
