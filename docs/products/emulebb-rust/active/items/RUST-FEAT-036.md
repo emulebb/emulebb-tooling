@@ -266,6 +266,11 @@ Do not put these in the normal Settings UI for beta:
   verification, public IP, and bound STUN/HTTP probe outcomes; Settings renders
   the live verdict beside the existing VPN Guard controls without duplicating
   status inside `AppSettings`.
+- 2026-07-18: Added the Network settings section resource. The Rust REST surface
+  now exposes `GET /api/v1/network` for P2P port, bind-resolution, active
+  interface, and nested VPN Guard status; Settings renders the live bind verdict
+  beside restart-required P2P bind controls instead of duplicating runtime
+  network status inside `AppSettings`.
 - 2026-07-14: `RUST-FEAT-036 keep ED2K servers in SQLite profile` removed normal
   daemon TOML server ownership. Enabled SQLite profile servers decide whether an
   ED2K server session can be configured.

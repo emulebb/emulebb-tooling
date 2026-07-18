@@ -36,6 +36,7 @@ tags:
   - name: App
   - name: Diagnostics
   - name: Stats
+  - name: Network
   - name: Categories
   - name: Transfers
   - name: SharedFiles
@@ -398,6 +399,30 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/StatsResponse"
+        "400":
+          $ref: "#/components/responses/ErrorResponse"
+        "401":
+          $ref: "#/components/responses/ErrorResponse"
+        "404":
+          $ref: "#/components/responses/ErrorResponse"
+        "405":
+          $ref: "#/components/responses/MethodNotAllowedResponse"
+        "409":
+          $ref: "#/components/responses/ErrorResponse"
+        "500":
+          $ref: "#/components/responses/ErrorResponse"
+        "503":
+          $ref: "#/components/responses/ErrorResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
+  /network:
+    get:
+      tags: [Network]
+      summary: Return live P2P network binding status.
+      operationId: getNetwork
+      responses:
+        "200":
+          $ref: "#/components/responses/NetworkResponse"
         "400":
           $ref: "#/components/responses/ErrorResponse"
         "401":
@@ -3001,6 +3026,15 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/StatusEnvelope"
+    NetworkResponse:
+      description: Network binding status envelope.
+      headers:
+        X-Contract-Version:
+          $ref: "#/components/headers/ContractVersionHeader"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/NetworkStatusEnvelope"
     VpnGuardResponse:
       description: VPN Guard status envelope.
       headers:
@@ -3876,6 +3910,14 @@ components:
           properties:
             data:
               $ref: "#/components/schemas/Status"
+    NetworkStatusEnvelope:
+      unevaluatedProperties: false
+      allOf:
+        - $ref: "#/components/schemas/EnvelopeBase"
+        - type: object
+          properties:
+            data:
+              $ref: "#/components/schemas/NetworkStatus"
     VpnGuardStatusEnvelope:
       unevaluatedProperties: false
       allOf:
