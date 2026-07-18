@@ -214,3 +214,11 @@ Extended the static OpenAPI drift checker so every native operation must carry a
 non-empty `operationId` and tag list, and operation IDs must remain unique. This
 keeps adapter/code-generator-facing metadata stable while the Rust-forward
 contract continues to evolve before freeze.
+
+## 2026-07-18 Progress - Static Success Response Gate
+
+Extended the static OpenAPI drift checker so every native operation must
+document exactly one `2xx` response, that success response must reference a
+shared response component, and the referenced component must define a concrete
+media schema. This keeps success-envelope documentation generator-ready and
+prevents route-local inline success shapes from bypassing the shared contract.
