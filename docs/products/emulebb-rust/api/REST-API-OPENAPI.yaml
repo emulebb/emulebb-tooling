@@ -6593,14 +6593,16 @@ components:
         - type: object
           properties:
             data:
-              type: object
-              additionalProperties: false
-              required: [items]
-              properties:
-                items:
-                  type: array
-                  items:
-                    $ref: "#/components/schemas/LogEntry"
+              $ref: "#/components/schemas/LogList"
+    LogList:
+      type: object
+      additionalProperties: false
+      required: [items]
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/LogEntry"
     LogEntry:
       type: object
       additionalProperties: false
