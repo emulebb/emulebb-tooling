@@ -285,6 +285,10 @@ Do not put these in the normal Settings UI for beta:
   advertised by `GET /api/v1/app/settings/surface` resolves to an authenticated
   live REST v1 GET route and returns a `data` envelope, so future section
   resources cannot remain UI-only or docs-only links.
+- 2026-07-18: Extended the Rust OpenAPI static route checker to parse
+  `SETTINGS_SECTION_RESOURCES` from `emulebb-settings` and fail when an
+  advertised Settings section resource is not documented as a GET operation in
+  the Rust OpenAPI artifact.
 - 2026-07-14: `RUST-FEAT-036 keep ED2K servers in SQLite profile` removed normal
   daemon TOML server ownership. Enabled SQLite profile servers decide whether an
   ED2K server session can be configured.
