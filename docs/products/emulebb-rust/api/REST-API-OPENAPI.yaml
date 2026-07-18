@@ -4283,6 +4283,7 @@ components:
           enum: [off, block]
         allowedPublicIpCidrs:
           type: string
+          description: Whitespace, comma, or semicolon separated public IPv4 CIDRs or host addresses; empty disables the CIDR gate.
     VpnGuardSettingsUpdate:
       type: object
       additionalProperties: false
@@ -4295,6 +4296,7 @@ components:
           enum: [off, block]
         allowedPublicIpCidrs:
           type: string
+          description: Whitespace, comma, or semicolon separated public IPv4 CIDRs or host addresses; empty disables the CIDR gate.
     IpFilterSettings:
       type: object
       additionalProperties: false
@@ -4781,6 +4783,7 @@ components:
           enum: [off, block]
         allowedPublicIpCidrs:
           type: string
+          description: Whitespace, comma, or semicolon separated public IPv4 CIDRs or host addresses; empty means no CIDR gate.
         startupBlocked:
           type: boolean
         startupBlockReason:

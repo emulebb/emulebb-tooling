@@ -403,6 +403,11 @@ Do not put these in the normal Settings UI for beta:
   ineffective empty strings. REST PATCH and OpenAPI now require non-empty
   `daemon.p2pBindInterface`, `nat.minissdpdSocket`, and `ipFilter.path` values
   when present, while preserving `null` as the explicit clear value.
+- 2026-07-18: Tightened `vpnGuard.allowedPublicIpCidrs` to the core VPN Guard
+  CIDR policy. REST PATCH, OpenAPI, and the embedded Settings UI now accept an
+  empty string as "no CIDR gate" or a whitespace/comma/semicolon-separated list
+  of public IPv4 CIDRs or host addresses; malformed, IPv6, and non-public ranges
+  are rejected before persistence.
 - 2026-07-14: `RUST-FEAT-036 keep ED2K servers in SQLite profile` removed normal
   daemon TOML server ownership. Enabled SQLite profile servers decide whether an
   ED2K server session can be configured.
