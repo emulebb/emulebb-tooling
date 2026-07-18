@@ -322,6 +322,11 @@ Do not put these in the normal Settings UI for beta:
   field without accidentally restoring omitted fields to defaults; explicit JSON
   `null` still clears nullable fields. OpenAPI now documents named
   `*SettingsUpdate` request DTOs separately from full settings response DTOs.
+- 2026-07-18: Aligned the embedded WebUI with the partial settings PATCH
+  contract. The Settings save path now builds sparse `AppSettingsUpdate`
+  payloads from changed form fields only, and no longer sends the shadowed
+  not-user-facing eD2K server toggles when saving the canonical `core.*`
+  controls. WebUI e2e coverage asserts the exact sparse payload.
 - 2026-07-14: `RUST-FEAT-036 keep ED2K servers in SQLite profile` removed normal
   daemon TOML server ownership. Enabled SQLite profile servers decide whether an
   ED2K server session can be configured.
