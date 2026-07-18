@@ -4204,8 +4204,10 @@ components:
             enum: [upnp_miniupnpc]
         bindIp:
           type: [string, "null"]
+          format: ipv4
         igdIp:
           type: [string, "null"]
+          format: ipv4
         minissdpdSocket:
           type: [string, "null"]
         ssdpLocalPort:
@@ -4223,6 +4225,7 @@ components:
           minimum: 1
         externalIpOverride:
           type: [string, "null"]
+          format: ipv4
     NatSettingsUpdate:
       type: object
       additionalProperties: false
@@ -4239,8 +4242,10 @@ components:
             enum: [upnp_miniupnpc]
         bindIp:
           type: [string, "null"]
+          format: ipv4
         igdIp:
           type: [string, "null"]
+          format: ipv4
         minissdpdSocket:
           type: [string, "null"]
         ssdpLocalPort:
@@ -4258,6 +4263,7 @@ components:
           minimum: 1
         externalIpOverride:
           type: [string, "null"]
+          format: ipv4
     VpnGuardSettings:
       type: object
       additionalProperties: false
@@ -4334,8 +4340,10 @@ components:
           type: [string, "null"]
         bindIp:
           type: [string, "null"]
+          format: ipv4
         igdIp:
           type: [string, "null"]
+          format: ipv4
         minissdpdSocket:
           type: [string, "null"]
         ssdpLocalPort:
@@ -4344,6 +4352,7 @@ components:
           maximum: 65535
         externalIpOverride:
           type: [string, "null"]
+          format: ipv4
         gateway:
           anyOf:
             - $ref: "#/components/schemas/NatGateway"

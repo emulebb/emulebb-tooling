@@ -387,6 +387,10 @@ Do not put these in the normal Settings UI for beta:
   for discovery timeout, lease duration, and renew margin. This matches the
   embedded Settings UI and prevents persisted values that the UPnP runtime clamps
   away during discovery or refresh scheduling.
+- 2026-07-18: Tightened NAT address settings as nullable IPv4 strings. REST
+  PATCH, OpenAPI, and the embedded Settings UI now reject malformed
+  `nat.bindIp`, `nat.igdIp`, and `nat.externalIpOverride` values before the UPnP
+  adapter has to reinterpret or fail them later.
 - 2026-07-14: `RUST-FEAT-036 keep ED2K servers in SQLite profile` removed normal
   daemon TOML server ownership. Enabled SQLite profile servers decide whether an
   ED2K server session can be configured.
