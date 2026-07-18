@@ -72,6 +72,11 @@ this just surfaces them.
 
 ## Progress
 
+- 2026-07-18: Extended the persisted Rust REST response-conformance probe to
+  assert the `/api/v1/events` SSE response headers promised by the contract:
+  `Cache-Control: no-cache, no-transform` and `X-Accel-Buffering: no`.
+  The conformance report now lists missing stream headers as `getEvents`
+  failures.
 - 2026-07-18: Hardened the embedded WebUI SSE client error path. Non-OK
   `/api/v1/events` responses now parse canonical REST JSON error envelopes and
   surface their messages instead of a generic stream failure; unit coverage locks
