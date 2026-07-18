@@ -348,6 +348,12 @@ Extended the static OpenAPI schema-component checker so
 the REST validator's eD2K-only, no-whitespace, 2048-character link text
 contract, and the batch form must keep its 100-link ceiling.
 
+## 2026-07-18 Progress - Static URL Import Schema Gate
+
+Extended the static OpenAPI schema-component checker so `UrlImportRequest.url`
+must document the REST validator's case-insensitive HTTP(S), no-whitespace,
+host-required, 2048-character URL text contract.
+
 ## 2026-07-18 Progress - Rust OpenAPI Conformance Pin
 
 Pinned the persisted running-daemon REST conformance wrapper to load

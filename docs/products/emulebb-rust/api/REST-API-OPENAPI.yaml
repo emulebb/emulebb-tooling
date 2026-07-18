@@ -6489,7 +6489,7 @@ components:
           type: string
           minLength: 1
           maxLength: 2048
-          pattern: '^https?://[^\s/?#][^\s]*$'
+          pattern: '^[hH][tT][tT][pP][sS]?://[^\s/?#][^\s]*$'
     UrlImportEnvelope:
       unevaluatedProperties: false
       allOf:
