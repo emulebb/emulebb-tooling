@@ -72,6 +72,11 @@ this just surfaces them.
 
 ## Progress
 
+- 2026-07-18: Made the SSE `TransferEvent` contract mechanically variant-safe.
+  Rust now models transfer add/update/remove/reset events as explicit tagged
+  enum variants instead of one optional-field DTO, WebUI types use the matching
+  discriminated union, serialization tests lock the wire shape, and OpenAPI
+  documents the stream payload as `oneOf` event variants.
 - 2026-07-18: Added `X-Contract-Version: 1.2.0` to `/api/v1` responses through
   the Rust REST router layer, including normal JSON responses, SSE streams, and
   REST error envelopes. OpenAPI response components and the persisted SSE

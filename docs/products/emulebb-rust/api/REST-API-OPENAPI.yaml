@@ -4292,21 +4292,69 @@ components:
             data:
               $ref: "#/components/schemas/Transfer"
     TransferEvent:
+      oneOf:
+        - $ref: "#/components/schemas/TransferAddedEvent"
+        - $ref: "#/components/schemas/TransferUpdatedEvent"
+        - $ref: "#/components/schemas/TransferRemovedEvent"
+        - $ref: "#/components/schemas/TransferSyncResetEvent"
+      discriminator:
+        propertyName: type
+        mapping:
+          transfer.added: "#/components/schemas/TransferAddedEvent"
+          transfer.updated: "#/components/schemas/TransferUpdatedEvent"
+          transfer.removed: "#/components/schemas/TransferRemovedEvent"
+          sync.reset: "#/components/schemas/TransferSyncResetEvent"
+    TransferAddedEvent:
       type: object
       additionalProperties: false
-      required: [id, type]
+      required: [id, type, transfer]
       properties:
         id:
           type: integer
           minimum: 1
         type:
           type: string
-          enum: [transfer.added, transfer.updated, transfer.removed, sync.reset]
+          enum: [transfer.added]
         transfer:
           $ref: "#/components/schemas/Transfer"
+    TransferUpdatedEvent:
+      type: object
+      additionalProperties: false
+      required: [id, type, transfer]
+      properties:
+        id:
+          type: integer
+          minimum: 1
+        type:
+          type: string
+          enum: [transfer.updated]
+        transfer:
+          $ref: "#/components/schemas/Transfer"
+    TransferRemovedEvent:
+      type: object
+      additionalProperties: false
+      required: [id, type, hash]
+      properties:
+        id:
+          type: integer
+          minimum: 1
+        type:
+          type: string
+          enum: [transfer.removed]
         hash:
           type: string
           pattern: "^[0-9a-f]{32}$"
+    TransferSyncResetEvent:
+      type: object
+      additionalProperties: false
+      required: [id, type, reason]
+      properties:
+        id:
+          type: integer
+          minimum: 1
+        type:
+          type: string
+          enum: [sync.reset]
         reason:
           type: string
           enum: [lagged, last-event-id]
