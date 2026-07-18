@@ -166,6 +166,10 @@ Do not put these in the normal Settings UI for beta:
 
 ## Implementation Notes
 
+- 2026-07-18: Added advanced WebUI controls for existing NAT tuning settings:
+  pinned IGD IP, miniSSDPd socket, SSDP local port, discovery timeout, lease
+  duration, renew margin, and external IP override. These stay behind the
+  Advanced toggle and PATCH the existing `nat` settings section.
 - 2026-07-18: Added advanced WebUI controls for existing eD2K timeout and retry
   settings: peer connect timeout, server connect timeout, callback timeout,
   reconnect interval, keepalive interval, and dead-server retries. These stay
