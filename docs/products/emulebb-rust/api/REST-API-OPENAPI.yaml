@@ -6453,6 +6453,7 @@ components:
         address:
           type: string
           minLength: 1
+          pattern: '\S'
         port:
           type: integer
           minimum: 1
@@ -6661,6 +6662,7 @@ components:
         address:
           type: string
           minLength: 1
+          pattern: '\S'
         port:
           type: integer
           minimum: 1

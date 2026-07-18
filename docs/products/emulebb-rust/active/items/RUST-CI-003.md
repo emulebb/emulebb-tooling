@@ -354,6 +354,13 @@ Extended the static OpenAPI schema-component checker so `UrlImportRequest.url`
 must document the REST validator's case-insensitive HTTP(S), no-whitespace,
 host-required, 2048-character URL text contract.
 
+## 2026-07-18 Progress - Static Endpoint Address Schema Gate
+
+Extended the static OpenAPI schema-component checker so `ServerCreateRequest`
+and `KadBootstrapRequest` address fields must document the REST validator's
+non-empty-after-trim endpoint address contract with a machine-readable
+non-whitespace pattern.
+
 ## 2026-07-18 Progress - Rust OpenAPI Conformance Pin
 
 Pinned the persisted running-daemon REST conformance wrapper to load
