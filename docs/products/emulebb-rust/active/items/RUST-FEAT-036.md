@@ -276,6 +276,11 @@ Do not put these in the normal Settings UI for beta:
   external addresses, refresh time, and last error; Settings renders live mapping
   health beside restart-required NAT controls without duplicating manager state
   inside `AppSettings`.
+- 2026-07-18: Tightened Settings section-resource reachability. In-page section
+  resources such as NAT, VPN Guard, and IP Filter now focus their concrete
+  Settings sections when opened from the advertised section-resource list, and
+  the WebUI smoke covers those resource-button paths before navigating to
+  Diagnostics.
 - 2026-07-14: `RUST-FEAT-036 keep ED2K servers in SQLite profile` removed normal
   daemon TOML server ownership. Enabled SQLite profile servers decide whether an
   ED2K server session can be configured.
