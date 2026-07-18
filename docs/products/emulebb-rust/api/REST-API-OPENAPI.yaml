@@ -4201,6 +4201,7 @@ components:
           type: array
           items:
             type: string
+            enum: [upnp_miniupnpc]
         bindIp:
           type: [string, "null"]
         igdIp:
@@ -4235,6 +4236,7 @@ components:
           type: array
           items:
             type: string
+            enum: [upnp_miniupnpc]
         bindIp:
           type: [string, "null"]
         igdIp:

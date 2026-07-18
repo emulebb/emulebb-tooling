@@ -379,6 +379,10 @@ Do not put these in the normal Settings UI for beta:
   underfill, timeout, and session-transfer values, while the Settings UI now
   preserves zero-policy controls for an empty retained waiting queue, disabled
   session-transfer rotation, and disabled session-time rotation.
+- 2026-07-18: Tightened NAT backend-order settings around the Rust-native backend
+  set. REST PATCH, OpenAPI, and the embedded Settings UI now accept only
+  `upnp_miniupnpc` entries while preserving an empty order as the runtime default
+  order.
 - 2026-07-14: `RUST-FEAT-036 keep ED2K servers in SQLite profile` removed normal
   daemon TOML server ownership. Enabled SQLite profile servers decide whether an
   ED2K server session can be configured.
