@@ -3813,7 +3813,7 @@ components:
       properties:
         listenPort:
           type: [integer, "null"]
-          minimum: 0
+          minimum: 1
           maximum: 65535
         obfuscationEnabled:
           type: boolean
@@ -3885,7 +3885,7 @@ components:
       properties:
         listenPort:
           type: [integer, "null"]
-          minimum: 0
+          minimum: 1
           maximum: 65535
         obfuscationEnabled:
           type: boolean
@@ -4033,7 +4033,7 @@ components:
       properties:
         listenPort:
           type: [integer, "null"]
-          minimum: 0
+          minimum: 1
           maximum: 65535
         bootstrapMinRoutingContacts:
           type: integer
@@ -4110,7 +4110,7 @@ components:
       properties:
         listenPort:
           type: [integer, "null"]
-          minimum: 0
+          minimum: 1
           maximum: 65535
         bootstrapMinRoutingContacts:
           type: integer
@@ -4201,7 +4201,7 @@ components:
           type: [string, "null"]
         ssdpLocalPort:
           type: [integer, "null"]
-          minimum: 0
+          minimum: 1
           maximum: 65535
         discoveryTimeoutSecs:
           type: integer
@@ -4235,7 +4235,7 @@ components:
           type: [string, "null"]
         ssdpLocalPort:
           type: [integer, "null"]
-          minimum: 0
+          minimum: 1
           maximum: 65535
         discoveryTimeoutSecs:
           type: integer
