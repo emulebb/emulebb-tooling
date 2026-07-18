@@ -148,3 +148,9 @@ reported LAN REST base URL and API key, writes a retained JSON report under the
 workspace output root, and keeps launch/validation discoverability inside the
 policy-owned Python quickstart path. Full automated live CI orchestration remains
 open.
+
+## 2026-07-18 Progress - Conformance Base URL Preflight
+
+Hardened the running-daemon conformance command to reject `--base-url` values
+that already include `/api/v1`, preventing accidental `/api/v1/api/v1` probes
+and giving operators a clean preflight error instead of a transport traceback.
