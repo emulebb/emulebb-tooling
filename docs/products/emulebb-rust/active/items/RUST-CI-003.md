@@ -116,3 +116,11 @@ response components and operation/status responses against the same OpenAPI
 artifact, including component response `$ref` resolution. This gives the live
 daemon conformance step a reusable validator, but the full live daemon response
 gate remains open.
+
+## 2026-07-18 Progress - Operation Response Validation Wiring
+
+Updated the shared REST completeness smoke path so live responses are validated
+against the OpenAPI response schema for the exact operation and HTTP status that
+returned, instead of only the named success envelope. The remaining gap is
+running that live path as a CI daemon conformance gate under the policy
+quickstart.
