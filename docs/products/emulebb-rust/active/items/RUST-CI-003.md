@@ -106,3 +106,13 @@ JSON body field allowlists in
 `crates\emulebb-rest\src\route_body_metadata.rs` against OpenAPI request-body
 schema property names. The CI gate now covers static route, query, and body
 metadata drift; live response schema validation remains open.
+
+## 2026-07-18 Progress - Response Schema Validator Primitive
+
+Extracted the REST smoke script's OpenAPI response schema validation into the
+importable shared-harness helper
+`emule_test_harness\rust_openapi_responses.py`. The helper validates named
+response components and operation/status responses against the same OpenAPI
+artifact, including component response `$ref` resolution. This gives the live
+daemon conformance step a reusable validator, but the full live daemon response
+gate remains open.
