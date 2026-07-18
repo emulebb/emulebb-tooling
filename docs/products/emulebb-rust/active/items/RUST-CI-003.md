@@ -222,3 +222,11 @@ document exactly one `2xx` response, that success response must reference a
 shared response component, and the referenced component must define a concrete
 media schema. This keeps success-envelope documentation generator-ready and
 prevents route-local inline success shapes from bypassing the shared contract.
+
+## 2026-07-18 Progress - Static Request Body Metadata Gate
+
+Extended the static OpenAPI drift checker so every documented native request
+body must explicitly state `required: true` or `required: false`, expose only
+`application/json`, and reference a shared schema component. This preserves the
+current optional-body route where intentional while keeping JSON request payloads
+generator-ready and aligned with the Rust validators.
