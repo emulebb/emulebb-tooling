@@ -337,6 +337,10 @@ Do not put these in the normal Settings UI for beta:
   `ipFilter`, and nested update objects now fail in the route-body layer with
   deterministic `unknown settings.<path> field` errors, matching the OpenAPI
   closed-object contract before serde or handler parsing.
+- 2026-07-18: Tightened hostname lookup settings update validation. The REST
+  body layer now rejects `daemon.hostnameLookup.cacheTtlSecs` and
+  `maxLookupsPerTick` values below `1`, plus `tickIntervalSecs` values below
+  `5`, matching the OpenAPI minima before settings are persisted.
 - 2026-07-14: `RUST-FEAT-036 keep ED2K servers in SQLite profile` removed normal
   daemon TOML server ownership. Enabled SQLite profile servers decide whether an
   ED2K server session can be configured.
