@@ -102,8 +102,21 @@ paths:
       description: |
         Server-Sent Events stream for live controller updates. The current stream
         emits transfer add/update/remove payloads and `sync.reset` events when a
-        subscriber has lagged and must re-baseline through `GET /transfers`.
+        subscriber has lagged or reconnects with `Last-Event-ID`; clients must
+        re-baseline through `GET /transfers` after any `sync.reset`.
       operationId: getEvents
+      parameters:
+        - name: Last-Event-ID
+          in: header
+          required: false
+          description: |
+            SSE resume cursor from a previous stream. The current daemon does not
+            replay historical events; when this header is present, the stream
+            starts with a `sync.reset` event carrying the supplied cursor in
+            `lastEventId` so clients can re-baseline through `GET /transfers`.
+          schema:
+            type: string
+            minLength: 1
       responses:
         "200":
           $ref: "#/components/responses/EventStreamResponse"
@@ -3992,9 +4005,12 @@ components:
           pattern: "^[0-9a-f]{32}$"
         reason:
           type: string
+          enum: [lagged, last-event-id]
         missed:
           type: integer
           minimum: 1
+        lastEventId:
+          type: string
     Transfer:
       type: object
       additionalProperties: false

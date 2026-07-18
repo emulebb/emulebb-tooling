@@ -81,3 +81,8 @@ this just surfaces them.
   The OpenAPI route/schema, route metadata, REST tests, core lifecycle test, WebUI
   API type, and smoke-test operation filtering were updated together. Per current
   Rust forward-lineage policy, the contract version was not bumped in this slice.
+- 2026-07-18: Honored `Last-Event-ID` explicitly. Reconnected streams now begin
+  with a fresh-id `sync.reset` event containing `reason: "last-event-id"` and the
+  supplied `lastEventId`, making the no-replay-cache behavior mechanical and
+  adapter-visible instead of silently dropping missed history. The OpenAPI header
+  parameter/schema, Rust DTO, WebUI type, and REST route test were aligned.
