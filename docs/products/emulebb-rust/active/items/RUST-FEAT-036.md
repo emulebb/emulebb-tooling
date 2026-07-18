@@ -271,6 +271,11 @@ Do not put these in the normal Settings UI for beta:
   interface, and nested VPN Guard status; Settings renders the live bind verdict
   beside restart-required P2P bind controls instead of duplicating runtime
   network status inside `AppSettings`.
+- 2026-07-18: Added the NAT settings section resource. The Rust REST surface now
+  exposes `GET /api/v1/nat` for gateway discovery, active mappings, observed
+  external addresses, refresh time, and last error; Settings renders live mapping
+  health beside restart-required NAT controls without duplicating manager state
+  inside `AppSettings`.
 - 2026-07-14: `RUST-FEAT-036 keep ED2K servers in SQLite profile` removed normal
   daemon TOML server ownership. Enabled SQLite profile servers decide whether an
   ED2K server session can be configured.

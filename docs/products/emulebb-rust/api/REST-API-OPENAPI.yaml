@@ -37,6 +37,7 @@ tags:
   - name: Diagnostics
   - name: Stats
   - name: Network
+  - name: Nat
   - name: Categories
   - name: Transfers
   - name: SharedFiles
@@ -423,6 +424,30 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/NetworkResponse"
+        "400":
+          $ref: "#/components/responses/ErrorResponse"
+        "401":
+          $ref: "#/components/responses/ErrorResponse"
+        "404":
+          $ref: "#/components/responses/ErrorResponse"
+        "405":
+          $ref: "#/components/responses/MethodNotAllowedResponse"
+        "409":
+          $ref: "#/components/responses/ErrorResponse"
+        "500":
+          $ref: "#/components/responses/ErrorResponse"
+        "503":
+          $ref: "#/components/responses/ErrorResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
+  /nat:
+    get:
+      tags: [Nat]
+      summary: Return live NAT mapping status.
+      operationId: getNat
+      responses:
+        "200":
+          $ref: "#/components/responses/NatResponse"
         "400":
           $ref: "#/components/responses/ErrorResponse"
         "401":
@@ -3035,6 +3060,15 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/NetworkStatusEnvelope"
+    NatResponse:
+      description: NAT mapping status envelope.
+      headers:
+        X-Contract-Version:
+          $ref: "#/components/headers/ContractVersionHeader"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/NatStatusEnvelope"
     VpnGuardResponse:
       description: VPN Guard status envelope.
       headers:
@@ -3902,6 +3936,80 @@ components:
         rangeCount:
           type: integer
           minimum: 0
+    NatStatus:
+      type: object
+      additionalProperties: false
+      required: [enabled, gatewayDiscovered, backend, bindIp, igdIp, minissdpdSocket, ssdpLocalPort, externalIpOverride, gateway, mappings, observedExternalAddresses, lastRefreshUnixSecs, lastError]
+      properties:
+        enabled:
+          type: boolean
+        gatewayDiscovered:
+          type: boolean
+        backend:
+          type: [string, "null"]
+        bindIp:
+          type: [string, "null"]
+        igdIp:
+          type: [string, "null"]
+        minissdpdSocket:
+          type: [string, "null"]
+        ssdpLocalPort:
+          type: [integer, "null"]
+          minimum: 0
+          maximum: 65535
+        externalIpOverride:
+          type: [string, "null"]
+        gateway:
+          anyOf:
+            - $ref: "#/components/schemas/NatGateway"
+            - type: "null"
+        mappings:
+          type: array
+          items:
+            $ref: "#/components/schemas/NatMapping"
+        observedExternalAddresses:
+          type: array
+          items:
+            type: string
+        lastRefreshUnixSecs:
+          type: [integer, "null"]
+          minimum: 0
+        lastError:
+          type: [string, "null"]
+    NatGateway:
+      type: object
+      additionalProperties: false
+      required: [backend, controlUrl, localIp, gatewayIp, externalIp]
+      properties:
+        backend:
+          type: string
+        controlUrl:
+          type: string
+        localIp:
+          type: [string, "null"]
+        gatewayIp:
+          type: [string, "null"]
+        externalIp:
+          type: [string, "null"]
+    NatMapping:
+      type: object
+      additionalProperties: false
+      required: [name, protocol, localAddr, externalAddr, leaseExpiresInSecs, backend]
+      properties:
+        name:
+          type: string
+        protocol:
+          type: string
+          enum: [tcp, udp]
+        localAddr:
+          type: string
+        externalAddr:
+          type: string
+        leaseExpiresInSecs:
+          type: integer
+          minimum: 0
+        backend:
+          type: string
     StatusEnvelope:
       unevaluatedProperties: false
       allOf:
@@ -3918,6 +4026,14 @@ components:
           properties:
             data:
               $ref: "#/components/schemas/NetworkStatus"
+    NatStatusEnvelope:
+      unevaluatedProperties: false
+      allOf:
+        - $ref: "#/components/schemas/EnvelopeBase"
+        - type: object
+          properties:
+            data:
+              $ref: "#/components/schemas/NatStatus"
     VpnGuardStatusEnvelope:
       unevaluatedProperties: false
       allOf:
