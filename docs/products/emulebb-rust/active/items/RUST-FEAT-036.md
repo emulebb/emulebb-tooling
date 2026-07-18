@@ -166,6 +166,10 @@ Do not put these in the normal Settings UI for beta:
 
 ## Implementation Notes
 
+- 2026-07-18: Added advanced WebUI controls for existing eD2K timeout and retry
+  settings: peer connect timeout, server connect timeout, callback timeout,
+  reconnect interval, keepalive interval, and dead-server retries. These stay
+  behind the Advanced toggle and PATCH the existing `ed2k` settings section.
 - 2026-07-18: Reworked the WebUI Settings tab from a flat control grid into
   domain sections for Storage, Transfers, Network, Hostname Lookup, Servers, Kad,
   NAT, VPN Guard, and IP Filter. Each section still binds to real `AppSettings`
