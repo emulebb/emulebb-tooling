@@ -166,6 +166,10 @@ Do not put these in the normal Settings UI for beta:
 
 ## Implementation Notes
 
+- 2026-07-18: Added advanced WebUI controls for existing eD2K transfer tuning:
+  session rotation, concurrent download cap, eD2K source cap, parallel download
+  peer cap, and startup download byte budget. These PATCH the existing `ed2k`
+  settings section and keep labels distinct from the higher-level `core` caps.
 - 2026-07-18: Added an advanced WebUI Uploads section for existing
   `ed2k.uploadQueue` tuning settings: startup slots, elasticity, byte budgets,
   underfill thresholds, waiting/granted/upload timeouts, session transfer target,
