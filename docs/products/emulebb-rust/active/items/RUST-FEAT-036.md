@@ -255,6 +255,12 @@ Do not put these in the normal Settings UI for beta:
   shows the `rest.bindAddr`, `rest.apiKey`, and `rest.webRootDir` TOML-owned
   fields as restart-required Bootstrap REST entries without exposing secret
   values or making them mutable through REST.
+- 2026-07-18: Tightened storage path validation for the beta Settings surface.
+  `PATCH /api/v1/app/settings` now rejects empty `incomingDir` values before
+  persistence and rejects existing non-directory incoming paths at the core
+  boundary; shared-directory root replacement canonicalizes through the same
+  long-path content boundary used by shared-tree scanning. OpenAPI documents
+  `incomingDir` as a non-empty nullable path string.
 - 2026-07-14: `RUST-FEAT-036 keep ED2K servers in SQLite profile` removed normal
   daemon TOML server ownership. Enabled SQLite profile servers decide whether an
   ED2K server session can be configured.

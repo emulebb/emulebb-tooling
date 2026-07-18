@@ -3546,6 +3546,8 @@ components:
       properties:
         incomingDir:
           type: [string, "null"]
+          minLength: 1
+          description: Finished download delivery directory; non-empty when set.
         p2pBindIp:
           type: [string, "null"]
           format: ipv4
