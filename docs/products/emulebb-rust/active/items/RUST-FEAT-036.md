@@ -166,6 +166,10 @@ Do not put these in the normal Settings UI for beta:
 
 ## Implementation Notes
 
+- 2026-07-18: Added an advanced WebUI Search settings section for existing
+  eD2K keyword, exact-hash keyword, and source server attempt budgets. The
+  controls PATCH the existing `ed2k` settings object and stay hidden until
+  Advanced is enabled.
 - 2026-07-18: Added advanced WebUI controls for existing eD2K network budget
   settings: new outgoing connections per five seconds and half-open connection
   cap. Labels intentionally distinguish these protocol-level caps from the
