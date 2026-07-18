@@ -76,6 +76,10 @@ this just surfaces them.
   the Rust REST router layer, including normal JSON responses, SSE streams, and
   REST error envelopes. OpenAPI response components and the persisted SSE
   conformance probe now assert the header.
+- 2026-07-18: Extended the persisted REST smoke harness to assert
+  `X-Contract-Version: 1.2.0` on native JSON success and error envelopes whenever
+  live transport headers are present. This closes the gap between the documented
+  all-`/api/v1` header contract and the non-SSE smoke path.
 - 2026-07-18: Extended the persisted Rust REST response-conformance probe to
   assert the `/api/v1/events` SSE response headers promised by the contract:
   `Cache-Control: no-cache, no-transform` and `X-Accel-Buffering: no`.
