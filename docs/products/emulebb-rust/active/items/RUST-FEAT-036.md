@@ -166,6 +166,11 @@ Do not put these in the normal Settings UI for beta:
 
 ## Implementation Notes
 
+- 2026-07-18: Added Settings-tab navigation for the existing section resources
+  advertised by `GET /api/v1/app/settings/surface`, making Sharing,
+  Categories, Servers, Kad, and Diagnostics reachable from Settings without
+  duplicating those resources inside `AppSettings`. WebUI e2e coverage now
+  proves the section-resource path opens a real section.
 - 2026-07-18: Wired the embedded WebUI to `GET /api/v1/app/settings/surface`
   and used the metadata in the Settings view for advanced-control hiding,
   restart-required badges, dirty Save/Revert state, and e2e coverage of the
