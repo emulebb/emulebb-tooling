@@ -324,3 +324,11 @@ discriminated `oneOf` over the four stream variants: `transfer.added`,
 `transfer.updated`, `transfer.removed`, and `sync.reset`. The gate now fails if
 variant refs, discriminator mappings, required fields, singleton `type` enums,
 or closed-object metadata drift from the Rust/WebUI event contract.
+
+## 2026-07-18 Progress - Live SSE Payload Schema Gate
+
+Extended the persisted running-daemon REST conformance command so the
+`/api/v1/events` probe parses the first SSE frame's `data:` payload and validates
+it against the Rust OpenAPI `TransferEvent` schema component. This keeps the
+live resume `sync.reset` frame honest beyond text-snippet checks and reports
+schema failures as `getEvents` conformance failures.
