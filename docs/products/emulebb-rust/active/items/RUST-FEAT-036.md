@@ -244,6 +244,12 @@ Do not put these in the normal Settings UI for beta:
   records to typed section shapes for core, daemon, eD2K, Kad, NAT, VPN Guard,
   and IP Filter settings. The Settings controls still use the same REST contract,
   but TypeScript now tracks the first-class fields that the UI edits.
+- 2026-07-18: Added the IP Filter settings section resource. The Rust REST
+  surface now exposes `GET /api/v1/ip-filter` for configured/reloadable status,
+  level, and loaded range count, plus `POST /api/v1/ip-filter/operations/reload`
+  to re-read the configured `ipfilter.dat` into the live shared filter. The
+  Settings UI shows the runtime status and reload action next to the IP Filter
+  controls, with OpenAPI and route/body validation aligned.
 - 2026-07-14: `RUST-FEAT-036 keep ED2K servers in SQLite profile` removed normal
   daemon TOML server ownership. Enabled SQLite profile servers decide whether an
   ED2K server session can be configured.

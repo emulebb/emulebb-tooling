@@ -45,6 +45,7 @@ tags:
   - name: Kad
   - name: Searches
   - name: Friends
+  - name: IpFilter
   - name: Logs
 paths:
   /app:
@@ -2412,6 +2413,54 @@ paths:
           $ref: "#/components/responses/ErrorResponse"
         default:
           $ref: "#/components/responses/ErrorResponse"
+  /ip-filter:
+    get:
+      tags: [IpFilter]
+      summary: Return live IP filter status.
+      operationId: getIpFilter
+      responses:
+        "200":
+          $ref: "#/components/responses/IpFilterResponse"
+        "400":
+          $ref: "#/components/responses/ErrorResponse"
+        "401":
+          $ref: "#/components/responses/ErrorResponse"
+        "404":
+          $ref: "#/components/responses/ErrorResponse"
+        "405":
+          $ref: "#/components/responses/MethodNotAllowedResponse"
+        "409":
+          $ref: "#/components/responses/ErrorResponse"
+        "500":
+          $ref: "#/components/responses/ErrorResponse"
+        "503":
+          $ref: "#/components/responses/ErrorResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
+  /ip-filter/operations/reload:
+    post:
+      tags: [IpFilter]
+      summary: Reload the configured ipfilter.dat file.
+      operationId: reloadIpFilter
+      responses:
+        "200":
+          $ref: "#/components/responses/IpFilterResponse"
+        "400":
+          $ref: "#/components/responses/ErrorResponse"
+        "401":
+          $ref: "#/components/responses/ErrorResponse"
+        "404":
+          $ref: "#/components/responses/ErrorResponse"
+        "405":
+          $ref: "#/components/responses/MethodNotAllowedResponse"
+        "409":
+          $ref: "#/components/responses/ErrorResponse"
+        "500":
+          $ref: "#/components/responses/ErrorResponse"
+        "503":
+          $ref: "#/components/responses/ErrorResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /logs:
     get:
       tags: [Logs]
@@ -2738,6 +2787,15 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/FriendEnvelope"
+    IpFilterResponse:
+      description: IP filter status envelope.
+      headers:
+        X-Contract-Version:
+          $ref: "#/components/headers/ContractVersionHeader"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/IpFilterStatusEnvelope"
     KadResponse:
       description: Kad envelope.
       headers:
@@ -3271,6 +3329,14 @@ components:
           properties:
             data:
               $ref: "#/components/schemas/SettingsSurface"
+    IpFilterStatusEnvelope:
+      unevaluatedProperties: false
+      allOf:
+        - $ref: "#/components/schemas/EnvelopeBase"
+        - type: object
+          properties:
+            data:
+              $ref: "#/components/schemas/IpFilterStatus"
     SettingsSurface:
       type: object
       additionalProperties: false
@@ -3743,6 +3809,23 @@ components:
         path:
           type: [string, "null"]
         level:
+          type: integer
+          minimum: 0
+    IpFilterStatus:
+      type: object
+      additionalProperties: false
+      required: [configured, reloadable, level, rangeCount]
+      properties:
+        configured:
+          type: boolean
+        reloadable:
+          type: boolean
+        path:
+          type: string
+        level:
+          type: integer
+          minimum: 0
+        rangeCount:
           type: integer
           minimum: 0
     StatusEnvelope:
