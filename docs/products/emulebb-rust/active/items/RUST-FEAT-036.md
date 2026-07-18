@@ -311,6 +311,11 @@ Do not put these in the normal Settings UI for beta:
   surface is now discoverable from `GET /api/v1/app/settings/surface`, and the
   Settings UI opens the existing Logs tab instead of duplicating retained log
   state inside `AppSettings`.
+- 2026-07-18: Added `GET /api/v1/events/status` as an adapter-friendly live
+  event-stream diagnostics resource. Controllers can now inspect SSE capacity,
+  subscriber count, queued events, and cursor state without opening the
+  long-lived stream or fetching full runtime diagnostics; capabilities advertise
+  this as `transfers.sse.status`.
 - 2026-07-14: `RUST-FEAT-036 keep ED2K servers in SQLite profile` removed normal
   daemon TOML server ownership. Enabled SQLite profile servers decide whether an
   ED2K server session can be configured.
