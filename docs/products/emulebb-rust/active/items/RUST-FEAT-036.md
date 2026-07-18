@@ -450,6 +450,10 @@ Do not put these in the normal Settings UI for beta:
   now blocks empty or whitespace-only folder paths before sending
   `PATCH /api/v1/shared-directories`, matching the REST/OpenAPI shared-root
   replacement contract.
+- 2026-07-18: Tightened WebUI endpoint-address validation. Server add and Kad
+  bootstrap forms now require non-empty trimmed addresses before sending
+  requests, matching the REST/OpenAPI request contracts alongside the existing
+  port checks.
 - 2026-07-14: `RUST-FEAT-036 keep ED2K servers in SQLite profile` removed normal
   daemon TOML server ownership. Enabled SQLite profile servers decide whether an
   ED2K server session can be configured.
