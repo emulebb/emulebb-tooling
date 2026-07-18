@@ -3543,10 +3543,12 @@ components:
           type: boolean
         interruptedHashingInvalidatedCache:
           type: boolean
+        reloadProgress:
+          $ref: "#/components/schemas/SharedDirectoryReloadProgress"
     RuntimeDiagnostics:
       type: object
       additionalProperties: false
-      required: [processId, knownFileCount, sharedFileCount, sharedHashingCount, downloadFileCount, activeUploads, waitingUploads, geolocation]
+      required: [processId, knownFileCount, sharedFileCount, sharedHashingCount, sharedDirectoryReloadProgress, ed2kPublish, kadPublish, downloadFileCount, activeUploads, waitingUploads, geolocation]
       properties:
         processId:
           type: integer
@@ -3560,6 +3562,14 @@ components:
         sharedHashingCount:
           type: integer
           minimum: 0
+        sharedDirectoryReloadProgress:
+          $ref: "#/components/schemas/SharedDirectoryReloadProgress"
+        ed2kPublish:
+          type: object
+          additionalProperties: true
+        kadPublish:
+          type: object
+          additionalProperties: true
         downloadFileCount:
           type: integer
           minimum: 0
@@ -4542,6 +4552,278 @@ components:
                         type: integer
                       comment:
                         type: string
+    SharedDirectoryReloadProgress:
+      type: object
+      additionalProperties: false
+      required: [phase, running, pending, scannedCount, plannedHashCount, reusedCount, newCount, changedCount, missingMtimeCount, statFailedCount, skippedFailedCount, skippedIntakeCount, prunedCount, staleHashCount, diskCount, activeHashCount, hashedCount, failedHashCount, plannedHashBytes, completedHashBytes, plannedReadBytes, completedReadBytes, readRateBytesPerSec, startedAtMs, updatedAtMs, active, recent, upcoming, disks]
+      properties:
+        phase:
+          type: string
+          enum: [idle, queued, scanning, planning, hashing]
+        running:
+          type: boolean
+        pending:
+          type: boolean
+        scannedCount:
+          type: integer
+          minimum: 0
+        plannedHashCount:
+          type: integer
+          minimum: 0
+        reusedCount:
+          type: integer
+          minimum: 0
+        newCount:
+          type: integer
+          minimum: 0
+        changedCount:
+          type: integer
+          minimum: 0
+        missingMtimeCount:
+          type: integer
+          minimum: 0
+        statFailedCount:
+          type: integer
+          minimum: 0
+        skippedFailedCount:
+          type: integer
+          minimum: 0
+        skippedIntakeCount:
+          type: integer
+          minimum: 0
+        prunedCount:
+          type: integer
+          minimum: 0
+        staleHashCount:
+          type: integer
+          minimum: 0
+        diskCount:
+          type: integer
+          minimum: 0
+        activeHashCount:
+          type: integer
+          minimum: 0
+        hashedCount:
+          type: integer
+          minimum: 0
+        failedHashCount:
+          type: integer
+          minimum: 0
+        plannedHashBytes:
+          type: integer
+          format: int64
+          minimum: 0
+        completedHashBytes:
+          type: integer
+          format: int64
+          minimum: 0
+        plannedReadBytes:
+          type: integer
+          format: int64
+          minimum: 0
+        completedReadBytes:
+          type: integer
+          format: int64
+          minimum: 0
+        readRateBytesPerSec:
+          type: integer
+          format: int64
+          minimum: 0
+        startedAtMs:
+          type:
+            - integer
+            - "null"
+          format: int64
+        updatedAtMs:
+          type:
+            - integer
+            - "null"
+          format: int64
+        active:
+          type: array
+          items:
+            $ref: "#/components/schemas/SharedDirectoryHashActiveFile"
+        recent:
+          type: array
+          items:
+            $ref: "#/components/schemas/SharedDirectoryHashRecentFile"
+        upcoming:
+          type: array
+          items:
+            $ref: "#/components/schemas/SharedDirectoryHashQueuedFile"
+        disks:
+          type: array
+          items:
+            $ref: "#/components/schemas/SharedDirectoryHashDiskProgress"
+    SharedDirectoryHashActiveFile:
+      type: object
+      additionalProperties: false
+      required: [id, diskKey, path, name, sizeBytes, reason, stage, stageReadBytes, stageTotalBytes, readBytes, readBytesTotal, readRateBytesPerSec, startedAtMs, updatedAtMs]
+      properties:
+        id:
+          type: string
+        diskKey:
+          type: string
+        path:
+          type: string
+        name:
+          type: string
+        sizeBytes:
+          type: integer
+          format: int64
+          minimum: 0
+        reason:
+          type: string
+          enum: [new, changed, missingMtime, statFailed]
+        stage:
+          type: string
+          enum: [md4, aich]
+        stageReadBytes:
+          type: integer
+          format: int64
+          minimum: 0
+        stageTotalBytes:
+          type: integer
+          format: int64
+          minimum: 0
+        readBytes:
+          type: integer
+          format: int64
+          minimum: 0
+        readBytesTotal:
+          type: integer
+          format: int64
+          minimum: 0
+        readRateBytesPerSec:
+          type: integer
+          format: int64
+          minimum: 0
+        startedAtMs:
+          type: integer
+          format: int64
+        updatedAtMs:
+          type: integer
+          format: int64
+    SharedDirectoryHashRecentFile:
+      type: object
+      additionalProperties: false
+      required: [id, diskKey, path, name, sizeBytes, reason, result, error, hash, readBytes, readBytesTotal, durationMs, averageReadRateBytesPerSec, finishedAtMs]
+      properties:
+        id:
+          type: string
+        diskKey:
+          type: string
+        path:
+          type: string
+        name:
+          type: string
+        sizeBytes:
+          type: integer
+          format: int64
+          minimum: 0
+        reason:
+          type: string
+          enum: [new, changed, missingMtime, statFailed]
+        result:
+          type: string
+          enum: [ok, failed]
+        error:
+          type:
+            - string
+            - "null"
+        hash:
+          type:
+            - string
+            - "null"
+        readBytes:
+          type: integer
+          format: int64
+          minimum: 0
+        readBytesTotal:
+          type: integer
+          format: int64
+          minimum: 0
+        durationMs:
+          type: integer
+          format: int64
+          minimum: 0
+        averageReadRateBytesPerSec:
+          type: integer
+          format: int64
+          minimum: 0
+        finishedAtMs:
+          type: integer
+          format: int64
+    SharedDirectoryHashQueuedFile:
+      type: object
+      additionalProperties: false
+      required: [id, diskKey, path, name, sizeBytes, reason, order]
+      properties:
+        id:
+          type: string
+        diskKey:
+          type: string
+        path:
+          type: string
+        name:
+          type: string
+        sizeBytes:
+          type: integer
+          format: int64
+          minimum: 0
+        reason:
+          type: string
+          enum: [new, changed, missingMtime, statFailed]
+        order:
+          type: integer
+          minimum: 0
+    SharedDirectoryHashDiskProgress:
+      type: object
+      additionalProperties: false
+      required: [diskKey, plannedCount, activeCount, completedCount, failedCount, queuedCount, plannedReadBytes, completedReadBytes, readRateBytesPerSec, currentPath, currentName, currentStage]
+      properties:
+        diskKey:
+          type: string
+        plannedCount:
+          type: integer
+          minimum: 0
+        activeCount:
+          type: integer
+          minimum: 0
+        completedCount:
+          type: integer
+          minimum: 0
+        failedCount:
+          type: integer
+          minimum: 0
+        queuedCount:
+          type: integer
+          minimum: 0
+        plannedReadBytes:
+          type: integer
+          format: int64
+          minimum: 0
+        completedReadBytes:
+          type: integer
+          format: int64
+          minimum: 0
+        readRateBytesPerSec:
+          type: integer
+          format: int64
+          minimum: 0
+        currentPath:
+          type:
+            - string
+            - "null"
+        currentName:
+          type:
+            - string
+            - "null"
+        currentStage:
+          type:
+            - string
+            - "null"
+          enum: [md4, aich, null]
     SharedDirectoryListEnvelope:
       unevaluatedProperties: false
       allOf:
@@ -4551,7 +4833,7 @@ components:
             data:
               type: object
               additionalProperties: false
-              required: [items, roots, monitorOwned, hashingCount]
+              required: [items, roots, monitorOwned, hashingCount, reloadProgress]
               properties:
                 items:
                   type: array
@@ -4568,6 +4850,8 @@ components:
                 hashingCount:
                   type: integer
                   minimum: 0
+                reloadProgress:
+                  $ref: "#/components/schemas/SharedDirectoryReloadProgress"
                 total:
                   type: integer
                   minimum: 0
