@@ -4042,28 +4042,28 @@ components:
           type: boolean
         localStoreKeywordTtlSecs:
           type: integer
-          minimum: 0
+          minimum: 1
         localStoreSourceTtlSecs:
           type: integer
-          minimum: 0
+          minimum: 1
         localStoreNotesTtlSecs:
           type: integer
-          minimum: 0
+          minimum: 1
         localStoreKeywordCapacity:
           type: integer
-          minimum: 0
+          minimum: 1
         localStoreSourceCapacity:
           type: integer
-          minimum: 0
+          minimum: 1
         localStoreNotesCapacity:
           type: integer
-          minimum: 0
+          minimum: 1
         localStoreSourcePerFileCapacity:
           type: integer
-          minimum: 0
+          minimum: 1
         localStoreNotesPerFileCapacity:
           type: integer
-          minimum: 0
+          minimum: 1
         publishSharedFilesEnabled:
           type: boolean
         republishIntervalSecs:
@@ -4088,22 +4088,22 @@ components:
           type: boolean
         snoopQueueDedupWindowSecs:
           type: integer
-          minimum: 0
+          minimum: 1
         snoopQueueGeneralMaxQueriesPer600s:
           type: integer
-          minimum: 0
+          minimum: 1
         snoopQueueGeneralDrainCooldownSecs:
           type: integer
-          minimum: 0
+          minimum: 1
         snoopQueueSourceMaxQueriesPer600s:
           type: integer
-          minimum: 0
+          minimum: 1
         snoopQueueSourceDrainCooldownSecs:
           type: integer
-          minimum: 0
+          minimum: 1
         snoopQueueSourceStopAfterResults:
           type: integer
-          minimum: 0
+          minimum: 1
     KadSettings:
       type: object
       additionalProperties: false
@@ -4119,28 +4119,28 @@ components:
           type: boolean
         localStoreKeywordTtlSecs:
           type: integer
-          minimum: 0
+          minimum: 1
         localStoreSourceTtlSecs:
           type: integer
-          minimum: 0
+          minimum: 1
         localStoreNotesTtlSecs:
           type: integer
-          minimum: 0
+          minimum: 1
         localStoreKeywordCapacity:
           type: integer
-          minimum: 0
+          minimum: 1
         localStoreSourceCapacity:
           type: integer
-          minimum: 0
+          minimum: 1
         localStoreNotesCapacity:
           type: integer
-          minimum: 0
+          minimum: 1
         localStoreSourcePerFileCapacity:
           type: integer
-          minimum: 0
+          minimum: 1
         localStoreNotesPerFileCapacity:
           type: integer
-          minimum: 0
+          minimum: 1
         publishSharedFilesEnabled:
           type: boolean
         republishIntervalSecs:
@@ -4165,22 +4165,22 @@ components:
           type: boolean
         snoopQueueDedupWindowSecs:
           type: integer
-          minimum: 0
+          minimum: 1
         snoopQueueGeneralMaxQueriesPer600s:
           type: integer
-          minimum: 0
+          minimum: 1
         snoopQueueGeneralDrainCooldownSecs:
           type: integer
-          minimum: 0
+          minimum: 1
         snoopQueueSourceMaxQueriesPer600s:
           type: integer
-          minimum: 0
+          minimum: 1
         snoopQueueSourceDrainCooldownSecs:
           type: integer
-          minimum: 0
+          minimum: 1
         snoopQueueSourceStopAfterResults:
           type: integer
-          minimum: 0
+          minimum: 1
     NatSettings:
       type: object
       additionalProperties: false

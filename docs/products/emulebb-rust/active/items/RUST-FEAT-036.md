@@ -355,6 +355,11 @@ Do not put these in the normal Settings UI for beta:
   `0` for eD2K listen, Kad listen, and NAT SSDP local ports while preserving
   JSON `null` as the explicit clear value. The Settings UI already used the same
   `1..65535` range.
+- 2026-07-18: Tightened the API-only Kad local-store and snoop-queue controls so
+  REST PATCH and OpenAPI reject `0` for TTL, capacity, rate-budget, cooldown,
+  deduplication, and stop-after-results fields. These values were already
+  clamped to `1` by daemon construction; the contract now rejects ineffective
+  writes before persistence.
 - 2026-07-14: `RUST-FEAT-036 keep ED2K servers in SQLite profile` removed normal
   daemon TOML server ownership. Enabled SQLite profile servers decide whether an
   ED2K server session can be configured.
