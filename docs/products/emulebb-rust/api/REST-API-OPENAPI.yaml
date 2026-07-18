@@ -2605,6 +2605,17 @@ components:
             $ref: "#/components/schemas/CapabilityDiscoveryEnvelope"
     EventStreamResponse:
       description: Server-Sent Events stream. Each `data:` line is a TransferEvent JSON object.
+      headers:
+        Cache-Control:
+          description: Prevent intermediaries from caching or transforming the event stream.
+          schema:
+            type: string
+            example: no-cache, no-transform
+        X-Accel-Buffering:
+          description: Disable reverse-proxy response buffering for live events.
+          schema:
+            type: string
+            example: "no"
       content:
         text/event-stream:
           schema:

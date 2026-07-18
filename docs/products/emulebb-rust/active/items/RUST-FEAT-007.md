@@ -72,6 +72,10 @@ this just surfaces them.
 
 ## Progress
 
+- 2026-07-18: Hardened the SSE transport contract for adapters and reverse
+  proxies. `GET /api/v1/events` now explicitly returns
+  `Cache-Control: no-cache, no-transform` and `X-Accel-Buffering: no`; REST tests
+  assert both headers and the OpenAPI event-stream response documents them.
 - 2026-07-18: Implemented the first Rust-native SSE slice.
   `GET /api/v1/events` now requires normal REST auth and serves
   `text/event-stream`; transfer add/update/remove changes publish through a Tokio
