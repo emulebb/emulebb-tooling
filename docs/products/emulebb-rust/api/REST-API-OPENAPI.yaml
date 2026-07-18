@@ -4970,11 +4970,13 @@ components:
         name:
           type: string
           minLength: 1
+          pattern: '\S'
         path:
           type:
             - string
             - "null"
           minLength: 1
+          pattern: '\S'
         comment:
           type: string
         color:
@@ -4993,11 +4995,13 @@ components:
         name:
           type: string
           minLength: 1
+          pattern: '\S'
         path:
           type:
             - string
             - "null"
           minLength: 1
+          pattern: '\S'
         comment:
           type: string
         color:

@@ -367,6 +367,12 @@ Extended the static OpenAPI schema-component checker so
 `FriendCreateRequest.name` must document the REST validator's 128-character,
 control-free display-name contract.
 
+## 2026-07-18 Progress - Static Category Text Schema Gate
+
+Extended the static OpenAPI schema-component checker so category create/patch
+`name` and `path` fields must document the REST validator's non-empty-after-trim
+text contract.
+
 ## 2026-07-18 Progress - Rust OpenAPI Conformance Pin
 
 Pinned the persisted running-daemon REST conformance wrapper to load
