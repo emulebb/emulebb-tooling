@@ -91,3 +91,7 @@ this just surfaces them.
   `/api/v1/events` with `Last-Event-ID`, verifies `text/event-stream`, reads the
   first frame, and fails `getEvents` if the expected resume `sync.reset` payload
   is missing.
+- 2026-07-18: Cleaned the Rust DTO shape behind the same wire contract.
+  `TransferEvent.type` and reset `reason` now use explicit serde-backed Rust
+  enums instead of ad-hoc strings, while preserving the OpenAPI/WebUI enum values
+  and SSE event names.
