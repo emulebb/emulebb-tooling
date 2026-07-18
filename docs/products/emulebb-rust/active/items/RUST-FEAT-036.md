@@ -360,6 +360,11 @@ Do not put these in the normal Settings UI for beta:
   deduplication, and stop-after-results fields. These values were already
   clamped to `1` by daemon construction; the contract now rejects ineffective
   writes before persistence.
+- 2026-07-18: Aligned the embedded Settings UI with documented eD2K zero-policy
+  controls. Advanced users can now save `0` for eD2K keepalive, concurrent
+  download cap, new-connection rate cap, half-open cap, and per-file source cap,
+  matching the REST/OpenAPI contract and runtime semantics for disabled or
+  uncapped limits.
 - 2026-07-14: `RUST-FEAT-036 keep ED2K servers in SQLite profile` removed normal
   daemon TOML server ownership. Enabled SQLite profile servers decide whether an
   ED2K server session can be configured.
