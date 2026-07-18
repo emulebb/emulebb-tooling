@@ -327,6 +327,11 @@ Do not put these in the normal Settings UI for beta:
   payloads from changed form fields only, and no longer sends the shadowed
   not-user-facing eD2K server toggles when saving the canonical `core.*`
   controls. WebUI e2e coverage asserts the exact sparse payload.
+- 2026-07-18: Tightened REST body validation for the partial settings PATCH
+  contract. Empty top-level settings updates, empty section update objects, and
+  empty nested update objects such as `daemon.hostnameLookup` and
+  `ed2k.uploadQueue` now fail before the handler, matching the OpenAPI
+  `minProperties` contract.
 - 2026-07-14: `RUST-FEAT-036 keep ED2K servers in SQLite profile` removed normal
   daemon TOML server ownership. Enabled SQLite profile servers decide whether an
   ED2K server session can be configured.
