@@ -4936,6 +4936,7 @@ components:
         id:
           type: integer
           minimum: 0
+          maximum: 4294967295
         name:
           type: string
         path:
@@ -4953,12 +4954,14 @@ components:
         priority:
           type: integer
           minimum: 0
+          maximum: 4294967295
     CategoryPriorityInput:
       oneOf:
         - type: string
           enum: [verylow, low, normal, high, veryhigh]
         - type: integer
           minimum: 0
+          maximum: 4294967295
     CategoryCreateRequest:
       type: object
       additionalProperties: false

@@ -418,6 +418,9 @@ Do not put these in the normal Settings UI for beta:
   shared REST/OpenAPI core settings schema maxima. The Settings UI now rejects
   out-of-range power-user values such as `core.maxConnections` before sending a
   PATCH that the daemon would refuse.
+- 2026-07-18: Aligned the category priority OpenAPI schema with the REST
+  validator and Rust model. Numeric category priorities and category ids now
+  advertise the `u32` ceiling instead of only documenting the lower bound.
 - 2026-07-14: `RUST-FEAT-036 keep ED2K servers in SQLite profile` removed normal
   daemon TOML server ownership. Enabled SQLite profile servers decide whether an
   ED2K server session can be configured.
