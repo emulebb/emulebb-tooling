@@ -166,6 +166,11 @@ Do not put these in the normal Settings UI for beta:
 
 ## Implementation Notes
 
+- 2026-07-18: Reworked the WebUI Settings tab from a flat control grid into
+  domain sections for Storage, Transfers, Network, Hostname Lookup, Servers, Kad,
+  NAT, VPN Guard, and IP Filter. Each section still binds to real `AppSettings`
+  fields and keeps metadata-driven advanced visibility, restart badges,
+  validation, and save/revert behavior.
 - 2026-07-18: Added inline WebUI validation for Settings numeric and listen-port
   controls. Invalid whole-number/range values now render field-level errors and
   disable Save before malformed `PATCH /api/v1/app/settings` requests can be
