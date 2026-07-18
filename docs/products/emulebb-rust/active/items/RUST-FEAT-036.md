@@ -295,6 +295,11 @@ Do not put these in the normal Settings UI for beta:
   closed `data` DTO; category, shared-directory, and server collection envelopes
   now reference named `CategoryList`, `SharedDirectoryList`, and `ServerList`
   DTO schemas without changing the wire shape.
+- 2026-07-18: Added a VPN Guard power-user probe operation. The Rust REST
+  surface now exposes `POST /api/v1/vpn-guard/operations/probe`, which runs the
+  bound dual-plane egress probe when the runtime has a probeable VPN Guard CIDR
+  gate and returns the refreshed `VpnGuardStatus` envelope. The Settings UI now
+  offers the same probe action beside the VPN Guard controls.
 - 2026-07-14: `RUST-FEAT-036 keep ED2K servers in SQLite profile` removed normal
   daemon TOML server ownership. Enabled SQLite profile servers decide whether an
   ED2K server session can be configured.
