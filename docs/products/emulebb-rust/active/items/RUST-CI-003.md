@@ -278,6 +278,14 @@ enum, or const shape. Empty enum definitions are rejected as well. This keeps
 the schema catalog generator-ready before adapters or power-user clients depend
 on it.
 
+## 2026-07-18 Progress - Static Non-Empty Update Schema Gate
+
+Extended the static OpenAPI schema-component checker so reusable `*Patch` and
+`*Update` DTOs must reject empty objects through `minProperties: 1` or an
+equivalent required-field composition. This keeps sparse settings updates and
+other power-user PATCH bodies machine-readable instead of relying on prose or
+handler-side accidents.
+
 ## 2026-07-18 Progress - Static Documented Error Response Gate
 
 Extended the static OpenAPI drift checker so every documented non-success,
