@@ -306,6 +306,11 @@ Do not put these in the normal Settings UI for beta:
   Mapping failures stay diagnostic by landing in `lastError`, so the Settings UI
   can show the live gateway/mapping result without treating a missing IGD as a
   transport-level API failure.
+- 2026-07-18: Added Logs to the advertised Settings section resources. The
+  existing `GET /api/v1/logs` and `POST /api/v1/logs/operations/clear` operator
+  surface is now discoverable from `GET /api/v1/app/settings/surface`, and the
+  Settings UI opens the existing Logs tab instead of duplicating retained log
+  state inside `AppSettings`.
 - 2026-07-14: `RUST-FEAT-036 keep ED2K servers in SQLite profile` removed normal
   daemon TOML server ownership. Enabled SQLite profile servers decide whether an
   ED2K server session can be configured.
