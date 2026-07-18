@@ -155,3 +155,11 @@ Hardened the running-daemon conformance command to reject `--base-url` values
 that include a path such as `/api/v1`, preventing accidental `/api/v1/api/v1`
 probes and giving operators a clean preflight error instead of a transport
 traceback.
+
+## 2026-07-18 Progress - Static Auth Contract Gate
+
+Extended the static OpenAPI drift checker to fail if the native contract loses
+its top-level `ApiKeyAuth` requirement, the `X-API-Key` header security scheme,
+or per-operation `401` response documentation. This keeps the documented auth
+surface aligned with the Rust router's API-key middleware before live response
+conformance runs.
