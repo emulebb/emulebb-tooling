@@ -3608,17 +3608,17 @@ components:
         core:
           $ref: "#/components/schemas/CoreSettingsUpdate"
         daemon:
-          $ref: "#/components/schemas/DaemonSettings"
+          $ref: "#/components/schemas/DaemonSettingsUpdate"
         ed2k:
-          $ref: "#/components/schemas/Ed2kSettings"
+          $ref: "#/components/schemas/Ed2kSettingsUpdate"
         kad:
-          $ref: "#/components/schemas/KadSettings"
+          $ref: "#/components/schemas/KadSettingsUpdate"
         nat:
-          $ref: "#/components/schemas/NatSettings"
+          $ref: "#/components/schemas/NatSettingsUpdate"
         vpnGuard:
-          $ref: "#/components/schemas/VpnGuardSettings"
+          $ref: "#/components/schemas/VpnGuardSettingsUpdate"
         ipFilter:
-          $ref: "#/components/schemas/IpFilterSettings"
+          $ref: "#/components/schemas/IpFilterSettingsUpdate"
     CoreSettings:
       type: object
       additionalProperties: false
@@ -3730,6 +3730,24 @@ components:
           type: boolean
         networkEd2k:
           type: boolean
+    DaemonSettingsUpdate:
+      type: object
+      additionalProperties: false
+      minProperties: 1
+      properties:
+        incomingDir:
+          type: [string, "null"]
+          minLength: 1
+          description: Finished download delivery directory; non-empty when set.
+        p2pBindIp:
+          type: [string, "null"]
+          format: ipv4
+        p2pBindInterface:
+          type: [string, "null"]
+        ed2kUserHash:
+          type: [string, "null"]
+        hostnameLookup:
+          $ref: "#/components/schemas/HostnameLookupSettingsUpdate"
     DaemonSettings:
       type: object
       additionalProperties: false
@@ -3767,6 +3785,100 @@ components:
         tickIntervalSecs:
           type: integer
           minimum: 5
+    HostnameLookupSettingsUpdate:
+      type: object
+      additionalProperties: false
+      minProperties: 1
+      properties:
+        enabled:
+          type: boolean
+        dnsServers:
+          type: array
+          items:
+            type: string
+          description: Explicit DNS server IPv4 or IPv4:port entries for bound reverse-DNS lookup.
+        cacheTtlSecs:
+          type: integer
+          minimum: 1
+        maxLookupsPerTick:
+          type: integer
+          minimum: 1
+        tickIntervalSecs:
+          type: integer
+          minimum: 5
+    Ed2kSettingsUpdate:
+      type: object
+      additionalProperties: false
+      minProperties: 1
+      properties:
+        listenPort:
+          type: [integer, "null"]
+          minimum: 0
+          maximum: 65535
+        obfuscationEnabled:
+          type: boolean
+        probeSearchTerm:
+          type: [string, "null"]
+        connectTimeoutSecs:
+          type: integer
+          minimum: 0
+        serverConnectTimeoutSecs:
+          type: integer
+          minimum: 0
+        callbackTimeoutSecs:
+          type: integer
+          minimum: 0
+        reconnectIntervalSecs:
+          type: integer
+          minimum: 0
+        reconnectEnabled:
+          type: boolean
+        safeServerConnect:
+          type: boolean
+        keepaliveSecs:
+          type: integer
+          minimum: 0
+        sessionRotationSecs:
+          type: integer
+          minimum: 0
+        maxConcurrentDownloads:
+          type: integer
+          minimum: 0
+        maxNewConnectionsPerFiveSeconds:
+          type: integer
+          minimum: 0
+        maxHalfOpenConnections:
+          type: integer
+          minimum: 0
+        maxSourcesPerFile:
+          type: integer
+          minimum: 0
+        maxParallelDownloadPeers:
+          type: integer
+          minimum: 0
+        keywordServerAttemptBudget:
+          type: integer
+          minimum: 0
+        exactHashKeywordServerAttemptBudget:
+          type: integer
+          minimum: 0
+        sourceServerAttemptBudget:
+          type: integer
+          minimum: 0
+        uploadQueue:
+          $ref: "#/components/schemas/Ed2kUploadQueueSettingsUpdate"
+        downloadLimitBytesPerSec:
+          type: integer
+          minimum: 0
+        enableUdpReask:
+          type: boolean
+        publishEmuleRustIdentity:
+          type: boolean
+        addServersFromServer:
+          type: boolean
+        deadServerRetries:
+          type: integer
+          minimum: 0
     Ed2kSettings:
       type: object
       additionalProperties: false
@@ -3874,6 +3986,122 @@ components:
           type: integer
           minimum: 0
         sessionTimeLimitSecs:
+          type: integer
+          minimum: 0
+    Ed2kUploadQueueSettingsUpdate:
+      type: object
+      additionalProperties: false
+      minProperties: 1
+      properties:
+        activeSlots:
+          type: integer
+          minimum: 0
+        elasticPercent:
+          type: integer
+          minimum: 0
+        uploadLimitBytesPerSec:
+          type: integer
+          minimum: 0
+        elasticUnderfillBytesPerSec:
+          type: integer
+          minimum: 0
+        elasticUnderfillSecs:
+          type: integer
+          minimum: 0
+        waitingCapacity:
+          type: integer
+          minimum: 0
+        waitingTimeoutSecs:
+          type: integer
+          minimum: 0
+        grantedTimeoutSecs:
+          type: integer
+          minimum: 0
+        uploadTimeoutSecs:
+          type: integer
+          minimum: 0
+        sessionTransferPercent:
+          type: integer
+          minimum: 0
+        sessionTimeLimitSecs:
+          type: integer
+          minimum: 0
+    KadSettingsUpdate:
+      type: object
+      additionalProperties: false
+      minProperties: 1
+      properties:
+        listenPort:
+          type: [integer, "null"]
+          minimum: 0
+          maximum: 65535
+        bootstrapMinRoutingContacts:
+          type: integer
+          minimum: 0
+        localStoreEnabled:
+          type: boolean
+        localStoreKeywordTtlSecs:
+          type: integer
+          minimum: 0
+        localStoreSourceTtlSecs:
+          type: integer
+          minimum: 0
+        localStoreNotesTtlSecs:
+          type: integer
+          minimum: 0
+        localStoreKeywordCapacity:
+          type: integer
+          minimum: 0
+        localStoreSourceCapacity:
+          type: integer
+          minimum: 0
+        localStoreNotesCapacity:
+          type: integer
+          minimum: 0
+        localStoreSourcePerFileCapacity:
+          type: integer
+          minimum: 0
+        localStoreNotesPerFileCapacity:
+          type: integer
+          minimum: 0
+        publishSharedFilesEnabled:
+          type: boolean
+        republishIntervalSecs:
+          type: integer
+          minimum: 0
+        publishContactFanout:
+          type: integer
+          minimum: 0
+        udpFirewallCheckEnabled:
+          type: boolean
+        udpFirewallCheckIntervalSecs:
+          type: integer
+          minimum: 0
+        tcpFirewallCheckEnabled:
+          type: boolean
+        tcpFirewallCheckIntervalSecs:
+          type: integer
+          minimum: 0
+        buddyEnabled:
+          type: boolean
+        routingMaintenanceEnabled:
+          type: boolean
+        snoopQueueDedupWindowSecs:
+          type: integer
+          minimum: 0
+        snoopQueueGeneralMaxQueriesPer600s:
+          type: integer
+          minimum: 0
+        snoopQueueGeneralDrainCooldownSecs:
+          type: integer
+          minimum: 0
+        snoopQueueSourceMaxQueriesPer600s:
+          type: integer
+          minimum: 0
+        snoopQueueSourceDrainCooldownSecs:
+          type: integer
+          minimum: 0
+        snoopQueueSourceStopAfterResults:
           type: integer
           minimum: 0
     KadSettings:
@@ -3986,6 +4214,40 @@ components:
           minimum: 0
         externalIpOverride:
           type: [string, "null"]
+    NatSettingsUpdate:
+      type: object
+      additionalProperties: false
+      minProperties: 1
+      properties:
+        enabled:
+          type: boolean
+        requireInitialMapping:
+          type: boolean
+        backendOrder:
+          type: array
+          items:
+            type: string
+        bindIp:
+          type: [string, "null"]
+        igdIp:
+          type: [string, "null"]
+        minissdpdSocket:
+          type: [string, "null"]
+        ssdpLocalPort:
+          type: [integer, "null"]
+          minimum: 0
+          maximum: 65535
+        discoveryTimeoutSecs:
+          type: integer
+          minimum: 0
+        leaseDurationSecs:
+          type: integer
+          minimum: 0
+        renewMarginSecs:
+          type: integer
+          minimum: 0
+        externalIpOverride:
+          type: [string, "null"]
     VpnGuardSettings:
       type: object
       additionalProperties: false
@@ -3996,9 +4258,32 @@ components:
           type: string
         allowedPublicIpCidrs:
           type: string
+    VpnGuardSettingsUpdate:
+      type: object
+      additionalProperties: false
+      minProperties: 1
+      properties:
+        enabled:
+          type: boolean
+        mode:
+          type: string
+        allowedPublicIpCidrs:
+          type: string
     IpFilterSettings:
       type: object
       additionalProperties: false
+      properties:
+        enabled:
+          type: boolean
+        path:
+          type: [string, "null"]
+        level:
+          type: integer
+          minimum: 0
+    IpFilterSettingsUpdate:
+      type: object
+      additionalProperties: false
+      minProperties: 1
       properties:
         enabled:
           type: boolean
