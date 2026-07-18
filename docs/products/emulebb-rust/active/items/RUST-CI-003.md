@@ -199,3 +199,11 @@ document `400`, `401`, `404`, and `default` through the shared `ErrorResponse`
 component, and that component must continue to publish the canonical
 `ErrorEnvelope` JSON schema. `405` stays on the dedicated
 `MethodNotAllowedResponse` gate because it also owns the `Allow` header.
+
+## 2026-07-18 Progress - Static Path Parameter Gate
+
+Extended the static OpenAPI drift checker so every path template placeholder
+must have a matching `in: path` parameter document, no extra path parameters are
+documented, and every documented path parameter is marked `required: true`.
+This catches route-template/documentation drift before live response
+conformance runs.
