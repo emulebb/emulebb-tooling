@@ -277,3 +277,11 @@ be an object, must not be empty, and must declare a concrete type, composition,
 enum, or const shape. Empty enum definitions are rejected as well. This keeps
 the schema catalog generator-ready before adapters or power-user clients depend
 on it.
+
+## 2026-07-18 Progress - Static Documented Error Response Gate
+
+Extended the static OpenAPI drift checker so every documented non-success,
+non-`405` response must reference the shared `ErrorResponse` component, not just
+the required `400`/`401`/`404`/`default` statuses. This keeps optional `409`,
+`500`, and `503` branches on the same canonical REST error envelope as the
+mandatory error surface.
