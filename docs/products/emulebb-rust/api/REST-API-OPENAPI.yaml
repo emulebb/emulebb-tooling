@@ -223,6 +223,35 @@ paths:
           $ref: "#/components/responses/ErrorResponse"
         default:
           $ref: "#/components/responses/ErrorResponse"
+  /diagnostics:
+    get:
+      tags: [Diagnostics]
+      summary: Return runtime diagnostics.
+      description: |
+        Power-user diagnostic snapshot for controller dashboards and live-soak
+        probes. This is the same `runtimeDiagnostics` object embedded in
+        `GET /status`, exposed directly so operators do not need to fetch and
+        trim the broader status document.
+      operationId: getDiagnostics
+      responses:
+        "200":
+          $ref: "#/components/responses/RuntimeDiagnosticsResponse"
+        "400":
+          $ref: "#/components/responses/ErrorResponse"
+        "401":
+          $ref: "#/components/responses/ErrorResponse"
+        "404":
+          $ref: "#/components/responses/ErrorResponse"
+        "405":
+          $ref: "#/components/responses/MethodNotAllowedResponse"
+        "409":
+          $ref: "#/components/responses/ErrorResponse"
+        "500":
+          $ref: "#/components/responses/ErrorResponse"
+        "503":
+          $ref: "#/components/responses/ErrorResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /diagnostics/dumps:
     post:
       tags: [Diagnostics]
@@ -2727,6 +2756,12 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/StatusEnvelope"
+    RuntimeDiagnosticsResponse:
+      description: Runtime diagnostics envelope.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/RuntimeDiagnosticsEnvelope"
     TransferDetailsResponse:
       description: Transfer detail envelope.
       content:
@@ -3457,6 +3492,14 @@ components:
           properties:
             data:
               $ref: "#/components/schemas/Status"
+    RuntimeDiagnosticsEnvelope:
+      unevaluatedProperties: false
+      allOf:
+        - $ref: "#/components/schemas/EnvelopeBase"
+        - type: object
+          properties:
+            data:
+              $ref: "#/components/schemas/RuntimeDiagnostics"
     Status:
       type: object
       additionalProperties: false

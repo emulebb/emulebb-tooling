@@ -166,6 +166,11 @@ Do not put these in the normal Settings UI for beta:
 
 ## Implementation Notes
 
+- 2026-07-18: Added a first-class `GET /api/v1/diagnostics` power-user section
+  resource. It exposes the same `RuntimeDiagnostics` object embedded in
+  `GET /status`, with OpenAPI, route metadata, REST tests, WebUI model/refresh
+  wiring, mock API coverage, and Diagnostics tab rendering aligned in the same
+  slice.
 - 2026-07-14: `RUST-FEAT-036 keep ED2K servers in SQLite profile` removed normal
   daemon TOML server ownership. Enabled SQLite profile servers decide whether an
   ED2K server session can be configured.
