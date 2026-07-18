@@ -191,3 +191,11 @@ shared route drift checker so Rust `CONTRACT_VERSION`, OpenAPI
 header, the capability discovery payload, and harness constants must all agree.
 The same gate also rejects inline `X-Contract-Version` response-header
 definitions that bypass the shared OpenAPI header component.
+
+## 2026-07-18 Progress - Static Error Response Gate
+
+Extended the static OpenAPI drift checker so every native operation must
+document `400`, `401`, `404`, and `default` through the shared `ErrorResponse`
+component, and that component must continue to publish the canonical
+`ErrorEnvelope` JSON schema. `405` stays on the dedicated
+`MethodNotAllowedResponse` gate because it also owns the `Allow` header.
