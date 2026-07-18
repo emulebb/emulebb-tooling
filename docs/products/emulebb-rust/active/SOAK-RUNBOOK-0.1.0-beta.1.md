@@ -10,8 +10,8 @@ For the routine Rust-only persisted upload/live profile, do not use this runbook
 as a separate command source. Use the
 [Workspace Policy Rust-only persisted live profile quickstart](../../../WORKSPACE-POLICY.md#rust-only-persisted-live-profile-quickstart):
 run `scripts\start-rust-soak-profile.py --describe` first, then use the reported
-launch, status, and stop paths. This file covers the broader beta release-gate
-soak context.
+launch, REST/OpenAPI conformance, status, and stop paths. This file covers the
+broader beta release-gate soak context.
 
 Live-wire conduct is binding: **be gentle** — a few widely-spaced actions, no
 run spamming ([[live-wire-be-gentle-no-ban]]); both clients ALWAYS on the
@@ -87,6 +87,11 @@ under the output soak root).
       name into `incomingDir`/category end-to-end.
 - [ ] **REST responsive throughout** — no control-plane starvation under
       hashing / Kad-publish load ([[rest-starvation-root-causes]]).
+- [ ] **Rust-forward REST/OpenAPI conformance** — after the Rust daemon is live,
+      run the `restOpenApiConformanceCommand` reported by
+      `scripts\start-rust-soak-profile.py --describe`; it validates native
+      `/api/v1` response schemas plus the SSE and `X-Contract-Version` response
+      header contract against the current OpenAPI artifact.
 - [ ] **VPN exit validated (automated, client-side)** — each client's own VPN
       Guard reports active + not blocked, and rust's `egressVerified=true` (bound
       HTTP+STUN probes resolved an allowlisted public IP); recorded under

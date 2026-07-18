@@ -139,3 +139,12 @@ Extended the static OpenAPI drift checker to fail any documented native
 operation response that omits `X-Contract-Version`. The shared CI guard now
 covers route, query, body, and response-header metadata drift before live daemon
 schema conformance runs.
+
+## 2026-07-18 Progress - Soak Describe Conformance Command
+
+The Rust-only persisted profile `--describe` output now includes a
+`restOpenApiConformanceCommand` for the already-running daemon. It uses the
+reported LAN REST base URL and API key, writes a retained JSON report under the
+workspace output root, and keeps launch/validation discoverability inside the
+policy-owned Python quickstart path. Full automated live CI orchestration remains
+open.
