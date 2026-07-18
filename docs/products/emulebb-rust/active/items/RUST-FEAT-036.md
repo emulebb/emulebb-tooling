@@ -166,6 +166,10 @@ Do not put these in the normal Settings UI for beta:
 
 ## Implementation Notes
 
+- 2026-07-18: Wired the embedded WebUI to `GET /api/v1/app/settings/surface`
+  and used the metadata in the Settings view for advanced-control hiding,
+  restart-required badges, dirty Save/Revert state, and e2e coverage of the
+  operator flow.
 - 2026-07-18: Exposed the DB-backed settings inventory through
   `GET /api/v1/app/settings/surface`. The route returns classified
   `/app/settings` field metadata and existing settings-section resources while
