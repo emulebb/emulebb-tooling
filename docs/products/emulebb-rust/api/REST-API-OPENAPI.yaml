@@ -4037,7 +4037,7 @@ components:
           maximum: 65535
         bootstrapMinRoutingContacts:
           type: integer
-          minimum: 0
+          minimum: 1
         localStoreEnabled:
           type: boolean
         localStoreKeywordTtlSecs:
@@ -4068,20 +4068,20 @@ components:
           type: boolean
         republishIntervalSecs:
           type: integer
-          minimum: 0
+          minimum: 1
         publishContactFanout:
           type: integer
-          minimum: 0
+          minimum: 1
         udpFirewallCheckEnabled:
           type: boolean
         udpFirewallCheckIntervalSecs:
           type: integer
-          minimum: 0
+          minimum: 60
         tcpFirewallCheckEnabled:
           type: boolean
         tcpFirewallCheckIntervalSecs:
           type: integer
-          minimum: 0
+          minimum: 60
         buddyEnabled:
           type: boolean
         routingMaintenanceEnabled:
@@ -4114,7 +4114,7 @@ components:
           maximum: 65535
         bootstrapMinRoutingContacts:
           type: integer
-          minimum: 0
+          minimum: 1
         localStoreEnabled:
           type: boolean
         localStoreKeywordTtlSecs:
@@ -4145,20 +4145,20 @@ components:
           type: boolean
         republishIntervalSecs:
           type: integer
-          minimum: 0
+          minimum: 1
         publishContactFanout:
           type: integer
-          minimum: 0
+          minimum: 1
         udpFirewallCheckEnabled:
           type: boolean
         udpFirewallCheckIntervalSecs:
           type: integer
-          minimum: 0
+          minimum: 60
         tcpFirewallCheckEnabled:
           type: boolean
         tcpFirewallCheckIntervalSecs:
           type: integer
-          minimum: 0
+          minimum: 60
         buddyEnabled:
           type: boolean
         routingMaintenanceEnabled:

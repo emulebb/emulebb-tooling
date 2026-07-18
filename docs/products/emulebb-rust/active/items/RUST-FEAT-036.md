@@ -345,6 +345,12 @@ Do not put these in the normal Settings UI for beta:
   The default DB-backed setting now uses `off`, OpenAPI documents `off` and
   `block`, REST PATCH rejects other mode strings before persistence, and the
   embedded WebUI renders the mode as a selector instead of a free text field.
+- 2026-07-18: Tightened Kad settings update validation for values that the
+  runtime previously clamped after persistence. REST PATCH and OpenAPI now
+  require `bootstrapMinRoutingContacts`, `republishIntervalSecs`, and
+  `publishContactFanout` to be at least `1`, and Kad UDP/TCP firewall check
+  intervals to be at least `60` seconds. The embedded Settings UI uses the same
+  floors before saving.
 - 2026-07-14: `RUST-FEAT-036 keep ED2K servers in SQLite profile` removed normal
   daemon TOML server ownership. Enabled SQLite profile servers decide whether an
   ED2K server session can be configured.
