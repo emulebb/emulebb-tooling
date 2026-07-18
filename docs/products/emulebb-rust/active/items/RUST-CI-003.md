@@ -124,3 +124,11 @@ against the OpenAPI response schema for the exact operation and HTTP status that
 returned, instead of only the named success envelope. The remaining gap is
 running that live path as a CI daemon conformance gate under the policy
 quickstart.
+
+## 2026-07-18 Progress - Existing Daemon Conformance Command
+
+Added the persisted Python command
+`repos\emulebb-build-tests\scripts\check-rust-rest-openapi-responses.py` for
+validating an already-running emulebb-rust daemon against the OpenAPI response
+schemas. It reuses the shared REST completeness runner and performs no ad-hoc
+launching, so CI/profile orchestration can own daemon startup separately.
