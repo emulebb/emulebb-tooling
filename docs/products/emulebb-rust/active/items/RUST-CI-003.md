@@ -163,3 +163,10 @@ its top-level `ApiKeyAuth` requirement, the `X-API-Key` header security scheme,
 or per-operation `401` response documentation. This keeps the documented auth
 surface aligned with the Rust router's API-key middleware before live response
 conformance runs.
+
+## 2026-07-18 Progress - Auth Override Guard
+
+Tightened the same static auth gate so an operation-level OpenAPI `security`
+override must still include `ApiKeyAuth`. This prevents a single native route
+from silently bypassing the documented `X-API-Key` requirement while the global
+security scheme remains valid.
