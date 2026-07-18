@@ -207,3 +207,10 @@ must have a matching `in: path` parameter document, no extra path parameters are
 documented, and every documented path parameter is marked `required: true`.
 This catches route-template/documentation drift before live response
 conformance runs.
+
+## 2026-07-18 Progress - Static Operation Metadata Gate
+
+Extended the static OpenAPI drift checker so every native operation must carry a
+non-empty `operationId` and tag list, and operation IDs must remain unique. This
+keeps adapter/code-generator-facing metadata stable while the Rust-forward
+contract continues to evolve before freeze.
