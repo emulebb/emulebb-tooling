@@ -3744,6 +3744,7 @@ components:
           format: ipv4
         p2pBindInterface:
           type: [string, "null"]
+          minLength: 1
         ed2kUserHash:
           type: [string, "null"]
           pattern: "^[0-9a-f]{10}0e[0-9a-f]{16}6f[0-9a-f]{2}$"
@@ -3763,6 +3764,7 @@ components:
           format: ipv4
         p2pBindInterface:
           type: [string, "null"]
+          minLength: 1
         ed2kUserHash:
           type: [string, "null"]
           pattern: "^[0-9a-f]{10}0e[0-9a-f]{16}6f[0-9a-f]{2}$"
@@ -4214,6 +4216,7 @@ components:
           format: ipv4
         minissdpdSocket:
           type: [string, "null"]
+          minLength: 1
         ssdpLocalPort:
           type: [integer, "null"]
           minimum: 1
@@ -4252,6 +4255,7 @@ components:
           format: ipv4
         minissdpdSocket:
           type: [string, "null"]
+          minLength: 1
         ssdpLocalPort:
           type: [integer, "null"]
           minimum: 1
@@ -4299,6 +4303,7 @@ components:
           type: boolean
         path:
           type: [string, "null"]
+          minLength: 1
         level:
           type: integer
           minimum: 0
@@ -4311,6 +4316,7 @@ components:
           type: boolean
         path:
           type: [string, "null"]
+          minLength: 1
         level:
           type: integer
           minimum: 0
@@ -4350,6 +4356,7 @@ components:
           format: ipv4
         minissdpdSocket:
           type: [string, "null"]
+          minLength: 1
         ssdpLocalPort:
           type: [integer, "null"]
           minimum: 0
@@ -5103,6 +5110,7 @@ components:
           type: string
         path:
           type: string
+          minLength: 1
         sizeBytes:
           type: integer
           minimum: 0

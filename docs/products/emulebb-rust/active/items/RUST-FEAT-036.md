@@ -399,6 +399,10 @@ Do not put these in the normal Settings UI for beta:
   32-character lowercase hex user hash, preserving `null` as the explicit clear
   value and rejecting values the daemon would otherwise normalize or reject at
   network bootstrap.
+- 2026-07-18: Tightened nullable text/path settings that previously accepted
+  ineffective empty strings. REST PATCH and OpenAPI now require non-empty
+  `daemon.p2pBindInterface`, `nat.minissdpdSocket`, and `ipFilter.path` values
+  when present, while preserving `null` as the explicit clear value.
 - 2026-07-14: `RUST-FEAT-036 keep ED2K servers in SQLite profile` removed normal
   daemon TOML server ownership. Enabled SQLite profile servers decide whether an
   ED2K server session can be configured.
