@@ -166,6 +166,11 @@ Do not put these in the normal Settings UI for beta:
 
 ## Implementation Notes
 
+- 2026-07-18: Added a machine-readable settings surface inventory in
+  `emulebb-settings` for all serialized `AppSettings` fields, plus existing
+  settings-section resources. Added a daemon bootstrap TOML inventory for the
+  REST bind/auth/WebUI-root fields. Tests now fail if either serialized settings
+  field set grows without a classification.
 - 2026-07-18: Added a first-class `GET /api/v1/diagnostics` power-user section
   resource. It exposes the same `RuntimeDiagnostics` object embedded in
   `GET /status`, with OpenAPI, route metadata, REST tests, WebUI model/refresh
