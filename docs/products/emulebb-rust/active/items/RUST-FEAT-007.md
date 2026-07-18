@@ -72,6 +72,10 @@ this just surfaces them.
 
 ## Progress
 
+- 2026-07-18: Hardened the embedded WebUI SSE client error path. Non-OK
+  `/api/v1/events` responses now parse canonical REST JSON error envelopes and
+  surface their messages instead of a generic stream failure; unit coverage locks
+  the auth-error path.
 - 2026-07-18: Hardened the SSE transport contract for adapters and reverse
   proxies. `GET /api/v1/events` now explicitly returns
   `Cache-Control: no-cache, no-transform` and `X-Accel-Buffering: no`; REST tests
