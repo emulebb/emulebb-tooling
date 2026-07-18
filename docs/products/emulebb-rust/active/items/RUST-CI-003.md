@@ -316,3 +316,11 @@ query parameter must be required and every confirm-prefixed request-body field
 must be required with a boolean `enum: [true]` schema. This keeps shutdown,
 diagnostic dump/crash, log clearing, completed-transfer clearing, and shared-root
 replacement confirmations machine-readable and aligned with Rust validators.
+
+## 2026-07-18 Progress - Static SSE Event Variant Gate
+
+Extended the static OpenAPI drift checker so `TransferEvent` must remain a
+discriminated `oneOf` over the four stream variants: `transfer.added`,
+`transfer.updated`, `transfer.removed`, and `sync.reset`. The gate now fails if
+variant refs, discriminator mappings, required fields, singleton `type` enums,
+or closed-object metadata drift from the Rust/WebUI event contract.
