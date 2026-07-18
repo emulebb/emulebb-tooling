@@ -292,3 +292,11 @@ Extended the static OpenAPI request-body metadata checker so every documented
 JSON request body must reference a schema component with `type: object` and
 `additionalProperties: false`. This aligns the generated contract with the Rust
 body-field validators that reject non-object bodies and unknown JSON fields.
+
+## 2026-07-18 Progress - Static SSE Response Header Gate
+
+Extended the static OpenAPI response-component checker so the shared
+`EventStreamResponse` component must document the adapter-visible
+`Cache-Control` and `X-Accel-Buffering` headers in addition to the
+contract-version header. This keeps the live-events reverse-proxy contract
+locked in the same drift gate as the JSON response components.

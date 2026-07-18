@@ -129,3 +129,6 @@ this just surfaces them.
 - 2026-07-18: Restored the full WebUI unit gate after the SSE consumer work by
   updating stale component expectations to the current Tabler badge classes;
   `npm run test:unit`, e2e smoke, typecheck, and production build now pass.
+- 2026-07-18: Added static OpenAPI drift coverage for the SSE response component
+  so `EventStreamResponse` must keep documenting `Cache-Control` and
+  `X-Accel-Buffering` alongside the contract-version header.
