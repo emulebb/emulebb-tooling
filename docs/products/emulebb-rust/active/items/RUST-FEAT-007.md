@@ -131,6 +131,11 @@ this just surfaces them.
   fetch-based event stream so it can send `X-API-Key` and `Last-Event-ID`.
   Transfer events and `sync.reset` now trigger immediate dashboard refreshes
   while the existing poll loop remains as fallback.
+- 2026-07-18: Surfaced the embedded WebUI event-stream health in Diagnostics.
+  Power users can now see whether the transfer stream is polling, connecting,
+  streaming, or reconnecting, plus the last event type/id, reconnect count, poll
+  interval, and last stream error. The browser smoke fixture asserts the
+  diagnostic values from a mocked `sync.reset` frame.
 - 2026-07-18: Restored the full WebUI unit gate after the SSE consumer work by
   updating stale component expectations to the current Tabler badge classes;
   `npm run test:unit`, e2e smoke, typecheck, and production build now pass.
