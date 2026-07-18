@@ -95,3 +95,6 @@ this just surfaces them.
   `TransferEvent.type` and reset `reason` now use explicit serde-backed Rust
   enums instead of ad-hoc strings, while preserving the OpenAPI/WebUI enum values
   and SSE event names.
+- 2026-07-18: Added route-level REST proof that `/api/v1/events` emits a real
+  `transfer.added` SSE frame after a transfer is created, covering the handler,
+  Tokio broadcast subscription, SSE formatting, and transfer DTO payload together.
