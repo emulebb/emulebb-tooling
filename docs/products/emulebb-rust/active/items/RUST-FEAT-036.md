@@ -166,6 +166,11 @@ Do not put these in the normal Settings UI for beta:
 
 ## Implementation Notes
 
+- 2026-07-18: Added an advanced WebUI Uploads section for existing
+  `ed2k.uploadQueue` tuning settings: startup slots, elasticity, byte budgets,
+  underfill thresholds, waiting/granted/upload timeouts, session transfer target,
+  and session time limit. The controls PATCH the nested `ed2k.uploadQueue`
+  settings object.
 - 2026-07-18: Added advanced WebUI controls for existing Kad tuning settings:
   bootstrap contact floor, local-store enable, publish contact fanout, and UDP/TCP
   firewall-check intervals. Low-level Kad store capacities, TTLs, and snoop queue
