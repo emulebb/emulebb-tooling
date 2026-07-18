@@ -2492,6 +2492,12 @@ components:
       type: apiKey
       in: header
       name: X-API-Key
+  headers:
+    ContractVersionHeader:
+      description: emulebb-rust `/api/v1` contract version for adapter gating.
+      schema:
+        type: string
+        example: "1.2.0"
   parameters:
     CategoryId:
       name: categoryId
@@ -2587,18 +2593,27 @@ components:
   responses:
     AppResponse:
       description: Application envelope.
+      headers:
+        X-Contract-Version:
+          $ref: "#/components/headers/ContractVersionHeader"
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/AppEnvelope"
     BulkOperationResponse:
       description: Bulk operation envelope.
+      headers:
+        X-Contract-Version:
+          $ref: "#/components/headers/ContractVersionHeader"
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/BulkOperationEnvelope"
     CapabilityDiscoveryResponse:
       description: Capability discovery envelope.
+      headers:
+        X-Contract-Version:
+          $ref: "#/components/headers/ContractVersionHeader"
       content:
         application/json:
           schema:
@@ -2606,6 +2621,8 @@ components:
     EventStreamResponse:
       description: Server-Sent Events stream. Each `data:` line is a TransferEvent JSON object.
       headers:
+        X-Contract-Version:
+          $ref: "#/components/headers/ContractVersionHeader"
         Cache-Control:
           description: Prevent intermediaries from caching or transforming the event stream.
           schema:
@@ -2622,30 +2639,45 @@ components:
             type: string
     CategoryListResponse:
       description: Category collection envelope.
+      headers:
+        X-Contract-Version:
+          $ref: "#/components/headers/ContractVersionHeader"
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/CategoryListEnvelope"
     CategoryResponse:
       description: Category envelope.
+      headers:
+        X-Contract-Version:
+          $ref: "#/components/headers/ContractVersionHeader"
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/CategoryEnvelope"
     CommentListResponse:
       description: Comment collection envelope.
+      headers:
+        X-Contract-Version:
+          $ref: "#/components/headers/ContractVersionHeader"
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/CommentListEnvelope"
     Ed2kLinkResponse:
       description: ED2K link envelope.
+      headers:
+        X-Contract-Version:
+          $ref: "#/components/headers/ContractVersionHeader"
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/Ed2kLinkEnvelope"
     ErrorResponse:
       description: Error envelope.
+      headers:
+        X-Contract-Version:
+          $ref: "#/components/headers/ContractVersionHeader"
       content:
         application/json:
           schema:
@@ -2653,6 +2685,8 @@ components:
     MethodNotAllowedResponse:
       description: Error envelope for an unsupported HTTP method on a known route.
       headers:
+        X-Contract-Version:
+          $ref: "#/components/headers/ContractVersionHeader"
         Allow:
           description: Comma-separated list of HTTP methods supported by this route.
           required: true
@@ -2665,216 +2699,324 @@ components:
             $ref: "#/components/schemas/ErrorEnvelope"
     DiagnosticDumpResponse:
       description: Diagnostic dump envelope.
+      headers:
+        X-Contract-Version:
+          $ref: "#/components/headers/ContractVersionHeader"
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/DiagnosticDumpEnvelope"
     FriendListResponse:
       description: Friend collection envelope.
+      headers:
+        X-Contract-Version:
+          $ref: "#/components/headers/ContractVersionHeader"
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/FriendListEnvelope"
     FriendResponse:
       description: Friend envelope.
+      headers:
+        X-Contract-Version:
+          $ref: "#/components/headers/ContractVersionHeader"
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/FriendEnvelope"
     KadResponse:
       description: Kad envelope.
+      headers:
+        X-Contract-Version:
+          $ref: "#/components/headers/ContractVersionHeader"
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/KadEnvelope"
     KadNodeListResponse:
       description: Kad node page envelope.
+      headers:
+        X-Contract-Version:
+          $ref: "#/components/headers/ContractVersionHeader"
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/KadNodeListEnvelope"
     LogListResponse:
       description: Log collection envelope.
+      headers:
+        X-Contract-Version:
+          $ref: "#/components/headers/ContractVersionHeader"
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/LogListEnvelope"
     OkAcceptedResponse:
       description: Accepted operation envelope.
+      headers:
+        X-Contract-Version:
+          $ref: "#/components/headers/ContractVersionHeader"
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/OkEnvelope"
     OkResponse:
       description: Operation envelope.
+      headers:
+        X-Contract-Version:
+          $ref: "#/components/headers/ContractVersionHeader"
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/OkEnvelope"
     PeerBanResponse:
       description: Peer ban-state operation envelope.
+      headers:
+        X-Contract-Version:
+          $ref: "#/components/headers/ContractVersionHeader"
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/PeerBanEnvelope"
     SettingsResponse:
       description: Settings envelope.
+      headers:
+        X-Contract-Version:
+          $ref: "#/components/headers/ContractVersionHeader"
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/AppSettingsEnvelope"
     SettingsSurfaceResponse:
       description: Settings surface metadata envelope.
+      headers:
+        X-Contract-Version:
+          $ref: "#/components/headers/ContractVersionHeader"
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/SettingsSurfaceEnvelope"
     SearchResponse:
       description: Search envelope.
+      headers:
+        X-Contract-Version:
+          $ref: "#/components/headers/ContractVersionHeader"
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/SearchEnvelope"
     SearchResultDownloadResponse:
       description: Search-result download operation envelope.
+      headers:
+        X-Contract-Version:
+          $ref: "#/components/headers/ContractVersionHeader"
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/SearchResultDownloadEnvelope"
     SearchListResponse:
       description: Search-session collection envelope.
+      headers:
+        X-Contract-Version:
+          $ref: "#/components/headers/ContractVersionHeader"
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/SearchListEnvelope"
     ServerListResponse:
       description: Server collection envelope.
+      headers:
+        X-Contract-Version:
+          $ref: "#/components/headers/ContractVersionHeader"
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/ServerListEnvelope"
     ServerResponse:
       description: Server envelope.
+      headers:
+        X-Contract-Version:
+          $ref: "#/components/headers/ContractVersionHeader"
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/ServerEnvelope"
     ServerStatusResponse:
       description: Server status envelope.
+      headers:
+        X-Contract-Version:
+          $ref: "#/components/headers/ContractVersionHeader"
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/ServerStatusEnvelope"
     SharedDirectoryListResponse:
       description: Shared-directory collection envelope.
+      headers:
+        X-Contract-Version:
+          $ref: "#/components/headers/ContractVersionHeader"
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/SharedDirectoryListEnvelope"
     SharedFileListResponse:
       description: Shared-file collection envelope.
+      headers:
+        X-Contract-Version:
+          $ref: "#/components/headers/ContractVersionHeader"
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/SharedFileListEnvelope"
     SharedFileResponse:
       description: Shared-file envelope.
+      headers:
+        X-Contract-Version:
+          $ref: "#/components/headers/ContractVersionHeader"
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/SharedFileEnvelope"
     SnapshotResponse:
       description: Snapshot envelope.
+      headers:
+        X-Contract-Version:
+          $ref: "#/components/headers/ContractVersionHeader"
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/SnapshotEnvelope"
     StatsResponse:
       description: Stats envelope.
+      headers:
+        X-Contract-Version:
+          $ref: "#/components/headers/ContractVersionHeader"
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/StatsEnvelope"
     StatusResponse:
       description: Status envelope.
+      headers:
+        X-Contract-Version:
+          $ref: "#/components/headers/ContractVersionHeader"
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/StatusEnvelope"
     RuntimeDiagnosticsResponse:
       description: Runtime diagnostics envelope.
+      headers:
+        X-Contract-Version:
+          $ref: "#/components/headers/ContractVersionHeader"
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/RuntimeDiagnosticsEnvelope"
     TransferDetailsResponse:
       description: Transfer detail envelope.
+      headers:
+        X-Contract-Version:
+          $ref: "#/components/headers/ContractVersionHeader"
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/TransferDetailsEnvelope"
     TransferListResponse:
       description: Transfer collection envelope.
+      headers:
+        X-Contract-Version:
+          $ref: "#/components/headers/ContractVersionHeader"
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/TransferListEnvelope"
     TransferResponse:
       description: Transfer envelope.
+      headers:
+        X-Contract-Version:
+          $ref: "#/components/headers/ContractVersionHeader"
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/TransferEnvelope"
     TransferSourceBrowseResponse:
       description: Transfer-source browse operation envelope.
+      headers:
+        X-Contract-Version:
+          $ref: "#/components/headers/ContractVersionHeader"
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/TransferSourceBrowseEnvelope"
     TransferSourceListResponse:
       description: Transfer-source collection envelope.
+      headers:
+        X-Contract-Version:
+          $ref: "#/components/headers/ContractVersionHeader"
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/TransferSourceListEnvelope"
     TransferSourceResponse:
       description: Transfer-source envelope.
+      headers:
+        X-Contract-Version:
+          $ref: "#/components/headers/ContractVersionHeader"
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/TransferSourceEnvelope"
     UploadListResponse:
       description: Upload collection envelope.
+      headers:
+        X-Contract-Version:
+          $ref: "#/components/headers/ContractVersionHeader"
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/UploadListEnvelope"
     UploadResponse:
       description: Upload envelope.
+      headers:
+        X-Contract-Version:
+          $ref: "#/components/headers/ContractVersionHeader"
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/UploadEnvelope"
     UploadRemoveResponse:
       description: Upload removal operation envelope.
+      headers:
+        X-Contract-Version:
+          $ref: "#/components/headers/ContractVersionHeader"
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/UploadRemoveEnvelope"
     UploadQueueListResponse:
       description: Upload-queue collection envelope.
+      headers:
+        X-Contract-Version:
+          $ref: "#/components/headers/ContractVersionHeader"
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/UploadQueueListEnvelope"
     UploadQueueEntryResponse:
       description: Upload-queue entry envelope.
+      headers:
+        X-Contract-Version:
+          $ref: "#/components/headers/ContractVersionHeader"
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/UploadQueueEntryEnvelope"
     UrlImportResponse:
       description: URL import operation envelope.
+      headers:
+        X-Contract-Version:
+          $ref: "#/components/headers/ContractVersionHeader"
       content:
         application/json:
           schema:

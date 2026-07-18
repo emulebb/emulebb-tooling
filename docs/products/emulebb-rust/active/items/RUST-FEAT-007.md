@@ -72,6 +72,10 @@ this just surfaces them.
 
 ## Progress
 
+- 2026-07-18: Added `X-Contract-Version: 1.2.0` to `/api/v1` responses through
+  the Rust REST router layer, including normal JSON responses, SSE streams, and
+  REST error envelopes. OpenAPI response components and the persisted SSE
+  conformance probe now assert the header.
 - 2026-07-18: Extended the persisted Rust REST response-conformance probe to
   assert the `/api/v1/events` SSE response headers promised by the contract:
   `Cache-Control: no-cache, no-transform` and `X-Accel-Buffering: no`.

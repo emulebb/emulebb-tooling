@@ -34,5 +34,9 @@ Change this spec in the same change as the implementation. The Rust conformance
 gate is tracked by
 [`RUST-CI-003`](../active/items/RUST-CI-003.md).
 
+Every `/api/v1` response carries `X-Contract-Version`, matching
+`info.x-contract-version` and `GET /capabilities.data.contractVersion`, so
+first-party adapters can gate on the contract without parsing the body first.
+
 Adapter surfaces (`/api/v2` qBit-compat, Torznab) must not broaden or weaken the
 native route shape.
