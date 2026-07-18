@@ -166,6 +166,10 @@ Do not put these in the normal Settings UI for beta:
 
 ## Implementation Notes
 
+- 2026-07-18: Added inline WebUI validation for Settings numeric and listen-port
+  controls. Invalid whole-number/range values now render field-level errors and
+  disable Save before malformed `PATCH /api/v1/app/settings` requests can be
+  sent; the settings e2e covers the invalid-port path.
 - 2026-07-18: Added Settings-tab navigation for the existing section resources
   advertised by `GET /api/v1/app/settings/surface`, making Sharing,
   Categories, Servers, Kad, and Diagnostics reachable from Settings without
