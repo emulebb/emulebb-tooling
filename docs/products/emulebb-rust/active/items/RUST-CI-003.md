@@ -246,3 +246,11 @@ location, a non-empty name, and a schema object. The OpenAPI contract now marks
 the existing optional query filters as `required: false` instead of relying on
 implicit OpenAPI defaults, which keeps generated clients and adapter manifests
 honest without changing Rust runtime behavior.
+
+## 2026-07-18 Progress - Static Tag Taxonomy Gate
+
+Extended the static OpenAPI drift checker so operation tags must be declared in
+the top-level tag taxonomy, top-level tags must be unique and named, and unused
+declared tags fail the route contract check. This keeps generated client
+groupings and power-user documentation navigation aligned with the Rust-native
+controller surface.
