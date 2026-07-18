@@ -236,6 +236,10 @@ Do not put these in the normal Settings UI for beta:
   sentinels so operator actions such as shutdown, diagnostics capture/crash,
   log clearing, transfer clearing, and shared-root replacement remain documented
   as required explicit `true` confirmations.
+- 2026-07-18: Tightened the embedded WebUI `AppSettings` API model from loose
+  records to typed section shapes for core, daemon, eD2K, Kad, NAT, VPN Guard,
+  and IP Filter settings. The Settings controls still use the same REST contract,
+  but TypeScript now tracks the first-class fields that the UI edits.
 - 2026-07-14: `RUST-FEAT-036 keep ED2K servers in SQLite profile` removed normal
   daemon TOML server ownership. Enabled SQLite profile servers decide whether an
   ED2K server session can be configured.
