@@ -166,6 +166,10 @@ Do not put these in the normal Settings UI for beta:
 
 ## Implementation Notes
 
+- 2026-07-18: Added advanced WebUI controls for existing eD2K network budget
+  settings: new outgoing connections per five seconds and half-open connection
+  cap. Labels intentionally distinguish these protocol-level caps from the
+  higher-level `core` connection controls.
 - 2026-07-18: Added advanced WebUI controls for existing eD2K transfer tuning:
   session rotation, concurrent download cap, eD2K source cap, parallel download
   peer cap, and startup download byte budget. These PATCH the existing `ed2k`
