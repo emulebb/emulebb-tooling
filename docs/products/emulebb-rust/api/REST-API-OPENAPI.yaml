@@ -488,6 +488,30 @@ paths:
           $ref: "#/components/responses/ErrorResponse"
         default:
           $ref: "#/components/responses/ErrorResponse"
+  /vpn-guard/operations/probe:
+    post:
+      tags: [VpnGuard]
+      summary: Run a bound VPN Guard egress probe.
+      operationId: probeVpnGuard
+      responses:
+        "200":
+          $ref: "#/components/responses/VpnGuardResponse"
+        "400":
+          $ref: "#/components/responses/ErrorResponse"
+        "401":
+          $ref: "#/components/responses/ErrorResponse"
+        "404":
+          $ref: "#/components/responses/ErrorResponse"
+        "405":
+          $ref: "#/components/responses/MethodNotAllowedResponse"
+        "409":
+          $ref: "#/components/responses/ErrorResponse"
+        "500":
+          $ref: "#/components/responses/ErrorResponse"
+        "503":
+          $ref: "#/components/responses/ErrorResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /categories:
     get:
       tags: [Categories]
