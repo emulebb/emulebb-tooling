@@ -4214,13 +4214,13 @@ components:
           maximum: 65535
         discoveryTimeoutSecs:
           type: integer
-          minimum: 0
+          minimum: 1
         leaseDurationSecs:
           type: integer
-          minimum: 0
+          minimum: 1
         renewMarginSecs:
           type: integer
-          minimum: 0
+          minimum: 1
         externalIpOverride:
           type: [string, "null"]
     NatSettingsUpdate:
@@ -4249,13 +4249,13 @@ components:
           maximum: 65535
         discoveryTimeoutSecs:
           type: integer
-          minimum: 0
+          minimum: 1
         leaseDurationSecs:
           type: integer
-          minimum: 0
+          minimum: 1
         renewMarginSecs:
           type: integer
-          minimum: 0
+          minimum: 1
         externalIpOverride:
           type: [string, "null"]
     VpnGuardSettings:

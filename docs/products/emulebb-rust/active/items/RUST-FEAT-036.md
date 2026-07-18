@@ -383,6 +383,10 @@ Do not put these in the normal Settings UI for beta:
   set. REST PATCH, OpenAPI, and the embedded Settings UI now accept only
   `upnp_miniupnpc` entries while preserving an empty order as the runtime default
   order.
+- 2026-07-18: Tightened NAT timing settings so REST PATCH and OpenAPI reject `0`
+  for discovery timeout, lease duration, and renew margin. This matches the
+  embedded Settings UI and prevents persisted values that the UPnP runtime clamps
+  away during discovery or refresh scheduling.
 - 2026-07-14: `RUST-FEAT-036 keep ED2K servers in SQLite profile` removed normal
   daemon TOML server ownership. Enabled SQLite profile servers decide whether an
   ED2K server session can be configured.
