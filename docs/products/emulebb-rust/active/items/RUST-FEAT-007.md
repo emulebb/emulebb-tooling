@@ -86,3 +86,8 @@ this just surfaces them.
   supplied `lastEventId`, making the no-replay-cache behavior mechanical and
   adapter-visible instead of silently dropping missed history. The OpenAPI header
   parameter/schema, Rust DTO, WebUI type, and REST route test were aligned.
+- 2026-07-18: Added a dedicated live conformance probe for the long-lived SSE
+  route. The persisted Rust REST response-conformance command now opens
+  `/api/v1/events` with `Last-Event-ID`, verifies `text/event-stream`, reads the
+  first frame, and fails `getEvents` if the expected resume `sync.reset` payload
+  is missing.
