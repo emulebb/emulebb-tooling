@@ -262,3 +262,10 @@ must have a non-empty description, must carry the shared contract-version
 header reference, and must expose the expected media type and schema. The gate
 preserves the intentional `EventStreamResponse` `text/event-stream` exception
 while keeping all other reusable response components JSON-envelope based.
+
+## 2026-07-18 Progress - Static Operation Summary Gate
+
+Extended the static OpenAPI operation metadata checker so every native
+operation must publish a non-empty `summary` alongside its stable `operationId`
+and tag list. This keeps generated client documentation and power-user route
+catalogs useful as the Rust-forward route surface evolves.
