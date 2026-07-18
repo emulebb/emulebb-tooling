@@ -166,6 +166,10 @@ Do not put these in the normal Settings UI for beta:
 
 ## Implementation Notes
 
+- 2026-07-18: Added scan-friendly Diagnostics summary metrics in the embedded
+  WebUI for process, file counts, shared hashing/reload progress, upload counts,
+  and eD2K/Kad publish phases while preserving the raw runtime JSON panel for
+  deep inspection.
 - 2026-07-18: Marked shadowed `ed2k.safeServerConnect` and
   `ed2k.addServersFromServer` settings surface entries as not-user-facing, with
   a guard test. The visible Settings controls remain the canonical `core.*`
