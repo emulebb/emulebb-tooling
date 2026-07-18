@@ -285,3 +285,10 @@ non-`405` response must reference the shared `ErrorResponse` component, not just
 the required `400`/`401`/`404`/`default` statuses. This keeps optional `409`,
 `500`, and `503` branches on the same canonical REST error envelope as the
 mandatory error surface.
+
+## 2026-07-18 Progress - Static Closed Request Schema Gate
+
+Extended the static OpenAPI request-body metadata checker so every documented
+JSON request body must reference a schema component with `type: object` and
+`additionalProperties: false`. This aligns the generated contract with the Rust
+body-field validators that reject non-object bodies and unknown JSON fields.
