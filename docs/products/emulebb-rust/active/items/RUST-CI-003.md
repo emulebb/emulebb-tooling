@@ -434,3 +434,9 @@ category string-or-u32 input, and shared-file rating bounds.
 Extended the static OpenAPI schema-component checker so category create/patch
 `color` and `priority` fields must document the REST validator contract:
 nullable RGB integer color bounds and the shared category priority input shape.
+
+## 2026-07-19 Progress - Static Category Selector Exclusion Gate
+
+Extended the static OpenAPI schema-component checker so category-selector
+request schemas must document that `categoryId` and `categoryName` are mutually
+exclusive, matching the REST boundary validator.
