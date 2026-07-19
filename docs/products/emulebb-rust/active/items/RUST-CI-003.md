@@ -586,3 +586,9 @@ document the REST middleware's lowercase 32-character hexadecimal contract for
 Extended the static OpenAPI parameter checker so endpoint-shaped path
 parameters must document the REST middleware's `address:port` token contract
 for `serverId` and the MD4-or-endpoint contract for `clientId`.
+
+## 2026-07-19 Progress - Static Logs Limit Default Gate
+
+Split `/logs` onto a dedicated `LogsLimit` OpenAPI parameter and extended the
+static checker so the documented default matches the REST handler's 200-line
+default instead of the generic paged collection limit default.

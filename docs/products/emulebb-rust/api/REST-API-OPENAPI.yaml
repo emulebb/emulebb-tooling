@@ -2621,7 +2621,7 @@ paths:
       summary: Return recent application log lines.
       operationId: listLogs
       parameters:
-        - $ref: "#/components/parameters/Limit"
+        - $ref: "#/components/parameters/LogsLimit"
       responses:
         "200":
           $ref: "#/components/responses/LogListResponse"
@@ -2725,6 +2725,15 @@ components:
         minimum: 1
         maximum: 1000
         default: 100
+    LogsLimit:
+      name: limit
+      in: query
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 1000
+        default: 200
     Offset:
       name: offset
       in: query
