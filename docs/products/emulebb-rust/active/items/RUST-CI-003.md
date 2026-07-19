@@ -483,3 +483,9 @@ requests must document the REST validator's boolean control fields: `static`,
 Extended the static OpenAPI schema-component checker so server create and Kad
 bootstrap requests must document the REST validator's endpoint port contract:
 integer ports in the inclusive `1..65535` range.
+
+## 2026-07-19 Progress - Static Endpoint Required Field Gate
+
+Extended the static OpenAPI schema-component checker so server create and Kad
+bootstrap requests must document the REST validator's required endpoint fields:
+both `address` and `port`.
