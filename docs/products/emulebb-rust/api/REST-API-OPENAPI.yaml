@@ -5389,7 +5389,7 @@ components:
           type: string
           minLength: 1
           maxLength: 2048
-          pattern: '^[eE][dD]2[kK]://\S+$'
+          pattern: '^[eE][dD]2[kK]://[^\s\x00-\x1F\x7F-\x9F]+$'
         links:
           type: array
           minItems: 1
@@ -5398,7 +5398,7 @@ components:
             type: string
             minLength: 1
             maxLength: 2048
-            pattern: '^[eE][dD]2[kK]://\S+$'
+            pattern: '^[eE][dD]2[kK]://[^\s\x00-\x1F\x7F-\x9F]+$'
         categoryId:
           type: integer
           minimum: 0

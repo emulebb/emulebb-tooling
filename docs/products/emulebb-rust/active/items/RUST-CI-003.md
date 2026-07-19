@@ -401,3 +401,9 @@ non-whitespace control characters.
 Extended the static OpenAPI schema-component checker so both accepted
 `SharedDirectoryRootInput` forms, raw string and `{ path }` object, must document
 the REST validator's trim-non-empty path contract.
+
+## 2026-07-19 Progress - Static Transfer Link Control Schema Gate
+
+Extended the static OpenAPI schema-component checker so transfer-create link
+text must document the full REST/WebUI input contract: case-insensitive
+`ed2k://`, no whitespace, no control characters, and a 2048-character ceiling.
