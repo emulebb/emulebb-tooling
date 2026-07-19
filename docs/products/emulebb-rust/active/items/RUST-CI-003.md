@@ -557,3 +557,9 @@ boolean field.
 Extended the static OpenAPI parameter checker so numeric query parameters must
 document the REST middleware bounds for `limit`, `offset`, and transfer-list
 `categoryId`.
+
+## 2026-07-19 Progress - Static Boolean Query Type Gate
+
+Extended the static OpenAPI parameter checker so optional boolean query
+controls must document the REST middleware type contract for
+`includeScoreBreakdown`, `includeEvidence`, and `exactTotal`.
