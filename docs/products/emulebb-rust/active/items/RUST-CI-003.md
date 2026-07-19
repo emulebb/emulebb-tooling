@@ -500,3 +500,8 @@ string.
 
 Extended the static OpenAPI schema-component checker so category create
 requests must document the REST validator's required `name` field.
+
+## 2026-07-19 Progress - Static Server Name Schema Gate
+
+Extended the static OpenAPI schema-component checker so server create/patch
+requests must document the REST validator's optional `name` field as a string.
