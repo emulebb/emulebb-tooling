@@ -510,3 +510,8 @@ requests must document the REST validator's optional `name` field as a string.
 
 Extended the static OpenAPI schema-component checker so URL import requests
 must document the REST validator's required `url` field.
+
+## 2026-07-19 Progress - Static Search Create Required Field Gate
+
+Extended the static OpenAPI schema-component checker so search create requests
+must document the REST validator's required `query` field.
