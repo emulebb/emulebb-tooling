@@ -580,3 +580,9 @@ document the REST middleware bounds for `categoryId` and `searchId`.
 Extended the static OpenAPI parameter checker so MD4-style path parameters must
 document the REST middleware's lowercase 32-character hexadecimal contract for
 `hash` and `userHash`.
+
+## 2026-07-19 Progress - Static Endpoint Token Path Gate
+
+Extended the static OpenAPI parameter checker so endpoint-shaped path
+parameters must document the REST middleware's `address:port` token contract
+for `serverId` and the MD4-or-endpoint contract for `clientId`.
