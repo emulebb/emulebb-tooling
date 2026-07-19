@@ -598,3 +598,8 @@ default instead of the generic paged collection limit default.
 Extended the static OpenAPI schema checker so the `Search` response schema must
 document the always-emitted `statusReason` field as a required nullable string,
 matching the create, list, and get search response mappers.
+
+## 2026-07-19 Progress - Static Search Session Status Reason Gate
+
+Extended the same schema checker coverage to `SearchSession`, so search list
+summaries also document the always-emitted nullable `statusReason` field.

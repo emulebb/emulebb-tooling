@@ -6702,7 +6702,7 @@ components:
     SearchSession:
       type: object
       additionalProperties: false
-      required: [id, query, method, type, status, resultCount]
+      required: [id, query, method, type, status, statusReason, resultCount]
       properties:
         id:
           type: string
@@ -6718,6 +6718,8 @@ components:
         status:
           type: string
           enum: [running, complete]
+        statusReason:
+          type: [string, "null"]
         resultCount:
           type: integer
           minimum: 0
