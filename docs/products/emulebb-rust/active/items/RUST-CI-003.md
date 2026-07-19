@@ -533,3 +533,9 @@ Extended the static OpenAPI schema-component checker so search create requests
 must document the REST validator's optional numeric filters: unsigned
 `minSizeBytes`, unsigned `maxSizeBytes`, and `minAvailability` in the inclusive
 `0..1000000` range.
+
+## 2026-07-19 Progress - Static Transfer Patch Mutation Family Gate
+
+Extended the static OpenAPI schema-component checker so transfer patch requests
+must document the REST validator's one-mutation-family rule across `priority`,
+`name`, `categoryId`, and `categoryName`.
