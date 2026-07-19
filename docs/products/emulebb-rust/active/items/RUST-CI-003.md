@@ -551,3 +551,9 @@ must document the REST validator's required `userHash` field as a lowercase
 Extended the static OpenAPI schema-component checker so diagnostic dump
 requests must document the REST validator's optional `fullMemory` control as a
 boolean field.
+
+## 2026-07-19 Progress - Static Numeric Query Bounds Gate
+
+Extended the static OpenAPI parameter checker so numeric query parameters must
+document the REST middleware bounds for `limit`, `offset`, and transfer-list
+`categoryId`.
