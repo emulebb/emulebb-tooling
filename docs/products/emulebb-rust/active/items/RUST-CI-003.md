@@ -459,3 +459,9 @@ contract: exactly one single `link` or batch `links` array is required.
 Extended the static OpenAPI schema-component checker so `SharedFilePatch`
 must document the REST validator's comment/rating coupling: comment edits and
 rating edits must be submitted together.
+
+## 2026-07-19 Progress - Static Paused Control Schema Gate
+
+Extended the static OpenAPI schema-component checker so transfer-create and
+search-result download requests must document the REST validator's optional
+`paused` control as a boolean field.
