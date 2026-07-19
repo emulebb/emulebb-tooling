@@ -407,3 +407,10 @@ the REST validator's trim-non-empty path contract.
 Extended the static OpenAPI schema-component checker so transfer-create link
 text must document the full REST/WebUI input contract: case-insensitive
 `ed2k://`, no whitespace, no control characters, and a 2048-character ceiling.
+
+## 2026-07-19 Progress - Static URL Import Control Schema Gate
+
+Extended the static OpenAPI schema-component checker so `UrlImportRequest.url`
+must document the full REST/WebUI URL import contract: case-insensitive
+HTTP(S), host-required, no whitespace, no control characters, and a
+2048-character ceiling.

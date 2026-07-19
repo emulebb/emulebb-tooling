@@ -6496,7 +6496,7 @@ components:
           type: string
           minLength: 1
           maxLength: 2048
-          pattern: '^[hH][tT][tT][pP][sS]?://[^\s/?#][^\s]*$'
+          pattern: '^[hH][tT][tT][pP][sS]?://[^\s/?#\x00-\x1F\x7F-\x9F][^\s\x00-\x1F\x7F-\x9F]*$'
     UrlImportEnvelope:
       unevaluatedProperties: false
       allOf:
