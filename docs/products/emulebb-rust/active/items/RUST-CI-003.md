@@ -471,3 +471,9 @@ search-result download requests must document the REST validator's optional
 Extended the static OpenAPI schema-component checker so `SharedFilePatch`
 must document the REST validator's comment field as a string when submitting
 the comment/rating pair.
+
+## 2026-07-19 Progress - Static Server Boolean Control Gate
+
+Extended the static OpenAPI schema-component checker so server create/patch
+requests must document the REST validator's boolean control fields: `static`,
+`connect`, and `enabled`.
