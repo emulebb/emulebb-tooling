@@ -428,3 +428,9 @@ Extended the static OpenAPI schema-component checker so transfer, shared-file,
 server, and category priority request schemas must document the REST validator
 contracts: exact string vocabularies for transfer/shared-file/server controls,
 category string-or-u32 input, and shared-file rating bounds.
+
+## 2026-07-19 Progress - Static Category Mutation Field Gate
+
+Extended the static OpenAPI schema-component checker so category create/patch
+`color` and `priority` fields must document the REST validator contract:
+nullable RGB integer color bounds and the shared category priority input shape.
