@@ -539,3 +539,9 @@ must document the REST validator's optional numeric filters: unsigned
 Extended the static OpenAPI schema-component checker so transfer patch requests
 must document the REST validator's one-mutation-family rule across `priority`,
 `name`, `categoryId`, and `categoryName`.
+
+## 2026-07-19 Progress - Static Friend User Hash Schema Gate
+
+Extended the static OpenAPI schema-component checker so friend create requests
+must document the REST validator's required `userHash` field as a lowercase
+32-character hexadecimal string.
