@@ -388,3 +388,10 @@ Extended the static OpenAPI schema-component checker so `TransferPatch.name`
 must document the REST/core transfer rename contract: trim-non-empty text
 without eD2K/Windows-forbidden filename characters or control characters, and
 without an unsupported fixed max-length claim.
+
+## 2026-07-19 Progress - Static Search Query Schema Gate
+
+Extended the static OpenAPI schema-component checker so
+`SearchCreateRequest.query` must document the REST/WebUI search-query contract:
+ASCII-whitespace-normalized, non-empty text with a 160-character ceiling and no
+non-whitespace control characters.

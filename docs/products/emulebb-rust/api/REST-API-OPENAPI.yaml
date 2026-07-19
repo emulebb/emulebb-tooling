@@ -6757,6 +6757,7 @@ components:
           type: string
           minLength: 1
           maxLength: 160
+          pattern: '^(?=.*\S)[^\x00-\x08\x0E-\x1F\x7F-\x9F]*$'
         method:
           type: string
           description: >
