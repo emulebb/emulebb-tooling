@@ -495,3 +495,8 @@ both `address` and `port`.
 Extended the static OpenAPI schema-component checker so category create/patch
 requests must document the REST validator's optional `comment` field as a
 string.
+
+## 2026-07-19 Progress - Static Category Create Required Field Gate
+
+Extended the static OpenAPI schema-component checker so category create
+requests must document the REST validator's required `name` field.
