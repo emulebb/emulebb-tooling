@@ -489,3 +489,9 @@ integer ports in the inclusive `1..65535` range.
 Extended the static OpenAPI schema-component checker so server create and Kad
 bootstrap requests must document the REST validator's required endpoint fields:
 both `address` and `port`.
+
+## 2026-07-19 Progress - Static Category Comment Schema Gate
+
+Extended the static OpenAPI schema-component checker so category create/patch
+requests must document the REST validator's optional `comment` field as a
+string.
