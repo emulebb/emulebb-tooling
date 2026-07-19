@@ -609,3 +609,9 @@ summaries also document the always-emitted nullable `statusReason` field.
 Extended the static OpenAPI schema checker so `Search.status` and
 `SearchSession.status` document the Rust mapper's emitted status vocabulary,
 including the additive `queued` state used while network searches wait to run.
+
+## 2026-07-19 Progress - Static Search Result Extension Gate
+
+Extended the static OpenAPI schema checker so `SearchResult.extension` is a
+required string, matching the search result response mapper that always emits
+the derived filename extension.

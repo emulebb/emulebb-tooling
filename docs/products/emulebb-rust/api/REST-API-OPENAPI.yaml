@@ -6810,6 +6810,7 @@ components:
         - sources
         - completeSources
         - fileType
+        - extension
         - complete
         - knownType
         - directory
