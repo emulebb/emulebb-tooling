@@ -453,3 +453,9 @@ download requests.
 Extended the static OpenAPI schema-component checker so
 `TransferCreateRequest` must document the REST validator's request selector
 contract: exactly one single `link` or batch `links` array is required.
+
+## 2026-07-19 Progress - Static Shared File Comment Rating Gate
+
+Extended the static OpenAPI schema-component checker so `SharedFilePatch`
+must document the REST validator's comment/rating coupling: comment edits and
+rating edits must be submitted together.
