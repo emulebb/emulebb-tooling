@@ -545,3 +545,9 @@ must document the REST validator's one-mutation-family rule across `priority`,
 Extended the static OpenAPI schema-component checker so friend create requests
 must document the REST validator's required `userHash` field as a lowercase
 32-character hexadecimal string.
+
+## 2026-07-19 Progress - Static Diagnostic Full Memory Schema Gate
+
+Extended the static OpenAPI schema-component checker so diagnostic dump
+requests must document the REST validator's optional `fullMemory` control as a
+boolean field.
