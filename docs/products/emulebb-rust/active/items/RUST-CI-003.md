@@ -477,3 +477,9 @@ the comment/rating pair.
 Extended the static OpenAPI schema-component checker so server create/patch
 requests must document the REST validator's boolean control fields: `static`,
 `connect`, and `enabled`.
+
+## 2026-07-19 Progress - Static Endpoint Port Schema Gate
+
+Extended the static OpenAPI schema-component checker so server create and Kad
+bootstrap requests must document the REST validator's endpoint port contract:
+integer ports in the inclusive `1..65535` range.
