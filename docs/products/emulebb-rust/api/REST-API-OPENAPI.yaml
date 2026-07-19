@@ -6123,6 +6123,7 @@ components:
       oneOf:
         - type: string
           minLength: 1
+          pattern: '\S'
         - type: object
           additionalProperties: false
           required: [path]
@@ -6130,6 +6131,7 @@ components:
             path:
               type: string
               minLength: 1
+              pattern: '\S'
     UploadListEnvelope:
       unevaluatedProperties: false
       allOf:

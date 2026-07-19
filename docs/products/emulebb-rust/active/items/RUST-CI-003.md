@@ -395,3 +395,9 @@ Extended the static OpenAPI schema-component checker so
 `SearchCreateRequest.query` must document the REST/WebUI search-query contract:
 ASCII-whitespace-normalized, non-empty text with a 160-character ceiling and no
 non-whitespace control characters.
+
+## 2026-07-19 Progress - Static Shared Directory Root Schema Gate
+
+Extended the static OpenAPI schema-component checker so both accepted
+`SharedDirectoryRootInput` forms, raw string and `{ path }` object, must document
+the REST validator's trim-non-empty path contract.
