@@ -603,3 +603,9 @@ matching the create, list, and get search response mappers.
 
 Extended the same schema checker coverage to `SearchSession`, so search list
 summaries also document the always-emitted nullable `statusReason` field.
+
+## 2026-07-19 Progress - Static Search Status Enum Gate
+
+Extended the static OpenAPI schema checker so `Search.status` and
+`SearchSession.status` document the Rust mapper's emitted status vocabulary,
+including the additive `queued` state used while network searches wait to run.

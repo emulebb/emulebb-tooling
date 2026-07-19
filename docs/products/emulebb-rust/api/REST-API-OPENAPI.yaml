@@ -6717,7 +6717,7 @@ components:
           enum: ["", arc, audio, iso, image, pro, video, doc, emulecollection]
         status:
           type: string
-          enum: [running, complete]
+          enum: [queued, running, stopped, complete, error]
         statusReason:
           type: [string, "null"]
         resultCount:
@@ -6749,7 +6749,7 @@ components:
           enum: ["", arc, audio, iso, image, pro, video, doc, emulecollection]
         status:
           type: string
-          enum: [running, stopped, complete, error]
+          enum: [queued, running, stopped, complete, error]
         statusReason:
           type: [string, "null"]
         items:
