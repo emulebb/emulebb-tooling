@@ -569,3 +569,8 @@ controls must document the REST middleware type contract for
 Extended the static OpenAPI parameter/schema checker so the transfer-list
 `state` query filter must reference the shared `TransferState` schema and that
 schema must match the REST middleware's accepted state names.
+
+## 2026-07-19 Progress - Static Numeric Path Bounds Gate
+
+Extended the static OpenAPI parameter checker so numeric path parameters must
+document the REST middleware bounds for `categoryId` and `searchId`.
