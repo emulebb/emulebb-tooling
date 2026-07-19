@@ -440,3 +440,10 @@ nullable RGB integer color bounds and the shared category priority input shape.
 Extended the static OpenAPI schema-component checker so category-selector
 request schemas must document that `categoryId` and `categoryName` are mutually
 exclusive, matching the REST boundary validator.
+
+## 2026-07-19 Progress - Static Category Selector ID Schema Gate
+
+Extended the static OpenAPI schema-component checker so category-selector
+`categoryId` request fields must document the REST validator's unsigned u32
+integer contract across transfer create, transfer patch, and search-result
+download requests.
