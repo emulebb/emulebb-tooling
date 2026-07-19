@@ -563,3 +563,9 @@ document the REST middleware bounds for `limit`, `offset`, and transfer-list
 Extended the static OpenAPI parameter checker so optional boolean query
 controls must document the REST middleware type contract for
 `includeScoreBreakdown`, `includeEvidence`, and `exactTotal`.
+
+## 2026-07-19 Progress - Static Transfer State Query Gate
+
+Extended the static OpenAPI parameter/schema checker so the transfer-list
+`state` query filter must reference the shared `TransferState` schema and that
+schema must match the REST middleware's accepted state names.
