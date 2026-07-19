@@ -381,3 +381,10 @@ product OpenAPI artifact under `docs/products/emulebb-rust/api`. The wrapper
 restores any inherited operator value after import, but the smoke module's
 import-time route inventory and response validators now use the Rust-forward
 contract instead of the older shared REST contract by accident.
+
+## 2026-07-19 Progress - Static Transfer Rename Schema Gate
+
+Extended the static OpenAPI schema-component checker so `TransferPatch.name`
+must document the REST/core transfer rename contract: trim-non-empty text
+without eD2K/Windows-forbidden filename characters or control characters, and
+without an unsupported fixed max-length claim.
