@@ -447,3 +447,9 @@ Extended the static OpenAPI schema-component checker so category-selector
 `categoryId` request fields must document the REST validator's unsigned u32
 integer contract across transfer create, transfer patch, and search-result
 download requests.
+
+## 2026-07-19 Progress - Static Transfer Create Link Choice Gate
+
+Extended the static OpenAPI schema-component checker so
+`TransferCreateRequest` must document the REST validator's request selector
+contract: exactly one single `link` or batch `links` array is required.
