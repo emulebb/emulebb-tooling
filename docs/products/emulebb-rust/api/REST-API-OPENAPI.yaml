@@ -5406,6 +5406,7 @@ components:
         categoryName:
           type: string
           minLength: 1
+          pattern: '\S'
         paused:
           type: boolean
     TransferPatch:
@@ -5450,6 +5451,7 @@ components:
         categoryName:
           type: string
           minLength: 1
+          pattern: '\S'
     TransferDetailsEnvelope:
       unevaluatedProperties: false
       allOf:
@@ -6890,6 +6892,7 @@ components:
         categoryName:
           type: string
           minLength: 1
+          pattern: '\S'
         paused:
           type: boolean
     SearchResultDownloadEnvelope:

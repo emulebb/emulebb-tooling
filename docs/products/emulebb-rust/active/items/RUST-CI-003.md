@@ -414,3 +414,10 @@ Extended the static OpenAPI schema-component checker so `UrlImportRequest.url`
 must document the full REST/WebUI URL import contract: case-insensitive
 HTTP(S), host-required, no whitespace, no control characters, and a
 2048-character ceiling.
+
+## 2026-07-19 Progress - Static Category Selector Schema Gate
+
+Extended the static OpenAPI schema-component checker so `categoryName`
+selectors on transfer create, transfer patch, and search-result download
+requests must document the REST selector contract: string input with at least
+one non-whitespace character after ASCII whitespace trimming.
