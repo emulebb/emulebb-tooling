@@ -574,3 +574,9 @@ schema must match the REST middleware's accepted state names.
 
 Extended the static OpenAPI parameter checker so numeric path parameters must
 document the REST middleware bounds for `categoryId` and `searchId`.
+
+## 2026-07-19 Progress - Static Lowercase Hash Path Gate
+
+Extended the static OpenAPI parameter checker so MD4-style path parameters must
+document the REST middleware's lowercase 32-character hexadecimal contract for
+`hash` and `userHash`.
