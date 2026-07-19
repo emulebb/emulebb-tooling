@@ -465,3 +465,9 @@ rating edits must be submitted together.
 Extended the static OpenAPI schema-component checker so transfer-create and
 search-result download requests must document the REST validator's optional
 `paused` control as a boolean field.
+
+## 2026-07-19 Progress - Static Shared File Comment Schema Gate
+
+Extended the static OpenAPI schema-component checker so `SharedFilePatch`
+must document the REST validator's comment field as a string when submitting
+the comment/rating pair.
