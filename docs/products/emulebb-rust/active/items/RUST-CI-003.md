@@ -515,3 +515,9 @@ must document the REST validator's required `url` field.
 
 Extended the static OpenAPI schema-component checker so search create requests
 must document the REST validator's required `query` field.
+
+## 2026-07-19 Progress - Static Search Mode Type Schema Gate
+
+Extended the static OpenAPI schema-component checker so search create requests
+must document the REST validator's optional search `method` and `type` enum
+contracts.
