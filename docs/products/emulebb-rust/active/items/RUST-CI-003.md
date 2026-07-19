@@ -505,3 +505,8 @@ requests must document the REST validator's required `name` field.
 
 Extended the static OpenAPI schema-component checker so server create/patch
 requests must document the REST validator's optional `name` field as a string.
+
+## 2026-07-19 Progress - Static URL Import Required Field Gate
+
+Extended the static OpenAPI schema-component checker so URL import requests
+must document the REST validator's required `url` field.
