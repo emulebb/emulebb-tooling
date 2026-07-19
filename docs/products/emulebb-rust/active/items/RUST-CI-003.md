@@ -526,3 +526,10 @@ contracts.
 
 Extended the static OpenAPI schema-component checker so search create requests
 must document the REST validator's optional `extension` field as a string.
+
+## 2026-07-19 Progress - Static Search Numeric Filter Schema Gate
+
+Extended the static OpenAPI schema-component checker so search create requests
+must document the REST validator's optional numeric filters: unsigned
+`minSizeBytes`, unsigned `maxSizeBytes`, and `minAvailability` in the inclusive
+`0..1000000` range.
