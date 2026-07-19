@@ -592,3 +592,9 @@ for `serverId` and the MD4-or-endpoint contract for `clientId`.
 Split `/logs` onto a dedicated `LogsLimit` OpenAPI parameter and extended the
 static checker so the documented default matches the REST handler's 200-line
 default instead of the generic paged collection limit default.
+
+## 2026-07-19 Progress - Static Search Status Reason Gate
+
+Extended the static OpenAPI schema checker so the `Search` response schema must
+document the always-emitted `statusReason` field as a required nullable string,
+matching the create, list, and get search response mappers.

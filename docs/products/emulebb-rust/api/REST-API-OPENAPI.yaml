@@ -6732,7 +6732,7 @@ components:
     Search:
       type: object
       unevaluatedProperties: false
-      required: [id, query, method, type, status, items]
+      required: [id, query, method, type, status, statusReason, items]
       properties:
         id:
           type: string
@@ -6748,6 +6748,8 @@ components:
         status:
           type: string
           enum: [running, stopped, complete, error]
+        statusReason:
+          type: [string, "null"]
         items:
           type: array
           description: >
