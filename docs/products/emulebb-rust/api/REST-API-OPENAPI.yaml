@@ -5380,7 +5380,7 @@ components:
             - "null"
     SharedFilePriority:
       type: string
-      enum: [auto, verylow, low, normal, high, release]
+      enum: [auto, not-published, verylow, low, normal, high, release]
     TransferCreateRequest:
       type: object
       additionalProperties: false
