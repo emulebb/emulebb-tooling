@@ -1468,7 +1468,7 @@ paths:
       operationId: reloadSharedDirectories
       responses:
         "200":
-          $ref: "#/components/responses/OkAcceptedResponse"
+          $ref: "#/components/responses/SharedDirectoryReloadResponse"
         "400":
           $ref: "#/components/responses/ErrorResponse"
         "401":
@@ -3013,6 +3013,15 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/OkEnvelope"
+    SharedDirectoryReloadResponse:
+      description: Shared-directory reload operation envelope.
+      headers:
+        X-Contract-Version:
+          $ref: "#/components/headers/ContractVersionHeader"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/SharedDirectoryReloadEnvelope"
     PeerBanResponse:
       description: Peer ban-state operation envelope.
       headers:
@@ -4535,6 +4544,28 @@ components:
         waitingUploads:
           type: integer
           minimum: 0
+        uploadBaseSlots:
+          type: integer
+          minimum: 0
+        uploadElasticSlots:
+          type: integer
+          minimum: 0
+        uploadEffectiveSlotCap:
+          type: integer
+          minimum: 0
+        uploadLimitBytesPerSec:
+          type: integer
+          minimum: 0
+        uploadElasticUnderfillBytesPerSec:
+          type: integer
+          minimum: 0
+        uploadElasticUnderfill:
+          type: boolean
+        uploadUnderfillSinceMs:
+          type:
+            - integer
+            - "null"
+          minimum: 0
         downloadCount:
           type: integer
           minimum: 0
@@ -4544,6 +4575,8 @@ components:
           type: integer
           minimum: 0
         sharedFilesReady:
+          type: boolean
+        sharedFilesComplete:
           type: boolean
         ed2kConnected:
           type: boolean
@@ -4566,6 +4599,8 @@ components:
         available:
           type: boolean
         ready:
+          type: boolean
+        complete:
           type: boolean
         filePresent:
           type: boolean
@@ -4798,8 +4833,9 @@ components:
         startupBlockReason:
           type: string
         publicIp:
-          type: string
-          nullable: true
+          type:
+            - string
+            - "null"
           description: Probe-confirmed public egress IPv4 (from the bound STUN/HTTP probes), when known.
         egressVerified:
           type: boolean
@@ -4822,14 +4858,16 @@ components:
         succeeded:
           type: boolean
         publicIp:
-          type: string
-          nullable: true
+          type:
+            - string
+            - "null"
         provider:
           type: string
           description: Provider URL (HTTP) or STUN server label that answered / was last tried.
         error:
-          type: string
-          nullable: true
+          type:
+            - string
+            - "null"
     GeolocationRuntimeDiagnostics:
       type: object
       additionalProperties: false
@@ -6073,6 +6111,25 @@ components:
           properties:
             data:
               $ref: "#/components/schemas/SharedDirectoryList"
+    SharedDirectoryReloadEnvelope:
+      unevaluatedProperties: false
+      allOf:
+        - $ref: "#/components/schemas/EnvelopeBase"
+        - type: object
+          properties:
+            data:
+              type: object
+              additionalProperties: false
+              required: [ok, started, queued]
+              properties:
+                ok:
+                  type: boolean
+                  const: true
+                started:
+                  type: boolean
+                queued:
+                  type: integer
+                  minimum: 0
     SharedDirectoryList:
       type: object
       additionalProperties: false
@@ -6431,6 +6488,17 @@ components:
           format: date-time
         hostNameError:
           type: [string, "null"]
+        obfuscationTcpPort:
+          type:
+            - integer
+            - "null"
+          minimum: 1
+          maximum: 65535
+        udpFlags:
+          type:
+            - integer
+            - "null"
+          minimum: 0
     ServerStatusEnvelope:
       unevaluatedProperties: false
       allOf:
