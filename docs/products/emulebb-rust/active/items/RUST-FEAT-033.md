@@ -87,7 +87,7 @@ evidence. It is not release sign-off; unchecked items remain blockers for the
 | Early network connection | PARTIAL | Current persisted soak samples show ED2K connected with High ID and Kad connected. Convert this into a repeatable early-connect gate that fails fast instead of waiting for long soak windows. |
 | Shared library persistence | PARTIAL | The 2026-07-22 persisted profile recovery restored 2534 accessible shared roots from the persisted `shareddir.dat`, and conformance no longer clears them. The accidental live `replaceSharedDirectories` conformance call forced a rehash/republish pass, so the release gate still needs a clean restart/reload proof with hashing already settled. |
 | Public upload path | PASS for current live/profile proof; keep monitoring | The regular persisted daemon showed fresh public upload throughput after the 2026-07-22 shared-root recovery: `knownUploadedBytes` rose from 507176960 to 508575907 between 16:24:23Z and 16:32:29Z, upload requests/accepts rose from 2777 to 2782, and a sample showed 13.13 KiB/s while ED2K/Kad stayed connected. Deterministic regular-exe Rust-Rust upload proof also passed at `rust-local-upload/20260722T162200Z` with 4 MiB delivered and max upload speed 272.672 KiB/s. |
-| Download and finished-file delivery | BLOCKER until fresh candidate proof exists | Existing history has multiple live-wire download fixes and completions, but the beta tag needs a current candidate proof that adds a file, downloads, resumes as needed, and delivers by name into `incomingDir` or a category path. |
+| Download and finished-file delivery | PARTIAL | Fresh deterministic regular-exe Rust-Rust proof passed at `rust-local-upload/20260722T164553Z`: the leecher added the ED2K link paused, resumed through REST, completed 4 MiB, and verified the delivered path/bytes. The beta tag still needs public or persisted-profile search/download evidence and a clean restart/reload proof after hashing settles. |
 | Search and publish | PARTIAL | Current soak samples show ED2K visibility and Kad publish counters progressing. The release gate still needs a current search/download proof and a disposition for any weak discoverability evidence. |
 | REST/OpenAPI conformance | PASS for current candidate | `check-rust-rest-openapi-responses.py --rest-coverage-budget contract` passed against the live persisted daemon on 2026-07-22 after the Rust OpenAPI contract and conformance harness were aligned with current response shapes. The harness now skips live-disruptive network, shared-root replacement, server mutation, Kad mutation, log clear, and search-delete routes during contract smoke. |
 | Embedded SPA WebUI | PARTIAL | Mocked WebUI unit/e2e/build gates are green after the polling reduction. Candidate proof still needs the packaged WebUI against the persisted daemon, including status, transfers, uploads, search/download, shared files, servers/Kad, settings, logs, and diagnostics with acceptable idle CPU. |
@@ -98,14 +98,15 @@ evidence. It is not release sign-off; unchecked items remain blockers for the
 
 ## Next Core Feature Focus
 
-The next coding/testing priority is the download gate, because uploads and
-connectivity have current live evidence while download/resume/delivery is the
-largest core user-facing requirement without fresh candidate proof. Work this
-as small slices:
+The next coding/testing priority is the public search/download gate, because
+local download/resume/delivery has fresh deterministic evidence while
+public/persisted-profile search-to-download behavior still needs current proof.
+Work this as small slices:
 
-1. Add or identify a repeatable persisted-profile download smoke that uses the
-   regular daemon and records add-link, source discovery, byte progress, resume,
-   and delivered-file evidence.
+1. Add or identify a repeatable persisted-profile search/download smoke that
+   uses the regular daemon and records search result selection, add-link or
+   search-result download, source discovery, byte progress, resume, and
+   delivered-file evidence.
 2. Run it against the current staged regular executable.
 3. Fix the first reproducible failure in the Rust core or harness, with focused
    tests before another live run.
