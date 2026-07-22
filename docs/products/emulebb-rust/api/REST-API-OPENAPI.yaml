@@ -5168,6 +5168,12 @@ components:
         path:
           type: string
           minLength: 1
+        deliveredPath:
+          type:
+            - string
+            - "null"
+        inIncoming:
+          type: boolean
         sizeBytes:
           type: integer
           minimum: 0
