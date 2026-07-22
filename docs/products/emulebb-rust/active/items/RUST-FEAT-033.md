@@ -75,6 +75,41 @@ target and archive directories outside the source workspace.
       full stock parity where beta backlog remains.
 - [ ] Operator gives the explicit tagging go.
 
+## Current Beta Gate Status (2026-07-22)
+
+This is the working gate map for turning the broad beta goal into executable
+evidence. It is not release sign-off; unchecked items remain blockers for the
+`rust-v0.1.0-beta.1` tag.
+
+| Gate | Current status | Evidence / next proof |
+| --- | --- | --- |
+| Regular headless persisted launch | PASS for current soak profile | `repos/emulebb-build-tests/scripts/start-rust-soak-profile.py --describe` and the staged `launch-client-here.py` resolve to the regular `emulebb-rust.exe` with the persisted profile. The native Slint UI is not a beta launch path. |
+| Early network connection | PARTIAL | Current persisted soak samples show ED2K connected with High ID and Kad connected. Convert this into a repeatable early-connect gate that fails fast instead of waiting for long soak windows. |
+| Shared library persistence | PARTIAL | Current persisted soak profile reloads 64k+ known/shared files without active hashing. Keep this as a restart/reload gate, not just a one-sample observation. |
+| Public upload path | PASS for current live soak; keep monitoring | Current persisted soak samples show active public uploads and non-zero upload speed. The local deterministic upload soak also proves a regular-exe upload path; retain both live and local proof in the release bundle. |
+| Download and finished-file delivery | BLOCKER until fresh candidate proof exists | Existing history has multiple live-wire download fixes and completions, but the beta tag needs a current candidate proof that adds a file, downloads, resumes as needed, and delivers by name into `incomingDir` or a category path. |
+| Search and publish | PARTIAL | Current soak samples show ED2K visibility and Kad publish counters progressing. The release gate still needs a current search/download proof and a disposition for any weak discoverability evidence. |
+| REST/OpenAPI conformance | BLOCKER until candidate command passes | Run the `restOpenApiConformanceCommand` reported by the persisted-profile `--describe` output against the candidate daemon. |
+| Embedded SPA WebUI | PARTIAL | Mocked WebUI unit/e2e/build gates are green after the polling reduction. Candidate proof still needs the packaged WebUI against the persisted daemon, including status, transfers, uploads, search/download, shared files, servers/Kad, settings, logs, and diagnostics with acceptable idle CPU. |
+| Regular logs and diagnostics | PARTIAL | Regular logs now include VPN Guard HTTP/STUN probe attempts and connection/upload state. Before tag, verify a regular-exe log excerpt is enough to diagnose startup, network probe, ED2K/Kad, publish, upload, and download failures without the diagnostics binary. |
+| VPN leak gate | BLOCKER | RUST-FEAT-005 remains release-blocking: CI/socket-truth plus operator wire-truth tunnel-down proof must show zero off-tunnel eD2K/Kad traffic. |
+| Stock-wire parity re-audit | BLOCKER | RUST-REF-004/RUST-CI-002 must leave no undispositioned P0 or stock-wire-critical finding before tag. |
+| Packaging workflow | PARTIAL | Versioning and release-scope decisions are in place. The Windows x64 zip workflow and release artifact contents still need candidate evidence before operator tag approval. |
+
+## Next Core Feature Focus
+
+The next coding/testing priority is the download gate, because uploads and
+connectivity have current live evidence while download/resume/delivery is the
+largest core user-facing requirement without fresh candidate proof. Work this
+as small slices:
+
+1. Add or identify a repeatable persisted-profile download smoke that uses the
+   regular daemon and records add-link, source discovery, byte progress, resume,
+   and delivered-file evidence.
+2. Run it against the current staged regular executable.
+3. Fix the first reproducible failure in the Rust core or harness, with focused
+   tests before another live run.
+
 ## Notes
 
 - Release-output hygiene landed in emulebb-rust commit `0d12f91`; the policy
