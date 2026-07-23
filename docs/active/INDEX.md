@@ -27,6 +27,8 @@ not planned when the roadmap was archived.
 **Latest roadmap/archive refresh:** 2026-07-12
 **Local non-done item inventory:** retained below as engineering/spec archive,
 not workflow authority.
+**Current non-done count:** `129`
+**Non-done by status:** `107` OPEN, `7` IN_PROGRESS, `15` DEFERRED, `0` BLOCKED.
 **Backlog counts:** item tables below are retained for provenance and future
 manual promotion only.
 **0.7.3 release-train relevance:** Most non-done items below are future or

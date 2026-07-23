@@ -109,6 +109,7 @@ nav:
       - Parity Matrix (2026-07-05): products/emulebb-rust/active/PARITY-MATRIX-2026-07-05.md
       - Parity Review (2026-07-05): products/emulebb-rust/active/PARITY-REVIEW-2026-07-05.md
       - Soak Runbook 0.1.0-beta.1: products/emulebb-rust/active/SOAK-RUNBOOK-0.1.0-beta.1.md
+      - Soak Upload/Download Gap Analysis: products/emulebb-rust/active/RUST-SOAK-UPLOAD-DOWNLOAD-GAP-ANALYSIS.md
       - Source And Backlog (GitHub): https://github.com/emulebb/emulebb-rust
   - qBittorrentBB (Companion):
       - Torrent Export & DHT Harvest (GitHub): https://github.com/emulebb/qbittorrentbb/blob/master/docs/BB-TORRENT-EXPORT-AND-HARVEST.md
