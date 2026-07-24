@@ -6203,20 +6203,12 @@ components:
     SharedDirectoryList:
       type: object
       additionalProperties: false
-      required: [items, roots, monitorOwned, hashingCount, reloadProgress]
+      required: [roots, hashingCount, reloadProgress]
       properties:
-        items:
-          type: array
-          items:
-            $ref: "#/components/schemas/SharedDirectory"
         roots:
           type: array
           items:
             $ref: "#/components/schemas/SharedDirectory"
-        monitorOwned:
-          type: array
-          items:
-            type: string
         hashingCount:
           type: integer
           minimum: 0
@@ -6234,13 +6226,11 @@ components:
     SharedDirectory:
       type: object
       additionalProperties: false
-      required: [path, monitorOwned, shareable, accessible]
+      required: [path, shareable, accessible]
       description: Shared directories are configured as folder trees; every root is recursively scanned and monitored.
       properties:
         path:
           type: string
-        monitorOwned:
-          type: boolean
         shareable:
           type: boolean
         accessible:
