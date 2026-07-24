@@ -5231,11 +5231,13 @@ components:
           type: string
         path:
           type: string
+          description: User-facing file path; Windows verbatim long-path prefixes are not exposed.
           minLength: 1
         deliveredPath:
           type:
             - string
             - "null"
+          description: User-facing delivered file path; Windows verbatim long-path prefixes are not exposed.
         inIncoming:
           type: boolean
         sizeBytes:
@@ -5790,6 +5792,7 @@ components:
           type: string
         path:
           type: string
+          description: User-facing shared file path; Windows verbatim long-path prefixes are not exposed.
         sizeBytes:
           type: integer
           minimum: 0
@@ -5805,6 +5808,7 @@ components:
           type: string
         directory:
           type: string
+          description: User-facing shared file directory; Windows verbatim long-path prefixes are not exposed.
         autoUploadPriority:
           type: boolean
         allTimeRequests:
@@ -6015,6 +6019,7 @@ components:
           type: string
         path:
           type: string
+          description: User-facing file path; Windows verbatim long-path prefixes are not exposed.
         name:
           type: string
         sizeBytes:
@@ -6064,6 +6069,7 @@ components:
           type: string
         path:
           type: string
+          description: User-facing file path; Windows verbatim long-path prefixes are not exposed.
         name:
           type: string
         sizeBytes:
@@ -6114,6 +6120,7 @@ components:
           type: string
         path:
           type: string
+          description: User-facing file path; Windows verbatim long-path prefixes are not exposed.
         name:
           type: string
         sizeBytes:
@@ -6164,6 +6171,7 @@ components:
           type:
             - string
             - "null"
+          description: User-facing current file path; Windows verbatim long-path prefixes are not exposed.
         currentName:
           type:
             - string
@@ -6231,6 +6239,7 @@ components:
       properties:
         path:
           type: string
+          description: User-facing root path; Windows verbatim long-path prefixes are not exposed.
         shareable:
           type: boolean
         accessible:
