@@ -1,6 +1,7 @@
 ---
 id: RUST-CI-003
-workflow: local
+workflow: github
+github_issue: https://github.com/emulebb/emulebb-rust/issues/15
 title: Wire the Rust /api/v1 OpenAPI conformance/drift check into CI
 status: OPEN
 priority: Minor

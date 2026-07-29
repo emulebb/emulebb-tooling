@@ -1,6 +1,7 @@
 ---
 id: RUST-FEAT-036
-workflow: local
+workflow: github
+github_issue: https://github.com/emulebb/emulebb-rust/issues/16
 title: Settings UI v2 - profile settings and beta-ready controls
 status: OPEN
 priority: Critical
