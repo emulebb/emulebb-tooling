@@ -38,7 +38,8 @@ rationalization.
   `RUST-BUG-001`, `RUST-FEAT-001`, `RUST-FEAT-003`, and `RUST-FEAT-005`.
 - Forward product work remains in `RUST-FEAT-002`, `RUST-FEAT-004`,
   `RUST-FEAT-006`, and `RUST-FEAT-007`; those are not blockers for core parity
-  closure.
+  closure. The 2026-09-25 beta decision separately promotes `RUST-FEAT-006`
+  to a release-packaging gate; it does not change the core parity criterion.
 
 ## Intended Shape
 

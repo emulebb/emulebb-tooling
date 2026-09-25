@@ -18,8 +18,9 @@ source: Operator decision 2026-07-05; product-direction reset 2026-07-08; WORKSP
 
 ## Summary
 
-Ship the first usable emulebb-rust release: an unsigned Windows x64 zip built
-by a GitHub Actions release workflow, tagged `rust-v0.1.0-beta.1`, with the
+Ship the first usable emulebb-rust release: unsigned Windows ZIPs, Linux
+DEBs/AppImages, macOS app-in-DMGs (x64 and ARM64 on each OS), and a two-arch
+GHCR image built by GitHub Actions, tagged `rust-v0.1.0-beta.1`, with the
 supported, permanent-drop, deferred, and beta-backlog surface documented
 unambiguously. Release publication is **workflow-only by operator direction
 (2026-07-05)**. The workflow-owned packaging helper requires explicit absolute
@@ -30,36 +31,37 @@ target and archive directories outside the source workspace.
 - Version `0.1.0-beta.1` (`[workspace.package]`, own semver line decoupled from
   MFC `0.7.x`/`0.8.x` and from the REST `x-contract-version`).
 - Tag scheme `rust-vX.Y.Z[-pre.N]`, distinct from MFC `emulebb-v*`.
-- Artifact `emulebb-rust-v<version>-windows-x64.zip` + `SHA256SUMS`, always
-  unsigned.
+- Native artifacts cover x64 and ARM64 on Windows, Linux, and macOS; all are
+  unsigned, and macOS DMGs are unnotarized. The combined set has `SHA256SUMS`,
+  manifests, and SBOMs.
 - Embedded SPA WebUI proof is required for beta acceptance. TrackMuleBB is
   parked future controller work and is not tagged, packaged, or required for
   this first Rust prerelease.
 - The annotated tag is created only after stock-parity, safety, REST-contract,
   WebUI, and soak evidence review plus an explicit operator go.
+- The Rust REST contract remains unstable between betas. Native VPN-safe claims
+  are deferred; direct routing is explicit and Docker-over-Gluetun is the beta
+  VPN deployment with a separate fail-closed test.
+- Both x64 deep campaigns must finish a small approved Linux document; one
+  must also finish a Linux ISO. Local deterministic Rust upload is sufficient,
+  while a stock-identifying public peer must supply accepted download bytes.
 
 ## Intended Shape
 
-1. **Scope doc** `docs/RELEASE-SCOPE.md` - the human-facing authority:
-   supported surface; SX1 as the only pre-approved permanent drop; explicit
-   deferred backlog; beta-allowed parity backlog; platform tier (Windows x64
-   release-supported; Linux runtime-proven unpackaged; macOS compile-only).
-2. **Version bump** `0.0.3` -> `0.1.0-beta.1` + regenerated `Cargo.lock`.
-3. **Release workflow** `.github/workflows/release.yml` on `rust-v*` tags:
-   windows runner, `cargo build --release --locked -p emulebb-daemon` with
-   default features (assert the `egress-audit` test feature is absent from the
-   resolved feature set), stage exe + `emulebb-rust.example.toml` (fail-closed
-   VPN defaults verified) + `RELEASE-SCOPE.md` + `LICENSE`, zip + `SHA256SUMS`,
-   attach to the GitHub release. Cargo output and staged release artifacts use
-   runner-temporary directories rather than `target/` or `dist/` in the source
-   checkout.
-4. **Release documentation:** version-specific changelog (compact
-   one-line-per-item, operational focus) + source-run WebUI instructions.
+1. **Scope doc** `RELEASE-SCOPE.md` records the usable eD2K/Kad/WebUI surface,
+   omissions, deferred work, unstable REST API, selected-route safety, and the
+   six native package targets plus the Docker image.
+2. **Release workflow** builds and retains candidate artifacts on manual runs;
+   after the separate approved tag, all six native package jobs and two-arch
+   image jobs must pass before publication. Output stays outside source trees.
+3. **Release documentation** includes a version-specific changelog,
+   first-run/API-key instructions, unsigned macOS launch steps, and the isolated
+   Gluetun deployment example.
 
 ## Release Gate (all must hold before the tag)
 
-- [ ] RUST-FEAT-005 fail-closed VPN leak gate passes in CI and candidate
-      evidence.
+- [ ] Docker-over-Gluetun tunnel-down proof records zero off-tunnel P2P egress;
+      no native VPN-safe claim is made.
 - [ ] RUST-REF-004 re-audits every non-SX1 registry entry with no
       undispositioned P0 or stock-wire-critical findings.
 - [ ] RUST-CI-003 OpenAPI conformance/drift gate passes against the Rust-forward
@@ -71,15 +73,21 @@ target and archive directories outside the source workspace.
       firewall-check, HighID + LowID, finished-file delivery, and sustained REST
       responsiveness. emulebb-mfc may be a frozen witness but is not the product
       parity target.
+- [ ] Fresh no-share direct campaigns on Windows x64 and WSL Ubuntu x64 each
+      finish an approved small Linux document; one also finishes an approved
+      Linux ISO, with exact SHA-256 verification and stock-identifying peer
+      file-block bytes. Local Rust/MFC upload and download are deterministic.
+- [ ] Each of the six native packages passes install/launch, every current
+      WebUI panel, local transfer, and shutdown smoke. The amd64/arm64 image
+      passes ownership, persistence, and Gluetun isolation checks.
 - [ ] `RELEASE-SCOPE.md` matches the re-audit dispositions and does not imply
       full stock parity where beta backlog remains.
 - [ ] Operator gives the explicit tagging go.
 
-## Current Beta Gate Status (2026-07-22)
+## Historical Gate Snapshot (2026-07-22)
 
-This is the working gate map for turning the broad beta goal into executable
-evidence. It is not release sign-off; unchecked items remain blockers for the
-`rust-v0.1.0-beta.1` tag.
+This snapshot predates the 2026-09-25 six-target and Docker beta decisions.
+It is historical evidence, not the current release gate or sign-off.
 
 | Gate | Current status | Evidence / next proof |
 | --- | --- | --- |
@@ -119,4 +127,4 @@ Work this as small slices:
   checker and packaging-helper tests guard the external-output requirement.
 - The INDEX scope note "emulebb-rust is out of RC2 ship scope" remains true for
   the MFC RC2 train; this item creates the rust client's own release gate.
-- Docker/GHCR (RUST-FEAT-006) intentionally stays out of this release.
+- Docker/GHCR (RUST-FEAT-006) is now part of this beta's release gate.

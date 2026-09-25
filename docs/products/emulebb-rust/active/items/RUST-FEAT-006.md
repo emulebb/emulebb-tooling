@@ -7,7 +7,7 @@ status: OPEN
 priority: Major
 category: feature
 labels: [docker, ghcr, packaging, bundle]
-milestone: phase-2
+milestone: release-0.1.0-beta.1
 created: 2026-06-16
 source: SUITE-DOCKER design (2026-06-16)
 ---
@@ -38,13 +38,18 @@ Docker form of the bundle cannot start. It is the eD2K core in the container set
 - Runs behind an **optional Gluetun** namespace (`network_mode: "service:gluetun"`);
   no own ports — `/api/v1` + eD2K TCP + Kad UDP are published on the fronting
   service.
-- amd64 first; multi-arch later.
+- linux/amd64 and linux/arm64 in beta.1; publish the versioned beta tag only,
+  reserving `latest` for a stable release.
+- Use an independent Gluetun instance and configuration for release proof;
+  never edit or restart the operator's existing P2P stack.
 
 ## Acceptance Criteria
 
-- [ ] CI builds and pushes `ghcr.io/emulebb/emulebb-rust:latest` + a version tag on release.
+- [ ] CI builds and pushes `ghcr.io/emulebb/emulebb-rust:0.1.0-beta.1`
+      as a two-architecture manifest after native packages and image smoke pass.
 - [ ] Image honours `PUID`/`PGID`/`TZ`; state under `/config`, downloads under `/data`.
 - [ ] `/api/v1` + eD2K TCP + Kad UDP reachable when ports are published on a fronting service.
+- [ ] A separate Gluetun tunnel-down test records zero off-tunnel P2P egress.
 
 ## Notes
 

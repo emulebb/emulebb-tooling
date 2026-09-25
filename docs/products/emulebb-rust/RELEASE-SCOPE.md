@@ -40,10 +40,11 @@ history, while current defers and approved drops remain in
 - **Sharing:** sharing is configured only by shared folder roots. Each root is a
   monitored folder tree and is always scanned recursively; single-file sharing
   and non-recursive folder sharing are not supported Rust surfaces.
-- **Safety:** fail-closed VPN egress pinning of every P2P socket to the tunnel
-  interface (`IP_UNICAST_IF`); with the tunnel down, zero P2P data-plane traffic
-  and the control plane still answers (RUST-FEAT-003 pin + RUST-FEAT-005 leak
-  test).
+- **Routing:** native packages support an explicitly selected direct route;
+  direct mode makes no anonymity promise. The supported beta VPN deployment is
+  the Docker image sharing a Gluetun network namespace. Gluetun tunnel-down
+  egress proof is required before that mode is claimed safe. Native VPN binding
+  remains experimental until its own egress pin and leak gate are proven.
 - **Control plane:** the Rust-forward `/api/v1` REST contract
   (`x-contract-version`), API-key auth, and embedded SPA WebUI operation. The
   frozen emulebb-mfc REST contract is not a forward compatibility constraint,
@@ -53,7 +54,7 @@ history, while current defers and approved drops remain in
   they make the contract cleaner, provided the owned consumers and conformance
   evidence move in the same change. Do not keep no-op legacy settings fields,
   legacy route names, or compatibility aliases for non-existent external Rust
-  consumers.
+  consumers. The contract is explicitly unstable between beta releases.
 - **Runtime IO:** broadband-oriented async IO is the daemon baseline, not a
   compatibility preference or runtime toggle.
 - **Persistence:** single SQLite store (the `known.met` / `clients.met` /
@@ -124,7 +125,7 @@ promotes it to a beta blocker:
   scheduler) by design.
 - **Autonomous indexer + Torznab** (RUST-FEAT-002) and **Arr integration**
   (RUST-FEAT-004).
-- **Docker/GHCR image** (RUST-FEAT-006) and **REST SSE push** (RUST-FEAT-007).
+- **REST SSE push** (RUST-FEAT-007).
 - **Parser fuzzing** — cargo-fuzz targets for the hand-rolled binary parsers.
 - **Alternate UPnP-IGD NAT backend** — `nat/igd.rs` is a stub; the miniupnpc
   backend is the supported one.
@@ -147,7 +148,8 @@ promotes it to a beta blocker:
 not with unresolved P0 safety or critical stock-wire parity findings. The beta
 gate is:
 
-- automated fail-closed VPN leak proof is passing;
+- isolated Docker-over-Gluetun tunnel-down proof shows zero off-tunnel P2P
+  egress; native VPN-safe claims remain deferred;
 - stock eMule wire-critical parity review has no undispositioned P0 findings;
 - the non-SX1 omission re-audit has an explicit backlog disposition for every
   registered divergence;
@@ -155,14 +157,29 @@ gate is:
 - the embedded SPA WebUI is green against the candidate daemon for status,
   transfers, uploads, search/download, shared files, servers/Kad, settings,
   logs, and diagnostics.
+- diagnostics-first, no-share, bounded public-network campaigns on Windows x64
+  and WSL Ubuntu x64 pass. Each completes and SHA-256-verifies an approved small
+  Linux document; at least one completes an approved Linux ISO. A stock-
+  identifying live peer supplies accepted file-block bytes. Local deterministic
+  Rust-to-MFC upload and MFC-to-Rust download pass.
+- packaged native startup, every current WebUI panel, local transfer, and clean
+  shutdown pass on Windows, Linux, and macOS, x64 and ARM64. The amd64/arm64
+  image passes persistence, permissions, and Gluetun isolation checks.
 
-The published prerelease artifact is the emulebb-rust Windows x64 zip.
+The published prerelease assets are unsigned Windows x64/ARM64 ZIPs, Linux
+amd64/arm64 DEBs, Linux x86_64/aarch64 AppImages, unsigned and unnotarized macOS
+x64/ARM64 app-in-DMGs, and a versioned GHCR Linux amd64/arm64 image. The image
+uses s6-overlay, `PUID`/`PGID`/`TZ`, `/config`, and `/data`; its beta tag is not
+`latest`. An independent Gluetun test stack must leave the operator's running
+P2P stack untouched.
 TrackMuleBB is parked and is not tagged, packaged, or required for this first
 Rust beta.
 
 ## Platform tier
 
-- **Windows x64** — release-supported (the distributed artifact).
-- **Linux** — runtime-proven (WSL2 Ubuntu) but not packaged in this release.
-- **macOS** — compile/test-viable only (one behavioral FS-watcher test is skipped
-  there; see `shared_dir_monitor_e2e.rs`).
+- **Windows x64 and ARM64** — portable ZIPs; x64 also receives the deep public
+  live campaign.
+- **Linux x64 and ARM64** — DEB and AppImage; WSL2 Ubuntu x64 also receives the
+  deep public live campaign.
+- **macOS x64 and ARM64** — unsigned, unnotarized app-in-DMG; native packaged
+  smoke only, not a public-network soak.

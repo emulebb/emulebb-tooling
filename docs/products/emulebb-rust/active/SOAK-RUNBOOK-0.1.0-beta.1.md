@@ -1,4 +1,10 @@
-# Converged Soak Runbook — `rust-v0.1.0-beta.1` release gate
+# Historical Converged VPN Soak Runbook — `rust-v0.1.0-beta.1`
+
+> This 2026-07-08 VPN-era procedure is retained as historical diagnostic
+> context. It is not the 2026-09-25 beta release gate. The current gate is
+> [RUST-FEAT-033](items/RUST-FEAT-033.md): fresh no-share direct Windows and
+> WSL Ubuntu campaigns plus an isolated Docker-over-Gluetun leak test. Do not
+> run this persisted shared-library/hide.me campaign as beta sign-off.
 
 RUST-FEAT-033 release gate. This is the operator-driven live validation that
 must pass before the `rust-v0.1.0-beta.1` tag. After the 2026-07-08 direction
