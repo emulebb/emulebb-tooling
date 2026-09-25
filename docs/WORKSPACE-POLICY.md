@@ -412,6 +412,21 @@ Canonical workspace variables:
 - `CARGO_TARGET_DIR` is set by orchestration to
   `EMULEBB_WORKSPACE_OUTPUT_ROOT\builds\rust\target` for orchestrated Rust
   builds; do not redirect Rust output back inside a repo tree.
+- Windows is the authoritative operator environment for WSL runs launched from
+  the canonical Windows workspace. A persisted Python launcher may pass an
+  already-valid Windows workspace root and output root to its WSL child after
+  translating them to WSL paths. This is boundary propagation, not an override:
+  the launcher must not mutate the parent environment, persist duplicate WSL
+  configuration, or invent a missing source value, and the run evidence must
+  record the source-to-child translation.
+- Windows and Linux Cargo builds must not share a target directory. A WSL
+  launcher that compiles Rust derives a WSL-specific target below the translated
+  output root (for example `builds/rust/target-wsl`). A WSL runner that only
+  executes an already-staged Linux binary does not require `CARGO_TARGET_DIR`.
+- `X_LOCAL_IP` crosses into WSL only for lanes that expose LAN-bound control or
+  probe traffic. A fully loopback-contained WSL control plane may omit it; its
+  P2P bind is a separate setting and may be selected from the effective WSL
+  route when the lane is explicitly address-bound.
 
 Toolchain override knobs (shell or CI boundary only; leave unset for release and
 CI unless the run evidence records why an override was needed):
@@ -653,6 +668,12 @@ swarm. If this fails once in public, it breaks the product's core trust claim.
   P2P UPnP preference and bind the P2P stack through `hide.me` by writing
   `BindInterface=hide.me`.
 - Public network live-test harnesses must not write `hide.me` into `BindAddr`.
+- The explicitly selected Rust WSL direct-beta smoke is a bounded exception to
+  the VPN-interface rule: it may use the effective WSL route with VPN Guard off
+  when the operator authorizes that lane, provided the profile is fresh, REST
+  stays on loopback, shared roots are empty, downloads are exact allowlisted
+  Linux-distribution artifacts with expected sizes and SHA-256 digests, and the
+  harness always tears the daemon down and preserves run evidence.
 - Public network live-test profiles must enable VPN Guard
   (`VpnGuardMode=Block`) unless the scenario explicitly exists to prove
   guard-off behavior. Empty `VpnGuardAllowedPublicIpCidrs` is allowed for

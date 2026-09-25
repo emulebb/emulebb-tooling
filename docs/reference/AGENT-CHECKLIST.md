@@ -48,6 +48,11 @@ conflict, policy wins.
   `EMULEBB_WORKSPACE_OUTPUT_ROOT`, `CARGO_TARGET_DIR`, or `X_LOCAL_IP` inline.
   If a live/build/profile task needs one and it is missing or wrong, stop and
   report the preflight failure.
+- A persisted Python WSL launcher may translate and pass already-valid Windows
+  operator paths to its WSL child as described by Workspace Policy. It must
+  leave the parent environment unchanged and record the translation. Do not
+  require `CARGO_TARGET_DIR` for a run-only staged-binary lane or `X_LOCAL_IP`
+  for a loopback-contained WSL control plane.
 - Do not use `stale/*` branches as active work targets unless the task is
   explicitly historical analysis.
 
@@ -146,6 +151,10 @@ python -m mkdocs build --strict
   running them.
 - Public network live tests that launch an eMule profile must enable the main
   P2P UPnP preference and bind through `BindInterface=hide.me`.
+- The operator-authorized Rust WSL direct-beta smoke is the bounded exception:
+  effective-route P2P binding, VPN Guard off, loopback-only REST, no shared
+  roots, exact allowlisted Linux artifacts, automatic teardown, and retained
+  evidence are mandatory.
 - Do not write `hide.me` into `BindAddr`.
 - Enable VPN Guard for public VPN live profiles unless the lane explicitly
   tests guard-off behavior. Empty VPN Guard CIDRs are valid interface-only
