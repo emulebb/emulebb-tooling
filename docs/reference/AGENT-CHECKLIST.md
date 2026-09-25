@@ -149,16 +149,18 @@ python -m mkdocs build --strict
 
 - Separate public network live tests from local live-stack tests before
   running them.
-- Public network live tests that launch an eMule profile must enable the main
-  P2P UPnP preference and bind through `BindInterface=hide.me`.
-- The operator-authorized Rust WSL direct-beta smoke is the bounded exception:
-  effective-route P2P binding, VPN Guard off, loopback-only REST, no shared
-  roots, exact allowlisted Linux artifacts, automatic teardown, and retained
-  evidence are mandatory.
-- Do not write `hide.me` into `BindAddr`.
-- Enable VPN Guard for public VPN live profiles unless the lane explicitly
-  tests guard-off behavior. Empty VPN Guard CIDRs are valid interface-only
-  coverage; configured CIDRs add public-exit validation.
+- Select VPN or direct P2P routing explicitly for public tests; VPN is optional,
+  and VPN mode must never silently fall back to direct. Use VPN Guard in VPN
+  mode and disable it only for an explicitly selected direct/guard-off lane.
+- Direct Rust beta smoke on Windows or WSL requires a fresh isolated profile,
+  no shared roots, exact safe hash/size/SHA-256 allowlisting, bounded execution,
+  automatic teardown, and retained evidence. WSL REST stays on loopback;
+  Windows control uses `X_LOCAL_IP` on the canonical split-tunnel machine.
+- Do not write an interface name into `BindAddr`; use `BindInterface` for VPN
+  mode and `BindAddr` only for intentional address-bound direct mode.
+- Enable main P2P UPnP when supported by the selected public route and capture
+  mapping/reachability evidence. Empty VPN Guard CIDRs are valid interface-only
+  VPN coverage; configured CIDRs add public-exit validation.
 - Public VPN live campaigns need operator-local VPN Guard live config for
   provider connect/allow-list/check/restore hooks. LAN-only local eD2K/Kad
   lanes do not need VPN Guard.

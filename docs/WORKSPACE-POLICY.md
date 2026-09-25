@@ -664,20 +664,23 @@ swarm. If this fails once in public, it breaks the product's core trust claim.
   terms.
 - Local live-stack tests run only against deterministic workspace-owned
   services and clients.
-- Public network live tests that launch an eMule profile must enable the main
-  P2P UPnP preference and bind the P2P stack through `hide.me` by writing
-  `BindInterface=hide.me`.
-- Public network live-test harnesses must not write `hide.me` into `BindAddr`.
-- The explicitly selected Rust WSL direct-beta smoke is a bounded exception to
-  the VPN-interface rule: it may use the effective WSL route with VPN Guard off
-  when the operator authorizes that lane, provided the profile is fresh, REST
-  stays on loopback, shared roots are empty, downloads are exact allowlisted
-  Linux-distribution artifacts with expected sizes and SHA-256 digests, and the
-  harness always tears the daemon down and preserves run evidence.
-- Public network live-test profiles must enable VPN Guard
-  (`VpnGuardMode=Block`) unless the scenario explicitly exists to prove
-  guard-off behavior. Empty `VpnGuardAllowedPublicIpCidrs` is allowed for
-  interface-only guard coverage; configured CIDRs add public-exit validation.
+- Public network live tests must select their P2P route explicitly. A VPN is
+  optional: VPN-mode profiles bind through the selected VPN interface and use
+  VPN Guard (`VpnGuardMode=Block`); direct-mode profiles bind to the effective
+  host route and use VPN Guard off. Never silently fall back from VPN mode to
+  direct mode. Public profiles enable the main P2P UPnP preference when the
+  selected route supports UPnP; record mapping and reachability evidence.
+- Public network harnesses must not write an interface name into `BindAddr`.
+  VPN-mode profiles use `BindInterface`; intentionally address-bound direct
+  profiles use `BindAddr` and leave `BindInterface` empty.
+- A direct Rust beta test on Windows or WSL must be explicitly selected, use a
+  fresh isolated profile, keep shared roots empty, and download only exact
+  operator-approved safe hashes with expected sizes and SHA-256 digests. REST
+  stays on loopback in WSL; on the canonical Windows split-tunnel machine its
+  control plane uses `X_LOCAL_IP` as required below. The persisted harness must
+  bound traffic and runtime, tear the daemon down, and preserve local evidence.
+- Empty `VpnGuardAllowedPublicIpCidrs` is valid for VPN interface-only guard
+  coverage; configured CIDRs add public-exit validation.
 - Public VPN live campaigns must take VPN Guard live configuration from
   operator-local inputs so the harness can connect, allow-list, verify, and
   restore the split-tunnel provider state. LAN-only suites such as local eD2K
