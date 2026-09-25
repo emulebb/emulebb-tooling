@@ -14,7 +14,7 @@ of per-repo folklore. Tiers are defined in [PRODUCT-PORTFOLIO](PRODUCT-PORTFOLIO
 | Supply chain | ✅ cargo-deny advisories | dependency-review | dependency-review | — | dependency-review |
 | Policy guard | ✅ rust-client policy | fork hygiene (output-root, env, bind) | workspace validate | — | workspace validate |
 | Privacy guard | ✅ no private data / titles | ✅ | ✅ | ✅ | ✅ tracked-file-privacy-guard |
-| **Leak-test (networked)** | ✅ **release-blocking** | ✅ **release-blocking** | required for live profiles | n/a (local-only) | n/a |
+| **VPN leak-test** | ✅ before VPN-safe release | ✅ before VPN-safe release | required for VPN live profiles | n/a (local-only) | n/a |
 | Docs/normalization | ✅ LF + docs checks | ✅ | ✅ | ✅ | ✅ |
 
 ✅ = required to merge/release · ⛔ = intentionally not gated yet · — = not applicable
@@ -34,9 +34,9 @@ of per-repo folklore. Tiers are defined in [PRODUCT-PORTFOLIO](PRODUCT-PORTFOLIO
 - **Invest by tier, not by history.** Core/Companion carry the strongest gates; the
   MFC app gets maintenance gates only on the shipping `0.7.x` line (heavier gates
   return with the `0.8.x` modernization line); Lab stays light until promoted.
-- **The leak-test is non-negotiable for any networked product** — it is the
-  automated form of the P0 Network Safety invariant
-  ([WORKSPACE-POLICY](../WORKSPACE-POLICY.md#network-safety-no-clearnet-leak-p0-invariant)).
+- **VPN-mode leak proof is non-negotiable before a VPN-safe claim or release.**
+  Explicitly selected direct-mode betas must be labeled as direct, not anonymous
+  ([WORKSPACE-POLICY](../WORKSPACE-POLICY.md#network-safety-selected-route-integrity-p0-invariant)).
 - **A non-blocking gate must have an owning item** (e.g. `RUST-BUG-001`) so it is
   visible debt, never silent.
 - New networked products inherit the Core/Companion bar at promotion time (see

@@ -31,13 +31,16 @@ cognitive load of a 14-repo workspace and makes ownership of each decision obvio
 | `emulebb-build-tests` | Infra | active | — | tooling |
 | `emulebb-tooling` | Infra | active | this repo | tooling |
 | `emulebb-setup` | Infra | active | — | tooling |
-| `amule` | Vendored-fork | build track | — | — |
+| `emulebb/amule` | Vendored-fork | optional Windows build track; manual checkout | — | — |
 | `emulebb-miniupnp` | Vendored-fork | build track | — | — |
 | `emulebb-pages` / `emulebb-org-profile` | Infra (public) | active | — | — |
 | `p2p-overlord-*` | Separate family | out of scope | own repos | — |
 
 Stage notes (decision 2026-07-12):
 
+- Upstream `amule-org/amule` is a separate, maintained cross-platform client.
+  Its `analysis/amule` checkout is a source/fixture reference, not a product
+  tier, runtime test requirement, or replacement for the eMuleBB fork.
 - `emulebb-rust` is the active forward lane: headless client stabilization plus
   embedded SPA WebUI.
 - `emulebb` (MFC) closes the 0.7.x line at 0.7.3 and stays frozen except for

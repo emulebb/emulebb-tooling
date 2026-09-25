@@ -3,14 +3,14 @@
 This guide explains how to run or use eMuleBB on macOS and Linux. For the normal
 Windows desktop path, start with the [Setup Guide](GUIDE-SETUP.md) instead.
 
-## Why There Is No Native macOS Or Linux Build
+## Why The MFC Desktop Client Has No Native macOS Or Linux Build
 
-eMuleBB is a Windows desktop application built on MFC and the Win32 API. MFC is a
-Microsoft-proprietary, Windows-only framework, and its source is not
-redistributable, so eMuleBB cannot be recompiled natively for macOS or Linux the
-way a portable toolkit app could.
+The eMuleBB MFC desktop client is a Windows application built on MFC and the
+Win32 API. MFC is a Microsoft-proprietary, Windows-only framework, and its
+source is not redistributable, so that client cannot be recompiled natively for
+macOS or Linux the way a portable toolkit app could.
 
-Running eMuleBB on those systems therefore means one of four things:
+Running the MFC client on those systems therefore means one of four things:
 
 - run a Windows guest in a virtual machine (highest fidelity),
 - run the Windows binary on a compatibility layer such as Wine (community,
@@ -19,8 +19,8 @@ Running eMuleBB on those systems therefore means one of four things:
   REST API and controllers, or
 - use a different client that is natively cross-platform.
 
-The native cross-platform future for the eMuleBB family is the separate
-`emulebb-rust` core, summarized at the end of this guide.
+The separate `emulebb-rust` client is the native cross-platform direction for
+the eMuleBB family, summarized at the end of this guide.
 
 ## Option A: Windows Virtual Machine (Recommended)
 
@@ -129,28 +129,26 @@ P2P engine still runs on Windows; only the control plane is remote. See
 
 ## Option D: aMule (Native, Different Client)
 
-If your goal is to use the eD2K and Kad network natively on macOS or Linux today,
-aMule is a mature wxWidgets client for exactly that. Because eMuleBB stays
-stock-compatible at the eD2K and Kad wire layer, aMule and eMuleBB peers
-interoperate normally.
+If your goal is to use the eD2K and Kad network natively on macOS or Linux
+today, aMule is a maintained, cross-platform wxWidgets client for exactly that.
+Because eMuleBB stays stock-compatible at the eD2K and Kad wire layer, aMule
+and eMuleBB peers interoperate normally.
 
 The trade-off is that aMule is a different client: you do not get eMuleBB-specific
-features such as the broadband upload-slot controller, the REST API, or the
-aMuTorrent and Arr integration.
+features such as the broadband upload-slot controller or the eMuleBB MFC/Rust
+REST contracts and integrations. Current upstream aMule has its own REST API and
+WebUI; these are not eMuleBB controller compatibility surfaces. In this workspace,
+`analysis/amule` is an upstream source/fixture reference, separate from the
+optional eMuleBB Windows-build fork.
 
 ## Native Cross-Platform Future: emulebb-rust
 
-`emulebb-rust` is an ongoing, separate effort: a headless eMuleBB-family core
-client with local indexing. It implements the common eMuleBB `/api/v1` REST
-contract directly so it can sit behind controllers such as aMuTorrent.
-
-The current `0.0.3` scope targets the search, share, download, upload, queue,
-eD2K, Kad, persistence, and controller surface needed for a real local client,
-with local SQLite/FTS indexing surfaced through the existing search and
-shared-file resources. It is not full eMule application parity, and it is not a
-shipped product. As a headless, portable core it is the long-term native answer
-for Linux and macOS, in contrast to the virtual-machine, Wine, and remote-control
-options above.
+`emulebb-rust` is a separate Rust-native eD2K/Kad client with a headless daemon,
+local indexing, its own `/api/v1` contract, and an embedded SPA WebUI. It is not
+a line-by-line MFC port or a shared-contract backend for the frozen aMuTorrent
+controller. Windows, Linux, and macOS CI build artifacts exist, but platform
+runtime and public-network transfer claims require their own proof. It is not
+yet the stable MFC package replacement.
 
 For the authoritative capability boundary, see the
-[eMuleBB Rust scope](../active/EMULEBB-RUST-SCOPE.md).
+[eMuleBB Rust release scope](../products/emulebb-rust/RELEASE-SCOPE.md).

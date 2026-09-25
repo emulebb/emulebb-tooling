@@ -56,14 +56,15 @@ scope and pull in support repos only when the task needs them.
 ## Product-Family Repositories
 
 These repos are managed by the workspace but remain peer products or tools, not
-subdirectories of the eMuleBB app.
+subdirectories of the eMuleBB app. `repos/amule` is the documented exception:
+an optional manual fork checkout, not a default setup-managed repo.
 
 | Path | Branch | Role | Validation |
 |---|---|---|---|
 | `repos/amutorrent` | `main` | aMuTorrent controller UI fork. | Node checks; live UI harness |
 | `repos/qbittorrentbb` | `master` | qBittorrentBB companion fork. | product-family quality checks |
 | `repos/goed2k-server` | `master` | Active Go eD2K server fork. | `go test ./...` |
-| `repos/amule` | `master` | aMule fork for eMuleBB-published builds. | package/rebase checks |
+| `repos/amule` | `master` | Optional manual eMuleBB aMule Windows-build fork. | package/rebase checks when present |
 | `repos/p2p-overlord-agents` | `develop` | Rust p2p-overlord agent code. | `cargo fmt --all --check` |
 | `repos/p2p-overlord-be` | `develop` | p2p-overlord backend/coordinator. | `npm run quality` |
 | `repos/p2p-overlord-tooling` | `develop` | p2p-overlord scenario catalog and pytest tooling. | future shared campaign adapter |
@@ -96,6 +97,7 @@ setup, but they are not edited as part of normal product work.
 |---|---|
 | `analysis/community-0.60` | Community eMule 0.60 reference |
 | `analysis/community-0.72` | Community eMule 0.72 reference |
+| `analysis/amule` | Maintained `amule-org/amule` upstream source and offline-fixture reference (optional `--include-analysis`) |
 | `analysis/mods-archive` | Archived mod source corpus |
 | `analysis/stale-v0.72a-experimental-clean` | Historical eMuleBB branch snapshot for comparison |
 | `analysis/emuleai` | eMuleAI comparison source |

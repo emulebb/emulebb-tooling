@@ -6,9 +6,13 @@ complete, clean test suite where code is reused, repeated operations live in
 dedicated modules, end-to-end coverage is strong, and a release's gating set is
 clearly separated from reference-only tests kept on demand.
 
+VPN setup and leak-proof requirements below apply to explicitly selected
+VPN-mode lanes. Direct-mode lanes remain available only when deliberately
+selected and labeled; they must never be a fallback from failed VPN mode.
+
 Companion governance: [QUALITY-GATES](QUALITY-GATES.md),
 [PRODUCT-PORTFOLIO](PRODUCT-PORTFOLIO.md),
-[WORKSPACE-POLICY Network Safety](../WORKSPACE-POLICY.md#network-safety-no-clearnet-leak-p0-invariant).
+[WORKSPACE-POLICY Network Safety](../WORKSPACE-POLICY.md#network-safety-selected-route-integrity-p0-invariant).
 
 ## Goal
 

@@ -7,6 +7,9 @@
 > Analysis based on `analysis/amule` materialized from
 > `https://github.com/amule-project/amule`.
 > Date: 2026-05-17
+> This dated analysis retains its original source provenance. The current
+> `analysis/amule` checkout tracks `amule-org/amule`; recheck paths and behavior
+> against that upstream before promoting any idea.
 
 ---
 

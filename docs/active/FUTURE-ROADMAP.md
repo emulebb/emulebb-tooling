@@ -69,9 +69,10 @@ eMuleBB remains a Windows MFC desktop client with a first-class UI, tray workflo
 and in-process REST surface for controllers. Headless-only, daemon,
 cross-platform, server-only, and mobile-controller product tracks belong outside
 this app — they are the emulebb-rust / qBittorrentBB / Gluetun tracks of the
-broader product family. `emulebb-rust` is the headless eD2K/Kad core behind the
-shared `/api/v1` contract and is now the **forward core**; qBittorrentBB is the
-BitTorrent companion; the Gluetun bundle is a headless Docker packaging track.
+broader product family. `emulebb-rust` is the headless eD2K/Kad client with its
+own Rust-forward `/api/v1` contract and is now the **forward core**;
+qBittorrentBB is the BitTorrent companion; the Gluetun bundle is a headless
+Docker packaging track.
 p2p-overlord is a separate Rust/Node product in the family that can share REST
 contracts, test infrastructure, and selected dependency forks without becoming
 part of the desktop app. See

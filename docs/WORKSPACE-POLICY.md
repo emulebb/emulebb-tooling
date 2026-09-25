@@ -153,6 +153,24 @@ Directive precedence is:
   staging copies the built executable to the canonical tools path and prunes
   runnable Cargo-target copies to prevent duplicate runtime entrypoints.
 
+## eMule-Family Reference Roles
+
+- Stock/community eMule is the primary public-network interoperability target.
+  It remains widely encountered; do not turn that qualitative observation into
+  an unevidenced peer-count or market-share claim. The community baseline and
+  tracing harness are controlled references, not substitutes for live peers.
+- eMuleBB MFC is the eMule broadband edition Windows fork, improved for modern
+  Windows systems and networks. Its active source is the `emulebb-main` worktree;
+  the `0.7.x` release line is in maintenance.
+- `emulebb-rust` is a separate Rust-native eD2K/Kad client and forward successor,
+  with a headless daemon and embedded SPA WebUI. It targets stock-compatible wire
+  behavior, not a line-by-line MFC implementation or a shared MFC REST contract.
+- aMule is a maintained cross-platform eMule-family client. The upstream
+  `amule-org/amule` checkout at `analysis\amule` is an optional, setup-managed
+  source and offline-fixture reference, not a product worktree or release gate.
+  The separate `emulebb/amule` Windows-build fork and optional `repos\amule`
+  checkout remain unchanged; neither is the upstream analysis reference.
+
 ## Branch And History Policy
 
 - `main` is the only integration branch for the app repo.
@@ -479,9 +497,10 @@ restate these rules per repo.
 - **Authoritative environment variables** (`EMULEBB_WORKSPACE_ROOT`,
   `EMULEBB_WORKSPACE_OUTPUT_ROOT`) are read, never assigned. Command-scoped knobs
   stay owned by their orchestration modules.
-- **Public P2P live tests** bind through the hide.me VPN interface, allow-list
-  the client executable in the shared hide.me split-tunnel settings, and restart
-  the VPN as needed through the centralized helper — never a bespoke restart.
+- **Public P2P live tests** explicitly select VPN or direct mode as defined in
+  Live Test Network Policy. VPN-mode runs bind through the selected tunnel,
+  use the centralized provider helper for allow-listing/restarts, and never
+  silently fall back to direct mode.
 - **LAN / control / probe traffic** binds through `X_LOCAL_IP` /
   `--lan-bind-addr`; loopback and wildcard are forbidden for harness paths on the
   operator split-tunnel machine, though product runtime may still use them.
@@ -494,22 +513,27 @@ Enforcement: the `output-root` and `emulebb-env-override` audits in
 the `doc-paths` audit, and the static `test_live_bind_policy_static.py` gate in
 the shared test suite.
 
-## Network Safety (No Clearnet Leak) — P0 Invariant
+## Network Safety (Selected-Route Integrity) — P0 Invariant
 
-This is a **P0 cross-product invariant** for every networked product in the suite
-(emulebb-rust, qBittorrentBB, eMuleBB MFC). It protects the suite's central
-"safe / anonymous" promise: the operator's real IP must never reach a public
-swarm. If this fails once in public, it breaks the product's core trust claim.
+Public-network P2P routing must be explicit for every networked product in the
+suite (emulebb-rust, qBittorrentBB, eMuleBB MFC). Direct mode intentionally
+uses the host route and makes no anonymity promise. Selecting VPN mode instead
+creates a **P0 fail-closed invariant**: public P2P traffic must not escape over
+the direct route if the tunnel fails.
 
-- **Fail-closed:** with the VPN tunnel down or unavailable, a networked product
-  must emit **zero P2P data-plane traffic** — no eD2K TCP, no Kad/eD2K UDP, no
-  BitTorrent peer/DHT egress. The data plane is pinned to the tunnel interface;
-  the control/REST plane stays on the local IP. UPnP/port-forwarding over the VPN
-  interface remains allowed.
-- **Automated leak-test gate:** each networked product must carry an automated
-  leak-test that asserts the above (tunnel down → no data egress off the tunnel).
-  This gate is **release-blocking**; an open leak-test gap blocks a release.
-- **Known release-blocking gaps (must close before declaring the product safe):**
+- **VPN-mode fail-closed:** with the selected tunnel down or unavailable, a
+  VPN-mode product must emit **zero P2P data-plane traffic** — no eD2K TCP, no
+  Kad/eD2K UDP, no BitTorrent peer/DHT egress. The data plane is pinned to the
+  tunnel interface; local control/REST access remains separate. UPnP or port
+  forwarding over the VPN interface remains allowed when supported.
+- **Direct-mode clarity:** direct mode may send P2P traffic over the effective
+  host route only when deliberately selected. Never advertise direct mode as
+  anonymous, and never silently change from VPN mode to direct mode.
+- **Automated VPN leak-test gate:** each product claiming VPN fail-closed
+  behavior must prove tunnel-down yields no off-tunnel data egress. An open
+  leak-test gap blocks that safety claim and release of a VPN-safe mode; it does
+  not prohibit an explicitly labeled direct-mode beta.
+- **Known VPN-safety gaps (must close before declaring VPN mode safe):**
   the emulebb-rust eD2K TCP egress pin (`RUST-FEAT-003`) and the emulebb-rust
   leak-test (`RUST-FEAT-005`); the qBittorrentBB `vpnReady()` fail-closed gap
   (`QBBB-FEAT-004`). VPN binding mechanics live under Managed Fork Hygiene and the

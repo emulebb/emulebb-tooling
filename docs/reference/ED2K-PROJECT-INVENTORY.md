@@ -309,12 +309,15 @@ server addresses, `server.met` files, or bootstrap guidance.
 - **aMule**
   - Status: Active
   - Language/platform: Cross-platform C++/wxWidgets
-  - Link: https://github.com/amule-project/amule
-  - Repo stats (GitHub, 2026-05-29):
-    - `amule-project/amule`: 1187 stars, 256 forks, 40 open issues; default `master`; default-branch commit 2026-05-29 `229e268`.
-  - Notes: Cross-platform eMule-like client and protocol reference. The
-           canonical workspace has an eMuleBB fork at `repos\amule` with
-           upstream remote `https://github.com/amule-project/amule.git`.
+  - Current upstream: https://github.com/amule-org/amule (`master`; 3.1.0
+    released 2026-09-21). The older `amule-project/amule` repository is the
+    frozen predecessor, not the maintained upstream.
+  - Local reference (2026-09-25): `analysis\amule` at
+    `5d7abd4239895555c96244c83f34368c3c38a446`; source comparison and
+    offline fixture ideas only.
+  - Notes: The separate `emulebb/amule` Windows-build fork is unchanged. Its
+    optional `repos\amule` checkout is not materialized locally; do not
+    confuse it with the upstream analysis reference.
 
 - **p2p-overlord**
   - Status: Active
