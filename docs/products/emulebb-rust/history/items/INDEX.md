@@ -9,10 +9,13 @@ Known closed refactor/evidence items:
 - `RUST-REF-001`
 - `RUST-REF-002`
 - `RUST-REF-003`
+- `RUST-REF-004`
 
 Known closed feature items include:
 
+- `RUST-FEAT-005`
 - `RUST-FEAT-030`
 - `RUST-FEAT-031`
 - `RUST-FEAT-032`
 - `RUST-FEAT-035`
+- `RUST-FEAT-036`

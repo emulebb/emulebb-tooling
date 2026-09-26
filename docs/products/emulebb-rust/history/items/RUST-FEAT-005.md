@@ -3,7 +3,7 @@ id: RUST-FEAT-005
 workflow: github
 github_issue: https://github.com/emulebb/emulebb-rust/issues/5
 title: Automated VPN leak-test — assert no data egress off the tunnel (release-blocking)
-status: IN_PROGRESS
+status: DONE
 priority: Critical
 category: feature
 labels: [vpn, anonymity, safety, tests, ci, release-blocker]
@@ -90,3 +90,14 @@ tunnel pull), recorded during the Phase-4 soak.
   path. STUN now requires a resolved bind interface index before DNS/socket
   activity and passes an explicit ifIndex to egress pinning, so a stale or
   unassigned P2P bind IP fails closed instead of degrading to optional pinning.
+
+## Completion Evidence (2026-09-26)
+
+The blocking CI gate covers tunnel-up, tunnel-down, and tunnel-pulled socket
+truth through the test-only `egress-audit` feature, while keeping loopback REST
+available. Independent container wire proof at
+`reports/rust-gluetun-proof/20260925T162901Z.json` passed with a positive capture
+sensor, P2P pinned to `tun0`, zero captured off-tunnel P2P packets after tunnel
+loss, REST/WebUI still reachable, the Rust daemon still running, and unrelated
+Compose projects preserved. The three acceptance criteria are satisfied; future
+platform-specific capture expansion is additive evidence, not a beta blocker.

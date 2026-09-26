@@ -2,7 +2,7 @@
 id: RUST-REF-004
 workflow: local
 title: Re-audit every non-SX1 Rust divergence under stock eMule parity policy
-status: OPEN
+status: DONE
 priority: Critical
 category: refactor
 labels: [parity, omissions, release, protocol]
@@ -47,18 +47,18 @@ Each non-SX1 registry entry gets exactly one disposition:
 
 ## Acceptance Criteria
 
-- [ ] Every non-SX1 entry in `policy/rust-client-omissions.toml` has a recorded
+- [x] Every non-SX1 entry in `policy/rust-client-omissions.toml` has a recorded
       disposition.
-- [ ] P0 safety and eD2K/Kad protocol-operational findings are either fixed or
+- [x] P0 safety and eD2K/Kad protocol-operational findings are either fixed or
       block the beta.
-- [ ] Beta-allowed findings have backlog owners and are listed as deferred work
+- [x] Beta-allowed findings have backlog owners and are listed as deferred work
       in the release scope.
-- [ ] `policy/rust-client.toml` review reporting excludes only the explicitly
+- [x] `policy/rust-client.toml` review reporting excludes only the explicitly
       approved permanent drops.
-- [ ] Non-protocol legacy REST/preference/API residues are removed or replaced
+- [x] Non-protocol legacy REST/preference/API residues are removed or replaced
       with Rust-native names and behavior before beta, unless explicitly retained
       as real product features.
-- [ ] The final release notes summarize remaining beta backlog without implying
+- [x] The final release notes summarize remaining beta backlog without implying
       full protocol parity where protocol backlog remains.
 
 ## Validation
@@ -86,3 +86,18 @@ text to an approved permanent drop: Rust does not advertise peer preview support
 and will not add an untrusted media-decoding surface for beta. The policy checker
 now fails active `fixed` entries, active/history ID overlap, and contradictory
 machine vs review dispositions.
+
+## Completion Evidence (2026-09-26)
+
+The active omission registry contains 10 entries; all 10 have explicit
+dispositions, owners, targets, and `beta_blocker = false`. The Rust policy gate
+passes and continues to reject unsupported dispositions, active/history overlap,
+contradictory review decisions, forbidden legacy Rust-native surface, and
+unapproved review exclusions. `RELEASE-SCOPE.md` lists the approved permanent
+drops and deferred protocol backlog, while the version-specific release notes
+repeat the user-visible compatibility boundaries without claiming full parity.
+
+The live Rust OpenAPI response gate also passed locally against the candidate
+daemon across the 100 documented routes and the SSE stream, closing the last
+validation dependency recorded by this item. Hosted enforcement remains tracked
+under `RUST-CI-003`.

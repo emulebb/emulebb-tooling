@@ -3,7 +3,7 @@ id: RUST-FEAT-036
 workflow: github
 github_issue: https://github.com/emulebb/emulebb-rust/issues/16
 title: Settings UI v2 - profile settings and beta-ready controls
-status: OPEN
+status: DONE
 priority: Critical
 category: feature
 labels: [settings, rest, ui, beta, profile]
@@ -155,15 +155,15 @@ Do not put these in the normal Settings UI for beta:
 
 ## Acceptance Criteria
 
-- [ ] All beta-facing settings above are represented in `AppSettings`,
+- [x] All beta-facing settings above are represented in `AppSettings`,
       bootstrap TOML, or an existing section resource.
-- [ ] No beta-facing setting is hidden only in TOML except REST bind/auth.
-- [ ] UI uses regular controls backed by real APIs.
-- [ ] Restart-required settings are explicit and cannot be mistaken for
+- [x] No beta-facing setting is hidden only in TOML except REST bind/auth.
+- [x] UI uses regular controls backed by real APIs.
+- [x] Restart-required settings are explicit and cannot be mistaken for
       live-applied settings.
-- [ ] Existing settings-adjacent resources are reachable from the Settings UI.
-- [ ] No inert compatibility fields or legacy preference names are introduced.
-- [ ] REST OpenAPI matches implementation and test coverage.
+- [x] Existing settings-adjacent resources are reachable from the Settings UI.
+- [x] No inert compatibility fields or legacy preference names are introduced.
+- [x] REST OpenAPI matches implementation and test coverage.
 
 ## Implementation Notes
 
@@ -462,11 +462,22 @@ Do not put these in the normal Settings UI for beta:
   `emulebb-rust-settings.toml`, `emulebb-rust-metadata.db`,
   `/api/v1/app/settings`, and `emulebb-settings`.
 
-## Next Implementation Slice
+## Completion Evidence (2026-09-26)
 
-Start with the backend/UI inventory:
-
-1. classify every current `AppSettings` and bootstrap TOML field;
-2. decide normal vs advanced vs restart-required controls;
-3. test it against OpenAPI and the UI;
-4. then fill the missing Settings UI sections.
+- `emulebb-settings/src/surface.rs` provides exhaustive machine-readable
+  classifications for serialized `AppSettings`, bootstrap-only settings, and
+  section resources; unit tests fail when serialized fields are unclassified or
+  duplicated.
+- The embedded Settings view uses live `/api/v1/app/settings` and
+  `/api/v1/app/settings/surface` data for explicit normal/advanced controls,
+  restart-required badges, validation, dirty Save/Revert state, redacted
+  bootstrap security visibility, and navigation to existing section resources.
+- REST tests prove each advertised section resource is an authenticated live GET
+  route with a data envelope. Body validation and OpenAPI cover the typed sparse
+  settings updates and reject ineffective, malformed, and unknown fields.
+- The canonical WebUI gate passed on 2026-09-26: 19 unit tests, 12 Playwright
+  Chromium tests (including the settings metadata/dirty-state flow), TypeScript
+  typecheck, and the production Vite build.
+- The live REST/OpenAPI candidate proof validated 100 documented routes plus SSE
+  with zero failed routes. The release tracker owns the remaining hosted/final
+  candidate evidence; no Settings v2 implementation gap remains.

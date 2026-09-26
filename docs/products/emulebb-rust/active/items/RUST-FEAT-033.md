@@ -1,9 +1,9 @@
 ---
 id: RUST-FEAT-033
 workflow: github
-github_issue: TBD - file on emulebb/emulebb-rust when scheduled
+github_issue: https://github.com/emulebb/emulebb-rust/issues/20
 title: Release - first usable release rust-v0.1.0-beta.1 (scope doc, GH release workflow, WebUI proof, soak-gated tag)
-status: OPEN
+status: IN_PROGRESS
 priority: Critical
 category: feature
 labels: [release, packaging, docs, ci]
@@ -60,13 +60,13 @@ target and archive directories outside the source workspace.
 
 ## Release Gate (all must hold before the tag)
 
-- [ ] Docker-over-Gluetun tunnel-down proof records zero off-tunnel P2P egress;
+- [x] Docker-over-Gluetun tunnel-down proof records zero off-tunnel P2P egress;
       no native VPN-safe claim is made.
-- [ ] RUST-REF-004 re-audits every non-SX1 registry entry with no
+- [x] RUST-REF-004 re-audits every non-SX1 registry entry with no
       undispositioned P0 or stock-wire-critical findings.
 - [ ] RUST-CI-003 OpenAPI conformance/drift gate passes against the Rust-forward
       OpenAPI artifact.
-- [ ] The packaged embedded SPA WebUI is green against the candidate daemon:
+- [x] The packaged embedded SPA WebUI is green against the candidate daemon:
       status, transfers, uploads, search/download, shared files, servers/Kad,
       settings, logs, and diagnostics.
 - [ ] Stock-parity soak evidence covers UDP reask, buddy callback,
@@ -80,9 +80,39 @@ target and archive directories outside the source workspace.
 - [ ] Each of the six native packages passes install/launch, every current
       WebUI panel, local transfer, and shutdown smoke. The amd64/arm64 image
       passes ownership, persistence, and Gluetun isolation checks.
-- [ ] `RELEASE-SCOPE.md` matches the re-audit dispositions and does not imply
+- [x] `RELEASE-SCOPE.md` matches the re-audit dispositions and does not imply
       full stock parity where beta backlog remains.
 - [ ] Operator gives the explicit tagging go.
+
+## Current Candidate Evidence (2026-09-26)
+
+- GitHub issue `emulebb/emulebb-rust#20` and milestone
+  `release-0.1.0-beta.1` now own the release decision; this document remains the
+  engineering evidence record.
+- RUST-FEAT-005 passed the isolated Docker-over-Gluetun tunnel-down campaign:
+  the positive sensor was proven, the P2P bind remained pinned to the tunnel,
+  and packet capture recorded zero off-tunnel P2P packets after tunnel loss.
+- RUST-REF-004 closed with all 10 non-SX1 registry entries dispositioned and no
+  undispositioned release blocker. The release scope and beta limitations use
+  those dispositions and make no native VPN-safety or full-parity claim.
+- The packaged embedded SPA passed unit/e2e/build gates and a Windows live
+  browser proof against the candidate daemon across all 14 current panels. The
+  transfer workflow observed an active nonzero-progress transfer and retained
+  no public result names, terms, hashes, or paths.
+- The Windows x64 fresh direct campaign passed HighID, Kad connectivity,
+  stock-identifying accepted file bytes, exact document/ISO SHA-256 delivery,
+  sustained REST diagnostics, and graceful shutdown. The matching WSL Ubuntu
+  x64 campaign is running and remains a tag blocker until its retained report
+  passes.
+- The live REST/OpenAPI gate passed locally against 100 documented routes plus
+  SSE with zero failed routes. Hosted cross-platform CI and the new required
+  live-conformance job remain pending on the final candidate head.
+- A previous manual workflow run built and smoked all six native package targets
+  and the two-architecture OCI candidate without publishing. The final manual
+  candidate run must use the reviewed release head and the strengthened package
+  smoke before this gate closes.
+- Tag creation and publication remain explicitly unauthorized until every open
+  checkbox above is closed and the operator separately gives the tagging go.
 
 ## Historical Gate Snapshot (2026-07-22)
 
