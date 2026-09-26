@@ -4856,9 +4856,10 @@ components:
               minimum: 0
               maximum: 65535
             serverUdp:
-              type: integer
+              type: [integer, "null"]
               minimum: 0
               maximum: 65535
+              description: Null while eD2K server UDP uses ephemeral helper sockets.
         binding:
           type: object
           additionalProperties: false
