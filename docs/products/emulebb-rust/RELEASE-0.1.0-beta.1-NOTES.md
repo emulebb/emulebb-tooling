@@ -114,4 +114,3 @@ shutdown, server and Kad connectivity, one small search/download, finished-file
 delivery, one shared folder, and persistence across restart. For containers,
 also confirm host ownership on `/config` and `/data`, then perform a controlled
 Gluetun tunnel-down check before relying on the VPN deployment.
-

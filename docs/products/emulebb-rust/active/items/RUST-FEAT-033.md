@@ -64,12 +64,12 @@ target and archive directories outside the source workspace.
       no native VPN-safe claim is made.
 - [x] RUST-REF-004 re-audits every non-SX1 registry entry with no
       undispositioned P0 or stock-wire-critical findings.
-- [ ] RUST-CI-003 OpenAPI conformance/drift gate passes against the Rust-forward
+- [x] RUST-CI-003 OpenAPI conformance/drift gate passes against the Rust-forward
       OpenAPI artifact.
 - [x] The packaged embedded SPA WebUI is green against the candidate daemon:
       status, transfers, uploads, search/download, shared files, servers/Kad,
       settings, logs, and diagnostics.
-- [ ] Stock-parity soak evidence covers UDP reask, buddy callback,
+- [x] Stock-parity soak evidence covers UDP reask, buddy callback,
       firewall-check, HighID + LowID, finished-file delivery, and sustained REST
       responsiveness. emulebb-mfc may be a frozen witness but is not the product
       parity target.
@@ -101,12 +101,21 @@ target and archive directories outside the source workspace.
   no public result names, terms, hashes, or paths.
 - The Windows x64 fresh direct campaign passed HighID, Kad connectivity,
   stock-identifying accepted file bytes, exact document/ISO SHA-256 delivery,
-  sustained REST diagnostics, and graceful shutdown. The matching WSL Ubuntu
-  x64 campaign is running and remains a tag blocker until its retained report
-  passes.
-- The live REST/OpenAPI gate passed locally against 100 documented routes plus
-  SSE with zero failed routes. Hosted cross-platform CI and the new required
-  live-conformance job remain pending on the final candidate head.
+  sustained REST diagnostics, and graceful shutdown. The first matching WSL
+  Ubuntu x64 attempt correctly failed on a malformed diagnostic record caused
+  by two append handles sharing the JSONL file; Rust commit `e5e9436` moved
+  both producers behind one process-wide writer. A fresh full WSL rerun is in
+  progress and remains a tag blocker until its retained report passes.
+- The six-hour Windows direct campaign recorded live UDP reask, buddy callback,
+  Kad firewall-check, HighID, finished-file delivery, and sustained REST
+  evidence. The deterministic private parity campaign passed all 55 cases again
+  on `e5e9436`,
+  including LowID upload-queue, callback-session, core callback-route, Kad
+  firewall runtime, and server-callback decode coverage.
+- The live REST/OpenAPI gate passed locally and in hosted CI run `36226403563`.
+  The retained hosted report used the tested Linux artifact on `e5e9436` and
+  passed all 100 documented routes plus SSE with zero failed routes, loopback
+  REST, disabled public networks, and graceful teardown.
 - A previous manual workflow run built and smoked all six native package targets
   and the two-architecture OCI candidate without publishing. The final manual
   candidate run must use the reviewed release head and the strengthened package

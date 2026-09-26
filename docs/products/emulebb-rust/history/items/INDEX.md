@@ -19,3 +19,8 @@ Known closed feature items include:
 - `RUST-FEAT-032`
 - `RUST-FEAT-035`
 - `RUST-FEAT-036`
+
+Known closed CI/tooling items include:
+
+- `RUST-CI-001`
+- `RUST-CI-003`

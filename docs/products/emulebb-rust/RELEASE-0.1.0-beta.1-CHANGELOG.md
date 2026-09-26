@@ -62,4 +62,3 @@ Git log.
 - REST clients must use `X-API-Key`; keep the listener on loopback or a trusted network and expect contract changes in later betas.
 - macOS packages require manual first-launch approval because they are unsigned and unnotarized; all native packages may trigger platform reputation warnings.
 - TrackMuleBB, the frozen Slint UI, autonomous Torznab/indexer and Arr integration are outside this artifact set.
-

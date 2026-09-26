@@ -3,7 +3,7 @@ id: RUST-CI-003
 workflow: github
 github_issue: https://github.com/emulebb/emulebb-rust/issues/15
 title: Wire the Rust /api/v1 OpenAPI conformance/drift check into CI
-status: OPEN
+status: DONE
 priority: Minor
 category: ci
 labels: [rest, contract, openapi, ci, drift]
@@ -57,13 +57,13 @@ is useful. The gate exists to keep the current chosen contract honest.
 
 ## Acceptance Criteria
 
-- [ ] A conformance check validates live Rust `/api/v1` responses against the
+- [x] A conformance check validates live Rust `/api/v1` responses against the
       Rust OpenAPI artifact in tooling docs.
-- [ ] It runs in this repo's CI / the shared `emulebb-build-tests` suite, not a
+- [x] It runs in this repo's CI / the shared `emulebb-build-tests` suite, not a
       forked suite.
-- [ ] Drift fails the gate (schema violation, implemented-but-unspecified route,
+- [x] Drift fails the gate (schema violation, implemented-but-unspecified route,
       or specified-but-unimplemented route).
-- [ ] The Rust API notes point at this item.
+- [x] The Rust API notes point at this item.
 
 ## Validation
 
@@ -72,8 +72,8 @@ is useful. The gate exists to keep the current chosen contract honest.
 
 ## Notes
 
-- Local item: it records an internal CI gate rather than a product feature.
-  Promote to a GitHub-tracked CI item if it needs public workflow visibility.
+- GitHub issue `emulebb/emulebb-rust#15` and the Suite project tracked the
+  public workflow state through completion.
 
 ## 2026-07-18 Progress
 
@@ -616,3 +616,18 @@ including the additive `queued` state used while network searches wait to run.
 Extended the static OpenAPI schema checker so `SearchResult.extension` is a
 required string, matching the search result response mapper that always emits
 the derived filename extension.
+
+## 2026-09-26 Completion Evidence
+
+- Rust commit `e5e9436148f8ee7265d165543ce9956c18740a9d` passed hosted CI run
+  `36226403563` on Windows, Linux, and macOS, including policy/Clippy and
+  cargo-deny.
+- The downstream `live REST/OpenAPI conformance` job used the retained, tested
+  Linux daemon artifact plus the pinned shared harness at
+  `d7a59c85d8a86ee88ab178d7c1ae1f73e00e210f`.
+- Its retained report passed all 100 documented/registered routes with zero
+  failed routes, validated the SSE `getEvents` payload, kept ED2K/Kad disabled,
+  bound REST to loopback, and shut down gracefully.
+- Static route/query/body/auth/header checks and negative drift tests remain in
+  the shared harness and Rust policy gate, so implemented/spec inventory drift
+  and live response-schema drift both fail CI.

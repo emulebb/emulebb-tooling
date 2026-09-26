@@ -3,7 +3,7 @@ id: RUST-FEAT-006
 workflow: github
 github_issue: https://github.com/emulebb/emulebb-rust/issues/6
 title: Publish a linuxserver-style GHCR Docker image
-status: OPEN
+status: IN_PROGRESS
 priority: Major
 category: feature
 labels: [docker, ghcr, packaging, bundle]
@@ -56,3 +56,16 @@ Docker form of the bundle cannot start. It is the eD2K core in the container set
 - One of the four prerequisite images (with `qbittorrentbb-nox`, `trackmulebb`,
   `bountarr`). Coheres with the VPN fail-closed model (RUST-FEAT-003/005) — Gluetun
   is the Docker analog of the Windows hide.me split-tunnel.
+
+## 2026-09-26 Candidate Evidence
+
+- A manual release-workflow candidate built and smoked the two-architecture OCI
+  archive without publishing it. The final reviewed-head candidate run remains
+  part of RUST-FEAT-033's pre-tag gate.
+- Container smoke has verified the configured UID/GID, `/config` state, `/data`
+  download persistence, and REST/WebUI launch shape.
+- The isolated Docker-over-Gluetun tunnel-down campaign proved its positive
+  sensor and recorded zero off-tunnel P2P packets after tunnel loss.
+- Publication is intentionally pending. This item closes only after the
+  separately approved `rust-v0.1.0-beta.1` tag run publishes and verifies the
+  versioned multi-architecture GHCR manifest.
