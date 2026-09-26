@@ -73,11 +73,11 @@ target and archive directories outside the source workspace.
       firewall-check, HighID + LowID, finished-file delivery, and sustained REST
       responsiveness. emulebb-mfc may be a frozen witness but is not the product
       parity target.
-- [ ] Fresh no-share direct campaigns on Windows x64 and WSL Ubuntu x64 each
+- [x] Fresh no-share direct campaigns on Windows x64 and WSL Ubuntu x64 each
       finish an approved small Linux document; one also finishes an approved
       Linux ISO, with exact SHA-256 verification and stock-identifying peer
       file-block bytes. Local Rust/MFC upload and download are deterministic.
-- [ ] Each of the six native packages passes install/launch, every current
+- [x] Each of the six native packages passes install/launch, every current
       WebUI panel, local transfer, and shutdown smoke. The amd64/arm64 image
       passes ownership, persistence, and Gluetun isolation checks.
 - [x] `RELEASE-SCOPE.md` matches the re-audit dispositions and does not imply
@@ -101,25 +101,38 @@ target and archive directories outside the source workspace.
   no public result names, terms, hashes, or paths.
 - The Windows x64 fresh direct campaign passed HighID, Kad connectivity,
   stock-identifying accepted file bytes, exact document/ISO SHA-256 delivery,
-  sustained REST diagnostics, and graceful shutdown. The first matching WSL
-  Ubuntu x64 attempt correctly failed on a malformed diagnostic record caused
-  by two append handles sharing the JSONL file; Rust commit `e5e9436` moved
-  both producers behind one process-wide writer. A fresh full WSL rerun is in
-  progress and remains a tag blocker until its retained report passes.
+  sustained REST diagnostics, and graceful shutdown. The final WSL Ubuntu x64
+  rerun on Rust commit `5c5bf7f` passed at retained run `20260926T092121Z`:
+  eD2K and Kad connected, 239 Kad contacts were observed, all 20 probes found
+  sources, two approved PDF deliveries passed exact size and SHA-256
+  verification, 9,728,000 stock-identifying payload bytes were accepted,
+  108,131 diagnostic records contained zero malformed records or error events,
+  and teardown was graceful. No public result names, hashes, or paths are
+  retained here.
 - The six-hour Windows direct campaign recorded live UDP reask, buddy callback,
   Kad firewall-check, HighID, finished-file delivery, and sustained REST
   evidence. The deterministic private parity campaign passed all 55 cases again
   on `e5e9436`,
   including LowID upload-queue, callback-session, core callback-route, Kad
   firewall runtime, and server-callback decode coverage.
-- The live REST/OpenAPI gate passed locally and in hosted CI run `36226403563`.
-  The retained hosted report used the tested Linux artifact on `e5e9436` and
-  passed all 100 documented routes plus SSE with zero failed routes, loopback
-  REST, disabled public networks, and graceful teardown.
-- A previous manual workflow run built and smoked all six native package targets
-  and the two-architecture OCI candidate without publishing. The final manual
-  candidate run must use the reviewed release head and the strengthened package
-  smoke before this gate closes.
+- Hosted CI run `36232498272` passed on exact Rust candidate `5c5bf7f` across
+  Windows, Linux, and macOS, including policy, format, Clippy, cargo-deny, and
+  the live REST/OpenAPI gate. Its retained Linux report matched all 100 OpenAPI
+  routes to the runtime registry, exercised all 78 safe routes plus SSE with
+  zero failures, kept public networks disabled and REST on loopback, and shut
+  down gracefully.
+- Manual release-candidate run `36234229443` passed on exact Rust candidate
+  `5c5bf7f` without publishing. All six Windows/Linux/macOS x64/ARM64 native
+  packages launched from fresh profiles, served the embedded SPA, exercised
+  all 14 current panel backends, reported REST status, and shut down
+  gracefully. The linux/amd64 and linux/arm64 OCI candidate passed first-run
+  WebUI, UID/GID `1234:1235`, `/config` and `/data` ownership/persistence, and
+  zero-published-port checks. Both publication jobs were intentionally skipped.
+- Rust candidate `5c5bf7f`, tooling evidence baseline `914d02a`, and build-test
+  harness `d7a59c8` were clean, synchronized with their upstream `main`
+  branches, and used for the final evidence review. The release workflow pins
+  the exact tooling and harness revisions that supplied the reviewed public
+  release documents and smoke logic.
 - Tag creation and publication remain explicitly unauthorized until every open
   checkbox above is closed and the operator separately gives the tagging go.
 

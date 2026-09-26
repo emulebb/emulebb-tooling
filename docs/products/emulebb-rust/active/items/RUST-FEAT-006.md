@@ -47,9 +47,9 @@ Docker form of the bundle cannot start. It is the eD2K core in the container set
 
 - [ ] CI builds and pushes `ghcr.io/emulebb/emulebb-rust:0.1.0-beta.1`
       as a two-architecture manifest after native packages and image smoke pass.
-- [ ] Image honours `PUID`/`PGID`/`TZ`; state under `/config`, downloads under `/data`.
-- [ ] `/api/v1` + eD2K TCP + Kad UDP reachable when ports are published on a fronting service.
-- [ ] A separate Gluetun tunnel-down test records zero off-tunnel P2P egress.
+- [x] Image honours `PUID`/`PGID`/`TZ`; state under `/config`, downloads under `/data`.
+- [x] `/api/v1` + eD2K TCP + Kad UDP reachable when ports are published on a fronting service.
+- [x] A separate Gluetun tunnel-down test records zero off-tunnel P2P egress.
 
 ## Notes
 
@@ -59,9 +59,9 @@ Docker form of the bundle cannot start. It is the eD2K core in the container set
 
 ## 2026-09-26 Candidate Evidence
 
-- A manual release-workflow candidate built and smoked the two-architecture OCI
-  archive without publishing it. The final reviewed-head candidate run remains
-  part of RUST-FEAT-033's pre-tag gate.
+- Manual release-candidate run `36234229443` built and smoked the linux/amd64
+  and linux/arm64 OCI archive on exact Rust candidate `5c5bf7f` without
+  publishing it. Both publication jobs were intentionally skipped.
 - Container smoke has verified the configured UID/GID, `/config` state, `/data`
   download persistence, and REST/WebUI launch shape.
 - The isolated Docker-over-Gluetun tunnel-down campaign proved its positive
