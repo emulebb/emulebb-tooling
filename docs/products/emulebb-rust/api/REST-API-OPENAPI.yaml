@@ -3831,6 +3831,9 @@ components:
           type: [string, "null"]
           pattern: "^[0-9a-f]{10}0e[0-9a-f]{16}6f[0-9a-f]{2}$"
           description: Marker-normalized local eD2K user hash; `null` clears the override.
+        initialSharedDirectoryReload:
+          type: boolean
+          description: Run the initial shared-root scan and hash pass on daemon startup.
         hostnameLookup:
           $ref: "#/components/schemas/HostnameLookupSettingsUpdate"
     DaemonSettings:
@@ -3851,6 +3854,9 @@ components:
           type: [string, "null"]
           pattern: "^[0-9a-f]{10}0e[0-9a-f]{16}6f[0-9a-f]{2}$"
           description: Marker-normalized local eD2K user hash; `null` means no configured override.
+        initialSharedDirectoryReload:
+          type: boolean
+          description: Run the initial shared-root scan and hash pass on daemon startup.
         hostnameLookup:
           $ref: "#/components/schemas/HostnameLookupSettings"
     HostnameLookupSettings:
@@ -4362,7 +4368,7 @@ components:
           type: boolean
         mode:
           type: string
-          enum: [off, block]
+          enum: ["off", "block"]
         allowedPublicIpCidrs:
           type: string
           description: Whitespace, comma, or semicolon separated public IPv4 CIDRs or host addresses; empty disables the CIDR gate.
@@ -4375,7 +4381,7 @@ components:
           type: boolean
         mode:
           type: string
-          enum: [off, block]
+          enum: ["off", "block"]
         allowedPublicIpCidrs:
           type: string
           description: Whitespace, comma, or semicolon separated public IPv4 CIDRs or host addresses; empty disables the CIDR gate.
@@ -4888,7 +4894,7 @@ components:
           type: boolean
         mode:
           type: string
-          enum: [off, block]
+          enum: ["off", "block"]
         allowedPublicIpCidrs:
           type: string
           description: Whitespace, comma, or semicolon separated public IPv4 CIDRs or host addresses; empty means no CIDR gate.
