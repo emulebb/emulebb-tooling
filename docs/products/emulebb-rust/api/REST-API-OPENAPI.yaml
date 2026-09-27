@@ -6948,8 +6948,38 @@ components:
           type: integer
           minimum: 0
           maximum: 1000000
+        minCompleteSources:
+          type: integer
+          minimum: 0
+          maximum: 1000000
+        minBitrateKbps:
+          type: integer
+          minimum: 0
+          maximum: 4294967295
+        minLengthSeconds:
+          type: integer
+          minimum: 0
+          maximum: 4294967295
         extension:
           type: string
+          maxLength: 256
+          pattern: '^[^\x00-\x08\x0E-\x1F\x7F-\x9F]*$'
+        codec:
+          type: string
+          maxLength: 256
+          pattern: '^[^\x00-\x08\x0E-\x1F\x7F-\x9F]*$'
+        title:
+          type: string
+          maxLength: 256
+          pattern: '^[^\x00-\x08\x0E-\x1F\x7F-\x9F]*$'
+        album:
+          type: string
+          maxLength: 256
+          pattern: '^[^\x00-\x08\x0E-\x1F\x7F-\x9F]*$'
+        artist:
+          type: string
+          maxLength: 256
+          pattern: '^[^\x00-\x08\x0E-\x1F\x7F-\x9F]*$'
     SearchResult:
       type: object
       additionalProperties: false
