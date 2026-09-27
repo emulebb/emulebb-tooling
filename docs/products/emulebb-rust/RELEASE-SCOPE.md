@@ -112,9 +112,10 @@ promotes it to a beta blocker:
   rejected; only the diagnostic event label may differ for cross-packet queued
   duplicates.
 - **Discovered-server obfuscation metadata**
-  (`server-obfuscation-metadata-non-config`) - configured obfuscated servers are
-  supported; non-config discovered obfuscation metadata can wait unless that
-  server path becomes a requirement.
+  (`server-obfuscation-metadata-non-config`) - TCP fallback for metadata-poor
+  servers is bounded and configured `obfuscation_tcp_port`/`udp_flags` persist.
+  Remaining work is import/discovery of obfuscated ports plus the UDP key,
+  key-binding-IP, crypt-ping, stale-key invalidation, and persistence lifecycle.
 - **Kad media metadata tags** (`kad-keyword-media-metadata-tags`) - published
   entries are findable by keyword/type/name/size, but optional bitrate/codec/
   length/artist/album/title filtering waits on a separate metadata extractor

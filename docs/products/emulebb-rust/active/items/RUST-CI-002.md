@@ -34,6 +34,16 @@ rationalization.
   reports is green but older than the latest June 19 parity fixes.
 - The latest public hide.me live-wire run passed after `RUST-BUG-098`; it is a
   useful smoke witness, not a substitute for the automated leak-test gate.
+- The 2026-09-27 stock-server audit found and closed two deterministic server
+  blockers on Rust `main`: multi-file TCP source discovery now emits one
+  complete `OP_GETSOURCES`/`OP_GETSOURCES_OBFU` frame per file (`f60e899`), and
+  metadata-poor server sessions now use a bounded obfuscated-to-plaintext
+  fallback without downgrading required crypt (`0332b74`). The focused
+  orchestrated `emulebb-ed2k` package run passed all 811 tests after both fixes.
+- Remaining server-obfuscation parity is metadata lifecycle work, not TCP retry
+  behavior: import/discovery of obfuscated TCP/UDP ports, extended status and
+  crypt-ping discovery, UDP key plus binding-IP handling, public-IP stale-key
+  invalidation, and persistence of the complete tuple.
 - Open or in-progress owners remain:
   `RUST-BUG-001`, `RUST-FEAT-001`, `RUST-FEAT-003`, and `RUST-FEAT-005`.
 - Forward product work remains in `RUST-FEAT-002`, `RUST-FEAT-004`,
