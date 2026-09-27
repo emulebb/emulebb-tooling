@@ -57,15 +57,15 @@ Rust 0.0.3 parity requires deterministic local evidence for:
 - Rust to Rust bidirectional transfer.
 - emulebb-mfc to Rust bidirectional transfer as a protocol/interoperability
   witness, not as shared REST-contract proof.
-- Rust to aMule bidirectional transfer with the staged aMule daemon/control
-  adapter.
 - Rust REST route, envelope, validation, and behavior against the Rust OpenAPI
   contract.
 
-The aMule leg is compatibility proof only. It must use short deterministic
-paths, configured LAN control binding, the shared goed2k launcher, and the
-existing multi-client matrix. Missing aMule binaries block the Rust parity gate
-when the aMule scenario is required.
+The July 2026 CI-047 retirement removed aMule launch/control adapters and live
+campaign entry points. In current workspace policy, upstream aMule is an
+offline source/fixture reference rather than a release gate. Reintroducing a
+live aMule leg requires a separate operator decision; if reopened, it must use
+short deterministic paths, configured LAN control binding, and the shared
+goed2k launcher.
 
 ## Deliberately Out
 

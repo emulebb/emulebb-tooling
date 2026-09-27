@@ -21,7 +21,8 @@ can remain a frozen comparison witness, but it is no longer the product parity
 target. The close target is core eD2K/Kad client behavior, deterministic local
 cross-client interoperation, and a manual public-network smoke witness. It is
 not the full Phase 0 product gate: REST API evolution, indexer, Arr/Torznab,
-Docker, SSE, and the automated tunnel-down leak test remain separately tracked.
+Docker, and SSE remain separately tracked. The automated tunnel-down leak test
+is a separate release-safety gate and is complete under `RUST-FEAT-005`.
 
 This item exists to prevent the parity closure decision from being spread across
 ad hoc reports. It owns the close checklist, evidence freshness rule, and test
@@ -44,8 +45,8 @@ rationalization.
   behavior: import/discovery of obfuscated TCP/UDP ports, extended status and
   crypt-ping discovery, UDP key plus binding-IP handling, public-IP stale-key
   invalidation, and persistence of the complete tuple.
-- Open or in-progress owners remain:
-  `RUST-BUG-001`, `RUST-FEAT-001`, `RUST-FEAT-003`, and `RUST-FEAT-005`.
+- Open or in-progress owners remain `RUST-BUG-001` and `RUST-FEAT-001`.
+  `RUST-FEAT-003` and `RUST-FEAT-005` are complete release-safety gates.
 - Forward product work remains in `RUST-FEAT-002`, `RUST-FEAT-004`,
   `RUST-FEAT-006`, and `RUST-FEAT-007`; those are not blockers for core parity
   closure. The 2026-09-25 beta decision separately promotes `RUST-FEAT-006`
@@ -77,8 +78,13 @@ The close gate is:
 ## Scope Constraints
 
 - Core parity closure does not claim full Phase 0 completion.
-- Public live-wire remains manual and nonblocking until `RUST-FEAT-005` adds the
-  automated tunnel-down leak-test.
+- Public live-wire remains manual and nonblocking. The completed
+  `RUST-FEAT-005` tunnel-down gate is deterministic local safety proof and does
+  not turn public-network smoke into a core-parity blocker.
+- The July 2026 CI-047 retirement removed aMule launch/control adapters and
+  campaign entry points. Current workspace policy treats aMule as an offline
+  source/fixture reference, not a release gate; reopening it requires a separate
+  operator decision.
 - emulebb-mfc source-seam, community/reference parity, VM proof, and
   public-network live proof stay out of the forward suite gate unless explicitly
   requested.
@@ -91,15 +97,15 @@ The close gate is:
 - [ ] Overnight campaign evidence is regenerated after the current Rust HEAD and
       current MFC/tracing-harness build inputs.
 - [ ] The retained campaign result records the Rust overnight local client
-      pytest proof, local ED2K protocol-combination matrix, private parity
-      modules, Rust/eMuleBB bidirectional transfer, Rust/Rust bidirectional
-      transfer, Rust/aMule bidirectional transfer, total parity audit, and REST
-      contract conformance as passed.
+      pytest proof, source-anchored stock oracle with executable Rust proof
+      packages, local ED2K protocol-combination matrix, private parity modules,
+      Rust/eMuleBB bidirectional transfer, Rust/Rust bidirectional transfer,
+      total parity audit, and REST contract conformance as passed.
 - [ ] The close decision explicitly states that `RUST-FEAT-002`,
       `RUST-FEAT-004`, `RUST-FEAT-006`, and `RUST-FEAT-007` are forward Phase 0
       or later work, not core stock-eMule parity blockers.
-- [ ] `RUST-FEAT-005` remains open and release-blocking for the suite safety
-      claim until the dynamic tunnel-down leak-test exists and is blocking.
+- [x] `RUST-FEAT-005` is closed with a blocking dynamic tunnel-down leak-test;
+      that release-safety gate remains distinct from core parity closure.
 - [ ] The regular release campaign is either documented as informational or its
       manual rows are converted to JSON evidence so it cannot contradict the
       authoritative overnight gate.
@@ -125,5 +131,6 @@ Optional smoke:
   rather than a product feature. If the gate needs public workflow visibility,
   promote it to a GitHub-tracked CI item before closure.
 - Related owners: `RUST-FEAT-001` for UDP reask live validation,
-  `RUST-FEAT-003` for VPN egress pinning validation, `RUST-FEAT-005` for dynamic
-  no-leak automation, and `RUST-BUG-001` for isolated Kad swarm CI debt.
+  completed `RUST-FEAT-003` for VPN egress pinning, completed `RUST-FEAT-005`
+  for dynamic no-leak automation, and `RUST-BUG-001` for isolated Kad swarm CI
+  debt.

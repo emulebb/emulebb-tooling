@@ -58,7 +58,9 @@ UDP reask is the backbone of eMule's queue economy. On a busy swarm, uploaders
 reclaim idle TCP sockets, so a held-TCP queued model loses the slot as soon as
 the connection drops. The remaining risk is not the implementation itself; it is
 whether the refreshed evidence proves Rust keeps MFC-compatible queue behavior
-across Rust↔Rust, Rust↔eMuleBB, Rust↔aMule, and public smoke scenarios.
+across Rust↔Rust, Rust↔eMuleBB, and the optional public smoke scenario. The July
+2026 CI-047 retirement removed aMule from live release campaigns; current
+workspace policy keeps it as an offline reference unless explicitly reopened.
 
 ## Representative Sites
 
@@ -132,8 +134,8 @@ tails) and stock obfuscation choice. Phase the LowID buddy reask
   tails; pending-gate drop; backoff threshold; reask-interval math.
 - Rust↔Rust: queued downloader releases TCP and keeps position purely via UDP
   reask across an accelerated cadence.
-- Rust↔aMule / Rust↔eMuleBB short-path witness (gentle, widely-spaced,
-  single-pass; confirm before any live-wire run per live-wire policy).
+- Rust↔eMuleBB short-path witness (gentle, widely-spaced, single-pass; confirm
+  before any public live-wire run per live-wire policy).
 - packet_trace labels added for the new opcodes so the harness can assert the
   exchange.
 - Core parity close: run the targeted Rust/eMuleBB reask proof from `RUST-CI-002`

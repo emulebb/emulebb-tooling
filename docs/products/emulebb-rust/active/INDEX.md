@@ -74,7 +74,8 @@ items.
 Core parity closure is narrower than full Phase 0. It covers core client
 behavior, Rust REST contract conformance, deterministic local cross-client interop,
 and an optional public hide.me smoke witness. It does not close the Phase 0
-indexer, Arr/Torznab, Docker, SSE, or automated tunnel-down leak-test work. The
+indexer, Arr/Torznab, Docker, or SSE work. The automated tunnel-down leak-test
+is already complete as the separate `RUST-FEAT-005` release-safety gate. The
 closure gate and test-rationalization plan are tracked by
 [RUST-CI-002](items/RUST-CI-002.md).
 
