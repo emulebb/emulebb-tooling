@@ -2,7 +2,7 @@
 id: RUST-CI-002
 workflow: local
 title: Rationalize and close the core stock-eMule parity evidence gate
-status: OPEN
+status: DONE
 priority: Major
 category: ci
 labels: [parity, tests, evidence, release]
@@ -30,27 +30,26 @@ rationalization.
 
 ## Current State
 
-- The Rust parity bug train through `RUST-BUG-099` is done on `main`.
-- Deterministic local evidence under the retained overnight and local parity
-  reports is green but older than the latest June 19 parity fixes.
-- The latest public hide.me live-wire run passed after `RUST-BUG-098`; it is a
-  useful smoke witness, not a substitute for the automated leak-test gate.
-- The 2026-09-27 stock-server audit found and closed two deterministic server
-  blockers on Rust `main`: multi-file TCP source discovery now emits one
-  complete `OP_GETSOURCES`/`OP_GETSOURCES_OBFU` frame per file (`f60e899`), and
-  metadata-poor server sessions now use a bounded obfuscated-to-plaintext
-  fallback without downgrading required crypt (`0332b74`). The focused
-  orchestrated `emulebb-ed2k` package run passed all 811 tests after both fixes.
-- Remaining server-obfuscation parity is metadata lifecycle work, not TCP retry
-  behavior: import/discovery of obfuscated TCP/UDP ports, extended status and
-  crypt-ping discovery, UDP key plus binding-IP handling, public-IP stale-key
-  invalidation, and persistence of the complete tuple.
-- Open or in-progress owners remain `RUST-BUG-001` and `RUST-FEAT-001`.
-  `RUST-FEAT-003` and `RUST-FEAT-005` are complete release-safety gates.
-- Forward product work remains in `RUST-FEAT-002`, `RUST-FEAT-004`,
-  `RUST-FEAT-006`, and `RUST-FEAT-007`; those are not blockers for core parity
-  closure. The 2026-09-25 beta decision separately promotes `RUST-FEAT-006`
-  to a release-packaging gate; it does not change the core parity criterion.
+**Closed 2026-09-27.** The authoritative `emulebb-rust-overnight` campaign
+passed all seven commands and all eight required blocking evidence rows. The
+retained result binds Rust `3a162136`, build-tests `9865967`, build `7eccd29`,
+tooling `fc9fb53`, MFC `9466ece`, and goed2k-server `ea5d4b2`. The only Rust
+status line was the operator-owned, deliberately untracked `TOMORRAWZ.MD`; the
+tracked Rust tree was clean. The archive-only documentation commit follows the
+captured tooling head and does not change the tested implementation or harness.
+
+The separate targeted Rust/eMuleBB UDP-reask proof also passed: both configured
+MFC slots were occupied, a third Rust peer was observed waiting, its queued TCP
+session detached, and its UDP reask received an acknowledgement. This closes
+`RUST-FEAT-001` without weakening MFC production anti-abuse behavior or Rust's
+stock production reask cadence.
+
+`RUST-BUG-001` remains distinct Phase 0 CI-isolation debt. Forward work in
+`RUST-FEAT-002`, `RUST-FEAT-004`, `RUST-FEAT-006`, and `RUST-FEAT-007` is not a
+core stock-eMule parity blocker. The regular/manual campaign remains
+informational; the overnight campaign is the sole authoritative automated
+close gate. Public-network smoke remains optional and nonblocking, and aMule
+remains a retired offline reference unless the operator explicitly reopens it.
 
 ## Intended Shape
 
@@ -94,19 +93,19 @@ The close gate is:
 
 ## Acceptance Criteria
 
-- [ ] Overnight campaign evidence is regenerated after the current Rust HEAD and
+- [x] Overnight campaign evidence is regenerated after the current Rust HEAD and
       current MFC/tracing-harness build inputs.
-- [ ] The retained campaign result records the Rust overnight local client
+- [x] The retained campaign result records the Rust overnight local client
       pytest proof, source-anchored stock oracle with executable Rust proof
       packages, local ED2K protocol-combination matrix, private parity modules,
       Rust/eMuleBB bidirectional transfer, Rust/Rust bidirectional transfer,
       total parity audit, and REST contract conformance as passed.
-- [ ] The close decision explicitly states that `RUST-FEAT-002`,
+- [x] The close decision explicitly states that `RUST-FEAT-002`,
       `RUST-FEAT-004`, `RUST-FEAT-006`, and `RUST-FEAT-007` are forward Phase 0
       or later work, not core stock-eMule parity blockers.
 - [x] `RUST-FEAT-005` is closed with a blocking dynamic tunnel-down leak-test;
       that release-safety gate remains distinct from core parity closure.
-- [ ] The regular release campaign is either documented as informational or its
+- [x] The regular release campaign is either documented as informational or its
       manual rows are converted to JSON evidence so it cannot contradict the
       authoritative overnight gate.
 
@@ -121,6 +120,22 @@ Required for closing this item:
 - `python -m emule_workspace build app --variant tracing-harness --config Release --platform x64 --build-output-mode ErrorsOnly`
 - `python -m emule_workspace test release-campaign --campaign emulebb-rust-overnight --execute --continue-on-failure`
 
+Closure results:
+
+- `${EMULEBB_WORKSPACE_OUTPUT_ROOT}\reports\release-campaign-runs\20260927T171451Z-emulebb-rust-overnight\release-campaign-run-result.json`
+  passed seven of seven commands and eight of eight required blocking evidence
+  rows.
+- `${EMULEBB_WORKSPACE_OUTPUT_ROOT}\artifacts\emulebb-rust-reask-cross-client\20260927T164726Z-x64-release-9936\emulebb-rust-reask-cross-client-result.json`
+  passed the targeted UDP-reask witness.
+- The final regular Rust release build completed without warnings at
+  `${EMULEBB_WORKSPACE_OUTPUT_ROOT}\logs\builds\20260927T165347Z-build-clients\build-result.json`.
+- `workspace-status` completed successfully. `workspace validate` passed the
+  active policy, branch, dependency-pin, documentation-path, editorconfig,
+  environment, localization, output-redirection, PowerShell-boundary, entrypoint,
+  and warning-policy audits, then reported the existing workspace artifact-audit
+  debt: ignored local virtual environments plus `emulebb-rust/webui/node_modules`.
+  Those operator caches are outside this parity closure and were not deleted.
+
 Optional smoke:
 
 - `python scripts\rust-live-wire-hideme.py --inputs live-wire-inputs.local.json`
@@ -130,7 +145,7 @@ Optional smoke:
 - This item is local because it records the evidence gate and close decision
   rather than a product feature. If the gate needs public workflow visibility,
   promote it to a GitHub-tracked CI item before closure.
-- Related owners: `RUST-FEAT-001` for UDP reask live validation,
+- Related owners: completed `RUST-FEAT-001` for UDP reask live validation,
   completed `RUST-FEAT-003` for VPN egress pinning, completed `RUST-FEAT-005`
   for dynamic no-leak automation, and `RUST-BUG-001` for isolated Kad swarm CI
   debt.

@@ -259,7 +259,7 @@ here, and a phase closes a suite milestone.
 - [ ] Connects (server + Kad), handles HighID/LowID.
 - [ ] Searches (server + Kad/global) and returns results.
 - [ ] Downloads a file end-to-end from ≥3 real sources, including queue/reask with
-      `enable_udp_reask` **on** and live-validated (`RUST-FEAT-001`).
+      `enable_udp_reask` **on** and live-validated (closed `RUST-FEAT-001`).
 - [ ] Uploads/shares and serves sources.
 - [ ] **Network Safety green:** eD2K TCP egress pinned to the tunnel
       (`RUST-FEAT-003`) and the automated leak-test passes blocking (`RUST-FEAT-005`).

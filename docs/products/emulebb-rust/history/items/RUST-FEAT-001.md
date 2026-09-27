@@ -3,7 +3,7 @@ id: RUST-FEAT-001
 workflow: github
 github_issue: https://github.com/emulebb/emulebb-rust/issues/1
 title: eD2K — Implement client UDP source reask and queue-slot persistence
-status: IN_PROGRESS
+status: DONE
 priority: Major
 category: feature
 labels: [ed2k, udp, downloads, parity]
@@ -20,9 +20,8 @@ source: protocol-divergence audit (emulebb-rust vs emulebb-main vs p2p-overlord-
 
 The eD2K client↔client UDP reask family (`OP_REASKFILEPING` 0x90, `OP_REASKACK`
 0x91, `OP_FILENOTFOUND` 0x92, `OP_QUEUEFULL` 0x93, and the LowID variants
-`OP_REASKCALLBACKUDP` 0x94 / `OP_DIRECTCALLBACKREQ` 0x95) is implemented and
-enabled by default in emulebb-rust. This item remains open until the live
-interoperability proof is refreshed after the latest parity fixes. Full design:
+`OP_REASKCALLBACKUDP` 0x94 / `OP_DIRECTCALLBACKREQ` 0x95) is implemented,
+enabled by default, and live-validated against emulebb-mfc. Full design:
 [`docs/design/udp-source-reask.md`](../../design/udp-source-reask.md).
 
 ## Current State
@@ -43,6 +42,15 @@ closing any defects found during that validation.
 implementation blocker for core MFC parity. The remaining blocker is evidence:
 regenerate the overnight/local parity campaign after the latest parity fixes and
 run the targeted Rust/eMuleBB UDP reask proof owned by `RUST-CI-002`.
+
+**Closure 2026-09-27.** The deterministic Rust/eMuleBB proof passed at current
+heads. It filled both configured MFC upload slots, observed the third Rust peer
+in the MFC waiting queue, then observed one Rust queued-session TCP detach and
+one acknowledged UDP reask. The harness used three temporary LAN aliases so the
+production MFC same-IP anti-abuse rule remained enabled, and removed every alias
+at teardown. Rust commit `3a162136` provides a packet-diagnostics-only bounded
+initial-delay seam for this proof; ordinary release builds retain stock
+`FILEREASKTIME`. Harness commit `9865967` owns the deterministic topology.
 
 - `crates/emulebb-ed2k/src/ed2k_client_udp/` owns the client UDP reask codec,
   dispatch, obfuscation, source set, reciprocity, buddy relay, and runtime.
@@ -125,7 +133,7 @@ tails) and stock obfuscation choice. Phase the LowID buddy reask
       rules otherwise).
 - [x] Per-transfer reask cadence introduces **no** cross-transfer shared
       scheduler.
-- [ ] Refreshed live interoperability evidence proves the implemented behavior
+- [x] Refreshed live interoperability evidence proves the implemented behavior
       against the current post-`RUST-BUG-099` parity baseline.
 
 ## Validation
@@ -140,6 +148,14 @@ tails) and stock obfuscation choice. Phase the LowID buddy reask
   exchange.
 - Core parity close: run the targeted Rust/eMuleBB reask proof from `RUST-CI-002`
   after current HEAD evidence is regenerated.
+
+Closure evidence:
+
+- `${EMULEBB_WORKSPACE_OUTPUT_ROOT}\artifacts\emulebb-rust-reask-cross-client\20260927T164726Z-x64-release-9936\emulebb-rust-reask-cross-client-result.json`
+  (`status=passed`, `activeSlots=2`, `effectiveSlotCap=2`,
+  `mfcWaitingSessionsMax=1`, `detaches=1`, `ackedReplies=1`).
+- `${EMULEBB_WORKSPACE_OUTPUT_ROOT}\reports\release-campaign-runs\20260927T171451Z-emulebb-rust-overnight\release-campaign-run-result.json`
+  (`status=passed`; seven commands and eight required blocking evidence rows).
 
 ## Notes
 

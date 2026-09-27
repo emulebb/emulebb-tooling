@@ -76,8 +76,8 @@ behavior, Rust REST contract conformance, deterministic local cross-client inter
 and an optional public hide.me smoke witness. It does not close the Phase 0
 indexer, Arr/Torznab, Docker, or SSE work. The automated tunnel-down leak-test
 is already complete as the separate `RUST-FEAT-005` release-safety gate. The
-closure gate and test-rationalization plan are tracked by
-[RUST-CI-002](items/RUST-CI-002.md).
+closure gate and test-rationalization plan completed on 2026-09-27; see the
+archived [RUST-CI-002](../history/items/RUST-CI-002.md) evidence record.
 
 ## Active Backlog
 
@@ -89,7 +89,6 @@ stay active-only; see [Closed Items](#closed-items-archive) for the archive.
 
 | ID | Priority | Status | Title |
 |----|----------|--------|-------|
-| [RUST-FEAT-001](items/RUST-FEAT-001.md) | Major | IN_PROGRESS | eD2K — Implement client UDP source reask and queue-slot persistence |
 | [RUST-FEAT-002](items/RUST-FEAT-002.md) | Major | OPEN | Indexer — autonomous Kad/eD2K snooping index with Torznab surface |
 | [RUST-FEAT-004](items/RUST-FEAT-004.md) | Major | OPEN | Arr integration — Torznab indexer + qBittorrent-emulating download client |
 | [RUST-FEAT-006](items/RUST-FEAT-006.md) | Major | IN_PROGRESS | Docker — publish a linuxserver-style GHCR image (suite bundle prerequisite) |
@@ -115,16 +114,15 @@ stay active-only; see [Closed Items](#closed-items-archive) for the archive.
 
 | ID | Priority | Status | Title |
 |----|----------|--------|-------|
-| [RUST-CI-002](items/RUST-CI-002.md) | Major | OPEN | Rationalize and close the core stock-eMule parity evidence gate |
 | [RUST-CI-004](items/RUST-CI-004.md) | Major | IN_PROGRESS | Harden Rust toolchain, feature, and supply-chain gates |
 
 ## Closed Items (archive)
 
 Closed items keep their full engineering record under
-[`../history/items/`](../history/items/INDEX.md). As of 2026-07-10 the archive holds the
-DONE set: `RUST-FEAT-003`, `RUST-FEAT-030`, `RUST-FEAT-031`, `RUST-FEAT-032`,
+[`../history/items/`](../history/items/INDEX.md). As of 2026-09-27 the archive holds the
+DONE set: `RUST-FEAT-001`, `RUST-FEAT-003`, `RUST-FEAT-030`, `RUST-FEAT-031`, `RUST-FEAT-032`,
 `RUST-FEAT-005`, `RUST-FEAT-035`, `RUST-FEAT-036`, `RUST-REF-001`, `RUST-REF-002`,
-`RUST-REF-003`, `RUST-REF-004`, `RUST-CI-001`, `RUST-CI-003`, and the
+`RUST-REF-003`, `RUST-REF-004`, `RUST-CI-001`, `RUST-CI-002`, `RUST-CI-003`, and the
 `RUST-BUG-002`...`RUST-BUG-099`
 parity wave. Browse that directory for the per-item detail; this index
 intentionally does not re-list closed items.

@@ -87,8 +87,9 @@ under the output soak root).
       accepted only when RUST-REF-004 has explicitly classified them as stock-
       irrelevant, beta-allowed backlog, or a requested permanent drop.
 - [ ] **Subsystem witness** — UDP source reask, buddy / buddy-relayed callback,
-      and Kad UDP+TCP firewall self-check observed live (advances/closes
-      RUST-CI-002). HighID **and** LowID sessions both covered.
+      and Kad UDP+TCP firewall self-check observed live. Core parity evidence is
+      closed under archived `RUST-CI-002`; this release soak still requires
+      HighID **and** LowID sessions.
 - [ ] **Finished-file delivery** — a download completes and is materialized by
       name into `incomingDir`/category end-to-end.
 - [ ] **REST responsive throughout** — no control-plane starvation under

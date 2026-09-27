@@ -1,9 +1,9 @@
 # eD2K UDP Source Reask & Queue-Slot Persistence — Design Sketch
 
-**Status:** **Implemented behind `enable_udp_reask` (on by default)** · post-parity · out of RC2 scope · live validation still recommended
+**Status:** **Implemented behind `enable_udp_reask` (on by default)** · post-parity · out of RC2 scope · live-validated 2026-09-27
 **Area:** ed2k download/upload client (`emulebb-ed2k`)
 **Audience:** anyone implementing client↔client UDP reask in emulebb-rust
-**Backlog item:** [`RUST-FEAT-001`](../active/items/RUST-FEAT-001.md)
+**Backlog item:** [`RUST-FEAT-001`](../history/items/RUST-FEAT-001.md) (closed)
 
 ---
 
