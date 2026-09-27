@@ -3929,6 +3929,12 @@ components:
           type: boolean
         safeServerConnect:
           type: boolean
+        useServerPriorities:
+          type: boolean
+          description: Apply stable high, normal, then low server-priority ordering; stock default true.
+        autoConnectStaticOnly:
+          type: boolean
+          description: Restrict application startup auto-connect to static servers; explicit targeted connects are unaffected.
         keepaliveSecs:
           type: integer
           minimum: 0
@@ -4002,6 +4008,12 @@ components:
           type: boolean
         safeServerConnect:
           type: boolean
+        useServerPriorities:
+          type: boolean
+          description: Apply stable high, normal, then low server-priority ordering; stock default true.
+        autoConnectStaticOnly:
+          type: boolean
+          description: Restrict application startup auto-connect to static servers; explicit targeted connects are unaffected.
         keepaliveSecs:
           type: integer
           minimum: 0
