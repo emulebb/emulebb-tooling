@@ -77,7 +77,9 @@ and an optional public hide.me smoke witness. It does not close the Phase 0
 indexer, Arr/Torznab, Docker, or SSE work. The automated tunnel-down leak-test
 is already complete as the separate `RUST-FEAT-005` release-safety gate. The
 closure gate and test-rationalization plan completed on 2026-09-27; see the
-archived [RUST-CI-002](../history/items/RUST-CI-002.md) evidence record.
+archived [RUST-CI-002](../history/items/RUST-CI-002.md) evidence record. Its
+2026-09-28 server-only reconciliation disposes every finding from the old
+server audit: 17 fixed, four stock-aligned omissions, and zero deferred.
 
 ## Active Backlog
 
