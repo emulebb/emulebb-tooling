@@ -49,6 +49,16 @@ the pre-fix `TOMORRAWZ.MD` audit. Its result is 17 fixed, four stock-aligned
 omissions, and zero deferred server findings. No new defect or source change was
 required.
 
+The 2026-09-28 peer TCP and transfer reconciliation below disposes every peer
+finding in the same pre-fix audit. Its result is ten fixed findings, four
+truthfully omitted features, and one accepted non-wire pacing defer. The audit
+found and fixed one additional capability-contract defect: legacy
+`OP_EMULEINFO` still advertised SX1 v3 even though the runtime is deliberately
+SX2-only. Rust commit `d9f6ae91` clears that legacy claim and adds direct
+capability-bit coverage. A refreshed overnight campaign passed all seven
+commands and all eight blocking evidence rows at that Rust head, and a fresh
+Rust/eMuleBB UDP-reask witness also passed.
+
 `RUST-BUG-001` remains distinct Phase 0 CI-isolation debt. Forward work in
 `RUST-FEAT-002`, `RUST-FEAT-004`, `RUST-FEAT-006`, and `RUST-FEAT-007` is not a
 core stock-eMule parity blocker. The regular/manual campaign remains
@@ -323,6 +333,200 @@ reproducible defect on current `main`. This closes the narrow server-parity
 reconciliation only. It does not imply that unrelated CI, WebUI, soak,
 packaging, or final beta gates are complete.
 
+## Peer TCP and Transfer Audit Reconciliation (2026-09-28)
+
+### Comparison Basis
+
+This is the narrow peer-protocol and transfer reconciliation requested after
+the server audit. It covers hello/capability tags, SX2, queue and UDP reask,
+32/64-bit transfer, hashset/AICH/ICH, secure identification, A4AF, upload
+scheduling, and duplicate handling. It does not close Kad, REST, WebUI,
+packaging, or the final beta release gate.
+
+- Old audit snapshot: emulebb-rust
+  `34b2bc0673ac28931144a70b5d670d6d04511500`.
+- Reconciled implementation: emulebb-rust `main` at
+  `d9f6ae918bf2e8786d39b61a6d3eef8d62da20af`.
+- Stock comparison: `emulebb-community-baseline` branch
+  `baseline/community-0.72a`, especially `Opcodes.h`, `BaseClient.cpp`,
+  `DownloadClient.cpp`, `UploadClient.cpp`, `ListenSocket.cpp`, and
+  `KnownFile.cpp`.
+- The old snapshot is an ancestor of the reconciled head. Every implementation
+  commit named below is also an ancestor of that head.
+- The active omission registry records SX1, peer chat/captcha, and preview as
+  approved drops, plus the conservative five-second connection window as a
+  nonblocking post-beta defer.
+- Authoritative current-head campaign:
+  `${EMULEBB_WORKSPACE_OUTPUT_ROOT}\reports\release-campaign-runs\20260928T202338Z-emulebb-rust-overnight\release-campaign-run-result.json`.
+  It passed all seven commands and all eight blocking evidence rows, including
+  the stock protocol oracle, local protocol-combination matrix, private eD2K
+  modules, eMuleBB/Rust and Rust/Rust bidirectional exchange, and total parity
+  audit.
+- Current UDP-reask witness:
+  `${EMULEBB_WORKSPACE_OUTPUT_ROOT}\artifacts\emulebb-rust-reask-cross-client\20260928T204605Z-x64-release-10252\emulebb-rust-reask-cross-client-result.json`.
+  It passed with two active slots, one observed waiting peer, one queued TCP
+  detach, and one acknowledged UDP reask.
+
+### Required Surface Verdict
+
+| Required surface | Verdict | Primary proof |
+|---|---|---|
+| Hello and capability tags | PASS | `hello_binary_corpus_skips_every_stock_tag_representation`; `hello_misc_options1_advertises_stock_comments_but_not_preview`; `hello_misc_options2_is_truthful_about_implemented_capabilities`; `emule_info_advertises_stock_comments_but_not_preview` |
+| SX2 source metadata | PASS | `source_exchange2_v1_through_v4_preserve_their_wire_capabilities`; `remembered_source_hint_preserves_every_crypt_bit_combination`; `listener_source_exchange_preserves_live_source_connect_options`; `listener_source_exchange_returns_only_parts_useful_to_requester` |
+| Queue and UDP reask | PASS | `tick_emits_due_ping_then_routes_the_ack`; `upload_queue_reask_reattaches_disconnected_waiter_without_wait_reset`; refreshed cross-client witness above |
+| 32/64-bit transfer | PASS | `upload_part_packets_select_sending_opcode_per_fragment`; `upload_part_packets_select_compressed_opcode_per_block`; `large_file_download_starts_hashset_flow_before_peer_secure_ident_key_arrives` |
+| Hashset, AICH, and ICH | PASS | `hashset_answer2_roundtrip_preserves_modern_md4_and_aich_sections`; `master_hash_matches_stock_emule_tracing_harness_fixture`; `corrupt_part_triggers_aich_recovery_request`; `ich_rehash_salvages_part_after_prefix_redownload` |
+| Secure identification | PASS | `v1_valid_signature_verifies`; `v2_localclient_signature_binds_peer_ip`; `outbound_signature_v2_selected_for_v2_only_peer`; `credit_accrual_gate_matches_oracle_ident_states` |
+| A4AF | PASS | `a4af_switch_requests_two_files_on_one_peer_connection`; `a4af_multi_file_peer_is_reused_and_not_double_engaged`; `a4af_nnp_source_is_swapped_to_another_wanted_file`; `direct_download_scheduler_attributes_a4af_results_to_the_switched_file` |
+| Upload scheduling and duplicate handling | PASS; diagnostics evidence follow-up remains | `upload_payload_send_granularity_matches_mfc_threshold`; `upload_queue_classifies_queued_and_completed_duplicates_across_packets`; `listener_skips_duplicate_range_within_single_upload_request`; `rejection_ledger_counts_per_peer_block_and_starts_each_key_at_one` |
+
+### Capability Contract
+
+The peer capability words now describe implemented behavior rather than a stock
+fingerprint. Regression tests assert the complete claimed subset, including
+negative bits:
+
+| Packet field | Advertised support | Explicitly not advertised |
+|---|---|---|
+| `CT_EMULE_MISCOPTIONS1` | AICH v1, Unicode, UDP v4, compression v1, secure-ident v3, extended requests v2, comments, multipacket | SX1, PeerCache, preview; no-view-shared-files is set |
+| `CT_EMULE_MISCOPTIONS2` | file identifiers, SX2, extended multipacket, large files, Kad v10 | captcha; crypt support/request follow the actual local setting and required-crypt is not fabricated |
+| `OP_EMULEINFO` tags | compression v1, UDP v4, comments, extended requests v2, secure-ident v3 | `ET_SOURCEEXCHANGE=0` and preview off |
+
+SX2 remains advertised only through `CT_EMULE_MISCOPTIONS2`; clearing the
+legacy `ET_SOURCEEXCHANGE` value does not disable or downgrade SX2.
+
+### Finding Dispositions
+
+The outcome vocabulary is intentionally exact:
+
+- **Fixed** means the old difference is implemented, or a false capability
+  claim is removed, and named regression evidence exists.
+- **Omitted (truthful)** means the optional feature is deliberately unavailable
+  and the peer is told that it is unavailable.
+- **Deferred** means a valid behavioral difference remains accepted for later
+  work and is recorded in the active machine-readable omission registry.
+
+| ID | Old finding | Disposition |
+|---|---|---|
+| A2-01 | SX2 connection options were lost or fabricated | Fixed |
+| A2-02 | Valid stock hello tag representations could abort the handshake | Fixed |
+| A2-03 | Requester part state was skipped and SX2 answers were not usefulness-filtered | Fixed |
+| A2-04 | Captcha was advertised without interactive response behavior | Omitted (truthful) |
+| A2-05 | Received file comments and ratings were discarded | Fixed |
+| A2-06 | Obsolete PeerCache packets closed the listener session | Fixed |
+| A2-07 | Shared browsing was not feature-complete | Omitted (truthful) |
+| A2-08 | SX1 live source exchange was absent | Omitted (truthful) |
+| A2-09 | Peer media preview was absent | Omitted (truthful) |
+| A2-10 | Connection pacing used a conservative rolling five-second window | Deferred |
+| A2-11 | Upload send granularity differed from stock | Fixed |
+| A2-12 | Cross-packet duplicate upload requests lacked conformant classification | Fixed; live diagnostics evidence follow-up remains |
+| A2-13 | A4AF lacked full source-set switching and live-session reuse | Fixed |
+| A2-14 | Out-of-part and unsolicited queue-rank anti-abuse escalation was shallow | Fixed |
+| A2-15 | Legacy `OP_EMULEINFO` falsely advertised SX1 v3 | Fixed |
+
+### Fixed Finding Evidence
+
+1. **A2-01 — preserve source connect options.** Commit
+   `1617ded40a4dbe0030a030eb3a00e90ad9642af3` retains the real SX2
+   support/request/require bits through ingestion, persistence, rediscovery,
+   and connection selection. Tests:
+   `remembered_source_hint_does_not_fabricate_crypt_options_from_user_hash`,
+   `remembered_source_hint_preserves_every_crypt_bit_combination`, and
+   `listener_source_exchange_preserves_live_source_connect_options`.
+2. **A2-02 — tolerate the full stock hello tag vocabulary.** Commit
+   `1d60dc5678adbee8b6b5a3740bd80fce8d582ac9` adds bounded skipping for valid
+   unknown stock representations without weakening truncation checks. Tests:
+   `hello_binary_corpus_skips_every_stock_tag_representation`,
+   `hello_ignores_unknown_long_tag_names_for_stock_valid_values`, and
+   `hello_rejects_truncated_variable_width_stock_tags`.
+3. **A2-03 — retain requester part state.** Commit
+   `47be5a217c959d4ccb3a5df118f77ba38cf34a42` retains per-file part state and
+   complete counts, including relayed state, and filters SX2 answers for
+   requester usefulness. Tests:
+   `source_exchange_filters_known_sources_by_requester_needed_parts`,
+   `requester_state_is_scoped_to_its_file_and_keeps_complete_count`, and
+   `listener_source_exchange_returns_only_parts_useful_to_requester`.
+4. **A2-05 — persist inbound descriptions.** Commit
+   `c5adf99ed78dd3a96d27b28353212e08abf316fb` retains received file comments
+   and ratings through source rediscovery and reload. Tests:
+   `file_description_decodes_stock_rating_and_long_string` and
+   `source_file_description_matches_identity_and_survives_rediscovery_and_reload`.
+5. **A2-06 — tolerate obsolete PeerCache packets.** Commit
+   `959ef6e57418a2197c97c79cadd76032956ff6d5` makes the three obsolete packets
+   bounded no-ops instead of disconnect reasons. Test:
+   `listener_upload_startup_tolerates_source_exchange_and_aich_probe`.
+6. **A2-11 — stock upload granularity.** Commit
+   `45b7c1eaf8225db126a3c12a4fe4a4622859359c` matches the stock payload
+   threshold. Test: `upload_payload_send_granularity_matches_mfc_threshold`.
+7. **A2-12 — duplicate classification.** Commits
+   `b1c732cbe0cb1292f643776a2dd89c912f2238b5` and
+   `1ea5c157a32160dd6d9935313be8df293cbb3e54` add the conformant bounded ledger
+   and classify queued/completed duplicates across packets. Tests:
+   `upload_queue_classifies_queued_and_completed_duplicates_across_packets`,
+   `behavior_peer_key_prefers_user_hash_then_ip`, and
+   `rejection_ledger_counts_per_peer_block_and_starts_each_key_at_one`.
+   `RUST-FEAT-025` remains active only for the captured listener-event body
+   assertion and live converged-soak `repeatCount` comparison; it does not
+   represent a missing rejection or classification path.
+8. **A2-13 — complete A4AF switching and reuse.** Commits
+   `e7f95b8b4f01454839e1f3f9a9d98653e4dc89c2` and
+   `f96747db7c9420b805c2953ca31dc61157047a18` add NNP/FNF selection across the
+   peer's source set and reuse one live peer session across files. Tests:
+   `a4af_nnp_source_is_swapped_to_another_wanted_file`,
+   `a4af_nnp_swap_skips_terminal_best_candidate_for_live_fallback`, and
+   `a4af_multi_file_peer_is_reused_and_not_double_engaged`.
+9. **A2-14 — transfer anti-abuse escalation.** Commits
+   `07ca28993d9ead18f9ecd7d177bc3b8234d79b6f` and
+   `3a162136e23b4c41f490d0a93fb29853aaaa5d23` add bounded out-of-part and
+   queue-rank escalation while keeping accelerated reask diagnostics bounded.
+   Tests: `repeated_out_of_part_requests_suppress_later_accept_with_cancel`,
+   `unsolicited_queue_rank_bursts_disconnect_then_ban`, and
+   `diagnostics_initial_reask_delay_override_is_bounded`.
+10. **A2-15 — truthful legacy source-exchange tag.** Commit
+    `d9f6ae918bf2e8786d39b61a6d3eef8d62da20af` sets legacy
+    `ET_SOURCEEXCHANGE=0`, retains SX2 in `CT_EMULE_MISCOPTIONS2`, and asserts
+    all supported/unsupported hello capability fields. Tests:
+    `emule_info_advertises_stock_comments_but_not_preview`,
+    `emule_info_decode_preserves_stock_capability_tags`,
+    `hello_misc_options1_advertises_stock_comments_but_not_preview`, and
+    `hello_misc_options2_is_truthful_about_implemented_capabilities`.
+
+### Truthful Omission Evidence
+
+- **A2-04 — peer chat/captcha.** Commit
+  `3a1abdb172d6faceb6117015ba7d8482e8a1b09d` clears the captcha capability.
+  `peer-chat-messaging` records the approved headless-product omission;
+  unsolicited packets remain bounded and ignored without disrupting transfer.
+- **A2-07 — shared browsing.** Rust returns empty/denied browse responses and
+  sets no-view-shared-files, matching a stock client configured not to expose
+  its inventory. No browse capability is claimed.
+- **A2-08 — SX1.** `sx1-live-source-exchange` records the approved drop. Both
+  the hello SX1 nibble and legacy `ET_SOURCEEXCHANGE` tag are zero; SX1 packets
+  are not acted on, while SX2 v1-v4 stays active.
+- **A2-09 — preview.** `ed2k-preview` records the approved drop. The preview bit
+  is zero and request/answer packets remain bounded diagnostic input only.
+
+### Deferred Evidence
+
+Only **A2-10** remains a behavioral defer. The
+`conn-rate-rolling-five-second-window` registry entry records the conservative
+rolling-window implementation and its post-beta target. It has no wire-format
+or capability-bit effect and is strictly no more aggressive than stock.
+
+### Peer Close Decision
+
+Every old peer finding now has a fixed, truthful-omission, or deferred
+disposition. All advertised peer capabilities are backed by implemented paths,
+and deliberately absent SX1, captcha/chat, preview, PeerCache, and shared
+browsing behavior is either unadvertised or explicitly disabled. The one
+remaining behavioral defer is non-wire connection pacing. The active
+`RUST-FEAT-025` work is a diagnostics-evidence closure task, not an unimplemented
+duplicate-rejection path.
+
+This closes only the requested A2 peer-transfer reconciliation. It does not
+mark the final beta, WebUI, packaging, soak, or unrelated active backlog items
+complete.
+
 ## Validation
 
 Required for closing this item:
@@ -349,6 +553,24 @@ Closure results:
   and warning-policy audits, then reported the existing workspace artifact-audit
   debt: ignored local virtual environments plus `emulebb-rust/webui/node_modules`.
   Those operator caches are outside this parity closure and were not deleted.
+
+Peer reconciliation refresh:
+
+- Rust commit `d9f6ae918bf2e8786d39b61a6d3eef8d62da20af` passed the orchestrated
+  `emulebb-ed2k` Release package run: 876 passed, zero failed.
+- `python tools\check_rust_client_policy.py` and focused `rustfmt --check` for
+  all three changed Rust files passed.
+- `${EMULEBB_WORKSPACE_OUTPUT_ROOT}\reports\release-campaign-runs\20260928T202338Z-emulebb-rust-overnight\release-campaign-run-result.json`
+  passed seven of seven commands and eight of eight required blocking evidence
+  rows at Rust `d9f6ae91`, build-tests `9865967`, build `7eccd29`, tooling
+  `9b13576`, MFC `9466ece`, and goed2k-server `ea5d4b2`.
+- `${EMULEBB_WORKSPACE_OUTPUT_ROOT}\artifacts\emulebb-rust-reask-cross-client\20260928T204605Z-x64-release-10252\emulebb-rust-reask-cross-client-result.json`
+  passed with `effectiveSlotCap=2`, `activeSlots=2`,
+  `mfcWaitingSessionsMax=1`, `detaches=1`, and `ackedReplies=1`.
+- The refreshed `workspace validate` again passed every audit before the
+  workspace artifact audit, which reported 68 existing generated files under
+  unrelated local virtual environments plus `emulebb-rust/webui/node_modules`.
+  Those operator-owned caches were not changed or deleted.
 
 Optional smoke:
 
