@@ -26,10 +26,12 @@ Since 2026-07-05 the repo carries its **own release gate**: the
 `rust-v0.1.0-beta.1` first-usable-release program tracked by
 [RUST-FEAT-033](items/RUST-FEAT-033.md) (`milestone: release-0.1.0-beta.1`
 groups its items).
-**Protocol policy:** IPv4-only, stock eMule wire-compatible for implemented
-eD2K/Kad behaviour. SX1 is the only pre-approved permanent protocol drop; the
-current omission registry is under re-audit. Machine-readable omissions remain
-in `EMULEBB_WORKSPACE_ROOT\repos\emulebb-rust\policy\rust-client-omissions.toml`.
+**Protocol policy:** IPv4-only, stock eMule wire-compatible within the frozen
+six-row [beta parity matrix](../RELEASE-SCOPE.md#frozen-beta-parity-matrix).
+Five approved omissions and the sole deferred connection-pacing behavior remain
+in `EMULEBB_WORKSPACE_ROOT\repos\emulebb-rust\policy\rust-client-omissions.toml`;
+the registry is frozen for beta unless an explicit release-scope decision
+reopens it.
 **Design sketches:** [`architecture`](../design/architecture.md).
 **Backlog process runbook:**
 [`BACKLOG-PROCESS`](../../../reference/BACKLOG-PROCESS.md)

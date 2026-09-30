@@ -87,15 +87,20 @@ and will not add an untrusted media-decoding surface for beta. The policy checke
 now fails active `fixed` entries, active/history ID overlap, and contradictory
 machine vs review dispositions.
 
-## Completion Evidence (2026-09-26)
+## Final Freeze Evidence (2026-09-30)
 
-The active omission registry contains 10 entries; all 10 have explicit
-dispositions, owners, targets, and `beta_blocker = false`. The Rust policy gate
-passes and continues to reject unsupported dispositions, active/history overlap,
-contradictory review decisions, forbidden legacy Rust-native surface, and
-unapproved review exclusions. `RELEASE-SCOPE.md` lists the approved permanent
-drops and deferred protocol backlog, while the version-specific release notes
-repeat the user-visible compatibility boundaries without claiming full parity.
+The active omission registry contains exactly six entries. Five are approved
+permanent drops (`sx1-live-source-exchange`, `ipv6-ed2k-kad`,
+`peer-chat-messaging`, `ed2k-preview`, and `kad-flood-lan-exemption`); the only
+deferred behavior is `conn-rate-rolling-five-second-window`. Every row has an
+explicit disposition, owner, target, and `beta_blocker = false`.
+
+The Rust policy gate passes and continues to reject unsupported dispositions,
+active/history overlap, contradictory review decisions, forbidden legacy
+Rust-native surface, and unapproved review exclusions. `RELEASE-SCOPE.md` owns
+one concise six-row current parity matrix. The version-specific release notes
+and changelog repeat the same five omissions and sole defer without copying
+already-fixed audit history back into the current release claim.
 
 The live Rust OpenAPI response gate also passed locally against the candidate
 daemon across the 100 documented routes and the SSE stream, closing the last

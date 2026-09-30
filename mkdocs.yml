@@ -99,6 +99,8 @@ nav:
       - Product Section: products/emulebb-rust/README.md
       - Active Backlog: products/emulebb-rust/active/INDEX.md
       - Release Scope: products/emulebb-rust/RELEASE-SCOPE.md
+      - 0.1.0-beta.1 Release Notes: products/emulebb-rust/RELEASE-0.1.0-beta.1-NOTES.md
+      - 0.1.0-beta.1 Changelog: products/emulebb-rust/RELEASE-0.1.0-beta.1-CHANGELOG.md
       - Code Quality And Test Placement: products/emulebb-rust/reference/CODE-QUALITY.md
       - Running On macOS And Linux: reference/GUIDE-CROSS-PLATFORM.md
       - REST API — Forward OpenAPI: products/emulebb-rust/api/REST-API-OPENAPI.yaml

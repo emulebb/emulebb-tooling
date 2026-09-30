@@ -4,9 +4,8 @@ This document is the unambiguous, human-facing statement of what the
 `emulebb-rust` client **does**, what it **intentionally omits**, and what is
 **deferred** for a later release. It is the companion to the machine-readable
 divergence registry `policy/rust-client-omissions.toml`. That registry records
-known stock-vs-Rust differences; this document and the active re-audit backlog
-decide whether each difference is a permanent drop, release-blocking gap, or
-deferred backlog item.
+the complete current stock-vs-Rust difference set; the matrix below mirrors its
+approved omissions and sole deferred behavior for this beta.
 
 `emulebb-rust` is a **headless eD2K/Kad client** with an embedded SPA WebUI,
 driven over its Rust-forward `/api/v1` REST contract. It targets eD2K/Kad
@@ -67,81 +66,28 @@ history, while current defers and approved drops remain in
   repeat-request tracking, identity-change / file-request-flood bans, upload/
   download recycle and timeout measures).
 
-## Permanent omissions
+## Frozen beta parity matrix
 
-These are product decisions, not open gaps. Anything not listed here remains
-subject to re-audit.
+This is the complete current stock-vs-Rust difference set for
+`rust-v0.1.0-beta.1`. The registry ID is the machine-readable authority.
 
-- **Source Exchange v1** (`sx1-live-source-exchange`) — SX2-only; SX1 never sent,
-  answered, or ingested (operator decision REF-002).
-- **IPv6 eD2K/Kad** (`ipv6-ed2k-kad`) - the beta line is IPv4-only and does not
-  advertise IPv6 support.
-- **Kad LAN flood exemption strictness** (`kad-flood-lan-exemption`) - the Rust
-  receiver keeps LAN/loopback Kad sources flood-exempt unconditionally; this has
-  no public-node wire effect and fits the VPN deployment posture.
-- **Peer media preview** (`ed2k-preview`) - Rust does not advertise peer preview
-  support, does not request previews, and does not add an untrusted media decode
-  surface for beta. Inbound preview packets remain diagnostic-only.
+| Registry ID | Frozen beta disposition | Compatibility contract |
+|---|---|---|
+| `sx1-live-source-exchange` | Approved omission | SX2 only; SX1 is unadvertised and live SX1 packets are ignored. |
+| `ipv6-ed2k-kad` | Approved omission | eD2K, Kad, peer transfer, NAT, and bootstrap are IPv4-only. |
+| `peer-chat-messaging` | Approved omission | No peer chat/captcha UI; captcha is unadvertised and unsolicited packets are tolerated. |
+| `ed2k-preview` | Approved omission | Preview is unadvertised; Rust neither requests nor answers media previews. |
+| `kad-flood-lan-exemption` | Approved omission | LAN/loopback stays flood-exempt; public peers retain stock flood controls. |
+| `conn-rate-rolling-five-second-window` | Deferred behavior | A true rolling five-second grant window is gentler and has no wire effect. |
 
-## Re-audit candidates
+## Freeze rule
 
-The active registry carries protocol-operational divergences only. `RUST-REF-004`
-owns the re-audit and must keep each active row in one of these states before
-beta sign-off:
-
-- approved permanent protocol drop;
-- deferred protocol backlog with owner, rationale, and target;
-- beta blocker requiring a protocol fix before release.
-
-## Deferred (not omitted — parked for a later release)
-
-Real future capability, intentionally out of `0.1.0-beta.1` unless the re-audit
-promotes it to a beta blocker:
-
-- **Peer chat/messaging** (`peer-chat-messaging`) - OP_MESSAGE/captcha packets
-  are decode-only and not surfaced by the headless daemon/UI. Revisit only if
-  peer messaging becomes a Rust product feature.
-- **Conservative connection pacing** (`conn-rate-rolling-five-second-window`) -
-  the outgoing connection grant window is a true rolling five seconds, which is
-  gentler than tick-batch pacing and not wire-incompatible.
-- **Upload send granularity polish**
-  (`upload-throttle-focus-slot-distribution`) - Rust matches the equal-share
-  fairness model; only low-cap packet granularity remains as optional polish.
-- **Upload duplicate diagnostic classification**
-  (`upload-duplicate-queued-intra-packet`) - duplicate block requests are still
-  rejected; only the diagnostic event label may differ for cross-packet queued
-  duplicates.
-- **Discovered-server obfuscation metadata**
-  (`server-obfuscation-metadata-non-config`) - TCP fallback for metadata-poor
-  servers is bounded and configured `obfuscation_tcp_port`/`udp_flags` persist.
-  Remaining work is import/discovery of obfuscated ports plus the UDP key,
-  key-binding-IP, crypt-ping, stale-key invalidation, and persistence lifecycle.
-- **Kad media metadata tags** (`kad-keyword-media-metadata-tags`) - published
-  entries are findable by keyword/type/name/size, but optional bitrate/codec/
-  length/artist/album/title filtering waits on a separate metadata extractor
-  decision.
-- **A4AF full model** — A4AF-lite (cross-transfer source reuse + No-Needed-Parts
-  swap) ships; the full eMule A4AF source-set/hijacking model is parked pending a
-  better design. Downloads are independent per-transfer tasks (no shared
-  scheduler) by design.
-- **Autonomous indexer + Torznab** (RUST-FEAT-002) and **Arr integration**
-  (RUST-FEAT-004).
-- **REST SSE push** (RUST-FEAT-007).
-- **Parser fuzzing** — cargo-fuzz targets for the hand-rolled binary parsers.
-- **Alternate UPnP-IGD NAT backend** — `nat/igd.rs` is a stub; the miniupnpc
-  backend is the supported one.
-- **Anti-abuse depth (defensive-measures plan)** — OP_OutOfPartReqs
-  quarantine/cooldown escalation (Phase D), upload-admission cooldowns
-  (failed-admit / no-socket / short-failed-slot; Phase E), and the
-  download-queue-rank-flood ban (Phase C remainder). The base detectors
-  (out-of-part-reqs, file-request-flood, identity-change bans) ship; the
-  escalation state machines are parked in the defensive-measures roadmap. None
-  blocker.
-- **Kad/eD2K memory-safety & stat cosmetics** — self-imposed global Kad
-  source/notes index ceilings (MFC has none), the network-size estimate using
-  base firewalled constants instead of a live-ratio blend, and the 128-entry
-  per-slot DoneBlocks history (MFC unbounded). Documented, effectively
-  non-binding, no wire impact.
+These six rows are the beta's complete intentional parity differences. The
+approved omissions are product decisions, not open gaps; the conservative
+connection-rate window is the only deferred behavior. Reopening an omission or
+adding another parity difference requires a deliberate release-scope decision
+and a matching registry update. Already-fixed audit history must not be copied
+back into this current matrix.
 
 ## Rust Beta gate
 
@@ -152,8 +98,7 @@ gate is:
 - isolated Docker-over-Gluetun tunnel-down proof shows zero off-tunnel P2P
   egress; native VPN-safe claims remain deferred;
 - stock eMule wire-critical parity review has no undispositioned P0 findings;
-- the non-SX1 omission re-audit has an explicit backlog disposition for every
-  registered divergence;
+- the frozen parity matrix has an explicit registry disposition for every row;
 - Rust OpenAPI conformance is enforced for the native daemon/UI boundary;
 - the embedded SPA WebUI is green against the candidate daemon for status,
   transfers, uploads, search/download, shared files, servers/Kad, settings,

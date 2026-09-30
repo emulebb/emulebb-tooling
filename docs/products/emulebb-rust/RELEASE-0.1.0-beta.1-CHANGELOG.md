@@ -21,8 +21,8 @@ Git log.
 - Added UDP source reask, server-mediated LowID callback, server cycling/import, obfuscation for configured servers, and bounded connection/source scheduling.
 - Added Kad bootstrap, routing maintenance, search/publish/local index, firewall checks, buddy operation and buddy-relayed callbacks, flood controls, and persistence.
 - Added upload scoring, elastic broadband slots, equal-share FIFO bandwidth scheduling, duplicate-block rejection, peer bans, IP filtering, and network-facing diagnostics.
-- Kept the live source-exchange surface SX2-only; SX1, IPv6 eD2K/Kad, peer media preview, and strict LAN-mode flood semantics are approved omissions for this beta.
-- Deferred peer chat, optional Kad media-metadata tags, discovered-server obfuscation metadata, low-cap upload-send granularity polish, and one duplicate-request diagnostic-label distinction without claiming those surfaces as full parity.
+- Froze the beta parity omissions: live source exchange is SX2-only, eD2K/Kad is IPv4-only, peer chat/captcha UI and media preview are absent and unadvertised, and LAN/loopback Kad sources remain flood-exempt outside stock LAN mode.
+- Kept the conservative rolling five-second outgoing-connection grant window as the only deferred parity behavior; it is gentler than stock tick-batch pacing and has no wire effect.
 
 ## REST, WebUI, And Diagnostics
 

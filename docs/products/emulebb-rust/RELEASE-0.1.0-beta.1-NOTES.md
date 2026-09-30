@@ -92,19 +92,26 @@ VPN leak-safety promise. The Gluetun deployment is the beta's tested VPN posture
 ## Known Limits And Compatibility Boundaries
 
 - This is a beta. Back up important profile and download state before testing.
-- eD2K/Kad networking is IPv4-only.
+- The frozen stock-vs-Rust difference set is the six-row
+  [release-scope parity matrix](RELEASE-SCOPE.md#frozen-beta-parity-matrix).
+- Source Exchange v1 is absent and unadvertised; Source Exchange v2 remains
+  supported.
+- eD2K, Kad, peer transfer, NAT, and bootstrap are IPv4-only; IPv6 is not
+  advertised.
+- Peer chat and captcha interaction have no daemon/WebUI surface; captcha is
+  unadvertised and unsolicited packets are safely ignored.
+- Peer media preview is absent and unadvertised to avoid adding an untrusted
+  media-decoding surface.
+- LAN/loopback Kad sources remain flood-exempt even outside stock LAN mode;
+  public peers retain the stock flood controls.
+- Outgoing connections use a conservative rolling five-second grant window;
+  this is gentler than stock tick-batch pacing and has no wire effect.
 - `/api/v1` is owned by the daemon and embedded WebUI and may change between
   beta releases; it is not frozen as an external compatibility contract.
-- Source Exchange v1 is intentionally absent; Source Exchange v2 remains
-  supported.
-- Peer chat/captcha interaction and peer media preview are not exposed. Preview
-  is an approved permanent drop to avoid an untrusted media-decoding surface.
-- Kad-published files do not include optional bitrate/codec/length/artist/album/
-  title tags, so media-attribute-filtered searches may not match them.
 - Sharing is by recursive monitored folder roots only. Single-file and
   non-recursive sharing are not supported surfaces.
 - The frozen Slint UI, TrackMuleBB, autonomous Torznab/indexer work, Arr
-  integration, and a full eMule A4AF scheduler are not included in this beta.
+  integration are not included in this beta.
 - Native packages and macOS apps are unsigned; macOS apps are not notarized.
 
 ## What To Test
