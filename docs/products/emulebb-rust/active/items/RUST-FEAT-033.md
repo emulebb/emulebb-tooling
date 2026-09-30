@@ -113,6 +113,9 @@ cleanup or product behavior.
       isolation, and blocking clean-teardown checks.
 - [x] Non-publishing E1 release certification passes all six native package
       targets and both OCI architectures on that same Rust commit.
+- [x] Exact-candidate E2 public campaigns pass on Windows x64 and WSL Ubuntu
+      x64 with connectivity, verified safe delivery, stock-identifying accepted
+      bytes, clean diagnostics, and graceful teardown.
 - [ ] Operator gives the explicit tagging go.
 - [ ] The approved tagged workflow publishes and verifies all native release
       assets plus `ghcr.io/emulebb/emulebb-rust:0.1.0-beta.1` for amd64/arm64.
@@ -298,6 +301,62 @@ The `Publish versioned GHCR image` and `Publish verified native beta assets`
 jobs were skipped by their tag-only guards. The final audit found no
 `rust-v0.1.0-beta.1` tag, GitHub release, or readable GHCR package. E1 therefore
 certifies retained candidates only and does not authorize publication.
+
+## Exact-Candidate Public Campaign Certification (E2, 2026-09-30)
+
+E2 retained the exact D1/D2/E1 Rust candidate
+`fc9e2f85ef9086a349c924f9ab6c41e60b35d6a0`; the Rust repository remained
+clean throughout. The support revisions were `emulebb-build`
+`7eccd2934a45bda9fadc31c15b59937d5a3c8af2`, `emulebb-build-tests`
+`f157378e266addd1d73d0a027302f1a38ea0b0fb`, and the pre-evidence-record
+`emulebb-tooling` revision `35f9160fa7a7dcc5581f11bc6a87f924bdb26298`.
+The build-test revision includes the evidence-only correction that gives the
+server-connect request transport headroom over the product's bounded initial
+UPnP reconcile. Its focused direct-smoke tests passed 15/15, and the complete
+Python suite passed 2,052 tests with one environment-dependent skip and six
+deselections.
+
+The Windows x64 diagnostics build passed with zero warnings at
+`${EMULEBB_WORKSPACE_OUTPUT_ROOT}\logs\builds\20260930T180503Z-build-clients\build-result.json`.
+The staged executable SHA-256 was
+`21f5a635b08037eb02bf900ec1b114d85d2642ff2e4d07a43a4cf8a63c094002`.
+The blocking campaign report is
+`${EMULEBB_WORKSPACE_OUTPUT_ROOT}\reports\rust-windows-direct-smoke\20260930T180633Z\report.json`,
+SHA-256 `0fd1d058331365eb471b5c00eb22af7d1093ef92015e18d9658ee93d2e59710e`.
+It passed from a fresh external profile with no shared roots and VPN Guard off:
+
+- eD2K connected with HighID; Kad connected with 415 contacts;
+- MiniUPnPc discovered the gateway and held both required mappings;
+- the single approved ISO completed and passed exact size and SHA-256 checks;
+- 73,518 diagnostic records covered `ed2k_packet_v1`, `udp_packet_v1`, and
+  `diag_event_v1`, with positive stock-identifying accepted bytes and zero
+  malformed records or error events;
+- REST shutdown was accepted, teardown was graceful, the mappings were
+  released, and no campaign process or listener remained.
+
+The WSL Ubuntu x64 diagnostics build passed with zero warnings at
+`${EMULEBB_WORKSPACE_OUTPUT_ROOT}\logs\builds\20260930T170050Z-build-clients\build-result.json`.
+Its log records the inherited Windows workspace and output roots translated to
+`/mnt/c/prj/p2p/emulebb-workspace` and `/mnt/c/var/build/emulebb_out`, with the
+derived Cargo target at
+`/mnt/c/var/build/emulebb_out/builds/rust/target-wsl`. The staged Linux
+executable SHA-256 was
+`ef52e02af816324d7f2099f3220d737c230a1d9fd98bed214a672d7423eaa4bf`.
+The blocking campaign report is
+`${EMULEBB_WORKSPACE_OUTPUT_ROOT}\reports\rust-linux-direct-smoke\20260930T170422Z\report.json`,
+SHA-256 `0e03799097b62a25213a5c0d1b9507466bdb8d90dce6ca110066399eea2fc270`.
+It also passed from a fresh external no-share profile with VPN Guard off:
+
+- eD2K connected and Kad connected with 296 contacts;
+- the single approved ISO completed and passed exact size and SHA-256 checks;
+- 73,655 diagnostic records covered all three required schemas, with positive
+  stock-identifying accepted bytes and zero malformed records or error events;
+- REST remained on loopback, shutdown was accepted, teardown was graceful,
+  and no campaign process or listener remained.
+
+The tracked record retains no public result name, ED2K hash, content SHA-256,
+or delivered path. E2 certifies the exact candidate's bounded public campaigns;
+it does not authorize tagging or publication.
 
 ## Current Candidate Evidence (2026-09-26)
 
