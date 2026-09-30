@@ -106,6 +106,8 @@ cleanup or product behavior.
       full stock parity where beta backlog remains.
 - [x] The beta code freeze is declared in the repo contribution/agent guidance,
       this release item, the active backlog index, and the GitHub release issue.
+- [x] Local deterministic D1 certification passes on one exact Rust commit,
+      with support revisions and retained evidence recorded below.
 - [ ] Operator gives the explicit tagging go.
 - [ ] The approved tagged workflow publishes and verifies all native release
       assets plus `ghcr.io/emulebb/emulebb-rust:0.1.0-beta.1` for amd64/arm64.
@@ -123,6 +125,54 @@ cleanup or product behavior.
   post-beta feature and refactor work is explicitly inactive.
 - GitHub has no `rust-v0.1.0-beta.1` release and no readable
   `emulebb-rust` GHCR package. Publication remains pending explicit operator go.
+
+## Local Deterministic Certification (D1, 2026-09-30)
+
+The selected local candidate is Rust commit
+`fc9e2f85ef9086a349c924f9ab6c41e60b35d6a0`. Certification used these exact
+support revisions:
+
+- `emulebb-build` `7eccd2934a45bda9fadc31c15b59937d5a3c8af2`;
+- `emulebb-build-tests` `0416a1ce602ad9777d1a061bb84d516c4347df84`;
+- `emulebb-tooling` `270e506805244781df84f326623b643f16f7ab7f`;
+- emulebb-mfc `9466ece74e617209640b813a8cc82dfee5f808cf`;
+- `goed2k-server` `ea5d4b2c860009d9739a30a73ff840d03e0864c2`.
+
+Required D1 evidence:
+
+- `python tools\rust_quality_gate.py quick` passed policy and 40 policy tests,
+  formatting, workspace/all-target Clippy with warnings denied, the packet
+  diagnostics build, 19 WebUI unit tests, 12 Chromium E2E tests, TypeScript
+  checking, and the production WebUI build.
+- The orchestrated Release x64 candidate build passed with zero warnings at
+  `${EMULEBB_WORKSPACE_OUTPUT_ROOT}\logs\builds\20260930T132945Z-build-clients\build-result.json`.
+- `${EMULEBB_WORKSPACE_OUTPUT_ROOT}\reports\release-campaign-runs\20260930T133255Z-emulebb-rust-overnight\release-campaign-run-result.json`
+  passed all seven commands. Its blocking evidence includes the stock protocol
+  oracle, protocol-combination and private-module matrices, total parity audit,
+  bidirectional Rust-to-Rust transfer, and bidirectional Rust-to-MFC transfer.
+- `${EMULEBB_WORKSPACE_OUTPUT_ROOT}\artifacts\emulebb-rust-reask-cross-client\20260930T140313Z-x64-release-8468\emulebb-rust-reask-cross-client-result.json`
+  passed the targeted UDP-reask proof with slot cap 2, two active slots, one
+  waiting session, one Rust detach, and one acknowledged reply.
+- `${EMULEBB_WORKSPACE_OUTPUT_ROOT}\reports\rust-rest-openapi-ci\20260930T140549Z\report.json`
+  records the exact Rust source revision and staged executable SHA-256. All 100
+  runtime/OpenAPI routes matched, all 78 safe routes ran with zero failures,
+  the SSE probe passed, REST stayed on loopback with public networks disabled,
+  and teardown was graceful.
+- The fresh Windows x64 package build passed with zero warnings at
+  `${EMULEBB_WORKSPACE_OUTPUT_ROOT}\logs\builds\20260930T141138Z-package-emulebb-rust\build-result.json`.
+  Its manifest is
+  `${EMULEBB_WORKSPACE_OUTPUT_ROOT}\release\rust-v0.1.0-beta.1\emulebb-rust-v0.1.0-beta.1-windows-x64.manifest.json`;
+  the nine-entry ZIP SHA-256 is
+  `b713fbb9ef2b8ca32145046d24b68fd28e91c36b6aae8f7749eac0a46a05d867`.
+  `smoke-rust-release-package.py --target-os windows --platform x64
+  --render-webui` then passed from a fresh temporary extraction/profile: REST,
+  all 14 WebUI panel backends, rendered navigation, stale-key recovery, browser
+  diagnostics, and graceful shutdown.
+
+The final D1 audit found no running test processes and clean Git status in the
+Rust, build, build-tests, tooling, MFC, and goed2k repositories. This
+certification selects the commit for subsequent hosted exact-SHA and publication
+gates; it does not authorize tagging or publication.
 
 ## Current Candidate Evidence (2026-09-26)
 
