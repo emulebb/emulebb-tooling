@@ -3909,6 +3909,9 @@ components:
           type: [integer, "null"]
           minimum: 1
           maximum: 65535
+        nickname:
+          type: string
+          maxLength: 50
         obfuscationEnabled:
           type: boolean
         probeSearchTerm:
@@ -3988,6 +3991,9 @@ components:
           type: [integer, "null"]
           minimum: 1
           maximum: 65535
+        nickname:
+          type: string
+          maxLength: 50
         obfuscationEnabled:
           type: boolean
         probeSearchTerm:
@@ -4307,7 +4313,7 @@ components:
           type: array
           items:
             type: string
-            enum: [upnp_miniupnpc]
+            enum: [upnp_miniupnpc, upnp_igd]
         bindIp:
           type: [string, "null"]
           format: ipv4
@@ -4346,7 +4352,7 @@ components:
           type: array
           items:
             type: string
-            enum: [upnp_miniupnpc]
+            enum: [upnp_miniupnpc, upnp_igd]
         bindIp:
           type: [string, "null"]
           format: ipv4
@@ -6526,7 +6532,7 @@ components:
     Server:
       type: object
       additionalProperties: false
-      required: [address, port, name, priority, static, enabled, connected, connecting, current, description, dynIp, failedCount, hardFiles, ip, ping, softFiles, version, users, files]
+      required: [address, port, name, priority, static, enabled, connected, connecting, current, description, dynIp, auxiliaryPorts, failedCount, hardFiles, ip, ping, softFiles, version, users, files]
       properties:
         address:
           type: string
@@ -6553,6 +6559,12 @@ components:
           type: string
         dynIp:
           type: string
+        auxiliaryPorts:
+          type: array
+          items:
+            type: integer
+            minimum: 1
+            maximum: 65535
         failedCount:
           type: integer
           minimum: 0
