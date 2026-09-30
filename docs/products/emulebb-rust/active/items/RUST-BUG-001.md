@@ -2,11 +2,11 @@
 id: RUST-BUG-001
 workflow: local
 title: kad_swarm multi-node transfer tests are isolated in CI
-status: IN_PROGRESS
+status: OPEN
 priority: Minor
 category: bug
 labels: [kad, tests, ci, flaky, debt]
-milestone: phase-0
+milestone: post-beta-polish
 created: 2026-06-14
 source: PM quality review (2026-06-14) — isolate + document CI timing debt
 ---
@@ -21,6 +21,13 @@ are **isolated** in CI: the main test step skips `local_kad_swarm`, and a
 separate serialized step runs `kad_swarm` with `--test-threads=1`
 (`.github/workflows/ci.yml`). The isolated step is blocking; this item tracks
 the remaining isolation debt.
+
+## Release Triage (2026-09-30)
+
+**Post-beta.** The isolated swarm step remains visible and blocking, and the
+hosted Windows/Linux/macOS matrix passed on candidate `334db49b`. No current
+release defect is exposed. The exact remainder is to prove deterministic
+parallel execution across the OS matrix and then remove the main-step skip.
 
 ## Why This Matters
 

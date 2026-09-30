@@ -89,47 +89,52 @@ current-head overnight campaign and UDP-reask witness both pass.
 ## Active Backlog
 
 Only **in-progress / open** items live in `items/`. Items move to
-[`../history/items/`](../history/items/INDEX.md) when they reach `DONE`, so these tables
-stay active-only; see [Closed Items](#closed-items-archive) for the archive.
+[`../history/items/`](../history/items/INDEX.md) when they reach `DONE`.
+The 2026-09-30 beta triage uses three buckets: beta blocker, post-beta, and
+done/stale. The beta milestone contains only the two genuine publication
+blockers below.
 
-### Features (`FEAT`)
+### Beta blockers
+
+| ID | Priority | Status | Blocking condition |
+|----|----------|--------|--------------------|
+| [RUST-FEAT-006](items/RUST-FEAT-006.md) | Major | IN_PROGRESS | Publish and verify the versioned two-architecture GHCR image. |
+| [RUST-FEAT-033](items/RUST-FEAT-033.md) | Critical | IN_PROGRESS | Obtain explicit tag approval and complete the tagged publication workflow. |
+
+### Post-beta features
 
 | ID | Priority | Status | Title |
 |----|----------|--------|-------|
 | [RUST-FEAT-002](items/RUST-FEAT-002.md) | Major | OPEN | Indexer — autonomous Kad/eD2K snooping index with Torznab surface |
 | [RUST-FEAT-004](items/RUST-FEAT-004.md) | Major | OPEN | Arr integration — Torznab indexer + qBittorrent-emulating download client |
-| [RUST-FEAT-006](items/RUST-FEAT-006.md) | Major | IN_PROGRESS | Docker — publish a linuxserver-style GHCR image (suite bundle prerequisite) |
-| [RUST-FEAT-007](items/RUST-FEAT-007.md) | Minor | OPEN | REST push — SSE stream for live transfer updates (+ transfers.sse capability) |
-| [RUST-FEAT-025](items/RUST-FEAT-025.md) | Major | IN_PROGRESS | Anti-abuse — redo upload_duplicate_done_block_rejected (+ queued sibling) with conformant ledger semantics |
-| [RUST-FEAT-033](items/RUST-FEAT-033.md) | Critical | IN_PROGRESS | Release — first usable release rust-v0.1.0-beta.1 (Rust tag, WebUI proof, soak-gated) |
+| [RUST-FEAT-025](items/RUST-FEAT-025.md) | Minor | OPEN | Validate conformant duplicate-block rejection diagnostics |
 
-### Refactors / Evidence (`REF`)
+### Post-beta refactors and evidence
 
 | ID | Priority | Status | Title |
 |----|----------|--------|-------|
-| [RUST-REF-005](items/RUST-REF-005.md) | Major | IN_PROGRESS | Decompose oversized Rust modules by responsibility |
-| [RUST-REF-006](items/RUST-REF-006.md) | Major | IN_PROGRESS | Consolidate Rust NAT and runtime safety internals |
+| [RUST-BUG-001](items/RUST-BUG-001.md) | Minor | OPEN | kad_swarm multi-node transfer tests are isolated in CI |
+| [RUST-REF-005](items/RUST-REF-005.md) | Major | OPEN | Decompose oversized Rust modules by responsibility |
+| [RUST-REF-006](items/RUST-REF-006.md) | Major | OPEN | Consolidate Rust NAT and runtime safety internals |
 | [RUST-REF-007](items/RUST-REF-007.md) | Minor | OPEN | Review Rust upload hot-path performance candidates |
 
-### Bugs (`BUG`)
+### Done or stale in the 2026-09-30 triage
 
-| ID | Priority | Status | Title |
-|----|----------|--------|-------|
-| [RUST-BUG-001](items/RUST-BUG-001.md) | Minor | IN_PROGRESS | kad_swarm multi-node transfer tests are isolated in CI |
-
-### CI / Tooling (`CI`)
-
-| ID | Priority | Status | Title |
-|----|----------|--------|-------|
-| [RUST-CI-004](items/RUST-CI-004.md) | Major | IN_PROGRESS | Harden Rust toolchain, feature, and supply-chain gates |
+- [RUST-CI-004](../history/items/RUST-CI-004.md) — the Rust 1.98 toolchain,
+  diagnostics, policy, cargo-deny, and hosted multi-platform gates are green.
+- [RUST-FEAT-007](../history/items/RUST-FEAT-007.md) — authenticated transfer
+  SSE, resume/reset, heartbeat, capabilities, WebUI consumption, and live
+  conformance are implemented.
+- [RUST-FEAT-034](../history/items/RUST-FEAT-034.md) — VPN Guard active HTTP and
+  STUN egress verification was already complete but remained in `active/items`.
+- [RUST-BUG-100](../history/items/RUST-BUG-100.md) — the completed packet-dump
+  recovery fix was renumbered from a mistakenly reused `RUST-BUG-005` ID and
+  archived.
 
 ## Closed Items (archive)
 
 Closed items keep their full engineering record under
-[`../history/items/`](../history/items/INDEX.md). As of 2026-09-27 the archive holds the
-DONE set: `RUST-FEAT-001`, `RUST-FEAT-003`, `RUST-FEAT-030`, `RUST-FEAT-031`, `RUST-FEAT-032`,
-`RUST-FEAT-005`, `RUST-FEAT-035`, `RUST-FEAT-036`, `RUST-REF-001`, `RUST-REF-002`,
-`RUST-REF-003`, `RUST-REF-004`, `RUST-CI-001`, `RUST-CI-002`, `RUST-CI-003`, and the
-`RUST-BUG-002`...`RUST-BUG-099`
-parity wave. Browse that directory for the per-item detail; this index
-intentionally does not re-list closed items.
+[`../history/items/`](../history/items/INDEX.md). The archive includes the
+parity wave, completed release infrastructure, and the four items closed or
+recovered by the 2026-09-30 triage above. Browse that directory for per-item
+detail; the active tables intentionally contain no closed rows.

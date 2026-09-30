@@ -7,7 +7,7 @@ status: OPEN
 priority: Major
 category: feature
 labels: [arr, torznab, qbittorrent-api, prowlarr, suite]
-milestone: phase-0
+milestone: post-beta-suite
 created: 2026-06-14
 source: suite forward program (note 15); SUITE-JOINT-ROADMAP
 ---
@@ -22,6 +22,12 @@ Give emulebb-rust the three Arr-stack roles alongside its native `/api/v1` REST:
 a Torznab indexer (serving the RUST-FEAT-002 index), a Prowlarr indexer definition,
 and a qBittorrent-WebUI-emulating download-client API so Prowlarr/Sonarr/Radarr
 and aMuTorrent drive rust as if it were a qBittorrent — zero new integration.
+
+## Release Triage (2026-09-30)
+
+**Post-beta.** Arr/Torznab/qBittorrent-compat integration depends on the
+post-beta indexer and is not required by the native daemon, embedded WebUI, or
+published beta package contract. No current absence is a beta release defect.
 
 ## Why This Matters
 

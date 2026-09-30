@@ -23,6 +23,14 @@ core to **GHCR** (`ghcr.io/emulebb/emulebb-rust`, `latest` + versioned), built a
 pushed by this repo's CI. Design:
 [`emulebb-tooling/docs/active/SUITE-DOCKER.md`](../../../../active/SUITE-DOCKER.md).
 
+## Release Triage (2026-09-30)
+
+**Beta blocker.** Candidate images and the two-architecture manifest path are
+implemented and smoked, but neither the `rust-v0.1.0-beta.1` release nor the
+`ghcr.io/emulebb/emulebb-rust:0.1.0-beta.1` package exists yet. Keep this item
+open and beta-attached until the separately approved tagged workflow publishes
+and verifies the versioned manifest.
+
 ## Why This Matters
 
 The **enabling prerequisite** for the suite Docker bundle: without this image the

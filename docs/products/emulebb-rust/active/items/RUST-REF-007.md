@@ -1,5 +1,6 @@
 ---
 id: RUST-REF-007
+workflow: local
 title: Review Rust upload hot-path performance candidates
 status: OPEN
 priority: Minor
@@ -19,6 +20,12 @@ not committed implementation work. Protocol parity is mandatory: any accepted
 change must preserve eD2K wire packet shapes, opcode choices, upload queue
 semantics, compression eligibility, throttle accounting, and existing diagnostics
 meaning.
+
+## Release Triage (2026-09-30)
+
+**Post-beta.** The current upload path is protocol-correct and passed the beta
+test matrix. These are measurement-led optimization candidates, not release
+defects; no implementation should begin without profiling evidence.
 
 ## Current State
 

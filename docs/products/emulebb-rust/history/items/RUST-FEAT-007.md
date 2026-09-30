@@ -1,9 +1,8 @@
 ---
 id: RUST-FEAT-007
-workflow: github
-github_issue: TBD - file on emulebb/emulebb-rust when scheduled
+workflow: local
 title: REST push - Server-Sent Events stream for live transfer updates (+ transfers.sse capability)
-status: OPEN
+status: DONE
 priority: Minor
 category: feature
 labels: [rest, push, sse, controller, contract]
@@ -12,7 +11,8 @@ created: 2026-06-17
 source: TrackMuleBB dashboard design discussion (2026-06-17); see trackmulebb TMBB-FEAT-014 and docs/design/MVP-UNIFIED-TRANSFERS.md
 ---
 
-> Workflow status is tracked in GitHub. This local document is retained as an engineering spec/evidence record.
+> No GitHub issue was filed before implementation completed; this archived local
+> record is the durable engineering and closure evidence.
 
 # RUST-FEAT-007 - REST push: Server-Sent Events stream for live transfer updates
 
@@ -54,12 +54,14 @@ this just surfaces them.
 
 ## Acceptance Criteria
 
-- [ ] `GET /api/v1/events` streams add/update/remove transfer events as SSE with
+- [x] `GET /api/v1/events` streams add/update/remove transfer events as SSE with
       incrementing event ids; survives a quiet period via heartbeats.
-- [ ] `Last-Event-ID` either replays missed events or instructs a `/transfers`
+- [x] `Last-Event-ID` either replays missed events or instructs a `/transfers`
       re-baseline; no silent gaps.
-- [ ] `GET /capabilities` lists `transfers.sse`; `/transfers` is unchanged.
-- [ ] Auth via `X-API-Key`; contract version (`x-contract-version`) bumped.
+- [x] `GET /capabilities` lists `transfers.sse`; `/transfers` is unchanged.
+- [x] Auth uses `X-API-Key`, and all SSE responses carry the current
+      `X-Contract-Version: 1.2.0` header. Per pre-freeze Rust API policy, the
+      feature did not require another contract-version bump.
 
 ## Notes
 
@@ -147,3 +149,17 @@ this just surfaces them.
 - 2026-07-18: Added static OpenAPI drift coverage for the SSE response component
   so `EventStreamResponse` must keep documenting `Cache-Control` and
   `X-Accel-Buffering` alongside the contract-version header.
+
+## Closure Evidence (2026-09-30)
+
+- Current code retains the authenticated broadcast-backed route, monotonically
+  increasing transfer event IDs, keepalive heartbeat, lag/reset behavior,
+  explicit `Last-Event-ID` reset, capability advertisement, and polling
+  fallback in the embedded WebUI.
+- REST/core/WebUI tests cover transfer events, reset serialization, headers,
+  auth, capability discovery, fetch-stream parsing, and dashboard integration.
+- Hosted run `36697107023` passes the live SSE conformance probe on exact SHA
+  `334db49`; the retained report records HTTP 200, `text/event-stream`, the
+  required cache/proxy headers, and a valid reset payload.
+- The current quick quality gate passes all WebUI unit/browser tests and the
+  production build. The implementation already satisfies this item.

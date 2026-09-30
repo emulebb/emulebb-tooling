@@ -26,6 +26,14 @@ unambiguously. Release publication is **workflow-only by operator direction
 (2026-07-05)**. The workflow-owned packaging helper requires explicit absolute
 target and archive directories outside the source workspace.
 
+## Release Triage (2026-09-30)
+
+**Beta blocker and umbrella release item.** All implementation, parity, safety,
+packaging-candidate, WebUI, and hosted CI gates are green. This item remains
+open for the explicit operator tag decision and the resulting tagged workflow;
+`RUST-FEAT-006` remains the only subordinate beta blocker until that workflow
+publishes and verifies the versioned GHCR manifest.
+
 ## Locked Decisions
 
 - Version `0.1.0-beta.1` (`[workspace.package]`, own semver line decoupled from
@@ -58,7 +66,7 @@ target and archive directories outside the source workspace.
    first-run/API-key instructions, unsigned macOS launch steps, and the isolated
    Gluetun deployment example.
 
-## Release Gate (all must hold before the tag)
+## Release Gate And Completion
 
 - [x] Docker-over-Gluetun tunnel-down proof records zero off-tunnel P2P egress;
       no native VPN-safe claim is made.
@@ -83,6 +91,19 @@ target and archive directories outside the source workspace.
 - [x] `RELEASE-SCOPE.md` matches the re-audit dispositions and does not imply
       full stock parity where beta backlog remains.
 - [ ] Operator gives the explicit tagging go.
+- [ ] The approved tagged workflow publishes and verifies all native release
+      assets plus `ghcr.io/emulebb/emulebb-rust:0.1.0-beta.1` for amd64/arm64.
+
+## Current Candidate Evidence (2026-09-30)
+
+- Hosted CI run `36697107023` passed on exact candidate `334db49b` across
+  policy/format, Clippy, cargo-deny, Windows, Linux, macOS, and live REST/OpenAPI
+  conformance. The live report matched all 100 registry/OpenAPI routes,
+  exercised all 78 safe routes with zero failures, and passed the SSE probe.
+- The release scope, notes, changelog, and omission history now agree that the
+  seven completed parity items are implemented rather than deferred.
+- GitHub has no `rust-v0.1.0-beta.1` release and no readable
+  `emulebb-rust` GHCR package. Publication remains pending explicit operator go.
 
 ## Current Candidate Evidence (2026-09-26)
 

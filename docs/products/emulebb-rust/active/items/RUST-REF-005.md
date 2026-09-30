@@ -3,11 +3,11 @@ id: RUST-REF-005
 workflow: github
 github_issue: https://github.com/emulebb/emulebb-rust/issues/7
 title: Decompose oversized Rust modules by responsibility
-status: IN_PROGRESS
+status: OPEN
 priority: Major
 category: refactor
 labels: [maintainability, rust, architecture]
-milestone: release-0.1.0-beta.1
+milestone: post-beta-polish
 created: 2026-07-10
 source: Operator maintainability direction 2026-07-10
 ---
@@ -20,6 +20,13 @@ Reduce the Rust client's legacy oversized source files through small,
 behavior-preserving extractions. Start with `emulebb-core/src/lib.rs`, which is
 13,711 lines at the start of this item, then continue through the largest
 responsibility-mixed production and test modules.
+
+## Release Triage (2026-09-30)
+
+**Post-beta.** Responsibility-based decomposition remains worthwhile, but the
+quality policy treats file size as an advisory and the candidate passes policy,
+Clippy, tests, and the hosted OS matrix. No remaining module-size concern is a
+release defect; resume this as small post-beta maintenance slices.
 
 ## Invariants
 

@@ -1,5 +1,5 @@
 ---
-id: RUST-BUG-005
+id: RUST-BUG-100
 workflow: local
 title: ed2k packet dumps silently disabled for a run when first-access precedes EMULEBB_RUST_LOG_DIR
 status: DONE
@@ -11,7 +11,7 @@ created: 2026-07-06
 source: soak forensics — current run produced zero ed2k_packet_v1 records despite 2 GB of uploads
 ---
 
-# RUST-BUG-005 — ed2k packet dumps could be permanently disabled for a run
+# RUST-BUG-100 — ed2k packet dumps could be permanently disabled for a run
 
 ## Symptom
 
@@ -59,3 +59,10 @@ and the two dumps diff 1:1.
 Dump files are PID-named singletons in a shared dir; PID reuse across runs makes
 old and new records collide in the same filenames. Isolating dumps per campaign
 (under the reports dir) would make per-run analysis unambiguous.
+
+## Archive Note (2026-09-30)
+
+This completed record had mistakenly reused `RUST-BUG-005`, whose canonical
+history item covers live server-status REST rows. The backlog triage renumbered
+this record to the next unused bug ID, `RUST-BUG-100`, before archival; no
+implementation or evidence changed.

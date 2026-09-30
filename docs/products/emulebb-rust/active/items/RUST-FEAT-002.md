@@ -7,7 +7,7 @@ status: OPEN
 priority: Major
 category: feature
 labels: [kad, ed2k, indexer, torznab, suite]
-milestone: phase-0
+milestone: post-beta-suite
 created: 2026-06-14
 source: suite forward program (notes 13-15); SUITE-JOINT-ROADMAP
 ---
@@ -24,6 +24,12 @@ replay and common-extension sweeps, plus optional eD2K-server search enrichment,
 into one FTS SQLite index, surfaced over Torznab. This is part of the Phase 0
 "perfectly functional" gate (the indexer role is inside deliverable #1). Full
 design: [`docs/design/kad-ed2k-indexer.md`](../../design/kad-ed2k-indexer.md).
+
+## Release Triage (2026-09-30)
+
+**Post-beta.** This remains valuable Phase 0 suite work, but the first Rust beta
+ships the client/daemon and embedded WebUI without the autonomous indexer or
+Torznab surface. No current indexer absence is a beta release defect.
 
 ## Why This Matters
 

@@ -3,7 +3,7 @@ id: RUST-CI-004
 workflow: github
 github_issue: https://github.com/emulebb/emulebb-rust/issues/8
 title: Harden Rust toolchain, feature, and supply-chain gates
-status: IN_PROGRESS
+status: DONE
 priority: Major
 category: ci
 labels: [rust, toolchain, ci, dependencies, supply-chain]
@@ -16,14 +16,15 @@ source: Operator-approved Rust development hygiene review 2026-07-11
 
 ## Summary
 
-Make Rust development and release inputs reproducible: pin the current stable
+Make Rust development and release inputs reproducible: pin the supported stable
 toolchain, exercise the diagnostics feature explicitly, centralize workspace
 manifest policy, and enforce dependency source and license rules after obsolete
 Git dependencies are removed.
 
 ## Scope
 
-- Pin Rust 1.97.0 in one repository-owned toolchain file and make CI consume it.
+- Pin the supported Rust toolchain in one repository-owned file and make CI
+  consume it; the current beta candidate uses Rust 1.98.1 (`rust-version = 1.98`).
 - Declare the workspace Rust version and verify the active compiler in CI.
 - Build/check the `packet-diagnostics` binary without enabling test-only
   `egress-audit` in product builds.
@@ -36,7 +37,7 @@ Git dependencies are removed.
 
 ## Acceptance Criteria
 
-- [x] Local development and every CI job use Rust 1.97.0 from one pin.
+- [x] Local development and every CI job use Rust 1.98.1 from one pin.
 - [x] The default daemon, diagnostics binary, and isolated egress-audit test
       configuration each have an explicit gate.
 - [x] All internal crates are `publish = false` and `GPL-2.0-only`.
@@ -67,3 +68,16 @@ Git dependencies are removed.
 - `6e7a347` prioritizes working-tree/index Rust changes (or the latest clean-tree
   commit) ahead of repository-wide context, retains non-failing size signals,
   and rejects permanent broad lint allows.
+
+## Closure Evidence (2026-09-30)
+
+- `c1871bb` updates the repository pin to Rust 1.98.1, `rust-version` to 1.98,
+  actions and dependencies to the reviewed current baseline, and cargo-deny to
+  the resulting locked graph; `16bb6e1` closes the platform-specific lint.
+- `334db49` closes the remaining Rust 1.98 Clippy debt without weakening the
+  `-D warnings` gate.
+- Hosted run `36697107023` passes policy/format, Clippy, cargo-deny, Windows,
+  Linux, macOS, and live REST/OpenAPI conformance on exact SHA `334db49`.
+- The current quick quality gate passes policy, 40 policy tests, formatting,
+  Clippy, packet diagnostics, 19 WebUI unit tests, 12 browser tests, and the
+  production WebUI build. No acceptance criterion remains open.
