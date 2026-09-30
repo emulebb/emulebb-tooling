@@ -26,6 +26,10 @@ Since 2026-07-05 the repo carries its **own release gate**: the
 `rust-v0.1.0-beta.1` first-usable-release program tracked by
 [RUST-FEAT-033](items/RUST-FEAT-033.md) (`milestone: release-0.1.0-beta.1`
 groups its items).
+**Code freeze:** effective 2026-09-30, the beta accepts only release blockers,
+test/evidence fixes, documentation corrections, and packaging fixes. Post-beta
+items stay recorded but inactive until the operator explicitly lifts the
+freeze.
 **Protocol policy:** IPv4-only, stock eMule wire-compatible within the frozen
 six-row [beta parity matrix](../RELEASE-SCOPE.md#frozen-beta-parity-matrix).
 Five approved omissions and the sole deferred connection-pacing behavior remain
@@ -55,9 +59,8 @@ uses the Rust-forward OpenAPI contract in this tooling docs tree.
 Core gates remain first-class: stock-wire parity, fail-closed VPN proof,
 responsive REST, upload/download/search/share evidence, and soak evidence. The
 beta may ship with a signed-off non-critical parity backlog, but P0 safety and
-stock-wire-critical findings block the tag. Indexer/Torznab/Arr work stays
-active forward scope but is not the first UI beta gate unless separately
-promoted.
+stock-wire-critical findings block the tag. Indexer/Torznab/Arr work remains
+post-beta scope and must not start during the code freeze.
 
 Current soak upload/download gap analysis is tracked in
 [Rust Soak Upload/Download Gap Analysis](RUST-SOAK-UPLOAD-DOWNLOAD-GAP-ANALYSIS.md).
@@ -85,6 +88,23 @@ server audit: 17 fixed, four stock-aligned omissions, and zero deferred. Its
 peer-transfer reconciliation disposes all 15 peer findings: ten fixed, four
 truthfully omitted, and one accepted non-wire pacing defer; a refreshed
 current-head overnight campaign and UDP-reask witness both pass.
+
+## Beta Code Freeze
+
+The `rust-v0.1.0-beta.1` code freeze is in force from 2026-09-30. A proposed
+change may enter the beta lane only when it is one of these four classes:
+
+- a release blocker;
+- a test or evidence fix;
+- a documentation correction;
+- a packaging fix.
+
+Do not start the indexer (`RUST-FEAT-002`), Arr integration
+(`RUST-FEAT-004`), major refactors (including `RUST-REF-005` through
+`RUST-REF-007`), or new protocol features. A test/evidence change must remain
+narrowly tied to release proof and must not carry unrelated cleanup or feature
+work. Work that does not meet an allowed class stays post-beta without
+implementation until the operator explicitly lifts the freeze.
 
 ## Active Backlog
 

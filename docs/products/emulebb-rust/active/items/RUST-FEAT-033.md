@@ -34,6 +34,20 @@ open for the explicit operator tag decision and the resulting tagged workflow;
 `RUST-FEAT-006` remains the only subordinate beta blocker until that workflow
 publishes and verifies the versioned GHCR manifest.
 
+## Beta Code Freeze (2026-09-30)
+
+The beta code freeze is active. Until the operator explicitly lifts it, accept
+only release blockers, test/evidence fixes, documentation corrections, and
+packaging fixes. Every proposed change must name its admission class and remain
+within that scope.
+
+Do not start the indexer (`RUST-FEAT-002`), Arr integration
+(`RUST-FEAT-004`), major refactors (including `RUST-REF-005` through
+`RUST-REF-007`), or new protocol features. Those records remain post-beta; they
+are not alternate work while publication is pending. A test/evidence change
+may repair a gate or strengthen release proof, but it must not carry unrelated
+cleanup or product behavior.
+
 ## Locked Decisions
 
 - Version `0.1.0-beta.1` (`[workspace.package]`, own semver line decoupled from
@@ -90,6 +104,8 @@ publishes and verifies the versioned GHCR manifest.
       passes ownership, persistence, and Gluetun isolation checks.
 - [x] `RELEASE-SCOPE.md` matches the re-audit dispositions and does not imply
       full stock parity where beta backlog remains.
+- [x] The beta code freeze is declared in the repo contribution/agent guidance,
+      this release item, the active backlog index, and the GitHub release issue.
 - [ ] Operator gives the explicit tagging go.
 - [ ] The approved tagged workflow publishes and verifies all native release
       assets plus `ghcr.io/emulebb/emulebb-rust:0.1.0-beta.1` for amd64/arm64.
@@ -102,6 +118,9 @@ publishes and verifies the versioned GHCR manifest.
   exercised all 78 safe routes with zero failures, and passed the SSE probe.
 - The release scope, notes, changelog, and omission history now agree that the
   seven completed parity items are implemented rather than deferred.
+- The beta code freeze limits accepted changes to release blockers,
+  test/evidence fixes, documentation corrections, and packaging fixes; named
+  post-beta feature and refactor work is explicitly inactive.
 - GitHub has no `rust-v0.1.0-beta.1` release and no readable
   `emulebb-rust` GHCR package. Publication remains pending explicit operator go.
 
@@ -177,22 +196,16 @@ It is historical evidence, not the current release gate or sign-off.
 | Stock-wire parity re-audit | PASS | Archived RUST-REF-004/RUST-CI-002 evidence leaves no undispositioned P0 or stock-wire-critical finding. |
 | Packaging workflow | PARTIAL | Versioning and release-scope decisions are in place. The orchestrated Rust client build stages the regular exe and packaged WebUI together under the canonical tools path, and `python -m emule_workspace package-emulebb-rust --skip-build --config Release --platform x64 --build-output-mode ErrorsOnly` now creates the unsigned local candidate under `%EMULEBB_WORKSPACE_OUTPUT_ROOT%\release\rust-v0.1.0-beta.1\`. On 2026-07-22 the local candidate wrote `emulebb-rust-v0.1.0-beta.1-windows-x64.zip`, `.manifest.json`, `.sbom.spdx.json`, and `SHA256SUMS`; the package content gate reported 9 entries: regular `emulebb-rust.exe`, packaged WebUI assets, example settings, `LICENSE`, generated package `README.md`, `RELEASE-SCOPE.md`, and `SBOM.spdx.json`. The package excludes `emulebb-rust-ui.exe` and diagnostics binaries. The local orchestrated zip SHA256 was `c0a47eda35734d6f016db35642149c135aba121d46a2942df8ca8e0f8113ad74`. The repo-local `rust-v*` release workflow now packages from the canonical staged regular runtime, checks out the release-scope doc, uploads the zip/manifest/SBOM/SHA256SUMS assets, and prunes stale Slint UI staging artifacts. A post-commit probe from Rust commit `77a803f` wrote the same 9-entry shape under `%EMULEBB_WORKSPACE_OUTPUT_ROOT%\release\rust-v0.1.0-beta.1-workflow-packager-probe-20260722-current\`; its zip SHA256 was `9ce12cc136308371f8b0be836d12690a7e6782c1410e9669a7862531bb256fff`, manifest SHA256 `2cca97ecc95948f58381e3d9c3dab00913183120ebbd808e4f8a35d105544b8b`, and SBOM SHA256 `79407251ecefb0c1e78fabcc7b79dab8ae71995e865d42dcf9ea4ce54fed7336`. The release tag/GitHub release run still needs operator approval and final release evidence. |
 
-## Next Core Feature Focus
+## Freeze-Period Work
 
-The next coding/testing priority is turning the persisted shared-library state
-into a clean restart/reload proof after hashing settles, while continuing public
-download/search monitoring on the regular daemon.
-Work this as small slices:
-
-1. Keep the sanitized `public-search-download-proof`, `publish-visibility-proof`,
-   `rust-webui-live-proof`, and `shared-reload-settled-proof` harnesses on the
-   regular daemon path as the current download/search, publish, embedded WebUI,
-   and shared-library gates.
-2. Preserve the privacy boundary: operator-owned terms and public result names,
-   hashes, and paths stay out of tracked docs, tests, and retained reports.
-3. Treat `sources>0` without transfer bytes or `sourcesTransferring` as weak
-   evidence only; fix the first reproducible Rust core or harness failure with
-   focused tests before another live run.
+The only planned work before tagging is release-blocker resolution and the
+minimum test/evidence, documentation, or packaging correction needed to prove
+and publish the selected candidate. Existing bounded monitoring may continue;
+it does not authorize new product scope. Preserve the privacy boundary:
+operator-owned terms and public result names, hashes, and paths stay out of
+tracked docs, tests, and retained reports. If evidence exposes a reproducible
+release-blocking defect, fix that defect with focused tests and no unrelated
+refactor.
 
 ## Notes
 
