@@ -108,6 +108,9 @@ cleanup or product behavior.
       this release item, the active backlog index, and the GitHub release issue.
 - [x] Local deterministic D1 certification passes on one exact Rust commit,
       with support revisions and retained evidence recorded below.
+- [x] Network-safety D2 certification passes on that same Rust commit with a
+      positive Gluetun sensor, zero tunnel-down egress, expected REST
+      isolation, and blocking clean-teardown checks.
 - [ ] Operator gives the explicit tagging go.
 - [ ] The approved tagged workflow publishes and verifies all native release
       assets plus `ghcr.io/emulebb/emulebb-rust:0.1.0-beta.1` for amd64/arm64.
@@ -173,6 +176,62 @@ The final D1 audit found no running test processes and clean Git status in the
 Rust, build, build-tests, tooling, MFC, and goed2k repositories. This
 certification selects the commit for subsequent hosted exact-SHA and publication
 gates; it does not authorize tagging or publication.
+
+## Network-Safety Certification (D2, 2026-09-30)
+
+D2 retained the exact D1 Rust candidate
+`fc9e2f85ef9086a349c924f9ab6c41e60b35d6a0`; no Rust repository file changed.
+The support inputs were `emulebb-build`
+`7eccd2934a45bda9fadc31c15b59937d5a3c8af2`, `emulebb-build-tests`
+`57afdb9895436cf2c3ba9558dc31bf10247f5760`, and the pre-evidence-record
+`emulebb-tooling` revision `9d829b33194c15d78ed1c214e94df3a70e01bd60`.
+
+Image provenance and WSL boundary evidence:
+
+- The clean Linux x64 Release build passed with zero warnings at
+  `${EMULEBB_WORKSPACE_OUTPUT_ROOT}\logs\builds\20260930T144458Z-build-clients\build-result.json`.
+  Its log records the Windows workspace/output roots translated to
+  `/mnt/c/prj/p2p/emulebb-workspace` and `/mnt/c/var/build/emulebb_out`, with
+  Linux Cargo isolated at `/mnt/c/var/build/emulebb_out/builds/rust/target-wsl`.
+- The Linux package manifest records the exact Rust, build, and tooling inputs.
+  The amd64 DEB SHA-256 is
+  `748de9a588dae45e9e632dfb896dbc6988aed04b5992ae4a28a675dc9ebcfafe`;
+  the staged and in-image executable SHA-256 is
+  `af82155706e2c21b5b9e6349ee8dc29e956927bc238ff4a5056b321e0c89957d`.
+- The single-architecture OCI proof archive is
+  `${EMULEBB_WORKSPACE_OUTPUT_ROOT}\artifacts\emulebb-rust-v0.1.0-beta.1-linux-amd64-fc9e2f85.oci.tar`,
+  SHA-256
+  `f7d3f099e9c9ba502b707028552b6c81a61f33a4b2299debb5df1a884c7022f0`.
+
+The blocking report is
+`${EMULEBB_WORKSPACE_OUTPUT_ROOT}\reports\rust-gluetun-proof\20260930T150716Z.json`,
+SHA-256 `ecde1e0e0af59706bb1ba440d72802efadd861b9d420cf935e543e3e06b096bd`.
+It passed with these results:
+
+- Gluetun was healthy, Rust P2P was pinned to `tun0`, eD2K and Kad connected
+  through the tunnel, and the positive host sensor captured test-tunnel UDP.
+- After Gluetun stopped, Rust remained running with only `lo`. REST remained
+  responsive on loopback inside the isolated Rust namespace, while the
+  host-published REST endpoint became unreachable as the fail-closed Compose
+  model requires.
+- The 45-second host capture decoded zero off-tunnel IPv4 TCP/UDP packets. The
+  retained 24-byte empty PCAP is
+  `${EMULEBB_WORKSPACE_OUTPUT_ROOT}\reports\rust-gluetun-proof\20260930T150716Z.off-tunnel.pcap`,
+  SHA-256
+  `e3f42e2687636327d7f18c9635173252505b4a838fa6829a755bab06c9c69749`.
+- Teardown returned success, removed the unique test project plus all of its
+  containers, networks, and volumes, and preserved the pre-existing `p2p`
+  project and state.
+
+The tracked example's Gluetun `v3.41.0` pin failed before Rust startup because
+that Gluetun version propagated custom OpenVPN `udp4` into an invalid iptables
+protocol. [Gluetun v3.41.2](https://github.com/qdm12/gluetun/releases/tag/v3.41.2)
+fixed custom-config protocol normalization. D2 therefore used
+`qmcgaw/gluetun:v3.41.3` (`sha256:fa19cc76b2af13d57a8d3dc3066f2ada061b1c761b8aecf989b3877c0486e027`)
+through a retained 55-byte test-only Compose override, SHA-256
+`67a1c92df06f9a00d7967fafbc39eccdcf08a9dc8c5f93e1424d0b600df8e1b3`.
+The excluded startup diagnostic at `20260930T150145Z.json` also proved clean
+teardown; it is not certification evidence.
 
 ## Current Candidate Evidence (2026-09-26)
 
