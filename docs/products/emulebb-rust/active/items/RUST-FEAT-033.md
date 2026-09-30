@@ -111,6 +111,8 @@ cleanup or product behavior.
 - [x] Network-safety D2 certification passes on that same Rust commit with a
       positive Gluetun sensor, zero tunnel-down egress, expected REST
       isolation, and blocking clean-teardown checks.
+- [x] Non-publishing E1 release certification passes all six native package
+      targets and both OCI architectures on that same Rust commit.
 - [ ] Operator gives the explicit tagging go.
 - [ ] The approved tagged workflow publishes and verifies all native release
       assets plus `ghcr.io/emulebb/emulebb-rust:0.1.0-beta.1` for amd64/arm64.
@@ -232,6 +234,70 @@ through a retained 55-byte test-only Compose override, SHA-256
 `67a1c92df06f9a00d7967fafbc39eccdcf08a9dc8c5f93e1424d0b600df8e1b3`.
 The excluded startup diagnostic at `20260930T150145Z.json` also proved clean
 teardown; it is not certification evidence.
+
+## Release Artifact Certification (E1, 2026-09-30)
+
+The non-publishing GitHub Actions
+[release run 36740989234](https://github.com/emulebb/emulebb-rust/actions/runs/36740989234)
+completed successfully from `workflow_dispatch` on exact Rust candidate
+`fc9e2f85ef9086a349c924f9ab6c41e60b35d6a0`. It ran from 16:00:14Z through
+16:11:33Z. The workflow used these pinned support inputs:
+
+- `emulebb-build` `ebc13973311f953a16f0c8d8423b857f76ca22fe`;
+- `emulebb-tooling` `914d02a9ef219dbfc813be4cdd6322a6c3b10c60`;
+- native package smoke harness `42896ef2efb34cb20288aff0d2d8707086e69d9f`;
+- OCI smoke harness `d7a59c85d8a86ee88ab178d7c1ae1f73e00e210f`;
+- `emulebb-miniupnp` `bced81fb0b73ae78c9b911c89e881fbc6d4a5c7c`.
+
+All six native matrix jobs passed: Windows x64 and ARM64, Linux x64 and ARM64,
+and macOS x64 and ARM64. The native smoke launched every produced package from
+a fresh, empty-share profile. The two Windows ZIPs, two macOS DMGs, and both
+the DEB and AppImage on each Linux architecture each served REST plus the two
+embedded WebUI assets, returned object JSON from all 14 current panel backends
+(`overview`, `transfers`, `search`, `sharing`, `shared-files`, `uploads`,
+`network`, `servers`, `kad`, `categories`, `friends`, `settings`,
+`diagnostics`, and `logs`), accepted REST shutdown, and exited with code zero.
+The additional Windows x64 Chromium proof visited all 14 panels, recovered
+from a stale API key, recorded no console/page/request errors, and stayed
+within its main-thread budget.
+
+The downloaded native asset hashes are:
+
+- Windows x64 ZIP:
+  `6234fd553965de0410a2c7bb8727bc8d4de7819e56f10592f5be299e0b159edc`;
+- Windows ARM64 ZIP:
+  `a6fe7169decbaa8ca5d5d8b8ffabf37562cae438007b3a9e205f7164fb8fb647`;
+- Linux amd64 DEB:
+  `2e44ee570f4bda9a3e7b0370a3a0803c3b668c392af7c225f462be43aa6b6fc1`;
+- Linux x86_64 AppImage:
+  `9a34e9ab1a590b388ece56b8ae9f7a7d55e230f81606558c1d6350fa712e9c26`;
+- Linux arm64 DEB:
+  `a9273186676ec6897d02b0c0655b40742e28edde99c2ae9a0174831490a4e469`;
+- Linux aarch64 AppImage:
+  `51522995b41e78dccfc4c38578a7136d75b935788865ccb30237ddaa4b3cc9b5`;
+- macOS x64 DMG:
+  `afe3ebbe7c78b5b3e975b8c57d012217f51b36942f7c36f09309b13e052eeba1`;
+- macOS ARM64 DMG:
+  `353c972015b80b4798980790bbcd1842cee6842aad0d60a2a88ed83749e5e294`.
+
+The dependent image job built the OCI archive without publishing and passed
+first-run image smoke for both `linux/amd64` and `linux/arm64`. Each platform
+served the WebUI, created its first-run profile, honored UID/GID `1234:1235`,
+owned `/config` and `/data` correctly, ran the daemon, exposed zero host ports,
+and was stopped and removed by the harness. The retained multiarch OCI tar is
+143,379,968 bytes with SHA-256
+`287719da0ebbf7cd367295719afe87e60e6efb50c075762392ae035e8881f387`.
+
+All 13 workflow artifacts were downloaded beneath
+`${EMULEBB_WORKSPACE_OUTPUT_ROOT}\artifacts\github-release-runs\36740989234`.
+The local audit covered 35 files totaling 232,240,156 bytes. All eight native
+manifests matched their asset and SBOM SHA-256 values and recorded the exact
+candidate and pinned build/tooling revisions; no provenance check failed.
+
+The `Publish versioned GHCR image` and `Publish verified native beta assets`
+jobs were skipped by their tag-only guards. The final audit found no
+`rust-v0.1.0-beta.1` tag, GitHub release, or readable GHCR package. E1 therefore
+certifies retained candidates only and does not authorize publication.
 
 ## Current Candidate Evidence (2026-09-26)
 
