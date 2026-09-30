@@ -59,6 +59,12 @@ capability-bit coverage. A refreshed overnight campaign passed all seven
 commands and all eight blocking evidence rows at that Rust head, and a fresh
 Rust/eMuleBB UDP-reask witness also passed.
 
+The 2026-09-30 Kad and client-UDP reconciliation below disposes every scoped
+Kad finding in the pre-fix audit. Its result is six fixed findings, one
+stock-aligned omission, one accepted display-only platform boundary, and the
+explicit IPv4-only product boundary. The current-head stock protocol oracle
+passed all five Rust proof packages that own this surface.
+
 `RUST-BUG-001` remains distinct Phase 0 CI-isolation debt. Forward work in
 `RUST-FEAT-002`, `RUST-FEAT-004`, `RUST-FEAT-006`, and `RUST-FEAT-007` is not a
 core stock-eMule parity blocker. The regular/manual campaign remains
@@ -527,6 +533,162 @@ This closes only the requested A2 peer-transfer reconciliation. It does not
 mark the final beta, WebUI, packaging, soak, or unrelated active backlog items
 complete.
 
+## Kad and Client UDP Audit Reconciliation (2026-09-30)
+
+### Comparison Basis
+
+This is the narrow Kad and client-UDP reconciliation requested after the peer
+audit. It covers Kad versions 2-10, routing persistence, search and publish,
+firewall and buddy behavior, UDP obfuscation and receiver keys, publish ACK,
+client-UDP port test, and Kad packet tag types. It does not re-open server,
+peer-transfer, REST, WebUI, packaging, or the final beta release gate.
+
+- Old audit snapshot: emulebb-rust
+  `34b2bc0673ac28931144a70b5d670d6d04511500`.
+- Reconciled implementation: emulebb-rust `main` at
+  `d9f6ae918bf2e8786d39b61a6d3eef8d62da20af`.
+- Stock comparison: `emulebb-community-baseline` branch
+  `baseline/community-0.72a`, especially `kademlia/kademlia/Search.cpp`,
+  `kademlia/net/KademliaUDPListener.cpp`,
+  `kademlia/routing/RoutingZone.cpp`, `kademlia/io/DataIO.cpp`, and
+  `ClientUDPSocket.cpp`.
+- The old snapshot is an ancestor of the reconciled head. Every implementation
+  commit named below is also an ancestor of that head.
+- The active omission registry records the IPv4-only product boundary. It
+  contains no unresolved Kad version, persistence, search/publish,
+  firewall/buddy, obfuscation, publish-ACK, port-test, or tag-type gap.
+- Authoritative current-head campaign:
+  `${EMULEBB_WORKSPACE_OUTPUT_ROOT}\reports\release-campaign-runs\20260928T202338Z-emulebb-rust-overnight\release-campaign-run-result.json`.
+  It passed all seven commands and all eight blocking evidence rows at the
+  reconciled Rust head. The stock-protocol-oracle proof executed and passed
+  `emulebb-ed2k`, `emulebb-kad-dht`, `emulebb-kad-net`,
+  `emulebb-kad-proto`, and `emulebb-core`.
+
+### Required Surface Verdict
+
+| Required surface | Verdict | Primary proof |
+|---|---|---|
+| Kad versions 2-10 | PASS | `search_phase_selects_stock_packet_family_for_versions_two_through_ten`; `source_publish_selects_stock_packet_family_for_versions_two_through_ten`; `legacy_v2_search_requests_match_stock_wire_shapes`; `legacy_v2_v3_source_publish_matches_stock_counted_layout` |
+| Routing persistence | PASS | `unversioned_counts_zero_one_two_three_and_more_are_unambiguous`; `modern_version_two_preserves_key_binding_and_verified_state`; `exact_record_sizes_reject_truncation_and_trailing_bytes`; `learned_contact_is_atomically_persisted_and_reloaded_on_restart` |
+| Search and publish | PASS | `test_run_search_phase_replays_restrictive_keyword_payload`; `build_keyword_publish_packets_splits_fifty_one_entries_into_two_packets`; `publish_response_preserves_optional_stock_ack_request_byte`; stock-protocol-oracle package proof above |
+| Firewall and buddy behavior | PASS | `tcp_firewall_recheck_tracks_up_to_four_helper_responses`; `udp_round_times_out_as_firewalled_after_completed_failed_tests`; `test_find_buddy_action_walk_stops_at_the_oracle_answer_target`; `kad_callback_req_relays_op_callback_down_held_buddy_socket` |
+| UDP obfuscation and receiver keys | PASS | `test_encrypt_decrypt_roundtrip_with_node_id_mode`; `test_encrypt_decrypt_roundtrip_with_receiver_key_mode`; `test_response_opcodes_keep_node_id_when_identity_is_known`; `test_receiver_verify_key_is_reused_across_ports_on_same_ip` |
+| Publish ACK and client-UDP port test | PASS | `publish_response_ack_bit_is_detected_without_treating_other_options_as_requests`; `test_publish_res_ack_prefers_receiver_key_when_available`; `parses_only_the_exact_stock_port_test_probe`; `udp_probe_wakes_only_the_current_tcp_registration_once` |
+| Kad packet tag types | PASS | `test_stock_storage_class_allowlist_roundtrips`; `test_reader_rejects_generic_ed2k_short_name_marker`; `test_reader_rejects_non_stock_storage_classes`; `test_truncated_name_and_bsob_lengths_are_rejected` |
+| IPv4-only boundary | EXPLICIT | `policy/rust-client.toml` sets `protocol.address_family = "ipv4-only"`; `ipv6-ed2k-kad` records the approved permanent drop and confirms that no IPv6 capability is advertised |
+
+### Finding Dispositions
+
+The outcome vocabulary is intentionally exact:
+
+- **Fixed** means the old difference is implemented and named regression
+  evidence exists.
+- **Omitted (stock-aligned)** means current stock also ignores the obsolete
+  family and Rust does not advertise it.
+- **Accepted platform boundary** means packet framing and network behavior are
+  stock-compatible, while display-only decoding follows the host platform.
+- **Permanent boundary** means the product difference is explicit in the
+  active machine-readable policy and is not advertised as supported.
+
+| ID | Old finding | Disposition |
+|---|---|---|
+| A3-01 | Kad v2 search and Kad v2/v3 source-publish fallbacks were missing | Fixed |
+| A3-02 | Non-stock Bool, BoolArray, Blob, and unknown storage classes could be indexed and relayed | Fixed |
+| A3-03 | `nodes.dat` versions, record sizes, security metadata, and runtime persistence were incomplete | Fixed |
+| A3-04 | Kad publish-response ACK requests were ignored | Fixed |
+| A3-05 | Client-UDP `OP_PORTTEST` was absent | Fixed |
+| A3-06 | NodeID-mode UDP obfuscation did not validate the embedded receiver key | Fixed |
+| A3-07 | Kad1 outbound behavior is absent | Omitted (stock-aligned) |
+| A3-08 | Invalid-UTF8 search-result fallback differs off Windows | Accepted platform boundary |
+| A3-09 | IPv6 eD2K/Kad is absent | Permanent boundary |
+
+### Fixed Finding Evidence
+
+1. **A3-01 - Kad v2/v3 wire selection.** Commit
+   `05c2bf99c55267c75b01d3a342ef3cf3eb58979d` adds the legacy v2 search and
+   notes request families, the counted v2/v3 source-publish family, correct
+   response tracking, and per-contact selection through version 10. Tests:
+   `search_phase_selects_stock_packet_family_for_versions_two_through_ten`,
+   `source_publish_selects_stock_packet_family_for_versions_two_through_ten`,
+   `legacy_v2_search_requests_match_stock_wire_shapes`, and
+   `legacy_v2_v3_source_publish_matches_stock_counted_layout`.
+2. **A3-02 - stock Kad tag classes only.** Commit
+   `c80e5ec6a4794da344ba72a152363aad3541e854` removes generic eD2K Bool,
+   BoolArray, and Blob values from the Kad tag model, retains the stock hash,
+   string, integer-width, float, and BSOB classes, requires canonical Kad name
+   encoding, and keeps bounded length checks. Tests:
+   `test_stock_storage_class_allowlist_roundtrips`,
+   `test_reader_rejects_non_stock_storage_classes`,
+   `test_reader_rejects_generic_ed2k_short_name_marker`, and
+   `test_truncated_name_and_bsob_lengths_are_rejected`.
+3. **A3-03 - secure routing persistence.** Commit
+   `55fc0ce9916dbec48049ed22280df587e182ed43` parses unversioned and modern
+   versions 1-3 without count ambiguity, enforces exact 25/34-byte records,
+   preserves UDP key, binding public IP, and verified state, snapshots learned
+   routing contacts, and atomically writes and reloads `nodes.dat`. Imported
+   keys become usable only after the current public IPv4 binding matches.
+   Tests: `unversioned_counts_zero_one_two_three_and_more_are_unambiguous`,
+   `modern_version_one_reads_exact_basic_records`,
+   `modern_version_two_preserves_key_binding_and_verified_state`,
+   `modern_version_three_normal_reads_extended_records`,
+   `modern_version_three_bootstrap_edition_reads_basic_records`,
+   `exact_record_sizes_reject_truncation_and_trailing_bytes`,
+   `encoding_roundtrips_all_extended_security_metadata`, and
+   `learned_contact_is_atomically_persisted_and_reloaded_on_restart`.
+4. **A3-04 - publish response ACK.** Commit
+   `d1fc7b59a282537de75ae8088b12d8a038805742` preserves the stock options
+   byte, detects bit zero, gates ACK transmission on a learned sender key, and
+   sends `KADEMLIA2_PUBLISH_RES_ACK` in receiver-key mode. Tests:
+   `publish_response_preserves_optional_stock_ack_request_byte`,
+   `publish_response_ack_bit_is_detected_without_treating_other_options_as_requests`,
+   and `test_publish_res_ack_prefers_receiver_key_when_available`.
+5. **A3-05 - cross-transport client port test.** Commit
+   `93d16d4cb03e442b8ffc02bedf3221352ced22d9` accepts only the exact client-UDP
+   `OP_PORTTEST 0x12` probe, associates it with the currently armed TCP test
+   session, and emits the one-shot stock TCP result. Tests:
+   `parses_only_the_exact_stock_port_test_probe`,
+   `udp_probe_wakes_only_the_current_tcp_registration_once`,
+   `dropping_registration_disarms_only_its_generation`, and the complete
+   listener startup flow in
+   `listener_upload_startup_tolerates_source_exchange_and_aich_probe`.
+6. **A3-06 - NodeID receiver-key validity.** Commit
+   `2b17400bcdad20c9c33c8e703f01af3a167347fc` validates the embedded
+   receiver key after successful NodeID-mode decryption instead of tying
+   validity to the selected RC4 key mode. Tests:
+   `test_encrypt_decrypt_roundtrip_with_node_id_mode`,
+   `test_response_opcodes_keep_node_id_when_identity_is_known`, and
+   `test_publish_res_ack_prefers_receiver_key_when_available`.
+
+### Boundary and Stock-Aligned Evidence
+
+- **A3-07 - Kad1.** Current stock explicitly ignores deprecated Kad1
+  bootstrap, hello, request, search, and publish opcodes. Rust drops Kad1
+  contacts (`test_sanitize_res_contacts_drops_kad1_and_dns_port_contacts`) and
+  does not advertise Kad1. Versions 2-10 use the tested packet selection above.
+- **A3-08 - legacy search strings.** Windows Rust follows stock by trying UTF-8
+  and then the active ANSI code page. Non-Windows builds use Windows-1252 only
+  for invalid-UTF8 display text (`test_search_res_decodes_legacy_cp1252_strings`).
+  The fallback does not alter packet framing, search routing, indexing keys, or
+  advertised capability. It is an accepted host-platform display boundary,
+  not a network parity defer.
+- **A3-09 - IPv4 only.** `policy/rust-client.toml` is explicit that the product
+  address family is IPv4-only. The active `ipv6-ed2k-kad` omission records the
+  operator-approved permanent boundary for eD2K, Kad, transfer, NAT, and
+  bootstrap behavior, and confirms that no IPv6 capability bit is advertised.
+
+### Kad and Client UDP Close Decision
+
+Every Kad/client-UDP finding from the old audit now has fixed,
+stock-aligned, accepted-platform, or permanent-boundary evidence. The supported
+Kad v2-v10, routing, search/publish, firewall/buddy, UDP obfuscation,
+publish-ACK, port-test, and tag-type surfaces are covered by named tests and the
+current-head stock-protocol-oracle package proof. The IPv4-only boundary is
+explicit in both the machine policy and the active omission registry.
+
+This closes only the requested A3 Kad and client-UDP reconciliation. It does
+not mark the final beta, WebUI, packaging, soak, or unrelated active backlog
+items complete.
+
 ## Validation
 
 Required for closing this item:
@@ -571,6 +733,19 @@ Peer reconciliation refresh:
   workspace artifact audit, which reported 68 existing generated files under
   unrelated local virtual environments plus `emulebb-rust/webui/node_modules`.
   Those operator-owned caches were not changed or deleted.
+
+Kad and client-UDP reconciliation refresh:
+
+- All six focused implementation commits are ancestors of Rust
+  `d9f6ae918bf2e8786d39b61a6d3eef8d62da20af`; the tracked Rust tree is
+  unchanged from the authoritative campaign head.
+- The same `20260928T202338Z` overnight result passed all seven commands and
+  all eight blocking evidence rows. Its stock-protocol-oracle result passed
+  the `emulebb-ed2k`, `emulebb-kad-dht`, `emulebb-kad-net`,
+  `emulebb-kad-proto`, and `emulebb-core` proof packages.
+- `python tools\check_rust_client_policy.py` and `git diff --check` passed at
+  the reconciled Rust head. The policy check includes the explicit IPv4-only
+  configuration and active omission-registry validation.
 
 Optional smoke:
 
