@@ -354,30 +354,51 @@ server addresses, `server.met` files, or bootstrap guidance.
            changes separately from packaging and presentation work.
 
 - **padMule**
-  - Status: 🟡 Active, experimental
+  - Status: 🟡 Active, experimental, agent-assisted
   - Language/platform: Rust engine with native SwiftUI iPad app
   - Link: https://github.com/ajbufort/padMule
   - Repo stats (GitHub, 2026-09-30):
     - `ajbufort/padMule`: 0 stars, 0 forks, 0 open issues; default `main`;
       default-branch commit 2026-08-14 `ce2d91b`; GPL-2.0; no releases.
-  - Notes: From-scratch iPad client claiming eD2K/Kad wire compatibility, with
-           Rust protocol/files/Kad/engine crates, UniFFI bindings, and an aMule
-           differential-test reference. Interesting portability and protocol-test
-           lead; verify the claims in code and traces before reuse.
+  - Notes: From-scratch iPad client with Rust protocol, file-format, Kad, engine,
+           CLI, and UniFFI crates behind a native SwiftUI app. The repository
+           explicitly documents coordinated Claude-agent development, treats
+           eMule 0.50a as wire authority, vendors aMule 3.0.1 as a read-only
+           runnable oracle, and carries differential-transfer scripts, fuzz
+           targets, supply-chain checks, and claimed on-device evidence. It is a
+           high-value clean-room interoperability and mobile-lifecycle reference,
+           not yet an independently verified authority. Its optional Leech Mode
+           and padMule-to-padMule enhancement channel conflict with eMuleBB policy;
+           review those boundaries before borrowing behavior. The source license
+           is described as GPL-2.0-or-later, while its own notice says some linked
+           binary configurations convey under GPL-3.0-or-later.
 
 - **rucio**
-  - Status: 🟢 Active, early
-  - Language/platform: Rust
+  - Status: 🟢 Active, released, partial eMule bridge
+  - Language/platform: Rust; daemon, CLI, embedded WebUI, containers, and
+    optional Tauri desktop shell
   - Link: https://github.com/ogarcia/rucio
   - Repo stats (GitHub, 2026-09-30):
     - `ogarcia/rucio`: 51 stars, 1 fork, 2 open issues; default `master`;
       default-branch commit 2026-09-25 `382b72f`; latest release `0.46.0` on
-      2026-09-25.
-  - Notes: New Rust P2P file-sharing daemon inspired by eMule and MLDonkey. It
-           uses its own Kademlia/Gossipsub/libp2p-style stack and optionally
-           builds eMule/Kad2 compatibility for Kad search and `ed2k://` download
-           workflows. Treat as a fresh monitoring lead until Kad2 and ED2K
-           compatibility are reviewed in code and network traces.
+      2026-09-25; GPL-3.0.
+  - Notes: New Rust P2P file-sharing product inspired by eMule and MLDonkey. Its
+           primary network is a separate libp2p stack using Kademlia discovery,
+           Gossipsub keyword search, BLAKE3 content identities, and `rucio:`
+           links. The optional `rucio-emule` bridge can bootstrap Kad2, search
+           keywords and sources, download `ed2k://` files, upload verified
+           partial chunks, and continue seeding completed files. It is not a
+           full eMule replacement: the audited scope has no eD2K server leg or
+           AICH, intentionally omits RSA secure identification, and advertises
+           no client-UDP reask, source exchange, or shared-directory browsing.
+           The project has substantive Rust CI (`fmt`, Clippy with
+           `-D warnings`, and all-feature tests), but its scripted E2E lane
+           excludes the live eMule leg. The local HTTP API defaults to loopback
+           but has no built-in authentication when exposed. Treat Rucio as a
+           strong daemon/product-packaging and clean network-separation reference;
+           require independent wire traces before using its eMule behavior as an
+           oracle, and do not copy GPL-3.0-only implementation code into the
+           GPL-2.0-only eMuleBB Rust tree.
 
 - **HydraP2P**
   - Status: 🟡 Needs verification
@@ -618,9 +639,16 @@ server addresses, `server.met` files, or bootstrap guidance.
       default-branch commit 2026-09-27 `e08a4a6`; release `v0.1.0` on
       2026-09-27; GPL-3.0.
   - Notes: New lightweight Windows UI/orchestration layer that bundles or drives
-           the existing aMule daemon rather than implementing eD2K/Kad itself.
-           Track as a packaging and desktop-UX lead; its one-day project history
-           is not yet maintenance or runtime-maturity evidence.
+           the existing aMule daemon through the External Connections protocol;
+           it does not implement the eD2K/Kad wire. The initial repository was
+           produced in seven commits on one day and already included a broad UI,
+           four translations, manuals, screenshots, and release packaging. That
+           is evidence of rapid or agent-accelerated construction, not by itself
+           evidence of runtime maturity; the author does not explicitly label it
+           vibe-coded. Track its multi-tab search, import, filename-cleanup,
+           Tauri/EC, and desktop-packaging ideas. Verify the bundled `amuled`
+           binary's provenance, redistribution terms, EC coverage, and live
+           behavior before treating the package as a compatibility reference.
 
 - **goed2kd**
   - Status: Maintained/early
