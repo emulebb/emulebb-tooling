@@ -4,6 +4,8 @@
 from __future__ import annotations
 
 import argparse
+from collections import Counter
+import hashlib
 import re
 import sys
 from dataclasses import dataclass
@@ -15,6 +17,76 @@ DOCS = ROOT / "docs"
 WIDE_TABLE_WARN_LIMIT = 180
 MAX_WIDE_TABLE_WARNINGS = 50
 AGENT_CHECKLIST_REL = "reference/AGENT-CHECKLIST.md"
+
+# Exact-content baseline for legacy current-doc table rows that predate the
+# strict wide-table gate.  The path plus SHA-256 digest permits only these rows;
+# edits or additional wide rows remain failures under --fail-on-wide-tables.
+WIDE_TABLE_BASELINE = (
+    (
+        "docs/active/FROZEN-SURFACES.md",
+        "cfd6fd3a937cae947313b76e652ac3cd14c4a263d9f85bb3bf4addbbba5fed2f",
+    ),
+    (
+        "docs/active/FROZEN-SURFACES.md",
+        "9822d0888233904142879627b201092104451f966a80c42175aa0cc98686124a",
+    ),
+    (
+        "docs/active/FROZEN-SURFACES.md",
+        "5272d88706fbbb34a0bb5995f941db1ab891f8cac9d579f5692e2ddcac8a2172",
+    ),
+    (
+        "docs/active/FROZEN-SURFACES.md",
+        "9c22df3730a18627571360d0055bf080f7243120e44f0a7750c8d41cfe3d8add",
+    ),
+    (
+        "docs/active/FROZEN-SURFACES.md",
+        "5a296e0ffbc300f02e39c5d4fef36a4732ed621efb78955cdf33d8aa67246452",
+    ),
+    (
+        "docs/active/FUTURE-ROADMAP.md",
+        "b0b92763d8327b3f4e9f31ac6f63225c2c4b1183e84f9664f2b40f4ac03d50b3",
+    ),
+    (
+        "docs/active/plans/MFC-0.8.0-LEAN-REMOVAL-PLAN.md",
+        "c38b6cb18b9a9176197762bc8dc8cb687aab6546ae288309c99d8f11276ca794",
+    ),
+    (
+        "docs/active/plans/MFC-0.8.0-LEAN-REMOVAL-PLAN.md",
+        "e3a989a98d9dd16dee6538400ea8abb68e179bca3b781fb211d1ff00efbe5dca",
+    ),
+    (
+        "docs/active/plans/MFC-0.8.0-LEAN-REMOVAL-PLAN.md",
+        "9d29cf6f519f10cf5c91cb4da8e24b0b3e9bc4a2cba42d39be7bf6a01228ea25",
+    ),
+    (
+        "docs/active/plans/MFC-0.8.0-LEAN-REMOVAL-PLAN.md",
+        "33005203d88d2338b1743884bef0a27d096fe06ae56433ea24d7f440f9d4d497",
+    ),
+    (
+        "docs/active/plans/MFC-0.8.0-LEAN-REMOVAL-PLAN.md",
+        "c48edd71721231c7f499a6fcf68ee1dcdaaaf2556b02c69087939ba0f571315b",
+    ),
+    (
+        "docs/active/plans/MFC-0.8.0-LEAN-REMOVAL-PLAN.md",
+        "df9ddb9fe5fc5c72d0ee9b345fb619ca77278261bd1651240c6a236d858ce2e4",
+    ),
+    (
+        "docs/active/plans/MFC-0.8.0-LEAN-REMOVAL-PLAN.md",
+        "c3e0b099832fea311e727d4f262eb4107cd266fb2764f2cbb4fe52ffeb4aa584",
+    ),
+    (
+        "docs/active/plans/MFC-0.8.0-LEAN-REMOVAL-PLAN.md",
+        "e95832f98a8d989e005d2eb6b4605b214099803a762beff53c2ea773cf5f51b8",
+    ),
+    (
+        "docs/active/plans/MFC-0.8.0-LEAN-REMOVAL-PLAN.md",
+        "28fd86c838ed3cdc3fe9b86bdb296efa892d541daeaa15b2fc81a84d723282e7",
+    ),
+    (
+        "docs/active/plans/MFC-0.8.0-STARTUP-TIME-TO-INTERACTIVE.md",
+        "7ec2409e43bc3e31058d00211572bccf936a8990d9879140ee028d10e18cc009",
+    ),
+)
 
 CURRENT_DOC_DIRS = {
     "active",
@@ -37,6 +109,7 @@ class WideTableRow:
     line_number: int
     width: int
     sample: str
+    digest: str
 
 
 def read_text(path: Path) -> str:
@@ -179,6 +252,7 @@ def find_wide_table_rows(limit: int) -> list[WideTableRow]:
                         line_number=line_number,
                         width=len(line),
                         sample=line[:160],
+                        digest=hashlib.sha256(line.encode("utf-8")).hexdigest(),
                     )
                 )
     return sorted(rows, key=lambda row: (-row.width, str(row.path), row.line_number))
@@ -219,7 +293,19 @@ def main() -> int:
     check_agent_checklist(errors)
 
     wide_rows = find_wide_table_rows(args.wide_table_limit)
-    for row in wide_rows[:MAX_WIDE_TABLE_WARNINGS]:
+    baseline_remaining = Counter(WIDE_TABLE_BASELINE)
+    allowed_wide_rows: list[WideTableRow] = []
+    unallowed_wide_rows: list[WideTableRow] = []
+    for row in wide_rows:
+        key = (row.path.relative_to(ROOT).as_posix(), row.digest)
+        if baseline_remaining[key] > 0:
+            allowed_wide_rows.append(row)
+            baseline_remaining[key] -= 1
+        else:
+            unallowed_wide_rows.append(row)
+
+    reported_rows = unallowed_wide_rows if args.fail_on_wide_tables else wide_rows
+    for row in reported_rows[:MAX_WIDE_TABLE_WARNINGS]:
         message = (
             f"{row.path.relative_to(ROOT)}:{row.line_number}: table row is "
             f"{row.width} chars wide: {row.sample}"
@@ -228,15 +314,21 @@ def main() -> int:
             errors.append(message)
         else:
             print(f"warning: {message}")
-    if len(wide_rows) > MAX_WIDE_TABLE_WARNINGS:
+    if len(reported_rows) > MAX_WIDE_TABLE_WARNINGS:
         print(
             "warning: "
-            f"{len(wide_rows) - MAX_WIDE_TABLE_WARNINGS} additional wide table rows suppressed"
+            f"{len(reported_rows) - MAX_WIDE_TABLE_WARNINGS} additional wide table rows suppressed"
+        )
+
+    if args.fail_on_wide_tables and allowed_wide_rows:
+        print(
+            f"allowed {len(allowed_wide_rows)} exact-content baseline wide table rows"
         )
 
     print(
         f"checked {len(current_markdown_files())} current Markdown docs, "
-        f"{len(wide_rows)} wide table rows over {args.wide_table_limit} chars"
+        f"{len(wide_rows)} wide table rows over {args.wide_table_limit} chars "
+        f"({len(allowed_wide_rows)} baseline, {len(unallowed_wide_rows)} unallowed)"
     )
 
     if errors:
