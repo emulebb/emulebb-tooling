@@ -22,6 +22,21 @@ omitted, and deferred surface is defined by the
 - Recursive monitored folder sharing, finished-file delivery, categories,
   persisted servers/settings/identity/credits, local SQLite indexing, IP filter,
   and anti-abuse controls.
+- Full peer-centric A4AF connection reuse across outbound and LowID connect-back
+  sessions, including per-file NNP/FNF handling on a reused TCP transport.
+- Learned and persisted server obfuscation metadata, including obfuscated
+  TCP/UDP ports, UDP keys, public-IP binding, stale-key suppression, and bounded
+  crypt-ping/plaintext discovery fallback.
+- Bounded shared-file media-metadata extraction and stock-compatible publication
+  of artist, album, title, duration, bitrate, and codec through Kad and the
+  supported eD2K server-offer subset.
+- Maintained-fork upload send granularity and cross-packet queued-duplicate
+  classification, preserving equal-share pacing and distinguishing queued from
+  already-served duplicate block requests.
+- Sanitizer-backed fuzz targets for the ED2K server, peer TCP, clear/obfuscated
+  client UDP, and Kad v2 parser families.
+- Ordered UPnP/IGD backend diversity: MiniUPnPc first, then an independent
+  in-tree SSDP/SOAP provider with the same bind and mapping safety contract.
 - An embedded SPA WebUI for status, transfers, search, sharing, uploads,
   servers, Kad, settings, logs, and diagnostics.
 - API-key-protected `/api/v1` REST and SSE surfaces. The owned OpenAPI contract

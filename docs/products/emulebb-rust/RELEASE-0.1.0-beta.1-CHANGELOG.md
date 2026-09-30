@@ -18,9 +18,14 @@ Git log.
 ## eD2K And Kad
 
 - Added IPv4 eD2K server login with HighID/LowID operation, search, TCP/global-UDP source discovery, transfer queues, compressed/multipacket blocks, 64-bit offsets, AICH/ICH, secure identification, and persisted credits.
-- Added UDP source reask, server-mediated LowID callback, server cycling/import, obfuscation for configured servers, and bounded connection/source scheduling.
+- Added UDP source reask, server-mediated LowID callback, server cycling/import, and bounded connection/source scheduling.
+- Added full peer-centric A4AF connection reuse so outbound and LowID connect-back sessions traverse alternate files on one TCP transport with per-file NNP/FNF attribution.
+- Added learned and persisted server obfuscation metadata from extended status and crypt-ping discovery, including obfuscated ports, UDP-key/public-IP binding, stale-key suppression, and bounded plaintext fallback.
+- Added bounded shared-file media-metadata extraction with stock-compatible Kad artist/album/title/duration/bitrate/codec publication and the supported duration/bitrate/codec subset in eD2K server offers.
 - Added Kad bootstrap, routing maintenance, search/publish/local index, firewall checks, buddy operation and buddy-relayed callbacks, flood controls, and persistence.
 - Added upload scoring, elastic broadband slots, equal-share FIFO bandwidth scheduling, duplicate-block rejection, peer bans, IP filtering, and network-facing diagnostics.
+- Matched the maintained fork's rate-limited upload send granularity with 2600-byte chunks at or above 6 KiB/s and 536-byte chunks below it while retaining whole-packet writes for unlimited uploads.
+- Preserved queued upload range generations across request packets so diagnostics distinguish queued duplicates from already-served duplicates while rejecting both.
 - Froze the beta parity omissions: live source exchange is SX2-only, eD2K/Kad is IPv4-only, peer chat/captcha UI and media preview are absent and unadvertised, and LAN/loopback Kad sources remain flood-exempt outside stock LAN mode.
 - Kept the conservative rolling five-second outgoing-connection grant window as the only deferred parity behavior; it is gentler than stock tick-batch pacing and has no wire effect.
 
@@ -35,6 +40,7 @@ Git log.
 ## Routing And Safety
 
 - Made explicit P2P bind/interface selection fail closed across ED2K, Kad, STUN, NAT, listeners, and outbound transport paths.
+- Added an independent in-tree SSDP/SOAP UPnP IGD provider behind preferred MiniUPnPc, including bind-pinned discovery, mapping verification, rollback, deletion, settings, REST, WebUI, and diagnostic support.
 - Added a blocking test-only socket-egress audit covering tunnel-up, tunnel-down, and tunnel-pulled scenarios while preserving loopback REST control.
 - Added Docker-over-Gluetun isolation proof with positive sensor validation and zero observed off-tunnel P2P packets after tunnel loss.
 - Kept native packages in direct-route posture with no anonymity promise; the isolated Gluetun namespace is the tested beta VPN deployment.
@@ -51,6 +57,7 @@ Git log.
 ## Validation
 
 - Added deterministic Rust-to-Rust and Rust-to-MFC upload/download coverage, stock-compatible live-byte witnesses, and exact delivered-file SHA-256 verification.
+- Added four sanitizer-backed libFuzzer targets covering ED2K server parsers, peer TCP parsers, clear/obfuscated client UDP parsing, and the Kad v2 packet decoder.
 - Added Windows and WSL direct-network diagnostic campaigns with bounded inputs, retained sanitized evidence, and graceful teardown requirements.
 - Added cross-platform Rust build/test CI on Windows, Linux, and macOS, pinned Rust/tool/action dependencies, formatting/Clippy policy, and cargo-deny advisory/license/source gates.
 - Added native package/WebUI startup smoke, container ownership/persistence checks, and independent Gluetun tunnel-down validation without touching an operator's existing stack.

@@ -66,6 +66,35 @@ history, while current defers and approved drops remain in
   repeat-request tracking, identity-change / file-request-flood bans, upload/
   download recycle and timeout measures).
 
+## Implemented beta parity closures
+
+These previously deferred items are implemented in the beta. They are retained
+as `fixed` audit records in `policy/rust-client-omissions-history.toml` and do
+not belong in the current parity-difference matrix:
+
+- **Full A4AF connection reuse:** outbound and LowID connect-back sessions walk
+  the peer's ordered cross-file relation set on one TCP transport, preserving
+  connection-scoped identity/capabilities while attributing NNP and FNF to the
+  file that produced each result.
+- **Server obfuscation metadata:** extended status replies and crypt-ping
+  discovery populate UDP flags, obfuscated TCP/UDP ports, UDP keys, and their
+  public-IP binding; the tuple persists across restart and stale keys are
+  suppressed after a public-IP change.
+- **Media metadata:** bounded shared-file extraction supplies artist, album,
+  title, duration, bitrate, and codec for stock-compatible Kad keyword tags,
+  plus the supported duration/bitrate/codec subset in eD2K server offers.
+- **Upload send granularity:** rate-limited uploads reserve and write the
+  maintained fork's 2600-byte chunks at or above 6 KiB/s and 536-byte chunks
+  below that threshold; unlimited uploads retain whole-packet writes.
+- **Queued duplicate classification:** per-slot request generations preserve
+  queued range keys across packets, distinguishing queued duplicates from
+  already-served duplicates without changing their rejection on the wire.
+- **Parser fuzzing:** four sanitizer-backed libFuzzer targets cover the ED2K
+  server, peer TCP, clear/obfuscated client UDP, and Kad v2 parser families.
+- **Alternate UPnP IGD:** MiniUPnPc remains preferred, with an independent
+  in-tree SSDP/SOAP IGD provider as the ordered fallback under the same bind,
+  mapping, rollback, and diagnostic contract.
+
 ## Frozen beta parity matrix
 
 This is the complete current stock-vs-Rust difference set for
