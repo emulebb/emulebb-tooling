@@ -803,6 +803,65 @@ server addresses, `server.met` files, or bootstrap guidance.
            and eMule metrics. Track as a diagnostics idea lead until packet behavior,
            data sources, and compatibility are reviewed.
 
+## Adjacent Agent-Built P2P Watchlist
+
+These projects do not implement eD2K/Kad and are not compatibility references.
+They are retained because their explicitly AI-assisted development, protocol
+scope, test claims, and security disclaimers provide useful comparisons for
+evaluating the current wave of rapidly produced P2P software. Do not move code
+or protocol assumptions from this section into eMuleBB without an independent
+design, license, security, and interoperability review.
+
+- **WebTorrent Rust (`webtorrent_rs`)**
+  - Status: ⚫ Archived, explicitly vibe-coded experiment
+  - Language/platform: Rust; WebTorrent/BitTorrent library
+  - Link: https://github.com/DIG-Network/webtorrent_rs
+  - Repo stats (GitHub, 2026-09-30):
+    - `DIG-Network/webtorrent_rs`: 0 stars, 0 forks, 0 open issues; default
+      `master`; default-branch commit 2025-12-25 `cc8dea5`; archived; no
+      releases or GitHub-detected license. The README states MIT.
+  - Notes: Unofficial Rust port claiming tracker, DHT, TCP/uTP/WebRTC, metadata,
+           peer exchange, NAT traversal, throttling, and more than 80 tests. The
+           maintainer explicitly calls it vibe-coded, experimental, unmaintained,
+           and unsuitable for production. Useful primarily as a cautionary case:
+           a broad implemented-feature list is not evidence of live swarm
+           compatibility, maintenance, or production safety.
+
+- **Rekindle**
+  - Status: 🟡 Active/early, explicitly AI-assisted
+  - Language/platform: Rust/Tauri/SolidJS over the Veilid P2P network
+  - Link: https://github.com/ScopeCreep-zip/Rekindle
+  - Repo stats (GitHub, 2026-09-30):
+    - `ScopeCreep-zip/Rekindle`: 10 stars, 0 forks, 0 open issues; default
+      `main`; default-branch commit 2026-02-19 `365971a`; latest prerelease
+      `v0.0.2-alpha` on 2026-02-19; MIT license.
+  - Notes: Decentralized gaming-chat client with Rust protocol, crypto, voice,
+           and community crates behind a Tauri UI. The README explicitly says AI
+           is used and that the project may appear vibe-coded. It identifies
+           one-to-one messaging as the primary tested workflow while voice,
+           communities, and game detection are not yet confirmed end to end.
+           Track its separation of reusable Rust crates from the desktop shell
+           and its candid implemented-versus-verified labeling; do not accept
+           its multi-layer cryptography claims without a dedicated audit.
+
+- **NomadPortal-Android**
+  - Status: 🟡 Active, early beta, explicitly vibe-coded
+  - Language/platform: Kotlin/Jetpack Compose with embedded Python Reticulum/LXMF
+  - Link: https://github.com/JamesM92/NomadPortal-Android
+  - Repo stats (GitHub, 2026-09-30):
+    - `JamesM92/NomadPortal-Android`: 1 star, 0 forks, 5 open issues; default
+      `dev`; default-branch commit 2026-08-27 `3880b4d`; latest prerelease
+      `v0.0.3` on 2026-08-26; GitHub reports no recognized license.
+  - Notes: Android client for Reticulum/LXMF messaging, NomadNet page hosting,
+           voice, Bluetooth/LoRa/TCP transports, and remote-shell access. The
+           author explicitly describes it as built with an AI assistant, states
+           that they are not a security expert, and warns that no professional
+           audit has covered its cryptographic identity, permissions, or
+           untrusted-input paths. Its repository describes a PolyForm
+           Noncommercial license, which is also unsuitable as a source donor for
+           eMuleBB. Useful as an example of unusually clear AI-development and
+           security-risk disclosure.
+
 ## Historical eMule Mods And Source Archives
 
 The workspace has archive evidence under `EMULEBB_WORKSPACE_ROOT\analysis\mods-archive`.
