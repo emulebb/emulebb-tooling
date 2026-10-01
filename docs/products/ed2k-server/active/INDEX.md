@@ -32,10 +32,11 @@ Items use `ED2KSRV-<CLASS>-<NNN>`, where `CLASS` is `BUG`, `FEAT`, `REF`, or
 
 | ID | Priority | Title |
 |---|---|---|
-| [ED2KSRV-BUG-001](items/ED2KSRV-BUG-001.md) | Critical | Bound packed-frame decompression and input sizes |
+| [ED2KSRV-BUG-001](items/ED2KSRV-BUG-001.md) | Critical | Bound packed-frame decompression |
 | [ED2KSRV-BUG-002](items/ED2KSRV-BUG-002.md) | Critical | Enforce configured client and publication limits |
 | [ED2KSRV-BUG-003](items/ED2KSRV-BUG-003.md) | Critical | Bound TCP and UDP work admission and rate limits |
 | [ED2KSRV-BUG-004](items/ED2KSRV-BUG-004.md) | Critical | Make advertised protocol capabilities truthful |
+| [ED2KSRV-BUG-005](items/ED2KSRV-BUG-005.md) | Critical | Bound protocol parser strings and collections |
 | [ED2KSRV-CI-001](items/ED2KSRV-CI-001.md) | Major | Build a clean-room differential protocol corpus |
 | [ED2KSRV-CI-002](items/ED2KSRV-CI-002.md) | Major | Qualify load, soak, and controlled canary gates |
 | [ED2KSRV-CI-003](items/ED2KSRV-CI-003.md) | Critical | Resolve dependency advisories and enforce an advisory gate |

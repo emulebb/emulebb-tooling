@@ -2,7 +2,7 @@
 id: ED2KSRV-BUG-001
 workflow: github
 github_issue: https://github.com/emulebb/ed2k-server/issues/2
-title: Bound packed-frame decompression and input sizes
+title: Bound packed-frame decompression
 status: OPEN
 priority: Critical
 category: bug
@@ -14,20 +14,19 @@ source: Rust-vs-Go-vs-Lugdunum production-readiness review at ed2k-server 604b25
 
 > Workflow status is tracked in GitHub. This local document is retained as an engineering spec/evidence record.
 
-# ED2KSRV-BUG-001 - Bound packed-frame decompression and input sizes
+# ED2KSRV-BUG-001 - Bound packed-frame decompression
 
 ## Summary
 
 Packed `0xD4` frames are decompressed into an unbounded buffer after only the
-compressed wire length has been bounded. Establish explicit wire, decompressed,
-tag/string, and collection limits so hostile input cannot drive unbounded
-allocation or CPU.
+compressed wire length has been bounded. Add an independent configurable
+ceiling for decompressed output so a small zlib payload cannot exhaust process
+memory.
 
 ## Current State
 
-`src/proto/frame.rs` uses `flate2::read::ZlibDecoder::read_to_end`. The
-configuration advertises `max_string_size`, but production enforcement is not
-consistent across protocol parsing paths.
+`src/proto/frame.rs` uses `flate2::read::ZlibDecoder::read_to_end` without an
+output ceiling.
 
 ## Scope Constraints
 
@@ -35,16 +34,19 @@ consistent across protocol parsing paths.
 - Use standard bounded I/O/decompression mechanisms.
 - Treat malformed and oversized input as a connection-level protocol error,
   not a process failure.
+- Tag, string, and collection parser limits are tracked separately by
+  `ED2KSRV-BUG-005`.
 
 ## Acceptance Criteria
 
-- [ ] Compressed wire length and decompressed output have explicit configurable ceilings.
-- [ ] Tag strings and variable-length collections are consistently bounded before allocation.
-- [ ] Compression-bomb, truncated-stream, oversized-frame, and boundary-value regression tests pass.
-- [ ] Normal packed frames remain compatible with the shared golden corpus.
-- [ ] A focused stress test demonstrates bounded memory and termination time for rejected input.
+- [ ] Compressed wire length and decompressed output have independent explicit ceilings.
+- [ ] The decompressed ceiling is configurable and defaults safely for existing configurations.
+- [ ] Decompression terminates after at most one byte beyond the configured ceiling.
+- [ ] Normal, exact-boundary, limit-plus-one, high-expansion, truncated-stream,
+      and wire-limit regression tests pass.
+- [ ] Plain frames and valid packed frames retain their existing behavior.
 
 ## Validation
 
-Run locked unit/integration tests, the protocol corpus, Clippy, formatting, and
-a focused hostile-input memory/CPU check.
+Run locked unit/integration tests, formatting, Clippy, and the managed Linux
+release build.
