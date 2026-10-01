@@ -25,8 +25,8 @@ sections by scope:
   machine policy, cargo, and omission rules live in `repos\emulebb-rust\policy`
   and its `AGENTS.md`.
 - **Product annex — forks / managed products (qBittorrentBB, amutorrent
-  [frozen], trackmulebb, amule, goed2k):** Managed Fork Hygiene plus each repo's
-  `AGENTS.md`.
+  [frozen], trackmulebb, amule, goed2k, ed2k-server):** Managed Fork Hygiene
+  plus each repo's `AGENTS.md`.
 
 Physical extraction of the MFC build/localization sections into a separate
 `WORKSPACE-POLICY-MFC.md` annex is a tracked follow-up; until then this scope map
@@ -102,6 +102,9 @@ Directive precedence is:
   helpers.
 - `repos\goed2k-server` owns the local ED2K server used by deterministic
   eMuleBB live E2E and protocol-parity scenarios.
+- `repos\ed2k-server` is the managed Rust eD2K index-server Service/Lab fork.
+  It is build-integrated as a future test-server candidate but is not selected
+  by any live, parity, or release campaign.
 - `repos\emulebb` is the canonical app repo checkout used as the branch store and
   worktree anchor.
 - Normal app editing belongs in
@@ -127,12 +130,16 @@ Directive precedence is:
   `EMULEBB_WORKSPACE_OUTPUT_ROOT\builds\tests`,
   `EMULEBB_WORKSPACE_OUTPUT_ROOT\builds\amule`,
   `EMULEBB_WORKSPACE_OUTPUT_ROOT\builds\third_party`, and
-  `EMULEBB_WORKSPACE_OUTPUT_ROOT\builds\rust\target`.
+  `EMULEBB_WORKSPACE_OUTPUT_ROOT\builds\rust\target`. WSL-hosted Rust builds
+  use the separate `builds\rust\target-wsl` subtree.
 - Package-only generated inputs belong under
   `EMULEBB_WORKSPACE_OUTPUT_ROOT\packages\build`; this includes aMuTorrent
   frontend bundles staged under `packages\build\amutorrent`.
 - Runtime tool payloads staged for tests and VM workflows belong under
-  `EMULEBB_WORKSPACE_OUTPUT_ROOT\tools`, such as `tools\amule`.
+  `EMULEBB_WORKSPACE_OUTPUT_ROOT\tools`, such as `tools\amule`. The managed
+  eD2K index-server build stages its candidate executable at
+  `tools\ed2k-server\bin\ed2k-server`; staging does not authorize a harness
+  or runtime selection change.
 - Orchestrated third-party dependency output should prefer
   `EMULEBB_WORKSPACE_OUTPUT_ROOT\builds\third_party`; repo-local third-party
   build directories are tolerated only for upstream/manual tooling and must be
@@ -209,7 +216,8 @@ Directive precedence is:
 - **Granular commits bind every managed repo**, not just the MFC app `main`.
   This applies to the app worktree and to every repo named in `Policy Scope`
   (emulebb, emulebb-rust, qBittorrentBB, amutorrent, trackmulebb, amule,
-  goed2k-server, and the emulebb-build/-tests/-tooling/-pages repos). Each
+  goed2k-server, ed2k-server, and the emulebb-build/-tests/-tooling/-pages
+  repos). Each
   commit on any managed repo must represent exactly one coherent outcome.
 - Stage explicit paths. Never `git add -A`/`git add .` a mixed working tree, and
   never bundle unrelated or pre-existing edits into a commit. When a working tree
@@ -482,7 +490,7 @@ module):
 
 These rules apply uniformly to every managed fork / managed product repo: the
 `emulebb` app worktree, `emulebb-rust`, `amutorrent` (maintained until 0.7.3 final), `trackmulebb`,
-`qbittorrentbb`, `amule`, `goed2k-server`, and the `emulebb-build` /
+`qbittorrentbb`, `amule`, `goed2k-server`, `ed2k-server`, and the `emulebb-build` /
 `emulebb-build-tests` / `emulebb-tooling` support repos. The
 `p2p-overlord-*` family is a separate product line and is out of scope here.
 Each fork's `AGENTS.md` stays thin and points back to this document; do not
@@ -493,7 +501,9 @@ restate these rules per repo.
   `EMULEBB_WORKSPACE_OUTPUT_ROOT\builds\rust\target` (orchestration pins it; set
   it explicitly for ad-hoc cargo). CMake forks configure an out-of-source build
   directory under the output root; Go forks build into
-  `EMULEBB_WORKSPACE_OUTPUT_ROOT\tools\<fork>`.
+  `EMULEBB_WORKSPACE_OUTPUT_ROOT\tools\<fork>`. The Linux-only Rust
+  `ed2k-server` fork builds through WSL on Windows or native Cargo on Linux and
+  stages its runnable binary under `tools\ed2k-server\bin`.
 - **Authoritative environment variables** (`EMULEBB_WORKSPACE_ROOT`,
   `EMULEBB_WORKSPACE_OUTPUT_ROOT`) are read, never assigned. Command-scoped knobs
   stay owned by their orchestration modules.
@@ -506,6 +516,9 @@ restate these rules per repo.
   operator split-tunnel machine, though product runtime may still use them.
 - **Tests** reuse and extend the shared Python suite in `emulebb-build-tests`;
   do not fork a parallel per-client suite.
+- **Server selection** remains unchanged: `goed2k-server` is the deterministic
+  harness server. `ed2k-server` has build and source-quality gates only until a
+  separately reviewed test-server integration is approved.
 
 Enforcement: the `output-root` and `emulebb-env-override` audits in
 `repos\emulebb-tooling\ci\check-workspace-policy.py` (run by

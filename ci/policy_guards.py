@@ -51,6 +51,7 @@ WORKSPACE_CLEAN_REPO_PATHS = (
     "repos/amutorrent",
     "repos/emulebb-build",
     "repos/emulebb-build-tests",
+    "repos/ed2k-server",
     "repos/emulebb-org-profile",
     "repos/emulebb-pages",
     "repos/emulebb-tooling",

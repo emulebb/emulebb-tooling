@@ -920,6 +920,7 @@ def audit_doc_paths(root: Path) -> None:
         r"repos\amutorrent",
         r"repos\qbittorrentbb",
         r"repos\amule",
+        r"repos\ed2k-server",
         r"repos\goed2k-server",
     ):
         fork_root = resolve_workspace_path(root, relative_repo)
@@ -964,6 +965,7 @@ HYGIENE_SCOPE_REPOS: tuple[tuple[str, str], ...] = (
     ("amutorrent", r"repos\amutorrent"),
     ("qbittorrentbb", r"repos\qbittorrentbb"),
     ("amule", r"repos\amule"),
+    ("ed2k-server", r"repos\ed2k-server"),
     ("goed2k-server", r"repos\goed2k-server"),
     ("emulebb-build", r"repos\emulebb-build"),
     ("emulebb-build-tests", r"repos\emulebb-build-tests"),
@@ -1066,7 +1068,7 @@ def audit_emulebb_env_override(root: Path) -> None:
 def audit_output_root(root: Path) -> None:
     """Checks that build output is redirected under EMULEBB_WORKSPACE_OUTPUT_ROOT.
 
-    Concretely: the Rust fork must keep its ``target/`` out of the source tree,
+    Concretely: Rust forks must keep ``target/`` out of the source tree,
     no tracked script may redirect ``CARGO_TARGET_DIR`` back inside a repo, and
     no tracked build command may target the retired
     ``workspaces\\workspace\\state\\tools`` location instead of the output root.
@@ -1074,15 +1076,17 @@ def audit_output_root(root: Path) -> None:
 
     issues: list[str] = []
 
-    # Rust fork: target/ must be gitignored and untracked so ad-hoc cargo cannot
+    # Rust forks: target/ must be gitignored and untracked so ad-hoc cargo cannot
     # pollute the source tree. CARGO_TARGET_DIR must be pre-set by the operator
     # to EMULEBB_WORKSPACE_OUTPUT_ROOT\builds\rust\target.
-    rust_root = resolve_workspace_path(root, r"repos\emulebb-rust")
-    if rust_root.is_dir():
+    for rust_relative_path in (r"repos\emulebb-rust", r"repos\ed2k-server"):
+        rust_root = resolve_workspace_path(root, rust_relative_path)
+        if not rust_root.is_dir():
+            continue
         gitignore = rust_root / ".gitignore"
         ignore_text = gitignore.read_text(encoding="utf-8") if gitignore.is_file() else ""
         if not re.search(r"(?m)^/?target/?\s*$", ignore_text):
-            issues.append(f"{gitignore}: emulebb-rust must gitignore the build target/ directory")
+            issues.append(f"{gitignore}: Rust forks must gitignore the build target/ directory")
         tracked_target = run_git(rust_root, ["ls-files", "--", "target", "target/**"]).lines
         if tracked_target:
             issues.append(f"{rust_root}: tracked files exist under target/ (build output in source tree): {tracked_target[0]} ...")

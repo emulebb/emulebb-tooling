@@ -63,6 +63,7 @@ an optional manual fork checkout, not a default setup-managed repo.
 |---|---|---|---|
 | `repos/amutorrent` | `main` | aMuTorrent controller UI fork. | Node checks; live UI harness |
 | `repos/qbittorrentbb` | `master` | qBittorrentBB companion fork. | product-family quality checks |
+| `repos/ed2k-server` | `master` | Managed Rust eD2K server; future harness candidate only. | workspace build and quality checks |
 | `repos/goed2k-server` | `master` | Active Go eD2K server fork. | `go test ./...` |
 | `repos/amule` | `master` | Optional manual eMuleBB aMule Windows-build fork. | package/rebase checks when present |
 | `repos/p2p-overlord-agents` | `develop` | Rust p2p-overlord agent code. | `cargo fmt --all --check` |
@@ -109,6 +110,7 @@ The GitHub organization uses these repo classes for settings consistency:
 | Class | Repositories |
 |---|---|
 | Product | `emulebb`, `emulebb-rust`, `qbittorrentbb`, `amutorrent` |
+| Service / Lab | `ed2k-server` |
 | Build, test, tooling, docs | `emulebb-build`, `emulebb-build-tests`, `emulebb-tooling`, `.github`, `emulebb.github.io` |
 | Dependency forks | `emulebb-*` dependency forks under `repos/third_party` |
 | Research, archive, and mirrors | `emulebb-mods-archive`, `emulebb-ai`, `amule`, `goed2k-server`, `JEmuleServer`, p2p-overlord repos |
@@ -141,7 +143,13 @@ the repo README or this map before making legal metadata changes.
   manifests, including `repo-roles.json`, and shared hook configuration
   converge.
 - Run `python -m emule_workspace prepare-product-family` after materialization
-  or after dependency lockfile changes in p2p-overlord or `goed2k-server`.
+  or after dependency lockfile changes in p2p-overlord, `goed2k-server`, or
+  `ed2k-server`.
+- Run `python -m emule_workspace build ed2k-server --config Release --platform
+  x64` to build the Linux-only Rust server through WSL on Windows (or native
+  Cargo on Linux) and stage the candidate binary below
+  `EMULEBB_WORKSPACE_OUTPUT_ROOT\tools\ed2k-server\bin`. This command does not
+  start the server or change the test harness selection.
 - Run `python -m emule_workspace refresh-product-family-rebases` after the
   scheduled aMule or aMuTorrent upstream-rebase workflows publish rewritten
   fork history. The command fetches `origin` for `repos/amule` and
@@ -165,7 +173,7 @@ the repo README or this map before making legal metadata changes.
   `--include-legacy-root-logs` removes retired root workspace logs.
 - Run `python -m emule_workspace validate --include-product-family
   --product-family-tier quality` when a product-family change touches
-  `goed2k-server`, p2p-overlord, or shared contracts. Use
+  `goed2k-server`, `ed2k-server`, p2p-overlord, or shared contracts. Use
   `--product-family-tier quick` for fast smoke checks and `full` before broad
   product-family release proof. Plain `validate` remains the default eMuleBB
   workspace gate.

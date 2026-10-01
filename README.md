@@ -11,6 +11,7 @@ It is not the app repo and it is not the build orchestrator:
 - build/test orchestration: `repos\emulebb-build`
 - shared test helpers: `repos\emulebb-build-tests`
 - local live-test ED2K server: `repos\goed2k-server`
+- managed future ED2K test-server candidate: `repos\ed2k-server`
 - workspace docs and helper audits: this repo
 
 ## Start Here

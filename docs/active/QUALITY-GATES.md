@@ -6,13 +6,13 @@ of per-repo folklore. Tiers are defined in [PRODUCT-PORTFOLIO](PRODUCT-PORTFOLIO
 
 ## Gate matrix
 
-| Gate | Core (rust) | Companion (qBittorrentBB / aMuTorrent) | MFC (eMuleBB, 0.7.x → 0.8.x) | Lab (goed2k) | Infra |
+| Gate | Core (rust) | Companion (qBittorrentBB / aMuTorrent) | MFC (eMuleBB, 0.7.x → 0.8.x) | Service / Lab servers | Infra |
 |---|---|---|---|---|---|
-| Build (matrix) | ✅ 3-OS | ✅ (fork CI) | ✅ x64 Debug+Release+diag | ⛔ while lab | ✅ |
-| Unit/integration tests | ✅ blocking | ✅ | ✅ shared harness | ⛔ while lab | ✅ |
-| Lint | 🔸 clippy advisory (relaxed; → `-D warnings` at Phase 0 close) + fmt ✅ | ✅ (upstream + fork checks) | warning-debt cleanup | — | — |
-| Supply chain | ✅ cargo-deny advisories | dependency-review | dependency-review | — | dependency-review |
-| Policy guard | ✅ rust-client policy | fork hygiene (output-root, env, bind) | workspace validate | — | workspace validate |
+| Build (matrix) | ✅ 3-OS | ✅ (fork CI) | ✅ x64 Debug+Release+diag | ed2k-server ✅ Linux; goed2k ⛔ while lab | ✅ |
+| Unit/integration tests | ✅ blocking | ✅ | ✅ shared harness | ed2k-server ✅ source tests; goed2k ⛔ while lab | ✅ |
+| Lint | 🔸 clippy advisory (relaxed; → `-D warnings` at Phase 0 close) + fmt ✅ | ✅ (upstream + fork checks) | warning-debt cleanup | ed2k-server fmt ✅ + clippy advisory | — |
+| Supply chain | ✅ cargo-deny advisories | dependency-review | dependency-review | ed2k-server dependency-review | dependency-review |
+| Policy guard | ✅ rust-client policy | fork hygiene (output-root, env, bind) | workspace validate | ed2k-server fork hygiene | workspace validate |
 | Privacy guard | ✅ no private data / titles | ✅ | ✅ | ✅ | ✅ tracked-file-privacy-guard |
 | **VPN leak-test** | ✅ before VPN-safe release | ✅ before VPN-safe release | required for VPN live profiles | n/a (local-only) | n/a |
 | Docs/normalization | ✅ LF + docs checks | ✅ | ✅ | ✅ | ✅ |
@@ -27,7 +27,10 @@ of per-repo folklore. Tiers are defined in [PRODUCT-PORTFOLIO](PRODUCT-PORTFOLIO
   `kad_swarm` tests non-blocking (`RUST-BUG-001`). cargo-deny enforces advisories
   only; bans/licenses pending a dep audit.
 - **Companion (qBittorrentBB):** `vpnReady()` not truly fail-closed (`QBBB-FEAT-004`).
-- **Lab (goed2k):** no build/test CI by decision; promotion adds the Service bar.
+- **Service / Lab servers:** `goed2k-server` still has no build/test CI by
+  decision. `ed2k-server` has Linux source-quality and candidate-artifact CI,
+  but no harness/runtime gate; adding one requires the future test-server
+  integration decision.
 
 ## Principles
 
