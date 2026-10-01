@@ -38,9 +38,12 @@ Items use `ED2KSRV-<CLASS>-<NNN>`, where `CLASS` is `BUG`, `FEAT`, `REF`, or
 | [ED2KSRV-BUG-004](items/ED2KSRV-BUG-004.md) | Critical | Make advertised protocol capabilities truthful |
 | [ED2KSRV-CI-001](items/ED2KSRV-CI-001.md) | Major | Build a clean-room differential protocol corpus |
 | [ED2KSRV-CI-002](items/ED2KSRV-CI-002.md) | Major | Qualify load, soak, and controlled canary gates |
+| [ED2KSRV-CI-003](items/ED2KSRV-CI-003.md) | Critical | Resolve dependency advisories and enforce an advisory gate |
 | [ED2KSRV-FEAT-001](items/ED2KSRV-FEAT-001.md) | Major | Add graceful shutdown and supervised task lifecycle |
 | [ED2KSRV-FEAT-002](items/ED2KSRV-FEAT-002.md) | Major | Add production observability and restart recovery |
 | [ED2KSRV-FEAT-003](items/ED2KSRV-FEAT-003.md) | Major | Make source selection bounded and fair |
 
 Dependencies are recorded in each item. Resource-safety items are the first
-production gate; load/canary qualification must exercise their final limits.
+production gate; open high/critical dependency advisories also block a
+production recommendation. Load/canary qualification must exercise the final
+resource limits.

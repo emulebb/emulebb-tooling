@@ -11,7 +11,7 @@ of per-repo folklore. Tiers are defined in [PRODUCT-PORTFOLIO](PRODUCT-PORTFOLIO
 | Build (matrix) | ✅ 3-OS | ✅ (fork CI) | ✅ x64 Debug+Release+diag | ed2k-server ✅ Linux; goed2k ⛔ while lab | ✅ |
 | Unit/integration tests | ✅ blocking | ✅ | ✅ shared harness | ed2k-server ✅ source tests; goed2k ⛔ while lab | ✅ |
 | Lint | 🔸 clippy advisory (relaxed; → `-D warnings` at Phase 0 close) + fmt ✅ | ✅ (upstream + fork checks) | warning-debt cleanup | ed2k-server fmt ✅ + clippy advisory | — |
-| Supply chain | ✅ cargo-deny advisories | dependency-review | dependency-review | ed2k-server dependency-review | dependency-review |
+| Supply chain | ✅ cargo-deny advisories | dependency-review | dependency-review | ed2k-server dependency-review; advisory closure tracked by `ED2KSRV-CI-003` | dependency-review |
 | Policy guard | ✅ rust-client policy | fork hygiene (output-root, env, bind) | workspace validate | ed2k-server fork hygiene | workspace validate |
 | Privacy guard | ✅ no private data / titles | ✅ | ✅ | ✅ | ✅ tracked-file-privacy-guard |
 | Runtime/load qualification | ✅ release campaigns | ✅ before release | ✅ release proof | ed2k-server tracked by `ED2KSRV-CI-002`; goed2k ⛔ while lab | as applicable |
@@ -33,7 +33,9 @@ of per-repo folklore. Tiers are defined in [PRODUCT-PORTFOLIO](PRODUCT-PORTFOLIO
   Linux source-quality and candidate-artifact CI. Its runtime/load admission
   gate is tracked by
   [`ED2KSRV-CI-002`](../products/ed2k-server/active/items/ED2KSRV-CI-002.md);
-  this does not select it as the shared test server.
+  dependency-advisory closure is tracked by
+  [`ED2KSRV-CI-003`](../products/ed2k-server/active/items/ED2KSRV-CI-003.md).
+  These gates do not select it as the shared test server.
 
 ## Principles
 
