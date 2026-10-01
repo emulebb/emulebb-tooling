@@ -26,7 +26,7 @@ cognitive load of a 14-repo workspace and makes ownership of each decision obvio
 | `itlezy/bountarr` | Companion (household media-grab UI) | parked, Phase 2 (TS/Node) | own repo | TrackMuleBB-suite |
 | `amutorrent` | Companion (legacy) | frozen with 0.7.3 | `docs/active` (`AMUT-*` ref) | aMuTorrent |
 | `emulebb` (MFC) | Client (MFC) | frozen 0.7.x maintenance | `emulebb-tooling/docs/active` (legacy IDs) | eMuleBB-MFC |
-| `ed2k-server` | Service / Lab | build-integrated; future test-server candidate | repo issues disabled while lab | — (not on board while lab) |
+| `ed2k-server` | Service / Lab | active production-hardening candidate, Phase 1 | `docs/products/ed2k-server/active` (`ED2KSRV-*`) + repo issues | ed2k-server |
 | `goed2k-server` | Service / Lab | lab (no CI gate) | `docs/active` lab index (`GOED2K-*` reserved) | — (not on board while lab) |
 | `emulebb-build` | Infra | active | — | tooling |
 | `emulebb-build-tests` | Infra | active | — | tooling |
@@ -49,10 +49,12 @@ Stage notes (decision 2026-07-12):
 - `amutorrent` freezes with the 0.7.3 Windows suite.
 - `qbittorrentbb` is future companion work; `trackmulebb` is parked until that
   companion work progresses.
-- `ed2k-server` is a managed, Linux-first Rust service fork with build, test,
-  formatting, dependency-review, and artifact-candidate automation. It is not
-  selected by the shared harness; `goed2k-server` remains the deterministic
-  live-test server until a separate integration decision.
+- `ed2k-server` is a managed, Linux-first Rust service fork and active Phase 1
+  production-hardening candidate. Build, test, formatting, dependency-review,
+  and artifact-candidate automation are present; production-readiness work is
+  GitHub-primary under the `ED2KSRV-*` backlog. It is not selected by the shared
+  harness; `goed2k-server` remains the deterministic live-test server until a
+  separate integration decision.
 
 ## Strategic note
 

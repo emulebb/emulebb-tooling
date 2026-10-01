@@ -72,6 +72,8 @@ nav:
       - emulebb-rust Forward OpenAPI: products/emulebb-rust/api/REST-API-OPENAPI.yaml
       - emulebb-rust Architecture: products/emulebb-rust/design/architecture.md
       - emulebb-rust Indexer Design: products/emulebb-rust/design/kad-ed2k-indexer.md
+      - ed2k-server: products/ed2k-server/README.md
+      - ed2k-server Active Backlog: products/ed2k-server/active/INDEX.md
       - TrackMuleBB: products/trackmulebb/README.md
       - TrackMuleBB Active Backlog: products/trackmulebb/active/INDEX.md
       - TrackMuleBB Rust Console UI: products/trackmulebb/design/PROPER-P2P-UI.md
@@ -201,6 +203,7 @@ not_in_nav: |
   /rest/REST-API-OPENAPI.yaml
   /products/emulebb-rust/active/items/**
   /products/emulebb-rust/history/**
+  /products/ed2k-server/active/items/**
   /products/trackmulebb/active/items/**
 
 validation:

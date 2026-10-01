@@ -26,7 +26,9 @@ non-behavior-expanding diagnostics/instrumentation. Forward development now live
 in **emulebb-rust**: the headless eD2K/Kad client plus embedded SPA WebUI. The
 broader **eMuleBB Suite** remains the product direction, but **qBittorrentBB** is
 future companion work and **TrackMuleBB** is parked until the BitTorrent side is
-ready to justify a cross-network controller. For the suite as a whole, see the
+ready to justify a cross-network controller. The Rust **ed2k-server** service is
+now an active Phase 1 production-hardening candidate; it is not yet the selected
+test-harness server. For the suite as a whole, see the
 [Suite Roadmap](active/SUITE-JOINT-ROADMAP.md),
 [Suite Bundle & Installer](active/SUITE-INSTALLER.md), and
 [Suite Docker Delivery](active/SUITE-DOCKER.md).

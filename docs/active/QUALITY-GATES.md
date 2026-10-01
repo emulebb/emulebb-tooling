@@ -14,6 +14,7 @@ of per-repo folklore. Tiers are defined in [PRODUCT-PORTFOLIO](PRODUCT-PORTFOLIO
 | Supply chain | ✅ cargo-deny advisories | dependency-review | dependency-review | ed2k-server dependency-review | dependency-review |
 | Policy guard | ✅ rust-client policy | fork hygiene (output-root, env, bind) | workspace validate | ed2k-server fork hygiene | workspace validate |
 | Privacy guard | ✅ no private data / titles | ✅ | ✅ | ✅ | ✅ tracked-file-privacy-guard |
+| Runtime/load qualification | ✅ release campaigns | ✅ before release | ✅ release proof | ed2k-server tracked by `ED2KSRV-CI-002`; goed2k ⛔ while lab | as applicable |
 | **VPN leak-test** | ✅ before VPN-safe release | ✅ before VPN-safe release | required for VPN live profiles | n/a (local-only) | n/a |
 | Docs/normalization | ✅ LF + docs checks | ✅ | ✅ | ✅ | ✅ |
 
@@ -28,9 +29,11 @@ of per-repo folklore. Tiers are defined in [PRODUCT-PORTFOLIO](PRODUCT-PORTFOLIO
   only; bans/licenses pending a dep audit.
 - **Companion (qBittorrentBB):** `vpnReady()` not truly fail-closed (`QBBB-FEAT-004`).
 - **Service / Lab servers:** `goed2k-server` still has no build/test CI by
-  decision. `ed2k-server` has Linux source-quality and candidate-artifact CI,
-  but no harness/runtime gate; adding one requires the future test-server
-  integration decision.
+  decision. `ed2k-server` is an active production-hardening candidate with
+  Linux source-quality and candidate-artifact CI. Its runtime/load admission
+  gate is tracked by
+  [`ED2KSRV-CI-002`](../products/ed2k-server/active/items/ED2KSRV-CI-002.md);
+  this does not select it as the shared test server.
 
 ## Principles
 
