@@ -11,6 +11,12 @@
 > `analysis/amule` checkout tracks `amule-org/amule`; recheck paths and behavior
 > against that upstream before promoting any idea.
 
+> **Newer cross-project snapshot:**
+> [eD2K Extension Interoperability And Evolution](IDEA-ED2K-EXTENSION-INTEROPERABILITY.md)
+> records aMule's 2026-10-01 capability parsing, uTP/QUIC scaffolding,
+> server-assisted NAT-T codecs, and current interoperability limits. This
+> watchlist retains its original dated scope as provenance.
+
 ---
 
 ## Summary

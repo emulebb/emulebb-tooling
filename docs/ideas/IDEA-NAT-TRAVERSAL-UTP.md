@@ -5,6 +5,12 @@
 > `main` until a future active item (e.g. `FEAT-018`, `FEAT-036`) explicitly
 > promotes a specific slice. Reference material captured 2026-06-10.
 
+> **Newer cross-project snapshot:**
+> [eD2K Extension Interoperability And Evolution](IDEA-ED2K-EXTENSION-INTEROPERABILITY.md)
+> records the 2026-10-01 aMule, eMuleAI, Rust-server, IPv6, capability, and
+> negotiated `OP_OFFERFILES` review. This document retains its narrower dated
+> NAT traversal analysis as provenance.
+
 ## Context
 
 `amule-project/amule` issue **#583** requests two connectivity features and

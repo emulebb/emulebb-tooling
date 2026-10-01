@@ -177,6 +177,7 @@ nav:
   - Ideas:
       - Cooperative DHT: ideas/IDEA-COOPERATIVE-DHT-COOPERATION.md
       - aMule Watchlist: ideas/IDEA-AMULE-WATCHLIST.md
+      - eD2K Extension Interoperability: ideas/IDEA-ED2K-EXTENSION-INTEROPERABILITY.md
       - Kad Protocol Modernization: ideas/IDEA-KAD-PROTOCOL-MODERNIZATION.md
       - IPv6 Kad Network: ideas/IDEA-IPV6-KAD-NETWORK.md
       - NAT Traversal And uTP: ideas/IDEA-NAT-TRAVERSAL-UTP.md
