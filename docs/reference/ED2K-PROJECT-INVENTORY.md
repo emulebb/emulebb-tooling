@@ -17,6 +17,9 @@ servers, clients, protocol libraries, bootstrap tools, and controllers. GitHub
 counts are dated snapshots; release and commit dates are stronger maintenance
 signals than stars alone.
 
+The 2026-10-02 incremental update added `ModderMule/eNode-go`; it did not repeat
+the full inventory audit.
+
 ## Status Labels
 
 | Status | Meaning |
@@ -90,6 +93,25 @@ and may expose UDP status or admin APIs.
            filters. Its README calls the `0.9.x` line a production-used test/MVP;
            verify protocol behavior and operational claims independently before
            adopting it as an interoperability reference.
+
+- **eNode-go**
+  - Status: 🟢 Active, experimental
+  - Language: Go
+  - Source or archive: https://github.com/ModderMule/eNode-go
+  - Repo stats (GitHub, 2026-10-02):
+    - `ModderMule/eNode-go`: 3 stars, 0 forks, 0 open issues; default `main`;
+      default-branch commit 2026-10-02 `78a9196`; MIT license.
+  - Lineage: Fork of `zt8989/eNode-go` and a Go port of the original Node.js
+    `eNode` server listed below.
+  - Notes: Implements TCP/UDP eD2K operations, protocol obfuscation, LowID
+           callbacks, Lugdunum extensions, server gossip, optional IPv6 and NAT
+           traversal, memory/MySQL/MongoDB storage, access filters, and a
+           loopback-default admin dashboard. The repository has unit and
+           Docker-backed database integration tests. It is maintained under the
+           same `ModderMule` GitHub owner as eMule Qt, which its default server
+           configuration also promotes. Treat the cross-server and IPv6/NAT
+           extensions as research claims until independently tested against
+           stock-compatible clients and servers.
 
 - **p2p-overlord ED2K server**
   - Status: Historical, archive-only
@@ -1094,6 +1116,7 @@ andrey23127 ed2k-server Rust
 rucio eMule Kad2 Rust
 eMule 0.72a community stable
 emule-qt GitHub
+ModderMule eNode-go eMule Qt
 Ember-P2P eMule Next padMule
 Python-eD2k ged2k jed2k jaMule
 KadGlobe eMule Kademlia
