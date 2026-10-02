@@ -16,24 +16,24 @@ source: Operator-approved Rust development hygiene review 2026-07-11
 
 ## Summary
 
-Keep the obsolete `rupnp` stack retired while preserving the preferred
-MiniUPnPc provider and the independent in-tree `upnp_igd` fallback, then harden
-synchronous runtime state and native-code boundaries without changing eD2K/Kad
-behavior.
+Keep obsolete Rust NAT implementations retired while the capability-aware
+PCP/NAT-PMP-first stack in RUST-FEAT-037 owns provider architecture. Continue
+hardening synchronous runtime state and native-code boundaries without changing
+eD2K/Kad wire behavior.
 
 ## Release Triage (2026-09-30)
 
 **Post-beta.** The remaining lock/lint consolidation is maintainability work,
-not a demonstrated release defect. Provider diversity is now intentional beta
-surface: MiniUPnPc is preferred and the independent in-tree SSDP/SOAP IGD
-provider is the supported fallback.
+not a demonstrated release defect. RUST-FEAT-037 supersedes this item's former
+provider-diversity scope: PCP/NAT-PMP is preferred, MiniUPnPc is the fallback,
+and the Rust in-tree SSDP/SOAP provider is removed.
 
 ## Scope
 
 - Keep the deprecated `rupnp` backend, its `ssdp-client` dependency, and
   personal Git patches absent.
-- Accept only the supported MiniUPnPc and in-tree `upnp_igd` identifiers, and
-  reject retired backend identifiers with a clear error.
+- Leave provider selection, fallback, settings migration, and live NAT evidence
+  to RUST-FEAT-037.
 - Adopt non-poisoning `parking_lot::Mutex` for short synchronous runtime state;
   keep asynchronous locks only where a guard must cross `.await`.
 - Fail closed explicitly for security-sensitive state instead of relying on
@@ -45,8 +45,8 @@ provider is the supported fallback.
 
 ## Acceptance Criteria
 
-- [x] MiniUPnPc and the independent in-tree `upnp_igd` fallback are the only
-      compiled and configurable UPnP providers.
+- [x] NAT provider architecture is separated into RUST-FEAT-037 and no longer
+      blocks this runtime-safety refactor.
 - [x] `rupnp`, `ssdp-client`, and their dependency stack are absent from source,
       manifests, and the lockfile.
 - [ ] Short synchronous runtime state cannot cascade through mutex poisoning.
@@ -56,7 +56,7 @@ provider is the supported fallback.
 
 ## Validation
 
-- NAT provider unit tests plus MiniUPnPc discovery/map/release coverage.
+- Focused lock, unsafe-boundary, and fail-closed state tests.
 - Supported workspace Rust format, Clippy, build, tests, Kad swarm, and VPN leak
   gates.
 
@@ -71,4 +71,5 @@ provider is the supported fallback.
   `undocumented_unsafe_blocks`, with concrete FFI safety invariants at each
   remaining unsafe block.
 - `7a22c3f` implements and tests the independent bind-pinned SSDP/SOAP IGD
-  fallback without reviving the retired dependency stack.
+  fallback without reviving the retired dependency stack; RUST-FEAT-037 later
+  supersedes and removes that provider in favor of PCP/NAT-PMP plus MiniUPnPc.

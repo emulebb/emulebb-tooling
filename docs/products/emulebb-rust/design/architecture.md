@@ -71,7 +71,8 @@ graph TD
   (k-buckets), `net` (UDP RPC), `dht` (the node).
 - `emulebb-index` — local Kad keyword/source index + snoop queue.
 - `emulebb-metadata` — SQLite persistence (leaf, no internal deps).
-- `emulebb-miniupnpc[-sys]` — UPnP IGD port-mapping FFI; `emulebb-tools` — the
+- `emulebb-pcpnatpmp[-sys]` — PCP v2/v1 and NAT-PMP v0 FFI;
+  `emulebb-miniupnpc[-sys]` — UPnP IGD fallback FFI; `emulebb-tools` — the
   standalone NAT diagnostic binary.
 
 ---
@@ -169,7 +170,7 @@ graph TB
 
     subgraph natstack[NAT / reachability]
         direction LR
-        n_nat[nat<br/>MiniUPnPc] ~~~ n_stun[stun] ~~~ n_reach[reachability] ~~~ n_kfw[kad_firewall]
+        n_nat[nat<br/>PCP / NAT-PMP → MiniUPnPc] ~~~ n_stun[stun] ~~~ n_reach[reachability] ~~~ n_kfw[kad_firewall]
     end
 
     natstack --> tcp
@@ -194,9 +195,10 @@ graph TB
   scheduler).
 - `ed2k_client_udp/` — UDP source reask: registry, source set, runtime/service,
   and buddy relay for firewalled peers.
-- NAT stack: `nat/` (the sole supported MiniUPnPc mapping provider), `stun`,
-  `reachability` (the resolved public IP/ports), and `kad_firewall` (UDP/TCP
-  firewall verdict).
+- NAT stack: `nat/` (route-filtered PCP/NAT-PMP first, MiniUPnPc fallback),
+  `stun`, `reachability` (the resolved public IP/ports), and `kad_firewall`
+  (UDP/TCP firewall verdict). One serialized manager task owns the initial
+  mapping and renewals; status exposes the negotiated mapping protocol.
 
 ---
 

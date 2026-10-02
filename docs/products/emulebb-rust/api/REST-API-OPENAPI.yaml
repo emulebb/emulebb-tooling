@@ -4314,10 +4314,14 @@ components:
           type: array
           items:
             type: string
-            enum: [upnp_miniupnpc, upnp_igd]
+            enum: [pcp_natpmp, upnp_miniupnpc]
         bindIp:
           type: [string, "null"]
           format: ipv4
+        pcpServerIp:
+          type: [string, "null"]
+          format: ipv4
+          description: Optional explicit PCP/NAT-PMP server; the protocol port is fixed at 5351.
         igdIp:
           type: [string, "null"]
           format: ipv4
@@ -4353,10 +4357,14 @@ components:
           type: array
           items:
             type: string
-            enum: [upnp_miniupnpc, upnp_igd]
+            enum: [pcp_natpmp, upnp_miniupnpc]
         bindIp:
           type: [string, "null"]
           format: ipv4
+        pcpServerIp:
+          type: [string, "null"]
+          format: ipv4
+          description: Optional explicit PCP/NAT-PMP server; the protocol port is fixed at 5351.
         igdIp:
           type: [string, "null"]
           format: ipv4
@@ -4449,7 +4457,7 @@ components:
     NatStatus:
       type: object
       additionalProperties: false
-      required: [enabled, gatewayDiscovered, backend, bindIp, igdIp, minissdpdSocket, ssdpLocalPort, externalIpOverride, gateway, mappings, observedExternalAddresses, lastRefreshUnixSecs, lastError]
+      required: [enabled, gatewayDiscovered, backend, protocol, bindIp, pcpServerIp, igdIp, minissdpdSocket, ssdpLocalPort, externalIpOverride, gateway, mappings, observedExternalAddresses, lastRefreshUnixSecs, lastError]
       properties:
         enabled:
           type: boolean
@@ -4457,7 +4465,13 @@ components:
           type: boolean
         backend:
           type: [string, "null"]
+        protocol:
+          type: [string, "null"]
+          enum: [pcp_v2, pcp_v1, nat_pmp_v0, upnp_igd, null]
         bindIp:
+          type: [string, "null"]
+          format: ipv4
+        pcpServerIp:
           type: [string, "null"]
           format: ipv4
         igdIp:

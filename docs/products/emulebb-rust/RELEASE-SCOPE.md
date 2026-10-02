@@ -91,9 +91,10 @@ not belong in the current parity-difference matrix:
   already-served duplicates without changing their rejection on the wire.
 - **Parser fuzzing:** four sanitizer-backed libFuzzer targets cover the ED2K
   server, peer TCP, clear/obfuscated client UDP, and Kad v2 parser families.
-- **Alternate UPnP IGD:** MiniUPnPc remains preferred, with an independent
-  in-tree SSDP/SOAP IGD provider as the ordered fallback under the same bind,
-  mapping, rollback, and diagnostic contract.
+- **Capability-aware NAT traversal:** the route-filtered shared
+  `libpcpnatpmp` fork tries PCP v2, PCP v1, and NAT-PMP v0 first; MiniUPnPc is
+  the ordered UPnP IGD fallback. Networks without PCP remain supported through
+  truthful bounded failure and automatic fallback.
 
 ## Frozen beta parity matrix
 
