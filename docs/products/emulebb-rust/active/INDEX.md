@@ -125,6 +125,7 @@ below as historical links.
 | ID | Priority | Status | Title |
 |----|----------|--------|-------|
 | [RUST-BUG-001](items/RUST-BUG-001.md) | Minor | OPEN | kad_swarm multi-node transfer tests are isolated in CI |
+| [RUST-BUG-101](items/RUST-BUG-101.md) | Major | IN_PROGRESS | Kad VPN searches complete before delayed results are collected |
 | [RUST-REF-005](items/RUST-REF-005.md) | Major | OPEN | Decompose oversized Rust modules by responsibility |
 | [RUST-REF-006](items/RUST-REF-006.md) | Major | OPEN | Consolidate Rust NAT and runtime safety internals |
 | [RUST-REF-007](items/RUST-REF-007.md) | Minor | OPEN | Review Rust upload hot-path performance candidates |
