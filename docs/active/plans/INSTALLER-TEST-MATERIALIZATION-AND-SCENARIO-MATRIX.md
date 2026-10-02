@@ -1,8 +1,10 @@
 # Installer Test Materialization And Scenario Matrix Plan
 
-This plan tracks the active goal to reuse the packaged eMuleBB suite installer
-for local development installs and test materialization, while making the live
-E2E scenario structure easier to audit and repeat.
+This maintenance plan records reuse of the packaged legacy eMuleBB `0.7.x`
+suite installer for local development installs and test materialization, while
+making the live E2E scenario structure easier to audit and repeat. Here,
+"suite" names the shipped MFC release bundle, not a forward organization
+umbrella or product roadmap.
 
 Current RC2+ follow-up: [CI-052](../../history/items/CI-052.md) promotes this installer
 materialization contract into the release gate. RC1 is frozen; active local and

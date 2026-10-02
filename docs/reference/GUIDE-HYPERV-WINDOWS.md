@@ -66,8 +66,9 @@ installation media.
 
 ## Manual User VM Path
 
-Use this path when you want to try the eMuleBB suite in a VM without using the
-workspace test harness.
+Use this path when you want to try the historical eMuleBB `0.7.x` Suite release
+bundle in a VM without using the workspace test harness. This does not describe
+a forward cross-network product umbrella.
 
 1. Create a Generation 2 Hyper-V VM.
 2. Install Windows from your own legal ISO.
