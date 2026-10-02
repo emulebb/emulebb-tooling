@@ -1,7 +1,6 @@
 # eMuleBB Rust 0.1.0-beta.2 Changelog
 
-Status: ACTIVE CANDIDATE. Final publication state is recorded only after the
-approved `rust-v0.1.0-beta.2` tag and release workflow pass.
+Status: PUBLISHED on 2026-10-02 from approved tag `rust-v0.1.0-beta.2`.
 
 ## Kad Search
 

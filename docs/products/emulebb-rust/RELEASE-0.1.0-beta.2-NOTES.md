@@ -1,7 +1,6 @@
 # eMuleBB Rust 0.1.0-beta.2 Release Notes
 
-Status: ACTIVE CANDIDATE. These notes are finalized only after the release gate
-passes and the approved `rust-v0.1.0-beta.2` tag publishes successfully.
+Status: PUBLISHED on 2026-10-02 from approved tag `rust-v0.1.0-beta.2`.
 
 `0.1.0-beta.2` is a focused corrective prerelease for the first public Rust
 beta. It keeps the beta.1 feature and compatibility surface and fixes a Kad
