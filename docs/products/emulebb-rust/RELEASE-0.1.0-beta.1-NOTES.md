@@ -39,6 +39,10 @@ omitted, and deferred surface is defined by the
   in-tree SSDP/SOAP provider with the same bind and mapping safety contract.
 - An embedded SPA WebUI for status, transfers, search, sharing, uploads,
   servers, Kad, settings, logs, and diagnostics.
+- Automatic first-run eD2K and Kad startup, with live server ranking and
+  fallback when the preferred public server is unavailable.
+- WebUI network controls, persistent search-session routes and history, paged
+  live search results, and explicit transfer stop and delete actions.
 - API-key-protected `/api/v1` REST and SSE surfaces. The owned OpenAPI contract
   is tested against live daemon responses in CI.
 - Unsigned native packages for Windows, Linux, and macOS on x64 and ARM64.
@@ -76,6 +80,12 @@ key on first launch:
 Open `http://127.0.0.1:4711/` and enter the generated API key when prompted. The
 same key is sent as `X-API-Key` by REST clients. Keep the WebUI/REST listener on
 loopback or a trusted network; do not expose it directly to the public internet.
+
+The default profile automatically starts eD2K and Kad after bootstrap. Native
+packages use the selected direct route unless an explicit bind policy is
+configured, so first launch may contact public eD2K/Kad infrastructure and does
+not provide anonymity. The Network, Servers, and Kad views expose current
+connection state and manual controls.
 
 An explicit `--profile <dir>` is an operator-managed profile and must already
 contain `emulebb-rust-settings.toml`. The SQLite repository in that profile is
@@ -132,7 +142,9 @@ VPN leak-safety promise. The Gluetun deployment is the beta's tested VPN posture
 ## What To Test
 
 Start with a fresh or backed-up profile. Confirm WebUI/API-key access, clean
-shutdown, server and Kad connectivity, one small search/download, finished-file
-delivery, one shared folder, and persistence across restart. For containers,
-also confirm host ownership on `/config` and `/data`, then perform a controlled
-Gluetun tunnel-down check before relying on the VPN deployment.
+shutdown, automatic server and Kad connectivity, fallback from an unavailable
+server, persistent search history/deep links, one small search/download,
+transfer stop/delete behavior, finished-file delivery, one shared folder, and
+persistence across restart. For containers, also confirm host ownership on
+`/config` and `/data`, then perform a controlled Gluetun tunnel-down check before
+relying on the VPN deployment.

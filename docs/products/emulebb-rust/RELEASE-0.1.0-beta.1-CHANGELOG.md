@@ -13,6 +13,7 @@ Git log.
 - Added platform-native default profiles plus explicit `--profile` operation; REST bootstrap/auth remains in `emulebb-rust-settings.toml`, with runtime settings and network state in `emulebb-rust-metadata.db`.
 - Added finished-download delivery to category or incoming directories with same-volume hard-link and cross-volume copy/atomic-rename behavior while retaining the piece store for seeding.
 - Added recursive monitored folder-root sharing, persistent categories/servers/settings/identity/credits, local file indexing, and observable reload/hash progress.
+- Added automatic first-run eD2K and Kad startup with live server-population ranking and bounded fallback when preferred public servers are unavailable.
 - Made broadband-oriented async IO the default runtime model instead of a compatibility preference or legacy UI toggle.
 
 ## eD2K And Kad
@@ -33,6 +34,7 @@ Git log.
 
 - Added API-key-authenticated `/api/v1` resources for application state, settings, transfers, uploads, search, sharing, categories, servers, Kad, NAT, VPN Guard, IP filter, logs, and runtime diagnostics.
 - Added the embedded Vite/Preact WebUI and packaged it beside every native daemon and inside the container image.
+- Added operational WebUI network controls, a unified connection-status toolbar, persistent search-session routes/history with paged live results, and transfer stop/delete actions.
 - Added SSE reset/resume behavior and contract-version headers while keeping the Rust REST contract explicitly unstable between beta releases.
 - Added static route/query/body/auth/header drift checks and a live 100-route plus SSE OpenAPI response-conformance CI gate using the tested Linux daemon artifact.
 - Added regular operational summaries and diagnostics for process state, ED2K/Kad, publish, transfer, upload, download, shared hashing/reload, VPN Guard, and public-IP probes.
@@ -61,6 +63,7 @@ Git log.
 - Added Windows and WSL direct-network diagnostic campaigns with bounded inputs, retained sanitized evidence, and graceful teardown requirements.
 - Added cross-platform Rust build/test CI on Windows, Linux, and macOS, pinned Rust/tool/action dependencies, formatting/Clippy policy, and cargo-deny advisory/license/source gates.
 - Added native package/WebUI startup smoke, container ownership/persistence checks, and independent Gluetun tunnel-down validation without touching an operator's existing stack.
+- Added a live consumer workflow covering zero-configuration network startup, search/download, transfer deletion, shared-folder reload, and publish visibility through the packaged WebUI.
 
 ## Migration And Risk Notes
 
