@@ -25,6 +25,8 @@ It is not the app repo and it is not the build orchestrator:
 - public setup:
   [`docs/reference/GUIDE-SETUP.md`](docs/reference/GUIDE-SETUP.md)
   (RC1 standalone ZIP, suite one-liner, and release provenance)
+- Docker and Gluetun operator reference:
+  [`docs/reference/GUIDE-DOCKER-GLUETUN-P2P-STACK.md`](docs/reference/GUIDE-DOCKER-GLUETUN-P2P-STACK.md)
 - workspace policy:
   [`docs/WORKSPACE-POLICY.md`](docs/WORKSPACE-POLICY.md)
 - agent checklist:

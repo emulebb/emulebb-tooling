@@ -106,6 +106,8 @@ nav:
       - Soak Runbook 0.1.0-beta.1: products/emulebb-rust/active/SOAK-RUNBOOK-0.1.0-beta.1.md
       - Soak Upload/Download Gap Analysis: products/emulebb-rust/active/RUST-SOAK-UPLOAD-DOWNLOAD-GAP-ANALYSIS.md
       - Source And Backlog (GitHub): https://github.com/emulebb/emulebb-rust
+  - P2P Operations:
+      - Docker And Gluetun Migration: reference/GUIDE-DOCKER-GLUETUN-P2P-STACK.md
   - qBittorrentBB (Paused Experiment):
       - Torrent Export & DHT Harvest (GitHub): https://github.com/emulebb/qbittorrentbb/blob/master/docs/BB-TORRENT-EXPORT-AND-HARVEST.md
       - Preserved Source (GitHub): https://github.com/emulebb/qbittorrentbb

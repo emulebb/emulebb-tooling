@@ -167,6 +167,7 @@ desktop app first, then layer automation on top.
 | Complete eMule manual from zero to power-user operation | [reference/GUIDE-POWER-USERS](reference/GUIDE-POWER-USERS.md) |
 | Setup, `-c` profiles, release package testing | [reference/GUIDE-SETUP](reference/GUIDE-SETUP.md) |
 | Running on macOS or Linux via VM, Wine, or remote control | [reference/GUIDE-CROSS-PLATFORM](reference/GUIDE-CROSS-PLATFORM.md) |
+| Move a Windows P2P workload behind Docker and Gluetun | [reference/GUIDE-DOCKER-GLUETUN-P2P-STACK](reference/GUIDE-DOCKER-GLUETUN-P2P-STACK.md) |
 | Search, downloads, categories, limits, upload policy | [reference/GUIDE-DOWNLOADS-SEARCH](reference/GUIDE-DOWNLOADS-SEARCH.md) |
 | Shared directories, monitored shares, large libraries | [reference/GUIDE-SHARING](reference/GUIDE-SHARING.md) |
 | eD2K, Kad, bind, ports, UPnP, firewall | [reference/GUIDE-NETWORK](reference/GUIDE-NETWORK.md) |
