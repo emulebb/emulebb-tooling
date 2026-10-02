@@ -25,10 +25,9 @@ Active vs Parked ledger).
 Since 2026-07-05 the repo has carried its **own release gate**. The
 `rust-v0.1.0-beta.1` first-usable-release program completed on 2026-10-02; its
 evidence is archived in [RUST-FEAT-033](../history/items/RUST-FEAT-033.md).
-**Code freeze:** effective 2026-09-30, the beta accepts only release blockers,
-test/evidence fixes, documentation corrections, and packaging fixes. Post-beta
-items stay recorded but inactive until the operator explicitly lifts the
-freeze.
+**Lifecycle:** beta1 is published and the repository is the active experimental
+development lane. It is not production-ready; changes follow the active backlog
+and retain evidence appropriate to their risk.
 **Protocol policy:** IPv4-only, stock eMule wire-compatible within the frozen
 six-row [beta parity matrix](../RELEASE-SCOPE.md#frozen-beta-parity-matrix).
 Five approved omissions and the sole deferred connection-pacing behavior remain
@@ -48,7 +47,7 @@ emulebb-mfc keeps its legacy unprefixed IDs. IDs are allocated per class and nev
 reused. Scan both `docs/active/items` and `docs/history/items` before
 allocating the next number.
 
-## First Beta — Rust Headless + Embedded SPA WebUI
+## Published Beta — Rust Headless + Embedded SPA WebUI
 
 The first forward milestone, a Rust headless client + embedded SPA WebUI beta,
 was published on 2026-10-02 after core and WebUI proof. TrackMuleBB is archived
@@ -59,21 +58,20 @@ Core gates remain first-class: stock-wire parity, fail-closed VPN proof,
 responsive REST, upload/download/search/share evidence, and soak evidence. The
 beta may ship with a signed-off non-critical parity backlog, but P0 safety and
 stock-wire-critical findings block the tag. Indexer/Torznab/Arr work remains
-post-beta scope and must not start during the code freeze.
+beta follow-up scope and is tracked through the normal backlog.
 
 Current soak upload/download gap analysis is tracked in
 [Rust Soak Upload/Download Gap Analysis](RUST-SOAK-UPLOAD-DOWNLOAD-GAP-ANALYSIS.md).
 Final beta evidence is reconciled in the
 [0.1.0-beta.1 Release Evidence Checklist](RELEASE-0.1.0-beta.1-CHECKLIST.md).
 
-## Phase 0 — "perfectly functional" gate
+## Longer-Term Beta Roadmap
 
-emulebb-rust is the strategic forward eD2K/Kad core. "Perfectly functional" =
-client parity **plus** the indexer role, per
-`emulebb-tooling/docs/history/HIST-SUITE-JOINT-ROADMAP.md`. The FEAT items below are the
-Phase 0 scope. Cooperative-DHT / BEP-46 publishing and similar ideas are **parked**
-(see the roadmap's Active vs Parked ledger) and are intentionally **not** backlog
-items.
+emulebb-rust is the active experimental eD2K/Kad product lane. The published
+beta establishes a usable headless client and embedded WebUI; indexer and Arr
+work may proceed only through their explicit backlog items. Cooperative-DHT /
+BEP-46 publishing and similar ideas remain parked and are intentionally not
+backlog items.
 
 ## Core Parity Closure
 
@@ -90,22 +88,14 @@ peer-transfer reconciliation disposes all 15 peer findings: ten fixed, four
 truthfully omitted, and one accepted non-wire pacing defer; a refreshed
 current-head overnight campaign and UDP-reask witness both pass.
 
-## Beta Code Freeze
+## Experimental Beta Change Policy
 
-The `rust-v0.1.0-beta.1` code freeze is in force from 2026-09-30. A proposed
-change may enter the beta lane only when it is one of these four classes:
-
-- a release blocker;
-- a test or evidence fix;
-- a documentation correction;
-- a packaging fix.
-
-Do not start the indexer (`RUST-FEAT-002`), Arr integration
-(`RUST-FEAT-004`), major refactors (including `RUST-REF-005` through
-`RUST-REF-007`), or new protocol features. A test/evidence change must remain
-narrowly tied to release proof and must not carry unrelated cleanup or feature
-work. Work that does not meet an allowed class stays post-beta without
-implementation until the operator explicitly lifts the freeze.
+The beta1 publication freeze ended with the published tag on 2026-10-02.
+Follow-up work is selected from the active backlog and should keep the Rust
+daemon, embedded WebUI, API contract, packaging, and evidence synchronized.
+The beta remains experimental: do not imply production readiness or API
+stability, and do not reactivate the retired cross-client Suite program through
+Rust backlog work.
 
 ## Active Backlog
 
@@ -122,7 +112,7 @@ below as historical links.
 | [RUST-FEAT-006](../history/items/RUST-FEAT-006.md) | Major | DONE | Public version-only amd64/arm64 GHCR manifest verified anonymously. |
 | [RUST-FEAT-033](../history/items/RUST-FEAT-033.md) | Critical | DONE | Approved tag, workflow publication, assets, and public image verified. |
 
-### Post-beta features
+### Beta follow-up features
 
 | ID | Priority | Status | Title |
 |----|----------|--------|-------|
@@ -130,7 +120,7 @@ below as historical links.
 | [RUST-FEAT-004](items/RUST-FEAT-004.md) | Major | OPEN | Arr integration — Torznab indexer + qBittorrent-emulating download client |
 | [RUST-FEAT-025](items/RUST-FEAT-025.md) | Minor | OPEN | Validate conformant duplicate-block rejection diagnostics |
 
-### Post-beta refactors and evidence
+### Beta follow-up refactors and evidence
 
 | ID | Priority | Status | Title |
 |----|----------|--------|-------|

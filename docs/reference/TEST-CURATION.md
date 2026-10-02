@@ -1,12 +1,18 @@
 # Test Curation — Necessary vs Not
 
+Status: historical curation evidence from the MFC `0.7.3` campaign. Current
+lifecycle and gating policy is defined by
+[Test Strategy](../active/TEST-STRATEGY.md); future-tense findings below record
+the state of that audit rather than active commitments.
+
 Companion to the generated [Test Inventory](TEST-INVENTORY.md) and the
 [Test Tiers](TEST-TIERS.md). It records how the maintained test surface was
 curated through four lenses, in priority order:
 
 1. **Non-redundancy** — cut where multiple layers cover the same thing.
 2. **Minimize runtime** — push slow load/soak/stress to the highest tier.
-3. **Forward program** — rust / qBittorrentBB / TrackMuleBB coverage, not just the frozen MFC app.
+3. **Active beta lane** — Rust coverage is forward-facing; qBittorrentBB and
+   TrackMuleBB assets are retained only as paused or historical on-demand coverage.
 4. **0.7.3 correctness gate** — what proves the shipped surface.
 
 Verdict vocabulary: **KEEP**, **WIRED-IN** (was dormant, now gated), **OPTIONAL**
@@ -52,7 +58,7 @@ re-verified green against a fresh test build, and wired in with the rest.
 | `parity` (859 cases), `web_api` (87), `protocol-parity` (13) | **KEEP** | The 0.7.3 gate backbone. |
 | `community-core-divergence` | **KEEP** | Orchestrated by community-core coverage (overnight). |
 | The 19 suites above | **WIRED-IN** | Were dormant; verified green; now in `test all`. |
-| `divergence` | **KEEP DORMANT** | A deliberate 0.8.0 scheduler-removal guard; red by design until the removal lands. |
+| `divergence` | **KEEP DORMANT** | Historical 0.8.0 scheduler-removal guard; expected red unless that deferred proposal is explicitly revived. |
 | `benchmark`, `pipeline`, `pipeline-benchmark` | **OPTIONAL** | Performance, not correctness; stay targeted-only. |
 | `kad-broadband` | **KEEP DORMANT** | Conditionally excluded from the build by design, so it registers zero cases — not a gap (detail below). |
 | Frozen MFC UI suites | **OPTIONAL** | Frozen low-churn UI; targeted-only, out of the tiers (suites listed below). |
@@ -72,7 +78,7 @@ re-verified green against a fresh test build, and wired in with the rest.
 | `multi-client-p2p` vs `multi-client-p2p-required` | **KEEP (both)** | Same suites, different evidence policy — intentional, not redundant. |
 | `shared-directory-browse-stress` | **WIRED-IN** | Was an orphan; added to `stabilization-stress` (overnight only). Detail below. |
 | `deterministic-two-client-transfer` | **KEEP (review)** | Overlaps `multi-client-p2p-matrix` on local transfer; acceptable as a deterministic baseline. |
-| Live-wire ARR (`radarr`/`sonarr`/`prowlarr-emulebb`) | **KEEP (live-wire/release only)** | Forward/controller surface; never quick/fast. |
+| Live-wire ARR (`radarr`/`sonarr`/`prowlarr-emulebb`) | **KEEP (live-wire/release only)** | Legacy controller evidence; never quick/fast or a Rust beta gate. |
 
 - Fast set: `preference-ui`, `shared-files-ui`, `config-stability-ui`,
   `shared-hash-ui`, `startup-diagnostics`, `shared-directories-rest`, `rest-api`
@@ -98,7 +104,8 @@ changed since it was built, so they are real on current source — not stale-bin
 - **`divergence` / `scheduler_removal`** — **deliberate, keep dormant.** These are
   compile-time guards (`#if __has_include("Scheduler.h")`, `#ifdef IDS_SCHEDULER`, …) that
   assert the legacy scheduler is *removed*. It is still present, so they are red by design
-  until the 0.8.0 legacy-surface removal lands. Correctly excluded from the 0.7.3 gate.
+  because the deferred 0.8.0 legacy-surface removal did not land. Correctly
+  excluded from the 0.7.3 gate.
 - **`startup` / `app_command_line`** — **stale test, fixed and wired.** The product was
   rebranded to emit "…canonical absolute **eMuleBB** base directory…"
   (`AppCommandLineSeams.h`), but the test still expected "eMule". Updated the expected
@@ -115,7 +122,8 @@ changed since it was built, so they are real on current source — not stale-bin
 The native dormancy and the live orphan are now resolved. Two suites stay dormant **by
 design** (not gaps):
 
-- **`divergence`** — red until the 0.8.0 scheduler removal lands.
+- **`divergence`** — remains red as a historical guard for the deferred 0.8.0
+  scheduler-removal proposal.
 - **`kad-broadband`** — conditionally excluded from the build until `KadPublishGuard.h` /
   `SafeKad.h` exist and the `afximpl.h` path gate is satisfied.
 
