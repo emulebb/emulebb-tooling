@@ -2,7 +2,7 @@
 
 > This 2026-07-08 VPN-era procedure is retained as historical diagnostic
 > context. It is not the 2026-09-25 beta release gate. The current gate is
-> [RUST-FEAT-033](items/RUST-FEAT-033.md): fresh no-share direct Windows and
+> [RUST-FEAT-033](../history/items/RUST-FEAT-033.md): fresh no-share direct Windows and
 > WSL Ubuntu campaigns plus an isolated Docker-over-Gluetun leak test. Do not
 > run this persisted shared-library/hide.me campaign as beta sign-off.
 

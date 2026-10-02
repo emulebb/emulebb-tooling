@@ -3,7 +3,7 @@ id: RUST-FEAT-006
 workflow: github
 github_issue: https://github.com/emulebb/emulebb-rust/issues/6
 title: Publish a linuxserver-style GHCR Docker image
-status: IN_PROGRESS
+status: DONE
 priority: Major
 category: feature
 labels: [docker, ghcr, packaging, bundle]
@@ -24,14 +24,13 @@ by this repo's CI. The beta publishes only the versioned tag; `latest` remains
 reserved for a stable release. Design:
 [`emulebb-tooling/docs/active/SUITE-DOCKER.md`](../../../../active/SUITE-DOCKER.md).
 
-## Release Triage (2026-09-30)
+## Closure (2026-10-02)
 
-**Beta blocker.** The approved tagged workflow built, smoked, and pushed the
-two-architecture `ghcr.io/emulebb/emulebb-rust:0.1.0-beta.1` manifest. GitHub
-created the organization package private by default, so anonymous inspection
-still returns HTTP 401. Keep this item open and beta-attached until a package
-administrator changes visibility to public and the anonymous registry API
-verifies the digest, platforms, and absence of a `latest` tag.
+The approved tagged workflow built, smoked, and pushed the public
+two-architecture `ghcr.io/emulebb/emulebb-rust:0.1.0-beta.1` manifest.
+Anonymous registry inspection verifies the recorded digest, both intended
+platforms, and the version-only tag policy. GitHub issue `#6` is closed and its
+Suite Project item is `Done`.
 
 ## Why This Matters
 
@@ -57,7 +56,7 @@ Docker form of the bundle cannot start. It is the eD2K core in the container set
 
 - [x] CI builds and pushes `ghcr.io/emulebb/emulebb-rust:0.1.0-beta.1`
       as a two-architecture manifest after native packages and image smoke pass.
-- [ ] Anonymous GHCR inspection verifies the published digest, amd64/arm64
+- [x] Anonymous GHCR inspection verifies the published digest, amd64/arm64
       platforms, and that the package exposes only the versioned beta tag, not
       `latest`.
 - [x] Image honours `PUID`/`PGID`/`TZ`; state under `/config`, downloads under `/data`.
@@ -94,6 +93,13 @@ Docker form of the bundle cannot start. It is the eD2K core in the container set
   `ghcr.io/emulebb/emulebb-rust:0.1.0-beta.1`, at manifest-list digest
   `sha256:8ddcb65b209e490405e037e78bb4c004574a5c07ee85c2dd829e16bd21f888f2`;
   it contains no `latest` push.
-- GitHub's default-private package visibility currently prevents independent
-  anonymous registry inspection. Public visibility and the resulting anonymous
-  tag/manifest verification remain required before this item can close.
+- After the organization administrator enabled public package visibility,
+  anonymous `docker buildx imagetools inspect` resolved the versioned tag to
+  `sha256:8ddcb65b209e490405e037e78bb4c004574a5c07ee85c2dd829e16bd21f888f2`.
+  It reported image manifests `sha256:317f9a5f14926d7c0e19c0194798fe6dfce7fa295399ef96867a9dc5af9bbd4c`
+  for `linux/amd64` and
+  `sha256:efdbbb64101fabb38e66ab51dc92738ae3e2d7cd1ff0ab25b4c7b106bab2b946`
+  for `linux/arm64`, plus their BuildKit attestation manifests.
+- The anonymous registry tag list is exactly `["0.1.0-beta.1"]`; an explicit
+  inspection of `ghcr.io/emulebb/emulebb-rust:latest` returns `not found`.
+  The beta therefore published only its versioned tag.

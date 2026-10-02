@@ -22,10 +22,9 @@ Active vs Parked ledger).
 (`main` branch); active docs in
 `EMULEBB_WORKSPACE_ROOT\repos\emulebb-tooling\docs\products\emulebb-rust`.
 **Scope note:** emulebb-rust is **out of RC2 ship scope** (the emulebb-mfc RC train).
-Since 2026-07-05 the repo carries its **own release gate**: the
-`rust-v0.1.0-beta.1` first-usable-release program tracked by
-[RUST-FEAT-033](items/RUST-FEAT-033.md) (`milestone: release-0.1.0-beta.1`
-groups its items).
+Since 2026-07-05 the repo has carried its **own release gate**. The
+`rust-v0.1.0-beta.1` first-usable-release program completed on 2026-10-02; its
+evidence is archived in [RUST-FEAT-033](../history/items/RUST-FEAT-033.md).
 **Code freeze:** effective 2026-09-30, the beta accepts only release blockers,
 test/evidence fixes, documentation corrections, and packaging fixes. Post-beta
 items stay recorded but inactive until the operator explicitly lifts the
@@ -51,10 +50,10 @@ allocating the next number.
 
 ## First Beta — Rust Headless + Embedded SPA WebUI
 
-The first forward milestone is a Rust headless client + embedded SPA WebUI beta.
-Release waits for both core proof and WebUI proof. TrackMuleBB is parked future
-controller work and is not a beta dependency. The beta targets Rust only and
-uses the Rust-forward OpenAPI contract in this tooling docs tree.
+The first forward milestone, a Rust headless client + embedded SPA WebUI beta,
+was published on 2026-10-02 after core and WebUI proof. TrackMuleBB remains
+parked future controller work and was not a beta dependency. The beta targets
+Rust only and uses the Rust-forward OpenAPI contract in this tooling docs tree.
 
 Core gates remain first-class: stock-wire parity, fail-closed VPN proof,
 responsive REST, upload/download/search/share evidence, and soak evidence. The
@@ -112,16 +111,16 @@ implementation until the operator explicitly lifts the freeze.
 
 Only **in-progress / open** items live in `items/`. Items move to
 [`../history/items/`](../history/items/INDEX.md) when they reach `DONE`.
-The 2026-09-30 beta triage uses three buckets: beta blocker, post-beta, and
-done/stale. The beta milestone contains only the two genuine publication
-blockers below.
+The 2026-09-30 beta triage used three buckets: beta blocker, post-beta, and
+done/stale. Both publication blockers completed on 2026-10-02 and are retained
+below as historical links.
 
-### Beta blockers
+### Completed beta publication
 
-| ID | Priority | Status | Blocking condition |
-|----|----------|--------|--------------------|
-| [RUST-FEAT-006](items/RUST-FEAT-006.md) | Major | IN_PROGRESS | Make the pushed versioned GHCR image public and verify it anonymously. |
-| [RUST-FEAT-033](items/RUST-FEAT-033.md) | Critical | IN_PROGRESS | Close public GHCR verification, then close the completed beta publication. |
+| ID | Priority | Status | Completion |
+|----|----------|--------|------------|
+| [RUST-FEAT-006](../history/items/RUST-FEAT-006.md) | Major | DONE | Public version-only amd64/arm64 GHCR manifest verified anonymously. |
+| [RUST-FEAT-033](../history/items/RUST-FEAT-033.md) | Critical | DONE | Approved tag, workflow publication, assets, and public image verified. |
 
 ### Post-beta features
 

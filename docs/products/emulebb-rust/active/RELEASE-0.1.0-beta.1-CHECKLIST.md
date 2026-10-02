@@ -98,13 +98,15 @@ Its focused test suite passed 5/5 before the proof and commit.
   SBOMs, release notes, changelog, and `SHA256SUMS`. All 22 entries in the sums
   file independently recomputed successfully; the `SHA256SUMS` SHA-256 is
   `2086c7c300d053a4c3fae881e6509f4c586556b047e140db22b84bcec30bf6cd`.
+  Each of the 25 downloaded files also matches its GitHub asset size and
+  server-recorded SHA-256 digest, with no missing or unexpected file.
 - [x] The workflow pushed `ghcr.io/emulebb/emulebb-rust:0.1.0-beta.1` for
   `linux/amd64` and `linux/arm64` at manifest-list digest
   `sha256:8ddcb65b209e490405e037e78bb4c004574a5c07ee85c2dd829e16bd21f888f2`.
-- [ ] Anonymous GHCR inspection succeeds. GitHub created the organization
-  package private by default; an unauthenticated manifest request currently
-  returns HTTP 401. An organization package administrator must change the
-  package visibility to public before public image delivery is complete.
+- [x] Anonymous GHCR inspection succeeds. The public tag resolves to the
+  recorded digest with `linux/amd64` and `linux/arm64` images. The anonymous
+  registry tag list is exactly `["0.1.0-beta.1"]`, and explicit inspection of
+  `latest` returns `not found`.
 
 Earlier passing public campaigns from other Rust commits are not reused here.
 
@@ -164,7 +166,8 @@ notes/OpenAPI revision recorded in package manifests.
 F1 final evidence review is complete and the board decision was **GO**. The
 workflow-owned GitHub prerelease and all native assets are published from the
 approved tag, and the versioned two-architecture GHCR manifest was pushed.
-GitHub's default-private package setting is the one remaining distribution
-boundary: public image delivery is incomplete until an organization package
-administrator changes `emulebb-rust` package visibility to public and an
-anonymous manifest inspection confirms the recorded digest and platforms.
+The organization package is public. Anonymous inspection confirms manifest
+digest `sha256:8ddcb65b209e490405e037e78bb4c004574a5c07ee85c2dd829e16bd21f888f2`,
+the intended amd64/arm64 images, and the version-only tag policy. GitHub issues
+`RUST-FEAT-006` and `RUST-FEAT-033` are closed, their Suite Project items are
+`Done`, and F2 publication is complete.

@@ -15,10 +15,12 @@ Known closed feature items include:
 
 - `RUST-FEAT-001`
 - `RUST-FEAT-005`
+- `RUST-FEAT-006`
 - `RUST-FEAT-007`
 - `RUST-FEAT-030`
 - `RUST-FEAT-031`
 - `RUST-FEAT-032`
+- `RUST-FEAT-033`
 - `RUST-FEAT-034`
 - `RUST-FEAT-035`
 - `RUST-FEAT-036`
