@@ -113,6 +113,12 @@ below as historical links.
 | [RUST-FEAT-006](../history/items/RUST-FEAT-006.md) | Major | DONE | Public version-only amd64/arm64 GHCR manifest verified anonymously. |
 | [RUST-FEAT-033](../history/items/RUST-FEAT-033.md) | Critical | DONE | Approved tag, workflow publication, assets, and public image verified. |
 
+### Completed beta follow-up
+
+| ID | Priority | Status | Completion |
+|----|----------|--------|------------|
+| [RUST-FEAT-037](../history/items/RUST-FEAT-037.md) | Major | DONE | PCP/NAT-PMP-first traversal, MiniUPnPc fallback, native provenance, and the capability-aware live matrix are complete. |
+
 ### Beta follow-up features
 
 | ID | Priority | Status | Title |
@@ -120,7 +126,6 @@ below as historical links.
 | [RUST-FEAT-002](items/RUST-FEAT-002.md) | Major | OPEN | Indexer — autonomous Kad/eD2K snooping index with Torznab surface |
 | [RUST-FEAT-004](items/RUST-FEAT-004.md) | Major | OPEN | Arr integration — Torznab indexer + qBittorrent-emulating download client |
 | [RUST-FEAT-025](items/RUST-FEAT-025.md) | Minor | OPEN | Validate conformant duplicate-block rejection diagnostics |
-| [RUST-FEAT-037](items/RUST-FEAT-037.md) | Major | IN_PROGRESS | Capability-aware PCP, NAT-PMP, and MiniUPnPc traversal |
 
 ### Beta follow-up refactors and evidence
 

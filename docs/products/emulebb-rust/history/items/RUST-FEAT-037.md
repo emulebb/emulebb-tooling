@@ -3,7 +3,7 @@ id: RUST-FEAT-037
 workflow: github
 github_issue: https://github.com/emulebb/emulebb-rust/issues/22
 title: Capability-aware PCP, NAT-PMP, and MiniUPnPc traversal
-status: IN_PROGRESS
+status: DONE
 priority: Major
 category: feature
 labels: [rust, nat, pcp, nat-pmp, upnp, vpn, packaging]
@@ -66,12 +66,12 @@ scope, constraints, and validation record.
 - [x] REST/OpenAPI/WebUI expose the optional PCP server and negotiated protocol.
 - [x] CI and release workflows pin both shared native forks.
 - [x] Native package SBOM and source provenance include both forks.
-- [ ] Windows-native direct live matrix completes with protocol obfuscation
+- [x] Windows-native direct live matrix completes with protocol obfuscation
       disabled.
-- [ ] WSL + Docker + plain OpenVPN live matrix completes with protocol
+- [x] WSL + Docker + plain OpenVPN live matrix completes with protocol
       obfuscation disabled.
-- [ ] Docker + Gluetun live matrix completes with protocol obfuscation disabled.
-- [ ] Every live lane records default automatic, PCP-only, MiniUPnPc-only, and
+- [x] Docker + Gluetun live matrix completes with protocol obfuscation disabled.
+- [x] Every live lane records default automatic, PCP-only, MiniUPnPc-only, and
       forced-PCP-failure fallback cases as supported or cleanly unsupported.
 
 ## Validation
@@ -88,3 +88,23 @@ scope, constraints, and validation record.
   cleanup in commits `a71e7b7`, `2b8649a`, and `a6e787f`.
 - The updated shared MiniUPnP fork is pinned at merge commit `4e7a109`.
 - The full Rust Release test suite and quick Rust quality gate pass locally.
+- The Windows-native matrix passed at
+  `reports/rust-windows-direct-smoke/20261002T230010Z/report.json`: automatic,
+  MiniUPnPc-only, and forced PCP failure mapped both ports through MiniUPnPc;
+  PCP-only was cleanly unsupported. Protocol obfuscation was disabled and the
+  daemon shut down gracefully.
+- The WSL Docker + plain OpenVPN matrix passed at
+  `reports/rust-openvpn-proof/20261002T225200Z-nat-matrix.json`: all four cases
+  were cleanly unsupported by the VPN service, automatic/fallback errors named
+  both attempted providers, protocol obfuscation was disabled, and isolated
+  Compose teardown was clean.
+- The Docker + Gluetun matrix passed at
+  `reports/rust-gluetun-proof/20261002T230000Z-nat-matrix.json`: all four cases
+  were cleanly unsupported, automatic/fallback errors named both providers,
+  protocol obfuscation was disabled, the tunnel-down leak count was zero, and
+  isolated Compose teardown was clean.
+- Windows and Linux beta.2 packages were built from clean provenance. The Linux
+  WSL translation record is
+  `reports/rust-linux-package-launch/20261002T224829Z/wsl-boundary.json`; the
+  local amd64 Docker test image matched executable SHA-256
+  `3b565a5c57a6e7a5908eb41b79f7982e833643eac472b80df882a2df3389df1a`.
