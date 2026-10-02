@@ -3,7 +3,7 @@ id: RUST-BUG-101
 workflow: github
 github_issue: https://github.com/emulebb/emulebb-rust/issues/19
 title: Kad VPN searches complete before delayed results are collected
-status: IN_PROGRESS
+status: DONE
 priority: Major
 category: bug
 labels: [kad, search, vpn, regression, release]
@@ -59,7 +59,7 @@ results (`CSearch::PrepareToStop`).
   Clippy, diagnostics, WebUI tests, and debug/release builds.
 - [x] Pass the fixed candidate through the one-second OpenVPN latency lane.
 - [x] Publish `rust-v0.1.0-beta.2` native packages and versioned GHCR image.
-- [ ] Update public issue 19 with the diagnosis, evidence, and release link.
+- [x] Update public issue 19 with the diagnosis, evidence, and release link.
 
 ## Evidence
 
@@ -92,3 +92,6 @@ policy/format/Clippy, cargo-deny, and live REST/OpenAPI conformance. Tag workflo
 run `37055014731` published all native assets and the version-only multiarch
 image. The public image index digest is
 `sha256:cd77c1e62ae8056283edbe5a5bcf2aa5301ac173b6e9696b38b867f24e57970c`.
+
+The public diagnosis, beta.2 link, comparison results, and LMDE 7 retest request
+were posted to issue 19 as comment `5960294957`.

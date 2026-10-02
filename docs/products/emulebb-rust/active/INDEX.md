@@ -25,9 +25,10 @@ Active vs Parked ledger).
 Since 2026-07-05 the repo has carried its **own release gate**. The
 `rust-v0.1.0-beta.1` first-usable-release program completed on 2026-10-02; its
 evidence is archived in [RUST-FEAT-033](../history/items/RUST-FEAT-033.md).
-**Lifecycle:** beta1 is published and the repository is the active experimental
-development lane. It is not production-ready; changes follow the active backlog
-and retain evidence appropriate to their risk.
+**Lifecycle:** beta2 is published with the Kad VPN timing correction tracked in
+[RUST-BUG-101](../history/items/RUST-BUG-101.md), and the repository remains the
+active experimental development lane. It is not production-ready; changes
+follow the active backlog and retain evidence appropriate to their risk.
 **Protocol policy:** IPv4-only, stock eMule wire-compatible within the frozen
 six-row [beta parity matrix](../RELEASE-SCOPE.md#frozen-beta-parity-matrix).
 Five approved omissions and the sole deferred connection-pacing behavior remain
@@ -125,7 +126,6 @@ below as historical links.
 | ID | Priority | Status | Title |
 |----|----------|--------|-------|
 | [RUST-BUG-001](items/RUST-BUG-001.md) | Minor | OPEN | kad_swarm multi-node transfer tests are isolated in CI |
-| [RUST-BUG-101](items/RUST-BUG-101.md) | Major | IN_PROGRESS | Kad VPN searches complete before delayed results are collected |
 | [RUST-REF-005](items/RUST-REF-005.md) | Major | OPEN | Decompose oversized Rust modules by responsibility |
 | [RUST-REF-006](items/RUST-REF-006.md) | Major | OPEN | Consolidate Rust NAT and runtime safety internals |
 | [RUST-REF-007](items/RUST-REF-007.md) | Minor | OPEN | Review Rust upload hot-path performance candidates |
@@ -142,6 +142,9 @@ below as historical links.
 - [RUST-BUG-100](../history/items/RUST-BUG-100.md) — the completed packet-dump
   recovery fix was renumbered from a mistakenly reused `RUST-BUG-005` ID and
   archived.
+- [RUST-BUG-101](../history/items/RUST-BUG-101.md) — the beta.2 Kad VPN timing
+  correction was reproduced, fixed, published, and returned to the reporter for
+  LMDE 7 confirmation.
 
 ## Closed Items (archive)
 

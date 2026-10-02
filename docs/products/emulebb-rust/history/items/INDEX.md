@@ -33,5 +33,6 @@ Known closed CI/tooling items include:
 - `RUST-CI-004`
 
 Known closed bug items include the `RUST-BUG-002` through `RUST-BUG-099`
-parity wave plus `RUST-BUG-100`, the packet-dump recovery record renumbered
-during the 2026-09-30 backlog triage to repair an old `RUST-BUG-005` collision.
+parity wave, `RUST-BUG-100` for packet-dump recovery, and `RUST-BUG-101` for the
+beta.2 Kad VPN search-timing correction. `RUST-BUG-100` was renumbered during
+the 2026-09-30 backlog triage to repair an old `RUST-BUG-005` collision.
