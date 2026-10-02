@@ -84,8 +84,27 @@ Its focused test suite passed 5/5 before the proof and commit.
 - [x] Final release go is granted. On 2026-10-02 the board accepted the retained
   exact-candidate evidence as sufficient for this beta and explicitly accepted
   the residual risk that the bounded Windows and WSL public campaigns did not
-  finish the approved ISO. The tagged workflow remains responsible for package,
-  checksum, GitHub prerelease, and GHCR publication verification.
+  finish the approved ISO.
+- [x] Annotated tag `rust-v0.1.0-beta.1` was pushed and independently resolved
+  through GitHub's tag object to candidate commit
+  `28a0703561f135b03ffcca94527ceb538ef9012e`.
+- [x] The tag-triggered release workflow passed on the selected candidate:
+  [workflow run 36993503619](https://github.com/emulebb/emulebb-rust/actions/runs/36993503619).
+  All six native architecture jobs, the two-architecture image candidate, the
+  versioned GHCR push, and native-asset publication succeeded.
+- [x] The GitHub
+  [prerelease](https://github.com/emulebb/emulebb-rust/releases/tag/rust-v0.1.0-beta.1)
+  is live with 25 files: eight packages, eight manifests, six architecture
+  SBOMs, release notes, changelog, and `SHA256SUMS`. All 22 entries in the sums
+  file independently recomputed successfully; the `SHA256SUMS` SHA-256 is
+  `2086c7c300d053a4c3fae881e6509f4c586556b047e140db22b84bcec30bf6cd`.
+- [x] The workflow pushed `ghcr.io/emulebb/emulebb-rust:0.1.0-beta.1` for
+  `linux/amd64` and `linux/arm64` at manifest-list digest
+  `sha256:8ddcb65b209e490405e037e78bb4c004574a5c07ee85c2dd829e16bd21f888f2`.
+- [ ] Anonymous GHCR inspection succeeds. GitHub created the organization
+  package private by default; an unauthenticated manifest request currently
+  returns HTTP 401. An organization package administrator must change the
+  package visibility to public before public image delivery is complete.
 
 Earlier passing public campaigns from other Rust commits are not reused here.
 
@@ -117,19 +136,19 @@ SHA-256 `f5f4b2a0d546f01542ed0c35bc46c8c94b87dcccd2ed0c3b76cfa5128a8d7989`.
 
 | Asset | Asset SHA-256 | Manifest SHA-256 | SBOM SHA-256 |
 |---|---|---|---|
-| `emulebb-rust-v0.1.0-beta.1-linux-aarch64.AppImage` | `3bb7ef8a59add76bf2339e4d5fd825755e5668e5835047da3a7a5b5ed4bb9628` | `6d90c30b14655e068a2019ad13cab9897e8c4522ae374db8702151695462420e` | `dbebfc147e049b21b80fa6056a44789e25e777ccf88d32f8082f3ffb2a80e678` |
-| `emulebb-rust-v0.1.0-beta.1-linux-arm64.deb` | `388ce4bc896c8227a17505d4ccc1147d6925f1381052fae53cd62d9888dfbed1` | `07dcd7d2df6fc272b7cbdc0128e2cc79c045a21814f0b7f7c9148f1047c56aca` | `dbebfc147e049b21b80fa6056a44789e25e777ccf88d32f8082f3ffb2a80e678` |
-| `emulebb-rust-v0.1.0-beta.1-linux-amd64.deb` | `a30096457a7f3caf693d4bf4d3f8bb3c4a6126b45a226e6edbf21b5924c91d49` | `54a8b69c2141f1d1962d8d6941b05a0d840a84a6ef099b1cfd3a9f2beceb2a65` | `53a011b3288d8c5537601ee80247bb2b89e8b7cb7c906d2a62b458769d35a6b9` |
-| `emulebb-rust-v0.1.0-beta.1-linux-x86_64.AppImage` | `2f3cd1abf86b3deaea329506da62f916bb66a0dcc3830a895148436c156b5724` | `5b63504a0e5588797032dc23fd00638d673067f17c362d3bf9013b3c5088e08a` | `53a011b3288d8c5537601ee80247bb2b89e8b7cb7c906d2a62b458769d35a6b9` |
-| `emulebb-rust-v0.1.0-beta.1-macos-arm64.dmg` | `a7848c0e3136d4023204c79b2c38a6c1b041730e0de3e84708b8e54f9b5fd003` | `7c7129091fe6ad395ffe61f3afae9520a3e73702df77f182fa3ba73cfdd58e8d` | `9ff88407026676a74c3974c83b9deb2fd3ccdfe24f4eb9618fb863cda2dca597` |
-| `emulebb-rust-v0.1.0-beta.1-macos-x64.dmg` | `f2259d302a43945b930011c307f17ca08e8706e2eca663da1256919f0f1a2af4` | `ae737f2c854b482f1efd4ea23fe22ff069f18b833e9458cf386ba9cf8b4f7552` | `fccb1c56dbb4aebe90717da19966db949e30520198e38aed69f09892fe98144a` |
-| `emulebb-rust-v0.1.0-beta.1-windows-arm64.zip` | `0742ee15cc4c3caf794244ce965c1ad084464c4ff89542278b41d500799ae05f` | `8f339bfdd53eb4dc6c3c75bf96a575d0af86ce867c57cfc68e73585633d3b4cd` | `19a0e3b350dc5acbf13ad3ec026c266fb967f9563b74afbcfd6a1e9fe9848b9a` |
-| `emulebb-rust-v0.1.0-beta.1-windows-x64.zip` | `8a5d463ac2ca04a2954a17e8bbfeceb742d01e2977913ceb3a9fb6afda90e843` | `89019bd1e429a3493397c935ebd968e20d353be9bca230c3fda0e32d793d553c` | `3429f32fe384ee61d94e7547e6dd35fa76f211d1c53e8aac4959c23ae7b17390` |
+| `emulebb-rust-v0.1.0-beta.1-linux-aarch64.AppImage` | `c8959465eb467be4241529190ce8aebdd9c589aee2575fee0c6c42ba587c276b` | `d8b392b7c785b4f20081e0e2bea5b6b858d35760cbcc19aa28a591d9eaf1d7d7` | `e6087fd1f5d748a516da1df6cd8b6d22674b60008bc7e40df57c1e02e1968547` |
+| `emulebb-rust-v0.1.0-beta.1-linux-arm64.deb` | `dbbf358de3643af363b2bab190a1691c4d0559418156531fa62a5b8308a00c88` | `81bda53c57f950ec324aecfb53608bcb78d00126ecd508fdf0dafa59185a3a9e` | `e6087fd1f5d748a516da1df6cd8b6d22674b60008bc7e40df57c1e02e1968547` |
+| `emulebb-rust-v0.1.0-beta.1-linux-amd64.deb` | `3a053c2df1b8983f385937d1c70afadd45e3583714973b2255b4a491e781fe95` | `c012c781aff1a30f9571559f0ca4cfba8973d7d116474aa0d9931eef1df205d1` | `13e1807ed246e7a77927ecb1ba4e9bfab52cdd58cb38ac480f7b9153965a0a88` |
+| `emulebb-rust-v0.1.0-beta.1-linux-x86_64.AppImage` | `3b84d29e966750aaeefd03388ef926e59c9e517cab098c9c148ead923487f511` | `d651f0ac87038ffce26ca03a95346f861473a0925340ba19d0d34a144239b4f4` | `13e1807ed246e7a77927ecb1ba4e9bfab52cdd58cb38ac480f7b9153965a0a88` |
+| `emulebb-rust-v0.1.0-beta.1-macos-arm64.dmg` | `977de939a886713083bb3ae3d57fa996eacea01ffcca2f5be1dda522d210cbb3` | `656a76454aef27b92efbb093a358f8476b968c75fbe83ca9a7941cfb7e1e345a` | `31f15b5224fc906b34be4d244fadb342cc7d4be7478f20e26323f776a95cf100` |
+| `emulebb-rust-v0.1.0-beta.1-macos-x64.dmg` | `f827eaf120949ec8ec04ec312e979f045ffb023b2f2d7a56b45dab883f8f408a` | `efe8151b41c2ee8259e1a6e8a2e2abeec6c638e44f1a5eff11c422a38bd8e7ac` | `d1cb98d7b3cffb57ad060deb8380ff8b509b3e469ff320b22e7ddddd7abb956d` |
+| `emulebb-rust-v0.1.0-beta.1-windows-arm64.zip` | `a4fbfe1c43cdbcdbfb78941093e896324dac5aa36aeb82c895d425951ab15591` | `e2cc8040efb2d25987fa78a6129ed521971aeb90c62b8571f8b76aba65c86f0a` | `abaa12b304622297b180f2d995461e8aed43796dffa6f37ee02283712165bd09` |
+| `emulebb-rust-v0.1.0-beta.1-windows-x64.zip` | `df108cb639f49375cd29d3ac3d93bfce63183d667cdf096d3b6730337f388e9e` | `2d05ddeb1df464712f72b933a5fe7123ae015d25b52f54b9cb16a7966597a146` | `e14b373b7860b784226c9e59a3ac65d822f256b741a8e3bd899fb0421ae3607f` |
 
 The Linux architecture pairs intentionally share one SBOM per architecture.
-The tagged workflow must generate and verify the combined `SHA256SUMS` before
-publication; a combined sums file is not emitted by this non-publishing manual
-run.
+These are the final published bytes from tagged workflow run `36993503619`,
+not the earlier non-publishing candidate builds. The workflow generated and
+verified the combined `SHA256SUMS` before prerelease publication.
 
 ## Repository State
 
@@ -142,8 +161,10 @@ notes/OpenAPI revision recorded in package manifests.
 
 ## Publication Boundary
 
-F1 final evidence review is complete and the board decision is **GO**. The
-annotated `rust-v0.1.0-beta.1` tag is authorized on selected Rust commit
-`28a0703561f135b03ffcca94527ceb538ef9012e`. Publication remains workflow-only:
-the tag-triggered `release.yml` must build and verify the native assets and OCI
-image before it publishes the GitHub prerelease and versioned GHCR manifest.
+F1 final evidence review is complete and the board decision was **GO**. The
+workflow-owned GitHub prerelease and all native assets are published from the
+approved tag, and the versioned two-architecture GHCR manifest was pushed.
+GitHub's default-private package setting is the one remaining distribution
+boundary: public image delivery is incomplete until an organization package
+administrator changes `emulebb-rust` package visibility to public and an
+anonymous manifest inspection confirms the recorded digest and platforms.

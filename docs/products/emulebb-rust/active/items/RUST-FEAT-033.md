@@ -29,10 +29,11 @@ target and archive directories outside the source workspace.
 ## Release Triage (2026-09-30)
 
 **Beta blocker and umbrella release item.** All implementation, parity, safety,
-packaging-candidate, WebUI, and hosted CI gates are green. This item remains
-open for the explicit operator tag decision and the resulting tagged workflow;
-`RUST-FEAT-006` remains the only subordinate beta blocker until that workflow
-publishes and verifies the versioned GHCR manifest.
+packaging-candidate, WebUI, hosted CI, tagged native publication, and versioned
+image-push gates are green. The GitHub prerelease is live. This item remains
+open only for public GHCR readability: GitHub created the organization package
+private by default, and an organization package administrator must make it
+public before the anonymous pull gate can close.
 
 ## Beta Code Freeze (2026-09-30)
 
@@ -120,8 +121,31 @@ cleanup or product behavior.
       approved ISO on this candidate.
 - [x] The board gives the explicit tagging go on 2026-10-02 for selected Rust
       commit `28a0703561f135b03ffcca94527ceb538ef9012e`.
-- [ ] The approved tagged workflow publishes and verifies all native release
-      assets plus `ghcr.io/emulebb/emulebb-rust:0.1.0-beta.1` for amd64/arm64.
+- [x] The approved tagged workflow publishes and verifies all native release
+      assets and pushes `ghcr.io/emulebb/emulebb-rust:0.1.0-beta.1` for
+      amd64/arm64.
+- [ ] The GHCR package is public and anonymous inspection verifies the
+      published manifest digest and amd64/arm64 platforms.
+
+## Tagged Publication Evidence (2026-10-02)
+
+- Annotated tag `rust-v0.1.0-beta.1` resolves through tag object
+  `94af8645f6c7d24664ee641a3007128b0bd83f9f` to the approved Rust candidate
+  `28a0703561f135b03ffcca94527ceb538ef9012e`.
+- [Tagged workflow run `36993503619`](https://github.com/emulebb/emulebb-rust/actions/runs/36993503619)
+  passed all six native architecture jobs, the multi-architecture image
+  candidate, the versioned GHCR push, and native release publication.
+- The GitHub
+  [prerelease](https://github.com/emulebb/emulebb-rust/releases/tag/rust-v0.1.0-beta.1)
+  is live with 25 files. All 22 entries in its `SHA256SUMS` recomputed
+  successfully; the sums-file SHA-256 is
+  `2086c7c300d053a4c3fae881e6509f4c586556b047e140db22b84bcec30bf6cd`.
+- The GHCR push completed at manifest-list digest
+  `sha256:8ddcb65b209e490405e037e78bb4c004574a5c07ee85c2dd829e16bd21f888f2`
+  with `linux/amd64` and `linux/arm64` images. Anonymous inspection currently
+  receives HTTP 401 because the newly created organization package has
+  default-private visibility; public readability remains the sole open release
+  distribution gate.
 
 ## Current Candidate Evidence (2026-09-30)
 
