@@ -120,8 +120,8 @@ blockers below.
 
 | ID | Priority | Status | Blocking condition |
 |----|----------|--------|--------------------|
-| [RUST-FEAT-006](items/RUST-FEAT-006.md) | Major | IN_PROGRESS | Publish and verify the versioned two-architecture GHCR image. |
-| [RUST-FEAT-033](items/RUST-FEAT-033.md) | Critical | IN_PROGRESS | Obtain explicit tag approval and complete the tagged publication workflow. |
+| [RUST-FEAT-006](items/RUST-FEAT-006.md) | Major | IN_PROGRESS | Make the pushed versioned GHCR image public and verify it anonymously. |
+| [RUST-FEAT-033](items/RUST-FEAT-033.md) | Critical | IN_PROGRESS | Close public GHCR verification, then close the completed beta publication. |
 
 ### Post-beta features
 

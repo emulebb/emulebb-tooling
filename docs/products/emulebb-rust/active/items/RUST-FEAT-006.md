@@ -19,17 +19,19 @@ source: SUITE-DOCKER design (2026-06-16)
 ## Summary
 
 Publish a **linuxserver-style** Docker image for the emulebb-rust headless eD2K/Kad
-core to **GHCR** (`ghcr.io/emulebb/emulebb-rust`, `latest` + versioned), built and
-pushed by this repo's CI. Design:
+core to **GHCR** (`ghcr.io/emulebb/emulebb-rust:0.1.0-beta.1`), built and pushed
+by this repo's CI. The beta publishes only the versioned tag; `latest` remains
+reserved for a stable release. Design:
 [`emulebb-tooling/docs/active/SUITE-DOCKER.md`](../../../../active/SUITE-DOCKER.md).
 
 ## Release Triage (2026-09-30)
 
-**Beta blocker.** Candidate images and the two-architecture manifest path are
-implemented and smoked, but neither the `rust-v0.1.0-beta.1` release nor the
-`ghcr.io/emulebb/emulebb-rust:0.1.0-beta.1` package exists yet. Keep this item
-open and beta-attached until the separately approved tagged workflow publishes
-and verifies the versioned manifest.
+**Beta blocker.** The approved tagged workflow built, smoked, and pushed the
+two-architecture `ghcr.io/emulebb/emulebb-rust:0.1.0-beta.1` manifest. GitHub
+created the organization package private by default, so anonymous inspection
+still returns HTTP 401. Keep this item open and beta-attached until a package
+administrator changes visibility to public and the anonymous registry API
+verifies the digest, platforms, and absence of a `latest` tag.
 
 ## Why This Matters
 
@@ -53,8 +55,11 @@ Docker form of the bundle cannot start. It is the eD2K core in the container set
 
 ## Acceptance Criteria
 
-- [ ] CI builds and pushes `ghcr.io/emulebb/emulebb-rust:0.1.0-beta.1`
+- [x] CI builds and pushes `ghcr.io/emulebb/emulebb-rust:0.1.0-beta.1`
       as a two-architecture manifest after native packages and image smoke pass.
+- [ ] Anonymous GHCR inspection verifies the published digest, amd64/arm64
+      platforms, and that the package exposes only the versioned beta tag, not
+      `latest`.
 - [x] Image honours `PUID`/`PGID`/`TZ`; state under `/config`, downloads under `/data`.
 - [x] `/api/v1` + eD2K TCP + Kad UDP reachable when ports are published on a fronting service.
 - [x] A separate Gluetun tunnel-down test records zero off-tunnel P2P egress.
@@ -74,6 +79,21 @@ Docker form of the bundle cannot start. It is the eD2K core in the container set
   download persistence, and REST/WebUI launch shape.
 - The isolated Docker-over-Gluetun tunnel-down campaign proved its positive
   sensor and recorded zero off-tunnel P2P packets after tunnel loss.
-- Publication is intentionally pending. This item closes only after the
-  separately approved `rust-v0.1.0-beta.1` tag run publishes and verifies the
-  versioned multi-architecture GHCR manifest.
+- At this 2026-09-26 snapshot, publication was intentionally pending and the
+  item remained open for the separately approved tag run.
+
+## 2026-10-02 Tagged Publication Evidence
+
+- The board gave the separate explicit tag approval, and annotated tag
+  `rust-v0.1.0-beta.1` resolves to approved Rust commit
+  `28a0703561f135b03ffcca94527ceb538ef9012e`.
+- [Tagged workflow run `36993503619`](https://github.com/emulebb/emulebb-rust/actions/runs/36993503619)
+  passed the native package dependencies, two-platform candidate smoke, and
+  `Publish versioned GHCR image` job.
+- The push log contains only
+  `ghcr.io/emulebb/emulebb-rust:0.1.0-beta.1`, at manifest-list digest
+  `sha256:8ddcb65b209e490405e037e78bb4c004574a5c07ee85c2dd829e16bd21f888f2`;
+  it contains no `latest` push.
+- GitHub's default-private package visibility currently prevents independent
+  anonymous registry inspection. Public visibility and the resulting anonymous
+  tag/manifest verification remain required before this item can close.
