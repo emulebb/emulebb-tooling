@@ -3,7 +3,7 @@ id: FEAT-004
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/54
 title: Kad — Generalise KadPublishGuard abuse budget beyond PUBLISH_SOURCE
-status: OPEN
+status: DEFERRED
 priority: Minor
 category: feature
 labels: [kad, abuse-prevention, throttling, resource-budget]

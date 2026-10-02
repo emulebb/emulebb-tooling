@@ -3,7 +3,7 @@ id: FEAT-007
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/56
 title: Windows Property Store integration for non-media file metadata
-status: OPEN
+status: DEFERRED
 priority: Minor
 category: feature
 labels: [metadata, windows-api, exploratory]

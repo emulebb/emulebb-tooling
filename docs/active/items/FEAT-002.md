@@ -3,7 +3,7 @@ id: FEAT-002
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/7
 title: Kad SafeKad — evolve from coarse same-IP gate into layered trust model (CGNAT fix)
-status: OPEN
+status: DEFERRED
 priority: Major
 category: feature
 labels: [kad, safekad, routing, cgnat, trust]

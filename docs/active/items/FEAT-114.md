@@ -3,7 +3,7 @@ id: FEAT-114
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/153
 title: Add storage-aware hash and verify throttling
-status: OPEN
+status: DEFERRED
 priority: Minor
 category: feature
 labels: [hashing, verification, disk-io, storage, hdd, performance, post-0.7.3]

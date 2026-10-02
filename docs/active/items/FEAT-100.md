@@ -3,7 +3,7 @@ id: FEAT-100
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/114
 title: Improve startup progress and UI readiness locking
-status: OPEN
+status: DEFERRED
 priority: Major
 category: feature
 labels: [startup, ui, responsiveness, lifecycle, locking, progress, post-0.7.3]

@@ -3,7 +3,7 @@ id: FEAT-018
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/60
 title: µTP (Micro Transport Protocol) transport layer — CUtpSocket / libutp
-status: OPEN
+status: DEFERRED
 priority: Minor
 category: feature
 labels: [network, utp, transport, congestion-control, libutp]

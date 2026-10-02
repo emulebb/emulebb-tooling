@@ -3,7 +3,7 @@ id: FEAT-104
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/118
 title: Add optional reverse DNS peer name resolution
-status: OPEN
+status: DEFERRED
 priority: Minor
 category: feature
 labels: [diagnostics, dns, peer-ui, privacy, post-0.7.3]

@@ -3,7 +3,7 @@ id: FEAT-111
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/130
 title: Add peer and queue diagnostics columns
-status: OPEN
+status: DEFERRED
 priority: Minor
 category: feature
 labels: [diagnostics, peer-ui, uploads, queue, observability, post-0.7.3]

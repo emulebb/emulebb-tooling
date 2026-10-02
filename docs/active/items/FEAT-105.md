@@ -3,7 +3,7 @@ id: FEAT-105
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/119
 title: Add stopped upload state for shared files
-status: OPEN
+status: DEFERRED
 priority: Minor
 category: feature
 labels: [shared-files, uploads, priority, release-controls, post-0.7.3]

@@ -3,7 +3,7 @@ id: FEAT-082
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/31
 title: Virtualize high-volume downloads, search results, and client-history lists
-status: OPEN
+status: DEFERRED
 priority: Minor
 category: feature
 labels: [ui, performance, lists, downloads, search, clients, emuleai]

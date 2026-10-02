@@ -3,7 +3,7 @@ id: FEAT-072
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/69
 title: Reduce startup cache UI-thread blocking on large shared libraries
-status: OPEN
+status: DEFERRED
 priority: Minor
 category: feature
 labels: [startup, shared-files, performance, ui, cache]

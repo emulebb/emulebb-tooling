@@ -3,7 +3,7 @@ id: FEAT-110
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/144
 title: Add configurable title bar status format
-status: OPEN
+status: DEFERRED
 priority: Minor
 category: feature
 labels: [ui, title-bar, status, preferences, observability, post-0.7.3]

@@ -3,7 +3,7 @@ id: FEAT-085
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/32
 title: Establish a shared campaign core for eMuleBB product-family test orchestration
-status: OPEN
+status: DEFERRED
 priority: Minor
 category: feature
 labels: [product-family, p2p-overlord, test-campaigns, orchestration, evidence]

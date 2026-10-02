@@ -5,7 +5,7 @@ closing eMuleBB backlog records.
 
 `docs/active/` is the current local spec and evidence layer. For
 GitHub-primary forward items marked `workflow: github`, the owning product repo
-issue and org Project #3 (`eMuleBB Suite`) own workflow state; the local
+issue and org Project #3 (`eMuleBB Roadmap`) own workflow state; the local
 Markdown file remains the engineering spec and evidence record. Project #2
 (`eMuleBB Roadmap MFC (archive)`) is MFC archive/provenance only unless an item
 is explicitly approved as frozen-line maintenance.
@@ -17,7 +17,7 @@ Canonical forward backlog workflow endpoint:
 When adding or materially updating an externally actionable backlog item,
 manage all three records together unless the item is explicitly local-only,
 historical, exploratory, or provenance-only: local Markdown spec, owning product
-repo issue, and Suite Project #3 item.
+repo issue, and eMuleBB Roadmap Project #3 item.
 
 ## Preflight
 
@@ -74,7 +74,7 @@ Use this path for normal externally actionable backlog slices:
 
 1. Create or update the local active item spec first, including the stable item
    ID, scope, constraints, and acceptance criteria.
-2. Put the item in the owning product repo and add it to the Suite Project #3
+2. Put the item in the owning product repo and add it to eMuleBB Roadmap Project #3
    with the correct `Product` and `Phase` fields.
 3. The local item must have `workflow: github`, `github_issue:` pointing to the
    owning repo issue, and a workflow-status note that points to the issue.

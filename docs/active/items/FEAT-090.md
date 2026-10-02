@@ -3,7 +3,7 @@ id: FEAT-090
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/80
 title: Tune broadband limits by drive topology and total budget
-status: OPEN
+status: DEFERRED
 priority: Minor
 category: feature
 labels: [preferences, defaults, performance, storage, hdd, ssd, broadband, post-0.7.3]

@@ -3,7 +3,7 @@ id: FEAT-008
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/57
 title: Oracle protocol guard seams — integrate stale branch test scaffolding
-status: OPEN
+status: DEFERRED
 priority: Trivial
 category: feature
 labels: [testing, protocol, oracle, stale-branch]

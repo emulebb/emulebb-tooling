@@ -3,7 +3,7 @@ id: FEAT-116
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/155
 title: Throttle background share scanning on active slow volumes
-status: OPEN
+status: DEFERRED
 priority: Minor
 category: feature
 labels: [shared-files, scanning, disk-io, storage, hdd, performance, post-0.7.3]

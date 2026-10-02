@@ -3,7 +3,7 @@ id: FEAT-044
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/18
 title: IP filter input policy - PeerGuardian lists, whitelist, and private-IP exemption
-status: OPEN
+status: DEFERRED
 priority: Minor
 category: feature
 labels: [ipfilter, security, peerguardian, whitelist, private-ip, emuleai]

@@ -3,7 +3,7 @@ id: FEAT-039
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/16
 title: Download checker — duplicate and near-duplicate intake guard
-status: OPEN
+status: DEFERRED
 priority: Minor
 category: feature
 labels: [downloads, duplicates, file-handling, safety, blacklist, intake]

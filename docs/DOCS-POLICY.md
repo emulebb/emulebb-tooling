@@ -20,7 +20,7 @@ If another doc conflicts with `docs/active/`, `docs/active/` wins for current
 status.
 
 For GitHub-primary backlog items, workflow status is an exception: the owning
-product repo issue and the public org-level `eMuleBB Suite` Project #3 own
+product repo issue and the public org-level `eMuleBB Roadmap` Project #3 own
 current state, priority, release placement, discussion, ownership, and PR
 linkage for forward work. The canonical forward board is
 `https://github.com/orgs/emulebb/projects/3`. MFC-era items in
@@ -85,7 +85,7 @@ as provenance only.
   instead of carrying anonymous task rows.
 - New externally actionable backlog items should be GitHub-primary by default:
   create or update the local item, the owning product repo issue, and membership
-  in the `eMuleBB Suite` Project #3 unless the item is explicitly local-only,
+  in the `eMuleBB Roadmap` Project #3 unless the item is explicitly local-only,
   historical, exploratory, or provenance-only. Do not add new MFC items to the
   archived roadmap unless they meet the frozen-line maintenance rule.
 - Do not create new top-level Markdown files in `docs/` unless they are policy

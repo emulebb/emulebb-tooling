@@ -3,7 +3,7 @@ id: FEAT-075
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/71
 title: Keep startup progress responsive during daily config backup
-status: OPEN
+status: DEFERRED
 priority: Minor
 category: feature
 labels: [startup, backup, ui, responsiveness, progress, post-0.7.3]

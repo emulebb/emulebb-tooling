@@ -3,7 +3,7 @@ id: FEAT-019
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/12
 title: Dark mode UI — system-aware Windows 10 dark theme integration
-status: OPEN
+status: DEFERRED
 priority: Minor
 category: feature
 labels: [ui, dark-mode, dwm, win10, theming]

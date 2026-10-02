@@ -3,7 +3,7 @@ id: FEAT-009
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/58
 title: Mirror audit guard seam — WIP work from stale branch parent commit
-status: OPEN
+status: DEFERRED
 priority: Trivial
 category: feature
 labels: [testing, audit, mirror, stale-branch]

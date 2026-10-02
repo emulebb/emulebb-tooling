@@ -3,7 +3,7 @@ id: FEAT-070
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/68
 title: Add targeted client UserHash and upload-lifecycle diagnostics
-status: OPEN
+status: DEFERRED
 priority: Minor
 category: feature
 labels: [diagnostics, logging, upload, clients, userhash]

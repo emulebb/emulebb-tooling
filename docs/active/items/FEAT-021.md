@@ -3,7 +3,7 @@ id: FEAT-021
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/61
 title: SourceSaver — persist download source lists between sessions
-status: OPEN
+status: DEFERRED
 priority: Minor
 category: feature
 labels: [download, sources, persistence, recovery]

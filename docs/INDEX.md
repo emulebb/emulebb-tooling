@@ -18,20 +18,18 @@
   <img alt="eMuleBB broadband edition logo" src="../assets/brand/emulebb-broadband-edition-logo.png" />
 </section>
 
-## The eMuleBB Suite
+## The eMuleBB Projects
 
-This guide covers the **eMuleBB Windows client** (the `0.7.3` eD2K/Kad desktop
-app). The MFC `0.7.x` line is frozen except for critical maintenance and
-non-behavior-expanding diagnostics/instrumentation. Forward development now lives
-in **emulebb-rust**: the headless eD2K/Kad client plus embedded SPA WebUI. The
-broader **eMuleBB Suite** remains the product direction, but **qBittorrentBB** is
-future companion work and **TrackMuleBB** is parked until the BitTorrent side is
-ready to justify a cross-network controller. The Rust **ed2k-server** service is
-now an active Phase 1 production-hardening candidate; it is not yet the selected
-test-harness server. For the suite as a whole, see the
-[Suite Roadmap](active/SUITE-JOINT-ROADMAP.md),
-[Suite Bundle & Installer](active/SUITE-INSTALLER.md), and
-[Suite Docker Delivery](active/SUITE-DOCKER.md).
+This guide covers the **eMuleBB Windows client** (the stable `0.7.3` eD2K/Kad
+desktop app) and the active experimental **emulebb-rust `0.1.0-beta.1`** client.
+The MFC `0.7.x` line accepts bugs and bounded low-risk maintenance; Rust is the
+only active product-development lane and is not yet production-ready.
+qBittorrentBB and its libtorrent fork are paused experiments, aMuTorrent is the
+frozen controller shipped with the `0.7.3` bundle, and TrackMuleBB is archived.
+The Go eD2K server remains harness-only; the Rust ed2k-server is an
+upstream-contribution reference. See the
+[Product Portfolio](active/PRODUCT-PORTFOLIO.md) and
+[Roadmap Summary](reference/ROADMAP-SUMMARY.md).
 
 ## Start Here
 
@@ -225,8 +223,7 @@ are not the best first read for users.
 | Workspace repository map | [reference/WORKSPACE-REPO-MAP](reference/WORKSPACE-REPO-MAP.md) |
 | Development and validation guide | [reference/DEVELOPMENT-GUIDE](reference/DEVELOPMENT-GUIDE.md) |
 | Active backlog and release dashboard | [active/INDEX](active/INDEX.md) |
-| p2p-overlord product-family integration plan | [active/plans/P2P-OVERLORD-PRODUCT-FAMILY-INTEGRATION](active/plans/P2P-OVERLORD-PRODUCT-FAMILY-INTEGRATION.md) |
-| Ecosystem suite bootstrap planning | [active/plans/ECOSYSTEM-SUITE-BOOTSTRAP-PLAN](active/plans/ECOSYSTEM-SUITE-BOOTSTRAP-PLAN.md) |
+| Retired cross-product planning | [history/HIST-SUITE-JOINT-ROADMAP](history/HIST-SUITE-JOINT-ROADMAP.md) |
 | 0.7.3 release-train control document | [active/RELEASE-0.7.3](active/RELEASE-0.7.3.md) |
 | Public 0.7.3 release notes | [active/RELEASE-0.7.3-NOTES](active/RELEASE-0.7.3-NOTES.md) |
 | 0.7.3 stable changelog | [active/RELEASE-0.7.3-STABLE-CHANGELOG](active/RELEASE-0.7.3-STABLE-CHANGELOG.md) |
@@ -247,8 +244,8 @@ are not the best first read for users.
 
 If a status claim outside `docs/active/` conflicts with `docs/active/`, treat
 `docs/active/` as authoritative for current local backlog and release state.
-For GitHub-primary forward backlog items marked `workflow: github`, the owning
-product repo issue and the public `eMuleBB Suite` org Project #3 are
+For GitHub-primary current backlog items marked `workflow: github`, the owning
+product repo issue and the public `eMuleBB Roadmap` org Project #3 are
 authoritative for workflow state. Project #2 is now the MFC archive board:
 `eMuleBB Roadmap MFC (archive)`.
 

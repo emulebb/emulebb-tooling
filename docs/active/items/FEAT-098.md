@@ -3,7 +3,7 @@ id: FEAT-098
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/35
 title: Add strict bound public-IP guard for VPN profiles
-status: OPEN
+status: DEFERRED
 priority: Major
 category: feature
 labels: [vpn, networking, bind-policy, diagnostics, privacy, live-e2e, post-0.7.3]

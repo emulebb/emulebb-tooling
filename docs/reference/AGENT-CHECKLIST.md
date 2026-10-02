@@ -83,7 +83,7 @@ python -m mkdocs build --strict
   workspace policy before implementation.
 - When the user asks to add or materially update an externally actionable
   backlog item, manage the local item, the owning product repo issue, and the
-  `eMuleBB Suite` Project #3 (`https://github.com/orgs/emulebb/projects/3`)
+  `eMuleBB Roadmap` Project #3 (`https://github.com/orgs/emulebb/projects/3`)
   together unless the item is explicitly local-only, historical, exploratory, or
   provenance-only.
 - For files with `workflow: github`, treat the linked GitHub issue and public

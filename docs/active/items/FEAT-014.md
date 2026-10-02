@@ -3,7 +3,7 @@ id: FEAT-014
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/59
 title: REST API follow-up — OpenAPI docs and optional external gateway
-status: OPEN
+status: DEFERRED
 priority: Minor
 category: feature
 labels: [api, rest, openapi, tooling, sidecar]

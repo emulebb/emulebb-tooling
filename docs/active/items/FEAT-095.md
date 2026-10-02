@@ -3,7 +3,7 @@ id: FEAT-095
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/85
 title: Move part-file durability work off foreground paths
-status: OPEN
+status: DEFERRED
 priority: Major
 category: feature
 labels: [part-file, persistence, disk-io, write-thread, performance, post-0.7.3]

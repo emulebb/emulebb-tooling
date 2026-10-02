@@ -3,7 +3,7 @@ id: FEAT-003
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/8
 title: Kad — Add response usefulness scoring and subnet-diversity search fanout
-status: OPEN
+status: DEFERRED
 priority: Minor
 category: feature
 labels: [kad, search, routing, quality]

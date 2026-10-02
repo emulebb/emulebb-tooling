@@ -3,7 +3,7 @@ id: FEAT-073
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/70
 title: Incorporate p2p-overlord into the eMuleBB product family
-status: OPEN
+status: DEFERRED
 priority: Minor
 category: feature
 labels: [product-family, p2p-overlord, rest, testing, upnp, post-0.7.3]

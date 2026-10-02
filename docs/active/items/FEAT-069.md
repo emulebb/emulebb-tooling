@@ -3,7 +3,7 @@ id: FEAT-069
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/67
 title: Shared-file include and exclude pattern rules
-status: OPEN
+status: DEFERRED
 priority: Minor
 category: feature
 labels: [sharing, filters, regex, privacy, file-handling]

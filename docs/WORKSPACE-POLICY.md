@@ -9,7 +9,8 @@ path after reading this policy.
 ## Policy Scope (core vs product annex)
 
 This document mixes **product-neutral core** rules (binding on every repo) with
-**product-specific** rules. To keep it readable as the suite grows, treat the
+**product-specific** rules. To keep it readable as the project family changes,
+treat the
 sections by scope:
 
 - **Core (all products):** Workspace Layout, Branch and History Policy, Commit
@@ -24,9 +25,12 @@ sections by scope:
   placement live in `docs\products\emulebb-rust\reference\CODE-QUALITY.md`;
   machine policy, cargo, and omission rules live in `repos\emulebb-rust\policy`
   and its `AGENTS.md`.
-- **Product annex — forks / managed products (qBittorrentBB, amutorrent
-  [frozen], trackmulebb, amule, goed2k, ed2k-server):** Managed Fork Hygiene
-  plus each repo's `AGENTS.md`.
+- **Product annex — forks / managed repositories:** Managed Fork Hygiene plus
+  each repo's `AGENTS.md`. Current lifecycle roles are: `amutorrent` frozen with
+  the shipped `0.7.3` bundle; `qbittorrentbb` and `emulebb-libtorrent` paused
+  experiments; `trackmulebb` an archived private experiment; `amule` an
+  analysis/reference fork; `goed2k-server` harness-only; and `ed2k-server` an
+  upstream-contribution reference fork.
 
 Physical extraction of the MFC build/localization sections into a separate
 `WORKSPACE-POLICY-MFC.md` annex is a tracked follow-up; until then this scope map
@@ -45,9 +49,9 @@ that is true.
 - Revalidate backlog and release docs against current `main`, dependency pins,
   and this policy before implementation.
 - For MFC backlog items, the linked `emulebb/emulebb` issue and org Project #2
-  (`eMuleBB Roadmap MFC (archive)`) are archive/provenance only. Forward
+  (`eMuleBB Roadmap MFC (archive)`) are archive/provenance only. Current
   GitHub-primary work uses the owning product repo issue and org Project #3
-  (`eMuleBB Suite`) for workflow state.
+  (`eMuleBB Roadmap`) for workflow state.
 
 ## Project Focus Contract
 
@@ -70,7 +74,9 @@ Project focus aliases and default scope:
   orchestration, `repos\emulebb-build-tests` for harnesses, and
   `repos\emulebb-tooling\docs\products\emulebb-mfc` for docs.
 - `qbittorrentbb`, `qbit`, or `qbbb`:
-  primary edit scope is `repos\qbittorrentbb`. Support scope is
+  primary edit scope is an explicitly materialized `repos\qbittorrentbb`
+  checkout. This paused experiment is not part of the default workspace.
+  Support scope is
   `repos\emulebb-build`, `repos\emulebb-build-tests`, and tooling docs only
   when the task needs shared orchestration, live-wire, or policy context.
 
@@ -101,10 +107,12 @@ Directive precedence is:
 - `repos\emulebb-build-tests` owns shared test harness code and test execution
   helpers.
 - `repos\goed2k-server` owns the local ED2K server used by deterministic
-  eMuleBB live E2E and protocol-parity scenarios.
-- `repos\ed2k-server` is the managed Rust eD2K index-server Service/Lab fork.
-  It is build-integrated as a future test-server candidate but is not selected
-  by any live, parity, or release campaign.
+  eMuleBB live E2E and protocol-parity scenarios. It is harness infrastructure,
+  not an evolving product or service roadmap.
+- `repos\ed2k-server` is the managed Rust eD2K index-server reference fork for
+  evaluating and preparing potentially upstreamable contributions. It remains
+  build-integrated but is not selected by any live, parity, release, or
+  production campaign.
 - `repos\emulebb` is the canonical app repo checkout used as the branch store and
   worktree anchor.
 - Normal app editing belongs in
@@ -169,14 +177,17 @@ Directive precedence is:
 - eMuleBB MFC is the eMule broadband edition Windows fork, improved for modern
   Windows systems and networks. Its active source is the `emulebb-main` worktree;
   the `0.7.x` release line is in maintenance.
-- `emulebb-rust` is a separate Rust-native eD2K/Kad client and forward successor,
-  with a headless daemon and embedded SPA WebUI. It targets stock-compatible wire
-  behavior, not a line-by-line MFC implementation or a shared MFC REST contract.
+- `emulebb-rust` is the active experimental Rust-native eD2K/Kad client. Its
+  first public beta is `0.1.0-beta.1`; beta status is not a production-readiness
+  claim. It has a headless daemon and embedded SPA WebUI and targets
+  stock-compatible wire behavior, not a line-by-line MFC implementation or a
+  shared MFC REST contract.
 - aMule is a maintained cross-platform eMule-family client. The upstream
   `amule-org/amule` checkout at `analysis\amule` is an optional, setup-managed
   source and offline-fixture reference, not a product worktree or release gate.
-  The separate `emulebb/amule` Windows-build fork and optional `repos\amule`
-  checkout remain unchanged; neither is the upstream analysis reference.
+  The separate `emulebb/amule` fork and optional `repos\amule` checkout are also
+  analysis/reference inputs. Their automation may remain active, but they are
+  not promoted as an eMuleBB product or release gate.
 
 ## Branch And History Policy
 
@@ -191,10 +202,10 @@ Directive precedence is:
 - After stable `0.7.3`, the MFC app is frozen on the `0.7.x` legacy support
   line. No MFC `0.8.x` implementation lane is active unless an explicit later
   operator decision reopens it.
-- The `0.7.x` legacy line accepts only compatibility-preserving, low-risk bug
-  fixes on supported surfaces plus security, crash/data-loss, packaging,
-  update-check, release-proof, and release-documentation fixes. It must not add
-  new product surface, new controller/API capability, or feature expansion.
+- The `0.7.x` legacy line accepts compatibility-preserving, low-risk bug fixes
+  plus bounded UX, performance, compatibility, build, packaging, documentation,
+  diagnostics, and release improvements. It must not add a new subsystem, broad
+  controller/API capability, protocol expansion, or architectural modernization.
 - Frozen legacy surfaces remain unsupported in `0.7.x`; do not fix them unless
   the issue affects supported shared infrastructure, security, or app
   stability.
@@ -488,9 +499,10 @@ module):
 
 ## Managed Fork Hygiene
 
-These rules apply uniformly to every managed fork / managed product repo: the
-`emulebb` app worktree, `emulebb-rust`, `amutorrent` (maintained until 0.7.3 final), `trackmulebb`,
-`qbittorrentbb`, `amule`, `goed2k-server`, `ed2k-server`, and the `emulebb-build` /
+These rules apply uniformly to every managed or retained fork: the
+`emulebb` app worktree, `emulebb-rust`, frozen `amutorrent`, archived
+`trackmulebb`, paused `qbittorrentbb` and `emulebb-libtorrent`, reference
+`amule` and `ed2k-server`, harness-only `goed2k-server`, and the `emulebb-build` /
 `emulebb-build-tests` / `emulebb-tooling` support repos. The
 `p2p-overlord-*` family is a separate product line and is out of scope here.
 Each fork's `AGENTS.md` stays thin and points back to this document; do not
@@ -516,9 +528,9 @@ restate these rules per repo.
   operator split-tunnel machine, though product runtime may still use them.
 - **Tests** reuse and extend the shared Python suite in `emulebb-build-tests`;
   do not fork a parallel per-client suite.
-- **Server selection** remains unchanged: `goed2k-server` is the deterministic
-  harness server. `ed2k-server` has build and source-quality gates only until a
-  separately reviewed test-server integration is approved.
+- **Server selection** is fixed: `goed2k-server` is the deterministic harness
+  server. `ed2k-server` has build and source-quality gates only as a reference
+  fork; it is not a future harness or production-service commitment.
 
 Enforcement: the `output-root` and `emulebb-env-override` audits in
 `repos\emulebb-tooling\ci\check-workspace-policy.py` (run by
@@ -528,8 +540,8 @@ the shared test suite.
 
 ## Network Safety (Selected-Route Integrity) — P0 Invariant
 
-Public-network P2P routing must be explicit for every networked product in the
-suite (emulebb-rust, qBittorrentBB, eMuleBB MFC). Direct mode intentionally
+Public-network P2P routing must be explicit for every networked product under
+test. Direct mode intentionally
 uses the host route and makes no anonymity promise. Selecting VPN mode instead
 creates a **P0 fail-closed invariant**: public P2P traffic must not escape over
 the direct route if the tunnel fails.
@@ -546,11 +558,10 @@ the direct route if the tunnel fails.
   behavior must prove tunnel-down yields no off-tunnel data egress. An open
   leak-test gap blocks that safety claim and release of a VPN-safe mode; it does
   not prohibit an explicitly labeled direct-mode beta.
-- **Known VPN-safety gaps (must close before declaring VPN mode safe):**
-  the emulebb-rust eD2K TCP egress pin (`RUST-FEAT-003`) and the emulebb-rust
-  leak-test (`RUST-FEAT-005`); the qBittorrentBB `vpnReady()` fail-closed gap
-  (`QBBB-FEAT-004`). VPN binding mechanics live under Managed Fork Hygiene and the
-  Live Test Network Policy.
+- **Priority boundary:** native Windows VPN integration is no longer a forward
+  development priority. Existing shipped behavior and safety claims still
+  require their recorded evidence; do not infer or advertise an unspecified
+  Docker/Gluetun product from this policy.
 
 ## Documentation Policy
 
@@ -577,15 +588,16 @@ the direct route if the tunnel fails.
   docs-first and light-code contribution work.
 - Backlog and planning docs are supporting specs; for GitHub-primary items they
   are not workflow authority by themselves.
-- Canonical forward backlog workflow endpoint is org Project #3:
+- Canonical current backlog workflow endpoint is org Project #3
+  (`eMuleBB Roadmap`):
   `https://github.com/orgs/emulebb/projects/3`. Use the owning product repo for
   issues, for example `emulebb/emulebb-rust` for Rust client work.
 - The MFC archive endpoints are `https://github.com/emulebb/emulebb/issues` and
   `https://github.com/orgs/emulebb/projects/2`. They are not the default for new
-  work; the MFC repo accepts only critical maintenance plus
-  non-behavior-expanding diagnostic/instrumentation items.
+  work; the MFC repo accepts only the bounded `0.7.x` maintenance work defined
+  in Branch And History Policy.
 - New externally actionable backlog items should be managed in the local item,
-  owning product repo issue, and the eMuleBB Suite board together unless
+  owning product repo issue, and the eMuleBB Roadmap board together unless
   explicitly local-only, historical, or provenance-only.
 - For GitHub-primary backlog work, GitHub owns workflow state, priority,
   release placement, ownership, discussion, and PR linkage. Local Markdown owns

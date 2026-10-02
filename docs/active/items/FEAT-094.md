@@ -3,7 +3,7 @@ id: FEAT-094
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/84
 title: Improve UDP burst handling without lock-held backoff
-status: OPEN
+status: DEFERRED
 priority: Major
 category: feature
 labels: [udp, networking, sockets, performance, locks, post-0.7.3]

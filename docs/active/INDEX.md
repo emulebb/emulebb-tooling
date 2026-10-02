@@ -7,8 +7,8 @@ reading.
 MFC GitHub-primary backlog workflow is archived. The `emulebb/emulebb` issues
 and public `eMuleBB Roadmap MFC (archive)` org Project #2
 (`https://github.com/orgs/emulebb/projects/2`) are provenance for the frozen MFC
-line, not forward workflow authority. Forward work uses owning product repo
-issues and the public `eMuleBB Suite` org Project #3
+line, not current workflow authority. Current work uses owning product repo
+issues and the public `eMuleBB Roadmap` org Project #3
 (`https://github.com/orgs/emulebb/projects/3`). Local item docs marked
 `workflow: github` are engineering spec/evidence records, not workflow status
 authority.
@@ -24,11 +24,11 @@ authority.
 **Source of truth:** `EMULEBB_WORKSPACE_ROOT\workspaces\workspace\app\emulebb-main` (`main` branch)
 **Current MFC GitHub issue count:** `0` open; the MFC issue backlog was closed as
 not planned when the roadmap was archived.
-**Latest roadmap/archive refresh:** 2026-07-12
+**Latest roadmap/archive refresh:** 2026-10-02
 **Local non-done item inventory:** retained below as engineering/spec archive,
 not workflow authority.
 **Current non-done count:** `129`
-**Non-done by status:** `107` OPEN, `7` IN_PROGRESS, `15` DEFERRED, `0` BLOCKED.
+**Non-done by status:** `18` OPEN, `3` IN_PROGRESS, `108` DEFERRED, `0` BLOCKED.
 **Backlog counts:** item tables below are retained for provenance and future
 manual promotion only.
 **0.7.3 release-train relevance:** Most non-done items below are future or
@@ -38,9 +38,9 @@ deferred work; stable `0.7.3` is published and final proof status is recorded in
 `emulebb-v0.7.3` is published, and further `0.7.x` work is limited to legacy
 maintenance.
 **Post-stable line split:** after stable `0.7.3`, MFC is frozen on the `0.7.x`
-legacy support line. Accept only critical maintenance plus
-non-behavior-expanding diagnostics/instrumentation. Forward focus is
-`emulebb-rust` headless client stabilization and embedded SPA WebUI.
+legacy support line. Accept bugs and bounded low-risk UX, performance,
+compatibility, build, packaging, documentation, diagnostics, and release work.
+`emulebb-rust` is the active experimental product-development lane.
 **Release backlog view:** [RELEASE-0.7.3](RELEASE-0.7.3.md)
 **Release checklist:** [RELEASE-0.7.3-CHECKLIST](RELEASE-0.7.3-CHECKLIST.md)
 **Release runbook:** [RELEASE-0.7.3-RUNBOOK](RELEASE-0.7.3-RUNBOOK.md)
@@ -49,20 +49,19 @@ non-behavior-expanding diagnostics/instrumentation. Forward focus is
 **Frozen surfaces:** [FROZEN-SURFACES](FROZEN-SURFACES.md)
 **Controller surface matrix:** [CONTROLLER-SURFACE-MATRIX](CONTROLLER-SURFACE-MATRIX.md)
 **Future release roadmap:** [FUTURE-ROADMAP](FUTURE-ROADMAP.md)
-**Archived emulebb-mfc 0.8.0 Performance & Async notes:** [MFC-0.8.0-PERF-ASYNC-PLAN](plans/MFC-0.8.0-PERF-ASYNC-PLAN.md)
-(design docs: [startup](plans/MFC-0.8.0-STARTUP-TIME-TO-INTERACTIVE.md),
-[network core thread](plans/MFC-0.8.0-NETWORK-CORE-THREAD.md),
-[Process() migration](plans/MFC-0.8.0-PROCESS-LOOP-MIGRATION.md))
-**Archived emulebb-mfc 0.8.0 Lean notes:** [MFC-0.8.0-LEAN-REMOVAL-PLAN](plans/MFC-0.8.0-LEAN-REMOVAL-PLAN.md)
+**Parked emulebb-mfc 0.8.0 Performance & Async notes:** [MFC-0.8.0-PERF-ASYNC-PLAN](../ideas/IDEA-MFC-0.8.0-PERF-ASYNC-PLAN.md)
+(design docs: [startup](../ideas/IDEA-MFC-0.8.0-STARTUP-TIME-TO-INTERACTIVE.md),
+[network core thread](../ideas/IDEA-MFC-0.8.0-NETWORK-CORE-THREAD.md),
+[Process() migration](../ideas/IDEA-MFC-0.8.0-PROCESS-LOOP-MIGRATION.md))
+**Parked emulebb-mfc 0.8.0 Lean notes:** [MFC-0.8.0-LEAN-REMOVAL-PLAN](../ideas/IDEA-MFC-0.8.0-LEAN-REMOVAL-PLAN.md)
 **Roadmap consolidation scaffold:** [FUTURE-ROADMAP#release-line-model](FUTURE-ROADMAP.md#release-line-model)
-**Suite joint roadmap (Rust-first forward program):** [SUITE-JOINT-ROADMAP](SUITE-JOINT-ROADMAP.md)
-**Suite metadata fabric (torrent⇄collection⇄eD2K):** [SUITE-METADATA-FABRIC](SUITE-METADATA-FABRIC.md)
-**GitHub-primary backlog workflow:** forward items use owning product repo issues
-plus the `eMuleBB Suite` Project #3. The archived MFC Project #2 is provenance
+**Retired Suite roadmap:** [historical roadmap](../history/HIST-SUITE-JOINT-ROADMAP.md)
+**GitHub-primary backlog workflow:** current items use owning product repo issues
+plus the `eMuleBB Roadmap` Project #3. The archived MFC Project #2 is provenance
 only.
 **Backlog process runbook:** [BACKLOG-PROCESS](../reference/BACKLOG-PROCESS.md)
 **Release execution plan:** [RELEASE-0.7.3-EXECUTION-PLAN](plans/RELEASE-0.7.3-EXECUTION-PLAN.md)
-**p2p-overlord product-family plan:** [P2P-OVERLORD-PRODUCT-FAMILY-INTEGRATION](plans/P2P-OVERLORD-PRODUCT-FAMILY-INTEGRATION.md)
+**Retired p2p-overlord integration plan:** [historical plan](../history/HIST-P2P-OVERLORD-PRODUCT-FAMILY-INTEGRATION.md)
 **Installer/test materialization plan:** [INSTALLER-TEST-MATERIALIZATION-AND-SCENARIO-MATRIX](plans/INSTALLER-TEST-MATERIALIZATION-AND-SCENARIO-MATRIX.md)
 **Historical beta evidence:** `docs/history/release-0.7.3/`
 **Historical reviews:** `docs/history/reviews/`
@@ -291,44 +290,44 @@ not active item docs.
 | [REF-019](../history/items/REF-019.md) | Minor | DONE | Replace ASSERT(0) + "must be a bug" with OnError() in EncryptedStreamSocket |
 | [REF-020](../history/items/REF-020.md) | Minor | DONE | Replace dynamic loading of always-present Win10 APIs with static linking |
 | [REF-021](items/REF-021.md) | Minor | DEFERRED | Remove blanket warning suppressions and replace deprecated Winsock APIs |
-| [REF-022](items/REF-022.md) | Trivial | OPEN | Replace custom type aliases in types.h with <cstdint> standard types |
+| [REF-022](items/REF-022.md) | Trivial | DEFERRED | Replace custom type aliases in types.h with <cstdint> standard types |
 | [REF-023](../history/items/REF-023.md) | Minor | DONE | Replace unsafe sprintf/_stprintf/wsprintf with safe equivalents |
-| [REF-024](items/REF-024.md) | Trivial | OPEN | Convert #define constants in Opcodes.h to constexpr in namespace |
-| [REF-025](items/REF-025.md) | Minor | IN_PROGRESS | Remove legacy feature set — IRC, SMTP, Scheduler, first-start wizard, splash screen, legacy update checker |
+| [REF-024](items/REF-024.md) | Trivial | DEFERRED | Convert #define constants in Opcodes.h to constexpr in namespace |
+| [REF-025](items/REF-025.md) | Minor | DEFERRED | Remove legacy feature set — IRC, SMTP, Scheduler, first-start wizard, splash screen, legacy update checker |
 | [REF-026](../history/items/REF-026.md) | Minor | DONE | Manifest — keep Win10/11+ compatibility GUID only and move Common Controls into manifests |
-| [REF-027](items/REF-027.md) | Minor | OPEN | CaptchaGenerator — replace CxImage with ATL CImage / native GDI |
+| [REF-027](items/REF-027.md) | Minor | DEFERRED | CaptchaGenerator — replace CxImage with ATL CImage / native GDI |
 | [REF-028](items/REF-028.md) | Minor | DEFERRED | Audit current MbedTLS 4.1 integration |
-| [REF-029](items/REF-029.md) | Major | OPEN | Move async socket readiness to WSAPoll backends |
+| [REF-029](items/REF-029.md) | Major | DEFERRED | Move async socket readiness to WSAPoll backends |
 | [REF-030](../history/items/REF-030.md) | Minor | DONE | Replace window-message async hostname resolver with worker-thread model |
 | [REF-031](../history/items/REF-031.md) | Minor | DONE | Review upload queue scoring against community and stale baselines |
-| [REF-032](items/REF-032.md) | Minor | IN_PROGRESS | Use MFC-native property sheets and dynamic layout instead of CTreePropSheet / ResizableLib |
-| [REF-033](items/REF-033.md) | Trivial | OPEN | Remove remaining IE/MSHTML drag-drop, HTML Help, and legacy IE web-client baggage |
+| [REF-032](items/REF-032.md) | Minor | DEFERRED | Use MFC-native property sheets and dynamic layout instead of CTreePropSheet / ResizableLib |
+| [REF-033](items/REF-033.md) | Trivial | DEFERRED | Remove remaining IE/MSHTML drag-drop, HTML Help, and legacy IE web-client baggage |
 | [REF-034](items/REF-034.md) | Minor | DEFERRED | Resolve Crypto++ 8.4 vs 8.9 dependency truth |
-| [REF-035](items/REF-035.md) | Minor | OPEN | Adopt WIL for narrow Windows and COM RAII cleanup |
-| [REF-036](items/REF-036.md) | Minor | OPEN | Adopt GSL contracts for buffer and pointer boundary hardening |
+| [REF-035](items/REF-035.md) | Minor | DEFERRED | Adopt WIL for narrow Windows and COM RAII cleanup |
+| [REF-036](items/REF-036.md) | Minor | DEFERRED | Adopt GSL contracts for buffer and pointer boundary hardening |
 | [REF-037](../history/items/REF-037.md) | Major | DONE | 0.7.3 RC1 legacy and frozen feature disposition ledger |
 | [REF-038](../history/items/REF-038.md) | Minor | DONE | Harden optional MediaInfo DLL loading and metadata extraction seams |
 | [REF-039](../history/items/REF-039.md) | Minor | DONE | Classify MediaInfo loader failures and bound metadata extraction counts |
 | [REF-040](../history/items/REF-040.md) | Minor | DONE | Harden external UnRAR DLL loading |
 | [REF-041](../history/items/REF-041.md) | Minor | DONE | Move remaining active app DLL probes to LoadLibraryEx |
-| [REF-042](items/REF-042.md) | Minor | OPEN | Consolidate WinInet download helpers and review URL shortcut intake |
-| [REF-043](items/REF-043.md) | Minor | OPEN | Drop legacy Web Interface templates and keep REST as the supported controller surface |
-| [REF-044](items/REF-044.md) | Minor | OPEN | Remove remaining import-parts residue and keep legacy import flows retired |
-| [REF-045](items/REF-045.md) | Minor | OPEN | Evaluate SQLite-backed storage for local metadata structures |
-| [REF-046](items/REF-046.md) | Minor | OPEN | Evaluate JSON or TOML for operator-editable configuration |
+| [REF-042](items/REF-042.md) | Minor | DEFERRED | Consolidate WinInet download helpers and review URL shortcut intake |
+| [REF-043](items/REF-043.md) | Minor | DEFERRED | Drop legacy Web Interface templates and keep REST as the supported controller surface |
+| [REF-044](items/REF-044.md) | Minor | DEFERRED | Remove remaining import-parts residue and keep legacy import flows retired |
+| [REF-045](items/REF-045.md) | Minor | DEFERRED | Evaluate SQLite-backed storage for local metadata structures |
+| [REF-046](items/REF-046.md) | Minor | DEFERRED | Evaluate JSON or TOML for operator-editable configuration |
 | [REF-047](../history/items/REF-047.md) | High | DONE | Finalize native REST v1 API standardization before RC1 |
-| [REF-048](items/REF-048.md) | Minor | OPEN | Reduce queue and tracking scan cost without policy drift |
-| [REF-049](items/REF-049.md) | Major | OPEN | Shorten upload hot-path locks only after adding lifetime guards |
-| [REF-050](items/REF-050.md) | Minor | OPEN | Tune compression and hash buffers with bounded memory |
-| [REF-051](items/REF-051.md) | Minor | OPEN | Remove legacy SOCKS and proxy support |
-| [REF-052](items/REF-052.md) | Minor | OPEN | Remove archive preview and recovery surfaces |
-| [REF-053](items/REF-053.md) | Minor | OPEN | Reduce upload queue and upload list linear lookup overhead |
+| [REF-048](items/REF-048.md) | Minor | DEFERRED | Reduce queue and tracking scan cost without policy drift |
+| [REF-049](items/REF-049.md) | Major | DEFERRED | Shorten upload hot-path locks only after adding lifetime guards |
+| [REF-050](items/REF-050.md) | Minor | DEFERRED | Tune compression and hash buffers with bounded memory |
+| [REF-051](items/REF-051.md) | Minor | DEFERRED | Remove legacy SOCKS and proxy support |
+| [REF-052](items/REF-052.md) | Minor | DEFERRED | Remove archive preview and recovery surfaces |
+| [REF-053](items/REF-053.md) | Minor | DEFERRED | Reduce upload queue and upload list linear lookup overhead |
 | [REF-054](../history/items/REF-054.md) | Minor | DONE | Stabilize and instrument download queue behavior |
-| [REF-055](items/REF-055.md) | Minor | OPEN | Post-RC2 code-quality and C++ modernization backlog |
-| [REF-056](items/REF-056.md) | Minor | OPEN | Standardize agent on-ramp and AGENTS.md pointer layer |
+| [REF-055](items/REF-055.md) | Minor | DEFERRED | Post-RC2 code-quality and C++ modernization backlog |
+| [REF-056](items/REF-056.md) | Minor | DEFERRED | Standardize agent on-ramp and AGENTS.md pointer layer |
 | [REF-057](items/REF-057.md) | Minor | DEFERRED | Defer GeoLocation MMDB load off the pre-window startup path |
-| [REF-058](items/REF-058.md) | Minor | OPEN | Async known-file and shared-file startup load to unblock the UI thread |
-| [REF-059](items/REF-059.md) | Major | OPEN | Review in depth and align the VPN guard across the three product families |
+| [REF-058](items/REF-058.md) | Minor | DEFERRED | Async known-file and shared-file startup load to unblock the UI thread |
+| [REF-059](items/REF-059.md) | Major | DEFERRED | Review in depth and align the VPN guard across the three product families |
 
 ---
 
@@ -356,26 +355,26 @@ not active item docs.
 | ID | Priority | Status | Title |
 |----|----------|--------|-------|
 | [FEAT-001](items/FEAT-001.md) | Minor | DEFERRED | Kad FastKad — add diversity-aware bootstrap ranking and aggressive stale decay |
-| [FEAT-002](items/FEAT-002.md) | Major | OPEN | Kad SafeKad — evolve from coarse same-IP gate into layered trust model (CGNAT fix) |
-| [FEAT-003](items/FEAT-003.md) | Minor | OPEN | Kad — Add response usefulness scoring and subnet-diversity search fanout |
-| [FEAT-004](items/FEAT-004.md) | Minor | OPEN | Kad — Generalise KadPublishGuard abuse budget beyond PUBLISH_SOURCE |
-| [FEAT-005](items/FEAT-005.md) | Minor | OPEN | Kad — Restore network-change grace handling around routing persistence and probing |
-| [FEAT-006](items/FEAT-006.md) | Minor | OPEN | Kad — Add explicit trust, budget, and bootstrap observability counters |
-| [FEAT-007](items/FEAT-007.md) | Minor | OPEN | Windows Property Store integration for non-media file metadata |
-| [FEAT-008](items/FEAT-008.md) | Trivial | OPEN | Oracle protocol guard seams — integrate stale branch test scaffolding |
-| [FEAT-009](items/FEAT-009.md) | Trivial | OPEN | Mirror audit guard seam — WIP work from stale branch parent commit |
+| [FEAT-002](items/FEAT-002.md) | Major | DEFERRED | Kad SafeKad — evolve from coarse same-IP gate into layered trust model (CGNAT fix) |
+| [FEAT-003](items/FEAT-003.md) | Minor | DEFERRED | Kad — Add response usefulness scoring and subnet-diversity search fanout |
+| [FEAT-004](items/FEAT-004.md) | Minor | DEFERRED | Kad — Generalise KadPublishGuard abuse budget beyond PUBLISH_SOURCE |
+| [FEAT-005](items/FEAT-005.md) | Minor | DEFERRED | Kad — Restore network-change grace handling around routing persistence and probing |
+| [FEAT-006](items/FEAT-006.md) | Minor | DEFERRED | Kad — Add explicit trust, budget, and bootstrap observability counters |
+| [FEAT-007](items/FEAT-007.md) | Minor | DEFERRED | Windows Property Store integration for non-media file metadata |
+| [FEAT-008](items/FEAT-008.md) | Trivial | DEFERRED | Oracle protocol guard seams — integrate stale branch test scaffolding |
+| [FEAT-009](items/FEAT-009.md) | Trivial | DEFERRED | Mirror audit guard seam — WIP work from stale branch parent commit |
 | [FEAT-010](../history/items/FEAT-010.md) | Minor | DONE | Long path support phase 2 — shell/UI, shared-directory recursion, exact-name paths, and path-helper audit |
-| [FEAT-011](items/FEAT-011.md) | Minor | OPEN | CShield — integrate ED2K anti-leecher engine (44 bad-client categories) |
+| [FEAT-011](items/FEAT-011.md) | Minor | DEFERRED | CShield — integrate ED2K anti-leecher engine (44 bad-client categories) |
 | [FEAT-012](../history/items/FEAT-012.md) | Minor | DONE | PR_TCPERRORFLOODER — TCP listen-socket flood defense |
 | [FEAT-013](../history/items/FEAT-013.md) | Major | DONE | REST API — add authenticated in-process JSON endpoints to WebServer |
-| [FEAT-014](items/FEAT-014.md) | Minor | OPEN | REST API follow-up — OpenAPI docs and optional external gateway |
+| [FEAT-014](items/FEAT-014.md) | Minor | DEFERRED | REST API follow-up — OpenAPI docs and optional external gateway |
 | [FEAT-015](../history/items/FEAT-015.md) | Major | DONE | Broadband upload slot controller — budget-based cap + slow-slot reclamation |
 | [FEAT-016](../history/items/FEAT-016.md) | Major | DONE | Modern limits — update stale hard-coded defaults for broadband/modern hardware |
-| [FEAT-017](items/FEAT-017.md) | Major | OPEN | DPI awareness — Per-Monitor V2 manifest + hardcoded pixel audit |
-| [FEAT-018](items/FEAT-018.md) | Minor | OPEN | µTP (Micro Transport Protocol) transport layer — CUtpSocket / libutp |
-| [FEAT-019](items/FEAT-019.md) | Minor | OPEN | Dark mode UI — system-aware Windows 10 dark theme integration |
+| [FEAT-017](items/FEAT-017.md) | Major | DEFERRED | DPI awareness — Per-Monitor V2 manifest + hardcoded pixel audit |
+| [FEAT-018](items/FEAT-018.md) | Minor | DEFERRED | µTP (Micro Transport Protocol) transport layer — CUtpSocket / libutp |
+| [FEAT-019](items/FEAT-019.md) | Minor | DEFERRED | Dark mode UI — system-aware Windows 10 dark theme integration |
 | [FEAT-020](../history/items/FEAT-020.md) | Trivial | DONE | DB-IP city geolocation — location label and flag per peer |
-| [FEAT-021](items/FEAT-021.md) | Minor | OPEN | SourceSaver — persist download source lists between sessions |
+| [FEAT-021](items/FEAT-021.md) | Minor | DEFERRED | SourceSaver — persist download source lists between sessions |
 | [FEAT-022](../history/items/FEAT-022.md) | Minor | DONE | Startup config directory override — `-c` flag for alternate preferences path |
 | [FEAT-023](../history/items/FEAT-023.md) | Minor | DONE | Broadband queue scoring and ratio/cooldown UI extras |
 | [FEAT-024](../history/items/FEAT-024.md) | Minor | DONE | Share-ignore policy with additive `shareignore.dat` |
@@ -385,20 +384,20 @@ not active item docs.
 | [FEAT-028](../history/items/FEAT-028.md) | Minor | DONE | Virtualize and harden shared files list |
 | [FEAT-029](../history/items/FEAT-029.md) | Minor | DONE | Search result ceilings — configurable ed2k expansion plus moderate Kad totals/lifetimes |
 | [FEAT-030](../history/items/FEAT-030.md) | Minor | DONE | Bind policy completion — global `BindAddr` everywhere else, separate `WebBindAddr` for WebServer |
-| [FEAT-031](items/FEAT-031.md) | Minor | OPEN | Auto-browse peers that expose remote shared-file inventories |
+| [FEAT-031](items/FEAT-031.md) | Minor | DEFERRED | Auto-browse peers that expose remote shared-file inventories |
 | [FEAT-032](items/FEAT-032.md) | Minor | DEFERRED | NAT mapping modernization — lease controls, status visibility, and PCP/NAT-PMP |
 | [FEAT-033](../history/items/FEAT-033.md) | Minor | DONE | Disk-space floor hardening and legacy import-flow retirement |
-| [FEAT-034](items/FEAT-034.md) | Minor | IN_PROGRESS | Shared-files reload should stop blocking the UI on large trees |
-| [FEAT-035](items/FEAT-035.md) | Major | OPEN | IPv6 dual-stack compatibility for current eD2K/Kad networking |
-| [FEAT-036](items/FEAT-036.md) | Major | OPEN | NAT traversal and extended source exchange for LowID-to-LowID connectivity |
+| [FEAT-034](items/FEAT-034.md) | Minor | DEFERRED | Shared-files reload should stop blocking the UI on large trees |
+| [FEAT-035](items/FEAT-035.md) | Major | DEFERRED | IPv6 dual-stack compatibility for current eD2K/Kad networking |
+| [FEAT-036](items/FEAT-036.md) | Major | DEFERRED | NAT traversal and extended source exchange for LowID-to-LowID connectivity |
 | [FEAT-037](items/FEAT-037.md) | Minor | DEFERRED | Release-oriented sharing controls — PowerShare, Release Bonus, and Share Only The Need |
 | [FEAT-038](../history/items/FEAT-038.md) | Minor | DONE | Shared-files watcher and live recursive share sync |
-| [FEAT-039](items/FEAT-039.md) | Minor | OPEN | Download checker — duplicate and near-duplicate intake guard |
-| [FEAT-040](items/FEAT-040.md) | Major | OPEN | Headless core with modern web/mobile controller and multi-user permissions |
-| [FEAT-041](items/FEAT-041.md) | Minor | OPEN | Download Inspector automation for stale downloads and majority-name rename |
+| [FEAT-039](items/FEAT-039.md) | Minor | DEFERRED | Download checker — duplicate and near-duplicate intake guard |
+| [FEAT-040](items/FEAT-040.md) | Major | DEFERRED | Headless core with modern web/mobile controller and multi-user permissions |
+| [FEAT-041](items/FEAT-041.md) | Minor | DEFERRED | Download Inspector automation for stale downloads and majority-name rename |
 | [FEAT-042](../history/items/FEAT-042.md) | Minor | DONE | Automatic IP filter update scheduling |
-| [FEAT-043](items/FEAT-043.md) | Minor | OPEN | Known Clients history and incremental list refresh performance |
-| [FEAT-044](items/FEAT-044.md) | Minor | OPEN | IP filter input policy - PeerGuardian lists, whitelist, and private-IP exemption |
+| [FEAT-043](items/FEAT-043.md) | Minor | DEFERRED | Known Clients history and incremental list refresh performance |
+| [FEAT-044](items/FEAT-044.md) | Minor | DEFERRED | IP filter input policy - PeerGuardian lists, whitelist, and private-IP exemption |
 | [FEAT-045](../history/items/FEAT-045.md) | Major | PASSED | REST transfer detail endpoint for controller parity |
 | [FEAT-046](../history/items/FEAT-046.md) | Major | PASSED | REST server and Kad bootstrap/import APIs |
 | [FEAT-047](../history/items/FEAT-047.md) | Minor | PASSED | REST search API completeness pass |
@@ -420,59 +419,59 @@ not active item docs.
 | [FEAT-064](items/FEAT-064.md) | Minor | DEFERRED | Archived post-0.7.3 MFC future roadmap |
 | [FEAT-065](../history/items/FEAT-065.md) | Minor | DONE | Polish the native MiniMule tray popup |
 | [FEAT-066](../history/items/FEAT-066.md) | Minor | DONE | Replace MiniMule chrome with table and speed chart |
-| [FEAT-068](items/FEAT-068.md) | Minor | OPEN | Bound REST large-list memory and latency for very large profiles |
-| [FEAT-069](items/FEAT-069.md) | Minor | OPEN | Shared-file include and exclude pattern rules |
-| [FEAT-070](items/FEAT-070.md) | Minor | OPEN | Add targeted client UserHash and upload-lifecycle diagnostics |
+| [FEAT-068](items/FEAT-068.md) | Minor | DEFERRED | Bound REST large-list memory and latency for very large profiles |
+| [FEAT-069](items/FEAT-069.md) | Minor | DEFERRED | Shared-file include and exclude pattern rules |
+| [FEAT-070](items/FEAT-070.md) | Minor | DEFERRED | Add targeted client UserHash and upload-lifecycle diagnostics |
 | [FEAT-071](../history/items/FEAT-071.md) | Minor | DONE | Filename mojibake repair for search results and download intake |
-| [FEAT-072](items/FEAT-072.md) | Minor | OPEN | Reduce startup cache UI-thread blocking on large shared libraries |
-| [FEAT-073](items/FEAT-073.md) | Minor | OPEN | Incorporate p2p-overlord into the eMuleBB product family |
+| [FEAT-072](items/FEAT-072.md) | Minor | DEFERRED | Reduce startup cache UI-thread blocking on large shared libraries |
+| [FEAT-073](items/FEAT-073.md) | Minor | DEFERRED | Incorporate p2p-overlord into the eMuleBB product family |
 | [FEAT-074](../history/items/FEAT-074.md) | Minor | DONE | Add main-window visual evidence for connected LowID state |
-| [FEAT-075](items/FEAT-075.md) | Minor | OPEN | Keep startup progress responsive during daily config backup |
-| [FEAT-076](items/FEAT-076.md) | Minor | OPEN | Parallelize shared-file hashing across physical volumes and SSDs |
-| [FEAT-077](items/FEAT-077.md) | Minor | OPEN | Auto-managed upload friend-slot candidates without mutating manual friends |
-| [FEAT-078](items/FEAT-078.md) | Minor | OPEN | Persist auto-browse inventories in a local queryable database |
-| [FEAT-079](items/FEAT-079.md) | Minor | OPEN | Save known and cancelled metadata from immutable background snapshots |
-| [FEAT-080](items/FEAT-080.md) | Minor | OPEN | Refresh protected-volume disk-space snapshots in the background |
+| [FEAT-075](items/FEAT-075.md) | Minor | DEFERRED | Keep startup progress responsive during daily config backup |
+| [FEAT-076](items/FEAT-076.md) | Minor | DEFERRED | Parallelize shared-file hashing across physical volumes and SSDs |
+| [FEAT-077](items/FEAT-077.md) | Minor | DEFERRED | Auto-managed upload friend-slot candidates without mutating manual friends |
+| [FEAT-078](items/FEAT-078.md) | Minor | DEFERRED | Persist auto-browse inventories in a local queryable database |
+| [FEAT-079](items/FEAT-079.md) | Minor | DEFERRED | Save known and cancelled metadata from immutable background snapshots |
+| [FEAT-080](items/FEAT-080.md) | Minor | DEFERRED | Refresh protected-volume disk-space snapshots in the background |
 | [FEAT-081](items/FEAT-081.md) | Trivial | DEFERRED | Add a bounded source-hostname resolver pool only if profiling shows backlog |
-| [FEAT-082](items/FEAT-082.md) | Minor | OPEN | Virtualize high-volume downloads, search results, and client-history lists |
+| [FEAT-082](items/FEAT-082.md) | Minor | DEFERRED | Virtualize high-volume downloads, search results, and client-history lists |
 | [FEAT-083](../history/items/FEAT-083.md) | Minor | WONT_DO | Connection Checker based on public reachability polling |
 | [FEAT-084](../history/items/FEAT-084.md) | Minor | WONT_DO | Migration Wizard for legacy profile import |
-| [FEAT-085](items/FEAT-085.md) | Minor | OPEN | Establish a shared campaign core for eMuleBB product-family test orchestration |
-| [FEAT-086](items/FEAT-086.md) | Minor | OPEN | Parse eMuleAI extension hints without advertising protocol support |
-| [FEAT-087](items/FEAT-087.md) | Minor | OPEN | Add transfer minicharts and aggregate progress metrics |
-| [FEAT-088](items/FEAT-088.md) | Minor | OPEN | Keep completed upload rows visible briefly |
-| [FEAT-089](items/FEAT-089.md) | Minor | OPEN | Add in-app guided Prowlarr indexer setup for eMuleBB |
-| [FEAT-090](items/FEAT-090.md) | Minor | OPEN | Tune broadband limits by drive topology and total budget |
-| [FEAT-091](items/FEAT-091.md) | Minor | OPEN | Downloads list expand/collapse-all peer rows |
-| [FEAT-092](items/FEAT-092.md) | Minor | OPEN | Add layered peer behavior guard for client quarantine and IP-ban escalation |
-| [FEAT-093](items/FEAT-093.md) | Minor | OPEN | Safely raise WebServer accepted-client concurrency |
-| [FEAT-094](items/FEAT-094.md) | Major | OPEN | Improve UDP burst handling without lock-held backoff |
-| [FEAT-095](items/FEAT-095.md) | Major | OPEN | Move part-file durability work off foreground paths |
-| [FEAT-096](items/FEAT-096.md) | Minor | IN_PROGRESS | Improve client and network statistics observability |
+| [FEAT-085](items/FEAT-085.md) | Minor | DEFERRED | Establish a shared campaign core for eMuleBB product-family test orchestration |
+| [FEAT-086](items/FEAT-086.md) | Minor | DEFERRED | Parse eMuleAI extension hints without advertising protocol support |
+| [FEAT-087](items/FEAT-087.md) | Minor | DEFERRED | Add transfer minicharts and aggregate progress metrics |
+| [FEAT-088](items/FEAT-088.md) | Minor | DEFERRED | Keep completed upload rows visible briefly |
+| [FEAT-089](items/FEAT-089.md) | Minor | DEFERRED | Add in-app guided Prowlarr indexer setup for eMuleBB |
+| [FEAT-090](items/FEAT-090.md) | Minor | DEFERRED | Tune broadband limits by drive topology and total budget |
+| [FEAT-091](items/FEAT-091.md) | Minor | DEFERRED | Downloads list expand/collapse-all peer rows |
+| [FEAT-092](items/FEAT-092.md) | Minor | DEFERRED | Add layered peer behavior guard for client quarantine and IP-ban escalation |
+| [FEAT-093](items/FEAT-093.md) | Minor | DEFERRED | Safely raise WebServer accepted-client concurrency |
+| [FEAT-094](items/FEAT-094.md) | Major | DEFERRED | Improve UDP burst handling without lock-held backoff |
+| [FEAT-095](items/FEAT-095.md) | Major | DEFERRED | Move part-file durability work off foreground paths |
+| [FEAT-096](items/FEAT-096.md) | Minor | DEFERRED | Improve client and network statistics observability |
 | [FEAT-097](../history/items/FEAT-097.md) | Minor | DONE | Add connection pressure details to Network Information |
-| [FEAT-098](items/FEAT-098.md) | Major | OPEN | Add strict bound public-IP guard for VPN profiles |
-| [FEAT-099](items/FEAT-099.md) | Minor | OPEN | Add app event webhooks for controller automation |
-| [FEAT-100](items/FEAT-100.md) | Major | OPEN | Improve startup progress and UI readiness locking |
-| [FEAT-101](items/FEAT-101.md) | Minor | OPEN | Add quick filter textbox to Downloads list |
-| [FEAT-102](items/FEAT-102.md) | Minor | OPEN | Exclude known files from search results |
-| [FEAT-103](items/FEAT-103.md) | Minor | OPEN | Publish Windows Hyper-V run guide for eMuleBB |
-| [FEAT-104](items/FEAT-104.md) | Minor | OPEN | Add optional reverse DNS peer name resolution |
-| [FEAT-105](items/FEAT-105.md) | Minor | OPEN | Add stopped upload state for shared files |
-| [FEAT-106](items/FEAT-106.md) | Major | OPEN | Add upload bandwidth ramp-up diagnostics and slot policy |
-| [FEAT-107](items/FEAT-107.md) | Minor | OPEN | Add upload under-target reason diagnostics |
-| [FEAT-108](items/FEAT-108.md) | Minor | OPEN | Add publish effectiveness feedback for shared files |
-| [FEAT-109](items/FEAT-109.md) | Minor | OPEN | Materialize suite tool dependencies deterministically |
-| [FEAT-110](items/FEAT-110.md) | Minor | OPEN | Add configurable title bar status format |
-| [FEAT-111](items/FEAT-111.md) | Minor | OPEN | Add peer and queue diagnostics columns |
-| [FEAT-112](items/FEAT-112.md) | Minor | OPEN | Add Torrent search type convenience filter and refresh file-type extensions |
-| [FEAT-113](items/FEAT-113.md) | Minor | OPEN | Persist peer upload performance history for slot selection |
-| [FEAT-114](items/FEAT-114.md) | Minor | OPEN | Add storage-aware hash and verify throttling |
-| [FEAT-115](items/FEAT-115.md) | Minor | OPEN | Add per-volume storage policy hints and diagnostics |
-| [FEAT-116](items/FEAT-116.md) | Minor | OPEN | Throttle background share scanning on active slow volumes |
-| [FEAT-117](items/FEAT-117.md) | Minor | OPEN | Indicate already-shared files in the unshared-folder share preview |
-| [FEAT-121](items/FEAT-121.md) | Major | OPEN | STUN UDP egress gate for the VPN guard (eMuleBB, emulebb-rust, libtorrent) |
+| [FEAT-098](items/FEAT-098.md) | Major | DEFERRED | Add strict bound public-IP guard for VPN profiles |
+| [FEAT-099](items/FEAT-099.md) | Minor | DEFERRED | Add app event webhooks for controller automation |
+| [FEAT-100](items/FEAT-100.md) | Major | DEFERRED | Improve startup progress and UI readiness locking |
+| [FEAT-101](items/FEAT-101.md) | Minor | DEFERRED | Add quick filter textbox to Downloads list |
+| [FEAT-102](items/FEAT-102.md) | Minor | DEFERRED | Exclude known files from search results |
+| [FEAT-103](items/FEAT-103.md) | Minor | DEFERRED | Publish Windows Hyper-V run guide for eMuleBB |
+| [FEAT-104](items/FEAT-104.md) | Minor | DEFERRED | Add optional reverse DNS peer name resolution |
+| [FEAT-105](items/FEAT-105.md) | Minor | DEFERRED | Add stopped upload state for shared files |
+| [FEAT-106](items/FEAT-106.md) | Major | DEFERRED | Add upload bandwidth ramp-up diagnostics and slot policy |
+| [FEAT-107](items/FEAT-107.md) | Minor | DEFERRED | Add upload under-target reason diagnostics |
+| [FEAT-108](items/FEAT-108.md) | Minor | DEFERRED | Add publish effectiveness feedback for shared files |
+| [FEAT-109](items/FEAT-109.md) | Minor | DEFERRED | Materialize suite tool dependencies deterministically |
+| [FEAT-110](items/FEAT-110.md) | Minor | DEFERRED | Add configurable title bar status format |
+| [FEAT-111](items/FEAT-111.md) | Minor | DEFERRED | Add peer and queue diagnostics columns |
+| [FEAT-112](items/FEAT-112.md) | Minor | DEFERRED | Add Torrent search type convenience filter and refresh file-type extensions |
+| [FEAT-113](items/FEAT-113.md) | Minor | DEFERRED | Persist peer upload performance history for slot selection |
+| [FEAT-114](items/FEAT-114.md) | Minor | DEFERRED | Add storage-aware hash and verify throttling |
+| [FEAT-115](items/FEAT-115.md) | Minor | DEFERRED | Add per-volume storage policy hints and diagnostics |
+| [FEAT-116](items/FEAT-116.md) | Minor | DEFERRED | Throttle background share scanning on active slow volumes |
+| [FEAT-117](items/FEAT-117.md) | Minor | DEFERRED | Indicate already-shared files in the unshared-folder share preview |
+| [FEAT-121](items/FEAT-121.md) | Major | DEFERRED | STUN UDP egress gate for the VPN guard (eMuleBB, emulebb-rust, libtorrent) |
 | [FEAT-123](../history/items/FEAT-123.md) | Major | DONE | Shared files one-level auto-updater |
-| [FEAT-124](items/FEAT-124.md) | Minor | OPEN | Leech mode - monitoring-only build that observes the network without sharing |
+| [FEAT-124](items/FEAT-124.md) | Minor | DEFERRED | Leech mode - monitoring-only build that observes the network without sharing |
 
 ---
 

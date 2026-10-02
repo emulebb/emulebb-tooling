@@ -3,7 +3,7 @@ id: FEAT-068
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/66
 title: Bound REST large-list memory and latency for very large profiles
-status: OPEN
+status: DEFERRED
 priority: Minor
 category: feature
 labels: [rest, shared-files, transfers, uploads, performance, memory, controller-surface]

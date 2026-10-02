@@ -3,13 +3,10 @@
 This guide explains how the eMuleBB client should be used with trusted local
 controllers, automation, and compatibility adapters.
 
-> **Controllers in the suite.** The forward eMuleBB Suite controller is
-> **TrackMuleBB** (`emulebb/trackmulebb`), a generic `/api/v1` + capability
-> consumer that drives any core by advertised capability. **aMuTorrent** is the
-> browser-UI controller **bundled with the frozen `0.7.3` release** (legacy). The
-> REST/adapter semantics on this page are the same regardless of which controller
-> calls them — controllers are clients of the native contract, not part of it.
-> Suite/forward setup: [SUITE-INSTALLER](../active/SUITE-INSTALLER.md).
+> **Controller lifecycle.** **aMuTorrent** is the frozen browser-UI controller
+> bundled with the stable MFC `0.7.3` release. TrackMuleBB is archived and is not
+> a forward product dependency. The REST/adapter semantics on this page belong
+> to the MFC contract; controllers are clients of that contract, not part of it.
 
 For a task-first product walkthrough of the eMuleBB client with a controller,
 Prowlarr, and selected Arr apps, start with the
@@ -243,12 +240,12 @@ For sharing automation:
 The desktop app owns shared-library scanning, hashing, and cache validation.
 Controllers request state changes; they do not own the scan engine.
 
-## Controller Behavior (TrackMuleBB / aMuTorrent)
+## Controller Behavior (aMuTorrent and custom clients)
 
-A controller integration uses native REST and adapter behavior. **TrackMuleBB**
-(forward) reads `GET /api/v1/capabilities` and calls only advertised operations;
-**aMuTorrent** (the `0.7.3` bundle controller) is a fixed REST/UI consumer. Either way,
-prove the basics before running long workflows:
+A controller integration uses native REST and adapter behavior. **aMuTorrent**
+(the `0.7.3` bundle controller) is a frozen REST/UI consumer. Custom clients
+should read `GET /api/v1/capabilities` and call only advertised operations.
+Prove the basics before running long workflows:
 
 - app status reads correctly
 - preferences read correctly

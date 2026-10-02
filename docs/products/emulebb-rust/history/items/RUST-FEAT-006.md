@@ -22,7 +22,7 @@ Publish a **linuxserver-style** Docker image for the emulebb-rust headless eD2K/
 core to **GHCR** (`ghcr.io/emulebb/emulebb-rust:0.1.0-beta.1`), built and pushed
 by this repo's CI. The beta publishes only the versioned tag; `latest` remains
 reserved for a stable release. Design:
-[`emulebb-tooling/docs/active/SUITE-DOCKER.md`](../../../../active/SUITE-DOCKER.md).
+[`emulebb-tooling/docs/active/SUITE-DOCKER.md`](../../../../history/HIST-SUITE-DOCKER.md).
 
 ## Closure (2026-10-02)
 

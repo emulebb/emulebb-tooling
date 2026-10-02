@@ -22,13 +22,11 @@ aMuTorrent `0.7.3` companion package from `emulebb/amutorrent`, installs the
 suite, and wires local controller integration through native REST, Torznab, and
 qBittorrent-compatible adapter paths.
 
-Future ecosystem planning makes qBittorrentBB the first planned Windows suite
-companion expansion: optional in the model, preselected for future normal
-local-machine `Full` installs, and carrying its fork DHT index/RSS/Torznab
-identity. Later planning covers `emulebb-rust` as an alternative core and a
-separate Gluetun Docker bundle. This is tracked in
-[Ecosystem Suite Bootstrap Plan](../active/plans/ECOSYSTEM-SUITE-BOOTSTRAP-PLAN.md).
-Those future components are not part of the published `0.7.3` bootstrapper.
+The bootstrapper is a preserved `0.7.3` release artifact, not the start of a
+forward cross-client suite. qBittorrentBB is paused, TrackMuleBB is archived,
+and no native Windows VPN expansion is planned. The former direction is kept in
+the [historical Ecosystem Suite Bootstrap Plan](../history/HIST-ECOSYSTEM-SUITE-BOOTSTRAP-PLAN.md).
+Those components are not part of the published `0.7.3` bootstrapper.
 
 ### Option 2: Manual Standalone ZIP {#quick-install-zip-extract-run}
 

@@ -3,7 +3,7 @@ id: FEAT-005
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/55
 title: Kad — Restore network-change grace handling around routing persistence and probing
-status: OPEN
+status: DEFERRED
 priority: Minor
 category: feature
 labels: [kad, resilience, network-change, vpn, mobile]

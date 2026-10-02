@@ -3,7 +3,7 @@ id: FEAT-078
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/25
 title: Persist auto-browse inventories in a local queryable database
-status: OPEN
+status: DEFERRED
 priority: Minor
 category: feature
 labels: [browse, cache, sqlite, database, ui, privacy]

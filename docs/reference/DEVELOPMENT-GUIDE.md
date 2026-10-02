@@ -129,7 +129,7 @@ Use this when adding, moving, closing, or reclassifying backlog work.
 - Revalidate the item against current `main`, dependency pins, and workspace
   policy before implementation.
 - For GitHub-migrated forward work, treat the linked owning-repo issue and
-  public `eMuleBB Suite` project as workflow authority. Project #2 is the MFC
+  public `eMuleBB Roadmap` project as workflow authority. Project #2 is the MFC
   archive board.
 - Keep local item docs as engineering specs and evidence, not workflow status
   authority, when `workflow: github` is present.

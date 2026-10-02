@@ -3,7 +3,7 @@ id: FEAT-092
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/82
 title: Add layered peer behavior guard for client quarantine and IP-ban escalation
-status: OPEN
+status: DEFERRED
 priority: Minor
 category: feature
 labels: [anti-leecher, quarantine, banning, peer-behavior, diagnostics, post-0.7.3]

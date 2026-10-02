@@ -3,7 +3,7 @@ id: FEAT-076
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/72
 title: Parallelize shared-file hashing across physical volumes and SSDs
-status: OPEN
+status: DEFERRED
 priority: Minor
 category: feature
 labels: [hashing, shared-files, performance, storage, ssd, post-0.7.3]

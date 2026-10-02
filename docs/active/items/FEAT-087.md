@@ -3,7 +3,7 @@ id: FEAT-087
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/77
 title: Add transfer minicharts and aggregate progress metrics
-status: OPEN
+status: DEFERRED
 priority: Minor
 category: feature
 labels: [ui, transfers, speed, progress, ratio, visualization, performance]

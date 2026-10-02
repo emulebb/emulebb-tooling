@@ -3,7 +3,7 @@ id: FEAT-088
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/78
 title: Keep completed upload rows visible briefly
-status: OPEN
+status: DEFERRED
 priority: Minor
 category: feature
 labels: [ui, transfers, uploads, preferences, polish]

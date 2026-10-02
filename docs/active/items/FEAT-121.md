@@ -3,7 +3,7 @@ id: FEAT-121
 workflow: local
 github_issue:
 title: STUN UDP egress gate for the VPN guard (eMuleBB, emulebb-rust, libtorrent)
-status: OPEN
+status: DEFERRED
 priority: Major
 category: feature
 labels: [vpn-guard, networking, stun, egress, security]

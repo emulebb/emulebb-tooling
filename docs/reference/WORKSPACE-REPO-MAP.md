@@ -14,7 +14,7 @@ the Python topology in `repos/emulebb-build`.
 |---|---|---|---|
 | `repos/emulebb` | `main` seed | Canonical app branch-store clone. | `validate` |
 | `workspaces/workspace/app/emulebb-main` | `main` | Active app development worktree. | `build app --variant main` |
-| `repos/emulebb-rust` | `main` | Forward Rust eD2K/Kad client and embedded SPA WebUI. | Cargo checks via workspace policy |
+| `repos/emulebb-rust` | `main` | Active experimental Rust eD2K/Kad client and embedded SPA WebUI. | Cargo checks via workspace policy |
 | `workspaces/workspace/app/emulebb-community-baseline` | `baseline/community-0.72a` | Community baseline worktree. | compare/live-diff |
 | `workspaces/workspace/app/emulebb-community-tracing-harness` | `tracing-harness/community-0.72a` | Tracing baseline worktree. | harness tests |
 
@@ -34,9 +34,9 @@ scope and pull in support repos only when the task needs them.
   `repos/emulebb-build-tests` for harnesses, and
   `repos/emulebb-tooling/docs/products/emulebb-mfc` for docs.
 - `qbittorrentbb`, `qbit`, or `qbbb`:
-  primary scope is `repos/qbittorrentbb`. Support scope is shared build,
-  harness, and tooling docs only when the task needs workspace integration,
-  live-wire, or policy context.
+  primary scope is an explicitly materialized `repos/qbittorrentbb` checkout.
+  This paused experiment is not materialized or validated by default. Support
+  scope is shared build and tooling only for explicit historical work.
 
 ## Workspace Orchestration
 
@@ -62,10 +62,10 @@ an optional manual fork checkout, not a default setup-managed repo.
 | Path | Branch | Role | Validation |
 |---|---|---|---|
 | `repos/amutorrent` | `main` | aMuTorrent controller UI fork. | Node checks; live UI harness |
-| `repos/qbittorrentbb` | `master` | qBittorrentBB companion fork. | product-family quality checks |
-| `repos/ed2k-server` | `master` | Managed Rust eD2K server; future harness candidate only. | workspace build and quality checks |
-| `repos/goed2k-server` | `master` | Active Go eD2K server fork. | `go test ./...` |
-| `repos/amule` | `master` | Optional manual eMuleBB aMule Windows-build fork. | package/rebase checks when present |
+| `repos/qbittorrentbb` | `master` | Optional paused qBittorrent experiment; not in default topology. | explicit on-demand checks only |
+| `repos/ed2k-server` | `master` | Managed Rust reference fork for potentially upstreamable contributions. | workspace build and quality checks |
+| `repos/goed2k-server` | `master` | Fixed deterministic Go eD2K harness server. | `go test ./...` |
+| `repos/amule` | `master` | Optional aMule analysis/reference fork. | package/rebase automation may remain active |
 | `repos/p2p-overlord-agents` | `develop` | Rust p2p-overlord agent code. | `cargo fmt --all --check` |
 | `repos/p2p-overlord-be` | `develop` | p2p-overlord backend/coordinator. | `npm run quality` |
 | `repos/p2p-overlord-tooling` | `develop` | p2p-overlord scenario catalog and pytest tooling. | future shared campaign adapter |
@@ -109,16 +109,17 @@ The GitHub organization uses these repo classes for settings consistency:
 
 | Class | Repositories |
 |---|---|
-| Product | `emulebb`, `emulebb-rust`, `qbittorrentbb`, `amutorrent` |
-| Service / Lab | `ed2k-server` |
+| Active / maintained products | `emulebb-rust`, `emulebb` |
+| Paused experiments | `qbittorrentbb`, `emulebb-libtorrent`, `amutorrent` |
+| Reference / harness | `ed2k-server`, `goed2k-server`, `amule` |
 | Build, test, tooling, docs | `emulebb-build`, `emulebb-build-tests`, `emulebb-tooling`, `.github`, `emulebb.github.io` |
 | Dependency forks | `emulebb-*` dependency forks under `repos/third_party` |
-| Research, archive, and mirrors | `emulebb-mods-archive`, `emulebb-ai`, `amule`, `goed2k-server`, `JEmuleServer`, p2p-overlord repos |
+| Research, archive, and mirrors | `emulebb-mods-archive`, `emulebb-ai`, `trackmulebb`, `JEmuleServer`, p2p-overlord repos |
 
 GitHub surfaces:
 
-- Product issues/discussions belong on `emulebb`; aMuTorrent remains a
-  product-family peer unless promoted to first-class roadmap tracking.
+- Current product issues belong on the owning `emulebb-rust` or `emulebb`
+  repository. Paused experiments do not accept normal issue intake.
 - Build, test, tooling, and docs repos keep issues enabled for active work
   intake; repo projects and wikis are non-authoritative.
 - Dependency fork issues, projects, discussions, and wikis are disabled unless

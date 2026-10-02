@@ -5,13 +5,11 @@ stack: the native eMuleBB client for eD2K/Kad state, a controller UI, and
 Prowlarr plus selected Arr apps for Torznab search and qBittorrent-compatible
 download-client workflows.
 
-> **Which controller.** These recipes target the controller **bundled with the
-> frozen `0.7.3` release — aMuTorrent** (legacy). The **forward** eMuleBB Suite
-> controller is **TrackMuleBB** (`emulebb/trackmulebb`), which drives the same
-> `/api/v1` by advertised capability and also installs/wires the wider suite
-> bundle; for the forward path see [SUITE-INSTALLER](../active/SUITE-INSTALLER.md)
-> and [SUITE-DOCKER](../active/SUITE-DOCKER.md). The eMuleBB-side setup below (REST,
-> Prowlarr, Arr) is the same regardless of controller.
+> **Which controller.** These historical `0.7.3` recipes target aMuTorrent, the
+> frozen controller shipped with that MFC bundle. TrackMuleBB is archived, and
+> there is no forward cross-client suite controller. The eMuleBB-side setup
+> below remains useful when maintaining the shipped REST, Prowlarr, and Arr
+> integration paths.
 
 The goal is not to hide the eMuleBB client behind another tool. The native
 desktop app owns identity, network state, categories, temp files, completed
@@ -38,7 +36,7 @@ Controllers And REST owns the API meaning behind them.
 | Native REST `/api/v1` | JSON automation, diagnostics, app state | aMuTorrent, scripts, custom tools |
 | qBit adapter `/api/v2` | Arr download-client compatibility | Selected Arr apps, qBit-compatible probes |
 | Torznab adapter `/indexer/emulebb/api` | Prowlarr and selected Arr search bridge | Prowlarr Generic Torznab |
-| Controller (TrackMuleBB forward / aMuTorrent legacy `0.7.3`) | Web controller and multi-client UI | eMuleBB REST and adapter surfaces |
+| Controller (aMuTorrent, frozen `0.7.3`) | Historical web controller and multi-client UI | eMuleBB REST and adapter surfaces |
 
 ```mermaid
 flowchart LR
@@ -163,8 +161,8 @@ keeps only the setup steps needed before wiring companion tools.
 
 ## aMuTorrent (legacy 0.7.3 bundle)
 
-aMuTorrent is the controller bundled with the frozen `0.7.3` release; the forward
-controller is TrackMuleBB. It should connect after native REST is healthy.
+aMuTorrent is the frozen controller bundled with the stable `0.7.3` release.
+It should connect after native REST is healthy.
 
 Use aMuTorrent when you want:
 

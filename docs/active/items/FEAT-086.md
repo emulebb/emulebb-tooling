@@ -3,7 +3,7 @@ id: FEAT-086
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/33
 title: Parse eMuleAI extension hints without advertising protocol support
-status: OPEN
+status: DEFERRED
 priority: Minor
 category: feature
 labels: [emuleai, ipv6, nat-traversal, protocol-compatibility, diagnostics]

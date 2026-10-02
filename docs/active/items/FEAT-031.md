@@ -3,7 +3,7 @@ id: FEAT-031
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/24
 title: Auto-browse peers that expose remote shared-file inventories
-status: OPEN
+status: DEFERRED
 priority: Minor
 category: feature
 labels: [browse, clients, cache, ui, automation, networking]

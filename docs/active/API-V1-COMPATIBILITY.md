@@ -60,9 +60,9 @@ versioning policy, migration notes, and conformance gate.
 
 ## Controller Direction
 
-TrackMuleBB is parked future controller work. It no longer needs generic
-emulebb-mfc capability negotiation as a product requirement, and it is not a Rust
-beta dependency. emulebb-mfc remains on its own frozen legacy controller path.
+TrackMuleBB is archived. It is not a Rust beta dependency and no longer drives
+generic capability negotiation as a product requirement. emulebb-mfc remains
+on its own stable legacy controller path.
 
 The active Rust UI target is the embedded SPA WebUI: status, transfers, uploads,
 search, shared files, servers/Kad, settings, logs, and diagnostics. SSE/event
@@ -80,9 +80,8 @@ streaming is deferred until the Rust API and UI behavior settle.
 
 ## Migration Notes
 
-- Active product docs for Rust and TrackMuleBB live under
-  `docs/products/emulebb-rust` and `docs/products/trackmulebb`.
-- Repo-local docs directories in `repos/emulebb-rust` and `repos/trackmulebb`
-  are pointers only.
+- Active product docs for Rust live under `docs/products/emulebb-rust`.
+- The TrackMuleBB record is preserved under `docs/history/trackmulebb`; its
+  archived repo-local docs are historical only.
 - Historical docs may still mention the old single-contract model as provenance;
   active governance follows this document.

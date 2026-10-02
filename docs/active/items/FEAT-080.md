@@ -3,7 +3,7 @@ id: FEAT-080
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/75
 title: Refresh protected-volume disk-space snapshots in the background
-status: OPEN
+status: DEFERRED
 priority: Minor
 category: feature
 labels: [download-queue, disk-space, storage, background-worker, performance, post-0.7.3]

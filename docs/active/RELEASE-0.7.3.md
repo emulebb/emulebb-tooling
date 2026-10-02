@@ -46,10 +46,10 @@ split.
   (small bug fixes and small features may still land — e.g. FEAT-123 / issue
   #148, the only feature lane taken, now landed). Scope is the Pages
   `install.ps1` thin wrapper over the release `Bootstrap-eMuleBBSuite.ps1`, the
-  MFC client + aMuTorrent + Arr suite as currently shipped. **qBittorrentBB and
-  emulebb-rust stay out of the `0.7.x` line entirely and ship in the `0.8.*`
-  program** (the forward suite + MFC modernization wave that begins after `0.7.3`).
-  See [SUITE-JOINT-ROADMAP](SUITE-JOINT-ROADMAP.md).
+  MFC client + aMuTorrent + Arr suite as shipped. **qBittorrentBB and
+  emulebb-rust stayed out of the `0.7.x` bundle.** The then-planned `0.8.*`
+  suite program was later retired; see the
+  [historical Suite Joint Roadmap](../history/HIST-SUITE-JOINT-ROADMAP.md).
 - CI status: **green on current `main`.** The earlier `0.7.3-nightly.20260615`
   failure (commit `72a6f7e`, issues #160/#161) is resolved and both issues are
   closed; subsequent `main` fixes (package `preferences.ini` requirement, the

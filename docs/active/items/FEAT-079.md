@@ -3,7 +3,7 @@ id: FEAT-079
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/74
 title: Save known and cancelled metadata from immutable background snapshots
-status: OPEN
+status: DEFERRED
 priority: Minor
 category: feature
 labels: [known-met, persistence, metadata, background-worker, performance, post-0.7.3]

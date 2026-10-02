@@ -3,7 +3,7 @@ id: FEAT-107
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/121
 title: Add upload under-target reason diagnostics
-status: OPEN
+status: DEFERRED
 priority: Minor
 category: feature
 labels: [uploads, diagnostics, bandwidth, observability, post-0.7.3]

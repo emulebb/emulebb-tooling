@@ -3,7 +3,7 @@ id: FEAT-124
 workflow: local
 github_issue:
 title: Leech mode - monitoring-only build that observes the network without sharing
-status: OPEN
+status: DEFERRED
 priority: Minor
 category: feature
 labels: [research, leech-mode, identity, uploads, kad-publish, local-branch]

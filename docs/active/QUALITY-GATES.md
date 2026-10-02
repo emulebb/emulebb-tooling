@@ -1,55 +1,54 @@
-# Quality Gates (merge-gate matrix)
+# Quality Gates
 
-Status: governance. Captured 2026-06-14. Defines the **Definition of Done / merge
-gate** per product tier, so "what blocks a merge" is explicit and uniform instead
-of per-repo folklore. Tiers are defined in [PRODUCT-PORTFOLIO](PRODUCT-PORTFOLIO.md).
+Status: governance. Updated 2026-10-02.
 
-## Gate matrix
+Quality gates follow repository lifecycle. A retained experiment does not
+inherit the release burden of an active product, and a reference fork must not
+be presented as a production candidate merely because CI can build it.
 
-| Gate | Core (rust) | Companion (qBittorrentBB / aMuTorrent) | MFC (eMuleBB, 0.7.x → 0.8.x) | Service / Lab servers | Infra |
-|---|---|---|---|---|---|
-| Build (matrix) | ✅ 3-OS | ✅ (fork CI) | ✅ x64 Debug+Release+diag | ed2k-server ✅ Linux; goed2k ⛔ while lab | ✅ |
-| Unit/integration tests | ✅ blocking | ✅ | ✅ shared harness | ed2k-server ✅ source tests; goed2k ⛔ while lab | ✅ |
-| Lint | 🔸 clippy advisory (relaxed; → `-D warnings` at Phase 0 close) + fmt ✅ | ✅ (upstream + fork checks) | warning-debt cleanup | ed2k-server fmt ✅ + clippy advisory | — |
-| Supply chain | ✅ cargo-deny advisories | dependency-review | dependency-review | ed2k-server dependency-review; advisory closure tracked by `ED2KSRV-CI-003` | dependency-review |
-| Policy guard | ✅ rust-client policy | fork hygiene (output-root, env, bind) | workspace validate | ed2k-server fork hygiene | workspace validate |
-| Privacy guard | ✅ no private data / titles | ✅ | ✅ | ✅ | ✅ tracked-file-privacy-guard |
-| Runtime/load qualification | ✅ release campaigns | ✅ before release | ✅ release proof | ed2k-server tracked by `ED2KSRV-CI-002`; goed2k ⛔ while lab | as applicable |
-| **VPN leak-test** | ✅ before VPN-safe release | ✅ before VPN-safe release | required for VPN live profiles | n/a (local-only) | n/a |
-| Docs/normalization | ✅ LF + docs checks | ✅ | ✅ | ✅ | ✅ |
+## Active experimental beta: emulebb-rust
 
-✅ = required to merge/release · ⛔ = intentionally not gated yet · — = not applicable
+Rust changes require the repository's supported platform build and test
+matrix, formatting and lint checks, dependency policy, tracked-content privacy
+guards, contract validation, and the proof appropriate to the changed surface.
+Release claims require the beta release checklist and product-specific evidence.
+VPN-safe language requires product-specific leak proof; no such property should
+be inferred from bind support alone.
 
-## Current gaps (tracked)
+## Stable maintenance: eMuleBB MFC
 
-- **Core (rust):** clippy is **relaxed to advisory** during active development —
-  re-enable blocking `-D warnings` before the Phase 0 close. Leak-test gate not yet
-  implemented (`RUST-FEAT-005`); eD2K TCP egress pin open (`RUST-FEAT-003`);
-  `kad_swarm` tests non-blocking (`RUST-BUG-001`). cargo-deny enforces advisories
-  only; bans/licenses pending a dep audit.
-- **Companion (qBittorrentBB):** `vpnReady()` not truly fail-closed (`QBBB-FEAT-004`).
-- **Service / Lab servers:** `goed2k-server` still has no build/test CI by
-  decision. `ed2k-server` is an active production-hardening candidate with
-  Linux source-quality and candidate-artifact CI. Its runtime/load admission
-  gate is tracked by
-  [`ED2KSRV-CI-002`](../products/ed2k-server/active/items/ED2KSRV-CI-002.md);
-  dependency-advisory closure is tracked by
-  [`ED2KSRV-CI-003`](../products/ed2k-server/active/items/ED2KSRV-CI-003.md).
-  These gates do not select it as the shared test server.
+MFC changes require the maintained Windows build matrix, native and shared
+harness tests appropriate to the change, workspace validation, REST/OpenAPI
+checks when the controller surface is touched, and release/package evidence for
+published patches. Changes must remain within the bounded `0.7.x` maintenance
+scope defined by the [MFC maintenance roadmap](FUTURE-ROADMAP.md).
+
+## Supporting repositories
+
+- `emulebb-build`, `emulebb-build-tests`, and `emulebb-tooling` keep their
+  existing CI, privacy, documentation, and topology checks.
+- `goed2k-server` is a fixed-purpose harness server. Validate changes only when
+  the harness requires them; do not create a product-evolution gate.
+- `ed2k-server` is a reference fork for analysis and possible upstream
+  contribution. Source checks may support a proposed upstream patch, but the
+  retired production-hardening gates are historical:
+  [ED2KSRV-CI-002](../history/ed2k-server/items/ED2KSRV-CI-002.md) and
+  [ED2KSRV-CI-003](../history/ed2k-server/items/ED2KSRV-CI-003.md).
+- The aMule fork remains an analysis/build reference with its existing
+  automation.
+
+## Paused, frozen, and archived work
+
+qBittorrentBB and emulebb-libtorrent are paused, aMuTorrent is frozen, and
+TrackMuleBB is archived. They have no forward release gate. Any explicitly
+approved maintenance should run the smallest repo-native checks needed to avoid
+regression and should not revive scheduled product automation implicitly.
 
 ## Principles
 
-- **Invest by tier, not by history.** Core/Companion carry the strongest gates; the
-  MFC app gets maintenance gates only on the shipping `0.7.x` line (heavier gates
-  return with the `0.8.x` modernization line); Lab stays light until promoted.
-- **VPN-mode leak proof is non-negotiable before a VPN-safe claim or release.**
-  Explicitly selected direct-mode betas must be labeled as direct, not anonymous
-  ([WORKSPACE-POLICY](../WORKSPACE-POLICY.md#network-safety-selected-route-integrity-p0-invariant)).
-- **A non-blocking gate must have an owning item** (e.g. `RUST-BUG-001`) so it is
-  visible debt, never silent.
-- New networked products inherit the Core/Companion bar at promotion time (see
-  [PRODUCT-PORTFOLIO](PRODUCT-PORTFOLIO.md) lifecycle transitions).
-- The **test gating set** (which test tiers gate which release: suite vs MFC
-  `0.7.x` vs on-demand reference) is defined in
-  [TEST-STRATEGY](TEST-STRATEGY.md#gating-matrix-per-release). MFC-source, parity,
-  and VM/public tests are reference-only and do not gate a suite release.
+- Test the owning lane and the surfaces a change can affect.
+- Treat non-blocking checks as named, visible debt only in active work.
+- Keep privacy and tracked-content guards on every repository that accepts
+  changes.
+- Require release evidence before using stable, beta, VPN-safe, or
+  production-ready labels.

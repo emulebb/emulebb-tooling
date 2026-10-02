@@ -3,7 +3,7 @@ id: FEAT-108
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/122
 title: Add publish effectiveness feedback for shared files
-status: OPEN
+status: DEFERRED
 priority: Minor
 category: feature
 labels: [shared-files, publishing, uploads, bandwidth, post-0.7.3]

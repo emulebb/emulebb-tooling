@@ -3,7 +3,7 @@ id: FEAT-043
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/65
 title: Known Clients history and incremental list refresh performance
-status: OPEN
+status: DEFERRED
 priority: Minor
 category: feature
 labels: [clients, known-clients, history, list-performance, ui, emuleai]

@@ -3,7 +3,7 @@ id: FEAT-115
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/154
 title: Add per-volume storage policy hints and diagnostics
-status: OPEN
+status: DEFERRED
 priority: Minor
 category: feature
 labels: [storage, disk-io, diagnostics, preferences, hdd, ssd, post-0.7.3]

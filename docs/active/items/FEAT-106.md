@@ -3,7 +3,7 @@ id: FEAT-106
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/120
 title: Add upload bandwidth ramp-up diagnostics and slot policy
-status: OPEN
+status: DEFERRED
 priority: Major
 category: feature
 labels: [uploads, bandwidth, slots, diagnostics, post-0.7.3]

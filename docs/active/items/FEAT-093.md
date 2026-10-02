@@ -3,7 +3,7 @@ id: FEAT-093
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/83
 title: Safely raise WebServer accepted-client concurrency
-status: OPEN
+status: DEFERRED
 priority: Minor
 category: feature
 labels: [webserver, rest, performance, threading, hardening, post-0.7.3]

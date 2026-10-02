@@ -3,7 +3,7 @@ id: FEAT-036
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/15
 title: NAT traversal and extended source exchange for LowID-to-LowID connectivity
-status: OPEN
+status: DEFERRED
 priority: Major
 category: feature
 labels: [networking, nat-traversal, lowid, source-exchange, relay, udp, connectivity]

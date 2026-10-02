@@ -147,8 +147,8 @@ x64/ARM64 app-in-DMGs, and a versioned GHCR Linux amd64/arm64 image. The image
 uses s6-overlay, `PUID`/`PGID`/`TZ`, `/config`, and `/data`; its beta tag is not
 `latest`. An independent Gluetun test stack must leave the operator's running
 P2P stack untouched.
-TrackMuleBB is parked and is not tagged, packaged, or required for this first
-Rust beta.
+TrackMuleBB is archived and is not tagged, packaged, or required for the Rust
+beta lane.
 
 ## Platform tier
 

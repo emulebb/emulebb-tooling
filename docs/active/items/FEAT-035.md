@@ -3,7 +3,7 @@ id: FEAT-035
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/14
 title: IPv6 dual-stack compatibility for current eD2K/Kad networking
-status: OPEN
+status: DEFERRED
 priority: Major
 category: feature
 labels: [ipv6, networking, dual-stack, kad, sockets, friends]

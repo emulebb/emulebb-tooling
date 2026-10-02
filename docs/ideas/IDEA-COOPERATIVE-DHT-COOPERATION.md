@@ -2,7 +2,7 @@
 
 > **Exploratory candidate set.** Captured 2026-06-14 from an operator design
 > session. Nothing here is committed. This is the **menu** of mechanisms for
-> notes 11–12 of the [Suite Joint Roadmap](../active/SUITE-JOINT-ROADMAP.md); a
+> notes 11–12 of the [Suite Joint Roadmap](../history/HIST-SUITE-JOINT-ROADMAP.md); a
 > specific slice is chosen at promotion time. Theory base and packaging:
 > [IDEA-QBITTORRENTBB-MESH](IDEA-QBITTORRENTBB-MESH.md) and
 > [IDEA-LIBTORRENT-MESH](IDEA-LIBTORRENT-MESH.md).

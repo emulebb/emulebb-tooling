@@ -3,7 +3,7 @@ id: FEAT-041
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/17
 title: Download Inspector automation for stale downloads and majority-name rename
-status: OPEN
+status: DEFERRED
 priority: Minor
 category: feature
 labels: [downloads, inspector, cleanup, rename, automation, emuleai]

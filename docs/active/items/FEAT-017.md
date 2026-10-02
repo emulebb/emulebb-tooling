@@ -3,7 +3,7 @@ id: FEAT-017
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/11
 title: DPI awareness — Per-Monitor V2 manifest + hardcoded pixel audit
-status: OPEN
+status: DEFERRED
 priority: Major
 category: feature
 labels: [dpi, hdpi, manifest, ui, win10]

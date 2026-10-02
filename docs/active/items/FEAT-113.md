@@ -3,7 +3,7 @@ id: FEAT-113
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/139
 title: Persist peer upload performance history for slot selection
-status: OPEN
+status: DEFERRED
 priority: Minor
 category: feature
 labels: [uploads, bandwidth, slots, peers, persistence, post-0.7.3]

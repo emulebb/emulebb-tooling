@@ -3,7 +3,7 @@ id: FEAT-011
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/10
 title: CShield — integrate ED2K anti-leecher engine (44 bad-client categories)
-status: OPEN
+status: DEFERRED
 priority: Minor
 category: feature
 labels: [cshield, anti-leecher, ed2k, banning, security]

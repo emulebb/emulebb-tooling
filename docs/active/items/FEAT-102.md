@@ -3,7 +3,7 @@ id: FEAT-102
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/116
 title: Exclude known files from search results
-status: OPEN
+status: DEFERRED
 priority: Minor
 category: feature
 labels: [search, filtering, known-files, downloads, shared-files, post-0.7.3]

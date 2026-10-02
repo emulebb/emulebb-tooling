@@ -3,7 +3,7 @@ id: FEAT-103
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/117
 title: Publish Windows Hyper-V run guide for eMuleBB
-status: OPEN
+status: DEFERRED
 priority: Minor
 category: feature
 labels: [docs, hyper-v, windows-vm, onboarding, package-smoke, post-0.7.3]

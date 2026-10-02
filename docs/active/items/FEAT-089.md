@@ -3,7 +3,7 @@ id: FEAT-089
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/79
 title: Add in-app guided Prowlarr indexer setup for eMuleBB
-status: OPEN
+status: DEFERRED
 priority: Minor
 category: feature
 labels: [ui, rest, torznab, prowlarr, controllers, setup]

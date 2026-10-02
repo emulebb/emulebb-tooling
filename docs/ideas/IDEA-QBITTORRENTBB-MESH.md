@@ -29,7 +29,7 @@ model but preselected for a normal local-machine `Full` install. This early
 companion package should carry the fork's DHT harvester/index, DHT Index UI/RSS,
 and Torznab endpoint as enabled product identity. The current planning home for
 that packaging direction is
-[ECOSYSTEM-SUITE-BOOTSTRAP-PLAN](../active/plans/ECOSYSTEM-SUITE-BOOTSTRAP-PLAN.md).
+[ECOSYSTEM-SUITE-BOOTSTRAP-PLAN](../history/HIST-ECOSYSTEM-SUITE-BOOTSTRAP-PLAN.md).
 The deeper equivalence-map and cross-network bridge work below remains
 exploratory until a separate active item promotes it.
 
@@ -187,7 +187,7 @@ of the long-tail eD2K-exclusive catalogue is the true limiter.
   candidate set, libtorrent fork now on the table):
   [IDEA-COOPERATIVE-DHT-COOPERATION](IDEA-COOPERATIVE-DHT-COOPERATION.md).
 - Suite program / phasing:
-  [SUITE-JOINT-ROADMAP](../active/SUITE-JOINT-ROADMAP.md).
+  [SUITE-JOINT-ROADMAP](../history/HIST-SUITE-JOINT-ROADMAP.md).
 - BT-engine half: [IDEA-EMULEBB-LIBTORRENT-FORK](IDEA-EMULEBB-LIBTORRENT-FORK.md).
 - Theory base / supersedes the "embed in emulebb-rust" packaging of
   [IDEA-LIBTORRENT-MESH](IDEA-LIBTORRENT-MESH.md).

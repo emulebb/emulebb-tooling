@@ -3,7 +3,7 @@ id: FEAT-040
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/64
 title: Headless core with modern web/mobile controller and multi-user permissions
-status: OPEN
+status: DEFERRED
 priority: Major
 category: feature
 labels: [daemon, web, mobile, remote-control, multi-user, permissions, api]

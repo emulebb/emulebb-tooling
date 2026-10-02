@@ -1,5 +1,5 @@
-site_name: eMuleBB Suite Documentation
-site_description: eMuleBB Suite — eD2K/Kad and BitTorrent clients, controller, REST, integration, and release documentation.
+site_name: eMuleBB Documentation
+site_description: Documentation for the active experimental Rust client, maintained Windows client, and eMuleBB engineering workspace.
 site_url: https://emulebb.github.io/emulebb-tooling/
 repo_url: https://github.com/emulebb/emulebb-tooling
 edit_uri: blob/main/docs/
@@ -50,19 +50,14 @@ plugins:
 nav:
   - Home: INDEX.md
   - Quick Help: HELP.md
-  - eMuleBB Suite:
-      - Roadmap: active/SUITE-JOINT-ROADMAP.md
+  - eMuleBB Projects:
       - Brand & Naming: active/BRAND-AND-NAMING.md
       - Roadmap Summary: reference/ROADMAP-SUMMARY.md
       - Product Portfolio: active/PRODUCT-PORTFOLIO.md
       - Quality Gates: active/QUALITY-GATES.md
       - Test Strategy: active/TEST-STRATEGY.md
-      - Suite Bundle & Installer: active/SUITE-INSTALLER.md
-      - Suite Docker Delivery: active/SUITE-DOCKER.md
       - REST API Contract Lineage: active/API-V1-COMPATIBILITY.md
-      - Metadata Fabric: active/SUITE-METADATA-FABRIC.md
-      - Ecosystem Bootstrap Plan: active/plans/ECOSYSTEM-SUITE-BOOTSTRAP-PLAN.md
-      - Suite Board (GitHub): https://github.com/orgs/emulebb/projects/3
+      - Roadmap Board (GitHub): https://github.com/orgs/emulebb/projects/3
   - Product Sections:
       - emulebb-mfc: products/emulebb-mfc/README.md
       - emulebb-mfc Frozen OpenAPI: products/emulebb-mfc/api/REST-API-OPENAPI.yaml
@@ -73,11 +68,6 @@ nav:
       - emulebb-rust Architecture: products/emulebb-rust/design/architecture.md
       - emulebb-rust Indexer Design: products/emulebb-rust/design/kad-ed2k-indexer.md
       - ed2k-server: products/ed2k-server/README.md
-      - ed2k-server Active Backlog: products/ed2k-server/active/INDEX.md
-      - TrackMuleBB: products/trackmulebb/README.md
-      - TrackMuleBB Active Backlog: products/trackmulebb/active/INDEX.md
-      - TrackMuleBB Rust Console UI: products/trackmulebb/design/PROPER-P2P-UI.md
-      - TrackMuleBB Local Suite: products/trackmulebb/LOCAL-SUITE.md
   - eMuleBB Client (Windows):
       - Product Guide: reference/GUIDE-EMULEBB.md
       - Released Behavior Summary: reference/RELEASED-BEHAVIOR-SUMMARY.md
@@ -116,19 +106,13 @@ nav:
       - Soak Runbook 0.1.0-beta.1: products/emulebb-rust/active/SOAK-RUNBOOK-0.1.0-beta.1.md
       - Soak Upload/Download Gap Analysis: products/emulebb-rust/active/RUST-SOAK-UPLOAD-DOWNLOAD-GAP-ANALYSIS.md
       - Source And Backlog (GitHub): https://github.com/emulebb/emulebb-rust
-  - qBittorrentBB (Companion):
+  - qBittorrentBB (Paused Experiment):
       - Torrent Export & DHT Harvest (GitHub): https://github.com/emulebb/qbittorrentbb/blob/master/docs/BB-TORRENT-EXPORT-AND-HARVEST.md
-      - Source And Backlog (GitHub): https://github.com/emulebb/qbittorrentbb
-  - TrackMuleBB (Controller):
-      - Product Section: products/trackmulebb/README.md
-      - Active Backlog: products/trackmulebb/active/INDEX.md
-      - Rust Console UI: products/trackmulebb/design/PROPER-P2P-UI.md
-      - MVP Unified Transfers — Design: products/trackmulebb/design/MVP-UNIFIED-TRANSFERS.md
-      - Source And Backlog (GitHub): https://github.com/emulebb/trackmulebb
+      - Preserved Source (GitHub): https://github.com/emulebb/qbittorrentbb
   - aMuTorrent (Controller — frozen 0.7.3, legacy):
       - Stack Integrations: reference/GUIDE-STACK-INTEGRATIONS.md
       - Controllers And REST: reference/GUIDE-CONTROLLERS-REST.md
-      - Source And Backlog (GitHub): https://github.com/emulebb/amutorrent
+      - Preserved Source (GitHub): https://github.com/emulebb/amutorrent
   - API And Automation:
       - REST Quickstart: rest/REST-API-QUICKSTART.md
       - REST Contract: rest/REST-API-CONTRACT.md
@@ -153,11 +137,6 @@ nav:
       - Installer Test Materialization Plan: active/plans/INSTALLER-TEST-MATERIALIZATION-AND-SCENARIO-MATRIX.md
       - Frozen Surfaces: active/FROZEN-SURFACES.md
       - Future Roadmap (emulebb-mfc): active/FUTURE-ROADMAP.md
-      - emulebb-mfc 0.8.0 Lean Removal Plan: active/plans/MFC-0.8.0-LEAN-REMOVAL-PLAN.md
-      - emulebb-mfc 0.8.0 Network Core Thread: active/plans/MFC-0.8.0-NETWORK-CORE-THREAD.md
-      - emulebb-mfc 0.8.0 Performance Async Plan: active/plans/MFC-0.8.0-PERF-ASYNC-PLAN.md
-      - emulebb-mfc 0.8.0 Process Loop Migration: active/plans/MFC-0.8.0-PROCESS-LOOP-MIGRATION.md
-      - emulebb-mfc 0.8.0 Startup Time To Interactive: active/plans/MFC-0.8.0-STARTUP-TIME-TO-INTERACTIVE.md
   - Developer And Workspace:
       - Workspace Policy: WORKSPACE-POLICY.md
       - Documentation Policy: DOCS-POLICY.md
@@ -187,6 +166,11 @@ nav:
       - libtorrent Content Mesh: ideas/IDEA-LIBTORRENT-MESH.md
       - qBittorrentBB Mesh: ideas/IDEA-QBITTORRENTBB-MESH.md
       - emulebb-libtorrent Fork: ideas/IDEA-EMULEBB-LIBTORRENT-FORK.md
+      - Parked MFC 0.8 Lean Removal: ideas/IDEA-MFC-0.8.0-LEAN-REMOVAL-PLAN.md
+      - Parked MFC 0.8 Network Core Thread: ideas/IDEA-MFC-0.8.0-NETWORK-CORE-THREAD.md
+      - Parked MFC 0.8 Performance And Async: ideas/IDEA-MFC-0.8.0-PERF-ASYNC-PLAN.md
+      - Parked MFC 0.8 Process Loop Migration: ideas/IDEA-MFC-0.8.0-PROCESS-LOOP-MIGRATION.md
+      - Parked MFC 0.8 Startup: ideas/IDEA-MFC-0.8.0-STARTUP-TIME-TO-INTERACTIVE.md
   - History:
       - History Archive: history/INDEX.md
       - Historical References: HISTORICAL-REFERENCES.md
@@ -194,18 +178,13 @@ nav:
       - Abandoned CMake / Ninja / vcpkg Adoption: history/ideas/IDEA-CMAKE.md
       - Abandoned eMule 2026 Modernization Roadmap: history/ideas/IDEA-MODERNIZATION-2026.md
       - Abandoned emulebb-mfc Restructure Guidance: history/ideas/IDEA-RESTRUCTURE.md
-  - Separate Family — p2p-overlord:
-      - eMule Agent Guide: reference/GUIDE-P2P-OVERLORD-EMULE-AGENT.md
-      - Product-Family Integration Plan: active/plans/P2P-OVERLORD-PRODUCT-FAMILY-INTEGRATION.md
-
+      - p2p-overlord Integration Reference: reference/GUIDE-P2P-OVERLORD-EMULE-AGENT.md
 not_in_nav: |
   /active/items/**
   /history/**
   /rest/REST-API-OPENAPI.yaml
   /products/emulebb-rust/active/items/**
   /products/emulebb-rust/history/**
-  /products/ed2k-server/active/items/**
-  /products/trackmulebb/active/items/**
 
 validation:
   nav:

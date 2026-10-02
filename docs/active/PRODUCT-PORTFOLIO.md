@@ -1,81 +1,68 @@
-# Product Portfolio & Lifecycle
+# Product Portfolio And Lifecycle
 
-Status: governance. Captured 2026-06-14. One-page map of every repo in the family:
-its tier, lifecycle stage, quality bar, and where its backlog lives. Reduces the
-cognitive load of a 14-repo workspace and makes ownership of each decision obvious.
+Status: governance. Updated 2026-10-02 after publication of
+`rust-v0.1.0-beta.1`. This is the current role map for repositories maintained
+or retained by the eMuleBB organization.
 
-## Tiers
+## Lifecycle Classes
 
-| Tier | Meaning | Quality bar (merge gate) |
+| Class | Meaning |
+|---|---|
+| Active experimental | Current development and public prereleases; not a production-readiness claim |
+| Maintenance | Published software accepting bounded, low-risk changes only |
+| Paused experiment | Preserved and buildable on demand, but without roadmap, issue intake, or scheduled work |
+| Reference | Retained for analysis or potentially upstreamable contributions |
+| Harness | Test infrastructure whose behavior changes only when the maintained harness requires it |
+| Infrastructure | Build, test, documentation, policy, and public-presence support |
+| Archived experiment | Read-only historical source with no active backlog |
+
+## Current Portfolio
+
+| Repository | Lifecycle | Current role |
 |---|---|---|
-| **Core** | The strategic forward client | build + test (3-OS) + clippy `-D warnings` + cargo-deny + policy guard + leak-test |
-| **Companion** | Future client/controller staged beside Core | build + test + lint + fork hygiene + leak-test (networked) |
-| **Service / Lab** | Useful but experimental; not a shipped client | green build (when promoted); narrative tracking while lab |
-| **Frozen / Maintenance** | Shipping but closed to features | release proof + security/crash/packaging gates only |
-| **Infra** | Build, test, docs, policy tooling | its own checks (privacy guard, docs/policy audits) |
-| **Vendored-fork (build track)** | Upstream tool we package, not a product | build/validation track + nightly upstream rebase |
-| **Separate family** | Adjacent product line, not the suite | out of scope here |
+| `emulebb-rust` | Active experimental | Primary active eD2K/Kad client; public `0.1.0-beta.1` |
+| `emulebb` (MFC) | Maintenance | Stable Windows `0.7.x` line; bugs and bounded low-risk changes only |
+| `qbittorrentbb` | Paused experiment | Preserved BitTorrent experiment; not part of the default workspace |
+| `emulebb-libtorrent` | Paused experiment | qBittorrentBB engine fork; not part of the default workspace |
+| `amutorrent` | Maintenance / paused | Frozen controller shipped with the `0.7.3` bundle; no forward roadmap |
+| `trackmulebb` | Archived experiment | Private archived controller experiment |
+| `goed2k-server` | Harness | Deterministic local eD2K test server; no product evolution |
+| `ed2k-server` | Reference | Managed Rust fork for analysis and potentially upstreamable contributions |
+| `emulebb/amule` | Reference | aMule analysis fork; automation remains active but is not product promotion |
+| `analysis/amule` | Reference | Optional checkout of maintained upstream `amule-org/amule` |
+| `emulebb-build`, `emulebb-build-tests`, `emulebb-tooling` | Infrastructure | Workspace orchestration, tests, policy, and documentation |
+| `emulebb-pages`, `emulebb-org-profile` | Infrastructure | Public website and GitHub organization profile |
+| Other `emulebb-*` dependency forks | Infrastructure | Reproducible native build inputs |
+| `p2p-overlord-*` | Archived separate family | Retained outside the eMuleBB product roadmap |
 
-## The portfolio
+## Product Direction
 
-| Repo | Tier | Stage | Backlog home | Board Product |
-|---|---|---|---|---|
-| `emulebb-rust` | Core | forward, Phase 0 | `docs/active` (`RUST-*`) | emulebb-rust |
-| `qbittorrentbb` | Companion | future, Phase 1 | `docs/active` (`QBBB-*`) | qBittorrentBB |
-| `trackmulebb` | Companion (controller + installer) | parked, Phase 2 (Python; new) | `docs/active` (`TMBB-*`) | TrackMuleBB |
-| `itlezy/bountarr` | Companion (household media-grab UI) | parked, Phase 2 (TS/Node) | own repo | TrackMuleBB-suite |
-| `amutorrent` | Companion (legacy) | frozen with 0.7.3 | `docs/active` (`AMUT-*` ref) | aMuTorrent |
-| `emulebb` (MFC) | Client (MFC) | frozen 0.7.x maintenance | `emulebb-tooling/docs/active` (legacy IDs) | eMuleBB-MFC |
-| `ed2k-server` | Service / Lab | active production-hardening candidate, Phase 1 | `docs/products/ed2k-server/active` (`ED2KSRV-*`) + repo issues | ed2k-server |
-| `goed2k-server` | Service / Lab | lab (no CI gate) | `docs/active` lab index (`GOED2K-*` reserved) | — (not on board while lab) |
-| `emulebb-build` | Infra | active | — | tooling |
-| `emulebb-build-tests` | Infra | active | — | tooling |
-| `emulebb-tooling` | Infra | active | this repo | tooling |
-| `emulebb-setup` | Infra | active | — | tooling |
-| `emulebb/amule` | Vendored-fork | optional Windows build track; manual checkout | — | — |
-| `emulebb-miniupnp` | Vendored-fork | build track | — | — |
-| `emulebb-pages` / `emulebb-org-profile` | Infra (public) | active | — | — |
-| `p2p-overlord-*` | Separate family | out of scope | own repos | — |
+`emulebb-rust` is the only active product-development lane. It is an
+experimental beta and must not be presented as production-ready. eMuleBB MFC
+remains published and supported on `0.7.x`, but its development surface is
+limited to compatibility-preserving bug fixes and bounded UX, performance,
+build, packaging, documentation, diagnostics, and release work. New subsystems,
+broad APIs, protocol expansion, and architectural modernization remain parked.
 
-Stage notes (decision 2026-07-12):
+The forward cross-network suite program is retired. The term **eMuleBB Suite**
+is retained only for the shipped `0.7.3` MFC/aMuTorrent bundle, its artifacts,
+and historical documents. Current organization-wide planning uses **eMuleBB
+Roadmap**.
 
-- Upstream `amule-org/amule` is a separate, maintained cross-platform client.
-  Its `analysis/amule` checkout is a source/fixture reference, not a product
-  tier, runtime test requirement, or replacement for the eMuleBB fork.
-- `emulebb-rust` is the active forward lane: headless client stabilization plus
-  embedded SPA WebUI.
-- `emulebb` (MFC) closes the 0.7.x line at 0.7.3 and stays frozen except for
-  critical maintenance plus non-behavior-expanding diagnostics/instrumentation.
-- `amutorrent` freezes with the 0.7.3 Windows suite.
-- `qbittorrentbb` is future companion work; `trackmulebb` is parked until that
-  companion work progresses.
-- `ed2k-server` is a managed, Linux-first Rust service fork and active Phase 1
-  production-hardening candidate. Build, test, formatting, dependency-review,
-  and artifact-candidate automation are present; production-readiness work is
-  GitHub-primary under the `ED2KSRV-*` backlog. It is not selected by the shared
-  harness; `goed2k-server` remains the deterministic live-test server until a
-  separate integration decision.
+Native Windows VPN integration is not a forward development priority. Existing
+behavior and safety claims remain evidence-bound; no unnamed Docker/Gluetun
+stack is an eMuleBB product until explicitly adopted.
 
-## Strategic note
+## Backlog Rules
 
-The forward investment is **Core first**. The historically heaviest-resourced
-product (`emulebb` MFC) closes its `0.7.x` line at `0.7.3` and is now frozen.
-Current development concentrates on `emulebb-rust` headless client stability and
-embedded SPA WebUI. qBittorrentBB is the later BitTorrent companion; TrackMuleBB
-is a parked future controller/integration layer, not a Rust beta dependency and
-not an MFC integration path. The ready-to-use **suite bundle** remains a future
-design reference (see [SUITE-INSTALLER](SUITE-INSTALLER.md)). Quality investment (CI
-gates, leak-tests, backlog depth) should track the tier and active lifecycle:
-Core gets the strongest gates; the Frozen app gets only maintenance gates; Lab
-gets the lightest touch until promoted.
+- Project #3, **eMuleBB Roadmap**, contains current GitHub-primary work.
+- MFC feature expansion and major refactors remain `DEFERRED` as a parked ledger;
+  they are not release commitments and are not closed as `WONT_DO`.
+- qBittorrentBB, aMuTorrent forward work, TrackMuleBB, and ed2k-server
+  production-hardening items are historical, not active backlog.
+- New ed2k-server issues may cover analysis or upstreamable work, but must not
+  recreate a production-service roadmap without a new operator decision.
 
-## Lifecycle transitions
-
-- **Lab → Service/Companion:** add the tier's full quality bar (CI build+test,
-  leak-test if networked), itemize the backlog with the product prefix, and put it
-  on the Suite board. (goed2k's promotion trigger lives in its lab index.)
-- **Active → Frozen:** declare the final release, move to maintenance gates only,
-  slim the roadmap to maintenance + family lanes (see emulebb-mfc precedent).
-
-Related: [SUITE-JOINT-ROADMAP](SUITE-JOINT-ROADMAP.md),
-[QUALITY-GATES](QUALITY-GATES.md), [WORKSPACE-POLICY](../WORKSPACE-POLICY.md).
+Related: [WORKSPACE-POLICY](../WORKSPACE-POLICY.md),
+[ROADMAP-SUMMARY](../reference/ROADMAP-SUMMARY.md), and
+[BRAND-AND-NAMING](BRAND-AND-NAMING.md).

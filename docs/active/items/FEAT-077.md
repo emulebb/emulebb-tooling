@@ -3,7 +3,7 @@ id: FEAT-077
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/73
 title: Auto-managed upload friend-slot candidates without mutating manual friends
-status: OPEN
+status: DEFERRED
 priority: Minor
 category: feature
 labels: [upload, broadband, friends, friend-slot, seeding, post-0.7.3]

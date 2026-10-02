@@ -3,7 +3,7 @@ id: FEAT-006
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/9
 title: Kad — Add explicit trust, budget, and bootstrap observability counters
-status: OPEN
+status: DEFERRED
 priority: Minor
 category: feature
 labels: [kad, observability, diagnostics, counters]

@@ -3,7 +3,7 @@ id: FEAT-109
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/123
 title: Materialize suite tool dependencies deterministically
-status: OPEN
+status: DEFERRED
 priority: Minor
 category: feature
 labels: [tooling, dependencies, live-e2e, deterministic-tests, post-0.7.3]

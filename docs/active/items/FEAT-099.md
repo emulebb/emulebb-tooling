@@ -3,7 +3,7 @@ id: FEAT-099
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/104
 title: Add app event webhooks for controller automation
-status: OPEN
+status: DEFERRED
 priority: Minor
 category: feature
 labels: [webhook, rest, automation, controllers, notifications, post-0.7.3]

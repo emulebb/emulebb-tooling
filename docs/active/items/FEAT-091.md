@@ -3,7 +3,7 @@ id: FEAT-091
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/81
 title: Downloads list expand/collapse-all peer rows
-status: OPEN
+status: DEFERRED
 priority: Minor
 category: feature
 labels: [downloads, ui, toolbar, keyboard-shortcuts, sources, post-0.7.3]

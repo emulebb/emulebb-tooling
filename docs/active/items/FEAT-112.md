@@ -3,7 +3,7 @@ id: FEAT-112
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/138
 title: Add Torrent search type convenience filter and refresh file-type extensions
-status: OPEN
+status: DEFERRED
 priority: Minor
 category: feature
 labels: [search, kad, file-types, rest, ui, compatibility, post-0.7.3]

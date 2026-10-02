@@ -1,59 +1,39 @@
-# Brand & Naming
+# Brand And Naming
 
-Status: governance. Captured 2026-06-15. The canonical naming convention for the
-family, so pages, docs, and product copy stay consistent as the suite grows beyond
-eD2K. Operator decision: **keep the "eMuleBB" name** (historical), and structure
-everything around it.
+Status: governance. Updated 2026-10-02.
 
-## Two levels + a family token
+## Canonical Names
 
-- **Organization / house brand:** **eMuleBB** (GitHub org slug `emulebb`, unchanged).
-- **The suite (umbrella term):** **eMuleBB Suite** — use this when talking about the
-  cross-network whole (matches the public board "eMuleBB Suite").
-- **Family token:** **`-BB`** — the shared suffix that signals "part of this family"
-  (eMu­le**BB**, qBittorrent**BB**). New first-party clients take a `-BB` name where
-  it reads naturally. "BB" originated as "broadband"; it is now the family mark.
+- **Organization / house:** **eMuleBB**; GitHub slug `emulebb`.
+- **MFC product:** **eMule broadband edition**, compactly **eMuleBB** or the
+  **eMuleBB Windows client**.
+- **Active Rust project:** **emulebb-rust**. Describe it as the active
+  experimental eD2K/Kad beta, not as production-ready.
+- **Current planning board:** **eMuleBB Roadmap**.
+- **Historical release bundle:** **eMuleBB Suite** applies to the shipped
+  `0.7.3` MFC/aMuTorrent bundle, existing artifact names, and historical plans.
 
-## Disambiguation rule (the important one)
+Do not use **eMuleBB Suite** as the forward umbrella for organization projects.
+Use **eMuleBB projects**, **eMuleBB organization**, or the specific repository
+name instead.
 
-Always distinguish the **suite/house** from the **eD2K product**:
+## Repository Labels
 
-- **eMuleBB** (alone) = the organization / the suite / the house brand.
-- **eMuleBB client** (or "eMuleBB Windows client") = the eD2K/Kad desktop product.
+| Repository | Public description |
+|---|---|
+| `emulebb` | Stable Windows eD2K/Kad client on the maintained `0.7.x` line |
+| `emulebb-rust` | Active experimental Rust eD2K/Kad client; public beta |
+| `qbittorrentbb` | Paused unofficial qBittorrent experiment |
+| `amutorrent` | Frozen unofficial controller fork shipped with eMuleBB `0.7.3` |
+| `trackmulebb` | Archived private controller experiment |
+| `goed2k-server` | Deterministic local eD2K test server |
+| `ed2k-server` | Rust eD2K server reference fork for possible upstream contributions |
+| `amule` | aMule analysis/reference fork |
 
-When there is any ambiguity, qualify the client. A BitTorrent client living under
-"eMuleBB" is not odd once eMuleBB is understood as the house, not "just eMule".
+Where newcomers could confuse a fork with its upstream, state that it is
+unofficial and link to the upstream project. Existing release artifacts keep
+their published names; this cleanup does not rename tags, packages, executable
+files, or the `0.7.3` bootstrapper.
 
-## Product names
-
-| Product | Refer to it as | Role |
-|---|---|---|
-| eMuleBB client | "the eMuleBB client" / "eMuleBB Windows client" | eD2K/Kad desktop (Windows; maintenance `0.7.x`) |
-| emulebb-rust | "emulebb-rust" | multiplatform eD2K/Kad core (forward core) |
-| qBittorrentBB | "qBittorrentBB" | BitTorrent companion |
-| aMuTorrent | "aMuTorrent" (the `0.7.3` Suite controller) | cross-network web-UI controller, **frozen** on `0.7.3` (sustainability) |
-| TrackMuleBB | "TrackMuleBB" (the eMuleBB Suite controller) | forward cross-network controller; Python, integrated web UI; repo `trackmulebb` |
-
-- aMuTorrent keeps its fork name (a controller, not a `-BB` client); tag it
-  "the `0.7.3` Suite controller". The forward controller is **TrackMuleBB**
-  (name = tracker + mule + `-BB`; first-party, built in-house, not a fork) — tag
-  it "the eMuleBB Suite controller".
-- **Upstream courtesy:** qBittorrentBB and aMuTorrent are **unofficial forks** of
-  qBittorrent and aMuTorrent-upstream; say so where a newcomer might confuse them
-  with the upstream projects.
-
-## Copy do / don't
-
-- **Do:** "the eMuleBB Suite", "the eMuleBB client", "emulebb-rust (the forward
-  core)", "qBittorrentBB, the BitTorrent companion".
-- **Don't:** call the suite "eMule"; imply the eMuleBB client is the whole suite;
-  introduce a second umbrella brand. One umbrella: **eMuleBB Suite**.
-
-## Where this applies
-
-- The org home (`emulebb` profile README), the marketing site (`emulebb-pages`),
-  and the docs site (`site_name: eMuleBB Suite Documentation`).
-- Docs IA is **centralized with per-product sections** (one MkDocs site, sections
-  for eMuleBB Suite / eMuleBB Client / emulebb-rust / qBittorrentBB / aMuTorrent).
-- Related: [PRODUCT-PORTFOLIO](PRODUCT-PORTFOLIO.md),
-  [SUITE-JOINT-ROADMAP](SUITE-JOINT-ROADMAP.md).
+Related: [PRODUCT-PORTFOLIO](PRODUCT-PORTFOLIO.md) and
+[WORKSPACE-POLICY](../WORKSPACE-POLICY.md).

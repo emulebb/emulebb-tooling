@@ -7,8 +7,8 @@
 > implementations differ by the **capabilities** they advertise, not by a
 > separate spec. **emulebb-rust** owns the canonical **superset**
 > (`emulebb-rust/docs/rest/REST-API-OPENAPI.yaml`) and leads the contract
-> version; this MFC subset is frozen and does not evolve. Forward controller:
-> **TrackMuleBB** (aMuTorrent is the frozen `0.7.3` bundle consumer). Capability
+> version; this MFC subset is frozen and does not evolve. TrackMuleBB is
+> archived; aMuTorrent is the frozen `0.7.3` bundle consumer. Capability
 > and versioning policy:
 > [API-V1-COMPATIBILITY](../active/API-V1-COMPATIBILITY.md).
 
@@ -26,8 +26,8 @@ capability-gated `/api/v1`)
 WebServer listener. The broadband release contract is the resource-oriented
 `/api/v1` surface described by the OpenAPI document above.
 
-The API is designed for trusted local controllers — TrackMuleBB (forward) and
-the aMuTorrent consumer bundled with `0.7.3`. The 0.7.3 contract intentionally
+The API is designed for trusted local controllers. The retained shipped
+consumer is aMuTorrent, bundled with `0.7.3`. The 0.7.3 contract intentionally
 prioritizes consistency and controller completeness over preserving old
 command-style route names.
 

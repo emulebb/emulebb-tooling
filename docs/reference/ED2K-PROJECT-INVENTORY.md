@@ -445,7 +445,7 @@ server addresses, `server.met` files, or bootstrap guidance.
     - `emulebb/p2p-overlord-agents` and `emulebb/p2p-overlord-be` are both
       archived; their last default-branch commits are from 2026-06-11.
   - Notes: Retired separate headless/server-oriented product lineage. It is not
-           part of the active eMuleBB suite; retain only for historical contract
+           part of the current eMuleBB portfolio; retain only for historical contract
            and architecture research.
 
 - **MLDonkey**

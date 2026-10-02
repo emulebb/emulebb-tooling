@@ -3,7 +3,7 @@ id: FEAT-101
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/115
 title: Add quick filter textbox to Downloads list
-status: OPEN
+status: DEFERRED
 priority: Minor
 category: feature
 labels: [downloads, ui, filtering, focus, large-lists, post-0.7.3]

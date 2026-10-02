@@ -3,7 +3,7 @@ id: FEAT-096
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/86
 title: Improve client and network statistics observability
-status: IN_PROGRESS
+status: DEFERRED
 priority: Minor
 category: feature
 labels: [statistics, observability, clients, network, rest, ui, post-0.7.3]

@@ -57,7 +57,7 @@ Deterministic ED2K server scenarios should use the active eMuleBB
 p2p-overlord ED2K server lineage is reference material only.
 
 For the full product-family boundary and implementation order, use the
-[p2p-overlord Product-Family Integration Plan](../active/plans/P2P-OVERLORD-PRODUCT-FAMILY-INTEGRATION.md).
+[p2p-overlord Product-Family Integration Plan](../history/HIST-P2P-OVERLORD-PRODUCT-FAMILY-INTEGRATION.md).
 
 ## Operating Notes
 

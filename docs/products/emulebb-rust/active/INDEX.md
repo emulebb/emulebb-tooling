@@ -8,7 +8,7 @@ each item is `docs/active/items/<ID>.md` with the same front matter and section
 vocabulary.
 
 Most active product items are **GitHub-tracked** (`workflow: github`): issues
-live in `emulebb/emulebb-rust` and are aggregated on the org **eMuleBB Suite**
+live in `emulebb/emulebb-rust` and are aggregated on the org **eMuleBB Roadmap**
 board (`https://github.com/orgs/emulebb/projects/3`, `Product = emulebb-rust`,
 `Phase` field). GitHub owns workflow state (status, priority, placement); these
 Markdown files own the durable engineering spec. Local-only backlog items record
@@ -51,8 +51,8 @@ allocating the next number.
 ## First Beta — Rust Headless + Embedded SPA WebUI
 
 The first forward milestone, a Rust headless client + embedded SPA WebUI beta,
-was published on 2026-10-02 after core and WebUI proof. TrackMuleBB remains
-parked future controller work and was not a beta dependency. The beta targets
+was published on 2026-10-02 after core and WebUI proof. TrackMuleBB is archived
+and was not a beta dependency. The beta targets
 Rust only and uses the Rust-forward OpenAPI contract in this tooling docs tree.
 
 Core gates remain first-class: stock-wire parity, fail-closed VPN proof,
@@ -70,7 +70,7 @@ Final beta evidence is reconciled in the
 
 emulebb-rust is the strategic forward eD2K/Kad core. "Perfectly functional" =
 client parity **plus** the indexer role, per
-`emulebb-tooling/docs/active/SUITE-JOINT-ROADMAP.md`. The FEAT items below are the
+`emulebb-tooling/docs/history/HIST-SUITE-JOINT-ROADMAP.md`. The FEAT items below are the
 Phase 0 scope. Cooperative-DHT / BEP-46 publishing and similar ideas are **parked**
 (see the roadmap's Active vs Parked ledger) and are intentionally **not** backlog
 items.

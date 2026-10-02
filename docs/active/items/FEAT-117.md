@@ -3,7 +3,7 @@ id: FEAT-117
 workflow: local
 github_issue:
 title: Indicate already-shared files in the unshared-folder share preview
-status: OPEN
+status: DEFERRED
 priority: Minor
 category: feature
 labels: [shared-files, ui, ux, share-preview]
