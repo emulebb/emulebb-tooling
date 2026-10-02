@@ -9,6 +9,7 @@ Active release candidate:
 - [`0.1.0-beta.1` release notes](RELEASE-0.1.0-beta.1-NOTES.md)
 - [`0.1.0-beta.1` changelog](RELEASE-0.1.0-beta.1-CHANGELOG.md)
 - [`0.1.0-beta.1` release scope](RELEASE-SCOPE.md)
+- [`0.1.0-beta.1` release evidence checklist](active/RELEASE-0.1.0-beta.1-CHECKLIST.md)
 
 Sharing is configured only through shared folder roots. Each root is a monitored
 folder tree; the Rust daemon does not expose single-file sharing controls or a

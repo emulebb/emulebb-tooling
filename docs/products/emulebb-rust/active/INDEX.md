@@ -64,6 +64,8 @@ post-beta scope and must not start during the code freeze.
 
 Current soak upload/download gap analysis is tracked in
 [Rust Soak Upload/Download Gap Analysis](RUST-SOAK-UPLOAD-DOWNLOAD-GAP-ANALYSIS.md).
+Final beta evidence is reconciled in the
+[0.1.0-beta.1 Release Evidence Checklist](RELEASE-0.1.0-beta.1-CHECKLIST.md).
 
 ## Phase 0 — "perfectly functional" gate
 
