@@ -113,10 +113,13 @@ cleanup or product behavior.
       isolation, and blocking clean-teardown checks.
 - [x] Non-publishing E1 release certification passes all six native package
       targets and both OCI architectures on that same Rust commit.
-- [x] Exact-candidate E2 public campaigns pass on Windows x64 and WSL Ubuntu
-      x64 with connectivity, verified safe delivery, stock-identifying accepted
-      bytes, clean diagnostics, and graceful teardown.
-- [ ] Operator gives the explicit tagging go.
+- [x] The board accepted the exact-candidate E2 evidence on 2026-10-02. The
+      Windows and WSL campaigns proved connectivity, stock-identifying accepted
+      bytes, clean diagnostics, and graceful teardown; the board explicitly
+      accepted the residual risk that the bounded campaigns did not finish the
+      approved ISO on this candidate.
+- [x] The board gives the explicit tagging go on 2026-10-02 for selected Rust
+      commit `28a0703561f135b03ffcca94527ceb538ef9012e`.
 - [ ] The approved tagged workflow publishes and verifies all native release
       assets plus `ghcr.io/emulebb/emulebb-rust:0.1.0-beta.1` for amd64/arm64.
 

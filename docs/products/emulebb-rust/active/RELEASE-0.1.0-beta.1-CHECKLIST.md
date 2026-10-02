@@ -5,13 +5,14 @@ The selected Rust commit is immutable for this evidence cycle. Any product or
 release-workflow change selects a new candidate and invalidates the evidence
 below.
 
-**F1 review result (2026-10-02): NO-GO for tag or publication.** Hosted CI,
-non-publishing packages, deterministic Windows certification, package/SBOM
-verification, and the fail-closed Gluetun proof are green on the selected
-candidate. Exact-candidate public delivery is not green: the Windows bounded
-probe was inconclusive and the one-hour WSL completion campaign received 50.7%
-of the approved ISO before public sources stopped serving it. No tag, GitHub
-prerelease, or GHCR publication is authorized by this checklist.
+**F1 board decision (2026-10-02): GO for tag and workflow-owned publication.**
+Hosted CI, non-publishing packages, deterministic Windows certification,
+package/SBOM verification, and the fail-closed Gluetun proof are green on the
+selected candidate. The board explicitly accepts the residual public-peer
+availability risk described below: the Windows bounded probe was inconclusive
+and the one-hour WSL completion campaign received 50.7% of the approved ISO
+before public sources stopped serving it. Those outcomes remain recorded as
+observed; this decision does not relabel them as passing completion evidence.
 
 ## Candidate Identity
 
@@ -80,10 +81,11 @@ Its focused test suite passed 5/5 before the proof and commit.
   passed. The open high-severity `pymdown-extensions` Dependabot alert affects
   the MkDocs-only `requirements-docs.txt` toolchain, is not shipped in Rust
   packages or images, and is classified as non-blocking follow-up maintenance.
-- [ ] Final release go is granted. This remains blocked on fresh
-  exact-candidate Windows and WSL public campaigns that satisfy completed
-  approved delivery, size/SHA-256 verification, stock-identifying accepted
-  bytes, clean diagnostics, and graceful teardown.
+- [x] Final release go is granted. On 2026-10-02 the board accepted the retained
+  exact-candidate evidence as sufficient for this beta and explicitly accepted
+  the residual risk that the bounded Windows and WSL public campaigns did not
+  finish the approved ISO. The tagged workflow remains responsible for package,
+  checksum, GitHub prerelease, and GHCR publication verification.
 
 Earlier passing public campaigns from other Rust commits are not reused here.
 
@@ -140,8 +142,8 @@ notes/OpenAPI revision recorded in package manifests.
 
 ## Publication Boundary
 
-F1 final evidence review is complete and its decision is **NO-GO**. Do not
-create `rust-v0.1.0-beta.1`, publish the GitHub prerelease, or push the GHCR
-image until the two unchecked public-delivery gates pass on the same selected
-Rust candidate and the operator then gives a separate explicit publication
-instruction.
+F1 final evidence review is complete and the board decision is **GO**. The
+annotated `rust-v0.1.0-beta.1` tag is authorized on selected Rust commit
+`28a0703561f135b03ffcca94527ceb538ef9012e`. Publication remains workflow-only:
+the tag-triggered `release.yml` must build and verify the native assets and OCI
+image before it publishes the GitHub prerelease and versioned GHCR manifest.
