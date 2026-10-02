@@ -11,9 +11,9 @@ approved by this checklist.
 
 | Component | Selected revision | Purpose |
 |---|---|---|
-| `emulebb-rust` | [`0f76ea9bdc88d20e09a8d58394601d5f19646699`](https://github.com/emulebb/emulebb-rust/commit/0f76ea9bdc88d20e09a8d58394601d5f19646699) | Immutable beta candidate |
+| `emulebb-rust` | [`28a0703561f135b03ffcca94527ceb538ef9012e`](https://github.com/emulebb/emulebb-rust/commit/28a0703561f135b03ffcca94527ceb538ef9012e) | Immutable beta candidate |
 | `emulebb-build` | [`80e2a1cae4cdd1b56ffba75685466c1f4ceabe12`](https://github.com/emulebb/emulebb-build/commit/80e2a1cae4cdd1b56ffba75685466c1f4ceabe12) | Orchestration and packaging |
-| `emulebb-build-tests` | [`0e4444fad7e976d6947db481cec2000980d876e8`](https://github.com/emulebb/emulebb-build-tests/commit/0e4444fad7e976d6947db481cec2000980d876e8) | Live, package, and image evidence harnesses |
+| `emulebb-build-tests` | [`ecd19103d4a3bab615d47b89d195594501d7b0b4`](https://github.com/emulebb/emulebb-build-tests/commit/ecd19103d4a3bab615d47b89d195594501d7b0b4) | Live, package, and image evidence harnesses |
 | `emulebb-tooling` | [`8035fc8ad161917bdaf97306e0c4a41eebe52437`](https://github.com/emulebb/emulebb-tooling/commit/8035fc8ad161917bdaf97306e0c4a41eebe52437) | Frozen release notes, changelog, and OpenAPI contract |
 
 ## Final Evidence
@@ -21,9 +21,10 @@ approved by this checklist.
 - [x] Candidate identity is selected, pushed, and pinned by full commit SHA in
   the CI and release workflows.
 - [ ] Hosted CI succeeds for the selected candidate:
-  [workflow run 36976789557](https://github.com/emulebb/emulebb-rust/actions/runs/36976789557).
+  [workflow run 36980088250](https://github.com/emulebb/emulebb-rust/actions/runs/36980088250).
 - [ ] The manually dispatched, non-publishing release workflow succeeds for the
-  selected candidate. Workflow URL: pending.
+  selected candidate:
+  [workflow run 36980108964](https://github.com/emulebb/emulebb-rust/actions/runs/36980108964).
 - [ ] The exact-candidate Windows campaign succeeds. Campaign ID and report:
   pending.
 - [ ] The exact-candidate WSL campaign succeeds. Campaign ID and report:
