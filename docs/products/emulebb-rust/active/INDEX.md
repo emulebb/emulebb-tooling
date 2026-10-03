@@ -148,6 +148,7 @@ below as historical links.
 | [RUST-BUG-001](items/RUST-BUG-001.md) | Minor | OPEN | kad_swarm multi-node transfer tests are isolated in CI |
 | [RUST-CI-005](items/RUST-CI-005.md) | Major | OPEN | Disposition and prove the negotiated offerfiles capability |
 | [RUST-CI-006](items/RUST-CI-006.md) | Major | OPEN | Refresh current-head stock parity evidence and reconcile docs |
+| [RUST-CI-007](items/RUST-CI-007.md) | Minor | OPEN | Publish immutable nightly beta builds |
 | [RUST-REF-005](items/RUST-REF-005.md) | Major | OPEN | Decompose oversized Rust modules by responsibility |
 | [RUST-REF-006](items/RUST-REF-006.md) | Major | OPEN | Consolidate Rust NAT and runtime safety internals |
 | [RUST-REF-007](items/RUST-REF-007.md) | Minor | OPEN | Review Rust upload hot-path performance candidates |
