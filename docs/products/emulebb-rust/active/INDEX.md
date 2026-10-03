@@ -38,6 +38,8 @@ reopens it.
 **Design sketches:** [`architecture`](../design/architecture.md).
 **Backlog process runbook:**
 [`BACKLOG-PROCESS`](../../../reference/BACKLOG-PROCESS.md)
+**Current headless/large-library execution roadmap:**
+[`RUST-HEADLESS-LARGE-LIBRARY-NOW-ROADMAP`](RUST-HEADLESS-LARGE-LIBRARY-NOW-ROADMAP.md)
 
 ## ID Taxonomy
 

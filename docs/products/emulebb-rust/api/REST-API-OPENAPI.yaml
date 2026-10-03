@@ -929,6 +929,32 @@ paths:
           $ref: "#/components/responses/ErrorResponse"
         default:
           $ref: "#/components/responses/ErrorResponse"
+  /transfers/{hash}/comments:
+    parameters:
+      - $ref: "#/components/parameters/FileHash"
+    get:
+      tags: [Transfers]
+      summary: Return known comments for one transfer.
+      operationId: listTransferComments
+      responses:
+        "200":
+          $ref: "#/components/responses/CommentListResponse"
+        "400":
+          $ref: "#/components/responses/ErrorResponse"
+        "401":
+          $ref: "#/components/responses/ErrorResponse"
+        "404":
+          $ref: "#/components/responses/ErrorResponse"
+        "405":
+          $ref: "#/components/responses/MethodNotAllowedResponse"
+        "409":
+          $ref: "#/components/responses/ErrorResponse"
+        "500":
+          $ref: "#/components/responses/ErrorResponse"
+        "503":
+          $ref: "#/components/responses/ErrorResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /transfers/{hash}/sources:
     parameters:
       - $ref: "#/components/parameters/FileHash"
@@ -1283,6 +1309,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/Limit"
         - $ref: "#/components/parameters/Offset"
+        - $ref: "#/components/parameters/AfterHash"
       responses:
         "200":
           $ref: "#/components/responses/SharedFileListResponse"
@@ -2772,6 +2799,14 @@ components:
       schema:
         type: string
         pattern: "^[0-9a-f]{32}$"
+    AfterHash:
+      name: afterHash
+      in: query
+      required: false
+      description: Exclusive lowercase eD2K hash cursor for stable keyset pagination. Cannot be combined with a non-zero offset.
+      schema:
+        type: string
+        pattern: "^[0-9a-f]{32}$"
     Limit:
       name: limit
       in: query
@@ -3978,6 +4013,9 @@ components:
           type: boolean
         publishEmuleRustIdentity:
           type: boolean
+        offerFilesCapabilityEnabled:
+          type: boolean
+          description: Honor a complete validated offerfiles_v=1 server pacing advertisement; restart required.
         addServersFromServer:
           type: boolean
         deadServerRetries:
@@ -4060,6 +4098,9 @@ components:
           type: boolean
         publishEmuleRustIdentity:
           type: boolean
+        offerFilesCapabilityEnabled:
+          type: boolean
+          description: Honor a complete validated offerfiles_v=1 server pacing advertisement; restart required.
         addServersFromServer:
           type: boolean
         deadServerRetries:
@@ -5805,12 +5846,16 @@ components:
             data:
               type: object
               unevaluatedProperties: false
-              required: [items]
+              required: [items, nextAfterHash]
               properties:
                 items:
                   type: array
                   items:
                     $ref: "#/components/schemas/SharedFile"
+                nextAfterHash:
+                  type: [string, "null"]
+                  pattern: "^[0-9a-f]{32}$"
+                  description: Exclusive cursor for the next keyset page, or null when this page is final.
               allOf:
                 - $ref: "#/components/schemas/Pagination"
     SharedFileEnvelope:
@@ -6547,7 +6592,7 @@ components:
     Server:
       type: object
       additionalProperties: false
-      required: [address, port, name, priority, static, enabled, connected, connecting, current, description, dynIp, auxiliaryPorts, failedCount, hardFiles, ip, ping, softFiles, version, users, files]
+      required: [address, port, name, priority, static, enabled, connected, connecting, current, description, dynIp, auxiliaryPorts, failedCount, hardFiles, ip, ping, softFiles, offerFilesPublishedEntries, offerFilesPendingEntries, version, users, files]
       properties:
         address:
           type: string
@@ -6592,6 +6637,23 @@ components:
           type: integer
           minimum: 0
         softFiles:
+          type: integer
+          minimum: 0
+        offerFilesMode:
+          type: string
+          enum: [awaitingCapability, legacy, negotiatedV1]
+        offerFilesBatchMax:
+          type: integer
+          minimum: 0
+        offerFilesMinIntervalMs:
+          type: integer
+          minimum: 1
+        offerFilesFallbackReason:
+          type: string
+        offerFilesPublishedEntries:
+          type: integer
+          minimum: 0
+        offerFilesPendingEntries:
           type: integer
           minimum: 0
         version:

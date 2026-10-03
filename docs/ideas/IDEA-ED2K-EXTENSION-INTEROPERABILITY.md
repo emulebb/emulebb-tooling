@@ -229,10 +229,12 @@ leaving substantial margin below a five-minute objective. Keeping the familiar
 200-record packet bounds per-packet parsing and indexing spikes; reducing the
 interval raises throughput without creating much larger packets.
 
-## Candidate Offer-Pacing Version 1
+## Offer-Pacing Version 1
 
-This section records the current eMuleBB proposal. It is **not yet an agreed
-wire standard**.
+The exact five-field contract below is now implemented by the Rust client in
+preparation for the corresponding `ed2k-server` rollout. It remains an
+extension between implementations rather than a stock eMule wire standard, so
+the client treats it as optional, connection-scoped, and fail-closed.
 
 A capable server would send one complete set in post-login `OP_SERVERIDENT`:
 
@@ -293,23 +295,19 @@ Content filtering, exhausted candidate budget, malformed records, a batch
 above the negotiated maximum, the hard safety boundary, and deliberate flooding
 remain valid rejection cases.
 
-### Unresolved Coordination Points
+### Implementation Status and Remaining Coordination
 
-The Rust maintainer's first proposal used shorter names (`offer_v`,
-`offer_batch`, and `offer_interval_ms`) plus `offer_burst`. The revised eMuleBB
-proposal uses the `offerfiles_*` prefix and omits a client-visible burst
-entitlement. The following points still require explicit agreement:
+The Rust implementation uses the final `offerfiles_*` names above and no burst
+field. It waits up to two seconds for post-login identification before locking
+legacy behavior, caps packets at 200 records and sustained sending at 400
+records/second, exposes pacing diagnostics, and has an advanced restart-required
+kill switch. A 100,000-file deterministic model completes in 500 batches within
+five minutes at 500 ms spacing.
 
-- final tag names;
-- whether version 1 has a burst field;
-- historical per-message versus new per-client hard-limit semantics;
-- whether a hard value of zero can mean disabled in an accelerated policy;
-- exact server behavior under temporary global overload;
-- which values may be enabled by default after concurrent-publisher testing.
-
-aMule's maintainer supports implementing a draft while making wire agreement a
-prerequisite for merge and activation. They also support keeping the bounded
-publication issue separate from a broader extension-framework discussion.
+Remaining coordination is operational: server behavior under temporary global
+overload, concurrent-publisher fairness, rollout defaults, rejection telemetry,
+and live cross-implementation evidence. Broader extension negotiation and IPv6
+source records remain separate work.
 
 ## Peer Capability Surfaces
 
