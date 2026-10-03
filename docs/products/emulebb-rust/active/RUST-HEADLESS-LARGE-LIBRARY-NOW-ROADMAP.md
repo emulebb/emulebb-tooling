@@ -90,30 +90,31 @@ seconds, below the five-minute objective without enlarging legacy packet shape.
 - Offline Rust router/OpenAPI route, parameter, settings, response, and error
   contract alignment.
 - External soak metadata migration tests for schema 23, including v22 to v23.
-- WSL2 Ubuntu, Docker Engine, the plain-OpenVPN Compose input, and the persisted
-  smoke launcher's Linux entrypoint are available; the credentialed live witness
-  still requires an operator-supplied candidate archive and private VPN root.
-
-The WSL + OpenVPN public-network witness is intentionally a separate operator
-evidence step because it consumes private VPN configuration and a packaged
-client archive. It must record the archive hash, Compose input, binding mode,
-methods exercised, tunnel evidence, and output report path.
+- The credentialed WSL2 + plain-OpenVPN public-network witness passed on Rust
+  commit `10a9c74e`. The retained report is
+  `${EMULEBB_WORKSPACE_OUTPUT_ROOT}\reports\rust-openvpn\20261003T065145Z-rust-now-10a9c74e.json`;
+  its six PCAPs are beside it. Archive SHA-256 is
+  `987776074f27b5f34b52eab6682386ac12c98a96c69078336b36800a4f9440bf` and the
+  certified daemon SHA-256 is
+  `ea51bd60c1f571ab1e4cb972a293ab660b7d7a3ac7d39e69cad3a46f002421a9`.
+  Plain OpenVPN owned PID 1, public traffic and the interface+IP P2P binding used
+  `tun0`, eD2K and Kad became ready, and two rounds each of server, global UDP,
+  and Kad search completed with results. The four-case NAT matrix passed with
+  the VPN route correctly classified as mapping-unsupported, pre-existing
+  Compose projects were preserved, and teardown left no test resources.
 
 ## NEXT — in order
 
-1. Run the packaged client through `smoke-rust-openvpn.py` in WSL with `tun0`
-   interface+IP binding. Exercise server, global UDP, and Kad searches; include
-   repeated searches and the NAT matrix where the provider supports it.
-2. Add a deterministic server fixture that emits the exact five-field
+1. Add a deterministic server fixture that emits the exact five-field
    `OP_SERVERIDENT` advertisement, accepts the complete 100,000-record sweep,
    and verifies connection-scoped fallback for malformed and rejected batches.
-3. Capture performance evidence for cold scan, warm restart, REST traversal,
+2. Capture performance evidence for cold scan, warm restart, REST traversal,
    steady-state watcher updates, and publication sweep at 10k, 50k, and 100k
    shared files. Treat wall time, peak RSS, SQLite growth, and event-loop stalls
    as release evidence rather than informal observations.
-4. Once keyset consumers have shipped, decide whether offset paging is worth
+3. Once keyset consumers have shipped, decide whether offset paging is worth
    retaining. Removal is an API-cleanup decision, not a wire-compatibility issue.
-5. Resume autonomous indexer/Torznab and Arr work only after the large-library
+4. Resume autonomous indexer/Torznab and Arr work only after the large-library
    base and live publishing witness remain green.
 
 ## PARKED — explicit future boundary
