@@ -128,12 +128,26 @@ below as historical links.
 | [RUST-FEAT-002](items/RUST-FEAT-002.md) | Major | OPEN | Indexer — autonomous Kad/eD2K snooping index with Torznab surface |
 | [RUST-FEAT-004](items/RUST-FEAT-004.md) | Major | OPEN | Arr integration — Torznab indexer + qBittorrent-emulating download client |
 | [RUST-FEAT-025](items/RUST-FEAT-025.md) | Minor | OPEN | Validate conformant duplicate-block rejection diagnostics |
+| [RUST-FEAT-038](items/RUST-FEAT-038.md) | Minor | OPEN | Add current-aMule-style endgame source takeover |
+| [RUST-FEAT-039](items/RUST-FEAT-039.md) | Minor | OPEN | Size ED2K request depth from measured RTT and bandwidth |
+| [RUST-FEAT-040](items/RUST-FEAT-040.md) | Minor | OPEN | Carry ED2K and Kad search metadata end to end |
+
+### Stock compatibility defects
+
+| ID | Priority | Status | Title |
+|----|----------|--------|-------|
+| [RUST-BUG-102](items/RUST-BUG-102.md) | Major | OPEN | Require a stock-compatible final completion rehash |
+| [RUST-BUG-103](items/RUST-BUG-103.md) | Major | OPEN | Classify ED2K server failures before dead-server accounting |
+| [RUST-BUG-104](items/RUST-BUG-104.md) | Major | OPEN | Preserve Kad AICH publisher provenance and result consensus |
+| [RUST-BUG-105](items/RUST-BUG-105.md) | Major | OPEN | Disposition stock source-acquisition default drift |
 
 ### Beta follow-up refactors and evidence
 
 | ID | Priority | Status | Title |
 |----|----------|--------|-------|
 | [RUST-BUG-001](items/RUST-BUG-001.md) | Minor | OPEN | kad_swarm multi-node transfer tests are isolated in CI |
+| [RUST-CI-005](items/RUST-CI-005.md) | Major | OPEN | Disposition and prove the negotiated offerfiles capability |
+| [RUST-CI-006](items/RUST-CI-006.md) | Major | OPEN | Refresh current-head stock parity evidence and reconcile docs |
 | [RUST-REF-005](items/RUST-REF-005.md) | Major | OPEN | Decompose oversized Rust modules by responsibility |
 | [RUST-REF-006](items/RUST-REF-006.md) | Major | OPEN | Consolidate Rust NAT and runtime safety internals |
 | [RUST-REF-007](items/RUST-REF-007.md) | Minor | OPEN | Review Rust upload hot-path performance candidates |
