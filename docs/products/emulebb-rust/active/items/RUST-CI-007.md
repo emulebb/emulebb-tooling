@@ -40,14 +40,14 @@ container channel also exposes a moving `nightly` tag.
 
 ## Acceptance Criteria
 
-- [ ] A manual non-publishing run completes the full package and smoke matrix.
+- [x] A manual non-publishing run completes the full package and smoke matrix.
 - [ ] A scheduled run publishes immutable GitHub and GHCR nightly artifacts
       only for a source commit with all required CI checks passing.
-- [ ] Generated release notes cover the range since the previous successful
+- [x] Generated release notes cover the range since the previous successful
       nightly and link the exact commits and full comparison.
-- [ ] Retention selection is strictly limited to well-formed nightly
+- [x] Retention selection is strictly limited to well-formed nightly
       prereleases and keeps the newest 14.
-- [ ] The formal `rust-v0.1.0-beta.2` release path remains valid and does not
+- [x] The formal `rust-v0.1.0-beta.2` release path remains valid and does not
       gain a moving channel tag.
 
 ## Validation
@@ -56,3 +56,20 @@ container channel also exposes a moving `nightly` tag.
 - Run the Rust policy checker and GitHub Actions workflow linter.
 - Trigger `Nightly` manually with publication disabled after the implementation
   commit's normal CI checks are green, then retain the run URL here.
+
+## Evidence
+
+- 2026-10-03: default-branch CI passed on source commit
+  `bba6cbbd3d5eb842e99c42bef129c3c5c0d79ee1`, including Windows, Linux,
+  macOS, policy/Clippy, cargo-deny, and live REST/OpenAPI conformance:
+  https://github.com/emulebb/emulebb-rust/actions/runs/37150371404
+- 2026-10-03: manual `Nightly` dry-run passed for
+  `0.1.0-beta.2.nightly.20261003.gbba6cbbd`. All six native package/smoke jobs
+  and the multi-architecture OCI image candidate passed; publication jobs were
+  skipped as requested:
+  https://github.com/emulebb/emulebb-rust/actions/runs/37151402599
+- Nightly metadata, changelog grouping/linking, required-CI selection, and
+  retention protections are covered by the nightly helper tests. Rust policy
+  checks and `actionlint` also passed after the final workflow pins were set.
+- The remaining unchecked criterion requires observing the first scheduled
+  publishing run; the item stays open until that evidence exists.
