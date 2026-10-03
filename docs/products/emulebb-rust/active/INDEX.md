@@ -137,6 +137,7 @@ below as historical links.
 | [RUST-REF-005](items/RUST-REF-005.md) | Major | OPEN | Decompose oversized Rust modules by responsibility |
 | [RUST-REF-006](items/RUST-REF-006.md) | Major | OPEN | Consolidate Rust NAT and runtime safety internals |
 | [RUST-REF-007](items/RUST-REF-007.md) | Minor | OPEN | Review Rust upload hot-path performance candidates |
+| [RUST-REF-008](items/RUST-REF-008.md) | Minor | OPEN | Measure and reduce large-library scan I/O amplification |
 
 ### Done or stale in the 2026-09-30 triage
 

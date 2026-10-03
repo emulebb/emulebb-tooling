@@ -108,10 +108,12 @@ seconds, below the five-minute objective without enlarging legacy packet shape.
 1. Add a deterministic server fixture that emits the exact five-field
    `OP_SERVERIDENT` advertisement, accepts the complete 100,000-record sweep,
    and verifies connection-scoped fallback for malformed and rejected batches.
-2. Capture performance evidence for cold scan, warm restart, REST traversal,
-   steady-state watcher updates, and publication sweep at 10k, 50k, and 100k
-   shared files. Treat wall time, peak RSS, SQLite growth, and event-loop stalls
-   as release evidence rather than informal observations.
+2. Continue the bounded storage evidence tracked by
+   [RUST-REF-008](items/RUST-REF-008.md): capture representative per-HDD
+   cohorts and attribute the remaining process logical-read amplification.
+   Keep the completed 100k SSD cold scan, warm restart, mutation, long-path,
+   watcher, and cleanup report as the baseline rather than rerunning an
+   unbounded real-media library.
 3. Once keyset consumers have shipped, decide whether offset paging is worth
    retaining. Removal is an API-cleanup decision, not a wire-compatibility issue.
 4. Resume autonomous indexer/Torznab and Arr work only after the large-library
