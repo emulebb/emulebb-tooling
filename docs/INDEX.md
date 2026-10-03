@@ -237,6 +237,7 @@ are not the best first read for users.
 | Test tiers runbook | [reference/TEST-TIERS](reference/TEST-TIERS.md) |
 | Test suite inventory | [reference/TEST-INVENTORY](reference/TEST-INVENTORY.md) |
 | Test curation decisions | [reference/TEST-CURATION](reference/TEST-CURATION.md) |
+| Exploratory Kad publishing and distributed-search design | [ideas/IDEA-KAD-PUBLISHING-AND-DISTRIBUTED-SEARCH](ideas/IDEA-KAD-PUBLISHING-AND-DISTRIBUTED-SEARCH.md) |
 | Release branching and packaging | [reference/RELEASE-BRANCHING-AND-PACKAGING](reference/RELEASE-BRANCHING-AND-PACKAGING.md) |
 | eD2K ecosystem inventory | [reference/ED2K-PROJECT-INVENTORY](reference/ED2K-PROJECT-INVENTORY.md) |
 | eD2K forums and sites inventory | [reference/ED2K-FORUMS-AND-SITES](reference/ED2K-FORUMS-AND-SITES.md) |

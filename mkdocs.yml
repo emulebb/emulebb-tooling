@@ -163,6 +163,7 @@ nav:
       - Status: dependencies/DEP-STATUS.md
   - Ideas:
       - Cooperative DHT: ideas/IDEA-COOPERATIVE-DHT-COOPERATION.md
+      - Kad Publishing And Distributed Search: ideas/IDEA-KAD-PUBLISHING-AND-DISTRIBUTED-SEARCH.md
       - aMule Watchlist: ideas/IDEA-AMULE-WATCHLIST.md
       - eD2K Extension Interoperability: ideas/IDEA-ED2K-EXTENSION-INTEROPERABILITY.md
       - Kad Protocol Modernization: ideas/IDEA-KAD-PROTOCOL-MODERNIZATION.md
