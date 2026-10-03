@@ -40,6 +40,8 @@ reopens it.
 [`BACKLOG-PROCESS`](../../../reference/BACKLOG-PROCESS.md)
 **Current headless/large-library execution roadmap:**
 [`RUST-HEADLESS-LARGE-LIBRARY-NOW-ROADMAP`](RUST-HEADLESS-LARGE-LIBRARY-NOW-ROADMAP.md)
+**Current large-library I/O and portability review:**
+[`RUST-LARGE-LIBRARY-IO-PORTABILITY-REVIEW`](RUST-LARGE-LIBRARY-IO-PORTABILITY-REVIEW.md)
 
 ## ID Taxonomy
 
@@ -140,6 +142,7 @@ below as historical links.
 | [RUST-BUG-103](items/RUST-BUG-103.md) | Major | OPEN | Classify ED2K server failures before dead-server accounting |
 | [RUST-BUG-104](items/RUST-BUG-104.md) | Major | OPEN | Preserve Kad AICH publisher provenance and result consensus |
 | [RUST-BUG-105](items/RUST-BUG-105.md) | Major | OPEN | Disposition stock source-acquisition default drift |
+| [RUST-BUG-107](items/RUST-BUG-107.md) | Major | OPEN | Preserve lossless shared-library path identity across platforms |
 
 ### Beta follow-up refactors and evidence
 
@@ -149,10 +152,13 @@ below as historical links.
 | [RUST-CI-005](items/RUST-CI-005.md) | Major | OPEN | Disposition and prove the negotiated offerfiles capability |
 | [RUST-CI-006](items/RUST-CI-006.md) | Major | OPEN | Refresh current-head stock parity evidence and reconcile docs |
 | [RUST-CI-007](items/RUST-CI-007.md) | Minor | OPEN | Publish immutable nightly beta builds |
+| [RUST-CI-008](items/RUST-CI-008.md) | Major | OPEN | Prove Unicode and long-path large-library behavior across platforms |
 | [RUST-REF-005](items/RUST-REF-005.md) | Major | OPEN | Decompose oversized Rust modules by responsibility |
 | [RUST-REF-006](items/RUST-REF-006.md) | Major | OPEN | Consolidate Rust NAT and runtime safety internals |
 | [RUST-REF-007](items/RUST-REF-007.md) | Minor | OPEN | Review Rust upload hot-path performance candidates |
-| [RUST-REF-008](items/RUST-REF-008.md) | Minor | OPEN | Measure and reduce large-library scan I/O amplification |
+| [RUST-REF-008](items/RUST-REF-008.md) | Major | OPEN | Reduce large-library metadata and scan I/O amplification |
+| [RUST-REF-009](items/RUST-REF-009.md) | Major | OPEN | Use native storage domains for cross-platform library scheduling |
+| [RUST-REF-010](items/RUST-REF-010.md) | Major | OPEN | Bound watcher reconciliation I/O for large shared libraries |
 
 ### Done or stale in the 2026-09-30 triage
 

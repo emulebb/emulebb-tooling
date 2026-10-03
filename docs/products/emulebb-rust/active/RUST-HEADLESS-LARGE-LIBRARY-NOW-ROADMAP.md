@@ -79,6 +79,20 @@ seconds, below the five-minute objective without enlarging legacy packet shape.
 - Do not add compatibility aliases, legacy GUI concepts, or dormant knobs unless
   they are required by a real peer/server wire behavior or an owned controller.
 
+### 4. Startup scanning and publication overlap
+
+- Persisted shared catalogs hydrate in bounded keyset pages after the first
+  immediately useful page is available to the network runtimes.
+- A cold empty profile scans and hashes a bounded small-first cohort before the
+  exhaustive library walk. Successful files enter the live catalog and server
+  publication queue immediately.
+- The exhaustive scan and hash job is detached from the request that triggered
+  it, and blocking filesystem/hash work does not run on asynchronous workers.
+- Reload diagnostics expose scan, plan, hash, byte, failure, queue, and per-disk
+  activity without placing source paths in normal path-free evidence.
+- The LAN-only startup harness proves eD2K publication and active Kad publish
+  workers while the initial 100k ingestion remains incomplete.
+
 ## Verification completed
 
 - Rust policy gate and tooling tests.
@@ -90,6 +104,14 @@ seconds, below the five-minute objective without enlarging legacy packet shape.
 - Offline Rust router/OpenAPI route, parameter, settings, response, and error
   contract alignment.
 - External soak metadata migration tests for schema 23, including v22 to v23.
+- The deterministic 100,000-file SSD campaign passed cold scan, warm reload,
+  one-percent mutation, 1,000 long-path files, watcher lifecycle, restart, and
+  cleanup. Its retained report is
+  `${EMULEBB_WORKSPACE_OUTPUT_ROOT}\reports\emulebb-rust\shared-library-io\rust-shared-library-io-20261003T153209Z-11012.json`.
+- The LAN-only startup campaign observed 8,596 shareable files with 91,407 hashes
+  still pending, and the local eD2K server accepted the first 200 files while
+  Kad publication workers were active. Its retained report is
+  `${EMULEBB_WORKSPACE_OUTPUT_ROOT}\reports\emulebb-rust\shared-library-io\rust-shared-library-lan-startup-20261003T183046Z-16340.json`.
 - The credentialed WSL2 + plain-OpenVPN public-network witness passed on Rust
   commit `10a9c74e`. The retained report is
   `${EMULEBB_WORKSPACE_OUTPUT_ROOT}\reports\rust-openvpn\20261003T065145Z-rust-now-10a9c74e.json`;
@@ -108,15 +130,23 @@ seconds, below the five-minute objective without enlarging legacy packet shape.
 1. Add a deterministic server fixture that emits the exact five-field
    `OP_SERVERIDENT` advertisement, accepts the complete 100,000-record sweep,
    and verifies connection-scoped fallback for malformed and rejected batches.
-2. Continue the bounded storage evidence tracked by
-   [RUST-REF-008](items/RUST-REF-008.md): capture representative per-HDD
-   cohorts and attribute the remaining process logical-read amplification.
-   Keep the completed 100k SSD cold scan, warm restart, mutation, long-path,
-   watcher, and cleanup report as the baseline rather than rerunning an
-   unbounded real-media library.
-3. Once keyset consumers have shipped, decide whether offset paging is worth
+2. Reduce the measured SQLite/catalog amplification tracked by
+   [RUST-REF-008](items/RUST-REF-008.md): index and batch stale-source removal,
+   batch initial share persistence without weakening durability, decouple media
+   enrichment from first publication, and repeat the bounded SSD comparison.
+3. Correct cross-platform filesystem identity through
+   [RUST-BUG-107](items/RUST-BUG-107.md) and storage-domain scheduling through
+   [RUST-REF-009](items/RUST-REF-009.md) before claiming equivalent multi-disk
+   behavior on Linux/macOS.
+4. Bound watcher reconciliation through
+   [RUST-REF-010](items/RUST-REF-010.md), then run the Unicode/long-path platform
+   matrix in [RUST-CI-008](items/RUST-CI-008.md).
+5. Capture representative per-HDD cohorts only after the preceding counters and
+   fixes exist. Keep the completed 100k SSD report as the baseline and do not
+   rerun an unbounded real-media library.
+6. Once keyset consumers have shipped, decide whether offset paging is worth
    retaining. Removal is an API-cleanup decision, not a wire-compatibility issue.
-4. Resume autonomous indexer/Torznab and Arr work only after the large-library
+7. Resume autonomous indexer/Torznab and Arr work only after the large-library
    base and live publishing witness remain green.
 
 ## PARKED — explicit future boundary
