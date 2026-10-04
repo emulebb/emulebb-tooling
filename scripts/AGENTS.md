@@ -2,9 +2,9 @@
 
 - Read `EMULEBB_WORKSPACE_ROOT\repos\emulebb-tooling\docs\WORKSPACE-POLICY.md`
   first; it is authoritative for workspace-wide rules.
-- Start from
-  `EMULEBB_WORKSPACE_ROOT\repos\emulebb-tooling\docs\reference\AGENT-CHECKLIST.md`
-  for the repeatable operating path.
+- Also read the routed
+  `EMULEBB_WORKSPACE_ROOT\repos\emulebb-tooling\docs\reference\WORKSPACE-OPERATIONS-POLICY.md`
+  annex for shared helper and automation rules.
 
 Everything below is this repo's local deltas only:
 

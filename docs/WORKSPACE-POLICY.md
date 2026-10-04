@@ -1,920 +1,165 @@
 # eMule Workspace Policy
 
-This document is the single source of truth for the canonical eMule workspace.
-Repo-local docs and `AGENTS.md` files should point here instead of restating
-workspace-wide policy. AI contributors should use the
-[Agent Checklist](reference/AGENT-CHECKLIST.md) as the repeatable operating
-path after reading this policy.
+This document is the mandatory, product-neutral policy entrypoint for the
+canonical eMuleBB workspace. Read it once before making workspace decisions,
+then load only the repo-local `AGENTS.md` and policy annexes selected by
+[Task routing](#task-routing). The
+[Agent Checklist](reference/AGENT-CHECKLIST.md) is an optional execution and
+handoff checklist, not a second mandatory policy read.
 
-## Policy Scope (core vs product annex)
-
-This document mixes **product-neutral core** rules (binding on every repo) with
-**product-specific** rules. To keep it readable as the project family changes,
-treat the
-sections by scope:
-
-- **Core (all products):** Workspace Layout, Branch and History Policy, Commit
-  Content and Privacy Hygiene, Network Safety, Environment Variables, Managed Fork
-  Hygiene, Documentation Policy (incl. English-only), File Normalization, Script
-  and Automation Runtime, Setup and Dependency Authority.
-- **Product annex — eMuleBB MFC:** Active Build Policy (MSVC/v143), Release
-  Localization Policy, Live Test Storage and Path Capability, and the MFC parts of
-  Protocol Compatibility / Baseline and Harness. These bind only the MFC app and
-  its build.
-- **Product annex — emulebb-rust:** responsibility-based code quality and test
-  placement live in `docs\products\emulebb-rust\reference\CODE-QUALITY.md`;
-  machine policy, cargo, and omission rules live in `repos\emulebb-rust\policy`
-  and its `AGENTS.md`.
-- **Product annex — forks / managed repositories:** Managed Fork Hygiene plus
-  each repo's `AGENTS.md`. Current lifecycle roles are: `amutorrent` frozen with
-  the shipped `0.7.3` bundle; `qbittorrentbb` and `emulebb-libtorrent` paused
-  experiments; `trackmulebb` an archived private experiment; `amule` an
-  analysis/reference fork; `goed2k-server` harness-only; and `ed2k-server` an
-  upstream-contribution reference fork.
-
-Physical extraction of the MFC build/localization sections into a separate
-`WORKSPACE-POLICY-MFC.md` annex is a tracked follow-up; until then this scope map
-is the authority on what binds which product. New rules go in the narrowest scope
-that is true.
-
-## Session Startup Contract
-
-- Read this policy before making workspace decisions.
-- Check `git status --short --branch` in each repo that will be read for
-  current-state decisions or edited.
-- Use repo-local `AGENTS.md` files only for local deltas after this policy has
-  been read.
-- Treat historical session handoff notes under `docs\history` as provenance
-  only.
-- Revalidate backlog and release docs against current `main`, dependency pins,
-  and this policy before implementation.
-- For MFC backlog items, the linked `emulebb/emulebb` issue and org Project #2
-  (`eMuleBB Roadmap MFC (archive)`) are archive/provenance only. Current
-  GitHub-primary work uses the owning product repo issue and org Project #3
-  (`eMuleBB Roadmap`) for workflow state.
-
-## Project Focus Contract
-
-The workspace is broad, but normal work is project-scoped. When the operator
-names a product or project, that project becomes the active focus for default
-reads, edits, tests, status checks, and reporting. Agents must not sweep all of
-`repos` and `workspaces` after the active project is clear.
-
-Project focus aliases and default scope:
-
-- `emulebb rust`, `rust`, or `emulebb-rust`:
-  primary edit scope is `repos\emulebb-rust`, including its UI successor
-  surfaces such as the embedded SPA WebUI. Support scope is
-  `repos\emulebb-build-tests` for harness, live, and profile scripts;
-  `repos\emulebb-tooling\docs\products\emulebb-rust` for docs; and
-  `repos\emulebb-build` for orchestration.
-- `emulebb mfc`, `mfc`, or `emulebb`:
-  primary edit scope is `workspaces\workspace\app\emulebb-main`. Support scope
-  is `repos\emulebb` as branch-store only, `repos\emulebb-build` for
-  orchestration, `repos\emulebb-build-tests` for harnesses, and
-  `repos\emulebb-tooling\docs\products\emulebb-mfc` for docs.
-- `qbittorrentbb`, `qbit`, or `qbbb`:
-  primary edit scope is an explicitly materialized `repos\qbittorrentbb`
-  checkout. This paused experiment is not part of the default workspace.
-  Support scope is
-  `repos\emulebb-build`, `repos\emulebb-build-tests`, and tooling docs only
-  when the task needs shared orchestration, live-wire, or policy context.
-
-Support repos are pulled in deliberately, not by habit. Read or check status in
-a support repo only when the focused task needs that repo's files or current
-state. Broad workspace scans are appropriate only when the operator asks for
-workspace-wide status, dependency topology is unclear, build/test orchestration
-requires it, or the requested behavior is explicitly cross-product.
+## Authority And Startup
 
 Directive precedence is:
 
 1. system and developer instructions from the active session
 2. workspace-root `AGENTS.md`
-3. this workspace policy
-4. repo-local `AGENTS.md` local deltas
-5. README, backlog, release, and handoff docs
+3. this core policy
+4. every applicable policy annex
+5. repo-local `AGENTS.md` local deltas
+6. README, backlog, release, and handoff documents
 
-## Workspace Layout
+If two applicable annexes appear to conflict, stop and correct the central
+policy rather than choosing one silently.
 
-- Canonical workspace paths are expressed through `EMULEBB_WORKSPACE_ROOT`.
-- Repos live under `EMULEBB_WORKSPACE_ROOT\repos\...`.
-- App worktrees live under `EMULEBB_WORKSPACE_ROOT\workspaces\workspace\app\...`.
-- Do not hardcode machine-specific absolute paths in workspace docs or scripts.
-- `repos\emulebb-tooling` owns shared workspace policy, helper docs, and
-  engineering notes.
-- `repos\emulebb-build` owns workspace materialization, repo/worktree
-  orchestration, build orchestration, validation, and packaging.
-- `repos\emulebb-build-tests` owns shared test harness code and test execution
-  helpers.
-- `repos\goed2k-server` owns the local ED2K server used by deterministic
-  eMuleBB live E2E and protocol-parity scenarios. It is harness infrastructure,
-  not an evolving product or service roadmap.
-- `repos\ed2k-server` is the managed Rust eD2K index-server reference fork for
-  evaluating and preparing potentially upstreamable contributions. It remains
-  build-integrated but is not selected by any live, parity, release, or
-  production campaign.
-- `repos\emulebb` is the canonical app repo checkout used as the branch store and
-  worktree anchor.
-- Normal app editing belongs in
-  `workspaces\workspace\app\emulebb-main`, not in `repos\emulebb`.
-- Retired pre-rename repository paths such as `repos\eMule`,
-  `repos\eMule-build`, `repos\eMule-build-tests`, and `repos\eMule-tooling`
-  are historical references only. Active policy, docs, tests, and helper code
-  must use `repos\emulebb`, `repos\emulebb-build`,
-  `repos\emulebb-build-tests`, and `repos\emulebb-tooling`.
-- `workspaces\workspace\deps.json` is the generated dependency contract for
-  the active workspace layout. Tests and helpers that need repo paths should
-  prefer its `workspace.repos` map instead of reconstructing old repo names.
-- The canonical app worktrees are `emulebb-main`,
-  `emulebb-community-baseline`, and `emulebb-community-tracing-harness` with
-  branches defined by the generated dependency contract.
-- Generated build, test, release, and runtime output belongs under
-  `EMULEBB_WORKSPACE_OUTPUT_ROOT`, not under `repos\...` or
-  `workspaces\workspace\state`.
-- The canonical output-root children are `builds`, `logs`, `reports`,
-  `artifacts`, `packages`, `release`, `tmp`, `tools`, `cache`, and `profiles`.
-- Canonical build-output subtrees include
-  `EMULEBB_WORKSPACE_OUTPUT_ROOT\builds\app`,
-  `EMULEBB_WORKSPACE_OUTPUT_ROOT\builds\tests`,
-  `EMULEBB_WORKSPACE_OUTPUT_ROOT\builds\amule`,
-  `EMULEBB_WORKSPACE_OUTPUT_ROOT\builds\third_party`, and
-  `EMULEBB_WORKSPACE_OUTPUT_ROOT\builds\rust\target`. WSL-hosted Rust builds
-  use the separate `builds\rust\target-wsl` subtree.
-- Package-only generated inputs belong under
-  `EMULEBB_WORKSPACE_OUTPUT_ROOT\packages\build`; this includes aMuTorrent
-  frontend bundles staged under `packages\build\amutorrent`.
-- Runtime tool payloads staged for tests and VM workflows belong under
-  `EMULEBB_WORKSPACE_OUTPUT_ROOT\tools`, such as `tools\amule`. The managed
-  eD2K index-server build stages its candidate executable at
-  `tools\ed2k-server\bin\ed2k-server`; staging does not authorize a harness
-  or runtime selection change.
-- Orchestrated third-party dependency output should prefer
-  `EMULEBB_WORKSPACE_OUTPUT_ROOT\builds\third_party`; repo-local third-party
-  build directories are tolerated only for upstream/manual tooling and must be
-  ignored plus covered by cleanup/audit.
-- ALL Rust builds — orchestrated, ad-hoc, manual, scripted, debug AND release —
-  must set `CARGO_TARGET_DIR` to `EMULEBB_WORKSPACE_OUTPUT_ROOT\builds\rust\target`.
-  Never run `cargo build`/`test`/`run` without it. A `repos\...\target` directory,
-  or any build/scratch output under a source tree (including anywhere under
-  `EMULEBB_WORKSPACE_ROOT` or a sibling source checkout), is a policy violation
-  and must be removed. Personal scratch/lab folders go under a dedicated scratch
-  root outside every source checkout, never inside one.
-- `emulebb-rust.exe` has exactly one runnable workspace path:
-  `EMULEBB_WORKSPACE_OUTPUT_ROOT\tools\emulebb-rust\bin\emulebb-rust.exe`.
-  Cargo target directories under `EMULEBB_WORKSPACE_OUTPUT_ROOT\builds\rust\target`
-  are intermediate build cache only. Soak, live-wire, profiling, manual launches,
-  split-tunnel allow-listing, and operator runbooks must never launch
-  `emulebb-rust.exe` from a Cargo target directory. Orchestrated Rust client
-  staging copies the built executable to the canonical tools path and prunes
-  runnable Cargo-target copies to prevent duplicate runtime entrypoints.
+- Infer the active project from the operator's wording and named paths before
+  exploring. Explicit product names always win. When product intent remains
+  genuinely ambiguous, default to `emulebb-rust` and add harness support only
+  when the task needs it.
+- Check `git status --short --branch` only in the active repo and support repos
+  that will be read for current-state decisions or edited.
+- Read the nearest repo-local `AGENTS.md` after this core. Do not sweep
+  `repos`, `workspaces`, or dormant products after the focus is known.
+- Treat historical notes under `docs\history` as provenance, not current
+  authority. Revalidate backlog and release documents against current `main`,
+  dependency pins, and policy before implementation.
 
-## eMule-Family Reference Roles
+## Project Focus
 
-- Stock/community eMule is the primary public-network interoperability target.
-  It remains widely encountered; do not turn that qualitative observation into
-  an unevidenced peer-count or market-share claim. The community baseline and
-  tracing harness are controlled references, not substitutes for live peers.
-- eMuleBB MFC is the eMule broadband edition Windows fork, improved for modern
-  Windows systems and networks. Its active source is the `emulebb-main` worktree;
-  the `0.7.x` release line is in maintenance.
-- `emulebb-rust` is the active experimental Rust-native eD2K/Kad client. Its
-  first public beta is `0.1.0-beta.1`; beta status is not a production-readiness
-  claim. It has a headless daemon and embedded SPA WebUI and targets
-  stock-compatible wire behavior, not a line-by-line MFC implementation or a
-  shared MFC REST contract.
-- aMule is a maintained cross-platform eMule-family client. The upstream
-  `amule-org/amule` checkout at `analysis\amule` is an optional, setup-managed
-  source and offline-fixture reference, not a product worktree or release gate.
-  The separate `emulebb/amule` fork and optional `repos\amule` checkout are also
-  analysis/reference inputs. Their automation may remain active, but they are
-  not promoted as an eMuleBB product or release gate.
+- `emulebb rust`, `rust`, or `emulebb-rust` selects
+  `repos\emulebb-rust`, including its embedded SPA WebUI. Add
+  `repos\emulebb-build-tests` for harness/live/profile work,
+  `repos\emulebb-tooling\docs\products\emulebb-rust` for product docs, or
+  `repos\emulebb-build` for orchestration only when required.
+- `emulebb mfc`, `mfc`, or an MFC source path selects
+  `workspaces\workspace\app\emulebb-main`. `repos\emulebb` is its branch store,
+  not its normal edit location. Add build, harness, or tooling support only when
+  required.
+- `qbittorrentbb`, `qbit`, or `qbbb` selects an explicitly materialized
+  `repos\qbittorrentbb` checkout. It is a paused experiment and is never the
+  ambiguous default.
+- Broad workspace scans are allowed only for an explicitly workspace-wide
+  request, unclear dependency topology, required orchestration, or genuinely
+  cross-product behavior.
 
-## Branch And History Policy
+## Workspace And Environment Boundaries
 
-- `main` is the only integration branch for the app repo.
-- Routine active work happens directly on `main`; short-lived branches are
-  exceptional and, when explicitly requested, use `feature/<topic>`,
-  `fix/<topic>`, or `chore/<topic>`.
-- Release stabilization branches use `release/MAJOR.MINOR.PATCH` and are
-  created from the selected reviewed `main` commit when a release candidate
-  starts. The `0.7.3` train is fixed as `0.7.3-rc.1`, `0.7.3-rc.2`,
-  `0.7.3-rc.3`, then stable `0.7.3`.
-- After stable `0.7.3`, the MFC app is frozen on the `0.7.x` legacy support
-  line. No MFC `0.8.x` implementation lane is active unless an explicit later
-  operator decision reopens it.
-- The `0.7.x` legacy line accepts compatibility-preserving, low-risk bug fixes
-  plus bounded UX, performance, compatibility, build, packaging, documentation,
-  diagnostics, and release improvements. It must not add a new subsystem, broad
-  controller/API capability, protocol expansion, or architectural modernization.
-- Frozen legacy surfaces remain unsupported in `0.7.x`; do not fix them unless
-  the issue affects supported shared infrastructure, security, or app
-  stability.
-- Patch maintenance on `release/0.7.x` publishes stable patch tags such as
-  `emulebb-v0.7.4`. If a separate one-off patch branch is needed, branch from
-  the latest stable tag when `main` has moved on.
-- Do not start normal feature work directly on release branches.
-- Fixes made on release branches must be merged or cherry-picked back to `main`
-  unless the fix is release-packaging metadata that does not apply to `main`.
-  For MFC, `main` remains a maintenance branch, not a feature-development lane.
-- Supporting repos use their setup-pinned branch.
-- `stale/*` branches are retired historical references only. Never use them as
-  active development targets or validation baselines unless a task explicitly
-  calls for historical comparison.
-- `analysis\stale-v0.72a-experimental-clean` is a historical reference checkout
-  only when present.
-- `repos\emulebb` exists to hold history, remotes, and worktrees. Its intended
-  neutral state is detached `HEAD` at `origin/main`.
-- **Granular commits bind every managed repo**, not just the MFC app `main`.
-  This applies to the app worktree and to every repo named in `Policy Scope`
-  (emulebb, emulebb-rust, qBittorrentBB, amutorrent, trackmulebb, amule,
-  goed2k-server, ed2k-server, and the emulebb-build/-tests/-tooling/-pages
-  repos). Each
-  commit on any managed repo must represent exactly one coherent outcome.
-- Stage explicit paths. Never `git add -A`/`git add .` a mixed working tree, and
-  never bundle unrelated or pre-existing edits into a commit. When a working tree
-  mixes concerns, split it into separate commits — one coherent slice each — even
-  when the changes share a file (stage the wanted hunks surgically).
-- Do not push `WIP`, checkpoint, or debug commits to any managed repo.
-- Commit (and push, when pushing) each completed coherent slice before starting
-  unrelated work unless the user explicitly asks to hold local commits.
-- **Never finish dirty.** A task, handoff, or final response must not leave
-  completed local changes uncommitted in any touched repo. This is a mandatory
-  completion gate, not a preference: before reporting done, re-run
-  `git status --short --branch` in every touched repo and commit every completed
-  coherent slice with explicit paths. If multiple concerns are dirty, make
-  multiple granular commits before final response.
-- The only acceptable exceptions to the no-dirty completion gate are explicit
-  user instructions to hold commits, genuinely incomplete work that is called out
-  as still in progress, or unrelated pre-existing user changes that must not be
-  staged. When an exception applies, name the repo and dirty paths in the final
-  response.
-- Feature, bug, refactor, and CI backlog commit messages must include the
-  tracked item id such as `BUG-017`, `FEAT-015`, `REF-021`, or `CI-003`.
-- GitHub-tracked roadmap work should keep the stable local item id and link the
-  GitHub issue when the work closes or materially advances it.
+- Canonical sources live only below `EMULEBB_WORKSPACE_ROOT\repos` and
+  `EMULEBB_WORKSPACE_ROOT\workspaces`. Maintained docs and scripts express
+  paths through `EMULEBB_WORKSPACE_ROOT`, never machine-specific absolute paths.
+- Generated build, test, package, profile, release, and runtime output belongs
+  below `EMULEBB_WORKSPACE_OUTPUT_ROOT`, which must be outside the source
+  workspace. Do not create build output or scratch/lab trees below a repo or
+  elsewhere under `EMULEBB_WORKSPACE_ROOT`.
+- Environment variables are inherited operator state. Agents must not assign,
+  repair, shadow, or guess `EMULEBB_WORKSPACE_ROOT`,
+  `EMULEBB_WORKSPACE_OUTPUT_ROOT`, `CARGO_TARGET_DIR`, or `X_LOCAL_IP` inline.
+  Stop and report a missing or invalid variable when the selected operation
+  requires it.
+- A persisted Python Windows-to-WSL launcher may translate already-valid
+  operator paths for its child and derive a WSL-specific Cargo target below the
+  translated output root. It must not mutate the parent environment, persist
+  duplicate WSL configuration, or invent missing source values, and it must
+  record the translation. Loopback-contained WSL control traffic does not
+  require `X_LOCAL_IP`.
+- `repos\emulebb-build` owns materialization and supported build, validation,
+  test, live-test, packaging, and release orchestration. Interactive operations
+  use `python -m emule_workspace` and its single workspace lock; do not start
+  competing orchestration runs.
 
-## Commit Content And Privacy Hygiene
+Detailed layout, environment-knob, setup, and automation rules are in the
+[Workspace Operations Policy](reference/WORKSPACE-OPERATIONS-POLICY.md).
 
-This is an absolute, non-negotiable rule for every tracked file (source, tests,
-fixtures, docs, comments), every commit message, and every PR/issue description.
+## Common Engineering Rules
 
-- **NEVER commit private data:** real API keys, tokens, passwords, credentials,
-  cookies, private IP/host names, account identifiers, email addresses, or any
-  personal information. Use obvious placeholders.
-- **NEVER commit private or machine-specific filesystem paths:** real Windows
-  user-profile paths, other absolute local paths, operator profile/library roots, or
-  drive-letter test roots. Use relative paths or documented variables
-  (`EMULEBB_WORKSPACE_ROOT`).
-- **NEVER commit real media titles:** actual movie, series, show, episode, album,
-  artist, game, or release names — anywhere, including test fixtures, sample
-  filenames, comments, and commit messages. These are operator-owned runtime inputs
-  only. Use synthetic placeholders (`Sample Title`, `Alpha Beta`, generic tokens).
-- Generic, non-identifying technical release tags are allowed where a test must
-  exercise them (e.g. `ITA`, `HDTV`, `WEBRip`, `XviD`, `x264`, `1080p`, `AC3`,
-  release-group placeholders) because they are scene/encoding metadata, not titles.
-- Scrub copied operator screenshots, live-session logs, and search results before
-  any of their content lands in a tracked file or message. When in doubt, invent a
-  neutral synthetic example that reproduces the same structure.
-
-## Build, Validation, And Test Policy
-
-- Interactive build, validation, test, live-test, and packaging commands must
-  go through `repos\emulebb-build` orchestration.
-- Use `python -m emule_workspace` for workspace build, validation, test,
-  live-test, and packaging orchestration.
-- `repos\emulebb-build` owns a single workspace lock. Never start multiple build,
-  validation, test, or live-test invocations in parallel.
-- Do not run ad hoc direct `MSBuild` commands from an app worktree,
-  `srchybrid`, or `repos\emulebb-build-tests`.
-- Direct `MSBuild` invocation is allowed only inside owned orchestration
-  implementation called through supported `emulebb-build` entrypoints.
-- Every development change should pass scoped validation plus the smallest
-  relevant build and test set for the changed area.
-- Every app code change must rebuild both active x64 app configurations and the
-  diagnostics Release executable before commit:
-  - `python -m emule_workspace build app --variant main --config Debug --platform x64 --build-output-mode ErrorsOnly`
-  - `python -m emule_workspace build app --variant main --config Release --platform x64 --build-output-mode ErrorsOnly`
-  - `python -m emule_workspace build app --variant main --config Release --platform x64 --build-output-mode ErrorsOnly --diagnostics`
-- Docs-only or policy-only changes may use a lighter validation path when they
-  do not alter the build contract.
-- Full matrix validation is expected for build-system, dependency pin,
-  compiler/toolchain policy, and broad integration changes.
-- `check-clean-worktree.py` is a CI, release-prep, or explicit hygiene guard;
-  it is not the default requirement for every in-progress feature branch.
-
-Routine `validate` in `repos\emulebb-build` must run the active static audits
-for build, branch, dependency pin, active documentation path, PowerShell
-boundary, project entrypoint, warning, localization, English-only language, and
-normalization policy.
-
-## Development And Compatibility Defaults
-
-- Default active work is hardening, bug fixing, compatibility-preserving
-  cleanup, and maintainability work with minimal behavioral drift.
-- Minimum drift from eMule community behavior is the default rule when choosing
-  among technically valid implementations.
-- Major behavioral changes are exception work. They must be explicitly
-  justified and tracked as intentional behavior work.
-- Major behavioral changes include broad scheduling or policy rewrites,
-  material default-runtime feature changes, protocol-adjacent behavior changes,
-  and large UI or workflow changes.
-- Put changes at the earliest layer where they are true, then let later layers
-  inherit them.
-- Bug fixes that add state repair, lifetime guards, synchronization guards,
-  bounds checks, fallback paths, or other non-obvious defensive logic must carry
-  concise `WHY:` comments at the fix site. The comment should name the concrete
-  failure mode, the invariant being preserved, and why the repair belongs on
-  that path; avoid restating what the code already says.
+- Prefer compatibility-preserving hardening, fixes, and maintainability work.
+  Protocol or other major behavioral changes require explicit justification and
+  tracking. Put changes at the earliest layer where they are true.
 - Before writing custom parsing, encoding, path, filesystem, crypto, protocol,
-  date/time, compression, or structured-data logic, first look for an existing
-  standard library, platform API, project helper, or pinned dependency.
-- Prefer narrow build-level fixes over source edits in third-party dependency
-  forks when the issue is build policy, warning policy, or orchestration.
-- New reusable code should include succinct Doxygen-style documentation. Short
-  private glue code may stay undocumented when it is truly trivial.
+  date/time, compression, or structured-data logic, look for a standard
+  library, platform API, project helper, or pinned dependency.
+- Non-obvious defensive fixes need a concise `WHY:` comment naming the failure
+  mode, preserved invariant, and why the repair belongs on that path.
+- Reusable code needs succinct API documentation where behavior is not obvious;
+  trivial private glue may remain undocumented.
+- Every managed-repo commit represents one coherent outcome. Stage explicit
+  paths; never use `git add -A` or `git add .` in a mixed tree, bundle unrelated
+  existing edits, or push WIP/debug commits.
+- Routine work stays on the setup-selected integration branch. Short-lived
+  branches are exceptional and, when explicitly requested, use
+  `feature/<topic>`, `fix/<topic>`, or `chore/<topic>`. Never use `stale/*` as
+  an active target without an explicit historical-comparison request.
+- Commit each completed coherent slice before unrelated work. Before final
+  handoff, rerun status in every touched repo and commit completed work unless
+  the operator asked to hold it, it is genuinely incomplete, or unrelated
+  pre-existing changes cannot be staged. Name any exception and dirty path.
+- Feature, bug, refactor, and CI backlog commits include their stable item id.
+  Do not create release tags without separate operator approval after proof.
 
-## Rust Metadata Schema Policy
+## Privacy And Artifact Hygiene
 
-- During the current experimental development phase, until an explicit policy
-  change, every `emulebb-rust` change that touches persisted data must review
-  whether the metadata schema still represents the clean current model. Evolve
-  the schema when that improves the model; do not retain an inferior or legacy
-  shape merely to avoid recreating development profiles.
-- `emulebb-rust` metadata databases must always match the current checked-in
-  Rust metadata schema. Rust product code must not carry legacy schema branches,
-  compatibility reads for retired columns, in-product migrations, schema repair,
-  or profile-reset logic.
-- A metadata schema-version change makes existing end-user profiles
-  incompatible. The only supported end-user path is to create an entirely fresh
-  profile. Rust startup must fail visibly with that instruction and must not
-  delete, move, replace, migrate, or partially reset the incompatible profile.
-- Python schema evolution in `repos\emulebb-build-tests` is internal harness
-  support for persisted test and soak profiles only, to accelerate engineering
-  validation. It is not a supported end-user migration or recovery path. Each
-  bounded harness migration must be run intentionally, create a backup before
-  mutation, and leave the database in the exact current schema.
-- Retired Rust REST, settings, and metadata fields are hard errors. Do not
-  deserialize-and-ignore, alias, remap, or bridge old field names in Rust product
-  code. If a persisted live-soak profile or harness still emits retired fields,
-  fix that outside the Rust product path.
+These rules bind source, tests, fixtures, docs, comments, commits, issues, and
+retained evidence:
 
-## Protocol Compatibility Policy
+- Never commit credentials, cookies, private host/IP values, account data,
+  personal information, or machine-specific absolute paths. Use documented
+  variables and obvious synthetic placeholders.
+- Never commit real movie, series, episode, album, artist, game, or release
+  titles. Use neutral names such as `Sample Title` or `Alpha Beta`. Generic
+  encoding tags such as `WEBRip`, `x264`, or `1080p` are allowed where
+  technically required.
+- Scrub operator screenshots, live logs, searches, and captures before they
+  enter tracked files or messages.
+- Tracked prose, identifiers carrying prose, comments, diagnostics, logs,
+  fixtures, commits, and issue/PR text are English-only. Deliberate localization
+  resources and unchanged upstream text are the only exceptions.
+- Honor repo `.editorconfig` and `.gitattributes`. Active workspace-owned text
+  uses LF; do not leave mixed-EOL edits.
 
-- eMuleBB stays stock-compatible at the eD2K and Kad protocol layer.
-- Preserve stock/community eMule wire semantics, packet and tag shapes, opcode
-  meanings, peer/server interaction rules, Kad state-machine behavior,
-  persistence semantics that affect network identity, and default network
-  behavior.
-- Protocol-adjacent evolution is limited to compatibility-preserving
-  connectivity work such as NAT traversal, safer bind/interface selection, and
-  diagnostics or tracing that do not alter default behavior. (IPv6 is currently
-  **parked/deferred** — the cores stay IPv4-only for now; do not lift the IPv6
-  omission without an explicit decision.)
-- Do not introduce protocol forks, proprietary Kad/eD2K extensions,
-  incompatible opcode or packet changes, default scheduling or routing policy
-  drift, or peer/server behavior that cannot be validated against
-  stock/community semantics.
-- Source Exchange v1 is the explicit exception to the stock-compatibility
-  default: eMuleBB intentionally removed the deprecated live-network SX1
-  advertise, request, response, and version-tracking paths. Source Exchange is
-  SX2-only on the live network; do not treat absent `OP_REQUESTSOURCES` /
-  `OP_ANSWERSOURCES` live-path support as an accidental protocol regression.
-  The durable decision record is [REF-002](history/items/REF-002.md).
-- Protocol-adjacent changes must carry explicit parity evidence through the
-  community baseline, protocol goldens, tracing harness, live-diff, or live
-  packet captures as appropriate.
+## Task Routing
 
-## Baseline And Harness Policy
+After this core and the nearest `AGENTS.md`, read only the matching annexes:
 
-- `baseline/community-0.72a` is the seam-enabled parity and regression
-  baseline. It is test-only and not a product release line.
-- Allowed baseline maintenance is limited to inert test seams, deterministic
-  probes or adapters, narrow logging/tracing needed by regression and parity
-  tests, and buildability fixes required to keep the baseline usable.
-- Community baseline changes must not alter normal runtime behavior,
-  persistence semantics, network behavior, or default control flow.
-- `tracing-harness/community-0.72a` derives from the community baseline and is
-  the only sanctioned place for deterministic parity-harness behavior that
-  intentionally changes runtime decisions.
-- The tracing harness is not a release branch, not a product baseline, and not
-  the default regression baseline.
-- Future release branch backports are narrow and selective: critical
-  buildability fixes, important low-risk bug fixes, or release maintenance for
-  an already published line.
+- Rust product, daemon, embedded WebUI, REST, metadata, Cargo, or protocol work:
+  [Rust Product Policy](products/emulebb-rust/reference/AGENT-POLICY.md).
+- Harness code, baseline/tracing work, local or public live tests, soak/profile
+  operation, VPN/bind behavior, or retained live evidence:
+  [Harness And Live Policy](reference/HARNESS-LIVE-POLICY.md).
+- `emulebb-main`, MFC maintenance, C++ app builds, resources/localization, or
+  MFC releases:
+  [MFC Product Policy](products/emulebb-mfc/reference/AGENT-POLICY.md).
+- Materialization, topology, shared orchestration, packaging, managed forks,
+  workspace docs/policy, normalization, or automation runtime:
+  [Workspace Operations Policy](reference/WORKSPACE-OPERATIONS-POLICY.md).
 
-## Setup And Dependency Authority
+A Rust live/soak task requires both the Rust and harness/live annexes. A tooling
+change that alters generated workspace behavior requires the operations annex.
+Reading an annex does not authorize unrelated repo exploration or edits.
 
-- `repos\emulebb-build` owns materialization, managed app worktrees, repo pinning,
-  and supported app-build orchestration.
-- Python topology in `repos\emulebb-build\emule_workspace` is the source of truth
-  for active dependency branches used by the canonical workspace.
-- `workspaces\workspace\deps.json` is a required generated contract file.
-- `python -m emule_workspace validate` must fail if the generated dependency
-  contract drifts from the current Python topology.
-- Tooling docs and test helpers may consume the generated dependency contract,
-  but must not become an independent topology source.
-- The ED2K server path is exposed as `workspace.repos.ed2k_server`; live E2E
-  helpers must resolve it from the manifest or orchestration layout.
-- Repo-local docs must not redefine dependency pin authority or workspace
-  topology.
+## Validation And Documentation
 
-## Environment Variables
-
-Canonical workspace paths and supported orchestration knobs are expressed
-through environment variables. Agents and CI must rely on the canonical
-variables below and treat override knobs as shell- or CI-boundary diagnosis
-tools, not as committed workspace state. `repos\emulebb-build\README.md`
-(`Environment Overrides`) is the authoritative reference for toolchain override
-knobs, and the owning orchestration module is authoritative for command-scoped
-knobs.
-
-**Hard rule: DO NOT OVERRIDE ALREADY AVAILABLE `EMULEBB_*` ENVIRONMENT
-VARIABLES, EVER.** If the process environment already provides an `EMULEBB_*`
-variable, agents, scripts, tests, and automation must use that exact value.
-Reassigning it, shadowing it with a fallback, or substituting a guessed default
-is a policy violation.
-
-Canonical workspace variables:
-
-- Agents and automation must never override an already-available `EMULEBB_*`
-  environment variable. If a required `EMULEBB_*` variable is present in the
-  process environment, use that exact value. Only set a missing required
-  variable at an explicit shell or CI boundary where the run evidence records
-  why it was absent.
-- `EMULEBB_WORKSPACE_ROOT` (required) is the absolute workspace root;
-  orchestration fails if it is unset. Maintained docs, scripts, and helpers
-  express paths relative to it and must not hardcode machine-specific absolute
-  paths.
-- `EMULEBB_WORKSPACE_OUTPUT_ROOT` (required) is the generated-output root and
-  must resolve outside `EMULEBB_WORKSPACE_ROOT`; orchestration fails if it is
-  unset or nested inside the workspace root. All build, test, release, and
-  runtime output belongs under it, never under `repos\...` or
-  `workspaces\workspace\state`.
-- `EMULEBB_RELEASE_VERSION` selects the release version for build, package, and
-  release orchestration; the active default is pinned in `repos\emulebb-build`.
-- `CARGO_TARGET_DIR` is set by orchestration to
-  `EMULEBB_WORKSPACE_OUTPUT_ROOT\builds\rust\target` for orchestrated Rust
-  builds; do not redirect Rust output back inside a repo tree.
-- Windows is the authoritative operator environment for WSL runs launched from
-  the canonical Windows workspace. A persisted Python launcher may pass an
-  already-valid Windows workspace root and output root to its WSL child after
-  translating them to WSL paths. This is boundary propagation, not an override:
-  the launcher must not mutate the parent environment, persist duplicate WSL
-  configuration, or invent a missing source value, and the run evidence must
-  record the source-to-child translation.
-- Windows and Linux Cargo builds must not share a target directory. A WSL
-  launcher that compiles Rust derives a WSL-specific target below the translated
-  output root (for example `builds/rust/target-wsl`). A WSL runner that only
-  executes an already-staged Linux binary does not require `CARGO_TARGET_DIR`.
-- `X_LOCAL_IP` crosses into WSL only for lanes that expose LAN-bound control or
-  probe traffic. A fully loopback-contained WSL control plane may omit it; its
-  P2P bind is a separate setting and may be selected from the effective WSL
-  route when the lane is explicitly address-bound.
-
-Toolchain override knobs (shell or CI boundary only; leave unset for release and
-CI unless the run evidence records why an override was needed):
-
-- `EMULEBB_VS_PLATFORM_TOOLSET` forces the Visual Studio toolset (default
-  `v143`) for compatibility diagnosis.
-- `EMULEBB_MSYS2_ROOT` points the aMule Windows client build at a nonstandard
-  MSYS2 install.
-- `EMULEBB_CMAKE_GENERATOR` and `EMULEBB_CMAKE_PLATFORM` override the CMake
-  generator and platform for dependency builds.
-
-Command-scoped knobs (owned by, and authoritative in, their orchestration
-module):
-
-- Diagnostics build flags `EMULEBB_ENABLE_STARTUP_DIAGNOSTICS`,
-  `EMULEBB_ENABLE_PACKET_DIAGNOSTICS`,
-  `EMULEBB_ENABLE_UPLOAD_SLOT_DIAGNOSTICS`,
-  `EMULEBB_ENABLE_DOWNLOAD_SLOT_DIAGNOSTICS`,
-  `EMULEBB_ENABLE_BAD_PEER_DIAGNOSTICS`, and `EMULEBB_ENABLE_KAD_DIAGNOSTICS`
-  enable diagnostics instrumentation for the `--diagnostics` app build.
-- Local package install knobs `EMULEBB_PACKAGE_ROOT_NAME`,
-  `EMULEBB_RELEASE_ASSET_ROOT_NAME`, and `EMULEBB_RUNTIME_SCRIPT_PATHS` control
-  package staging and runtime script resolution.
-- Windows VM lab knobs `EMULEBB_VM_TEST_PASSWORD`,
-  `EMULEBB_VM_HIDE_ME_SETTINGS_PATH`, `EMULEBB_OFFLINE_SOFTWARE`,
-  `EMULEBB_OFFLINE_SYSTEM`, and `EMULEBB_OFFLINE_DEFAULT_USER` configure the
-  windowed VM test lab.
-- The live-test harness uses `X_LOCAL_IP` as the LAN bind address (equivalent to
-  `--lan-bind-addr`) for non-P2P control and probe traffic on the operator
-  split-tunnel machine.
-- Documentation builds may set `NO_MKDOCS_2_WARNING` to silence the MkDocs
-  upgrade notice.
-
-## Managed Fork Hygiene
-
-These rules apply uniformly to every managed or retained fork: the
-`emulebb` app worktree, `emulebb-rust`, frozen `amutorrent`, archived
-`trackmulebb`, paused `qbittorrentbb` and `emulebb-libtorrent`, reference
-`amule` and `ed2k-server`, harness-only `goed2k-server`, and the `emulebb-build` /
-`emulebb-build-tests` / `emulebb-tooling` support repos. The
-`p2p-overlord-*` family is a separate product line and is out of scope here.
-Each fork's `AGENTS.md` stays thin and points back to this document; do not
-restate these rules per repo.
-
-- **Build output** lands under `EMULEBB_WORKSPACE_OUTPUT_ROOT` only — never in a
-  source tree or under the source root. Rust sets `CARGO_TARGET_DIR` to
-  `EMULEBB_WORKSPACE_OUTPUT_ROOT\builds\rust\target` (orchestration pins it; set
-  it explicitly for ad-hoc cargo). CMake forks configure an out-of-source build
-  directory under the output root; Go forks build into
-  `EMULEBB_WORKSPACE_OUTPUT_ROOT\tools\<fork>`. The Linux-only Rust
-  `ed2k-server` fork builds through WSL on Windows or native Cargo on Linux and
-  stages its runnable binary under `tools\ed2k-server\bin`.
-- **Authoritative environment variables** (`EMULEBB_WORKSPACE_ROOT`,
-  `EMULEBB_WORKSPACE_OUTPUT_ROOT`) are read, never assigned. Command-scoped knobs
-  stay owned by their orchestration modules.
-- **Public P2P live tests** explicitly select VPN or direct mode as defined in
-  Live Test Network Policy. VPN-mode runs bind through the selected tunnel,
-  use the centralized provider helper for allow-listing/restarts, and never
-  silently fall back to direct mode.
-- **LAN / control / probe traffic** binds through `X_LOCAL_IP` /
-  `--lan-bind-addr`; loopback and wildcard are forbidden for harness paths on the
-  operator split-tunnel machine, though product runtime may still use them.
-- **Tests** reuse and extend the shared Python suite in `emulebb-build-tests`;
-  do not fork a parallel per-client suite.
-- **Server selection** is fixed: `goed2k-server` is the deterministic harness
-  server. `ed2k-server` has build and source-quality gates only as a reference
-  fork; it is not a future harness or production-service commitment.
-
-Enforcement: the `output-root` and `emulebb-env-override` audits in
-`repos\emulebb-tooling\ci\check-workspace-policy.py` (run by
-`python -m emule_workspace validate`), the per-fork `AGENTS.md` pointer check in
-the `doc-paths` audit, and the static `test_live_bind_policy_static.py` gate in
-the shared test suite.
-
-## Network Safety (Selected-Route Integrity) — P0 Invariant
-
-Public-network P2P routing must be explicit for every networked product under
-test. Direct mode intentionally
-uses the host route and makes no anonymity promise. Selecting VPN mode instead
-creates a **P0 fail-closed invariant**: public P2P traffic must not escape over
-the direct route if the tunnel fails.
-
-- **VPN-mode fail-closed:** with the selected tunnel down or unavailable, a
-  VPN-mode product must emit **zero P2P data-plane traffic** — no eD2K TCP, no
-  Kad/eD2K UDP, no BitTorrent peer/DHT egress. The data plane is pinned to the
-  tunnel interface; local control/REST access remains separate. UPnP or port
-  forwarding over the VPN interface remains allowed when supported.
-- **Direct-mode clarity:** direct mode may send P2P traffic over the effective
-  host route only when deliberately selected. Never advertise direct mode as
-  anonymous, and never silently change from VPN mode to direct mode.
-- **Automated VPN leak-test gate:** each product claiming VPN fail-closed
-  behavior must prove tunnel-down yields no off-tunnel data egress. An open
-  leak-test gap blocks that safety claim and release of a VPN-safe mode; it does
-  not prohibit an explicitly labeled direct-mode beta.
-- **Priority boundary:** native Windows VPN integration is no longer a forward
-  development priority. Existing shipped behavior and safety claims still
-  require their recorded evidence; do not infer or advertise an unspecified
-  Docker/Gluetun product from this policy.
-
-## Documentation Policy
-
-- **English is the only language for workspace artifacts, regardless of prompt
-  language.** The operator may prompt in any language, but all code identifiers
-  that carry prose, code comments, documentation, engineering/design notes,
-  README and diagram text, commit messages, PR/issue text, generated diagnostics,
-  runtime log messages, trace/event names and bodies, fixtures, sample data, and
-  persisted logs across every workspace-owned repo must be written in English.
-  No non-English prose may land in a tracked file, generated artifact intended
-  for retention, or git history. Exceptions: intentional product-localization
-  resources (`srchybrid\lang\*.rc` and other deliberate UI translation assets,
-  governed by the Release Localization Policy) and pre-existing upstream text
-  inside vendored or fork files that originated upstream.
-- Workspace-wide development rules belong only in this document.
-- Workspace-wide hooks and policy helpers must be centralized in
-  `repos\emulebb-tooling`.
-- All active Markdown documentation belongs under `repos\emulebb-tooling\docs`.
-- `docs\DOCS-POLICY.md` owns the documentation taxonomy, naming conventions,
-  navigation expectations, and browser-readability rules.
-- `docs\reference\AGENT-CHECKLIST.md` is the repeatable operating checklist
-  for AI agents contributing to the workspace.
-- `docs\reference\DEVELOPMENT-GUIDE.md` is the practical guide for routine
-  docs-first and light-code contribution work.
-- Backlog and planning docs are supporting specs; for GitHub-primary items they
-  are not workflow authority by themselves.
-- Canonical current backlog workflow endpoint is org Project #3
-  (`eMuleBB Roadmap`):
-  `https://github.com/orgs/emulebb/projects/3`. Use the owning product repo for
-  issues, for example `emulebb/emulebb-rust` for Rust client work.
-- The MFC archive endpoints are `https://github.com/emulebb/emulebb/issues` and
-  `https://github.com/orgs/emulebb/projects/2`. They are not the default for new
-  work; the MFC repo accepts only the bounded `0.7.x` maintenance work defined
-  in Branch And History Policy.
-- New externally actionable backlog items should be managed in the local item,
-  owning product repo issue, and the eMuleBB Roadmap board together unless
-  explicitly local-only, historical, or provenance-only.
-- For GitHub-primary backlog work, GitHub owns workflow state, priority,
-  release placement, ownership, discussion, and PR linkage. Local Markdown owns
-  durable engineering specs, acceptance criteria, implementation notes, and
-  evidence.
-- Historical handoff notes live under `docs\history`. Create or refresh a
-  current handoff only when terminating a session or when explicitly asked.
-- Repo-local `AGENTS.md` files should stay thin and repo-specific.
-- Use `EMULEBB_WORKSPACE_ROOT` style references instead of machine-specific
-  absolute paths in active docs.
-- Documentation and normalization requirements are mandatory completion
-  criteria, not optional style guidance.
-
-## File Normalization Policy
-
-- Tracked text-file edits must honor repo-local `.editorconfig` and
-  `.gitattributes` rules.
-- Authors must normalize edited tracked files before commit.
-- Active workspace-owned repos use LF for tracked text files, including Windows
-  command files, resource files, Visual Studio solution/project files, and any
-  explicitly allowed PowerShell files.
-- Do not leave edited tracked files in mixed-EOL state.
-- `repos\emulebb-tooling\helpers\source-normalizer.py` is the canonical
-  normalization helper for workspace-owned repos and app worktrees.
-- The normalizer is not mandatory for small LF-stable edits. Use it when
-  touching files with uncertain encoding or EOL history, after generated or
-  bulk edits, or when checks show normalization drift.
-- `repos\emulebb-tooling\hooks\pre-commit` is the shared workspace hook
-  entrypoint.
-- `python -m emule_workspace sync` configures repo-local `core.hooksPath` to
-  that shared hook directory.
-
-## Script And Automation Runtime Policy
-
-- Repeatable workspace automation should be implemented as persisted Python
-  scripts or modules in the owning repo.
-- Before adding any new Python script or helper, search the owning repo's
-  existing Python scripts/modules for the needed capability. Prefer reusing or
-  extending an existing Python entrypoint or module; add a new Python file only
-  when no existing owner fits.
-- One-off PowerShell commands are acceptable for basic shell operations such as
-  file finding, string search, directory listing, environment inspection, and
-  invoking existing tools.
-- Soak, live-wire, profiling, monitoring, build orchestration, packaging, and
-  persisted support workflows must not be implemented as PowerShell scripts or
-  inline PowerShell programs. Extend the owning Python scripts/modules instead;
-  use PowerShell only as the interactive shell for trivial command invocation and
-  inspection.
-- CMD/batch is even more restricted than PowerShell: do not add `.cmd`/`.bat`
-  launchers or inline batch programs for workspace automation. Operator launch,
-  soak, live-wire, profiling, monitoring, build, and packaging workflows belong
-  in Python.
-- New tracked PowerShell files must not be added in workspace-owned repos or
-  managed app worktrees unless this policy explicitly allows them.
-- `repos\emulebb-build\emule_workspace\release_assets\emulebb\scripts\*.ps1`
-  is allowed for eMuleBB package-owned native Windows setup and integration
-  assets staged into `eMuleBB\scripts`. These scripts are product runtime assets
-  and must stay compatible with Windows PowerShell `5.1`.
-- `repos\emulebb-build\emule_workspace\release_assets\emulebb_automation_examples\automation\*.ps1`
-  is allowed for eMuleBB package-owned REST automation examples staged by the
-  bootstrapper into `examples\automation`. These scripts are example assets and
-  must stay compatible with Windows PowerShell `5.1`.
-- eMuleBB package-owned PowerShell runtime script filenames must use
-  `Verb-Noun.ps1` form, for example `Start-eMuleBB.ps1` or
-  `Register-Prowlarr.ps1`; lowercase kebab-case script names are not allowed.
-- Allowed eMuleBB runtime scripts must declare `#Requires -Version 5.1`.
-- Workspace hygiene checks must fail when tracked PowerShell appears outside
-  the allowed path or when an allowed script omits the required header.
-
-## Active Build Policy
-
-- Active compiler baseline for workspace-owned C++ builds is C++17.
-- Active MSVC toolset baseline is `v143`.
-- `v145` is a forward-compatibility probe target only. It may be used in
-  GitHub automation, local diagnosis, and explicitly labeled experimental
-  artifacts, but it is not the default release toolset.
-- Official RC/stable packages must use the active baseline toolset unless the
-  operator makes a separate release-policy decision after sustained probe,
-  smoke, and package evidence.
-- The active workspace build matrix has no `Win32` target.
-- Supported build architectures are `x64` and `ARM64`.
-- Debug builds in the active matrix must use:
-  - `RuntimeLibrary=MultiThreadedDebug`
-  - `Optimization=Disabled`
-  - `IncrementalLink=true` for executable targets
-  - `DebugInformationFormat=ProgramDatabase`
-- Release builds in the active matrix must use:
-  - `RuntimeLibrary=MultiThreaded`
-  - explicit speed-oriented optimization
-  - `FunctionLevelLinking=true`
-  - `IntrinsicFunctions=true` where the project compiles code directly
-  - `IncrementalLink=false` for executable targets
-  - `LinkTimeCodeGeneration=UseLinkTimeCodeGeneration` for release app links
-- Active compile targets should declare `BufferSecurityCheck=true` and
-  `MultiProcessorCompilation=true`.
-- This policy applies to `emulebb-main`, `emulebb-build-tests`, and maintained
-  dependency projects used by the canonical workspace build.
-- Shared test builds support `x64` and `ARM64`; test execution remains `x64`
-  only.
-- Frozen app branches are not normalization targets for routine build-policy
-  cleanup.
-- Project-specific structural exceptions are allowed for C-only projects,
-  utility wrappers that inherit policy through orchestration, and `cryptopp`
-  toolset enforcement that lives in workspace build orchestration.
-- Toolset overrides must flow through `emulebb-build` orchestration. Do not
-  hardcode a newer Visual Studio generator or `PlatformToolset` in project files
-  when a build-time override can express the probe.
-
-## Live Test Network Policy
-
-- Public network live tests contact the real public eD2K/Kad network, public
-  servers, public peers, public search results, or operator-provided live-wire
-  terms.
-- Local live-stack tests run only against deterministic workspace-owned
-  services and clients.
-- Public network live tests must select their P2P route explicitly. A VPN is
-  optional: VPN-mode profiles bind through the selected VPN interface and use
-  VPN Guard (`VpnGuardMode=Block`); direct-mode profiles bind to the effective
-  host route and use VPN Guard off. Never silently fall back from VPN mode to
-  direct mode. Public profiles enable the main P2P UPnP preference when the
-  selected route supports UPnP; record mapping and reachability evidence.
-- Public network harnesses must not write an interface name into `BindAddr`.
-  VPN-mode profiles use `BindInterface`; intentionally address-bound direct
-  profiles use `BindAddr` and leave `BindInterface` empty.
-- A direct Rust beta test on Windows or WSL must be explicitly selected, use a
-  fresh isolated profile, keep shared roots empty, and download only exact
-  operator-approved safe hashes with expected sizes and SHA-256 digests. REST
-  stays on loopback in WSL; on the canonical Windows split-tunnel machine its
-  control plane uses `X_LOCAL_IP` as required below. The persisted harness must
-  bound traffic and runtime, tear the daemon down, and preserve local evidence.
-- Empty `VpnGuardAllowedPublicIpCidrs` is valid for VPN interface-only guard
-  coverage; configured CIDRs add public-exit validation.
-- Public VPN live campaigns must take VPN Guard live configuration from
-  operator-local inputs so the harness can connect, allow-list, verify, and
-  restore the split-tunnel provider state. LAN-only suites such as local eD2K
-  and local Kad do not need VPN Guard.
-- In the canonical operator split-tunnel environment, live harness control and
-  probe traffic must bind and connect through an explicit LAN address supplied
-  as `--lan-bind-addr` / `X_LOCAL_IP`; do not use loopback or wildcard
-  addresses for those harness paths on that machine.
-- The operator split-tunnel rule is harness- and machine-specific. Product
-  runtime behavior, release package scripts, and user installations must still
-  support deliberate loopback and wildcard bindings where the product contract
-  allows them.
-- `--lan-bind-addr` is the canonical harness parameter for the LAN address used
-  by all non-P2P services and control/probe surfaces. Do not reintroduce
-  ambiguous names such as `--bind-addr`, `--rest-bind-addr`, or
-  `--web-bind-addr`.
-- Public-network P2P profiles that use an interface policy must write the VPN
-  adapter name to `BindInterface` and leave the eMule P2P `BindAddr` empty. Use
-  `BindAddr` for P2P only when the profile is intentionally address-bound
-  rather than interface-bound.
-- In tests and examples, use `192.0.2.x` addresses for LAN bind examples. Use
-  `127.0.0.1` as the canonical loopback spelling where loopback compatibility
-  must be documented or tested; reserve `localhost` for explicit DNS, URL
-  parsing, UNC, or compatibility cases.
-- Local live-stack tests may bind to LAN addresses, local-only virtual
-  adapters, test-specific adapters, or explicit local IP addresses when needed
-  for deterministic behavior.
-- A local live-stack test becomes a public network live test as soon as it
-  contacts public eD2K/Kad infrastructure, imports public bootstrap nodes,
-  performs public searches, or accepts public peer discovery.
-- Live-wire media titles and search terms are operator-owned runtime inputs.
-  Never hardcode real movie, series, or release titles in tracked harness code,
-  docs, or tests.
-
-### Rust-only persisted live profile quickstart
-
-The Rust-only long upload/live soak profile is an operator workflow owned by
-`repos\emulebb-build-tests`. Agents must use the persisted Python entrypoints
-below and must not inspect or re-create launch logic before running the
-describing command. The required environment variables
-`EMULEBB_WORKSPACE_ROOT`, `EMULEBB_WORKSPACE_OUTPUT_ROOT`, `CARGO_TARGET_DIR`,
-and `X_LOCAL_IP` must already be present and valid in the inherited process
-environment; do not set or repair them inline.
-
-```powershell
-cd $env:EMULEBB_WORKSPACE_ROOT\repos\emulebb-build-tests
-python scripts\start-rust-soak-profile.py --describe
-python scripts\start-rust-soak-profile.py --seconds 86400
-python scripts\rust-soak-control.py profile-status --include-vpn-status
-python scripts\rust-soak-control.py stop-profile-launch
-```
-
-`--describe` is the canonical way to discover the effective profile path,
-runtime executable, REST binding, VPN guard config, bootstrap counts, launch
-command, and stop command. Routine monitoring uses `profile-status`; stopping
-uses `stop-profile-launch`. Soak, live-wire, profiling, and monitoring work
-must stay in persisted Python scripts/modules, not `.ps1`, inline Python, or
-ad-hoc shell programs.
-
-## Live Test Storage And Path Capability Policy
-
-- eMuleBB is the only active Windows P2P client under test that is treated as
-  long-path capable.
-- The community tracing harness, community baseline, eMuleAI comparison trees,
-  and aMule are compatibility clients. They must not be used as proof targets
-  for long-path behavior unless their own code has explicitly gained and proven
-  long-path support.
-- Mixed-client local live suites that include aMule or the tracing harness must
-  keep generated profiles, incoming directories, temp directories, and shared
-  libraries on short paths. Prefer throwaway VHD drive-letter roots for those
-  suites.
-- VHD folder-mount or intentionally deep-path storage scenarios are eMuleBB-only
-  tests. They may exercise eMuleBB shared files, startup cache, REST, part-file,
-  and completion behavior, but they must not launch aMule or the tracing harness
-  against those long paths.
-
-## Product And Release Naming
-
-- The full public product name is `eMule broadband edition`.
-- The compact app, UI, API, and protocol-facing mod name is `eMuleBB`.
-- The GitHub organization, code name, and URL slug are `emulebb`.
-- The fixed `0.7.3` release-candidate train is `0.7.3-rc.1`,
-  `0.7.3-rc.2`, and `0.7.3-rc.3`.
-- The first stable release is `0.7.3`.
-- After stable `0.7.3`, the `0.7.x` series is the legacy support version with
-  a frozen public surface.
-- No MFC `0.8.x` modernization line is active. Retained `0.8.x` design notes are
-  historical or parked references unless a later operator decision reopens a
-  narrow MFC lane.
-- Stable patch releases increment the patch number, starting with `0.7.4` after
-  `0.7.3` if a stable hotfix is needed.
-- Future prereleases use the next target version with an explicit prerelease
-  suffix, for example `0.7.5-rc.1` or `0.7.5-beta.1`.
-- Superseded `1.0.0`, `1.0.1`, and `1.1.1` release labels are internal
-  evidence/rehearsal labels only.
-- Release tags use `emulebb-vMAJOR.MINOR.PATCH` for stable releases and
-  `emulebb-vMAJOR.MINOR.PATCH-rc.N` or
-  `emulebb-vMAJOR.MINOR.PATCH-beta.N` for prereleases.
-- Standard release ZIP assets use
-  `emulebb-MAJOR.MINOR.PATCH[-rc.N|-beta.N]-ARCH.zip`; paired diagnostics
-  assets use `emulebb-MAJOR.MINOR.PATCH[-rc.N|-beta.N]-diagnostics-ARCH.zip`.
-- The standard package executable remains `emulebb.exe`; the diagnostics
-  package executable is `emulebb-diagnostics.exe`. Do not put the version
-  number in executable filenames.
-- Runtime diagnostic artifacts written by the app use lowercase kebab-case
-  `emulebb` names. Current log names are `emulebb.log`,
-  `emulebb-verbose.log`, `emulebb-crt-debug.log`,
-  `emulebb-startup-errors.log`, `emulebb-diagnostics-packet.log`,
-  `emulebb-diagnostics-upload-slot.log`,
-  `emulebb-diagnostics-download-slot.log`,
-  `emulebb-diagnostics-bad-peer.log`,
-  `emulebb-diagnostics-kad.log`,
-  `emulebb-diagnostics-diag.log`,
-  `emulebb-diagnostics-startup.trace.json`, `emulebb-performance.csv`,
-  `emulebb-performance.mrtg`, `emulebb-performance-data.mrtg`, and
-  `emulebb-performance-overhead.mrtg`. Rotated logs append
-  `-YYYYMMDD-HHMMSS` before the extension. Dump names use
-  `emulebb-dump-YYYYMMDD-HHMMSS-pid<PID>-mini|full.dmp` and
-  `emulebb-crash-YYYYMMDD-HHMMSS-pid<PID>.dmp`.
-- Runtime artifact renames are strict unless the user explicitly requests
-  compatibility aliases; do not add dual writes or fallback opens for retired
-  filenames by default.
-- Build and test artifact names are strict. New build, certification, release
-  campaign, and test runs use UTC `YYYYMMDDTHHMMSSZ` run ids. Build recaps use
-  `build-result.json`; certification recaps use `certification-result.json`;
-  release-campaign recaps use `release-campaign-run-result.json`. Test suites
-  publish timestamped run folders plus `<suite>\latest` snapshots, and suite
-  leaves use `<suite>-result.json`, `<suite>-result.partial.json`, and
-  `<suite>-summary.json`.
-- Public release documentation must include a version-specific changelog for
-  every actual published release from `0.7.3-rc.2` onward. Release notes explain
-  the release for users; changelogs enumerate material changes in the released
-  artifact set. Changelogs are power-user release documents, not Git logs or
-  commit lists: use a compact one-line-per-item format that describes
-  operationally relevant changes, compatibility boundaries,
-  packaging/controller changes, diagnostics, defaults, risks, and
-  migration/testing notes that users or administrators need to know. Start the
-  active-candidate changelog during RC preparation and finalize it only when the
-  operator gives the release go. The `0.7.3-rc.2` changelog must include a
-  separate RC1-vs-stock/community-baseline section with the RC1 release date.
-- Official release tags are annotated tags on selected reviewed commits only
-  after release proof passes and the operator gives a separate tagging
-  instruction.
-
-## Release Localization Policy
-
-- Every stock eMule resource file under `srchybrid\lang\*.rc` in the active app
-  worktree is a supported eMuleBB release language and part of release gating.
-- `repos\emulebb-tooling\helpers\rc-release-languages.json` is the
-  machine-readable release manifest and must enumerate exactly the current
-  stock resource file set.
-- New release-facing user-visible strings must land in `srchybrid\emule.rc` and
-  every stock language file before release proof.
-- Existing stock/eMule community translation strings must be preserved exactly
-  as labels unless the user explicitly asks for a targeted correction. Do not
-  mass-retranslate legacy labels or rewrite unrelated strings during a
-  release-label pass.
-- New eMuleBB labels must be meaningfully translated for every release
-  language. AI or machine translation is allowed and expected for draft
-  coverage, but it must be treated as a reviewed translation source, not a
-  blind bulk replacement.
-- External or historical translation engines, including the eMuleAI analysis
-  tree, are not authoritative translation sources for release `.rc` files.
-- `helpers\rc-string-table.py` is the canonical helper for release localization
-  coverage, layout, ordering, and quality audits.
-- `helpers\rc-localization-preflight.py` is the canonical aggregate release
-  localization gate. It must run from workspace validation and from pre-commit
-  when staged localization/resource policy files change.
-- `helpers\rc-translate-missing.py` is a convenience helper for adding only
-  missing managed strings while preserving existing translations.
-- `helpers\rc-release-localization-layout.json` owns source-anchored placement
-  rules for managed release labels that must keep identical order across all
-  release language `.rc` files.
-- `helpers\rc-release-localization-ignored-ids.txt` owns the baseline of
-  English `IDS_*` rows that are intentionally not release-gated. New English
-  string IDs must be classified in either the required-ID manifest or this
-  ignored-ID baseline before they are committed.
-- Mechanical localization edits must be generated or audited by the helpers and
-  keyed on resource ids, not fragile surrounding text. A managed label may be
-  inserted or normalized, but unrelated community labels must not change.
-- Parallel localization work is allowed only for draft/review artifacts. Do not
-  run concurrent `.rc` writes.
+- Every development change gets scoped validation plus the smallest relevant
+  build/test set. Broad build-system, dependency, compiler, and integration
+  changes require the relevant full matrix.
+- Product code changes follow their product annex. Policy/docs-only changes may
+  use the documented lighter validation path when they do not alter a build
+  contract.
+- Active Markdown belongs under `repos\emulebb-tooling\docs`.
+  `DOCS-POLICY.md` owns taxonomy, naming, navigation, and readability.
+  Workspace-wide rules belong in this core or its routed annexes; repo-local
+  `AGENTS.md` files remain thin local deltas.
+- The owning product repository issue and org Project #3 (`eMuleBB Roadmap`)
+  are the default workflow authority for externally actionable work. Local
+  Markdown owns durable specifications and evidence. MFC Project #2 and the
+  linked MFC issue set are archive/provenance unless bounded maintenance is
+  explicitly approved.
+- Refresh handoff notes only when ending a session or when explicitly asked.

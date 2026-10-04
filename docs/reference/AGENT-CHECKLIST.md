@@ -1,222 +1,48 @@
 # Agent Checklist
 
-This checklist is the single **start-here** on-ramp and repeatable operating
-path for any agent contributing to the canonical eMuleBB workspace, independent
-of which tool or assistant is used. Read it first, identify your change family in
-[Startup](#startup), then jump to the matching section below and to the
-authoritative section of [Workspace Policy](../WORKSPACE-POLICY.md) for that
-area. It does not replace the policy; when this checklist and policy appear to
-conflict, policy wins.
+This is an optional execution and handoff checklist. Policy authority remains
+the [Workspace Policy](../WORKSPACE-POLICY.md) and the annexes it routes.
 
-## Startup
+## Start
 
-- Read [Workspace Policy](../WORKSPACE-POLICY.md) before making workspace
-  decisions.
-- Read the nearest repo-local `AGENTS.md` only after the central policy.
-- Identify the active project from the operator's wording before broad
-  exploration. `emulebb rust`, `emulebb mfc`, and `qbittorrentbb` select
-  different default scopes under the
-  [Project Focus Contract](../WORKSPACE-POLICY.md#project-focus-contract).
-- Check `git status --short --branch` only in the active project repo and in
-  support repos that will be read for current-state decisions or edited.
-- Identify the change family before editing: docs, backlog, app code, build
-  orchestration, tests, REST/API, localization/resources, release/package,
-  website/org-profile, or handoff.
-- Keep work scoped to one coherent outcome and one coherent commit unless the
-  user explicitly asks for a different flow.
+- Read the core policy once.
+- Resolve the product from explicit wording or paths; if still ambiguous,
+  default to `emulebb-rust`.
+- Read the nearest repo `AGENTS.md` and only the annexes triggered by the task.
+- Check status only in the active repo and support repos needed for current-state
+  decisions or edits.
+- Confirm required inherited environment values without assigning or repairing
+  them.
+- Identify one coherent outcome and its smallest relevant validation surface.
 
-## Workspace Boundaries
+## Route
 
-- Use `EMULEBB_WORKSPACE_ROOT` style paths in maintained docs and scripts.
-- Focus first on the active project. Pull in support repos only when the task
-  needs their source, docs, harnesses, or orchestration state.
-- Edit MFC app source in `workspaces\workspace\app\emulebb-main`.
-- Edit Rust client and embedded SPA WebUI source in `repos\emulebb-rust`.
-- Edit qBittorrentBB source in `repos\qbittorrentbb`.
-- Treat `repos\emulebb` as the branch-store checkout, not the normal edit
-  location.
-- Use [Workspace Repository Map](WORKSPACE-REPO-MAP.md) for repo roles,
-  product-family boundaries, and repeatable validation commands.
-- Prefer `workspaces\workspace\repo-roles.json` when tooling needs
-  machine-readable repository roles instead of parsing Markdown tables.
-- Do not hardcode machine-local absolute paths in active docs or helpers.
-- Use the environment variables defined in
-  [Workspace Policy](../WORKSPACE-POLICY.md#environment-variables); rely on the
-  canonical variables and treat override knobs as shell/CI-boundary diagnosis
-  only.
-- Do not set or repair `EMULEBB_WORKSPACE_ROOT`,
-  `EMULEBB_WORKSPACE_OUTPUT_ROOT`, `CARGO_TARGET_DIR`, or `X_LOCAL_IP` inline.
-  If a live/build/profile task needs one and it is missing or wrong, stop and
-  report the preflight failure.
-- A persisted Python WSL launcher may translate and pass already-valid Windows
-  operator paths to its WSL child as described by Workspace Policy. It must
-  leave the parent environment unchanged and record the translation. Do not
-  require `CARGO_TARGET_DIR` for a run-only staged-binary lane or `X_LOCAL_IP`
-  for a loopback-contained WSL control plane.
-- Do not use `stale/*` branches as active work targets unless the task is
-  explicitly historical analysis.
+| Work | Read next |
+| --- | --- |
+| Rust daemon, WebUI, REST, persistence, protocol, or Cargo | [Rust Product Policy](../products/emulebb-rust/reference/AGENT-POLICY.md) |
+| Harness, baseline/tracing, live network, soak, profile, VPN, or evidence | [Harness And Live Policy](HARNESS-LIVE-POLICY.md) |
+| MFC source, C++ build, resources, localization, or release | [MFC Product Policy](../products/emulebb-mfc/reference/AGENT-POLICY.md) |
+| Topology, build orchestration, packaging, policy/docs, forks, or automation | [Workspace Operations Policy](WORKSPACE-OPERATIONS-POLICY.md) |
 
-## Docs Workflow
+Read multiple annexes only when the task crosses those boundaries. A Rust soak
+needs Rust plus harness/live; routine Rust code does not need MFC or operations.
 
-- Put active Markdown under `repos\emulebb-tooling\docs`.
-- Follow [Documentation Policy](../DOCS-POLICY.md) for naming, taxonomy, and
-  navigation.
-- Use [Development Guide](DEVELOPMENT-GUIDE.md) for routine docs-only and
-  light-code checklists.
-- Update `docs\INDEX.md`, `mkdocs.yml`, and README links when discoverability
-  changes.
-- For docs-only edits, run:
+## Work
 
-```powershell
-cd $env:EMULEBB_WORKSPACE_ROOT\repos\emulebb-tooling
-git diff --check
-python scripts\docs-structure-check.py --fail-on-wide-tables
-$env:NO_MKDOCS_2_WARNING='1'
-python -m mkdocs build --strict
-```
-
-## Backlog And Roadmap
-
-- Use [Backlog Process](BACKLOG-PROCESS.md) for item creation, updates,
-  validation, and closure.
-- Revalidate backlog work against current `main`, current dependency pins, and
-  workspace policy before implementation.
-- When the user asks to add or materially update an externally actionable
-  backlog item, manage the local item, the owning product repo issue, and the
-  `eMuleBB Roadmap` Project #3 (`https://github.com/orgs/emulebb/projects/3`)
-  together unless the item is explicitly local-only, historical, exploratory, or
-  provenance-only.
-- For files with `workflow: github`, treat the linked GitHub issue and public
-  Suite project as workflow authority. Project #2 is the MFC archive board and
-  should only receive explicitly approved frozen-line maintenance items. The
-  Markdown item remains the spec and evidence record.
-- Run `python scripts\docs-item-taxonomy-check.py` after active item, index, or
-  taxonomy changes.
-
-## Code Workflow
-
-- Prefer compatibility-preserving hardening, bug fixes, and maintainability
-  improvements with minimal behavioral drift.
-- For bug fixes with non-obvious defensive logic, add a concise `WHY:` comment
-  at the fix site explaining the failure mode and invariant being preserved.
-- Before writing custom parsing, encoding, filesystem, crypto, protocol,
-  date/time, compression, or structured-data logic, look for an existing
-  standard library, platform API, project helper, or pinned dependency.
-- Keep app source changes in `workspaces\workspace\app\emulebb-main`.
-- Use `repos\emulebb-build` orchestration for build, validation, test, live-test,
-  and packaging.
-- Use `python -m emule_workspace workspace-status` before broad release or
-  product-family work to inspect dirty state across all managed repos.
-- Do not run ad hoc direct `MSBuild` from app worktrees, `srchybrid`, or
-  `repos\emulebb-build-tests`.
-- For app code, run workspace validation plus the required x64 app builds and
-  the diagnostics Release build from `repos\emulebb-build`
-  (`python -m emule_workspace`), exactly as defined in
-  [Workspace Policy](../WORKSPACE-POLICY.md#build-validation-and-test-policy).
-  That section is the single source of those commands.
-
-## Tests And Evidence
-
-- Choose evidence by changed surface; do not use hosted CI as a substitute for
-  local release proof.
-- For REST/API work, keep the human contract, OpenAPI contract, adapter notes,
-  and implementation aligned.
-- For protocol-adjacent work, preserve stock/community eMule wire semantics and
-  collect parity evidence through the appropriate baseline, golden, tracing, or
-  live-diff path.
-- For broad build, dependency, compiler, or toolchain policy changes, use the
-  relevant full validation matrix.
-- Use [Evidence Retention](EVIDENCE-RETENTION.md) before pruning large generated
-  test, diagnostic, profiling, or release-campaign artifacts.
-- Treat root-level progress Markdown files under `workspaces\workspace\state`
-  as disposable scratch notes after durable conclusions move to active docs,
-  history, or GitHub issues.
-
-## Localization And Resources
-
-- Preserve stock/eMule translations. Do not mass-retranslate legacy labels.
-- New release-facing strings must land in `srchybrid\emule.rc` and every stock
-  `srchybrid\lang\*.rc` language before release proof.
-- Use tooling helpers for release localization coverage, layout/order audits,
-  and managed-string updates; do not run concurrent `.rc` writes.
-- Preserve community labels exactly unless making an explicit targeted
-  correction. New labels need reviewed AI-assisted or curated translations for
-  every release language before they are treated as release-ready.
-- Treat external or historical translation engines as inspiration only, not
-  authoritative release sources.
-
-## Live Tests
-
-- Separate public network live tests from local live-stack tests before
-  running them.
-- Select VPN or direct P2P routing explicitly for public tests; VPN is optional,
-  and VPN mode must never silently fall back to direct. Use VPN Guard in VPN
-  mode and disable it only for an explicitly selected direct/guard-off lane.
-- Direct Rust beta smoke on Windows or WSL requires a fresh isolated profile,
-  no shared roots, exact safe hash/size/SHA-256 allowlisting, bounded execution,
-  automatic teardown, and retained evidence. WSL REST stays on loopback;
-  Windows control uses `X_LOCAL_IP` on the canonical split-tunnel machine.
-- Do not write an interface name into `BindAddr`; use `BindInterface` for VPN
-  mode and `BindAddr` only for intentional address-bound direct mode.
-- Enable main P2P UPnP when supported by the selected public route and capture
-  mapping/reachability evidence. Empty VPN Guard CIDRs are valid interface-only
-  VPN coverage; configured CIDRs add public-exit validation.
-- Public VPN live campaigns need operator-local VPN Guard live config for
-  provider connect/allow-list/check/restore hooks. LAN-only local eD2K/Kad
-  lanes do not need VPN Guard.
-- On the canonical split-tunnel test machine, pass the required
-  `--lan-bind-addr` / `X_LOCAL_IP` to every live harness path that binds or
-  probes non-P2P services. Loopback and wildcard binds remain valid product
-  compatibility cases, but not valid operator-machine live harness defaults.
-- Keep LAN and P2P bind concepts separate: `--lan-bind-addr` is for non-P2P
-  services and control/probe traffic; VPN P2P binding is through
-  `BindInterface` unless an address-bound P2P profile is explicitly intended.
-- Do not reintroduce ambiguous live harness names such as `--bind-addr`,
-  `--rest-bind-addr`, or `--web-bind-addr`.
-- Never hardcode real media titles or search terms in tracked harness code,
-  docs, or tests.
-- For the Rust-only persisted live profile, do not inspect harness source first:
-  run the persisted command description from `repos\emulebb-build-tests` and use
-  its reported paths and stop command.
-
-```powershell
-cd $env:EMULEBB_WORKSPACE_ROOT\repos\emulebb-build-tests
-python scripts\start-rust-soak-profile.py --describe
-python scripts\start-rust-soak-profile.py --seconds 86400
-python scripts\rust-soak-control.py profile-status --include-vpn-status
-python scripts\rust-soak-control.py stop-profile-launch
-```
-
-## Release And Package Work
-
-- Use active release docs for release campaign, packaging, provenance, and tag
-  decisions.
-- Do not describe open, deferred, exploratory, or future backlog work as
-  shipped.
-- Do not publish release-package claims before package evidence exists.
-- Do not create release tags unless the operator gives a separate tagging
-  instruction after release proof.
-
-## Website And Public Docs
-
-- Public website, org-profile, README, and rendered docs claims must follow the
-  tooling docs and active release state.
-- Keep product claims bounded to shipped and evidenced behavior.
-- Update public touchpoints only when discoverability or external-facing claims
-  change.
-
-## Commit, Push, And Handoff
-
-- Keep commits granular and behavior-focused.
-- Do not bundle unrelated docs, app code, dependency, release, and website
-  changes.
-- Commit and push each completed coherent slice before starting unrelated work
-  unless the user explicitly asks to hold local commits.
-- Before saying a task is done, run `git status --short --branch` in every
-  touched repo. Do not final-handoff completed work while it is still
-  uncommitted; make granular commits first, or explicitly state that work is
-  incomplete/held by user request.
-- Include tracked item IDs in feature, bug, refactor, and CI backlog commits.
+- Reuse the owning repo's helpers and entrypoints before creating new ones.
+- Keep reads, edits, tests, and reporting inside the chosen product scope.
+- Preserve unrelated existing work and stage explicit paths.
+- Select evidence by the changed surface. Use the owning orchestration rather
+  than ad-hoc build or live launch logic.
 - Record skipped validation with a concrete reason.
-- Refresh a handoff note only when terminating a session or when explicitly
-  asked; handoff notes are not policy authority.
+
+## Finish
+
+- Run scoped validation and `git diff --check` in each edited repo.
+- Review diffs for private data, machine paths, real media titles, non-English
+  prose, generated output, and accidental unrelated edits.
+- Commit each completed coherent slice separately; include a tracked item id
+  when the work belongs to one.
+- Re-run `git status --short --branch` in every touched repo.
+- Do not tag releases without separate approval. Refresh a handoff note only
+  when ending the session or when explicitly asked.

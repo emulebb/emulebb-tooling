@@ -3,6 +3,8 @@
 This section contains product-specific documentation for the frozen emulebb-mfc
 line.
 
+- Agent policy:
+  [`reference/AGENT-POLICY.md`](reference/AGENT-POLICY.md)
 - Frozen OpenAPI contract:
   [`api/REST-API-OPENAPI.yaml`](api/REST-API-OPENAPI.yaml)
 - Legacy OpenAPI alias used by release tooling:

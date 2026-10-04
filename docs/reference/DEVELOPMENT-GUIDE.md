@@ -65,7 +65,7 @@ Do not run ad hoc direct `MSBuild` from the app worktree, `srchybrid`, or
 Every app code change must rebuild both active x64 app configurations and the
 diagnostics Release executable before commit. Those exact build commands are
 defined once in
-[Workspace Policy](../WORKSPACE-POLICY.md#build-validation-and-test-policy); run
+[Workspace Operations Policy](WORKSPACE-OPERATIONS-POLICY.md#build-and-validation); run
 them from `repos\emulebb-build`. Documentation-only changes do not require an app
 build when they do not alter the build contract.
 

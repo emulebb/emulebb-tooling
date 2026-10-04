@@ -19,6 +19,7 @@ non-recursive sharing mode.
 - Forward OpenAPI contract:
   [`api/REST-API-OPENAPI.yaml`](api/REST-API-OPENAPI.yaml)
 - Architecture: [`design/architecture.md`](design/architecture.md)
+- Agent policy: [`reference/AGENT-POLICY.md`](reference/AGENT-POLICY.md)
 - Code quality and test placement:
   [`reference/CODE-QUALITY.md`](reference/CODE-QUALITY.md)
 

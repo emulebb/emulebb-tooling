@@ -14,7 +14,7 @@ but it is not the forward parity target.
 
 For the routine Rust-only persisted upload/live profile, do not use this runbook
 as a separate command source. Use the
-[Workspace Policy Rust-only persisted live profile quickstart](../../../WORKSPACE-POLICY.md#rust-only-persisted-live-profile-quickstart):
+[Harness And Live Policy persisted Rust soak workflow](../../../reference/HARNESS-LIVE-POLICY.md#persisted-rust-soak-workflow):
 run `scripts\start-rust-soak-profile.py --describe` first, then use the reported
 launch, REST/OpenAPI conformance, status, and stop paths. This file covers the
 broader beta release-gate soak context.

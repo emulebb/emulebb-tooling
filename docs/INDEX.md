@@ -79,11 +79,17 @@ workspace and release controls instead of the product manual:
 
 | Role | Start Here |
 |---|---|
-| Contributor or AI agent | [Workspace Policy](WORKSPACE-POLICY.md) and [Agent Checklist](reference/AGENT-CHECKLIST.md) |
+| Contributor or AI agent | [Workspace Policy](WORKSPACE-POLICY.md), then only its task-routed annexes; use the [Agent Checklist](reference/AGENT-CHECKLIST.md) when useful |
 | Routine developer | [Development Guide](reference/DEVELOPMENT-GUIDE.md) |
 | Backlog owner | [Active Backlog](active/INDEX.md) and [Backlog Process](reference/BACKLOG-PROCESS.md) |
 | Release operator | [0.7.3 Release Train Dashboard](active/RELEASE-0.7.3.md) |
 | REST/controller reviewer | [REST Contract](rest/REST-API-CONTRACT.md) and [Controller Surface Matrix](active/CONTROLLER-SURFACE-MATRIX.md) |
+
+The routed policy annexes are
+[Workspace Operations](reference/WORKSPACE-OPERATIONS-POLICY.md),
+[Harness And Live](reference/HARNESS-LIVE-POLICY.md),
+[emulebb-rust](products/emulebb-rust/reference/AGENT-POLICY.md), and
+[emulebb-mfc](products/emulebb-mfc/reference/AGENT-POLICY.md).
 
 Release operators should also use the
 [Execution Plan](active/plans/RELEASE-0.7.3-EXECUTION-PLAN.md) and

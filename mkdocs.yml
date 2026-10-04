@@ -60,8 +60,10 @@ nav:
       - Roadmap Board (GitHub): https://github.com/orgs/emulebb/projects/3
   - Product Sections:
       - emulebb-mfc: products/emulebb-mfc/README.md
+      - emulebb-mfc Agent Policy: products/emulebb-mfc/reference/AGENT-POLICY.md
       - emulebb-mfc Frozen OpenAPI: products/emulebb-mfc/api/REST-API-OPENAPI.yaml
       - emulebb-rust: products/emulebb-rust/README.md
+      - emulebb-rust Agent Policy: products/emulebb-rust/reference/AGENT-POLICY.md
       - emulebb-rust Active Backlog: products/emulebb-rust/active/INDEX.md
       - emulebb-rust Release Scope: products/emulebb-rust/RELEASE-SCOPE.md
       - emulebb-rust Forward OpenAPI: products/emulebb-rust/api/REST-API-OPENAPI.yaml
@@ -97,6 +99,7 @@ nav:
       - 0.1.0-beta.2 Changelog: products/emulebb-rust/RELEASE-0.1.0-beta.2-CHANGELOG.md
       - 0.1.0-beta.1 Release Evidence Checklist: products/emulebb-rust/active/RELEASE-0.1.0-beta.1-CHECKLIST.md
       - Headless Large-Library NOW Roadmap: products/emulebb-rust/active/RUST-HEADLESS-LARGE-LIBRARY-NOW-ROADMAP.md
+      - Large-Library I/O Portability Review: products/emulebb-rust/active/RUST-LARGE-LIBRARY-IO-PORTABILITY-REVIEW.md
       - Code Quality And Test Placement: products/emulebb-rust/reference/CODE-QUALITY.md
       - Running On macOS And Linux: reference/GUIDE-CROSS-PLATFORM.md
       - REST API — Forward OpenAPI: products/emulebb-rust/api/REST-API-OPENAPI.yaml
@@ -144,6 +147,8 @@ nav:
       - Future Roadmap (emulebb-mfc): active/FUTURE-ROADMAP.md
   - Developer And Workspace:
       - Workspace Policy: WORKSPACE-POLICY.md
+      - Workspace Operations Policy: reference/WORKSPACE-OPERATIONS-POLICY.md
+      - Harness And Live Policy: reference/HARNESS-LIVE-POLICY.md
       - Documentation Policy: DOCS-POLICY.md
       - Agent Checklist: reference/AGENT-CHECKLIST.md
       - Backlog Process: reference/BACKLOG-PROCESS.md
