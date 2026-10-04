@@ -335,18 +335,24 @@ normalization policy.
 
 ## Rust Metadata Schema Policy
 
+- During the current experimental development phase, until an explicit policy
+  change, every `emulebb-rust` change that touches persisted data must review
+  whether the metadata schema still represents the clean current model. Evolve
+  the schema when that improves the model; do not retain an inferior or legacy
+  shape merely to avoid recreating development profiles.
 - `emulebb-rust` metadata databases must always match the current checked-in
-  Rust metadata schema. The Rust product code must not carry legacy schema
-  branches, compatibility reads for retired columns, or in-product schema
-  migrations.
-- When a persistent operator soak profile needs to be preserved across a Rust
-  metadata schema bump, repair that operator-owned database outside the Rust
-  product with an explicit, bounded Python migration in `repos\emulebb-build-tests`.
-  The migration must be run intentionally against the soak profile, create a
-  backup before mutation, and leave the database in the exact current schema.
-- Do not make Rust startup silently accept stale schema versions or extra legacy
-  fields. A stale profile that has not been externally migrated should fail
-  visibly during preflight/startup.
+  Rust metadata schema. Rust product code must not carry legacy schema branches,
+  compatibility reads for retired columns, in-product migrations, schema repair,
+  or profile-reset logic.
+- A metadata schema-version change makes existing end-user profiles
+  incompatible. The only supported end-user path is to create an entirely fresh
+  profile. Rust startup must fail visibly with that instruction and must not
+  delete, move, replace, migrate, or partially reset the incompatible profile.
+- Python schema evolution in `repos\emulebb-build-tests` is internal harness
+  support for persisted test and soak profiles only, to accelerate engineering
+  validation. It is not a supported end-user migration or recovery path. Each
+  bounded harness migration must be run intentionally, create a backup before
+  mutation, and leave the database in the exact current schema.
 - Retired Rust REST, settings, and metadata fields are hard errors. Do not
   deserialize-and-ignore, alias, remap, or bridge old field names in Rust product
   code. If a persisted live-soak profile or harness still emits retired fields,
