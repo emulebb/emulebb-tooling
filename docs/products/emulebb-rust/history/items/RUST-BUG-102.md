@@ -3,7 +3,7 @@ id: RUST-BUG-102
 workflow: github
 github_issue: https://github.com/emulebb/emulebb-rust/issues/23
 title: Require a stock-compatible final completion rehash
-status: OPEN
+status: DONE
 priority: Major
 category: bug
 labels: [rust, ed2k, transfer, integrity, aich, parity]
@@ -24,7 +24,7 @@ and records completion, but delivery trusts the persisted completed manifest.
 Stock eMule and current aMule both retain a distinct final hashing/completing
 transition before the file becomes deliverable.
 
-## Current State
+## Original State
 
 - `crates/emulebb-ed2k/src/ed2k_transfer/piece_store.rs` verifies a completed
   part by reading it back, then marks the part complete. It also exposes a
@@ -81,26 +81,56 @@ rather than local persistence damage.
 
 ## Acceptance Criteria
 
-- [ ] Normal completion automatically enters a visible completing/hashing state
+- [x] Normal completion automatically enters a visible completing/hashing state
       and performs a full assembled-file ED2K rehash.
-- [ ] Delivery is impossible until the final identity check succeeds.
-- [ ] Mutating a previously verified part before the last part arrives causes
+- [x] Delivery is impossible until the final identity check succeeds.
+- [x] Mutating a previously verified part before the last part arrives causes
       completion to fail and the damaged range to become incomplete again.
-- [ ] Restarting with every part marked complete but damaged bytes on disk
+- [x] Restarting with every part marked complete but damaged bytes on disk
       performs the same check before delivery.
-- [ ] A clean restart in the pending-delivery state completes without
+- [x] A clean restart in the pending-delivery state completes without
       redownloading valid data.
-- [ ] AICH-assisted localization/recovery, when available, retains the MD4 file
+- [x] AICH-assisted localization/recovery, when available, retains the MD4 file
       hash as the final acceptance authority.
 
-## Validation
+## Resolution
 
-- Focused state-machine and piece-store tests for clean completion, last-part
-  completion, crash/restart, and final-hash failure.
-- Mutation tests that alter a verified early part immediately before completion
-  and between process shutdown and restart.
-- Local stock eMule/current-aMule transfer witnesses confirming the Rust client
-  exposes only the rehashed file and can recover the corrupted part.
+- Added schema v24 with a persisted `final_rehash_pending` barrier and a visible
+  `completing` state between all-parts-present and delivery.
+- Routed normal completion, startup recovery, and manual recheck through one
+  whole-file ED2K MD4 authority. Delivery now rejects pending transfers.
+- On mismatch, authoritative part MD4 hashes demote only corrupt pieces and
+  queue AICH-assisted repair metadata; failures that cannot be localized fail
+  closed instead of publishing unverified bytes.
+- Added a backup-first v23-to-v24 migration for completed but undelivered rows.
+- Added source-bound direct NAT-PMP v0 fallback and finite-lease MiniUPnPc retry
+  while exercising the completion change through native and VPN live lanes.
+
+## Evidence
+
+- Rust commits `9edda9af` and `94f1ebdc`.
+- Full Rust workspace regression: all unit, integration, and doc tests passed.
+- Harness regression: `2122 passed, 6 deselected`.
+- Final Windows Release/diagnostics build (zero warnings):
+  `EMULEBB_WORKSPACE_OUTPUT_ROOT\logs\builds\20261004T101037Z-build-clients`.
+- Final Linux package boundary evidence:
+  `EMULEBB_WORKSPACE_OUTPUT_ROOT\reports\rust-linux-package-launch\20261004T101330Z\wsl-boundary.json`.
+- Final OCI package report:
+  `EMULEBB_WORKSPACE_OUTPUT_ROOT\reports\rust-docker-package\20261004T101610Z\report.json`.
+- Windows NAT-disabled smoke:
+  `EMULEBB_WORKSPACE_OUTPUT_ROOT\reports\rust-windows-direct-smoke\20261004T101626Z\report.json`.
+- Windows UPnP smoke (MiniUPnPc, two mappings, High ID):
+  `EMULEBB_WORKSPACE_OUTPUT_ROOT\reports\rust-windows-direct-smoke\20261004T101729Z\report.json`.
+- Windows exact 2,785 MB completion and delivered-file SHA-256 proof:
+  `EMULEBB_WORKSPACE_OUTPUT_ROOT\reports\rust-windows-direct-smoke\20261004T080433Z\report.json`.
+- WSL/OpenVPN network and NAT-PMP proof:
+  `EMULEBB_WORKSPACE_OUTPUT_ROOT\reports\rust-vpn-live\20261004T094800Z-openvpn-network.json`.
+- Docker/Gluetun network and NAT-PMP proof:
+  `EMULEBB_WORKSPACE_OUTPUT_ROOT\reports\rust-vpn-live\20261004T095200Z-gluetun-network.json`.
+- The VPN provider returned UPnP IGD error 501 in both VPN lanes; the existing
+  helper's `upnpc` control failed against the same endpoint while its NAT-PMP
+  mappings remained healthy. This is retained as an external capability result,
+  not reported as a successful VPN UPnP proof.
 
 ## Notes
 
