@@ -3,7 +3,7 @@ id: RUST-BUG-104
 workflow: github
 github_issue: https://github.com/emulebb/emulebb-rust/issues/25
 title: Preserve Kad AICH publisher provenance and result consensus
-status: OPEN
+status: DONE
 priority: Major
 category: bug
 labels: [rust, kad, aich, integrity, parity]
@@ -79,18 +79,47 @@ root before transfer.
 
 ## Acceptance Criteria
 
-- [ ] Keyword storage maintains publisher-to-optional-root state across add,
+- [x] Keyword storage maintains publisher-to-optional-root state across add,
       refresh, root change, removal, and expiry.
-- [ ] Aggregate result encoding is deterministic, bounded, and derived only
+- [x] Aggregate result encoding is deterministic, bounded, and derived only
       from current publishers.
-- [ ] A valid result from a supported Kad version reaches the internal search
+- [x] A valid result from a supported Kad version reaches the internal search
       result as one provenance-bearing AICH candidate.
-- [ ] Conflicting publishers remain distinct candidates; no last-writer-wins or
+- [x] Conflicting publishers remain distinct candidates; no last-writer-wins or
       count-to-votes conversion occurs.
-- [ ] Malformed and pre-version-gate AICH tags are ignored safely and covered by
+- [x] Malformed and pre-version-gate AICH tags are ignored safely and covered by
       tests.
-- [ ] The existing AICH trust layer can accept multiple independent search or
+- [x] The existing AICH trust layer can accept multiple independent search or
       source observations without double-counting a responder.
+
+## Implementation
+
+- Keyword storage now keeps a live, non-persisted, 100-publisher ledger per
+  file entry. Each publisher owns one optional root and expiry timestamp;
+  refresh, omission, malformed replacement, expiry, and deterministic eviction
+  update the aggregate without retaining an unprovenanced raw AICH tag.
+- Keyword responses derive `PUBLISHINFO` and at most eleven AICH result records
+  from current publishers, ordered by descending popularity and root bytes.
+- Search traversal attaches the queried contact's socket and advertised Kad
+  version to each response entry. The decoder accepts plausible single-root
+  candidates only from version 9 or newer and treats the responder as exactly
+  one observation.
+- Core search state keeps at most 64 live responder/root observations per
+  result, does not persist them, and replays only accepted-result observations
+  into the transfer trust accumulator when the user starts a download.
+- The AICH trust accumulator assigns each masked signer to its first root, and
+  the batch recording path promotes at most once under the existing 10-signer,
+  92-percent trust threshold.
+
+## Evidence
+
+- Implementation commit: `emulebb/emulebb-rust@92ea4fdc`.
+- `python tools/rust_quality_gate.py policy`
+- `python tools/rust_quality_gate.py fmt`
+- `python tools/rust_quality_gate.py clippy`
+- `python tools/rust_quality_gate.py ci-test`
+- The isolated Kad swarm covers matching and conflicting stock-compatible AICH
+  publish shapes over the real UDP traversal/response path.
 
 ## Validation
 

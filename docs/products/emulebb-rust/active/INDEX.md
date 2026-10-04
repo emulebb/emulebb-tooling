@@ -140,7 +140,7 @@ below as historical links.
 |----|----------|--------|-------|
 | [RUST-BUG-102](../history/items/RUST-BUG-102.md) | Major | DONE | Require a stock-compatible final completion rehash |
 | [RUST-BUG-103](../history/items/RUST-BUG-103.md) | Major | DONE | Classify ED2K server failures before dead-server accounting |
-| [RUST-BUG-104](items/RUST-BUG-104.md) | Major | OPEN | Preserve Kad AICH publisher provenance and result consensus |
+| [RUST-BUG-104](../history/items/RUST-BUG-104.md) | Major | DONE | Preserve Kad AICH publisher provenance and result consensus |
 | [RUST-BUG-105](items/RUST-BUG-105.md) | Major | OPEN | Disposition stock source-acquisition default drift |
 | [RUST-BUG-107](items/RUST-BUG-107.md) | Major | OPEN | Preserve lossless shared-library path identity across platforms |
 
