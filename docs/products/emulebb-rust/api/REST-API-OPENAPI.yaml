@@ -4009,6 +4009,21 @@ components:
         downloadLimitBytesPerSec:
           type: integer
           minimum: 0
+        minFreeConfigSpaceBytes:
+          type: integer
+          minimum: 1073741824
+          maximum: 5497558138880
+          description: Raw-byte free-space floor for the profile/config volume; MFC default is 1 GiB.
+        minFreeTransferSpaceBytes:
+          type: integer
+          minimum: 5368709120
+          maximum: 5497558138880
+          description: Raw-byte free-space floor for incomplete-transfer volumes; MFC default is 5 GiB.
+        minFreeIncomingSpaceBytes:
+          type: integer
+          minimum: 5368709120
+          maximum: 5497558138880
+          description: Raw-byte free-space floor for incoming/destination volumes; MFC default is 5 GiB.
         enableUdpReask:
           type: boolean
         publishEmuleRustIdentity:
@@ -4094,6 +4109,21 @@ components:
         downloadLimitBytesPerSec:
           type: integer
           minimum: 0
+        minFreeConfigSpaceBytes:
+          type: integer
+          minimum: 1073741824
+          maximum: 5497558138880
+          description: Raw-byte free-space floor for the profile/config volume; MFC default is 1 GiB.
+        minFreeTransferSpaceBytes:
+          type: integer
+          minimum: 5368709120
+          maximum: 5497558138880
+          description: Raw-byte free-space floor for incomplete-transfer volumes; MFC default is 5 GiB.
+        minFreeIncomingSpaceBytes:
+          type: integer
+          minimum: 5368709120
+          maximum: 5497558138880
+          description: Raw-byte free-space floor for incoming/destination volumes; MFC default is 5 GiB.
         enableUdpReask:
           type: boolean
         publishEmuleRustIdentity:
