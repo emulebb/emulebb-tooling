@@ -102,6 +102,11 @@ Detailed layout, environment-knob, setup, and automation rules are in the
   handoff, rerun status in every touched repo and commit completed work unless
   the operator asked to hold it, it is genuinely incomplete, or unrelated
   pre-existing changes cannot be staged. Name any exception and dirty path.
+- Push each validated coherent commit to its configured upstream before
+  beginning unrelated work or final handoff. Leave completed commits local-only
+  only when the operator explicitly asks to hold them or the push is blocked;
+  report any blocked push. Never force-push or rewrite published history without
+  explicit operator approval.
 - Feature, bug, refactor, and CI backlog commits include their stable item id.
   Do not create release tags without separate operator approval after proof.
 
