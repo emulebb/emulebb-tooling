@@ -147,6 +147,12 @@ below as historical links.
 | [RUST-BUG-105](../history/items/RUST-BUG-105.md) | Major | DONE | Disposition stock source-acquisition default drift |
 | [RUST-BUG-107](items/RUST-BUG-107.md) | Major | OPEN | Preserve lossless shared-library path identity across platforms |
 
+### Runtime reliability defects
+
+| ID | Priority | Status | Title |
+|----|----------|--------|-------|
+| [RUST-BUG-108](../history/items/RUST-BUG-108.md) | Major | DONE | Harden regular-build logging and retention |
+
 ### Beta follow-up refactors and evidence
 
 | ID | Priority | Status | Title |
