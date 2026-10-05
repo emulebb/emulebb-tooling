@@ -29,10 +29,13 @@ evidence is archived in [RUST-FEAT-033](../history/items/RUST-FEAT-033.md).
 [RUST-BUG-101](../history/items/RUST-BUG-101.md), and the repository remains the
 active experimental development lane. It is not production-ready; changes
 follow the active backlog and retain evidence appropriate to their risk.
-**Protocol policy:** IPv4-only, stock eMule wire-compatible within the frozen
-six-row [beta parity matrix](../RELEASE-SCOPE.md#frozen-beta-parity-matrix).
-Five approved omissions and the sole deferred connection-pacing behavior remain
-in `EMULEBB_WORKSPACE_ROOT\repos\emulebb-rust\policy\rust-client-omissions.toml`;
+**Behavior authority:** IPv4-only stock/community eMule wire behavior within the
+frozen [beta parity matrix](../RELEASE-SCOPE.md#frozen-beta-parity-matrix), with
+maintained eMuleBB MFC owning non-wire operational limits and disk/network I/O
+outcomes. Rust implements those outcomes through native async architecture, and
+stock wire behavior wins any conflict. Five approved omissions and the sole
+deferred connection-pacing behavior remain in
+`EMULEBB_WORKSPACE_ROOT\repos\emulebb-rust\policy\rust-client-omissions.toml`;
 the registry is frozen for beta unless an explicit release-scope decision
 reopens it.
 **Design sketches:** [`architecture`](../design/architecture.md).
@@ -141,7 +144,7 @@ below as historical links.
 | [RUST-BUG-102](../history/items/RUST-BUG-102.md) | Major | DONE | Require a stock-compatible final completion rehash |
 | [RUST-BUG-103](../history/items/RUST-BUG-103.md) | Major | DONE | Classify ED2K server failures before dead-server accounting |
 | [RUST-BUG-104](../history/items/RUST-BUG-104.md) | Major | DONE | Preserve Kad AICH publisher provenance and result consensus |
-| [RUST-BUG-105](items/RUST-BUG-105.md) | Major | OPEN | Disposition stock source-acquisition default drift |
+| [RUST-BUG-105](../history/items/RUST-BUG-105.md) | Major | DONE | Disposition stock source-acquisition default drift |
 | [RUST-BUG-107](items/RUST-BUG-107.md) | Major | OPEN | Preserve lossless shared-library path identity across platforms |
 
 ### Beta follow-up refactors and evidence

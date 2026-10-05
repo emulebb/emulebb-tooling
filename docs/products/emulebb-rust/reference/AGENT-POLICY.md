@@ -12,10 +12,15 @@ metadata, Cargo, or Rust protocol work.
 - The Rust headless daemon and embedded SPA WebUI are the active client and UI.
   Slint/native UI is a frozen experiment unless the operator explicitly asks to
   remove or revive it.
-- Preserve stock/community eD2K and Kad wire behavior, packet/tag shapes,
-  opcodes, peer/server rules, network-identity persistence, and default network
-  behavior. Rust REST, settings, scheduling, diagnostics, and UI are clean
-  Rust-native async-daemon concepts, not MFC or legacy GUI mirrors.
+- Preserve stock/community eMule authority for eD2K and Kad wire behavior,
+  packet/tag shapes, opcodes, peer/server/Kad interoperability state machines,
+  advertised capabilities, and network identity.
+- Non-wire operational defaults and ceilings, plus disk and network I/O
+  outcomes, follow the maintained eMuleBB MFC client. Implement those outcomes
+  through clean Rust-native async architecture, not MFC REST, UI, settings,
+  controller, or thread mirrors. If the authorities conflict, stock wire
+  behavior wins; intentional operational or I/O divergence from eMuleBB MFC
+  requires an explicit tracked disposition.
 - Broadband-oriented async I/O is the baseline, not a compatibility toggle.
   IPv6 remains parked and the protocol cores stay IPv4-only. Source Exchange is
   intentionally SX2-only; absent `OP_REQUESTSOURCES` and `OP_ANSWERSOURCES`
@@ -24,7 +29,8 @@ metadata, Cargo, or Rust protocol work.
   goldens, community baseline, tracing, live-diff, or packet captures.
 
 `policy\rust-client.toml` and its omission registry are the machine-readable
-authority for platform, protocol, long-path, and reviewed-omission policy.
+authority for platform, behavior authority, protocol, long-path, and
+reviewed-omission policy.
 
 ## API And UI Contract
 

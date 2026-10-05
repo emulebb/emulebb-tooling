@@ -8,13 +8,13 @@ the complete current stock-vs-Rust difference set; the matrix below mirrors its
 approved omissions and sole deferred behavior for this beta.
 
 `emulebb-rust` is a **headless eD2K/Kad client** with an embedded SPA WebUI,
-driven over its Rust-forward `/api/v1` REST contract. It targets eD2K/Kad
-protocol-operational parity: the wire behavior, advertised capabilities, state
-machines, persistence needed for network correctness, and safety properties
-required to operate cleanly with stock-compatible peers, servers, and Kad nodes.
-It is not an MFC, stock GUI, legacy WebServer, or legacy preference mirror. Local
-controller shape, REST names, UI behavior, scheduling, diagnostics, and
-non-protocol settings must evolve as clean Rust-native async daemon surfaces.
+driven over its Rust-forward `/api/v1` REST contract. Stock/community eMule owns
+wire behavior, advertised capabilities, interoperability state machines, and
+persistence needed for network correctness. Non-wire operational defaults and
+ceilings, plus disk and network I/O outcomes, follow the maintained eMuleBB MFC
+client. Rust implements those outcomes through clean Rust-native async daemon
+architecture; it does not mirror the MFC GUI, REST, settings, controllers, or
+threads. Stock wire behavior wins if the authorities conflict.
 The active registry is the beta gap board: implemented fixes live in audit
 history, while current defers and approved drops remain in
 `policy/rust-client-omissions.toml`.
@@ -54,7 +54,9 @@ history, while current defers and approved drops remain in
   evidence move in the same change. Do not keep no-op legacy settings fields,
   legacy route names, or compatibility aliases for non-existent external Rust
   consumers. The contract is explicitly unstable between beta releases.
-- **Runtime IO:** broadband-oriented async IO is the daemon baseline, not a
+- **Runtime IO and limits:** non-wire operational defaults and ceilings, plus
+  disk and network I/O outcomes, follow maintained eMuleBB MFC. They are
+  implemented through Rust-native async I/O as the daemon baseline, not as a
   compatibility preference or runtime toggle.
 - **Persistence:** single SQLite store (the `known.met` / `clients.met` /
   `server.met` / `preferences.dat` equivalent) — known files, peer credits,
