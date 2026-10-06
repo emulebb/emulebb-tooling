@@ -91,6 +91,9 @@ Detailed layout, environment-knob, setup, and automation rules are in the
   mode, preserved invariant, and why the repair belongs on that path.
 - Reusable code needs succinct API documentation where behavior is not obvious;
   trivial private glue may remain undocumented.
+- Start each work chunk from a clean worktree in every repository that the
+  chunk will modify. If a required repository already has uncommitted files,
+  stop and report them instead of layering new work onto the dirty tree.
 - Every managed-repo commit represents one coherent outcome. Stage explicit
   paths; never use `git add -A` or `git add .` in a mixed tree, bundle unrelated
   existing edits, or push WIP/debug commits.
@@ -98,15 +101,19 @@ Detailed layout, environment-knob, setup, and automation rules are in the
   branches are exceptional and, when explicitly requested, use
   `feature/<topic>`, `fix/<topic>`, or `chore/<topic>`. Never use `stale/*` as
   an active target without an explicit historical-comparison request.
-- Commit each completed coherent slice before unrelated work. Before final
-  handoff, rerun status in every touched repo and commit completed work unless
-  the operator asked to hold it, it is genuinely incomplete, or unrelated
-  pre-existing changes cannot be staged. Name any exception and dirty path.
-- Push each validated coherent commit to its configured upstream before
-  beginning unrelated work or final handoff. Leave completed commits local-only
-  only when the operator explicitly asks to hold them or the push is blocked;
-  report any blocked push. Never force-push or rewrite published history without
-  explicit operator approval.
+- Treat the end of every coherent work chunk as a mandatory commit boundary.
+  During complex work, also create granular commits at independently
+  reviewable, validated intermediate checkpoints; do not accumulate the whole
+  task into one final commit.
+- Never leave agent-created tracked or untracked files uncommitted when moving
+  to another chunk or ending a turn. Finish and commit the chunk, or remove
+  only the agent's own incomplete files and edits before stopping. Rerun
+  `git status --short --branch` in every touched repository and require a clean
+  worktree before handoff.
+- Push each validated granular commit to its configured upstream before
+  beginning the next chunk and before final handoff. If a push is blocked, stop
+  before starting more work and report the committed local SHA. Never
+  force-push or rewrite published history without explicit operator approval.
 - Feature, bug, refactor, and CI backlog commits include their stable item id.
   Do not create release tags without separate operator approval after proof.
 
