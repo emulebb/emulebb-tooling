@@ -6,10 +6,10 @@ forward REST contract.
 
 Active release candidate:
 
-- [`0.1.0-beta.1` release notes](RELEASE-0.1.0-beta.1-NOTES.md)
-- [`0.1.0-beta.1` changelog](RELEASE-0.1.0-beta.1-CHANGELOG.md)
-- [`0.1.0-beta.1` release scope](RELEASE-SCOPE.md)
-- [`0.1.0-beta.1` release evidence checklist](active/RELEASE-0.1.0-beta.1-CHECKLIST.md)
+- [`0.1.0-beta.2` release notes](RELEASE-0.1.0-beta.2-NOTES.md)
+- [`0.1.0-beta.2` changelog](RELEASE-0.1.0-beta.2-CHANGELOG.md)
+- [`0.1.0-beta.2` release scope](RELEASE-SCOPE.md)
+- [Current-head parity evidence and documentation reconciliation](active/items/RUST-CI-006.md)
 
 Sharing is configured only through shared folder roots. Each root is a monitored
 folder tree; the Rust daemon does not expose single-file sharing controls or a
