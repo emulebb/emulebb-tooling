@@ -3,9 +3,11 @@
 ## Current Direction
 
 The eMuleBB organization has one active product-development lane:
-**emulebb-rust**, an experimental eD2K/Kad client whose first public beta is
-`0.1.0-beta.1`. Beta status is an invitation to test, not a production-readiness
-claim.
+**emulebb-rust**, an experimental eD2K/Kad client in beta. CI-gated nightly
+prereleases from `main` are the current public testing channel. Beta status is
+an invitation to test, not a production-readiness claim; the project receives
+best-effort, spare-time development, and
+[contributors are welcome](https://github.com/emulebb/emulebb-rust/blob/main/CONTRIBUTING.md).
 
 The published **eMuleBB Windows client** remains available on its stable `0.7.x`
 maintenance line. It accepts bugs and bounded low-risk UX, performance,
