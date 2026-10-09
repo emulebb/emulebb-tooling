@@ -449,8 +449,8 @@ lane and has its own
 [Gluetun Compose example](https://github.com/emulebb/emulebb-rust/blob/main/packaging/docker/compose.gluetun.example.yaml).
 That example uses the same central pattern—Gluetun owns the namespace and the
 Rust client binds P2P to `tun0`—but it is independent of the aMule/aMuTorrent
-deployment described here. The published beta is not a production-readiness
-claim and should not be presented as already deployed in this stack.
+deployment described here. The Rust nightly beta channel should not be
+presented as already deployed in this stack.
 
 ## Related Guides
 

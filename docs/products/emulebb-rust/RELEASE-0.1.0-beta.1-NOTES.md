@@ -45,7 +45,7 @@ omitted, and deferred surface is defined by the
   live search results, and explicit transfer stop and delete actions.
 - API-key-protected `/api/v1` REST and SSE surfaces. The owned OpenAPI contract
   is tested against live daemon responses in CI.
-- Unsigned native packages for Windows, Linux, and macOS on x64 and ARM64.
+- Native packages for Windows, Linux, and macOS on x64 and ARM64.
 - A versioned Linux amd64/arm64 GHCR image using s6-overlay, `PUID`/`PGID`/`TZ`,
   `/config`, and `/data/ed2k`.
 
@@ -91,13 +91,12 @@ An explicit `--profile <dir>` is an operator-managed profile and must already
 contain `emulebb-rust-settings.toml`. The SQLite repository in that profile is
 `emulebb-rust-metadata.db`. Do not run two clients against the same live profile.
 
-## macOS Unsigned Launch
+## macOS First Launch
 
-The macOS app is unsigned and unnotarized. Mount the DMG, copy
-`eMuleBB Rust.app` to Applications, then approve the first launch in
-**System Settings > Privacy & Security** if Gatekeeper blocks it. The app starts
-the daemon, waits for the local WebUI, and opens it in the browser. Quit the app
-to stop its daemon.
+Mount the DMG, copy `eMuleBB Rust.app` to Applications, then approve the first
+launch in **System Settings > Privacy & Security** if Gatekeeper blocks it. The
+app starts the daemon, waits for the local WebUI, and opens it in the browser.
+Quit the app to stop its daemon.
 
 ## Docker And Gluetun
 
@@ -137,7 +136,8 @@ VPN leak-safety promise. The Gluetun deployment is the beta's tested VPN posture
   non-recursive sharing are not supported surfaces.
 - The frozen Slint UI, TrackMuleBB, autonomous Torznab/indexer work, Arr
   integration are not included in this beta.
-- Native packages and macOS apps are unsigned; macOS apps are not notarized.
+- macOS may require first-launch approval in
+  **System Settings > Privacy & Security**.
 
 ## What To Test
 

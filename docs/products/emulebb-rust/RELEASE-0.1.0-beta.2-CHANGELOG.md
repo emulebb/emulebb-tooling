@@ -26,5 +26,4 @@ Status: PUBLISHED on 2026-10-02 from approved tag `rust-v0.1.0-beta.2`.
 ## Compatibility
 
 - No REST contract, profile schema, wire protocol, or release-scope change.
-- The beta.1 feature set, platform matrix, known limits, and unsigned package
-  posture remain unchanged.
+- The beta.1 feature set, platform matrix, and known limits remain unchanged.

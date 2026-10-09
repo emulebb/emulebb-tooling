@@ -27,8 +27,8 @@ Since 2026-07-05 the repo has carried its **own release gate**. The
 evidence is archived in [RUST-FEAT-033](../history/items/RUST-FEAT-033.md).
 **Lifecycle:** beta2 is published with the Kad VPN timing correction tracked in
 [RUST-BUG-101](../history/items/RUST-BUG-101.md), and the repository remains the
-active experimental development lane. It is not production-ready; changes
-follow the active backlog and retain evidence appropriate to their risk.
+active beta development lane. Changes follow the active backlog and retain
+evidence appropriate to their risk.
 **Behavior authority:** IPv4-only stock/community eMule wire behavior within the
 frozen [beta parity matrix](../RELEASE-SCOPE.md#frozen-beta-parity-matrix), with
 maintained eMuleBB MFC owning non-wire operational limits and disk/network I/O

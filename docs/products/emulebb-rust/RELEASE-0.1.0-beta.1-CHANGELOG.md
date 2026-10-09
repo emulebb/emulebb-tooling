@@ -49,9 +49,9 @@ Git log.
 
 ## Packaging And Operations
 
-- Added unsigned Windows x64/ARM64 ZIP packaging with embedded WebUI, example settings, license, release scope, manifest, SPDX SBOM, and SHA-256 evidence.
+- Added Windows x64/ARM64 ZIP packaging with embedded WebUI, example settings, license, release scope, manifest, SPDX SBOM, and SHA-256 evidence.
 - Added Linux amd64/arm64 DEB and x86_64/aarch64 AppImage packaging with the same runtime/WebUI and provenance contract.
-- Added unsigned, unnotarized macOS x64/ARM64 app-in-DMG packaging with first-launch Gatekeeper guidance and browser WebUI startup.
+- Added macOS x64/ARM64 app-in-DMG packaging with first-launch Gatekeeper guidance and browser WebUI startup.
 - Added a linuxserver-style s6 OCI image for linux/amd64 and linux/arm64 with `PUID`/`PGID`/`TZ`, `/config`, `/data/ed2k`, and a versioned beta tag only.
 - Added six-target native package smoke and multi-architecture image assembly gates; publication remains tag-only after separate operator approval.
 - Added per-asset manifests and SPDX SBOMs plus a release-wide `SHA256SUMS` file; final published hashes remain pending candidate approval.
@@ -70,5 +70,4 @@ Git log.
 - Treat this as a new Rust beta profile; do not point it at a live MFC profile or run two clients against one profile directory.
 - Back up state before testing; development-era SQLite schemas are current-only and are not silently repaired or migrated by the Rust daemon.
 - REST clients must use `X-API-Key`; keep the listener on loopback or a trusted network and expect contract changes in later betas.
-- macOS packages require manual first-launch approval because they are unsigned and unnotarized; all native packages may trigger platform reputation warnings.
 - TrackMuleBB, the frozen Slint UI, autonomous Torznab/indexer and Arr integration are outside this artifact set.

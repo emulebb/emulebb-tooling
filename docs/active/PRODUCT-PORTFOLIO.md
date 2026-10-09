@@ -8,7 +8,7 @@ maintained or retained by the eMuleBB organization.
 
 | Class | Meaning |
 |---|---|
-| Active experimental | Current development and public prereleases; not a production-readiness claim |
+| Active beta | Current development and public beta/nightly releases |
 | Maintenance | Published software accepting bounded, low-risk changes only |
 | Paused experiment | Preserved and buildable on demand, but without roadmap, issue intake, or scheduled work |
 | Reference | Retained for analysis or potentially upstreamable contributions |
@@ -20,7 +20,7 @@ maintained or retained by the eMuleBB organization.
 
 | Repository | Lifecycle | Current role |
 |---|---|---|
-| `emulebb-rust` | Active experimental | Primary active eD2K/Kad client; CI-gated nightly beta builds from `main` are the current public testing channel |
+| `emulebb-rust` | Active beta | Primary active eD2K/Kad client; CI-gated nightly beta builds from `main` are the current public testing channel |
 | `emulebb` (MFC) | Maintenance | Stable Windows `0.7.x` line; bugs and bounded low-risk changes only |
 | `qbittorrentbb` | Paused experiment | Preserved BitTorrent experiment; not part of the default workspace |
 | `emulebb-libtorrent` | Paused experiment | qBittorrentBB engine fork; not part of the default workspace |
@@ -37,12 +37,11 @@ maintained or retained by the eMuleBB organization.
 
 ## Product Direction
 
-`emulebb-rust` is the only active product-development lane. It is an
-experimental beta and must not be presented as production-ready. CI-gated
-nightly prereleases from `main` are the primary public testing channel; formal
-beta tags remain immutable release evidence rather than the public front-door
-download target. Development is a best-effort, spare-time project, and
-[contributors are welcome](https://github.com/emulebb/emulebb-rust/blob/main/CONTRIBUTING.md).
+`emulebb-rust` is the only active product-development lane. It is in beta.
+CI-gated nightly prereleases from `main` are the primary public testing channel;
+formal beta tags remain immutable release evidence rather than the public
+front-door download target. Development is a best-effort, spare-time project,
+and [contributors are welcome](https://github.com/emulebb/emulebb-rust/blob/main/CONTRIBUTING.md).
 
 eMuleBB MFC remains published and supported on `0.7.x`, but its development
 surface is limited to compatibility-preserving bug fixes and bounded UX,

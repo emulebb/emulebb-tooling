@@ -144,10 +144,10 @@ gate is:
   shutdown pass on Windows, Linux, and macOS, x64 and ARM64. The amd64/arm64
   image passes persistence, permissions, and Gluetun isolation checks.
 
-The published prerelease assets are unsigned Windows x64/ARM64 ZIPs, Linux
-amd64/arm64 DEBs, Linux x86_64/aarch64 AppImages, unsigned and unnotarized macOS
-x64/ARM64 app-in-DMGs, and a versioned GHCR Linux amd64/arm64 image. The image
-uses s6-overlay, `PUID`/`PGID`/`TZ`, `/config`, and `/data`; its beta tag is not
+The published prerelease assets are Windows x64/ARM64 ZIPs, Linux amd64/arm64
+DEBs, Linux x86_64/aarch64 AppImages, macOS x64/ARM64 app-in-DMGs, and a
+versioned GHCR Linux amd64/arm64 image. The image uses s6-overlay,
+`PUID`/`PGID`/`TZ`, `/config`, and `/data`; its beta tag is not
 `latest`. An independent Gluetun test stack must leave the operator's running
 P2P stack untouched.
 TrackMuleBB is archived and is not tagged, packaged, or required for the Rust
@@ -159,5 +159,5 @@ beta lane.
   live campaign.
 - **Linux x64 and ARM64** — DEB and AppImage; WSL2 Ubuntu x64 also receives the
   deep public live campaign.
-- **macOS x64 and ARM64** — unsigned, unnotarized app-in-DMG; native packaged
-  smoke only, not a public-network soak.
+- **macOS x64 and ARM64** — app-in-DMG; native packaged smoke only, not a
+  public-network soak.

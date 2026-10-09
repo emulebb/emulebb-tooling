@@ -42,8 +42,7 @@ The prerelease publishes the same native platform matrix as beta.1:
 - macOS x64 and ARM64 DMGs
 - `ghcr.io/emulebb/emulebb-rust:0.1.0-beta.2`
 
-Native packages remain unsigned, and the macOS apps remain unnotarized. The
-container image is versioned only; no `latest` tag is published.
+The container image is versioned only; no `latest` tag is published.
 
 ## Upgrade And Retest
 

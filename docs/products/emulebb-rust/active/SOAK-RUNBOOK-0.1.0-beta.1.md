@@ -118,6 +118,6 @@ under the output soak root).
 
 Record the evidence bundle. Then (and only then) the operator gives the explicit
 tag go: annotate `rust-v0.1.0-beta.1` on the reviewed Rust commit -> the
-`release.yml` workflow builds and publishes the unsigned Windows x64 zip. Close
+`release.yml` workflow builds and publishes the Windows x64 zip. Close
 RUST-FEAT-033 after the release proof is recorded; close RUST-FEAT-005 only if
 its GitHub workflow state also confirms the leak gate is complete.
