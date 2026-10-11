@@ -101,6 +101,24 @@ Detailed layout, environment-knob, setup, and automation rules are in the
   branches are exceptional and, when explicitly requested, use
   `feature/<topic>`, `fix/<topic>`, or `chore/<topic>`. Never use `stale/*` as
   an active target without an explicit historical-comparison request.
+- Work performed on a non-default branch is not complete until its full
+  delivery lifecycle is finished: commit coherent changes granularly, push the
+  branch, open a pull request targeting `main`, resolve required checks and
+  reviews, merge the pull request, delete the source branch both remotely and
+  locally, fetch with pruning, switch back to `main`, fast-forward it, and
+  verify a clean worktree. Never end completed work on an unpushed branch, an
+  unmerged pull request, or a dangling topic/tracking branch.
+- Preserve meaningful granular commits when merging. Use a repository-allowed
+  rebase or merge-commit method for a multi-commit pull request; do not squash
+  it into one commit. Squash is acceptable only when the pull request already
+  contains one coherent commit or when the operator explicitly requests it.
+- Before final handoff, audit open pull requests plus local and remote
+  non-default branches in every touched repository. Merge completed work and
+  delete branches that are integrated or superseded. Explicitly designated
+  historical `stale/*` archives may remain. If required external state makes a
+  merge impossible, the work remains incomplete: leave a pull request with the
+  exact blocker recorded and do not report the task as complete until a later
+  continuation merges it and performs the cleanup above.
 - Treat the end of every coherent work chunk as a mandatory commit boundary.
   During complex work, also create granular commits at independently
   reviewable, validated intermediate checkpoints; do not accumulate the whole
