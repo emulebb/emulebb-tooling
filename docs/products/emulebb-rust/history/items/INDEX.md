@@ -40,5 +40,6 @@ accounting, and `RUST-BUG-104` for Kad AICH publisher provenance and result
 consensus. `RUST-BUG-105` records the stock-wire/eMuleBB-MFC operational
 authority split and the maintained MFC broadband source limits. `RUST-BUG-106`
 records progressive connectivity and publication during 100k-file startup.
+`RUST-BUG-109` closes the ED2K callback and server state-machine parity audit.
 `RUST-BUG-100` was renumbered during the 2026-09-30 backlog triage to repair an
 old `RUST-BUG-005` collision.

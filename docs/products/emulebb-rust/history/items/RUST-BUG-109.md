@@ -2,7 +2,7 @@
 id: RUST-BUG-109
 workflow: local
 title: Close ED2K callback and server state-machine parity gaps
-status: IN_PROGRESS
+status: DONE
 priority: Critical
 category: bug
 labels: [rust, ed2k, callbacks, servers, protocol-parity]
@@ -126,9 +126,9 @@ that diverge from community eMule/aMule behavior.
       zero-source replies, and stock-compatible trailing bytes are accepted.
 - [x] Invalid zlib data in a bounded packed server frame is packet-local, while
       invalid raw markers and declared lengths remain transport-fatal.
-- [ ] Upload promotion can use a connected shared server for eligible LowID
+- [x] Upload promotion can use a connected shared server for eligible LowID
       waiters and retains the queue grant through callback completion/timeout.
-- [ ] Focused tests, formatting, Clippy, policy checks, and the applicable
+- [x] Focused tests, formatting, Clippy, policy checks, and the applicable
       workspace test gate pass from committed state.
 
 ## Validation
@@ -574,6 +574,31 @@ full affected-crate gate pass from committed state: 1,014 `emulebb-ed2k`
 library tests, 394 `emulebb-core` library tests plus integration/doc tests,
 all-target checks, strict Clippy, formatting, and whitespace checks. The
 shared-server upload callback planner is the remaining acceptance slice.
+
+Shared-server upload callback promotion is implemented by
+`emulebb-rust@11a6ac73`. The listener receives a clone of the command handle for
+the same long-lived server worker represented by its live state. Each queue
+maintenance pass captures one coherent callback-route snapshot: a known
+server-assigned HighID/LowID verdict is authoritative over Kad, and a usable
+shared-server route requires a connected HighID session with a nonzero login
+generation. Direct UDP remains the preferred stock lane; otherwise an eligible
+LowID is routed only through the exact server endpoint advertised in its HELLO.
+
+The queue arms the exact endpoint, login generation, and LowID before dispatch.
+The background worker revalidates that tuple immediately before writing
+`OP_CALLBACKREQUEST`. Proven pre-send failures cancel only the callback attempt;
+post-queue delivery ambiguity and confirmed sends retain the waiter's original
+rank and missed-turn entitlement until callback adoption or timeout. The
+direct-UDP upload lane now uses the same deadline-aware sender as downloader
+callbacks, preserving the same known-not-sent versus delivery-unknown contract.
+
+Focused regressions cover route priority, same-server matching, different-server
+rejection, local LowID rejection, nonzero login epochs, server-over-Kad verdict
+precedence, and a confirmed background callback whose retained entitlement is
+then claimed. Validation from committed state passes all 1,019
+`emulebb-ed2k` library tests, all 394 `emulebb-core` library tests plus both
+crates' integration and doc tests, affected-crate all-target checks, strict
+Clippy, formatting, and whitespace checks. All acceptance criteria are complete.
 
 ## Notes
 
