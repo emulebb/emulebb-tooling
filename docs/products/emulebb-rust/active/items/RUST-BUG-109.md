@@ -553,6 +553,28 @@ crates' integration and doc tests, affected-crate all-target checks, strict
 Clippy, formatting, and whitespace checks. Listener HELLO adoption and the
 shared-server dispatch planner remain in progress.
 
+Inbound upload-callback adoption is committed as
+`emulebb-rust@6c32baee`. After a valid inbound `OP_HELLO` binds the live peer
+identity and the listener sends its HELLO responses, it atomically claims any
+matching upload callback entitlement, attaches the granted session to that TCP
+connection, and immediately sends `OP_ACCEPTUPLOADREQ`. The peer no longer has
+to issue a second `OP_STARTUPLOADREQ` to recover the slot it had already earned.
+The same listener attachment path now owns both HighID promote-dial grants and
+LowID callback claims.
+
+An upload callback takes priority over a coincident download callback ticket:
+the download ticket remains queued for a later callback, whereas entering the
+current download-only session driver would monopolize the socket and strand the
+time-sensitive upload entitlement. A matched callback that finds the one-slot
+overflow already occupied leaves its entitlement untouched. A socket-level
+regression proves HELLOANSWER is followed by `OP_ACCEPTUPLOADREQ` without any
+new upload request, the producer epoch is cancelled, and the queue entry is a
+connected grant for the intended file. All ten listener-queue tests and the
+full affected-crate gate pass from committed state: 1,014 `emulebb-ed2k`
+library tests, 394 `emulebb-core` library tests plus integration/doc tests,
+all-target checks, strict Clippy, formatting, and whitespace checks. The
+shared-server upload callback planner is the remaining acceptance slice.
+
 ## Notes
 
 Implementation order follows dependency pressure: establish callback session
