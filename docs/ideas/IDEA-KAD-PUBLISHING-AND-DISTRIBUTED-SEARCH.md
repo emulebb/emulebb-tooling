@@ -47,7 +47,7 @@ Related current and exploratory material:
   owns the future autonomous Kad/eD2K FTS index.
 - [RUST-FEAT-004](../products/emulebb-rust/active/items/RUST-FEAT-004.md)
   owns Torznab and the application-level federation surface.
-- [RUST-BUG-104](../products/emulebb-rust/active/items/RUST-BUG-104.md)
+- [RUST-BUG-104](../products/emulebb-rust/history/items/RUST-BUG-104.md)
   owns Kad AICH publisher provenance and consensus.
 - [RUST-FEAT-040](../products/emulebb-rust/active/items/RUST-FEAT-040.md)
   owns end-to-end search metadata and provenance.
