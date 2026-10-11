@@ -223,6 +223,30 @@ checks. Strict Clippy reaches only the same seven pre-existing
 need the same ticket reservation/settlement migration before the legacy intent
 store and listener fallback can be removed.
 
+Direct-UDP callback production is migrated to route-scoped tickets by
+`emulebb-rust@77fc35f5`. A type-6 source now reserves admission before queue or
+cooldown ownership, requires its non-zero protocol user hash, joins A4AF work
+on the same `(source UDP endpoint, user hash)` session, and shares the ticket's
+exact absolute deadline and the download cancellation token with the bounded
+client-UDP worker. Queue rejection, pre-send cancellation/expiry, and local UDP
+send failure are proven-not-sent outcomes which cancel the exact ticket and
+linear cooldown claim. Cancellation, expiry, or worker loss after queue
+admission is delivery-ambiguous and conservatively arms the ticket and commits
+the 45-second peer cooldown. The producer no longer writes the legacy client-ID
+intent queue or logs queue admission as a sent datagram.
+
+Validation from committed code passes all 16 direct-callback protocol/runtime
+tests, the direct ticket A4AF route test, both direct peer-cooldown tests, all
+991 `emulebb-ed2k` library tests, all 391 `emulebb-core` library tests,
+`cargo check -p emulebb-core --all-targets`, formatting, and whitespace checks.
+Strict Clippy reports only the same seven pre-existing
+`unfulfilled-lint-expectations`; rerunning with that pre-existing lint allowed
+passes both crates and all targets. Kad callback production remains to migrate
+before removing the legacy intent store and listener fallback. Direct callback
+transport is also still hosted by the UDP-reask worker, so disabling
+`enable_udp_reask` currently suppresses this otherwise independent type-6
+connect path; decouple that lifecycle in a separate granular change.
+
 ## Notes
 
 Implementation order follows dependency pressure: establish callback session
