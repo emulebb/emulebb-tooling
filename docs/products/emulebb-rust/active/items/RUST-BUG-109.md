@@ -103,7 +103,7 @@ diverge from community eMule/aMule behavior.
       have Lugdunum-shaped tests.
 - [x] Callback tickets are route-scoped, identity-checked, expiring, and
       cancelled on known send/reject failure without losing unconsumed A4AF work.
-- [ ] Every callback connect-out applies shared IP-filter and peer-ban admission
+- [x] Every callback connect-out applies shared IP-filter and peer-ban admission
       before opening a socket.
 - [ ] `OP_REJECT` fails or downgrades only the relevant command while preserving
       the authenticated server session.
@@ -334,6 +334,29 @@ both doc-test suites, affected-crate all-target checks, formatting, and
 whitespace checks. Strict Clippy passes for both affected crates and all targets
 with warnings denied, the seven known unrelated unfulfilled expectations
 allowed, and `clippy::allow_attributes` denied.
+
+Shared callback connect-out admission is implemented by
+`emulebb-rust@6dd1a8b4`. Server `OP_CALLBACKREQUESTED`, Kad-relayed
+`OP_CALLBACK` from both ordinary peer and held-buddy sockets, and direct-UDP
+`OP_DIRECTCALLBACKREQ` all converge on the listener-owned callback-session
+supervisor. Immediately before opening TCP, that boundary rejects non-IPv4 or
+live-IP-filtered endpoints and applies the peer-ban store's IP-or-known-user-hash
+semantics. Because `IpFilter` clones share their mutable backing, queued callback
+work observes filter reloads; a ban recorded after queue admission is likewise
+rechecked without holding policy locks across network I/O.
+
+Pure admission tests cover filtered, IP-banned, hash-banned, and accepted
+identities. Socket-level regressions prove that none of the server, Kad, or
+direct-UDP origins reaches a bound filtered listener and that a hash-only ban on
+an otherwise unbanned endpoint opens no socket. Validation passes all 5 focused
+admission/socket tests, all 992 `emulebb-ed2k` library tests and its doc tests,
+affected-crate all-target checks, formatting, and whitespace checks. Strict
+Clippy passes for both affected crates and all targets with warnings denied, the
+seven known unrelated unfulfilled expectations allowed, and
+`clippy::allow_attributes` denied. An independent read-only route review found
+no callback connect-out bypass and no local callback-ticket settlement hazard;
+it also confirmed the boundary matches community eMule and aMule's final common
+`TryToConnect` IP-filter/ban recheck.
 
 ## Notes
 
