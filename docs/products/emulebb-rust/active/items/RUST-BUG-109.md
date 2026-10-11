@@ -98,7 +98,7 @@ diverge from community eMule/aMule behavior.
 
 - [x] Callback connect-outs transfer ownership to a live peer session and can
       serve a file request after HELLO on server, Kad, and direct-UDP routes.
-- [ ] Chained UDP `OP_GLOBFOUNDSOURCES` replies require validated `E3 9B`
+- [x] Chained UDP `OP_GLOBFOUNDSOURCES` replies require validated `E3 9B`
       separators, retain valid prefix sets after a malformed later segment, and
       have Lugdunum-shaped tests.
 - [ ] Callback tickets are route-scoped, identity-checked, expiring, and
@@ -139,6 +139,13 @@ passed), `cargo check -p emulebb-core --all-targets`, `cargo fmt --all --
 currently blocked by seven pre-existing unrelated
 `unfulfilled-lint-expectations` in server/NAT modules; it reported no finding in
 the callback-session changes.
+
+UDP source-result framing is implemented by `emulebb-rust@120f0360`.
+The generic source-set decoder now leaves all trailing bytes untouched; the UDP
+aggregate decoder alone recognizes embedded `E3 9B` continuation markers,
+ignores unmarked tails, and retains already-decoded sets when a later marked
+segment is malformed. The Lugdunum-shaped regression cases and the complete
+result-decoder suite pass (10 tests).
 
 ## Notes
 
