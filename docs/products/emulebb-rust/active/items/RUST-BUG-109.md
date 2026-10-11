@@ -15,8 +15,8 @@ source: 2026-10-11 ED2K static parity audit against community eMule, aMule, ed2k
 
 ## Summary
 
-Close seven ED2K interoperability and state-machine gaps found by the 2026-10-11
-static audit. Stock/community eMule wire behavior remains authoritative;
+Close eight ED2K interoperability and state-machine gaps found by the 2026-10-11
+static audit and its implementation review. Stock/community eMule wire behavior remains authoritative;
 maintained eMuleBB MFC improvements are retained where they strengthen callback
 admission or preserve upload grants, and the implementation remains Rust-native.
 
@@ -46,6 +46,10 @@ The audit found these unresolved behaviors at the starting revision
    than failing only the affected request.
 7. Disconnected LowID upload waiters can use direct UDP callback only; the
    maintained MFC shared-server callback lane is absent.
+8. Kad-relayed `OP_CALLBACK` treats a retained `DhtNode` as proof that Kad is
+   running and parses malformed payloads before checking live Kad state, so a
+   stopped Kad runtime can still originate a callback or lose a valid peer or
+   held-buddy session.
 
 ## Why This Matters
 
@@ -105,6 +109,8 @@ diverge from community eMule/aMule behavior.
       cancelled on known send/reject failure without losing unconsumed A4AF work.
 - [x] Every callback connect-out applies shared IP-filter and peer-ban admission
       before opening a socket.
+- [x] Kad-relayed `OP_CALLBACK` checks live Kad state before parsing on both
+      ingress paths and rechecks before queueing a callback connect-out.
 - [ ] `OP_REJECT` fails or downgrades only the relevant command while preserving
       the authenticated server session.
 - [ ] Malformed TCP search/source replies fail only the affected operation and
@@ -357,6 +363,28 @@ seven known unrelated unfulfilled expectations allowed, and
 no callback connect-out bypass and no local callback-ticket settlement hazard;
 it also confirmed the boundary matches community eMule and aMule's final common
 `TryToConnect` IP-filter/ban recheck.
+
+Live Kad callback gating is implemented by `emulebb-rust@db62b65b`. The
+ordinary inbound-client and held-buddy paths now carry the live `DhtNode`
+rather than treating a retained object or cached Kad ID as proof that Kad is
+running. A shared pre-parse gate ignores `OP_CALLBACK` while Kad is stopped,
+matching community eMule, maintained eMuleBB MFC, and aMule ordering; the shared
+authorization boundary rechecks after decoding and again after the asynchronous
+file-ownership lookup before queueing the connect-out. This preserves valid TCP
+sessions on malformed stopped-Kad traffic and closes stop-time races without
+weakening the existing uCheck, file-ownership, endpoint, IP-filter, or ban
+guards. Lugdunum has no comparable Kad client path: its apparent `0x99`
+occurrences are ED2K UDP global-search responses, while its callbacks are classic
+server relays.
+
+Focused regressions prove that callback acceptance follows live Kad state and
+that malformed stopped-Kad callbacks leave both an ordinary listener session
+and a held-buddy connection alive. Validation passes all 995 `emulebb-ed2k`
+library tests, all 394 `emulebb-core` library tests plus its integration tests,
+both doc-test suites, affected-crate all-target checks, formatting, and
+whitespace checks. Strict Clippy passes for both affected crates and all targets
+with warnings denied, the seven known unrelated unfulfilled expectations
+allowed, and `clippy::allow_attributes` denied.
 
 ## Notes
 
