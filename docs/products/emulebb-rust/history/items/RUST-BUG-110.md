@@ -87,9 +87,9 @@ a hash-banned identity immediately after HELLO binding.
 
 Completed on 2026-10-11 in three granular `emulebb-rust` commits:
 
-- `cc2b5b8b` disconnects banned identities during shared HELLO binding.
-- `c8d08fea` adds the direction-aware HELLO phase gate and preserves plain and
+- `28005540` disconnects banned identities during shared HELLO binding.
+- `4e630bee` adds the direction-aware HELLO phase gate and preserves plain and
   packed unaffiliated `OP_PORTTEST`.
-- `8f0f2602` holds promoted grants until identity binding, validates outbound
+- `61faa0f0` holds promoted grants until identity binding, validates outbound
   route identity without false bans, supports the legacy info prelude and
   simultaneous HELLO, and bounds pre-establishment work.
