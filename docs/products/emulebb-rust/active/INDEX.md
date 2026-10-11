@@ -146,6 +146,7 @@ below as historical links.
 | [RUST-BUG-104](../history/items/RUST-BUG-104.md) | Major | DONE | Preserve Kad AICH publisher provenance and result consensus |
 | [RUST-BUG-105](../history/items/RUST-BUG-105.md) | Major | DONE | Disposition stock source-acquisition default drift |
 | [RUST-BUG-107](items/RUST-BUG-107.md) | Major | OPEN | Preserve lossless shared-library path identity across platforms |
+| [RUST-BUG-109](../history/items/RUST-BUG-109.md) | Critical | DONE | Close ED2K callback and server state-machine parity gaps |
 
 ### Runtime reliability defects
 
