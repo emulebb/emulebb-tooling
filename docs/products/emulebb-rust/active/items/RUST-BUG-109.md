@@ -156,8 +156,20 @@ and HighIDs remain globally deduplicated by dialable endpoint. Both server and
 core aggregation preserve colliding LowIDs from different servers, and the
 20-minute callback request gate is server-scoped. The focused aggregation,
 source-policy, buddy-reask tests and `cargo check -p emulebb-core --all-targets`
-pass. Expiring ticket storage, listener claims, and dispatch-failure
-cancellation remain in progress.
+pass.
+
+The bounded callback admission store is implemented by
+`emulebb-rust@63e12c01`. Tickets carry a typed server, Kad-buddy, or direct-UDP
+route; match a non-zero HELLO user hash before any route fallback; scope
+hashless server LowIDs by `(server endpoint, client-id)`; merge bounded A4AF
+work; expire without eviction; and use linear dispatch permits plus
+generation-checked leases so send cancellation cannot invalidate a fast
+inbound claim. Reserved-versus-armed state survives claim release and lease
+expiry, including a callback which arrives before the dispatch caller records
+send success. All 15 focused ticket-store tests,
+`cargo check -p emulebb-core --all-targets`, formatting, and whitespace checks
+pass. Listener claim adoption, per-route reservation/cancellation, and explicit
+return of unconsumed A4AF work remain in progress.
 
 ## Notes
 
