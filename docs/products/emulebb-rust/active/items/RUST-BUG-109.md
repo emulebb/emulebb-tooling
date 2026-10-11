@@ -497,6 +497,18 @@ Clippy passes for both affected crates and all targets with warnings denied, the
 seven known unrelated unfulfilled expectations allowed, and
 `clippy::allow_attributes` denied.
 
+Shared-server upload promotion groundwork is committed as
+`emulebb-rust@8d390a90`. The uploader identity now retains the server endpoint
+advertised in the peer's HELLO as route provenance without making it part of
+stable client identity. Upload admission can therefore recognize the stock
+same-server LowID exception instead of treating every peer server as unknown.
+The live server-assigned TCP verdict is authoritative when available, with Kad
+used only as its fallback, matching the core reachability policy. Focused tests
+cover matching, different, and unknown peer servers plus conflicting server and
+Kad verdicts; affected-crate all-target checks, strict Clippy, formatting, and
+whitespace checks pass. Endpoint-pinned callback dispatch, a route-bound queue
+lease, and inbound HELLO adoption remain in progress.
+
 ## Notes
 
 Implementation order follows dependency pressure: establish callback session
