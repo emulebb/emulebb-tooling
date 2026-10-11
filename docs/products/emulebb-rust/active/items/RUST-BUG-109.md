@@ -287,6 +287,28 @@ found no remaining Kad producer blocker after FINDSOURCE supervision and the
 post-drain cancellation guard. All three callback producers now use tickets;
 the legacy intent store and listener fallback can be removed next.
 
+The obsolete client-ID-only callback intent path is removed by
+`emulebb-rust@db9eb2b0`. `Ed2kCallbackIntent`, its unbounded runtime store, and
+the public register/claim API no longer exist. An inbound HELLO starts download
+work only after a route-scoped ticket claim; otherwise the connection remains
+in the ordinary listener dispatcher and can still serve uploads. The listener
+regression now creates the same LowID on two server routes, proves that only the
+HELLO's server route is adopted, and proves that the other route remains
+independently claimable. A repository-wide search confirms that no producer or
+consumer still depends on the removed API.
+
+Validation from committed behavior passes all 98 callback-related
+`emulebb-ed2k` tests, all 990 `emulebb-ed2k` library tests, all 392
+`emulebb-core` library tests plus its integration and doc tests, the core and
+workspace all-target checks, formatting, and whitespace checks. Strict Clippy
+still reports exactly the same seven unrelated
+`unfulfilled-lint-expectations`; allowing that known baseline passes both
+affected crates with warnings denied and the explicit
+`clippy::allow_attributes` gate. A separate read-only review confirmed that
+unmatched inbound peers retain normal upload handling, route-scoped adoption is
+unchanged, all three producers use tickets, and the cross-server LowID test
+covers the removed fallback's isolation hazard.
+
 ## Notes
 
 Implementation order follows dependency pressure: establish callback session
