@@ -54,7 +54,7 @@ The audit found these unresolved behaviors at the starting revision
 ## Why This Matters
 
 The first four defects affect advertised ED2K connectivity or public-network
-input handling and block a trustworthy beta callback path. The remaining three
+input handling and block a trustworthy beta callback path. The remaining four
 discard useful authenticated state or reachable upload peers in ways that
 diverge from community eMule/aMule behavior.
 
@@ -80,8 +80,9 @@ diverge from community eMule/aMule behavior.
   strongest available peer identity before consuming pending work.
 - UDP chained-result decoding explicitly requires embedded protocol/opcode
   markers and preserves a valid prefix when a later segment is malformed.
-- Server command failures have request-local outcomes; only connection-fatal
-  framing or transport failures end the authenticated server session.
+- Typed server command failures have request-local outcomes; uncorrelated
+  notices do not mutate request state, and only connection-fatal framing or
+  transport failures end the authenticated server session.
 - Upload promotion retains enough peer provenance to select direct TCP, direct
   UDP callback, shared-server callback, or an explicit unreachable result.
 
@@ -111,8 +112,9 @@ diverge from community eMule/aMule behavior.
       before opening a socket.
 - [x] Kad-relayed `OP_CALLBACK` checks live Kad state before parsing on both
       ingress paths and rechecks before queueing a callback connect-out.
-- [ ] `OP_REJECT` fails or downgrades only the relevant command while preserving
-      the authenticated server session.
+- [x] Null, uncorrelated `OP_REJECT` notices mutate no command state and preserve
+      login, pending operations, negotiated capabilities, and the authenticated
+      server session; typed replies and per-request deadlines remain authoritative.
 - [ ] Malformed TCP search/source replies fail only the affected operation and
       preserve the server session.
 - [ ] Upload promotion can use a connected shared server for eligible LowID
@@ -385,6 +387,41 @@ both doc-test suites, affected-crate all-target checks, formatting, and
 whitespace checks. Strict Clippy passes for both affected crates and all targets
 with warnings denied, the seven known unrelated unfulfilled expectations
 allowed, and `clippy::allow_attributes` denied.
+
+Stock-compatible `OP_REJECT` handling is implemented by three granular
+`emulebb-rust` commits. `5513fb0d` changes the shared/background packet handler
+to treat `OP_REJECT` as an uncorrelated notice, preserving both a pending login
+and a typed background request; it also removes the unsafe reject-triggered
+offer-pacing downgrade. `8eb3ee31` applies the same rule to the one-shot keyword,
+source, and callback sessions, while retaining `OP_CALLBACK_FAIL` as the typed
+callback failure. It also makes the callback response grace deadline reach its
+intended success outcome when no explicit failure arrives. `f48d99cc` removes
+the semantic `last_tx_opcode`, the reject-only conservative offer mode, its
+fallback-delay machinery, and the now-unused private protocol-rejection
+constructor. `last_tx` remains solely as an idle/keepalive timestamp.
+
+Community eMule, maintained eMuleBB MFC, and aMule all log `OP_REJECT` and return
+success from their packet handlers without disconnecting or mutating a pending
+request. Their protocol declarations describe opcode `0x05` as a null packet:
+it carries no request ID, rejected opcode, hash, client ID, or other correlator.
+Consequently the old latest-transmit inference was not merely divergent but
+racy: an offer rejection can queue during the 80 ms offer quiet period, after
+which a search overwrites the latest opcode before the queued rejection is
+read. ed2k-server defines the constant but supplies no correlatable producer,
+and the Lugdunum decompile supplies no rejection payload contract or evidence
+for latest-transmit attribution. The safe Rust model therefore completes
+requests only from their typed responses, cancellation, deadline, or transport
+closure; it never eagerly guesses which command a null reject concerned.
+
+Focused regressions cover reject-before-`OP_IDCHANGE`, a pending background
+keyword search, negotiated offer pacing, one-shot keyword and source searches,
+and callback reject versus typed `OP_CALLBACK_FAIL`. Empty and nonempty reject
+payloads are both nonfatal. Validation from committed state passes all 999
+`emulebb-ed2k` library tests, all 394 `emulebb-core` library tests plus both
+crates' integration and doc tests, affected-crate all-target checks, formatting,
+and whitespace checks. Strict Clippy passes for both affected crates and all
+targets with warnings denied, the seven known unrelated unfulfilled
+expectations allowed, and `clippy::allow_attributes` denied.
 
 ## Notes
 
