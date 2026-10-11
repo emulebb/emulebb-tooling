@@ -96,7 +96,7 @@ diverge from community eMule/aMule behavior.
 
 ## Acceptance Criteria
 
-- [ ] Callback connect-outs transfer ownership to a live peer session and can
+- [x] Callback connect-outs transfer ownership to a live peer session and can
       serve a file request after HELLO on server, Kad, and direct-UDP routes.
 - [ ] Chained UDP `OP_GLOBFOUNDSOURCES` replies require validated `E3 9B`
       separators, retain valid prefix sets after a malformed later segment, and
@@ -116,10 +116,29 @@ diverge from community eMule/aMule behavior.
 
 ## Validation
 
-Validation evidence and implementation commit IDs will be recorded here as the
-acceptance checklist advances. Static comparator evidence is rooted in
-community eMule `0f867145`, aMule `6b1d2d0b`, ed2k-server `57c30957`, and the
-Lugdunum 17.15 decompile.
+Static comparator evidence is rooted in community eMule `0f867145`, aMule
+`6b1d2d0b`, ed2k-server `57c30957`, and the Lugdunum 17.15 decompile.
+
+Callback-session ownership is implemented by these granular `emulebb-rust`
+commits:
+
+- `0156cd72` adopts established callback transports in the ordinary peer
+  dispatcher and binds `HELLOANSWER` identity/capability state.
+- `4eb00568` introduces the bounded listener-owned session supervisor and moves
+  the server callback route onto it.
+- `718e7d15` moves the direct-UDP callback route onto the supervisor.
+- `7ca14320` moves inbound and outbound-buddy Kad callback routes onto the
+  supervisor.
+- `1ca3debe` removes the obsolete handshake-only public path and converts the
+  callback protocol tests to exercise the production supervisor.
+
+Validated from committed code with the focused callback suite (8 passed),
+listener suite (24 passed), buddy-link test, direct-callback core tests (3
+passed), `cargo check -p emulebb-core --all-targets`, `cargo fmt --all --
+--check`, and `git diff --check`. The crate-wide strict Clippy command is
+currently blocked by seven pre-existing unrelated
+`unfulfilled-lint-expectations` in server/NAT modules; it reported no finding in
+the callback-session changes.
 
 ## Notes
 
