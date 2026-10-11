@@ -15,10 +15,12 @@ source: 2026-10-11 ED2K static parity audit against community eMule, aMule, ed2k
 
 ## Summary
 
-Close eight ED2K interoperability and state-machine gaps found by the 2026-10-11
-static audit and its implementation review. Stock/community eMule wire behavior remains authoritative;
-maintained eMuleBB MFC improvements are retained where they strengthen callback
-admission or preserve upload grants, and the implementation remains Rust-native.
+Close the ED2K interoperability and state-machine gaps found by the 2026-10-11
+static audit and its implementation review. Stock/community eMule wire behavior
+remains authoritative; maintained eMuleBB MFC improvements are retained where
+they strengthen callback admission or preserve upload grants, and the
+implementation remains Rust-native. The durable list includes the eight
+starting findings plus any adjacent disparity proved while implementing them.
 
 This record is the durable execution tracker for the remediation wave. Each
 acceptance item is implemented and validated as a separate granular
@@ -42,21 +44,24 @@ The audit found these unresolved behaviors at the starting revision
 4. Server-relayed and Kad-relayed callback connect-outs bypass the shared IP
    filter and peer-ban admission policy.
 5. A normal server `OP_REJECT` tears down the authenticated server connection.
-6. Malformed TCP search/source responses tear down the server connection rather
-   than failing only the affected request.
+6. Malformed TCP search/source responses tear down the server connection and
+   discard request state even though the bounded frame can be dropped safely.
 7. Disconnected LowID upload waiters can use direct UDP callback only; the
    maintained MFC shared-server callback lane is absent.
 8. Kad-relayed `OP_CALLBACK` treats a retained `DhtNode` as proof that Kad is
    running and parses malformed payloads before checking live Kad state, so a
    stopped Kad runtime can still originate a callback or lose a valid peer or
    held-buddy session.
+9. A bounded `OP_PACKEDPROT` frame with invalid zlib data tears down the server
+   session, while stock clients discard that packet and keep the framed TCP
+   stream; invalid raw markers and invalid declared lengths remain fatal.
 
 ## Why This Matters
 
 The first four defects affect advertised ED2K connectivity or public-network
-input handling and block a trustworthy beta callback path. The remaining four
-discard useful authenticated state or reachable upload peers in ways that
-diverge from community eMule/aMule behavior.
+input handling and block a trustworthy beta callback path. The remaining
+findings discard useful authenticated state or reachable upload peers in ways
+that diverge from community eMule/aMule behavior.
 
 ## Representative Sites
 
@@ -81,8 +86,8 @@ diverge from community eMule/aMule behavior.
 - UDP chained-result decoding explicitly requires embedded protocol/opcode
   markers and preserves a valid prefix when a later segment is malformed.
 - Typed server command failures have request-local outcomes; uncorrelated
-  notices do not mutate request state, and only connection-fatal framing or
-  transport failures end the authenticated server session.
+  notices do not mutate request state, and only invalid raw framing or transport
+  failures end the authenticated server session.
 - Upload promotion retains enough peer provenance to select direct TCP, direct
   UDP callback, shared-server callback, or an explicit unreachable result.
 
@@ -115,8 +120,12 @@ diverge from community eMule/aMule behavior.
 - [x] Null, uncorrelated `OP_REJECT` notices mutate no command state and preserve
       login, pending operations, negotiated capabilities, and the authenticated
       server session; typed replies and per-request deadlines remain authoritative.
-- [ ] Malformed TCP search/source replies fail only the affected operation and
-      preserve the server session.
+- [x] Malformed bounded TCP search/source replies are packet-local: the owning
+      request, accumulated results, original absolute deadline, and authenticated
+      session survive; source-envelope hashes remain authoritative even for
+      zero-source replies, and stock-compatible trailing bytes are accepted.
+- [ ] Invalid zlib data in a bounded packed server frame is packet-local, while
+      invalid raw markers and declared lengths remain transport-fatal.
 - [ ] Upload promotion can use a connected shared server for eligible LowID
       waiters and retains the queue grant through callback completion/timeout.
 - [ ] Focused tests, formatting, Clippy, policy checks, and the applicable
@@ -422,6 +431,56 @@ crates' integration and doc tests, affected-crate all-target checks, formatting,
 and whitespace checks. Strict Clippy passes for both affected crates and all
 targets with warnings denied, the seven known unrelated unfulfilled
 expectations allowed, and `clippy::allow_attributes` denied.
+
+Malformed bounded TCP search/source handling is corrected by
+`emulebb-rust@a36fd30d`. A malformed `OP_SEARCHRESULT`, `OP_FOUNDSOURCES`, or
+`OP_FOUNDSOURCES_OBFU` no longer unwinds the authenticated background session.
+The exact pending variant is restored with its accumulated pages/source sets
+and original absolute deadline; malformed search pages do not trigger
+`OP_QUERY_MORE_RESULT`. This avoids an ABA hazard that an immediate request
+failure would create: TCP search pages carry no query ID, and source replies
+carry only the file hash, so a late response could otherwise complete a newly
+dispatched request. One-shot keyword and source sessions apply the same
+packet-local policy under an absolute post-dispatch deadline rather than a
+deadline reset by every received packet.
+
+Source decoding now returns a typed envelope containing the response file hash,
+decoded sources, and trailing-byte count. The envelope hash is checked before
+body parsing, including count-zero responses, so a malformed or empty reply for
+another hash cannot consume the active request. Declared entries remain
+transactional in Rust, while bytes following the declared source count are
+accepted and logged as stock-compatible extension/diagnostic data.
+
+Community eMule, maintained eMuleBB MFC, and aMule all retain the server TCP
+connection for malformed `OP_SEARCHRESULT` and ordinary `OP_FOUNDSOURCES`; a
+search parse failure skips their local-search completion transition, and source
+parsers consume the declared entries while ignoring a tail. Their omission of
+`OP_FOUNDSOURCES_OBFU` from the legacy exception allow-list is an inconsistent
+historical oversight; Rust deliberately applies the safe framed-packet rule to
+both source opcodes. ed2k-server and Lugdunum corroborate the reply envelopes
+and always emit hash plus count, but as server producers they do not provide a
+client receive-error state machine. Rust intentionally keeps each malformed
+frame transactional instead of preserving stock's partially mutated entry
+prefix, while retaining all results from earlier valid frames.
+
+Regressions cover a valid `More=1` page followed by a malformed and then valid
+page, single-source truncated/unmatched/valid replies, count-zero envelope
+correlation, accepted source tails, a batch retaining a completed hash across
+short, malformed, and unrelated replies, one-shot equivalents, and an
+uncorrelated malformed result followed by valid session traffic. Validation
+from committed state passes all 1,003 `emulebb-ed2k` library tests, all 394
+`emulebb-core` library tests plus both crates' integration and doc tests,
+affected-crate all-target checks, formatting, and whitespace checks. Strict
+Clippy passes for both affected crates and all targets with warnings denied, the
+seven known unrelated unfulfilled expectations allowed, and
+`clippy::allow_attributes` denied.
+
+The same comparator pass found a separate framing-boundary disparity: community
+eMule, maintained MFC, and aMule discard a bounded packed packet whose zlib
+payload fails to inflate and keep the TCP stream, while Rust currently returns
+an error from `ServerSession::read_packet` and closes the session. Invalid raw
+protocol markers, zero lengths, and oversized declared lengths remain
+transport-fatal. This is tracked as the next independent acceptance item.
 
 ## Notes
 
