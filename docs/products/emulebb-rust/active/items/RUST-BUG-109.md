@@ -101,7 +101,7 @@ diverge from community eMule/aMule behavior.
 - [x] Chained UDP `OP_GLOBFOUNDSOURCES` replies require validated `E3 9B`
       separators, retain valid prefix sets after a malformed later segment, and
       have Lugdunum-shaped tests.
-- [ ] Callback tickets are route-scoped, identity-checked, expiring, and
+- [x] Callback tickets are route-scoped, identity-checked, expiring, and
       cancelled on known send/reject failure without losing unconsumed A4AF work.
 - [ ] Every callback connect-out applies shared IP-filter and peer-ban admission
       before opening a socket.
@@ -256,7 +256,36 @@ is retained as dispatched; preflight cancellation/expiry, duplicate/busy search
 admission, no route, and all-send failure remain distinguishable known-not-sent
 outcomes for the producer to settle. All 125 `emulebb-kad-dht` library tests,
 strict Clippy for that crate/all targets, formatting, and whitespace checks
-pass. The core Kad producer has not yet adopted this new outcome contract.
+pass. The core Kad producer consumes this outcome contract in the following
+slice.
+
+Kad callback production is migrated to route-scoped tickets by three granular
+`emulebb-rust` commits. `4d75c957` replaces the callback constructor's permanent
+lint allowance with a checked expectation. `aa78cc08` makes the typed Kad
+dispatch outcome mandatory to consume. `09d9c9d3` reserves a Kad-buddy ticket
+before cooldown or wire ownership, requires the source user hash, joins A4AF
+files on one `(buddy id, normalized optional buddy endpoint, user hash)`
+session, and excludes file identity from the peer-scoped 45-second cooldown.
+Direct buddy sends classify local send failure as proven not sent and treat
+cancellation or expiry after polling the transport as delivery-ambiguous.
+Endpoint-unknown FINDSOURCE traversals share the exact ticket deadline and
+download cancellation token, settle from the typed phase-2 send result, run
+concurrently with faster direct/server/TCP routes, and remain supervised until
+the owning download attempt can safely settle. Known-not-sent outcomes cancel
+the exact ticket and linear cooldown claim; sent or ambiguous outcomes arm the
+ticket and commit the cooldown from settlement. The Kad producer no longer
+writes the legacy callback-intent queue.
+
+Validation from committed behavior passes all 5 focused Kad-producer tests,
+all 125 `emulebb-kad-dht` library tests, all 991 `emulebb-ed2k` library tests,
+all 392 `emulebb-core` library tests, `cargo check -p emulebb-core
+--all-targets`, formatting, and whitespace checks. Strict Clippy reports only
+the same seven pre-existing `unfulfilled-lint-expectations`; allowing that
+known baseline passes all core targets, and the explicit
+`clippy::allow_attributes` gate passes. A separate read-only lifecycle review
+found no remaining Kad producer blocker after FINDSOURCE supervision and the
+post-drain cancellation guard. All three callback producers now use tickets;
+the legacy intent store and listener fallback can be removed next.
 
 ## Notes
 
