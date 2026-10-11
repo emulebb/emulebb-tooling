@@ -247,6 +247,17 @@ transport is also still hosted by the UDP-reask worker, so disabling
 `enable_udp_reask` currently suppresses this otherwise independent type-6
 connect path; decouple that lifecycle in a separate granular change.
 
+The endpoint-unknown Kad callback prerequisite is implemented by
+`emulebb-rust@e745146d`. Generic Kad traversal now reports phase-2 local send
+attempt/success counts, returns immediately when no responding contact can be
+queried, and exposes a typed FINDSOURCE callback outcome under the caller's
+absolute deadline and cancellation token. A callback sent before cancellation
+is retained as dispatched; preflight cancellation/expiry, duplicate/busy search
+admission, no route, and all-send failure remain distinguishable known-not-sent
+outcomes for the producer to settle. All 125 `emulebb-kad-dht` library tests,
+strict Clippy for that crate/all targets, formatting, and whitespace checks
+pass. The core Kad producer has not yet adopted this new outcome contract.
+
 ## Notes
 
 Implementation order follows dependency pressure: establish callback session
