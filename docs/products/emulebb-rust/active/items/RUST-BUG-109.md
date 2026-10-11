@@ -202,6 +202,27 @@ with the core all-targets check, formatting, and whitespace checks; strict
 Clippy remains blocked only by the same seven unrelated expectations. Per-route
 reservation/cancellation is the remaining callback-ticket integration work.
 
+Classic server callback production is migrated to route-scoped tickets by
+`emulebb-rust@b857bec2`. Both connected-server `OP_CALLBACKREQUEST` and
+cross-server UDP `OP_GLOBCALLBACKREQ` reserve admission before wire dispatch;
+A4AF joins share one server-local peer ticket and one peer-scoped 20-minute
+retry gate. A linear dispatch guard keeps queued or in-progress work claimable
+and non-reapable, shares the ticket's exact absolute deadline with the
+background server worker, conservatively arms admission on task abort or
+ambiguous delivery, and rolls back only proven-not-sent outcomes. Successful
+or ambiguous delivery restarts the bounded callback window and cooldown from
+settlement, while failed delivery cancels the exact ticket and cooldown claim.
+The server producer no longer writes the legacy client-ID intent queue.
+
+Validation from committed code passes all 31 callback-store tests, all 7
+background callback-dispatch classification tests, all 10 core source/cooldown
+tests, all 983 `emulebb-ed2k` library tests, all 389 `emulebb-core` library
+tests, `cargo check -p emulebb-core --all-targets`, formatting, and whitespace
+checks. Strict Clippy reaches only the same seven pre-existing
+`unfulfilled-lint-expectations`. Direct-UDP and Kad callback producers still
+need the same ticket reservation/settlement migration before the legacy intent
+store and listener fallback can be removed.
+
 ## Notes
 
 Implementation order follows dependency pressure: establish callback session
