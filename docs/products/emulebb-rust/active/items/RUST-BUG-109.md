@@ -309,6 +309,32 @@ unmatched inbound peers retain normal upload handling, route-scoped adoption is
 unchanged, all three producers use tickets, and the cross-server LowID test
 covers the removed fallback's isolation hazard.
 
+Direct UDP callbacks are decoupled from the optional source-reask lifecycle by
+four granular `emulebb-rust` commits. `16b68df4` introduces a dedicated typed
+sender over the shared Kad UDP socket, with exact pre-send versus
+delivery-ambiguous settlement and fail-closed obfuscation when the public IP is
+unknown. `ffaeec42` moves the core type-6 producer to that sender, requires a
+live Kad runtime independently of `enable_udp_reask`, and runs the public-IP
+fallback for Kad direct callbacks even when source reask is disabled.
+`619ecb66` removes the obsolete direct-callback command, outcome, and worker
+branch from the reask runtime. `7168ed62` keeps the sole client-UDP ingress
+handler and its core event consumer active for `OP_DIRECTCALLBACKREQ` and
+`OP_PORTTEST` while suppressing actual source-reask and buddy-relay traffic;
+core rechecks the stock `Kademlia::IsRunning() && IsFirewalled()` gate at event
+dispatch time.
+
+Regressions prove that the outbound 21-byte callback wire request and both
+plaintext and obfuscated inbound callback requests work with
+`enable_udp_reask=false`, that source-reask packets remain ignored in that
+mode, and that a stopped Kad runtime rejects a callback without consuming its
+rate-limit slot. Validation passes all 12 callback-focused `emulebb-ed2k`
+tests, all 7 callback-focused `emulebb-core` tests, all 987 `emulebb-ed2k`
+library tests, all 394 `emulebb-core` library tests plus its integration tests,
+both doc-test suites, affected-crate all-target checks, formatting, and
+whitespace checks. Strict Clippy passes for both affected crates and all targets
+with warnings denied, the seven known unrelated unfulfilled expectations
+allowed, and `clippy::allow_attributes` denied.
+
 ## Notes
 
 Implementation order follows dependency pressure: establish callback session
