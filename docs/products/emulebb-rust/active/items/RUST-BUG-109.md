@@ -171,6 +171,21 @@ send success. All 15 focused ticket-store tests,
 pass. Listener claim adoption, per-route reservation/cancellation, and explicit
 return of unconsumed A4AF work remain in progress.
 
+Unconsumed callback-session work is retained by `emulebb-rust@adbfa489`.
+Inbound ownership is represented by an RAII session claim: successful file
+outcomes acknowledge only that hash across joined routes, while cancellation,
+panic, or an early return synchronously restores the remaining A4AF set for a
+fresh bounded dispatch epoch. Active sessions no longer expire on the short
+handshake lease; same-hash routes can join one peer session, fallback admission
+pins the observed HELLO hash, and both pending and live-session merges enforce
+the 256-file bound transactionally. Late send completion has an explicit
+`Settled` outcome and stale permits cannot mutate a newer retry generation.
+All 29 focused callback-store tests and all 971 `emulebb-ed2k` library tests
+pass, along with `cargo check -p emulebb-core --all-targets`, formatting, and
+whitespace checks. Strict Clippy still reaches only the seven pre-existing
+unrelated `unfulfilled-lint-expectations`. Listener adoption and per-route
+reservation/cancellation remain in progress.
+
 ## Notes
 
 Implementation order follows dependency pressure: establish callback session
