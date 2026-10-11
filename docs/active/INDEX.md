@@ -27,8 +27,8 @@ not planned when the roadmap was archived.
 **Latest roadmap/archive refresh:** 2026-10-02
 **Local non-done item inventory:** retained below as engineering/spec archive,
 not workflow authority.
-**Current non-done count:** `129`
-**Non-done by status:** `18` OPEN, `3` IN_PROGRESS, `108` DEFERRED, `0` BLOCKED.
+**Current non-done count:** `130`
+**Non-done by status:** `18` OPEN, `4` IN_PROGRESS, `108` DEFERRED, `0` BLOCKED.
 **Backlog counts:** item tables below are retained for provenance and future
 manual promotion only.
 **0.7.3 release-train relevance:** Most non-done items below are future or
@@ -532,6 +532,7 @@ not active item docs.
 | [CI-051](../history/items/CI-051.md) | Major | DONE | Move generated workspace outputs outside repos and worktrees |
 | [CI-052](../history/items/CI-052.md) | Major | DONE | RC2+ installer-backed test gate rationalization |
 | [CI-053](../history/items/CI-053.md) | Major | DONE | Fix ARM64 controlled-smoke PCH virtual-memory exhaustion (native host toolchain) |
+| [CI-054](items/CI-054.md) | Major | IN_PROGRESS | Add native Windows Rust/MFC protocol-parity diagnostics campaign |
 
 ---
 

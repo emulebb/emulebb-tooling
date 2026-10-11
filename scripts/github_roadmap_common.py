@@ -233,6 +233,8 @@ class Item:
     path: Path
     github_issue: str
     workflow: str
+    product: str
+    phase: str
 
     @property
     def issue_title(self) -> str:
@@ -398,6 +400,8 @@ def load_items() -> list[Item]:
                 path=path,
                 github_issue=fields.get("github_issue", ""),
                 workflow=fields.get("workflow", ""),
+                product=fields.get("product", ""),
+                phase=fields.get("phase", ""),
             )
         )
     return items
@@ -411,6 +415,8 @@ def run_gh(args: Iterable[str], input_text: str | None = None) -> subprocess.Com
         command,
         input=input_text,
         text=True,
+        encoding="utf-8",
+        errors="replace",
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         cwd=ROOT,

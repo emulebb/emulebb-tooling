@@ -8,7 +8,6 @@ import re
 import sys
 
 from github_roadmap_common import (
-    ISSUE_REPO,
     MANAGED_LABEL_PREFIXES,
     OWNER,
     PROJECT_TITLE,
@@ -17,6 +16,19 @@ from github_roadmap_common import (
     read_text,
     run_gh,
 )
+
+
+ISSUE_URL_RE = re.compile(
+    r"^https://github\.com/(?P<owner>[A-Za-z0-9_.-]+)/"
+    r"(?P<repo>[A-Za-z0-9_.-]+)/issues/(?P<number>\d+)$"
+)
+ARCHIVED_MFC_REPO = "emulebb/emulebb"
+PROJECT3_STATUS = {
+    "OPEN": "Todo",
+    "IN_PROGRESS": "In Progress",
+    "BLOCKED": "Todo",
+    "DEFERRED": "Todo",
+}
 
 
 def check_local_metadata(errors: list[str]) -> None:
@@ -31,8 +43,16 @@ def check_local_metadata(errors: list[str]) -> None:
             errors.append(f"{item.item_id}: missing workflow: github front matter")
         if not item.github_issue:
             errors.append(f"{item.item_id}: missing github_issue front matter")
-        elif not re.match(r"^https://github\.com/emulebb/emulebb/issues/\d+$", item.github_issue):
+        elif not ISSUE_URL_RE.match(item.github_issue):
             errors.append(f"{item.item_id}: invalid github_issue URL {item.github_issue!r}")
+        else:
+            match = ISSUE_URL_RE.match(item.github_issue)
+            issue_repo = f"{match.group('owner')}/{match.group('repo')}" if match else ""
+            if issue_repo != ARCHIVED_MFC_REPO:
+                if not item.product:
+                    errors.append(f"{item.item_id}: missing product front matter")
+                if not item.phase:
+                    errors.append(f"{item.item_id}: missing phase front matter")
 
         text = read_text(item.path)
         if "Workflow status is tracked in GitHub" not in text:
@@ -42,17 +62,7 @@ def check_local_metadata(errors: list[str]) -> None:
 def check_github_issue(item, errors: list[str]) -> None:
     """Check that the GitHub issue for one local item is discoverable."""
 
-    result = run_gh(
-        [
-            "issue",
-            "view",
-            item.github_issue,
-            "--repo",
-            ISSUE_REPO,
-            "--json",
-            "title,url,labels",
-        ]
-    )
+    result = run_gh(["issue", "view", item.github_issue, "--json", "title,url,labels"])
     if result.returncode != 0:
         errors.append(f"{item.item_id}: cannot read GitHub issue {item.github_issue}")
         return
@@ -69,12 +79,15 @@ def check_github_issue(item, errors: list[str]) -> None:
         for label in labels
         if isinstance(label, dict) and label.get("name")
     }
-    for expected in item.github_labels:
-        if expected not in label_names:
-            errors.append(f"{item.item_id}: missing issue label {expected}")
-    for label in sorted(label_names):
-        if label not in item.github_labels and label.startswith(MANAGED_LABEL_PREFIXES):
-            errors.append(f"{item.item_id}: stale managed issue label {label}")
+    match = ISSUE_URL_RE.match(item.github_issue)
+    issue_repo = f"{match.group('owner')}/{match.group('repo')}" if match else ""
+    if issue_repo == ARCHIVED_MFC_REPO:
+        for expected in item.github_labels:
+            if expected not in label_names:
+                errors.append(f"{item.item_id}: missing issue label {expected}")
+        for label in sorted(label_names):
+            if label not in item.github_labels and label.startswith(MANAGED_LABEL_PREFIXES):
+                errors.append(f"{item.item_id}: stale managed issue label {label}")
 
 
 def project_number(errors: list[str]) -> str:
@@ -141,24 +154,26 @@ def project_item_field_value(project_item: dict[str, object], field_name: str) -
 
 
 def check_project_item(item, project_items: dict[str, dict[str, object]], errors: list[str]) -> None:
-    """Check that one GitHub-primary item is present in Project #2 with fields."""
+    """Check one forward-product item in the canonical Project #3."""
+
+    match = ISSUE_URL_RE.match(item.github_issue)
+    issue_repo = f"{match.group('owner')}/{match.group('repo')}" if match else ""
+    if issue_repo == ARCHIVED_MFC_REPO:
+        return
 
     project_item = project_items.get(item.github_issue)
     if not project_item:
-        errors.append(f"{item.item_id}: missing Project #2 item")
+        errors.append(f"{item.item_id}: missing Project #3 item")
         return
     expected_values = {
-        "Roadmap Status": item.project_status,
-        "Work Type": item.project_type,
-        "Priority": item.priority,
-        "Lane": item.lane,
-        "Local ID": item.item_id,
-        "Release": item.project_release,
+        "Status": PROJECT3_STATUS.get(item.status, "Todo"),
+        "Product": item.product,
+        "Phase": item.phase,
     }
     for field_name, expected in expected_values.items():
         actual = project_item_field_value(project_item, field_name)
         if actual != expected:
-            errors.append(f"{item.item_id}: Project #2 {field_name} is {actual!r}, expected {expected!r}")
+            errors.append(f"{item.item_id}: Project #3 {field_name} is {actual!r}, expected {expected!r}")
 
 
 def main() -> int:

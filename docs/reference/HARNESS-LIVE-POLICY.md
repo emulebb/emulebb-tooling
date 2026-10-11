@@ -67,6 +67,18 @@ size and SHA-256, bound traffic and runtime, tear down automatically, and retain
 evidence. WSL REST stays on loopback; Windows control follows the split-tunnel
 LAN rule.
 
+An explicitly selected native-Windows Rust-versus-MFC protocol-parity campaign
+may use a narrower operator-approved exception to that direct-test baseline. It
+may share only roots listed in ignored operator-local inputs and may admit a
+download by exact eD2K hash and size when a prior SHA-256 is unavailable. Both
+clients must use fresh isolated profiles and output-root incoming directories,
+must never open or execute the downloaded payloads, and must compute SHA-256
+after completion and require cross-client equality. That equality proves parity
+between the two completed payloads; it does not establish content provenance or
+trust. The campaign must remain bounded, tear down automatically, retain
+sanitized evidence, and leave the ordinary direct Rust beta requirements above
+unchanged for every other workflow.
+
 Never put real media titles or live search terms in tracked harness code, docs,
 tests, or retained evidence.
 
