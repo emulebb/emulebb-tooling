@@ -2,7 +2,7 @@
 id: RUST-BUG-110
 workflow: local
 title: Bind ED2K peer service to the HELLO state machine
-status: OPEN
+status: DONE
 priority: Major
 category: bug
 labels: [rust, ed2k, uploads, identity, protocol-parity]
@@ -22,7 +22,7 @@ service and before an outbound promoted upload receives
 `OP_PORTTEST` exception. Adopt the maintained MFC improvement that disconnects
 a hash-banned identity immediately after HELLO binding.
 
-## Current State
+## Starting State
 
 - An inbound peer reaches the shared opcode dispatcher before `OP_HELLO`, so
   metadata, source, queue, and upload handlers can run with socket-only identity.
@@ -62,20 +62,34 @@ a hash-banned identity immediately after HELLO binding.
 
 ## Acceptance Criteria
 
-- [ ] Hash-banned HELLO identities disconnect before replies or peer-service
+- [x] Hash-banned HELLO identities disconnect before replies or peer-service
       side effects.
-- [ ] Inbound ordinary packets before `OP_HELLO` close the connection without
+- [x] Inbound ordinary packets before `OP_HELLO` close the connection without
       queue or file-service effects; decoded `OP_PORTTEST` remains supported.
-- [ ] Promoted uploads emit no `OP_ACCEPTUPLOADREQ` before a valid identity
+- [x] Promoted uploads emit no `OP_ACCEPTUPLOADREQ` before a valid identity
       exchange and attach exactly once after matching HELLO completion.
-- [ ] Legacy `OP_EMULEINFO` preludes and simultaneous HELLO remain interoperable.
-- [ ] Initial expected-hash mismatch closes and releases without adding a ban;
+- [x] Legacy `OP_EMULEINFO` preludes and simultaneous HELLO remain interoperable.
+- [x] Initial expected-hash mismatch closes and releases without adding a ban;
       post-binding hash mutation still bans.
-- [ ] Targeted listener tests, `cargo fmt --check`, and focused clippy pass.
+- [x] Targeted listener tests, `cargo fmt --check`, and focused clippy pass.
 
 ## Validation
 
-- Listener integration tests for hash-ban disconnect and pre-HELLO rejection.
-- Promotion tests for delayed accept, legacy info prelude, simultaneous HELLO,
-  mismatch, EOF, and timeout cleanup.
-- Focused `emulebb-ed2k` listener test suite and workspace formatting checks.
+- `cargo test -p emulebb-ed2k -- --test-threads=1`: 1024 passed.
+- `cargo test -p emulebb-ed2k ed2k_tcp::tests -- --test-threads=1`: 159 passed.
+- `cargo fmt --all -- --check`: passed.
+- `cargo clippy -p emulebb-ed2k --lib -- -D warnings
+  -A unfulfilled-lint-expectations`: passed. The allowance isolates seven
+  pre-existing unfulfilled lint expectations in unrelated server/NAT files;
+  the unsuppressed strict command remains blocked by that baseline.
+
+## Completion
+
+Completed on 2026-10-11 in three granular `emulebb-rust` commits:
+
+- `cc2b5b8b` disconnects banned identities during shared HELLO binding.
+- `c8d08fea` adds the direction-aware HELLO phase gate and preserves plain and
+  packed unaffiliated `OP_PORTTEST`.
+- `8f0f2602` holds promoted grants until identity binding, validates outbound
+  route identity without false bans, supports the legacy info prelude and
+  simultaneous HELLO, and bounds pre-establishment work.

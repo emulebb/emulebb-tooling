@@ -147,7 +147,7 @@ below as historical links.
 | [RUST-BUG-105](../history/items/RUST-BUG-105.md) | Major | DONE | Disposition stock source-acquisition default drift |
 | [RUST-BUG-107](items/RUST-BUG-107.md) | Major | OPEN | Preserve lossless shared-library path identity across platforms |
 | [RUST-BUG-109](../history/items/RUST-BUG-109.md) | Critical | DONE | Close ED2K callback and server state-machine parity gaps |
-| [RUST-BUG-110](items/RUST-BUG-110.md) | Major | OPEN | Bind ED2K peer service to the HELLO state machine |
+| [RUST-BUG-110](../history/items/RUST-BUG-110.md) | Major | DONE | Bind ED2K peer service to the HELLO state machine |
 
 ### Runtime reliability defects
 
