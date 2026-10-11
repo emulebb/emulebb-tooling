@@ -186,6 +186,22 @@ whitespace checks. Strict Clippy still reaches only the seven pre-existing
 unrelated `unfulfilled-lint-expectations`. Listener adoption and per-route
 reservation/cancellation remain in progress.
 
+Inbound listener adoption is implemented by `emulebb-rust@4f764be7`. After a
+validated HELLO response and secure-ident probe are written, the listener
+constructs the callback identity from the observed user hash, server-scoped
+client ID, mandatory server trailer, IPv4 peer address, and advertised ED2K TCP
+port. It adopts matching ticket work through the RAII session claim, acknowledges
+only successful per-file outcomes, continues A4AF after completion/NNP/FNF, and
+returns the unconsumed tail for a new dispatch after incomplete/queued outcomes
+or task failure. The legacy client-ID intent store remains only as an `Ok(None)`
+fallback until all three request producers migrate. Wire tests prove server
+provenance against a colliding LowID, ticket priority over the legacy queue,
+same-socket A4AF continuation, and tail retention after peer close. All 11
+callback protocol tests and all 974 `emulebb-ed2k` library tests pass, together
+with the core all-targets check, formatting, and whitespace checks; strict
+Clippy remains blocked only by the same seven unrelated expectations. Per-route
+reservation/cancellation is the remaining callback-ticket integration work.
+
 ## Notes
 
 Implementation order follows dependency pressure: establish callback session
