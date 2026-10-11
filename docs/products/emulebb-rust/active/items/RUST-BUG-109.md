@@ -124,7 +124,7 @@ that diverge from community eMule/aMule behavior.
       request, accumulated results, original absolute deadline, and authenticated
       session survive; source-envelope hashes remain authoritative even for
       zero-source replies, and stock-compatible trailing bytes are accepted.
-- [ ] Invalid zlib data in a bounded packed server frame is packet-local, while
+- [x] Invalid zlib data in a bounded packed server frame is packet-local, while
       invalid raw markers and declared lengths remain transport-fatal.
 - [ ] Upload promotion can use a connected shared server for eligible LowID
       waiters and retains the queue grant through callback completion/timeout.
@@ -477,10 +477,25 @@ seven known unrelated unfulfilled expectations allowed, and
 
 The same comparator pass found a separate framing-boundary disparity: community
 eMule, maintained MFC, and aMule discard a bounded packed packet whose zlib
-payload fails to inflate and keep the TCP stream, while Rust currently returns
-an error from `ServerSession::read_packet` and closes the session. Invalid raw
-protocol markers, zero lengths, and oversized declared lengths remain
-transport-fatal. This is tracked as the next independent acceptance item.
+payload fails to inflate and keep the TCP stream. This is corrected by
+`emulebb-rust@67b994d3`. `ServerSession::read_packet` now loops over an internal
+typed framed-read outcome, consumes and logs a failed bounded packed frame, and
+continues at the next frame without exposing a synthetic opcode to command
+handlers. The caller's existing timeout/cancellation still encloses the whole
+read future, and an obfuscated stream remains cipher-aligned because the exact
+encrypted frame is consumed before inflation. Invalid raw protocol markers,
+zero lengths, truncated frames, and oversized declared lengths remain
+transport-fatal.
+
+A socket-level regression coalesces invalid zlib data and a valid
+`OP_SERVERSTATUS` frame and proves that the valid successor is returned; a
+paired regression proves an invalid raw marker still fails the transport.
+Validation from committed state passes all 1,005 `emulebb-ed2k` library tests,
+all 394 `emulebb-core` library tests plus both crates' integration and doc tests,
+affected-crate all-target checks, formatting, and whitespace checks. Strict
+Clippy passes for both affected crates and all targets with warnings denied, the
+seven known unrelated unfulfilled expectations allowed, and
+`clippy::allow_attributes` denied.
 
 ## Notes
 
