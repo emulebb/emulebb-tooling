@@ -522,6 +522,37 @@ affected-crate all-target checks, strict Clippy, formatting, and whitespace
 checks pass. The upload queue's callback-pending entitlement and listener HELLO
 adoption remain in progress.
 
+LowID upload callback ownership is implemented by
+`emulebb-rust@a0e0e494`. A detached LowID waiter now retains an orthogonal
+callback entitlement while remaining in the ranked waiting queue; it consumes
+no base upload slot, and queue selection continues to a connected or directly
+dialable waiter in the same maintenance pass. Typed promotion work prevents a
+callback permit from carrying or releasing an active-session handle. Callback
+dispatch is generation- and deadline-bound, routes are armed atomically before
+wire send, and a known-not-sent result or timeout cancels only the wire attempt:
+the original wait time and stock-style missed-turn entitlement survive for a
+late callback or live reask without seeding upload cooldown.
+
+A matching callback claim atomically rekeys the waiter to the observed HELLO,
+cancels the producer epoch, and grants at most one temporary slot above the
+effective active limit. Known nonzero user hashes are authoritative; mismatch
+never falls back to endpoint identity. Multiple retained entitlements are
+allowed, but serialized claims cannot exceed the one-slot overflow, and a full
+claim leaves the later entitlement intact. The existing verified-incumbent
+collision policy remains authoritative for ordinary reconnects. Direct-UDP
+promotion now uses this permit path rather than prematurely treating a LowID as
+an active grant.
+
+Regressions prove that the LowID stays Waiting while a HighID fills the base
+slot, callback timeout preserves the missed turn for reask, hash mismatch cannot
+consume the epoch, late dispatch settlement cannot revoke a successful claim,
+and two matching callbacks admit only one overflow until capacity returns. The
+full affected-crate gate passes from committed state: all 1,013
+`emulebb-ed2k` library tests, all 394 `emulebb-core` library tests plus both
+crates' integration and doc tests, affected-crate all-target checks, strict
+Clippy, formatting, and whitespace checks. Listener HELLO adoption and the
+shared-server dispatch planner remain in progress.
+
 ## Notes
 
 Implementation order follows dependency pressure: establish callback session
