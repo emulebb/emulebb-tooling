@@ -509,6 +509,19 @@ Kad verdicts; affected-crate all-target checks, strict Clippy, formatting, and
 whitespace checks pass. Endpoint-pinned callback dispatch, a route-bound queue
 lease, and inbound HELLO adoption remain in progress.
 
+Connected-server callback dispatch is route-fenced by
+`emulebb-rust@db08699e`. Every accepted server login publishes the
+process-global server-session trace ID as its generation, so reconnects to the
+same endpoint cannot reuse an attempt-local epoch. Background callback commands
+carry the expected canonical endpoint and login generation; immediately before
+the write, the live worker requires that exact route and a current local HighID.
+Zero and HighID targets are rejected before queueing. Wire regressions prove a
+matching command emits one `OP_CALLBACKREQUEST`, while stale-generation,
+different-endpoint, and local-LowID cases emit no bytes. Focused callback tests,
+affected-crate all-target checks, strict Clippy, formatting, and whitespace
+checks pass. The upload queue's callback-pending entitlement and listener HELLO
+adoption remain in progress.
+
 ## Notes
 
 Implementation order follows dependency pressure: establish callback session
