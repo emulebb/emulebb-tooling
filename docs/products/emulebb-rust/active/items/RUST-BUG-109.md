@@ -147,6 +147,18 @@ ignores unmarked tails, and retains already-decoded sets when a later marked
 segment is malformed. The Lugdunum-shaped regression cases and the complete
 result-decoder suite pass (10 tests).
 
+Callback-ticket route identity prerequisites are implemented by two granular
+`emulebb-rust` commits. `91ee28dc` retains the mandatory HELLO trailer's server
+endpoint and rejects truncated trailers; all 36 HELLO-related tests pass.
+`9f5dd7ac` introduces one canonical discovered-source identity: server LowIDs
+are scoped by `(server endpoint, client-id)`, Kad LowIDs use their user hash,
+and HighIDs remain globally deduplicated by dialable endpoint. Both server and
+core aggregation preserve colliding LowIDs from different servers, and the
+20-minute callback request gate is server-scoped. The focused aggregation,
+source-policy, buddy-reask tests and `cargo check -p emulebb-core --all-targets`
+pass. Expiring ticket storage, listener claims, and dispatch-failure
+cancellation remain in progress.
+
 ## Notes
 
 Implementation order follows dependency pressure: establish callback session
