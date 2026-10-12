@@ -138,6 +138,7 @@ below as historical links.
 | [RUST-FEAT-040](items/RUST-FEAT-040.md) | Minor | OPEN | Carry ED2K and Kad search metadata end to end |
 | [RUST-FEAT-041](items/RUST-FEAT-041.md) | Minor | OPEN | Implement ED2K server user search (OP_SEARCH_USER / OP_USERS_LIST) |
 | [RUST-FEAT-042](items/RUST-FEAT-042.md) | Minor | OPEN | Handle OP_INVALID_LOWID server-UDP notification |
+| [RUST-FEAT-043](items/RUST-FEAT-043.md) | Minor | OPEN | Port the MFC TCP-error flooder IP ban |
 
 ### Stock compatibility defects
 
@@ -153,12 +154,15 @@ below as historical links.
 | [RUST-BUG-111](items/RUST-BUG-111.md) | Major | OPEN | Avoid duplicate startup/republish on repeated OP_IDCHANGE |
 | [RUST-BUG-112](items/RUST-BUG-112.md) | Minor | OPEN | Advertise offerfiles_v uniformly across ED2K server session types |
 | [RUST-BUG-113](items/RUST-BUG-113.md) | Minor | OPEN | Advertise share-viewing capability truthfully in CT_EMULE_MISCOPTIONS1 |
+| [RUST-BUG-114](items/RUST-BUG-114.md) | Minor | OPEN | Enforce an explicit maximum upload-slot ceiling and clarify maxUploadSlots semantics |
+| [RUST-BUG-115](items/RUST-BUG-115.md) | Minor | OPEN | Ban cross-reconnect userhash changes via a tracked-client identity store |
 
 ### Runtime reliability defects
 
 | ID | Priority | Status | Title |
 |----|----------|--------|-------|
 | [RUST-BUG-108](../history/items/RUST-BUG-108.md) | Major | DONE | Harden regular-build logging and retention |
+| [RUST-BUG-116](items/RUST-BUG-116.md) | Minor | OPEN | Wire periodic expiry pruning for the client BanStore |
 
 ### Beta follow-up refactors and evidence
 
