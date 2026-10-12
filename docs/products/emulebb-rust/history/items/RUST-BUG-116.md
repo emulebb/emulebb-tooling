@@ -3,7 +3,7 @@ id: RUST-BUG-116
 workflow: github
 github_issue: https://github.com/emulebb/emulebb-rust/issues/83
 title: Wire periodic expiry pruning for the client BanStore
-status: OPEN
+status: DONE
 priority: Minor
 category: bug
 labels: [rust, ed2k, ban, memory, hygiene]
@@ -77,3 +77,5 @@ IPs/hashes, with no mechanism to reclaim it.
 ## Notes
 
 Shares the pruning cadence with RUST-BUG-115 and RUST-FEAT-043.
+
+- Fixed in emulebb-rust PR #101 (commit `7f274dd3`), rebase-merged to `main`.

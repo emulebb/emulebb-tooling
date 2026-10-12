@@ -160,7 +160,7 @@ below as historical links.
 | [RUST-BUG-110](../history/items/RUST-BUG-110.md) | Major | DONE | Bind ED2K peer service to the HELLO state machine |
 | [RUST-BUG-111](items/RUST-BUG-111.md) | Major | OPEN | Avoid duplicate startup/republish on repeated OP_IDCHANGE |
 | [RUST-BUG-112](items/RUST-BUG-112.md) | Minor | OPEN | Advertise offerfiles_v uniformly across ED2K server session types |
-| [RUST-BUG-113](items/RUST-BUG-113.md) | Minor | OPEN | Advertise share-viewing capability truthfully in CT_EMULE_MISCOPTIONS1 |
+| [RUST-BUG-113](../history/items/RUST-BUG-113.md) | Minor | DONE | Advertise share-viewing capability truthfully in CT_EMULE_MISCOPTIONS1 |
 | [RUST-BUG-114](items/RUST-BUG-114.md) | Minor | OPEN | Enforce an explicit maximum upload-slot ceiling and clarify maxUploadSlots semantics |
 | [RUST-BUG-115](items/RUST-BUG-115.md) | Minor | OPEN | Ban cross-reconnect userhash changes via a tracked-client identity store |
 
@@ -169,7 +169,7 @@ below as historical links.
 | ID | Priority | Status | Title |
 |----|----------|--------|-------|
 | [RUST-BUG-108](../history/items/RUST-BUG-108.md) | Major | DONE | Harden regular-build logging and retention |
-| [RUST-BUG-116](items/RUST-BUG-116.md) | Minor | OPEN | Wire periodic expiry pruning for the client BanStore |
+| [RUST-BUG-116](../history/items/RUST-BUG-116.md) | Minor | DONE | Wire periodic expiry pruning for the client BanStore |
 
 ### Beta follow-up refactors and evidence
 

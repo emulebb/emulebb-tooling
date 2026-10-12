@@ -3,7 +3,7 @@ id: RUST-BUG-113
 workflow: github
 github_issue: https://github.com/emulebb/emulebb-rust/issues/80
 title: Advertise share-viewing capability truthfully in CT_EMULE_MISCOPTIONS1
-status: OPEN
+status: DONE
 priority: Minor
 category: bug
 labels: [rust, ed2k, hello, capability, parity, browse]
@@ -82,3 +82,5 @@ omission (`ed2k-preview`); this item is only about the view-shared-files bit.
 
 Related capability honesty is recorded in RUST-REF-015 (offerfiles_v) and the
 existing `ed2k-preview` omission.
+
+- Fixed in emulebb-rust PR #101 (commit `d93d1172`), rebase-merged to `main`.
