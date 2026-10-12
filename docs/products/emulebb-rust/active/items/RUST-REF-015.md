@@ -1,6 +1,7 @@
 ---
 id: RUST-REF-015
-workflow: local
+workflow: github
+github_issue: https://github.com/emulebb/emulebb-rust/issues/100
 title: Track the non-stock offerfiles_v server-login extension
 status: OPEN
 priority: Minor
@@ -10,6 +11,8 @@ milestone: post-beta-polish
 created: 2026-10-12
 source: ED2K static audit 2026-10-12 vs community-0.72, aMule
 ---
+
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb-rust/issues/100. This local document is retained as the durable engineering spec and evidence record.
 
 # RUST-REF-015 - Track the non-stock offerfiles_v server-login extension
 

@@ -1,6 +1,7 @@
 ---
 id: RUST-FEAT-050
-workflow: local
+workflow: github
+github_issue: https://github.com/emulebb/emulebb-rust/issues/93
 title: Parse and emit the ED2K link AICH root (h=) section
 status: OPEN
 priority: Minor
@@ -10,6 +11,8 @@ milestone: post-beta-compatibility
 created: 2026-10-12
 source: feature-backlog chat 2026-10-12 vs emulebb-mfc, aMule
 ---
+
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb-rust/issues/93. This local document is retained as the durable engineering spec and evidence record.
 
 # RUST-FEAT-050 - Parse and emit the ED2K link AICH root (h=) section
 

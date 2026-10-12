@@ -1,6 +1,7 @@
 ---
 id: RUST-REF-008
-workflow: local
+workflow: github
+github_issue: https://github.com/emulebb/emulebb-rust/issues/96
 title: Reduce large-library metadata and scan I/O amplification
 status: OPEN
 priority: Major
@@ -10,6 +11,8 @@ milestone: post-beta-polish
 created: 2026-10-03
 source: 100k SSD campaign, interrupted multi-HDD campaign, and 2026-10-03 I/O review
 ---
+
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb-rust/issues/96. This local document is retained as the durable engineering spec and evidence record.
 
 # RUST-REF-008 - Reduce large-library metadata and scan I/O amplification
 

@@ -1,6 +1,7 @@
 ---
 id: RUST-FEAT-051
-workflow: local
+workflow: github
+github_issue: https://github.com/emulebb/emulebb-rust/issues/94
 title: Implement ED2K server user search (OP_SEARCH_USER / OP_USERS_LIST)
 status: OPEN
 priority: Minor
@@ -10,6 +11,8 @@ milestone: post-beta-compatibility
 created: 2026-10-12
 source: ED2K static audit 2026-10-12 vs community-0.72, aMule, ed2k-server, lugdunum 17.15
 ---
+
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb-rust/issues/94. This local document is retained as the durable engineering spec and evidence record.
 
 # RUST-FEAT-051 - Implement ED2K server user search (OP_SEARCH_USER / OP_USERS_LIST)
 

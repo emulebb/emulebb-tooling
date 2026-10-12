@@ -1,6 +1,7 @@
 ---
 id: RUST-FEAT-046
-workflow: local
+workflow: github
+github_issue: https://github.com/emulebb/emulebb-rust/issues/89
 title: Repair mojibake and normalize download filenames at intake
 status: OPEN
 priority: Minor
@@ -10,6 +11,8 @@ milestone: post-beta-compatibility
 created: 2026-10-12
 source: ED2K download-completeness audit 2026-10-12 vs community-0.72, emulebb-mfc
 ---
+
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb-rust/issues/89. This local document is retained as the durable engineering spec and evidence record.
 
 # RUST-FEAT-046 - Repair mojibake and normalize download filenames at intake
 

@@ -1,6 +1,7 @@
 ---
 id: RUST-REF-007
-workflow: local
+workflow: github
+github_issue: https://github.com/emulebb/emulebb-rust/issues/95
 title: Review Rust upload hot-path performance candidates
 status: OPEN
 priority: Minor
@@ -10,6 +11,8 @@ milestone: post-beta-polish
 created: 2026-07-14
 source: Operator upload performance review 2026-07-14
 ---
+
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb-rust/issues/95. This local document is retained as the durable engineering spec and evidence record.
 
 # RUST-REF-007 - Review Rust upload hot-path performance candidates
 

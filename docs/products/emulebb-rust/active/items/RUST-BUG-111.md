@@ -1,6 +1,7 @@
 ---
 id: RUST-BUG-111
-workflow: local
+workflow: github
+github_issue: https://github.com/emulebb/emulebb-rust/issues/76
 title: Avoid duplicate startup/republish on repeated OP_IDCHANGE
 status: OPEN
 priority: Major
@@ -10,6 +11,8 @@ milestone: post-beta-compatibility
 created: 2026-10-12
 source: ED2K static audit 2026-10-12 vs community-0.72, aMule, ed2k-server, lugdunum 17.15
 ---
+
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb-rust/issues/76. This local document is retained as the durable engineering spec and evidence record.
 
 # RUST-BUG-111 - Avoid duplicate startup/republish on repeated OP_IDCHANGE
 

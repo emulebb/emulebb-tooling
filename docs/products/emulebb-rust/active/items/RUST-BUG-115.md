@@ -1,6 +1,7 @@
 ---
 id: RUST-BUG-115
-workflow: local
+workflow: github
+github_issue: https://github.com/emulebb/emulebb-rust/issues/82
 title: Ban cross-reconnect userhash changes via a tracked-client identity store
 status: OPEN
 priority: Minor
@@ -10,6 +11,8 @@ milestone: post-beta-compatibility
 created: 2026-10-12
 source: ED2K upload/ban/slot audit 2026-10-12 vs emulebb-mfc
 ---
+
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb-rust/issues/82. This local document is retained as the durable engineering spec and evidence record.
 
 # RUST-BUG-115 - Ban cross-reconnect userhash changes via a tracked-client identity store
 

@@ -1,6 +1,7 @@
 ---
 id: RUST-REF-010
-workflow: local
+workflow: github
+github_issue: https://github.com/emulebb/emulebb-rust/issues/98
 title: Bound watcher reconciliation I/O for large shared libraries
 status: OPEN
 priority: Major
@@ -10,6 +11,8 @@ milestone: post-beta-polish
 created: 2026-10-03
 source: 2026-10-03 large-library I/O and portability review
 ---
+
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb-rust/issues/98. This local document is retained as the durable engineering spec and evidence record.
 
 # RUST-REF-010 - Bound watcher reconciliation I/O for large shared libraries
 

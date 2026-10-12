@@ -1,6 +1,7 @@
 ---
 id: RUST-FEAT-045
-workflow: local
+workflow: github
+github_issue: https://github.com/emulebb/emulebb-rust/issues/88
 title: Retain and expose multiple per-source filenames for downloads
 status: OPEN
 priority: Minor
@@ -10,6 +11,8 @@ milestone: post-beta-compatibility
 created: 2026-10-12
 source: ED2K download-completeness audit 2026-10-12 vs community-0.72, emulebb-mfc
 ---
+
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb-rust/issues/88. This local document is retained as the durable engineering spec and evidence record.
 
 # RUST-FEAT-045 - Retain and expose multiple per-source filenames for downloads
 

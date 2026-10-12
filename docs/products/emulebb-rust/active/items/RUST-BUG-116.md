@@ -1,6 +1,7 @@
 ---
 id: RUST-BUG-116
-workflow: local
+workflow: github
+github_issue: https://github.com/emulebb/emulebb-rust/issues/83
 title: Wire periodic expiry pruning for the client BanStore
 status: OPEN
 priority: Minor
@@ -10,6 +11,8 @@ milestone: post-beta-polish
 created: 2026-10-12
 source: ED2K upload/ban/slot audit 2026-10-12 vs emulebb-mfc
 ---
+
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb-rust/issues/83. This local document is retained as the durable engineering spec and evidence record.
 
 # RUST-BUG-116 - Wire periodic expiry pruning for the client BanStore
 

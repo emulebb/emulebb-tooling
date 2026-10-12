@@ -1,6 +1,7 @@
 ---
 id: RUST-BUG-113
-workflow: local
+workflow: github
+github_issue: https://github.com/emulebb/emulebb-rust/issues/80
 title: Advertise share-viewing capability truthfully in CT_EMULE_MISCOPTIONS1
 status: OPEN
 priority: Minor
@@ -10,6 +11,8 @@ milestone: post-beta-compatibility
 created: 2026-10-12
 source: ED2K static audit 2026-10-12 vs community-0.72, aMule
 ---
+
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb-rust/issues/80. This local document is retained as the durable engineering spec and evidence record.
 
 # RUST-BUG-113 - Advertise share-viewing capability truthfully in CT_EMULE_MISCOPTIONS1
 

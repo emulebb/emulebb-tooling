@@ -1,6 +1,7 @@
 ---
 id: RUST-BUG-001
-workflow: local
+workflow: github
+github_issue: https://github.com/emulebb/emulebb-rust/issues/77
 title: kad_swarm multi-node transfer tests are isolated in CI
 status: OPEN
 priority: Minor
@@ -10,6 +11,8 @@ milestone: post-beta-polish
 created: 2026-06-14
 source: PM quality review (2026-06-14) — isolate + document CI timing debt
 ---
+
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb-rust/issues/77. This local document is retained as the durable engineering spec and evidence record.
 
 # RUST-BUG-001 - kad_swarm multi-node transfer tests are isolated in CI
 

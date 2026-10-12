@@ -1,6 +1,7 @@
 ---
 id: RUST-CI-008
-workflow: local
+workflow: github
+github_issue: https://github.com/emulebb/emulebb-rust/issues/84
 title: Prove Unicode and long-path large-library behavior across platforms
 status: OPEN
 priority: Major
@@ -10,6 +11,8 @@ milestone: post-beta-polish
 created: 2026-10-03
 source: 2026-10-03 large-library I/O and portability review
 ---
+
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb-rust/issues/84. This local document is retained as the durable engineering spec and evidence record.
 
 # RUST-CI-008 - Prove Unicode and long-path large-library behavior across platforms
 

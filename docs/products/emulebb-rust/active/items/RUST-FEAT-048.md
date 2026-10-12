@@ -1,6 +1,7 @@
 ---
 id: RUST-FEAT-048
-workflow: local
+workflow: github
+github_issue: https://github.com/emulebb/emulebb-rust/issues/91
 title: Sparse part-file allocation for large downloads (multi-platform, default-on)
 status: OPEN
 priority: Minor
@@ -10,6 +11,8 @@ milestone: post-beta-polish
 created: 2026-10-12
 source: feature-backlog chat 2026-10-12 vs emulebb-mfc, aMule
 ---
+
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb-rust/issues/91. This local document is retained as the durable engineering spec and evidence record.
 
 # RUST-FEAT-048 - Sparse part-file allocation for large downloads (multi-platform, default-on)
 
