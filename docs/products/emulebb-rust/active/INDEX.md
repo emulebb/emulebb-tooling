@@ -137,6 +137,7 @@ below as historical links.
 | [RUST-FEAT-039](items/RUST-FEAT-039.md) | Minor | OPEN | Size ED2K request depth from measured RTT and bandwidth |
 | [RUST-FEAT-040](items/RUST-FEAT-040.md) | Minor | OPEN | Carry ED2K and Kad search metadata end to end |
 | [RUST-FEAT-041](items/RUST-FEAT-041.md) | Minor | OPEN | Implement ED2K server user search (OP_SEARCH_USER / OP_USERS_LIST) |
+| [RUST-FEAT-042](items/RUST-FEAT-042.md) | Minor | OPEN | Handle OP_INVALID_LOWID server-UDP notification |
 
 ### Stock compatibility defects
 
