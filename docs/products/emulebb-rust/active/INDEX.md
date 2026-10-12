@@ -174,6 +174,7 @@ below as historical links.
 | [RUST-REF-009](items/RUST-REF-009.md) | Major | OPEN | Use native storage domains for cross-platform library scheduling |
 | [RUST-REF-010](items/RUST-REF-010.md) | Major | OPEN | Bound watcher reconciliation I/O for large shared libraries |
 | [RUST-REF-011](items/RUST-REF-011.md) | Minor | OPEN | Consolidate duplicated ED2K opcode and capability constants |
+| [RUST-REF-012](items/RUST-REF-012.md) | Minor | DEFERRED | Disposition OP_DISCONNECT server-session parity note |
 
 ### Done or stale in the 2026-09-30 triage
 
