@@ -152,8 +152,8 @@ seconds, below the five-minute objective without enlarging legacy packet shape.
 ## PARKED — explicit future boundary
 
 Operator stance (2026-10-12): the items in this section are **future-only, not
-excluded**. They are parked until the upstream design stabilizes so
-emulebb-rust adopts a settled, interoperable model rather than a moving target.
+excluded**. Each is parked for its own stated reason; none is a permanent
+product exclusion.
 
 IPv6 support remains a separate protocol project. Do not reinterpret classic
 IPv4 fields, advertise eMuleAI IPv6 bits, or mix IPv4/IPv6 Kad contacts before
@@ -167,6 +167,11 @@ as IPv6. Revisit once aMule and eMuleAI stabilize uTP so the transport can be
 adopted with its own capability negotiation, congestion-control contract,
 persistence, and live-evidence plan. It is additive and does not change stock
 ED2K wire behavior for peers that do not speak it.
+
+eMule collection files (`.emulecollection` import/export): FUTURE, lowest
+priority. No upstream blocker; parked only to keep the beta surface lean. When
+revisited, import enqueues a deduplicated batch and export serializes the
+daemon's canonical shared-file hash/name/size.
 
 ## EXCLUDED — operator decisions
 
