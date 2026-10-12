@@ -136,7 +136,6 @@ below as historical links.
 | [RUST-FEAT-038](items/RUST-FEAT-038.md) | Minor | OPEN | Add current-aMule-style endgame source takeover |
 | [RUST-FEAT-039](items/RUST-FEAT-039.md) | Minor | OPEN | Size ED2K request depth from measured RTT and bandwidth |
 | [RUST-FEAT-040](items/RUST-FEAT-040.md) | Minor | OPEN | Carry ED2K and Kad search metadata end to end |
-| [RUST-FEAT-041](items/RUST-FEAT-041.md) | Minor | OPEN | Implement ED2K server user search (OP_SEARCH_USER / OP_USERS_LIST) |
 | [RUST-FEAT-042](items/RUST-FEAT-042.md) | Minor | OPEN | Handle OP_INVALID_LOWID server-UDP notification |
 | [RUST-FEAT-043](items/RUST-FEAT-043.md) | Minor | OPEN | Port the MFC TCP-error flooder IP ban |
 | [RUST-FEAT-044](items/RUST-FEAT-044.md) | Minor | OPEN | Implement follow-majority filename selection for downloads |
@@ -146,6 +145,7 @@ below as historical links.
 | [RUST-FEAT-048](items/RUST-FEAT-048.md) | Minor | OPEN | Sparse part-file allocation for large downloads (multi-platform, default-on) |
 | [RUST-FEAT-049](items/RUST-FEAT-049.md) | Minor | OPEN | Add per-file share exclusions with a built-in default ignore set |
 | [RUST-FEAT-050](items/RUST-FEAT-050.md) | Minor | OPEN | Parse and emit the ED2K link AICH root (h=) section |
+| [RUST-FEAT-051](items/RUST-FEAT-051.md) | Minor | OPEN | Implement ED2K server user search (OP_SEARCH_USER / OP_USERS_LIST) |
 
 ### Stock compatibility defects
 
@@ -178,7 +178,7 @@ below as historical links.
 | [RUST-BUG-001](items/RUST-BUG-001.md) | Minor | OPEN | kad_swarm multi-node transfer tests are isolated in CI |
 | [RUST-CI-005](items/RUST-CI-005.md) | Major | OPEN | Disposition and prove the negotiated offerfiles capability |
 | [RUST-CI-006](items/RUST-CI-006.md) | Major | OPEN | Refresh current-head stock parity evidence and reconcile docs |
-| [RUST-CI-007](items/RUST-CI-007.md) | Minor | OPEN | Publish immutable nightly beta builds |
+| [RUST-CI-007](../history/items/RUST-CI-007.md) | Minor | DONE | Publish immutable nightly beta builds |
 | [RUST-CI-008](items/RUST-CI-008.md) | Major | OPEN | Prove Unicode and long-path large-library behavior across platforms |
 | [RUST-REF-005](items/RUST-REF-005.md) | Major | OPEN | Decompose oversized Rust modules by responsibility |
 | [RUST-REF-006](items/RUST-REF-006.md) | Major | OPEN | Consolidate Rust NAT and runtime safety internals |

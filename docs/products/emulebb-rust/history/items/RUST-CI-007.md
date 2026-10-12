@@ -3,7 +3,7 @@ id: RUST-CI-007
 workflow: github
 github_issue: https://github.com/emulebb/emulebb-rust/issues/32
 title: Publish immutable nightly beta builds
-status: OPEN
+status: DONE
 priority: Minor
 category: ci
 labels: [rust, github-actions, release, nightly]
@@ -73,3 +73,6 @@ container channel also exposes a moving `nightly` tag.
   checks and `actionlint` also passed after the final workflow pins were set.
 - The remaining unchecked criterion requires observing the first scheduled
   publishing run; the item stays open until that evidence exists.
+
+- 2026-10-06: GitHub issue #32 closed as COMPLETED; the scheduled publishing-run
+  evidence is recorded on the issue and the item is marked DONE.

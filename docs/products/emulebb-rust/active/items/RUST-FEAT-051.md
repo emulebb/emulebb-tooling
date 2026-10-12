@@ -1,5 +1,5 @@
 ---
-id: RUST-FEAT-041
+id: RUST-FEAT-051
 workflow: local
 title: Implement ED2K server user search (OP_SEARCH_USER / OP_USERS_LIST)
 status: OPEN
@@ -11,7 +11,7 @@ created: 2026-10-12
 source: ED2K static audit 2026-10-12 vs community-0.72, aMule, ed2k-server, lugdunum 17.15
 ---
 
-# RUST-FEAT-041 - Implement ED2K server user search (OP_SEARCH_USER / OP_USERS_LIST)
+# RUST-FEAT-051 - Implement ED2K server user search (OP_SEARCH_USER / OP_USERS_LIST)
 
 ## Summary
 
