@@ -151,6 +151,8 @@ below as historical links.
 | [RUST-BUG-109](../history/items/RUST-BUG-109.md) | Critical | DONE | Close ED2K callback and server state-machine parity gaps |
 | [RUST-BUG-110](../history/items/RUST-BUG-110.md) | Major | DONE | Bind ED2K peer service to the HELLO state machine |
 | [RUST-BUG-111](items/RUST-BUG-111.md) | Major | OPEN | Avoid duplicate startup/republish on repeated OP_IDCHANGE |
+| [RUST-BUG-112](items/RUST-BUG-112.md) | Minor | OPEN | Advertise offerfiles_v uniformly across ED2K server session types |
+| [RUST-BUG-113](items/RUST-BUG-113.md) | Minor | OPEN | Advertise share-viewing capability truthfully in CT_EMULE_MISCOPTIONS1 |
 
 ### Runtime reliability defects
 
@@ -177,6 +179,7 @@ below as historical links.
 | [RUST-REF-012](items/RUST-REF-012.md) | Minor | DEFERRED | Disposition OP_DISCONNECT server-session parity note |
 | [RUST-REF-013](items/RUST-REF-013.md) | Minor | DEFERRED | Disposition OP_IDCHANGE auxiliary-port field handling |
 | [RUST-REF-014](items/RUST-REF-014.md) | Minor | DEFERRED | Disposition ed2k-server capability-constant discrepancy |
+| [RUST-REF-015](items/RUST-REF-015.md) | Minor | OPEN | Track the non-stock offerfiles_v server-login extension |
 
 ### Done or stale in the 2026-09-30 triage
 
