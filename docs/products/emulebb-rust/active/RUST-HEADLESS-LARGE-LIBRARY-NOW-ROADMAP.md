@@ -186,3 +186,8 @@ are recorded so they are not re-proposed.
 - Time-based bandwidth/connection scheduler (time-of-day profiles): EXCLUDED.
   Rationale: same — an external Python process can drive `/api/v1` limits; no
   in-daemon scheduling engine.
+- Proxy transport support (SOCKS4/4a/5, HTTP CONNECT): EXCLUDED — operator
+  decision: **never**. The product is VPN-first; do not add an outbound proxy
+  transport layer. The existing `proxy_configured` gate in the UDP-reask
+  eligibility predicate remains a stock-shape mirror and must not grow a real
+  proxy implementation.
