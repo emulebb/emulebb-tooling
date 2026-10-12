@@ -144,6 +144,7 @@ below as historical links.
 | [RUST-FEAT-046](items/RUST-FEAT-046.md) | Minor | OPEN | Repair mojibake and normalize download filenames at intake |
 | [RUST-FEAT-047](items/RUST-FEAT-047.md) | Minor | OPEN | Recognize already-downloaded files to avoid duplicate downloads |
 | [RUST-FEAT-048](items/RUST-FEAT-048.md) | Minor | OPEN | Sparse part-file allocation for large downloads (multi-platform, default-on) |
+| [RUST-FEAT-049](items/RUST-FEAT-049.md) | Minor | OPEN | Add per-file share exclusions with a built-in default ignore set |
 
 ### Stock compatibility defects
 
