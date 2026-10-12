@@ -1,6 +1,6 @@
 # emulebb-rust Headless Large-Library Roadmap — NOW
 
-**Updated:** 2026-10-03  
+**Updated:** 2026-10-12
 **Product boundary:** `repos/emulebb-rust`, plus the Rust soak/contract harness in
 `repos/emulebb-build-tests`  
 **Product intent:** a lean, powerful, headless eD2K/Kad client optimized for
@@ -151,9 +151,33 @@ seconds, below the five-minute objective without enlarging legacy packet shape.
 
 ## PARKED — explicit future boundary
 
+Operator stance (2026-10-12): the items in this section are **future-only, not
+excluded**. They are parked until the upstream design stabilizes so
+emulebb-rust adopts a settled, interoperable model rather than a moving target.
+
 IPv6 support remains a separate protocol project. Do not reinterpret classic
 IPv4 fields, advertise eMuleAI IPv6 bits, or mix IPv4/IPv6 Kad contacts before
 there is an end-to-end address model, persistence format, capability contract,
 peer/server consumer coverage, and dual-stack live evidence. aMule/eMuleAI
 research remains valuable input, but partial advertisement would reduce
 interoperability rather than improve it.
+
+uTP peer transport (from aMule/eMuleAI) is parked on the same future boundary
+as IPv6. Revisit once aMule and eMuleAI stabilize uTP so the transport can be
+adopted with its own capability negotiation, congestion-control contract,
+persistence, and live-evidence plan. It is additive and does not change stock
+ED2K wire behavior for peers that do not speak it.
+
+## EXCLUDED — operator decisions
+
+These were proposed in the 2026-10-12 feature-backlog chat and declined; they
+are recorded so they are not re-proposed.
+
+- Auto category-assignment rules (extension / keyword / size -> category):
+  EXCLUDED. Rationale: achievable through API integration from an external
+  Python process; keep the daemon lean. Category-driven delivery itself is
+  already implemented (`crates/emulebb-core/src/delivery.rs` resolves a
+  per-category path; `category_id` is persisted on the transfer manifest).
+- Time-based bandwidth/connection scheduler (time-of-day profiles): EXCLUDED.
+  Rationale: same — an external Python process can drive `/api/v1` limits; no
+  in-daemon scheduling engine.
