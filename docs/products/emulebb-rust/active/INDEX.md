@@ -139,6 +139,10 @@ below as historical links.
 | [RUST-FEAT-041](items/RUST-FEAT-041.md) | Minor | OPEN | Implement ED2K server user search (OP_SEARCH_USER / OP_USERS_LIST) |
 | [RUST-FEAT-042](items/RUST-FEAT-042.md) | Minor | OPEN | Handle OP_INVALID_LOWID server-UDP notification |
 | [RUST-FEAT-043](items/RUST-FEAT-043.md) | Minor | OPEN | Port the MFC TCP-error flooder IP ban |
+| [RUST-FEAT-044](items/RUST-FEAT-044.md) | Minor | OPEN | Implement follow-majority filename selection for downloads |
+| [RUST-FEAT-045](items/RUST-FEAT-045.md) | Minor | OPEN | Retain and expose multiple per-source filenames for downloads |
+| [RUST-FEAT-046](items/RUST-FEAT-046.md) | Minor | OPEN | Repair mojibake and normalize download filenames at intake |
+| [RUST-FEAT-047](items/RUST-FEAT-047.md) | Minor | OPEN | Recognize already-downloaded files to avoid duplicate downloads |
 
 ### Stock compatibility defects
 
