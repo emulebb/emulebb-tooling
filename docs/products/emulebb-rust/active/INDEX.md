@@ -176,6 +176,7 @@ below as historical links.
 | [RUST-REF-011](items/RUST-REF-011.md) | Minor | OPEN | Consolidate duplicated ED2K opcode and capability constants |
 | [RUST-REF-012](items/RUST-REF-012.md) | Minor | DEFERRED | Disposition OP_DISCONNECT server-session parity note |
 | [RUST-REF-013](items/RUST-REF-013.md) | Minor | DEFERRED | Disposition OP_IDCHANGE auxiliary-port field handling |
+| [RUST-REF-014](items/RUST-REF-014.md) | Minor | DEFERRED | Disposition ed2k-server capability-constant discrepancy |
 
 ### Done or stale in the 2026-09-30 triage
 
