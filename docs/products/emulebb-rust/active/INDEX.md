@@ -31,7 +31,7 @@ reused. Parked ideas are not backlog items until explicitly activated.
 | ID | Class | Title |
 |---|---|---|
 | [RUST-BUG-107](items/RUST-BUG-107.md) | Bug | Preserve lossless shared-library path identity across platforms |
-| [RUST-CI-005](items/RUST-CI-005.md) | Evidence | Disposition and prove the negotiated offerfiles capability |
+| [RUST-CI-005](items/RUST-CI-005.md) | Evidence | Prove negotiated offerfiles capability interoperability |
 | [RUST-CI-006](items/RUST-CI-006.md) | Evidence | Refresh current-head stock parity evidence and reconcile docs |
 | [RUST-CI-008](items/RUST-CI-008.md) | Evidence | Prove Unicode and long-path large-library behavior across platforms |
 | [RUST-FEAT-002](items/RUST-FEAT-002.md) | Feature | Autonomous Kad/eD2K snooping index with Torznab surface |

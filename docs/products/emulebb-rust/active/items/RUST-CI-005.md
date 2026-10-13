@@ -2,7 +2,7 @@
 id: RUST-CI-005
 workflow: github
 github_issue: https://github.com/emulebb/emulebb-rust/issues/30
-title: Disposition and prove the negotiated offerfiles capability
+title: Prove negotiated offerfiles capability interoperability
 status: OPEN
 priority: Major
 category: ci
@@ -14,37 +14,38 @@ source: Stock compatibility review and headless large-library roadmap review
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb-rust/issues/30. This local document is retained as the durable engineering spec and evidence record.
 
-# RUST-CI-005 - Disposition and prove the negotiated offerfiles capability
+# RUST-CI-005 - Prove negotiated offerfiles capability interoperability
 
 ## Summary
 
-Make an explicit policy decision for Rust's negotiated `offerfiles_v=1`
-capability and produce the deterministic interoperability evidence required by
-that decision. It is a non-stock ED2K server extension with five custom fields,
-currently enabled by default, while workspace policy prohibits proprietary
-protocol extensions or default drift without an explicit exception.
+Complete the deterministic and cross-client interoperability evidence for the
+approved negotiated `offerfiles_v=1` extension. The policy disposition is
+closed by `RUST-REF-015` and Rust commit `afb56cb1`; this item now owns only the
+proof that the default-on extension remains bounded, connection-scoped, and
+stock-compatible when negotiation is absent or rejected.
 
 ## Current State
 
 - `crates/emulebb-ed2k/src/ed2k_server/offer_policy.rs` defines and validates the
   negotiated capability and its custom fields with fail-closed behavior.
 - `crates/emulebb-settings/src/lib.rs` enables the capability by default.
+- `policy/rust-client-extensions.toml`, `RELEASE-SCOPE.md`, and closed
+  `RUST-REF-015` record the approved default-on policy exception and downgrade
+  contract.
 - The negotiated path targets a 100,000-record deterministic publication model,
   but still lacks the server fixture required to prove acceptance, rejection,
   malformed advertisement, reconnect reset, and stock fallback behavior.
 - `docs/WORKSPACE-POLICY.md` requires stock protocol compatibility and explicit
   governance for extensions/default drift.
-- The negotiation and validation are safer than silent packet drift, but they
-  do not themselves establish stock/current-aMule interoperability or authorize
-  a default-on extension.
+- The completed disposition does not itself establish stock/current-aMule
+  interoperability or the full deterministic large-library witness.
 
 ## Why This Matters
 
 Default-on proprietary behavior can fragment interoperability, create a de
 facto private dialect, and make stock compatibility claims conditional in ways
-operators cannot see. Conversely, removing a useful capability without testing
-would discard existing work. This item requires a recorded disposition and
-evidence for whichever path is chosen.
+operators cannot see. The approved extension therefore remains incomplete
+without explicit downgrade, stock/current-aMule, and large-library evidence.
 
 ## Representative Sites
 
@@ -54,8 +55,8 @@ evidence for whichever path is chosen.
 
 ## Intended Shape
 
-- Choose and record one disposition: remove the extension, ship it default-off,
-  or approve a narrowly scoped policy exception with compatibility rationale.
+- Retain the approved default-on policy and its machine-readable registry entry;
+  changing that decision requires a new tracked product-scope disposition.
 - In every retained form, require explicit negotiation, exact field validation,
   per-connection reset, and stock packet behavior when negotiation is absent or
   rejected.
@@ -76,9 +77,9 @@ evidence for whichever path is chosen.
 
 ## Acceptance Criteria
 
-- [ ] The extension has an explicit recorded disposition consistent with
+- [x] The extension has an explicit recorded disposition consistent with
       workspace protocol policy.
-- [ ] Default settings, user-facing configuration, and compatibility claims
+- [x] Default settings, user-facing configuration, and compatibility claims
       match that disposition.
 - [ ] Exact fixtures cover acceptance, rejection, unsupported peer, malformed
       fields, duplicate fields, reconnect reset, and downgrade behavior.
@@ -101,5 +102,5 @@ evidence for whichever path is chosen.
 
 ## Notes
 
-Fail-closed parsing is a useful implementation property, but it does not settle
-whether a proprietary capability should be enabled by default.
+Policy disposition is complete. Fail-closed parsing remains an implementation
+property, not a substitute for the outstanding interoperability evidence.
