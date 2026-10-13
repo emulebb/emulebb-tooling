@@ -6036,7 +6036,7 @@ components:
     SharedDirectoryReloadProgress:
       type: object
       additionalProperties: false
-      required: [phase, running, pending, scannedCount, plannedHashCount, reusedCount, newCount, changedCount, missingMtimeCount, statFailedCount, skippedFailedCount, skippedIntakeCount, prunedCount, staleHashCount, diskCount, activeHashCount, hashedCount, failedHashCount, plannedHashBytes, completedHashBytes, plannedReadBytes, completedReadBytes, readRateBytesPerSec, startedAtMs, updatedAtMs, active, recent, upcoming, disks]
+      required: [phase, running, pending, scannedCount, plannedHashCount, reusedCount, newCount, changedCount, escapedDisplayPathCount, missingFingerprintCount, statFailedCount, skippedFailedCount, skippedIntakeCount, prunedCount, staleHashCount, diskCount, activeHashCount, hashedCount, failedHashCount, plannedHashBytes, completedHashBytes, plannedReadBytes, completedReadBytes, readRateBytesPerSec, startedAtMs, updatedAtMs, active, recent, upcoming, disks]
       properties:
         phase:
           type: string
@@ -6060,7 +6060,10 @@ components:
         changedCount:
           type: integer
           minimum: 0
-        missingMtimeCount:
+        escapedDisplayPathCount:
+          type: integer
+          minimum: 0
+        missingFingerprintCount:
           type: integer
           minimum: 0
         statFailedCount:
