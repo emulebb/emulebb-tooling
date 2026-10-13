@@ -5,7 +5,7 @@ product: emulebb-rust
 phase: Phase 1
 github_issue: https://github.com/emulebb/emulebb-rust/issues/82
 title: Ban cross-reconnect userhash changes via a tracked-client identity store
-status: OPEN
+status: DONE
 priority: Minor
 category: bug
 labels: [rust, ed2k, ban, identity, anti-abuse, parity]
@@ -28,13 +28,16 @@ endpoint is therefore not caught.
 
 ## Current State
 
-- `crates/emulebb-ed2k/src/ed2k_tcp/listener/session.rs:1557-1574` compares the
-  HELLO hash against the per-session `bound_user_hash` and bans on a live
-  session change.
-- `crates/emulebb-ed2k/src/ed2k_transfer/diag_bad_peer.rs:78-85` emits
-  `identity_userhash_changed` (hash + IP scope, action `ban`).
-- There is no tracked-client identity store, so a fresh reconnect with a
-  changed hash is invisible to the listener.
+- `crates/emulebb-ed2k/src/tracked_client_identity.rs` owns a bounded in-memory
+  identity store keyed by source IPv4 and advertised ED2K TCP port, with the
+  master's two-hour retention window.
+- `Ed2kTransferRuntime` shares the store across listener sessions and prunes it
+  from the existing 20-minute client-maintenance loop.
+- `apply_peer_hello_profile` preserves the live-session hash-change guard and
+  also bans a fresh reconnect that changes the tracked endpoint's user hash,
+  emitting `identity_userhash_changed_tracked`.
+- First-seen endpoints and reconnects with an unchanged hash remain accepted;
+  mismatches do not replace the retained identity.
 
 Master reference (`workspaces/workspace/app/emulebb-main/srchybrid`):
 
@@ -81,18 +84,29 @@ The intra-session guard alone leaves that hole open.
 
 ## Acceptance Criteria
 
-- [ ] A reconnect with a different hash on the same (IP, port) is banned.
-- [ ] A reconnect with the same hash is not banned.
-- [ ] Tracked entries expire and are pruned after the TTL.
-- [ ] A listener test covers changed, unchanged, and never-seen endpoints.
+- [x] A reconnect with a different hash on the same (IP, port) is banned.
+- [x] A reconnect with the same hash is not banned.
+- [x] Tracked entries expire and are pruned after the TTL.
+- [x] A listener test covers changed, unchanged, and never-seen endpoints.
 
 ## Validation
 
-- Listener-session tests for the three identity cases plus a store unit test
-  for expiry/pruning. Existing `identity_userhash_changed` coverage stays
-  green.
+- `python tools/rust_quality_gate.py fmt`
+- `python tools/rust_quality_gate.py policy` (108 policy tests passed)
+- `python tools/rust_quality_gate.py diagnostics`
+- `python tools/rust_quality_gate.py clippy`
+- Workspace-orchestrated `emulebb-ed2k` tests (1,048 passed) and
+  `emulebb-core` unit/integration tests (400 unit tests plus all integration
+  suites) passed in Debug configuration.
+- PR #107 required CI passed on Windows, macOS, and Ubuntu after rerunning one
+  unrelated Ubuntu watcher-timing failure; required CodeQL passed for Rust,
+  Python, JavaScript/TypeScript, and Actions.
 
 ## Notes
 
 Complements RUST-BUG-116 (shared pruning cadence). The new diagnostic mirrors
 the master's `identity_userhash_changed_tracked` event name for diffing.
+
+- Completed on 2026-10-14 by emulebb-rust PR #107 in preserved commits
+  `74f08278`, `2c70b8a6`, and `36c0da00`.
+- GitHub issue #82 is closed and the eMuleBB Roadmap item is Done.
