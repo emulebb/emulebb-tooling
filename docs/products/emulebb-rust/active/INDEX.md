@@ -45,8 +45,6 @@ unless an explicit release-scope decision reopens them.
 [`RUST-HEADLESS-LARGE-LIBRARY-NOW-ROADMAP`](RUST-HEADLESS-LARGE-LIBRARY-NOW-ROADMAP.md)
 **Current large-library I/O and portability review:**
 [`RUST-LARGE-LIBRARY-IO-PORTABILITY-REVIEW`](RUST-LARGE-LIBRARY-IO-PORTABILITY-REVIEW.md)
-**Current beta corrective execution ledger:**
-[`RUST-BETA2-CORRECTIVE-EXECUTION`](RUST-BETA2-CORRECTIVE-EXECUTION.md)
 
 ## ID Taxonomy
 
