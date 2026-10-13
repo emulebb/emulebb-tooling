@@ -2,7 +2,7 @@
 id: RUST-FEAT-048
 workflow: github
 github_issue: https://github.com/emulebb/emulebb-rust/issues/91
-title: Sparse part-file allocation for large downloads (multi-platform, default-on)
+title: Use sparse part files without weakening capacity reservations
 status: OPEN
 priority: Minor
 category: feature
@@ -14,15 +14,15 @@ source: feature-backlog chat 2026-10-12 vs emulebb-mfc, aMule
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb-rust/issues/91. This local document is retained as the durable engineering spec and evidence record.
 
-# RUST-FEAT-048 - Sparse part-file allocation for large downloads (multi-platform, default-on)
+# RUST-FEAT-048 - Use sparse part files without weakening capacity reservations
 
 ## Summary
 
-Allocate incomplete-download payload files sparsely, default-on, on every
-filesystem that supports the concept (NTFS plus any other sparse-capable FS),
-and make disk-space accounting use the allocated size rather than the logical
-size. This prevents a large download from pinning its full logical size the
-moment a high-offset piece is written.
+Allocate incomplete-download payload files sparsely where supported so a
+high-offset piece does not physically allocate the intervening gap. Keep two
+different disk concepts explicit: allocated bytes describe current physical
+usage, while completion-capacity reservation remains based on the remaining
+logical bytes needed to finish every active download.
 
 ## Current State
 
@@ -33,8 +33,9 @@ moment a high-offset piece is written.
   the salvage payload.
 - No `FSCTL_SET_SPARSE`, `fallocate`, `SEEK_DATA/SEEK_HOLE`, or equivalent
   exists anywhere in the tree.
-- `crates/emulebb-core/src/disk_guard.rs:196-214` reserves disk based on
-  `manifest.file_size` (logical), not the allocated on-disk size.
+- `crates/emulebb-core/src/disk_guard.rs:196-214` reserves the remaining logical
+  bytes (`file_size - durable_present_bytes`). That conservative future-capacity
+  invariant is correct and must remain authoritative.
 
 Master reference (`workspaces/workspace/app/emulebb-main/srchybrid`):
 
@@ -47,13 +48,12 @@ Master reference (`workspaces/workspace/app/emulebb-main/srchybrid`):
 
 ## Why This Matters
 
-On Windows NTFS, writing past EOF zero-fills and **allocates** the gap, so a
-100 GB download can consume ~100 GB of disk almost immediately even with only a
-few pieces present. On Unix, hole writes are already sparse, but the allocated-
-size accounting still needs to be correct so the disk guard does not
-over-reserve or wrongly pause. The operator requirement is multi-platform:
-default-on for NTFS and any other filesystem that supports the same concept,
-with a graceful no-op elsewhere.
+On Windows NTFS, writing past EOF can allocate the gap unless the file is marked
+sparse, so a high-offset piece may consume nearly the full logical size. Unix
+filesystems commonly create holes automatically. Measuring allocated bytes is
+useful for telemetry and current-volume usage, but substituting that value for
+future completion capacity would overcommit the volume across concurrent sparse
+downloads and could make completion impossible.
 
 ## Representative Sites
 
@@ -65,22 +65,25 @@ with a graceful no-op elsewhere.
 
 ## Intended Shape
 
-- Mark the payload file sparse at creation on Windows (default-on), and
-  feature-detect other filesystems that support sparse holes so the same
-  behavior is applied wherever the concept exists.
-- Add a small "allocated size" abstraction: `GetCompressedFileSize` on Windows,
-  `SEEK_DATA/SEEK_HOLE` or block-count on Unix, with a conservative fallback to
-  logical size when the filesystem cannot report it.
-- Use allocated size in the disk guard and completion accounting so sparse
-  payloads reserve only what they actually consume.
-- Add a `SparsePartFiles`-equivalent setting, default true; unsupported
-  filesystems simply fall back to dense files without error.
+- Mark new payload files sparse on Windows and rely on normal hole semantics on
+  supported Unix filesystems. Unsupported filesystems fall back to dense files
+  without changing transfer correctness.
+- Add one allocated-size abstraction for telemetry and current-usage reporting,
+  with a conservative logical-size fallback when the platform cannot report
+  physical allocation.
+- Keep admission and resume reservation based on remaining logical completion
+  bytes, net of already durable pieces. Never reserve only the currently
+  allocated byte count.
+- Treat sparse layout as a storage implementation detail rather than adding a
+  user-facing compatibility setting during beta.
 
 ## Scope Constraints
 
 - No wire/protocol change.
 - Preserve resume, verification, completion rehash, and salvage semantics
   exactly; sparse marking must not change logical file content or hashing.
+- Preserve the disk guard's aggregate future-completion guarantee across all
+  active downloads.
 - The hash-named piece store remains a short-path internal path class per
   `policy/rust-client.toml`; apply the sparse helper inside that boundary.
 
@@ -90,10 +93,12 @@ with a graceful no-op elsewhere.
       piece write does not allocate the intervening gap.
 - [ ] Allocated-size accounting is correct on Windows and on sparse-capable
       Unix filesystems, with a safe fallback elsewhere.
-- [ ] The disk guard reserves against allocated size for sparse payloads.
+- [ ] The disk guard continues to reserve aggregate remaining logical bytes and
+      cannot overcommit a volume merely because active payloads are sparse.
 - [ ] Resume/verify/rehash behavior is unchanged for both sparse and dense
       payloads.
-- [ ] A setting disables sparse allocation and restores dense behavior.
+- [ ] Unsupported sparse marking falls back safely without introducing a
+      user-facing compatibility mode.
 
 ## Validation
 
@@ -101,7 +106,9 @@ with a graceful no-op elsewhere.
   `SEEK_DATA/SEEK_HOLE` fallback.
 - A fixture writes a piece at a far offset and asserts the allocated size stays
   near the downloaded bytes.
-- Disk-guard and resume tests for sparse and dense payloads.
+- Disk-guard tests with multiple sparse downloads proving current allocation
+  never substitutes for required completion capacity.
+- Resume tests for sparse and dense fallback payloads.
 
 ## Notes
 

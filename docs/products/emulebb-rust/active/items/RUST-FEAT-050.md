@@ -18,11 +18,12 @@ source: feature-backlog chat 2026-10-12 vs emulebb-mfc, aMule
 
 ## Summary
 
-Support the AICH root (`h=<base32 AICH root>`) section of ED2K file links.
-Large-file links carry this section because MD4 alone is ambiguous above ~4 GB;
-the AICH root is the trusted integrity anchor. Rust currently parses
-`name|size|hash` and silently drops everything except `sources,...`, so the
-root is lost on import, and the emitter never writes it.
+Support the AICH root (`h=<base32 AICH root>`) section of ED2K file links. The
+legacy ED2K hash remains the file identity; AICH adds an independently verifiable
+integrity tree used for recovery and corruption resistance whenever the root is
+known. Rust currently parses `name|size|hash` and silently drops everything
+except `sources,...`, so the root is lost on import, and the emitter never writes
+it.
 
 ## Current State
 
@@ -48,11 +49,12 @@ Master reference (`workspaces/workspace/app/emulebb-main/srchybrid`):
 
 ## Why This Matters
 
-For files above the legacy 4 GB MD4 boundary, an ED2K link without the AICH
-root cannot reliably identify the file, and dropping the root on import loses
-the trusted anchor before transfer start. This is a link-codec interop gap that
-no external script can close because the root must land in the daemon's
-transfer manifest.
+Dropping a supplied AICH root discards integrity evidence before transfer start
+and prevents the receiver from using the same recovery identity advertised by
+the sender. Stock-compatible emitters include `h=` whenever a valid root is
+known, not only at a particular file-size threshold. This is a link-codec
+interop gap that no external script can close because the root must land in the
+daemon's transfer manifest.
 
 ## Representative Sites
 
@@ -82,11 +84,11 @@ transfer manifest.
 
 ## Acceptance Criteria
 
-- [ ] A large-file link with a valid `h=` section imports with its AICH root
-      set on the transfer manifest.
+- [ ] A link with a valid `h=` section imports with its AICH root set on the
+      transfer manifest regardless of file size.
 - [ ] A malformed `h=` section is rejected without corrupting the rest of the
       link.
-- [ ] Generated links include `h=` when an AICH root is known.
+- [ ] Generated links include `h=` whenever a valid AICH root is known.
 - [ ] Links without `h=` continue to parse unchanged.
 
 ## Validation

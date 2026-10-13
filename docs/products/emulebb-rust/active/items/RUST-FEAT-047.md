@@ -2,7 +2,7 @@
 id: RUST-FEAT-047
 workflow: github
 github_issue: https://github.com/emulebb/emulebb-rust/issues/90
-title: Recognize already-downloaded files to avoid duplicate downloads
+title: Persist completed-file identity to prevent duplicate downloads
 status: OPEN
 priority: Minor
 category: feature
@@ -14,15 +14,15 @@ source: ED2K download-completeness audit 2026-10-12 vs community-0.72, emulebb-m
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb-rust/issues/90. This local document is retained as the durable engineering spec and evidence record.
 
-# RUST-FEAT-047 - Recognize already-downloaded files to avoid duplicate downloads
+# RUST-FEAT-047 - Persist completed-file identity to prevent duplicate downloads
 
 ## Summary
 
-When a new download request is created, check whether the file hash is already
-present in the local library/shared catalog and, if so, surface that instead of
-starting a redundant download. MFC does this through the remembered known files
-(`known.met` / `known2.met`); the Rust import machinery exists for sharing but
-is not consulted at download-request time.
+Persist the identity of successfully completed downloads and consult that
+history whenever a new transfer is requested. Shared-library and active-transfer
+indexes remain useful live evidence, but they cannot remember a completed file
+after the operator moves, unshares, or deletes it. The duplicate decision must
+therefore survive both file removal and daemon restart.
 
 ## Current State
 
@@ -30,8 +30,10 @@ is not consulted at download-request time.
   `imported_known_file_identity_index()` and `:1406`
   `promote_imported_known_file()` serve the shared-library import/reload path,
   not download dedupe.
-- No explicit "this ED2K link hash is already in my library -> skip/confirm"
-  check was found at download-request creation.
+- Active transfer state can reject a duplicate currently in progress, but no
+  durable completed-download identity store exists.
+- No single transfer-creation authority combines active transfers, the current
+  shared catalog, imported known files, and completed history.
 
 Master reference (`workspaces/workspace/app/emulebb-main/srchybrid`):
 
@@ -40,47 +42,70 @@ Master reference (`workspaces/workspace/app/emulebb-main/srchybrid`):
   `AddKnownFileAICHHash` indexes remembered files; `SHAHashSet.h:68-70`
   defines `KNOWN2_MET_FILENAME` / version.
 
+Current aMule additionally writes completed identities to `knownhistory.met`,
+which preserves the user-facing "already downloaded" decision independently of
+whether the completed payload remains shared.
+
 ## Why This Matters
 
-Re-adding a link whose content is already present should not silently re-spend
-bandwidth and disk. It is both a correctness (duplicate library entries) and a
-resource question.
+Re-adding a completed hash should not silently re-spend bandwidth and disk just
+because the payload was moved out of the shared library. This is a durable user
+intent and resource-protection concern, not merely a current-path lookup.
 
 ## Representative Sites
 
 - `crates/emulebb-core/src/shared_directories.rs` - imported-known-file index
+- `crates/emulebb-core/src/transfer_create_api.rs` - transfer-creation authority
 - `crates/emulebb-core/src/ed2k_sources.rs` - download source acquisition
 - `workspaces/workspace/app/emulebb-main/srchybrid/KnownFileList.cpp` -
   remembered-file index
+- `EMULEBB_WORKSPACE_ROOT\analysis\amule\src\KnownFileList.cpp` -
+  `knownhistory.met` persistence
 
 ## Intended Shape
 
-- At download-request creation, look up the hash in the local shared catalog
-  and the imported known-file index.
-- Report `already-present` (with the local path and name) through the
-  Rust-native API, with a documented confirm/skip policy rather than a silent
-  second copy.
+- Add a current-only completed-file identity store keyed by ED2K hash. Store
+  the canonical completed name, size, completion time, and known AICH root when
+  available; do not make an obsolete path the identity.
+- Record completion atomically before active-transfer cleanup removes the only
+  durable evidence.
+- Route every transfer-creation entry point through one duplicate-decision
+  service that checks active transfers, current shared/imported identities, and
+  completed history.
+- Return a structured conflict describing the matching evidence and require an
+  explicit re-download override instead of silently starting or silently
+  discarding the request.
 
 ## Scope Constraints
 
 - Do not block share-in-place or prevent an explicit re-download when the
   operator wants one.
-- Additive API state only; no wire change.
+- No wire change. The beta REST and persistence schemas may break to express a
+  clean current model; do not add compatibility aliases or migrations.
+- A moved or deleted completed payload remains history, but must not be
+  represented as a currently accessible local path.
 
 ## Acceptance Criteria
 
-- [ ] A download request whose hash already exists locally is detected and
-      reported before any transfer starts.
-- [ ] The API exposes the existing path/name and a documented skip or confirm
-      behavior.
-- [ ] A test covers hash-present and hash-absent request paths.
+- [ ] Successful completion durably records the ED2K hash and metadata before
+      active-transfer cleanup.
+- [ ] Duplicate decisions combine active, shared/imported, and completed-history
+      evidence before any transfer or source-acquisition work starts.
+- [ ] Detection survives daemon restart and removal of the completed payload
+      from the shared library.
+- [ ] The API returns structured evidence and requires an explicit override to
+      re-download; stale history never claims a live path.
+- [ ] Tests cover active, shared, historical, absent, restart, removed-file, and
+      explicit-override paths.
 
 ## Validation
 
-- Runtime test creating a request for an already-imported hash and asserting
-  no transfer job is started and the API reports the existing file.
+- Persistence and runtime tests proving completion recording, restart survival,
+  and duplicate rejection before transfer creation.
+- API/OpenAPI/WebUI validation for the structured conflict and explicit
+  re-download override.
 
 ## Notes
 
-First confirm current behavior end-to-end; the import index may already have
-the lookup primitive needed.
+The shared import index may supply one evidence source, but it is not the
+completed-history authority.

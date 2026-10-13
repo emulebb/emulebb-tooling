@@ -2,7 +2,7 @@
 id: RUST-BUG-112
 workflow: github
 github_issue: https://github.com/emulebb/emulebb-rust/issues/79
-title: Advertise offerfiles_v uniformly across ED2K server session types
+title: Centralize offerfiles_v policy by ED2K server-session role
 status: OPEN
 priority: Minor
 category: bug
@@ -14,16 +14,16 @@ source: ED2K static audit 2026-10-12 vs community-0.72, aMule
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb-rust/issues/79. This local document is retained as the durable engineering spec and evidence record.
 
-# RUST-BUG-112 - Advertise offerfiles_v uniformly across ED2K server session types
+# RUST-BUG-112 - Centralize offerfiles_v policy by ED2K server-session role
 
 ## Summary
 
-The long-lived background server session logs in with the configured
-`offerfiles_v=1` capability (five login tags by default), while the one-shot
-keyword, source, and callback server sessions log in with
-`ServerLoginCapabilities::default()` and therefore emit only the stock four
-login tags. The same daemon, against the same server, presents two different
-login fingerprints depending on which feature opened the session.
+The long-lived publishing session logs in with the configured
+`offerfiles_v=1` capability, while one-shot keyword, source, and callback
+sessions emit the stock four-tag login through an incidental `Default` value.
+The wire difference is appropriate because only the background session can
+publish files, but that policy must be centralized and named rather than
+emerging independently at each call site.
 
 ## Current State
 
@@ -40,12 +40,11 @@ login fingerprints depending on which feature opened the session.
 
 ## Why This Matters
 
-A non-uniform login shape is an observable fingerprint and makes the extension
-behave inconsistently. The extension itself is intentional and stays
-(RUST-REF-015), but its advertisement must not flip per call site. One-shot
-sessions that publish no offerfiles may legitimately omit the tag, but then
-that omission should be a deliberate, documented policy — not an accidental
-`Default` at three unrelated call sites.
+The extension itself is intentional and stays (RUST-REF-015), but capability
+advertisement must describe actual session behavior. Advertising a publishing
+extension from sessions that never publish is misleading; omitting it via
+three unrelated defaults is fragile. A single role-aware policy should make
+both outcomes explicit and testable.
 
 ## Representative Sites
 
@@ -59,29 +58,28 @@ that omission should be a deliberate, documented policy — not an accidental
 
 ## Intended Shape
 
-- Decide the single policy for which session types advertise `offerfiles_v=1`,
-  and encode that decision in one place rather than per call site.
-- Most likely shape: every server session that uses the shared login builder
-  advertises the same capability, so the login fingerprint is identical
-  regardless of entry point.
-- If one-shot sessions intentionally stay four-tag, state that rationale with a
-  named helper (not `Default`) so the asymmetry is obvious and tested.
+- Define explicit server-session roles in the shared login construction path.
+- Advertise `offerfiles_v=1` only for a publishing session that can consume the
+  returned pacing envelope and send `OP_OFFERFILES`.
+- Keep keyword, source, and callback sessions on the stock four-tag login and
+  make that non-publishing policy impossible to express through an incidental
+  derived default.
 
 ## Scope Constraints
 
 - Keep the extension enabled for the large-library background publish path.
-- Do not start one-shot sessions consuming the offerfiles envelope unless that
-  is part of the chosen policy; this item is about consistent advertisement,
-  not new publishing behavior.
+- Do not make one-shot sessions consume an envelope or publish files.
+- Do not optimize for identical fingerprints at the cost of truthful
+  capability advertisement.
 
 ## Acceptance Criteria
 
-- [ ] A single authority decides whether a server login carries the
+- [ ] A single role-aware authority decides whether a server login carries the
       `offerfiles_v` tag.
-- [ ] Keyword, source, callback, and background sessions produce the same login
-      tag-count policy (or an explicitly documented, centrally enforced
-      exception).
-- [ ] A codec/session test asserts the login tag set per session type.
+- [ ] The publishing session advertises the extension; keyword, source, and
+      callback sessions emit the stock four-tag login.
+- [ ] Tests assert the tag set for every server-session role and prevent a new
+      call site from selecting capabilities through `Default`.
 
 ## Validation
 

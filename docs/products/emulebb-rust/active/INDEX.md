@@ -143,8 +143,8 @@ below as historical links.
 | [RUST-FEAT-044](items/RUST-FEAT-044.md) | Minor | OPEN | Implement follow-majority filename selection for downloads |
 | [RUST-FEAT-045](items/RUST-FEAT-045.md) | Minor | OPEN | Retain and expose multiple per-source filenames for downloads |
 | [RUST-FEAT-046](items/RUST-FEAT-046.md) | Minor | OPEN | Repair mojibake and normalize download filenames at intake |
-| [RUST-FEAT-047](items/RUST-FEAT-047.md) | Minor | OPEN | Recognize already-downloaded files to avoid duplicate downloads |
-| [RUST-FEAT-048](items/RUST-FEAT-048.md) | Minor | OPEN | Sparse part-file allocation for large downloads (multi-platform, default-on) |
+| [RUST-FEAT-047](items/RUST-FEAT-047.md) | Minor | OPEN | Persist completed-file identity to prevent duplicate downloads |
+| [RUST-FEAT-048](items/RUST-FEAT-048.md) | Minor | OPEN | Use sparse part files without weakening capacity reservations |
 | [RUST-FEAT-049](items/RUST-FEAT-049.md) | Minor | OPEN | Add per-file share exclusions with a built-in default ignore set |
 | [RUST-FEAT-050](items/RUST-FEAT-050.md) | Minor | OPEN | Parse and emit the ED2K link AICH root (h=) section |
 | [RUST-FEAT-051](items/RUST-FEAT-051.md) | Minor | OPEN | Implement ED2K server user search (OP_SEARCH_USER / OP_USERS_LIST) |
@@ -161,7 +161,7 @@ below as historical links.
 | [RUST-BUG-109](../history/items/RUST-BUG-109.md) | Critical | DONE | Close ED2K callback and server state-machine parity gaps |
 | [RUST-BUG-110](../history/items/RUST-BUG-110.md) | Major | DONE | Bind ED2K peer service to the HELLO state machine |
 | [RUST-BUG-111](items/RUST-BUG-111.md) | Major | OPEN | Avoid duplicate startup/republish on repeated OP_IDCHANGE |
-| [RUST-BUG-112](items/RUST-BUG-112.md) | Minor | OPEN | Advertise offerfiles_v uniformly across ED2K server session types |
+| [RUST-BUG-112](items/RUST-BUG-112.md) | Minor | OPEN | Centralize offerfiles_v policy by ED2K server-session role |
 | [RUST-BUG-113](../history/items/RUST-BUG-113.md) | Minor | DONE | Advertise share-viewing capability truthfully in CT_EMULE_MISCOPTIONS1 |
 | [RUST-BUG-114](items/RUST-BUG-114.md) | Minor | OPEN | Enforce an explicit maximum upload-slot ceiling and clarify maxUploadSlots semantics |
 | [RUST-BUG-115](items/RUST-BUG-115.md) | Minor | OPEN | Ban cross-reconnect userhash changes via a tracked-client identity store |
