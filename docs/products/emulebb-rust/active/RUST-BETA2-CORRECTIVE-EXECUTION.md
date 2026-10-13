@@ -132,6 +132,7 @@ for workflow state.
 | 2026-10-13 | RUST-FEAT-047 OpenAPI contract | `6b83783` | YAML parses as OpenAPI 3.1; route checker reports only the pre-existing search sort/order query drift |
 | 2026-10-13 | RUST-FEAT-047 WebUI conflict handling | `aeeff64b` / `35be62f7` | 28 unit tests, production build, and all 16 Playwright tests pass; both entry points default to reject and require confirmation before retry |
 | 2026-10-13 | RUST-FEAT-047 final affected-surface validation | product commits through `35be62f7` | 38 metadata, 1,035 ED2K, 399 core unit plus integrations, 117 REST unit plus 2 integrations, strict affected-crate Clippy, 28 WebUI unit, build, and 16 Playwright tests pass |
+| 2026-10-13 | RUST-FEAT-047 workflow closure | `d5ac4c2` / `f0702ea` | Durable spec moved to history; GitHub issue #90 closed as completed and Roadmap Project #3 status verified as Done |
 
 The global `github-roadmap-check.py --github` run still reports 244 legacy
 MFC-label synchronization errors outside this Rust slice. The new Rust issue's
