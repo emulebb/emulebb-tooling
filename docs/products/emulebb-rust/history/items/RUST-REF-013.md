@@ -2,7 +2,7 @@
 id: RUST-REF-013
 workflow: local
 title: Disposition OP_IDCHANGE auxiliary-port field handling
-status: DEFERRED
+status: WONT_DO
 priority: Minor
 category: refactor
 labels: [rust, ed2k, server, parity, disposition]
@@ -53,10 +53,12 @@ item `WONT_DO`.
 
 ## Acceptance Criteria
 
-- [ ] The eMule-compatible disposition is captured in the parity matrix or
+- [x] The eMule-compatible disposition is captured in the parity matrix or
       omissions registry.
-- [ ] The item is closed `WONT_DO` after capture.
+- [x] The item is closed `WONT_DO` after capture.
 
 ## Notes
 
-Found by the 2026-10-12 ED2K static audit; classified as stock-aligned.
+Found by the 2026-10-12 ED2K static audit; classified as stock-aligned. Closed
+`WONT_DO` on 2026-10-13 after the ignored-field disposition was recorded in
+current parity evidence.

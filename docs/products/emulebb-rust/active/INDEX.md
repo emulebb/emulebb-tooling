@@ -35,9 +35,9 @@ maintained eMuleBB MFC owning non-wire operational limits and disk/network I/O
 outcomes. Rust implements those outcomes through native async architecture, and
 stock wire behavior wins any conflict. Five approved omissions and the sole
 deferred connection-pacing behavior remain in
-`EMULEBB_WORKSPACE_ROOT\repos\emulebb-rust\policy\rust-client-omissions.toml`;
-the registry is frozen for beta unless an explicit release-scope decision
-reopens it.
+`EMULEBB_WORKSPACE_ROOT\repos\emulebb-rust\policy\rust-client-omissions.toml`
+and `policy\rust-client-extensions.toml`; the registries are frozen for beta
+unless an explicit release-scope decision reopens them.
 **Design sketches:** [`architecture`](../design/architecture.md).
 **Backlog process runbook:**
 [`BACKLOG-PROCESS`](../../../reference/BACKLOG-PROCESS.md)
@@ -189,10 +189,10 @@ below as historical links.
 | [RUST-REF-009](items/RUST-REF-009.md) | Major | OPEN | Use native storage domains for cross-platform library scheduling |
 | [RUST-REF-010](items/RUST-REF-010.md) | Major | OPEN | Bound watcher reconciliation I/O for large shared libraries |
 | [RUST-REF-011](items/RUST-REF-011.md) | Minor | OPEN | Consolidate duplicated ED2K opcode and capability constants |
-| [RUST-REF-012](items/RUST-REF-012.md) | Minor | DEFERRED | Disposition OP_DISCONNECT server-session parity note |
-| [RUST-REF-013](items/RUST-REF-013.md) | Minor | DEFERRED | Disposition OP_IDCHANGE auxiliary-port field handling |
-| [RUST-REF-014](items/RUST-REF-014.md) | Minor | DEFERRED | Disposition ed2k-server capability-constant discrepancy |
-| [RUST-REF-015](items/RUST-REF-015.md) | Minor | OPEN | Track the non-stock offerfiles_v server-login extension |
+| [RUST-REF-012](../history/items/RUST-REF-012.md) | Minor | WONT_DO | Disposition OP_DISCONNECT server-session parity note |
+| [RUST-REF-013](../history/items/RUST-REF-013.md) | Minor | WONT_DO | Disposition OP_IDCHANGE auxiliary-port field handling |
+| [RUST-REF-014](../history/items/RUST-REF-014.md) | Minor | WONT_DO | Disposition ed2k-server capability-constant discrepancy |
+| [RUST-REF-015](../history/items/RUST-REF-015.md) | Minor | DONE | Track the non-stock offerfiles_v server-login extension |
 
 ### Done or stale in the 2026-09-30 triage
 

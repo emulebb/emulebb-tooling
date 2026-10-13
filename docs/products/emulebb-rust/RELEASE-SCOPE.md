@@ -3,9 +3,10 @@
 This document is the unambiguous, human-facing statement of what the
 `emulebb-rust` client **does**, what it **intentionally omits**, and what is
 **deferred** for a later release. It is the companion to the machine-readable
-divergence registry `policy/rust-client-omissions.toml`. That registry records
-the complete current stock-vs-Rust difference set; the matrix below mirrors its
-approved omissions and sole deferred behavior for this beta.
+registries `policy/rust-client-omissions.toml` and
+`policy/rust-client-extensions.toml`. Together they record the complete current
+stock-vs-Rust difference set; the matrices below mirror approved omissions, the
+sole deferred behavior, and intentional negotiated extensions.
 
 `emulebb-rust` is a **headless eD2K/Kad client** with an embedded SPA WebUI,
 driven over its Rust-forward `/api/v1` REST contract. Stock/community eMule owns
@@ -15,9 +16,10 @@ ceilings, plus disk and network I/O outcomes, follow the maintained eMuleBB MFC
 client. Rust implements those outcomes through clean Rust-native async daemon
 architecture; it does not mirror the MFC GUI, REST, settings, controllers, or
 threads. Stock wire behavior wins if the authorities conflict.
-The active registry is the beta gap board: implemented fixes live in audit
-history, while current defers and approved drops remain in
-`policy/rust-client-omissions.toml`.
+The active registries are the beta difference board: implemented fixes live in
+audit history, current defers and approved drops remain in
+`policy/rust-client-omissions.toml`, and deliberate additions remain in
+`policy/rust-client-extensions.toml`.
 
 ## Supported surface
 
@@ -112,14 +114,21 @@ This is the complete current stock-vs-Rust difference set for
 | `kad-flood-lan-exemption` | Approved omission | LAN/loopback stays flood-exempt; public peers retain stock flood controls. |
 | `conn-rate-rolling-five-second-window` | Deferred behavior | A true rolling five-second grant window is gentler and has no wire effect. |
 
+### Intentional protocol extensions
+
+| Registry ID | Disposition | Compatibility contract |
+|---|---|---|
+| `offerfiles-v1` | Approved negotiated extension | Only the publishing server session advertises `offerfiles_v=1`; stock servers ignore the tag, and absent/invalid envelopes retain bounded legacy `OP_OFFERFILES` pacing. |
+
 ## Freeze rule
 
-These six rows are the beta's complete intentional parity differences. The
-approved omissions are product decisions, not open gaps; the conservative
-connection-rate window is the only deferred behavior. Reopening an omission or
-adding another parity difference requires a deliberate release-scope decision
-and a matching registry update. Already-fixed audit history must not be copied
-back into this current matrix.
+These six omission/defer rows plus the extension row are the beta's complete
+intentional parity differences. The approved omissions and extension are
+product decisions, not open gaps; the conservative connection-rate window is
+the only deferred behavior. Reopening an omission or adding another parity
+difference requires a deliberate release-scope decision and a matching registry
+update. Already-fixed audit history must not be copied back into these current
+matrices.
 
 ## Rust Beta gate
 

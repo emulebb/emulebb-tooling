@@ -55,3 +55,19 @@ tracking, memory-safety (`unique_ptr`, `GetTickCount64`), diag hooks
   behavior. Anti-abuse correctness, not a wire fingerprint.
 - Cosmetic (rust-only, not an MFC divergence): rust hardcodes the login/hello
   nick to `"eMule"` rather than a configurable value; structure identical.
+
+## Current ED2K Server Audit Dispositions
+
+The 2026-10-13 revalidation records these later findings so declaration-only or
+reference-only observations are not reopened as product gaps:
+
+| Item | Observation | Current disposition |
+|---|---|---|
+| `RUST-REF-012` | `OP_DISCONNECT` is declared but not emitted by stock eMule or aMule. | Stock-aligned; no send path. |
+| `RUST-REF-013` | Rust ignores the auxiliary `OP_IDCHANGE` port field as stock eMule does. | Stock-aligned; keep ignored. |
+| `RUST-REF-014` | `ed2k-server` declares a misleading `0x0800` crypt constant but emits the correct stock `0x0400` flag. | Reference caveat only; Rust stays `0x0400`. |
+| `RUST-REF-015` | Rust adds negotiated `offerfiles_v1` publishing limits. | Intentional extension registered as `offerfiles-v1`. |
+
+The extension is machine-readable in
+`policy/rust-client-extensions.toml`. Only the long-lived publishing session
+advertises it; one-shot server sessions retain the stock four-tag login.

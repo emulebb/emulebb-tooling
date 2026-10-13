@@ -27,9 +27,9 @@ metadata, Cargo, or Rust protocol work.
 - Protocol-adjacent changes require parity evidence through appropriate
   goldens, community baseline, tracing, live-diff, or packet captures.
 
-`policy\rust-client.toml` and its omission registry are the machine-readable
-authority for platform, behavior authority, protocol, long-path, and
-reviewed-omission policy.
+`policy\rust-client.toml`, its omission registry, and its extension registry are
+the machine-readable authority for platform, behavior authority, protocol,
+long-path, reviewed-omission, and intentional-extension policy.
 
 ## API And UI Contract
 
