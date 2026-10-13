@@ -48,6 +48,19 @@ for workflow state.
   completed, final-rehash-clean download. Share-in-place manifests are excluded;
   repeat completions preserve the first completion time and reject conflicting
   size or non-null AICH identity.
+- Current-local evidence is revalidated against the filesystem and expected
+  size before it can block a download. Historical evidence remains pathless and
+  survives transfer cleanup, payload removal, and process restart.
+- Shared-source identity is independent of transfer state. A deliberate
+  re-download may reset managed partial state while preserving an independently
+  shared file as upload-readable catalog evidence.
+- `KnownFilePolicy` is the single creation policy for ED2K links and search
+  results. `reject` is the default; `redownload` applies only to current-local
+  or historical evidence. Active transfers, identity mismatches, and duplicate
+  hashes within one request are never overrideable.
+- Duplicate preflight is serialized across transfer-creation requests and runs
+  before transfer/source mutation. REST returns `DOWNLOAD_CONFLICT` with typed
+  evidence, and WebUI retries with `redownload` only after explicit confirmation.
 - Buddy liveness is based on received peer activity, not merely successful
   writes or recurring local pings.
 
@@ -112,6 +125,12 @@ for workflow state.
 | 2026-10-13 | RUST-BUG-116 completed | `c3707c12` / `dfd4c2f7` | 1,026 ED2K tests and all 426 core tests pass; physical pruning proven |
 | 2026-10-13 | RUST-BUG-117 completed | `92688d17` / `6a822d1e` / `5225f8f2` / `50227302` | 1,032 ED2K and 428 core tests pass; deterministic liveness and reconnect handoff proven |
 | 2026-10-13 | RUST-FEAT-047 history foundation | `576f1b53` | All 38 metadata tests and strict metadata Clippy pass; completion history survives manifest deletion and conflicting identity rolls back atomically |
+| 2026-10-13 | RUST-FEAT-047 evidence classification | `995efd2a` | Active, verified-current, and pathless-history evidence are distinguished; restart, absent-file, and removed-payload cases are covered |
+| 2026-10-13 | RUST-FEAT-047 re-download storage model | `b09063f7` / `50c14ca1` | Deliberate re-download resets managed transfer state while preserving independent shares and upload readability across restart |
+| 2026-10-13 | RUST-FEAT-047 creation authority | `abf711c8` | All 399 core tests and core integrations pass; strict all-target core Clippy passes; batch conflicts do not partially mutate state |
+| 2026-10-13 | RUST-FEAT-047 REST conflict surface | `b401bf08` | 117 REST unit tests, 2 REST integrations, and strict all-target REST Clippy pass; both creation routes return typed 409 conflicts |
+| 2026-10-13 | RUST-FEAT-047 OpenAPI contract | `6b83783` | YAML parses as OpenAPI 3.1; route checker reports only the pre-existing search sort/order query drift |
+| 2026-10-13 | RUST-FEAT-047 WebUI conflict handling | `aeeff64b` / `35be62f7` | 28 unit tests, production build, and all 16 Playwright tests pass; both entry points default to reject and require confirmation before retry |
 
 The global `github-roadmap-check.py --github` run still reports 244 legacy
 MFC-label synchronization errors outside this Rust slice. The new Rust issue's
