@@ -83,3 +83,16 @@ long-path, reviewed-omission, and intentional-extension policy.
 Use `repos\emulebb-build` orchestration for supported build and validation
 entrypoints. Rust live, soak, or profile work additionally requires the
 [Harness And Live Policy](../../../reference/HARNESS-LIVE-POLICY.md).
+
+## Documentation Boundaries
+
+- Keep `docs/products/emulebb-rust/active/` limited to `INDEX.md` and the
+  `items/` directory. Track every actionable slice and its progress in its
+  owning item instead of creating branch-wide ledgers, reviews, or checklists.
+- Keep current scope in `RELEASE-SCOPE.md`, implemented structure in
+  `design/architecture.md`, and genuinely forward designs in `design/`.
+- Published release notes belong to GitHub Releases. Persisted live/soak
+  procedures belong to `repos\emulebb-build-tests`; Rust product docs link to
+  the harness and retain only stable conclusions or evidence references.
+- Delete a completed temporary plan when its evidence is reconciled into owning
+  items. Archive only unique historical analysis that remains useful.

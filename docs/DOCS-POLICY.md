@@ -83,6 +83,13 @@ as provenance only.
 - Every actionable active task must have its own item ID under
   `docs/active/items/`; release dashboards and plans should point to item IDs
   instead of carrying anonymous task rows.
+- Product-specific active directories may impose a stricter shape. For
+  `docs/products/emulebb-rust`, keep only `active/INDEX.md` beside
+  `active/items/`: put current product boundaries in `RELEASE-SCOPE.md`, current
+  implemented structure in `design/architecture.md`, forward designs in
+  `design/`, and all actionable execution or evidence work in owning item docs.
+  Do not create standalone Rust ledgers, dated reviews, release checklists, or
+  runbooks in the active product directory.
 - New externally actionable backlog items should be GitHub-primary by default:
   create or update the local item, the owning product repo issue, and membership
   in the `eMuleBB Roadmap` Project #3 unless the item is explicitly local-only,

@@ -65,8 +65,7 @@ source: short provenance note
    logs out of the item body.
 6. Add or update the row in `docs\active\INDEX.md` in the matching section.
    Keep rows sorted by item ID inside each table section.
-7. Update the snapshot counts in `docs\active\INDEX.md` when adding, closing, or
-   changing active statuses.
+7. Update snapshot counts when the product index maintains them.
 
 ## GitHub-Primary Backlog
 
@@ -99,9 +98,9 @@ has project scope and network access.
    `docs\active\items` to `docs\history\items`.
 3. Preserve provenance: include implementation commits, validation commands,
    product decisions, or rejection rationale in the historical item body.
-4. Update the `docs\active\INDEX.md` row to point at `../history/items/<ID>.md`
-   and use the closed status.
-5. Update active snapshot counts.
+4. Remove the item row from `docs\active\INDEX.md`; the active index lists only
+   open work. Do not duplicate a closed-item inventory in the history index.
+5. Update active snapshot counts when the product index maintains them.
 6. If a GitHub-primary item is closed or materially advanced, update the linked
    GitHub issue/project as the workflow authority.
 
