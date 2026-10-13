@@ -1,6 +1,6 @@
 # eD2K Project Inventory
 
-Last verified: 2026-09-30
+Last full verification: 2026-09-30
 
 This inventory tracks active, stale, obscure, and historical projects around
 eD2K, eDonkey2000, eMule, Kad, server software, controller tooling, protocol
@@ -19,6 +19,12 @@ signals than stars alone.
 
 The 2026-10-02 incremental update added `ModderMule/eNode-go`; it did not repeat
 the full inventory audit.
+
+The 2026-10-13 incremental update added `aria2-next`, `rmule`, `njMule`,
+`macMule`, `p2pwatch`, and `hispamula-indexer`. It also rechecked repositories
+with visible post-September activity and refreshed the materially changed
+server, client, and controller entries below; it did not repeat the full
+non-GitHub or archive audit.
 
 ## Status Labels
 
@@ -50,15 +56,19 @@ and may expose UDP status or admin APIs.
   - Status: Active, experimental
   - Language: Java
   - Source or archive: https://github.com/dagga/JEmuleServer
-  - Repo stats (GitHub, 2026-09-30):
-    - `dagga/JEmuleServer`: 4 stars, 0 forks, 0 open issues; default `main`;
-      default-branch commit 2026-06-24 `5cc2106`.
+  - Repo stats (GitHub, 2026-10-13):
+    - `dagga/JEmuleServer`: 5 stars, 0 forks, 0 open issues; default `main`;
+      default-branch commit 2026-10-13 `1f8ec11`; latest release `v1.0.1` on
+      2026-10-13; GPL-3.0.
   - Notes: Modern open-source eMule/eD2K server project. The README describes a
            Java 21 server with protocol obfuscation, compression, advanced search,
            large-file support, Lugdunum extensions, embedded H2 storage, LowID
            callbacks, fake-file filtering, admin CLI, and IPv6 support. Treat as
            a fresh research lead until protocol coverage and license fit are
-           reviewed in code.
+           reviewed in code. Source review on 2026-10-13 found generic unknown
+           login-tag handling and a flexible `OP_SERVERIDENT` tag list, but no
+           `OP_OFFERFILES` batch/rate enforcement in `PublishHandler`; it must
+           add matching enforcement before advertising faster pacing.
 
 - **goed2k-server**
   - Status: Active
@@ -71,16 +81,20 @@ and may expose UDP status or admin APIs.
            login, status, message, ID assignment, offer files, search, search-more,
            source lookup, callbacks, JSON/MySQL/PostgreSQL catalog storage, and admin
            UI/API. The eMuleBB managed fork lives at
-           `https://github.com/emulebb/goed2k-server`.
+           `https://github.com/emulebb/goed2k-server`. Its current offer handler
+           replaces the client's complete indexed set on every packet; negotiated
+           multi-batch publishing would therefore discard earlier batches until
+           cumulative per-session offer semantics are implemented.
 
 - **ed2k-server (Rust; formerly the unidentified `ed2k-rust` lead)**
   - Status: 🟢 Active, production-used MVP
   - Language: Rust
   - Source or archive: https://github.com/andrey23127/ed2k-server
-  - Repo stats (GitHub, 2026-09-30):
-    - `andrey23127/ed2k-server`: 22 stars, 2 forks, 3 open issues; default
-      `master`; default-branch commit 2026-09-26 `78b1e4f`; latest release
-      `v0.9.76` on 2026-09-26; MIT license.
+  - Repo stats (GitHub, 2026-10-13):
+    - `andrey23127/ed2k-server`: 28 stars, 4 forks, 3 open issues; default
+      `master`; default-branch commit and source tag `v0.9.81` on 2026-10-12
+      `ed83d68`; latest GitHub release remains `v0.9.78` on 2026-10-07; MIT
+      license.
   - Public network evidence: eMule-Security listed `ed2k-rust main server` in
     its 2026-09-29 snapshot. The repository's current VPS example seeds that
     endpoint, while a source comment records the earlier test-server address
@@ -90,28 +104,34 @@ and may expose UDP status or admin APIs.
   - Notes: Clean-room Linux server implementation with TCP and UDP search/source
            operations, server gossip, obfuscation, NAT traversal, opt-in IPv6,
            admin UI, IP filtering, and mandatory operator-supplied content
-           filters. Its README calls the `0.9.x` line a production-used test/MVP;
-           verify protocol behavior and operational claims independently before
-           adopting it as an interoperability reference.
+           filters. Source tag `v0.9.81` implements the opt-in `offerfiles_v=1`
+           login/`OP_SERVERIDENT` pacing negotiation, per-client enforcement,
+           and global record-rate backpressure while leaving legacy clients
+           unchanged. Its README calls the `0.9.x` line a production-used
+           test/MVP; verify protocol behavior and operational claims
+           independently before adopting it as an interoperability reference.
 
 - **eNode-go**
   - Status: 🟢 Active, experimental
   - Language: Go
   - Source or archive: https://github.com/ModderMule/eNode-go
-  - Repo stats (GitHub, 2026-10-02):
+  - Repo stats (GitHub, 2026-10-13):
     - `ModderMule/eNode-go`: 3 stars, 0 forks, 0 open issues; default `main`;
-      default-branch commit 2026-10-02 `78a9196`; MIT license.
+      default-branch commit 2026-10-13 `f7efae4`; latest release `v0.4.5` on
+      2026-10-13; MIT license.
   - Lineage: Fork of `zt8989/eNode-go` and a Go port of the original Node.js
     `eNode` server listed below.
   - Notes: Implements TCP/UDP eD2K operations, protocol obfuscation, LowID
            callbacks, Lugdunum extensions, server gossip, optional IPv6 and NAT
            traversal, memory/MySQL/MongoDB storage, access filters, and a
            loopback-default admin dashboard. The repository has unit and
-           Docker-backed database integration tests. It is maintained under the
-           same `ModderMule` GitHub owner as eMule Qt, which its default server
-           configuration also promotes. Treat the cross-server and IPv6/NAT
-           extensions as research claims until independently tested against
-           stock-compatible clients and servers.
+           Docker-backed database integration tests. Its current source already
+           enforces per-session soft/hard offer limits and stores later batches
+           cumulatively, but does not negotiate an `offerfiles_v` pace. It is
+           maintained under the same `ModderMule` GitHub owner as eMule Qt, which
+           its default server configuration also promotes. Treat the cross-server
+           and IPv6/NAT extensions as research claims until independently tested
+           against stock-compatible clients and servers.
 
 - **p2p-overlord ED2K server**
   - Status: Historical, archive-only
@@ -284,6 +304,61 @@ server addresses, `server.met` files, or bootstrap guidance.
            `OP_LOGINREQUEST`, `OP_SEARCHREQUEST`, `OP_SERVERLIST`, source lookup, and
            server tags.
 
+## Negotiated Fast Server Publishing Snapshot
+
+This 2026-10-13 snapshot is specific to the experimental `offerfiles_v=1`
+extension: a publishing client requests version 1 in `OP_LOGINREQUEST`, and a
+supporting server returns a complete batch/interval policy in the first
+`OP_SERVERIDENT`. It accelerates incremental `OP_OFFERFILES` visibility on the
+connected eD2K server only; it does not change Kad publication. The eMuleBB
+policy and outstanding proof boundary are recorded in
+[RUST-REF-015](../products/emulebb-rust/history/items/RUST-REF-015.md) and
+[RUST-CI-005](../products/emulebb-rust/active/items/RUST-CI-005.md).
+
+Current implementation state:
+
+- `emulebb-rust` implements the negotiating client with legacy fallback.
+- `andrey23127/ed2k-server` source tag `v0.9.81` implements the opt-in server
+  advertisement, matching enforcement, and global backpressure.
+- aMule PR `#1715` implements an experimental, disabled-by-default client and
+  reports isolated 60,000-file publication against that server source in 179.4
+  seconds. The PR remains open and production server-load proof remains
+  incomplete.
+
+High-value next adoption candidates:
+
+- **eMule Qt plus eNode-go**: the active client still uses a 200-file,
+  60-second scheduler, while the same owner's server already stores later
+  batches cumulatively and enforces soft/hard limits. This is the clearest
+  independent paired implementation after aMule/`ed2k-server`.
+- **njMule**: its pre-alpha `FilePublisher` explicitly uses 200 files every 60
+  seconds. The architecture is new enough to add connection-scoped negotiation
+  before the first public release.
+- **aria2-next**: its server session currently selects at most the first 200
+  shareable entries and repeats that prefix every ten minutes. Negotiated
+  continuation would improve both large-library coverage and time to visibility.
+- **eMule Community, eMule Next, and eMuleAI**: the inspected stock-derived
+  paths retain the 200-file cap and one-minute gate. They have broad user reach,
+  but need conservative opt-in UX and independent interoperability evidence.
+- **JEmuleServer**: its parser already tolerates unknown named login tags and
+  its server-ident path is extensible. It needs per-client batch/pacing and
+  server-wide backpressure before it can advertise the capability safely.
+
+Projects needing prerequisite work rather than simple acceleration:
+
+- **rmule** currently sends the complete share set in one `OP_OFFERFILES`.
+  It first needs bounded legacy fallback and multi-batch state; negotiation
+  would then provide the safe faster path.
+- **goed2k-server** currently replaces the client's indexed set on each offer
+  packet. It must preserve cumulative session offers before accepting a paced
+  multi-batch client.
+- Controllers and packaging layers such as aMuTorrent, Mularr, aMule Nuxt,
+  TauriMule, docker-amule, macMule, and AriaLite do not implement this wire path.
+  They benefit indirectly when their underlying aMule, eMule, or aria2-next
+  engine adopts it.
+- The stable eMuleBB MFC line is frozen for maintenance; forward adoption and
+  proof remain owned by `emulebb-rust`.
+
 ## Modern Clients, Forks, And Front Ends
 
 - **eMuleBB**
@@ -302,9 +377,9 @@ server addresses, `server.met` files, or bootstrap guidance.
   - Status: 🟢 Active, pre-release forward client
   - Language/platform: Rust; headless multiplatform daemon plus embedded SPA WebUI
   - Link: https://github.com/emulebb/emulebb-rust
-  - Repo stats (GitHub, 2026-09-30):
-    - `emulebb/emulebb-rust`: 3 stars, 0 forks, 10 open issues; default `main`;
-      default-branch commit 2026-09-30 `334db49`; GPL-2.0; no public release yet.
+  - Repo stats (GitHub, 2026-10-13):
+    - `emulebb/emulebb-rust`: 6 stars, 0 forks, 29 open issues; default `main`;
+      default-branch commit 2026-10-13 `93cd2f8`; GPL-2.0; no public release yet.
   - Notes: Workspace-owned forward eD2K/Kad client. It targets stock-compatible
            wire behavior while remaining a separate implementation from the MFC
            product; do not infer release readiness from repository activity.
@@ -323,6 +398,19 @@ server addresses, `server.met` files, or bootstrap guidance.
            from the June beta snapshots recorded previously to a stable GitHub
            release in August.
 
+- **macMule**
+  - Status: Maintained, packaging-only
+  - Language/platform: macOS application bundle around eMule Community and Wine
+  - Link: https://github.com/mderouet/macMule
+  - Repo stats (GitHub, 2026-10-13):
+    - `mderouet/macMule`: 23 stars, 2 forks, 0 open issues; default `master`;
+      default-branch commit 2026-02-14 `511f3fe`; latest release `v0.70b` on
+      2026-02-14; GPL-2.0.
+  - Notes: Build and packaging wrapper for running the current eMule Community
+           x64 client through Wine on Apple Silicon and Intel macOS. It does not
+           implement eD2K/Kad itself; protocol behavior remains the bundled
+           eMule build's behavior.
+
 - **eMuleAI**
   - Status: Active
   - Language/platform: Windows, C++/MFC
@@ -338,24 +426,26 @@ server addresses, `server.met` files, or bootstrap guidance.
   - Status: Active
   - Language/platform: Qt 6/C++23
   - Link: https://github.com/ModderMule/emule-qt
-  - Repo stats (GitHub, 2026-09-30):
-    - `ModderMule/emule-qt`: 27 stars, 4 forks, 4 open issues; default `main`;
-      default-branch commit 2026-09-29 `a668483`; latest release `v0.5.5` on
-      2026-09-28.
+  - Repo stats (GitHub, 2026-10-13):
+    - `ModderMule/emule-qt`: 34 stars, 4 forks, 4 open issues; default `main`;
+      default-branch commit 2026-10-13 `c502f60`; latest release `v0.6.12` on
+      2026-10-13; GPL-2.0.
   - Notes: Qt port intended to modernize the eMule client and improve platform
            independence. Local analysis checkout exists under
            `EMULEBB_WORKSPACE_ROOT\analysis\emule-qt`. Homepage:
            https://emule-qt.org/. The September release cadence makes it one of
-           the most visibly active independent client implementations.
+           the most visibly active independent client implementations. Its
+           current core keeps the stock-derived 200-file batch and 60-second
+           spacing, making it a direct negotiated-pacing adoption candidate.
 
 - **Ember**
   - Status: 🟢 Active, protocol-extension caution
   - Language/platform: Rust/Tauri/Svelte; Windows and Linux packages
   - Link: https://github.com/untaimed18/Ember-P2P
-  - Repo stats (GitHub, 2026-09-30):
-    - `untaimed18/Ember-P2P`: 15 stars, 0 forks, 2 open issues; default `main`;
-      default-branch commit 2026-09-28 `a1f0799`; latest release `v1.7.0` on
-      2026-09-28; GPL-3.0.
+  - Repo stats (GitHub, 2026-10-13):
+    - `untaimed18/Ember-P2P`: 24 stars, 0 forks, 1 open issue; default `main`;
+      default-branch commit 2026-10-11 `0392bd3`; latest release `v1.7.3` on
+      2026-10-10; GPL-3.0.
   - Notes: Ground-up client that implements eD2K/Kad interoperation but also
            enables its own encrypted Ember DHT and an Ember-only peer-exchange
            opcode. Those additions make it a useful implementation and adoption
@@ -366,14 +456,67 @@ server addresses, `server.met` files, or bootstrap guidance.
   - Status: 🟢 Active, beta
   - Language/platform: Windows C++/MFC
   - Link: https://github.com/favoritejonny/Emule-Next
-  - Repo stats (GitHub, 2026-09-30):
-    - `favoritejonny/Emule-Next`: 4 stars, 0 forks, 0 open issues; default
-      `main`; default-branch commit 2026-09-27 `d4a380a`; `v1.0.0-beta.1`
+  - Repo stats (GitHub, 2026-10-13):
+    - `favoritejonny/Emule-Next`: 8 stars, 0 forks, 0 open issues; default
+      `main`; default-branch commit 2026-10-11 `5d69617`; `v1.0.0-beta.1`
       prerelease published 2026-09-27; GPL-2.0.
   - Notes: Independent eMule Community fork with Win32/x64 portable packages,
            refreshed UI assets, 43 languages, CI, checksums, and SBOM release
            evidence. Treat it as a young fork and validate substantive runtime
            changes separately from packaging and presentation work.
+
+- **aria2-next**
+  - Status: 🟢 Active, released, needs protocol review
+  - Language/platform: C++20; Windows, macOS, Linux, and Android
+  - Link: https://github.com/AnInsomniacy/aria2-next
+  - Repo stats (GitHub, 2026-10-13):
+    - `AnInsomniacy/aria2-next`: 666 stars, 28 forks, 2 open issues; default
+      `main`; default-branch commit 2026-10-13 `612ffea`; latest release
+      `v3.0.1` on 2026-10-13; GPL-2.0.
+  - Notes: New download engine preserving aria2 command-line, configuration,
+           session, and JSON-RPC surfaces while adding a native eD2K/Kad
+           implementation. Its README claims server and Kad source/search,
+           verified transfers, upload queues, credits, obfuscation, persisted
+           identity, sharing, and wire checks against aMule. Source review on
+           2026-10-13 found that `ServerSession` offers at most the first 200
+           shareable entries and repeats that selection every ten minutes; it
+           has no continuation cursor or negotiated pace. Treat the broader
+           claims as a strong interoperability lead, not an oracle, until code
+           and live traces are independently reviewed. `FateLightX/AriaLite` is
+           a current macOS front end that bundles this engine.
+
+- **rmule**
+  - Status: 🟡 Active, early release
+  - Language/platform: Rust; terminal UI and headless CLI
+  - Link: https://github.com/Lazark0x/rmule
+  - Repo stats (GitHub, 2026-10-13):
+    - `Lazark0x/rmule`: 0 stars, 0 forks, 0 open issues; default `main`;
+      default-branch commit 2026-10-12 `63ee533`; latest release `v0.2.0` on
+      2026-10-12; GPL-3.0.
+  - Notes: New library-first eD2K/Kad client with server login/search, Kad,
+           peer transfer, shared-file registration, upload handling, persisted
+           state, and a parity matrix tied to aMule source and captured bytes.
+           Its current session follower sends the complete share set in one
+           `OP_OFFERFILES` command rather than applying a stock or negotiated
+           batch/pacing policy. Its README still records missing or intentionally
+           omitted surfaces, including Kad notes and shared-directory browsing.
+           Review actual publication scheduling and live behavior before
+           treating it as a compatibility reference.
+
+- **njMule**
+  - Status: 🟡 Active, pre-alpha
+  - Language/platform: Java 25; JavaFX desktop, web UI, and headless core
+  - Link: https://github.com/njMule/njMule
+  - Repo stats (GitHub, 2026-10-13):
+    - `njMule/njMule`: 0 stars, 0 forks, 0 open issues; default `main`;
+      default-branch commit 2026-10-13 `aac6e33`; no public release; GPL-3.0.
+  - Notes: New eD2K/Kad client that claims server and Kad connectivity/search,
+           verified downloads, upload queues, credits, secure identification,
+           source exchange, shared files, and read-only eMule profile import.
+           `FilePublisher` currently uses the stock-derived 200-file batch and
+           60-second interval. The public repository was created on 2026-10-12
+           and labels itself pre-alpha, so the broad surface needs independent
+           code and runtime review before use as protocol evidence.
 
 - **padMule**
   - Status: 🟡 Active, experimental, agent-assisted
@@ -448,15 +591,20 @@ server addresses, `server.met` files, or bootstrap guidance.
   - Current upstream: https://github.com/amule-org/amule (`master`; 3.1.0
     released 2026-09-21). The older `amule-project/amule` repository is the
     frozen predecessor, not the maintained upstream.
-  - Repo stats (GitHub, 2026-09-30):
-    - `amule-org/amule`: 371 stars, 30 forks, 52 open issues; default `master`;
-      default-branch activity through 2026-09-30.
+  - Repo stats (GitHub, 2026-10-13):
+    - `amule-org/amule`: 384 stars, 33 forks, 62 open issues; default `master`;
+      default-branch commit 2026-10-13 `f9dba47`; latest release `3.1.0` on
+      2026-09-21.
   - Local reference (2026-09-25): `analysis\amule` at
     `5d7abd4239895555c96244c83f34368c3c38a446`; source comparison and
     offline fixture ideas only.
   - Notes: The separate `emulebb/amule` Windows-build fork is unchanged. Its
     optional `repos\amule` checkout is not materialized locally; do not
-    confuse it with the upstream analysis reference.
+           confuse it with the upstream analysis reference. Open PR `#1715`
+           adds experimental, opt-in `offerfiles_v=1` client negotiation and
+           reports isolated interoperability against `ed2k-server` source tag
+           `v0.9.81`; production server-load validation and upstream review are
+           still incomplete.
 
 - **p2p-overlord**
   - Status: Historical, archived
@@ -592,6 +740,33 @@ server addresses, `server.met` files, or bootstrap guidance.
     - `tronarite/ed2k-indexer`: 0 stars, 0 forks, 0 open issues; default `main`; default-branch commit 2026-03-17 `a3e8ccc`.
   - Notes: Self-hosted Torznab-compatible indexer for Radarr/Sonarr and eMule workflows.
 
+- **p2pwatch**
+  - Status: 🟡 Active, needs privacy/runtime review
+  - Language/platform: Python
+  - Link: https://github.com/mission-titar/p2pwatch
+  - Repo stats (GitHub, 2026-10-13):
+    - `mission-titar/p2pwatch`: 0 stars, 0 forks, 0 open issues; default `main`;
+      default-branch commit 2026-10-13 `ba32bc0`; latest release `v4.1.0` on
+      2026-10-05; AGPL-3.0.
+  - Notes: Continuous eD2K/Kad crawler and indexer for recovery-oriented
+           searches. The project states that it records file observations and
+           protocol-provided pseudonymous source identifiers but not peer IPs,
+           ports, or countries. Review protocol completeness, retention,
+           consent, and deployment behavior independently before reuse.
+
+- **hispamula-indexer**
+  - Status: 🟢 Active, new integration
+  - Language/platform: Python/FastAPI/Docker
+  - Link: https://github.com/ascalotoru/hispamula-indexer
+  - Repo stats (GitHub, 2026-10-13):
+    - `ascalotoru/hispamula-indexer`: 0 stars, 0 forks, 0 open issues; default
+      `master`; default-branch commit 2026-10-12 `4e8686b`; latest release
+      `v1.0.4` on 2026-10-12; Apache-2.0.
+  - Notes: Authenticated Torznab/Newznab scraper for a public eD2K-link catalog.
+           It emits real `ed2k://` identities through an aMulerr-compatible
+           magnet wrapper for downstream aMule workflows; it does not itself
+           query, serve, or publish on the eD2K/Kad networks.
+
 - **docker-amule**
   - Status: Maintained
   - Language/platform: Docker
@@ -628,10 +803,10 @@ server addresses, `server.met` files, or bootstrap guidance.
   - Status: Active
   - Language/platform: Web/Docker
   - Link: https://github.com/joecarl/mularr
-  - Repo stats (GitHub, 2026-09-30):
-    - `joecarl/mularr`: 154 stars, 5 forks, 7 open issues; default `main`;
-      default-branch commit 2026-09-12 `d872df7`; latest release `v0.18.0` on
-      2026-09-12; MIT license.
+  - Repo stats (GitHub, 2026-10-13):
+    - `joecarl/mularr`: 172 stars, 5 forks, 4 open issues; default `main`;
+      default-branch commit 2026-10-07 `c6dceda`; latest release `v1.0.0` on
+      2026-10-07; MIT license.
   - Notes: New aMule-focused web UI and automation project with *Arr, Gluetun,
            Telegram, qBittorrent-compatible, and Torznab-compatible surfaces.
            Treat as a fresh controller lead until source and runtime behavior are
@@ -641,10 +816,10 @@ server addresses, `server.met` files, or bootstrap guidance.
   - Status: 🟢 Active, needs security/runtime review
   - Language/platform: TypeScript/Nuxt/Docker
   - Link: https://github.com/JuanmanDev/amule-nuxt
-  - Repo stats (GitHub, 2026-09-30):
+  - Repo stats (GitHub, 2026-10-13):
     - `JuanmanDev/amule-nuxt`: 3 stars, 0 forks, 2 open issues; default
-      `master`; default-branch commit 2026-09-22 `b47bf9a`; latest release
-      `v1.19.0` on 2026-09-22; MIT license.
+      `master`; default-branch commit 2026-10-04 `a8aae22`; latest release
+      `v1.20.0` on 2026-10-04; MIT license.
   - Notes: Modern aMule WebUI that implements the EC protocol directly in
            TypeScript and adds HTTP/JSON, WebSocket updates, scheduled search,
            a browser demo, and an MCP control surface. The README warns that the
@@ -656,10 +831,10 @@ server addresses, `server.met` files, or bootstrap guidance.
   - Status: 🟡 Active, new alpha
   - Language/platform: Rust/Tauri/TypeScript Windows front end over `amuled`
   - Link: https://github.com/alexwing/Taurimule
-  - Repo stats (GitHub, 2026-09-30):
-    - `alexwing/Taurimule`: 1 star, 0 forks, 0 open issues; default `main`;
-      default-branch commit 2026-09-27 `e08a4a6`; release `v0.1.0` on
-      2026-09-27; GPL-3.0.
+  - Repo stats (GitHub, 2026-10-13):
+    - `alexwing/Taurimule`: 2 stars, 0 forks, 0 open issues; default `main`;
+      default-branch commit 2026-10-05 `31998d7`; release `v0.3.0` on
+      2026-10-05; GPL-3.0.
   - Notes: New lightweight Windows UI/orchestration layer that bundles or drives
            the existing aMule daemon through the External Connections protocol;
            it does not implement the eD2K/Kad wire. The initial repository was
