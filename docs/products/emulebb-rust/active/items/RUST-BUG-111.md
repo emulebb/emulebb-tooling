@@ -18,27 +18,28 @@ source: ED2K static audit 2026-10-12 vs community-0.72, aMule, ed2k-server, lugd
 
 ## Summary
 
-The `OP_IDCHANGE` handler re-runs the full connected-startup path on every
-occurrence of the packet, including redundant re-sends of the same assigned
-client ID. That re-emits `ConnectSucceeded` and republishes the offer-file
-catalog when nothing changed. Stock eMule performs the connected transition
-once and does not republish inside the IDCHANGE handler.
+The first fix correctly suppresses connected startup for a redundant
+`OP_IDCHANGE`, but a genuine client-ID reassignment does not republish a
+non-empty offer-file catalog. Reassignment re-enters startup while retaining the
+session's published-hash epoch, so every previously published file is skipped.
 
 ## Current State
 
-- In `crates/emulebb-ed2k/src/ed2k_server/packet_handler.rs`, the `OP_IDCHANGE`
-  branch unconditionally sends `ConnectSucceeded` and calls
-  `send_connected_server_startup` after setting `login_accepted = true`.
-- A server that echoes IDCHANGE, or sends a second IDCHANGE after the callback
-  test, therefore triggers a duplicate connect event and a full offer-file
-  republish.
+- `packet_handler.rs` now distinguishes first login, same-ID repeats, and a real
+  ID change. A same-ID repeat emits no duplicate `ConnectSucceeded` event.
+- A real reassignment calls connected startup, but
+  `begin_offer_files_publishing` retains the prior published-hash set.
+- `send_offer_files_snapshot` skips hashes already in that set, so a non-empty
+  catalog produces no second `OP_OFFERFILES` frame for the new assigned ID.
+- Existing tests use an empty shared catalog and assert events/public-IP state,
+  so they cannot observe either duplicate suppression or required republication
+  on the wire.
 
 ## Why This Matters
 
-This is a server-session state-machine parity divergence: it produces noisy
-duplicate connect events and unnecessary full catalog republishes against live
-servers, while stock only republishes on a fresh connection or an actual ID
-change.
+The session state transition and publication epoch must agree. Suppressing a
+redundant transition is correct, but a real endpoint/ID reassignment needs a new
+publication epoch so the server receives offers carrying the new client ID.
 
 ## Representative Sites
 
@@ -52,8 +53,8 @@ change.
   accepted login or when the assigned `client_id` actually changes.
 - On a redundant same-ID IDCHANGE, only refresh server flags/public-IP state as
   stock does, without republishing.
-- Preserve the full republish and public-IP refresh on a real LowID-to-HighID
-  reassignment.
+- Start a fresh offer-publication epoch before startup on a real LowID-to-HighID
+  reassignment, preserving the full republish and public-IP refresh.
 
 ## Scope Constraints
 
@@ -67,7 +68,8 @@ change.
       `ConnectSucceeded` event and triggers no offer-file republish.
 - [ ] A genuine client-ID reassignment still emits the connect event, refreshes
       public-IP state, and republishes the catalog.
-- [ ] A session-level test covers both redundant and reassigning IDCHANGE.
+- [ ] Session-level tests cover both redundant and reassigning IDCHANGE with a
+      non-empty catalog and assert emitted `OP_OFFERFILES` frames.
 
 ## Validation
 
@@ -78,3 +80,7 @@ change.
 
 Found by the 2026-10-12 ED2K static audit; complements the RUST-BUG-109 and
 RUST-BUG-110 HELLO/callback state-machine closures.
+
+PR #102 (commit `29d5316f`) implemented the transition gate but closed the
+GitHub issue before non-empty-catalog wire behavior was proven. The 2026-10-13
+closure audit reopened the item.
