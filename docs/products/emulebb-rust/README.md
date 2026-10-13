@@ -6,8 +6,7 @@ forward REST contract.
 
 Active release candidate:
 
-- [`0.1.0-beta.2` release notes](RELEASE-0.1.0-beta.2-NOTES.md)
-- [`0.1.0-beta.2` changelog](RELEASE-0.1.0-beta.2-CHANGELOG.md)
+- [`0.1.0-beta.2` GitHub release](https://github.com/emulebb/emulebb-rust/releases/tag/rust-v0.1.0-beta.2)
 - [`0.1.0-beta.2` release scope](RELEASE-SCOPE.md)
 - [Current-head parity evidence and documentation reconciliation](active/items/RUST-CI-006.md)
 

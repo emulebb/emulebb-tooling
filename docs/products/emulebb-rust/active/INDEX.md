@@ -68,10 +68,10 @@ beta may ship with a signed-off non-critical parity backlog, but P0 safety and
 stock-wire-critical findings block the tag. Indexer/Torznab/Arr work remains
 beta follow-up scope and is tracked through the normal backlog.
 
-Current soak upload/download gap analysis is tracked in
-[Rust Soak Upload/Download Gap Analysis](RUST-SOAK-UPLOAD-DOWNLOAD-GAP-ANALYSIS.md).
-Final beta evidence is reconciled in the
-[0.1.0-beta.1 Release Evidence Checklist](RELEASE-0.1.0-beta.1-CHECKLIST.md).
+Current parity evidence and documentation reconciliation are tracked in
+[RUST-CI-006](items/RUST-CI-006.md). Final beta.1 evidence is retained in
+[RUST-FEAT-033](../history/items/RUST-FEAT-033.md) and the published
+[GitHub release](https://github.com/emulebb/emulebb-rust/releases/tag/rust-v0.1.0-beta.1).
 
 ## Longer-Term Beta Roadmap
 

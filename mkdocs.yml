@@ -92,11 +92,8 @@ nav:
       - Product Section: products/emulebb-rust/README.md
       - Active Backlog: products/emulebb-rust/active/INDEX.md
       - Release Scope: products/emulebb-rust/RELEASE-SCOPE.md
-      - 0.1.0-beta.1 Release Notes: products/emulebb-rust/RELEASE-0.1.0-beta.1-NOTES.md
-      - 0.1.0-beta.1 Changelog: products/emulebb-rust/RELEASE-0.1.0-beta.1-CHANGELOG.md
-      - 0.1.0-beta.2 Release Notes: products/emulebb-rust/RELEASE-0.1.0-beta.2-NOTES.md
-      - 0.1.0-beta.2 Changelog: products/emulebb-rust/RELEASE-0.1.0-beta.2-CHANGELOG.md
-      - 0.1.0-beta.1 Release Evidence Checklist: products/emulebb-rust/active/RELEASE-0.1.0-beta.1-CHECKLIST.md
+      - 0.1.0-beta.1 Release: https://github.com/emulebb/emulebb-rust/releases/tag/rust-v0.1.0-beta.1
+      - 0.1.0-beta.2 Release: https://github.com/emulebb/emulebb-rust/releases/tag/rust-v0.1.0-beta.2
       - Headless Large-Library NOW Roadmap: products/emulebb-rust/active/RUST-HEADLESS-LARGE-LIBRARY-NOW-ROADMAP.md
       - Large-Library I/O Portability Review: products/emulebb-rust/active/RUST-LARGE-LIBRARY-IO-PORTABILITY-REVIEW.md
       - Code Quality And Test Placement: products/emulebb-rust/reference/CODE-QUALITY.md
