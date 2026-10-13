@@ -22,8 +22,7 @@ After the compatibility findings in this review are dispositioned, run one
 authoritative stock eMule/current-aMule/Rust campaign from a clean immutable
 Rust head and reconcile the durable documentation to that evidence. The
 existing broad parity campaign is tied to an older Rust revision, while later
-targeted witnesses do not collectively replace a same-head full campaign and
-one active soak document still contradicts later upload evidence.
+targeted witnesses do not collectively replace a same-head full campaign.
 
 ## Current State
 
@@ -33,8 +32,9 @@ one active soak document still contradicts later upload evidence.
 - Large-library, live, and targeted peer witnesses exist for later changes, but
   no single retained campaign reruns the complete stock/MFC/current-aMule matrix
   at the current immutable head.
-- `RUST-SOAK-UPLOAD-DOWNLOAD-GAP-ANALYSIS.md` still describes upload admission as
-  open, while later `RUST-CI-002` peer evidence records that path as passing.
+- The obsolete upload/download gap analysis and beta.1 soak runbook were retired
+  on 2026-10-13. Archived `RUST-CI-002` and `RUST-FEAT-033` now own those results;
+  the remaining gap is a same-head full campaign.
 
 ## Why This Matters
 
@@ -45,7 +45,7 @@ regression; stale red prose can equally misrepresent completed behavior.
 ## Representative Sites
 
 - `EMULEBB_WORKSPACE_ROOT\repos\emulebb-tooling\docs\products\emulebb-rust\history\items\RUST-CI-002.md`
-- `EMULEBB_WORKSPACE_ROOT\repos\emulebb-tooling\docs\products\emulebb-rust\active\RUST-SOAK-UPLOAD-DOWNLOAD-GAP-ANALYSIS.md`
+- `EMULEBB_WORKSPACE_ROOT\repos\emulebb-tooling\docs\products\emulebb-rust\history\items\RUST-FEAT-033.md`
 - `EMULEBB_WORKSPACE_ROOT\repos\emulebb-tooling\docs\products\emulebb-rust\RELEASE-SCOPE.md`
 - `EMULEBB_WORKSPACE_ROOT\repos\emulebb-rust\policy\rust-client-omissions.toml`
 - `EMULEBB_WORKSPACE_ROOT\repos\emulebb-build-tests`
@@ -85,8 +85,8 @@ regression; stale red prose can equally misrepresent completed behavior.
       deterministic or interop witness appropriate to its risk.
 - [ ] The omissions registry and frozen parity matrix match the evidence with no
       hidden proprietary/default divergence.
-- [ ] Active and release documentation contains no contradiction such as the
-      stale upload-admission statement.
+- [x] Obsolete soak guidance is removed and current release documentation no
+      longer contradicts the retained upload-admission evidence.
 - [ ] The evidence manifest is reproducible through maintained Python entry
       points and passes cleanup/secret/privacy checks.
 
