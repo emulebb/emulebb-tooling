@@ -42,8 +42,8 @@ gentle, compliant supplement.
 
 1. **Passive snoop layer (primary, free).** Index every keyword-publish,
    source-publish, and routed search/result that passes through the node. Hook the
-   Kad RPC receive path (the same `emulebb-kad-net` receive loop the UDP
-   source-reask foundation hooks; see `docs/design/udp-source-reask.md`). Zero
+   Kad RPC receive path (the same `emulebb-kad-net` receive loop described in
+   the [architecture](architecture.md#source-ownership-and-reask-invariants)). Zero
    extra queries, zero ban risk.
 2. **Replay layer (cheap, active).** Maintain a frequency-ranked table of observed
    keywords; periodically re-search the top-N to deepen result/source sets. Self-
