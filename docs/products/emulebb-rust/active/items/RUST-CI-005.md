@@ -29,8 +29,9 @@ protocol extensions or default drift without an explicit exception.
 - `crates/emulebb-ed2k/src/ed2k_server/offer_policy.rs` defines and validates the
   negotiated capability and its custom fields with fail-closed behavior.
 - `crates/emulebb-settings/src/lib.rs` enables the capability by default.
-- The headless/large-library roadmap describes a 100,000-file deterministic
-  model and calls out the missing deterministic server fixture.
+- The negotiated path targets a 100,000-record deterministic publication model,
+  but still lacks the server fixture required to prove acceptance, rejection,
+  malformed advertisement, reconnect reset, and stock fallback behavior.
 - `docs/WORKSPACE-POLICY.md` requires stock protocol compatibility and explicit
   governance for extensions/default drift.
 - The negotiation and validation are safer than silent packet drift, but they
@@ -49,7 +50,6 @@ evidence for whichever path is chosen.
 
 - `EMULEBB_WORKSPACE_ROOT\repos\emulebb-rust\crates\emulebb-ed2k\src\ed2k_server\offer_policy.rs`
 - `EMULEBB_WORKSPACE_ROOT\repos\emulebb-rust\crates\emulebb-settings\src\lib.rs`
-- `EMULEBB_WORKSPACE_ROOT\repos\emulebb-tooling\docs\products\emulebb-rust\active\RUST-HEADLESS-LARGE-LIBRARY-NOW-ROADMAP.md`
 - `EMULEBB_WORKSPACE_ROOT\repos\emulebb-tooling\docs\WORKSPACE-POLICY.md`
 
 ## Intended Shape
