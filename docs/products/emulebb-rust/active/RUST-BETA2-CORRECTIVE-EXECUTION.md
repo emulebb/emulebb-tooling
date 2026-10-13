@@ -41,6 +41,13 @@ for workflow state.
 - Already-downloaded recognition needs a durable completed-download identity
   store. The current shared catalog and active transfer index are insufficient
   because users may move or delete completed files.
+- Completed-download history stores content identity and completion metadata,
+  never a live-path claim. It has no foreign key to current transfer, share, or
+  path rows, and schema `31` intentionally requires a fresh beta profile.
+- The authoritative completion-manifest transaction records history only for a
+  completed, final-rehash-clean download. Share-in-place manifests are excluded;
+  repeat completions preserve the first completion time and reject conflicting
+  size or non-null AICH identity.
 - Buddy liveness is based on received peer activity, not merely successful
   writes or recurring local pings.
 
@@ -82,7 +89,7 @@ for workflow state.
 
 ### 4. Durable Download History
 
-- Define a current-only persisted identity store keyed by ED2K file hash, with
+- Define a durable persisted identity store keyed by ED2K file hash, with
   the metadata required for user-visible duplicate decisions.
 - Record history atomically at successful completion before active-transfer
   cleanup can remove the only durable identity.
@@ -104,6 +111,7 @@ for workflow state.
 | 2026-10-13 | RUST-BUG-113 completed | `3f3bb819` | Hello capability and empty/denied browse policy agree |
 | 2026-10-13 | RUST-BUG-116 completed | `c3707c12` / `dfd4c2f7` | 1,026 ED2K tests and all 426 core tests pass; physical pruning proven |
 | 2026-10-13 | RUST-BUG-117 completed | `92688d17` / `6a822d1e` / `5225f8f2` / `50227302` | 1,032 ED2K and 428 core tests pass; deterministic liveness and reconnect handoff proven |
+| 2026-10-13 | RUST-FEAT-047 history foundation | `576f1b53` | All 38 metadata tests and strict metadata Clippy pass; completion history survives manifest deletion and conflicting identity rolls back atomically |
 
 The global `github-roadmap-check.py --github` run still reports 244 legacy
 MFC-label synchronization errors outside this Rust slice. The new Rust issue's
