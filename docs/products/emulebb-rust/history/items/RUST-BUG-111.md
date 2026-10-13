@@ -3,7 +3,7 @@ id: RUST-BUG-111
 workflow: github
 github_issue: https://github.com/emulebb/emulebb-rust/issues/76
 title: Avoid duplicate startup/republish on repeated OP_IDCHANGE
-status: OPEN
+status: DONE
 priority: Major
 category: bug
 labels: [rust, ed2k, server, state-machine, login, parity]
@@ -64,11 +64,11 @@ publication epoch so the server receives offers carrying the new client ID.
 
 ## Acceptance Criteria
 
-- [ ] A second `OP_IDCHANGE` with the same client ID emits no duplicate
+- [x] A second `OP_IDCHANGE` with the same client ID emits no duplicate
       `ConnectSucceeded` event and triggers no offer-file republish.
-- [ ] A genuine client-ID reassignment still emits the connect event, refreshes
+- [x] A genuine client-ID reassignment still emits the connect event, refreshes
       public-IP state, and republishes the catalog.
-- [ ] Session-level tests cover both redundant and reassigning IDCHANGE with a
+- [x] Session-level tests cover both redundant and reassigning IDCHANGE with a
       non-empty catalog and assert emitted `OP_OFFERFILES` frames.
 
 ## Validation
@@ -84,3 +84,11 @@ RUST-BUG-110 HELLO/callback state-machine closures.
 PR #102 (commit `29d5316f`) implemented the transition gate but closed the
 GitHub issue before non-empty-catalog wire behavior was proven. The 2026-10-13
 closure audit reopened the item.
+
+Completed on 2026-10-13 in emulebb-rust commit `4b04be6b`. Validation:
+
+- both focused IDCHANGE wire tests pass;
+- all 18 offer-files tests pass;
+- all 1,026 `emulebb-ed2k` tests pass;
+- targeted all-target Clippy passes with only the repository's seven unrelated
+  unfulfilled cognitive-complexity expectations allowed.

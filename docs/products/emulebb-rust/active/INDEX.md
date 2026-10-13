@@ -160,7 +160,7 @@ below as historical links.
 | [RUST-BUG-107](items/RUST-BUG-107.md) | Major | OPEN | Preserve lossless shared-library path identity across platforms |
 | [RUST-BUG-109](../history/items/RUST-BUG-109.md) | Critical | DONE | Close ED2K callback and server state-machine parity gaps |
 | [RUST-BUG-110](../history/items/RUST-BUG-110.md) | Major | DONE | Bind ED2K peer service to the HELLO state machine |
-| [RUST-BUG-111](items/RUST-BUG-111.md) | Major | OPEN | Avoid duplicate startup/republish on repeated OP_IDCHANGE |
+| [RUST-BUG-111](../history/items/RUST-BUG-111.md) | Major | DONE | Avoid duplicate startup/republish on repeated OP_IDCHANGE |
 | [RUST-BUG-112](items/RUST-BUG-112.md) | Minor | OPEN | Centralize offerfiles_v policy by ED2K server-session role |
 | [RUST-BUG-113](items/RUST-BUG-113.md) | Minor | OPEN | Advertise share-viewing capability truthfully in CT_EMULE_MISCOPTIONS1 |
 | [RUST-BUG-114](items/RUST-BUG-114.md) | Minor | OPEN | Enforce an explicit maximum upload-slot ceiling and clarify maxUploadSlots semantics |
