@@ -8,6 +8,7 @@ import re
 import sys
 
 from github_roadmap_common import (
+    DOCS,
     MANAGED_LABEL_PREFIXES,
     OWNER,
     PROJECT_TITLE,
@@ -31,10 +32,17 @@ PROJECT3_STATUS = {
 }
 
 
-def check_local_metadata(errors: list[str]) -> None:
+def check_local_metadata(items, errors: list[str], product: str | None) -> None:
     """Check local active specs for GitHub workflow metadata."""
 
-    for item in load_items():
+    for item in items:
+        if product:
+            if item.product != product:
+                errors.append(
+                    f"{item.item_id}: product is {item.product!r}, expected {product!r}"
+                )
+            if not item.phase:
+                errors.append(f"{item.item_id}: missing phase front matter")
         if item.workflow == "local":
             # Explicitly local-only specs (e.g. deferred 0.8.x items, or already-shipped
             # local fixes) are exempt from GitHub-primary metadata until promoted.
@@ -62,7 +70,15 @@ def check_local_metadata(errors: list[str]) -> None:
 def check_github_issue(item, errors: list[str]) -> None:
     """Check that the GitHub issue for one local item is discoverable."""
 
-    result = run_gh(["issue", "view", item.github_issue, "--json", "title,url,labels"])
+    result = run_gh(
+        [
+            "issue",
+            "view",
+            item.github_issue,
+            "--json",
+            "title,url,state,body,labels,milestone",
+        ]
+    )
     if result.returncode != 0:
         errors.append(f"{item.item_id}: cannot read GitHub issue {item.github_issue}")
         return
@@ -71,7 +87,32 @@ def check_github_issue(item, errors: list[str]) -> None:
         errors.append(f"{item.item_id}: unexpected issue JSON")
         return
     title = str(data.get("title", ""))
-    if item.item_id not in title:
+    if item.product == "emulebb-rust":
+        expected_title = f"{item.item_id} - {item.title}"
+        if title != expected_title:
+            errors.append(
+                f"{item.item_id}: issue title is {title!r}, expected {expected_title!r}"
+            )
+        if data.get("state") != "OPEN":
+            errors.append(f"{item.item_id}: active spec points to a non-open issue")
+        milestone = data.get("milestone")
+        milestone_title = (
+            str(milestone.get("title", "")) if isinstance(milestone, dict) else ""
+        )
+        if milestone_title != item.milestone:
+            errors.append(
+                f"{item.item_id}: issue milestone is {milestone_title!r}, "
+                f"expected {item.milestone!r}"
+            )
+        body = str(data.get("body", ""))
+        durable_spec_line = f"**Durable spec:** {item.spec_url}"
+        if durable_spec_line not in body:
+            errors.append(f"{item.item_id}: issue body lacks canonical durable-spec line")
+        if body.count(item.spec_url) != 1:
+            errors.append(
+                f"{item.item_id}: issue body must contain exactly one canonical spec URL"
+            )
+    elif item.item_id not in title:
         errors.append(f"{item.item_id}: issue title does not contain local ID")
     labels = data.get("labels", [])
     label_names = {
@@ -169,6 +210,7 @@ def check_project_item(item, project_items: dict[str, dict[str, object]], errors
         "Status": PROJECT3_STATUS.get(item.status, "Todo"),
         "Product": item.product,
         "Phase": item.phase,
+        "Priority": item.priority,
     }
     for field_name, expected in expected_values.items():
         actual = project_item_field_value(project_item, field_name)
@@ -183,14 +225,24 @@ def main() -> int:
         action="store_true",
         help="also query GitHub issues and org project visibility",
     )
+    parser.add_argument(
+        "--product",
+        help="check only docs/products/<product>/active/items",
+    )
     args = parser.parse_args()
 
     errors: list[str] = []
-    check_local_metadata(errors)
+    items_root = DOCS / "products" / args.product / "active" / "items" if args.product else None
+    if items_root is not None and not items_root.is_dir():
+        errors.append(f"missing product backlog directory: {items_root}")
+        items = []
+    else:
+        items = load_items(items_root) if items_root is not None else load_items()
+    check_local_metadata(items, errors, args.product)
     if args.github:
         number = project_number(errors)
         project_items = project_items_by_url(number, errors)
-        for item in load_items():
+        for item in items:
             if item.github_issue:
                 check_github_issue(item, errors)
                 check_project_item(item, project_items, errors)
@@ -201,7 +253,12 @@ def main() -> int:
         print(f"errors: {len(errors)}", file=sys.stderr)
         return 1
 
-    print(f"checked {len(load_items())} GitHub-primary active backlog specs")
+    github_primary = sum(1 for item in items if item.workflow == "github")
+    scope = f" for {args.product}" if args.product else ""
+    print(
+        f"checked {len(items)} active backlog specs{scope} "
+        f"({github_primary} GitHub-primary)"
+    )
     return 0
 
 
