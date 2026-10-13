@@ -6,8 +6,8 @@ metadata, Cargo, or Rust protocol work.
 
 ## Product Direction
 
-- `rust-v0.1.0-beta.2` is the active corrective release line and active beta
-  product-development lane. Do not rewrite published beta tags or artifacts.
+- `rust-v0.1.0-beta.2` is the current published beta baseline. Development
+  continues on the beta lane; do not rewrite published beta tags or artifacts.
 - The Rust headless daemon and embedded SPA WebUI are the active client and UI.
   Slint/native UI is a frozen experiment unless the operator explicitly asks to
   remove or revive it.

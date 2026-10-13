@@ -4,7 +4,7 @@ This section is the canonical home for active emulebb-rust product docs,
 backlog, design notes, history, release scope, embedded SPA WebUI scope, and
 forward REST contract.
 
-Active release candidate:
+Current published beta baseline:
 
 - [`0.1.0-beta.2` GitHub release](https://github.com/emulebb/emulebb-rust/releases/tag/rust-v0.1.0-beta.2)
 - [`0.1.0-beta.2` release scope](RELEASE-SCOPE.md)
