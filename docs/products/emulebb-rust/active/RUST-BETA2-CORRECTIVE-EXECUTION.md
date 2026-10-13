@@ -21,8 +21,8 @@ for workflow state.
 |------|-------|-------|-----------|
 | 1 | Backlog documentation cleanup | COMPLETE | Taxonomy, structure, and GitHub records agree |
 | 2 | Closure evidence for RUST-BUG-111, 113, and 116 | COMPLETE | Focused tests prove every retained criterion |
-| 3 | Buddy receive-liveness defect | IN_PROGRESS | Silent half-open buddy links expire and reconnect |
-| 4 | RUST-FEAT-047 durable download history | PENDING | Completed hashes survive file removal and restart |
+| 3 | Buddy receive-liveness defect | COMPLETE | Silent half-open buddy links expire and reconnect |
+| 4 | RUST-FEAT-047 durable download history | IN_PROGRESS | Completed hashes survive file removal and restart |
 
 ## Design Decisions
 
@@ -103,6 +103,7 @@ for workflow state.
 | 2026-10-13 | RUST-BUG-111 completed | `4b04be6b` | 1,026 crate tests pass; IDCHANGE wire behavior proven |
 | 2026-10-13 | RUST-BUG-113 completed | `3f3bb819` | Hello capability and empty/denied browse policy agree |
 | 2026-10-13 | RUST-BUG-116 completed | `c3707c12` / `dfd4c2f7` | 1,026 ED2K tests and all 426 core tests pass; physical pruning proven |
+| 2026-10-13 | RUST-BUG-117 completed | `92688d17` / `6a822d1e` / `5225f8f2` / `50227302` | 1,032 ED2K and 428 core tests pass; deterministic liveness and reconnect handoff proven |
 
 The global `github-roadmap-check.py --github` run still reports 244 legacy
 MFC-label synchronization errors outside this Rust slice. The new Rust issue's

@@ -165,7 +165,7 @@ below as historical links.
 | [RUST-BUG-113](../history/items/RUST-BUG-113.md) | Minor | DONE | Advertise share-viewing capability truthfully in CT_EMULE_MISCOPTIONS1 |
 | [RUST-BUG-114](items/RUST-BUG-114.md) | Minor | OPEN | Enforce an explicit maximum upload-slot ceiling and clarify maxUploadSlots semantics |
 | [RUST-BUG-115](items/RUST-BUG-115.md) | Minor | OPEN | Ban cross-reconnect userhash changes via a tracked-client identity store |
-| [RUST-BUG-117](items/RUST-BUG-117.md) | Major | OPEN | Expire silent Kad buddy links from received activity |
+| [RUST-BUG-117](../history/items/RUST-BUG-117.md) | Major | DONE | Expire silent Kad buddy links from received activity |
 
 ### Runtime reliability defects
 
