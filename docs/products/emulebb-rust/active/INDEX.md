@@ -1,8 +1,9 @@
 # emulebb-rust Active Backlog
 
-This index lists only open emulebb-rust work. GitHub owns workflow state and
-roadmap placement; each linked Markdown item owns the durable engineering spec,
-constraints, acceptance criteria, and retained evidence.
+This index lists only open emulebb-rust work. GitHub Project fields and issue
+milestones own workflow state and roadmap placement; each linked Markdown item
+owns the durable engineering spec, constraints, acceptance criteria, and
+retained evidence.
 
 ## Current Authority
 

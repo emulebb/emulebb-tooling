@@ -4,9 +4,10 @@ This runbook is the repeatable workflow for creating, updating, validating, and
 closing eMuleBB backlog records.
 
 `docs/active/` is the current local spec and evidence layer. For
-GitHub-primary forward items marked `workflow: github`, the owning product repo
-issue and org Project #3 (`eMuleBB Roadmap`) own workflow state; the local
-Markdown file remains the engineering spec and evidence record. Project #2
+GitHub-primary forward items marked `workflow: github`, org Project #3
+(`eMuleBB Roadmap`) owns `Status`, `Product`, `Phase`, and `Priority`; the
+owning issue milestone owns release placement; and the local Markdown file
+remains the engineering spec and evidence record. Project #2
 (`eMuleBB Roadmap MFC (archive)`) is MFC archive/provenance only unless an item
 is explicitly approved as frozen-line maintenance.
 
@@ -81,12 +82,13 @@ Use this path for normal externally actionable backlog slices:
 4. The current `github-roadmap-sync.py` path is legacy MFC archive tooling until
    generalized for per-product Suite sync. Do not use it for forward Rust,
    qBittorrentBB, or TrackMuleBB items without a focused tooling update.
-5. Managed labels and project fields should mirror the product's local item:
-   priority, work type, local ID, product, phase, and release/milestone where
-   applicable.
-6. After migration, treat GitHub as the workflow authority for status, priority,
-   release placement, discussion, ownership, and PR linkage. Keep the Markdown
-   item as the durable spec/evidence record.
+5. Project fields must mirror the local item and product lane: `Status`,
+   `Product`, `Phase`, and `Priority`. The issue milestone must match the local
+   `milestone:` value. Local `labels:` are durable engineering taxonomy and do
+   not need to match GitHub issue labels token for token.
+6. Treat GitHub as the workflow authority for status, priority, release
+   placement, discussion, ownership, and PR linkage. Keep the Markdown item as
+   the durable spec/evidence record.
 
 Run `python scripts\github-roadmap-check.py` after local edits. Run
 `python scripts\github-roadmap-check.py --github` when the current GitHub token
