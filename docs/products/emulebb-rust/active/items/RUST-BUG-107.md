@@ -1,6 +1,8 @@
 ---
 id: RUST-BUG-107
 workflow: github
+product: emulebb-rust
+phase: Phase 1
 github_issue: https://github.com/emulebb/emulebb-rust/issues/78
 title: Preserve lossless shared-library path identity across platforms
 status: OPEN

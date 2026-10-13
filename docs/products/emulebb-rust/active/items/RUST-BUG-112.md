@@ -1,6 +1,8 @@
 ---
 id: RUST-BUG-112
 workflow: github
+product: emulebb-rust
+phase: Phase 1
 github_issue: https://github.com/emulebb/emulebb-rust/issues/79
 title: Centralize offerfiles_v policy by ED2K server-session role
 status: OPEN

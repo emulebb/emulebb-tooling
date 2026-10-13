@@ -1,6 +1,8 @@
 ---
 id: RUST-REF-009
 workflow: github
+product: emulebb-rust
+phase: Phase 1
 github_issue: https://github.com/emulebb/emulebb-rust/issues/97
 title: Use native storage domains for cross-platform library scheduling
 status: OPEN

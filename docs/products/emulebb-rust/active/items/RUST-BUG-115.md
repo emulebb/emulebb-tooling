@@ -1,6 +1,8 @@
 ---
 id: RUST-BUG-115
 workflow: github
+product: emulebb-rust
+phase: Phase 1
 github_issue: https://github.com/emulebb/emulebb-rust/issues/82
 title: Ban cross-reconnect userhash changes via a tracked-client identity store
 status: OPEN

@@ -1,6 +1,8 @@
 ---
 id: RUST-FEAT-049
 workflow: github
+product: emulebb-rust
+phase: Phase 1
 github_issue: https://github.com/emulebb/emulebb-rust/issues/92
 title: Add per-file share exclusions with a built-in default ignore set
 status: OPEN

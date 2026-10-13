@@ -1,6 +1,8 @@
 ---
 id: RUST-CI-006
 workflow: github
+product: emulebb-rust
+phase: Phase 0
 github_issue: https://github.com/emulebb/emulebb-rust/issues/31
 title: Refresh current-head stock parity evidence and reconcile docs
 status: OPEN

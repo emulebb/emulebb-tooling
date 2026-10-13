@@ -1,6 +1,8 @@
 ---
 id: RUST-REF-006
 workflow: github
+product: emulebb-rust
+phase: Phase 0
 github_issue: https://github.com/emulebb/emulebb-rust/issues/9
 title: Consolidate Rust NAT and runtime safety internals
 status: OPEN

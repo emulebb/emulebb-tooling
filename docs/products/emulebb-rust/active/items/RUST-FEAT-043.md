@@ -1,6 +1,8 @@
 ---
 id: RUST-FEAT-043
 workflow: github
+product: emulebb-rust
+phase: Phase 1
 github_issue: https://github.com/emulebb/emulebb-rust/issues/86
 title: Port the MFC TCP-error flooder IP ban
 status: OPEN

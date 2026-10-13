@@ -1,6 +1,8 @@
 ---
 id: RUST-FEAT-048
 workflow: github
+product: emulebb-rust
+phase: Phase 1
 github_issue: https://github.com/emulebb/emulebb-rust/issues/91
 title: Use sparse part files without weakening capacity reservations
 status: OPEN

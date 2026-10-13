@@ -1,6 +1,8 @@
 ---
 id: RUST-CI-005
 workflow: github
+product: emulebb-rust
+phase: Phase 0
 github_issue: https://github.com/emulebb/emulebb-rust/issues/30
 title: Prove negotiated offerfiles capability interoperability
 status: OPEN

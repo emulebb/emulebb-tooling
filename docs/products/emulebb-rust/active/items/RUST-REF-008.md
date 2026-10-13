@@ -1,6 +1,8 @@
 ---
 id: RUST-REF-008
 workflow: github
+product: emulebb-rust
+phase: Phase 1
 github_issue: https://github.com/emulebb/emulebb-rust/issues/96
 title: Reduce large-library metadata and scan I/O amplification
 status: OPEN

@@ -1,6 +1,8 @@
 ---
 id: RUST-FEAT-004
 workflow: github
+product: emulebb-rust
+phase: Phase 0
 github_issue: https://github.com/emulebb/emulebb-rust/issues/4
 title: Arr integration — Torznab indexer + qBittorrent-emulating download client
 status: OPEN

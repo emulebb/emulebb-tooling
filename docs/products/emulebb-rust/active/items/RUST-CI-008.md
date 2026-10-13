@@ -1,6 +1,8 @@
 ---
 id: RUST-CI-008
 workflow: github
+product: emulebb-rust
+phase: Phase 1
 github_issue: https://github.com/emulebb/emulebb-rust/issues/84
 title: Prove Unicode and long-path large-library behavior across platforms
 status: OPEN
