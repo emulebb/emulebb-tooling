@@ -5,7 +5,7 @@ product: emulebb-rust
 phase: Phase 1
 github_issue: https://github.com/emulebb/emulebb-rust/issues/78
 title: Preserve lossless shared-library path identity across platforms
-status: IN_PROGRESS
+status: DONE
 priority: Major
 category: bug
 labels: [rust, sharing, paths, unicode, metadata, portability]
@@ -28,7 +28,7 @@ directories, aliases, hard links, and coarse-timestamp filesystems. This is a
 beta.3 clean-schema change: incompatible profiles fail visibly and require a
 fresh profile; product code does not migrate or repair old path rows.
 
-## Current State
+## Starting State
 
 - `local_paths.normalized_key` uses Unicode NFKC on every platform and lowercases
   Windows paths. NFKC is appropriate for search but can make two distinct legal
@@ -92,25 +92,69 @@ Unicode display name.
 
 ## Acceptance Criteria
 
-- [ ] Compatibility-equivalent but distinct legal names do not collide in
+- [x] Compatibility-equivalent but distinct legal names do not collide in
       `local_paths`.
-- [ ] Supported native paths round-trip through SQLite and reopen the same file
+- [x] Supported native paths round-trip through SQLite and reopen the same file
       on Windows, Linux, and macOS.
-- [ ] Non-UTF-8 Unix filenames remain shareable through exact native identity,
+- [x] Non-UTF-8 Unix filenames remain shareable through exact native identity,
       use deterministic escaped display names, and emit explicit diagnostics.
-- [ ] Windows long-path construction has no lossy component conversion.
-- [ ] Case-sensitive Windows directories and case-insensitive/default macOS
+- [x] Windows long-path construction has no lossy component conversion.
+- [x] Case-sensitive Windows directories and case-insensitive/default macOS
       volumes have capability-aware identity tests.
-- [ ] Incremental reuse cannot silently accept a same-size changed file solely
+- [x] Incremental reuse cannot silently accept a same-size changed file solely
       because a coarse mtime value is unchanged.
-- [ ] The schema version changes and an older profile fails visibly without
+- [x] The schema version changes and an older profile fails visibly without
       mutation, migration, fallback reads, or partial acceptance.
 
 ## Validation
 
-- Metadata migration and collision tests using synthetic NFC/NFD,
-  compatibility-equivalent, case-variant, CJK, emoji, and bracketed names.
-- Platform-native integration tests for open, hash, restart, rename, delete, and
-  upload serving.
-- Capability-gated non-UTF-8 Unix and Windows case-sensitive-directory tests.
-- The scale matrix tracked by `RUST-CI-008`.
+- `python tools/rust_quality_gate.py fmt`, `clippy`, `policy`, and `diagnostics`
+  passed. Clippy covered the locked workspace and all targets with warnings
+  denied; the policy lane passed all 108 tests.
+- Workspace-orchestrated Rust tests passed: metadata 48, ED2K 1,040, core 400
+  unit tests plus its integration suites, REST 117 unit plus 2 contract tests,
+  and daemon 70.
+- WebUI validation passed 28 unit tests, 16 Playwright tests, typecheck, and the
+  production build.
+- GitHub CI run `38404816643` passed policy/format/Clippy, cargo-deny, workflow
+  lint, Ubuntu, macOS, Windows, retained beta builds, and live REST/OpenAPI
+  conformance.
+- GitHub CodeQL run `38404816209` passed Rust, Python, JavaScript/TypeScript,
+  Actions, and the required aggregate gate.
+- The platform lanes exercised the non-UTF-8 Unix lifecycle, default macOS
+  case-insensitive alias behavior, and Windows case-sensitive-directory
+  capability test. The broader large-library scale matrix remains owned by the
+  open `RUST-CI-008` evidence item.
+
+## Evidence
+
+- Exact local path identity stores Unix `OsStr` bytes or Windows UTF-16 code
+  units separately from escaped Unicode display/search text.
+- Versioned native fingerprints carry stable file IDs and full-resolution
+  timestamps through ingest, persistence, reload reuse, delivery, monitoring,
+  and rename relocation. Coarse timestamps force conservative rehashing.
+- Clean schema version 33 is current-only. Older profiles fail visibly without
+  mutation, migration, fallback reads, or repair.
+- The intentional reload-progress API break is reflected in the authoritative
+  OpenAPI contract by tooling commit `95a844a`; live conformance passed against
+  `escapedDisplayPathCount` and `missingFingerprintCount`.
+
+## Completion
+
+Completed on 2026-10-13 by rebase-merging
+[emulebb-rust PR #105](https://github.com/emulebb/emulebb-rust/pull/105),
+which closed issue 78 and moved its beta.3 roadmap item to Done. Repository
+settings disallow merge commits, so rebase merge preserved the granular commits
+without squashing. The delivered Rust history is:
+
+- `3ab0df30` through `3fafe30a`: exact native path storage, runtime transport,
+  and Windows long-path handling;
+- `be42fe27` through `1d3a1631`: native fingerprint definition, capture, and
+  persistence across runtime paths;
+- `8044ab49` through `62990ff8`: native display cleanup and escaped-path
+  diagnostics;
+- `22f1b529` through `cf62e309`: Unix, Windows, and macOS lifecycle/capability
+  coverage;
+- `d6875613`: exact scanned and monitored ingest paths after the Unix CI
+  regression exposed the remaining lossy boundary;
+- `7a2930e8`: pin the updated OpenAPI contract used by live conformance.
