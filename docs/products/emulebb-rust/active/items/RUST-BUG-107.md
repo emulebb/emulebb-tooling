@@ -5,11 +5,11 @@ product: emulebb-rust
 phase: Phase 1
 github_issue: https://github.com/emulebb/emulebb-rust/issues/78
 title: Preserve lossless shared-library path identity across platforms
-status: OPEN
+status: IN_PROGRESS
 priority: Major
 category: bug
 labels: [rust, sharing, paths, unicode, metadata, portability]
-milestone: post-beta-polish
+milestone: rust-v0.1.0-beta.3
 created: 2026-10-03
 source: 2026-10-03 large-library I/O and portability review
 ---
@@ -24,7 +24,9 @@ Separate human/search normalization from filesystem identity so distinct legal
 shared-file paths cannot collapse in SQLite and native paths can be reopened
 without lossy Unicode conversion. Define and prove the support policy for
 non-UTF-8 Unix filenames, Unicode normalization variants, Windows case-sensitive
-directories, aliases, hard links, and coarse-timestamp filesystems.
+directories, aliases, hard links, and coarse-timestamp filesystems. This is a
+beta.3 clean-schema change: incompatible profiles fail visibly and require a
+fresh profile; product code does not migrate or repair old path rows.
 
 ## Current State
 
@@ -61,26 +63,31 @@ Unicode display name.
 
 ## Intended Shape
 
-- Store an exact platform-native path key: Unix `OsStr` bytes and Windows UTF-16
-  code units, with a separate safe Unicode display path.
+- Introduce one native path identity boundary used by metadata, reload indexes,
+  watcher state, relocation, and long-path construction. Store Unix `OsStr`
+  bytes or Windows UTF-16 code units exactly, with a separate safe Unicode
+  display path and search key.
 - Do not apply NFKC or compatibility folding to the native identity. Retain that
   normalization only for search/display matching.
 - Record stable filesystem identity where available: device/inode on Unix and
   volume/file ID on Windows. Use it to recognize aliases and hard links without
   conflating distinct files.
-- Record sufficient timestamp/change identity for incremental reuse, or define a
-  conservative fallback for filesystems whose mtime resolution is too coarse.
-- Define whether non-UTF-8 Unix filenames are supported. If not, expose an
-  explicit skipped-path count and reason rather than silently producing an empty
-  name or lossy key.
+- Record nanosecond-resolution timestamps and the strongest portable change
+  identity available. Rehash conservatively when the filesystem exposes only a
+  coarse or otherwise ambiguous timestamp; unchanged reuse must not depend on a
+  same-size millisecond timestamp alone.
+- Support non-UTF-8 Unix filenames for filesystem identity and file access. Use
+  a deterministic escaped Unicode display name for UI and wire surfaces, and
+  expose diagnostics whenever such a display surrogate is required.
 
 ## Scope Constraints
 
 - Preserve user-visible Unicode names and ED2K/Kad UTF-8 filename behavior.
 - Do not canonicalize directory-entry paths in a way that repeats the prior
   Windows Unicode re-normalization failure.
-- Schema migration must preserve existing paths and force conservative re-scan
-  where exact native identity cannot be reconstructed.
+- Bump the clean schema. An older profile fails through the existing
+  incompatible-profile path and instructs the user to create a fresh profile;
+  do not add migration, fallback reads, repair, or compatibility aliases.
 - Storage-device scheduling is tracked separately by `RUST-REF-009`.
 
 ## Acceptance Criteria
@@ -89,13 +96,15 @@ Unicode display name.
       `local_paths`.
 - [ ] Supported native paths round-trip through SQLite and reopen the same file
       on Windows, Linux, and macOS.
-- [ ] The non-UTF-8 Unix filename policy is explicit, diagnosed, and tested.
+- [ ] Non-UTF-8 Unix filenames remain shareable through exact native identity,
+      use deterministic escaped display names, and emit explicit diagnostics.
 - [ ] Windows long-path construction has no lossy component conversion.
 - [ ] Case-sensitive Windows directories and case-insensitive/default macOS
       volumes have capability-aware identity tests.
 - [ ] Incremental reuse cannot silently accept a same-size changed file solely
       because a coarse mtime value is unchanged.
-- [ ] Existing profiles migrate without losing valid shared catalog entries.
+- [ ] The schema version changes and an older profile fails visibly without
+      mutation, migration, fallback reads, or partial acceptance.
 
 ## Validation
 
