@@ -314,10 +314,18 @@ def check_rust_product_structure(errors: list[str]) -> None:
             )
             continue
 
-        item_title = frontmatter_field(read_text(item), "title")
+        item_text = read_text(item)
+        item_title = frontmatter_field(item_text, "title")
         if not item_title:
             errors.append(f"{item.relative_to(ROOT)}: missing title front matter")
             continue
+
+        expected_heading = f"# {item.stem} - {item_title}"
+        if item_text.splitlines().count(expected_heading) != 1:
+            errors.append(
+                f"{item.relative_to(ROOT)}: expected exactly one heading "
+                f"{expected_heading!r}"
+            )
 
         row_match = re.search(
             rf"^\|\s*\[[^]]+\]\({re.escape(item_link)}\)\s*\|\s*[^|]+\|\s*(.*?)\s*\|$",
