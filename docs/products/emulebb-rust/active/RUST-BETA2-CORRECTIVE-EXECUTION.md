@@ -19,8 +19,8 @@ for workflow state.
 
 | Step | Scope | State | Exit Gate |
 |------|-------|-------|-----------|
-| 1 | Backlog documentation cleanup | IN_PROGRESS | Taxonomy, structure, and GitHub records agree |
-| 2 | Closure evidence for RUST-BUG-111, 113, and 116 | PENDING | Focused tests prove every retained criterion |
+| 1 | Backlog documentation cleanup | COMPLETE | Taxonomy, structure, and GitHub records agree |
+| 2 | Closure evidence for RUST-BUG-111, 113, and 116 | IN_PROGRESS | Focused tests prove every retained criterion |
 | 3 | Buddy receive-liveness defect | PENDING | Silent half-open buddy links expire and reconnect |
 | 4 | RUST-FEAT-047 durable download history | PENDING | Completed hashes survive file removal and restart |
 
@@ -60,11 +60,17 @@ for workflow state.
 ### 2. Closure Evidence
 
 - `RUST-BUG-111`: observe server output and prove redundant `OP_IDCHANGE` does
-  not republish while a genuine reassignment does.
-- `RUST-BUG-113`: retain only criteria matching the intentional always-visible
-  share-view policy, then prove the encoded capability and request handling.
+  not republish while a genuine reassignment does. Audit finding: reassignment
+  currently re-enters startup but does not clear the published-hash epoch, so a
+  non-empty catalog is not actually republished.
+- `RUST-BUG-113`: reopen the item. The peer listener intentionally returns an
+  empty share list and denies directory browsing, but hello currently advertises
+  `no_view_shared_files = 0`. Restore truthful bit `1`; a future browsable-share
+  feature must own any configurable allow state.
 - `RUST-BUG-116`: seed an expired ban, run the periodic maintenance path, and
-  prove the stored record is physically removed.
+  prove the stored record is physically removed. Add retained-entry counts as
+  runtime observability so the integration test does not rely on expiry-aware
+  lookup behavior.
 
 ### 3. Buddy Receive Liveness
 
@@ -89,7 +95,16 @@ for workflow state.
 
 | Date | Slice | Commit | Evidence |
 |------|-------|--------|----------|
-| 2026-10-13 | Execution tracker created | this commit | Pending documentation gates |
+| 2026-10-13 | Execution tracker created | `5919ad8` | Taxonomy and structure checks pass |
+| 2026-10-13 | Backlog contracts corrected | `f44ea99` | Items 112, 047, 048, and 050 synchronized to GitHub |
+| 2026-10-13 | Unsupported features closed | `e3ec08e` | GitHub issues 85 and 94 closed not planned |
+| 2026-10-13 | Offerfiles extension registered | `afb56cb1` / `9960035` | TOML, taxonomy, and structure checks pass; issue 100 closed |
+| 2026-10-13 | Buddy liveness tracked | `dcd9d23` | GitHub issue 103 added to Project #3 as Rust Phase 1 Todo |
+
+The global `github-roadmap-check.py --github` run still reports 244 legacy
+MFC-label synchronization errors outside this Rust slice. The new Rust issue's
+repository, product, phase, and status fields were verified directly in Project
+#3; no unrelated labels were changed.
 
 ## Resume Checklist
 
