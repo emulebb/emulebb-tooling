@@ -138,7 +138,7 @@ below as historical links.
 | [RUST-FEAT-038](items/RUST-FEAT-038.md) | Minor | OPEN | Add current-aMule-style endgame source takeover |
 | [RUST-FEAT-039](items/RUST-FEAT-039.md) | Minor | OPEN | Size ED2K request depth from measured RTT and bandwidth |
 | [RUST-FEAT-040](items/RUST-FEAT-040.md) | Minor | OPEN | Carry ED2K and Kad search metadata end to end |
-| [RUST-FEAT-042](items/RUST-FEAT-042.md) | Minor | OPEN | Handle OP_INVALID_LOWID server-UDP notification |
+| [RUST-FEAT-042](../history/items/RUST-FEAT-042.md) | Minor | WONT_DO | Handle OP_INVALID_LOWID server-UDP notification |
 | [RUST-FEAT-043](items/RUST-FEAT-043.md) | Minor | OPEN | Port the MFC TCP-error flooder IP ban |
 | [RUST-FEAT-044](items/RUST-FEAT-044.md) | Minor | OPEN | Implement follow-majority filename selection for downloads |
 | [RUST-FEAT-045](items/RUST-FEAT-045.md) | Minor | OPEN | Retain and expose multiple per-source filenames for downloads |
@@ -147,7 +147,7 @@ below as historical links.
 | [RUST-FEAT-048](items/RUST-FEAT-048.md) | Minor | OPEN | Use sparse part files without weakening capacity reservations |
 | [RUST-FEAT-049](items/RUST-FEAT-049.md) | Minor | OPEN | Add per-file share exclusions with a built-in default ignore set |
 | [RUST-FEAT-050](items/RUST-FEAT-050.md) | Minor | OPEN | Parse and emit the ED2K link AICH root (h=) section |
-| [RUST-FEAT-051](items/RUST-FEAT-051.md) | Minor | OPEN | Implement ED2K server user search (OP_SEARCH_USER / OP_USERS_LIST) |
+| [RUST-FEAT-051](../history/items/RUST-FEAT-051.md) | Minor | WONT_DO | Implement ED2K server user search (OP_SEARCH_USER / OP_USERS_LIST) |
 
 ### Stock compatibility defects
 
