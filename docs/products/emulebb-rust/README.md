@@ -19,7 +19,11 @@ non-recursive sharing mode.
   [`api/REST-API-OPENAPI.yaml`](api/REST-API-OPENAPI.yaml)
 - Architecture: [`design/architecture.md`](design/architecture.md)
 - Agent policy: [`reference/AGENT-POLICY.md`](reference/AGENT-POLICY.md)
-- Code quality and test placement:
-  [`reference/CODE-QUALITY.md`](reference/CODE-QUALITY.md)
+- Task-routed policies:
+  [`API and UI`](reference/API-UI-POLICY.md),
+  [`persistence`](reference/PERSISTENCE-POLICY.md),
+  [`protocol`](reference/PROTOCOL-POLICY.md),
+  [`product documentation`](reference/PRODUCT-DOCS-POLICY.md), and
+  [`code quality and test placement`](reference/CODE-QUALITY.md)
 
 Repo-local docs under `repos/emulebb-rust/docs` are pointers only.

@@ -1,98 +1,60 @@
 # emulebb-rust Agent Policy
 
-Read the [Workspace Policy](../../../WORKSPACE-POLICY.md) first. This annex is
-mandatory only for `emulebb-rust` product, daemon, embedded WebUI, REST,
-metadata, Cargo, or Rust protocol work.
+Read the [Workspace Policy](../../../WORKSPACE-POLICY.md) first. This compact
+base is mandatory for `emulebb-rust` product work. Load only the task annexes
+selected below.
+
+## Task Routing
+
+- eD2K or Kad wire behavior, packets, tags, capabilities, network identity, or
+  interoperability: [Protocol Policy](PROTOCOL-POLICY.md).
+- `/api/v1`, REST routes, DTOs, OpenAPI, controllers, or the embedded SPA:
+  [API And UI Policy](API-UI-POLICY.md).
+- Persisted settings, metadata, database schemas, or profile compatibility:
+  [Persistence Policy](PERSISTENCE-POLICY.md).
+- Rust source structure, test placement, refactoring, maintainability, or lint
+  suppressions: [Rust Code Quality Policy](CODE-QUALITY.md).
+- Rust product docs, backlog records, release scope, design docs, or retained
+  evidence: [Product Documentation Policy](PRODUCT-DOCS-POLICY.md).
+- Live, soak, or profile work: the workspace
+  [Harness And Live Policy](../../../reference/HARNESS-LIVE-POLICY.md).
+
+Do not load unrelated Rust annexes merely because the repository is active.
 
 ## Product Direction
 
 - `rust-v0.1.0-beta.2` is the current published beta baseline. Development
   continues on the beta lane; do not rewrite published beta tags or artifacts.
 - The Rust headless daemon and embedded SPA WebUI are the active client and UI.
-  Slint/native UI is a frozen experiment unless the operator explicitly asks to
-  remove or revive it.
-- Preserve stock/community eMule authority for eD2K and Kad wire behavior,
-  packet/tag shapes, opcodes, peer/server/Kad interoperability state machines,
-  advertised capabilities, and network identity.
+  Slint/native UI is frozen unless the operator explicitly requests removal or
+  revival.
 - Non-wire operational defaults and ceilings, plus disk and network I/O
   outcomes, follow the maintained eMuleBB MFC client. Implement those outcomes
   through clean Rust-native async architecture, not MFC REST, UI, settings,
-  controller, or thread mirrors. If the authorities conflict, stock wire
-  behavior wins; intentional operational or I/O divergence from eMuleBB MFC
-  requires an explicit tracked disposition.
-- Broadband-oriented async I/O is the baseline, not a compatibility toggle.
-  IPv6 remains parked and the protocol cores stay IPv4-only. Source Exchange is
-  intentionally SX2-only; absent `OP_REQUESTSOURCES` and `OP_ANSWERSOURCES`
-  live paths are not regressions.
-- Protocol-adjacent changes require parity evidence through appropriate
-  goldens, community baseline, tracing, live-diff, or packet captures.
-
-`policy\rust-client.toml`, its omission registry, and its extension registry are
-the machine-readable authority for platform, behavior authority, protocol,
-long-path, reviewed-omission, and intentional-extension policy.
-
-## API And UI Contract
-
-- The forward `/api/v1` contract under
-  `docs\products\emulebb-rust\api` is authoritative. The frozen MFC REST
-  contract is not a forward-compatibility constraint.
-- Route or DTO changes evolve the daemon, OpenAPI, validators, embedded SPA
-  models, and tests together. Do not add speculative aliases or legacy shapes.
-- Do not bump `apiVersion` or REST `contractVersion` without a deliberate API
-  freeze or release-boundary decision.
-- Retired REST, settings, and metadata fields are hard errors: do not ignore,
+  controller, or thread mirrors. Stock wire behavior wins when authorities
+  conflict; intentional operational or I/O divergence requires a tracked
+  disposition.
+- `policy\rust-client.toml`, its omission registry, and its extension registry
+  are the machine-readable authority for platform, behavior authority,
+  protocol, long-path, reviewed-omission, and intentional-extension policy.
+- Retired REST, settings, and metadata fields are hard errors. Do not ignore,
   alias, remap, or bridge them.
-
-## Current-Only Persistence
-
-- During the experimental phase, every change touching persisted data must
-  review whether the checked-in schema remains the clean current model. Evolve
-  it when warranted; do not retain an inferior shape merely to preserve
-  development profiles.
-- Product code requires the current schema exactly. It must not contain legacy
-  branches, fallback reads, migrations, repair, profile-reset logic, or silent
-  compatibility behavior.
-- A schema-version change makes existing end-user profiles incompatible.
-  Startup must fail visibly and instruct the user to create an entirely fresh
-  profile. It must not delete, move, replace, migrate, or partially reset the
-  incompatible profile.
-- Python migrations in `repos\emulebb-build-tests` are internal, intentional,
-  backup-first support for known persisted test and soak schemas only. They are
-  not an end-user migration or recovery path and must not appear in
-  product-facing guidance.
 
 ## Source And Output Boundaries
 
-- Follow the
-  [Rust Code Quality Policy](CODE-QUALITY.md) for responsibility-based
-  structure, test placement, maintainability, and lint suppressions.
 - Every Windows Cargo build, test, or run uses inherited
   `CARGO_TARGET_DIR=%EMULEBB_WORKSPACE_OUTPUT_ROOT%\builds\rust\target`.
   WSL compilation uses its separately derived `target-wsl` directory. Never
-  create a repo-local `target` or any source-tree build/scratch output.
+  create repo-local build or scratch output.
 - The only runnable Windows workspace binary is
   `EMULEBB_WORKSPACE_OUTPUT_ROOT\tools\emulebb-rust\bin\emulebb-rust.exe`.
-  Cargo targets are intermediate cache and must not be used by manual, soak,
-  profiling, live-wire, or allow-list workflows.
+  Cargo targets are intermediate cache and are not manual, soak, profiling,
+  live-wire, or allow-list executables.
 - Windows long-path support applies only to shared-directory trees, incoming
   delivery, and category output paths. Config, logs, metadata DB, hash-named
-  piece stores, and every other internal path intentionally remain short-path.
-  The exact allowed classes and implementation mechanism live in
-  `policy\rust-client.toml` and the `emulebb_ed2k::long_path` module docs.
+  piece stores, and other internal paths remain short-path. Exact classes and
+  mechanisms live in `policy\rust-client.toml` and
+  `emulebb_ed2k::long_path` module documentation.
 
 Use `repos\emulebb-build` orchestration for supported build and validation
-entrypoints. Rust live, soak, or profile work additionally requires the
-[Harness And Live Policy](../../../reference/HARNESS-LIVE-POLICY.md).
-
-## Documentation Boundaries
-
-- Keep `docs/products/emulebb-rust/active/` limited to `INDEX.md` and the
-  `items/` directory. Track every actionable slice and its progress in its
-  owning item instead of creating branch-wide ledgers, reviews, or checklists.
-- Keep current scope in `RELEASE-SCOPE.md`, implemented structure in
-  `design/architecture.md`, and genuinely forward designs in `design/`.
-- Published release notes belong to GitHub Releases. Persisted live/soak
-  procedures belong to `repos\emulebb-build-tests`; Rust product docs link to
-  the harness and retain only stable conclusions or evidence references.
-- Delete a completed temporary plan when its evidence is reconciled into owning
-  items. Archive only unique historical analysis that remains useful.
+entrypoints.

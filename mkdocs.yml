@@ -84,6 +84,10 @@ nav:
   - emulebb-rust (Core):
       - Product Section: products/emulebb-rust/README.md
       - Agent Policy: products/emulebb-rust/reference/AGENT-POLICY.md
+      - API And UI Policy: products/emulebb-rust/reference/API-UI-POLICY.md
+      - Persistence Policy: products/emulebb-rust/reference/PERSISTENCE-POLICY.md
+      - Protocol Policy: products/emulebb-rust/reference/PROTOCOL-POLICY.md
+      - Product Documentation Policy: products/emulebb-rust/reference/PRODUCT-DOCS-POLICY.md
       - Active Backlog: products/emulebb-rust/active/INDEX.md
       - Release Scope: products/emulebb-rust/RELEASE-SCOPE.md
       - Architecture: products/emulebb-rust/design/architecture.md
