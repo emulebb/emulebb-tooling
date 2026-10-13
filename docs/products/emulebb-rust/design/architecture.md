@@ -200,6 +200,22 @@ graph TB
   (UDP/TCP firewall verdict). One serialized manager task owns the initial
   mapping and renewals; status exposes the negotiated mapping protocol.
 
+### Source ownership and reask invariants
+
+- `download_source_registry.rs` is the peer-keyed source authority across all
+  transfers. It leases one peer to its best eligible file, enforces one active
+  relationship per peer, and redirects a No Needed Parts outcome to the best
+  other wanted file. This A4AF-lite policy preserves independent per-transfer
+  tasks; it deliberately does not hijack a live TCP connection between files.
+- `ed2k_client_udp/` owns the client UDP socket, opcode-context dispatch,
+  pending anti-spoof correlation, source state, reciprocity, and LowID buddy
+  relay. Each transfer owns its reask cadence; UDP-eligible queued sources
+  release TCP and retain queue position through stock-framed datagrams, with a
+  bounded TCP reconnect fallback when UDP is unavailable.
+- `enable_udp_reask` is on by default. The closed
+  [`RUST-FEAT-001`](../history/items/RUST-FEAT-001.md) record owns the protocol
+  detail, phased implementation history, and deterministic live evidence.
+
 ---
 
 ## 4. Kad DHT stack (`emulebb-kad-*` + `emulebb-index`)
@@ -299,9 +315,6 @@ graph TD
 
 - REST contract: [`api/REST-API-OPENAPI.yaml`](../api/REST-API-OPENAPI.yaml)
   and [`api/README.md`](../api/README.md).
-- Subsystem design notes in this folder:
-  [`kad-ed2k-indexer.md`](kad-ed2k-indexer.md),
-  [`source-management-and-a4af.md`](source-management-and-a4af.md),
-  [`udp-source-reask.md`](udp-source-reask.md).
+- Forward subsystem design: [`kad-ed2k-indexer.md`](kad-ed2k-indexer.md).
 - Entry points: `crates/emulebb-daemon/src/lib.rs` (boot/wiring) and
   `crates/emulebb-core/src/lib.rs` (`EmulebbCore`).

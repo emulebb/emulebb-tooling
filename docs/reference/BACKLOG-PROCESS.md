@@ -4,9 +4,10 @@ This runbook is the repeatable workflow for creating, updating, validating, and
 closing eMuleBB backlog records.
 
 `docs/active/` is the current local spec and evidence layer. For
-GitHub-primary forward items marked `workflow: github`, the owning product repo
-issue and org Project #3 (`eMuleBB Roadmap`) own workflow state; the local
-Markdown file remains the engineering spec and evidence record. Project #2
+GitHub-primary forward items marked `workflow: github`, org Project #3
+(`eMuleBB Roadmap`) owns `Status`, `Product`, `Phase`, and `Priority`; the
+owning issue milestone owns release placement; and the local Markdown file
+remains the engineering spec and evidence record. Project #2
 (`eMuleBB Roadmap MFC (archive)`) is MFC archive/provenance only unless an item
 is explicitly approved as frozen-line maintenance.
 
@@ -63,10 +64,10 @@ source: short provenance note
    sections (`Summary` and `Acceptance Criteria` required). Use the template's
    section vocabulary instead of inventing near-synonyms, and keep dated proof
    logs out of the item body.
-6. Add or update the row in `docs\active\INDEX.md` in the matching section.
-   Keep rows sorted by item ID inside each table section.
-7. Update the snapshot counts in `docs\active\INDEX.md` when adding, closing, or
-   changing active statuses.
+6. Add or update the row in the product's active index in the matching section.
+   Copy the item front-matter `title` exactly and keep rows sorted by item ID
+   inside each table section.
+7. Update snapshot counts when the product index maintains them.
 
 ## GitHub-Primary Backlog
 
@@ -81,16 +82,18 @@ Use this path for normal externally actionable backlog slices:
 4. The current `github-roadmap-sync.py` path is legacy MFC archive tooling until
    generalized for per-product Suite sync. Do not use it for forward Rust,
    qBittorrentBB, or TrackMuleBB items without a focused tooling update.
-5. Managed labels and project fields should mirror the product's local item:
-   priority, work type, local ID, product, phase, and release/milestone where
-   applicable.
-6. After migration, treat GitHub as the workflow authority for status, priority,
-   release placement, discussion, ownership, and PR linkage. Keep the Markdown
-   item as the durable spec/evidence record.
+5. Project fields must mirror the local item and product lane: `Status`,
+   `Product`, `Phase`, and `Priority`. The issue milestone must match the local
+   `milestone:` value. Local `labels:` are durable engineering taxonomy and do
+   not need to match GitHub issue labels token for token.
+6. Treat GitHub as the workflow authority for status, priority, release
+   placement, discussion, ownership, and PR linkage. Keep the Markdown item as
+   the durable spec/evidence record.
 
-Run `python scripts\github-roadmap-check.py` after local edits. Run
-`python scripts\github-roadmap-check.py --github` when the current GitHub token
-has project scope and network access.
+Run `python scripts\github-roadmap-check.py` after top-level backlog edits. For
+a product-local backlog, pass its product directory name, for example
+`python scripts\github-roadmap-check.py --product emulebb-rust`. Add `--github`
+when the current GitHub token has project scope and network access.
 
 ## Close Or Reclassify An Item
 
@@ -99,9 +102,9 @@ has project scope and network access.
    `docs\active\items` to `docs\history\items`.
 3. Preserve provenance: include implementation commits, validation commands,
    product decisions, or rejection rationale in the historical item body.
-4. Update the `docs\active\INDEX.md` row to point at `../history/items/<ID>.md`
-   and use the closed status.
-5. Update active snapshot counts.
+4. Remove the item row from `docs\active\INDEX.md`; the active index lists only
+   open work. Do not duplicate a closed-item inventory in the history index.
+5. Update active snapshot counts when the product index maintains them.
 6. If a GitHub-primary item is closed or materially advanced, update the linked
    GitHub issue/project as the workflow authority.
 
@@ -121,6 +124,7 @@ Run this when GitHub credentials are available:
 
 ```powershell
 python scripts\github-roadmap-check.py --github
+python scripts\github-roadmap-check.py --github --product emulebb-rust
 ```
 
 For docs-only changes, app builds are not required unless the doc change claims

@@ -1,10 +1,11 @@
 # Design: Autonomous Kad/eD2K indexer (notes 13–15)
 
-Status: design / direction. Captured 2026-06-14. Post-0.7.3; full development
-mode. This is **inside deliverable #1** — "perfectly functional" means client
-parity **plus** this indexer role (per the suite joint roadmap in
-`emulebb-tooling/docs/history/HIST-SUITE-JOINT-ROADMAP.md`). It is the eD2K/Kad mirror
-of the qBittorrentBB DHT harvester.
+Status: active post-beta design, owned by
+[`RUST-FEAT-002`](../active/items/RUST-FEAT-002.md). The current published beta
+remains the headless client/daemon described by
+[`RELEASE-SCOPE`](../RELEASE-SCOPE.md); the autonomous indexer is later suite
+work, not a beta defect. It is the eD2K/Kad mirror of the qBittorrentBB DHT
+harvester.
 
 ## Goal
 
@@ -42,8 +43,8 @@ gentle, compliant supplement.
 
 1. **Passive snoop layer (primary, free).** Index every keyword-publish,
    source-publish, and routed search/result that passes through the node. Hook the
-   Kad RPC receive path (the same `emulebb-kad-net` receive loop the UDP
-   source-reask foundation hooks; see `docs/design/udp-source-reask.md`). Zero
+   Kad RPC receive path (the same `emulebb-kad-net` receive loop described in
+   the [architecture](architecture.md#source-ownership-and-reask-invariants)). Zero
    extra queries, zero ban risk.
 2. **Replay layer (cheap, active).** Maintain a frequency-ranked table of observed
    keywords; periodically re-search the top-N to deepen result/source sets. Self-

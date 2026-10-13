@@ -21,8 +21,10 @@ source: protocol-divergence audit (emulebb-rust vs emulebb-main vs p2p-overlord-
 The eD2K client↔client UDP reask family (`OP_REASKFILEPING` 0x90, `OP_REASKACK`
 0x91, `OP_FILENOTFOUND` 0x92, `OP_QUEUEFULL` 0x93, and the LowID variants
 `OP_REASKCALLBACKUDP` 0x94 / `OP_DIRECTCALLBACKREQ` 0x95) is implemented,
-enabled by default, and live-validated against emulebb-mfc. Full design:
-[`docs/design/udp-source-reask.md`](../../design/udp-source-reask.md).
+enabled by default, and live-validated against emulebb-mfc. Current subsystem
+invariants live in the
+[architecture](../../design/architecture.md#source-ownership-and-reask-invariants);
+this closed item retains the detailed implementation and evidence record.
 
 ## Current State
 
@@ -162,6 +164,6 @@ Closure evidence:
 - Provenance: protocol-divergence audit across `emulebb-community-baseline`,
   `emulebb-main`, and emulebb-rust; gap confirmed identical in
   `p2p-overlord-agents`.
-- Related design: [`docs/design/udp-source-reask.md`](../../design/udp-source-reask.md),
-  [`docs/design/source-management-and-a4af.md`](../../design/source-management-and-a4af.md).
+- Current design summary:
+  [`architecture`](../../design/architecture.md#source-ownership-and-reask-invariants).
 - Depends on nothing else; A4AF is independent.

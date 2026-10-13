@@ -2,7 +2,7 @@
 id: RUST-REF-012
 workflow: local
 title: Disposition OP_DISCONNECT server-session parity note
-status: DEFERRED
+status: WONT_DO
 priority: Minor
 category: refactor
 labels: [rust, ed2k, server, parity, disposition]
@@ -50,9 +50,11 @@ observation is treated as stock-aligned, then close the item `WONT_DO`.
 
 ## Acceptance Criteria
 
-- [ ] The disposition is captured in the parity matrix or omissions registry.
-- [ ] The item is closed `WONT_DO` after capture.
+- [x] The disposition is captured in the parity matrix.
+- [x] The item is closed `WONT_DO` after capture.
 
 ## Notes
 
 Found by the 2026-10-12 ED2K static audit; classified as parity, not a defect.
+Closed `WONT_DO` on 2026-10-13 after the stock-aligned no-send disposition was
+recorded in current parity evidence.

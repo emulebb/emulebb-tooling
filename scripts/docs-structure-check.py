@@ -99,6 +99,12 @@ NAV_REQUIRED_DIRS = {
     "reference",
     "rest",
 }
+RUST_PRODUCT_DOCS = DOCS / "products" / "emulebb-rust"
+RUST_ACTIVE_DOCS = RUST_PRODUCT_DOCS / "active"
+RUST_ACTIVE_INDEX = RUST_ACTIVE_DOCS / "INDEX.md"
+RUST_ALLOWED_ROOT_MARKDOWN = {"README.md", "RELEASE-SCOPE.md"}
+RUST_ALLOWED_ACTIVE_MARKDOWN = {"INDEX.md"}
+RUST_CLOSED_STATUSES = {"DONE", "PASSED", "WONT_DO"}
 
 
 @dataclass(frozen=True)
@@ -116,6 +122,23 @@ def read_text(path: Path) -> str:
     """Read a UTF-8 Markdown file while tolerating historical byte drift."""
 
     return path.read_text(encoding="utf-8", errors="ignore")
+
+
+def frontmatter_field(text: str, name: str) -> str:
+    """Return one scalar field from simple Markdown front matter."""
+
+    if not text.startswith("---\n"):
+        return ""
+    end = text.find("\n---", 4)
+    if end == -1:
+        return ""
+    for line in text[4:end].splitlines():
+        if ":" not in line:
+            continue
+        field_name, value = line.split(":", 1)
+        if field_name.strip() == name:
+            return value.strip()
+    return ""
 
 
 def current_markdown_files() -> list[Path]:
@@ -239,6 +262,91 @@ def check_agent_checklist(errors: list[str]) -> None:
         errors.append("mkdocs.yml: missing top-level Agent Checklist nav entry")
 
 
+def check_rust_product_structure(errors: list[str]) -> None:
+    """Keep emulebb-rust current docs item-owned and free of duplicate ledgers."""
+
+    for path in sorted(RUST_PRODUCT_DOCS.glob("*.md")):
+        if path.name not in RUST_ALLOWED_ROOT_MARKDOWN:
+            errors.append(
+                f"{path.relative_to(ROOT)}: unexpected Rust product-root Markdown; "
+                "use README.md, RELEASE-SCOPE.md, an item, or a scoped subdirectory"
+            )
+
+    for path in sorted(RUST_ACTIVE_DOCS.glob("*.md")):
+        if path.name not in RUST_ALLOWED_ACTIVE_MARKDOWN:
+            errors.append(
+                f"{path.relative_to(ROOT)}: standalone Rust active Markdown is not allowed; "
+                "put actionable work in active/items and durable truth in scope or architecture"
+            )
+
+    stale_scope = DOCS / "active" / "EMULEBB-RUST-SCOPE.md"
+    if stale_scope.exists():
+        errors.append(
+            f"{stale_scope.relative_to(ROOT)}: obsolete duplicate of the Rust product release scope"
+        )
+
+    if not RUST_ACTIVE_INDEX.is_file():
+        errors.append(f"{RUST_ACTIVE_INDEX.relative_to(ROOT)}: missing Rust active index")
+        return
+
+    index_text = read_text(RUST_ACTIVE_INDEX)
+    for target in re.findall(r"\.\./history/items/([^)]+\.md)", index_text):
+        if target != "INDEX.md":
+            errors.append(
+                f"{RUST_ACTIVE_INDEX.relative_to(ROOT)}: closed item {target} must not be "
+                "listed in the active index"
+            )
+
+    for status in sorted(RUST_CLOSED_STATUSES):
+        if re.search(rf"\|\s*{status}\s*\|", index_text):
+            errors.append(
+                f"{RUST_ACTIVE_INDEX.relative_to(ROOT)}: closed status {status} must not "
+                "appear in the active index"
+            )
+
+    for item in sorted((RUST_ACTIVE_DOCS / "items").glob("*.md")):
+        item_link = f"items/{item.name}"
+        link_count = index_text.count(item_link)
+        if link_count != 1:
+            errors.append(
+                f"{RUST_ACTIVE_INDEX.relative_to(ROOT)}: expected exactly one link to "
+                f"{item_link}, found {link_count}"
+            )
+            continue
+
+        item_text = read_text(item)
+        item_title = frontmatter_field(item_text, "title")
+        if not item_title:
+            errors.append(f"{item.relative_to(ROOT)}: missing title front matter")
+            continue
+
+        expected_heading = f"# {item.stem} - {item_title}"
+        if item_text.splitlines().count(expected_heading) != 1:
+            errors.append(
+                f"{item.relative_to(ROOT)}: expected exactly one heading "
+                f"{expected_heading!r}"
+            )
+
+        row_match = re.search(
+            rf"^\|\s*\[[^]]+\]\({re.escape(item_link)}\)\s*\|\s*[^|]+\|\s*(.*?)\s*\|$",
+            index_text,
+            re.MULTILINE,
+        )
+        if row_match is None:
+            errors.append(
+                f"{RUST_ACTIVE_INDEX.relative_to(ROOT)}: link to {item_link} is not in "
+                "the expected backlog table shape"
+            )
+            continue
+
+        index_title = row_match.group(1).strip()
+        if index_title != item_title:
+            errors.append(
+                f"{RUST_ACTIVE_INDEX.relative_to(ROOT)}: title for {item.name} must match "
+                f"front matter exactly: {item_title!r}"
+            )
+
+
 def find_wide_table_rows(limit: int) -> list[WideTableRow]:
     """Return current-doc Markdown table rows wider than the configured limit."""
 
@@ -291,6 +399,7 @@ def main() -> int:
         check_heading(path, errors)
     check_index_navigation(errors)
     check_agent_checklist(errors)
+    check_rust_product_structure(errors)
 
     wide_rows = find_wide_table_rows(args.wide_table_limit)
     baseline_remaining = Counter(WIDE_TABLE_BASELINE)

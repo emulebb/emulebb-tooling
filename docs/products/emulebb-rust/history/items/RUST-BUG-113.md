@@ -18,31 +18,30 @@ source: ED2K static audit 2026-10-12 vs community-0.72, aMule
 
 ## Summary
 
-`emule_misc_options1()` hardcodes the `no_view_shared_files` bit (bit 2) to `1`
-in `CT_EMULE_MISCOPTIONS1`, telling peers we do not permit browsing shared
-files. The listener actually serves `OP_ASKSHAREDFILES`, `OP_ASKSHAREDDIRS`,
-and `OP_ASKSHAREDFILESDIR`, so the advertised capability is the inverse of the
-implemented behavior.
+`emule_misc_options1()` currently advertises `no_view_shared_files = 0`, telling
+peers that the actual shared catalog can be browsed. The listener intentionally
+returns an empty file list and denies directory browsing, so the capability bit
+is the inverse of the implemented privacy policy.
 
 ## Current State
 
-- `crates/emulebb-ed2k/src/ed2k_tcp/hello.rs:89` sets
-  `let no_view_shared_files = 1u32;` unconditionally; line 102 places it in
-  MISCOPTIONS1 bit 2.
-- The browse surface is live: `crates/emulebb-ed2k/src/ed2k_tcp/listener/session.rs:886-895`
-  dispatches `OP_ASKSHAREDFILES`, `OP_ASKSHAREDDIRS`, and `OP_ASKSHAREDFILESDIR`
-  to the `browse::handle_*` handlers.
+- `crates/emulebb-ed2k/src/ed2k_tcp/hello.rs` sets
+  `no_view_shared_files = 0` in MISCOPTIONS1 bit 2.
+- `listener/session/browse.rs` returns an empty catalog for
+  `OP_ASKSHAREDFILES` and denies `OP_ASKSHAREDDIRS` plus
+  `OP_ASKSHAREDFILESDIR`.
+- Existing listener tests already prove the empty/denied behavior, while hello
+  tests and the full hello golden pin the incorrect advertised bit.
 - Stock ties the bit to the operator preference:
   `analysis/community-0.72/srchybrid/BaseClient.cpp:974`
   `uNoViewSharedFiles = (thePrefs.CanSeeShares() == vsfaNobody)`, so a default
-  stock client that permits viewing advertises bit 0.
+  client that denies viewing advertises bit 1.
 
 ## Why This Matters
 
-Advertising "no view shared files" while serving browse discourages peers from
-requesting a feature the client does implement and is a small, observable
-capability fingerprint divergence. The preview bit remains a separate, approved
-omission (`ed2k-preview`); this item is only about the view-shared-files bit.
+Advertising browse permission while returning no shared content is a false
+capability contract and an observable privacy-policy mismatch. The preview bit
+remains a separate approved omission (`ed2k-preview`).
 
 ## Representative Sites
 
@@ -53,34 +52,40 @@ omission (`ed2k-preview`); this item is only about the view-shared-files bit.
 
 ## Intended Shape
 
-- Derive `no_view_shared_files` from the effective share-visibility policy: `1`
-  only when browsing is disabled, `0` otherwise.
-- If the headless client has no operator-facing share-visibility toggle yet,
-  advertise `0` (viewing allowed) to match the implemented browse handlers, and
-  add a setting later without changing the wire default.
+- Advertise `no_view_shared_files = 1` for the current non-browsable product
+  policy.
+- Keep hello encoding and browse request handling driven by one policy when a
+  future feature exposes the real shared catalog.
+- Do not add a fake configuration state before browse-enabled behavior exists.
 
 ## Scope Constraints
 
 - Preview stays `0` per the `ed2k-preview` omission; do not couple this change
   to preview.
-- No browse behavior change; only the advertised MISCOPTIONS1 bit changes.
+- No browse behavior or configuration change; only restore the truthful
+  advertised MISCOPTIONS1 bit and its goldens.
 
 ## Acceptance Criteria
 
-- [ ] A default client advertises `no_view_shared_files = 0` when browsing is
-      enabled/served.
-- [ ] The bit becomes `1` if and only if share browsing is configured off.
-- [ ] A hello codec test pins the bit for both settings.
+- [x] The current non-browsable client advertises `no_view_shared_files = 1`.
+- [x] Hello encoding and the existing empty/denied browse responses express the
+      same policy.
+- [x] Hello bit and full-wire golden tests pin the truthful current profile.
 
 ## Validation
 
-- Extend `crates/emulebb-ed2k/src/ed2k_tcp/tests/protocol/hello.rs` with
-  MISCOPTIONS1 assertions for browse-enabled and browse-disabled
-  configurations.
+- Update `crates/emulebb-ed2k/src/ed2k_tcp/tests/protocol/hello.rs` direct bit
+  assertion and full hello-answer golden; retain existing listener deny tests.
 
 ## Notes
 
 Related capability honesty is recorded in RUST-REF-015 (offerfiles_v) and the
 existing `ed2k-preview` omission.
 
-- Fixed in emulebb-rust PR #101 (commit `d93d1172`), rebase-merged to `main`.
+- PR #101 (commit `d93d1172`) inverted the bit based on an incorrect assumption
+  that dispatching browse opcodes exposed the real catalog. The 2026-10-13
+  closure audit verified the handlers remain intentionally empty/denied and
+  reopened the item.
+- Completed on 2026-10-13 in emulebb-rust commit `3f3bb819`. The 25 hello tests,
+  the listener browse-policy test, formatting, and targeted all-target Clippy
+  pass.

@@ -1,6 +1,8 @@
 ---
 id: RUST-FEAT-045
 workflow: github
+product: emulebb-rust
+phase: Phase 1
 github_issue: https://github.com/emulebb/emulebb-rust/issues/88
 title: Retain and expose multiple per-source filenames for downloads
 status: OPEN

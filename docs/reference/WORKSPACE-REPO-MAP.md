@@ -38,6 +38,29 @@ scope and pull in support repos only when the task needs them.
   This paused experiment is not materialized or validated by default. Support
   scope is shared build and tooling only for explicit historical work.
 
+## eD2K Reference Terminology
+
+Use these operator terms exactly in protocol audits and source comparisons.
+Every path is relative to `EMULEBB_WORKSPACE_ROOT`; the Lugdunum evidence is a
+read-only sibling outside the canonical workspace source boundary.
+
+- `aMule` means `analysis/amule`, the maintained `amule-org/amule` upstream
+  reference.
+- `stock eMule` means `analysis/community-0.72`, the community eMule 0.72 stock
+  reference.
+- `eD2K Rust server` means `repos/ed2k-server`, the managed eMuleBB reference
+  fork.
+- `Lugdunum decompiled` means
+  `../eMule-server/lugdunum/lugdunum_eserver_17.15_linux/decompiled`, external
+  decompiled Lugdunum 17.15 protocol evidence with no Git synchronization
+  contract.
+
+For any current-state comparison, refresh the relevant Git remote refs first.
+Only fast-forward a clean tracking branch; stop and report rewritten or
+divergent history instead of resetting, rebasing, or merging it implicitly.
+Keep `analysis/amule` current with `origin/master`; keep `repos/ed2k-server`
+current with `origin/master` and review `upstream/master` before merging it.
+
 ## Workspace Orchestration
 
 | Path | Branch | Role | Validation |

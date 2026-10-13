@@ -1,6 +1,8 @@
 ---
 id: RUST-FEAT-046
 workflow: github
+product: emulebb-rust
+phase: Phase 1
 github_issue: https://github.com/emulebb/emulebb-rust/issues/89
 title: Repair mojibake and normalize download filenames at intake
 status: OPEN

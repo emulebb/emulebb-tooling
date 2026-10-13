@@ -33,6 +33,16 @@ def main() -> int:
             None,
         ),
         ("GitHub roadmap metadata", [sys.executable, "scripts/github-roadmap-check.py"], None),
+        (
+            "emulebb-rust roadmap metadata",
+            [
+                sys.executable,
+                "scripts/github-roadmap-check.py",
+                "--product",
+                "emulebb-rust",
+            ],
+            None,
+        ),
     ]
 
     mkdocs_env = os.environ.copy()

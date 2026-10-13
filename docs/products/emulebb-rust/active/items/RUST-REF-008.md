@@ -1,6 +1,8 @@
 ---
 id: RUST-REF-008
 workflow: github
+product: emulebb-rust
+phase: Phase 1
 github_issue: https://github.com/emulebb/emulebb-rust/issues/96
 title: Reduce large-library metadata and scan I/O amplification
 status: OPEN
@@ -48,6 +50,11 @@ index, and removes hashes one transaction at a time. These sites are the first
 attribution targets; the process logical-read counter must still be traced
 before every byte is assigned to a cause.
 
+The cold-cohort entry limit currently counts directories and errors, which can
+starve publishable files in directory-heavy prefixes and is not fair across
+storage domains. The exhaustive planner also materializes duplicate path, key,
+and domain strings for the complete tree before ordinary hashing begins.
+
 An intentionally stopped real-media HDD campaign committed 4,947 unique hashes
 covering about 589 GB with no invalid hash or scan failures. That is sufficient
 correctness evidence, not authorization for another complete media-library run.
@@ -92,6 +99,9 @@ remaining large-library I/O cost.
 - Extend the existing Python harness with per-physical-disk file and byte
   ceilings, deterministic selection, resumable checkpoints, and redacted
   per-disk evidence.
+- Make cold-cohort selection count publishable files and schedule fairly across
+  storage domains. Stage exhaustive work per domain instead of retaining a
+  duplicate whole-tree string graph before hashing starts.
 
 ## Scope Constraints
 
@@ -104,6 +114,8 @@ remaining large-library I/O cost.
 - Storage-domain mapping and native path identity are owned by
   `RUST-REF-009` and `RUST-BUG-107`; watcher rescan policy is owned by
   `RUST-REF-010`.
+- Do not tune the 180 KiB hash buffer until metadata amplification is removed
+  and profiling identifies syscall overhead as a material remaining cost.
 
 ## Acceptance Criteria
 

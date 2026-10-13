@@ -1,6 +1,8 @@
 ---
 id: RUST-FEAT-040
 workflow: github
+product: emulebb-rust
+phase: Phase 0
 github_issue: https://github.com/emulebb/emulebb-rust/issues/29
 title: Carry ED2K and Kad search metadata end to end
 status: OPEN

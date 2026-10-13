@@ -2,7 +2,7 @@
 id: RUST-REF-014
 workflow: local
 title: Disposition ed2k-server capability-constant discrepancy
-status: DEFERRED
+status: WONT_DO
 priority: Minor
 category: refactor
 labels: [rust, ed2k, reference, parity, disposition]
@@ -52,10 +52,11 @@ No code change. Record the observation in the parity evidence and close the item
 
 ## Acceptance Criteria
 
-- [ ] The discrepancy is captured in the parity matrix or omissions registry.
-- [ ] The item is closed `WONT_DO` after capture.
+- [x] The discrepancy is captured in the parity matrix.
+- [x] The item is closed `WONT_DO` after capture.
 
 ## Notes
 
 Found by the 2026-10-12 ED2K static audit; classified as a reference-repo
-caveat, not an emulebb-rust defect.
+caveat, not an emulebb-rust defect. Closed `WONT_DO` on 2026-10-13 after the
+reference caveat was recorded in current parity evidence.

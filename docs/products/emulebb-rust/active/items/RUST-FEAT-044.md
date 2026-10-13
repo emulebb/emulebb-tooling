@@ -1,6 +1,8 @@
 ---
 id: RUST-FEAT-044
 workflow: github
+product: emulebb-rust
+phase: Phase 1
 github_issue: https://github.com/emulebb/emulebb-rust/issues/87
 title: Implement follow-majority filename selection for downloads
 status: OPEN

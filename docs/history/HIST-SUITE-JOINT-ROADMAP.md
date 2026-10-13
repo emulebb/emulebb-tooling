@@ -216,7 +216,8 @@ client and the embedded SPA WebUI can operate it without depending on TrackMuleB
   sources.
 - **Enable UDP source-reask (FEAT-001).** Code-complete off by default; remaining
   work is live validation (Rust↔Rust, then gentle Rust↔stock) before flipping
-  `enable_udp_reask` on. See `emulebb-rust` `docs/design/udp-source-reask.md`.
+  `enable_udp_reask` on. See the closed
+  [`RUST-FEAT-001`](../products/emulebb-rust/history/items/RUST-FEAT-001.md) record.
 - **Finish the VPN egress pin for eD2K TCP** (Kad UDP is done; eD2K TCP pending).
   Close the network-level anonymity guarantee.
 - Embedded SPA WebUI: status, searches, transfers, uploads, shared files, server/Kad
@@ -342,7 +343,7 @@ Promote a slice into a product backlog before any of these becomes work.
 | NAT traversal / µTP | `ideas/IDEA-NAT-TRAVERSAL-UTP.md` |
 | aMule watchlist | `ideas/IDEA-AMULE-WATCHLIST.md` |
 | Broad modernization / restructure surveys (archived — MFC frozen) | `history/ideas/IDEA-MODERNIZATION-2026.md`, `history/ideas/IDEA-RESTRUCTURE.md` |
-| A4AF cross-file source dedup (rust) | `emulebb-rust/docs/design/source-management-and-a4af.md` |
+| A4AF cross-file source dedup (rust) | [`RUST-FEAT-001`](../products/emulebb-rust/history/items/RUST-FEAT-001.md) |
 | TrackMuleBB owning all generic download rules (scope split) | `amutorrent/docs/SUITE-AUTOMATION.md` (frozen-aMuTorrent design reference) |
 | qBittorrentBB branded export, harvested store, and Torznab parity | qBittorrentBB product backlog, to be reactivated after Rust stabilizes |
 | TrackMuleBB controller and setup CLI | TrackMuleBB product backlog, to be reactivated only after qBittorrentBB progresses |

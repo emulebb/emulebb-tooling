@@ -1,6 +1,8 @@
 ---
 id: RUST-FEAT-039
 workflow: github
+product: emulebb-rust
+phase: Phase 0
 github_issue: https://github.com/emulebb/emulebb-rust/issues/28
 title: Size ED2K request depth from measured RTT and bandwidth
 status: OPEN

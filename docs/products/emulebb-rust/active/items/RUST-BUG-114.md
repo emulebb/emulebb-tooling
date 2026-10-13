@@ -1,6 +1,8 @@
 ---
 id: RUST-BUG-114
 workflow: github
+product: emulebb-rust
+phase: Phase 1
 github_issue: https://github.com/emulebb/emulebb-rust/issues/81
 title: Enforce an explicit maximum upload-slot ceiling and clarify maxUploadSlots semantics
 status: OPEN

@@ -1,6 +1,8 @@
 ---
 id: RUST-REF-011
 workflow: github
+product: emulebb-rust
+phase: Phase 1
 github_issue: https://github.com/emulebb/emulebb-rust/issues/99
 title: Consolidate duplicated ED2K opcode and capability constants
 status: OPEN

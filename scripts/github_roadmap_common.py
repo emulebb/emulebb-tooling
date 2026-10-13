@@ -377,12 +377,12 @@ def infer_lane(fields: dict[str, str]) -> str:
     return "Planning"
 
 
-def load_items() -> list[Item]:
-    """Load all active backlog items from local docs."""
+def load_items(items_root: Path = ACTIVE_ITEMS) -> list[Item]:
+    """Load active backlog items from the selected local docs directory."""
 
-    lane_by_id = active_item_ids_by_lane()
+    lane_by_id = active_item_ids_by_lane() if items_root == ACTIVE_ITEMS else {}
     items: list[Item] = []
-    for path in sorted(ACTIVE_ITEMS.glob("*.md")):
+    for path in sorted(items_root.glob("*.md")):
         text = read_text(path)
         fields = parse_frontmatter(text)
         item_id = fields.get("id", path.stem)

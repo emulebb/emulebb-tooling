@@ -18,17 +18,18 @@ source: ED2K upload/ban/slot audit 2026-10-12 vs emulebb-mfc
 
 ## Summary
 
-`BanStore::prune_expired` exists but has no production caller. Both the IP and
-user-hash ban maps therefore grow without bound over a long-running daemon:
-expired entries are correctly treated as not-banned on lookup, but they are
-never physically removed. The master prunes its ban maps on a timer.
+The periodic production caller now physically removes expired entries from both
+internal ban maps. Retained-entry diagnostics and runtime tests distinguish
+actual memory reclamation from expiry-aware lookup behavior.
 
 ## Current State
 
-- `crates/emulebb-ed2k/src/ban_store.rs:122` defines `prune_expired(&self,
-  now)`, which removes entries past `CLIENT_BAN_TIME`.
-- The only caller is the unit test (`ban_store.rs:216`); a workspace-wide grep
-  finds no daemon/core/runtime call site.
+- `crates/emulebb-core/src/network_api.rs` wires a periodic prune loop into the
+  production runtime with an injected clock seam for deterministic evidence.
+- `BanStore::retained_entry_counts` exposes a diagnostic snapshot of physically
+  retained IP and user-hash entries.
+- Unit and runtime tests prove that each prune removes expired entries from both
+  indexes while preserving fresh entries and honoring shutdown.
 
 Master reference (`workspaces/workspace/app/emulebb-main/srchybrid`):
 
@@ -51,9 +52,12 @@ IPs/hashes, with no mechanism to reclaim it.
 
 ## Intended Shape
 
-- Invoke `BanStore::prune_expired(Instant::now())` from a periodic runtime
-  tick (the daemon maintenance loop or the ED2K transfer runtime cadence),
-  matching the master's `BAN_CLEANUP_TIME` frequency.
+- Keep the existing periodic runtime invocation matching the master's cleanup
+  purpose.
+- Expose a small retained-entry count snapshot for operational observability and
+  deterministic integration assertions.
+- Seed expired IP and hash entries into the real shared store, run the periodic
+  loop, and prove both retained counts reach zero while fresh entries remain.
 - If RUST-BUG-115 lands a tracked-identity store and RUST-FEAT-043 lands a TCP
   error-flood map, prune all three on the same cadence.
 
@@ -64,18 +68,24 @@ IPs/hashes, with no mechanism to reclaim it.
 
 ## Acceptance Criteria
 
-- [ ] `prune_expired` is called periodically in the running daemon.
-- [ ] An integration/runtime test proves a ban inserted and then advanced past
+- [x] `prune_expired` is called periodically in the running daemon.
+- [x] An integration/runtime test proves a ban inserted and then advanced past
       the TTL is physically removed from both maps.
-- [ ] Long-running behavior does not grow the ban maps unboundedly.
+- [x] Every maintenance tick physically removes expired IP and hash entries
+      while preserving unexpired entries.
 
 ## Validation
 
-- Extend the `BanStore` tests with a production-cadence call-site test, or add
-  a runtime test that exercises the periodic prune.
+- `cargo test -p emulebb-ed2k -p emulebb-core`
+- `cargo clippy -p emulebb-ed2k -p emulebb-core --all-targets -- -D warnings -A unfulfilled-lint-expectations`
 
 ## Notes
 
 Shares the pruning cadence with RUST-BUG-115 and RUST-FEAT-043.
 
-- Fixed in emulebb-rust PR #101 (commit `7f274dd3`), rebase-merged to `main`.
+- PR #101 (commit `7f274dd3`) wired the production loop. The 2026-10-13 closure
+  audit reopened the item because existing tests did not prove physical map
+  reclamation.
+- Completed on 2026-10-13 in emulebb-rust commits `c3707c12` and `dfd4c2f7`.
+  All `emulebb-ed2k` and `emulebb-core` tests pass, and the runtime test proves
+  physical removal from both retained indexes while preserving fresh bans.

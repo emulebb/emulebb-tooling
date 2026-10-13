@@ -19,15 +19,17 @@ path, not by filename alone.
 If another doc conflicts with `docs/active/`, `docs/active/` wins for current
 status.
 
-For GitHub-primary backlog items, workflow status is an exception: the owning
-product repo issue and the public org-level `eMuleBB Roadmap` Project #3 own
-current state, priority, release placement, discussion, ownership, and PR
-linkage for forward work. The canonical forward board is
-`https://github.com/orgs/emulebb/projects/3`. MFC-era items in
+For GitHub-primary backlog items, workflow status is an exception: the public
+org-level `eMuleBB Roadmap` Project #3 owns `Status`, `Product`, `Phase`, and
+`Priority`; the owning product repo issue milestone owns release placement;
+and the issue owns discussion, ownership, and PR linkage. The canonical forward
+board is `https://github.com/orgs/emulebb/projects/3`. MFC-era items in
 `emulebb/emulebb` and Project #2 (`eMuleBB Roadmap MFC (archive)`) are
 archive/provenance only unless they are critical maintenance or
 non-behavior-expanding diagnostics/instrumentation. The local active item doc
-remains the engineering spec/evidence record. Such files carry
+remains the engineering spec/evidence record. Its `priority:` and `milestone:`
+front matter mirror GitHub, while `labels:` remains durable engineering
+taxonomy and need not match issue labels token for token. Such files carry
 `workflow: github` and `github_issue:` front matter. Their legacy `status:` field
 is retained only for the current taxonomy tooling until the active-doc model is
 migrated more broadly.
@@ -83,6 +85,13 @@ as provenance only.
 - Every actionable active task must have its own item ID under
   `docs/active/items/`; release dashboards and plans should point to item IDs
   instead of carrying anonymous task rows.
+- Product-specific active directories may impose a stricter shape. For
+  `docs/products/emulebb-rust`, keep only `active/INDEX.md` beside
+  `active/items/`: put current product boundaries in `RELEASE-SCOPE.md`, current
+  implemented structure in `design/architecture.md`, forward designs in
+  `design/`, and all actionable execution or evidence work in owning item docs.
+  Do not create standalone Rust ledgers, dated reviews, release checklists, or
+  runbooks in the active product directory.
 - New externally actionable backlog items should be GitHub-primary by default:
   create or update the local item, the owning product repo issue, and membership
   in the `eMuleBB Roadmap` Project #3 unless the item is explicitly local-only,

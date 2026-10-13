@@ -3,7 +3,7 @@ id: RUST-REF-015
 workflow: github
 github_issue: https://github.com/emulebb/emulebb-rust/issues/100
 title: Track the non-stock offerfiles_v server-login extension
-status: OPEN
+status: DONE
 priority: Minor
 category: refactor
 labels: [rust, ed2k, server, protocol-extension, login, parity]
@@ -92,9 +92,10 @@ and tracking, and prevents repeated re-audit churn.
 - Keep the extension enabled by default as the large-library publish mechanism.
 - Treat it as a known, tracked divergence in parity evidence; a future ED2K
   re-audit must not report it as an unintended gap.
-- If a machine-readable "tracked extension" registry is ever added beside
-  `policy/rust-client-omissions.toml`, move this disposition there.
-- Keep the advertisement uniform across every server session type (see
+- Keep the extension in the machine-readable
+  `policy/rust-client-extensions.toml` registry beside the omission registry.
+- Advertise the extension only from the long-lived publishing server session;
+  one-shot keyword, source, and callback sessions retain the stock login (see
   RUST-BUG-112).
 
 ## Scope Constraints
@@ -106,11 +107,11 @@ and tracking, and prevents repeated re-audit churn.
 
 ## Acceptance Criteria
 
-- [ ] The extension is recorded in the parity matrix or equivalent evidence as
+- [x] The extension is recorded in the parity matrix and extension registry as
       intentional and tracked.
-- [ ] A future ED2K parity re-audit treats `offerfiles_v` as a known divergence
+- [x] A future ED2K parity re-audit treats `offerfiles_v` as a known divergence
       rather than a new defect.
-- [ ] The justification (bounded incremental large-library publishing) is
+- [x] The justification (bounded incremental large-library publishing) is
       captured in this record.
 
 ## Validation
@@ -120,6 +121,8 @@ and tracking, and prevents repeated re-audit churn.
 
 ## Notes
 
-Complements RUST-BUG-112 (uniform advertisement across session types).
+Completed on 2026-10-13 by product-policy commit `afb56cb1` and the matching
+release/parity documentation update. Complements RUST-BUG-112 (truthful
+role-aware advertisement across session types).
 RUST-CI-005 owns the negotiated offerfiles capability proof. The duplicated
 opcode/capability constants are in scope for the RUST-REF-011 consolidation.

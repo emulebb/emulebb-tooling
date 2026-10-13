@@ -6,8 +6,8 @@ metadata, Cargo, or Rust protocol work.
 
 ## Product Direction
 
-- `rust-v0.1.0-beta.2` is the active corrective release line and active beta
-  product-development lane. Do not rewrite published beta tags or artifacts.
+- `rust-v0.1.0-beta.2` is the current published beta baseline. Development
+  continues on the beta lane; do not rewrite published beta tags or artifacts.
 - The Rust headless daemon and embedded SPA WebUI are the active client and UI.
   Slint/native UI is a frozen experiment unless the operator explicitly asks to
   remove or revive it.
@@ -27,9 +27,9 @@ metadata, Cargo, or Rust protocol work.
 - Protocol-adjacent changes require parity evidence through appropriate
   goldens, community baseline, tracing, live-diff, or packet captures.
 
-`policy\rust-client.toml` and its omission registry are the machine-readable
-authority for platform, behavior authority, protocol, long-path, and
-reviewed-omission policy.
+`policy\rust-client.toml`, its omission registry, and its extension registry are
+the machine-readable authority for platform, behavior authority, protocol,
+long-path, reviewed-omission, and intentional-extension policy.
 
 ## API And UI Contract
 
@@ -83,3 +83,16 @@ reviewed-omission policy.
 Use `repos\emulebb-build` orchestration for supported build and validation
 entrypoints. Rust live, soak, or profile work additionally requires the
 [Harness And Live Policy](../../../reference/HARNESS-LIVE-POLICY.md).
+
+## Documentation Boundaries
+
+- Keep `docs/products/emulebb-rust/active/` limited to `INDEX.md` and the
+  `items/` directory. Track every actionable slice and its progress in its
+  owning item instead of creating branch-wide ledgers, reviews, or checklists.
+- Keep current scope in `RELEASE-SCOPE.md`, implemented structure in
+  `design/architecture.md`, and genuinely forward designs in `design/`.
+- Published release notes belong to GitHub Releases. Persisted live/soak
+  procedures belong to `repos\emulebb-build-tests`; Rust product docs link to
+  the harness and retain only stable conclusions or evidence references.
+- Delete a completed temporary plan when its evidence is reconciled into owning
+  items. Archive only unique historical analysis that remains useful.

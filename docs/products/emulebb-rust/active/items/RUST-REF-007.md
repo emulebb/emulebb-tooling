@@ -1,6 +1,8 @@
 ---
 id: RUST-REF-007
 workflow: github
+product: emulebb-rust
+phase: Phase 1
 github_issue: https://github.com/emulebb/emulebb-rust/issues/95
 title: Review Rust upload hot-path performance candidates
 status: OPEN

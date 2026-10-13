@@ -3486,6 +3486,7 @@ components:
                 - METHOD_NOT_ALLOWED
                 - NOT_FOUND
                 - INVALID_STATE
+                - DOWNLOAD_CONFLICT
                 - SERVICE_BUSY
                 - EMULE_UNAVAILABLE
                 - EMULE_ERROR
@@ -3509,6 +3510,16 @@ components:
                 constraint:
                   type: string
                   description: Inclusive numeric bounds the field must satisfy, formatted as "min..max".
+                conflicts:
+                  description: >-
+                    Present when `code` is `DOWNLOAD_CONFLICT`. Retry only when
+                    every entry sets `redownloadAllowed=true`, and only after
+                    deliberate user confirmation, by sending
+                    `knownFilePolicy=redownload`.
+                  type: array
+                  minItems: 1
+                  items:
+                    $ref: "#/components/schemas/DownloadConflictEvidence"
     AppEnvelope:
       unevaluatedProperties: false
       allOf:
@@ -5639,6 +5650,8 @@ components:
           pattern: '\S'
         paused:
           type: boolean
+        knownFilePolicy:
+          $ref: "#/components/schemas/KnownFilePolicy"
     TransferPatch:
       type: object
       additionalProperties: false
@@ -7222,6 +7235,78 @@ components:
           minLength: 1
           pattern: '\S'
         paused:
+          type: boolean
+        knownFilePolicy:
+          $ref: "#/components/schemas/KnownFilePolicy"
+    KnownFilePolicy:
+      type: string
+      enum: [reject, redownload]
+      default: reject
+      description: >-
+        Duplicate-download handling. `reject` returns a structured 409 conflict
+        before any transfer or source mutation. `redownload` deliberately
+        replaces only current-local or historical completion evidence; active
+        transfers, identity mismatches, and duplicate hashes within one request
+        remain conflicts.
+    DownloadConflictEvidence:
+      type: object
+      additionalProperties: false
+      required:
+        - hash
+        - kind
+        - requestedName
+        - requestedSizeBytes
+        - recordedName
+        - recordedSizeBytes
+        - transferState
+        - currentPaths
+        - firstCompletedAtMs
+        - lastCompletedAtMs
+        - redownloadAllowed
+      properties:
+        hash:
+          type: string
+          pattern: '^[0-9A-Fa-f]{32}$'
+        kind:
+          type: string
+          enum:
+            - activeTransfer
+            - presentLocalFile
+            - previouslyCompleted
+            - identityMismatch
+            - requestDuplicate
+        requestedName:
+          type: string
+        requestedSizeBytes:
+          type: integer
+          format: int64
+          minimum: 0
+        recordedName:
+          type: string
+        recordedSizeBytes:
+          type: integer
+          format: int64
+          minimum: 0
+        transferState:
+          type:
+            - string
+            - "null"
+          enum: [downloading, completing, null]
+        currentPaths:
+          type: array
+          items:
+            type: string
+        firstCompletedAtMs:
+          type:
+            - integer
+            - "null"
+          format: int64
+        lastCompletedAtMs:
+          type:
+            - integer
+            - "null"
+          format: int64
+        redownloadAllowed:
           type: boolean
     SearchResultDownloadEnvelope:
       unevaluatedProperties: false

@@ -1,6 +1,8 @@
 ---
 id: RUST-FEAT-025
 workflow: local
+product: emulebb-rust
+phase: Phase 1
 title: Validate conformant duplicate-block rejection diagnostics
 status: OPEN
 priority: Minor

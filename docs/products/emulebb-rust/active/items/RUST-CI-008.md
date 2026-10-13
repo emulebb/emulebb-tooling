@@ -1,6 +1,8 @@
 ---
 id: RUST-CI-008
 workflow: github
+product: emulebb-rust
+phase: Phase 1
 github_issue: https://github.com/emulebb/emulebb-rust/issues/84
 title: Prove Unicode and long-path large-library behavior across platforms
 status: OPEN
@@ -58,6 +60,8 @@ is explicitly ignored even though release packaging emits macOS artifacts.
 - Do not make a 100k run mandatory for ordinary pull requests.
 - Product fixes discovered by the matrix remain owned by `RUST-BUG-107`,
   `RUST-REF-009`, and `RUST-REF-010`.
+- Run the full cross-platform matrix after those path, storage-domain, and
+  watcher fixes are available; do not use stale red evidence as their proxy.
 
 ## Acceptance Criteria
 
