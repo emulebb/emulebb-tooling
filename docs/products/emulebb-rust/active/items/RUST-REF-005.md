@@ -14,6 +14,8 @@ created: 2026-07-10
 source: Operator maintainability direction 2026-07-10
 ---
 
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb-rust/issues/7. This local document is retained as the durable engineering spec and evidence record.
+
 # RUST-REF-005 - Decompose oversized Rust modules by responsibility
 
 ## Summary

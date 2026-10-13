@@ -14,6 +14,8 @@ created: 2026-07-11
 source: Operator-approved Rust development hygiene review 2026-07-11
 ---
 
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb-rust/issues/9. This local document is retained as the durable engineering spec and evidence record.
+
 # RUST-REF-006 - Consolidate Rust NAT and runtime safety internals
 
 ## Summary
