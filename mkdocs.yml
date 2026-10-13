@@ -89,7 +89,6 @@ nav:
       - Troubleshooting: reference/GUIDE-TROUBLESHOOTING.md
       - Translations: reference/GUIDE-TRANSLATIONS.md
   - emulebb-rust (Core):
-      - Rust Scope: active/EMULEBB-RUST-SCOPE.md
       - Product Section: products/emulebb-rust/README.md
       - Active Backlog: products/emulebb-rust/active/INDEX.md
       - Release Scope: products/emulebb-rust/RELEASE-SCOPE.md

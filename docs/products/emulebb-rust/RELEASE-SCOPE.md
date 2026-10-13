@@ -1,4 +1,4 @@
-# emulebb-rust Release Scope (`rust-v0.1.0-beta.1`)
+# emulebb-rust Release Scope
 
 This document is the unambiguous, human-facing statement of what the
 `emulebb-rust` client **does**, what it **intentionally omits**, and what is
