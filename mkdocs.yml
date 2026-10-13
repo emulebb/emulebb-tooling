@@ -94,8 +94,6 @@ nav:
       - Release Scope: products/emulebb-rust/RELEASE-SCOPE.md
       - 0.1.0-beta.1 Release: https://github.com/emulebb/emulebb-rust/releases/tag/rust-v0.1.0-beta.1
       - 0.1.0-beta.2 Release: https://github.com/emulebb/emulebb-rust/releases/tag/rust-v0.1.0-beta.2
-      - Headless Large-Library NOW Roadmap: products/emulebb-rust/active/RUST-HEADLESS-LARGE-LIBRARY-NOW-ROADMAP.md
-      - Large-Library I/O Portability Review: products/emulebb-rust/active/RUST-LARGE-LIBRARY-IO-PORTABILITY-REVIEW.md
       - Code Quality And Test Placement: products/emulebb-rust/reference/CODE-QUALITY.md
       - Running On macOS And Linux: reference/GUIDE-CROSS-PLATFORM.md
       - REST API — Forward OpenAPI: products/emulebb-rust/api/REST-API-OPENAPI.yaml

@@ -102,8 +102,8 @@ not belong in the current parity-difference matrix:
 
 ## Frozen beta parity matrix
 
-This is the complete current stock-vs-Rust difference set for
-`rust-v0.1.0-beta.1`. The registry ID is the machine-readable authority.
+This is the complete current stock-vs-Rust difference set for the beta line.
+The registry ID is the machine-readable authority.
 
 | Registry ID | Frozen beta disposition | Compatibility contract |
 |---|---|---|
@@ -130,11 +130,26 @@ difference requires a deliberate release-scope decision and a matching registry
 update. Already-fixed audit history must not be copied back into these current
 matrices.
 
+## Forward boundaries and non-goals
+
+IPv6 eD2K/Kad and uTP peer transport are future protocol projects, not partial
+beta additions. Either requires an end-to-end address or transport model,
+persistence, capability negotiation, all consumer coverage, and dual-stack or
+transport-specific live evidence before advertisement. Collection-file import
+and export is also future work at low priority.
+
+Automatic category-assignment rules and time-based bandwidth or connection
+scheduling remain external-controller concerns through the REST API. The daemon
+does not grow an internal rule or scheduler engine. Proxy transports
+(SOCKS4/4a/5 and HTTP CONNECT) are intentionally excluded: the product is
+VPN-first, and stock-shaped proxy eligibility checks must not become a proxy
+implementation.
+
 ## Rust Beta gate
 
-`rust-v0.1.0-beta.1` may ship with a signed-off non-critical parity backlog, but
-not with unresolved P0 safety or critical stock-wire parity findings. The beta
-gate is:
+The beta line may ship with a signed-off non-critical parity backlog, but not
+with unresolved P0 safety or critical stock-wire parity findings. The beta gate
+is:
 
 - isolated Docker-over-Gluetun tunnel-down proof shows zero off-tunnel P2P
   egress; native VPN-safe claims remain deferred;
