@@ -1,10 +1,11 @@
 # Design: Autonomous Kad/eD2K indexer (notes 13–15)
 
-Status: design / direction. Captured 2026-06-14. Post-0.7.3; full development
-mode. This is **inside deliverable #1** — "perfectly functional" means client
-parity **plus** this indexer role (per the suite joint roadmap in
-`emulebb-tooling/docs/history/HIST-SUITE-JOINT-ROADMAP.md`). It is the eD2K/Kad mirror
-of the qBittorrentBB DHT harvester.
+Status: active post-beta design, owned by
+[`RUST-FEAT-002`](../active/items/RUST-FEAT-002.md). The current published beta
+remains the headless client/daemon described by
+[`RELEASE-SCOPE`](../RELEASE-SCOPE.md); the autonomous indexer is later suite
+work, not a beta defect. It is the eD2K/Kad mirror of the qBittorrentBB DHT
+harvester.
 
 ## Goal
 
