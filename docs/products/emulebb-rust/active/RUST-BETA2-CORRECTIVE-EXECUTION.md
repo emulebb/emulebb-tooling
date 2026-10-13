@@ -22,7 +22,7 @@ for workflow state.
 | 1 | Backlog documentation cleanup | COMPLETE | Taxonomy, structure, and GitHub records agree |
 | 2 | Closure evidence for RUST-BUG-111, 113, and 116 | COMPLETE | Focused tests prove every retained criterion |
 | 3 | Buddy receive-liveness defect | COMPLETE | Silent half-open buddy links expire and reconnect |
-| 4 | RUST-FEAT-047 durable download history | IN_PROGRESS | Completed hashes survive file removal and restart |
+| 4 | RUST-FEAT-047 durable download history | COMPLETE | History, conflicts, explicit override, and UI confirmation validated |
 
 ## Design Decisions
 
@@ -131,6 +131,7 @@ for workflow state.
 | 2026-10-13 | RUST-FEAT-047 REST conflict surface | `b401bf08` | 117 REST unit tests, 2 REST integrations, and strict all-target REST Clippy pass; both creation routes return typed 409 conflicts |
 | 2026-10-13 | RUST-FEAT-047 OpenAPI contract | `6b83783` | YAML parses as OpenAPI 3.1; route checker reports only the pre-existing search sort/order query drift |
 | 2026-10-13 | RUST-FEAT-047 WebUI conflict handling | `aeeff64b` / `35be62f7` | 28 unit tests, production build, and all 16 Playwright tests pass; both entry points default to reject and require confirmation before retry |
+| 2026-10-13 | RUST-FEAT-047 final affected-surface validation | product commits through `35be62f7` | 38 metadata, 1,035 ED2K, 399 core unit plus integrations, 117 REST unit plus 2 integrations, strict affected-crate Clippy, 28 WebUI unit, build, and 16 Playwright tests pass |
 
 The global `github-roadmap-check.py --github` run still reports 244 legacy
 MFC-label synchronization errors outside this Rust slice. The new Rust issue's

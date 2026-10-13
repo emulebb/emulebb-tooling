@@ -3,7 +3,7 @@ id: RUST-FEAT-047
 workflow: github
 github_issue: https://github.com/emulebb/emulebb-rust/issues/90
 title: Persist completed-file identity to prevent duplicate downloads
-status: OPEN
+status: DONE
 priority: Minor
 category: feature
 labels: [rust, ed2k, download, dedupe, library]
@@ -26,14 +26,18 @@ therefore survive both file removal and daemon restart.
 
 ## Current State
 
-- `crates/emulebb-core/src/shared_directories.rs:826`
-  `imported_known_file_identity_index()` and `:1406`
-  `promote_imported_known_file()` serve the shared-library import/reload path,
-  not download dedupe.
-- Active transfer state can reject a duplicate currently in progress, but no
-  durable completed-download identity store exists.
-- No single transfer-creation authority combines active transfers, the current
-  shared catalog, imported known files, and completed history.
+- Metadata schema `31` owns a pathless `download_history` identity store keyed
+  by ED2K hash. The authoritative completion-manifest transaction records it
+  only for completed, final-rehash-clean downloads.
+- `Ed2kTransferRuntime::download_evidence()` classifies active transfers,
+  filesystem-verified current local files, and prior completion history without
+  converting stale history into a live-path claim.
+- `EmulebbCore::preflight_downloads()` is the single duplicate-decision
+  authority for both ED2K-link and search-result creation. A global creation
+  gate keeps preflight and mutation ordered across concurrent requests.
+- REST exposes `knownFilePolicy=reject|redownload` and typed
+  `DOWNLOAD_CONFLICT` evidence. WebUI starts with `reject` and retries with
+  `redownload` only after explicit confirmation.
 
 Master reference (`workspaces/workspace/app/emulebb-main/srchybrid`):
 
@@ -87,25 +91,35 @@ intent and resource-protection concern, not merely a current-path lookup.
 
 ## Acceptance Criteria
 
-- [ ] Successful completion durably records the ED2K hash and metadata before
+- [x] Successful completion durably records the ED2K hash and metadata before
       active-transfer cleanup.
-- [ ] Duplicate decisions combine active, shared/imported, and completed-history
+- [x] Duplicate decisions combine active, shared/imported, and completed-history
       evidence before any transfer or source-acquisition work starts.
-- [ ] Detection survives daemon restart and removal of the completed payload
+- [x] Detection survives daemon restart and removal of the completed payload
       from the shared library.
-- [ ] The API returns structured evidence and requires an explicit override to
+- [x] The API returns structured evidence and requires an explicit override to
       re-download; stale history never claims a live path.
-- [ ] Tests cover active, shared, historical, absent, restart, removed-file, and
+- [x] Tests cover active, shared, historical, absent, restart, removed-file, and
       explicit-override paths.
 
 ## Validation
 
-- Persistence and runtime tests proving completion recording, restart survival,
-  and duplicate rejection before transfer creation.
-- API/OpenAPI/WebUI validation for the structured conflict and explicit
-  re-download override.
+- `cargo test -p emulebb-metadata -p emulebb-ed2k -p emulebb-core -p emulebb-rest`
+- `cargo clippy -p emulebb-metadata -p emulebb-ed2k -p emulebb-core -p emulebb-rest --all-targets -- -D warnings -A unfulfilled-lint-expectations`
+- `npm run test:unit`, `npm run build`, and `npm run test:e2e` in `webui`.
+- OpenAPI YAML parse plus `check-rust-openapi-routes.py`; the checker retains one
+  unrelated pre-existing drift for search-result `sort` and `order` query
+  parameters.
 
 ## Notes
 
 The shared import index may supply one evidence source, but it is not the
 completed-history authority.
+
+- Completed on 2026-10-13 in emulebb-rust commits `576f1b53`, `995efd2a`,
+  `b09063f7`, `50c14ca1`, `abf711c8`, `b401bf08`, `aeeff64b`, and `35be62f7`,
+  with OpenAPI contract commit `6b83783` in emulebb-tooling.
+- Final validation passed 38 metadata tests, 1,035 ED2K tests, all 399 core unit
+  tests and integrations, 117 REST unit tests and 2 REST integrations, strict
+  all-target Clippy for all affected crates, 28 WebUI unit tests, the production
+  WebUI build, and all 16 Playwright tests.

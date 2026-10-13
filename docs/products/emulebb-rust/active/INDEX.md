@@ -143,7 +143,7 @@ below as historical links.
 | [RUST-FEAT-044](items/RUST-FEAT-044.md) | Minor | OPEN | Implement follow-majority filename selection for downloads |
 | [RUST-FEAT-045](items/RUST-FEAT-045.md) | Minor | OPEN | Retain and expose multiple per-source filenames for downloads |
 | [RUST-FEAT-046](items/RUST-FEAT-046.md) | Minor | OPEN | Repair mojibake and normalize download filenames at intake |
-| [RUST-FEAT-047](items/RUST-FEAT-047.md) | Minor | OPEN | Persist completed-file identity to prevent duplicate downloads |
+| [RUST-FEAT-047](../history/items/RUST-FEAT-047.md) | Minor | DONE | Persist completed-file identity to prevent duplicate downloads |
 | [RUST-FEAT-048](items/RUST-FEAT-048.md) | Minor | OPEN | Use sparse part files without weakening capacity reservations |
 | [RUST-FEAT-049](items/RUST-FEAT-049.md) | Minor | OPEN | Add per-file share exclusions with a built-in default ignore set |
 | [RUST-FEAT-050](items/RUST-FEAT-050.md) | Minor | OPEN | Parse and emit the ED2K link AICH root (h=) section |
