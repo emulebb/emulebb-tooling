@@ -3,7 +3,7 @@ id: RUST-BUG-113
 workflow: github
 github_issue: https://github.com/emulebb/emulebb-rust/issues/80
 title: Advertise share-viewing capability truthfully in CT_EMULE_MISCOPTIONS1
-status: OPEN
+status: DONE
 priority: Minor
 category: bug
 labels: [rust, ed2k, hello, capability, parity, browse]
@@ -67,10 +67,10 @@ remains a separate approved omission (`ed2k-preview`).
 
 ## Acceptance Criteria
 
-- [ ] The current non-browsable client advertises `no_view_shared_files = 1`.
-- [ ] Hello encoding and the existing empty/denied browse responses express the
+- [x] The current non-browsable client advertises `no_view_shared_files = 1`.
+- [x] Hello encoding and the existing empty/denied browse responses express the
       same policy.
-- [ ] Hello bit and full-wire golden tests pin the truthful current profile.
+- [x] Hello bit and full-wire golden tests pin the truthful current profile.
 
 ## Validation
 
@@ -86,3 +86,6 @@ existing `ed2k-preview` omission.
   that dispatching browse opcodes exposed the real catalog. The 2026-10-13
   closure audit verified the handlers remain intentionally empty/denied and
   reopened the item.
+- Completed on 2026-10-13 in emulebb-rust commit `3f3bb819`. The 25 hello tests,
+  the listener browse-policy test, formatting, and targeted all-target Clippy
+  pass.
