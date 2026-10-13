@@ -34,8 +34,8 @@ reused. Parked ideas are not backlog items until explicitly activated.
 | [RUST-CI-005](items/RUST-CI-005.md) | Evidence | Prove negotiated offerfiles capability interoperability |
 | [RUST-CI-006](items/RUST-CI-006.md) | Evidence | Refresh current-head stock parity evidence and reconcile docs |
 | [RUST-CI-008](items/RUST-CI-008.md) | Evidence | Prove Unicode and long-path large-library behavior across platforms |
-| [RUST-FEAT-002](items/RUST-FEAT-002.md) | Feature | Autonomous Kad/eD2K snooping index with Torznab surface |
-| [RUST-FEAT-004](items/RUST-FEAT-004.md) | Feature | Arr integration through Torznab and qBittorrent-compatible control |
+| [RUST-FEAT-002](items/RUST-FEAT-002.md) | Feature | Indexer — autonomous Kad/eD2K snooping index with Torznab surface |
+| [RUST-FEAT-004](items/RUST-FEAT-004.md) | Feature | Arr integration — Torznab indexer + qBittorrent-emulating download client |
 | [RUST-REF-005](items/RUST-REF-005.md) | Refactor | Decompose oversized Rust modules by responsibility |
 | [RUST-REF-006](items/RUST-REF-006.md) | Refactor | Consolidate Rust NAT and runtime safety internals |
 | [RUST-REF-008](items/RUST-REF-008.md) | Refactor | Reduce large-library metadata and scan I/O amplification |
@@ -46,10 +46,10 @@ reused. Parked ideas are not backlog items until explicitly activated.
 
 | ID | Class | Title |
 |---|---|---|
-| [RUST-BUG-001](items/RUST-BUG-001.md) | Bug | Isolate Kad swarm multi-node transfer tests in CI |
+| [RUST-BUG-001](items/RUST-BUG-001.md) | Bug | Eliminate kad_swarm CI isolation debt |
 | [RUST-BUG-112](items/RUST-BUG-112.md) | Bug | Centralize offerfiles_v policy by ED2K server-session role |
-| [RUST-BUG-114](items/RUST-BUG-114.md) | Bug | Enforce an explicit upload-slot ceiling and clarify maxUploadSlots |
-| [RUST-BUG-115](items/RUST-BUG-115.md) | Bug | Ban cross-reconnect userhash changes through tracked identity |
+| [RUST-BUG-114](items/RUST-BUG-114.md) | Bug | Enforce an explicit maximum upload-slot ceiling and clarify maxUploadSlots semantics |
+| [RUST-BUG-115](items/RUST-BUG-115.md) | Bug | Ban cross-reconnect userhash changes via a tracked-client identity store |
 | [RUST-FEAT-025](items/RUST-FEAT-025.md) | Feature | Validate conformant duplicate-block rejection diagnostics |
 | [RUST-FEAT-038](items/RUST-FEAT-038.md) | Feature | Add current-aMule-style endgame source takeover |
 | [RUST-FEAT-039](items/RUST-FEAT-039.md) | Feature | Size ED2K request depth from measured RTT and bandwidth |
@@ -59,7 +59,7 @@ reused. Parked ideas are not backlog items until explicitly activated.
 | [RUST-FEAT-045](items/RUST-FEAT-045.md) | Feature | Retain and expose multiple per-source filenames for downloads |
 | [RUST-FEAT-046](items/RUST-FEAT-046.md) | Feature | Repair mojibake and normalize download filenames at intake |
 | [RUST-FEAT-048](items/RUST-FEAT-048.md) | Feature | Use sparse part files without weakening capacity reservations |
-| [RUST-FEAT-049](items/RUST-FEAT-049.md) | Feature | Add per-file share exclusions with a built-in ignore set |
-| [RUST-FEAT-050](items/RUST-FEAT-050.md) | Feature | Parse and emit the ED2K link AICH root section |
+| [RUST-FEAT-049](items/RUST-FEAT-049.md) | Feature | Add per-file share exclusions with a built-in default ignore set |
+| [RUST-FEAT-050](items/RUST-FEAT-050.md) | Feature | Parse and emit the ED2K link AICH root (h=) section |
 | [RUST-REF-007](items/RUST-REF-007.md) | Refactor | Review Rust upload hot-path performance candidates |
 | [RUST-REF-011](items/RUST-REF-011.md) | Refactor | Consolidate duplicated ED2K opcode and capability constants |
