@@ -22,8 +22,8 @@ status.
 For GitHub-primary backlog items, workflow status is an exception: the public
 org-level `eMuleBB Roadmap` Project #3 owns `Status`, `Product`, `Phase`, and
 `Priority`; the owning product repo issue milestone owns release placement;
-and the issue owns discussion, ownership, and PR linkage. The canonical forward board is
-`https://github.com/orgs/emulebb/projects/3`. MFC-era items in
+and the issue owns discussion, ownership, and PR linkage. The canonical forward
+board is `https://github.com/orgs/emulebb/projects/3`. MFC-era items in
 `emulebb/emulebb` and Project #2 (`eMuleBB Roadmap MFC (archive)`) are
 archive/provenance only unless they are critical maintenance or
 non-behavior-expanding diagnostics/instrumentation. The local active item doc

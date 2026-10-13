@@ -90,9 +90,10 @@ Use this path for normal externally actionable backlog slices:
    placement, discussion, ownership, and PR linkage. Keep the Markdown item as
    the durable spec/evidence record.
 
-Run `python scripts\github-roadmap-check.py` after local edits. Run
-`python scripts\github-roadmap-check.py --github` when the current GitHub token
-has project scope and network access.
+Run `python scripts\github-roadmap-check.py` after top-level backlog edits. For
+a product-local backlog, pass its product directory name, for example
+`python scripts\github-roadmap-check.py --product emulebb-rust`. Add `--github`
+when the current GitHub token has project scope and network access.
 
 ## Close Or Reclassify An Item
 
@@ -123,6 +124,7 @@ Run this when GitHub credentials are available:
 
 ```powershell
 python scripts\github-roadmap-check.py --github
+python scripts\github-roadmap-check.py --github --product emulebb-rust
 ```
 
 For docs-only changes, app builds are not required unless the doc change claims
