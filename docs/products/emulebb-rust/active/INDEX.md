@@ -172,7 +172,7 @@ below as historical links.
 | ID | Priority | Status | Title |
 |----|----------|--------|-------|
 | [RUST-BUG-108](../history/items/RUST-BUG-108.md) | Major | DONE | Harden regular-build logging and retention |
-| [RUST-BUG-116](items/RUST-BUG-116.md) | Minor | OPEN | Wire periodic expiry pruning for the client BanStore |
+| [RUST-BUG-116](../history/items/RUST-BUG-116.md) | Minor | DONE | Wire periodic expiry pruning for the client BanStore |
 
 ### Beta follow-up refactors and evidence
 

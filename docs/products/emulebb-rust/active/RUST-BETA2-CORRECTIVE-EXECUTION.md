@@ -20,8 +20,8 @@ for workflow state.
 | Step | Scope | State | Exit Gate |
 |------|-------|-------|-----------|
 | 1 | Backlog documentation cleanup | COMPLETE | Taxonomy, structure, and GitHub records agree |
-| 2 | Closure evidence for RUST-BUG-111, 113, and 116 | IN_PROGRESS | Focused tests prove every retained criterion |
-| 3 | Buddy receive-liveness defect | PENDING | Silent half-open buddy links expire and reconnect |
+| 2 | Closure evidence for RUST-BUG-111, 113, and 116 | COMPLETE | Focused tests prove every retained criterion |
+| 3 | Buddy receive-liveness defect | IN_PROGRESS | Silent half-open buddy links expire and reconnect |
 | 4 | RUST-FEAT-047 durable download history | PENDING | Completed hashes survive file removal and restart |
 
 ## Design Decisions
@@ -102,6 +102,7 @@ for workflow state.
 | 2026-10-13 | Buddy liveness tracked | `dcd9d23` | GitHub issue 103 added to Project #3 as Rust Phase 1 Todo |
 | 2026-10-13 | RUST-BUG-111 completed | `4b04be6b` | 1,026 crate tests pass; IDCHANGE wire behavior proven |
 | 2026-10-13 | RUST-BUG-113 completed | `3f3bb819` | Hello capability and empty/denied browse policy agree |
+| 2026-10-13 | RUST-BUG-116 completed | `c3707c12` / `dfd4c2f7` | 1,026 ED2K tests and all 426 core tests pass; physical pruning proven |
 
 The global `github-roadmap-check.py --github` run still reports 244 legacy
 MFC-label synchronization errors outside this Rust slice. The new Rust issue's
