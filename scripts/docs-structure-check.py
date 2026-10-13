@@ -124,6 +124,23 @@ def read_text(path: Path) -> str:
     return path.read_text(encoding="utf-8", errors="ignore")
 
 
+def frontmatter_field(text: str, name: str) -> str:
+    """Return one scalar field from simple Markdown front matter."""
+
+    if not text.startswith("---\n"):
+        return ""
+    end = text.find("\n---", 4)
+    if end == -1:
+        return ""
+    for line in text[4:end].splitlines():
+        if ":" not in line:
+            continue
+        field_name, value = line.split(":", 1)
+        if field_name.strip() == name:
+            return value.strip()
+    return ""
+
+
 def current_markdown_files() -> list[Path]:
     """Return Markdown files that belong to the current documentation surface."""
 
@@ -294,6 +311,31 @@ def check_rust_product_structure(errors: list[str]) -> None:
             errors.append(
                 f"{RUST_ACTIVE_INDEX.relative_to(ROOT)}: expected exactly one link to "
                 f"{item_link}, found {link_count}"
+            )
+            continue
+
+        item_title = frontmatter_field(read_text(item), "title")
+        if not item_title:
+            errors.append(f"{item.relative_to(ROOT)}: missing title front matter")
+            continue
+
+        row_match = re.search(
+            rf"^\|\s*\[[^]]+\]\({re.escape(item_link)}\)\s*\|\s*[^|]+\|\s*(.*?)\s*\|$",
+            index_text,
+            re.MULTILINE,
+        )
+        if row_match is None:
+            errors.append(
+                f"{RUST_ACTIVE_INDEX.relative_to(ROOT)}: link to {item_link} is not in "
+                "the expected backlog table shape"
+            )
+            continue
+
+        index_title = row_match.group(1).strip()
+        if index_title != item_title:
+            errors.append(
+                f"{RUST_ACTIVE_INDEX.relative_to(ROOT)}: title for {item.name} must match "
+                f"front matter exactly: {item_title!r}"
             )
 
 

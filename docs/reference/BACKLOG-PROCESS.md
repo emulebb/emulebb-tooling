@@ -63,8 +63,9 @@ source: short provenance note
    sections (`Summary` and `Acceptance Criteria` required). Use the template's
    section vocabulary instead of inventing near-synonyms, and keep dated proof
    logs out of the item body.
-6. Add or update the row in `docs\active\INDEX.md` in the matching section.
-   Keep rows sorted by item ID inside each table section.
+6. Add or update the row in the product's active index in the matching section.
+   Copy the item front-matter `title` exactly and keep rows sorted by item ID
+   inside each table section.
 7. Update snapshot counts when the product index maintains them.
 
 ## GitHub-Primary Backlog
