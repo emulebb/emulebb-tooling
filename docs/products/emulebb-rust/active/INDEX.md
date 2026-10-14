@@ -47,7 +47,6 @@ reused. Parked ideas are not backlog items until explicitly activated.
 | ID | Class | Title |
 |---|---|---|
 | [RUST-BUG-001](items/RUST-BUG-001.md) | Bug | Eliminate kad_swarm CI isolation debt |
-| [RUST-BUG-114](items/RUST-BUG-114.md) | Bug | Enforce an explicit maximum upload-slot ceiling and clarify maxUploadSlots semantics |
 | [RUST-FEAT-025](items/RUST-FEAT-025.md) | Feature | Validate conformant duplicate-block rejection diagnostics |
 | [RUST-FEAT-038](items/RUST-FEAT-038.md) | Feature | Add current-aMule-style endgame source takeover |
 | [RUST-FEAT-039](items/RUST-FEAT-039.md) | Feature | Size ED2K request depth from measured RTT and bandwidth |
