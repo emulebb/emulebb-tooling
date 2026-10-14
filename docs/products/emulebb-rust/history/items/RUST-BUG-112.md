@@ -5,7 +5,7 @@ product: emulebb-rust
 phase: Phase 1
 github_issue: https://github.com/emulebb/emulebb-rust/issues/79
 title: Centralize offerfiles_v policy by ED2K server-session role
-status: OPEN
+status: DONE
 priority: Minor
 category: bug
 labels: [rust, ed2k, server, login, parity, fingerprint]
@@ -29,16 +29,17 @@ emerging independently at each call site.
 
 ## Current State
 
-- `crates/emulebb-ed2k/src/ed2k_server/session_driver.rs:120-121` builds
-  `ServerLoginCapabilities { offer_files_v1: context.offer_files_capability_enabled }`.
-- `crates/emulebb-ed2k/src/ed2k_server/active_keyword.rs:459`,
-  `crates/emulebb-ed2k/src/ed2k_server/active_source.rs:213` (also `:230`), and
-  `crates/emulebb-ed2k/src/ed2k_server/active_callback.rs:71` call
-  `encode_login_request(..., ServerLoginCapabilities::default())`, where the
-  derived `Default` leaves `offer_files_v1 = false`.
-- Only the background session runs the two-second server-ident negotiation and
-  applies a returned `OfferFilesPolicy`; the one-shot sessions never request or
-  consume the envelope.
+- `crates/emulebb-ed2k/src/ed2k_server/startup.rs` owns an explicit
+  `ServerSessionRole` for publishing, keyword-search, source-search, and
+  callback sessions; login encoding derives its tag set from that role.
+- The publishing role carries the configured `offer_files_v1_enabled` value,
+  which defaults on, and the background driver uses the same value for login
+  advertisement and capability-envelope negotiation.
+- Keyword-search, source-search, and callback roles explicitly emit the stock
+  four-tag login and cannot accidentally advertise publishing capability
+  through a defaultable capability struct.
+- An exhaustive codec test locks the tag count and `offerfiles_v` presence for
+  every role, including explicitly disabled publishing.
 
 ## Why This Matters
 
@@ -76,20 +77,33 @@ both outcomes explicit and testable.
 
 ## Acceptance Criteria
 
-- [ ] A single role-aware authority decides whether a server login carries the
+- [x] A single role-aware authority decides whether a server login carries the
       `offerfiles_v` tag.
-- [ ] The publishing session advertises the extension; keyword, source, and
+- [x] The publishing session advertises the extension; keyword, source, and
       callback sessions emit the stock four-tag login.
-- [ ] Tests assert the tag set for every server-session role and prevent a new
+- [x] Tests assert the tag set for every server-session role and prevent a new
       call site from selecting capabilities through `Default`.
 
 ## Validation
 
-- Existing server-login codec tests
-  (`crates/emulebb-ed2k/src/ed2k_server/tests/protocol.rs`) stay green; add an
-  assertion covering each session entry point.
+- `python tools/rust_quality_gate.py fmt`
+- `python tools/rust_quality_gate.py policy` (108 policy tests passed)
+- `python tools/rust_quality_gate.py diagnostics`
+- `python tools/rust_quality_gate.py clippy`
+- Workspace-orchestrated `emulebb-ed2k` tests (1,049 passed) and
+  `emulebb-core` unit/integration tests (400 unit tests plus all integration
+  suites) passed in Debug configuration.
+- PR #108 required CI passed on Windows, macOS, and Ubuntu; live REST/OpenAPI
+  conformance and required CodeQL passed. Its first two Ubuntu attempts exposed
+  an unrelated concurrent-reload race in `native_path_shared_dir`; test-only
+  PR #109 serialized that setup and passed all required gates before #108 was
+  rebased and revalidated.
 
 ## Notes
 
 Depends on the RUST-REF-015 disposition. Related constant consolidation is
 tracked by RUST-REF-011.
+
+- Completed on 2026-10-14 by emulebb-rust PR #108 in preserved commits
+  `a823bc6b` and `4fcd5c10`.
+- GitHub issue #79 is closed and the eMuleBB Roadmap item is Done.
