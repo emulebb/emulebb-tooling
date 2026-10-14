@@ -3776,10 +3776,11 @@ components:
           type: integer
           minimum: 1
           maximum: 4294967295
-        maxUploadSlots:
+        baseUploadSlots:
           type: integer
           minimum: 1
           maximum: 64
+          description: Baseline active upload slots; sustained underfill may expand the total active slots up to 128.
         uploadSlotElasticPercent:
           type: integer
           minimum: 0
@@ -3832,10 +3833,11 @@ components:
           type: integer
           minimum: 1
           maximum: 4294967295
-        maxUploadSlots:
+        baseUploadSlots:
           type: integer
           minimum: 1
           maximum: 64
+          description: Baseline active upload slots; sustained underfill may expand the total active slots up to 128.
         uploadSlotElasticPercent:
           type: integer
           minimum: 0
@@ -4152,7 +4154,7 @@ components:
       type: object
       additionalProperties: false
       properties:
-        activeSlots:
+        baseSlots:
           type: integer
           minimum: 1
           maximum: 64
@@ -4193,7 +4195,7 @@ components:
       additionalProperties: false
       minProperties: 1
       properties:
-        activeSlots:
+        baseSlots:
           type: integer
           minimum: 1
           maximum: 64
