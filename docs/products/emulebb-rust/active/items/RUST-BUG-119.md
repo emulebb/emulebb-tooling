@@ -69,7 +69,7 @@ Those are release-blocking reliability risks for a headless beta client.
 - `crates/emulebb-ed2k/src/ed2k_server/server_description_poll.rs`
 - `crates/emulebb-core/src/network_api.rs`
 - `crates/emulebb-core/src/ed2k_net_drivers.rs`
-- `crates/emulebb-core/src/reachability.rs`
+- `crates/emulebb-ed2k/src/reachability.rs`
 
 ## Intended Shape
 
@@ -105,7 +105,7 @@ Those are release-blocking reliability risks for a headless beta client.
 
 - [x] Reconnect-disabled runtimes remain commandable, accurately report idle
       state, and honor a later explicit connect without full runtime restart.
-- [ ] Server-session loss and explicit disconnect invalidate server-learned
+- [x] Server-session loss and explicit disconnect invalidate server-learned
       identity; NAT mapping loss invalidates mapped ports; focused tests prove
       stale reachability cannot seed later subsystems.
 - [ ] Parallel connection attempts isolate mutable pre-commit state and only
@@ -126,6 +126,16 @@ Those are release-blocking reliability risks for a headless beta client.
   directed connection.
 - `cargo fmt --all -- --check` passed for `143cd3f8`.
 - `python -m emule_workspace test rust-unit --package emulebb-ed2k --config Debug --build-output-mode ErrorsOnly` passed for `143cd3f8`: 1,057 unit tests and 0 doc-test failures.
+- Rust commit `4ad0c35b` separates server and fallback public-IP evidence,
+  refreshes fallback evidence independently, and makes each NAT snapshot revoke
+  mappings that disappeared or became invalid.
+- Rust commit `0cbeb48a` invalidates server evidence whenever a serial or
+  parallel server session retires, preserves independent fallback/NAT/Kad
+  evidence during server-only disconnect, and clears all reachability only
+  after full-runtime task cancellation and NAT shutdown.
+- `cargo fmt --all -- --check` passed for the reachability lifecycle slice.
+- `python -m emule_workspace test rust-unit --package emulebb-ed2k --config Debug --build-output-mode ErrorsOnly` passed for `0cbeb48a`: 1,058 unit tests and 0 doc-test failures.
+- `python -m emule_workspace test rust-unit --package emulebb-core --config Debug --build-output-mode ErrorsOnly` passed for `0cbeb48a`: 404 unit tests plus all enabled integration and doc-test suites.
 - Add focused deterministic tests at each ownership boundary before or with its
   implementation commit.
 - Run `python -m emule_workspace test rust-unit --package emulebb-ed2k --config Debug --build-output-mode ErrorsOnly` after ED2K slices.
