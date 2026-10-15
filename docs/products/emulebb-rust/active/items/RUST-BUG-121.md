@@ -137,6 +137,9 @@ make REST status disagree with live sockets and advertised wire identity.
   server-only disconnect an awaitable retirement barrier.
 - Record each validated Rust commit and focused test result here before moving
   to the next slice.
+- `bbce3b2c` makes NAT stop abort and await its reconcile worker before mapping
+  release, with final-owner drop as an abort safety net. Validation: all 1,065
+  `emulebb-ed2k` unit tests and doc tests passed through the workspace harness.
 
 ## Notes
 
