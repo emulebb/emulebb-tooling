@@ -149,8 +149,16 @@ Those are release-blocking reliability risks for a headless beta client.
 - Rust commit `0c04aa1f` makes server metadata polling consume live plan and
   session generations, discard superseded transaction events, stop promptly on
   plan/session/runtime retirement, and join its task at runtime shutdown.
+- Rust commit `39c4a484` applies the Clippy-required aggregate initializer to
+  the metadata polling test fixture without changing runtime behavior.
 - `cargo fmt --all -- --check` passed for `0c04aa1f`.
 - `python -m emule_workspace test rust-unit --package emulebb-ed2k --config Debug --build-output-mode ErrorsOnly` passed for `0c04aa1f`: 1,061 unit tests and 0 doc-test failures.
+- `python tools/rust_quality_gate.py ci` passed at Rust head `39c4a484`:
+  policy and 111 policy tests, rustfmt, workspace Clippy with warnings denied,
+  diagnostics build, 28 WebUI unit tests, 16 Playwright tests, production WebUI
+  build, fresh debug/release workspace and diagnostics builds, all workspace
+  unit/integration/doc tests, and 3 observed-egress VPN leak tests.
+- Protected-main implementation PR: https://github.com/emulebb/emulebb-rust/pull/120
 - Add focused deterministic tests at each ownership boundary before or with its
   implementation commit.
 - Run `python -m emule_workspace test rust-unit --package emulebb-ed2k --config Debug --build-output-mode ErrorsOnly` after ED2K slices.
