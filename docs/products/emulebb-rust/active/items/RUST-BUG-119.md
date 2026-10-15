@@ -103,7 +103,7 @@ Those are release-blocking reliability risks for a headless beta client.
 
 ## Acceptance Criteria
 
-- [ ] Reconnect-disabled runtimes remain commandable, accurately report idle
+- [x] Reconnect-disabled runtimes remain commandable, accurately report idle
       state, and honor a later explicit connect without full runtime restart.
 - [ ] Server-session loss and explicit disconnect invalidate server-learned
       identity; NAT mapping loss invalidates mapped ports; focused tests prove
@@ -120,6 +120,12 @@ Those are release-blocking reliability risks for a headless beta client.
 
 ## Validation
 
+- Rust commit `143cd3f8` keeps serial and parallel reconnect-disabled loops
+  alive for explicit plan/reconnect commands. Deterministic tests cover an
+  established session drop and exhausted parallel attempts before a later
+  directed connection.
+- `cargo fmt --all -- --check` passed for `143cd3f8`.
+- `python -m emule_workspace test rust-unit --package emulebb-ed2k --config Debug --build-output-mode ErrorsOnly` passed for `143cd3f8`: 1,057 unit tests and 0 doc-test failures.
 - Add focused deterministic tests at each ownership boundary before or with its
   implementation commit.
 - Run `python -m emule_workspace test rust-unit --package emulebb-ed2k --config Debug --build-output-mode ErrorsOnly` after ED2K slices.
