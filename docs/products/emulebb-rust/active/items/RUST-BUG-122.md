@@ -1,0 +1,247 @@
+---
+id: RUST-BUG-122
+workflow: github
+github_issue: https://github.com/emulebb/emulebb-rust/issues/125
+title: Make completed-download delivery isolated and transactional
+status: OPEN
+priority: Critical
+category: bug
+labels: [rust, ed2k, persistence, filesystem, lifecycle, beta]
+product: emulebb-rust
+phase: Phase 1
+milestone: rust-v0.1.0-beta.3
+created: 2026-10-15
+source: 2026-10-15 Beta 3 completed-download delivery audit after RUST-BUG-121
+---
+
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb-rust/issues/125. This local document is retained as the durable engineering spec and evidence record.
+
+# RUST-BUG-122 - Make completed-download delivery isolated and transactional
+
+## Summary
+
+Make the transition from a verified hash-named piece store to an
+operator-facing completed file one isolated, persisted lifecycle transaction.
+The verified payload, delivered file, SQLite row, REST view, retry worker, row
+removal, and destructive deletion must agree across ordinary edits, restarts,
+concurrent control requests, and power loss.
+
+This is focused Beta 3 stabilization work. Schema, API, configuration, and
+internal ownership boundaries may break where that produces a coherent
+long-term model instead of preserving the current hybrid behavior.
+
+## Product Boundary
+
+The Rust product is a headless local eD2K/Kad client, not an indexer or remote
+coordinator. Its completed-download contract is therefore fundamental:
+
+- bytes accepted under an ED2K hash must remain authoritative for upload;
+- users must receive a normal file in Incoming or the selected category;
+- REST state must describe persisted reality after restart;
+- retries and removal must never strand the only usable copy or leave an
+  untracked file after reporting success.
+
+The current same-volume hard-link optimization crosses the trust boundary
+between the immutable verified store and mutable operator-owned content.
+
+## Confirmed Critical Defects
+
+### Writable delivery aliases verified upload authority
+
+- `deliver_payload_file` hard-links `pieces.bin` into the destination when both
+  paths are on one volume.
+- Upload serving later reads the retained hash-named piece store and trusts its
+  persisted verified ranges without rehashing each read.
+- Editing, truncating, tagging, or repairing the delivered file therefore
+  mutates the same inode and can make the client upload changed bytes under the
+  old ED2K hash.
+- Cross-volume delivery already has independent-copy semantics, so behavior
+  also changes based only on storage topology.
+
+### Missing or corrupt source can be committed as delivered
+
+- An absent `pieces.bin` is treated as the zero-byte special case without first
+  requiring `expected_size == 0`.
+- A newly installed hard link or copy is accepted without validating its size
+  and ED2K hash; verification is used only when adopting an already-existing
+  collision candidate.
+- A missing non-empty source can therefore create an empty completed file, and
+  a truncated or externally modified source can be committed as delivered.
+
+### Persisted completed transfers disappear after restart
+
+- Startup hydration intentionally skips completed manifests and initializes the
+  in-memory transfer map empty.
+- Transfer listing and bulk clear walk only that in-memory map, while direct
+  lookup lazily hydrates a persisted row.
+- Immediately after restart, a completed transfer is absent and bulk clear is a
+  successful no-op; looking it up by hash makes it appear in later list calls.
+
+### Recorded delivered paths are neither verified nor retried
+
+- A recorded path is accepted as `AlreadyDelivered` when any filesystem object
+  exists there; regular-file type, size, fingerprint, and hash are not checked.
+- The production retry selector includes only rows whose delivered path is
+  null, so a deleted, moved, replaced, symlinked, or directory occupant is never
+  reconciled after restart.
+- Public state derives `completed` from the stored path, not filesystem reality.
+
+### Delivery races destructive deletion
+
+- Delivery has its own lock but drops the manifest lock while copying and
+  installing the destination.
+- Destructive deletion does not acquire the delivery lock. It reads the old
+  delivered path, removes visible/internal storage, and removes the SQLite row
+  as separate operations.
+- A concurrent large delivery can install its destination after deletion saw no
+  delivered path, then fail its phase-two manifest reload. The delete request
+  reports success while an untracked operator-facing file remains.
+- A crash after filesystem deletion but before SQLite deletion leaves a
+  completed catalog row with neither internal nor delivered authority.
+
+### Row-only removal can permanently suppress delivery
+
+- Failed delivery leaves a verified transfer in `completing`.
+- Row removal checks only the manifest's whole-file completion bit, marks the
+  row removed, and does not require a reconciled delivered file.
+- Retry selection excludes removed rows, so a direct REST delete can permanently
+  hide a completed download whose only remaining copy is internal `pieces.bin`.
+
+### Filesystem and SQLite durability are misordered
+
+- Delivery syncs copied file contents and the pending-intent file, but does not
+  sync parent directories after link/create/rename or intent replacement.
+- SQLite uses WAL with `synchronous=FULL` and can durably commit
+  `delivered_path` before the destination directory entry is durable.
+- The inverse crash window can preserve an unrecorded destination while losing
+  the intent, causing retry to create a suffixed duplicate.
+
+## Confirmed Major Gaps
+
+- Completed-manifest rewrites refresh `completed_at_ms` and download-history
+  completion time even when no incomplete-to-complete transition occurred.
+- Failure to delete `delivery.pending` is returned after the manifest commit as
+  a delivery failure, while retry selection excludes the now-delivered row.
+- Process termination can leave full-size `.ed2k-delivering-*` sibling files;
+  no startup reconciliation owns or removes them.
+- Cross-volume `tempfile` creation can publish a different Unix permission mode
+  than same-volume delivery. Output permissions have no explicit product rule.
+- Relative Incoming paths remain anchored to process working directory and can
+  redirect future completed files after a service-layout change.
+- Destination directory identity is not held across check and install, leaving
+  a local symlink/junction replacement race in writable parent directories.
+
+The first three major gaps belong to this item's persisted lifecycle work. Path
+normalization, output permission policy, and directory-handle hardening remain
+retained audit findings but must not broaden the first critical repair slices.
+
+## Representative Sites
+
+- `crates/emulebb-ed2k/src/ed2k_transfer/deliver.rs`
+- `crates/emulebb-ed2k/src/ed2k_transfer/piece_store.rs`
+- `crates/emulebb-ed2k/src/ed2k_transfer/metadata.rs`
+- `crates/emulebb-core/src/delivery.rs`
+- `crates/emulebb-core/src/disk_guard.rs`
+- `crates/emulebb-core/src/transfer_control_api.rs`
+- `crates/emulebb-core/src/transfer_create_api.rs`
+- `crates/emulebb-core/src/transfer_state_api.rs`
+- `crates/emulebb-core/src/views.rs`
+- `crates/emulebb-metadata/src/transfer_store.rs`
+- `crates/emulebb-metadata/src/download_history_store.rs`
+- `crates/emulebb-daemon/src/lib.rs`
+- `crates/emulebb-rest/src/handlers/transfers.rs`
+
+## Intended Shape
+
+- Keep the hash-named piece store as immutable verified upload authority.
+  Materialize an independent copy, or a copy-on-write clone with proven write
+  isolation; never expose a writable hard-link alias.
+- Reserve delivery capacity according to the actual materialization contract.
+  An always-copy design reserves one additional payload even on the same volume.
+- Distinguish a legitimate zero-byte payload from missing internal storage and
+  validate source plus installed output before persisted state advances.
+- Persist explicit delivery and deletion lifecycle state instead of inferring
+  authority from nullable path fields and in-memory retry errors.
+- Reconcile persisted non-removed rows on startup before publishing the transfer
+  view. List, direct lookup, retry, and clear must not depend on call order.
+- Use one per-transfer lifecycle gate for delivery, output reconciliation, row
+  removal, and destructive deletion.
+- Persist destructive intent before removing either filesystem authority, then
+  recover or complete the operation deterministically after restart.
+- Sync filesystem namespace commits before the corresponding SQLite transition.
+  Post-commit intent cleanup is best-effort, observable, and retryable.
+- Preserve completion timestamps across metadata-only rewrites and delivery;
+  set them only on an actual incomplete-to-complete transition.
+
+## Ordered Implementation Slices
+
+1. **Payload isolation and validation** — add failing alias/missing-source tests,
+   replace hard-link delivery with isolated atomic materialization, update disk
+   reservation, and validate installed bytes before commit.
+2. **Persisted completed visibility** — make listing and bulk-clear operate on
+   persisted non-removed transfers with deterministic startup semantics, while
+   preserving bounded large-library behavior.
+3. **Delivery reconciliation state** — introduce explicit persisted delivery
+   state, verify recorded outputs, retry missing/mismatched destinations, and
+   reclaim owned stale temporary artifacts.
+4. **Lifecycle serialization** — use one per-transfer gate and a persisted
+   deletion intent across delivery, row removal, and destructive deletion.
+5. **Durability ordering** — add directory-sync barriers and deterministic
+   failpoints for intent, destination, manifest, and deletion transitions.
+6. **Temporal correctness** — preserve completion/history timestamps across
+   non-transition manifest updates and make post-commit cleanup non-reversing.
+
+Each slice lands as its own Rust commit with focused tests. Do not combine the
+schema/state-machine change with unrelated path-policy or UI work.
+
+## Acceptance Criteria
+
+- [ ] User edits to a delivered file cannot change bytes served from the
+      verified piece store.
+- [ ] Missing, truncated, or corrupt internal payloads fail delivery without
+      creating or committing a false completed output.
+- [ ] Installed output is a verified regular file before persisted state moves
+      to delivered.
+- [ ] Restarted list, direct lookup, retry, and bulk clear are independent of
+      endpoint call order.
+- [ ] Missing or mismatched recorded outputs enter deterministic reconciliation
+      rather than remaining falsely completed.
+- [ ] Row removal cannot suppress delivery of a verified-but-undelivered file.
+- [ ] Delivery and destructive deletion serialize and recover without orphan
+      output, hidden-only success, or a row whose authorities are both absent.
+- [ ] Filesystem namespace durability precedes SQLite advancement at every
+      cross-domain commit boundary supported by the platform.
+- [ ] Owned stale copy/intention artifacts are reclaimed without touching
+      unrelated user files.
+- [ ] Completion and history timestamps change only on a true completion
+      transition.
+- [ ] The canonical Rust quality gate and protected-main CI pass.
+
+## Validation Plan
+
+- Runtime tests for hard-link mutation isolation, zero-byte versus missing
+  non-empty sources, truncated sources, installed-output verification, and
+  collision no-clobber behavior.
+- Core/metadata restart tests for completed listing, direct lookup, bulk clear,
+  pending retries, removed rows, and timestamp preservation.
+- Deterministic paused-task tests for delivery versus row removal and destructive
+  deletion, including failure between filesystem and SQLite transitions.
+- Failpoint/process-boundary tests for pending intent, destination rename,
+  directory sync, manifest commit, cleanup, and deletion recovery.
+- Platform coverage for Windows long paths and Unix directory durability; real
+  cross-volume coverage where the workspace harness provides it.
+
+## Audit Evidence
+
+- Existing tests cover sanitization, collision suffixing, same-process delivery
+  concurrency, empty downloads, long paths, and direct intent adoption.
+- Existing restart delivery coverage calls materialization directly and bypasses
+  the production retry selector.
+- Existing deletion coverage is sequential, completed-clear coverage uses a
+  same-process in-memory store, and current history tests accept timestamp
+  refresh after metadata-only rewrites.
+- No existing GitHub issue matched delivery hard-link aliasing, completing-row
+  removal, or persisted delivery reconciliation when this item was created.
+
+Start with payload isolation and validation. It removes the direct wire-data
+integrity violation before the broader persisted state-machine work.
