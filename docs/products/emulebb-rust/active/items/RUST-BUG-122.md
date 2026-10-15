@@ -339,13 +339,31 @@ schema/state-machine change with unrelated path-policy or UI work.
   deletion transaction was factored through one shared known-file cleanup path.
   Validation: `cargo fmt --all --check` and all 49 `emulebb-metadata` tests plus
   doc tests passed through the workspace harness.
+- `44fdbb06` makes a pending destructive deletion a terminal visibility
+  partition instead of an ordinary transfer state. Normal manifest, startup
+  hydration, transfer timestamp/count, completed catalog, publish, share,
+  share-in-place reload, delivered-reuse, and delivery-reconciliation queries
+  now suppress intent-marked rows; one explicit deletion-only manifest read is
+  retained for recovery. Full manifest rewrites and piece checkpoints cannot
+  mutate an intent-marked transfer, and ED2K job creation or explicit
+  replacement acquires the lifecycle gate and rejects recreation while intent
+  is pending. Regressions cover every metadata surface, duplicate shared-source
+  reload, and both runtime recreation paths. Validation: `cargo fmt --all
+  --check`, all 49 `emulebb-metadata` tests, all 1,083 `emulebb-ed2k` tests,
+  `cargo check --workspace`, all 413 `emulebb-core` unit tests, and every core
+  integration/doc test passed. The existing shared-directory persistence
+  binary still exposes a parallel-only SQLite lock flake in its default test
+  runner; its seven tests pass with `--test-threads=1`, and the failing case
+  passes in isolation.
 
 Payload isolation, validation, persisted completed-transfer visibility, the
 explicit delivery state model, and startup output reconciliation are complete.
 In-process lifecycle serialization and the verified-but-undelivered removal
 rule are also complete. Continue with schema 35 persisted destructive-deletion
-intent integration: suppress pending deletions from every active/catalog view,
-then add identity-safe intent-first cleanup and pre-hydration startup recovery.
-Until runtime deletion uses the new intent, crashes between visible-file
-removal, internal payload removal, and SQLite deletion can still reverse a user
-delete or leave a permanently `completing` transfer with no byte authority.
+intent integration: the normal/runtime visibility partition is complete. Next
+extract one shared delivered-output identity verifier, then use it for
+identity-safe intent-first cleanup and pre-hydration startup recovery. Until
+runtime deletion uses the intent and recovery path, crashes between
+visible-file removal, internal payload removal, and SQLite deletion can still
+reverse a user delete or leave a permanently `completing` transfer with no
+byte authority.
