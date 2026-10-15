@@ -108,12 +108,12 @@ Those are release-blocking reliability risks for a headless beta client.
 - [x] Server-session loss and explicit disconnect invalidate server-learned
       identity; NAT mapping loss invalidates mapped ports; focused tests prove
       stale reachability cannot seed later subsystems.
-- [ ] Parallel connection attempts isolate mutable pre-commit state and only
+- [x] Parallel connection attempts isolate mutable pre-commit state and only
       the selected winner can publish identity, startup side effects, callbacks,
       catalog work, or responder consumption.
-- [ ] Live-plan cancellation completes session cleanup and preserves the
+- [x] Live-plan cancellation completes session cleanup and preserves the
       documented retryable-interruption semantics for claimed background work.
-- [ ] Server-description polling follows live plan generations, handles server
+- [x] Server-description polling follows live plan generations, handles server
       mutations, and terminates with the owning runtime.
 - [ ] Focused ED2K and core suites pass after every slice, followed by the
       repository's required broader validation before merge.
@@ -136,6 +136,21 @@ Those are release-blocking reliability risks for a headless beta client.
 - `cargo fmt --all -- --check` passed for the reachability lifecycle slice.
 - `python -m emule_workspace test rust-unit --package emulebb-ed2k --config Debug --build-output-mode ErrorsOnly` passed for `0cbeb48a`: 1,058 unit tests and 0 doc-test failures.
 - `python -m emule_workspace test rust-unit --package emulebb-core --config Debug --build-output-mode ErrorsOnly` passed for `0cbeb48a`: 404 unit tests plus all enabled integration and doc-test suites.
+- Rust commit `218d9611` gives parallel server attempts private pre-activation
+  state. A deterministic loser-injection test proves that only the selected
+  winner publishes login identity and server-list side effects.
+- `cargo fmt --all -- --check` passed for `218d9611`.
+- `python -m emule_workspace test rust-unit --package emulebb-ed2k --config Debug --build-output-mode ErrorsOnly` passed for `218d9611`: 1,059 unit tests and 0 doc-test failures.
+- Rust commit `446e4e35` adds cooperative per-session cancellation and completes
+  retryable interruption for claimed responder work before a superseding live
+  plan starts its replacement session.
+- `cargo fmt --all -- --check` passed for `446e4e35`.
+- `python -m emule_workspace test rust-unit --package emulebb-ed2k --config Debug --build-output-mode ErrorsOnly` passed for `446e4e35`: 1,060 unit tests and 0 doc-test failures.
+- Rust commit `0c04aa1f` makes server metadata polling consume live plan and
+  session generations, discard superseded transaction events, stop promptly on
+  plan/session/runtime retirement, and join its task at runtime shutdown.
+- `cargo fmt --all -- --check` passed for `0c04aa1f`.
+- `python -m emule_workspace test rust-unit --package emulebb-ed2k --config Debug --build-output-mode ErrorsOnly` passed for `0c04aa1f`: 1,061 unit tests and 0 doc-test failures.
 - Add focused deterministic tests at each ownership boundary before or with its
   implementation commit.
 - Run `python -m emule_workspace test rust-unit --package emulebb-ed2k --config Debug --build-output-mode ErrorsOnly` after ED2K slices.
