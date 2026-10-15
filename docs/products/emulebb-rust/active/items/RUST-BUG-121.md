@@ -155,6 +155,11 @@ make REST status disagree with live sockets and advertised wire identity.
   descendant drainage, then aborts and still joins as a bounded fallback before
   clearing runtime state. Validation: all 407 `emulebb-core` unit tests plus its
   integration and doc tests passed, including barrier and timeout tests.
+- `86572bc0` introduces non-clonable runtime/server reachability leases and
+  cloneable generation-fenced writers. Old runtime and server writers now have
+  explicit `RejectedStale` outcomes and cannot overwrite or clear a newer
+  generation in focused tests. Validation: all 1,069 `emulebb-ed2k` unit tests
+  and doc tests passed.
 
 ## Notes
 
