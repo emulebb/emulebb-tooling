@@ -166,6 +166,12 @@ make REST status disagree with live sockets and advertised wire identity.
   writers; rollback also proves its retained writer becomes `RejectedStale`.
   Validation: all 407 `emulebb-core` unit tests plus its integration and doc
   tests passed through the workspace harness.
+- `217de406` allocates one pending reachability lease per server attempt and
+  activates only the selected serial or parallel session. Packet processing
+  receives the attempt-scoped writer directly; retirement revokes publication
+  before cancellation, and a parallel-winner test proves server evidence is
+  cleared after the owned session drains. Validation: all 1,069
+  `emulebb-ed2k` unit tests and doc tests passed through the workspace harness.
 
 ## Notes
 
