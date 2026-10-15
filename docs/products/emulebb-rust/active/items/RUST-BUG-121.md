@@ -184,6 +184,12 @@ make REST status disagree with live sockets and advertised wire identity.
   `emulebb-core` unit tests plus integration/doc tests, and all 117
   `emulebb-rest` unit tests plus contract/doc tests passed through the workspace
   harness.
+- `940d59e2` removes every unfenced mutation method from
+  `ExternalReachability`. Production and test code must now publish through a
+  runtime- or server-generation writer, while the shared handle exposes only
+  coherent reads and runtime-generation creation. Validation: all 1,072
+  `emulebb-ed2k` tests and all 408 `emulebb-core` unit tests plus integration
+  and doc tests passed through the workspace harness.
 
 ## Notes
 
