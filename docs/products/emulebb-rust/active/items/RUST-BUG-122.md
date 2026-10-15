@@ -364,14 +364,26 @@ schema/state-machine change with unrelated path-policy or UI work.
   primitive needed to delete only the recorded file still owned by the
   transfer. Validation: `cargo fmt --all --check` and all 1,084
   `emulebb-ed2k` tests plus doc tests passed.
+- `0421e046` makes the durable deletion intent the operation's commit point.
+  The ED2K runtime now persists intent under the lifecycle and manifest gates
+  before touching either filesystem authority, immediately evicts manifest and
+  catalog visibility, and finalizes SQLite only after cleanup. Matching or
+  missing recorded outputs are removed/accepted, while a foreign replacement
+  is preserved. Any cleanup or finalization failure leaves the terminal intent
+  hidden and retryable instead of reversing the user's deletion; repeated
+  cleanup resumes from the deletion-only manifest reader. Regressions cover the
+  lifecycle gate, both-authority removal, foreign-file preservation, restart
+  resumption, and a forced mid-cleanup failure followed by idempotent retry.
+  Validation: `cargo fmt --all --check`, all 1,087 `emulebb-ed2k` tests plus doc
+  tests, and the three focused `emulebb-core` destructive-deletion tests passed.
 
 Payload isolation, validation, persisted completed-transfer visibility, the
 explicit delivery state model, and startup output reconciliation are complete.
 In-process lifecycle serialization and the verified-but-undelivered removal
 rule are also complete. Continue with schema 35 persisted destructive-deletion
-intent integration: the normal/runtime visibility partition and shared output
-identity classifier are complete. Next use that classifier for identity-safe
-intent-first cleanup, then add pre-hydration startup recovery. Until runtime
-deletion uses the intent and recovery path, crashes between visible-file
-removal, internal payload removal, and SQLite deletion can still reverse a user
-delete or leave a permanently `completing` transfer with no byte authority.
+intent integration: the normal/runtime visibility partition, shared output
+identity classifier, and intent-first retryable cleanup are complete. Next add
+pre-hydration startup recovery so no REST/network surface opens before every
+persisted deletion intent has been resumed. Until that startup barrier lands, a
+crash can leave cleanup pending and hidden indefinitely unless another runtime
+deletion call explicitly retries the hash.
