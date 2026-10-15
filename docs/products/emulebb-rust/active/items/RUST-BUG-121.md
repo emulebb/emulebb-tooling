@@ -150,6 +150,11 @@ make REST status disagree with live sockets and advertised wire identity.
   and cooperatively cancels and joins every parallel loser on all normal exits.
   A forced outer-abort test proves descendant sockets close. Validation: all
   1,067 `emulebb-ed2k` unit tests and doc tests passed.
+- `2b2eb329` makes the installed runtime own the server supervisor separately.
+  Full disconnect signals shutdown, waits up to two seconds for cooperative
+  descendant drainage, then aborts and still joins as a bounded fallback before
+  clearing runtime state. Validation: all 407 `emulebb-core` unit tests plus its
+  integration and doc tests passed, including barrier and timeout tests.
 
 ## Notes
 
