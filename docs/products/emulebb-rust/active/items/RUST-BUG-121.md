@@ -140,6 +140,11 @@ make REST status disagree with live sockets and advertised wire identity.
 - `bbce3b2c` makes NAT stop abort and await its reconcile worker before mapping
   release, with final-owner drop as an abort safety net. Validation: all 1,065
   `emulebb-ed2k` unit tests and doc tests passed through the workspace harness.
+- `358b820a` owns pre-install NAT and reachability in an explicit startup
+  candidate. Required NAT errors and every later interface, Kad, or TCP-bind
+  failure now clear candidate publications, stop and join NAT, and release the
+  selected mapping before returning the original error. Validation: all 405
+  `emulebb-core` unit tests plus its integration and doc tests passed.
 
 ## Notes
 
