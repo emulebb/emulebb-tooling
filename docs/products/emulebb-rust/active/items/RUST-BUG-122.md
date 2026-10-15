@@ -202,7 +202,7 @@ schema/state-machine change with unrelated path-policy or UI work.
       creating or committing a false completed output.
 - [x] Installed output is a verified regular file before persisted state moves
       to delivered.
-- [ ] Restarted list, direct lookup, retry, and bulk clear are independent of
+- [x] Restarted list, direct lookup, retry, and bulk clear are independent of
       endpoint call order.
 - [ ] Missing or mismatched recorded outputs enter deterministic reconciliation
       rather than remaining falsely completed.
@@ -264,6 +264,17 @@ schema/state-machine change with unrelated path-policy or UI work.
   truncated source, a wrong installed hash, manifest non-advancement, and
   cleanup of the rejected destination. Validation: all 1,076 `emulebb-ed2k`
   tests and doc tests passed through the workspace harness.
+- `cc528ca7` completes the persisted completed-transfer visibility slice. The
+  metadata/runtime boundary now exposes only non-removed transfer-list
+  manifests, excluding the potentially 100k-entry completed shared catalog.
+  Core hydrates those rows through one idempotent barrier shared by list,
+  direct lookup, startup resume, and bulk clear; the daemon completes hydration
+  before opening REST. A restart regression proves a delivered transfer is
+  listed without a prior hash lookup, can be bulk-cleared from a fresh core,
+  preserves its operator file, and remains absent after another restart.
+  Validation: all 48 `emulebb-metadata` tests, all 1,076 `emulebb-ed2k` tests,
+  all 411 `emulebb-core` unit tests plus integration/doc tests, and all 70
+  `emulebb-daemon` tests plus doc tests passed through the workspace harness.
 
-Payload isolation and validation are complete. Continue with persisted
-completed-transfer visibility before the broader delivery state-machine work.
+Payload isolation, validation, and persisted completed-transfer visibility are
+complete. Continue with explicit delivery reconciliation state.
