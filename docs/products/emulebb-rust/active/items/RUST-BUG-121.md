@@ -190,6 +190,13 @@ make REST status disagree with live sockets and advertised wire identity.
   coherent reads and runtime-generation creation. Validation: all 1,072
   `emulebb-ed2k` tests and all 408 `emulebb-core` unit tests plus integration
   and doc tests passed through the workspace harness.
+- `0d85ea45` separates the root `ReachabilityRuntimeAuthority` from cloneable
+  `ExternalReachability` readers. Only the private core lifecycle authority can
+  create or replace runtime generations; reader handles have no constructor,
+  default, mutation, or generation-creation path. The workspace-wide all-target
+  check passed, followed by all 1,072 `emulebb-ed2k` tests and all 408
+  `emulebb-core` unit tests plus integration and doc tests through the workspace
+  harness.
 
 ## Notes
 
