@@ -160,6 +160,12 @@ make REST status disagree with live sockets and advertised wire identity.
   explicit `RejectedStale` outcomes and cannot overwrite or clear a newer
   generation in focused tests. Validation: all 1,069 `emulebb-ed2k` unit tests
   and doc tests passed.
+- `a246be43` installs the runtime lease through the startup transaction, stores
+  it in `Ed2kRuntime`, and retires it before full-disconnect task signaling.
+  NAT, STUN, and Kad firewall producers now receive only generation-fenced
+  writers; rollback also proves its retained writer becomes `RejectedStale`.
+  Validation: all 407 `emulebb-core` unit tests plus its integration and doc
+  tests passed through the workspace harness.
 
 ## Notes
 
