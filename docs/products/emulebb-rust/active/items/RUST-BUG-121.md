@@ -3,7 +3,7 @@ id: RUST-BUG-121
 workflow: github
 github_issue: https://github.com/emulebb/emulebb-rust/issues/123
 title: Make ED2K runtime startup and retirement transactional
-status: OPEN
+status: IN_PROGRESS
 priority: Critical
 category: bug
 labels: [rust, ed2k, lifecycle, concurrency, nat, beta]
@@ -127,6 +127,16 @@ make REST status disagree with live sockets and advertised wire identity.
 - Focused `emulebb-core` startup, disconnect, and reconnect lifecycle tests.
 - Repository formatting and Clippy checks after each implementation slice.
 - Full Rust quality gate and required protected-main CI before merge.
+
+## Implementation Progress
+
+- Active Rust branch: `fix/rust-bug-121-transactional-runtime`.
+- Slice 1: make NAT shutdown completion-aware and roll back failed startup.
+- Slice 2: make server-loop descendant ownership cancellation-safe.
+- Slice 3: fence reachability publication by runtime/server generation and make
+  server-only disconnect an awaitable retirement barrier.
+- Record each validated Rust commit and focused test result here before moving
+  to the next slice.
 
 ## Notes
 
