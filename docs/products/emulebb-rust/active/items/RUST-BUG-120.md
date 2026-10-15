@@ -82,15 +82,15 @@ UDP reasks, and deterministic teardown during beta recovery paths.
 
 ## Acceptance Criteria
 
-- [ ] Every externally visible reachability read comes from a complete state
+- [x] Every externally visible reachability read comes from a complete state
       generation rather than independent atomic fields.
-- [ ] A NAT status publishes mapped TCP and UDP ports atomically.
-- [ ] Server login and peer hello identities consume one reachability snapshot
+- [x] A NAT status publishes mapped TCP and UDP ports atomically.
+- [x] Server login and peer hello identities consume one reachability snapshot
       for all advertised ports.
-- [ ] Runtime-wide invalidation replaces the complete state atomically.
-- [ ] Tests prove precedence, clone sharing, batch NAT updates, coherent
+- [x] Runtime-wide invalidation replaces the complete state atomically.
+- [x] Tests prove precedence, clone sharing, batch NAT updates, coherent
       multi-field reads, and complete invalidation.
-- [ ] Follow-up ownership gaps found by the audit are recorded without expanding
+- [x] Follow-up ownership gaps found by the audit are recorded without expanding
       this item into a broad runtime rewrite.
 
 ## Validation
@@ -99,6 +99,20 @@ UDP reasks, and deterministic teardown during beta recovery paths.
 - Focused `emulebb-core` NAT synchronization tests.
 - Repository formatting and Clippy checks.
 - Full repository quality gate before merge.
+- Rust commit `2227d5f4` replaces split relaxed atomics with one copyable
+  `ReachabilitySnapshot` behind a synchronous lock and adds immutable-snapshot
+  regression coverage.
+- Rust commit `c2485397` removes independent NAT port setters and publishes the
+  TCP/UDP pair in one state transition from each `NatStatus` snapshot.
+- Rust commit `84c22f1c` adds the named `AdvertisedPorts` projection and migrates
+  server login, peer hello, buddy hello, global callback, self-source filtering,
+  and startup diagnostics to coherent snapshot reads.
+- `cargo fmt --all -- --check` passed after every implementation slice.
+- Focused `emulebb-ed2k` validation passed with 1,063 unit tests and no doc-test
+  failures at `84c22f1c`.
+- Focused `emulebb-core` validation passed with 404 unit tests plus all enabled
+  integration and doc-test suites at `84c22f1c`.
+- Protected-main implementation PR: https://github.com/emulebb/emulebb-rust/pull/122
 
 ## Notes
 
@@ -106,3 +120,25 @@ Implement this item in granular commits: establish the snapshot abstraction,
 then make NAT publication atomic, then migrate multi-field wire consumers. Keep
 the item updated after each validated commit so the remote branch is a durable
 recovery point.
+
+The same audit confirmed separate lifecycle defects that must follow this item
+without being folded into its state-coherence patch:
+
+- **Critical:** add runtime and selected-server-session writer epochs so retired
+  STUN, NAT, Kad, or server tasks cannot republish or clear current evidence.
+  This includes eliminating detached nested parallel server attempts and the
+  transient server-IP resurrection window during server-only disconnect.
+- **Critical:** add startup rollback ownership so a failure after NAT startup
+  cannot leave the NAT manager, gateway mappings, or advertised ports alive
+  without a successfully installed ED2K runtime.
+- **Critical:** make gateway lease deadlines authoritative, renew from actual
+  granted lifetimes, and revoke mappings after expiry or failed renewal instead
+  of preserving them indefinitely.
+- **Major:** tag Kad UDP firewall summaries and expiry with a round ID and give
+  one owner responsibility for publishing each verdict.
+- **Major:** re-login on changes to the effective `(tcp_port, udp_port)` pair,
+  including UDP-only remaps and peer-confirmation expiry, while preserving the
+  existing server-safe coalescing interval.
+- **Major:** timestamp and expire STUN fallback evidence after a bounded missed-
+  probe horizon, and explicitly decide whether trusted NAT/Kad observations may
+  become fallback public-IP producers.
