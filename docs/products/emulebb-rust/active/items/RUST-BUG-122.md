@@ -330,12 +330,22 @@ schema/state-machine change with unrelated path-policy or UI work.
   transfer visible as `completing`. Validation: `cargo fmt --all --check`, all
   1,082 `emulebb-ed2k` tests, and all 413 `emulebb-core` unit tests plus
   integration/doc tests passed through the workspace harness.
+- `bf85f467` bumps the clean-profile schema from 34 to 35 and adds a terminal
+  `delete_requested_at_ms` marker with a partial recovery index. The metadata
+  contract now has explicit idempotent request, ordered pending-intent scan,
+  and intent-gated finalization operations. Repeated requests preserve the
+  original intent/update timestamps, ordinary manifest upserts cannot clear an
+  intent, and finalization refuses an unmarked transfer. The existing metadata
+  deletion transaction was factored through one shared known-file cleanup path.
+  Validation: `cargo fmt --all --check` and all 49 `emulebb-metadata` tests plus
+  doc tests passed through the workspace harness.
 
 Payload isolation, validation, persisted completed-transfer visibility, the
 explicit delivery state model, and startup output reconciliation are complete.
 In-process lifecycle serialization and the verified-but-undelivered removal
 rule are also complete. Continue with schema 35 persisted destructive-deletion
-intent, selector suppression, identity-safe cleanup, and pre-hydration startup
-recovery. Without that intent, crashes between visible-file removal, internal
-payload removal, and SQLite deletion can still reverse a user delete or leave a
-permanently `completing` transfer with no remaining byte authority.
+intent integration: suppress pending deletions from every active/catalog view,
+then add identity-safe intent-first cleanup and pre-hydration startup recovery.
+Until runtime deletion uses the new intent, crashes between visible-file
+removal, internal payload removal, and SQLite deletion can still reverse a user
+delete or leave a permanently `completing` transfer with no byte authority.
