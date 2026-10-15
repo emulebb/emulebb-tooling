@@ -9,8 +9,9 @@ or pull requests, merges work, cleans delivery state, or creates release tags.
 - Every managed-repo commit represents one coherent outcome. Stage explicit
   paths; never use `git add -A` or `git add .` in a mixed tree, bundle unrelated
   existing edits, or push WIP/debug commits.
-- Routine work stays on the setup-selected integration branch. Short-lived
-  branches are exceptional and, when explicitly requested, use
+- Routine work targeting a protected default branch uses a short-lived topic
+  branch and pull request. Work targeting an explicitly selected unprotected
+  integration branch stays on that branch. Topic branches use
   `feature/<topic>`, `fix/<topic>`, or `chore/<topic>`. Never use `stale/*` as
   an active target without an explicit historical-comparison request.
 - Treat the end of every coherent work chunk as a mandatory commit boundary.
@@ -22,6 +23,17 @@ or pull requests, merges work, cleans delivery state, or creates release tags.
 
 ## Pull Requests And Completion
 
+- Limit each human author to one open implementation pull request per
+  repository. Before opening a pull request, list that author's open pull
+  requests against the same default branch. Finish or close the existing pull
+  request before opening another. Bot-authored dependency, security, and
+  release pull requests are exempt. A repository may define one
+  maintainer-controlled exception label for deliberately parallel work; record
+  the reason on both pull requests before applying it.
+- Do not open draft pull requests merely to retain work. An explicitly queued
+  topic branch may remain without a pull request, but it is incomplete work:
+  keep its scope disjoint from the active pull request, rebase it onto the
+  updated default branch before review, and do not report it as delivered.
 - Work performed on a non-default branch is not complete until its full
   delivery lifecycle is finished: commit coherent changes granularly, push the
   branch, open a pull request targeting `main`, resolve required checks and
