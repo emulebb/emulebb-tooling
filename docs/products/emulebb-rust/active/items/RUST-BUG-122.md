@@ -223,7 +223,7 @@ schema/state-machine change with unrelated path-policy or UI work.
       endpoint call order.
 - [x] Missing or mismatched recorded outputs enter deterministic reconciliation
       rather than remaining falsely completed.
-- [ ] Row removal cannot suppress delivery of a verified-but-undelivered file.
+- [x] Row removal cannot suppress delivery of a verified-but-undelivered file.
 - [ ] Delivery and destructive deletion serialize and recover without orphan
       output, hidden-only success, or a row whose authorities are both absent.
 - [ ] Filesystem namespace durability precedes SQLite advancement at every
@@ -318,8 +318,24 @@ schema/state-machine change with unrelated path-policy or UI work.
   --all --check`, all 48 `emulebb-metadata` tests, all 1,080 `emulebb-ed2k`
   tests, all 412 `emulebb-core` unit tests plus integration/doc tests, and all
   70 `emulebb-daemon` tests plus doc tests passed through the workspace harness.
+- `9b37e713` introduces one per-transfer lifecycle gate shared by delivery,
+  row-only removal, and destructive deletion. Destructive deletion now removes
+  the recorded delivered output inside the ED2K runtime while holding the same
+  gate as materialization, closing the in-process orphan race. Row-only removal
+  rejects a completed download whose delivery state is still `pending`, so a
+  failed or concurrent delivery cannot be hidden from retries; share-in-place
+  and fully delivered rows remain removable without deleting their files.
+  Deterministic lock-held regressions prove both removal operations wait for
+  the gate, and a core regression proves rejected row removal leaves the
+  transfer visible as `completing`. Validation: `cargo fmt --all --check`, all
+  1,082 `emulebb-ed2k` tests, and all 413 `emulebb-core` unit tests plus
+  integration/doc tests passed through the workspace harness.
 
 Payload isolation, validation, persisted completed-transfer visibility, the
 explicit delivery state model, and startup output reconciliation are complete.
-Continue with one per-transfer lifecycle gate covering delivery, row removal,
-and destructive deletion, including the verified-but-undelivered removal rule.
+In-process lifecycle serialization and the verified-but-undelivered removal
+rule are also complete. Continue with schema 35 persisted destructive-deletion
+intent, selector suppression, identity-safe cleanup, and pre-hydration startup
+recovery. Without that intent, crashes between visible-file removal, internal
+payload removal, and SQLite deletion can still reverse a user delete or leave a
+permanently `completing` transfer with no remaining byte authority.
