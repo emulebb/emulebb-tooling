@@ -145,6 +145,11 @@ make REST status disagree with live sockets and advertised wire identity.
   failure now clear candidate publications, stop and join NAT, and release the
   selected mapping before returning the original error. Validation: all 405
   `emulebb-core` unit tests plus its integration and doc tests passed.
+- `ac1a5643` replaces detachable description/parallel-session handles with
+  abort-on-drop ownership, gives pending attempts an explicit retired state,
+  and cooperatively cancels and joins every parallel loser on all normal exits.
+  A forced outer-abort test proves descendant sockets close. Validation: all
+  1,067 `emulebb-ed2k` unit tests and doc tests passed.
 
 ## Notes
 
