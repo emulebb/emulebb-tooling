@@ -173,6 +173,23 @@ retained audit findings but must not broaden the first critical repair slices.
 - Preserve completion timestamps across metadata-only rewrites and delivery;
   set them only on an actual incomplete-to-complete transition.
 
+### Persisted delivery-state model
+
+Schema version 34 stores one explicit state on every transfer:
+
+- `not_applicable` — a share-in-place file; `source_path_id` is required and
+  `delivered_path_id` is forbidden;
+- `pending` — a download whose operator-facing copy has not been committed;
+  both source and delivered paths are forbidden, including while incomplete;
+- `delivered` — a download with a committed operator-facing copy;
+  `delivered_path_id` is required and `source_path_id` is forbidden.
+
+The database CHECK constraint and metadata upsert validation enforce the same
+state/path matrix. Completion and final-rehash state are intentionally
+orthogonal: a download is pending from creation, and an operator-triggered
+rehash may temporarily clear completion without discarding a valid delivery
+record.
+
 ## Ordered Implementation Slices
 
 1. **Payload isolation and validation** — add failing alias/missing-source tests,
@@ -275,6 +292,17 @@ schema/state-machine change with unrelated path-policy or UI work.
   Validation: all 48 `emulebb-metadata` tests, all 1,076 `emulebb-ed2k` tests,
   all 411 `emulebb-core` unit tests plus integration/doc tests, and all 70
   `emulebb-daemon` tests plus doc tests passed through the workspace harness.
+- `5e640bad` introduces the explicit persisted delivery lifecycle and bumps the
+  clean-profile schema from 33 to 34. Downloads start `pending`, share-in-place
+  rows are `not_applicable`, and only a verified output committed with its path
+  becomes `delivered`. SQLite and the metadata API reject incoherent state/path
+  combinations; pending retry selection now uses the state instead of nullable
+  paths. Core and the ED2K runtime also use the state as delivery authority and
+  return a first-class `NotRequired` outcome for share-in-place files.
+  Validation: `cargo fmt --all --check`, all 48 `emulebb-metadata` tests, all
+  1,076 `emulebb-ed2k` tests, and all 411 `emulebb-core` unit tests plus
+  integration/doc tests passed through the workspace harness.
 
-Payload isolation, validation, and persisted completed-transfer visibility are
-complete. Continue with explicit delivery reconciliation state.
+Payload isolation, validation, persisted completed-transfer visibility, and the
+explicit delivery state model are complete. Continue with startup verification
+and deterministic reconciliation of recorded delivered outputs.
