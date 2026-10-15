@@ -221,7 +221,7 @@ schema/state-machine change with unrelated path-policy or UI work.
       to delivered.
 - [x] Restarted list, direct lookup, retry, and bulk clear are independent of
       endpoint call order.
-- [ ] Missing or mismatched recorded outputs enter deterministic reconciliation
+- [x] Missing or mismatched recorded outputs enter deterministic reconciliation
       rather than remaining falsely completed.
 - [ ] Row removal cannot suppress delivery of a verified-but-undelivered file.
 - [ ] Delivery and destructive deletion serialize and recover without orphan
@@ -302,7 +302,24 @@ schema/state-machine change with unrelated path-policy or UI work.
   Validation: `cargo fmt --all --check`, all 48 `emulebb-metadata` tests, all
   1,076 `emulebb-ed2k` tests, and all 411 `emulebb-core` unit tests plus
   integration/doc tests passed through the workspace harness.
+- `44cc0ba6` completes startup verification and deterministic reconciliation of
+  recorded delivered outputs. Before REST starts, the daemon now enumerates
+  every active completed download in `pending` or `delivered` state; candidate
+  discovery fails startup instead of publishing an unverified transfer view.
+  Recorded regular files with an exact safe native fingerprint take the fast
+  path, while changed, missing, coarse, or unavailable identities fall back to
+  a full canonical ED2K hash. Byte-identical replacements are adopted with a
+  refreshed fingerprint. Missing, non-file, wrong-size, wrong-hash, or
+  unverifiable outputs are first persisted back to `pending`, then re-delivered
+  through the collision-safe path; unrelated occupants remain untouched and a
+  verified suffix is selected. Failed redelivery remains visibly pending for
+  the existing retry worker. Restart and runtime regressions cover replaced,
+  missing, byte-identical, and failed-redelivery cases. Validation: `cargo fmt
+  --all --check`, all 48 `emulebb-metadata` tests, all 1,080 `emulebb-ed2k`
+  tests, all 412 `emulebb-core` unit tests plus integration/doc tests, and all
+  70 `emulebb-daemon` tests plus doc tests passed through the workspace harness.
 
-Payload isolation, validation, persisted completed-transfer visibility, and the
-explicit delivery state model are complete. Continue with startup verification
-and deterministic reconciliation of recorded delivered outputs.
+Payload isolation, validation, persisted completed-transfer visibility, the
+explicit delivery state model, and startup output reconciliation are complete.
+Continue with one per-transfer lifecycle gate covering delivery, row removal,
+and destructive deletion, including the verified-but-undelivered removal rule.
