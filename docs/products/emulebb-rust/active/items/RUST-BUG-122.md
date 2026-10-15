@@ -355,15 +355,23 @@ schema/state-machine change with unrelated path-policy or UI work.
   binary still exposes a parallel-only SQLite lock flake in its default test
   runner; its seven tests pass with `--test-threads=1`, and the failing case
   passes in isolation.
+- `43a5cfc1` extracts one conservative delivered-output identity classifier
+  shared by recorded-output reconciliation, pending-intent adoption, collision
+  handling, and installed-output verification. It distinguishes a missing path
+  from matching canonical bytes and a foreign occupant, keeps the native
+  fingerprint fast path, falls back to a full ED2K hash, and rejects identity
+  changes observed across hashing. This gives destructive cleanup the exact
+  primitive needed to delete only the recorded file still owned by the
+  transfer. Validation: `cargo fmt --all --check` and all 1,084
+  `emulebb-ed2k` tests plus doc tests passed.
 
 Payload isolation, validation, persisted completed-transfer visibility, the
 explicit delivery state model, and startup output reconciliation are complete.
 In-process lifecycle serialization and the verified-but-undelivered removal
 rule are also complete. Continue with schema 35 persisted destructive-deletion
-intent integration: the normal/runtime visibility partition is complete. Next
-extract one shared delivered-output identity verifier, then use it for
-identity-safe intent-first cleanup and pre-hydration startup recovery. Until
-runtime deletion uses the intent and recovery path, crashes between
-visible-file removal, internal payload removal, and SQLite deletion can still
-reverse a user delete or leave a permanently `completing` transfer with no
-byte authority.
+intent integration: the normal/runtime visibility partition and shared output
+identity classifier are complete. Next use that classifier for identity-safe
+intent-first cleanup, then add pre-hydration startup recovery. Until runtime
+deletion uses the intent and recovery path, crashes between visible-file
+removal, internal payload removal, and SQLite deletion can still reverse a user
+delete or leave a permanently `completing` transfer with no byte authority.
