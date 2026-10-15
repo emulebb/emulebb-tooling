@@ -196,7 +196,7 @@ schema/state-machine change with unrelated path-policy or UI work.
 
 ## Acceptance Criteria
 
-- [ ] User edits to a delivered file cannot change bytes served from the
+- [x] User edits to a delivered file cannot change bytes served from the
       verified piece store.
 - [ ] Missing, truncated, or corrupt internal payloads fail delivery without
       creating or committing a false completed output.
@@ -242,6 +242,19 @@ schema/state-machine change with unrelated path-policy or UI work.
   refresh after metadata-only rewrites.
 - No existing GitHub issue matched delivery hard-link aliasing, completing-row
   removal, or persisted delivery reconciliation when this item was created.
+
+## Progress
+
+- `578e1237` removes same-volume hard-link delivery. Every completed download is
+  now materialized through an independent temp-copy plus no-clobber install, so
+  edits to the operator-facing file cannot mutate retained verified upload
+  bytes. The aggregate disk guard now reserves the additional full payload on
+  same-volume layouts as well as cross-volume layouts. A runtime regression
+  test mutates the delivered file and proves `pieces.bin` remains unchanged; a
+  core reservation test proves an empty same-volume download reserves both the
+  piece store and delivered copy. Validation: all 1,073 `emulebb-ed2k` tests
+  and all 410 `emulebb-core` unit tests plus integration/doc tests passed through
+  the workspace harness.
 
 Start with payload isolation and validation. It removes the direct wire-data
 integrity violation before the broader persisted state-machine work.
