@@ -100,6 +100,10 @@ Detailed layout, environment-knob, setup, and automation rules are in the
 These rules bind source, tests, fixtures, docs, comments, commits, issues, and
 retained evidence:
 
+- Regardless of the language used in operator instructions, agents always work
+  and respond in English. Code, identifiers, comments, documentation, tests,
+  fixtures, diagnostics, logs, commits, and issue or pull-request text remain
+  English-only; do not mirror the operator's language.
 - Never commit credentials, cookies, private host/IP values, account data,
   personal information, or machine-specific absolute paths. Use documented
   variables and obvious synthetic placeholders.
