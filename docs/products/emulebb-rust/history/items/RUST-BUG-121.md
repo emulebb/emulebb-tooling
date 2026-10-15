@@ -3,7 +3,7 @@ id: RUST-BUG-121
 workflow: github
 github_issue: https://github.com/emulebb/emulebb-rust/issues/123
 title: Make ED2K runtime startup and retirement transactional
-status: IN_PROGRESS
+status: DONE
 priority: Critical
 category: bug
 labels: [rust, ed2k, lifecycle, concurrency, nat, beta]
@@ -211,6 +211,10 @@ make REST status disagree with live sockets and advertised wire identity.
   run encountered one unrelated Kad traversal timing failure; the complete
   125-test `emulebb-kad-dht` package passed immediately in isolation before the
   full canonical rerun passed.
+- Pull request https://github.com/emulebb/emulebb-rust/pull/124 passed all
+  protected-main CI and CodeQL requirements, including Linux, macOS, and Windows
+  build/test jobs plus live REST/OpenAPI conformance, and merged by rebase on
+  2026-10-15. Issue 123 closed automatically and its roadmap status is `Done`.
 
 ## Notes
 
