@@ -172,6 +172,18 @@ make REST status disagree with live sockets and advertised wire identity.
   before cancellation, and a parallel-winner test proves server evidence is
   cleared after the owned session drains. Validation: all 1,069
   `emulebb-ed2k` unit tests and doc tests passed through the workspace harness.
+- `a02f25f5` replaces the core-owned enabled flag and reconnect notifier with a
+  revisioned server-control channel. Server-only disconnect now disables the
+  lane, wakes its supervisor, and waits for an acknowledgment sent only after
+  the selected session has retired its reachability capability and public
+  connection state has been cleared. The wait is bounded and REST surfaces a
+  failed or timed-out retirement instead of returning a stale success. A
+  deterministic barrier test proves disconnect remains pending while server
+  evidence is live, then observes state retirement and stale-writer rejection
+  before success. Validation: all 1,072 `emulebb-ed2k` tests, all 408
+  `emulebb-core` unit tests plus integration/doc tests, and all 117
+  `emulebb-rest` unit tests plus contract/doc tests passed through the workspace
+  harness.
 
 ## Notes
 
