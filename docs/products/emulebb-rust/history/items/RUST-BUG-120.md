@@ -3,7 +3,7 @@ id: RUST-BUG-120
 workflow: github
 github_issue: https://github.com/emulebb/emulebb-rust/issues/121
 title: Publish coherent ED2K reachability snapshots
-status: IN_PROGRESS
+status: DONE
 priority: Major
 category: bug
 labels: [rust, ed2k, reachability, concurrency, nat, beta]
@@ -99,20 +99,29 @@ UDP reasks, and deterministic teardown during beta recovery paths.
 - Focused `emulebb-core` NAT synchronization tests.
 - Repository formatting and Clippy checks.
 - Full repository quality gate before merge.
-- Rust commit `2227d5f4` replaces split relaxed atomics with one copyable
+- Rust commit `1c0b2146` replaces split relaxed atomics with one copyable
   `ReachabilitySnapshot` behind a synchronous lock and adds immutable-snapshot
   regression coverage.
-- Rust commit `c2485397` removes independent NAT port setters and publishes the
+- Rust commit `794e741a` removes independent NAT port setters and publishes the
   TCP/UDP pair in one state transition from each `NatStatus` snapshot.
-- Rust commit `84c22f1c` adds the named `AdvertisedPorts` projection and migrates
+- Rust commit `cf5f6be8` adds the named `AdvertisedPorts` projection and migrates
   server login, peer hello, buddy hello, global callback, self-source filtering,
   and startup diagnostics to coherent snapshot reads.
 - `cargo fmt --all -- --check` passed after every implementation slice.
 - Focused `emulebb-ed2k` validation passed with 1,063 unit tests and no doc-test
-  failures at `84c22f1c`.
+  failures at the implementation branch head.
 - Focused `emulebb-core` validation passed with 404 unit tests plus all enabled
-  integration and doc-test suites at `84c22f1c`.
+  integration and doc-test suites at the implementation branch head.
 - Protected-main implementation PR: https://github.com/emulebb/emulebb-rust/pull/122
+- `python tools/rust_quality_gate.py ci` passed at the implementation branch
+  head: policy and 111 policy tests, rustfmt, workspace Clippy with warnings
+  denied, diagnostics, 28 WebUI unit tests, 16 Playwright tests, production
+  WebUI build, fresh debug/release workspace and diagnostics builds, all
+  workspace unit/integration/doc tests, and 3 observed-egress VPN leak tests.
+- Required CI passed on PR #122 across Linux, macOS, and Windows, including
+  policy/format/Clippy, supply-chain, CodeQL, and live REST/OpenAPI gates. The
+  PR was rebased into `main` at `cf5f6be8` on 2026-10-15 and closed issue #121;
+  eMuleBB Roadmap Project #3 records the item as Done.
 
 ## Notes
 
