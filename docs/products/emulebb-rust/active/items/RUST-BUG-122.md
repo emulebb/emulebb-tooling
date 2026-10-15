@@ -198,9 +198,9 @@ schema/state-machine change with unrelated path-policy or UI work.
 
 - [x] User edits to a delivered file cannot change bytes served from the
       verified piece store.
-- [ ] Missing, truncated, or corrupt internal payloads fail delivery without
+- [x] Missing, truncated, or corrupt internal payloads fail delivery without
       creating or committing a false completed output.
-- [ ] Installed output is a verified regular file before persisted state moves
+- [x] Installed output is a verified regular file before persisted state moves
       to delivered.
 - [ ] Restarted list, direct lookup, retry, and bulk clear are independent of
       endpoint call order.
@@ -255,6 +255,15 @@ schema/state-machine change with unrelated path-policy or UI work.
   piece store and delivered copy. Validation: all 1,073 `emulebb-ed2k` tests
   and all 410 `emulebb-core` unit tests plus integration/doc tests passed through
   the workspace harness.
+- `c7287e2e` completes the payload-isolation/validation slice. Delivery now
+  requires a regular source with the expected size before creating the
+  destination, except for the explicit zero-byte/no-piece-store case. Every
+  newly installed copy is rehashed with canonical ED2K semantics before the
+  manifest can record it; failed verification removes the untrusted output.
+  Runtime and helper regressions cover a missing non-empty piece store, a
+  truncated source, a wrong installed hash, manifest non-advancement, and
+  cleanup of the rejected destination. Validation: all 1,076 `emulebb-ed2k`
+  tests and doc tests passed through the workspace harness.
 
-Start with payload isolation and validation. It removes the direct wire-data
-integrity violation before the broader persisted state-machine work.
+Payload isolation and validation are complete. Continue with persisted
+completed-transfer visibility before the broader delivery state-machine work.
