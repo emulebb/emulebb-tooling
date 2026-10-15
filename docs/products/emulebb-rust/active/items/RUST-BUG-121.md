@@ -106,19 +106,19 @@ make REST status disagree with live sockets and advertised wire identity.
 
 ## Acceptance Criteria
 
-- [ ] A deterministic failure after successful initial NAT reconciliation leaves
+- [x] A deterministic failure after successful initial NAT reconciliation leaves
       no NAT manager task, gateway mapping, advertised port, or installed runtime.
-- [ ] NAT stop does not return before its reconcile worker has terminated, and
+- [x] NAT stop does not return before its reconcile worker has terminated, and
       dropping the final manager owner cannot detach a live reconcile loop.
-- [ ] Every runtime-owned reachability writer is generation-scoped; writes and
+- [x] Every runtime-owned reachability writer is generation-scoped; writes and
       clears from a retired generation cannot mutate current state.
-- [ ] Full disconnect invalidates publication rights, cooperatively stops and
+- [x] Full disconnect invalidates publication rights, cooperatively stops and
       joins all server-loop descendants, then clears runtime-owned state.
-- [ ] Server-only disconnect does not return until the selected server session
+- [x] Server-only disconnect does not return until the selected server session
       can no longer republish connection state, identity, or startup side effects.
-- [ ] Reconnect can install a new generation immediately without interference
+- [x] Reconnect can install a new generation immediately without interference
       from an older runtime or selected server session.
-- [ ] Deterministic paused-task tests cover failed startup, full disconnect,
+- [x] Deterministic paused-task tests cover failed startup, full disconnect,
       server-only disconnect, and stale-writer rejection without timing sleeps.
 
 ## Validation
@@ -203,6 +203,14 @@ make REST status disagree with live sockets and advertised wire identity.
   the late drop of the old lease cannot clear the new generation. Validation:
   all 409 `emulebb-core` unit tests plus integration and doc tests passed through
   the workspace harness.
+- The canonical `python tools/rust_quality_gate.py ci` gate passed end to end on
+  2026-10-15: policy checks, 111 policy tests, formatting, workspace/all-target
+  Clippy with warnings denied, packet-diagnostics checking, 28 WebUI unit tests,
+  16 browser tests, fresh debug/release builds and staging, the full workspace
+  test suite, documentation tests, and all three VPN egress tests. The first gate
+  run encountered one unrelated Kad traversal timing failure; the complete
+  125-test `emulebb-kad-dht` package passed immediately in isolation before the
+  full canonical rerun passed.
 
 ## Notes
 
