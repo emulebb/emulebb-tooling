@@ -3,7 +3,7 @@ id: RUST-BUG-119
 workflow: github
 github_issue: https://github.com/emulebb/emulebb-rust/issues/119
 title: Harden ED2K server runtime lifecycle ownership
-status: IN_PROGRESS
+status: DONE
 priority: Major
 category: bug
 labels: [rust, ed2k, server, lifecycle, concurrency, cancellation, beta]
@@ -115,50 +115,54 @@ Those are release-blocking reliability risks for a headless beta client.
       documented retryable-interruption semantics for claimed background work.
 - [x] Server-description polling follows live plan generations, handles server
       mutations, and terminates with the owning runtime.
-- [ ] Focused ED2K and core suites pass after every slice, followed by the
+- [x] Focused ED2K and core suites pass after every slice, followed by the
       repository's required broader validation before merge.
 
 ## Validation
 
-- Rust commit `143cd3f8` keeps serial and parallel reconnect-disabled loops
+- Rust commit `87f64946` keeps serial and parallel reconnect-disabled loops
   alive for explicit plan/reconnect commands. Deterministic tests cover an
   established session drop and exhausted parallel attempts before a later
   directed connection.
-- `cargo fmt --all -- --check` passed for `143cd3f8`.
-- `python -m emule_workspace test rust-unit --package emulebb-ed2k --config Debug --build-output-mode ErrorsOnly` passed for `143cd3f8`: 1,057 unit tests and 0 doc-test failures.
-- Rust commit `4ad0c35b` separates server and fallback public-IP evidence,
+- `cargo fmt --all -- --check` passed for `87f64946`.
+- `python -m emule_workspace test rust-unit --package emulebb-ed2k --config Debug --build-output-mode ErrorsOnly` passed for `87f64946`: 1,057 unit tests and 0 doc-test failures.
+- Rust commit `b6309288` separates server and fallback public-IP evidence,
   refreshes fallback evidence independently, and makes each NAT snapshot revoke
   mappings that disappeared or became invalid.
-- Rust commit `0cbeb48a` invalidates server evidence whenever a serial or
+- Rust commit `5d06efad` invalidates server evidence whenever a serial or
   parallel server session retires, preserves independent fallback/NAT/Kad
   evidence during server-only disconnect, and clears all reachability only
   after full-runtime task cancellation and NAT shutdown.
 - `cargo fmt --all -- --check` passed for the reachability lifecycle slice.
-- `python -m emule_workspace test rust-unit --package emulebb-ed2k --config Debug --build-output-mode ErrorsOnly` passed for `0cbeb48a`: 1,058 unit tests and 0 doc-test failures.
-- `python -m emule_workspace test rust-unit --package emulebb-core --config Debug --build-output-mode ErrorsOnly` passed for `0cbeb48a`: 404 unit tests plus all enabled integration and doc-test suites.
-- Rust commit `218d9611` gives parallel server attempts private pre-activation
+- `python -m emule_workspace test rust-unit --package emulebb-ed2k --config Debug --build-output-mode ErrorsOnly` passed for `5d06efad`: 1,058 unit tests and 0 doc-test failures.
+- `python -m emule_workspace test rust-unit --package emulebb-core --config Debug --build-output-mode ErrorsOnly` passed for `5d06efad`: 404 unit tests plus all enabled integration and doc-test suites.
+- Rust commit `c043dd6b` gives parallel server attempts private pre-activation
   state. A deterministic loser-injection test proves that only the selected
   winner publishes login identity and server-list side effects.
-- `cargo fmt --all -- --check` passed for `218d9611`.
-- `python -m emule_workspace test rust-unit --package emulebb-ed2k --config Debug --build-output-mode ErrorsOnly` passed for `218d9611`: 1,059 unit tests and 0 doc-test failures.
-- Rust commit `446e4e35` adds cooperative per-session cancellation and completes
+- `cargo fmt --all -- --check` passed for `c043dd6b`.
+- `python -m emule_workspace test rust-unit --package emulebb-ed2k --config Debug --build-output-mode ErrorsOnly` passed for `c043dd6b`: 1,059 unit tests and 0 doc-test failures.
+- Rust commit `dee3d4d2` adds cooperative per-session cancellation and completes
   retryable interruption for claimed responder work before a superseding live
   plan starts its replacement session.
-- `cargo fmt --all -- --check` passed for `446e4e35`.
-- `python -m emule_workspace test rust-unit --package emulebb-ed2k --config Debug --build-output-mode ErrorsOnly` passed for `446e4e35`: 1,060 unit tests and 0 doc-test failures.
-- Rust commit `0c04aa1f` makes server metadata polling consume live plan and
+- `cargo fmt --all -- --check` passed for `dee3d4d2`.
+- `python -m emule_workspace test rust-unit --package emulebb-ed2k --config Debug --build-output-mode ErrorsOnly` passed for `dee3d4d2`: 1,060 unit tests and 0 doc-test failures.
+- Rust commit `0f15bf31` makes server metadata polling consume live plan and
   session generations, discard superseded transaction events, stop promptly on
   plan/session/runtime retirement, and join its task at runtime shutdown.
-- Rust commit `39c4a484` applies the Clippy-required aggregate initializer to
+- Rust commit `58261dea` applies the Clippy-required aggregate initializer to
   the metadata polling test fixture without changing runtime behavior.
-- `cargo fmt --all -- --check` passed for `0c04aa1f`.
-- `python -m emule_workspace test rust-unit --package emulebb-ed2k --config Debug --build-output-mode ErrorsOnly` passed for `0c04aa1f`: 1,061 unit tests and 0 doc-test failures.
-- `python tools/rust_quality_gate.py ci` passed at Rust head `39c4a484`:
+- `cargo fmt --all -- --check` passed for `0f15bf31`.
+- `python -m emule_workspace test rust-unit --package emulebb-ed2k --config Debug --build-output-mode ErrorsOnly` passed for `0f15bf31`: 1,061 unit tests and 0 doc-test failures.
+- `python tools/rust_quality_gate.py ci` passed at Rust head `58261dea`:
   policy and 111 policy tests, rustfmt, workspace Clippy with warnings denied,
   diagnostics build, 28 WebUI unit tests, 16 Playwright tests, production WebUI
   build, fresh debug/release workspace and diagnostics builds, all workspace
   unit/integration/doc tests, and 3 observed-egress VPN leak tests.
 - Protected-main implementation PR: https://github.com/emulebb/emulebb-rust/pull/120
+- Required CI passed on PR #120 across Linux, macOS, and Windows, including
+  policy/format/Clippy, supply-chain, CodeQL, and live REST/OpenAPI gates. The
+  PR was rebased into `main` at `58261dea` on 2026-10-15 and closed issue #119;
+  eMuleBB Roadmap Project #3 records the item as Done.
 - Add focused deterministic tests at each ownership boundary before or with its
   implementation commit.
 - Run `python -m emule_workspace test rust-unit --package emulebb-ed2k --config Debug --build-output-mode ErrorsOnly` after ED2K slices.
