@@ -197,6 +197,12 @@ make REST status disagree with live sockets and advertised wire identity.
   check passed, followed by all 1,072 `emulebb-ed2k` tests and all 408
   `emulebb-core` unit tests plus integration and doc tests through the workspace
   harness.
+- `5e0e7bce` adds deterministic reconnect-generation coverage. A delayed writer
+  from the installed old candidate is released only after a second candidate
+  has installed and published its own evidence; the old write is rejected, and
+  the late drop of the old lease cannot clear the new generation. Validation:
+  all 409 `emulebb-core` unit tests plus integration and doc tests passed through
+  the workspace harness.
 
 ## Notes
 
