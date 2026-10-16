@@ -446,6 +446,19 @@ schema/state-machine change with unrelated path-policy or UI work.
   1,098 `emulebb-ed2k` unit tests plus doc tests, and Clippy with warnings denied
   after exempting the repository's seven unrelated pre-existing
   `unfulfilled_lint_expectations` diagnostics passed.
+- `150aaf6c` removes completed-catalog construction from the progressive daemon
+  constructor. The daemon-facing runtime now starts with an empty completed
+  catalog, runs destructive-deletion, transfer-root, payload, transfer-row, and
+  delivery reconciliation first, then explicitly hydrates one bounded cohort
+  before REST binding or ED2K/Kad startup. Only the remaining pages hydrate in
+  the background. This prevents completed metadata, media-path inspection, and
+  upload publication from outrunning startup authority checks while preserving
+  bounded large-library startup. A regression proves the progressive runtime
+  exposes zero entries until explicit initial hydration, then advances the
+  keyset cursor without duplicate work. Validation: `cargo fmt --all --check`,
+  `git diff --check`, strict Clippy for `emulebb-ed2k`, `emulebb-core`, and
+  `emulebb-daemon`, all 1,098 ED2K unit tests, all 414 core unit tests, and all
+  70 daemon unit tests passed.
 
 Payload isolation, validation, persisted completed-transfer visibility, the
 explicit delivery state model, and startup output reconciliation are complete.
@@ -461,7 +474,11 @@ The focused follow-up audit found the remaining authority gap in completed
 downloads: the progressive runtime constructor catalogs completed rows before
 any internal-storage validation, completed `pieces.bin` paths do not reject
 symlinks/wrong types, and upload source selection ignores a separately verified
-`delivered_path`. Next generalize the storage barrier to completed downloads and
-defer initial completed-catalog hydration until their internal/delivered
-authority is classified. Then add a verified delivered-output serving fallback
-and a live reader-open guard so post-startup path replacement also fails closed.
+`delivered_path`. Initial completed-catalog exposure is now deferred until the
+startup barriers finish. The sidecar audit also found a separate critical
+upload-selection flaw: downloaded transfers may prefer an unverified same-hash,
+same-size shared-source row over their canonical internal payload. Next remove
+that fallback so downloads serve only canonical storage, then generalize the
+storage barrier to restore completed internal payloads from verified delivered
+outputs or demote rows with no remaining authority. Finally add a live
+reader-open guard so post-startup path replacement also fails closed.
