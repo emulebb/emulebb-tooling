@@ -229,6 +229,33 @@ The merged Rust commit is limited to persisted completion time:
 Filesystem namespace sync barriers and stale owned-artifact reclamation remain
 separate follow-up commits so their crash semantics are reviewed independently.
 
+## Active Delivery-Attempt And Durability Slice
+
+Branches: `fix/rust-bug-122-delivery-attempts` and
+`docs/rust-bug-122-delivery-attempts`.
+
+This final focused slice replaces ambiguous filesystem inference with persisted
+provenance, then closes the remaining namespace-durability boundaries in five
+granular Rust commits:
+
+1. add a typed SQLite delivery-attempt record keyed by transfer, with a random
+   attempt identifier, exact staging and target paths, and an explicit phase;
+2. persist attempt provenance before staging, use an attempt-specific no-clobber
+   staging name, and never adopt a pre-existing destination by content equality;
+3. recover or reclaim only exact artifacts whose ownership is proven by the
+   persisted attempt; preserve legacy `.ed2k-delivering-*` files when provenance
+   is absent;
+4. resolve any active delivery attempt before destructive deletion removes the
+   transfer directory, and make post-commit intent cleanup non-reversing;
+5. sync destination and transfer-root namespace changes before their associated
+   SQLite transitions, with deterministic crash-boundary regressions.
+
+The recovery contract is deliberately conservative: an installed destination
+may be inferred only from a durable staged attempt whose exact staging path has
+disappeared and whose exact target verifies. `AlreadyExists` always preserves
+the unrelated target and selects another suffix. Cleanup never globs temporary
+names and never deletes an artifact without persisted provenance.
+
 ## Acceptance Criteria
 
 - [x] User edits to a delivered file cannot change bytes served from the
