@@ -390,6 +390,17 @@ schema/state-machine change with unrelated path-policy or UI work.
   hydration or delivery reconciliation. Validation: `cargo fmt --all --check`,
   all 1,088 `emulebb-ed2k` tests, all 414 `emulebb-core` unit tests, all 70
   `emulebb-daemon` tests plus doc tests, and `cargo check --workspace` passed.
+- `9b8e27fc` closes silent adoption of untracked transfer-root content. A new
+  download with no persisted manifest now inspects its canonical hash path
+  under the per-transfer lifecycle/manifest gates. It reclaims only the empty
+  directory produced by the pre-commit crash window, plus the one exact retired
+  `resume-manifest.json` artifact from pre-SQL builds. A non-empty directory,
+  regular file, or symlink is rejected without touching its bytes, so a later
+  download can no longer overwrite or gradually incorporate an unmanaged
+  `pieces.bin`. Regressions prove empty recovery, retired-manifest cleanup,
+  non-empty payload preservation, regular-file preservation, and absence of a
+  manifest after rejection. Validation: `cargo fmt --all --check`, all 1,091
+  `emulebb-ed2k` tests plus doc tests, and `cargo check --workspace` passed.
 
 Payload isolation, validation, persisted completed-transfer visibility, the
 explicit delivery state model, and startup output reconciliation are complete.
@@ -397,8 +408,10 @@ In-process lifecycle serialization and the verified-but-undelivered removal
 rule are also complete. Continue with schema 35 persisted destructive-deletion
 intent integration: the normal/runtime visibility partition, shared output
 identity classifier, intent-first retryable cleanup, and strict pre-exposure
-startup recovery are complete. Next audit crash-created filesystem orphans and
-define whether startup should conservatively reclaim only directories with
-provably absent metadata, quarantine them, or surface them as operator-visible
-repair work. Do not broaden deletion to unknown files until ownership can be
-proven from canonical transfer-directory structure and payload identity.
+startup recovery are complete. Unmanaged transfer paths can no longer be
+silently adopted by a future download. Next add a bounded startup inventory of
+canonical hash paths: reclaim only provably empty/pre-SQL directories, preserve
+and report every non-empty or non-directory collision, and leave noncanonical
+operator content untouched. Decide the operator-visible repair surface before
+adding quarantine or deletion; safety must not depend on automatic mutation of
+unknown bytes.
