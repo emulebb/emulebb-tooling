@@ -364,6 +364,33 @@ check-then-unlink race in final randomized tombstone reaping. Resolve each item
 with a focused regression and granular Rust commit, rerun the canonical gate,
 and obtain another clean independent review before marking the PR ready.
 
+### Fresh Review Resolution Checkpoint (2026-10-16)
+
+All fresh-review findings are now closed in eight granular Rust commits:
+
+- `76afc11c` demotes an owned delivered output to `unowned` whenever canonical
+  payload recovery proves only content, not the exact recorded native identity;
+- `6ba65065` preserves any occupant of a `prepared` staging path because that
+  phase has not captured identity authority yet;
+- `1cc7e599` rehashes the retained staged handle after atomic publication and
+  before persisting `published`/`owned`, with a Unix mutation-window failpoint;
+- `cc12a789` verifies an uncheckpointed moved tombstone by ED2K hash and stable
+  opened-handle/path binding before adopting a rename-changed native identity;
+- `43b70919` processes every pending deletion in a sweep and aggregates failures
+  so one blocked job cannot starve later durable work;
+- `f98fad47` bumps the clean schema to 41 and requires every owned delivered
+  output to carry a fingerprint whose size matches the transfer;
+- `49144ea8` adds a final pre-unlink identity recheck plus a deterministic
+  tombstone replacement failpoint;
+- `7698ab79` keys destructive-delete test hooks by native path so parallel
+  same-content fixtures cannot consume one another's race injection.
+
+Focused validation passes: 39 delivery runtime tests, 16 managed-payload
+reconciliation tests, 58 metadata tests plus documentation tests, strict
+ED2K/metadata Clippy, formatting and diff checks, and core/daemon all-target
+checks. A second independent full-diff review and the canonical full gate remain
+required before protected-main CI and merge.
+
 ## Acceptance Criteria
 
 - [x] User edits to a delivered file cannot change bytes served from the
