@@ -211,6 +211,24 @@ record.
 Each slice lands as its own Rust commit with focused tests. Do not combine the
 schema/state-machine change with unrelated path-policy or UI work.
 
+## Active Temporal-Correctness Slice
+
+Branch: `fix/rust-bug-122-temporal-correctness`
+
+The next granular Rust commit is limited to persisted completion time:
+
+- detect an actual incomplete-to-complete transition before overwriting the
+  known-file completion bit;
+- preserve `transfers.completed_at_ms` across completed metadata rewrites,
+  delivery-state changes, and temporary completed-to-incomplete demotion;
+- advance `download_history.last_completed_at_ms` only on a real completion
+  transition while still allowing descriptive metadata to refresh;
+- add deterministic metadata regressions for first completion, metadata-only
+  rewrites, demotion, and a later recompletion.
+
+Filesystem namespace sync barriers and stale owned-artifact reclamation remain
+separate follow-up commits so their crash semantics are reviewed independently.
+
 ## Acceptance Criteria
 
 - [x] User edits to a delivered file cannot change bytes served from the
