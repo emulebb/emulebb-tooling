@@ -229,6 +229,204 @@ The merged Rust commit is limited to persisted completion time:
 Filesystem namespace sync barriers and stale owned-artifact reclamation remain
 separate follow-up commits so their crash semantics are reviewed independently.
 
+## Active Delivery-Attempt And Durability Slice
+
+Branches: `fix/rust-bug-122-delivery-attempts` and
+`docs/rust-bug-122-delivery-attempts`.
+
+This final focused slice replaces ambiguous filesystem inference with persisted
+provenance, then closes the remaining namespace-durability boundaries in five
+granular Rust commits:
+
+1. add a typed SQLite delivery-attempt record keyed by transfer, with a random
+   attempt identifier, exact staging and target paths, and an explicit phase;
+2. persist attempt provenance before staging, use an attempt-specific no-clobber
+   staging name, and never adopt a pre-existing destination by content equality;
+3. recover or reclaim only exact artifacts whose ownership is proven by the
+   persisted attempt; preserve legacy `.ed2k-delivering-*` files when provenance
+   is absent;
+4. resolve any active delivery attempt before destructive deletion removes the
+   transfer directory, and make post-commit intent cleanup non-reversing;
+5. sync destination and transfer-root namespace changes before their associated
+   SQLite transitions, with deterministic crash-boundary regressions.
+
+The recovery contract is deliberately conservative: an installed destination
+may be inferred only from a durable staged attempt whose exact staging path has
+disappeared and whose exact target verifies. `AlreadyExists` always preserves
+the unrelated target and selects another suffix. Cleanup never globs temporary
+names and never deletes an artifact without persisted provenance.
+
+### Independent Review Blockers
+
+Rust draft PR #129 (`https://github.com/emulebb/emulebb-rust/pull/129`)
+remains draft after independent review found that the initial attempt model is
+not yet strong enough to authorize ownership-sensitive recovery or deletion:
+
+- `staged` proves that a staging file was verified, but does not prove that the
+  exact target was installed; a missing staging file plus byte-identical foreign
+  target must therefore never be adopted or deleted;
+- installation currently removes the staging hard link before the delivered
+  manifest commits, discarding the strongest native-identity proof and opening
+  classify-to-unlink and verify-to-fingerprint replacement races;
+- destructive deletion still treats content equality as ownership and can
+  remove a byte-identical operator replacement;
+- hard-link-only publication excludes filesystems without hard-link support;
+- Windows namespace operations do not yet have an enforceable write-through
+  ordering equivalent to the Unix parent-directory sync barrier;
+- a raced `NotFound` during delivered-file deletion must still re-establish the
+  namespace durability barrier before SQLite finalization.
+
+The required redesign separates content validity from ownership proof, retains
+or persists native target identity through manifest commit, uses atomic
+platform publication without requiring hard-link support, and adds deterministic
+tests for every install, cleanup, and deletion crash boundary before the PR can
+leave draft.
+
+### Review Resolution Checkpoint (2026-10-16)
+
+The publication-side blockers are now closed in four granular Rust commits:
+
+- `f7618dbe` adds schema 39 `published` delivery attempts and explicit
+  `owned`/`unowned` delivered-path authority across metadata and ED2K models;
+- `0ce4bbea` replaces hard-link-only publication with native atomic no-replace
+  moves on Linux, macOS, and Windows, including explicit collision and
+  unsupported-filesystem outcomes plus namespace barriers;
+- `fc6f9984` keeps the verified staging handle open through publication,
+  captures and persists a post-move fingerprint before manifest advancement,
+  and records interrupted staged-without-staging recovery as `unowned` rather
+  than granting destructive ownership;
+- deterministic runtime regressions cover staged recovery, publication before
+  and after the `published` SQLite boundary, byte-identical foreign target
+  collision, long Windows paths, and ambiguous staged deletion preservation.
+
+Focused validation currently passes: 55 metadata tests, 24 delivery runtime
+tests, both filesystem durability tests, and core/ED2K all-target compile
+checks.
+
+### Deletion Review Resolution Checkpoint (2026-10-16)
+
+The final design blocker is now closed in three additional granular Rust
+commits:
+
+- `c68a2074` adds schema 40 `prepared`/`moved` output-tombstone metadata with
+  exact native paths, source and moved fingerprints, idempotent transitions,
+  and ownership-gated creation;
+- `982c7898` replaces classify-then-unlink with a persisted same-directory
+  tombstone transaction, atomic no-replace rename, post-move identity
+  checkpoint, retryable reclamation, and final transfer-row removal only after
+  the owned namespace object is gone. It also applies the same tombstone-first
+  ordering to the internal transfer directory;
+- `8702bb53` retains strict pre-exposure startup recovery and adds periodic
+  daemon retries so transient sharing and antivirus failures converge without
+  requiring a process restart.
+
+Deterministic regressions cover every output tombstone crash boundary, a
+byte-identical replacement racing between verification and rename, foreign
+tombstone collisions, Windows sharing violations, long paths, interrupted
+published attempts, unowned output preservation, and transfer-directory
+tombstone recovery. Focused validation passes with 57 metadata tests, 35
+delivery runtime tests, core and daemon all-target checks, and strict
+metadata/ED2K/core/daemon Clippy. Draft Rust PR #129 now has no known design
+blocker; it remains draft only until the full repository gate, fresh independent
+review, and protected-main CI are complete.
+
+### Full Local Gate Checkpoint (2026-10-16)
+
+The canonical `python tools/rust_quality_gate.py ci` gate now passes from a
+clean committed Rust tree. It covers client policy plus 111 policy tests,
+formatting, workspace-wide all-target strict Clippy, packet diagnostics, 28
+WebUI unit tests, 16 Chromium end-to-end tests, fresh debug and release builds,
+the complete workspace suite including 1,142 ED2K, 415 core, 70 daemon, and 57
+metadata unit tests plus integration and documentation tests, and all three
+observed VPN egress tests. The first run exposed one stale legacy assertion that
+still expected post-install verification; `9324a162` updates it to assert the
+stronger pre-publication rejection contract, and the full gate then passed.
+
+### Fresh Independent Review Blockers (2026-10-16)
+
+Rust PR #129 remains draft and unmergeable after a fresh full-diff review found
+four ownership/crash-safety blockers that the green suite did not exercise:
+
+- canonical-payload recovery can replace an owned delivered fingerprint with a
+  merely content-valid foreign replacement without demoting deletion ownership;
+- a `prepared` delivery attempt has no proven staging identity, but recovery and
+  deletion currently unlink any object occupying its recorded staging path;
+- publication hashes staging before the final rename but does not rehash the
+  retained handle after that final mutation window before persisting `owned`;
+- output-tombstone recovery assumes native file identity remains stable across
+  rename on every supported filesystem, so an unstable provider can make a
+  crash-before-checkpoint job permanently block startup.
+
+The same review found two required robustness follow-ups: one blocked deletion
+must not starve later pending jobs, and `delivered + owned` must require a
+fingerprint whose size matches the transfer. It also noted a residual
+check-then-unlink race in final randomized tombstone reaping. Resolve each item
+with a focused regression and granular Rust commit, rerun the canonical gate,
+and obtain another clean independent review before marking the PR ready.
+
+### Fresh Review Resolution Checkpoint (2026-10-16)
+
+All fresh-review findings are now closed in eight granular Rust commits:
+
+- `76afc11c` demotes an owned delivered output to `unowned` whenever canonical
+  payload recovery proves only content, not the exact recorded native identity;
+- `6ba65065` preserves any occupant of a `prepared` staging path because that
+  phase has not captured identity authority yet;
+- `1cc7e599` rehashes the retained staged handle after atomic publication and
+  before persisting `published`/`owned`, with a Unix mutation-window failpoint;
+- `cc12a789` verifies an uncheckpointed moved tombstone by ED2K hash and stable
+  opened-handle/path binding before adopting a rename-changed native identity;
+- `43b70919` processes every pending deletion in a sweep and aggregates failures
+  so one blocked job cannot starve later durable work;
+- `f98fad47` bumps the clean schema to 41 and requires every owned delivered
+  output to carry a fingerprint whose size matches the transfer;
+- `49144ea8` adds a final pre-unlink identity recheck plus a deterministic
+  tombstone replacement failpoint;
+- `7698ab79` keys destructive-delete test hooks by native path so parallel
+  same-content fixtures cannot consume one another's race injection.
+
+Focused validation passes: 39 delivery runtime tests, 16 managed-payload
+reconciliation tests, 58 metadata tests plus documentation tests, strict
+ED2K/metadata Clippy, formatting and diff checks, and core/daemon all-target
+checks. A second independent full-diff review and the canonical full gate remain
+required before protected-main CI and merge.
+
+### Second Independent Review Checkpoint (2026-10-16)
+
+The canonical `python tools/rust_quality_gate.py ci` gate passes after all eight
+fresh-review fixes. The first rerun was interrupted by a transient Windows lock
+on the Rolldown native module during the second `npm ci`; an unchanged rerun
+completed client policy plus 111 policy tests, formatting, workspace-wide
+all-target strict Clippy, packet diagnostics, 28 WebUI unit tests, 16 Chromium
+end-to-end tests, fresh debug and release builds, the complete workspace test
+suite, integration and documentation tests, and all three observed VPN egress
+tests.
+
+The second independent full-diff review nevertheless found three high-severity
+merge blockers:
+
+- destructive deletion persists the database intent before fallible delivery-
+  attempt cleanup, but hides the live cache/catalog entry only afterward; a
+  staging cleanup failure can therefore leave a durably deleted transfer live
+  and potentially served until restart;
+- crash-before-checkpoint output-tombstone recovery accepts a byte-identical
+  replacement when native identity changed, which treats content equality as
+  ownership and can delete a foreign replacement;
+- startup propagates pending-deletion cleanup failures as fatal, so a persistent
+  sharing lock or deliberately preserved ambiguous tombstone can create an
+  indefinite daemon restart loop before the runtime retry sweep starts.
+
+The review also found two medium-severity gaps: transfer-directory tombstones
+have no persisted identity before recursive recovery deletion, and the Unix
+post-publication mutation hook is keyed only by content hash so parallel
+same-content fixtures can consume the wrong hook. The final path-based unlink
+still has a low-severity check-to-unlink race that the current failpoint does not
+exercise. Prior ownership demotion, prepared-staging preservation, post-move
+rehash, deletion-sweep starvation, and schema 41 owned-fingerprint findings are
+closed. Rust PR #129 remains draft and must not merge until these remaining
+findings are resolved in granular commits, the canonical gate passes again, a
+third independent review is clean, and fresh protected-main CI passes.
+
 ## Acceptance Criteria
 
 - [x] User edits to a delivered file cannot change bytes served from the
@@ -244,9 +442,9 @@ separate follow-up commits so their crash semantics are reviewed independently.
 - [x] Row removal cannot suppress delivery of a verified-but-undelivered file.
 - [x] Delivery and destructive deletion serialize and recover without orphan
       output, hidden-only success, or a row whose authorities are both absent.
-- [ ] Filesystem namespace durability precedes SQLite advancement at every
+- [x] Filesystem namespace durability precedes SQLite advancement at every
       cross-domain commit boundary supported by the platform.
-- [ ] Owned stale copy/intention artifacts are reclaimed without touching
+- [x] Owned stale copy/intention artifacts are reclaimed without touching
       unrelated user files.
 - [x] Completion and history timestamps change only on a true completion
       transition.
@@ -677,6 +875,10 @@ republish its pending state. Share-in-place ingest now derives its hash and
 fingerprint from one verified no-follow handle and excludes Windows writers
 during hashing. Live canonical, share-in-place, and incomplete upload reads now
 fail closed against replaced or corrupt authority and reconcile persisted and
-catalog state before reuse. Continue with the two remaining acceptance
-boundaries: filesystem namespace durability before SQLite advancement and
-conservative reclamation of owned stale copy/intent artifacts.
+catalog state before reuse. Schema 39 delivery ownership, schema 40 output-
+tombstone recovery, and schema 41 owned-fingerprint invariants close most
+namespace-durability and owned-artifact reclamation boundaries. The second
+independent review found remaining deletion ordering, startup availability,
+tombstone identity, test-isolation, and final unlink race gaps. The item remains
+implementation-active; Rust PR #129 stays draft until those findings are
+resolved and revalidated.
