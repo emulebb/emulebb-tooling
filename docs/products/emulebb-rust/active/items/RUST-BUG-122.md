@@ -301,12 +301,34 @@ The publication-side blockers are now closed in four granular Rust commits:
 
 Focused validation currently passes: 55 metadata tests, 24 delivery runtime
 tests, both filesystem durability tests, and core/ED2K all-target compile
-checks. Draft Rust PR #129 remains intentionally unmergeable until the final
-review blocker is closed: delivered-output deletion must use a persisted
-same-directory tombstone state machine instead of classify-then-unlink. The
-approved design is schema 40 `prepared`/`moved` tombstone metadata followed by
-atomic no-replace rename, exact post-move identity persistence, retryable
-physical reclamation, and only then transfer-row finalization.
+checks.
+
+### Deletion Review Resolution Checkpoint (2026-10-16)
+
+The final design blocker is now closed in three additional granular Rust
+commits:
+
+- `c68a2074` adds schema 40 `prepared`/`moved` output-tombstone metadata with
+  exact native paths, source and moved fingerprints, idempotent transitions,
+  and ownership-gated creation;
+- `982c7898` replaces classify-then-unlink with a persisted same-directory
+  tombstone transaction, atomic no-replace rename, post-move identity
+  checkpoint, retryable reclamation, and final transfer-row removal only after
+  the owned namespace object is gone. It also applies the same tombstone-first
+  ordering to the internal transfer directory;
+- `8702bb53` retains strict pre-exposure startup recovery and adds periodic
+  daemon retries so transient sharing and antivirus failures converge without
+  requiring a process restart.
+
+Deterministic regressions cover every output tombstone crash boundary, a
+byte-identical replacement racing between verification and rename, foreign
+tombstone collisions, Windows sharing violations, long paths, interrupted
+published attempts, unowned output preservation, and transfer-directory
+tombstone recovery. Focused validation passes with 57 metadata tests, 35
+delivery runtime tests, core and daemon all-target checks, and strict
+metadata/ED2K/core/daemon Clippy. Draft Rust PR #129 now has no known design
+blocker; it remains draft only until the full repository gate, fresh independent
+review, and protected-main CI are complete.
 
 ## Acceptance Criteria
 
@@ -323,9 +345,9 @@ physical reclamation, and only then transfer-row finalization.
 - [x] Row removal cannot suppress delivery of a verified-but-undelivered file.
 - [x] Delivery and destructive deletion serialize and recover without orphan
       output, hidden-only success, or a row whose authorities are both absent.
-- [ ] Filesystem namespace durability precedes SQLite advancement at every
+- [x] Filesystem namespace durability precedes SQLite advancement at every
       cross-domain commit boundary supported by the platform.
-- [ ] Owned stale copy/intention artifacts are reclaimed without touching
+- [x] Owned stale copy/intention artifacts are reclaimed without touching
       unrelated user files.
 - [x] Completion and history timestamps change only on a true completion
       transition.
@@ -756,6 +778,8 @@ republish its pending state. Share-in-place ingest now derives its hash and
 fingerprint from one verified no-follow handle and excludes Windows writers
 during hashing. Live canonical, share-in-place, and incomplete upload reads now
 fail closed against replaced or corrupt authority and reconcile persisted and
-catalog state before reuse. Continue with the two remaining acceptance
-boundaries: filesystem namespace durability before SQLite advancement and
-conservative reclamation of owned stale copy/intent artifacts.
+catalog state before reuse. Schema 39 delivery ownership plus schema 40
+output-tombstone recovery now close the remaining namespace-durability and
+owned-artifact reclamation boundaries. The item is implementation-complete and
+awaits the full local quality gate, independent review, protected-main CI, and
+rebase merge of Rust PR #129.
