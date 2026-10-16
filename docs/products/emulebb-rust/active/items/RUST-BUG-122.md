@@ -282,6 +282,32 @@ platform publication without requiring hard-link support, and adds deterministic
 tests for every install, cleanup, and deletion crash boundary before the PR can
 leave draft.
 
+### Review Resolution Checkpoint (2026-10-16)
+
+The publication-side blockers are now closed in four granular Rust commits:
+
+- `f7618dbe` adds schema 39 `published` delivery attempts and explicit
+  `owned`/`unowned` delivered-path authority across metadata and ED2K models;
+- `0ce4bbea` replaces hard-link-only publication with native atomic no-replace
+  moves on Linux, macOS, and Windows, including explicit collision and
+  unsupported-filesystem outcomes plus namespace barriers;
+- `fc6f9984` keeps the verified staging handle open through publication,
+  captures and persists a post-move fingerprint before manifest advancement,
+  and records interrupted staged-without-staging recovery as `unowned` rather
+  than granting destructive ownership;
+- deterministic runtime regressions cover staged recovery, publication before
+  and after the `published` SQLite boundary, byte-identical foreign target
+  collision, long Windows paths, and ambiguous staged deletion preservation.
+
+Focused validation currently passes: 55 metadata tests, 24 delivery runtime
+tests, both filesystem durability tests, and core/ED2K all-target compile
+checks. Draft Rust PR #129 remains intentionally unmergeable until the final
+review blocker is closed: delivered-output deletion must use a persisted
+same-directory tombstone state machine instead of classify-then-unlink. The
+approved design is schema 40 `prepared`/`moved` tombstone metadata followed by
+atomic no-replace rename, exact post-move identity persistence, retryable
+physical reclamation, and only then transfer-row finalization.
+
 ## Acceptance Criteria
 
 - [x] User edits to a delivered file cannot change bytes served from the
