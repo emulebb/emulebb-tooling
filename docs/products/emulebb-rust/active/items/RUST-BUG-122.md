@@ -330,6 +330,18 @@ metadata/ED2K/core/daemon Clippy. Draft Rust PR #129 now has no known design
 blocker; it remains draft only until the full repository gate, fresh independent
 review, and protected-main CI are complete.
 
+### Full Local Gate Checkpoint (2026-10-16)
+
+The canonical `python tools/rust_quality_gate.py ci` gate now passes from a
+clean committed Rust tree. It covers client policy plus 111 policy tests,
+formatting, workspace-wide all-target strict Clippy, packet diagnostics, 28
+WebUI unit tests, 16 Chromium end-to-end tests, fresh debug and release builds,
+the complete workspace suite including 1,142 ED2K, 415 core, 70 daemon, and 57
+metadata unit tests plus integration and documentation tests, and all three
+observed VPN egress tests. The first run exposed one stale legacy assertion that
+still expected post-install verification; `9324a162` updates it to assert the
+stronger pre-publication rejection contract, and the full gate then passed.
+
 ## Acceptance Criteria
 
 - [x] User edits to a delivered file cannot change bytes served from the
