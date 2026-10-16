@@ -507,6 +507,21 @@ schema/state-machine change with unrelated path-policy or UI work.
   --check`, `git diff --check`, strict Clippy for `emulebb-ed2k`,
   `emulebb-core`, and `emulebb-daemon`, all 1,106 ED2K unit tests, all 414 core
   unit tests, and all 70 daemon unit tests passed.
+- `2199c4ae` bumps the clean schema to 36 and adds a dedicated canonical
+  `payload_fingerprint`, explicitly separate from shared-source and delivered
+  output authority. Stable successful final rehash and restoration paths record
+  it; completion-pending, failure, incomplete, demoted, and share-in-place rows
+  clear or forbid it. Startup uses the fingerprint only as a cache key: a
+  precise safe match skips hashing, while missing, stale, or coarse baselines
+  force whole-file ED2K verification and persist a refreshed identity. Tests
+  cover SQL round trips and invalid states, completion lifecycle transitions,
+  missing and stale baselines, restoration, hidden-row pending intent,
+  corruption, demotion, and share-in-place exclusion. Validation: `cargo fmt
+  --all --check`, `git diff --check`, `cargo check --workspace --all-targets`,
+  strict Clippy for metadata, `emulebb-ed2k`, `emulebb-core`, and
+  `emulebb-daemon`, 49 focused metadata tests, four completion-rehash tests, 15
+  payload-reconciliation tests, all 1,108 ED2K unit tests, all 414 core unit
+  tests, and all 70 daemon unit tests passed.
 
 Payload isolation, validation, persisted completed-transfer visibility, the
 explicit delivery state model, and startup output reconciliation are complete.
@@ -523,10 +538,9 @@ authority gap: completed catalog exposure is deferred until reconciliation,
 canonical verified download bytes beat same-hash shared-source rows, and every
 managed internal payload now reaches startup in one of three explicit states:
 verified canonical authority, restored canonical authority, or demoted
-redownload state with uncertain bytes quarantined. The correctness-first
-barrier currently performs a whole-file ED2K pass for every completed internal
-download. Next persist a dedicated canonical-payload fingerprint at successful
-completion/restoration so unchanged precise-identity files can skip that pass
-without weakening same-length corruption detection. After that, add live
-reader-open fingerprint guards for shared and delivered paths so post-startup
-replacement also fails closed.
+redownload state with uncertain bytes quarantined. Startup now skips whole-file
+rehashing only when a precise persisted canonical-payload identity safely
+matches; missing, stale, or coarse baselines still rehash and refresh. Next add
+live reader-open fingerprint guards for canonical, shared, and delivered paths,
+and bind final rehash to one verified open handle so post-startup replacement
+also fails closed.
