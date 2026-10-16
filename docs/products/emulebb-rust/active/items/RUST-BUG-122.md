@@ -342,6 +342,28 @@ observed VPN egress tests. The first run exposed one stale legacy assertion that
 still expected post-install verification; `9324a162` updates it to assert the
 stronger pre-publication rejection contract, and the full gate then passed.
 
+### Fresh Independent Review Blockers (2026-10-16)
+
+Rust PR #129 remains draft and unmergeable after a fresh full-diff review found
+four ownership/crash-safety blockers that the green suite did not exercise:
+
+- canonical-payload recovery can replace an owned delivered fingerprint with a
+  merely content-valid foreign replacement without demoting deletion ownership;
+- a `prepared` delivery attempt has no proven staging identity, but recovery and
+  deletion currently unlink any object occupying its recorded staging path;
+- publication hashes staging before the final rename but does not rehash the
+  retained handle after that final mutation window before persisting `owned`;
+- output-tombstone recovery assumes native file identity remains stable across
+  rename on every supported filesystem, so an unstable provider can make a
+  crash-before-checkpoint job permanently block startup.
+
+The same review found two required robustness follow-ups: one blocked deletion
+must not starve later pending jobs, and `delivered + owned` must require a
+fingerprint whose size matches the transfer. It also noted a residual
+check-then-unlink race in final randomized tombstone reaping. Resolve each item
+with a focused regression and granular Rust commit, rerun the canonical gate,
+and obtain another clean independent review before marking the PR ready.
+
 ## Acceptance Criteria
 
 - [x] User edits to a delivered file cannot change bytes served from the
