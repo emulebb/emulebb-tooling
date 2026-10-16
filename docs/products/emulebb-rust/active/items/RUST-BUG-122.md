@@ -488,6 +488,25 @@ schema/state-machine change with unrelated path-policy or UI work.
   have an explicit round-trip regression. Validation: `cargo fmt --all
   --check`, `git diff --check`, strict ED2K Clippy, the crash-window adoption
   regression, and all 1,099 ED2K unit tests passed.
+- `fad46291` generalizes startup storage reconciliation across every internally
+  managed download, including completed and operator-hidden rows. Completed
+  `pieces.bin` content is now whole-file ED2K verified before catalog exposure;
+  missing, truncated, oversized, or same-length-corrupt canonical payloads are
+  restored only from a separately verified delivered output. If no valid
+  recovery remains, completion and every piece claim are demoted, a removed row
+  is revived for redownload, and delivery authority is cleared without touching
+  a foreign delivered occupant. Invalid regular canonical occupants are moved
+  to durable quarantine names before replacement or reset rather than truncated
+  or overwritten; wrong filesystem types and transfer-directory identity swaps
+  fail startup untouched. A valid `delivery.pending` marker is adopted even
+  when the canonical payload is already intact and the transfer row is hidden,
+  closing the restore-before-metadata crash window. Regressions cover missing
+  directories, incomplete extent loss, exact-length completed corruption,
+  verified restoration, hidden-row intent adoption, demotion, upload reads,
+  share-in-place exclusion, and wrong path types. Validation: `cargo fmt --all
+  --check`, `git diff --check`, strict Clippy for `emulebb-ed2k`,
+  `emulebb-core`, and `emulebb-daemon`, all 1,106 ED2K unit tests, all 414 core
+  unit tests, and all 70 daemon unit tests passed.
 
 Payload isolation, validation, persisted completed-transfer visibility, the
 explicit delivery state model, and startup output reconciliation are complete.
@@ -499,14 +518,15 @@ startup recovery are complete. Unmanaged transfer paths can no longer be
 silently adopted by a future download, and startup now reconciles safe orphan
 residue while preserving/reporting unknown bytes. Persisted incomplete rows can
 no longer resume or publish progress unsupported by their internal payload.
-The focused follow-up audit found the remaining authority gap in completed
-downloads: the progressive runtime constructor catalogs completed rows before
-any internal-storage validation, completed `pieces.bin` paths do not reject
-symlinks/wrong types, and upload source selection ignores a separately verified
-`delivered_path`. Initial completed-catalog exposure is now deferred until the
-startup barriers finish. Canonical verified download bytes now take precedence
-over same-hash shared-source rows. Next generalize the storage barrier to
-restore completed internal payloads from verified delivered outputs or demote
-rows with no remaining authority. Finally add a live reader-open fingerprint
-guard for shared and delivered paths so post-startup replacement also fails
-closed.
+The focused follow-up audit found and closed the completed-download startup
+authority gap: completed catalog exposure is deferred until reconciliation,
+canonical verified download bytes beat same-hash shared-source rows, and every
+managed internal payload now reaches startup in one of three explicit states:
+verified canonical authority, restored canonical authority, or demoted
+redownload state with uncertain bytes quarantined. The correctness-first
+barrier currently performs a whole-file ED2K pass for every completed internal
+download. Next persist a dedicated canonical-payload fingerprint at successful
+completion/restoration so unchanged precise-identity files can skip that pass
+without weakening same-length corruption detection. After that, add live
+reader-open fingerprint guards for shared and delivered paths so post-startup
+replacement also fails closed.
