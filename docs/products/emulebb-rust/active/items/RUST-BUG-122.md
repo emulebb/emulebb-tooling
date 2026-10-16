@@ -543,6 +543,23 @@ schema/state-machine change with unrelated path-policy or UI work.
   `-D warnings` remains blocked only by seven unrelated pre-existing
   `unfulfilled-lint-expectations`, so the strict ED2K run allowed that lint and
   denied every other warning.
+- `24b8f2a3` binds share-in-place ingest hashing, file size, and the persisted
+  source fingerprint to one no-follow open handle. The combined MD4/AICH builder
+  now accepts that existing reader instead of reopening the pathname. Ingest
+  verifies exact handle metadata before and after hashing and verifies that the
+  current path still resolves to the same native identity before publication;
+  a missing precise identity is a hard failure rather than an unfingerprinted
+  share. Exact in-operation equality remains distinct from the conservative
+  `safely_matches` cache-reuse rule, so valid coarse-timestamp files can still
+  be freshly hashed. Windows holds the ingest source with read sharing only,
+  excluding concurrent writers and path deletion for the full hash operation;
+  Unix rejects symlinks and detects path replacement after hashing. Regressions
+  cover the shared reader hash-builder, normal progress reporting, Windows
+  writer exclusion, deterministic Unix path replacement, and Unix symlink
+  rejection without manifest or catalog publication. Validation: `cargo fmt
+  --all --check`, `git diff --check`, strict Clippy for `emulebb-ed2k`, the
+  focused ingest and combined-hashset tests, and all 1,113 ED2K unit tests
+  passed.
 
 Payload isolation, validation, persisted completed-transfer visibility, the
 explicit delivery state model, and startup output reconciliation are complete.
@@ -563,7 +580,7 @@ redownload state with uncertain bytes quarantined. Startup now skips whole-file
 rehashing only when a precise persisted canonical-payload identity safely
 matches; missing, stale, or coarse baselines still rehash and refresh. Final
 completion now hashes one verified no-follow handle and stale hydration cannot
-republish its pending state. Next bind share-in-place ingest hashing and
-fingerprint capture to one verified open handle, then add live reader-open
-fingerprint guards for canonical, shared, and delivered paths so
-post-publication replacement also fails closed.
+republish its pending state. Share-in-place ingest now derives its hash and
+fingerprint from one verified no-follow handle and excludes Windows writers
+during hashing. Next add live reader-open fingerprint guards for canonical,
+shared, and delivered paths so post-publication replacement also fails closed.
