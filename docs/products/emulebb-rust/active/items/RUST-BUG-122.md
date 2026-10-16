@@ -560,6 +560,40 @@ schema/state-machine change with unrelated path-policy or UI work.
   --all --check`, `git diff --check`, strict Clippy for `emulebb-ed2k`, the
   focused ingest and combined-hashset tests, and all 1,113 ED2K unit tests
   passed.
+- `4d239551` closes the live upload-authority gap after publication. Completed
+  canonical payloads and share-in-place sources are opened without following
+  symlinks and must still match their persisted native fingerprint before any
+  bytes are served. Windows source readers hold read-only sharing so writers and
+  deletion cannot race a live read; Unix readers verify the same handle again
+  after the read. Missing or replaced authority is withdrawn from the catalog;
+  canonical completion is moved back to final-rehash-pending, while invalid
+  share-in-place identity is cleared until rehash. Managed incomplete payloads
+  cannot use whole-file timestamps because later pieces legitimately mutate the
+  same file, so each advertised ED2K part is read into one stable snapshot and
+  MD4-validated before its fragments are served. A still-invalid part is
+  durably requeued and removed from catalog ranges, while stale open/read
+  failures are revalidated under the manifest lock before any demotion. Cached
+  writer handles are invalidated first so redownload cannot write into a
+  detached inode after atomic `pieces.bin` replacement. Startup and live
+  catalog admission now share one authority predicate: completed canonical
+  entries require a payload fingerprint, completed source-backed entries
+  require a source fingerprint, incomplete entries require acquired MD4
+  authority plus verified ranges, and final-rehash-pending entries are never
+  exposed. Live relocation updates canonical manifest identity immediately;
+  identity-changing relocation de-offers until rehash, and relocating a
+  secondary duplicate source no longer rewrites canonical path, name, or
+  catalog metadata. Shared-source fallback now accepts only present sources
+  whose current no-follow fingerprint safely matches persisted evidence.
+  Regressions cover trusted and identity-changing relocation, same-path source
+  replacement, secondary-source relocation, Windows writer exclusion, Unix
+  post-open mutation, completed canonical replacement, incomplete-part
+  corruption, missing payload, stale missing-path recovery, catalog hydration
+  without MD4 authority, and atomic partfile replacement followed by canonical
+  redownload. Validation: `cargo fmt --all --check`, `git diff --check`, 49
+  metadata unit tests, 414 core unit tests, all 1,123 ED2K unit tests, focused
+  authority regressions, `cargo check -p emulebb-ed2k`, and strict Clippy for
+  metadata, ED2K, and core with every warning denied except the repository's
+  unrelated pre-existing `unfulfilled-lint-expectations` diagnostics passed.
 
 Payload isolation, validation, persisted completed-transfer visibility, the
 explicit delivery state model, and startup output reconciliation are complete.
@@ -582,5 +616,8 @@ matches; missing, stale, or coarse baselines still rehash and refresh. Final
 completion now hashes one verified no-follow handle and stale hydration cannot
 republish its pending state. Share-in-place ingest now derives its hash and
 fingerprint from one verified no-follow handle and excludes Windows writers
-during hashing. Next add live reader-open fingerprint guards for canonical,
-shared, and delivered paths so post-publication replacement also fails closed.
+during hashing. Live canonical, share-in-place, and incomplete upload reads now
+fail closed against replaced or corrupt authority and reconcile persisted and
+catalog state before reuse. Next audit delivered-output truth across runtime
+listing, retry selection, operator mutation, and restart reconciliation so the
+user-facing completion state cannot drift after initial delivery.
