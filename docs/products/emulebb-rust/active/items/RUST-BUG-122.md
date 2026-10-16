@@ -522,6 +522,27 @@ schema/state-machine change with unrelated path-policy or UI work.
   `emulebb-daemon`, 49 focused metadata tests, four completion-rehash tests, 15
   payload-reconciliation tests, all 1,108 ED2K unit tests, all 414 core unit
   tests, and all 70 daemon unit tests passed.
+- `e51359ce` hardens the live final-completion barrier around one authoritative
+  payload handle. Native fingerprints now come from the same no-follow handle
+  used to identify and size the file on Unix and Windows; final rehash runs
+  under lifecycle and manifest serialization, withdraws the pending payload
+  from the shared catalog, hashes that handle, and verifies both handle
+  stability and its current path binding before publication. Filesystem
+  authority failures preserve verified pieces in a retryable pending state
+  instead of misclassifying them as content corruption. Missing payloads reset
+  atomically and idempotently for redownload, while oversized regular files are
+  quarantined rather than truncated. Completed and incomplete catalog hydration
+  now revalidates current manifest state under the per-hash lock, refuses stale
+  pending snapshots, and does not overwrite live upload counters. Regressions
+  cover restart finalization, earlier-piece mutation, pre-finalization catalog
+  exclusion, oversized and missing payload recovery, wrong path types, Unix
+  symlinks, stale completed hydration, and stale incomplete hydration.
+  Validation: `cargo fmt --all --check`, `git diff --check`, strict Clippy for
+  `emulebb-ed2k`, all 1,112 ED2K unit tests, all 414 core unit tests, all 70
+  daemon unit tests, and `cargo check --workspace --all-targets` passed. Plain
+  `-D warnings` remains blocked only by seven unrelated pre-existing
+  `unfulfilled-lint-expectations`, so the strict ED2K run allowed that lint and
+  denied every other warning.
 
 Payload isolation, validation, persisted completed-transfer visibility, the
 explicit delivery state model, and startup output reconciliation are complete.
@@ -540,7 +561,9 @@ managed internal payload now reaches startup in one of three explicit states:
 verified canonical authority, restored canonical authority, or demoted
 redownload state with uncertain bytes quarantined. Startup now skips whole-file
 rehashing only when a precise persisted canonical-payload identity safely
-matches; missing, stale, or coarse baselines still rehash and refresh. Next add
-live reader-open fingerprint guards for canonical, shared, and delivered paths,
-and bind final rehash to one verified open handle so post-startup replacement
-also fails closed.
+matches; missing, stale, or coarse baselines still rehash and refresh. Final
+completion now hashes one verified no-follow handle and stale hydration cannot
+republish its pending state. Next bind share-in-place ingest hashing and
+fingerprint capture to one verified open handle, then add live reader-open
+fingerprint guards for canonical, shared, and delivered paths so
+post-publication replacement also fails closed.
