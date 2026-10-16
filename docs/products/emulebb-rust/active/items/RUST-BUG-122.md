@@ -479,6 +479,15 @@ schema/state-machine change with unrelated path-policy or UI work.
   incomplete, completed removed-row, and deletion-intent states. Validation:
   `cargo fmt --all --check`, `git diff --check`, strict metadata Clippy, all 49
   metadata unit tests, and metadata doc tests passed.
+- `6238c07e` hardens the durable delivery crash-window pointer before it is used
+  as completed-payload recovery authority. `delivery.pending` now stores exact
+  platform-native path bytes through the shared `NativePath` codec instead of
+  lossy UTF-8 text, and reads distinguish a missing marker from I/O failure,
+  empty content, or invalid native encoding. Delivery therefore fails closed
+  instead of silently abandoning a corrupt intent, and non-Unicode Unix paths
+  have an explicit round-trip regression. Validation: `cargo fmt --all
+  --check`, `git diff --check`, strict ED2K Clippy, the crash-window adoption
+  regression, and all 1,099 ED2K unit tests passed.
 
 Payload isolation, validation, persisted completed-transfer visibility, the
 explicit delivery state model, and startup output reconciliation are complete.
