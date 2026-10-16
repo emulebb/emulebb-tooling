@@ -401,6 +401,20 @@ schema/state-machine change with unrelated path-policy or UI work.
   non-empty payload preservation, regular-file preservation, and absence of a
   manifest after rejection. Validation: `cargo fmt --all --check`, all 1,091
   `emulebb-ed2k` tests plus doc tests, and `cargo check --workspace` passed.
+- `5edb4ad4` adds the pre-exposure transfer-root inventory without introducing
+  destructive quarantine policy. Metadata now exposes the exact download rows
+  which own internal hash paths, including hidden pending-deletion rows while
+  excluding share-in-place sources. After strict deletion recovery and before
+  transfer hydration/REST/network startup, the runtime scans only direct child
+  names which are canonical lowercase ED2K hashes. Empty/pre-SQL residue is
+  reclaimed; non-empty directories, regular files, symlinks, and inspection
+  failures are preserved and logged per hash, with aggregate daemon counts.
+  Noncanonical operator content is ignored. Each candidate is lifecycle- and
+  manifest-locked and ownership is rechecked after locking, so a stale scan can
+  never remove a concurrently committed transfer directory. Validation: `cargo
+  fmt --all --check`, all 49 `emulebb-metadata` tests, all 1,092
+  `emulebb-ed2k` tests plus doc tests, all 414 `emulebb-core` unit tests, all 70
+  `emulebb-daemon` tests plus doc tests, and `cargo check --workspace` passed.
 
 Payload isolation, validation, persisted completed-transfer visibility, the
 explicit delivery state model, and startup output reconciliation are complete.
@@ -409,9 +423,9 @@ rule are also complete. Continue with schema 35 persisted destructive-deletion
 intent integration: the normal/runtime visibility partition, shared output
 identity classifier, intent-first retryable cleanup, and strict pre-exposure
 startup recovery are complete. Unmanaged transfer paths can no longer be
-silently adopted by a future download. Next add a bounded startup inventory of
-canonical hash paths: reclaim only provably empty/pre-SQL directories, preserve
-and report every non-empty or non-directory collision, and leave noncanonical
-operator content untouched. Decide the operator-visible repair surface before
-adding quarantine or deletion; safety must not depend on automatic mutation of
-unknown bytes.
+silently adopted by a future download, and startup now reconciles safe orphan
+residue while preserving/reporting unknown bytes. Next audit the inverse
+ownership failure: a persisted download row whose canonical internal path or
+`pieces.bin` authority is missing, replaced by the wrong filesystem type, or
+shorter than persisted verified progress. Recovery must demote unprovable piece
+state before resume/publish rather than advertising bytes that no longer exist.
