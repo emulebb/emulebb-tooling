@@ -224,7 +224,7 @@ schema/state-machine change with unrelated path-policy or UI work.
 - [x] Missing or mismatched recorded outputs enter deterministic reconciliation
       rather than remaining falsely completed.
 - [x] Row removal cannot suppress delivery of a verified-but-undelivered file.
-- [ ] Delivery and destructive deletion serialize and recover without orphan
+- [x] Delivery and destructive deletion serialize and recover without orphan
       output, hidden-only success, or a row whose authorities are both absent.
 - [ ] Filesystem namespace durability precedes SQLite advancement at every
       cross-domain commit boundary supported by the platform.
@@ -232,7 +232,7 @@ schema/state-machine change with unrelated path-policy or UI work.
       unrelated user files.
 - [ ] Completion and history timestamps change only on a true completion
       transition.
-- [ ] The canonical Rust quality gate and protected-main CI pass.
+- [x] The canonical Rust quality gate and protected-main CI pass.
 
 ## Validation Plan
 
@@ -262,7 +262,7 @@ schema/state-machine change with unrelated path-policy or UI work.
 
 ## Progress
 
-- `578e1237` removes same-volume hard-link delivery. Every completed download is
+- `1a1e428c` removes same-volume hard-link delivery. Every completed download is
   now materialized through an independent temp-copy plus no-clobber install, so
   edits to the operator-facing file cannot mutate retained verified upload
   bytes. The aggregate disk guard now reserves the additional full payload on
@@ -272,7 +272,7 @@ schema/state-machine change with unrelated path-policy or UI work.
   piece store and delivered copy. Validation: all 1,073 `emulebb-ed2k` tests
   and all 410 `emulebb-core` unit tests plus integration/doc tests passed through
   the workspace harness.
-- `c7287e2e` completes the payload-isolation/validation slice. Delivery now
+- `f2b024fb` completes the payload-isolation/validation slice. Delivery now
   requires a regular source with the expected size before creating the
   destination, except for the explicit zero-byte/no-piece-store case. Every
   newly installed copy is rehashed with canonical ED2K semantics before the
@@ -281,7 +281,7 @@ schema/state-machine change with unrelated path-policy or UI work.
   truncated source, a wrong installed hash, manifest non-advancement, and
   cleanup of the rejected destination. Validation: all 1,076 `emulebb-ed2k`
   tests and doc tests passed through the workspace harness.
-- `cc528ca7` completes the persisted completed-transfer visibility slice. The
+- `9f39a64c` completes the persisted completed-transfer visibility slice. The
   metadata/runtime boundary now exposes only non-removed transfer-list
   manifests, excluding the potentially 100k-entry completed shared catalog.
   Core hydrates those rows through one idempotent barrier shared by list,
@@ -292,7 +292,7 @@ schema/state-machine change with unrelated path-policy or UI work.
   Validation: all 48 `emulebb-metadata` tests, all 1,076 `emulebb-ed2k` tests,
   all 411 `emulebb-core` unit tests plus integration/doc tests, and all 70
   `emulebb-daemon` tests plus doc tests passed through the workspace harness.
-- `5e640bad` introduces the explicit persisted delivery lifecycle and bumps the
+- `02869dae` introduces the explicit persisted delivery lifecycle and bumps the
   clean-profile schema from 33 to 34. Downloads start `pending`, share-in-place
   rows are `not_applicable`, and only a verified output committed with its path
   becomes `delivered`. SQLite and the metadata API reject incoherent state/path
@@ -302,7 +302,7 @@ schema/state-machine change with unrelated path-policy or UI work.
   Validation: `cargo fmt --all --check`, all 48 `emulebb-metadata` tests, all
   1,076 `emulebb-ed2k` tests, and all 411 `emulebb-core` unit tests plus
   integration/doc tests passed through the workspace harness.
-- `44cc0ba6` completes startup verification and deterministic reconciliation of
+- `68868d70` completes startup verification and deterministic reconciliation of
   recorded delivered outputs. Before REST starts, the daemon now enumerates
   every active completed download in `pending` or `delivered` state; candidate
   discovery fails startup instead of publishing an unverified transfer view.
@@ -318,7 +318,7 @@ schema/state-machine change with unrelated path-policy or UI work.
   --all --check`, all 48 `emulebb-metadata` tests, all 1,080 `emulebb-ed2k`
   tests, all 412 `emulebb-core` unit tests plus integration/doc tests, and all
   70 `emulebb-daemon` tests plus doc tests passed through the workspace harness.
-- `9b37e713` introduces one per-transfer lifecycle gate shared by delivery,
+- `d28ea3b0` introduces one per-transfer lifecycle gate shared by delivery,
   row-only removal, and destructive deletion. Destructive deletion now removes
   the recorded delivered output inside the ED2K runtime while holding the same
   gate as materialization, closing the in-process orphan race. Row-only removal
@@ -330,7 +330,7 @@ schema/state-machine change with unrelated path-policy or UI work.
   transfer visible as `completing`. Validation: `cargo fmt --all --check`, all
   1,082 `emulebb-ed2k` tests, and all 413 `emulebb-core` unit tests plus
   integration/doc tests passed through the workspace harness.
-- `bf85f467` bumps the clean-profile schema from 34 to 35 and adds a terminal
+- `52e023be` bumps the clean-profile schema from 34 to 35 and adds a terminal
   `delete_requested_at_ms` marker with a partial recovery index. The metadata
   contract now has explicit idempotent request, ordered pending-intent scan,
   and intent-gated finalization operations. Repeated requests preserve the
@@ -339,7 +339,7 @@ schema/state-machine change with unrelated path-policy or UI work.
   deletion transaction was factored through one shared known-file cleanup path.
   Validation: `cargo fmt --all --check` and all 49 `emulebb-metadata` tests plus
   doc tests passed through the workspace harness.
-- `44fdbb06` makes a pending destructive deletion a terminal visibility
+- `6c28d59e` makes a pending destructive deletion a terminal visibility
   partition instead of an ordinary transfer state. Normal manifest, startup
   hydration, transfer timestamp/count, completed catalog, publish, share,
   share-in-place reload, delivered-reuse, and delivery-reconciliation queries
@@ -355,7 +355,7 @@ schema/state-machine change with unrelated path-policy or UI work.
   binary still exposes a parallel-only SQLite lock flake in its default test
   runner; its seven tests pass with `--test-threads=1`, and the failing case
   passes in isolation.
-- `43a5cfc1` extracts one conservative delivered-output identity classifier
+- `31f14a1d` extracts one conservative delivered-output identity classifier
   shared by recorded-output reconciliation, pending-intent adoption, collision
   handling, and installed-output verification. It distinguishes a missing path
   from matching canonical bytes and a foreign occupant, keeps the native
@@ -364,7 +364,7 @@ schema/state-machine change with unrelated path-policy or UI work.
   primitive needed to delete only the recorded file still owned by the
   transfer. Validation: `cargo fmt --all --check` and all 1,084
   `emulebb-ed2k` tests plus doc tests passed.
-- `0421e046` makes the durable deletion intent the operation's commit point.
+- `bd4c1086` makes the durable deletion intent the operation's commit point.
   The ED2K runtime now persists intent under the lifecycle and manifest gates
   before touching either filesystem authority, immediately evicts manifest and
   catalog visibility, and finalizes SQLite only after cleanup. Matching or
@@ -376,7 +376,7 @@ schema/state-machine change with unrelated path-policy or UI work.
   resumption, and a forced mid-cleanup failure followed by idempotent retry.
   Validation: `cargo fmt --all --check`, all 1,087 `emulebb-ed2k` tests plus doc
   tests, and the three focused `emulebb-core` destructive-deletion tests passed.
-- `9a7f2059` completes pre-exposure recovery of durable destructive-deletion
+- `fe89bf57` completes pre-exposure recovery of durable destructive-deletion
   intents. Startup scans the ordered intent set immediately after core
   construction and strictly resumes each deletion before transfer hydration,
   delivery reconciliation, REST binding, or network/background task startup.
@@ -390,7 +390,7 @@ schema/state-machine change with unrelated path-policy or UI work.
   hydration or delivery reconciliation. Validation: `cargo fmt --all --check`,
   all 1,088 `emulebb-ed2k` tests, all 414 `emulebb-core` unit tests, all 70
   `emulebb-daemon` tests plus doc tests, and `cargo check --workspace` passed.
-- `9b8e27fc` closes silent adoption of untracked transfer-root content. A new
+- `3c6f6eba` closes silent adoption of untracked transfer-root content. A new
   download with no persisted manifest now inspects its canonical hash path
   under the per-transfer lifecycle/manifest gates. It reclaims only the empty
   directory produced by the pre-commit crash window, plus the one exact retired
@@ -401,7 +401,7 @@ schema/state-machine change with unrelated path-policy or UI work.
   non-empty payload preservation, regular-file preservation, and absence of a
   manifest after rejection. Validation: `cargo fmt --all --check`, all 1,091
   `emulebb-ed2k` tests plus doc tests, and `cargo check --workspace` passed.
-- `5edb4ad4` adds the pre-exposure transfer-root inventory without introducing
+- `b6856ae4` adds the pre-exposure transfer-root inventory without introducing
   destructive quarantine policy. Metadata now exposes the exact download rows
   which own internal hash paths, including hidden pending-deletion rows while
   excluding share-in-place sources. After strict deletion recovery and before
@@ -415,7 +415,7 @@ schema/state-machine change with unrelated path-policy or UI work.
   fmt --all --check`, all 49 `emulebb-metadata` tests, all 1,092
   `emulebb-ed2k` tests plus doc tests, all 414 `emulebb-core` unit tests, all 70
   `emulebb-daemon` tests plus doc tests, and `cargo check --workspace` passed.
-- `395c015f` adds a strict pre-exposure authority barrier for every persisted
+- `dd500281` adds a strict pre-exposure authority barrier for every persisted
   incomplete download. Under the per-transfer lifecycle and manifest locks,
   startup now recreates only metadata-owned missing hash directories, inspects
   `pieces.bin` with no symlink following, and fails closed while preserving any
@@ -433,7 +433,7 @@ schema/state-machine change with unrelated path-policy or UI work.
   `emulebb-ed2k`, `emulebb-core`, and `emulebb-daemon`, all 1,098
   `emulebb-ed2k` unit tests plus doc tests, all 414 `emulebb-core` unit tests,
   all 70 `emulebb-daemon` unit tests, and `cargo check --workspace` passed.
-- `33fa92f8` closes the operator-recheck gap for incomplete downloads. Recheck
+- `eb9ce9e0` closes the operator-recheck gap for incomplete downloads. Recheck
   now reuses the canonical whole-payload part computation to MD4-validate every
   persisted `Verified` piece even when other pieces are still missing. It keeps
   intact verified pieces publishable, demotes missing/truncated or mismatching
@@ -446,7 +446,7 @@ schema/state-machine change with unrelated path-policy or UI work.
   1,098 `emulebb-ed2k` unit tests plus doc tests, and Clippy with warnings denied
   after exempting the repository's seven unrelated pre-existing
   `unfulfilled_lint_expectations` diagnostics passed.
-- `150aaf6c` removes completed-catalog construction from the progressive daemon
+- `6cbab433` removes completed-catalog construction from the progressive daemon
   constructor. The daemon-facing runtime now starts with an empty completed
   catalog, runs destructive-deletion, transfer-root, payload, transfer-row, and
   delivery reconciliation first, then explicitly hydrates one bounded cohort
@@ -459,7 +459,7 @@ schema/state-machine change with unrelated path-policy or UI work.
   `git diff --check`, strict Clippy for `emulebb-ed2k`, `emulebb-core`, and
   `emulebb-daemon`, all 1,098 ED2K unit tests, all 414 core unit tests, and all
   70 daemon unit tests passed.
-- `1d4b4e99` fixes canonical upload-source precedence when an explicit
+- `e9d83291` fixes canonical upload-source precedence when an explicit
   redownload coexists with a same-hash shared-file row. Once a download has any
   verified internal range, upload readers now use only its hash-owned
   `pieces.bin` and its persisted verified-range map; an unrelated shared path
@@ -471,7 +471,7 @@ schema/state-machine change with unrelated path-policy or UI work.
   proves uploads still return the canonical payload. Validation: `cargo fmt
   --all --check`, `git diff --check`, strict ED2K Clippy, the existing explicit
   redownload fallback regression, and all 1,099 ED2K unit tests passed.
-- `d3cd5104` adds the metadata inventory required by the completed-storage
+- `bf09f7f0` adds the metadata inventory required by the completed-storage
   barrier. One SQL-filtered query now returns every internally managed download
   manifest, including incomplete, completed, and operator-hidden completed
   rows, while excluding share-in-place identities and already-hidden pending
@@ -479,7 +479,7 @@ schema/state-machine change with unrelated path-policy or UI work.
   incomplete, completed removed-row, and deletion-intent states. Validation:
   `cargo fmt --all --check`, `git diff --check`, strict metadata Clippy, all 49
   metadata unit tests, and metadata doc tests passed.
-- `6238c07e` hardens the durable delivery crash-window pointer before it is used
+- `43d5b512` hardens the durable delivery crash-window pointer before it is used
   as completed-payload recovery authority. `delivery.pending` now stores exact
   platform-native path bytes through the shared `NativePath` codec instead of
   lossy UTF-8 text, and reads distinguish a missing marker from I/O failure,
@@ -488,7 +488,7 @@ schema/state-machine change with unrelated path-policy or UI work.
   have an explicit round-trip regression. Validation: `cargo fmt --all
   --check`, `git diff --check`, strict ED2K Clippy, the crash-window adoption
   regression, and all 1,099 ED2K unit tests passed.
-- `fad46291` generalizes startup storage reconciliation across every internally
+- `0adae526` generalizes startup storage reconciliation across every internally
   managed download, including completed and operator-hidden rows. Completed
   `pieces.bin` content is now whole-file ED2K verified before catalog exposure;
   missing, truncated, oversized, or same-length-corrupt canonical payloads are
@@ -507,7 +507,7 @@ schema/state-machine change with unrelated path-policy or UI work.
   --check`, `git diff --check`, strict Clippy for `emulebb-ed2k`,
   `emulebb-core`, and `emulebb-daemon`, all 1,106 ED2K unit tests, all 414 core
   unit tests, and all 70 daemon unit tests passed.
-- `2199c4ae` bumps the clean schema to 36 and adds a dedicated canonical
+- `fc4c08de` bumps the clean schema to 36 and adds a dedicated canonical
   `payload_fingerprint`, explicitly separate from shared-source and delivered
   output authority. Stable successful final rehash and restoration paths record
   it; completion-pending, failure, incomplete, demoted, and share-in-place rows
@@ -522,7 +522,7 @@ schema/state-machine change with unrelated path-policy or UI work.
   `emulebb-daemon`, 49 focused metadata tests, four completion-rehash tests, 15
   payload-reconciliation tests, all 1,108 ED2K unit tests, all 414 core unit
   tests, and all 70 daemon unit tests passed.
-- `e51359ce` hardens the live final-completion barrier around one authoritative
+- `251bdba3` hardens the live final-completion barrier around one authoritative
   payload handle. Native fingerprints now come from the same no-follow handle
   used to identify and size the file on Unix and Windows; final rehash runs
   under lifecycle and manifest serialization, withdraws the pending payload
@@ -543,7 +543,7 @@ schema/state-machine change with unrelated path-policy or UI work.
   `-D warnings` remains blocked only by seven unrelated pre-existing
   `unfulfilled-lint-expectations`, so the strict ED2K run allowed that lint and
   denied every other warning.
-- `24b8f2a3` binds share-in-place ingest hashing, file size, and the persisted
+- `d70694b0` binds share-in-place ingest hashing, file size, and the persisted
   source fingerprint to one no-follow open handle. The combined MD4/AICH builder
   now accepts that existing reader instead of reopening the pathname. Ingest
   verifies exact handle metadata before and after hashing and verifies that the
@@ -560,7 +560,7 @@ schema/state-machine change with unrelated path-policy or UI work.
   --all --check`, `git diff --check`, strict Clippy for `emulebb-ed2k`, the
   focused ingest and combined-hashset tests, and all 1,113 ED2K unit tests
   passed.
-- `4d239551` closes the live upload-authority gap after publication. Completed
+- `83806b47` closes the live upload-authority gap after publication. Completed
   canonical payloads and share-in-place sources are opened without following
   symlinks and must still match their persisted native fingerprint before any
   bytes are served. Windows source readers hold read-only sharing so writers and
@@ -594,7 +594,7 @@ schema/state-machine change with unrelated path-policy or UI work.
   authority regressions, `cargo check -p emulebb-ed2k`, and strict Clippy for
   metadata, ED2K, and core with every warning denied except the repository's
   unrelated pre-existing `unfulfilled-lint-expectations` diagnostics passed.
-- `1a2ba73f` serializes synchronous and detached shared-directory reloads through
+- `11995e10` serializes synchronous and detached shared-directory reloads through
   one core-owned async gate. Detached requests still coalesce through the
   existing running/pending state, but neither API can now overlap catalog and
   manifest persistence with another reload in the same runtime. A deterministic
@@ -602,7 +602,7 @@ schema/state-machine change with unrelated path-policy or UI work.
   and verifies that the detached worker drains after release. Validation: the
   focused coordinator regression, strict core Clippy, formatting, and diff
   checks passed.
-- `2506d1e8` repairs the Windows CI failure that exposed a second persistence
+- `d41daea8` repairs the Windows CI failure that exposed a second persistence
   boundary beyond the in-core gate. `upsert_transfer_manifest` previously began
   a deferred WAL transaction, read destructive-deletion authority, then tried
   to upgrade to a writer after another SQLite connection could commit. SQLite
@@ -614,7 +614,10 @@ schema/state-machine change with unrelated path-policy or UI work.
   the contender succeeds. Validation: 50 metadata unit tests, 415 core unit
   tests plus all core integration/doc tests, 20 consecutive runs of the exact
   Windows restart regression, strict metadata/core all-target Clippy,
-  formatting, and diff checks passed. Protected-main CI rerun is pending.
+  formatting, and diff checks passed.
+- Rust PR #126 merged to protected `main` by rebase on 2026-10-16. All required
+  CI and CodeQL checks passed, including Linux, macOS, Windows, cargo-deny,
+  strict format/Clippy policy, workflow lint, and live REST/OpenAPI conformance.
 
 Payload isolation, validation, persisted completed-transfer visibility, the
 explicit delivery state model, and startup output reconciliation are complete.
@@ -639,6 +642,7 @@ republish its pending state. Share-in-place ingest now derives its hash and
 fingerprint from one verified no-follow handle and excludes Windows writers
 during hashing. Live canonical, share-in-place, and incomplete upload reads now
 fail closed against replaced or corrupt authority and reconcile persisted and
-catalog state before reuse. Next audit delivered-output truth across runtime
-listing, retry selection, operator mutation, and restart reconciliation so the
-user-facing completion state cannot drift after initial delivery.
+catalog state before reuse. Continue with the three remaining acceptance
+boundaries: filesystem namespace durability before SQLite advancement,
+conservative reclamation of owned stale copy/intent artifacts, and
+completion/history timestamps that change only on a true completion transition.
