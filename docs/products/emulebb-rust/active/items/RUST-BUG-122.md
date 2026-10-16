@@ -459,6 +459,18 @@ schema/state-machine change with unrelated path-policy or UI work.
   `git diff --check`, strict Clippy for `emulebb-ed2k`, `emulebb-core`, and
   `emulebb-daemon`, all 1,098 ED2K unit tests, all 414 core unit tests, and all
   70 daemon unit tests passed.
+- `1d4b4e99` fixes canonical upload-source precedence when an explicit
+  redownload coexists with a same-hash shared-file row. Once a download has any
+  verified internal range, upload readers now use only its hash-owned
+  `pieces.bin` and its persisted verified-range map; an unrelated shared path
+  can no longer override those bytes merely because its current length still
+  matches. The shared-source fallback remains available only while the new
+  download has no verified canonical bytes, preserving intentional
+  share-while-redownloading behavior. The regression completes a redownload,
+  rewrites the old shared source in place with equal-length foreign bytes, and
+  proves uploads still return the canonical payload. Validation: `cargo fmt
+  --all --check`, `git diff --check`, strict ED2K Clippy, the existing explicit
+  redownload fallback regression, and all 1,099 ED2K unit tests passed.
 
 Payload isolation, validation, persisted completed-transfer visibility, the
 explicit delivery state model, and startup output reconciliation are complete.
@@ -475,10 +487,9 @@ downloads: the progressive runtime constructor catalogs completed rows before
 any internal-storage validation, completed `pieces.bin` paths do not reject
 symlinks/wrong types, and upload source selection ignores a separately verified
 `delivered_path`. Initial completed-catalog exposure is now deferred until the
-startup barriers finish. The sidecar audit also found a separate critical
-upload-selection flaw: downloaded transfers may prefer an unverified same-hash,
-same-size shared-source row over their canonical internal payload. Next remove
-that fallback so downloads serve only canonical storage, then generalize the
-storage barrier to restore completed internal payloads from verified delivered
-outputs or demote rows with no remaining authority. Finally add a live
-reader-open guard so post-startup path replacement also fails closed.
+startup barriers finish. Canonical verified download bytes now take precedence
+over same-hash shared-source rows. Next generalize the storage barrier to
+restore completed internal payloads from verified delivered outputs or demote
+rows with no remaining authority. Finally add a live reader-open fingerprint
+guard for shared and delivered paths so post-startup replacement also fails
+closed.
