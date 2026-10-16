@@ -376,14 +376,29 @@ schema/state-machine change with unrelated path-policy or UI work.
   resumption, and a forced mid-cleanup failure followed by idempotent retry.
   Validation: `cargo fmt --all --check`, all 1,087 `emulebb-ed2k` tests plus doc
   tests, and the three focused `emulebb-core` destructive-deletion tests passed.
+- `9a7f2059` completes pre-exposure recovery of durable destructive-deletion
+  intents. Startup scans the ordered intent set immediately after core
+  construction and strictly resumes each deletion before transfer hydration,
+  delivery reconciliation, REST binding, or network/background task startup.
+  Interactive deletion retains its accepted-and-retry-later contract, while
+  startup propagates cleanup/finalization failures with the transfer hash and
+  refuses to expose a profile until every intent is complete. Recovery remains
+  independently idempotent per hash, so earlier intents may finish before a
+  later blocker stops startup. Restart regressions cover successful cleanup,
+  an empty no-op scan, a forced cleanup failure that preserves the intent, and
+  successful retry; a core regression proves recovered rows cannot enter
+  hydration or delivery reconciliation. Validation: `cargo fmt --all --check`,
+  all 1,088 `emulebb-ed2k` tests, all 414 `emulebb-core` unit tests, all 70
+  `emulebb-daemon` tests plus doc tests, and `cargo check --workspace` passed.
 
 Payload isolation, validation, persisted completed-transfer visibility, the
 explicit delivery state model, and startup output reconciliation are complete.
 In-process lifecycle serialization and the verified-but-undelivered removal
 rule are also complete. Continue with schema 35 persisted destructive-deletion
 intent integration: the normal/runtime visibility partition, shared output
-identity classifier, and intent-first retryable cleanup are complete. Next add
-pre-hydration startup recovery so no REST/network surface opens before every
-persisted deletion intent has been resumed. Until that startup barrier lands, a
-crash can leave cleanup pending and hidden indefinitely unless another runtime
-deletion call explicitly retries the hash.
+identity classifier, intent-first retryable cleanup, and strict pre-exposure
+startup recovery are complete. Next audit crash-created filesystem orphans and
+define whether startup should conservatively reclaim only directories with
+provably absent metadata, quarantine them, or surface them as operator-visible
+repair work. Do not broaden deletion to unknown files until ownership can be
+proven from canonical transfer-directory structure and payload identity.
