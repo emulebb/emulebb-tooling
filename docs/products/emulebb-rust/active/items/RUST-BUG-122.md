@@ -391,6 +391,42 @@ ED2K/metadata Clippy, formatting and diff checks, and core/daemon all-target
 checks. A second independent full-diff review and the canonical full gate remain
 required before protected-main CI and merge.
 
+### Second Independent Review Checkpoint (2026-10-16)
+
+The canonical `python tools/rust_quality_gate.py ci` gate passes after all eight
+fresh-review fixes. The first rerun was interrupted by a transient Windows lock
+on the Rolldown native module during the second `npm ci`; an unchanged rerun
+completed client policy plus 111 policy tests, formatting, workspace-wide
+all-target strict Clippy, packet diagnostics, 28 WebUI unit tests, 16 Chromium
+end-to-end tests, fresh debug and release builds, the complete workspace test
+suite, integration and documentation tests, and all three observed VPN egress
+tests.
+
+The second independent full-diff review nevertheless found three high-severity
+merge blockers:
+
+- destructive deletion persists the database intent before fallible delivery-
+  attempt cleanup, but hides the live cache/catalog entry only afterward; a
+  staging cleanup failure can therefore leave a durably deleted transfer live
+  and potentially served until restart;
+- crash-before-checkpoint output-tombstone recovery accepts a byte-identical
+  replacement when native identity changed, which treats content equality as
+  ownership and can delete a foreign replacement;
+- startup propagates pending-deletion cleanup failures as fatal, so a persistent
+  sharing lock or deliberately preserved ambiguous tombstone can create an
+  indefinite daemon restart loop before the runtime retry sweep starts.
+
+The review also found two medium-severity gaps: transfer-directory tombstones
+have no persisted identity before recursive recovery deletion, and the Unix
+post-publication mutation hook is keyed only by content hash so parallel
+same-content fixtures can consume the wrong hook. The final path-based unlink
+still has a low-severity check-to-unlink race that the current failpoint does not
+exercise. Prior ownership demotion, prepared-staging preservation, post-move
+rehash, deletion-sweep starvation, and schema 41 owned-fingerprint findings are
+closed. Rust PR #129 remains draft and must not merge until these remaining
+findings are resolved in granular commits, the canonical gate passes again, a
+third independent review is clean, and fresh protected-main CI passes.
+
 ## Acceptance Criteria
 
 - [x] User edits to a delivered file cannot change bytes served from the
@@ -839,8 +875,10 @@ republish its pending state. Share-in-place ingest now derives its hash and
 fingerprint from one verified no-follow handle and excludes Windows writers
 during hashing. Live canonical, share-in-place, and incomplete upload reads now
 fail closed against replaced or corrupt authority and reconcile persisted and
-catalog state before reuse. Schema 39 delivery ownership plus schema 40
-output-tombstone recovery now close the remaining namespace-durability and
-owned-artifact reclamation boundaries. The item is implementation-complete and
-awaits the full local quality gate, independent review, protected-main CI, and
-rebase merge of Rust PR #129.
+catalog state before reuse. Schema 39 delivery ownership, schema 40 output-
+tombstone recovery, and schema 41 owned-fingerprint invariants close most
+namespace-durability and owned-artifact reclamation boundaries. The second
+independent review found remaining deletion ordering, startup availability,
+tombstone identity, test-isolation, and final unlink race gaps. The item remains
+implementation-active; Rust PR #129 stays draft until those findings are
+resolved and revalidated.
