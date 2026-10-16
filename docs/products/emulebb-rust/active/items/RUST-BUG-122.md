@@ -433,6 +433,19 @@ schema/state-machine change with unrelated path-policy or UI work.
   `emulebb-ed2k`, `emulebb-core`, and `emulebb-daemon`, all 1,098
   `emulebb-ed2k` unit tests plus doc tests, all 414 `emulebb-core` unit tests,
   all 70 `emulebb-daemon` unit tests, and `cargo check --workspace` passed.
+- `33fa92f8` closes the operator-recheck gap for incomplete downloads. Recheck
+  now reuses the canonical whole-payload part computation to MD4-validate every
+  persisted `Verified` piece even when other pieces are still missing. It keeps
+  intact verified pieces publishable, demotes missing/truncated or mismatching
+  pieces, distinguishes absent bytes from retained corrupt bytes for ICH state,
+  and refuses to apply a stale result if geometry, hash authority, or piece
+  state changes while disk hashing runs. Completed/fully present payloads retain
+  the existing final-rehash barrier. The regression now covers clean partial
+  recheck, missing internal payload, restored progress, and subsequent
+  corruption. Validation: `cargo fmt --all --check`, `git diff --check`, all
+  1,098 `emulebb-ed2k` unit tests plus doc tests, and Clippy with warnings denied
+  after exempting the repository's seven unrelated pre-existing
+  `unfulfilled_lint_expectations` diagnostics passed.
 
 Payload isolation, validation, persisted completed-transfer visibility, the
 explicit delivery state model, and startup output reconciliation are complete.
