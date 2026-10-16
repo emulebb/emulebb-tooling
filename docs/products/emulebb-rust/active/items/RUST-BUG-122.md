@@ -256,6 +256,32 @@ disappeared and whose exact target verifies. `AlreadyExists` always preserves
 the unrelated target and selects another suffix. Cleanup never globs temporary
 names and never deletes an artifact without persisted provenance.
 
+### Independent Review Blockers
+
+Rust draft PR #129 (`https://github.com/emulebb/emulebb-rust/pull/129`)
+remains draft after independent review found that the initial attempt model is
+not yet strong enough to authorize ownership-sensitive recovery or deletion:
+
+- `staged` proves that a staging file was verified, but does not prove that the
+  exact target was installed; a missing staging file plus byte-identical foreign
+  target must therefore never be adopted or deleted;
+- installation currently removes the staging hard link before the delivered
+  manifest commits, discarding the strongest native-identity proof and opening
+  classify-to-unlink and verify-to-fingerprint replacement races;
+- destructive deletion still treats content equality as ownership and can
+  remove a byte-identical operator replacement;
+- hard-link-only publication excludes filesystems without hard-link support;
+- Windows namespace operations do not yet have an enforceable write-through
+  ordering equivalent to the Unix parent-directory sync barrier;
+- a raced `NotFound` during delivered-file deletion must still re-establish the
+  namespace durability barrier before SQLite finalization.
+
+The required redesign separates content validity from ownership proof, retains
+or persists native target identity through manifest commit, uses atomic
+platform publication without requiring hard-link support, and adds deterministic
+tests for every install, cleanup, and deletion crash boundary before the PR can
+leave draft.
+
 ## Acceptance Criteria
 
 - [x] User edits to a delivered file cannot change bytes served from the
