@@ -415,6 +415,24 @@ schema/state-machine change with unrelated path-policy or UI work.
   fmt --all --check`, all 49 `emulebb-metadata` tests, all 1,092
   `emulebb-ed2k` tests plus doc tests, all 414 `emulebb-core` unit tests, all 70
   `emulebb-daemon` tests plus doc tests, and `cargo check --workspace` passed.
+- `395c015f` adds a strict pre-exposure authority barrier for every persisted
+  incomplete download. Under the per-transfer lifecycle and manifest locks,
+  startup now recreates only metadata-owned missing hash directories, inspects
+  `pieces.bin` with no symlink following, and fails closed while preserving any
+  directory, symlink, or other wrong-type occupant. Missing payloads and any
+  payload shorter than the highest persisted contiguous or bitmap-backed byte
+  demote every claimed piece, clear derived verified ranges/final-rehash state,
+  persist the repair, and evict stale catalog authority before transfer
+  hydration or network publication. The all-progress demotion is deliberate:
+  once truncation is observed, file extent alone cannot prove that an earlier
+  prefix still belongs to the persisted ED2K identity. Intact partial payloads
+  retain their progress, and the operation is idempotent. Six restart-focused
+  regressions cover missing payloads, truncation, intact partials, missing
+  directories, wrong payload types, and wrong transfer-directory types.
+  Validation: `cargo fmt --all --check`, `git diff --check`, strict Clippy for
+  `emulebb-ed2k`, `emulebb-core`, and `emulebb-daemon`, all 1,098
+  `emulebb-ed2k` unit tests plus doc tests, all 414 `emulebb-core` unit tests,
+  all 70 `emulebb-daemon` unit tests, and `cargo check --workspace` passed.
 
 Payload isolation, validation, persisted completed-transfer visibility, the
 explicit delivery state model, and startup output reconciliation are complete.
@@ -424,8 +442,13 @@ intent integration: the normal/runtime visibility partition, shared output
 identity classifier, intent-first retryable cleanup, and strict pre-exposure
 startup recovery are complete. Unmanaged transfer paths can no longer be
 silently adopted by a future download, and startup now reconciles safe orphan
-residue while preserving/reporting unknown bytes. Next audit the inverse
-ownership failure: a persisted download row whose canonical internal path or
-`pieces.bin` authority is missing, replaced by the wrong filesystem type, or
-shorter than persisted verified progress. Recovery must demote unprovable piece
-state before resume/publish rather than advertising bytes that no longer exist.
+residue while preserving/reporting unknown bytes. Persisted incomplete rows can
+no longer resume or publish progress unsupported by their internal payload.
+The focused follow-up audit found the remaining authority gap in completed
+downloads: the progressive runtime constructor catalogs completed rows before
+any internal-storage validation, completed `pieces.bin` paths do not reject
+symlinks/wrong types, and upload source selection ignores a separately verified
+`delivered_path`. Next generalize the storage barrier to completed downloads and
+defer initial completed-catalog hydration until their internal/delivered
+authority is classified. Then add a verified delivered-output serving fallback
+and a live reader-open guard so post-startup path replacement also fails closed.
