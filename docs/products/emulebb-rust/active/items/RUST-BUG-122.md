@@ -211,11 +211,11 @@ record.
 Each slice lands as its own Rust commit with focused tests. Do not combine the
 schema/state-machine change with unrelated path-policy or UI work.
 
-## Active Temporal-Correctness Slice
+## Completed Temporal-Correctness Slice
 
-Branch: `fix/rust-bug-122-temporal-correctness`; draft Rust PR #128.
+Rust PR #128 merged to protected `main` by rebase on 2026-10-16.
 
-The next granular Rust commit is limited to persisted completion time:
+The merged Rust commit is limited to persisted completion time:
 
 - detect an actual incomplete-to-complete transition before overwriting the
   known-file completion bit;
@@ -636,7 +636,7 @@ separate follow-up commits so their crash semantics are reviewed independently.
 - Rust PR #126 merged to protected `main` by rebase on 2026-10-16. All required
   CI and CodeQL checks passed, including Linux, macOS, Windows, cargo-deny,
   strict format/Clippy policy, workflow lint, and live REST/OpenAPI conformance.
-- `f02cd058` makes persisted completion time transition-driven instead of
+- `cfe73bfc` makes persisted completion time transition-driven instead of
   rewrite-driven. One shared authoritative-download predicate excludes
   final-rehash-pending and share-in-place rows; prior state is captured before
   the known-file completion bit changes. Transfer completion time survives
@@ -649,8 +649,10 @@ separate follow-up commits so their crash semantics are reviewed independently.
   share-in-place boundaries, legacy repair, manifest recreation, and wall-clock
   rollback. Validation: 53 metadata tests, 1,123 ED2K tests, 415 core unit tests
   plus all core integration/doc tests, strict metadata Clippy, formatting, diff
-  checks, and independent review with no remaining findings passed. Protected
-  CI is pending on draft Rust PR #128.
+  checks, and independent review with no remaining findings passed. Rust PR
+  #128 merged to protected `main` by rebase on 2026-10-16 after all required CI
+  and CodeQL checks passed, including Linux, macOS, Windows, cargo-deny, strict
+  format/Clippy policy, workflow lint, and live REST/OpenAPI conformance.
 
 Payload isolation, validation, persisted completed-transfer visibility, the
 explicit delivery state model, and startup output reconciliation are complete.
