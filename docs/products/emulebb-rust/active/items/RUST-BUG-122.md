@@ -594,6 +594,27 @@ schema/state-machine change with unrelated path-policy or UI work.
   authority regressions, `cargo check -p emulebb-ed2k`, and strict Clippy for
   metadata, ED2K, and core with every warning denied except the repository's
   unrelated pre-existing `unfulfilled-lint-expectations` diagnostics passed.
+- `1a2ba73f` serializes synchronous and detached shared-directory reloads through
+  one core-owned async gate. Detached requests still coalesce through the
+  existing running/pending state, but neither API can now overlap catalog and
+  manifest persistence with another reload in the same runtime. A deterministic
+  regression holds the gate, schedules both APIs, proves both remain blocked,
+  and verifies that the detached worker drains after release. Validation: the
+  focused coordinator regression, strict core Clippy, formatting, and diff
+  checks passed.
+- `2506d1e8` repairs the Windows CI failure that exposed a second persistence
+  boundary beyond the in-core gate. `upsert_transfer_manifest` previously began
+  a deferred WAL transaction, read destructive-deletion authority, then tried
+  to upgrade to a writer after another SQLite connection could commit. SQLite
+  correctly rejected that stale snapshot immediately with
+  `SQLITE_BUSY_SNAPSHOT`; the configured busy timeout cannot retry an unsafe
+  snapshot upgrade. Manifest upserts now begin `IMMEDIATE`, acquiring writer
+  authority before their first read. A two-connection regression holds an
+  existing writer, proves the manifest upsert waits, then commits and verifies
+  the contender succeeds. Validation: 50 metadata unit tests, 415 core unit
+  tests plus all core integration/doc tests, 20 consecutive runs of the exact
+  Windows restart regression, strict metadata/core all-target Clippy,
+  formatting, and diff checks passed. Protected-main CI rerun is pending.
 
 Payload isolation, validation, persisted completed-transfer visibility, the
 explicit delivery state model, and startup output reconciliation are complete.
