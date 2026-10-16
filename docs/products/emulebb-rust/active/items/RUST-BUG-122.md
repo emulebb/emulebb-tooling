@@ -213,7 +213,7 @@ schema/state-machine change with unrelated path-policy or UI work.
 
 ## Active Temporal-Correctness Slice
 
-Branch: `fix/rust-bug-122-temporal-correctness`
+Branch: `fix/rust-bug-122-temporal-correctness`; draft Rust PR #128.
 
 The next granular Rust commit is limited to persisted completion time:
 
@@ -248,7 +248,7 @@ separate follow-up commits so their crash semantics are reviewed independently.
       cross-domain commit boundary supported by the platform.
 - [ ] Owned stale copy/intention artifacts are reclaimed without touching
       unrelated user files.
-- [ ] Completion and history timestamps change only on a true completion
+- [x] Completion and history timestamps change only on a true completion
       transition.
 - [x] The canonical Rust quality gate and protected-main CI pass.
 
@@ -636,6 +636,21 @@ separate follow-up commits so their crash semantics are reviewed independently.
 - Rust PR #126 merged to protected `main` by rebase on 2026-10-16. All required
   CI and CodeQL checks passed, including Linux, macOS, Windows, cargo-deny,
   strict format/Clippy policy, workflow lint, and live REST/OpenAPI conformance.
+- `f02cd058` makes persisted completion time transition-driven instead of
+  rewrite-driven. One shared authoritative-download predicate excludes
+  final-rehash-pending and share-in-place rows; prior state is captured before
+  the known-file completion bit changes. Transfer completion time survives
+  metadata-only updates, delivery-state rewrites, and temporary demotion, while
+  a later authoritative recompletion advances both transfer and history time.
+  Transition time is monotonic against retained transfer/history evidence, and
+  legacy completed rows with a null transfer timestamp repair from history
+  without refreshing it. Deterministic regressions cover first completion,
+  metadata and delivery rewrites, demotion/recompletion, final-rehash and
+  share-in-place boundaries, legacy repair, manifest recreation, and wall-clock
+  rollback. Validation: 53 metadata tests, 1,123 ED2K tests, 415 core unit tests
+  plus all core integration/doc tests, strict metadata Clippy, formatting, diff
+  checks, and independent review with no remaining findings passed. Protected
+  CI is pending on draft Rust PR #128.
 
 Payload isolation, validation, persisted completed-transfer visibility, the
 explicit delivery state model, and startup output reconciliation are complete.
@@ -660,7 +675,6 @@ republish its pending state. Share-in-place ingest now derives its hash and
 fingerprint from one verified no-follow handle and excludes Windows writers
 during hashing. Live canonical, share-in-place, and incomplete upload reads now
 fail closed against replaced or corrupt authority and reconcile persisted and
-catalog state before reuse. Continue with the three remaining acceptance
-boundaries: filesystem namespace durability before SQLite advancement,
-conservative reclamation of owned stale copy/intent artifacts, and
-completion/history timestamps that change only on a true completion transition.
+catalog state before reuse. Continue with the two remaining acceptance
+boundaries: filesystem namespace durability before SQLite advancement and
+conservative reclamation of owned stale copy/intent artifacts.
