@@ -471,6 +471,14 @@ schema/state-machine change with unrelated path-policy or UI work.
   proves uploads still return the canonical payload. Validation: `cargo fmt
   --all --check`, `git diff --check`, strict ED2K Clippy, the existing explicit
   redownload fallback regression, and all 1,099 ED2K unit tests passed.
+- `d3cd5104` adds the metadata inventory required by the completed-storage
+  barrier. One SQL-filtered query now returns every internally managed download
+  manifest, including incomplete, completed, and operator-hidden completed
+  rows, while excluding share-in-place identities and already-hidden pending
+  destructive deletions. Regressions prove the partition across share-in-place,
+  incomplete, completed removed-row, and deletion-intent states. Validation:
+  `cargo fmt --all --check`, `git diff --check`, strict metadata Clippy, all 49
+  metadata unit tests, and metadata doc tests passed.
 
 Payload isolation, validation, persisted completed-transfer visibility, the
 explicit delivery state model, and startup output reconciliation are complete.
