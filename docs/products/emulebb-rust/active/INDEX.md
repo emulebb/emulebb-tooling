@@ -27,12 +27,6 @@ Rust item IDs use `RUST-<CLASS>-<NNN>` with `BUG`, `FEAT`, `REF`, or `CI`.
 Allocate against both active and historical item directories; IDs are never
 reused. Parked ideas are not backlog items until explicitly activated.
 
-## Critical
-
-| ID | Class | Title |
-|---|---|---|
-| [RUST-BUG-122](items/RUST-BUG-122.md) | Bug | Make completed-download delivery isolated and transactional |
-
 ## Major
 
 | ID | Class | Title |
