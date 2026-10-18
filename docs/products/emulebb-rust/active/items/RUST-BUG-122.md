@@ -484,9 +484,17 @@ that identity continuity was necessary but insufficient. `f49537cc` adds the
 independent durable marker described above. Post-fix focused validation passes:
 all 61 metadata tests, all 41 delivery-runtime tests, the complete 1,149-test
 ED2K suite, workspace-wide all-target strict Clippy, formatting, and diff
-checks. The canonical quality gate and fresh CI must be rerun at `f49537cc`;
-the earlier clean third review and gate at `aabbb846` are supporting evidence,
-not merge authorization for the changed head.
+checks. The changed head requires fresh final-candidate validation; the earlier
+clean third review and gate at `aabbb846` remain supporting evidence rather than
+merge authorization.
+
+The unchanged canonical `python tools/rust_quality_gate.py ci` gate passes at
+final candidate `f49537cc`: client policy plus 111 policy tests, formatting,
+workspace-wide all-target strict Clippy, packet diagnostics, 28 WebUI unit
+tests, 16 Chromium end-to-end tests, WebUI production build, fresh debug and
+release workspace/diagnostics builds, the complete workspace and documentation
+test suites, and all three observed VPN egress tests. Fresh protected-main CI
+and CodeQL remain the only merge gate.
 
 One low-severity platform limitation remains documented rather than disguised
 as an atomicity fix. Rust/Unix exposes no portable unlink-by-open-handle
@@ -500,9 +508,9 @@ handle-relative recursive deletion or a stronger private-filesystem boundary;
 it is an explicit Beta 3 residual, subject to the third independent review, not
 an unverified claim of portability.
 
-The remaining merge sequence is a canonical gate rerun at `f49537cc`,
-topic-branch push, fresh protected-main CI/CodeQL, then rebase merge. Rust PR
-#129 remains draft until those checks are green.
+The remaining merge sequence is topic-branch push, fresh protected-main
+CI/CodeQL, then rebase merge. Rust PR #129 remains draft until those checks are
+green.
 
 ## Acceptance Criteria
 
