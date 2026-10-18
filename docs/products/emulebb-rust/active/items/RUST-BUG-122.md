@@ -451,6 +451,13 @@ the second independent review:
   owned transfer directory. Recovery requires both proofs before rename and
   again before recursive tombstone deletion, so an accidentally reused inode
   cannot authorize deletion of a replacement directory.
+- `a52f95ef` advances the clean-profile schema to 43 for the new marker column,
+  so a schema-42 profile created by the identity-only candidate fails the normal
+  clean-profile version check instead of being accepted with a missing column.
+- `2808acf8` makes marker validation deterministic in the regression suite. The
+  test preserves the directory identity, removes only the persisted authority
+  marker, and proves recovery retains both the tombstone sentinel and pending
+  deletion intent.
 
 Focused validation passes: all 61 metadata tests, all 41 delivery-runtime tests,
 the core startup ordering regression, affected ED2K/core/daemon compile checks,
@@ -494,7 +501,15 @@ workspace-wide all-target strict Clippy, packet diagnostics, 28 WebUI unit
 tests, 16 Chromium end-to-end tests, WebUI production build, fresh debug and
 release workspace/diagnostics builds, the complete workspace and documentation
 test suites, and all three observed VPN egress tests. Fresh protected-main CI
-and CodeQL remain the only merge gate.
+and CodeQL started for that superseded head but are not merge authority.
+
+A focused read-only review of `aabbb846...f49537cc` found no blocker or high
+issue and two medium gaps: the marker column initially reused schema version 42,
+and the replacement regression could pass through identity mismatch without
+exercising marker validation. `a52f95ef` and `2808acf8` resolve those findings
+in separate commits. Focused follow-up validation passes all 61 metadata tests,
+all 42 delivery-runtime tests, formatting, and diff checks. The canonical gate
+and protected-main CI must now run at final candidate `2808acf8`.
 
 One low-severity platform limitation remains documented rather than disguised
 as an atomicity fix. Rust/Unix exposes no portable unlink-by-open-handle
@@ -508,9 +523,9 @@ handle-relative recursive deletion or a stronger private-filesystem boundary;
 it is an explicit Beta 3 residual, subject to the third independent review, not
 an unverified claim of portability.
 
-The remaining merge sequence is topic-branch push, fresh protected-main
-CI/CodeQL, then rebase merge. Rust PR #129 remains draft until those checks are
-green.
+The remaining merge sequence is a canonical gate rerun at `2808acf8`,
+topic-branch push, fresh protected-main CI/CodeQL, then rebase merge. Rust PR
+#129 remains draft until those checks are green.
 
 ## Acceptance Criteria
 
@@ -966,7 +981,9 @@ tombstone recovery, and schema 41 owned-fingerprint invariants close most
 namespace-durability and owned-artifact reclamation boundaries. The second
 independent review's deletion ordering, startup availability, tombstone
 identity, and test-isolation blockers are closed in five granular commits;
-schema 42 makes transfer-directory ownership durable and immutable with first
-delete intent. The unavoidable portable path-delete race is documented as a
-low-severity Beta 3 residual. The item remains implementation-active; Rust PR
-#129 stays draft pending fresh protected-main CI.
+schema 42 makes transfer-directory native identity durable and immutable with
+first delete intent, while schema 43 adds an independently persisted marker so
+immediate inode reuse cannot transfer deletion authority. The unavoidable
+portable path-delete race is documented as a low-severity Beta 3 residual. The
+item remains implementation-active; Rust PR #129 stays draft pending final-head
+canonical validation and fresh protected-main CI.
