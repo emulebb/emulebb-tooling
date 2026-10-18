@@ -427,6 +427,46 @@ closed. Rust PR #129 remains draft and must not merge until these remaining
 findings are resolved in granular commits, the canonical gate passes again, a
 third independent review is clean, and fresh protected-main CI passes.
 
+### Second-Review Resolution Checkpoint (2026-10-18)
+
+Five granular Rust commits resolve every high- and medium-severity finding from
+the second independent review:
+
+- `22e9e86d` keys post-publication race hooks by native target path instead of
+  shared content hash, so parallel same-content fixtures cannot cross-talk;
+- `6ee34f0e` hides cache, checkpoint, and shared-catalog visibility immediately
+  after durable deletion acceptance, before any fallible attempt cleanup;
+- `ef46d082` requires native identity continuity before adopting an
+  uncheckpointed output tombstone, preserving byte-identical replacements;
+- `13395fbc` reports per-transfer startup cleanup failures as retryable pending
+  work while keeping intent enumeration and database failures fatal;
+- `aabbb846` advances the clean-profile schema to 42 and atomically records the
+  owned transfer-directory identity with first deletion intent. Recovery never
+  adopts a later path, rejects changed original/tombstone identities, and
+  preserves non-directory and share-in-place occupants.
+
+Focused validation passes: all 61 metadata tests, all 41 delivery-runtime tests,
+the core startup ordering regression, affected ED2K/core/daemon compile checks,
+formatting, and diff checks. The earlier Linux/macOS CI failures were reproduced
+as test-hook cross-talk or an invalid cross-platform timestamp expectation and
+are addressed by `22e9e86d`.
+
+One low-severity platform limitation remains documented rather than disguised
+as an atomicity fix. Rust/Unix exposes no portable unlink-by-open-handle
+primitive: both final output-tombstone unlink and recursive transfer-directory
+reaping necessarily retain a narrow identity-check-to-path-delete race against
+a hostile process already able to mutate those directories. Crash/restart and
+accidental replacement safety are closed by persisted identity, no-follow
+opens, randomized output tombstones, repeated identity checks, and fail-closed
+retry. Eliminating the adversarial race would require platform-specific
+handle-relative recursive deletion or a stronger private-filesystem boundary;
+it is an explicit Beta 3 residual, subject to the third independent review, not
+an unverified claim of portability.
+
+The remaining merge sequence is the canonical full gate, third independent
+full-diff review, topic-branch push, fresh protected-main CI/CodeQL, then rebase
+merge. Rust PR #129 remains draft until those steps are green.
+
 ## Acceptance Criteria
 
 - [x] User edits to a delivered file cannot change bytes served from the
@@ -878,7 +918,10 @@ fail closed against replaced or corrupt authority and reconcile persisted and
 catalog state before reuse. Schema 39 delivery ownership, schema 40 output-
 tombstone recovery, and schema 41 owned-fingerprint invariants close most
 namespace-durability and owned-artifact reclamation boundaries. The second
-independent review found remaining deletion ordering, startup availability,
-tombstone identity, test-isolation, and final unlink race gaps. The item remains
-implementation-active; Rust PR #129 stays draft until those findings are
-resolved and revalidated.
+independent review's deletion ordering, startup availability, tombstone
+identity, and test-isolation blockers are closed in five granular commits;
+schema 42 makes transfer-directory ownership durable and immutable with first
+delete intent. The unavoidable portable path-delete race is documented as a
+low-severity Beta 3 residual. The item remains implementation-active; Rust PR
+#129 stays draft pending the canonical gate, third independent review, and
+fresh protected-main CI.
