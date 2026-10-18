@@ -509,7 +509,14 @@ and the replacement regression could pass through identity mismatch without
 exercising marker validation. `a52f95ef` and `2808acf8` resolve those findings
 in separate commits. Focused follow-up validation passes all 61 metadata tests,
 all 42 delivery-runtime tests, formatting, and diff checks. The canonical gate
-and protected-main CI must now run at final candidate `2808acf8`.
+passes at final candidate `2808acf8`: client policy plus 111 policy tests,
+formatting, workspace-wide all-target strict Clippy, packet diagnostics, 28
+WebUI unit tests, 16 Chromium end-to-end tests, WebUI production build, fresh
+debug and release workspace/diagnostics builds, the complete workspace and
+documentation test suites, and all three observed VPN egress tests. The same
+reviewer verified both findings closed and reported no remaining blocker,
+high-, or medium-severity finding. Fresh protected-main CI/CodeQL is the only
+remaining merge gate.
 
 One low-severity platform limitation remains documented rather than disguised
 as an atomicity fix. Rust/Unix exposes no portable unlink-by-open-handle
@@ -523,9 +530,9 @@ handle-relative recursive deletion or a stronger private-filesystem boundary;
 it is an explicit Beta 3 residual, subject to the third independent review, not
 an unverified claim of portability.
 
-The remaining merge sequence is a canonical gate rerun at `2808acf8`,
-topic-branch push, fresh protected-main CI/CodeQL, then rebase merge. Rust PR
-#129 remains draft until those checks are green.
+The remaining merge sequence is topic-branch push, fresh protected-main
+CI/CodeQL, then rebase merge. Rust PR #129 remains draft until those checks are
+green.
 
 ## Acceptance Criteria
 
@@ -985,5 +992,5 @@ schema 42 makes transfer-directory native identity durable and immutable with
 first delete intent, while schema 43 adds an independently persisted marker so
 immediate inode reuse cannot transfer deletion authority. The unavoidable
 portable path-delete race is documented as a low-severity Beta 3 residual. The
-item remains implementation-active; Rust PR #129 stays draft pending final-head
-canonical validation and fresh protected-main CI.
+item remains implementation-active; Rust PR #129 stays draft pending fresh
+protected-main CI.
