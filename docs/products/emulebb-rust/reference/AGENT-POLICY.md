@@ -25,15 +25,23 @@ Do not load unrelated Rust annexes merely because the repository is active.
 
 - `rust-v0.1.0-beta.2` is the current published beta baseline. Development
   continues on the beta lane; do not rewrite published beta tags or artifacts.
-- The Rust headless daemon and embedded SPA WebUI are the active client and UI.
-  Slint/native UI is frozen unless the operator explicitly requests removal or
-  revival.
-- Non-wire operational defaults and ceilings, plus disk and network I/O
-  outcomes, follow the maintained eMuleBB MFC client. Implement those outcomes
-  through clean Rust-native async architecture, not MFC REST, UI, settings,
-  controller, or thread mirrors. Stock wire behavior wins when authorities
-  conflict; intentional operational or I/O divergence requires a tracked
-  disposition.
+- The product is an automation-first integrated suite delivered through hard-
+  gated Client, Indexer, and Arr phases. Production work stays in the Client
+  phase until every active client item, including newly accepted items, closes.
+- The Rust headless daemon and embedded SPA operations console are the active
+  client and UI. A native desktop UI or recreation of the MFC GUI is outside
+  scope.
+- Stock/community eMule owns wire behavior and externally visible protocol
+  state. Maintained eMuleBB MFC owns only explicitly identified non-wire
+  defaults, ceilings, and disk/network I/O outcomes. Current aMule is evidence
+  and optimization inspiration, not a behavior authority. Rust-native async
+  design owns internal implementation when required outcomes remain intact.
+- The bounded-monolith target is one daemon and one SQLite database with
+  explicit client, indexer, and compatibility domain boundaries. The future
+  autonomous indexer and Arr adapters must not introduce parallel client state.
+- API, configuration, and schema compatibility remain explicitly unstable
+  through all three phases and freeze together only after the Arr gate. An
+  incompatible schema requires an entirely fresh profile.
 - `policy\rust-client.toml`, its omission registry, and its extension registry
   are the machine-readable authority for platform, behavior authority,
   protocol, long-path, reviewed-omission, and intentional-extension policy.
