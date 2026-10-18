@@ -451,6 +451,13 @@ formatting, and diff checks. The earlier Linux/macOS CI failures were reproduced
 as test-hook cross-talk or an invalid cross-platform timestamp expectation and
 are addressed by `22e9e86d`.
 
+The unchanged canonical `python tools/rust_quality_gate.py ci` rerun passes at
+Rust head `aabbb846`: client policy plus 111 policy tests, formatting,
+workspace-wide all-target strict Clippy, packet diagnostics, 28 WebUI unit
+tests, 16 Chromium end-to-end tests, WebUI production build, fresh debug and
+release workspace/diagnostics builds, the complete workspace and documentation
+test suites, and all three observed VPN egress tests.
+
 One low-severity platform limitation remains documented rather than disguised
 as an atomicity fix. Rust/Unix exposes no portable unlink-by-open-handle
 primitive: both final output-tombstone unlink and recursive transfer-directory
@@ -463,9 +470,9 @@ handle-relative recursive deletion or a stronger private-filesystem boundary;
 it is an explicit Beta 3 residual, subject to the third independent review, not
 an unverified claim of portability.
 
-The remaining merge sequence is the canonical full gate, third independent
-full-diff review, topic-branch push, fresh protected-main CI/CodeQL, then rebase
-merge. Rust PR #129 remains draft until those steps are green.
+The remaining merge sequence is the third independent full-diff review,
+topic-branch push, fresh protected-main CI/CodeQL, then rebase merge. Rust PR
+#129 remains draft until those steps are green.
 
 ## Acceptance Criteria
 
