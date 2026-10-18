@@ -1,8 +1,8 @@
 openapi: 3.1.0
 info:
   title: emulebb-rust REST API (forward)
-  version: 1.2.0
-  x-contract-version: "1.2.0"
+  version: 2.0.0
+  x-contract-version: "2.0.0"
   x-contract-baseline: "emulebb-rust forward contract"
   summary: The experimental first-party /api/v1 contract for emulebb-rust and its embedded WebUI.
   description: >
@@ -1544,6 +1544,100 @@ paths:
           $ref: "#/components/responses/ErrorResponse"
         default:
           $ref: "#/components/responses/ErrorResponse"
+  /shared-directories/exclusions:
+    get:
+      tags: [SharedDirectories]
+      summary: List exact shared-file exclusions and configurable default ignore rules.
+      operationId: listSharedFileExclusions
+      responses:
+        "200":
+          $ref: "#/components/responses/SharedFileExclusionsResponse"
+        "400":
+          $ref: "#/components/responses/ErrorResponse"
+        "401":
+          $ref: "#/components/responses/ErrorResponse"
+        "404":
+          $ref: "#/components/responses/ErrorResponse"
+        "405":
+          $ref: "#/components/responses/MethodNotAllowedResponse"
+        "500":
+          $ref: "#/components/responses/ErrorResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
+    post:
+      tags: [SharedDirectories]
+      summary: Exclude one exact file path from sharing.
+      operationId: addSharedFileExclusion
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SharedFileExclusionRequest"
+      responses:
+        "200":
+          $ref: "#/components/responses/SharedFileExclusionsResponse"
+        "400":
+          $ref: "#/components/responses/ErrorResponse"
+        "401":
+          $ref: "#/components/responses/ErrorResponse"
+        "404":
+          $ref: "#/components/responses/ErrorResponse"
+        "405":
+          $ref: "#/components/responses/MethodNotAllowedResponse"
+        "500":
+          $ref: "#/components/responses/ErrorResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
+    delete:
+      tags: [SharedDirectories]
+      summary: Remove one exact shared-file exclusion.
+      operationId: removeSharedFileExclusion
+      parameters:
+        - $ref: "#/components/parameters/SharedDirectoryRootPath"
+      responses:
+        "200":
+          $ref: "#/components/responses/SharedFileExclusionsResponse"
+        "400":
+          $ref: "#/components/responses/ErrorResponse"
+        "401":
+          $ref: "#/components/responses/ErrorResponse"
+        "404":
+          $ref: "#/components/responses/ErrorResponse"
+        "405":
+          $ref: "#/components/responses/MethodNotAllowedResponse"
+        "500":
+          $ref: "#/components/responses/ErrorResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
+  /shared-directories/exclusions/rules/{ruleKey}:
+    patch:
+      tags: [SharedDirectories]
+      summary: Enable or disable one built-in shared-file ignore rule.
+      operationId: updateSharedFileIgnoreRule
+      parameters:
+        - $ref: "#/components/parameters/SharedFileIgnoreRuleKey"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SharedFileIgnoreRuleUpdate"
+      responses:
+        "200":
+          $ref: "#/components/responses/SharedFileExclusionsResponse"
+        "400":
+          $ref: "#/components/responses/ErrorResponse"
+        "401":
+          $ref: "#/components/responses/ErrorResponse"
+        "404":
+          $ref: "#/components/responses/ErrorResponse"
+        "405":
+          $ref: "#/components/responses/MethodNotAllowedResponse"
+        "500":
+          $ref: "#/components/responses/ErrorResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /shared-directories/operations/reload:
     post:
       tags: [SharedDirectories]
@@ -2496,6 +2590,8 @@ paths:
         - $ref: "#/components/parameters/Limit"
         - $ref: "#/components/parameters/IncludeEvidence"
         - $ref: "#/components/parameters/ExactTotal"
+        - $ref: "#/components/parameters/SearchSort"
+        - $ref: "#/components/parameters/SearchSortOrder"
       responses:
         "200":
           $ref: "#/components/responses/SearchResponse"
@@ -2765,8 +2861,8 @@ components:
       description: emulebb-rust `/api/v1` contract version for adapter gating.
       schema:
         type: string
-        const: "1.2.0"
-        example: "1.2.0"
+        const: "2.0.0"
+        example: "2.0.0"
   parameters:
     CategoryId:
       name: categoryId
@@ -2870,6 +2966,20 @@ components:
         type: boolean
         default: true
       description: Return an exact result total. Set false to allow `total` to be a lower-bound estimate when computing the exact count is expensive.
+    SearchSort:
+      name: sort
+      in: query
+      required: false
+      schema:
+        type: string
+        enum: [displayName, sizeBytes, sources, completeSources, rating, fileType, artist, album, title, lengthSeconds, bitrateKbps, codec]
+    SearchSortOrder:
+      name: order
+      in: query
+      required: false
+      schema:
+        type: string
+        enum: [asc, desc]
     TransferStateFilter:
       name: state
       in: query
@@ -2909,6 +3019,13 @@ components:
         minLength: 1
         pattern: '\S'
       description: Shared-directory root path to remove.
+    SharedFileIgnoreRuleKey:
+      name: ruleKey
+      in: path
+      required: true
+      schema:
+        type: string
+        minLength: 1
     UserHash:
       name: userHash
       in: path
@@ -3212,6 +3329,15 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/SharedDirectoryListEnvelope"
+    SharedFileExclusionsResponse:
+      description: Shared-file exclusion policy envelope.
+      headers:
+        X-Contract-Version:
+          $ref: "#/components/headers/ContractVersionHeader"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/SharedFileExclusionsEnvelope"
     SharedFileListResponse:
       description: Shared-file collection envelope.
       headers:
@@ -3603,8 +3729,8 @@ components:
         contractVersion:
           type: string
           description: Independent `/api/v1` contract version from `info.x-contract-version`.
-          const: "1.2.0"
-          example: "1.2.0"
+          const: "2.0.0"
+          example: "2.0.0"
         apiVersion:
           type: string
           example: "1"
@@ -4022,6 +4148,27 @@ components:
         downloadLimitBytesPerSec:
           type: integer
           minimum: 0
+        followMajorityFilenameForNewDownloads:
+          type: boolean
+          description: Let newly created transfers adopt a sufficiently corroborated filename; disabled by default.
+        followMajorityFilenameMinimumVotes:
+          type: integer
+          minimum: 0
+          maximum: 1000
+        followMajorityFilenameRequiredPercent:
+          type: integer
+          minimum: 1
+          maximum: 100
+        detectTcpErrorFlooder:
+          type: boolean
+        tcpErrorFlooderIntervalMinutes:
+          type: integer
+          minimum: 1
+          maximum: 1440
+        tcpErrorFlooderThreshold:
+          type: integer
+          minimum: 1
+          maximum: 1000
         minFreeConfigSpaceBytes:
           type: integer
           minimum: 1073741824
@@ -4122,6 +4269,27 @@ components:
         downloadLimitBytesPerSec:
           type: integer
           minimum: 0
+        followMajorityFilenameForNewDownloads:
+          type: boolean
+          description: Let newly created transfers adopt a sufficiently corroborated filename; disabled by default.
+        followMajorityFilenameMinimumVotes:
+          type: integer
+          minimum: 0
+          maximum: 1000
+        followMajorityFilenameRequiredPercent:
+          type: integer
+          minimum: 1
+          maximum: 100
+        detectTcpErrorFlooder:
+          type: boolean
+        tcpErrorFlooderIntervalMinutes:
+          type: integer
+          minimum: 1
+          maximum: 1440
+        tcpErrorFlooderThreshold:
+          type: integer
+          minimum: 1
+          maximum: 1000
         minFreeConfigSpaceBytes:
           type: integer
           minimum: 1073741824
@@ -5347,12 +5515,14 @@ components:
     Transfer:
       type: object
       additionalProperties: false
-      required: [hash, name, sizeBytes, state]
+      required: [hash, displayName, nameConsensus, sizeBytes, state]
       properties:
         hash:
           type: string
-        name:
+        displayName:
           type: string
+        nameConsensus:
+          $ref: "#/components/schemas/TransferNameConsensus"
         path:
           type: string
           description: User-facing file path; Windows verbatim long-path prefixes are not exposed.
@@ -5362,6 +5532,9 @@ components:
             - string
             - "null"
           description: User-facing delivered file path; Windows verbatim long-path prefixes are not exposed.
+        deliveryError:
+          type: string
+          description: Last finished-file delivery failure while the transfer remains in completing state.
         inIncoming:
           type: boolean
         sizeBytes:
@@ -5427,6 +5600,54 @@ components:
           minimum: 0
         ed2kLink:
           type: string
+    TransferNameConsensus:
+      type: object
+      additionalProperties: false
+      required: [selectedName, pinned, followMajority, observationCount, candidates]
+      properties:
+        selectedName:
+          type: string
+        pinned:
+          type: boolean
+        followMajority:
+          type: boolean
+        observationCount:
+          type: integer
+          minimum: 0
+        candidates:
+          type: array
+          items:
+            $ref: "#/components/schemas/TransferNameCandidate"
+    TransferNameCandidate:
+      type: object
+      additionalProperties: false
+      required: [normalizedName, votes, rawNames]
+      properties:
+        normalizedName:
+          type: string
+        votes:
+          type: integer
+          minimum: 0
+        rawNames:
+          type: array
+          items:
+            type: string
+    TransferFileNameObservation:
+      type: object
+      additionalProperties: false
+      required: [rawName, normalizedName, origin, serverEndpoint, observedAt]
+      properties:
+        rawName:
+          type: string
+        normalizedName:
+          type: string
+        origin:
+          type: string
+        serverEndpoint:
+          type: [string, "null"]
+        observedAt:
+          type: string
+          format: date-time
     TransferState:
       type: string
       enum: [downloading, paused, queued, checking, completing, completed, error, missingfiles]
@@ -5489,10 +5710,8 @@ components:
     SearchResultEvidence:
       type: object
       additionalProperties: false
-      required: [confidence, availabilityEvidence, nameEvidence, integrityEvidence]
+      required: [availabilityEvidence, nameEvidence, integrityEvidence]
       properties:
-        confidence:
-          $ref: "#/components/schemas/SearchConfidence"
         availabilityEvidence:
           $ref: "#/components/schemas/SearchAvailabilityEvidence"
         nameEvidence:
@@ -5538,7 +5757,7 @@ components:
     SearchAvailabilityEvidence:
       type: object
       additionalProperties: false
-      required: [sources, completeSources, completionState, clientCount, serverCount, kadPublishers]
+      required: [sources, completeSources]
       properties:
         sources:
           type: integer
@@ -5548,13 +5767,7 @@ components:
           minimum: 0
         completionState:
           $ref: "#/components/schemas/SearchCompletionState"
-        clientCount:
-          type: integer
-          minimum: 0
-        serverCount:
-          type: integer
-          minimum: 0
-        kadPublishers:
+        observedSourceEndpoints:
           type: integer
           minimum: 0
     SearchCompletionState:
@@ -5563,8 +5776,12 @@ components:
     SearchNameEvidence:
       type: object
       additionalProperties: false
-      required: [observedNames, observedExtensions, canonicalNames, ignoredNameTokens, divergenceGroups, divergent]
+      required: [observedRawNames, observedNames, observedExtensions, divergent]
       properties:
+        observedRawNames:
+          type: array
+          items:
+            type: string
         observedNames:
           type: array
           items:
@@ -5573,45 +5790,21 @@ components:
           type: array
           items:
             type: string
-        canonicalNames:
-          type: array
-          items:
-            type: string
-        ignoredNameTokens:
-          type: array
-          items:
-            type: string
-        divergenceGroups:
-          type: array
-          items:
-            type: string
         divergent:
           type: boolean
     SearchIntegrityEvidence:
       type: object
       additionalProperties: false
-      required: [hasAichHash, multipleAich, pendingHeaderCheck, cachedHeaderEvidence, claimedType, extensionType, detectedHeaderType]
+      required: [hasAichHash, multipleAich, aichHashes]
       properties:
         hasAichHash:
           type: boolean
         multipleAich:
           type: boolean
-        pendingHeaderCheck:
-          type: boolean
-        cachedHeaderEvidence:
-          type: boolean
-        claimedType:
-          type:
-            - string
-            - "null"
-        extensionType:
-          type:
-            - string
-            - "null"
-        detectedHeaderType:
-          type:
-            - string
-            - "null"
+        aichHashes:
+          type: array
+          items:
+            type: string
     SharedFilePriority:
       type: string
       enum: [auto, not-published, verylow, low, normal, high, release]
@@ -5661,10 +5854,10 @@ components:
         - required: [priority]
           not:
             anyOf:
-              - required: [name]
+              - required: [displayName]
               - required: [categoryId]
               - required: [categoryName]
-        - required: [name]
+        - required: [displayName]
           not:
             anyOf:
               - required: [priority]
@@ -5674,16 +5867,16 @@ components:
           not:
             anyOf:
               - required: [priority]
-              - required: [name]
+              - required: [displayName]
               - required: [categoryName]
         - required: [categoryName]
           not:
             anyOf:
               - required: [priority]
-              - required: [name]
+              - required: [displayName]
               - required: [categoryId]
       properties:
-        name:
+        displayName:
           type: string
           minLength: 1
           pattern: '^(?=.*\S)[^<>:"/\\|?*\x00-\x1F\x7F-\x9F]*$'
@@ -5796,14 +5989,14 @@ components:
     TransferSource:
       type: object
       additionalProperties: false
-      required: [clientId, userName, userHash, address, port, downloadState, clientSoftware, downloadSpeedKiBps, availableParts, partCount, serverIp, serverPort, lowId, queueRank, viewSharedFiles, sharedFilesRequestPending]
+      required: [clientId, userName, userHash, address, port, downloadState, clientSoftware, reportedFileNames, downloadSpeedKiBps, availableParts, partCount, serverIp, serverPort, lowId, queueRank, viewSharedFiles, sharedFilesRequestPending]
       properties:
         clientId:
           type: string
         userName:
           type: string
         userHash:
-          type: string
+          type: [string, "null"]
         address:
           type: string
         port:
@@ -5812,9 +6005,13 @@ components:
           maximum: 65535
         downloadState:
           type: string
-          enum: [downloading, onqueue, connected, connecting, waitcallback, waitcallbackkad, reqhashset, noneededparts, toomanyconns, toomanyconnskad, lowtolowip, banned, error, none, remotequeuefull, unknown]
+          enum: [downloading, onqueue, connected, connecting, waitcallback, waitcallbackkad, reqhashset, noneededparts, toomanyconns, toomanyconnskad, lowtolowip, banned, error, none, remotequeuefull, remembered, unknown]
         clientSoftware:
           type: string
+        reportedFileNames:
+          type: array
+          items:
+            $ref: "#/components/schemas/TransferFileNameObservation"
         downloadSpeedKiBps:
           type: number
           minimum: 0
@@ -6411,6 +6608,68 @@ components:
               type: string
               minLength: 1
               pattern: '\S'
+    SharedFileExclusionsEnvelope:
+      unevaluatedProperties: false
+      allOf:
+        - $ref: "#/components/schemas/EnvelopeBase"
+        - type: object
+          properties:
+            data:
+              $ref: "#/components/schemas/SharedFileExclusions"
+    SharedFileExclusions:
+      type: object
+      additionalProperties: false
+      required: [custom, defaults]
+      properties:
+        custom:
+          type: array
+          items:
+            $ref: "#/components/schemas/SharedFileExclusion"
+        defaults:
+          type: array
+          items:
+            $ref: "#/components/schemas/SharedFileIgnoreRule"
+    SharedFileExclusion:
+      type: object
+      additionalProperties: false
+      required: [path]
+      properties:
+        path:
+          type: string
+          minLength: 1
+    SharedFileIgnoreRule:
+      type: object
+      additionalProperties: false
+      required: [key, matchKind, pattern, enabled]
+      properties:
+        key:
+          type: string
+          minLength: 1
+        matchKind:
+          type: string
+          enum: [exact, prefix, suffix, lockFile]
+        pattern:
+          type: string
+          minLength: 1
+        enabled:
+          type: boolean
+    SharedFileExclusionRequest:
+      type: object
+      additionalProperties: false
+      required: [path]
+      properties:
+        path:
+          type: string
+          minLength: 1
+          pattern: '\S'
+    SharedFileIgnoreRuleUpdate:
+      type: object
+      additionalProperties: false
+      minProperties: 1
+      required: [enabled]
+      properties:
+        enabled:
+          type: boolean
     UploadListEnvelope:
       unevaluatedProperties: false
       allOf:
@@ -7004,24 +7263,30 @@ components:
     SearchSession:
       type: object
       additionalProperties: false
-      required: [id, query, method, type, status, statusReason, resultCount]
+      required: [id, query, requestedMethod, resolvedMethod, type, criteria, status, statusReason, progress, resultCount]
       properties:
         id:
           type: string
         query:
           type: string
-        method:
+        requestedMethod:
           type: string
-          description: Resolved native search method.
           enum: [automatic, server, global, kad]
+        resolvedMethod:
+          type: [string, "null"]
+          enum: [server, global, kad, null]
         type:
           type: string
           enum: ["", arc, audio, iso, image, pro, video, doc, emulecollection]
+        criteria:
+          $ref: "#/components/schemas/SearchCriteria"
         status:
           type: string
           enum: [queued, running, stopped, complete, error]
         statusReason:
           type: [string, "null"]
+        progress:
+          $ref: "#/components/schemas/SearchProgress"
         resultCount:
           type: integer
           minimum: 0
@@ -7036,24 +7301,36 @@ components:
     Search:
       type: object
       unevaluatedProperties: false
-      required: [id, query, method, type, status, statusReason, items]
+      required: [id, query, requestedMethod, resolvedMethod, type, criteria, status, statusReason, progress, items]
       properties:
         id:
           type: string
         query:
           type: string
-        method:
+        requestedMethod:
           type: string
-          description: Resolved native search method.
           enum: [automatic, server, global, kad]
+        resolvedMethod:
+          type: [string, "null"]
+          enum: [server, global, kad, null]
         type:
           type: string
           enum: ["", arc, audio, iso, image, pro, video, doc, emulecollection]
+        criteria:
+          $ref: "#/components/schemas/SearchCriteria"
         status:
           type: string
           enum: [queued, running, stopped, complete, error]
         statusReason:
           type: [string, "null"]
+        progress:
+          $ref: "#/components/schemas/SearchProgress"
+        sort:
+          type: [string, "null"]
+          enum: [displayName, sizeBytes, sources, completeSources, rating, fileType, artist, album, title, lengthSeconds, bitrateKbps, codec, null]
+        order:
+          type: [string, "null"]
+          enum: [asc, desc, null]
         items:
           type: array
           description: >
@@ -7067,6 +7344,54 @@ components:
             $ref: "#/components/schemas/SearchResult"
       allOf:
         - $ref: "#/components/schemas/Pagination"
+    SearchCriteria:
+      type: object
+      additionalProperties: false
+      required: [extension, minSizeBytes, maxSizeBytes, minAvailability, minCompleteSources, minBitrateKbps, minLengthSeconds, codec, title, album, artist]
+      properties:
+        extension:
+          type: string
+        minSizeBytes:
+          type: [integer, "null"]
+          minimum: 0
+        maxSizeBytes:
+          type: [integer, "null"]
+          minimum: 0
+        minAvailability:
+          type: [integer, "null"]
+          minimum: 0
+        minCompleteSources:
+          type: [integer, "null"]
+          minimum: 0
+        minBitrateKbps:
+          type: [integer, "null"]
+          minimum: 0
+        minLengthSeconds:
+          type: [integer, "null"]
+          minimum: 0
+        codec:
+          type: string
+        title:
+          type: string
+        album:
+          type: string
+        artist:
+          type: string
+    SearchProgress:
+      type: object
+      additionalProperties: false
+      required: [phase, completedUnits, unit]
+      properties:
+        phase:
+          type: string
+        completedUnits:
+          type: integer
+          minimum: 0
+        totalUnits:
+          type: integer
+          minimum: 0
+        unit:
+          type: string
     SearchCreateRequest:
       type: object
       additionalProperties: false
@@ -7134,41 +7459,33 @@ components:
       additionalProperties: false
       required:
         - searchId
-        - method
         - type
         - hash
-        - name
+        - displayName
+        - nameConsensus
         - sizeBytes
         - sources
         - completeSources
         - fileType
+        - media
         - extension
         - complete
-        - knownType
         - directory
-        - clientIp
-        - clientPort
-        - serverIp
-        - serverPort
-        - clientCount
-        - serverCount
-        - kadPublishInfo
         - rating
-        - hasComment
-        - spam
+        - aichHash
+        - observations
       properties:
         searchId:
           type: string
-        method:
-          type: string
-          enum: [automatic, server, global, kad]
         type:
           type: string
           enum: ["", arc, audio, iso, image, pro, video, doc, emulecollection]
         hash:
           type: string
-        name:
+        displayName:
           type: string
+        nameConsensus:
+          $ref: "#/components/schemas/SearchNameConsensus"
         sizeBytes:
           type: integer
           minimum: 0
@@ -7183,48 +7500,105 @@ components:
           description: >
             Raw native file-type tag reported by the search result row. This is
             not constrained to the search request type enum and is not remapped.
+        media:
+          $ref: "#/components/schemas/SearchResultMedia"
         extension:
           type: string
         complete:
           type: boolean
-        knownType:
-          type: string
-          enum: [shared, downloading, downloaded, cancelled, unknown, undetermined]
         directory:
-          type:
-            - string
-            - "null"
-        clientIp:
           type: string
-        clientPort:
-          type: integer
-          minimum: 0
-          maximum: 65535
-        serverIp:
-          type: string
-        serverPort:
-          type: integer
-          minimum: 0
-          maximum: 65535
-        clientCount:
-          type: integer
-          minimum: 0
-        serverCount:
-          type: integer
-          minimum: 0
-        kadPublishInfo:
-          type: integer
-          minimum: 0
         rating:
           type: integer
           minimum: 0
-        hasComment:
-          type: boolean
-        spam:
-          type: boolean
+        aichHash:
+          type: [string, "null"]
+        observations:
+          type: array
+          items:
+            $ref: "#/components/schemas/SearchResultObservation"
         evidence:
           description: Present unless the caller sets `includeEvidence=false`.
           $ref: "#/components/schemas/SearchResultEvidence"
+    SearchNameConsensus:
+      type: object
+      additionalProperties: false
+      required: [selectedName, observationCount, candidates]
+      properties:
+        selectedName:
+          type: string
+        observationCount:
+          type: integer
+          minimum: 0
+        candidates:
+          type: array
+          items:
+            $ref: "#/components/schemas/TransferNameCandidate"
+    SearchResultMedia:
+      type: object
+      additionalProperties: false
+      required: [artist, album, title, lengthSeconds, bitrateKbps, codec]
+      properties:
+        artist:
+          type: string
+        album:
+          type: string
+        title:
+          type: string
+        lengthSeconds:
+          type: integer
+          minimum: 0
+        bitrateKbps:
+          type: integer
+          minimum: 0
+        codec:
+          type: string
+    SearchResultObservation:
+      type: object
+      additionalProperties: false
+      required: [origin, serverEndpoint, rawName, normalizedName, sizeBytes, sources, completeSources, sourceClientId, sourceClientPort, fileType, media, rating, aichHash, complete, directory, observedAt]
+      properties:
+        origin:
+          type: string
+        serverEndpoint:
+          type: [string, "null"]
+        rawName:
+          type: string
+        normalizedName:
+          type: string
+        sizeBytes:
+          type: integer
+          minimum: 0
+        sources:
+          type: integer
+          minimum: 0
+        completeSources:
+          type: integer
+          minimum: 0
+        sourceClientId:
+          type: [integer, "null"]
+          minimum: 0
+          maximum: 4294967295
+        sourceClientPort:
+          type: [integer, "null"]
+          minimum: 0
+          maximum: 65535
+        fileType:
+          type: string
+        media:
+          $ref: "#/components/schemas/SearchResultMedia"
+        rating:
+          type: integer
+          minimum: 0
+        aichHash:
+          type: [string, "null"]
+        complete:
+          type: boolean
+        directory:
+          type: string
+        observedAt:
+          type: string
+          format: date-time
     SearchResultDownloadRequest:
       type: object
       additionalProperties: false
