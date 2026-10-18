@@ -1,6 +1,6 @@
 # emulebb-rust Architecture
 
-`emulebb-rust` is the forward (Rust) eMule/Kad core: an eD2k + Kademlia peer that
+`emulebb-rust` is the forward Rust eD2K/Kad client: an eD2K + Kademlia peer that
 runs as a headless daemon and exposes its entire control surface over a REST API
 (`/api/v1/*`). It is built as a Cargo workspace of focused crates layered
 **daemon → core → protocol/transfer subsystems → persistence**, with the
@@ -8,9 +8,11 @@ protocol leaf crates (`emulebb-kad-proto`, `emulebb-metadata`) carrying no
 internal dependencies.
 
 A guiding principle is **REST as the control plane**: the daemon owns the live
-network state, and anything an operator or controller (e.g. TrackMuleBB) needs to
-do is expressed as a REST call rather than baked into the core. The core only
-carries behavior that cannot be expressed over REST.
+network state, and operator or external-controller actions are expressed as
+REST calls rather than internal automation rules. The core owns client behavior
+that cannot be delegated to a controller. The forward bounded-monolith suite
+design is documented separately in
+[`integrated-suite`](integrated-suite.md); this document describes current code.
 
 The diagrams below are layered from the outside in: workspace crate graph →
 runtime composition → eD2k internals → Kad DHT stack → persistence.
@@ -19,7 +21,7 @@ runtime composition → eD2k internals → Kad DHT stack → persistence.
 
 ## 1. Workspace crate dependency graph
 
-How the 13 workspace crates depend on each other (edges = a `[dependencies]`
+How the 16 workspace crates depend on each other (edges = a `[dependencies]`
 entry in that crate's `Cargo.toml`).
 
 ```mermaid
@@ -42,6 +44,7 @@ graph TD
     ed2k --> kadproto
     ed2k --> meta
     ed2k --> upnp[emulebb-miniupnpc]
+    ed2k --> pcp[emulebb-pcpnatpmp]
 
     index --> kadproto
     index --> meta
@@ -53,10 +56,11 @@ graph TD
     kadrouting --> kadproto
 
     upnp --> upnpsys[emulebb-miniupnpc-sys]
+    pcp --> pcpsys[emulebb-pcpnatpmp-sys]
     tools[emulebb-tools<br/>bin: nat-diagnostic] --> ed2k
 
     classDef leaf fill:#e8f0fe,stroke:#4285f4;
-    class kadproto,meta,upnpsys leaf;
+    class kadproto,meta,upnpsys,pcpsys leaf;
 ```
 
 **Legend**
@@ -88,7 +92,7 @@ network subsystems. Node names match the `EmulebbCore` struct
 %%{init: {'flowchart': {'nodeSpacing': 45, 'rankSpacing': 80}}}%%
 graph TB
     cfg[DaemonProfile<br/>--profile dir<br/>emulebb-rust-settings.toml] --> boot[daemon::run]
-    ctrl[External controller<br/>TrackMuleBB / scripts] -->|REST| router
+    ctrl[External automation<br/>controllers / scripts] -->|REST| router
 
     boot --> coreobj[EmulebbCore]
     boot --> router[axum Router<br/>/api/v1/*]
@@ -300,8 +304,9 @@ graph TD
 **Legend**
 
 - `MetadataStore` (`crates/emulebb-metadata/src/store.rs`) wraps the rusqlite
-  connection; `schema.sql` is the current development schema. During the Rust
-  dev phase, mismatched local databases are reset rather than migrated.
+  connection; `schema.sql` is the exact current development schema. An
+  incompatible database fails startup and requires an entirely fresh profile;
+  product code never migrates, repairs, or resets it.
 - Typed sub-stores: identity (user hash / secure-ident keys), peers, profile
   settings, searches, transfers, and the Kad publish cache.
 - On boot the core reads settings via `profile_state::load_core_state`,

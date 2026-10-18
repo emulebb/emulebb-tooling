@@ -61,8 +61,8 @@ making informed choices without starting a download.
 - Carry origin/provenance so server, Kad responder, publisher, and notes sources
   can be reconciled without pretending conflicting observations are identical.
 - Persist enough normalized metadata for result replay and indexing.
-- Extend the Rust-native OpenAPI/REST model additively with absence represented
-  explicitly and no MFC API-shape constraint.
+- Evolve the Rust-native OpenAPI/REST model to the clean canonical search-result
+  shape with absence represented explicitly and no MFC API-shape constraint.
 
 ## Scope Constraints
 
@@ -70,8 +70,9 @@ making informed choices without starting a download.
 - Do not trust a remote rating count as independent local observations.
 - RUST-BUG-104 owns AICH consensus/trust; this item owns the end-to-end field
   transport and API surface.
-- Preserve compatibility for existing API consumers through additive fields or
-  an explicit versioned migration.
+- The beta API and schema may break. Update all owned consumers atomically and
+  reject stale API fields or incompatible profiles rather than adding aliases,
+  migrations, or fallback reads.
 
 ## Acceptance Criteria
 
@@ -82,8 +83,8 @@ making informed choices without starting a download.
 - [ ] Conflicting observations retain provenance and use documented merge rules.
 - [ ] Malformed/oversized tags are bounded without losing an otherwise valid
       result.
-- [ ] OpenAPI, generated/handwritten clients, embedded WebUI, and persistence
-      migrations remain synchronized.
+- [ ] OpenAPI, generated/handwritten clients, embedded WebUI, and the exact
+      current persistence schema remain synchronized.
 - [ ] A stock/current-aMule fixture produces materially equivalent visible
       metadata for the same server and Kad search results.
 
@@ -91,8 +92,8 @@ making informed choices without starting a download.
 
 - Golden packet fixtures covering all supported server/Kad tags, missing tags,
   conflicts, wrong types, malformed values, and size bounds.
-- Storage and API round-trip tests, including upgrade from records without the
-  new optional fields.
+- Storage and API round-trip tests against the exact current schema, plus a
+  startup failure test for an incompatible prior schema.
 - Local stock/current-aMule result comparison and WebUI/API witness.
 
 ## Notes

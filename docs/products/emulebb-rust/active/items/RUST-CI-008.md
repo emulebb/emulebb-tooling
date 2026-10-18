@@ -25,6 +25,10 @@ normalization, case, and native path-limit cohorts, then run the initial scan,
 warm reload, mutation, watcher, persistence, and publication checks on Windows,
 Linux, and macOS.
 
+This evidence is part of the hard Client gate. Every Windows, Linux, and macOS
+x64/ARM64 package requires compile/test viability and packaged lifecycle smoke;
+deep public-network evidence remains concentrated on Windows x64 and Linux x64.
+
 ## Current State
 
 The Windows SSD campaign proves 100,000 files, 10.49 GB, and 1,000 long paths.
