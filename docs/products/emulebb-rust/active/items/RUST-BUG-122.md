@@ -444,6 +444,13 @@ the second independent review:
   owned transfer-directory identity with first deletion intent. Recovery never
   adopts a later path, rejects changed original/tombstone identities, and
   preserves non-directory and share-in-place occupants.
+- `f49537cc` closes an inode-reuse gap exposed by fresh Ubuntu CI. Native Unix
+  directory identity alone is not durable ownership proof because an inode may
+  be reused immediately after deletion. First deletion intent now persists both
+  the native identity and a random UUID marker created and synced inside the
+  owned transfer directory. Recovery requires both proofs before rename and
+  again before recursive tombstone deletion, so an accidentally reused inode
+  cannot authorize deletion of a replacement directory.
 
 Focused validation passes: all 61 metadata tests, all 41 delivery-runtime tests,
 the core startup ordering regression, affected ED2K/core/daemon compile checks,
@@ -469,6 +476,18 @@ low Beta 3 residual and noted that Windows long-path identity capture fails
 conservatively by retaining pending cleanup rather than deleting unverified
 content.
 
+Fresh protected-main CI run `39112104010` then found one additional correctness
+gap on Ubuntu: `destructive_delete_preserves_replaced_transfer_directory_tombstone`
+observed immediate inode reuse and recovered a replacement tombstone that only
+matched the persisted native identity. The failure was deterministic evidence
+that identity continuity was necessary but insufficient. `f49537cc` adds the
+independent durable marker described above. Post-fix focused validation passes:
+all 61 metadata tests, all 41 delivery-runtime tests, the complete 1,149-test
+ED2K suite, workspace-wide all-target strict Clippy, formatting, and diff
+checks. The canonical quality gate and fresh CI must be rerun at `f49537cc`;
+the earlier clean third review and gate at `aabbb846` are supporting evidence,
+not merge authorization for the changed head.
+
 One low-severity platform limitation remains documented rather than disguised
 as an atomicity fix. Rust/Unix exposes no portable unlink-by-open-handle
 primitive: both final output-tombstone unlink and recursive transfer-directory
@@ -481,9 +500,9 @@ handle-relative recursive deletion or a stronger private-filesystem boundary;
 it is an explicit Beta 3 residual, subject to the third independent review, not
 an unverified claim of portability.
 
-The remaining merge sequence is topic-branch push, fresh protected-main
-CI/CodeQL, then rebase merge. Rust PR #129 remains draft until those checks are
-green.
+The remaining merge sequence is a canonical gate rerun at `f49537cc`,
+topic-branch push, fresh protected-main CI/CodeQL, then rebase merge. Rust PR
+#129 remains draft until those checks are green.
 
 ## Acceptance Criteria
 
@@ -506,7 +525,8 @@ green.
       unrelated user files.
 - [x] Completion and history timestamps change only on a true completion
       transition.
-- [x] The canonical Rust quality gate and protected-main CI pass.
+- [ ] The canonical Rust quality gate and protected-main CI pass for the final
+      merge candidate.
 
 ## Validation Plan
 
