@@ -458,6 +458,17 @@ tests, 16 Chromium end-to-end tests, WebUI production build, fresh debug and
 release workspace/diagnostics builds, the complete workspace and documentation
 test suites, and all three observed VPN egress tests.
 
+The third independent read-only review of `origin/main...aabbb846` reports no
+remaining blocker, high-, or medium-severity finding and classifies the Rust
+implementation as merge-ready pending fresh protected-main CI. It independently
+verified atomic first-intent directory identity, immutable `NULL` and concrete
+authority, replacement preservation, durable visibility teardown, startup
+resilience, delivery-tombstone continuity, path-keyed race hooks, and schema 42
+constraints. The review also confirmed the documented path-delete TOCTOU as a
+low Beta 3 residual and noted that Windows long-path identity capture fails
+conservatively by retaining pending cleanup rather than deleting unverified
+content.
+
 One low-severity platform limitation remains documented rather than disguised
 as an atomicity fix. Rust/Unix exposes no portable unlink-by-open-handle
 primitive: both final output-tombstone unlink and recursive transfer-directory
@@ -470,9 +481,9 @@ handle-relative recursive deletion or a stronger private-filesystem boundary;
 it is an explicit Beta 3 residual, subject to the third independent review, not
 an unverified claim of portability.
 
-The remaining merge sequence is the third independent full-diff review,
-topic-branch push, fresh protected-main CI/CodeQL, then rebase merge. Rust PR
-#129 remains draft until those steps are green.
+The remaining merge sequence is topic-branch push, fresh protected-main
+CI/CodeQL, then rebase merge. Rust PR #129 remains draft until those checks are
+green.
 
 ## Acceptance Criteria
 
@@ -930,5 +941,4 @@ identity, and test-isolation blockers are closed in five granular commits;
 schema 42 makes transfer-directory ownership durable and immutable with first
 delete intent. The unavoidable portable path-delete race is documented as a
 low-severity Beta 3 residual. The item remains implementation-active; Rust PR
-#129 stays draft pending the canonical gate, third independent review, and
-fresh protected-main CI.
+#129 stays draft pending fresh protected-main CI.
