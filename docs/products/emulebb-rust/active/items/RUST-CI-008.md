@@ -27,15 +27,19 @@ Linux, and macOS.
 
 ## Current State
 
-The Windows SSD campaign proves 100,000 files, 10.49 GB, and 1,000 ASCII long
-paths up to 420 display characters. Smaller Rust tests cover accented, CJK, and
-bracketed names. The scale fixture itself does not contain Unicode names, and its
-long-path contract counts Python characters rather than Windows UTF-16 code
-units or Unix encoded bytes.
+The Windows SSD campaign proves 100,000 files, 10.49 GB, and 1,000 long paths.
+The production fixture now reserves a deterministic 16-file cohort spanning
+NFC/NFD, compatibility, case, accented, CJK, emoji, bracketed, and long-Unicode
+names without changing the established file-count, byte-count, or size-bucket
+contract. Validation reports Windows lengths in UTF-16 code units and Unix
+lengths in encoded bytes, including component maxima and explicit native
+case/normalization capability dispositions.
 
-The Rust CI matrix builds/tests Windows, Linux, and macOS, but the 100k I/O
-harness and physical-disk counters are Windows-oriented. macOS watcher deletion
-is explicitly ignored even though release packaging emits macOS artifacts.
+Portable fixture and path-capability tests run on Windows, Linux, and macOS in
+the fast harness workflow. The full initial-scan, warm-reload, mutation, watcher,
+restart, and cleanup campaign remains an operator evidence lane; physical-disk
+counters remain Windows-oriented. macOS watcher deletion is still explicitly
+ignored even though release packaging emits macOS artifacts.
 
 ## Intended Shape
 
@@ -65,9 +69,9 @@ is explicitly ignored even though release packaging emits macOS artifacts.
 
 ## Acceptance Criteria
 
-- [ ] The fixture deterministically creates and validates its Unicode cohorts
+- [x] The fixture deterministically creates and validates its Unicode cohorts
       without disturbing the existing 100k size/long-path contract.
-- [ ] Path lengths are reported in the platform-native units relevant to actual
+- [x] Path lengths are reported in the platform-native units relevant to actual
       filesystem limits.
 - [ ] Windows, Linux, and macOS lanes cover initial scan, warm reload, one-percent
       mutation, watcher create/rename/delete, restart, and cleanup.
@@ -75,7 +79,7 @@ is explicitly ignored even though release packaging emits macOS artifacts.
       eD2K server offers, and Kad publication encoding.
 - [ ] Capability-gated normalization/case collision cases cannot overwrite or
       alias the wrong durable source row.
-- [ ] Reports contain no private paths or content-derived names.
+- [x] Reports contain no private paths or content-derived names.
 - [ ] The macOS watcher support claim is reconciled with its release-package
       status and backed by an explicit passing or accepted-degradation result.
 
@@ -86,3 +90,22 @@ is explicitly ignored even though release packaging emits macOS artifacts.
 - Small hosted Windows/Linux/macOS fixture lanes.
 - Retained full 100k evidence on each supported platform where suitable runner
   storage is available.
+
+## Evidence
+
+- `emulebb-build-tests` PR #4 merged as `e90a06be` with fixture implementation
+  commits `2116ab2` and `b6c2908`.
+- Follow-up PR #5 merged as `94122a74`, aligning metadata seeders and bounded
+  migrations with schema 44, materializing the pinned PCP/NAT-PMP source, and
+  stabilizing protected-root fingerprints against deferred Windows directory
+  timestamp updates.
+- The hosted portability matrix passed on Ubuntu 24.04, macOS, and Windows 2022.
+- The coordinated fast workflow passed the complete Python harness on Windows
+  2022 and Windows 2025/VS2026, plus portability lanes on Ubuntu 24.04, macOS,
+  and Windows 2022, at PR #5 head `ac9d4a9`.
+- The focused local shared-library suite passed 29 tests, including deterministic
+  cohort mapping, native-unit accounting, capability cleanup, and report
+  redaction.
+- The remaining unchecked criteria require the retained cross-platform lifecycle
+  campaigns and macOS watcher disposition; this item stays open until that
+  evidence exists.

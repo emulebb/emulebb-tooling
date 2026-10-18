@@ -5,7 +5,7 @@ product: emulebb-rust
 phase: Phase 1
 github_issue: https://github.com/emulebb/emulebb-rust/issues/92
 title: Add per-file share exclusions with a built-in default ignore set
-status: OPEN
+status: DONE
 priority: Minor
 category: feature
 labels: [rust, sharing, exclude, watcher, parity]
@@ -86,12 +86,12 @@ filesystem noise, which is exactly the eMule/MFC behavior.
 
 ## Acceptance Criteria
 
-- [ ] Excluding a file persists across watcher reloads and daemon restarts.
-- [ ] Excluded files never appear in the shared catalog, server offerfiles, or
+- [x] Excluding a file persists across watcher reloads and daemon restarts.
+- [x] Excluded files never appear in the shared catalog, server offerfiles, or
       Kad publish candidates.
-- [ ] The built-in "usual suspects" and "suggested set" are applied by default
+- [x] The built-in "usual suspects" and "suggested set" are applied by default
       and are individually removable.
-- [ ] The API exposes list/add/remove exclusion operations.
+- [x] The API exposes list/add/remove exclusion operations.
 
 ## Validation
 
@@ -100,6 +100,23 @@ filesystem noise, which is exactly the eMule/MFC behavior.
 - Offerfiles and Kad publish-candidate tests asserting excluded hashes are
   absent.
 - Case/normalization tests using the RUST-BUG-107 canonical identity.
+
+## Evidence
+
+- Metadata schema 44 persists canonical exact-path exclusions and per-rule
+  default overrides across reopen/restart.
+- Shared-directory scan, bootstrap, direct-share, and live-monitor paths all
+  apply one exclusion policy before entries can reach the shared catalog used
+  by server offerfiles and Kad publication.
+- Tests cover restart persistence, removable defaults, exact scan exclusion,
+  direct-share rejection, watcher suppression, and REST validation; OpenAPI
+  2.0 and the WebUI expose list/add/remove and default-rule toggles.
+- Rust PR #130 delivered the feature on 2026-10-18 through rebased commits
+  `dc324c08`, `65be4f27`, and `85cefaff`; required CI passed strict policy,
+  formatting, Clippy, cargo-deny, CodeQL, live REST/OpenAPI conformance, and
+  build/test jobs on Ubuntu, macOS, and Windows.
+- Contract and harness support landed through tooling PR #34 (`2a6c2a12`) and
+  build-tests PR #4 (`e90a06be`).
 
 ## Notes
 

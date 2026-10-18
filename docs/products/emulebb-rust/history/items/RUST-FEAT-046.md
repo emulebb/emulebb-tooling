@@ -5,7 +5,7 @@ product: emulebb-rust
 phase: Phase 1
 github_issue: https://github.com/emulebb/emulebb-rust/issues/89
 title: Repair mojibake and normalize download filenames at intake
-status: OPEN
+status: DONE
 priority: Minor
 category: feature
 labels: [rust, ed2k, filename, unicode, parity]
@@ -80,16 +80,32 @@ name appears as several variants, defeating any later consensus logic.
 
 ## Acceptance Criteria
 
-- [ ] A Windows-1252 mojibake fixture is repaired to its intended UTF-8 name.
-- [ ] HTML entities and percent-encoded UTF-8 are decoded at intake.
-- [ ] The repaired name is what the API exposes and what is written at
+- [x] A Windows-1252 mojibake fixture is repaired to its intended UTF-8 name.
+- [x] HTML entities and percent-encoded UTF-8 are decoded at intake.
+- [x] The repaired name is what the API exposes and what is written at
       delivery (modulo filesystem sanitization).
-- [ ] Valid non-ASCII names pass through unchanged.
+- [x] Valid non-ASCII names pass through unchanged.
 
 ## Validation
 
 - Unit tests for entity, percent, and mojibake repair plus property-style
   fixtures; delivery round-trip showing the repaired name on disk.
+
+## Evidence
+
+- `normalize_ed2k_file_name` applies bounded HTML decoding, percent-decoded
+  UTF-8, Windows-1252 mojibake repair, and Unicode NFC at the shared intake
+  boundary.
+- Unit tests cover compound repair, invalid/unknown preservation, NFC, CJK, and
+  emoji; transfer tests retain raw evidence while voting on normalized names.
+- A completed-download round trip proves the repaired canonical name becomes
+  the delivered filename on disk and the REST/WebUI display name.
+- Rust PR #130 delivered the feature on 2026-10-18 through rebased commits
+  `dc324c08`, `65be4f27`, and `85cefaff`; required CI passed strict policy,
+  formatting, Clippy, cargo-deny, CodeQL, live REST/OpenAPI conformance, and
+  build/test jobs on Ubuntu, macOS, and Windows.
+- Contract and harness support landed through tooling PR #34 (`2a6c2a12`) and
+  build-tests PR #4 (`e90a06be`).
 
 ## Notes
 

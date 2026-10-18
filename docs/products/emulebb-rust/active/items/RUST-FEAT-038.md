@@ -28,10 +28,14 @@ single slow source even when other useful peers are idle.
 
 ## Current State
 
-- `crates/emulebb-ed2k/src/ed2k_transfer/piece_store.rs` assigns an exclusive
-  whole-part claim.
-- The exclusive model is simple and avoids duplicates, but it couples every
-  remaining block in the part to the first claimant.
+- `crates/emulebb-ed2k/src/ed2k_transfer/block_lease.rs` owns block-granular
+  leases, a bounded endgame trigger, stale-lease takeover, and cooldown rules.
+- Runtime tests prove two peers can lease distinct blocks from the same part,
+  dropping a lease preserves verified partial progress, and takeover requires
+  endgame plus bounded stale/no-progress conditions.
+- TCP integration coverage exercises late duplicates, out-of-order ranges,
+  reconnect/resume, cancellation, and stale packets without corrupting piece
+  state or creating ordinary duplicate traffic.
 - Current aMule's `DownloadClient.cpp` contains endgame redistribution/takeover
   behavior and the 3.1 release notes call out requesting final blocks from
   several sources.
@@ -70,15 +74,15 @@ already received from another source.
 
 ## Acceptance Criteria
 
-- [ ] A stalled block lease can be reassigned without releasing unrelated valid
+- [x] A stalled block lease can be reassigned without releasing unrelated valid
       blocks from the same part.
-- [ ] The final blocks can use multiple healthy sources under a documented,
+- [x] The final blocks can use multiple healthy sources under a documented,
       bounded endgame trigger.
-- [ ] Late, duplicate, cancelled, invalid, and out-of-order responses leave
+- [x] Late, duplicate, cancelled, invalid, and out-of-order responses leave
       piece state and peer attribution correct.
-- [ ] Disconnect/reconnect and process-recovery paths cannot strand a block in
+- [x] Disconnect/reconnect and process-recovery paths cannot strand a block in
       an owned-but-unrequestable state.
-- [ ] Normal non-endgame transfers do not create duplicate block traffic.
+- [x] Normal non-endgame transfers do not create duplicate block traffic.
 - [ ] Completion latency improves in a deterministic slow-final-source fixture.
 
 ## Validation
@@ -89,6 +93,17 @@ already received from another source.
   restart transitions.
 - Local current-aMule interop witness demonstrating bounded final-block
   redistribution and correct completion.
+
+## Evidence
+
+- The 2026-10-18 beta.3 scope audit traced the active scheduler to
+  `block_lease.rs`, the piece-state tests, and the TCP duplicate, stale,
+  out-of-order, and reconnect fixtures.
+- The complete `emulebb-ed2k` suite passed 1,161 tests at the filename-scope PR
+  head, including the block-lease and TCP fixtures above.
+- The deterministic slow-final-source latency comparison and retained local
+  current-aMule interoperability witness remain outstanding, so this item stays
+  open.
 
 ## Notes
 

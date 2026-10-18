@@ -5,7 +5,7 @@ product: emulebb-rust
 phase: Phase 1
 github_issue: https://github.com/emulebb/emulebb-rust/issues/93
 title: Parse and emit the ED2K link AICH root (h=) section
-status: OPEN
+status: DONE
 priority: Minor
 category: feature
 labels: [rust, ed2k, link, aich, parity]
@@ -86,17 +86,32 @@ daemon's transfer manifest.
 
 ## Acceptance Criteria
 
-- [ ] A link with a valid `h=` section imports with its AICH root set on the
+- [x] A link with a valid `h=` section imports with its AICH root set on the
       transfer manifest regardless of file size.
-- [ ] A malformed `h=` section is rejected without corrupting the rest of the
+- [x] A malformed `h=` section is rejected without corrupting the rest of the
       link.
-- [ ] Generated links include `h=` whenever a valid AICH root is known.
-- [ ] Links without `h=` continue to parse unchanged.
+- [x] Generated links include `h=` whenever a valid AICH root is known.
+- [x] Links without `h=` continue to parse unchanged.
 
 ## Validation
 
 - Unit tests for parse (valid, malformed, absent `h=`) and emit (with/without
   root), including a base32 round-trip fixture matching the stock link shape.
+
+## Evidence
+
+- The ED2K link parser validates one base32 20-byte `h=` section and seeds the
+  transfer manifest independently of file size while preserving source parsing.
+- Shared-file link generation emits the canonical base32 section whenever a
+  valid AICH root exists.
+- Parse, malformed, absent, import, persistence, and emit round-trip tests cover
+  the stock link shapes.
+- Rust PR #130 delivered the feature on 2026-10-18 through rebased commits
+  `dc324c08`, `65be4f27`, and `85cefaff`; required CI passed strict policy,
+  formatting, Clippy, cargo-deny, CodeQL, live REST/OpenAPI conformance, and
+  build/test jobs on Ubuntu, macOS, and Windows.
+- Contract and harness support landed through tooling PR #34 (`2a6c2a12`) and
+  build-tests PR #4 (`e90a06be`).
 
 ## Notes
 

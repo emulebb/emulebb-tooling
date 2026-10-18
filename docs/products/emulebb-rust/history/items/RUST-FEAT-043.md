@@ -5,7 +5,7 @@ product: emulebb-rust
 phase: Phase 1
 github_issue: https://github.com/emulebb/emulebb-rust/issues/86
 title: Port the MFC TCP-error flooder IP ban
-status: OPEN
+status: DONE
 priority: Minor
 category: feature
 labels: [rust, ed2k, ban, anti-abuse, parity]
@@ -75,16 +75,31 @@ for peers that abuse the TCP accept path without having to open an upload slot.
 
 ## Acceptance Criteria
 
-- [ ] Repeated TCP errors from one IP within the interval produce an IP ban at
+- [x] Repeated TCP errors from one IP within the interval produce an IP ban at
       the threshold.
-- [ ] Errors outside the interval do not accumulate, and stale counters are
+- [x] Errors outside the interval do not accumulate, and stale counters are
       pruned.
-- [ ] A transport/listener test drives N synthetic errors and asserts the ban.
+- [x] A transport/listener test drives N synthetic errors and asserts the ban.
 
 ## Validation
 
 - Unit tests for the counter window and threshold, plus a listener fixture
   test that raises the configured number of transport errors.
+
+## Evidence
+
+- `tcp_error_flood.rs` implements the bounded rolling per-IP tracker, stale
+  pruning, threshold reset, and IP-only `BanStore` escalation.
+- Listener seam and tracker tests cover threshold, interval reset, stale
+  pruning, disabled policy, and non-transport errors.
+- Settings, REST/OpenAPI 2.0, and WebUI surfaces expose the enable, interval,
+  and threshold controls with bounded validation.
+- Rust PR #130 delivered the feature on 2026-10-18 through rebased commits
+  `dc324c08`, `65be4f27`, and `85cefaff`; required CI passed strict policy,
+  formatting, Clippy, cargo-deny, CodeQL, live REST/OpenAPI conformance, and
+  build/test jobs on Ubuntu, macOS, and Windows.
+- Contract and harness support landed through tooling PR #34 (`2a6c2a12`) and
+  build-tests PR #4 (`e90a06be`).
 
 ## Notes
 
