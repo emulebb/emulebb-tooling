@@ -26,6 +26,9 @@ closed by `RUST-REF-015` and Rust commit `afb56cb1`; this item now owns only the
 proof that the default-on extension remains bounded, connection-scoped, and
 stock-compatible when negotiation is absent or rejected.
 
+This evidence is part of the hard Client gate. Policy approval alone is not
+enough to close the item or begin Indexer production implementation.
+
 ## Current State
 
 - `crates/emulebb-ed2k/src/ed2k_server/offer_policy.rs` defines and validates the
@@ -76,6 +79,8 @@ without explicit downgrade, stock/current-aMule, and large-library evidence.
 - An approved exception must name owners, default, downgrade behavior, evidence,
   and the condition under which it will be removed or standardized.
 - Do not treat successful Rust-to-Rust negotiation as stock interoperability.
+- Do not weaken, defer, or exempt the evidence criteria merely because the
+  extension already has a policy disposition or is enabled by default.
 
 ## Acceptance Criteria
 

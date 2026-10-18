@@ -4,80 +4,94 @@ workflow: github
 product: emulebb-rust
 phase: Phase 0
 github_issue: https://github.com/emulebb/emulebb-rust/issues/2
-title: Indexer — autonomous Kad/eD2K snooping index with Torznab surface
+title: Indexer — autonomous Kad/eD2K observation index
 status: OPEN
 priority: Major
 category: feature
-labels: [kad, ed2k, indexer, torznab, suite]
+labels: [kad, ed2k, indexer, suite]
 milestone: post-beta-suite
 created: 2026-06-14
-source: suite forward program (notes 13-15); SUITE-JOINT-ROADMAP
+source: integrated-suite product direction
 ---
 
-> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb-rust/issues/2. This local document is retained as an engineering spec/evidence record.
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb-rust/issues/2. This local document is retained as the durable engineering spec and evidence record.
 
-# RUST-FEAT-002 - Indexer — autonomous Kad/eD2K snooping index with Torznab surface
+# RUST-FEAT-002 - Indexer — autonomous Kad/eD2K observation index
 
 ## Summary
 
-Make emulebb-rust an autonomous index of the Kad + eD2K networks, not just a
-client. Passive-first snoop of routed Kad traffic, plus gentle/compliant active
-replay and common-extension sweeps, plus optional eD2K-server search enrichment,
-into one FTS SQLite index, surfaced over Torznab. This is part of the Phase 0
-"perfectly functional" gate (the indexer role is inside deliverable #1). Full
-design: [`docs/design/kad-ed2k-indexer.md`](../../design/kad-ed2k-indexer.md).
+Add the integrated suite's persistent remote-observation index after the Client
+gate closes. The Indexer runs inside the existing bounded-monolith daemon and
+single SQLite database, consumes the Client domain's validated traffic and
+search services, and exposes live, index, and hybrid results through one
+canonical provenance-bearing model.
 
-## Release Triage (2026-09-30)
+Full design: [`kad-ed2k-indexer`](../../design/kad-ed2k-indexer.md) and
+[`integrated-suite`](../../design/integrated-suite.md).
 
-**Post-beta.** This remains valuable Phase 0 suite work, but the first Rust beta
-ships the client/daemon and embedded WebUI without the autonomous indexer or
-Torznab surface. No current indexer absence is a beta release defect.
+## Current State
 
-## Why This Matters
-
-The suite's "no strict reliance on servers/indexers" goal requires the client to
-build its own discovery. Kad stores search-ready metadata natively (no
-BEP-9-equivalent fetch), so eD2K/Kad indexing is cheaper per query than BT DHT
-harvesting. The index is the eD2K half of the suite's Prowlarr-federated search.
+- The current `emulebb-index` crate owns the protocol-required local Kad
+  keyword/source/notes index and snoop queue. That Client behavior is not the
+  autonomous persistent corpus described here.
+- Production Indexer implementation is prohibited until every Client Gate item,
+  including newly accepted client work, closes.
+- Torznab and qBittorrent compatibility are not part of this item; RUST-FEAT-004
+  owns the later Arr phase.
 
 ## Intended Shape
 
-- Passive snoop layer hooking the `emulebb-kad-net` receive loop (free, primary).
-- Gentle active layers under live-wire discipline: keyword replay + curated
-  common-extension dictionary sweep, widely spaced and single-pass.
-- Opportunistic source/availability capture only (no dedicated source sweep).
-- Optional eD2K-server `OP_SEARCH`/`OP_GETSOURCES` enrichment (never a dependency).
-- Storage: SQLite + FTS5, conventions mirroring the qBittorrentBB harvester and
-  `emulebb-metadata/schema.sql` (WAL, NFKC, first/last_seen_ms). Indexer schema
-  parity with qBittorrentBB is a living goal, co-evolved, not frozen.
+- Capture validated passive observations without extra network requests.
+- Run replay and curated discovery sweeps under one documented bounded budget.
+- Use existing Client identities, sockets, searches, validation, and rate
+  controls; do not create a second network client.
+- Persist observations indefinitely until explicit operator deletion. Do not
+  add a product TTL, record limit, or configured disk quota.
+- Retain source, protocol, observation provenance, first/last seen times,
+  metadata, availability evidence, and validation state.
+- Enable passive capture and bounded active discovery by default when the phase
+  ships.
+- Pause index writes and active discovery on low disk or SQLite write failure,
+  keep normal client networking/transfers operating, and expose a persistent
+  fault.
 
 ## Scope Constraints
 
-- Introduce focused modules for independently nameable responsibilities; no
-  prerequisite big-refactor of legacy `.rs`. SQLite-only (no on-disk
-  metadata-file mirror).
-- Active querying must respect [[live-wire-be-gentle-no-ban]]: no aggressive
-  enumeration, protocol-compliant.
-- Out of scope: cooperative-DHT mechanisms and BEP-46 publishing (parked, see
-  `emulebb-tooling/docs/ideas/IDEA-COOPERATIVE-DHT-COOPERATION.md`).
+- One daemon, one profile, one database, and one schema version.
+- An incompatible Indexer schema change invalidates the entire beta profile;
+  there is no partial rebuild or migration path.
+- Indexer tables have one owning service. Client and future adapters do not
+  write them directly.
+- Active discovery remains gentle and bounded even though storage retention is
+  intentionally unbounded.
+- No Torznab, qBittorrent compatibility, federation, internal media-selection
+  rules, scheduling, or post-processing under this item.
 
 ## Acceptance Criteria
 
-- [ ] Passive snoop populates the index from routed Kad keyword/source/search
-      traffic with zero extra queries.
-- [ ] Active replay + common-extension sweep run under a documented rate budget.
-- [ ] FTS SQLite index with the shared column conventions; queryable by keyword.
-- [ ] Torznab endpoint serving the index (same dialect/caps/apikey as qBittorrentBB).
-- [ ] eD2K-server enrichment is optional and absent-server-safe.
+- [ ] The complete Client gate is closed before production implementation begins.
+- [ ] Passive observations add no network queries and retain provenance.
+- [ ] Replay and discovery obey a deterministic documented rate budget.
+- [ ] Live, index, and hybrid queries share one canonical result model.
+- [ ] Restart preserves the persistent corpus and observation provenance.
+- [ ] The corpus has no product TTL or configured capacity ceiling and supports
+      explicit operator deletion.
+- [ ] Low disk and SQLite write failures pause Indexer writes/discovery without
+      interrupting normal client transfers or sharing.
+- [ ] API, WebUI, logs, and diagnostics expose Indexer state and persistent faults.
+- [ ] Packaged lifecycle coverage passes on Windows, Linux, and macOS x64/ARM64.
 
 ## Validation
 
-- Unit: codec/index round-trips; sweep rate-budget math; Torznab response shape.
-- Local: snoop populates the index against a local Kad/eD2K fixture; Torznab query
-  returns indexed results.
-- Gentle live witness per live-wire policy before any public-network run.
+- Unit/property tests for observation normalization, conflicts, deduplication,
+  provenance, scheduling budgets, and pause/recovery state.
+- Deterministic Kad/eD2K fixtures for passive capture and bounded active work.
+- Large-corpus persistence, restart, explicit deletion, low-disk, and SQLite
+  failure campaigns.
+- Bounded public-network evidence through maintained harness entry points only
+  after deterministic traffic-budget proof.
 
 ## Notes
 
-- Surfaces pair with RUST-FEAT-004 (Arr integration). Design parity tracked against the
-  qBittorrentBB harvester.
+RUST-FEAT-004 consumes this domain after the Indexer gate closes. It must not
+pull compatibility-specific DTOs or transfer state into the Indexer.

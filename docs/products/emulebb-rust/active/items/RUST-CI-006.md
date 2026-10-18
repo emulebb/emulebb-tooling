@@ -26,6 +26,9 @@ Rust head and reconcile the durable documentation to that evidence. The
 existing broad parity campaign is tied to an older Rust revision, while later
 targeted witnesses do not collectively replace a same-head full campaign.
 
+This is a hard Client-gate item. Release-scope difference tables remain a
+declared set, not a proven complete set, until this campaign passes.
+
 ## Current State
 
 - Archived `RUST-CI-002` records the authoritative parity campaign against Rust
