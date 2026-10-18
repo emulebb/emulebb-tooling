@@ -3,7 +3,7 @@ id: RUST-BUG-122
 workflow: github
 github_issue: https://github.com/emulebb/emulebb-rust/issues/125
 title: Make completed-download delivery isolated and transactional
-status: OPEN
+status: DONE
 priority: Critical
 category: bug
 labels: [rust, ed2k, persistence, filesystem, lifecycle, beta]
@@ -530,9 +530,15 @@ handle-relative recursive deletion or a stronger private-filesystem boundary;
 it is an explicit Beta 3 residual, subject to the third independent review, not
 an unverified claim of portability.
 
-The remaining merge sequence is topic-branch push, fresh protected-main
-CI/CodeQL, then rebase merge. Rust PR #129 remains draft until those checks are
-green.
+### Merge Completion Checkpoint (2026-10-18)
+
+Final candidate `2808acf8` passed protected-main CI run `39116063704` and
+CodeQL run `39116063678`, including Linux, macOS, Windows, cargo-deny, strict
+policy/format/Clippy, workflow lint, required aggregate checks, and live
+REST/OpenAPI conformance. Marking the PR ready triggered the repository's
+required second CI evaluation, run `39117933344`, on the same SHA; every job
+passed again. Rust PR #129 then merged to protected `main` by rebase at
+`2f154b8b` on 2026-10-18. Issue #125 closed automatically.
 
 ## Acceptance Criteria
 
@@ -555,7 +561,7 @@ green.
       unrelated user files.
 - [x] Completion and history timestamps change only on a true completion
       transition.
-- [ ] The canonical Rust quality gate and protected-main CI pass for the final
+- [x] The canonical Rust quality gate and protected-main CI pass for the final
       merge candidate.
 
 ## Validation Plan
@@ -991,6 +997,7 @@ identity, and test-isolation blockers are closed in five granular commits;
 schema 42 makes transfer-directory native identity durable and immutable with
 first delete intent, while schema 43 adds an independently persisted marker so
 immediate inode reuse cannot transfer deletion authority. The unavoidable
-portable path-delete race is documented as a low-severity Beta 3 residual. The
-item remains implementation-active; Rust PR #129 stays draft pending fresh
-protected-main CI.
+portable path-delete race is documented as a low-severity Beta 3 residual. Rust
+PR #129 passed final-head local validation, focused independent review, two
+protected-main CI evaluations, and CodeQL, then merged by rebase to protected
+`main` at `2f154b8b`. This item is complete.
