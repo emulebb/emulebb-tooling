@@ -50,12 +50,6 @@ reused. Parked ideas are not backlog items until explicitly activated.
 | [RUST-FEAT-038](items/RUST-FEAT-038.md) | Feature | Add current-aMule-style endgame source takeover |
 | [RUST-FEAT-039](items/RUST-FEAT-039.md) | Feature | Size ED2K request depth from measured RTT and bandwidth |
 | [RUST-FEAT-040](items/RUST-FEAT-040.md) | Feature | Carry ED2K and Kad search metadata end to end |
-| [RUST-FEAT-043](items/RUST-FEAT-043.md) | Feature | Port the MFC TCP-error flooder IP ban |
-| [RUST-FEAT-044](items/RUST-FEAT-044.md) | Feature | Implement follow-majority filename selection for downloads |
-| [RUST-FEAT-045](items/RUST-FEAT-045.md) | Feature | Retain and expose multiple per-source filenames for downloads |
-| [RUST-FEAT-046](items/RUST-FEAT-046.md) | Feature | Repair mojibake and normalize download filenames at intake |
 | [RUST-FEAT-048](items/RUST-FEAT-048.md) | Feature | Use sparse part files without weakening capacity reservations |
-| [RUST-FEAT-049](items/RUST-FEAT-049.md) | Feature | Add per-file share exclusions with a built-in default ignore set |
-| [RUST-FEAT-050](items/RUST-FEAT-050.md) | Feature | Parse and emit the ED2K link AICH root (h=) section |
 | [RUST-REF-007](items/RUST-REF-007.md) | Refactor | Review Rust upload hot-path performance candidates |
 | [RUST-REF-011](items/RUST-REF-011.md) | Refactor | Consolidate duplicated ED2K opcode and capability constants |

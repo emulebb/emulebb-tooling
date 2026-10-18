@@ -5,7 +5,7 @@ product: emulebb-rust
 phase: Phase 1
 github_issue: https://github.com/emulebb/emulebb-rust/issues/88
 title: Retain and expose multiple per-source filenames for downloads
-status: OPEN
+status: DONE
 priority: Minor
 category: feature
 labels: [rust, ed2k, download, filename, metadata, api]
@@ -79,10 +79,10 @@ provenance so conflicting observations are not silently overwritten.
 
 ## Acceptance Criteria
 
-- [ ] Multiple distinct per-source names survive a download session and a
+- [x] Multiple distinct per-source names survive a download session and a
       persistence round-trip.
-- [ ] The Rust-native API/OpenAPI/WebUI exposes the names with provenance.
-- [ ] The canonical `display_name` remains correct when no consensus exists
+- [x] The Rust-native API/OpenAPI/WebUI exposes the names with provenance.
+- [x] The canonical `display_name` remains correct when no consensus exists
       (first-seen fallback preserved).
 
 ## Validation
@@ -91,6 +91,21 @@ provenance so conflicting observations are not silently overwritten.
   malformed names.
 - A download-session test feeding several `OP_REQFILENAMEANSWER` names and
   asserting the observation list.
+
+## Evidence
+
+- Metadata schema 44 persists bounded raw and normalized filename observations
+  with source endpoint, user hash, client software, origin, server, and time.
+- Download-session, storage, API serialization, and WebUI tests cover distinct,
+  duplicate, conflicting, normalized, and manually pinned observations.
+- REST/OpenAPI 2.0 publishes `displayName`, `nameConsensus`, and per-source
+  `reportedFileNames`; all 16 Playwright flows pass with the breaking schema.
+- Rust PR #130 delivered the feature on 2026-10-18 through rebased commits
+  `dc324c08`, `65be4f27`, and `85cefaff`; required CI passed strict policy,
+  formatting, Clippy, cargo-deny, CodeQL, live REST/OpenAPI conformance, and
+  build/test jobs on Ubuntu, macOS, and Windows.
+- Contract and harness support landed through tooling PR #34 (`2a6c2a12`) and
+  build-tests PR #4 (`e90a06be`).
 
 ## Notes
 

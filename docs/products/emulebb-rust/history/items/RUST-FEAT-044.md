@@ -5,7 +5,7 @@ product: emulebb-rust
 phase: Phase 1
 github_issue: https://github.com/emulebb/emulebb-rust/issues/87
 title: Implement follow-majority filename selection for downloads
-status: OPEN
+status: DONE
 priority: Minor
 category: feature
 labels: [rust, ed2k, download, filename, parity]
@@ -87,11 +87,11 @@ mislabelled source can rename the download.
 
 ## Acceptance Criteria
 
-- [ ] A majority name above the configured threshold renames an incomplete
+- [x] A majority name above the configured threshold renames an incomplete
       transfer and is persisted.
-- [ ] A manual rename disables further automatic renames for that transfer.
-- [ ] Complete and completing transfers are never renamed.
-- [ ] The minimum-votes and required-percent knobs are config-driven and
+- [x] A manual rename disables further automatic renames for that transfer.
+- [x] Complete and completing transfers are never renamed.
+- [x] The minimum-votes and required-percent knobs are config-driven and
       tested.
 
 ## Validation
@@ -100,6 +100,22 @@ mislabelled source can rename the download.
   filtering).
 - A session/state-machine test feeding several source names and asserting the
   selected majority name is adopted.
+
+## Evidence
+
+- Transfer manifests persist follow-majority state and manual display-name
+  pinning alongside the durable observation set.
+- Tests cover ties, minimum-vote and percentage thresholds, majority adoption,
+  persistence, manual pinning, and both final-rehash-pending and completed
+  rename guards.
+- Settings, REST/OpenAPI 2.0, and WebUI surfaces expose the policy and consensus
+  evidence.
+- Rust PR #130 delivered the feature on 2026-10-18 through rebased commits
+  `dc324c08`, `65be4f27`, and `85cefaff`; required CI passed strict policy,
+  formatting, Clippy, cargo-deny, CodeQL, live REST/OpenAPI conformance, and
+  build/test jobs on Ubuntu, macOS, and Windows.
+- Contract and harness support landed through tooling PR #34 (`2a6c2a12`) and
+  build-tests PR #4 (`e90a06be`).
 
 ## Notes
 
