@@ -146,7 +146,7 @@ Total: 254 closed items.
 | [BUG-149](BUG-149.md) | Shared directory tree rebuild is slow and UI-blocking on large shared sets | DONE |
 | [BUG-150](BUG-150.md) | False multiple_names Caution on cosmetic search-name differences | DONE |
 
-## FEAT — features (49)
+## FEAT — features (51)
 
 | ID | Title | Status |
 | --- | --- | --- |
@@ -190,9 +190,11 @@ Total: 254 closed items.
 | [FEAT-066](FEAT-066.md) | Replace MiniMule chrome with table and speed chart | DONE |
 | [FEAT-067](FEAT-067.md) | External VPN kill-switch watchdog | WONT_DO |
 | [FEAT-071](FEAT-071.md) | Filename mojibake repair for search results and download intake | Done |
+| [FEAT-073](FEAT-073.md) | Incorporate p2p-overlord into the eMuleBB product family | WONT_DO |
 | [FEAT-074](FEAT-074.md) | Add main-window visual evidence for connected LowID state | DONE |
 | [FEAT-083](FEAT-083.md) | Connection Checker based on public reachability polling | WONT_DO |
 | [FEAT-084](FEAT-084.md) | Migration Wizard for legacy profile import | WONT_DO |
+| [FEAT-085](FEAT-085.md) | Establish a shared campaign core for eMuleBB product-family test orchestration | WONT_DO |
 | [FEAT-097](FEAT-097.md) | Add connection pressure details to Network Information | DONE |
 | [FEAT-118](FEAT-118.md) | Composite Confidence indicator replacing the Risk + Kad-Confidence columns | DONE |
 | [FEAT-119](FEAT-119.md) | Quick hide already-known files filter in search results | DONE |
@@ -235,7 +237,7 @@ Total: 254 closed items.
 | [REF-047](REF-047.md) | Finalize native REST v1 API standardization before RC1 | DONE |
 | [REF-054](REF-054.md) | Stabilize and instrument download queue behavior | DONE |
 
-## CI — build/packaging/gates (40)
+## CI — build/packaging/gates (41)
 
 | ID | Title | Status |
 | --- | --- | --- |
@@ -275,6 +277,7 @@ Total: 254 closed items.
 | [CI-041](CI-041.md) | Publish Markdown documentation with MkDocs Material | DONE |
 | [CI-042](CI-042.md) | Keep only the latest nightly GitHub prerelease per build stream | DONE |
 | [CI-043](CI-043.md) | Add aMuTorrent automatic upstream nightly sync and release workflow | DONE |
+| [CI-046](CI-046.md) | Share product-family test profile and fixture hygiene | WONT_DO |
 | [CI-048](CI-048.md) | Improve documentation navigation and public release guidance | DONE |
 | [CI-051](CI-051.md) | Move generated workspace outputs outside repos and worktrees | DONE |
 | [CI-052](CI-052.md) | RC2+ installer-backed test gate rationalization | DONE |

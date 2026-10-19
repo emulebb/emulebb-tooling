@@ -3,7 +3,7 @@ id: FEAT-073
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/70
 title: Incorporate p2p-overlord into the eMuleBB product family
-status: DEFERRED
+status: WONT_DO
 priority: Minor
 category: feature
 labels: [product-family, p2p-overlord, rest, testing, upnp, post-0.7.3]
@@ -16,6 +16,12 @@ source: operator product-family planning for p2p-overlord integration
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/70. This local document is retained as an engineering spec/evidence record.
 
 # FEAT-073 - Incorporate p2p-overlord into the eMuleBB product family
+
+## Decision
+
+Closed as `WONT_DO` after the workspace was refocused on emulebb-rust,
+maintained eMuleBB MFC diagnostics, stock/aMule compatibility, and the Rust
+local ED2K server. The repositories are not materialized or release-gated.
 
 ## Summary
 

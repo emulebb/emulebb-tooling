@@ -1,4 +1,7 @@
-# p2p-overlord eMule Agent
+# Historical p2p-overlord eMule Agent
+
+> This guide records a retired product-family integration direction. The
+> repositories are not part of the current workspace or release gates.
 
 `p2p-overlord` is a separate Rust/Node product in the eMuleBB organization for
 headless, server-oriented P2P metadata and network-agent work. Its current eMule

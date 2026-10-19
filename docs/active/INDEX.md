@@ -27,8 +27,8 @@ not planned when the roadmap was archived.
 **Latest roadmap/archive refresh:** 2026-10-02
 **Local non-done item inventory:** retained below as engineering/spec archive,
 not workflow authority.
-**Current non-done count:** `130`
-**Non-done by status:** `18` OPEN, `4` IN_PROGRESS, `108` DEFERRED, `0` BLOCKED.
+**Current non-done count:** `127`
+**Non-done by status:** `17` OPEN, `4` IN_PROGRESS, `106` DEFERRED, `0` BLOCKED.
 **Backlog counts:** item tables below are retained for provenance and future
 manual promotion only.
 **0.7.3 release-train relevance:** Most non-done items below are future or
@@ -424,7 +424,7 @@ not active item docs.
 | [FEAT-070](items/FEAT-070.md) | Minor | DEFERRED | Add targeted client UserHash and upload-lifecycle diagnostics |
 | [FEAT-071](../history/items/FEAT-071.md) | Minor | DONE | Filename mojibake repair for search results and download intake |
 | [FEAT-072](items/FEAT-072.md) | Minor | DEFERRED | Reduce startup cache UI-thread blocking on large shared libraries |
-| [FEAT-073](items/FEAT-073.md) | Minor | DEFERRED | Incorporate p2p-overlord into the eMuleBB product family |
+| [FEAT-073](../history/items/FEAT-073.md) | Minor | WONT_DO | Incorporate p2p-overlord into the eMuleBB product family |
 | [FEAT-074](../history/items/FEAT-074.md) | Minor | DONE | Add main-window visual evidence for connected LowID state |
 | [FEAT-075](items/FEAT-075.md) | Minor | DEFERRED | Keep startup progress responsive during daily config backup |
 | [FEAT-076](items/FEAT-076.md) | Minor | DEFERRED | Parallelize shared-file hashing across physical volumes and SSDs |
@@ -436,7 +436,7 @@ not active item docs.
 | [FEAT-082](items/FEAT-082.md) | Minor | DEFERRED | Virtualize high-volume downloads, search results, and client-history lists |
 | [FEAT-083](../history/items/FEAT-083.md) | Minor | WONT_DO | Connection Checker based on public reachability polling |
 | [FEAT-084](../history/items/FEAT-084.md) | Minor | WONT_DO | Migration Wizard for legacy profile import |
-| [FEAT-085](items/FEAT-085.md) | Minor | DEFERRED | Establish a shared campaign core for eMuleBB product-family test orchestration |
+| [FEAT-085](../history/items/FEAT-085.md) | Minor | WONT_DO | Establish a shared campaign core for eMuleBB product-family test orchestration |
 | [FEAT-086](items/FEAT-086.md) | Minor | DEFERRED | Parse eMuleAI extension hints without advertising protocol support |
 | [FEAT-087](items/FEAT-087.md) | Minor | DEFERRED | Add transfer minicharts and aggregate progress metrics |
 | [FEAT-088](items/FEAT-088.md) | Minor | DEFERRED | Keep completed upload rows visible briefly |
@@ -524,7 +524,7 @@ not active item docs.
 | [CI-043](../history/items/CI-043.md) | Minor | DONE | Add aMuTorrent automatic upstream nightly sync and release workflow |
 | [CI-044](items/CI-044.md) | Major | OPEN | Add containerized integration profiles for controller and P2P compatibility testing |
 | [CI-045](items/CI-045.md) | Major | OPEN | Add workspace-level bind interface selection for predictable live tests |
-| [CI-046](items/CI-046.md) | Minor | OPEN | Share product-family test profile and fixture hygiene |
+| [CI-046](../history/items/CI-046.md) | Minor | WONT_DO | Share product-family test profile and fixture hygiene |
 | [CI-047](items/CI-047.md) | Minor | OPEN | Add repeatable local package install refresh command |
 | [CI-048](../history/items/CI-048.md) | Minor | DONE | Improve documentation navigation and public release guidance |
 | [CI-049](items/CI-049.md) | Minor | OPEN | Enable CodeQL code scanning for the app repository |

@@ -4,9 +4,9 @@
 
 This is the post-`0.7.3` architecture plan for bringing relevant
 p2p-overlord work into the eMuleBB product family without merging the products.
-The tracking item is [FEAT-073](../active/items/FEAT-073.md).
+The tracking item is [FEAT-073](items/FEAT-073.md).
 The shared campaign-core architecture slice is tracked separately as
-[FEAT-085](../active/items/FEAT-085.md).
+[FEAT-085](items/FEAT-085.md).
 
 ## Product Boundary
 

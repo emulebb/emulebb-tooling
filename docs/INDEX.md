@@ -177,7 +177,6 @@ desktop app first, then layer automation on top.
 | eD2K, Kad, bind, ports, UPnP, firewall | [reference/GUIDE-NETWORK](reference/GUIDE-NETWORK.md) |
 | eMuleBB, Prowlarr, Radarr, and Sonarr setup recipes | [reference/GUIDE-STACK-INTEGRATIONS](reference/GUIDE-STACK-INTEGRATIONS.md) |
 | REST semantics, qBit-compatible/Torznab adapter behavior | [reference/GUIDE-CONTROLLERS-REST](reference/GUIDE-CONTROLLERS-REST.md) |
-| p2p-overlord eMule agent boundary and source docs | [reference/GUIDE-P2P-OVERLORD-EMULE-AGENT](reference/GUIDE-P2P-OVERLORD-EMULE-AGENT.md) |
 | Preferences and `preferences.ini` reference | [reference/GUIDE-PREFERENCES](reference/GUIDE-PREFERENCES.md) |
 | Runtime `.met` and `.dat` file roles | [reference/GUIDE-PERSISTENCE-FILES](reference/GUIDE-PERSISTENCE-FILES.md) |
 | IP filter setup and troubleshooting | [reference/GUIDE-IP-FILTERS](reference/GUIDE-IP-FILTERS.md) |
@@ -201,7 +200,6 @@ authority for live state.
 | qBit, Torznab, and Arr adapter notes | [rest/REST-API-ADAPTERS](rest/REST-API-ADAPTERS.md) |
 | REST parity inventory | [rest/REST-API-PARITY-INVENTORY](rest/REST-API-PARITY-INVENTORY.md) |
 | Controller surface matrix | [active/CONTROLLER-SURFACE-MATRIX](active/CONTROLLER-SURFACE-MATRIX.md) |
-| p2p-overlord claimed-subset contract boundary | [reference/GUIDE-P2P-OVERLORD-EMULE-AGENT](reference/GUIDE-P2P-OVERLORD-EMULE-AGENT.md) |
 
 ## Translations
 

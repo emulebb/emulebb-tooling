@@ -170,7 +170,7 @@ nav:
       - Abandoned CMake / Ninja / vcpkg Adoption: history/ideas/IDEA-CMAKE.md
       - Abandoned eMule 2026 Modernization Roadmap: history/ideas/IDEA-MODERNIZATION-2026.md
       - Abandoned emulebb-mfc Restructure Guidance: history/ideas/IDEA-RESTRUCTURE.md
-      - p2p-overlord Integration Reference: reference/GUIDE-P2P-OVERLORD-EMULE-AGENT.md
+      - Archived p2p-overlord Integration Reference: history/GUIDE-P2P-OVERLORD-EMULE-AGENT.md
 not_in_nav: |
   /active/items/**
   /history/**
