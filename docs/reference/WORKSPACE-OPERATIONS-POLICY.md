@@ -13,7 +13,9 @@ runtime work.
   workspace lock. `repos\emulebb-build-tests` owns shared harness code.
 - `workspaces\workspace\deps.json` and `repo-roles.json` are generated
   contracts. Consumers use `workspace.repos`; the deterministic server resolves
-  through `workspace.repos.ed2k_server`. They do not reconstruct old names or
+  through `workspace.repos.ed2k_server`. Selected repository profiles are
+  recorded in both contracts, and non-core repositories are exposed separately
+  rather than implied by paths. Consumers do not reconstruct old names or
   establish an independent topology authority.
 - The canonical MFC worktrees are `emulebb-main`,
   `emulebb-community-baseline`, and `emulebb-community-tracing-harness` on
@@ -30,9 +32,12 @@ runtime work.
   `EMULEBB_WORKSPACE_OUTPUT_ROOT\packages\build`, including
   `packages\build\amutorrent`. Runtime tool payloads use `tools`, including
   `tools\amule`. Third-party orchestration prefers `builds\third_party`.
-- `goed2k-server` is harness-only. `ed2k-server` is an upstream-contribution
-  reference whose candidate stages under `tools\ed2k-server\bin`; staging does
-  not authorize runtime selection.
+- `goed2k-server` remains a temporary harness-only provider during the approved
+  migration to the Rust `ed2k-server`. The Rust fork remains an
+  upstream-contribution reference: follow upstream closely, prefer harness-side
+  adaptation, and keep server changes minimal, generic, and upstreamable. Its
+  candidate stages under `tools\ed2k-server\bin`; runtime selection changes only
+  after deterministic Go/Rust parity gates pass.
 
 Python topology in `repos\emulebb-build\emule_workspace` is the source of truth.
 `python -m emule_workspace validate` fails generated-contract drift. Setup and
@@ -86,13 +91,19 @@ sync configure the shared hook and must not overwrite dirty managed work.
 
 ## Managed Repositories
 
-- Managed repos include the active products/support repos plus frozen
-  `amutorrent`, archived `trackmulebb`, paused `qbittorrentbb` and
-  `emulebb-libtorrent`, reference `amule` and `ed2k-server`, and harness-only
-  `goed2k-server`. `p2p-overlord-*` is a separate product family.
+- The default `core` profile contains the active Rust product, the MFC seed and
+  all three diagnostic/release worktrees, their required third-party forks,
+  workspace support repos, the single aMule reference, the stock eMule 0.72
+  reference, and both ED2K servers during the Go-to-Rust transition. MFC remains
+  buildable and shippable for critical fixes; it is not a historical-only lane.
+- Public-presence repositories and historical analysis repositories are explicit
+  optional profiles. Normal materialization and synchronization must not pull
+  archived, stale, paused, frozen, or unrelated product-family repositories.
+  `amutorrent`, `trackmulebb`, `qbittorrentbb`, `emulebb-libtorrent`, and
+  `p2p-overlord-*` are outside the core profile.
 - Supporting repos use setup-pinned branches. `stale/*` and
   `analysis\stale-v0.72a-experimental-clean` are historical-only unless a task
-  explicitly requests comparison.
+  explicitly selects the historical-analysis profile for comparison.
 - Build output stays outside source trees. CMake uses out-of-source output below
   the output root, Go tools stage below `tools\<fork>`, and Rust follows the
   [Rust Product Policy](../products/emulebb-rust/reference/AGENT-POLICY.md).
@@ -101,6 +112,9 @@ sync configure the shared hook and must not overwrite dirty managed work.
   clean `master`; parity evidence records the tested commit. The archival
   `emulebb/amule` fork may remain a secondary remote, not a second checkout,
   product worktree, or release gate.
+- Stock eMule 0.72 under `repos\emule-stock` is the single clean moving stock
+  compatibility reference. Instrumented eMuleBB MFC branches remain in the
+  canonical app seed and worktrees; they do not replace the clean stock oracle.
 - Shared tests are extended in `emulebb-build-tests` rather than forked into
   parallel per-client suites.
 
