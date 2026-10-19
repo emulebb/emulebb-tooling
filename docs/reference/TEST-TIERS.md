@@ -43,7 +43,7 @@ release-blocking RC certification; its contents are intentionally unchanged so
 ### Overnight — full proof
 
 Fast plus the expanded live, UI resource-depth, stabilization-stress, and
-aMuTorrent live suites.
+explicit legacy-controller compatibility suites.
 
 Stock/community parity comparisons (`test protocol-parity`,
 `test community-core-coverage`) are **on-demand only** and not part of any tier.

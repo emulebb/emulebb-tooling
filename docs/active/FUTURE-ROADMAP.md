@@ -27,7 +27,7 @@ The maintenance roadmap does not include:
 - broad feature expansion or a new MFC architecture;
 - an active `0.8.x` modernization program;
 - a new cross-client “eMuleBB Suite” roadmap;
-- TrackMuleBB, qBittorrentBB, or controller-platform development;
+- retired product-family or controller-platform development;
 - native Windows VPN integration as a forward product priority.
 
 New product development belongs to `emulebb-rust`, which is the active

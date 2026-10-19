@@ -23,8 +23,6 @@ name instead.
 |---|---|
 | `emulebb` | Stable Windows eD2K/Kad client on the maintained `0.7.x` line |
 | `emulebb-rust` | Active experimental Rust eD2K/Kad client; public beta |
-| `qbittorrentbb` | Paused unofficial qBittorrent experiment |
-| `amutorrent` | Frozen unofficial controller fork shipped with eMuleBB `0.7.3` |
 | `trackmulebb` | Archived private controller experiment |
 | `ed2k-server` | Sole local deterministic eD2K test server; upstream-aligned Rust fork |
 | `amule` | aMule analysis/reference fork |

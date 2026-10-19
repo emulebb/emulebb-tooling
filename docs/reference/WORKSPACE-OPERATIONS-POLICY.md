@@ -29,9 +29,9 @@ runtime work.
   `EMULEBB_WORKSPACE_OUTPUT_ROOT\builds\amule`,
   `EMULEBB_WORKSPACE_OUTPUT_ROOT\builds\third_party`, and the Rust targets.
   Package-only generated inputs use
-  `EMULEBB_WORKSPACE_OUTPUT_ROOT\packages\build`, including
-  `packages\build\amutorrent`. Runtime tool payloads use `tools`, including
-  `tools\amule`. Third-party orchestration prefers `builds\third_party`.
+  `EMULEBB_WORKSPACE_OUTPUT_ROOT\packages\build`. Runtime tool payloads use
+  `tools`, including `tools\amule`. Third-party orchestration prefers
+  `builds\third_party`.
 - `repos\ed2k-server` is the sole local deterministic ED2K server and an
   upstream-contribution reference. Follow upstream closely, prefer harness-side
   adaptation, and keep server changes minimal, generic, and upstreamable. Its
@@ -99,8 +99,7 @@ sync configure the shared hook and must not overwrite dirty managed work.
 - Public-presence repositories and historical analysis repositories are explicit
   optional profiles. Normal materialization and synchronization must not pull
   archived, stale, paused, frozen, or unrelated product-family repositories.
-  `amutorrent`, `trackmulebb`, `qbittorrentbb`, `emulebb-libtorrent`, and
-  `p2p-overlord-*` are outside the core profile.
+  `p2p-overlord-*` is outside the core profile.
 - Supporting repos use setup-pinned branches. `stale/*` and
   `analysis\stale-v0.72a-experimental-clean` are historical-only unless a task
   explicitly selects the historical-analysis profile for comparison.

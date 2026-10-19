@@ -48,7 +48,6 @@ class CleanWorktreeFailure(RuntimeError):
 WORKSPACE_CLEAN_REPO_PATHS = (
     "repos/emulebb",
     "repos/amule",
-    "repos/amutorrent",
     "repos/emulebb-build",
     "repos/emulebb-build-tests",
     "repos/ed2k-server",
@@ -287,7 +286,7 @@ def run_basic_hygiene(
             if psd1_issue:
                 add_issue(issues, "psd1-shape", relative_path, psd1_issue)
 
-    if repo_kind in {"node-web", "amutorrent"}:
+    if repo_kind == "node-web":
         package_json_path = repo_root_path / "package.json"
         if package_json_path.is_file():
             package_json = json.loads(package_json_path.read_text(encoding="utf-8"))

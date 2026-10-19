@@ -640,7 +640,6 @@ def audit_powershell_boundary(root: Path) -> None:
     build_root = resolve_workspace_path(root, r"repos\emulebb-build")
     scan_roots = (
         tooling_root,
-        resolve_workspace_path(root, r"repos\amutorrent"),
         build_root,
         resolve_workspace_path(root, r"repos\emulebb-build-tests"),
         resolve_workspace_path(root, r"repos\emulebb"),
@@ -918,8 +917,6 @@ def audit_doc_paths(root: Path) -> None:
     # p2p-overlord-* is a separate product family and is excluded.
     for relative_repo in (
         r"repos\emulebb-rust",
-        r"repos\amutorrent",
-        r"repos\qbittorrentbb",
         r"repos\ed2k-server",
     ):
         fork_root = resolve_workspace_path(root, relative_repo)
@@ -961,8 +958,6 @@ def audit_clean_worktree(root: Path) -> None:
 HYGIENE_SCOPE_REPOS: tuple[tuple[str, str], ...] = (
     ("app-main", r"workspaces\workspace\app\emulebb-main"),
     ("emulebb-rust", r"repos\emulebb-rust"),
-    ("amutorrent", r"repos\amutorrent"),
-    ("qbittorrentbb", r"repos\qbittorrentbb"),
     ("amule", r"repos\amule"),
     ("ed2k-server", r"repos\ed2k-server"),
     ("emulebb-build", r"repos\emulebb-build"),

@@ -20,7 +20,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--repo-root", type=Path, default=REPO_ROOT)
     parser.add_argument(
         "--repo-kind",
-        choices=("generic", "workspace", "app", "tests", "tooling", "node-web", "amutorrent", "emulebb-build"),
+        choices=("generic", "workspace", "app", "tests", "tooling", "node-web", "emulebb-build"),
         default="generic",
     )
     parser.add_argument("--summary-path", type=Path)

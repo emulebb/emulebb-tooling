@@ -36,12 +36,11 @@ scope defined by the [MFC maintenance roadmap](FUTURE-ROADMAP.md).
 - The aMule fork remains an analysis/build reference with its existing
   automation.
 
-## Paused, frozen, and archived work
+## Archived work
 
-qBittorrentBB and emulebb-libtorrent are paused, aMuTorrent is frozen, and
-TrackMuleBB is archived. They have no forward release gate. Any explicitly
-approved maintenance should run the smallest repo-native checks needed to avoid
-regression and should not revive scheduled product automation implicitly.
+Retired product-family and controller repositories have no current workspace
+gate or maintenance expectation. Completed release evidence remains historical
+provenance and must not revive scheduled product automation implicitly.
 
 ## Principles
 

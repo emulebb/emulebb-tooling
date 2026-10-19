@@ -35,11 +35,6 @@ scope and pull in support repos only when the task needs them.
   `repos/emulebb` as branch-store only, `repos/emulebb-build` for orchestration,
   `repos/emulebb-build-tests` for harnesses, and
   `repos/emulebb-tooling/docs/products/emulebb-mfc` for docs.
-- `qbittorrentbb`, `qbit`, or `qbbb`:
-  primary scope is an explicitly materialized `repos/qbittorrentbb` checkout.
-  This paused experiment is not materialized or validated by default. Support
-  scope is shared build and tooling only for explicit historical work.
-
 ## eD2K Reference Terminology
 
 Use these operator terms exactly in protocol audits and source comparisons.
@@ -91,9 +86,9 @@ products require explicit work and are not materialized by the core profile.
 | `repos/amule` | `master` | Managed official aMule upstream and moving parity reference. | clean fast-forward sync; record tested SHA in parity evidence |
 | `repos/emule-stock` | `v0.72a` | Clean stock eMule compatibility oracle. | clean fast-forward sync; source/parity comparison |
 
-`amutorrent`, `qbittorrentbb`, `trackmulebb`, and `p2p-overlord-*` are outside
-the core profile. Their historical documentation does not make their local
-checkouts part of normal materialization or validation.
+Historical documentation does not make retired product-family checkouts part
+of normal materialization or validation. `trackmulebb` and `p2p-overlord-*`
+remain outside the core profile.
 
 ## Third-Party Forks
 
@@ -131,7 +126,6 @@ The GitHub organization uses these repo classes for settings consistency:
 | Class | Repositories |
 |---|---|
 | Active / maintained products | `emulebb-rust`, `emulebb` |
-| Paused experiments | `qbittorrentbb`, `emulebb-libtorrent`, `amutorrent` |
 | Reference / harness | `ed2k-server`, `amule` |
 | Build, test, tooling, docs | `emulebb-build`, `emulebb-build-tests`, `emulebb-tooling`, `.github`, `emulebb.github.io` |
 | Dependency forks | `emulebb-*` dependency forks under `repos/third_party` |
@@ -171,13 +165,6 @@ the repo README or this map before making legal metadata changes.
   Cargo on Linux) and stage the candidate binary below
   `EMULEBB_WORKSPACE_OUTPUT_ROOT\tools\ed2k-server\bin`. This command does not
   start the server.
-- Run `python -m emule_workspace refresh-product-family-rebases` after the
-  scheduled aMuTorrent upstream-rebase workflow publishes rewritten fork
-  history. The command refreshes `repos/amutorrent` only when the worktree is
-  clean and local `HEAD` exactly matched the pre-fetch remote-tracking ref. If
-  local commits or file changes exist, it stops and reports the repo for manual
-  review instead of resetting work. Managed `repos/amule` follows normal clean
-  fast-forward behavior through `python -m emule_workspace sync`.
 - Run `python -m emule_workspace workspace-status` before release and broad
   testing to inspect dirty state, branches, upstreams, and ahead/behind counts
   across all managed repos.

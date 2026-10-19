@@ -16,11 +16,8 @@ Its feature expansion and major modernization backlog is parked as `DEFERRED`.
 
 Current GitHub-primary work is tracked on org Project #3, **eMuleBB Roadmap**.
 
-## Retained But Not Active
+## Supporting And Historical Context
 
-- **qBittorrentBB** and **emulebb-libtorrent** are paused experiments. They are
-  preserved for reference and explicit on-demand builds, not roadmap work.
-- **aMuTorrent** is the frozen controller shipped with the `0.7.3` bundle.
 - **TrackMuleBB** is an archived private experiment.
 - **ed2k-server** is the sole local deterministic server and an upstream-aligned
   Rust reference fork, not a production-hardening program or public service.

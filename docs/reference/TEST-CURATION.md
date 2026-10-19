@@ -11,8 +11,8 @@ curated through four lenses, in priority order:
 
 1. **Non-redundancy** — cut where multiple layers cover the same thing.
 2. **Minimize runtime** — push slow load/soak/stress to the highest tier.
-3. **Active beta lane** — Rust coverage is forward-facing; qBittorrentBB and
-   TrackMuleBB assets are retained only as paused or historical on-demand coverage.
+3. **Active beta lane** — Rust coverage is forward-facing; retired and archived
+   product-family assets are historical evidence, not on-demand workspace lanes.
 4. **0.7.3 correctness gate** — what proves the shipped surface.
 
 Verdict vocabulary: **KEEP**, **WIRED-IN** (was dormant, now gated), **OPTIONAL**

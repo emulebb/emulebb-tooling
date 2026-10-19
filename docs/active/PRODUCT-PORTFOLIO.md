@@ -10,7 +10,6 @@ maintained or retained by the eMuleBB organization.
 |---|---|
 | Active beta | Current development and public beta/nightly releases |
 | Maintenance | Published software accepting bounded, low-risk changes only |
-| Paused experiment | Preserved and buildable on demand, but without roadmap, issue intake, or scheduled work |
 | Reference | Retained for analysis or potentially upstreamable contributions |
 | Harness | Test infrastructure whose behavior changes only when the maintained harness requires it |
 | Infrastructure | Build, test, documentation, policy, and public-presence support |
@@ -22,9 +21,6 @@ maintained or retained by the eMuleBB organization.
 |---|---|---|
 | `emulebb-rust` | Active beta | Primary active eD2K/Kad client; CI-gated nightly beta builds from `main` are the current public testing channel |
 | `emulebb` (MFC) | Maintenance | Stable Windows `0.7.x` diagnostics and critical-fix lane; remains buildable and shippable |
-| `qbittorrentbb` | Paused experiment | Preserved BitTorrent experiment; not part of the default workspace |
-| `emulebb-libtorrent` | Paused experiment | qBittorrentBB engine fork; not part of the default workspace |
-| `amutorrent` | Maintenance / paused | Frozen controller shipped with the `0.7.3` bundle; no forward roadmap |
 | `trackmulebb` | Archived experiment | Private archived controller experiment |
 | `ed2k-server` | Harness / reference | Sole local deterministic eD2K server; managed Rust fork kept close to upstream with minimal upstreamable changes |
 | `amule-org/amule` | Reference | Managed current upstream at `repos/amule`; moving interoperability and protocol-parity target |
@@ -62,8 +58,8 @@ stack is an eMuleBB product until explicitly adopted.
 - Project #3, **eMuleBB Roadmap**, contains current GitHub-primary work.
 - MFC feature expansion and major refactors remain `DEFERRED` as a parked ledger;
   they are not release commitments and are not closed as `WONT_DO`.
-- qBittorrentBB, aMuTorrent forward work, TrackMuleBB, and ed2k-server
-  production-hardening items are historical, not active backlog.
+- TrackMuleBB and ed2k-server production-hardening items are historical, not
+  active backlog.
 - New ed2k-server issues may cover deterministic local-server capability,
   upstream alignment, or upstreamable fixes, but must not recreate a
   production-service roadmap without a new operator decision.

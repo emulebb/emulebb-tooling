@@ -25,7 +25,7 @@ endpoint, and is not a constraint on any future controller UI.
 Primary consumers:
 
 - emulebb-mfc `0.7.x`
-- aMuTorrent `0.7.3` / sustainability maintenance
+- legacy `0.7.3` controller compatibility evidence
 - emulebb-mfc package and release validation tooling
 
 ## Rust Contract

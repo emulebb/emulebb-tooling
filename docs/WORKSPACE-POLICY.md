@@ -44,9 +44,6 @@ policy rather than choosing one silently.
   `workspaces\workspace\app\emulebb-main`. `repos\emulebb` is its branch store,
   not its normal edit location. Add build, harness, or tooling support only when
   required.
-- `qbittorrentbb`, `qbit`, or `qbbb` selects an explicitly materialized
-  `repos\qbittorrentbb` checkout. It is a paused experiment and is never the
-  ambiguous default.
 - Broad workspace scans are allowed only for an explicitly workspace-wide
   request, unclear dependency topology, required orchestration, or genuinely
   cross-product behavior.

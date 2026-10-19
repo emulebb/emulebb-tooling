@@ -81,7 +81,7 @@ Use this path for normal externally actionable backlog slices:
    owning repo issue, and a workflow-status note that points to the issue.
 4. The current `github-roadmap-sync.py` path is legacy MFC archive tooling until
    generalized for per-product Suite sync. Do not use it for forward Rust,
-   qBittorrentBB, or TrackMuleBB items without a focused tooling update.
+   archived, or retired product-family items without a focused tooling update.
 5. Project fields must mirror the local item and product lane: `Status`,
    `Product`, `Phase`, and `Priority`. The issue milestone must match the local
    `milestone:` value. Local `labels:` are durable engineering taxonomy and do
