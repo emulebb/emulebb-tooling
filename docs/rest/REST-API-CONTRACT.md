@@ -26,10 +26,9 @@ capability-gated `/api/v1`)
 WebServer listener. The broadband release contract is the resource-oriented
 `/api/v1` surface described by the OpenAPI document above.
 
-The API is designed for trusted local controllers. The retained shipped
-consumer is aMuTorrent, bundled with `0.7.3`. The 0.7.3 contract intentionally
-prioritizes consistency and controller completeness over preserving old
-command-style route names.
+The API is designed for trusted local controllers. The 0.7.3 contract
+intentionally prioritizes consistency and controller completeness over
+preserving old command-style route names.
 
 After 0.7.3 RC1, the same OpenAPI document is also the canonical
 product-family contract for p2p-overlord implementations that choose to expose
@@ -39,11 +38,10 @@ creating a parallel contract.
 
 ## Controller Boundary
 
-aMuTorrent is the primary UI consumer and 0.7.3 RC2 proof target, but it is not
-the authority for native route shape. The aMuTorrent eMuleBB adapter must
-translate UI expectations to the clean `/api/v1` contract instead of requiring
-native aliases, qBittorrent-compatible response shapes, or legacy command-style
-routes.
+Controller adapters consume, but do not define, the native `/api/v1` contract.
+They translate client expectations to the clean native surface instead of
+requiring native aliases, qBittorrent-compatible response shapes, or old
+command-style routes.
 
 Arr integrations are separate compatibility adapters. Prowlarr Torznab,
 Radarr/Sonarr controller flows, and qBittorrent-compatible download-client
@@ -183,7 +181,7 @@ The release API intentionally excludes:
 - host operating-system shutdown and reboot
 - binary shared-file streaming
 - granular REST permissions or low-rights REST mode
-- dynamic capability negotiation between eMuleBB and aMuTorrent
+- out-of-band, controller-specific capability negotiation
 
 `PATCH /api/v1/shared-directories` replaces the configured shared-directory
 roots and requires `confirmReplaceRoots: true`. Each root may be either a
@@ -281,8 +279,8 @@ The OpenAPI contract is the implemented target contract for the current
 validation behavior, and the internal route execution model. The Python smoke
 harness includes OpenAPI route consistency checks, validates success/error
 envelopes, and reports whether each native route is direct or UI-thread
-dispatched. aMuTorrent's eMuleBB adapter consumes the same final field names
-while keeping aMuTorrent's own public routes stable.
+dispatched. Compatibility adapters consume the same final field names while
+keeping their public routes adapter-local.
 
 The live smoke harness validates route coverage and response envelopes against
 OpenAPI. The strict DTO policy is enforced by tests that reject open-ended
@@ -304,12 +302,6 @@ Torznab family-to-search-type mapping still resolves to REST tokens accepted by
   - Contract boundary: OpenAPI is authoritative; adapters do not define route names or
                        envelopes.
   - Proof lane: REST smoke, OpenAPI drift, live completeness
-
-- **aMuTorrent**
-  - Surface: `/api/v1` through its own adapter
-  - Contract boundary: Translates UI expectations to final native fields and unwraps
-                       native envelopes.
-  - Proof lane: aMuTorrent browser smoke
 
 - **Prowlarr Torznab**
   - Surface: Torznab XML adapter
@@ -377,7 +369,7 @@ match [REST-API-OPENAPI.yaml](REST-API-OPENAPI.yaml).
 ## Retired Before Public Release
 
 The following earlier command-style routes are not part of the final broadband
-release contract and should not be used by aMuTorrent:
+release contract and must not be used by any client or adapter:
 
 - `/api/v1/app/version`
 - `/api/v1/stats/global`

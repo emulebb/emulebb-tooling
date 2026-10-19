@@ -41,7 +41,7 @@ be tracked as active item IDs before being added here as pending work.
 
 - **JSON success envelope is `{ data, meta }`**
   - Status: implemented
-  - Notes: Landed on native `main`; aMuTorrent also unwraps this shape.
+  - Notes: Landed on native `main`; compatibility adapters unwrap this shape.
 
 - **JSON collection envelope is `{ data: { items: [...] }, meta }`**
   - Status: implemented
@@ -76,7 +76,7 @@ be tracked as active item IDs before being added here as pending work.
            `/transfers/{hash}/files?confirm=true` and
            `/shared-files/{hash}/file?confirm=true`.
 
-- **aMuTorrent consumes this OpenAPI surface statically**
+- **Compatibility clients consume this OpenAPI surface statically**
   - Status: implemented
   - Notes: The integration branch unwraps native envelopes and consumes final
            resource/operation routes and field names.
@@ -171,7 +171,7 @@ be tracked as active item IDs before being added here as pending work.
 | Migrated capability | REST target | Status | Impact and notes |
 |---|---|---|---|
 | List categories | `GET /categories` | implemented | Returns the category collection envelope. |
-| Create category | `POST /categories` | implemented | Required for aMuTorrent category management. |
+| Create category | `POST /categories` | implemented | Required for controller and Arr category management. |
 | Edit category | `PATCH /categories/{categoryId}` | implemented | Default category id `0` remains protected. |
 | Delete category | `DELETE /categories/{categoryId}` | implemented | Must preserve normal eMule constraints. |
 | Category tab refresh | `GET /categories` plus UI polling | obsolete | Web UI tab refresh action is presentation-only. |
@@ -276,8 +276,8 @@ be tracked as active item IDs before being added here as pending work.
 - **Get transfer part/source detail**
   - REST target: `GET /transfers/{hash}/details`
   - Status: implemented
-  - Impact and notes: Native route returns transfer, part, and source detail; aMuTorrent
-                      hydrates transfer detail from it.
+  - Impact and notes: Native route returns transfer, part, and source detail for
+                      controller clients.
 
 - **Browse source**
   - REST target: `POST /transfers/{hash}/sources/{clientId}/operations/browse`
@@ -304,7 +304,7 @@ be tracked as active item IDs before being added here as pending work.
 - **Hide transfer columns or update transfer table sort**
   - REST target: none
   - Status: obsolete
-  - Impact and notes: Presentation state belongs to aMuTorrent or any other controller.
+  - Impact and notes: Presentation state belongs to controller UIs.
 
 ## Shared Files And Shared Directories
 
@@ -395,8 +395,8 @@ be tracked as active item IDs before being added here as pending work.
 - **List active uploads**
   - REST target: `GET /uploads`
   - Status: implemented
-  - Impact and notes: Current REST exposes uploads; aMuTorrent currently drops this data
-                      in its data pipeline.
+  - Impact and notes: Current REST exposes uploads; presentation and retention are
+                      consumer-owned.
 
 - **List upload queue**
   - REST target: `GET /upload-queue`
@@ -486,8 +486,8 @@ be tracked as active item IDs before being added here as pending work.
 - **Get search results**
   - REST target: `GET /searches/{searchId}`
   - Status: implemented
-  - Impact and notes: aMuTorrent should poll this until stable and verify the echoed
-                      `method` and `type`.
+  - Impact and notes: Clients poll this until stable and verify the echoed `method`
+                      and `type`.
 
 - **Stop/delete one search**
   - REST target: `DELETE /searches/{searchId}`
@@ -534,60 +534,63 @@ be tracked as active item IDs before being added here as pending work.
 | Legacy or possible action | Status | Rationale |
 |---|---|---|
 | Binary shared-file streaming through REST | obsolete | Metadata and ED2K links are enough for controller integration; local file serving changes risk profile. |
-| Host OS shutdown/reboot | obsolete | Not needed by aMuTorrent and too destructive for the trusted local API. |
+| Host OS shutdown/reboot | obsolete | Not required for controller integration and too destructive for the trusted local API. |
 | Deprecated template sessions and low-rights mode | obsolete | REST is all-in behind `X-API-Key`. |
-| Dynamic capability negotiation | obsolete | eMuleBB and aMuTorrent ship together; static contract compliance is simpler and stricter. |
+| Dynamic capability negotiation | obsolete | The frozen MFC contract is static; advertised capabilities and OpenAPI compliance are sufficient. |
 | Granular REST permissions | obsolete | User explicitly chose all-in API-key behavior. |
 
-## aMuTorrent Gap Checklist
+## Historical 0.7.3 Controller Adapter Proof
+
+This completed checklist records the adapter work shipped with the retired
+aMuTorrent `0.7.3` bundle. It is provenance, not a current release gate.
 
 - **Endpoint adapter route names**
   - Status: implemented
-  - Work required: aMuTorrent now prefers final operation/resource routes for transfers,
-                   servers, shared reload, and search-result download.
+  - Recorded outcome: aMuTorrent preferred final operation/resource routes for
+                      transfers, servers, shared reload, and search-result download.
 
 - **Response envelopes**
   - Status: implemented
-  - Work required: Native REST now always emits `{data, meta}` success envelopes and
-                   `{error:{code,message,details}}` errors; aMuTorrent unwraps both.
+  - Recorded outcome: Native REST emitted `{data, meta}` success envelopes and
+                      `{error:{code,message,details}}` errors; aMuTorrent unwrapped both.
 
 - **Torznab search method policy**
   - Status: implemented
-  - Work required: Prowlarr/Torznab movie and TV searches dispatch REST `video` searches
-                   through connected `global` first and connected `kad` second,
-                   combining connected-network results; other families keep the native
-                   automatic policy.
+  - Recorded outcome: Prowlarr/Torznab movie and TV searches dispatched REST
+                      `video` searches through connected `global` first and connected
+                      `kad` second, combining connected-network results; other families
+                      kept the native automatic policy.
 
 - **qBittorrent transfer delete semantics**
   - Status: implemented
-  - Work required: qBit-compatible delete requests always forward native transfer cancel
-                   with destructive-file semantics; eMule does not provide a
-                   partial-state-preserving delete for incomplete transfers.
+  - Recorded outcome: qBit-compatible delete requests forwarded native transfer
+                      cancel with destructive-file semantics; eMule does not provide a
+                      partial-state-preserving delete for incomplete transfers.
 
 - **Shared-file deletion**
   - Status: implemented
-  - Work required: Shared deletes call `/shared-files/{hash}` instead of transfer delete
-                   helpers.
+  - Recorded outcome: Shared deletes called `/shared-files/{hash}` instead of
+                      transfer delete helpers.
 
 - **Uploads in data pipeline**
   - Status: implemented
-  - Work required: `/uploads` rows remain preserved through the eMuleBB manager fetch
-                   result.
+  - Recorded outcome: `/uploads` rows remained preserved through the eMuleBB
+                      manager fetch result.
 
 - **Transfer detail hydration**
   - Status: implemented
-  - Work required: aMuTorrent hydrates peers plus part/source detail from
-                   `/transfers/{hash}/details`.
+  - Recorded outcome: aMuTorrent hydrated peers plus part/source detail from
+                      `/transfers/{hash}/details`.
 
 - **Search polling**
   - Status: implemented
-  - Work required: aMuTorrent stores the returned `id` and polls `/searches/{searchId}`
-                   for results.
+  - Recorded outcome: aMuTorrent stored the returned `id` and polled
+                      `/searches/{searchId}` for results.
 
 - **Browser smoke**
   - Status: implemented
-  - Work required: `emulebb-build-tests` now owns `amutorrent-browser-smoke.py`,
-                   launched from the aggregate live E2E suite.
+  - Recorded outcome: The `0.7.3` release campaign recorded live browser-controller
+                      proof. That lane is no longer maintained.
 
 ## Arr And qBittorrent-Compatible Adapter Boundary
 
@@ -612,5 +615,3 @@ The completed REST parity surface is kept current by these supported workspace e
 | eMule app validation/build/tests | implemented |
 | Native REST route and contract tests | implemented |
 | Live eMule REST E2E completeness lane | implemented |
-| aMuTorrent Node eMuleBB tests | implemented |
-| Live aMuTorrent browser smoke against eMuleBB | implemented |

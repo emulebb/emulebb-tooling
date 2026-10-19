@@ -14,8 +14,8 @@ info:
     `docs/products/emulebb-rust/api/REST-API-OPENAPI.yaml` and
     `docs/active/API-V1-COMPATIBILITY.md`.
     The API is served by the eMule WebServer listener, uses `X-API-Key`
-    authentication only, and was designed for aMuTorrent and other trusted local
-    controllers; adapter compatibility must not weaken the native route shape.
+    authentication only, and was designed for trusted local controllers;
+    adapter compatibility must not weaken the native route shape.
 servers:
   - url: http://{host}:{port}/api/v1
     variables:
