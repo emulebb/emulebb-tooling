@@ -117,27 +117,18 @@ Proof tier:
 Purpose:
 full certification, full generated heavy stress, and real-profile monitoring.
 
-### `p2p-overlord-post-0.7.3`
-
-Proof tier:
-`future`.
-
-Purpose:
-post-`0.7.3` product-family campaign skeleton.
-
 `emulebb-0.7.3` maps the current release gates into feature-flow scenarios
 across:
 
 - workspace validation and fast certification;
 - Kad/eD2K protocol parity, native coverage, community comparison, and
   live-diff;
-- REST, aMuTorrent, Prowlarr, Radarr, and Sonarr controller flows;
+- REST, Prowlarr, Radarr, and Sonarr controller flows;
 - quick release-expanded live-wire UI/REST/download weak-path coverage;
 - quick disposable heavy-profile CPU/memory stress;
 - release language/resource UI depth;
-- quick stabilization stress and targeted aMuTorrent add-ons;
-- x64 package, ARM64 package, optional aMuTorrent package, clean worktree, and
-  hash recording.
+- quick stabilization stress;
+- x64 package, ARM64 package, clean worktree, and hash recording.
 
 The `installer-controller-surface` profile is the quick installer-backed
 controller proof. The long `live-process-monitor` lane is intentionally split
@@ -158,11 +149,6 @@ and proxy support receive no support and no release-gated tests. See
 
 The active release checklist remains the ship authority. The campaign report is
 the release-matrix and evidence-status view.
-
-Post-`0.7.3` p2p-overlord product-family campaigns should build on the same
-campaign base in `repos\emulebb-build-tests` with product-specific variants for
-Rust agents, backend coordinator checks, long-run monitoring, and claimed REST
-subset conformance.
 
 ## Local Inputs
 

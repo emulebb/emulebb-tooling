@@ -78,8 +78,7 @@ products require explicit work and are not materialized by the core profile.
 | `repos/emule-stock` | `v0.72a` | Clean stock eMule compatibility oracle. | clean fast-forward sync; source/parity comparison |
 
 Historical documentation does not make retired product-family checkouts part
-of normal materialization or validation. `trackmulebb` and `p2p-overlord-*`
-remain outside the core profile.
+of normal materialization or validation.
 
 ## Third-Party Forks
 
@@ -148,7 +147,7 @@ the repo README or this map before making legal metadata changes.
   manifests, including `repo-roles.json`, and shared hook configuration
   converge.
 - Run `python -m emule_workspace prepare-product-family` after materialization
-  or after dependency lockfile changes in p2p-overlord or `ed2k-server`.
+  or after dependency lockfile changes in `ed2k-server`.
 - Run `python -m emule_workspace build ed2k-server --config Release --platform
   x64` to build the Linux-only Rust server through WSL on Windows (or native
   Cargo on Linux) and stage the candidate binary below
@@ -170,7 +169,7 @@ the repo README or this map before making legal metadata changes.
   `--include-legacy-root-logs` removes retired root workspace logs.
 - Run `python -m emule_workspace validate --include-product-family
   --product-family-tier quality` when a product-family change touches
-  `ed2k-server`, p2p-overlord, or shared contracts. Use
+  `ed2k-server` or shared contracts. Use
   `--product-family-tier quick` for fast smoke checks and `full` before broad
   product-family release proof. Plain `validate` remains the default eMuleBB
   workspace gate.

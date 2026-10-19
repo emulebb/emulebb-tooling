@@ -35,9 +35,10 @@ maintenance task needs to protect a supported shared boundary.
 
 ## Supported Boundaries
 
-- REST `/api/v1`, the bounded qBittorrent-compatible `/api/v2` adapter,
-  Torznab, and the shipped aMuTorrent `0.7.3` integration remain supported where
-  the release contract documents them.
+- REST `/api/v1`, the bounded qBittorrent-compatible `/api/v2` adapter, and
+  Torznab remain supported where the release contract documents them. The
+  shipped aMuTorrent `0.7.3` integration is historical release compatibility,
+  not a current gate.
 - WebServer listener safety, HTTPS/TLS behavior on `0.7.x`, allowed-IP checks,
   and REST routing remain supported because they carry the controller API.
 - Category behavior remains supported; scheduler behavior does not.

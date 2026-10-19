@@ -99,7 +99,7 @@ sync configure the shared hook and must not overwrite dirty managed work.
 - Public-presence repositories and historical analysis repositories are explicit
   optional profiles. Normal materialization and synchronization must not pull
   archived, stale, paused, frozen, or unrelated product-family repositories.
-  `p2p-overlord-*` is outside the core profile.
+  Unrelated product families stay outside the core profile.
 - Supporting repos use setup-pinned branches. `stale/*` and
   `analysis\stale-v0.72a-experimental-clean` are historical-only unless a task
   explicitly selects the historical-analysis profile for comparison.

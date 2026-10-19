@@ -11,9 +11,8 @@ repository's current lifecycle and the risk of the proposed change.
 |---|---|
 | **emulebb-rust** | Active experimental beta. Repo-native quality, test, and cross-platform build gates are primary; add targeted workspace evidence as needed. |
 | **emulebb-mfc `0.7.x`** | Diagnostics and critical-fix maintenance. Keep it buildable and shippable; require proof proportional to the touched surface. |
-| **TrackMuleBB** | Archived private experiment. No active gate. |
 | **ed2k-server** | Sole local deterministic server and upstream-aligned Rust fork. Use minimal upstreamable changes and focused harness proof; no production-service gate. |
-| **aMule fork** | Analysis/reference fork with active mirror and quality automation. It is not an eMuleBB product release lane. |
+| **aMule upstream** | Managed official upstream used for interoperability and protocol parity. It is not an eMuleBB product release lane. |
 
 ## Shared rules
 
