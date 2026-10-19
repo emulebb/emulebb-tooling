@@ -21,13 +21,12 @@ maintained or retained by the eMuleBB organization.
 | Repository | Lifecycle | Current role |
 |---|---|---|
 | `emulebb-rust` | Active beta | Primary active eD2K/Kad client; CI-gated nightly beta builds from `main` are the current public testing channel |
-| `emulebb` (MFC) | Maintenance | Stable Windows `0.7.x` line; bugs and bounded low-risk changes only |
+| `emulebb` (MFC) | Maintenance | Stable Windows `0.7.x` diagnostics and critical-fix lane; remains buildable and shippable |
 | `qbittorrentbb` | Paused experiment | Preserved BitTorrent experiment; not part of the default workspace |
 | `emulebb-libtorrent` | Paused experiment | qBittorrentBB engine fork; not part of the default workspace |
 | `amutorrent` | Maintenance / paused | Frozen controller shipped with the `0.7.3` bundle; no forward roadmap |
 | `trackmulebb` | Archived experiment | Private archived controller experiment |
-| `goed2k-server` | Harness | Deterministic local eD2K test server; no product evolution |
-| `ed2k-server` | Reference | Managed Rust fork for analysis and potentially upstreamable contributions |
+| `ed2k-server` | Harness / reference | Sole local deterministic eD2K server; managed Rust fork kept close to upstream with minimal upstreamable changes |
 | `amule-org/amule` | Reference | Managed current upstream at `repos/amule`; moving interoperability and protocol-parity target |
 | `emulebb-build`, `emulebb-build-tests`, `emulebb-tooling` | Infrastructure | Workspace orchestration, tests, policy, and documentation |
 | `emulebb-pages`, `emulebb-org-profile` | Infrastructure | Public website and GitHub organization profile |
@@ -42,9 +41,10 @@ formal beta tags remain immutable release evidence rather than the public
 front-door download target. Development is a best-effort, spare-time project,
 and [contributors are welcome](https://github.com/emulebb/emulebb-rust/blob/main/CONTRIBUTING.md).
 
-eMuleBB MFC remains published and supported on `0.7.x`, but its development
-surface is limited to compatibility-preserving bug fixes and bounded UX,
-performance, build, packaging, documentation, diagnostics, and release work.
+eMuleBB MFC remains published, buildable, and shippable on `0.7.x`, but its
+development surface is limited to compatibility-preserving critical fixes and
+bounded UX, performance, build, packaging, documentation, diagnostics, and
+release work.
 New subsystems, broad APIs, protocol expansion, and architectural modernization
 remain parked.
 
@@ -64,8 +64,9 @@ stack is an eMuleBB product until explicitly adopted.
   they are not release commitments and are not closed as `WONT_DO`.
 - qBittorrentBB, aMuTorrent forward work, TrackMuleBB, and ed2k-server
   production-hardening items are historical, not active backlog.
-- New ed2k-server issues may cover analysis or upstreamable work, but must not
-  recreate a production-service roadmap without a new operator decision.
+- New ed2k-server issues may cover deterministic local-server capability,
+  upstream alignment, or upstreamable fixes, but must not recreate a
+  production-service roadmap without a new operator decision.
 
 Related: [WORKSPACE-POLICY](../WORKSPACE-POLICY.md),
 [ROADMAP-SUMMARY](../reference/ROADMAP-SUMMARY.md), and

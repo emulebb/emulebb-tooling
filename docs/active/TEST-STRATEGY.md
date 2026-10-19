@@ -10,12 +10,11 @@ repository's current lifecycle and the risk of the proposed change.
 | Lane | Required direction |
 |---|---|
 | **emulebb-rust** | Active experimental beta. Repo-native quality, test, and cross-platform build gates are primary; add targeted workspace evidence as needed. |
-| **emulebb-mfc `0.7.x`** | Long-term maintenance. Baseline plus focused native, package, smoke, or soak proof proportional to the touched maintenance surface. |
+| **emulebb-mfc `0.7.x`** | Diagnostics and critical-fix maintenance. Keep it buildable and shippable; require proof proportional to the touched surface. |
 | **qBittorrentBB / emulebb-libtorrent** | Paused experiments. No scheduled release gate; retained checks run on repository changes or explicit operator request. |
 | **aMuTorrent** | Frozen `0.7.3` controller package. No scheduled sync or forward feature gate; package and bounded maintenance proof run only when needed. |
 | **TrackMuleBB** | Archived private experiment. No active gate. |
-| **goed2k-server** | Harness-only support service. Validate the harness behavior required by the consuming test lane; do not treat it as a product release. |
-| **ed2k-server** | Reference fork for analysis and possible upstream contribution. Use upstreamable, change-focused checks; there is no production-service gate. |
+| **ed2k-server** | Sole local deterministic server and upstream-aligned Rust fork. Use minimal upstreamable changes and focused harness proof; no production-service gate. |
 | **aMule fork** | Analysis/reference fork with active mirror and quality automation. It is not an eMuleBB product release lane. |
 
 ## Shared rules

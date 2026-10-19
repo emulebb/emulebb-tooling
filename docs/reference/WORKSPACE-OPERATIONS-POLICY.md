@@ -32,12 +32,11 @@ runtime work.
   `EMULEBB_WORKSPACE_OUTPUT_ROOT\packages\build`, including
   `packages\build\amutorrent`. Runtime tool payloads use `tools`, including
   `tools\amule`. Third-party orchestration prefers `builds\third_party`.
-- `goed2k-server` remains a temporary harness-only provider during the approved
-  migration to the Rust `ed2k-server`. The Rust fork remains an
-  upstream-contribution reference: follow upstream closely, prefer harness-side
+- `repos\ed2k-server` is the sole local deterministic ED2K server and an
+  upstream-contribution reference. Follow upstream closely, prefer harness-side
   adaptation, and keep server changes minimal, generic, and upstreamable. Its
-  candidate stages under `tools\ed2k-server\bin`; runtime selection changes only
-  after deterministic Go/Rust parity gates pass.
+  candidate stages under `tools\ed2k-server\bin`; retired Go-server providers
+  are not selectable workspace infrastructure.
 
 Python topology in `repos\emulebb-build\emule_workspace` is the source of truth.
 `python -m emule_workspace validate` fails generated-contract drift. Setup and
@@ -94,8 +93,9 @@ sync configure the shared hook and must not overwrite dirty managed work.
 - The default `core` profile contains the active Rust product, the MFC seed and
   all three diagnostic/release worktrees, their required third-party forks,
   workspace support repos, the single aMule reference, the stock eMule 0.72
-  reference, and both ED2K servers during the Go-to-Rust transition. MFC remains
-  buildable and shippable for critical fixes; it is not a historical-only lane.
+  reference, and the sole local Rust ED2K server. MFC remains buildable and
+  shippable for diagnostics and critical fixes; it is not a historical-only
+  lane.
 - Public-presence repositories and historical analysis repositories are explicit
   optional profiles. Normal materialization and synchronization must not pull
   archived, stale, paused, frozen, or unrelated product-family repositories.

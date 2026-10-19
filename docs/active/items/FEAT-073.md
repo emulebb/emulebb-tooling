@@ -26,10 +26,10 @@ p2p-overlord remains its own Rust/Node product, similar to how eMuleBB and
 aMule remain distinct clients, but it should share contracts, campaign
 patterns, and selected dependencies where that reduces drift.
 
-The active ED2K server for eMuleBB remains
-`https://github.com/emulebb/goed2k-server`. The obsolete `emulebb-ed2k-server`
-fork slug has no current public repository, is not part of this future
-integration, and should remain decommissioned.
+The sole local ED2K server for eMuleBB is
+`https://github.com/emulebb/ed2k-server`. The retired Go server and
+the obsolete `emulebb-ed2k-server` fork slug are not part of this future
+integration.
 
 ## Intended Shape
 
@@ -39,7 +39,7 @@ integration, and should remain decommissioned.
 - Manage `p2p-overlord-tooling` as the product-family scenario catalog while
   keeping its test suite separate until the deferred shared campaign-core work.
 - Keep p2p-overlord's ED2K server lineage out of the active eMuleBB topology;
-  use `goed2k-server` as the shared ED2K server fork.
+  use the upstream-aligned Rust `ed2k-server` fork as the shared local server.
 - Treat `docs/rest/REST-API-OPENAPI.yaml` as the shared REST API authority for
   every implementation that claims the eMuleBB-compatible `/api/v1` surface.
 - Use `repos/emulebb-build-tests` as the common base for cross-product release
@@ -54,8 +54,8 @@ integration, and should remain decommissioned.
   eMuleBB `0.7.3` release line.
 - Do not broaden eMuleBB wire behavior or introduce proprietary eD2K/Kad
   protocol extensions.
-- Do not replace `goed2k-server` with the obsolete `emulebb-ed2k-server`
-  fork.
+- Do not replace `ed2k-server` with the retired Go server,
+  the obsolete `emulebb-ed2k-server` fork, or a p2p-overlord server fork.
 - Do not make p2p-overlord conformance redefine the canonical REST contract;
   OpenAPI remains the authority.
 
@@ -66,8 +66,8 @@ integration, and should remain decommissioned.
       without materializing obsolete ED2K server repos
 - [x] workspace topology exposes `p2p-overlord-tooling` as a managed scenario
       catalog without merging its test suite into eMuleBB campaigns yet
-- [x] stale `emulebb-ed2k-server` references/remotes are removed or marked
-      superseded
+- [x] retired Go-server and stale `emulebb-ed2k-server` references/remotes are
+      removed or marked superseded
 - [x] shared test-campaign docs identify p2p-overlord variants and REST
       conformance expectations
 - [x] REST docs state how a p2p-overlord implementation proves a claimed

@@ -22,12 +22,13 @@
 
 This guide covers the **eMuleBB Windows client** (the stable `0.7.3` eD2K/Kad
 desktop app) and the active **emulebb-rust** beta with CI-gated nightly builds.
-The MFC `0.7.x` line accepts bugs and bounded low-risk maintenance; Rust is the
-only active product-development lane.
+The MFC `0.7.x` line remains buildable and shippable for diagnostics, critical
+fixes, and bounded low-risk maintenance; Rust is the only active
+product-development lane.
 qBittorrentBB and its libtorrent fork are paused experiments, aMuTorrent is the
 frozen controller shipped with the `0.7.3` bundle, and TrackMuleBB is archived.
-The Go eD2K server remains harness-only; the Rust ed2k-server is an
-upstream-contribution reference. See the
+The upstream-aligned Rust `ed2k-server` fork is the sole local deterministic
+server; server changes stay minimal, generic, and upstreamable. See the
 [Product Portfolio](active/PRODUCT-PORTFOLIO.md) and
 [Roadmap Summary](reference/ROADMAP-SUMMARY.md).
 

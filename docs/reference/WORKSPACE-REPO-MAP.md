@@ -15,7 +15,7 @@ analysis and public-presence repositories require explicit optional profiles.
 | Path | Branch | Role | Validation |
 |---|---|---|---|
 | `repos/emulebb` | `main` seed | Canonical app branch-store clone. | `validate` |
-| `workspaces/workspace/app/emulebb-main` | `main` | Active app development worktree. | `build app --variant main` |
+| `workspaces/workspace/app/emulebb-main` | `main` | Maintained MFC app worktree for diagnostics and critical fixes. | `build app --variant main` |
 | `repos/emulebb-rust` | `main` | Active experimental Rust eD2K/Kad client and embedded SPA WebUI. | Cargo checks via workspace policy |
 | `workspaces/workspace/app/emulebb-community-baseline` | `baseline/community-0.72a` | Community baseline worktree. | compare/live-diff |
 | `workspaces/workspace/app/emulebb-community-tracing-harness` | `tracing-harness/community-0.72a` | Tracing baseline worktree. | harness tests |
@@ -50,8 +50,8 @@ read-only sibling outside the canonical workspace source boundary.
   reference.
 - `stock eMule` means `repos/emule-stock`, the community eMule 0.72 stock
   reference.
-- `eD2K Rust server` means `repos/ed2k-server`, the managed eMuleBB reference
-  fork.
+- `eD2K Rust server` means `repos/ed2k-server`, the managed upstream-aligned
+  fork and sole local deterministic server.
 - `Lugdunum decompiled` means
   `../eMule-server/lugdunum/lugdunum_eserver_17.15_linux/decompiled`, external
   decompiled Lugdunum 17.15 protocol evidence with no Git synchronization
@@ -87,8 +87,7 @@ products require explicit work and are not materialized by the core profile.
 
 | Path | Branch | Role | Validation |
 |---|---|---|---|
-| `repos/ed2k-server` | `master` | Managed Rust reference fork for potentially upstreamable contributions. | workspace build and quality checks |
-| `repos/goed2k-server` | `master` | Temporary deterministic Go harness provider during Rust-server migration. | `go test ./...`; dual-provider parity |
+| `repos/ed2k-server` | `master` | Sole local deterministic ED2K server and upstream-aligned Rust reference fork. | workspace build, harness, and quality checks |
 | `repos/amule` | `master` | Managed official aMule upstream and moving parity reference. | clean fast-forward sync; record tested SHA in parity evidence |
 | `repos/emule-stock` | `v0.72a` | Clean stock eMule compatibility oracle. | clean fast-forward sync; source/parity comparison |
 
@@ -133,7 +132,7 @@ The GitHub organization uses these repo classes for settings consistency:
 |---|---|
 | Active / maintained products | `emulebb-rust`, `emulebb` |
 | Paused experiments | `qbittorrentbb`, `emulebb-libtorrent`, `amutorrent` |
-| Reference / harness | `ed2k-server`, `goed2k-server`, `amule` |
+| Reference / harness | `ed2k-server`, `amule` |
 | Build, test, tooling, docs | `emulebb-build`, `emulebb-build-tests`, `emulebb-tooling`, `.github`, `emulebb.github.io` |
 | Dependency forks | `emulebb-*` dependency forks under `repos/third_party` |
 | Research, archive, and mirrors | `emulebb-mods-archive`, `emulebb-ai`, `trackmulebb`, `JEmuleServer`, p2p-overlord repos |
@@ -166,13 +165,12 @@ the repo README or this map before making legal metadata changes.
   manifests, including `repo-roles.json`, and shared hook configuration
   converge.
 - Run `python -m emule_workspace prepare-product-family` after materialization
-  or after dependency lockfile changes in p2p-overlord, `goed2k-server`, or
-  `ed2k-server`.
+  or after dependency lockfile changes in p2p-overlord or `ed2k-server`.
 - Run `python -m emule_workspace build ed2k-server --config Release --platform
   x64` to build the Linux-only Rust server through WSL on Windows (or native
   Cargo on Linux) and stage the candidate binary below
   `EMULEBB_WORKSPACE_OUTPUT_ROOT\tools\ed2k-server\bin`. This command does not
-  start the server or change the test harness selection.
+  start the server.
 - Run `python -m emule_workspace refresh-product-family-rebases` after the
   scheduled aMuTorrent upstream-rebase workflow publishes rewritten fork
   history. The command refreshes `repos/amutorrent` only when the worktree is
@@ -196,7 +194,7 @@ the repo README or this map before making legal metadata changes.
   `--include-legacy-root-logs` removes retired root workspace logs.
 - Run `python -m emule_workspace validate --include-product-family
   --product-family-tier quality` when a product-family change touches
-  `goed2k-server`, `ed2k-server`, p2p-overlord, or shared contracts. Use
+  `ed2k-server`, p2p-overlord, or shared contracts. Use
   `--product-family-tier quick` for fast smoke checks and `full` before broad
   product-family release proof. Plain `validate` remains the default eMuleBB
   workspace gate.

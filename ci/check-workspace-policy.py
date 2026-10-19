@@ -921,7 +921,6 @@ def audit_doc_paths(root: Path) -> None:
         r"repos\amutorrent",
         r"repos\qbittorrentbb",
         r"repos\ed2k-server",
-        r"repos\goed2k-server",
     ):
         fork_root = resolve_workspace_path(root, relative_repo)
         if fork_root.is_dir():
@@ -966,7 +965,6 @@ HYGIENE_SCOPE_REPOS: tuple[tuple[str, str], ...] = (
     ("qbittorrentbb", r"repos\qbittorrentbb"),
     ("amule", r"repos\amule"),
     ("ed2k-server", r"repos\ed2k-server"),
-    ("goed2k-server", r"repos\goed2k-server"),
     ("emulebb-build", r"repos\emulebb-build"),
     ("emulebb-build-tests", r"repos\emulebb-build-tests"),
     ("emulebb-tooling", r"repos\emulebb-tooling"),

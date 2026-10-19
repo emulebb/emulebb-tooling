@@ -26,9 +26,11 @@ live evidence.
   parity work and record its exact commit in retained evidence. Never silently
   substitute it for the fixed Community 0.72a regression baseline; campaigns
   report fixed-stock and moving-upstream results as distinct lanes.
-- `goed2k-server` is the deterministic harness server. `ed2k-server` has build
-  and source-quality gates as an upstream-contribution reference; no live,
-  parity, release, or production campaign selects it.
+- `ed2k-server` is the sole local deterministic harness server and an
+  upstream-contribution reference. Keep it close to upstream, prefer
+  harness-side adaptation, and keep server changes minimal, generic, and
+  upstreamable. Local live and parity campaigns may select it; release and
+  public-production campaigns do not.
 - Rust metadata schema helpers are internal, bounded, backup-first
   infrastructure for known persisted test/soak profiles. They are never an
   end-user migration or recovery path.

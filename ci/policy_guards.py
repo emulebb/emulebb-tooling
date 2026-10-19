@@ -55,7 +55,6 @@ WORKSPACE_CLEAN_REPO_PATHS = (
     "repos/emulebb-org-profile",
     "repos/emulebb-pages",
     "repos/emulebb-tooling",
-    "repos/goed2k-server",
     "repos/p2p-overlord-agents",
     "repos/p2p-overlord-be",
     "repos/third_party/emulebb-cryptopp",

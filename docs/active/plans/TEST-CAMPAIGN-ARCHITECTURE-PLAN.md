@@ -68,8 +68,8 @@ scenario reuses an existing mechanism — the campaign is wiring + evidence, not
 
 ### preflight
 - `wire.preflight.materialize` — `python -m emule_workspace sync` (rust resolves from the
-  org; goed2k server present). Evidence: manual.
-- `wire.preflight.build-pair` — build MFC main (Release x64) + rust (cargo) + goed2k server.
+  org; Rust ed2k-server present). Evidence: manual.
+- `wire.preflight.build-pair` — build MFC main (Release x64) + rust (cargo) + Rust ed2k-server.
   Evidence: manual / build recap. (Both clients must emit their packet/diag dumps:
   MFC `--diagnostics` with `EMULEBB_ENABLE_PACKET_DIAGNOSTICS`; rust `EMULEBB_RUST_LOG_DIR`.)
 

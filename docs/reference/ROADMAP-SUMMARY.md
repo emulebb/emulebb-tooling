@@ -8,9 +8,10 @@ The eMuleBB organization has one active product-development lane:
 spare-time development, and
 [contributors are welcome](https://github.com/emulebb/emulebb-rust/blob/main/CONTRIBUTING.md).
 
-The published **eMuleBB Windows client** remains available on its stable `0.7.x`
-maintenance line. It accepts bugs and bounded low-risk UX, performance,
-compatibility, build, packaging, documentation, diagnostics, and release work.
+The published **eMuleBB Windows client** remains available, buildable, and
+shippable on its stable `0.7.x` maintenance line. It accepts critical fixes and
+bounded low-risk UX, performance, compatibility, build, packaging,
+documentation, diagnostics, and release work.
 Its feature expansion and major modernization backlog is parked as `DEFERRED`.
 
 Current GitHub-primary work is tracked on org Project #3, **eMuleBB Roadmap**.
@@ -21,9 +22,8 @@ Current GitHub-primary work is tracked on org Project #3, **eMuleBB Roadmap**.
   preserved for reference and explicit on-demand builds, not roadmap work.
 - **aMuTorrent** is the frozen controller shipped with the `0.7.3` bundle.
 - **TrackMuleBB** is an archived private experiment.
-- **goed2k-server** is fixed harness infrastructure, not an evolving service.
-- **ed2k-server** is a reference fork for analysis and potentially upstreamable
-  contributions, not a production-hardening or future-harness program.
+- **ed2k-server** is the sole local deterministic server and an upstream-aligned
+  Rust reference fork, not a production-hardening program or public service.
 - **aMule** checkouts are analysis/reference inputs. Existing automation may
   continue, but aMule is not an eMuleBB product lane.
 

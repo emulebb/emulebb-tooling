@@ -27,11 +27,10 @@ scope defined by the [MFC maintenance roadmap](FUTURE-ROADMAP.md).
 
 - `emulebb-build`, `emulebb-build-tests`, and `emulebb-tooling` keep their
   existing CI, privacy, documentation, and topology checks.
-- `goed2k-server` is a fixed-purpose harness server. Validate changes only when
-  the harness requires them; do not create a product-evolution gate.
-- `ed2k-server` is a reference fork for analysis and possible upstream
-  contribution. Source checks may support a proposed upstream patch, but the
-  retired production-hardening gates are historical:
+- `ed2k-server` is the sole local deterministic server and an upstream-aligned
+  reference fork. Validate its required harness behavior and any proposed
+  upstream patch, while keeping server changes minimal, generic, and
+  upstreamable. The retired production-hardening gates are historical:
   [ED2KSRV-CI-002](../history/ed2k-server/items/ED2KSRV-CI-002.md) and
   [ED2KSRV-CI-003](../history/ed2k-server/items/ED2KSRV-CI-003.md).
 - The aMule fork remains an analysis/build reference with its existing

@@ -26,8 +26,7 @@ name instead.
 | `qbittorrentbb` | Paused unofficial qBittorrent experiment |
 | `amutorrent` | Frozen unofficial controller fork shipped with eMuleBB `0.7.3` |
 | `trackmulebb` | Archived private controller experiment |
-| `goed2k-server` | Deterministic local eD2K test server |
-| `ed2k-server` | Rust eD2K server reference fork for possible upstream contributions |
+| `ed2k-server` | Sole local deterministic eD2K test server; upstream-aligned Rust fork |
 | `amule` | aMule analysis/reference fork |
 
 Where newcomers could confuse a fork with its upstream, state that it is

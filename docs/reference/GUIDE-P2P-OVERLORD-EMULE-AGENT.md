@@ -53,8 +53,8 @@ contract. If a p2p-overlord implementation advertises an eMuleBB-compatible
 instead of defining a parallel contract.
 
 Deterministic ED2K server scenarios should use the active eMuleBB
-[`goed2k-server`](https://github.com/emulebb/goed2k-server) fork. Historical
-p2p-overlord ED2K server lineage is reference material only.
+[`ed2k-server`](https://github.com/emulebb/ed2k-server) Rust fork. Historical
+p2p-overlord and retired Go server lineages are reference material only.
 
 For the full product-family boundary and implementation order, use the
 [p2p-overlord Product-Family Integration Plan](../history/HIST-P2P-OVERLORD-PRODUCT-FAMILY-INTEGRATION.md).
