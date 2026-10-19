@@ -8,7 +8,7 @@
 > `https://github.com/amule-project/amule`.
 > Date: 2026-05-17
 > This dated analysis retains its original source provenance. The current
-> `analysis/amule` checkout tracks `amule-org/amule`; recheck paths and behavior
+> `repos/amule` checkout tracks `amule-org/amule`; recheck paths and behavior
 > against that upstream before promoting any idea.
 
 > **Newer cross-project snapshot:**
@@ -39,7 +39,7 @@ or diagnostics, with stock eMule/eD2K/Kad behavior treated as the authority.
 ## Protocol And Tag Test Ideas
 
 aMule has focused Kad/eD2K tag serialization tests in
-`analysis/amule/unittests/tests/CTagTest.cpp`. These are useful as a future
+`repos/amule/unittests/tests/CTagTest.cpp`. These are useful as a future
 fixture inventory for eMuleBB protocol parser regression tests, especially:
 
 - Kad tag-list packets with UTF-8 filenames and mixed file metadata.
@@ -56,7 +56,7 @@ runtime into the native test executable.
 
 ## File-Format Tool Ideas
 
-aMule includes a `fileview` utility under `analysis/amule/src/utils/fileview`
+aMule includes a `fileview` utility under `repos/amule/src/utils/fileview`
 for read-only inspection of profile and persistence files. It covers:
 
 - `preferences.dat`

@@ -96,9 +96,11 @@ sync configure the shared hook and must not overwrite dirty managed work.
 - Build output stays outside source trees. CMake uses out-of-source output below
   the output root, Go tools stage below `tools\<fork>`, and Rust follows the
   [Rust Product Policy](../products/emulebb-rust/reference/AGENT-POLICY.md).
-- Upstream `amule-org/amule` under `analysis\amule` and optional
-  `repos\amule` / `emulebb/amule` checkouts are analysis and offline-fixture
-  references, not product worktrees or release gates.
+- Official `amule-org/amule` under `repos\amule` is the single managed moving
+  interoperability and offline-fixture reference. Sync may fast-forward only a
+  clean `master`; parity evidence records the tested commit. The archival
+  `emulebb/amule` fork may remain a secondary remote, not a second checkout,
+  product worktree, or release gate.
 - Shared tests are extended in `emulebb-build-tests` rather than forked into
   parallel per-client suites.
 

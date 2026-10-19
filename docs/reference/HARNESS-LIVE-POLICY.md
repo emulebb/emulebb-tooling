@@ -21,6 +21,11 @@ live evidence.
 - `tracing-harness/community-0.72a` is the only sanctioned location for parity
   behavior that intentionally changes runtime decisions. It is neither a
   release branch nor the default regression baseline.
+- `repos/amule` is the managed official upstream aMule checkout and the moving
+  interoperability target. Refresh it through workspace sync before current
+  parity work and record its exact commit in retained evidence. Never silently
+  substitute it for the fixed Community 0.72a regression baseline; campaigns
+  report fixed-stock and moving-upstream results as distinct lanes.
 - `goed2k-server` is the deterministic harness server. `ed2k-server` has build
   and source-quality gates as an upstream-contribution reference; no live,
   parity, release, or production campaign selects it.

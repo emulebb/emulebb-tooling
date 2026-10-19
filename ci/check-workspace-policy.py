@@ -914,12 +914,12 @@ def audit_doc_paths(root: Path) -> None:
         assert_text_contains(issues, repo_root, relative_path, policy_text, "AGENTS.md must point to the central workspace policy.")
     # In-scope downstream/sibling forks must also point at the central policy, but
     # only when the fork is materialized in this workspace (minimal checkouts may
-    # omit them). p2p-overlord-* is a separate product family and is excluded.
+    # omit them). Official upstream references such as repos/amule stay pristine;
+    # p2p-overlord-* is a separate product family and is excluded.
     for relative_repo in (
         r"repos\emulebb-rust",
         r"repos\amutorrent",
         r"repos\qbittorrentbb",
-        r"repos\amule",
         r"repos\ed2k-server",
         r"repos\goed2k-server",
     ):

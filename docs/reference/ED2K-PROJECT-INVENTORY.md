@@ -595,16 +595,15 @@ Projects needing prerequisite work rather than simple acceleration:
     - `amule-org/amule`: 384 stars, 33 forks, 62 open issues; default `master`;
       default-branch commit 2026-10-13 `f9dba47`; latest release `3.1.0` on
       2026-09-21.
-  - Local reference (2026-09-25): `analysis\amule` at
-    `5d7abd4239895555c96244c83f34368c3c38a446`; source comparison and
-    offline fixture ideas only.
-  - Notes: The separate `emulebb/amule` Windows-build fork is unchanged. Its
-    optional `repos\amule` checkout is not materialized locally; do not
-           confuse it with the upstream analysis reference. Open PR `#1715`
-           adds experimental, opt-in `offerfiles_v=1` client negotiation and
-           reports isolated interoperability against `ed2k-server` source tag
-           `v0.9.81`; production server-load validation and upstream review are
-           still incomplete.
+  - Local reference (2026-10-19): managed `repos\amule` at
+    `cfc357134e97561685a91c6822222493d39c7de2`; current source comparison,
+    build, offline-fixture, and moving parity reference.
+  - Notes: The historical `emulebb/amule` Windows-build fork is retained as the
+           `emulebb` remote in the same clone for provenance, not as a second
+           checkout. Open PR `#1715` adds experimental, opt-in `offerfiles_v=1`
+           client negotiation and reports isolated interoperability against
+           `ed2k-server` source tag `v0.9.81`; production server-load validation
+           and upstream review are still incomplete.
 
 - **p2p-overlord**
   - Status: Historical, archived

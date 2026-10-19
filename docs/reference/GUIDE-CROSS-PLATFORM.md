@@ -138,8 +138,9 @@ The trade-off is that aMule is a different client: you do not get eMuleBB-specif
 features such as the broadband upload-slot controller or the eMuleBB MFC/Rust
 REST contracts and integrations. Current upstream aMule has its own REST API and
 WebUI; these are not eMuleBB controller compatibility surfaces. In this workspace,
-`analysis/amule` is an upstream source/fixture reference, separate from the
-optional eMuleBB Windows-build fork.
+`repos/amule` is the single managed official upstream source, build, and parity
+reference. The historical eMuleBB fork is retained only as a secondary Git
+remote for provenance.
 
 ## Native Cross-Platform Future: emulebb-rust
 

@@ -50,7 +50,7 @@ making informed choices without starting a download.
 - `EMULEBB_WORKSPACE_ROOT\repos\emulebb-rust\crates\emulebb-core\src\search_query.rs`
 - `EMULEBB_WORKSPACE_ROOT\repos\emulebb-rust\crates\emulebb-kad-dht\src\types.rs`
 - `EMULEBB_WORKSPACE_ROOT\repos\emulebb-rust\crates\emulebb-core\src\lib.rs`
-- `EMULEBB_WORKSPACE_ROOT\analysis\amule\src\kademlia\kademlia\Search.cpp`
+- `EMULEBB_WORKSPACE_ROOT\repos\amule\src\kademlia\kademlia\Search.cpp`
 
 ## Intended Shape
 

@@ -28,8 +28,7 @@ maintained or retained by the eMuleBB organization.
 | `trackmulebb` | Archived experiment | Private archived controller experiment |
 | `goed2k-server` | Harness | Deterministic local eD2K test server; no product evolution |
 | `ed2k-server` | Reference | Managed Rust fork for analysis and potentially upstreamable contributions |
-| `emulebb/amule` | Reference | aMule analysis fork; automation remains active but is not product promotion |
-| `analysis/amule` | Reference | Optional checkout of maintained upstream `amule-org/amule` |
+| `amule-org/amule` | Reference | Managed current upstream at `repos/amule`; moving interoperability and protocol-parity target |
 | `emulebb-build`, `emulebb-build-tests`, `emulebb-tooling` | Infrastructure | Workspace orchestration, tests, policy, and documentation |
 | `emulebb-pages`, `emulebb-org-profile` | Infrastructure | Public website and GitHub organization profile |
 | Other `emulebb-*` dependency forks | Infrastructure | Reproducible native build inputs |

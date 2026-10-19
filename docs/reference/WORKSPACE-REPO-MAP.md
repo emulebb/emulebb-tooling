@@ -44,7 +44,7 @@ Use these operator terms exactly in protocol audits and source comparisons.
 Every path is relative to `EMULEBB_WORKSPACE_ROOT`; the Lugdunum evidence is a
 read-only sibling outside the canonical workspace source boundary.
 
-- `aMule` means `analysis/amule`, the maintained `amule-org/amule` upstream
+- `aMule` means `repos/amule`, the managed `amule-org/amule` upstream
   reference.
 - `stock eMule` means `analysis/community-0.72`, the community eMule 0.72 stock
   reference.
@@ -58,7 +58,7 @@ read-only sibling outside the canonical workspace source boundary.
 For any current-state comparison, refresh the relevant Git remote refs first.
 Only fast-forward a clean tracking branch; stop and report rewritten or
 divergent history instead of resetting, rebasing, or merging it implicitly.
-Keep `analysis/amule` current with `origin/master`; keep `repos/ed2k-server`
+Keep `repos/amule` current with `origin/master`; keep `repos/ed2k-server`
 current with `origin/master` and review `upstream/master` before merging it.
 
 ## Workspace Orchestration
@@ -79,8 +79,7 @@ current with `origin/master` and review `upstream/master` before merging it.
 ## Product-Family Repositories
 
 These repos are managed by the workspace but remain peer products or tools, not
-subdirectories of the eMuleBB app. `repos/amule` is the documented exception:
-an optional manual fork checkout, not a default setup-managed repo.
+subdirectories of the eMuleBB app.
 
 | Path | Branch | Role | Validation |
 |---|---|---|---|
@@ -88,7 +87,7 @@ an optional manual fork checkout, not a default setup-managed repo.
 | `repos/qbittorrentbb` | `master` | Optional paused qBittorrent experiment; not in default topology. | explicit on-demand checks only |
 | `repos/ed2k-server` | `master` | Managed Rust reference fork for potentially upstreamable contributions. | workspace build and quality checks |
 | `repos/goed2k-server` | `master` | Fixed deterministic Go eD2K harness server. | `go test ./...` |
-| `repos/amule` | `master` | Optional aMule analysis/reference fork. | package/rebase automation may remain active |
+| `repos/amule` | `master` | Managed official aMule upstream and moving parity reference. | clean fast-forward sync; record tested SHA in parity evidence |
 | `repos/p2p-overlord-agents` | `develop` | Rust p2p-overlord agent code. | `cargo fmt --all --check` |
 | `repos/p2p-overlord-be` | `develop` | p2p-overlord backend/coordinator. | `npm run quality` |
 | `repos/p2p-overlord-tooling` | `develop` | p2p-overlord scenario catalog and pytest tooling. | future shared campaign adapter |
@@ -121,7 +120,6 @@ setup, but they are not edited as part of normal product work.
 |---|---|
 | `analysis/community-0.60` | Community eMule 0.60 reference |
 | `analysis/community-0.72` | Community eMule 0.72 reference |
-| `analysis/amule` | Maintained `amule-org/amule` upstream source and offline-fixture reference (optional `--include-analysis`) |
 | `analysis/mods-archive` | Archived mod source corpus |
 | `analysis/stale-v0.72a-experimental-clean` | Historical eMuleBB branch snapshot for comparison |
 | `analysis/emuleai` | eMuleAI comparison source |
@@ -175,12 +173,12 @@ the repo README or this map before making legal metadata changes.
   `EMULEBB_WORKSPACE_OUTPUT_ROOT\tools\ed2k-server\bin`. This command does not
   start the server or change the test harness selection.
 - Run `python -m emule_workspace refresh-product-family-rebases` after the
-  scheduled aMule or aMuTorrent upstream-rebase workflows publish rewritten
-  fork history. The command fetches `origin` for `repos/amule` and
-  `repos/amutorrent`, then refreshes the local branch only when the worktree is
+  scheduled aMuTorrent upstream-rebase workflow publishes rewritten fork
+  history. The command refreshes `repos/amutorrent` only when the worktree is
   clean and local `HEAD` exactly matched the pre-fetch remote-tracking ref. If
   local commits or file changes exist, it stops and reports the repo for manual
-  review instead of resetting work.
+  review instead of resetting work. Managed `repos/amule` follows normal clean
+  fast-forward behavior through `python -m emule_workspace sync`.
 - Run `python -m emule_workspace workspace-status` before release and broad
   testing to inspect dirty state, branches, upstreams, and ahead/behind counts
   across all managed repos.

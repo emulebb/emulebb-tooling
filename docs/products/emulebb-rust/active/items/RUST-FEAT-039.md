@@ -44,7 +44,7 @@ reducing cancellation waste, head-of-line delay, and unnecessary requests.
 ## Representative Sites
 
 - `EMULEBB_WORKSPACE_ROOT\repos\emulebb-rust\crates\emulebb-ed2k\src\ed2k_tcp\download\window.rs`
-- `EMULEBB_WORKSPACE_ROOT\analysis\amule\src\DownloadClient.cpp`
+- `EMULEBB_WORKSPACE_ROOT\repos\amule\src\DownloadClient.cpp`
 
 ## Intended Shape
 
