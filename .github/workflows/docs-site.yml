@@ -7,6 +7,8 @@ on:
     paths:
       - '.github/workflows/docs-site.yml'
       - 'docs/**'
+      - 'helpers/public-presence.py'
+      - 'manifests/public-presence.v1.json'
       - 'mkdocs.yml'
       - 'requirements-docs.txt'
       - 'scripts/docs-item-taxonomy-check.py'
@@ -16,6 +18,8 @@ on:
     paths:
       - '.github/workflows/docs-site.yml'
       - 'docs/**'
+      - 'helpers/public-presence.py'
+      - 'manifests/public-presence.v1.json'
       - 'mkdocs.yml'
       - 'requirements-docs.txt'
       - 'scripts/docs-item-taxonomy-check.py'
@@ -54,6 +58,7 @@ jobs:
 
       - name: Run documentation checks
         run: |
+          python helpers/public-presence.py validate
           python scripts/docs-item-taxonomy-check.py
           python scripts/docs-structure-check.py
           python scripts/github-roadmap-check.py

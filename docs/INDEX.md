@@ -220,6 +220,7 @@ are not the best first read for users.
 | Documentation ownership rules | [DOCS-POLICY](DOCS-POLICY.md) |
 | AI contributor checklist | [reference/AGENT-CHECKLIST](reference/AGENT-CHECKLIST.md) |
 | Workspace repository map | [reference/WORKSPACE-REPO-MAP](reference/WORKSPACE-REPO-MAP.md) |
+| Public website and organization profile contract | [reference/PUBLIC-PRESENCE-CONTRACT](reference/PUBLIC-PRESENCE-CONTRACT.md) |
 | Development and validation guide | [reference/DEVELOPMENT-GUIDE](reference/DEVELOPMENT-GUIDE.md) |
 | Active backlog and release dashboard | [active/INDEX](active/INDEX.md) |
 | Retired cross-product planning | [history/HIST-SUITE-JOINT-ROADMAP](history/HIST-SUITE-JOINT-ROADMAP.md) |
