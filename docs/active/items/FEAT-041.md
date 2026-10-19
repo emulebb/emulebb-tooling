@@ -9,7 +9,7 @@ category: feature
 labels: [downloads, inspector, cleanup, rename, automation, emuleai]
 milestone: ~
 created: 2026-04-25
-source: `analysis\emuleai` v1.4 release notes
+source: eMuleAI v1.4 release notes
 ---
 
 

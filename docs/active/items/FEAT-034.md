@@ -10,7 +10,7 @@ labels: [performance, shared-files, reload, threading, ui]
 milestone: ~
 created: 2026-04-20
 updated: 2026-06-03
-source: current `main` revalidation; `analysis\emuleai` and Xtreme comparison; filtered web-demand scan; 2026-05-27 senior C++ performance and I/O review
+source: current `main` revalidation; eMuleAI and Xtreme source comparison; filtered web-demand scan; 2026-05-27 senior C++ performance and I/O review
 ---
 
 
@@ -114,7 +114,7 @@ KnownFile maps directly.
 
 ## Comparison Notes
 
-- `analysis\emuleai` keeps a dedicated search worker thread alive and resets/coalesces
+- eMuleAI keeps a dedicated search worker thread alive and resets/coalesces
   work on reload
 - the focused Xtreme archive also shows a long-standing off-thread/shared-scan direction
 

@@ -40,7 +40,7 @@ overlay, or a private-IP filtering preference.
 
 ## eMuleAI Reference
 
-`analysis\emuleai\srchybrid\IPFilter.cpp/h` includes:
+The eMuleAI v1.4 `srchybrid/IPFilter.cpp/h` sources include:
 
 - `LoadP2PFiles()`
 - `.p2p` and `guarding.p2p` parsing

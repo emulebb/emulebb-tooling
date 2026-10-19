@@ -9,7 +9,7 @@ category: feature
 labels: [ui, performance, lists, downloads, search, clients, emuleai]
 milestone: post-0.7.3
 created: 2026-05-24
-source: eMuleAI v1.4 release notes and `analysis\emuleai` list-control comparison
+source: eMuleAI v1.4 release notes and list-control source comparison
 ---
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb/issues/31. This local document is retained as an engineering spec/evidence record.
