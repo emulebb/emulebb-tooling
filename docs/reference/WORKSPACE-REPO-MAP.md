@@ -6,7 +6,9 @@ them with machine-local absolute paths in docs, scripts, or CI output.
 
 `workspaces/workspace/repo-roles.json` is the generated machine-readable role
 manifest for this map. It is written by `python -m emule_workspace sync` from
-the Python topology in `repos/emulebb-build`.
+the Python topology in `repos/emulebb-build`. The default `core` profile is the
+supported product, compatibility, diagnostics, and release surface. Historical
+analysis and public-presence repositories require explicit optional profiles.
 
 ## Primary Product Repositories
 
@@ -46,7 +48,7 @@ read-only sibling outside the canonical workspace source boundary.
 
 - `aMule` means `repos/amule`, the managed `amule-org/amule` upstream
   reference.
-- `stock eMule` means `analysis/community-0.72`, the community eMule 0.72 stock
+- `stock eMule` means `repos/emule-stock`, the community eMule 0.72 stock
   reference.
 - `eD2K Rust server` means `repos/ed2k-server`, the managed eMuleBB reference
   fork.
@@ -69,7 +71,9 @@ current with `origin/master` and review `upstream/master` before merging it.
 | `repos/emulebb-build-tests` | `main` | Native, live, controller, campaign tests. | `test python`; selected suites |
 | `repos/emulebb-tooling` | `main` | Policies, hooks, docs, CI guards. | policy checks; MkDocs |
 
-## Public Web And Org Repositories
+## Optional Public Web And Org Repositories
+
+These repositories are materialized only with the `public-presence` profile.
 
 | Path | Branch | Role | Validation |
 |---|---|---|---|
@@ -78,22 +82,19 @@ current with `origin/master` and review `upstream/master` before merging it.
 
 ## Product-Family Repositories
 
-These repos are managed by the workspace but remain peer products or tools, not
-subdirectories of the eMuleBB app.
+Core entries are managed by normal synchronization. Paused or historical peer
+products require explicit work and are not materialized by the core profile.
 
 | Path | Branch | Role | Validation |
 |---|---|---|---|
-| `repos/amutorrent` | `main` | aMuTorrent controller UI fork. | Node checks; live UI harness |
-| `repos/qbittorrentbb` | `master` | Optional paused qBittorrent experiment; not in default topology. | explicit on-demand checks only |
 | `repos/ed2k-server` | `master` | Managed Rust reference fork for potentially upstreamable contributions. | workspace build and quality checks |
-| `repos/goed2k-server` | `master` | Fixed deterministic Go eD2K harness server. | `go test ./...` |
+| `repos/goed2k-server` | `master` | Temporary deterministic Go harness provider during Rust-server migration. | `go test ./...`; dual-provider parity |
 | `repos/amule` | `master` | Managed official aMule upstream and moving parity reference. | clean fast-forward sync; record tested SHA in parity evidence |
-| `repos/p2p-overlord-agents` | `develop` | Rust p2p-overlord agent code. | `cargo fmt --all --check` |
-| `repos/p2p-overlord-be` | `develop` | p2p-overlord backend/coordinator. | `npm run quality` |
-| `repos/p2p-overlord-tooling` | `develop` | p2p-overlord scenario catalog and pytest tooling. | future shared campaign adapter |
+| `repos/emule-stock` | `v0.72a` | Clean stock eMule compatibility oracle. | clean fast-forward sync; source/parity comparison |
 
-`p2p-overlord-tooling` is managed from the `emulebb` organization. Its test
-suite remains separate until the shared campaign-core decision is implemented.
+`amutorrent`, `qbittorrentbb`, `trackmulebb`, and `p2p-overlord-*` are outside
+the core profile. Their historical documentation does not make their local
+checkouts part of normal materialization or validation.
 
 ## Third-Party Forks
 
@@ -113,13 +114,13 @@ Windows builds and pinned update policy. They are not application feature repos.
 
 ## Analysis Repositories
 
-Analysis repos are source-provenance and comparison inputs. They are managed by
-setup, but they are not edited as part of normal product work.
+Analysis repos are source-provenance and comparison inputs available only
+through the `historical-analysis` profile. They are not edited or pulled during
+normal product work.
 
 | Path | Role |
 |---|---|
 | `analysis/community-0.60` | Community eMule 0.60 reference |
-| `analysis/community-0.72` | Community eMule 0.72 reference |
 | `analysis/mods-archive` | Archived mod source corpus |
 | `analysis/stale-v0.72a-experimental-clean` | Historical eMuleBB branch snapshot for comparison |
 | `analysis/emuleai` | eMuleAI comparison source |
