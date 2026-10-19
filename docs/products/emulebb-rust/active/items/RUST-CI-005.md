@@ -37,9 +37,11 @@ enough to close the item or begin Indexer production implementation.
 - `policy/rust-client-extensions.toml`, `RELEASE-SCOPE.md`, and closed
   `RUST-REF-015` record the approved default-on policy exception and downgrade
   contract.
-- The negotiated path targets a 100,000-record deterministic publication model,
-  but still lacks the server fixture required to prove acceptance, rejection,
-  malformed advertisement, reconnect reset, and stock fallback behavior.
+- Exact parser and session fixtures cover accepted, absent, unsupported,
+  malformed, duplicate, timeout, and first-snapshot-lock behavior.
+- A deterministic two-connection server fixture proves that timeout closes the
+  advertised connection without sending `OP_OFFERFILES`, reconnects once
+  without `offerfiles_v`, and only then publishes a stock-shaped legacy batch.
 - The 2026-10-19 latest-source review confirmed that `ST_SOFTFILES` is a
   distinct-hash budget, while every same-hash refresh still consumes packet and
   pacing capacity. RUST-BUG-128 owns the shared publication-state correction.
@@ -48,8 +50,11 @@ enough to close the item or begin Indexer production implementation.
   Downgrade proof therefore includes a fresh unadvertised connection epoch.
 - `docs/WORKSPACE-POLICY.md` requires stock protocol compatibility and explicit
   governance for extensions/default drift.
-- The completed disposition does not itself establish stock/current-aMule
-  interoperability or the full deterministic large-library witness.
+- The 100,000-file selector fixture proves bounded construction and exact-once
+  catalog coverage, but the retained pacing, cancellation, and memory campaign
+  is still outstanding.
+- The completed implementation does not itself establish stock/current-aMule
+  interoperability; those live witnesses remain required.
 
 ## Why This Matters
 
@@ -97,14 +102,31 @@ without explicit downgrade, stock/current-aMule, and large-library evidence.
       workspace protocol policy.
 - [x] Default settings, user-facing configuration, and compatibility claims
       match that disposition.
-- [ ] Exact fixtures cover acceptance, rejection, unsupported peer, malformed
+- [x] Exact fixtures cover acceptance, rejection, unsupported peer, malformed
       fields, duplicate fields, reconnect reset, and downgrade behavior.
 - [ ] Stock eMule and current aMule interop witnesses show standard behavior and
       no custom field leakage.
 - [ ] A 100,000-file deterministic fixture proves bounded offer construction,
       memory, pacing, reconnect, and cancellation behavior.
-- [ ] Diagnostics identify whether the standard or negotiated path was selected
+- [x] Diagnostics identify whether the standard or negotiated path was selected
       without logging private library contents.
+
+## Implementation Evidence (2026-10-19)
+
+- Rust commit `40fbb3e1` makes timeout and invalid negotiation connection-safe:
+  an ambiguous advertised connection cannot publish a legacy batch.
+- Rust commit `1ba8bff9` adds the deterministic two-connection timeout witness,
+  including v1 tag presence on the first login and absence on the fallback.
+- Rust commit `5ec5f4d1` preserves the automatic fallback reason and publication
+  counters in live diagnostics on the replacement connection.
+- Rust commit `1c808365` records the exact same-connection versus fresh-
+  connection downgrade contract in the machine-readable extension registry.
+- Canonical `emulebb-ed2k` validation passes: 1,166 unit tests, documentation
+  tests, strict Clippy with the repository's known lint-expectation allowance,
+  formatting, and whitespace checks.
+- Remaining gate evidence is limited to stock eMule/current-aMule live
+  interoperability and the retained full 100,000-file pacing, cancellation,
+  reconnect, and memory campaign.
 
 ## Validation
 

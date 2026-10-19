@@ -35,7 +35,7 @@ records per packet and previously unseen hashes per connection.
   client software. Please upgrade it.` to the Rust publishing session.
 - Retained soak evidence recorded 1,954 offered records across 42 batches for a
   final 53-file catalog, consistent with repeated near-full-catalog offers.
-- Catalog refresh currently clears publication state instead of retaining
+- The pre-fix catalog refresh cleared publication state instead of retaining
   unchanged wire records.
 - Current aMule history identifies the exact warning as its incremental
   publication bug 303 and fixes it with per-file publication state.
@@ -77,16 +77,31 @@ records per packet and previously unseen hashes per connection.
 
 ## Acceptance Criteria
 
-- [ ] Catalog reorder and unchanged refresh send no duplicate offers.
-- [ ] New and materially changed records are offered exactly once per current
+- [x] Catalog reorder and unchanged refresh send no duplicate offers.
+- [x] New and materially changed records are offered exactly once per current
       wire state.
-- [ ] Same-hash refreshes remain eligible after soft-budget exhaustion without
+- [x] Same-hash refreshes remain eligible after soft-budget exhaustion without
       consuming another distinct slot.
-- [ ] New hashes stop at the connection-scoped soft limit.
-- [ ] Every packet stays below the hard limit and local packet ceiling.
-- [ ] Exhausted budgets do not create empty publication timer loops.
-- [ ] Reconnect resets publication and distinct-hash state.
+- [x] New hashes stop at the connection-scoped soft limit.
+- [x] Every packet stays below the hard limit and local packet ceiling.
+- [x] Exhausted budgets do not create empty publication timer loops.
+- [x] Reconnect resets publication and distinct-hash state.
 - [ ] Canonical Rust validation and the applicable RUST-CI-005 evidence pass.
+
+## Implementation Evidence (2026-10-19)
+
+- Rust commit `e3cbd847` preserves unchanged publication state across catalog
+  refreshes and reopens only new or materially changed wire records.
+- Rust commit `0a1240e4` separates per-packet capacity from the connection-
+  scoped distinct-hash budget, clamps legacy packets, and stops exhausted
+  pumps without empty sends.
+- Rust commits `40fbb3e1`, `1ba8bff9`, and `5ec5f4d1` make negotiation fallback
+  connection-safe, prove the two-login transition on the wire, and retain the
+  fallback cause in diagnostics.
+- Focused regressions and the complete 1,166-test `emulebb-ed2k` suite pass with
+  strict Clippy, formatting, and whitespace checks.
+- The bug remains open until the applicable RUST-CI-005 stock/current-aMule and
+  retained large-library evidence completes.
 
 ## Validation
 
