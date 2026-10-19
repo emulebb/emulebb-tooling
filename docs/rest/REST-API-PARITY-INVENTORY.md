@@ -556,8 +556,8 @@ aMuTorrent `0.7.3` bundle. It is provenance, not a current release gate.
 
 - **Torznab search method policy**
   - Status: implemented
-  - Recorded outcome: Prowlarr/Torznab movie and TV searches dispatched REST
-                      `video` searches through connected `global` first and connected
+  - Recorded outcome: Prowlarr/Torznab movie and TV searches dispatched REST `video` searches
+                      through connected `global` first and connected
                       `kad` second, combining connected-network results; other families
                       kept the native automatic policy.
 
