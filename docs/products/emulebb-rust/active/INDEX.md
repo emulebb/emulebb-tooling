@@ -38,6 +38,7 @@ reused. Parked ideas are not backlog items until explicitly activated.
 
 | ID | Class | Title |
 |---|---|---|
+| [RUST-BUG-128](items/RUST-BUG-128.md) | Bug | Preserve incremental ED2K offer publication |
 | [RUST-CI-005](items/RUST-CI-005.md) | Evidence | Prove negotiated offerfiles capability interoperability |
 | [RUST-CI-006](items/RUST-CI-006.md) | Evidence | Refresh current-head stock parity evidence and reconcile docs |
 | [RUST-CI-008](items/RUST-CI-008.md) | Evidence | Prove Unicode and long-path large-library behavior across platforms |

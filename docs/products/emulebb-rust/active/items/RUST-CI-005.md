@@ -40,6 +40,12 @@ enough to close the item or begin Indexer production implementation.
 - The negotiated path targets a 100,000-record deterministic publication model,
   but still lacks the server fixture required to prove acceptance, rejection,
   malformed advertisement, reconnect reset, and stock fallback behavior.
+- The 2026-10-19 latest-source review confirmed that `ST_SOFTFILES` is a
+  distinct-hash budget, while every same-hash refresh still consumes packet and
+  pacing capacity. RUST-BUG-128 owns the shared publication-state correction.
+- A timeout or malformed capability response must not make the client send a
+  legacy-sized packet on a connection the server may already have bound to v1.
+  Downgrade proof therefore includes a fresh unadvertised connection epoch.
 - `docs/WORKSPACE-POLICY.md` requires stock protocol compatibility and explicit
   governance for extensions/default drift.
 - The completed disposition does not itself establish stock/current-aMule
@@ -65,6 +71,9 @@ without explicit downgrade, stock/current-aMule, and large-library evidence.
 - In every retained form, require explicit negotiation, exact field validation,
   per-connection reset, and stock packet behavior when negotiation is absent or
   rejected.
+- Treat an explicit first identity without the extension as a definitive legacy
+  selection. Treat timeout or malformed negotiation as connection-ambiguous:
+  reconnect once without the extension before publishing legacy offers.
 - Add a deterministic server fixture that can accept, reject, malformed-reply,
   duplicate, and reconnect the extension negotiation.
 - Exercise the 100,000-file model without putting custom fields on a stock peer
