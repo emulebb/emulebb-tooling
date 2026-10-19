@@ -177,16 +177,15 @@ For an existing profile:
 | Deep Windows long-path behavior | [Long Path Guide](GUIDE-LONGPATHS.md) |
 | Keyboard and menu workflow | [Keyboard Shortcuts](KEYBOARD-SHORTCUTS.md) |
 | Symptom-led diagnostics, support evidence, Low ID, Kad, REST, and disk-space triage | [Troubleshooting Guide](GUIDE-TROUBLESHOOTING.md) |
-| Translation terminology, localized homepage rules, and glossary | [Translations And Localization](GUIDE-TRANSLATIONS.md) |
+| Translation terminology, localized quickstart rules, and glossary | [Translations And Localization](GUIDE-TRANSLATIONS.md) |
 | Development, validation, CI, packaging, and guide refresh workflow | [Development Guide](DEVELOPMENT-GUIDE.md) |
 
 ## Public Documentation And Evidence
 
 The product guide is maintained as Markdown in `emulebb-tooling` and published as
 browser-readable HTML through the MkDocs documentation site at
-`https://emulebb.github.io/emulebb-tooling/`. The public homepage links to that
-rendered documentation and summarizes it; the Markdown guide remains the source
-of truth for product behavior, release evidence, and operator workflows.
+`https://emulebb.github.io/emulebb-tooling/`. The Markdown guide remains the
+source of truth for product behavior, release evidence, and operator workflows.
 
 The repeatable publishing workflow is:
 
@@ -200,17 +199,13 @@ The repeatable publishing workflow is:
 
 3. Commit and push the source Markdown. GitHub Actions builds the MkDocs HTML
    site from `main` and deploys it to GitHub Pages.
-4. When the public homepage needs a shorter product summary, update
-   `repos\emulebb-pages` from the rendered-doc facts and regenerate its static
-   HTML pages.
 
-Release-facing product claims are backed by evidence, not by homepage copy.
+Release-facing product claims are backed by evidence.
 Current quality signals include extensive automated testing, native and Python
 harness coverage, REST/OpenAPI checks, live E2E lanes, package manifests,
 SHA-256 hashes, SPDX SBOM files for release packages, and GitHub artifact
-attestations for eMuleBB nightly assets. The homepage may advertise those
-strengths only after the source guide and release docs describe the same
-evidence.
+attestations for eMuleBB nightly assets. Publish those strengths only after the
+source guide and release docs describe the same evidence.
 
 ## Public Testing And Downloads
 

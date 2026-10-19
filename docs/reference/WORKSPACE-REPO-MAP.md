@@ -66,15 +66,6 @@ current with `origin/master` and review `upstream/master` before merging it.
 | `repos/emulebb-build-tests` | `main` | Native, live, controller, campaign tests. | `test python`; selected suites |
 | `repos/emulebb-tooling` | `main` | Policies, hooks, docs, CI guards. | policy checks; MkDocs |
 
-## Optional Public Web And Org Repositories
-
-These repositories are materialized only with the `public-presence` profile.
-
-| Path | Branch | Role | Validation |
-|---|---|---|---|
-| `repos/emulebb-pages` | `main` | Public GitHub Pages site. | static-site/link review |
-| `repos/emulebb-org-profile` | `main` | GitHub organization profile README. | Markdown/rendering review |
-
 ## Product-Family Repositories
 
 Core entries are managed by normal synchronization. Paused or historical peer
@@ -114,10 +105,8 @@ normal product work.
 
 | Path | Role |
 |---|---|
-| `analysis/community-0.60` | Community eMule 0.60 reference |
-| `analysis/mods-archive` | Archived mod source corpus |
 | `analysis/stale-v0.72a-experimental-clean` | Historical eMuleBB branch snapshot for comparison |
-| `analysis/emuleai` | eMuleAI comparison source |
+| `analysis/emule-qt` | eMule-Qt comparison source |
 
 ## GitHub Repository Governance
 

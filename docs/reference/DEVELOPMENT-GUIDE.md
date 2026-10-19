@@ -93,9 +93,7 @@ need to be published as formatted HTML:
    GitHub Pages.
 
 Generated MkDocs output belongs under `.local\mkdocs-site` and must not be
-committed. The static product homepage in `repos\emulebb-pages` is separate:
-update it only after the source Markdown is current, then regenerate its
-committed HTML through that repo's Jinja renderer.
+committed.
 
 ## Docs-Only Checklist
 

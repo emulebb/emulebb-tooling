@@ -210,11 +210,7 @@ authority for live state.
 The long-form product docs are English-canonical for now. Do not fork large
 translated Markdown copies unless there is a review and maintenance owner. Use
 [Translations And Localization](reference/GUIDE-TRANSLATIONS.md) for glossary,
-terminology, screenshot, command, API field, and localized-homepage rules.
-
-The public homepage in `repos\emulebb-pages` has localized entry pages. Those
-pages should link back to this maintained guide set rather than carrying
-stale, partial copies of the manuals.
+terminology, screenshot, command, API field, and localized-quickstart rules.
 
 ## Workspace And Release Docs
 

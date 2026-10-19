@@ -1060,10 +1060,10 @@ design, license, security, and interoperability review.
 
 ## Historical eMule Mods And Source Archives
 
-The workspace has archive evidence under `EMULEBB_WORKSPACE_ROOT\analysis\mods-archive`.
-These projects are historical reference material for UX, upload policy,
+The projects below are historical reference material for UX, upload policy,
 anti-leecher logic, server handling, large-share behavior, and compatibility
-hardening. Do not import behavior wholesale.
+hardening. They are documented for provenance and are not materialized by the
+current workspace. Do not import behavior wholesale.
 
 - **MorphXT**
   - Status: Historical, archive-only

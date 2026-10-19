@@ -6,8 +6,7 @@ translation without creating stale, misleading manuals.
 ## Current Strategy
 
 The long-form product manuals in `repos\emulebb-tooling\docs` are
-English-canonical. The public homepage in `repos\emulebb-pages` has localized
-entry pages and should link users back to the maintained manuals.
+English-canonical and remain the source of truth.
 
 Do not create broad translated Markdown copies of the product guides unless
 there is an owner who will keep them current. Partial, stale translations are
@@ -17,22 +16,20 @@ Best current path:
 
 1. Keep the full source manuals current in English.
 2. Keep headings, glossary terms, screenshots, and field names stable.
-3. Localize short public homepage summaries in `repos\emulebb-pages`.
-4. Link localized homepage pages to the canonical guide sections.
-5. Translate narrow high-value quickstart pages only when review capacity
+3. Translate narrow high-value quickstart pages only when review capacity
    exists.
+4. Link localized quickstarts to the canonical guide sections.
 
 ## What Should Stay Untranslated
 
 Keep these exact in every language:
 
-- executable and package names: `emulebb.exe`, `eMuleBB`, `aMuTorrent`
+- executable and package names: `emulebb.exe`, `eMuleBB`
 - command-line options: `-c`, `--help`, `--generate-webserver-cert`
 - file names: `preferences.ini`, `server.met`, `nodes.dat`, `known.met`
 - API routes: `/api/v1`, `/api/v2`, `/indexer/emulebb/api`
 - HTTP headers: `X-API-Key`
-- script names: `Register-aMuTorrent.ps1`, `Register-Prowlarr.ps1`,
-  `Register-ArrStack.ps1`
+- script names: `Register-Prowlarr.ps1`, `Register-ArrStack.ps1`
 - category identifiers used as config values: `emulebb-radarr`,
   `emulebb-sonarr`
 - Torznab categories when used as numeric values: `2000`, `5000`, `7000`
@@ -66,7 +63,6 @@ Translate the explanation around those terms, not the identifiers themselves.
 | Prowlarr | Product name. Do not translate. |
 | Radarr | Product name. Do not translate. |
 | Sonarr | Product name. Do not translate. |
-| aMuTorrent | Product name. Do not translate. |
 | Arr apps | Family term for Radarr, Sonarr, and related tools. Explain once. |
 | bind address | Network listener address. Translate as network bind/listen address. |
 | UPnP | Router feature. Do not translate. |
@@ -109,20 +105,6 @@ Screenshots must not expose:
 - private filesystem paths
 - user names, hostnames, or account identifiers
 
-## Homepage Translation
-
-Localized public homepage pages live in `repos\emulebb-pages`. They should:
-
-- describe eMuleBB in the user's language
-- link to the canonical documentation site
-- avoid copying long guide sections
-- use the same product claims as the source docs
-- avoid announcing a stable release before release docs approve it
-
-When the homepage needs a new translated sentence, update the structured source
-used by the pages renderer, regenerate the static pages, and validate the pages
-site. Do not manually edit each generated locale page.
-
 ## Manual Translation Workflow
 
 For a narrow translated guide or quickstart:
@@ -149,7 +131,7 @@ replacement.
 
 Acceptable:
 
-- translating a short homepage summary
+- translating a short documentation summary
 - translating a quickstart checklist
 - generating a first draft for human review
 - checking glossary consistency
@@ -159,7 +141,7 @@ Not acceptable:
 - bulk translating the full manual tree without review
 - translating API fields or command examples
 - replacing stock eMule UI strings outside the release localization workflow
-- changing legacy translation text without an explicit reason
+- changing existing translation text without an explicit reason
 
 Release-facing app resource strings are governed by the workspace release
 localization policy and the release language helper scripts, not by this docs
