@@ -99,18 +99,11 @@ emulebb-0.7.4-x64.zip
 emulebb-0.8.0-x64.zip
 ```
 
-Optional controller packages follow the same version policy:
-
-```text
-emulebb-0.7.3-rc.1-amutorrent-x64.zip
-emulebb-0.7.3-amutorrent-x64.zip
-```
-
 SBOM and manifest assets use the same package stem with their normal suffixes.
 
 ### Local Rebuild Shortcut
 
-Do not search the workspace for package artifacts. Rebuild the local suite
+Do not search the workspace for package artifacts. Rebuild the local app
 package from the build repo and use the deterministic release output directory:
 
 ```powershell
@@ -125,53 +118,13 @@ python -m emule_workspace package-release `
   --platform x64 `
   --config Release `
   --build-output-mode ErrorsOnly
-
-python -m emule_workspace package-amutorrent `
-  --release-version $version `
-  --platform x64 `
-  --config Release `
-  --build-output-mode ErrorsOnly
 ```
 
 The artifacts are written to:
 
 ```text
-%EMULEBB_WORKSPACE_ROOT%\workspaces\workspace\state\release\emulebb-v<VERSION>
+%EMULEBB_WORKSPACE_OUTPUT_ROOT%\release\emulebb-v<VERSION>
 ```
-
-For stable `0.7.3`, the local Full-suite input assets are:
-
-```text
-emulebb-0.7.3-x64.zip
-emulebb-0.7.3-x64.manifest.json
-emulebb-0.7.3-amutorrent-x64.zip
-emulebb-0.7.3-amutorrent-x64.manifest.json
-suite-scripts-0.7.3.zip
-suite-scripts-0.7.3.manifest.json
-automation-examples-0.7.3.zip
-automation-examples-0.7.3.manifest.json
-Bootstrap-eMuleBBSuite.ps1
-```
-
-Run a local Full-suite install from that directory:
-
-```powershell
-$release = "$env:EMULEBB_WORKSPACE_ROOT\workspaces\workspace\state\release\emulebb-v$version"
-
-powershell -NoProfile -ExecutionPolicy Bypass `
-  -File "$release\Bootstrap-eMuleBBSuite.ps1" `
-  -Bundle Full `
-  -InstallRoot 'C:\eMuleBBSuite-0.7.3-local' `
-  -EmulebbPackageZip "$release\emulebb-$version-x64.zip" `
-  -EmulebbPackageManifest "$release\emulebb-$version-x64.manifest.json" `
-  -AmutorrentPackageZip "$release\emulebb-$version-amutorrent-x64.zip" `
-  -AmutorrentPackageManifest "$release\emulebb-$version-amutorrent-x64.manifest.json"
-```
-
-The bootstrapper resolves adjacent `suite-scripts-*` and
-`automation-examples-*` assets automatically when the local eMuleBB package ZIP
-is supplied. Add `-DryRun -NonInteractive` to the bootstrap command to verify
-resolution without installing.
 
 Main app ZIPs ship the runtime executable, the full release language DLL set,
 package-facing notices, REST API docs, and SPDX SBOM/manifest provenance. The

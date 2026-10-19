@@ -80,9 +80,8 @@ and may expose UDP status or admin APIs.
   - Notes: Go ED2K/eMule server built around `github.com/monkeyWie/goed2k`; implements
            login, status, message, ID assignment, offer files, search, search-more,
            source lookup, callbacks, JSON/MySQL/PostgreSQL catalog storage, and admin
-           UI/API. The eMuleBB managed fork lives at
-           `https://github.com/emulebb/goed2k-server`. Its current offer handler
-           replaces the client's complete indexed set on every packet; negotiated
+           UI/API. Its current offer handler replaces the client's complete indexed
+           set on every packet; negotiated
            multi-batch publishing would therefore discard earlier batches until
            cumulative per-session offer semantics are implemented.
 
@@ -139,10 +138,9 @@ and may expose UDP status or admin APIs.
   - Source or archive: https://github.com/p2p-overlord/p2p-overlord-ed2k-server
   - Repo stats (GitHub, 2026-05-29):
     - `p2p-overlord/p2p-overlord-ed2k-server`: 0 stars, 0 forks, 0 open issues; default `master`; default-branch commit 2026-05-10 `7ca18a2`; archived.
-  - Notes: Archived fork lineage retained only as historical reference; active
-           eMuleBB workspace topology tracks `goed2k-server` directly. The
-           obsolete `emulebb-ed2k-server` fork slug has no current public
-           repository and should not be used.
+  - Notes: Archived fork lineage retained only as historical reference. The
+           eMuleBB workspace no longer tracks a Go ED2K server; `ed2k-server`
+           is the sole local deterministic server.
 
 - **ed2kd**
   - Status: Stale
@@ -694,7 +692,7 @@ Projects needing prerequisite work rather than simple acceleration:
 ## Controllers, Indexers, And Automation
 
 - **aMuTorrent**
-  - Status: Maintained, frozen `0.7.3` controller line
+  - Status: Historical, frozen `0.7.3` release companion
   - Language/platform: Node.js/React/Docker
   - Link: https://github.com/emulebb/amutorrent
   - Repo stats (GitHub, 2026-09-30):
