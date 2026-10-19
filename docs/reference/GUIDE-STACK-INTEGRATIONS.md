@@ -5,10 +5,6 @@ stack: the native eMuleBB client for eD2K/Kad state plus Prowlarr and selected
 Arr apps for Torznab search and qBittorrent-compatible download-client
 workflows.
 
-> **Legacy controller.** The controller-specific section preserves the
-> aMuTorrent recipe shipped with `0.7.3`; it is not a current product or
-> dependency. The eMuleBB-side Prowlarr and Arr setup remains current.
-
 The goal is not to hide the eMuleBB client behind another tool. The native
 desktop app owns identity, network state, categories, temp files, completed
 files, shared files, and upload behavior. Controllers should make that state
@@ -61,31 +57,6 @@ flowchart LR
 
 Do the setup in that order. If eMuleBB is not healthy as a desktop client,
 automation will only make failure modes harder to read.
-
-## Legacy `0.7.3` Controller Reference
-
-These preserved screenshots record the controller experience shipped with the
-legacy `0.7.3` suite. They are release-history context, not a current workspace
-product or recommended controller dependency.
-
-<div class="docs-screenshot-grid">
-  <figure>
-    <img alt="aMuTorrent dashboard connected to download backends" src="../assets/screenshots/amutorrent-home-desktop.png" />
-    <figcaption>Dashboard: one place to inspect connected clients and activity.</figcaption>
-  </figure>
-  <figure>
-    <img alt="aMuTorrent downloads view" src="../assets/screenshots/amutorrent-downloads-desktop.png" />
-    <figcaption>Downloads: transfer state is controller-friendly but still comes from the native client.</figcaption>
-  </figure>
-  <figure>
-    <img alt="aMuTorrent search view" src="../assets/screenshots/amutorrent-search-desktop.png" />
-    <figcaption>Search: eD2K/Kad results can be surfaced through controller workflows.</figcaption>
-  </figure>
-  <figure>
-    <img alt="aMuTorrent shared files view" src="../assets/screenshots/amutorrent-shared-desktop.png" />
-    <figcaption>Sharing: large libraries need explicit visibility and privacy decisions.</figcaption>
-  </figure>
-</div>
 
 ## Before You Start
 
@@ -152,50 +123,6 @@ port, firewall, lifecycle, or API key before configuring any adapter.
 For bind policy, lifecycle, HTTPS certificate behavior, and unsafe diagnostic
 routes, use [Controllers And REST](GUIDE-CONTROLLERS-REST.md). This stack guide
 keeps only the setup steps needed before wiring companion tools.
-
-## aMuTorrent (legacy 0.7.3 bundle)
-
-aMuTorrent is the retired controller bundled with the stable `0.7.3` release.
-Use this section only when reproducing or diagnosing that published bundle.
-
-The published controller provided:
-
-- a browser UI for search, transfers, shared files, history, and statistics
-- one operator surface for multiple download clients
-- a REST consumer that understands eMuleBB-specific state
-- a safer place to experiment before enabling unattended Arr flows
-
-Basic proof order:
-
-1. Start eMuleBB with the intended profile.
-2. Start aMuTorrent with eMuleBB integration enabled.
-3. Confirm app status and preferences read correctly.
-4. Confirm the search page can dispatch an eMuleBB search.
-5. Confirm a selected result reaches eMuleBB as a native transfer.
-6. Confirm transfer details, category, path, and queue data make sense.
-
-If the aMuTorrent UI fails but direct `GET /api/v1/app` works, compare the UI
-adapter assumptions with [REST API contract](../rest/REST-API-CONTRACT.md) and
-[REST adapter notes](../rest/REST-API-ADAPTERS.md). For behavior-level REST and
-adapter expectations, use [Controllers And REST](GUIDE-CONTROLLERS-REST.md).
-
-### Package Helper Script
-
-Release packages include a helper that registers or repairs the eMuleBB client
-entry in a compatible aMuTorrent instance through aMuTorrent's config API:
-
-```powershell
-.\scripts\Register-aMuTorrent.ps1 `
-  -AmutorrentUrl "http://$host:4000" `
-  -AmutorrentApiKey '<amutorrent-admin-api-key>' `
-  -EmulebbBaseUrl "http://$host:4711" `
-  -EmulebbApiKey '<emulebb-api-key>'
-```
-
-Use `-Action Unregister` to remove the matching aMuTorrent eMuleBB client. The
-helper refuses to edit entries owned by `EMULEBB_*` environment variables and
-refuses to remove the last enabled aMuTorrent download client. Leave
-`-AmutorrentApiKey` blank only when aMuTorrent authentication is disabled.
 
 ## Prowlarr Indexer Setup
 

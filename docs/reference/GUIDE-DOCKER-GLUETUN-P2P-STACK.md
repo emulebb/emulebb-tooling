@@ -2,14 +2,13 @@
 
 This guide describes the operating pattern used to move a Windows-hosted
 eMuleBB MFC and Hide.me setup into Docker: Gluetun owns the VPN tunnel and
-firewall, while aMule, aMuTorrent, qBittorrent, and a port-forward helper share
-its network namespace.
+firewall, while aMule, qBittorrent, and a port-forward helper share its network
+namespace.
 
 > **Operator reference, not a product.** This is a reusable deployment pattern,
 > not an officially supported eMuleBB stack. The eMuleBB MFC client remains in
 > its Windows maintenance lane. aMule is a different, stock-compatible eD2K/Kad
-> client, and aMuTorrent is the frozen controller that accompanied eMuleBB
-> `0.7.3`.
+> client.
 
 The snippets are deliberately incomplete. They illustrate the boundaries that
 matter without publishing an operator's credentials, addresses, storage layout,
@@ -50,7 +49,6 @@ flowchart LR
         UI --> Tunnel["Gluetun network namespace"]
         Qbit["qBittorrent"] --> Tunnel
         Amule["aMule"] --> Tunnel
-        Amutorrent["aMuTorrent"] --> Tunnel
         Forwarder["Port-forward helper"] --> Tunnel
         Tunnel --> VPN["Hide.me OpenVPN tunnel"]
         VPN --> Internet2["P2P networks"]
@@ -115,7 +113,6 @@ services:
       - openvpn_password
     ports:
       - "127.0.0.1:18080:8080" # qBittorrent WebUI
-      - "127.0.0.1:14000:4000" # aMuTorrent WebUI
     restart: "no"
 
   qbittorrent:
@@ -158,37 +155,6 @@ network-privileged stack.
 The published ports above bind to loopback. For LAN access, use an explicit
 trusted host address and a host firewall rule rather than changing them to an
 unreviewed wildcard exposure.
-
-### Add aMuTorrent without another network path
-
-aMuTorrent talks to aMule through loopback because both containers share
-Gluetun's namespace. The aMule External Connections port does not need to be
-published on the host.
-
-```yaml
-services:
-  amutorrent:
-    image: example.invalid/operator/amutorrent:3.9.7
-    network_mode: service:gluetun
-    depends_on:
-      gluetun:
-        condition: service_healthy
-      amule:
-        condition: service_healthy
-    environment:
-      AMULE_ENABLED: "true"
-      AMULE_HOST: 127.0.0.1
-      AMULE_PORT: "4712"
-      QBITTORRENT_ENABLED: "false"
-      WEB_AUTH_ENABLED: "true"
-    volumes:
-      - ./state/amutorrent:/app/data
-    restart: "no"
-```
-
-Keep the EC password and WebUI credentials in ignored secret files or an
-ignored environment file. Disabling aMuTorrent category synchronization is
-also useful when category destinations must not become implicit aMule shares.
 
 ### Bind qBittorrent to the tunnel
 
@@ -338,7 +304,7 @@ docker compose logs --tail=100 gluetun
 Then start the forwarder and clients:
 
 ```bash
-docker compose up -d port-forward qbittorrent amule amutorrent
+docker compose up -d port-forward qbittorrent amule
 docker compose ps
 ```
 
@@ -407,10 +373,10 @@ replace Gluetun, wait for health, and then recreate or start the consumers so
 that they join the current namespace:
 
 ```bash
-docker compose stop amutorrent amule qbittorrent port-forward
+docker compose stop amule qbittorrent port-forward
 docker compose up -d --force-recreate gluetun
 docker compose ps gluetun
-docker compose up -d port-forward qbittorrent amule amutorrent
+docker compose up -d port-forward qbittorrent amule
 ```
 
 For automatic recovery, require a sustained failure rather than reacting to a
@@ -448,8 +414,8 @@ profiles as interchangeable formats.
 lane and has its own
 [Gluetun Compose example](https://github.com/emulebb/emulebb-rust/blob/main/packaging/docker/compose.gluetun.example.yaml).
 That example uses the same central pattern—Gluetun owns the namespace and the
-Rust client binds P2P to `tun0`—but it is independent of the aMule/aMuTorrent
-deployment described here. The Rust nightly beta channel should not be
+Rust client binds P2P to `tun0`—but it is independent of the aMule deployment
+described here. The Rust nightly beta channel should not be
 presented as already deployed in this stack.
 
 ## Related Guides
@@ -459,5 +425,5 @@ presented as already deployed in this stack.
   firewall concepts.
 - [Running eMuleBB On macOS And Linux](GUIDE-CROSS-PLATFORM.md) for the product
   distinction between MFC, aMule, and emulebb-rust.
-- [Stack Integration Guide](GUIDE-STACK-INTEGRATIONS.md) for the historical
-  Windows eMuleBB/aMuTorrent controller path.
+- [Stack Integration Guide](GUIDE-STACK-INTEGRATIONS.md) for current Prowlarr
+  and Arr adapter setup.

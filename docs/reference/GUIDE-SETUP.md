@@ -5,32 +5,11 @@ This guide covers practical setup for eMuleBB. It complements the
 
 ## Quick Setup Options
 
-Stable `0.7.3` is published on GitHub Releases. Prefer the standalone app path
-for current maintenance installs; use the suite path only to reproduce the
-published legacy bundle.
+Stable `0.7.3` is published on GitHub Releases. Use the standalone application
+package for current maintenance installs. The retired controller bundle remains
+documented only in the [0.7.3 release notes](../active/RELEASE-0.7.3-NOTES.md).
 
-### Legacy Option: Published `0.7.3` Suite One-Liner {#full-suite-install-powershell-bootstrap}
-
-Fastest setup for the x64 suite: eMuleBB, aMuTorrent, Prowlarr, and selected
-Arr integration in one bootstrap flow.
-
-```powershell
-irm https://github.com/emulebb/emulebb/releases/download/emulebb-v0.7.3/Bootstrap-eMuleBBSuite.ps1 | iex
-```
-
-The bootstrapper defaults to the `Full` bundle. It downloads the published
-stable eMuleBB package from `emulebb/emulebb`, resolves the matching
-aMuTorrent `0.7.3` companion package from `emulebb/amutorrent`, installs the
-suite, and wires local controller integration through native REST, Torznab, and
-qBittorrent-compatible adapter paths.
-
-The bootstrapper is a preserved `0.7.3` release artifact, not the start of a
-forward cross-client suite. Retired product-family experiments are not current
-workspace products, and no native Windows VPN expansion is planned. The former direction is kept in
-the [historical Ecosystem Suite Bootstrap Plan](../history/HIST-ECOSYSTEM-SUITE-BOOTSTRAP-PLAN.md).
-Those components are not part of the published `0.7.3` bootstrapper.
-
-### Option 2: Manual Standalone ZIP {#quick-install-zip-extract-run}
+### Standalone ZIP {#quick-install-zip-extract-run}
 
 Best when you only want the eMuleBB desktop app: download
 `emulebb-0.7.3-x64.zip` from
@@ -58,12 +37,10 @@ aMule.
 
 Stable release builds and packaging happen in GitHub Actions and are published
 through GitHub Releases. The `0.7.3` release carries ZIPs, package manifests,
-SHA-256 evidence, SPDX SBOMs, diagnostics packages, the standalone suite
-bootstrapper, and the bootstrapper SHA-256 asset. Suite releases also publish
-`automation-examples-<version>.zip` and
+SHA-256 evidence, SPDX SBOMs, diagnostics packages, and historical release
+artifacts. Releases may also publish `automation-examples-<version>.zip` and
 `automation-examples-<version>.manifest.json` when REST automation examples are
-available. The bootstrapper verifies package hashes from the release manifests
-before installing.
+available.
 
 ## Install Model
 
@@ -102,87 +79,6 @@ flowchart TD
 Do not run multiple eMule-family clients against the same live profile. Before
 reusing an existing profile, close all clients and copy the full config
 directory as a rollback backup.
-
-### Suite Bootstrap Details
-
-Use this section when you want to verify or customize the full
-suite/bootstrapper flow instead of only running the one-liner.
-
-For manual verification, download `Bootstrap-eMuleBBSuite.ps1` and
-`Bootstrap-eMuleBBSuite.ps1.sha256` from the same GitHub Release page, compare
-the hash, then run the bootstrapper.
-
-The bootstrapper installs the latest stable release by default. To opt into the
-latest nightly build instead:
-
-```powershell
-.\Bootstrap-eMuleBBSuite.ps1 -IncludeNightly -Bundle Full
-```
-
-For a specific published release after manual download:
-
-```powershell
-.\Bootstrap-eMuleBBSuite.ps1 -Version 0.7.3
-```
-
-The bootstrapper is published as a release asset, so setup does not depend on
-the current `main` branch. It resolves the requested `-Version`, or otherwise
-the latest stable release. Nightly builds are never selected automatically; pass
-`-IncludeNightly` to opt into the latest supported nightly. Legacy pre-eMuleBB
-release tags are ignored. It
-verifies the release ZIP against its manifest SHA-256, extracts the versioned
-suite installer, and hands off to that installer. The versioned installer is
-also included in the main app ZIP under `eMuleBB\scripts`.
-
-When the matching automation examples asset exists, the bootstrapper passes it
-to the installer and the examples are staged under
-`<install-root>\examples\automation`. These examples are a bootstrap-installed
-component only; the standalone app ZIP does not carry them.
-
-`-Bundle Full` installs eMuleBB, aMuTorrent, Node, Prowlarr, Radarr, Sonarr,
-Lidarr, Readarr, and Whisparr.
-The bootstrapper resolves the eMuleBB desktop package from
-`emulebb/emulebb/releases` and resolves the aMuTorrent controller package from
-`emulebb/amutorrent/releases`. Node and the Arr applications are downloaded from
-pinned public upstream URLs by default; pass `-DependencyManifest` to the
-installer only when you need a pre-hashed local or mirrored dependency set. Full
-and Controller bootstrap runs require the selected aMuTorrent release or nightly
-to publish `emulebb-<amutorrent-version>-amutorrent-x64.zip` and its manifest.
-If those assets are missing, non-interactive bootstrap runs fail before
-installing anything; an interactive run can choose to install `-Bundle Core`
-instead. Direct installer runs can override the aMuTorrent source with
-`-AmutorrentReleaseBaseUrl` and `-AmutorrentVersion`; if omitted, the installer
-uses the same release root and version as the eMuleBB desktop package.
-
-To verify the bootstrapper itself before running it, compare the local hash
-with the adjacent `Bootstrap-eMuleBBSuite.ps1.sha256` release asset:
-
-```powershell
-Get-FileHash -Algorithm SHA256 .\Bootstrap-eMuleBBSuite.ps1
-```
-
-### Advanced Split-Tunnel Or Remote Bind
-
-Use this only when a split-tunnel VPN or remote-control setup makes loopback
-unsuitable. Set `X_LOCAL_IP` to the machine's LAN IPv4 address before running
-the bootstrapper:
-
-```powershell
-$env:X_LOCAL_IP = '192.0.2.10'
-.\Bootstrap-eMuleBBSuite.ps1
-```
-
-The suite installer uses that address as the default control-service bind and
-still warns when services are exposed beyond loopback. Keep ordinary local
-installs on the default loopback-oriented path.
-
-## Hyper-V Isolated Suite Runs
-
-Use [Windows Hyper-V Suite Isolation](GUIDE-HYPERV-WINDOWS.md) when you want to
-test the eMuleBB package or suite installer inside clean Windows guests instead
-of touching the host machine's daily profile, downloads, controllers, and
-runtime state. That path is for release/package confidence and cautious suite
-experiments; it is not required for a normal desktop install.
 
 ## Choose Directories
 

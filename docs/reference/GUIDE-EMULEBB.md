@@ -107,11 +107,9 @@ released behavior summary.
 
 ## Install And Profile Model
 
-The fastest full-suite install is the RC2 PowerShell one-liner in the
-[Setup Guide](GUIDE-SETUP.md#full-suite-install-powershell-bootstrap). It
-bootstraps eMuleBB plus the local controller/Arr integration flow from GitHub
-Releases. If you only want the standalone desktop app, download the eMuleBB ZIP,
-extract it into a new application folder, and run `emulebb.exe`.
+Use the [Setup Guide](GUIDE-SETUP.md#quick-install-zip-extract-run) to download
+the standalone eMuleBB ZIP from GitHub Releases, extract it into a new
+application folder, and run `emulebb.exe`.
 
 Keep these locations conceptually separate:
 

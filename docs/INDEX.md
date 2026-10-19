@@ -36,13 +36,11 @@ server; server changes stay minimal, generic, and upstreamable. See the
 
 ### Install Fast Path
 
-- [Legacy `0.7.3` suite one-liner](reference/GUIDE-SETUP.md#full-suite-install-powershell-bootstrap):
-  reproduce the published MFC bundle when validating that historical release.
-- [Manual standalone ZIP](reference/GUIDE-SETUP.md#quick-install-zip-extract-run):
+- [Standalone ZIP](reference/GUIDE-SETUP.md#quick-install-zip-extract-run):
   download the current stable `0.7.3` eMuleBB ZIP, extract it into a new app
   folder, and start `emulebb.exe`.
-- [Hyper-V isolated suite runs](reference/GUIDE-HYPERV-WINDOWS.md):
-  prepare clean local Windows guests and run package or suite checks without
+- [Hyper-V isolated package runs](reference/GUIDE-HYPERV-WINDOWS.md):
+  prepare clean local Windows guests and run package checks without
   touching the host's daily eMuleBB profile.
 - [Running on macOS and Linux](reference/GUIDE-CROSS-PLATFORM.md):
   options for using eMuleBB off Windows through a virtual machine, Wine, a

@@ -260,9 +260,6 @@ A controller should treat the desktop app as the authority. It may present a
 modern workflow, but category, search, transfer, shared-file, upload-queue, and
 lifecycle semantics still come from native eMuleBB state.
 
-For field-level setup of the bundled aMuTorrent controller and package helper
-usage, use [Stack Integration Guide](GUIDE-STACK-INTEGRATIONS.md#amutorrent-legacy-073-bundle).
-
 ## Arr, qBit, And Torznab Adapter Behavior
 
 Adapter surfaces let Arr-family tools, qBittorrent-compatible workflows, and
