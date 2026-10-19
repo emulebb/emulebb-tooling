@@ -118,9 +118,8 @@ the whole path as experimental.
 
 You can keep the eMuleBB engine on a Windows host, VM, or Wine instance and
 control it from any macOS or Linux browser. eMuleBB exposes an authenticated REST
-API and integrates with the aMuTorrent web controller and the Arr stack
-(Prowlarr, Radarr, Sonarr, Lidarr), all of which are browser-based and
-cross-platform.
+API and integrates with the Arr stack (Prowlarr, Radarr, Sonarr, Lidarr), whose
+management interfaces are browser-based and cross-platform.
 
 This gives you cross-platform *use* without running the desktop UI locally. The
 P2P engine still runs on Windows; only the control plane is remote. See
@@ -146,8 +145,8 @@ remote for provenance.
 
 `emulebb-rust` is a separate Rust-native eD2K/Kad client with a headless daemon,
 local indexing, its own `/api/v1` contract, and an embedded SPA WebUI. It is not
-a line-by-line MFC port or a shared-contract backend for the frozen aMuTorrent
-controller. Windows, Linux, and macOS CI build artifacts exist, but platform
+a line-by-line MFC port or a shared-contract backend for retired MFC controller
+forks. Windows, Linux, and macOS CI build artifacts exist, but platform
 runtime and public-network transfer claims require their own proof. It is not
 yet the stable MFC package replacement.
 

@@ -102,17 +102,12 @@ nav:
       - Source And Backlog (GitHub): https://github.com/emulebb/emulebb-rust
   - P2P Operations:
       - Docker And Gluetun Migration: reference/GUIDE-DOCKER-GLUETUN-P2P-STACK.md
-  - qBittorrentBB (Paused Experiment):
-      - Torrent Export & DHT Harvest (GitHub): https://github.com/emulebb/qbittorrentbb/blob/master/docs/BB-TORRENT-EXPORT-AND-HARVEST.md
-      - Preserved Source (GitHub): https://github.com/emulebb/qbittorrentbb
-  - aMuTorrent (Controller — frozen 0.7.3, legacy):
-      - Stack Integrations: reference/GUIDE-STACK-INTEGRATIONS.md
-      - Controllers And REST: reference/GUIDE-CONTROLLERS-REST.md
-      - Preserved Source (GitHub): https://github.com/emulebb/amutorrent
   - API And Automation:
       - REST Quickstart: rest/REST-API-QUICKSTART.md
       - REST Contract: rest/REST-API-CONTRACT.md
       - Adapter Notes: rest/REST-API-ADAPTERS.md
+      - Arr And Adapter Setup: reference/GUIDE-STACK-INTEGRATIONS.md
+      - Controllers And REST: reference/GUIDE-CONTROLLERS-REST.md
       - emulebb-mfc Frozen OpenAPI: products/emulebb-mfc/api/REST-API-OPENAPI.yaml
       - Rust Forward OpenAPI: products/emulebb-rust/api/REST-API-OPENAPI.yaml
       - Legacy emulebb-mfc OpenAPI Alias: rest/REST-API-OPENAPI.yaml
@@ -163,9 +158,6 @@ nav:
       - Kad Protocol Modernization: ideas/IDEA-KAD-PROTOCOL-MODERNIZATION.md
       - IPv6 Kad Network: ideas/IDEA-IPV6-KAD-NETWORK.md
       - NAT Traversal And uTP: ideas/IDEA-NAT-TRAVERSAL-UTP.md
-      - libtorrent Content Mesh: ideas/IDEA-LIBTORRENT-MESH.md
-      - qBittorrentBB Mesh: ideas/IDEA-QBITTORRENTBB-MESH.md
-      - emulebb-libtorrent Fork: ideas/IDEA-EMULEBB-LIBTORRENT-FORK.md
       - Parked MFC 0.8 Lean Removal: ideas/IDEA-MFC-0.8.0-LEAN-REMOVAL-PLAN.md
       - Parked MFC 0.8 Network Core Thread: ideas/IDEA-MFC-0.8.0-NETWORK-CORE-THREAD.md
       - Parked MFC 0.8 Performance And Async: ideas/IDEA-MFC-0.8.0-PERF-ASYNC-PLAN.md
@@ -182,6 +174,9 @@ nav:
 not_in_nav: |
   /active/items/**
   /history/**
+  /ideas/IDEA-EMULEBB-LIBTORRENT-FORK.md
+  /ideas/IDEA-LIBTORRENT-MESH.md
+  /ideas/IDEA-QBITTORRENTBB-MESH.md
   /rest/REST-API-OPENAPI.yaml
   /products/emulebb-rust/active/items/**
   /products/emulebb-rust/history/**

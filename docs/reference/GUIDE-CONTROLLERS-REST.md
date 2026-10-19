@@ -3,10 +3,10 @@
 This guide explains how the eMuleBB client should be used with trusted local
 controllers, automation, and compatibility adapters.
 
-> **Controller lifecycle.** **aMuTorrent** is the frozen browser-UI controller
-> bundled with the stable MFC `0.7.3` release. TrackMuleBB is archived and is not
-> a forward product dependency. The REST/adapter semantics on this page belong
-> to the MFC contract; controllers are clients of that contract, not part of it.
+> **Controller lifecycle.** Former bundled controller forks are retired and are
+> not forward product dependencies. The REST/adapter semantics on this page
+> belong to the MFC contract; controllers are clients of that contract, not
+> part of it.
 
 For a task-first product walkthrough of the eMuleBB client with a controller,
 Prowlarr, and selected Arr apps, start with the
@@ -20,8 +20,8 @@ resource ownership, adapter limits, typed errors, diagnostics, and unsupported
 behavior. It explains what controller calls mean after setup exists.
 
 Use [Stack Integration Guide](GUIDE-STACK-INTEGRATIONS.md) for setup recipes:
-which fields to enter in aMuTorrent, Prowlarr, and selected Arr apps; which
-helper script to run; and which manual proof flow to follow first.
+which fields to enter in Prowlarr and selected Arr apps, which helper script to
+run, and which manual proof flow to follow first.
 
 ## REST Is The Preferred Controller Path
 
@@ -240,10 +240,9 @@ For sharing automation:
 The desktop app owns shared-library scanning, hashing, and cache validation.
 Controllers request state changes; they do not own the scan engine.
 
-## Controller Behavior (aMuTorrent and custom clients)
+## Controller Behavior
 
-A controller integration uses native REST and adapter behavior. **aMuTorrent**
-(the `0.7.3` bundle controller) is a frozen REST/UI consumer. Custom clients
+A controller integration uses native REST and adapter behavior. Custom clients
 should read `GET /api/v1/capabilities` and call only advertised operations.
 Prove the basics before running long workflows:
 
@@ -348,8 +347,9 @@ Controllers must therefore:
 
 - honor `Retry-After` and use bounded backoff on `503`, exactly as for lifecycle
   unavailability above
-- stagger independent pollers (for example aMuTorrent status polling, Prowlarr,
-  and a second Arr app) instead of issuing concurrent bursts at the same listener
+- stagger independent pollers (for example custom-controller status polling,
+  Prowlarr, and a second Arr app) instead of issuing concurrent bursts at the
+  same listener
 - expect that issuing a search makes the listener briefly busy for other callers,
   and size poll intervals with that in mind
 - treat a `503` with `Retry-After` as transient and retryable, distinct from a

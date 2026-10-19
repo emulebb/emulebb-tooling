@@ -45,7 +45,7 @@ eMuleBB focuses on those gaps:
 | Keep an existing profile under control | Explicit profile model, `-c` profiles, documented state files |
 | Run large shares without guessing | Large-library guidance, share-ignore rules, monitored-share behavior |
 | Diagnose real problems | Logs, dumps, performance evidence, symptom-led troubleshooting |
-| Use modern controllers | Native REST, aMuTorrent, qBit-compatible, and Torznab adapter docs |
+| Use modern controllers | Native REST plus qBit-compatible and Torznab adapter docs |
 | Preserve eMule behavior | Stock-compatible eD2K/Kad defaults and native desktop authority |
 
 ## Compatibility Baseline And Future Evolution
@@ -81,7 +81,7 @@ remain hard constraints.
 5. Connect eD2K and/or Kad and confirm the state is understandable.
 6. Add one small shared directory and verify it on the Shared Files page.
 7. Run one small search or add one known safe link.
-8. Only then enable REST, aMuTorrent, Prowlarr, Radarr, or Sonarr.
+8. Only then enable REST, Prowlarr, Radarr, or Sonarr.
 
 The fastest way to lose clarity is to start a copied profile, a controller, an
 Arr app, and a large share scan all at the same time. Prove one layer, then add
@@ -170,7 +170,7 @@ For an existing profile:
 | eD2K, Kad, ports, binding, UPnP, firewall, WebServer network behavior | [Network Guide](GUIDE-NETWORK.md) |
 | Downloads, search, categories, broadband upload policy, transfer behavior | [Downloads and Search Guide](GUIDE-DOWNLOADS-SEARCH.md) |
 | Shared directories, monitored shares, large libraries, share-ignore rules | [Sharing Guide](GUIDE-SHARING.md) |
-| eMuleBB plus aMuTorrent plus Prowlarr/Radarr/Sonarr workflows | [Stack Integration Guide](GUIDE-STACK-INTEGRATIONS.md) |
+| eMuleBB plus Prowlarr/Radarr/Sonarr workflows | [Stack Integration Guide](GUIDE-STACK-INTEGRATIONS.md) |
 | REST behavior, adapter boundaries, lifecycle, and controller safety | [Controllers and REST Guide](GUIDE-CONTROLLERS-REST.md) |
 | Landed behavior matrix, release documentation coverage, and evidence model | [Released Behavior Summary](RELEASED-BEHAVIOR-SUMMARY.md) |
 | IP filter setup, updates, manual reloads, formats, levels, and troubleshooting | [IP Filter Guide](GUIDE-IP-FILTERS.md) |
@@ -237,10 +237,6 @@ gh attestation verify PATH_TO_ASSET -R emulebb/emulebb
   `https://github.com/emulebb/amule/releases`. eMuleBB publishes Windows build
   and validation artifacts for aMule users. This is an ecosystem build track,
   not upstream aMule ownership.
-- aMuTorrent manager fork:
-  `https://github.com/emulebb/amutorrent/releases`. Release automation exists
-  for the eMuleBB-oriented fork. If the release page has no published asset,
-  there is no public package yet.
 - MiniUPnP/miniupnpc for Windows:
   `https://github.com/emulebb/emulebb-miniupnp/releases`. Windows `upnpc`
   packages are published as adjacent tooling for the eMuleBB ecosystem.
@@ -262,8 +258,7 @@ Use this flow when testing a public nightly:
    emulebb.exe -c "$env:TEMP\eMuleBB-TestProfile"
    ```
 
-5. Start once without REST controllers, aMuTorrent, Arr tools, or other
-   automation.
+5. Start once without REST controllers, Arr tools, or other automation.
 6. Verify the app opens, connection state is visible, server and Kad setup are
    intentional, shared directories load, logs are written, and shutdown
    completes normally.

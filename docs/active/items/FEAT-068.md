@@ -107,15 +107,12 @@ Bounded paging is implemented and guarded:
   `BuildPagedItemsEnvelope` path with `total` reflecting the filtered count.
 - **Contract** — the common pagination shape (`items`/`total`/`offset`/`limit`)
   and a stable-ordering guarantee are documented in `REST-API-CONTRACT.md`.
-- **Controller (aMuTorrent)** — `_fetchAllPages` walks pages bounded by
-  `AMUTORRENT_EMULEBB_SHARED_MAX_ITEMS` (default 2000), surfaces the full `total`,
-  and flags truncation in the stats tree and logs. All adapter list bounds (page
-  size, snapshot/logs limits, shared/transfers caps, refresh throttle) live
-  centrally in `config.js` `EMULEBB_REST`, overridable via `AMUTORRENT_EMULEBB_*`.
+- **Controller clients** — consumers must walk pages with an explicit aggregate
+  cap, surface the full `total`, and make truncation observable rather than
+  walking an unbounded library.
 
 Coverage: `test_shared_file_list_source.py` guards the C++ bounded-paging and
-snapshot-bounding invariants; aMuTorrent `emulebbManager.test.js` proves a
+snapshot-bounding invariants. Add controller-neutral harness proof that a
 50,000-file library is fetched in bounded page count and capped without walking
 the whole library. A live in-app RAM/latency benchmark against a real 50k
-profile remains an optional future addition (not required for the bounded
-guarantees above).
+profile remains an optional future addition.

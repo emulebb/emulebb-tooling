@@ -2,7 +2,7 @@
 id: FEAT-121
 workflow: local
 github_issue:
-title: STUN UDP egress gate for the VPN guard (eMuleBB, emulebb-rust, libtorrent)
+title: STUN UDP egress gate for the VPN guard (eMuleBB and emulebb-rust)
 status: DEFERRED
 priority: Major
 category: feature
@@ -28,8 +28,8 @@ STUN must report an allowed IP first, then the existing HTTP probe **confirms**
 the TCP path. Either check failing fails the guard closed (the existing
 pause-all-P2P path).
 
-Implemented consistently across all three clients that bind to the VPN:
-eMuleBB (C++/MFC), emulebb-rust (eD2k), and the qBittorrentBB libtorrent fork.
+Implement the same model across the maintained clients that bind to the VPN:
+eMuleBB (C++/MFC) and emulebb-rust (eD2k).
 
 ## Behavior
 
@@ -43,17 +43,17 @@ eMuleBB (C++/MFC), emulebb-rust (eD2k), and the qBittorrentBB libtorrent fork.
 - **Resilience by fan-out**: a fixed set of public STUN servers is raced
   concurrently; the first valid reflexive address wins; the probe fails only when
   every server fails. No per-socket retransmits. When one server wins the others
-  are cancelled (rust/libtorrent) or self-terminate at their bounded timeout
-  (eMuleBB threads).
+  are cancelled (rust) or self-terminate at their bounded timeout (eMuleBB
+  threads).
 - **IPv4 gate** only for now.
 
-## Shared design across the three implementations
+## Shared design across the two implementations
 
 - Identical codec (build request / parse `XOR-MAPPED-ADDRESS` + legacy
   `MAPPED-ADDRESS`), verified against canonical byte vectors.
 - Same built-in server list (Google 19302, Cloudflare/Nextcloud 3478), kept in
-  sync by hand: `StunProbeSeams::GetStunIpv4ProbeServers` (eMuleBB),
-  `DEFAULT_STUN_SERVERS` (rust), `default_servers[]` (libtorrent).
+  sync by hand: `StunProbeSeams::GetStunIpv4ProbeServers` (eMuleBB) and
+  `DEFAULT_STUN_SERVERS` (rust).
 - Same per-server probe: resolve (DNS ok) -> bind + egress-pin -> connect ->
   single send -> bounded recv -> parse.
 
@@ -70,15 +70,16 @@ eMuleBB (C++/MFC), emulebb-rust (eD2k), and the qBittorrentBB libtorrent fork.
 
 - [x] STUN probe egress-pinned to the tunnel, source-filtered via `connect()`.
 - [x] VPN guard gates on STUN then confirms with HTTP; both fail closed.
-- [x] Multi-server race, single send, no retransmit, in all three clients.
+- [x] Multi-server race, single send, no retransmit, in eMuleBB and the Rust
+      probe primitive.
 - [x] Codec verified against canonical vectors (eMuleBB) + unit tests (rust).
 - [x] Live-verified on eMuleBB over the hide.me tunnel (gate + confirm pass).
 - [x] Debug, Release, and diagnostics Release x64 app builds pass before commit.
-- [ ] libtorrent change compiled in a qBittorrentBB build (deferred: built on next
-      qBittorrentBB build).
+- [ ] The Rust probe is wired into a complete startup/runtime guard and
+      live-verified against the maintained policy.
 
 ## Release Note
 
 VPN-egress hardening. New feature; under the active 0.7.3 release freeze it
-targets the 0.8.x line. The libtorrent-side probe is unwired (primitive only)
-until STUN is integrated into qBittorrentBB.
+targets the 0.8.x line. The Rust probe remains a primitive until it is wired
+into the full guard.

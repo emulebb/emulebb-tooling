@@ -11,8 +11,8 @@
     </p>
     <p>
       Start here if you are setting up a profile, moving an existing eMule
-      install, testing a release package, or wiring eMuleBB into aMuTorrent,
-      Prowlarr, Radarr, or Sonarr.
+      install, testing a release package, or wiring eMuleBB into Prowlarr,
+      Radarr, or Sonarr.
     </p>
   </div>
   <img alt="eMuleBB broadband edition logo" src="../assets/brand/emulebb-broadband-edition-logo.png" />
@@ -25,8 +25,8 @@ desktop app) and the active **emulebb-rust** beta with CI-gated nightly builds.
 The MFC `0.7.x` line remains buildable and shippable for diagnostics, critical
 fixes, and bounded low-risk maintenance; Rust is the only active
 product-development lane.
-qBittorrentBB and its libtorrent fork are paused experiments, aMuTorrent is the
-frozen controller shipped with the `0.7.3` bundle, and TrackMuleBB is archived.
+Former BitTorrent and controller forks are retired from the current workspace;
+TrackMuleBB is archived.
 The upstream-aligned Rust `ed2k-server` fork is the sole local deterministic
 server; server changes stay minimal, generic, and upstreamable. See the
 [Product Portfolio](active/PRODUCT-PORTFOLIO.md) and
@@ -36,10 +36,8 @@ server; server changes stay minimal, generic, and upstreamable. See the
 
 ### Install Fast Path
 
-- [Full suite one-liner](reference/GUIDE-SETUP.md#full-suite-install-powershell-bootstrap):
-  run the current stable `0.7.3` PowerShell bootstrapper directly from GitHub
-  Releases when you want eMuleBB plus aMuTorrent, Prowlarr, Radarr, and Sonarr
-  integration.
+- [Legacy `0.7.3` suite one-liner](reference/GUIDE-SETUP.md#full-suite-install-powershell-bootstrap):
+  reproduce the published MFC bundle when validating that historical release.
 - [Manual standalone ZIP](reference/GUIDE-SETUP.md#quick-install-zip-extract-run):
   download the current stable `0.7.3` eMuleBB ZIP, extract it into a new app
   folder, and start `emulebb.exe`.
@@ -66,8 +64,8 @@ Use these guides in order for a first real profile:
    upload policy.
 6. [Sharing Guide](reference/GUIDE-SHARING.md) covers shared directories,
    monitored shares, large libraries, and share-ignore rules.
-7. [Stack Integration Guide](reference/GUIDE-STACK-INTEGRATIONS.md) covers the
-   eMuleBB plus aMuTorrent plus Arr workflow with field-level setup details.
+7. [Stack Integration Guide](reference/GUIDE-STACK-INTEGRATIONS.md) covers
+   qBittorrent-compatible and Torznab adapter workflows with Prowlarr and Arr.
 
 For public release testing, use the
 [0.7.3 release notes](active/RELEASE-0.7.3-NOTES.md) before downloading or
@@ -141,14 +139,14 @@ Release operators should also use the
 ## Automation Fast Path
 
 eMuleBB's main automation story is local and operator-controlled: the native
-desktop app owns eD2K/Kad state, while REST, aMuTorrent, qBittorrent-compatible
-routes, and Torznab routes make that state easier to operate.
+desktop app owns eD2K/Kad state, while REST, qBittorrent-compatible routes, and
+Torznab routes make that state easier to operate.
 
 | Goal | Start Here |
 |---|---|
 | Make the first authenticated REST call | [REST Quickstart](rest/REST-API-QUICKSTART.md) |
 | Understand the exact REST contract | [REST API Contract](rest/REST-API-CONTRACT.md) |
-| Wire aMuTorrent, Prowlarr, Radarr, or Sonarr | [Stack Integration Guide](reference/GUIDE-STACK-INTEGRATIONS.md) |
+| Wire Prowlarr, Radarr, or Sonarr | [Stack Integration Guide](reference/GUIDE-STACK-INTEGRATIONS.md) |
 | Review adapter compatibility | [REST Adapter Notes](rest/REST-API-ADAPTERS.md) |
 
 ## First Hour Checklist
@@ -179,7 +177,7 @@ desktop app first, then layer automation on top.
 | Search, downloads, categories, limits, upload policy | [reference/GUIDE-DOWNLOADS-SEARCH](reference/GUIDE-DOWNLOADS-SEARCH.md) |
 | Shared directories, monitored shares, large libraries | [reference/GUIDE-SHARING](reference/GUIDE-SHARING.md) |
 | eD2K, Kad, bind, ports, UPnP, firewall | [reference/GUIDE-NETWORK](reference/GUIDE-NETWORK.md) |
-| eMuleBB, aMuTorrent, Prowlarr, Radarr, Sonarr setup recipes | [reference/GUIDE-STACK-INTEGRATIONS](reference/GUIDE-STACK-INTEGRATIONS.md) |
+| eMuleBB, Prowlarr, Radarr, and Sonarr setup recipes | [reference/GUIDE-STACK-INTEGRATIONS](reference/GUIDE-STACK-INTEGRATIONS.md) |
 | REST semantics, qBit-compatible/Torznab adapter behavior | [reference/GUIDE-CONTROLLERS-REST](reference/GUIDE-CONTROLLERS-REST.md) |
 | p2p-overlord eMule agent boundary and source docs | [reference/GUIDE-P2P-OVERLORD-EMULE-AGENT](reference/GUIDE-P2P-OVERLORD-EMULE-AGENT.md) |
 | Preferences and `preferences.ini` reference | [reference/GUIDE-PREFERENCES](reference/GUIDE-PREFERENCES.md) |
@@ -202,7 +200,7 @@ authority for live state.
 | First authenticated REST calls | [rest/REST-API-QUICKSTART](rest/REST-API-QUICKSTART.md) |
 | Human-readable REST contract | [rest/REST-API-CONTRACT](rest/REST-API-CONTRACT.md) |
 | Machine-readable OpenAPI contract | [rest/REST-API-OPENAPI](rest/REST-API-OPENAPI.yaml) |
-| qBit, Torznab, Arr, and aMuTorrent adapter notes | [rest/REST-API-ADAPTERS](rest/REST-API-ADAPTERS.md) |
+| qBit, Torznab, and Arr adapter notes | [rest/REST-API-ADAPTERS](rest/REST-API-ADAPTERS.md) |
 | REST parity inventory | [rest/REST-API-PARITY-INVENTORY](rest/REST-API-PARITY-INVENTORY.md) |
 | Controller surface matrix | [active/CONTROLLER-SURFACE-MATRIX](active/CONTROLLER-SURFACE-MATRIX.md) |
 | p2p-overlord claimed-subset contract boundary | [reference/GUIDE-P2P-OVERLORD-EMULE-AGENT](reference/GUIDE-P2P-OVERLORD-EMULE-AGENT.md) |

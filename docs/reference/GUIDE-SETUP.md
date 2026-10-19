@@ -5,9 +5,11 @@ This guide covers practical setup for eMuleBB. It complements the
 
 ## Quick Setup Options
 
-Stable `0.7.3` is published on GitHub Releases. Pick one path:
+Stable `0.7.3` is published on GitHub Releases. Prefer the standalone app path
+for current maintenance installs; use the suite path only to reproduce the
+published legacy bundle.
 
-### Option 1: Full Suite One-Liner {#full-suite-install-powershell-bootstrap}
+### Legacy Option: Published `0.7.3` Suite One-Liner {#full-suite-install-powershell-bootstrap}
 
 Fastest setup for the x64 suite: eMuleBB, aMuTorrent, Prowlarr, and selected
 Arr integration in one bootstrap flow.
@@ -23,8 +25,8 @@ suite, and wires local controller integration through native REST, Torznab, and
 qBittorrent-compatible adapter paths.
 
 The bootstrapper is a preserved `0.7.3` release artifact, not the start of a
-forward cross-client suite. qBittorrentBB is paused, TrackMuleBB is archived,
-and no native Windows VPN expansion is planned. The former direction is kept in
+forward cross-client suite. Retired product-family experiments are not current
+workspace products, and no native Windows VPN expansion is planned. The former direction is kept in
 the [historical Ecosystem Suite Bootstrap Plan](../history/HIST-ECOSYSTEM-SUITE-BOOTSTRAP-PLAN.md).
 Those components are not part of the published `0.7.3` bootstrapper.
 
@@ -374,9 +376,8 @@ For trusted local automation:
 
 REST is the supported controller surface. The legacy HTML template UI is frozen
 pending removal and should not be treated as a maintained setup target. See
-[Controllers and REST Guide](GUIDE-CONTROLLERS-REST.md). For a full
-eMuleBB plus aMuTorrent plus Prowlarr/Arr setup, use the
-[Stack Integration Guide](GUIDE-STACK-INTEGRATIONS.md).
+[Controllers and REST Guide](GUIDE-CONTROLLERS-REST.md). For Prowlarr and Arr
+adapter setup, use the [Stack Integration Guide](GUIDE-STACK-INTEGRATIONS.md).
 
 ## Release-Aware Setup
 

@@ -124,10 +124,10 @@ suite (87 cases). Unify into one campaign that validates **both** against the si
 - `rest.contract.openapi.rust` — route table + deny-unknown-fields + response field
   alignment (existing rust test).
 - `rest.contract.openapi.mfc` — the `web_api` native suite mapped to the same OpenAPI.
-- `rest.controllers.parity` — drive aMuTorrent (and the arr handoff) against **both** the
-  MFC and rust controller and assert identical observable behavior on the shared envelopes
+- `rest.controllers.parity` — drive controller-neutral REST probes and the Arr handoff
+  against **both** MFC and Rust and assert identical observable behavior on the shared envelopes
   (connect, categories, snapshot, shared files, search, transfer create/control).
-This is what guarantees controllers (aMuTorrent, Prowlarr/Radarr/Sonarr) work the same on
+This is what guarantees controllers and Prowlarr/Radarr/Sonarr work the same on
 either core.
 
 ## Third: network-safety leak-test (P0, per product)

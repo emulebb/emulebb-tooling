@@ -19,13 +19,13 @@ source: operator request to bring p2p-overlord campaigns into one eMuleBB worksp
 ## Summary
 
 Create a small shared campaign/runtime core that lets the eMuleBB workspace run
-eMuleBB, aMuTorrent, and p2p-overlord test campaigns through one uniform
-structure while preserving product-specific runner logic.
+eMuleBB and p2p-overlord test campaigns through one uniform structure while
+preserving product-specific runner logic.
 
 The goal is one workspace-level campaign model, one artifact/reporting model,
 and one process-cleanup/lifecycle contract. The goal is not to merge the
-desktop app, Rust agent, aMuTorrent, or their native harnesses into one
-monolithic test suite.
+desktop app, Rust agent, or their native harnesses into one monolithic test
+suite.
 
 This item refines the product-family testing portion of
 [FEAT-073](FEAT-073.md). `FEAT-073` owns the broad product-family boundary;
@@ -68,7 +68,6 @@ emule_test_harness/
     workspace.py
   products/
     emulebb.py
-    amutorrent.py
     p2p_overlord.py
 ```
 
@@ -116,16 +115,6 @@ common core:
 
 The implementation should preserve the existing `python -m emule_workspace`
 operator entrypoint.
-
-### aMuTorrent Adapter
-
-The aMuTorrent adapter should wrap existing controller and browser flows:
-
-- clean startup
-- eMuleBB UI/browser smoke
-- resilience and restart behavior
-- REST scheme selection for HTTP and HTTPS
-- live-wire input and artifact propagation
 
 ### p2p-overlord Adapter
 
@@ -221,8 +210,7 @@ The common core should support at least these product-family campaign classes:
 - [ ] A shared `campaign_core` module exists under `repos/emulebb-build-tests`.
 - [ ] Existing eMuleBB release-campaign reporting and execution continue to
       work through `python -m emule_workspace test release-campaign`.
-- [ ] Product adapters exist for eMuleBB and p2p-overlord, with a clear seam
-      for aMuTorrent.
+- [ ] Product adapters exist for eMuleBB and p2p-overlord.
 - [ ] p2p-overlord scenarios can be referenced by stable `scenarioId` from an
       eMuleBB-owned campaign manifest.
 - [ ] p2p-overlord deterministic private smoke can run from the eMuleBB

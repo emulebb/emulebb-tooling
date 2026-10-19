@@ -33,7 +33,7 @@ For a first serious setup:
 4. Add one small shared directory and one small test download.
 5. Learn the transfer list before adding many files.
 6. Leave the client running long enough to gather sources and queue position.
-7. Add REST, aMuTorrent, Prowlarr, Radarr, or Sonarr only after the desktop app
+7. Add REST, Prowlarr, Radarr, or Sonarr only after the desktop app
    is healthy.
 
 ## If You Know Other P2P Apps
@@ -104,7 +104,7 @@ Use staged confidence instead of trying to finish the whole setup at once.
 1. Add larger shared roots gradually.
 2. Tune upload and connection limits using real observation.
 3. Add IP filters only after baseline startup is understood.
-4. Add REST and aMuTorrent.
+4. Add REST automation.
 5. Add Prowlarr/Radarr/Sonarr only after manual flows are clear.
 6. Create a profile backup routine.
 7. Record known-good package, profile, port, and category settings.
@@ -1033,10 +1033,9 @@ The correct order is:
 1. eMuleBB desktop works.
 2. REST read-only status works.
 3. REST mutations work for one harmless operation.
-4. aMuTorrent reads state correctly.
-5. Prowlarr Torznab caps/search works.
-6. Radarr/Sonarr qBit-compatible download-client test works.
-7. One manual acquisition works.
+4. Prowlarr Torznab caps/search works.
+5. Radarr/Sonarr qBit-compatible download-client test works.
+6. One manual acquisition works.
 8. Automatic search/import can be enabled.
 
 Do not let automation hide basic client state. If the desktop app shows Low ID,

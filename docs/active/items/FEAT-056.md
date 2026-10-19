@@ -60,8 +60,8 @@ Classification:
 `rc1-closeout slice`.
 
 Target:
-publish a maintained matrix tying native REST, qBit, Torznab, Arr, and
-aMuTorrent workflows to API families and evidence artifacts.
+publish a maintained matrix tying native REST, qBit-compatible, Torznab, and
+Arr workflows to API families and evidence artifacts.
 
 ### Release-Note Separation
 

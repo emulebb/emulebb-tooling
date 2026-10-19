@@ -327,7 +327,7 @@ not active item docs.
 | [REF-056](items/REF-056.md) | Minor | DEFERRED | Standardize agent on-ramp and AGENTS.md pointer layer |
 | [REF-057](items/REF-057.md) | Minor | DEFERRED | Defer GeoLocation MMDB load off the pre-window startup path |
 | [REF-058](items/REF-058.md) | Minor | DEFERRED | Async known-file and shared-file startup load to unblock the UI thread |
-| [REF-059](items/REF-059.md) | Major | DEFERRED | Review in depth and align the VPN guard across the three product families |
+| [REF-059](items/REF-059.md) | Major | DEFERRED | Align the VPN guard across eMuleBB MFC and emulebb-rust |
 
 ---
 
@@ -469,7 +469,7 @@ not active item docs.
 | [FEAT-115](items/FEAT-115.md) | Minor | DEFERRED | Add per-volume storage policy hints and diagnostics |
 | [FEAT-116](items/FEAT-116.md) | Minor | DEFERRED | Throttle background share scanning on active slow volumes |
 | [FEAT-117](items/FEAT-117.md) | Minor | DEFERRED | Indicate already-shared files in the unshared-folder share preview |
-| [FEAT-121](items/FEAT-121.md) | Major | DEFERRED | STUN UDP egress gate for the VPN guard (eMuleBB, emulebb-rust, libtorrent) |
+| [FEAT-121](items/FEAT-121.md) | Major | DEFERRED | STUN UDP egress gate for the VPN guard (eMuleBB and emulebb-rust) |
 | [FEAT-123](../history/items/FEAT-123.md) | Major | DONE | Shared files one-level auto-updater |
 | [FEAT-124](items/FEAT-124.md) | Minor | DEFERRED | Leech mode - monitoring-only build that observes the network without sharing |
 
@@ -522,7 +522,7 @@ not active item docs.
 | [CI-041](../history/items/CI-041.md) | Minor | DONE | Publish Markdown documentation with MkDocs Material |
 | [CI-042](../history/items/CI-042.md) | Minor | DONE | Keep only the latest nightly GitHub prerelease per build stream |
 | [CI-043](../history/items/CI-043.md) | Minor | DONE | Add aMuTorrent automatic upstream nightly sync and release workflow |
-| [CI-044](items/CI-044.md) | Major | OPEN | Add containerized full-suite profiles for controller and P2P client testing |
+| [CI-044](items/CI-044.md) | Major | OPEN | Add containerized integration profiles for controller and P2P compatibility testing |
 | [CI-045](items/CI-045.md) | Major | OPEN | Add workspace-level bind interface selection for predictable live tests |
 | [CI-046](items/CI-046.md) | Minor | OPEN | Share product-family test profile and fixture hygiene |
 | [CI-047](items/CI-047.md) | Minor | OPEN | Add repeatable local package install refresh command |

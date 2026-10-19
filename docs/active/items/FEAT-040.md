@@ -36,8 +36,8 @@ Current demand signals increasingly look like self-hosted download-manager expec
 - manage it remotely from browser or phone
 - support multiple users or automation clients safely
 
-That is exactly the direction eMule Qt and current aMule/aMuTorrent-style tooling are
-pushing toward.
+That is exactly the direction eMule Qt and current self-hosted controller
+ecosystems are pushing toward.
 
 ## Intended Mainline Shape
 

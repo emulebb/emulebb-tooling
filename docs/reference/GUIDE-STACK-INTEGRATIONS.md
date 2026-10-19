@@ -1,15 +1,13 @@
 # eMuleBB Stack Integration Guide
 
 This guide shows how to operate the eMuleBB client as part of a local power-user
-stack: the native eMuleBB client for eD2K/Kad state, a controller UI, and
-Prowlarr plus selected Arr apps for Torznab search and qBittorrent-compatible
-download-client workflows.
+stack: the native eMuleBB client for eD2K/Kad state plus Prowlarr and selected
+Arr apps for Torznab search and qBittorrent-compatible download-client
+workflows.
 
-> **Which controller.** These historical `0.7.3` recipes target aMuTorrent, the
-> frozen controller shipped with that MFC bundle. TrackMuleBB is archived, and
-> there is no forward cross-client suite controller. The eMuleBB-side setup
-> below remains useful when maintaining the shipped REST, Prowlarr, and Arr
-> integration paths.
+> **Legacy controller.** The controller-specific section preserves the
+> aMuTorrent recipe shipped with `0.7.3`; it is not a current product or
+> dependency. The eMuleBB-side Prowlarr and Arr setup remains current.
 
 The goal is not to hide the eMuleBB client behind another tool. The native
 desktop app owns identity, network state, categories, temp files, completed
@@ -19,8 +17,8 @@ easier to use, not flatten it into generic torrent semantics.
 ## Guide Boundary
 
 Use this guide for task-first setup recipes: the order to enable eMuleBB,
-aMuTorrent, Prowlarr, and selected Arr apps; the fields to type into those
-tools; and the proof flow for one safe search or transfer.
+Prowlarr, and selected Arr apps; the fields to type into those tools; and the
+proof flow for one safe search or transfer.
 
 Use [Controllers And REST](GUIDE-CONTROLLERS-REST.md) for the behavior
 contract: trust model, lifecycle rules, native REST semantics, adapter
@@ -33,10 +31,9 @@ Controllers And REST owns the API meaning behind them.
 | Layer | Owns | Talks To |
 |---|---|---|
 | eMuleBB desktop | Profile, eD2K/Kad, searches, transfers, sharing, logs | Native UI, REST, adapters |
-| Native REST `/api/v1` | JSON automation, diagnostics, app state | aMuTorrent, scripts, custom tools |
+| Native REST `/api/v1` | JSON automation, diagnostics, app state | Scripts and custom tools |
 | qBit adapter `/api/v2` | Arr download-client compatibility | Selected Arr apps, qBit-compatible probes |
 | Torznab adapter `/indexer/emulebb/api` | Prowlarr and selected Arr search bridge | Prowlarr Generic Torznab |
-| Controller (aMuTorrent, frozen `0.7.3`) | Historical web controller and multi-client UI | eMuleBB REST and adapter surfaces |
 
 ```mermaid
 flowchart LR
@@ -44,7 +41,6 @@ flowchart LR
     Rest["Native REST<br/>/api/v1"]
     Qbit["qBit adapter<br/>/api/v2"]
     Torznab["Torznab adapter<br/>/indexer/emulebb/api"]
-    Amu["aMuTorrent<br/>operator UI"]
     Prowlarr["Prowlarr<br/>indexer"]
     Radarr["Radarr<br/>movies"]
     Sonarr["Sonarr<br/>series"]
@@ -53,7 +49,6 @@ flowchart LR
     Desktop --> Rest
     Desktop --> Qbit
     Desktop --> Torznab
-    Rest --> Amu
     Torznab --> Prowlarr
     Prowlarr --> Radarr
     Prowlarr --> Sonarr
@@ -67,11 +62,11 @@ flowchart LR
 Do the setup in that order. If eMuleBB is not healthy as a desktop client,
 automation will only make failure modes harder to read.
 
-## Visual Workflow
+## Legacy `0.7.3` Controller Reference
 
-The current aMuTorrent fork already gives the stack a modern operator surface.
-These screenshots are included to show the intended shape of the controller
-experience; eMuleBB remains the native state owner behind it.
+These preserved screenshots record the controller experience shipped with the
+legacy `0.7.3` suite. They are release-history context, not a current workspace
+product or recommended controller dependency.
 
 <div class="docs-screenshot-grid">
   <figure>
@@ -108,9 +103,9 @@ Use a stable setup before adding controllers:
   split-tunnel VPN machines where loopback is broken, set `X_LOCAL_IP` to the
   LAN IPv4 address and use that address consistently for local services.
 
-For an existing profile, start eMuleBB once without aMuTorrent, Prowlarr, Arr
-apps, or scripts. Let the app load the profile, resolve paths, and write current
-sidecars before adding automation.
+For an existing profile, start eMuleBB once without Prowlarr, Arr apps, or
+scripts. Let the app load the profile, resolve paths, and write current sidecars
+before adding automation.
 
 ## Recommended Local Layout
 
@@ -122,7 +117,6 @@ Keep application binaries, profile state, and media storage separate.
 | Profile | Stable user-owned directory passed with `-c` | Identity and config are explicit. |
 | Temp | Fast local disk with enough free space | `.part` files are write-heavy. |
 | Incoming | Final storage path visible to Arr import if used | Completed files are predictable. |
-| aMuTorrent | Separate package or service directory | Web UI updates do not mutate the eMuleBB profile. |
 | Arr apps | Existing Radarr/Sonarr/Lidarr/Readarr/Whisparr installs | They own media import policy. |
 
 Do not run two eMule-family clients against the same profile. Do not point
@@ -161,10 +155,10 @@ keeps only the setup steps needed before wiring companion tools.
 
 ## aMuTorrent (legacy 0.7.3 bundle)
 
-aMuTorrent is the frozen controller bundled with the stable `0.7.3` release.
-It should connect after native REST is healthy.
+aMuTorrent is the retired controller bundled with the stable `0.7.3` release.
+Use this section only when reproducing or diagnosing that published bundle.
 
-Use aMuTorrent when you want:
+The published controller provided:
 
 - a browser UI for search, transfers, shared files, history, and statistics
 - one operator surface for multiple download clients
@@ -434,7 +428,7 @@ whether the query is broad enough for the network.
 
 ## Security Rules
 
-- Treat eMuleBB, Prowlarr, Arr, and aMuTorrent API keys as secrets.
+- Treat eMuleBB, Prowlarr, Arr, and any legacy-controller API keys as secrets.
 - Do not paste API keys into public issues, logs, screenshots, or chat.
 - Bind REST to localhost when it works, or to `X_LOCAL_IP` / a controlled
   LAN/VPN address when split-tunnel VPN software breaks loopback.
