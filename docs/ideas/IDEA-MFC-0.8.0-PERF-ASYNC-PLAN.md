@@ -48,8 +48,8 @@ without changing eD2K/Kad wire behavior or dropping eMuleBB's REST controller su
 ## Decision: forward-port the proven WSAPoll network thread (not a from-scratch design, not IOCP-first)
 
 The operator chose "dedicated network thread first, not full IOCP." That exact migration
-**already exists, built and tested**, in the operator's own `v0.72a-broadband-dev`
-lineage: `analysis/stale-v0.72a-experimental-clean/`. Its design docs
+**already exists, built and tested**, in the historical
+`stale/v0.72a-experimental-clean` Git lineage. Its design docs
 (`docs/ARCH-NETWORKING.md`, `docs/ARCH-THREADING.md`) and `RESUME.md` record that it:
 
 - replaced `WSAAsyncSelect` + the helper window with a **dedicated `WSAPoll` network-thread
