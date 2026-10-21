@@ -429,8 +429,8 @@ Projects needing prerequisite work rather than simple acceleration:
       default-branch commit 2026-10-13 `c502f60`; latest release `v0.6.12` on
       2026-10-13; GPL-2.0.
   - Notes: Qt port intended to modernize the eMule client and improve platform
-           independence. Local analysis checkout exists under
-           `EMULEBB_WORKSPACE_ROOT\analysis\emule-qt`. Homepage:
+           independence. It remains an external research reference and is not
+           materialized by the canonical workspace. Homepage:
            https://emule-qt.org/. The September release cadence makes it one of
            the most visibly active independent client implementations. Its
            current core keeps the stock-derived 200-file batch and 60-second
