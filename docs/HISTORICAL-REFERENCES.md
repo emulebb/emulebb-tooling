@@ -5,8 +5,7 @@ provenance or implementation history. The main example is the stale
 experimental branch:
 
 - branch name: `stale/v0.72a-experimental-clean`
-- common local analysis checkout:
-  `analysis\stale-v0.72a-experimental-clean`
+- storage: Git history only; there is no canonical local analysis checkout
 
 ## Rule
 
@@ -36,14 +35,15 @@ is:
 - the stale branch is there to explain where an idea came from, not to revive
   that branch as an active workflow
 
-References may appear in a few forms:
+Historical documents may preserve a few old spellings:
 
 - `stale-v0.72a-experimental-clean`
-- `analysis\stale-v0.72a-experimental-clean`
+- the former local path `analysis\stale-v0.72a-experimental-clean`
 - old remote or tag spellings such as
   `remotes/origin/stale/v0.72a-experimental-clean`
 
-Those all point at the same historical source family.
+Those all point at the same historical source family; none authorizes
+materializing a persistent analysis checkout.
 
 ## How To Read Provenance Notes
 

@@ -96,15 +96,15 @@ sync configure the shared hook and must not overwrite dirty managed work.
   reference, and the sole local Rust ED2K server. MFC remains buildable and
   shippable for diagnostics and critical fixes; it is not a historical-only
   lane.
-- Public-presence repositories and historical analysis repositories are explicit
-  optional profiles. Normal materialization and synchronization must not pull
-  archived, stale, paused, frozen, or unrelated product-family repositories.
-  Unrelated product families stay outside the core profile.
-- Supporting repos use setup-pinned branches. `stale/*` and
-  `analysis\stale-v0.72a-experimental-clean` are historical-only unless a task
-  explicitly selects the historical-analysis profile for comparison.
+- Public-presence repositories use an explicit optional profile. Historical
+  analysis repositories are not workspace profiles and must not be materialized
+  by setup or synchronization. Normal operations must not pull archived, stale,
+  paused, frozen, or unrelated product-family repositories.
+- `stale/*` branches are Git provenance only. Inspect one only when a task names
+  the exact historical comparison; do not create a persistent workspace clone
+  or worktree for it.
 - Build output stays outside source trees. CMake uses out-of-source output below
-  the output root, Go tools stage below `tools\<fork>`, and Rust follows the
+  the output root, staged tools use `tools\<name>`, and Rust follows the
   [Rust Product Policy](../products/emulebb-rust/reference/AGENT-POLICY.md).
 - Official `amule-org/amule` under `repos\amule` is the single managed moving
   interoperability and offline-fixture reference. Sync may fast-forward only a

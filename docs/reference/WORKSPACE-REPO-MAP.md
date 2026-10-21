@@ -7,8 +7,9 @@ them with machine-local absolute paths in docs, scripts, or CI output.
 `workspaces/workspace/repo-roles.json` is the generated machine-readable role
 manifest for this map. It is written by `python -m emule_workspace sync` from
 the Python topology in `repos/emulebb-build`. The default `core` profile is the
-supported product, compatibility, diagnostics, and release surface. Historical
-analysis and public-presence repositories require explicit optional profiles.
+supported product, compatibility, diagnostics, and release surface. Public
+presence repositories require an explicit optional profile. Historical analysis
+sources are not materialized as workspace repositories.
 
 ## Primary Product Repositories
 
@@ -96,16 +97,15 @@ Windows builds and pinned update policy. They are not application feature repos.
 | `repos/third_party/emulebb-resizablelib` | Native UI layout helper fork |
 | `repos/third_party/emulebb-zlib` | zlib fork for native compression dependencies |
 
-## Analysis Repositories
+## Historical Analysis Sources
 
-Analysis repos are source-provenance and comparison inputs available only
-through the `historical-analysis` profile. They are not edited or pulled during
-normal product work.
+Historical branches and external peer projects are provenance, not canonical
+workspace repositories. Normal materialization never clones them. Use retained
+commit references and documentation first; inspect an exact remote revision only
+for an explicitly named comparison, without adding it to workspace topology.
 
-| Path | Role |
-|---|---|
-| `analysis/stale-v0.72a-experimental-clean` | Historical eMuleBB branch snapshot for comparison |
-| `analysis/emule-qt` | eMule-Qt comparison source |
+- `stale/v0.72a-experimental-clean` remains historical eMuleBB Git provenance.
+- `ModderMule/emule-qt` remains an external comparison source.
 
 ## GitHub Repository Governance
 
