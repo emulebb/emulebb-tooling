@@ -5,7 +5,7 @@ product: emulebb-rust
 phase: Phase 0
 github_issue: https://github.com/emulebb/emulebb-rust/issues/30
 title: Prove negotiated offerfiles capability interoperability
-status: OPEN
+status: DONE
 priority: Major
 category: ci
 labels: [rust, ed2k, server, protocol, policy, evidence]
@@ -50,9 +50,9 @@ enough to close the item or begin Indexer production implementation.
   Downgrade proof therefore includes a fresh unadvertised connection epoch.
 - `docs/WORKSPACE-POLICY.md` requires stock protocol compatibility and explicit
   governance for extensions/default drift.
-- The 100,000-file selector fixture proves bounded construction and exact-once
-  catalog coverage, but the retained pacing, cancellation, and memory campaign
-  is still outstanding.
+- The retained 100,000-file campaign proves bounded construction, negotiated
+  pacing, clean cancellation, reconnect publication, exact server indexing,
+  and bounded client memory.
 - Retained stock eMule 0.72a and current-aMule live witnesses now prove that
   standard peers complete the transfer path without requesting or selecting
   the custom capability.
@@ -107,7 +107,7 @@ without explicit downgrade, stock/current-aMule, and large-library evidence.
       fields, duplicate fields, reconnect reset, and downgrade behavior.
 - [x] Stock eMule and current aMule interop witnesses show standard behavior and
       no custom field leakage.
-- [ ] A 100,000-file deterministic fixture proves bounded offer construction,
+- [x] A 100,000-file deterministic fixture proves bounded offer construction,
       memory, pacing, reconnect, and cancellation behavior.
 - [x] Diagnostics identify whether the standard or negotiated path was selected
       without logging private library contents.
@@ -125,8 +125,9 @@ without explicit downgrade, stock/current-aMule, and large-library evidence.
 - Canonical `emulebb-ed2k` validation passes: 1,166 unit tests, documentation
   tests, strict Clippy with the repository's known lint-expectation allowance,
   formatting, and whitespace checks.
-- Remaining gate evidence is limited to the retained full 100,000-file pacing,
-  cancellation, reconnect, and memory campaign.
+- `emulebb-build-tests` merges `aaf77b3` and `3ae00e3` add the retained full
+  100,000-file campaign, resumable post-scan checkpoints, WSL-local Rust server
+  routing, and settled live-session evidence.
 
 ## Compatibility Evidence (2026-10-21)
 
@@ -144,6 +145,25 @@ without explicit downgrade, stock/current-aMule, and large-library evidence.
   and
   `${EMULEBB_WORKSPACE_OUTPUT_ROOT}\reports\deterministic-two-client-transfer\20261021T191802Z-x64-release-13356\deterministic-two-client-transfer-result.json`.
 
+## Scale Evidence (2026-10-22)
+
+- Retained run `20261021T204449Z-15648` passed against exactly 100,000 files,
+  10,485,760,000 bytes, and 1,000 long paths.
+- The cold scan completed in 2,735.923 seconds with a 320.3 MiB peak private
+  footprint and shut down cleanly through REST.
+- The cancellation epoch negotiated v1, published exactly three 200-record
+  batches, stopped cleanly, released the client, and left all pacing/global-
+  throttle/oversize counters at zero.
+- The reconnect epoch published exactly 100,000 records in 505 bounded batches
+  during progressive hydration. The negotiated envelope was 200 records per
+  batch at a 500 ms minimum interval; server and client both settled at
+  100,000 records with zero pending entries.
+- The reconnect used 292.4 MiB peak private memory and 202.2 MiB peak working
+  set, below the 512 MiB acceptance ceiling. Connection waits, global waits,
+  and oversized batches all remained zero.
+- The retained report is
+  `${EMULEBB_WORKSPACE_OUTPUT_ROOT}\reports\emulebb-rust\shared-library-io\rust-offerfiles-scale-20261021T204449Z-15648.json`.
+
 ## Validation
 
 - Offer-policy unit/property tests for all five fields, bounds, duplication,
@@ -155,6 +175,6 @@ without explicit downgrade, stock/current-aMule, and large-library evidence.
 
 ## Notes
 
-Policy disposition and stock/current-aMule compatibility proof are complete.
-Fail-closed parsing remains an implementation property, not a substitute for
-the outstanding large-library evidence.
+Policy disposition, stock/current-aMule compatibility, fail-closed downgrade,
+and retained large-library evidence are complete. Future capability changes
+must preserve this matrix or reopen the Client gate.

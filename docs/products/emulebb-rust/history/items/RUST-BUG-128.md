@@ -3,7 +3,7 @@ id: RUST-BUG-128
 workflow: github
 github_issue: https://github.com/emulebb/emulebb-rust/issues/136
 title: Preserve incremental ED2K offer publication
-status: OPEN
+status: DONE
 priority: Major
 category: bug
 labels: [rust, ed2k, protocol, server, beta]
@@ -86,7 +86,7 @@ records per packet and previously unseen hashes per connection.
 - [x] Every packet stays below the hard limit and local packet ceiling.
 - [x] Exhausted budgets do not create empty publication timer loops.
 - [x] Reconnect resets publication and distinct-hash state.
-- [ ] Canonical Rust validation and the applicable RUST-CI-005 evidence pass.
+- [x] Canonical Rust validation and the applicable RUST-CI-005 evidence pass.
 
 ## Implementation Evidence (2026-10-19)
 
@@ -105,8 +105,15 @@ records per packet and previously unseen hashes per connection.
   `20261021T191802Z-x64-release-13356` prove stock eMule 0.72a and current aMule
   `3.1.0-411-g2d8e97aa9` complete the transfer path while every custom v1
   negotiation counter remains zero.
-- The bug remains open only until the applicable RUST-CI-005 retained
-  large-library pacing, cancellation, reconnect, and memory evidence completes.
+- `emulebb-build-tests` merges `aaf77b3` and `3ae00e3` provide the applicable
+  retained RUST-CI-005 scale campaign and corrected live-session evidence.
+- Retained run `20261021T204449Z-15648` published exactly 100,000 records in
+  505 bounded batches after reconnect. It used the negotiated 200-record,
+  500 ms envelope, left connection/global wait and oversized counters at zero,
+  settled client and server publication state at 100,000 records, and remained
+  below the 512 MiB memory ceiling.
+- The retained report is
+  `${EMULEBB_WORKSPACE_OUTPUT_ROOT}\reports\emulebb-rust\shared-library-io\rust-offerfiles-scale-20261021T204449Z-15648.json`.
 
 ## Validation
 

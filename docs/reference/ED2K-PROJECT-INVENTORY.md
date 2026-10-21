@@ -311,7 +311,7 @@ supporting server returns a complete batch/interval policy in the first
 connected eD2K server only; it does not change Kad publication. The eMuleBB
 policy and outstanding proof boundary are recorded in
 [RUST-REF-015](../products/emulebb-rust/history/items/RUST-REF-015.md) and
-[RUST-CI-005](../products/emulebb-rust/active/items/RUST-CI-005.md).
+[RUST-CI-005](../products/emulebb-rust/history/items/RUST-CI-005.md).
 
 Current implementation state:
 
