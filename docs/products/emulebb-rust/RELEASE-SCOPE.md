@@ -44,9 +44,10 @@ Use this precedence instead of a general promise to reproduce another client:
 
 Stock wire behavior wins whenever authorities conflict. A new wire extension
 requires an explicit registry entry, negotiation and downgrade rules, and a
-tracked evidence disposition. The currently default-on `offerfiles-v1`
-extension remains part of the Client gate until its full RUST-CI-005 evidence
-matrix passes.
+tracked evidence disposition. The default-on `offerfiles-v1` extension is
+governed by the completed RUST-CI-005 evidence matrix; any negotiation,
+downgrade, stock-compatibility, or scale-evidence regression reopens the Client
+gate.
 
 ## Current phase: Client
 
@@ -119,8 +120,8 @@ set is complete.
 The permanent omissions are product decisions, not client-gate gaps. Reopening
 one requires an explicit scope decision and matching registry update. The
 connection-rate row remains a reported defer. The extension remains default-on
-but cannot close RUST-CI-005 without its deterministic, stock eMule,
-current-aMule, reconnect, downgrade, malformed-input, and scale evidence.
+under completed deterministic, stock eMule, current-aMule, reconnect,
+downgrade, malformed-input, and 100,000-file scale evidence.
 
 ### Client gate
 
@@ -132,7 +133,7 @@ The Indexer phase cannot begin until all of the following are true:
   the registries and current documentation;
 - there are no unresolved critical safety, data-integrity, privacy, or stock-
   wire findings;
-- `offerfiles-v1` satisfies the complete RUST-CI-005 evidence contract;
+- `offerfiles-v1` continues to satisfy the complete RUST-CI-005 evidence contract;
 - the canonical API and WebUI complete status, settings, network, search,
   transfer, upload, sharing, log, and diagnostic workflows;
 - Docker-over-Gluetun tunnel-down testing proves zero off-tunnel P2P egress;
