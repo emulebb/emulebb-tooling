@@ -13,9 +13,8 @@ issues and the public `eMuleBB Roadmap` org Project #3
 `workflow: github` are engineering spec/evidence records, not workflow status
 authority.
 
-> Historical reference only: `stale-v0.72a-experimental-clean` and
-> `analysis\stale-v0.72a-experimental-clean` are retired reference sources, not
-> active branch targets or current baselines. Use them only as provenance or
+> Historical reference only: `stale/v0.72a-experimental-clean` is a retired Git branch, not an
+> active branch target or current baseline. Use it only as provenance or
 > idea-extraction sources; landed status is determined against `main`. See
 > [Historical References](../HISTORICAL-REFERENCES.md).
 

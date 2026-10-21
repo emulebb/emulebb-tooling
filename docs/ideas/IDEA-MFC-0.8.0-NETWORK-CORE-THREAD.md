@@ -15,8 +15,8 @@ UI work and vice-versa, and blocks moving the `Process()` loop off the UI thread
 
 **This is a forward-port, not a fresh design.** The operator's own `v0.72a-broadband-dev`
 lineage already built and tested the dedicated-network-thread migration the operator chose.
-The reference implementation and its design rationale live in
-`analysis/stale-v0.72a-experimental-clean/`:
+The reference implementation and its design rationale are retained in the
+historical `stale/v0.72a-experimental-clean` Git lineage:
 
 - `docs/ARCH-NETWORKING.md` §1–§2 — the post-migration socket hierarchy and the shared
   `WSAPoll` backend.
