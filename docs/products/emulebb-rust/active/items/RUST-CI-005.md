@@ -53,8 +53,9 @@ enough to close the item or begin Indexer production implementation.
 - The 100,000-file selector fixture proves bounded construction and exact-once
   catalog coverage, but the retained pacing, cancellation, and memory campaign
   is still outstanding.
-- The completed implementation does not itself establish stock/current-aMule
-  interoperability; those live witnesses remain required.
+- Retained stock eMule 0.72a and current-aMule live witnesses now prove that
+  standard peers complete the transfer path without requesting or selecting
+  the custom capability.
 
 ## Why This Matters
 
@@ -104,7 +105,7 @@ without explicit downgrade, stock/current-aMule, and large-library evidence.
       match that disposition.
 - [x] Exact fixtures cover acceptance, rejection, unsupported peer, malformed
       fields, duplicate fields, reconnect reset, and downgrade behavior.
-- [ ] Stock eMule and current aMule interop witnesses show standard behavior and
+- [x] Stock eMule and current aMule interop witnesses show standard behavior and
       no custom field leakage.
 - [ ] A 100,000-file deterministic fixture proves bounded offer construction,
       memory, pacing, reconnect, and cancellation behavior.
@@ -124,21 +125,36 @@ without explicit downgrade, stock/current-aMule, and large-library evidence.
 - Canonical `emulebb-ed2k` validation passes: 1,166 unit tests, documentation
   tests, strict Clippy with the repository's known lint-expectation allowance,
   formatting, and whitespace checks.
-- Remaining gate evidence is limited to stock eMule/current-aMule live
-  interoperability and the retained full 100,000-file pacing, cancellation,
-  reconnect, and memory campaign.
+- Remaining gate evidence is limited to the retained full 100,000-file pacing,
+  cancellation, reconnect, and memory campaign.
+
+## Compatibility Evidence (2026-10-21)
+
+- `emulebb-build-tests` merge `34d87b8` adds provider-neutral local-server
+  control for `offerfiles_v1` and a deterministic stock-peer fallback witness.
+- Retained run `20261021T191131Z-x64-release-10424` passed with stock eMule
+  0.72a. The Rust server reported a valid enabled v1 policy while request,
+  session, batch, record, and oversized counters all remained zero; the 4 MiB
+  transfer and both-client cleanup completed.
+- Retained run `20261021T191802Z-x64-release-13356` passed with current aMule
+  `3.1.0-411-g2d8e97aa9` under the same zero-negotiation assertions; the
+  transfer and both-client cleanup completed.
+- The retained reports are
+  `${EMULEBB_WORKSPACE_OUTPUT_ROOT}\reports\deterministic-two-client-transfer\20261021T191131Z-x64-release-10424\deterministic-two-client-transfer-result.json`
+  and
+  `${EMULEBB_WORKSPACE_OUTPUT_ROOT}\reports\deterministic-two-client-transfer\20261021T191802Z-x64-release-13356\deterministic-two-client-transfer-result.json`.
 
 ## Validation
 
 - Offer-policy unit/property tests for all five fields, bounds, duplication,
   ordering, malformed values, and reset semantics.
 - Deterministic server-fixture matrix for negotiated and non-negotiated paths.
-- Stock eMule/current-aMule local interop plus the retained large-library
-  evidence campaign.
+- Retained large-library pacing, cancellation, reconnect, and memory campaign.
 - Backlog/policy documentation check confirming the approved decision is
   reflected in the release scope.
 
 ## Notes
 
-Policy disposition is complete. Fail-closed parsing remains an implementation
-property, not a substitute for the outstanding interoperability evidence.
+Policy disposition and stock/current-aMule compatibility proof are complete.
+Fail-closed parsing remains an implementation property, not a substitute for
+the outstanding large-library evidence.

@@ -100,13 +100,18 @@ records per packet and previously unseen hashes per connection.
   fallback cause in diagnostics.
 - Focused regressions and the complete 1,166-test `emulebb-ed2k` suite pass with
   strict Clippy, formatting, and whitespace checks.
-- The bug remains open until the applicable RUST-CI-005 stock/current-aMule and
-  retained large-library evidence completes.
+- `emulebb-build-tests` merge `34d87b8` and retained runs
+  `20261021T191131Z-x64-release-10424` and
+  `20261021T191802Z-x64-release-13356` prove stock eMule 0.72a and current aMule
+  `3.1.0-411-g2d8e97aa9` complete the transfer path while every custom v1
+  negotiation counter remains zero.
+- The bug remains open only until the applicable RUST-CI-005 retained
+  large-library pacing, cancellation, reconnect, and memory evidence completes.
 
 ## Validation
 
 - Focused catalog reconciliation, mutation, soft-budget, hard-boundary, and
   empty-pump regressions.
 - Canonical `emulebb-ed2k` unit suite and Rust static validation.
-- RUST-CI-005 deterministic server-fixture and retained interoperability
-  evidence.
+- RUST-CI-005 retained large-library pacing, cancellation, reconnect, and
+  memory evidence.
