@@ -145,6 +145,22 @@ Because every newly accepted client item joins the gate, issue triage must
 reject speculative or low-value work rather than using priority alone to defer
 it silently.
 
+### Beta increment gate
+
+An incremental beta may be prepared while the broader Client gate remains open;
+it does not authorize Indexer work or imply that every later Client item is
+complete. RUST-CI-009 owns the current Beta 3 candidate certification and
+depends on RUST-CI-006 current-head parity evidence, required hosted CI, complete
+dry-run release assembly, packaged lifecycle checks, and a retained manifest of
+exact revisions and artifact digests.
+
+Candidate selection is explicit and restartable. Normal review and breaking
+beta improvements continue until an immutable candidate revision is selected.
+Any product or contract change after selection invalidates that candidate and
+requires a new certification pass. Candidate certification does not bump a
+version, create or move a tag, publish a GitHub Release or image, close a
+milestone, or replace the separate operator decision to ship.
+
 ## Future phase: Indexer
 
 The autonomous indexer is an integrated product domain, not the
