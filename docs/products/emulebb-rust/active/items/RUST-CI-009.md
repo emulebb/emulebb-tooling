@@ -37,10 +37,41 @@ continue normally until an operator explicitly selects a candidate revision.
 - The current published baseline remains `rust-v0.1.0-beta.2`.
 - RUST-CI-006 still owns the same-head stock eMule/current-aMule/Rust parity
   campaign and documentation reconciliation.
-- Hosted CI and release packaging already cover the supported platform and
-  architecture matrix, but no retained Beta 3 candidate manifest currently
-  binds those results to one immutable product and support-repository revision
-  set.
+- Hosted CI and release packaging cover the supported platform and architecture
+  matrix. The release workflow now retains a non-publishing candidate bundle
+  with exact revision and artifact metadata, but no Beta 3 candidate has been
+  selected and certified against RUST-CI-006.
+
+## Non-Publishing Rehearsal Evidence (2026-10-22)
+
+Rust PR [#143](https://github.com/emulebb/emulebb-rust/pull/143) added the
+always-on candidate assembly boundary. Workflow run
+[`39796808727`](https://github.com/emulebb/emulebb-rust/actions/runs/39796808727)
+then exercised it successfully without publishing:
+
+- Rust source `9e9320e69f070c62d04d1170a5a8997eba7387e2` passed exact-source
+  Required CI and Required CodeQL checks.
+- Support revisions were `emulebb-build`
+  `bd96006a94b92ab9a8499f563c86011f36dfbfd9`, `emulebb-build-tests`
+  `160da394fc74343bffd2846db4058eb3a11ed050`, and `emulebb-tooling`
+  `9af34723a508b46be839502138b64a0be7e39dde`.
+- Native source revisions were `emulebb-miniupnp`
+  `4e7a10948004ca2085ac8103e14fc77edb898b4c` and
+  `emulebb-libpcpnatpmp` `a6e787f837e507336a8774522c33b54264ef4a4b`.
+- All six native package jobs, the multi-architecture OCI image/security job,
+  and the non-publishing assembly job completed successfully.
+- The retained manifest recorded 29 hashed evidence files plus itself. Its OCI
+  manifest digest was
+  `sha256:edcb1129228e06ec6465d4f4ae825b0cab6224316e81c738ee8c99200b665854`;
+  independent inspection matched every recorded size, SHA-256 value, native
+  checksum entry, image-security checksum entry, and revision.
+- GHCR publication, GitHub prerelease publication, nightly channel advancement,
+  and nightly retention jobs were skipped. No tag or GitHub Release was created.
+
+This run deliberately used the current `0.1.0-beta.2` package identity. It
+proves the dry-run assembly and provenance machinery only; it is not the Beta 3
+candidate, does not satisfy RUST-CI-006 or the packaged lifecycle acceptance
+criterion, and does not close any acceptance checkbox below.
 
 ## Intended Shape
 
