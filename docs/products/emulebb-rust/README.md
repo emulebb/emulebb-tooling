@@ -11,6 +11,7 @@ Current published beta baseline:
 - [`0.1.0-beta.2` GitHub release](https://github.com/emulebb/emulebb-rust/releases/tag/rust-v0.1.0-beta.2)
 - [`0.1.0-beta.2` release scope](RELEASE-SCOPE.md)
 - [Current-head parity evidence and documentation reconciliation](active/items/RUST-CI-006.md)
+- [Beta 3 candidate certification without publication](active/items/RUST-CI-009.md)
 
 The current product is the headless IPv4 eD2K/Kad client, its `/api/v1` control
 plane, and embedded operations console. The protocol-required local Kad index
