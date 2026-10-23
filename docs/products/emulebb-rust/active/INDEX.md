@@ -60,6 +60,7 @@ reused. Parked ideas are not backlog items until explicitly activated.
 | ID | Class | Title |
 |---|---|---|
 | [RUST-CI-028](items/RUST-CI-028.md) | Evidence | Make Windows manifest embedding target-aware |
+| [RUST-BUG-135](items/RUST-BUG-135.md) | Bug | Return errors for Kad wire-count overflow |
 | [RUST-FEAT-025](items/RUST-FEAT-025.md) | Feature | Validate conformant duplicate-block rejection diagnostics |
 | [RUST-FEAT-038](items/RUST-FEAT-038.md) | Feature | Add current-aMule-style endgame source takeover |
 | [RUST-FEAT-039](items/RUST-FEAT-039.md) | Feature | Size ED2K request depth from measured RTT and bandwidth |
