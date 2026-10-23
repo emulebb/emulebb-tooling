@@ -1308,8 +1308,9 @@ paths:
       operationId: listSharedFiles
       parameters:
         - $ref: "#/components/parameters/Limit"
-        - $ref: "#/components/parameters/Offset"
-        - $ref: "#/components/parameters/AfterHash"
+        - $ref: "#/components/parameters/SharedFileCursor"
+        - $ref: "#/components/parameters/SharedFileSearch"
+        - $ref: "#/components/parameters/SharedFilePriorityFilter"
       responses:
         "200":
           $ref: "#/components/responses/SharedFileListResponse"
@@ -2895,14 +2896,27 @@ components:
       schema:
         type: string
         pattern: "^[0-9a-f]{32}$"
-    AfterHash:
-      name: afterHash
+    SharedFileCursor:
+      name: cursor
       in: query
       required: false
-      description: Exclusive lowercase eD2K hash cursor for stable keyset pagination. Cannot be combined with a non-zero offset.
+      description: Server-issued opaque cursor for the next path-ordered page. Clients must preserve the same search and priority filters while following a cursor.
       schema:
         type: string
-        pattern: "^[0-9a-f]{32}$"
+    SharedFileSearch:
+      name: q
+      in: query
+      required: false
+      description: Case-insensitive substring search across the visible file name, path, and lowercase eD2K hash.
+      schema:
+        type: string
+    SharedFilePriorityFilter:
+      name: priority
+      in: query
+      required: false
+      description: Return only shared files with this upload priority.
+      schema:
+        $ref: "#/components/schemas/SharedFilePriority"
     Limit:
       name: limit
       in: query
@@ -6088,18 +6102,23 @@ components:
             data:
               type: object
               unevaluatedProperties: false
-              required: [items, nextAfterHash]
+              required: [items, total, limit, nextCursor]
               properties:
                 items:
                   type: array
                   items:
                     $ref: "#/components/schemas/SharedFile"
-                nextAfterHash:
+                total:
+                  type: integer
+                  minimum: 0
+                  description: Total shared files matching the current search and priority filters.
+                limit:
+                  type: integer
+                  minimum: 1
+                  maximum: 1000
+                nextCursor:
                   type: [string, "null"]
-                  pattern: "^[0-9a-f]{32}$"
-                  description: Exclusive cursor for the next keyset page, or null when this page is final.
-              allOf:
-                - $ref: "#/components/schemas/Pagination"
+                  description: Server-issued cursor for the next path-ordered page, or null when this page is final.
     SharedFileEnvelope:
       unevaluatedProperties: false
       allOf:
@@ -6111,7 +6130,7 @@ components:
     SharedFile:
       type: object
       additionalProperties: false
-      required: [hash, name, path, directory, sizeBytes, priority, autoUploadPriority, requests, acceptedRequests, transferredBytes, allTimeRequests, allTimeAccepts, allTimeTransferred, partCount, partFile, complete, comment, rating, hasComment, userRating, publishedEd2k, sharedByRule]
+      required: [hash, name, path, directory, sizeBytes, priority, autoUploadPriority, requests, acceptedRequests, transferredBytes, allTimeRequests, allTimeAccepts, allTimeTransferred, partCount, partFile, complete, comment, rating, hasComment, userRating, publishedEd2k, publication, sharedByRule]
       properties:
         hash:
           type: string
@@ -6161,6 +6180,12 @@ components:
           minimum: 0
         publishedEd2k:
           type: boolean
+          description: Compatibility projection that is true only when the eD2K publication lane is published.
+        publication:
+          oneOf:
+            - $ref: "#/components/schemas/SharedFilePublicationStatus"
+            - type: "null"
+          description: Live runtime publication status. List responses populate it; single-file read and update responses currently return null.
         sharedByRule:
           type: boolean
         requests:
@@ -6172,6 +6197,58 @@ components:
         transferredBytes:
           type: integer
           minimum: 0
+    SharedFilePublishState:
+      type: string
+      enum: [unavailable, waiting, queued, publishing, partial, published, failed]
+      description: |
+        Live publication lifecycle. `unavailable` means the lane is disabled or the file is ineligible;
+        `waiting` means the required network runtime is not ready; `queued` means eligible and ready;
+        `publishing` means an attempt is active; `partial` means only part of a multi-keyword Kad publication
+        is confirmed; `published` means the runtime observed protocol-level success; and `failed` means the
+        most recent attempt failed. Publication state is ephemeral and is not a list-filter contract.
+    SharedFilePublishLane:
+      type: object
+      additionalProperties: false
+      required: [state, lastSuccessAtMs]
+      properties:
+        state:
+          $ref: "#/components/schemas/SharedFilePublishState"
+        lastSuccessAtMs:
+          type: [integer, "null"]
+          format: int64
+          description: Unix epoch milliseconds for the most recent confirmed runtime success, retained after a later failure.
+    SharedFileKadKeywordPublish:
+      type: object
+      additionalProperties: false
+      required: [state, publishedKeywords, totalKeywords, lastSuccessAtMs]
+      properties:
+        state:
+          $ref: "#/components/schemas/SharedFilePublishState"
+        publishedKeywords:
+          type: integer
+          minimum: 0
+        totalKeywords:
+          type: integer
+          minimum: 0
+        lastSuccessAtMs:
+          type: [integer, "null"]
+          format: int64
+          description: Unix epoch milliseconds for the most recent confirmed Kad keyword publication.
+    SharedFilePublicationStatus:
+      type: object
+      additionalProperties: false
+      required: [ed2k, kadKeyword, kadSource]
+      properties:
+        ed2k:
+          allOf:
+            - $ref: "#/components/schemas/SharedFilePublishLane"
+          description: A successful state means the offer-files packet was written in the current accepted server session; eD2K has no per-file acknowledgement.
+        kadKeyword:
+          $ref: "#/components/schemas/SharedFileKadKeywordPublish"
+        kadSource:
+          allOf:
+            - $ref: "#/components/schemas/SharedFilePublishLane"
+          description: A successful state means the most recent Kad source-store search received at least one acknowledgement.
     SharedFilePatch:
       type: object
       additionalProperties: false
