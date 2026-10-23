@@ -5,7 +5,7 @@ of the parent dashboard at `../ED2K-PROJECT-INVENTORY.md`.
 
 ## Required Workflow
 
-1. Read `methodology.md` before researching or editing entries.
+1. Read `METHODOLOGY.md` before researching or editing entries.
 2. Preserve the parent dashboard path and its nine category headings so old
    links and category fragments keep landing on a useful index.
 3. Search canonical upstreams, GitHub/GitLab/Codeberg, broader web results, and
@@ -22,7 +22,7 @@ of the parent dashboard at `../ED2K-PROJECT-INVENTORY.md`.
    and one `Assessment` line covering activity, adoption, maturity, relevance,
    and participation mode.
 9. Apply the activity/adoption tiers and historical preservation tiers from
-   `methodology.md`. Within each tier, sort by verified activity date, adoption
+   `METHODOLOGY.md`. Within each tier, sort by verified activity date, adoption
    evidence, then project name.
 10. Keep verified download-only or non-contributing clients visible under the
     red capability-warning tier and exclude them from healthy-peer rankings.

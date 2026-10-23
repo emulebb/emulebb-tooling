@@ -4,7 +4,7 @@
 
 Reusable eD2K/Kad libraries, hashing and AICH tools, diagnostics, EC utilities, and protocol experiments.
 
-Ranking badges and thresholds are defined in [Methodology](methodology.md). Statistics are dated snapshots, not live user counts.
+Ranking badges and thresholds are defined in [Methodology](METHODOLOGY.md). Statistics are dated snapshots, not live user counts.
 
 ## Protocol Libraries And Utilities
 
