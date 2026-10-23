@@ -18,3 +18,6 @@ Everything below is this repo's local deltas only:
 - Update `docs\RESUME.md` only at session termination or explicit handoff.
 - When a tooling helper launches `emule.exe`, pass `-c` so the config root is
   explicit.
+- For eD2K inventory discovery or maintenance, read
+  `docs\reference\ed2k-inventory\AGENTS.md` before editing the dashboard or
+  detail pages, and update both layers together.

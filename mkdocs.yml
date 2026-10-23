@@ -147,7 +147,15 @@ nav:
       - Test Campaign Architecture Plan: active/plans/TEST-CAMPAIGN-ARCHITECTURE-PLAN.md
       - CI Baseline: reference/CI-BASELINE.md
       - Release Branching And Packaging: reference/RELEASE-BRANCHING-AND-PACKAGING.md
-      - eD2K Inventory: reference/ED2K-PROJECT-INVENTORY.md
+      - eD2K Inventory:
+          - Dashboard: reference/ED2K-PROJECT-INVENTORY.md
+          - Servers And Bootstrap: reference/ed2k-inventory/servers-and-bootstrap.md
+          - Clients And Front Ends: reference/ed2k-inventory/clients.md
+          - Controllers And Indexers: reference/ed2k-inventory/controllers-and-indexers.md
+          - Libraries And Utilities: reference/ed2k-inventory/libraries-and-utilities.md
+          - Protocols And Adjacent P2P: reference/ed2k-inventory/protocols-and-adjacent.md
+          - Historical Mods And Archives: reference/ed2k-inventory/historical-and-archives.md
+          - Methodology And Refresh Rules: reference/ed2k-inventory/methodology.md
       - eD2K Forums And Sites: reference/ED2K-FORUMS-AND-SITES.md
   - Dependencies:
       - Status: dependencies/DEP-STATUS.md
@@ -178,6 +186,7 @@ not_in_nav: |
   /ideas/IDEA-EMULEBB-LIBTORRENT-FORK.md
   /ideas/IDEA-LIBTORRENT-MESH.md
   /ideas/IDEA-QBITTORRENTBB-MESH.md
+  /reference/ed2k-inventory/AGENTS.md
   /rest/REST-API-OPENAPI.yaml
   /products/emulebb-rust/active/items/**
   /products/emulebb-rust/history/**
