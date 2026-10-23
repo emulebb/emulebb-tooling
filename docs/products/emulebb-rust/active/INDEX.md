@@ -41,6 +41,7 @@ reused. Parked ideas are not backlog items until explicitly activated.
 | [RUST-CI-006](items/RUST-CI-006.md) | Evidence | Refresh current-head stock parity evidence and reconcile docs |
 | [RUST-CI-008](items/RUST-CI-008.md) | Evidence | Prove Unicode and long-path large-library behavior across platforms |
 | [RUST-CI-009](items/RUST-CI-009.md) | Evidence | Certify a Beta 3 candidate without publishing |
+| [RUST-CI-029](items/RUST-CI-029.md) | Evidence | Test packet diagnostics without unsafe environment mutation |
 | [RUST-BUG-129](items/RUST-BUG-129.md) | Bug | Queue targeted re-hash after upload-time source invalidation |
 | [RUST-BUG-130](items/RUST-BUG-130.md) | Bug | Release search drain ownership when persistence fails |
 | [RUST-BUG-131](items/RUST-BUG-131.md) | Bug | Make category deletion and transfer remap atomic |
