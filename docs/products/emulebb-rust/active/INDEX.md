@@ -50,6 +50,7 @@ reused. Parked ideas are not backlog items until explicitly activated.
 | [RUST-REF-008](items/RUST-REF-008.md) | Refactor | Reduce large-library metadata and scan I/O amplification |
 | [RUST-REF-009](items/RUST-REF-009.md) | Refactor | Use native storage domains for cross-platform library scheduling |
 | [RUST-REF-010](items/RUST-REF-010.md) | Refactor | Bound watcher reconciliation I/O for large shared libraries |
+| [RUST-REF-016](items/RUST-REF-016.md) | Refactor | Move blocking SQLite work behind bounded async persistence |
 
 ## Client Gate — Minor
 
