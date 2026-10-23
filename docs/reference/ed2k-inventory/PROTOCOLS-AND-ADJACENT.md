@@ -4,7 +4,7 @@
 
 Stock protocol references, the negotiated fast-publishing research snapshot, and clean-slate or adjacent P2P projects that are not confirmed stock eD2K/Kad implementations.
 
-Ranking badges and thresholds are defined in [Methodology](methodology.md). Statistics are dated snapshots, not live user counts.
+Ranking badges and thresholds are defined in [Methodology](METHODOLOGY.md). Statistics are dated snapshots, not live user counts.
 
 ## Protocol References
 

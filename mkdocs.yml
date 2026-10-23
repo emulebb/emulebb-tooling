@@ -149,13 +149,13 @@ nav:
       - Release Branching And Packaging: reference/RELEASE-BRANCHING-AND-PACKAGING.md
       - eD2K Inventory:
           - Dashboard: reference/ED2K-PROJECT-INVENTORY.md
-          - Servers And Bootstrap: reference/ed2k-inventory/servers-and-bootstrap.md
-          - Clients And Front Ends: reference/ed2k-inventory/clients.md
-          - Controllers And Indexers: reference/ed2k-inventory/controllers-and-indexers.md
-          - Libraries And Utilities: reference/ed2k-inventory/libraries-and-utilities.md
-          - Protocols And Adjacent P2P: reference/ed2k-inventory/protocols-and-adjacent.md
-          - Historical Mods And Archives: reference/ed2k-inventory/historical-and-archives.md
-          - Methodology And Refresh Rules: reference/ed2k-inventory/methodology.md
+          - Servers And Bootstrap: reference/ed2k-inventory/SERVERS-AND-BOOTSTRAP.md
+          - Clients And Front Ends: reference/ed2k-inventory/CLIENTS.md
+          - Controllers And Indexers: reference/ed2k-inventory/CONTROLLERS-AND-INDEXERS.md
+          - Libraries And Utilities: reference/ed2k-inventory/LIBRARIES-AND-UTILITIES.md
+          - Protocols And Adjacent P2P: reference/ed2k-inventory/PROTOCOLS-AND-ADJACENT.md
+          - Historical Mods And Archives: reference/ed2k-inventory/HISTORICAL-AND-ARCHIVES.md
+          - Methodology And Refresh Rules: reference/ed2k-inventory/METHODOLOGY.md
       - eD2K Forums And Sites: reference/ED2K-FORUMS-AND-SITES.md
   - Dependencies:
       - Status: dependencies/DEP-STATUS.md

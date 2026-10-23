@@ -4,7 +4,7 @@
 
 Historical material is ranked by preservation value, completeness, and accessibility rather than recent development activity.
 
-Ranking badges and thresholds are defined in [Methodology](methodology.md). Statistics are dated snapshots, not live user counts.
+Ranking badges and thresholds are defined in [Methodology](METHODOLOGY.md). Statistics are dated snapshots, not live user counts.
 
 ## Historical eMule Mods And Source Archives
 

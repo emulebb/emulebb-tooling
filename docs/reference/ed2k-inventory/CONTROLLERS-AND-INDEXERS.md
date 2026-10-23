@@ -4,7 +4,7 @@
 
 Automation layers, Arr adapters, native remote applications, WebUIs, containers, and indexers around eMule and aMule.
 
-Ranking badges and thresholds are defined in [Methodology](methodology.md). Statistics are dated snapshots, not live user counts.
+Ranking badges and thresholds are defined in [Methodology](METHODOLOGY.md). Statistics are dated snapshots, not live user counts.
 
 ## Controllers, Indexers, And Automation
 

@@ -4,7 +4,7 @@
 
 Current clients are ranked by activity and public adoption. Download-only implementations remain visible for threat and ecosystem tracking but are excluded from healthy-peer rankings.
 
-Ranking badges and thresholds are defined in [Methodology](methodology.md). Statistics are dated snapshots, not live user counts.
+Ranking badges and thresholds are defined in [Methodology](METHODOLOGY.md). Statistics are dated snapshots, not live user counts.
 
 ## Modern Clients, Forks, And Front Ends
 
