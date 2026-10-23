@@ -45,6 +45,7 @@ reused. Parked ideas are not backlog items until explicitly activated.
 | [RUST-BUG-130](items/RUST-BUG-130.md) | Bug | Release search drain ownership when persistence fails |
 | [RUST-BUG-131](items/RUST-BUG-131.md) | Bug | Make category deletion and transfer remap atomic |
 | [RUST-BUG-132](items/RUST-BUG-132.md) | Bug | Own daemon background tasks through graceful shutdown |
+| [RUST-BUG-133](items/RUST-BUG-133.md) | Bug | Bound REST request bodies before metadata validation |
 | [RUST-REF-005](items/RUST-REF-005.md) | Refactor | Decompose oversized Rust modules by responsibility |
 | [RUST-REF-006](items/RUST-REF-006.md) | Refactor | Consolidate Rust NAT and runtime safety internals |
 | [RUST-REF-008](items/RUST-REF-008.md) | Refactor | Reduce large-library metadata and scan I/O amplification |
