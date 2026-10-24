@@ -99,6 +99,37 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
 - No public live client was launched for these foundation slices; guarded live
   and tunnel-down acceptance evidence remains outstanding.
 
+## In-Flight Implementation
+
+- `emulebb/emulebb-rust#166` is intentionally still draft. Its current branch
+  adds the dependency-neutral `emulebb-diagnostics` crate, the incompatible
+  `diag_event_v2` envelope, one process-wide and family-local sequence
+  authority, size/age rotation, global persisted-directory retention, writer
+  health in REST/bundles, and active-run multi-segment bundle capture.
+- The `diag_event_v2` identity contract is `(processId, runId, segmentId)`.
+  `seq` is process-wide retained-event order and `streamSeq` is retained-event
+  order within one family. Files are named
+  `emulebb-rust-diag-<processId>-<runId>-<segmentId>.jsonl`.
+- Independent review blocked the first merge attempt because retention was
+  initially per random run, bundle capture selected one globally newest file,
+  live partial lines could be reported as corruption, and the harness accepted
+  only `diag_event_v1`. The Rust branch now bounds segments across restarts,
+  protects the active segment, revalidates size after rollover, aggregates only
+  the active run, and ignores a racing unterminated active tail.
+- The staged `emulebb-build-tests` branch adds one run-aware selector shared by
+  soak control and parity consumers, keeps legacy v1 fallback, accepts v2 in
+  semantic diffing and direct-smoke analysis, and diffs every retained segment
+  from exactly one Rust run. Targeted validation is 155 tests passed.
+- The full harness run reached 2,327 passed, 1 skipped, and one failure that
+  exposed the missing strict OpenAPI declaration for `diagnosticWriter`; this
+  is a cross-repository contract failure, not a live-network result. The
+  canonical schema is being staged here as optional for migration so current
+  Rust main and the v2 producer both validate; it will become required after
+  the producer lands.
+- Legacy packet dump families remain unbounded. Arbitrarily long public live
+  soaks are still unauthorized, and no live client has been launched during
+  these implementation slices.
+
 ## Why This Matters
 
 Long-running public-network observation is needed to expose rare eD2K and Kad
