@@ -44,8 +44,10 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
 - Temporary MFC `preferences.ini` overlays use a durable output-root journal,
   exact-byte restore after process exit, and stale-run recovery after old soak
   processes are stopped.
-- Detached controller/status/watch behavior still needs to be unified around
-  this dual-client workflow; the existing detached wrapper remains Rust-only.
+- A dedicated persisted-soak controller now starts the canonical dual-client
+  launcher detached and until stopped, records exact launcher and watcher
+  identities, reports dual process/REST/VPN health, rotates watcher evidence,
+  and requests graceful teardown before an exact-identity forced fallback.
 - Packet and semantic diagnostics cover substantial protocol surface, but they
   lack a common run/session/action correlation envelope, complete unified
   server and client-UDP events, bounded rotation, and strict missing-family or
@@ -69,6 +71,11 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   overlays, stale-run recovery, and restore evidence in both canonical
   launchers. Local validation: 2,308 passed, 1 skipped, 1 deselected; all PR
   checks passed.
+- `emulebb/emulebb-build-tests#21` added the canonical stop-file contract and
+  detached dual-client controller with exact process identities,
+  restart-safe status, loopback REST and full-tunnel health checks, bounded
+  rotating watcher evidence, and graceful/forced stop semantics. Local
+  validation: 2,319 passed, 1 skipped, 1 deselected; all PR checks passed.
 - No public live client was launched for these foundation slices; guarded live
   and tunnel-down acceptance evidence remains outstanding.
 
@@ -172,7 +179,7 @@ and distinguish observed parity from merely unobserved behavior.
       a valid nonempty Rust profile is reused without reimport or reset.
 - [x] Temporary MFC harness overrides are backup-first and recoverable after
       graceful stop, launcher failure, or stale-manifest recovery.
-- [ ] The canonical dual-client workflow supports detached until-stopped runs,
+- [x] The canonical dual-client workflow supports detached until-stopped runs,
       self-describing status, periodic health checks, and graceful teardown.
 - [ ] Packet/event evidence rotates within configured byte and age budgets and
       reports record, parse, sequence, and dropped-event gaps.
