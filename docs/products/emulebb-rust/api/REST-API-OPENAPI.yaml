@@ -3615,7 +3615,10 @@ components:
           minLength: 1
         schema:
           type: string
-          const: emulebb.diagnostic-bundle.v2
+          description: >-
+            Diagnostic bundle contract version. Version 3 contains only bounded
+            unified diag_event_v2 artifacts and excludes legacy side-file dumps.
+          const: emulebb.diagnostic-bundle.v3
         byteCount:
           type: integer
           format: int64
