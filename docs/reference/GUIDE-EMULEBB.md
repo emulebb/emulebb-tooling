@@ -427,7 +427,7 @@ exist, and restart after startup, bind, listener, or layout-state edits.
 Collect evidence before changing many settings. Use:
 
 - normal and verbose logs
-- redacted diagnostic snapshot JSON
+- local diagnostic bundle and common event traces
 - firewall repair output
 - mini dumps for crashes
 - full dumps for hangs or memory growth
@@ -440,8 +440,13 @@ debug CRT log is `emulebb-crt-debug.log`, recoverable early startup directory
 errors use `emulebb-startup-errors.log`, diagnostics logs use
 `emulebb-diagnostics-packet.log`, `emulebb-diagnostics-upload-slot.log`,
 `emulebb-diagnostics-download-slot.log`, `emulebb-diagnostics-bad-peer.log`,
-`emulebb-diagnostics-kad.log`, `emulebb-diagnostics-diag.log`, and
-`emulebb-diagnostics-startup.trace.json`, and performance logs default to
+`emulebb-diagnostics-kad.log`, and
+`emulebb-diagnostics-startup.trace.json`. Current common diagnostic events use
+retained v2 run segments named
+`emulebb-mfc-diag-<processId>-<runId>-<segmentId:06>.jsonl` with the atomic
+`emulebb-mfc-diag-health.json` writer-health sidecar; the fixed
+`emulebb-diagnostics-diag.log` name is retired for current runs. Performance
+logs default to
 `emulebb-performance.csv` or `emulebb-performance.mrtg` with
 `emulebb-performance-data.mrtg` and `emulebb-performance-overhead.mrtg`
 sidecars.
