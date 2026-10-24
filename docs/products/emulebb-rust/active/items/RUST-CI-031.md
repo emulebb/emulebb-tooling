@@ -62,9 +62,10 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
 - Rust and MFC use one process-wide retained-event sequence,
   family-local stream sequences, rotate-before-write segments, persisted-run
   retention, and observable writer/drop/error health.
-- One legacy packet side-file writer remains unbounded: eD2K peer TCP. The
-  client-UDP, server TCP/UDP, and Kad-UDP side files are retired after their
-  exact evidence moved to the bounded unified stream. Diagnostic bundle
+- Every active Rust protocol family now emits through the bounded unified
+  stream. The peer-TCP, client-UDP, server TCP/UDP, and Kad-UDP legacy packet
+  side-file writers are retired, and active harness consumers select exact
+  `diag_event_v2` runs rather than discovering those files. Diagnostic bundle
   snapshots still accumulate without directory retention.
   Rust and MFC eD2K client UDP record exact wire bytes, receive dispositions,
   and correlated socket-boundary send attempts and terminal outcomes in the
@@ -75,9 +76,10 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   correlated socket-boundary send attempts plus exactly one success, failure,
   or cancellation terminal outcome. The Rust `ed2k_server_udp` family still
   lacks an aligned MFC comparator and is not yet cross-client parity evidence.
-  Arbitrary-length authorization remains blocked until the remaining unbounded
-  storage paths are retired or bounded, repeated bundle persistence is bounded,
-  and guarded live validation proves the complete path.
+  Arbitrary-length authorization remains blocked until controller output,
+  `daemon.out`, campaign archives, repeated bundle persistence, and aggregate
+  disk reserve are bounded, then guarded live validation proves the complete
+  path.
 
 ## Landed Evidence
 
@@ -193,11 +195,69 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   The full workspace suite and supported quick quality gate passed locally;
   all Linux, macOS, Windows, CodeQL, dependency, policy, and live REST/OpenAPI
   PR checks passed.
+- `emulebb/emulebb-build-tests#27` migrated every active peer-TCP, client-UDP,
+  Kad-UDP, server-startup, packet-coverage, offline-diff, secure-ident, Linux
+  direct-smoke, and reflected-self-source consumer to exact selected
+  `diag_event_v2` runs. Current validation rejects legacy packet side-file
+  input rather than silently accepting it. Local validation passed 2,377
+  Python tests with one skip and one deselection; all baseline, fast-harness,
+  portability, dependency, and CodeQL PR checks passed.
+- `emulebb/emulebb-rust#173` preserved peer-TCP trace/state correlation and
+  retired the final Rust peer packet and obfuscation-handshake side-file
+  writer. Packet, state, and handshake classification now occurs directly in
+  the internal unified-event record. Local validation passed 1,190 diagnostic
+  eD2K tests and 1,182 default-feature eD2K tests plus the supported quick
+  quality gate; all Linux, macOS, Windows, CodeQL, dependency, policy, and live
+  REST/OpenAPI PR checks passed.
 - `emulebb/emulebb-tooling#59` through `#62` aligned the common-v2 product
   contract, segmented filenames and writer-health evidence, and the explicit
   local-only unredacted trace policy.
 - No public live client was launched for these foundation slices; guarded live
   and tunnel-down acceptance evidence remains outstanding.
+
+## Storage Audit - 2026-10-24
+
+- The unified Rust event ring is bounded by segment size, rotation age, and
+  retained segment count, but it has no aggregate-byte, retained-age, or
+  minimum-free-space authority. The active segment is allowed to exceed its
+  target for one exact oversized record, which is correct for evidence
+  integrity but must be included in reserve calculations.
+- The persisted soak watcher rotates its JSONL history, but detached launcher
+  and watcher stdout/stderr append forever. The watcher also prints every
+  sample to its unbounded stdout log, duplicating the bounded JSONL stream.
+- Rust `daemon.out` appends for the complete lifetime of one persisted run and
+  is only evacuated before a later launch. Rust daily application-log rotation
+  bounds file count but not bytes generated within one day.
+- Every new campaign creates timestamped archive and report trees with no byte,
+  age, campaign-count, or free-space policy. Moving profile evidence to the
+  output volume can require a cross-volume copy without destination-space
+  preflight, and evacuating every retained segment defeats cross-run writer
+  retention by preserving successive copies forever.
+- Each diagnostic bundle is individually bounded, but every confirmed request
+  persists a unique UUID-named file under the Rust profile and no retention
+  policy removes old bundles. The persisted soak currently captures no bundles;
+  adding periodic capture before storage ownership changes would create a new
+  unbounded path.
+- The persisted preflight and watcher do not enforce free-space reserve or
+  observe Rust/MFC writer drop, write-error, or retention-error health. A full
+  disk can therefore leave the controller apparently healthy until a secondary
+  failure becomes visible.
+- The optional converged observer also grows five-minute checkpoints,
+  per-action reports, and an all-actions summary indefinitely. Diagnostic
+  segments must remain immutable and exact; enabling diagnostic tail trimming
+  is not an acceptable storage design.
+- Arbitrarily long discovery needs compact all-run family/opcode/outcome and
+  integrity indexes plus budget-aware preservation of selected immutable raw
+  segments. Retaining all raw traffic forever is neither required nor safe.
+
+The long-term owner is a harness-level `SoakStoragePolicy` and
+`BoundedArtifactStore` with mandatory total-byte, maximum-age, and
+minimum-free-space limits. It protects the active campaign, prunes only closed
+unpinned artifacts oldest-first, rotates non-protocol process logs, checks
+reserve before launch and promotion, and stops the run as inconclusive when the
+reserve or evidence-integrity contract cannot be maintained. Evidence remains
+unredacted; bounding is performed by rotating or deleting whole immutable
+artifacts, never by field omission or mutation of `diag_event_v2` records.
 
 ## Next Implementation
 
@@ -209,25 +269,39 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   use the new missing-family, exact-wire, and lifecycle findings to drive the
   next protocol-parity gaps. `diag_event_v2` remains the only current event
   envelope; `ed2k_client_udp` is a family within it, not a second schema.
-- Retire the remaining unbounded eD2K peer-TCP packet side file after
-  equivalence tests. Do not add an independent retention system when the common
-  segmented writer is the intended long-term authority.
+- Build the harness storage-policy foundation first: strict ignored-input
+  parsing, injectable free-space and artifact inventory, and deterministic
+  byte/age/active-campaign/reserve enforcement tests.
+- Extend the Rust common writer with aggregate-byte, retained-age, and
+  minimum-free-space policy plus observable fault/drop accounting. Keep the
+  active segment protected and preserve exact oversized records.
+- Transfer diagnostic-bundle persistence ownership to the bounded campaign
+  store so repeated endpoint captures do not grow the Rust profile directory.
+- Bound detached controller logs and `daemon.out`, then make persisted watcher
+  health fail closed on disk pressure and Rust/MFC writer-integrity faults.
+- Replace preflight evacuation of every profile segment with hashed,
+  identity-preserving promotion of selected closed segments and compact
+  manifests under the shared campaign budget.
+- Add sparse bundle capture at ready/start, low-cadence periodic checkpoints,
+  writer or health faults, and final stop. Do not capture on every 60-second
+  health sample.
+- Add compact complete-run eD2K/Kad family, opcode, outcome, sequence, and
+  writer-health indexes with budget-aware pinning of diagnostically interesting
+  exact raw segments.
+- Converge the optional observer onto the same bounded store and prove stable
+  disk use with deterministic multi-day simulation before any guarded public
+  soak is authorized.
 - Add aligned MFC and harness coverage for Rust's `ed2k_server_udp` family
   before treating server UDP observations as cross-client parity evidence.
-- Bound diagnostic bundle snapshot persistence by an explicit storage budget,
-  or move snapshot ownership into the bounded campaign evidence store. Each
-  individual bundle is bounded today, but repeated confirmed captures are not.
-- Extend the common writer from retained-segment count toward aggregate byte,
-  maximum-age, and minimum-free-space enforcement, then archive closed segments
-  in the soak harness with stable run/process/segment identity and hashes.
 - Protocol and soak traces, bundles, manifests, and diagnostic payloads are
   explicitly local test evidence and will not be published. They must preserve
   exact file, peer, user, hash, endpoint, search, and packet data whenever that
   data helps reconstruct eD2K or Kad behavior. Redaction and privacy-driven
   field omission are not requirements for this lane; completeness is.
-- Arbitrarily long public live soaks remain unauthorized while the remaining
-  packet side file and repeated bundle snapshots are unbounded. No live client
-  has been launched during these implementation slices.
+- Arbitrarily long public live soaks remain unauthorized while controller logs,
+  campaign archives, repeated bundle snapshots, and free-space enforcement are
+  unbounded. No live client has been launched during these implementation
+  slices.
 
 ## Why This Matters
 
