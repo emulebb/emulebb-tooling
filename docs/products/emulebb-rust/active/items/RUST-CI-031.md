@@ -66,11 +66,11 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   eD2K peer TCP, server TCP/UDP, and Kad UDP legacy records already duplicate
   bounded unified evidence. Rust eD2K client UDP now records exact receive
   bytes with accepted, ignored, and dropped outcomes plus correlated send
-  attempt and terminal lifecycle events. MFC/harness alignment and one Rust
-  reask send-state correctness fix remain incomplete. Arbitrary-length
-  authorization therefore remains blocked until those evidence gaps close,
-  the unbounded storage paths are retired or bounded, and guarded live
-  validation proves the complete path.
+  attempt and terminal lifecycle events, and only confirmed local sends open
+  the pending-reply gate. MFC/harness alignment remains incomplete.
+  Arbitrary-length authorization therefore remains blocked until that evidence
+  gap closes, the unbounded storage paths are retired or bounded, and guarded
+  live validation proves the complete path.
 
 ## Landed Evidence
 
@@ -145,6 +145,14 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   validation passed 1,186 diagnostic eD2K tests, the complete core diagnostic
   suite, exact workspace Clippy, and formatting; all required
   Linux/macOS/Windows, CodeQL, dependency, and live REST/OpenAPI checks passed.
+- `emulebb/emulebb-rust#170` separated each reask's logical source endpoint
+  from its direct or buddy-relayed wire destination and moved pending-reply
+  mutation behind confirmed local UDP send success. Local send errors and
+  abandoned work now remain retryable without becoming false remote timeouts or
+  influencing TCP fallback. Local validation passed 1,188 diagnostic eD2K
+  tests, the complete core diagnostic matrix, exact workspace Clippy, and
+  formatting; all required Linux/macOS/Windows, CodeQL, dependency, and live
+  REST/OpenAPI checks passed.
 - `emulebb/emulebb-tooling#59` through `#62` aligned the common-v2 product
   contract, segmented filenames and writer-health evidence, and the explicit
   local-only unredacted trace policy.
@@ -157,11 +165,6 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   `seq` is process-wide retained-event order and `streamSeq` is retained-event
   order within one family. Files are named
   `emulebb-rust-diag-<processId>-<runId>-<segmentId>.jsonl`.
-- Move reask pending-state mutation behind confirmed local UDP send success.
-  `ReaskSourceSet::due_datagrams` currently marks a request pending before the
-  socket send, so a known local send failure can later be misclassified as a
-  remote timeout and influence fallback. Add deterministic failure and
-  cancellation tests without creating false remote-delivery evidence.
 - Add the matching MFC client-UDP unified emitter and teach the common schema,
   comparator, and required-family gate about `ed2k_client_udp` before claiming
   cross-client parity for that family.
