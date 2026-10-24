@@ -52,10 +52,12 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   lack a common run/session/action correlation envelope, complete unified
   server and client-UDP events, bounded rotation, and strict missing-family or
   sequence-gap gates.
-- The Rust diagnostic dump endpoint now produces a versioned, bounded,
-  redacted investigation bundle with status, runtime diagnostics, settings
-  provenance, recent-log fingerprints, and tails plus integrity summaries for
-  unified, eD2K peer TCP, eD2K client UDP, eD2K server, and Kad UDP artifacts.
+- The Rust diagnostic dump endpoint now produces a versioned, bounded local
+  investigation bundle with status, runtime diagnostics, settings provenance,
+  recent-log fingerprints, and tails plus integrity summaries for unified,
+  eD2K peer TCP, eD2K client UDP, eD2K server, and Kad UDP artifacts. Its
+  existing redaction is transitional and must not suppress evidence needed by
+  this explicitly local, non-published test lane.
 - The unified event stream currently has independent eD2K/core and Kad
   sequence allocators appending to one file, so duplicate and non-monotonic
   sequence values are expected and global gap claims remain inconclusive.
@@ -101,11 +103,16 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
 
 ## In-Flight Implementation
 
-- `emulebb/emulebb-rust#166` is intentionally still draft. Its current branch
-  adds the dependency-neutral `emulebb-diagnostics` crate, the incompatible
-  `diag_event_v2` envelope, one process-wide and family-local sequence
-  authority, size/age rotation, global persisted-directory retention, writer
-  health in REST/bundles, and active-run multi-segment bundle capture.
+- `emulebb/emulebb-build-tests#22` has landed run-aware segmented Rust trace
+  selection, ordered multi-segment loading, v2 compatibility, and the first
+  shared v2 schema notes. Local validation passed 2,329 tests with 1 skipped
+  and 1 deselected; both supported Windows harness jobs and the portability,
+  security, and dependency checks passed.
+- `emulebb/emulebb-rust#166` remains open while the common-schema correction
+  lands. Its branch adds the dependency-neutral `emulebb-diagnostics` crate,
+  the incompatible `diag_event_v2` envelope, one process-wide and family-local
+  sequence authority, size/age rotation, global persisted-directory retention,
+  writer health in REST/bundles, and active-run multi-segment bundle capture.
 - The `diag_event_v2` identity contract is `(processId, runId, segmentId)`.
   `seq` is process-wide retained-event order and `streamSeq` is retained-event
   order within one family. Files are named
@@ -116,16 +123,16 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   only `diag_event_v1`. The Rust branch now bounds segments across restarts,
   protects the active segment, revalidates size after rollover, aggregates only
   the active run, and ignores a racing unterminated active tail.
-- The staged `emulebb-build-tests` branch adds one run-aware selector shared by
-  soak control and parity consumers, keeps legacy v1 fallback, accepts v2 in
-  semantic diffing and direct-smoke analysis, and diffs every retained segment
-  from exactly one Rust run. Targeted validation is 155 tests passed.
-- The full harness run reached 2,327 passed, 1 skipped, and one failure that
-  exposed the missing strict OpenAPI declaration for `diagnosticWriter`; this
-  is a cross-repository contract failure, not a live-network result. The
-  canonical schema is being staged here as optional for migration so current
-  Rust main and the v2 producer both validate; it will become required after
-  the producer lands.
+- The first migration design left MFC on `diag_event_v1` while Rust emitted
+  `diag_event_v2`. That is rejected as a steady-state design: v2 is the single
+  current common envelope for both clients, and v1 may survive only behind an
+  explicitly named legacy-input adapter. Current parity and soak gates must not
+  silently accept either version.
+- Protocol and soak traces, bundles, manifests, and diagnostic payloads are
+  explicitly local test evidence and will not be published. They must preserve
+  exact file, peer, user, hash, endpoint, search, and packet data whenever that
+  data helps reconstruct eD2K or Kad behavior. Redaction and privacy-driven
+  field omission are not requirements for this lane; completeness is.
 - Legacy packet dump families remain unbounded. Arbitrarily long public live
   soaks are still unauthorized, and no live client has been launched during
   these implementation slices.
@@ -134,9 +141,9 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
 
 Long-running public-network observation is needed to expose rare eD2K and Kad
 state-machine behavior, but an unbounded run magnifies routing, profile
-mutation, privacy, disk-growth, and false-parity risks. A supported workflow
-must fail closed before launch, preserve operator state, bound its evidence,
-and distinguish observed parity from merely unobserved behavior.
+mutation, disk-growth, and false-parity risks. A supported workflow must fail
+closed before launch, preserve operator state, bound its local evidence, and
+distinguish observed parity from merely unobserved behavior.
 
 ## Representative Sites
 
@@ -192,9 +199,9 @@ and distinguish observed parity from merely unobserved behavior.
 - Complete unified event coverage for eD2K server traffic, client UDP, peer
   capability negotiation, retries/timeouts, disconnects, and Kad lifecycle
   transitions.
-- Produce a bounded, redacted diagnostic bundle containing the full REST
-  snapshot, settings provenance, network/guard state, counters, recent errors,
-  and packet/event tails.
+- Produce a bounded, unredacted local diagnostic bundle containing the full
+  REST snapshot, settings provenance, network/guard state, counters, recent
+  errors, and packet/event tails.
 - Treat missing required families, unknown schemas, parse failures, sequence
   gaps, and absent comparable keys as explicit inconclusive or failing evidence
   instead of parity success.
@@ -210,6 +217,12 @@ and distinguish observed parity from merely unobserved behavior.
 - This item may break harness schemas, diagnostic schemas, REST APIs, or test
   profile configuration during the beta phase when the resulting design is
   cleaner and the owning contracts and tests change together.
+- `diag_event_v2` is the only current common event envelope for both Rust and
+  MFC. Legacy v1 input, if retained at all, is isolated from current validation
+  behind an explicit compatibility adapter.
+- Runtime traces and bundles are unredacted local test artifacts. They may
+  contain exact identifiers and raw public-network payloads and must never be
+  uploaded, attached to public issues, or committed.
 - Tracked files never contain operator profile paths, private network values,
   live search terms, file names, hashes, or raw public-network payloads.
 - The harness must not mutate hide.me settings or inherited workspace
@@ -234,11 +247,12 @@ and distinguish observed parity from merely unobserved behavior.
       self-describing status, periodic health checks, and graceful teardown.
 - [ ] Packet/event evidence rotates within configured byte and age budgets and
       reports record, parse, sequence, and dropped-event gaps.
-- [ ] Required eD2K and Kad diagnostic families carry enough stable correlation
-      to reconstruct causal sessions and harness actions without exposing live
-      private data.
-- [x] The diagnostic dump API produces a bounded, redacted investigation bundle
-      rather than a status-only placeholder.
+- [ ] Required eD2K and Kad diagnostic families carry exact local evidence and
+      enough stable correlation to reconstruct causal sessions and harness
+      actions without privacy-driven omissions.
+- [x] The diagnostic dump API produces a bounded investigation bundle rather
+      than a status-only placeholder; removing its transitional redaction is
+      still required.
 - [ ] The parity matrix covers server, peer-transfer, source/queue, and Kad
       lifecycle behavior while excluding registered omissions and separating
       negotiated extensions.
@@ -251,11 +265,11 @@ and distinguish observed parity from merely unobserved behavior.
 - Static policy, environment-override, live-bind, and profile-path gates.
 - Unit tests for provider-state parsing, full-tunnel preflight, empty/reuse
   profile selection, transactional overrides, manifests, rotation, gap
-  detection, redaction, and strict comparison outcomes.
+  detection, evidence completeness, and strict comparison outcomes.
 - Deterministic local eD2K/Kad fixtures and protocol goldens.
 - Explicit operator-approved public validation with tunnel-down blocking,
   guarded dual startup, loopback control, clean stop, recovered stop, and
-  retained sanitized evidence.
+  retained local-only evidence.
 
 ## Notes
 
