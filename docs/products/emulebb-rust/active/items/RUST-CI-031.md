@@ -32,23 +32,45 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
 
 ## Current State
 
-- The shared hide.me helper enables whitelist split tunneling and may rewrite
-  provider settings, while this lane requires split tunneling to remain off.
-- The shared soak bind resolver rejects loopback and requires `X_LOCAL_IP` even
-  when the control plane no longer needs a split-tunnel LAN exception.
-- The dual launcher rejects a Rust profile outside
-  `EMULEBB_WORKSPACE_OUTPUT_ROOT`, so an explicitly named operator-owned
-  persisted profile cannot currently be selected.
-- The detached persisted-profile wrapper launches Rust only, always attaches a
-  finite CPU-profile deadline, and suppresses MFC.
-- Standalone control commands do not consistently assert VPN Guard Block for
-  both clients before process creation.
+- The canonical dual-client launchers now expose an explicit full-tunnel mode,
+  perform a read-only hide.me preflight, use IPv4 loopback for control, and
+  require VPN Guard Block configuration before client launch.
+- The full-tunnel lane accepts an explicitly selected operator-owned Rust
+  profile outside `EMULEBB_WORKSPACE_OUTPUT_ROOT`; split-tunnel runs retain the
+  managed-output boundary.
+- An empty persisted Rust profile is imported transactionally from the selected
+  MFC profile, while a populated profile must contain the current Rust settings
+  and metadata files and is then reused without reimport.
+- Temporary MFC `preferences.ini` overlays use a durable output-root journal,
+  exact-byte restore after process exit, and stale-run recovery after old soak
+  processes are stopped.
+- Detached controller/status/watch behavior still needs to be unified around
+  this dual-client workflow; the existing detached wrapper remains Rust-only.
 - Packet and semantic diagnostics cover substantial protocol surface, but they
   lack a common run/session/action correlation envelope, complete unified
   server and client-UDP events, bounded rotation, and strict missing-family or
   sequence-gap gates.
 - The diagnostic dump endpoint captures only a small status document and does
   not yet produce a complete bounded protocol-investigation bundle.
+
+## Landed Evidence
+
+- `emulebb/emulebb-tooling#56` defined the persisted full-tunnel lane, external
+  profile exception, loopback-control rule, and evidence limitations.
+- `emulebb/emulebb-build-tests#18` added the read-only full-tunnel preflight,
+  explicit topology selection, loopback control binding, and fail-closed guard
+  requirement. Local validation: 2,297 passed, 1 skipped, 1 deselected; all PR
+  checks passed.
+- `emulebb/emulebb-build-tests#19` added transactional import-if-empty,
+  validated reuse, external-profile scoping, and preflight-before-mutation
+  ordering. Local validation: 2,303 passed, 1 skipped, 1 deselected; all PR
+  checks passed.
+- `emulebb/emulebb-build-tests#20` added durable exact-byte MFC preference
+  overlays, stale-run recovery, and restore evidence in both canonical
+  launchers. Local validation: 2,308 passed, 1 skipped, 1 deselected; all PR
+  checks passed.
+- No public live client was launched for these foundation slices; guarded live
+  and tunnel-down acceptance evidence remains outstanding.
 
 ## Why This Matters
 
@@ -146,9 +168,9 @@ and distinguish observed parity from merely unobserved behavior.
       selected interface.
 - [ ] Both clients start with VPN Guard Block and a controlled tunnel-down proof
       demonstrates zero off-tunnel public P2P traffic.
-- [ ] A truly empty Rust profile is imported once from the selected MFC profile;
+- [x] A truly empty Rust profile is imported once from the selected MFC profile;
       a valid nonempty Rust profile is reused without reimport or reset.
-- [ ] Temporary MFC harness overrides are backup-first and recoverable after
+- [x] Temporary MFC harness overrides are backup-first and recoverable after
       graceful stop, launcher failure, or stale-manifest recovery.
 - [ ] The canonical dual-client workflow supports detached until-stopped runs,
       self-describing status, periodic health checks, and graceful teardown.
