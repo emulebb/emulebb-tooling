@@ -138,16 +138,21 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   atomic writer health, final-close error persistence, and complete unredacted
   eD2K/Kad packet payloads. Required Debug x64, Release x64, and diagnostics
   Release x64 builds passed; all PR checks are green.
-- `emulebb/emulebb-build-tests#23` is open with commits `9747790` and
-  `6fd86b5`. It makes v2 the only current schema, selects exactly one Rust or
-  MFC run, rejects stale-process fallback, malformed complete lines, mixed
-  identities, segment/sequence gaps, and foreign schemas, validates matching
-  lossless MFC writer health, gives derived reports their own schemas, and
-  confines v1 to the explicit legacy MFC adapter. Local validation passed 2,340
-  tests with 1 skipped and 1 deselected; PR checks are running.
-- PR #179 remains draft until #23 lands and the MFC artifact-name policy is
-  updated. Rust PR #166 remains unmerged until its current API conformance
-  failure is resolved and local-bundle redaction is removed.
+- `emulebb/emulebb-build-tests#23` is open with commits `9747790`, `6fd86b5`,
+  and `5055ccb`. It makes v2 the only current schema, selects exactly one Rust
+  or MFC run, rejects stale-process fallback, malformed complete lines, mixed
+  identities, segment/sequence gaps, foreign schemas, empty action windows,
+  and packet-only parity, validates matching lossless MFC writer health, gives
+  derived reports their own schemas, and confines v1 to the explicit legacy
+  MFC adapter. Upload monitoring and compact watch reports follow the selected
+  process across every retained segment instead of pinning one file. Local
+  validation passed 2,357 tests with 1 skipped and 1 deselected; an independent
+  final audit reported no blockers, and PR checks are running.
+- This tooling branch replaces the stale fixed MFC event filename in product
+  policy with the segmented v2 run pattern and writer-health sidecar. PR #179
+  remains draft until #23 and this policy update land. Rust PR #166 remains
+  unmerged until its current API conformance failure is resolved and
+  local-bundle redaction is removed.
 - Protocol and soak traces, bundles, manifests, and diagnostic payloads are
   explicitly local test evidence and will not be published. They must preserve
   exact file, peer, user, hash, endpoint, search, and packet data whenever that

@@ -86,10 +86,13 @@ python -m emule_workspace build app --variant main --config Release --platform x
   `emulebb-diagnostics-upload-slot.log`,
   `emulebb-diagnostics-download-slot.log`,
   `emulebb-diagnostics-bad-peer.log`, `emulebb-diagnostics-kad.log`,
-  `emulebb-diagnostics-diag.log`,
   `emulebb-diagnostics-startup.trace.json`, `emulebb-performance.csv`,
   `emulebb-performance.mrtg`, `emulebb-performance-data.mrtg`, and
   `emulebb-performance-overhead.mrtg`.
+- Current common diagnostic events use retained v2 run segments named
+  `emulebb-mfc-diag-<processId>-<runId>-<segmentId:06>.jsonl` plus the atomic
+  `emulebb-mfc-diag-health.json` writer-health sidecar. The fixed
+  `emulebb-diagnostics-diag.log` name is retired for current runs.
 - Rotated logs insert `-YYYYMMDD-HHMMSS` before the extension. Dumps use
   `emulebb-dump-YYYYMMDD-HHMMSS-pid<PID>-mini|full.dmp` and
   `emulebb-crash-YYYYMMDD-HHMMSS-pid<PID>.dmp`.
