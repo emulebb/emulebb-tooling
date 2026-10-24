@@ -52,8 +52,16 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   lack a common run/session/action correlation envelope, complete unified
   server and client-UDP events, bounded rotation, and strict missing-family or
   sequence-gap gates.
-- The diagnostic dump endpoint captures only a small status document and does
-  not yet produce a complete bounded protocol-investigation bundle.
+- The Rust diagnostic dump endpoint now produces a versioned, bounded,
+  redacted investigation bundle with status, runtime diagnostics, settings
+  provenance, recent-log fingerprints, and tails plus integrity summaries for
+  unified, eD2K peer TCP, eD2K client UDP, eD2K server, and Kad UDP artifacts.
+- The unified event stream currently has independent eD2K/core and Kad
+  sequence allocators appending to one file, so duplicate and non-monotonic
+  sequence values are expected and global gap claims remain inconclusive.
+- Current packet/event writers remain single unbounded files; arbitrary-length
+  authorization therefore remains blocked until segmented rotation, retention,
+  writer/drop counters, and a process-wide sequence contract land.
 
 ## Landed Evidence
 
@@ -76,6 +84,18 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   restart-safe status, loopback REST and full-tunnel health checks, bounded
   rotating watcher evidence, and graceful/forced stop semantics. Local
   validation: 2,319 passed, 1 skipped, 1 deselected; all PR checks passed.
+- `emulebb/emulebb-rust#165` replaced the status-only dump with
+  `emulebb.diagnostic-bundle.v1`, bounded artifact tails, explicit
+  missing/schema/parse/sequence evidence, stable sensitive-value
+  fingerprints, and an honest `fullMemoryIncluded: false` result. Local
+  validation: 125 REST tests and 431 core tests passed; format, Clippy, all
+  platform build/test jobs, CodeQL, dependency policy, and live REST/OpenAPI
+  conformance passed.
+- The post-merge diagnostics audit identified the next implementation order:
+  one authoritative segmented event writer with process-wide and stream-local
+  sequencing; bounded rotation and retention with writer/drop counters;
+  unified eD2K server and client-UDP coverage; then stable connection, request,
+  search, and transfer correlation fields.
 - No public live client was launched for these foundation slices; guarded live
   and tunnel-down acceptance evidence remains outstanding.
 
@@ -186,7 +206,7 @@ and distinguish observed parity from merely unobserved behavior.
 - [ ] Required eD2K and Kad diagnostic families carry enough stable correlation
       to reconstruct causal sessions and harness actions without exposing live
       private data.
-- [ ] The diagnostic dump API produces a bounded, redacted investigation bundle
+- [x] The diagnostic dump API produces a bounded, redacted investigation bundle
       rather than a status-only placeholder.
 - [ ] The parity matrix covers server, peer-transfer, source/queue, and Kad
       lifecycle behavior while excluding registered omissions and separating
