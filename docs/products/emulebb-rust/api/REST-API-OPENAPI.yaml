@@ -5087,6 +5087,8 @@ components:
           minimum: 0
         sharedDirectoryReloadProgress:
           $ref: "#/components/schemas/SharedDirectoryReloadProgress"
+        diagnosticWriter:
+          $ref: "#/components/schemas/DiagnosticWriterHealth"
         ed2kPublish:
           type: object
           additionalProperties: true
@@ -5108,6 +5110,68 @@ components:
           oneOf:
             - $ref: "#/components/schemas/GeolocationRuntimeDiagnostics"
             - type: "null"
+    DiagnosticWriterHealth:
+      type: object
+      additionalProperties: false
+      required: [schema, enabled, configured, initialized, runId, processId, activeSegmentId, activeFileName, activeSegmentBytes, recordsWritten, bytesWritten, droppedEvents, encodeErrors, writeErrors, rotations, retentionDeletes, retentionDeleteErrors, maxSegmentBytes, maxSegmentSeconds, retainedSegments, initializationFailure]
+      properties:
+        schema:
+          type: string
+          enum: [diag_event_v2]
+        enabled:
+          type: boolean
+        configured:
+          type: boolean
+        initialized:
+          type: boolean
+        runId:
+          type: [string, "null"]
+        processId:
+          type: integer
+          minimum: 0
+        activeSegmentId:
+          type: [integer, "null"]
+          minimum: 0
+        activeFileName:
+          type: [string, "null"]
+        activeSegmentBytes:
+          type: integer
+          minimum: 0
+        recordsWritten:
+          type: integer
+          minimum: 0
+        bytesWritten:
+          type: integer
+          minimum: 0
+        droppedEvents:
+          type: integer
+          minimum: 0
+        encodeErrors:
+          type: integer
+          minimum: 0
+        writeErrors:
+          type: integer
+          minimum: 0
+        rotations:
+          type: integer
+          minimum: 0
+        retentionDeletes:
+          type: integer
+          minimum: 0
+        retentionDeleteErrors:
+          type: integer
+          minimum: 0
+        maxSegmentBytes:
+          type: [integer, "null"]
+          minimum: 0
+        maxSegmentSeconds:
+          type: [integer, "null"]
+          minimum: 0
+        retainedSegments:
+          type: [integer, "null"]
+          minimum: 0
+        initializationFailure:
+          type: [string, "null"]
     TransferEventRuntimeDiagnostics:
       type: object
       additionalProperties: false
