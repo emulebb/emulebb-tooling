@@ -55,23 +55,25 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   comparisons. Stable connection/session/action correlation remains incomplete.
 - The Rust diagnostic dump endpoint now produces a versioned, bounded local
   investigation bundle with status, runtime diagnostics, settings provenance,
-  recent logs, and exact records plus integrity summaries for unified,
-  eD2K peer TCP, eD2K client UDP, eD2K server, and Kad UDP artifacts. Its
-  evidence is intentionally unredacted for this local, non-published test lane.
+  recent logs, and exact records plus integrity summaries from the unified
+  `diag_event_v2` stream only. Bundle v3 deliberately excludes legacy side-file
+  dumps. Its evidence is intentionally unredacted for this local,
+  non-published test lane.
 - Rust and MFC use one process-wide retained-event sequence,
   family-local stream sequences, rotate-before-write segments, persisted-run
   retention, and observable writer/drop/error health.
-- Four legacy packet dump families remain separate unbounded files, and
-  diagnostic bundle snapshots accumulate without directory retention. The
-  eD2K peer TCP, server TCP/UDP, and Kad UDP legacy records already duplicate
-  bounded unified evidence. Rust and MFC eD2K client UDP now record exact wire
-  bytes, receive dispositions, and correlated socket-boundary send attempts and
-  terminal outcomes in the same `diag_event_v2` family. The harness compares
-  exact packet bytes, audits each side's lifecycle independently, and requires
-  the family across complete captures while keeping narrow action windows
-  sampling-tolerant. Arbitrary-length authorization remains blocked until the
-  unbounded storage paths are retired or bounded and guarded live validation
-  proves the complete path.
+- Two legacy packet side-file writers remain unbounded: eD2K peer TCP and the
+  combined eD2K server TCP/UDP writer. The client-UDP and Kad-UDP side files are
+  retired after their exact evidence moved to the bounded unified stream.
+  Diagnostic bundle snapshots still accumulate without directory retention.
+  Rust and MFC eD2K client UDP record exact wire bytes, receive dispositions,
+  and correlated socket-boundary send attempts and terminal outcomes in the
+  same `diag_event_v2` family. The harness compares exact packet bytes, audits
+  each side's lifecycle independently, and requires the family across complete
+  captures while keeping narrow action windows sampling-tolerant.
+  Arbitrary-length authorization remains blocked until the remaining unbounded
+  storage paths are retired or bounded, repeated bundle persistence is bounded,
+  and guarded live validation proves the complete path.
 
 ## Landed Evidence
 
@@ -165,6 +167,16 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   native seam coverage, and the canonical single-schema contract. Local
   validation passed 2,368 Python tests with one skip and one deselection plus
   832 native parity tests; all PR checks passed.
+- `emulebb/emulebb-tooling#69` published the bundle-v3 OpenAPI contract and made
+  its bounded, unified-only `diag_event_v2` artifact policy explicit. Both local
+  documentation gates and all PR checks passed.
+- `emulebb/emulebb-rust#171` changed diagnostic bundles to unified-only v3,
+  retired the client-UDP and Kad-UDP unbounded side-file writers, completed Kad
+  flow, trace, state, outcome, tracker, and exact-byte context in
+  `diag_event_v2`, and exposed the SHA-256 of the exact loaded IP-filter source.
+  The full workspace suite, focused diagnostic suites, strict Kad Clippy, and
+  formatting passed locally; all Linux, macOS, Windows, CodeQL, dependency,
+  policy, and live REST/OpenAPI PR checks passed.
 - `emulebb/emulebb-tooling#59` through `#62` aligned the common-v2 product
   contract, segmented filenames and writer-health evidence, and the explicit
   local-only unredacted trace policy.
@@ -181,9 +193,9 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   use the new missing-family, exact-wire, and lifecycle findings to drive the
   next protocol-parity gaps. `diag_event_v2` remains the only current event
   envelope; `ed2k_client_udp` is a family within it, not a second schema.
-- Retire the four unbounded per-family packet files after equivalence tests:
-  eD2K peer TCP, eD2K server TCP/UDP, Kad UDP, and eD2K client UDP. Do not add
-  four independent retention systems when the common segmented writer is the
+- Retire the two remaining unbounded packet side files after equivalence tests:
+  eD2K peer TCP and the combined eD2K server TCP/UDP writer. Do not add
+  independent retention systems when the common segmented writer is the
   intended long-term authority.
 - Bound diagnostic bundle snapshot persistence by an explicit storage budget,
   or move snapshot ownership into the bounded campaign evidence store. Each
