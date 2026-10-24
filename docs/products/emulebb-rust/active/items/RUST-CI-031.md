@@ -61,10 +61,13 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
 - Rust and MFC use one process-wide retained-event sequence,
   family-local stream sequences, rotate-before-write segments, persisted-run
   retention, and observable writer/drop/error health.
-- Legacy packet dump families remain separate unbounded files. Arbitrary-length
-  authorization therefore remains blocked until packet evidence is bounded or
-  retired from the long-soak gate and guarded live validation proves the
-  complete path.
+- Four legacy packet dump families remain separate unbounded files, and
+  diagnostic bundle snapshots accumulate without directory retention. The
+  eD2K peer TCP, server TCP/UDP, and Kad UDP legacy records already duplicate
+  bounded unified evidence; eD2K client UDP must first gain equivalent unified
+  records. Arbitrary-length authorization therefore remains blocked until
+  those storage paths are retired or bounded and guarded live validation proves
+  the complete path.
 
 ## Landed Evidence
 
@@ -109,37 +112,53 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   passed the full workspace, 1,180 diagnostic eD2K tests, 78 diagnostic Kad-net
   tests, 75 diagnostic daemon tests, strict Clippy, formatting, and all required
   Linux/macOS/Windows, CodeQL, dependency, and live REST/OpenAPI checks.
+- `emulebb/emulebb-build-tests#24` removed the no-op Rust `fullMemory` request
+  and echoed result from contract smoke, Windows VM smoke, and local
+  dump/crash smoke while preserving the unrelated crash-dump preference in the
+  local swarm harness. All 20 required PR checks passed.
+- `emulebb/emulebb-tooling#63` removed `fullMemory` from the Rust-only OpenAPI
+  request and documented the complete diagnostic result. The shared and MFC
+  contracts remain unchanged.
+- `emulebb/emulebb-rust#167` removed `fullMemory` and
+  `fullMemoryIncluded` end to end from the request, route metadata, response,
+  bundle, tests, and Web UI. Legacy clients now receive strict unknown-field
+  validation. Local validation passed 127 REST tests, the complete core suite,
+  strict Clippy, 28 Web UI unit tests, typecheck, and production build; all
+  required Linux/macOS/Windows, CodeQL, dependency, and live REST/OpenAPI checks
+  passed.
 - `emulebb/emulebb-tooling#59` through `#62` aligned the common-v2 product
   contract, segmented filenames and writer-health evidence, and the explicit
   local-only unredacted trace policy.
 - No public live client was launched for these foundation slices; guarded live
   and tunnel-down acceptance evidence remains outstanding.
 
-## In-Flight Implementation
+## Next Implementation
 
 - The `diag_event_v2` identity contract is `(processId, runId, segmentId)`.
   `seq` is process-wide retained-event order and `streamSeq` is retained-event
   order within one family. Files are named
   `emulebb-rust-diag-<processId>-<runId>-<segmentId>.jsonl`.
-- `emulebb/emulebb-build-tests#24` removes the no-op Rust `fullMemory` request
-  field from contract smoke, Windows VM smoke, and local dump/crash smoke, and
-  removes the misleading echoed result. The change remains compatible with the
-  current optional server field while the API removal lands.
-- The Rust-only OpenAPI contract now removes `fullMemory` and documents the
-  complete bundle result (`schema`, byte/artifact/issue counts, and missing
-  artifact families). The shared and MFC contracts remain unchanged.
-- The next Rust API slice removes `fullMemory` and `fullMemoryIncluded` from the
-  request, route metadata, response model, bundle metadata, tests, and Web UI.
-  Legacy clients sending `fullMemory` will then fail strict unknown-field
-  validation by design.
+- Add exact eD2K client UDP records to the bounded unified `diag_event_v2`
+  stream. This is the only legacy packet family without equivalent unified
+  raw/payload evidence.
+- Retire the four unbounded per-family packet files after equivalence tests:
+  eD2K peer TCP, eD2K server TCP/UDP, Kad UDP, and eD2K client UDP. Do not add
+  four independent retention systems when the common segmented writer is the
+  intended long-term authority.
+- Bound diagnostic bundle snapshot persistence by an explicit storage budget,
+  or move snapshot ownership into the bounded campaign evidence store. Each
+  individual bundle is bounded today, but repeated confirmed captures are not.
+- Extend the common writer from retained-segment count toward aggregate byte,
+  maximum-age, and minimum-free-space enforcement, then archive closed segments
+  in the soak harness with stable run/process/segment identity and hashes.
 - Protocol and soak traces, bundles, manifests, and diagnostic payloads are
   explicitly local test evidence and will not be published. They must preserve
   exact file, peer, user, hash, endpoint, search, and packet data whenever that
   data helps reconstruct eD2K or Kad behavior. Redaction and privacy-driven
   field omission are not requirements for this lane; completeness is.
-- Legacy packet dump families remain unbounded. Arbitrarily long public live
-  soaks are still unauthorized, and no live client has been launched during
-  these implementation slices.
+- Arbitrarily long public live soaks remain unauthorized while the audited
+  packet side files and bundle snapshots are unbounded. No live client has been
+  launched during these implementation slices.
 
 ## Why This Matters
 
@@ -254,9 +273,8 @@ distinguish observed parity from merely unobserved behavior.
 - [ ] Required eD2K and Kad diagnostic families carry exact local evidence and
       enough stable correlation to reconstruct causal sessions and harness
       actions without privacy-driven omissions.
-- [x] The diagnostic dump API produces a bounded investigation bundle rather
-      than a status-only placeholder; removing its transitional redaction is
-      still required.
+- [x] The diagnostic dump API produces a bounded, exact, unredacted local
+      investigation bundle rather than a status-only placeholder.
 - [ ] The parity matrix covers server, peer-transfer, source/queue, and Kad
       lifecycle behavior while excluding registered omissions and separating
       negotiated extensions.
