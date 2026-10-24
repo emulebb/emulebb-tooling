@@ -62,6 +62,10 @@ separate. Never fall back silently from VPN to direct.
   traffic use inherited `X_LOCAL_IP` / `--lan-bind-addr`, never loopback or
   wildcard. Product runtime and other machines retain deliberate loopback and
   wildcard compatibility.
+- A full-tunnel host lane must prove split tunneling is disabled and must not
+  call helpers that add application allow-list entries, excluded ranges, or
+  other provider settings. Its local control planes use loopback while P2P
+  remains bound through `BindInterface` with VPN Guard Block.
 - `--lan-bind-addr` is the only harness name for that LAN concept. Do not
   reintroduce `--bind-addr`, `--rest-bind-addr`, or `--web-bind-addr`.
 - Use `192.0.2.x` for documented LAN examples and `127.0.0.1` for canonical
@@ -85,6 +89,35 @@ between the two completed payloads; it does not establish content provenance or
 trust. The campaign must remain bounded, tear down automatically, retain
 sanitized evidence, and leave the ordinary direct Rust beta requirements above
 unchanged for every other workflow.
+
+An explicitly selected persisted-profile diagnostic soak is a separate
+discovery lane, not a parity-certification or release-proof campaign. It may run
+until explicitly stopped and may use operator-owned MFC and Rust profile roots
+outside the workspace output root under the core policy exception, provided
+all of the following remain true:
+
+- profile paths come only from ignored local input or explicit runtime
+  arguments and never enter tracked files or retained messages;
+- hide.me is already active in full-tunnel mode, split tunneling is off, both
+  P2P planes use `BindInterface`, both clients use VPN Guard Block, and the
+  harness fails before launch rather than changing provider settings;
+- local REST control uses loopback and stays separate from the guarded public
+  P2P data plane;
+- a truly empty Rust profile may be imported once from the selected MFC
+  profile, while a nonempty current-schema Rust profile is validated and reused
+  without automatic reset or reimport;
+- every temporary MFC profile override is backup-first and recoverable after
+  normal stop, launch failure, or stale-manifest recovery;
+- campaign manifests, summaries, archived diagnostic segments, and selected
+  retained evidence stay below `EMULEBB_WORKSPACE_OUTPUT_ROOT`, while generic
+  workspace cleanup never owns the external profiles; and
+- diagnostic storage, monitoring history, and retained payloads are bounded by
+  explicit byte, age, and free-space limits. Missing required families, parse
+  failures, sequence gaps, or dropped records make evidence inconclusive or
+  failed rather than successful parity.
+
+Discoveries from this lane require a separate bounded, reproducible campaign
+before they support a parity, certification, release, or VPN-safety claim.
 
 Never put real media titles or live search terms in tracked harness code, docs,
 tests, or retained evidence.

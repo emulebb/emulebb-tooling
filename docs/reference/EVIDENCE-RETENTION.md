@@ -6,6 +6,13 @@ is archived, indexed, or cleaned. It applies to generated files under
 `repos\emulebb-build-tests\reports`. It does not change source, docs, or
 release package retention.
 
+Raw diagnostics written inside an explicitly selected operator-owned external
+profile are transient operator state, not durable workspace evidence. The live
+harness must rotate them within configured byte and age budgets, must never let
+generic cleanup move or delete the profile, and must copy only bounded selected
+segments plus compact indexes or summaries into the workspace output root for
+classification below.
+
 ## Retention Tiers
 
 | Tier | Purpose | Default Handling |

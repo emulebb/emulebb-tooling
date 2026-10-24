@@ -57,6 +57,13 @@ policy rather than choosing one silently.
   below `EMULEBB_WORKSPACE_OUTPUT_ROOT`, which must be outside the source
   workspace. Do not create build output or scratch/lab trees below a repo or
   elsewhere under `EMULEBB_WORKSPACE_ROOT`.
+- An explicitly selected persisted-profile diagnostic soak may use an
+  operator-owned profile root outside `EMULEBB_WORKSPACE_OUTPUT_ROOT` only when
+  the Harness And Live Policy authorizes that lane. The profile path must come
+  from ignored local input or an explicit runtime argument, must never enter
+  tracked files, and remains operator state that workspace cleanup must not
+  move or delete. Campaign manifests, summaries, archived diagnostic segments,
+  and retained evidence still belong below `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
 - Environment variables are inherited operator state. Agents must not assign,
   repair, shadow, or guess `EMULEBB_WORKSPACE_ROOT`,
   `EMULEBB_WORKSPACE_OUTPUT_ROOT`, `CARGO_TARGET_DIR`, or `X_LOCAL_IP` inline.

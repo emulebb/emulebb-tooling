@@ -139,7 +139,7 @@ and distinguish observed parity from merely unobserved behavior.
 
 ## Acceptance Criteria
 
-- [ ] The harness/live policy defines the persisted full-tunnel diagnostic soak
+- [x] The harness/live policy defines the persisted full-tunnel diagnostic soak
       lane and its evidence limitations.
 - [ ] Preflight fails before launch unless hide.me is active, split tunneling is
       off, loopback control is available, and both P2P planes can bind the

@@ -32,6 +32,11 @@ runtime work.
   `EMULEBB_WORKSPACE_OUTPUT_ROOT\packages\build`. Runtime tool payloads use
   `tools`, including `tools\amule`. Third-party orchestration prefers
   `builds\third_party`.
+- The core persisted-profile diagnostic-soak exception permits an explicitly
+  selected operator-owned profile outside the output root. It does not create
+  a second workspace output root: orchestration state, manifests, archived
+  diagnostic segments, summaries, and promoted evidence remain under the
+  configured output root, and generic cleanup never owns the external profile.
 - `repos\ed2k-server` is the sole local deterministic ED2K server and an
   upstream-contribution reference. Follow upstream closely, prefer harness-side
   adaptation, and keep server changes minimal, generic, and upstreamable. Its
