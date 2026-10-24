@@ -209,9 +209,24 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   eD2K tests and 1,182 default-feature eD2K tests plus the supported quick
   quality gate; all Linux, macOS, Windows, CodeQL, dependency, policy, and live
   REST/OpenAPI PR checks passed.
+- `emulebb/emulebb-build-tests#28` added the strict versioned `soak_storage`
+  ignored-input contract, deterministic whole-file inventory and free-space
+  seams, and a reusable `BoundedArtifactStore`. It protects active and pinned
+  evidence, selects only complete closed artifacts oldest-first, and enforces
+  maximum retained age, aggregate bytes, and minimum free-space reserve without
+  redacting or mutating protocol records. Local validation passed 2,405 Python
+  tests with one skip and one deselection; all baseline, fast-harness,
+  portability, dependency, analysis, and CodeQL PR checks passed.
 - `emulebb/emulebb-tooling#59` through `#62` aligned the common-v2 product
   contract, segmented filenames and writer-health evidence, and the explicit
   local-only unredacted trace policy.
+- The operator-reported concurrent IP-filter work was reconciled after its
+  compilation completed: the Rust checkout and only registered worktree were
+  clean at `95f14c80`, and no local or remote IP-filter topic branch or
+  uncommitted delta was available to include. The existing exact-source
+  IP-filter SHA-256 diagnostics from Rust #171 remain present; any later
+  materialized IP-filter delta must be reviewed and landed as its own granular
+  Rust slice.
 - No public live client was launched for these foundation slices; guarded live
   and tunnel-down acceptance evidence remains outstanding.
 
@@ -269,9 +284,11 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   use the new missing-family, exact-wire, and lifecycle findings to drive the
   next protocol-parity gaps. `diag_event_v2` remains the only current event
   envelope; `ed2k_client_udp` is a family within it, not a second schema.
-- Build the harness storage-policy foundation first: strict ignored-input
-  parsing, injectable free-space and artifact inventory, and deterministic
-  byte/age/active-campaign/reserve enforcement tests.
+- Integrate the landed harness storage-policy foundation into persisted
+  controller preflight, launch, watch, stop, and status paths. Preflight must
+  prove a feasible plan without mutation; launch must apply and verify it
+  before profile mutation or process start; watch and stop must fail closed on
+  reserve or evidence-integrity loss.
 - Extend the Rust common writer with aggregate-byte, retained-age, and
   minimum-free-space policy plus observable fault/drop accounting. Keep the
   active segment protected and preserve exact oversized records.
