@@ -62,15 +62,19 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
 - Rust and MFC use one process-wide retained-event sequence,
   family-local stream sequences, rotate-before-write segments, persisted-run
   retention, and observable writer/drop/error health.
-- Two legacy packet side-file writers remain unbounded: eD2K peer TCP and the
-  combined eD2K server TCP/UDP writer. The client-UDP and Kad-UDP side files are
-  retired after their exact evidence moved to the bounded unified stream.
-  Diagnostic bundle snapshots still accumulate without directory retention.
+- One legacy packet side-file writer remains unbounded: eD2K peer TCP. The
+  client-UDP, server TCP/UDP, and Kad-UDP side files are retired after their
+  exact evidence moved to the bounded unified stream. Diagnostic bundle
+  snapshots still accumulate without directory retention.
   Rust and MFC eD2K client UDP record exact wire bytes, receive dispositions,
   and correlated socket-boundary send attempts and terminal outcomes in the
   same `diag_event_v2` family. The harness compares exact packet bytes, audits
   each side's lifecycle independently, and requires the family across complete
   captures while keeping narrow action windows sampling-tolerant.
+  Rust server TCP and UDP diagnostics now preserve trace/state context and emit
+  correlated socket-boundary send attempts plus exactly one success, failure,
+  or cancellation terminal outcome. The Rust `ed2k_server_udp` family still
+  lacks an aligned MFC comparator and is not yet cross-client parity evidence.
   Arbitrary-length authorization remains blocked until the remaining unbounded
   storage paths are retired or bounded, repeated bundle persistence is bounded,
   and guarded live validation proves the complete path.
@@ -177,6 +181,18 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   The full workspace suite, focused diagnostic suites, strict Kad Clippy, and
   formatting passed locally; all Linux, macOS, Windows, CodeQL, dependency,
   policy, and live REST/OpenAPI PR checks passed.
+- `emulebb/emulebb-build-tests#26` moved Rust server startup-failure context to
+  the selected current `diag_event_v2` run, accepted server TCP and server UDP
+  records, and removed the harness dependency on the unbounded server side
+  file before its retirement. Local validation passed 2,369 Python tests with
+  one skip and one deselection; all PR checks passed.
+- `emulebb/emulebb-rust#172` preserved server trace/state correlation, added
+  attempted and exactly-one-terminal send lifecycles for server TCP and UDP,
+  routed plaintext and obfuscated login frames through the diagnostic-aware
+  send contract, and retired the combined unbounded server packet side file.
+  The full workspace suite and supported quick quality gate passed locally;
+  all Linux, macOS, Windows, CodeQL, dependency, policy, and live REST/OpenAPI
+  PR checks passed.
 - `emulebb/emulebb-tooling#59` through `#62` aligned the common-v2 product
   contract, segmented filenames and writer-health evidence, and the explicit
   local-only unredacted trace policy.
@@ -193,10 +209,11 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   use the new missing-family, exact-wire, and lifecycle findings to drive the
   next protocol-parity gaps. `diag_event_v2` remains the only current event
   envelope; `ed2k_client_udp` is a family within it, not a second schema.
-- Retire the two remaining unbounded packet side files after equivalence tests:
-  eD2K peer TCP and the combined eD2K server TCP/UDP writer. Do not add
-  independent retention systems when the common segmented writer is the
-  intended long-term authority.
+- Retire the remaining unbounded eD2K peer-TCP packet side file after
+  equivalence tests. Do not add an independent retention system when the common
+  segmented writer is the intended long-term authority.
+- Add aligned MFC and harness coverage for Rust's `ed2k_server_udp` family
+  before treating server UDP observations as cross-client parity evidence.
 - Bound diagnostic bundle snapshot persistence by an explicit storage budget,
   or move snapshot ownership into the bounded campaign evidence store. Each
   individual bundle is bounded today, but repeated confirmed captures are not.
@@ -208,9 +225,9 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   exact file, peer, user, hash, endpoint, search, and packet data whenever that
   data helps reconstruct eD2K or Kad behavior. Redaction and privacy-driven
   field omission are not requirements for this lane; completeness is.
-- Arbitrarily long public live soaks remain unauthorized while the audited
-  packet side files and bundle snapshots are unbounded. No live client has been
-  launched during these implementation slices.
+- Arbitrarily long public live soaks remain unauthorized while the remaining
+  packet side file and repeated bundle snapshots are unbounded. No live client
+  has been launched during these implementation slices.
 
 ## Why This Matters
 
