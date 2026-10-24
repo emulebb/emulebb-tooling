@@ -64,13 +64,14 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
 - Four legacy packet dump families remain separate unbounded files, and
   diagnostic bundle snapshots accumulate without directory retention. The
   eD2K peer TCP, server TCP/UDP, and Kad UDP legacy records already duplicate
-  bounded unified evidence. Rust eD2K client UDP now records exact receive
-  bytes with accepted, ignored, and dropped outcomes plus correlated send
-  attempt and terminal lifecycle events, and only confirmed local sends open
-  the pending-reply gate. MFC/harness alignment remains incomplete.
-  Arbitrary-length authorization therefore remains blocked until that evidence
-  gap closes, the unbounded storage paths are retired or bounded, and guarded
-  live validation proves the complete path.
+  bounded unified evidence. Rust and MFC eD2K client UDP now record exact wire
+  bytes, receive dispositions, and correlated socket-boundary send attempts and
+  terminal outcomes in the same `diag_event_v2` family. The harness compares
+  exact packet bytes, audits each side's lifecycle independently, and requires
+  the family across complete captures while keeping narrow action windows
+  sampling-tolerant. Arbitrary-length authorization remains blocked until the
+  unbounded storage paths are retired or bounded and guarded live validation
+  proves the complete path.
 
 ## Landed Evidence
 
@@ -153,6 +154,17 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   tests, the complete core diagnostic matrix, exact workspace Clippy, and
   formatting; all required Linux/macOS/Windows, CodeQL, dependency, and live
   REST/OpenAPI checks passed.
+- `emulebb/emulebb#180` added the MFC `ed2k_client_udp` v2 emitter with exact
+  unredacted wire bytes, accepted/ignored/dropped receive outcomes, stable
+  socket-boundary send attempts, and exactly one success, failure, or
+  cancellation terminal per attempt. Debug, Release, and diagnostics Release
+  builds passed before each granular commit; all PR checks passed.
+- `emulebb/emulebb-build-tests#25` added the dedicated mixed client-UDP packet
+  and lifecycle diff, complete-capture required-family and per-side lifecycle
+  gates, cross-client and offline-soak enforcement, compact failure summaries,
+  native seam coverage, and the canonical single-schema contract. Local
+  validation passed 2,368 Python tests with one skip and one deselection plus
+  832 native parity tests; all PR checks passed.
 - `emulebb/emulebb-tooling#59` through `#62` aligned the common-v2 product
   contract, segmented filenames and writer-health evidence, and the explicit
   local-only unredacted trace policy.
@@ -165,9 +177,10 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   `seq` is process-wide retained-event order and `streamSeq` is retained-event
   order within one family. Files are named
   `emulebb-rust-diag-<processId>-<runId>-<segmentId>.jsonl`.
-- Add the matching MFC client-UDP unified emitter and teach the common schema,
-  comparator, and required-family gate about `ed2k_client_udp` before claiming
-  cross-client parity for that family.
+- Exercise the aligned `ed2k_client_udp` family in guarded bounded captures and
+  use the new missing-family, exact-wire, and lifecycle findings to drive the
+  next protocol-parity gaps. `diag_event_v2` remains the only current event
+  envelope; `ed2k_client_udp` is a family within it, not a second schema.
 - Retire the four unbounded per-family packet files after equivalence tests:
   eD2K peer TCP, eD2K server TCP/UDP, Kad UDP, and eD2K client UDP. Do not add
   four independent retention systems when the common segmented writer is the
