@@ -64,10 +64,12 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
 - Four legacy packet dump families remain separate unbounded files, and
   diagnostic bundle snapshots accumulate without directory retention. The
   eD2K peer TCP, server TCP/UDP, and Kad UDP legacy records already duplicate
-  bounded unified evidence; eD2K client UDP must first gain equivalent unified
-  records. Arbitrary-length authorization therefore remains blocked until
-  those storage paths are retired or bounded and guarded live validation proves
-  the complete path.
+  bounded unified evidence. Successful eD2K client UDP sends and decodable
+  receives now do too, but terminal drop/ignore/send-failure coverage and
+  MFC/harness alignment remain incomplete. Arbitrary-length authorization
+  therefore remains blocked until those evidence gaps close, the unbounded
+  storage paths are retired or bounded, and guarded live validation proves the
+  complete path.
 
 ## Landed Evidence
 
@@ -126,6 +128,13 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   strict Clippy, 28 Web UI unit tests, typecheck, and production build; all
   required Linux/macOS/Windows, CodeQL, dependency, and live REST/OpenAPI checks
   passed.
+- `emulebb/emulebb-rust#168` added exact successful eD2K client UDP wire and
+  decoded-payload records to the bounded `ed2k_client_udp` `diag_event_v2`
+  family. Independent review also found and fixed receive diagnostics using the
+  local public IP rather than the remote sender IP for obfuscation. Local
+  validation passed 1,181 diagnostic eD2K tests plus strict default and feature
+  Clippy; all required Linux/macOS/Windows, CodeQL, dependency, and live
+  REST/OpenAPI checks passed.
 - `emulebb/emulebb-tooling#59` through `#62` aligned the common-v2 product
   contract, segmented filenames and writer-health evidence, and the explicit
   local-only unredacted trace policy.
@@ -138,9 +147,15 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   `seq` is process-wide retained-event order and `streamSeq` is retained-event
   order within one family. Files are named
   `emulebb-rust-diag-<processId>-<runId>-<segmentId>.jsonl`.
-- Add exact eD2K client UDP records to the bounded unified `diag_event_v2`
-  stream. This is the only legacy packet family without equivalent unified
-  raw/payload evidence.
+- Complete eD2K client UDP terminal evidence before retiring its legacy file:
+  preserve raw bytes for filtered, banned, undecodable, malformed, unknown,
+  unregistered, and unsolicited receives; distinguish accepted, ignored, and
+  dropped routing outcomes; record failed/cancelled sends; and derive accurate
+  state, phase, and opcode names for reask, direct callback, buddy relay, and
+  port-test traffic.
+- Add the matching MFC client-UDP unified emitter and teach the common schema,
+  comparator, and required-family gate about `ed2k_client_udp` before claiming
+  cross-client parity for that family.
 - Retire the four unbounded per-family packet files after equivalence tests:
   eD2K peer TCP, eD2K server TCP/UDP, Kad UDP, and eD2K client UDP. Do not add
   four independent retention systems when the common segmented writer is the
