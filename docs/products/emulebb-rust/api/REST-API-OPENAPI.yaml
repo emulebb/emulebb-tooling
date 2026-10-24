@@ -3598,15 +3598,40 @@ components:
     DiagnosticDump:
       type: object
       additionalProperties: false
-      required: [ok, path, fullMemory]
+      required:
+        - ok
+        - path
+        - schema
+        - byteCount
+        - artifactFileCount
+        - missingArtifactFamilies
+        - issueCount
       properties:
         ok:
           type: boolean
           const: true
         path:
           type: string
-        fullMemory:
-          type: boolean
+          minLength: 1
+        schema:
+          type: string
+          const: emulebb.diagnostic-bundle.v2
+        byteCount:
+          type: integer
+          format: int64
+          minimum: 0
+        artifactFileCount:
+          type: integer
+          format: int64
+          minimum: 0
+        missingArtifactFamilies:
+          type: array
+          items:
+            type: string
+        issueCount:
+          type: integer
+          format: int64
+          minimum: 0
     ErrorEnvelope:
       type: object
       additionalProperties: false
@@ -6146,9 +6171,6 @@ components:
         confirmDump:
           type: boolean
           enum: [true]
-        fullMemory:
-          type: boolean
-          default: false
     DiagnosticCrashTestRequest:
       type: object
       additionalProperties: false
