@@ -48,22 +48,24 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   launcher detached and until stopped, records exact launcher and watcher
   identities, reports dual process/REST/VPN health, rotates watcher evidence,
   and requests graceful teardown before an exact-identity forced fallback.
-- Packet and semantic diagnostics cover substantial protocol surface, but they
-  lack a common run/session/action correlation envelope, complete unified
-  server and client-UDP events, bounded rotation, and strict missing-family or
-  sequence-gap gates.
+- Packet and semantic diagnostics cover substantial protocol surface. The
+  common event stream now has a v2 process/run/segment envelope and bounded
+  writers on active Rust and MFC branches, while connection/session/action
+  correlation, unified server/client-UDP coverage, and required-family gates
+  remain incomplete.
 - The Rust diagnostic dump endpoint now produces a versioned, bounded local
   investigation bundle with status, runtime diagnostics, settings provenance,
   recent-log fingerprints, and tails plus integrity summaries for unified,
   eD2K peer TCP, eD2K client UDP, eD2K server, and Kad UDP artifacts. Its
   existing redaction is transitional and must not suppress evidence needed by
   this explicitly local, non-published test lane.
-- The unified event stream currently has independent eD2K/core and Kad
-  sequence allocators appending to one file, so duplicate and non-monotonic
-  sequence values are expected and global gap claims remain inconclusive.
-- Current packet/event writers remain single unbounded files; arbitrary-length
-  authorization therefore remains blocked until segmented rotation, retention,
-  writer/drop counters, and a process-wide sequence contract land.
+- Active Rust and MFC branches use one process-wide retained-event sequence,
+  family-local stream sequences, rotate-before-write segments, persisted-run
+  retention, and observable writer/drop/error health.
+- Legacy packet dump families remain separate unbounded files. Arbitrary-length
+  authorization therefore remains blocked until current v2 integration lands,
+  packet evidence is bounded or retired from the long-soak gate, and guarded
+  live validation proves the complete path.
 
 ## Landed Evidence
 
@@ -104,10 +106,11 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
 ## In-Flight Implementation
 
 - `emulebb/emulebb-build-tests#22` has landed run-aware segmented Rust trace
-  selection, ordered multi-segment loading, v2 compatibility, and the first
-  shared v2 schema notes. Local validation passed 2,329 tests with 1 skipped
-  and 1 deselected; both supported Windows harness jobs and the portability,
-  security, and dependency checks passed.
+  selection, ordered multi-segment loading, transitional v2 compatibility, and
+  the first shared v2 schema notes. Local validation passed 2,329 tests with 1
+  skipped and 1 deselected; both supported Windows harness jobs and the
+  portability, security, and dependency checks passed. The permissive
+  dual-schema behavior is superseded by the strict common-v2 work in #23.
 - `emulebb/emulebb-rust#166` remains open while the common-schema correction
   lands. Its branch adds the dependency-neutral `emulebb-diagnostics` crate,
   the incompatible `diag_event_v2` envelope, one process-wide and family-local
@@ -128,6 +131,23 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   current common envelope for both clients, and v1 may survive only behind an
   explicitly named legacy-input adapter. Current parity and soak gates must not
   silently accept either version.
+- `emulebb/emulebb#179` is draft with MFC commits `9dbb9952`, `2271d8fc`, and
+  `77ec3524`. The branch emits the common v2 envelope through a dedicated
+  per-launch segmented writer with unique create-new files, rotate-before-write
+  byte/age bounds, committed process/family sequences, global retention,
+  atomic writer health, final-close error persistence, and complete unredacted
+  eD2K/Kad packet payloads. Required Debug x64, Release x64, and diagnostics
+  Release x64 builds passed; all PR checks are green.
+- `emulebb/emulebb-build-tests#23` is open with commits `9747790` and
+  `6fd86b5`. It makes v2 the only current schema, selects exactly one Rust or
+  MFC run, rejects stale-process fallback, malformed complete lines, mixed
+  identities, segment/sequence gaps, and foreign schemas, validates matching
+  lossless MFC writer health, gives derived reports their own schemas, and
+  confines v1 to the explicit legacy MFC adapter. Local validation passed 2,340
+  tests with 1 skipped and 1 deselected; PR checks are running.
+- PR #179 remains draft until #23 lands and the MFC artifact-name policy is
+  updated. Rust PR #166 remains unmerged until its current API conformance
+  failure is resolved and local-bundle redaction is removed.
 - Protocol and soak traces, bundles, manifests, and diagnostic payloads are
   explicitly local test evidence and will not be published. They must preserve
   exact file, peer, user, hash, endpoint, search, and packet data whenever that
