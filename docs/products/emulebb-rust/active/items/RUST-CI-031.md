@@ -62,11 +62,18 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
 - Rust and MFC use one process-wide retained-event sequence,
   family-local stream sequences, rotate-before-write segments, persisted-run
   retention, and observable writer/drop/error health.
+- The Rust writer now treats storage as an explicit authority: it enforces
+  aggregate bytes, retained age, retained segment count, and minimum free
+  space before growth; protects the active segment; accepts an exact oversized
+  record only when the configured budget permits it; and exposes retained
+  inventory, maximum growth, policy state, drop causes, and latched storage and
+  writer-I/O faults. Invalid configured limits fail initialization instead of
+  silently falling back to defaults.
 - Every active Rust protocol family now emits through the bounded unified
   stream. The peer-TCP, client-UDP, server TCP/UDP, and Kad-UDP legacy packet
   side-file writers are retired, and active harness consumers select exact
-  `diag_event_v2` runs rather than discovering those files. Diagnostic bundle
-  snapshots still accumulate without directory retention.
+  `diag_event_v2` runs rather than discovering those files. The REST/OpenAPI
+  contract now carries the complete 41-field writer-health payload.
   Rust and MFC eD2K client UDP record exact wire bytes, receive dispositions,
   and correlated socket-boundary send attempts and terminal outcomes in the
   same `diag_event_v2` family. The harness compares exact packet bytes, audits
@@ -76,10 +83,10 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   correlated socket-boundary send attempts plus exactly one success, failure,
   or cancellation terminal outcome. The Rust `ed2k_server_udp` family still
   lacks an aligned MFC comparator and is not yet cross-client parity evidence.
-  Arbitrary-length authorization remains blocked until controller output,
-  `daemon.out`, campaign archives, repeated bundle persistence, and aggregate
-  disk reserve are bounded, then guarded live validation proves the complete
-  path.
+  Arbitrary-length authorization remains blocked until repeated bundle
+  persistence and selected-segment promotion are owned by the bounded campaign
+  store, persisted watcher health makes writer-integrity faults terminal, and
+  guarded live validation proves the complete path.
 
 ## Landed Evidence
 
@@ -284,26 +291,41 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   deselection; all baseline, portability, dependency, analysis, CodeQL, and
   Windows harness PR checks passed. Independent capacity review confirmed the
   retention formula and absence of watcher double-counting.
+- `emulebb/emulebb-tooling#80` aligned the strict OpenAPI
+  `DiagnosticWriterHealth` schema with all 41 always-present Rust fields and
+  the nullable seven-value storage block reason. Exact required/property
+  coverage, YAML parsing, and the persisted live REST/OpenAPI harness passed.
+- `emulebb/emulebb-rust#174` extracted deterministic segment retention and
+  added aggregate-byte, retained-age, retained-count, and minimum-free-space
+  enforcement; full-segment growth reservation; exact oversized-record budget
+  checks; cause-specific drops; latched storage-authority and writer-I/O
+  faults; fail-closed configuration parsing; complete writer-health REST and
+  bundle diagnostics; and the merged tooling contract pin. Local validation
+  passed 20 diagnostics tests, 131 REST tests, the full Rust workspace suite,
+  strict Clippy, formatting, and live REST/OpenAPI conformance. All required
+  Linux, macOS, Windows, CodeQL, policy, dependency, workflow-lint, and live
+  conformance checks passed. The broader product-family quality command reached
+  only the unrelated pre-existing generated-artifact audit failures for the
+  build-tests `.venv` executables and Rust `webui/node_modules`.
 - `emulebb/emulebb-tooling#59` through `#62` aligned the common-v2 product
   contract, segmented filenames and writer-health evidence, and the explicit
   local-only unredacted trace policy.
 - The operator-reported concurrent IP-filter work was reconciled after its
-  compilation completed: the Rust checkout and only registered worktree were
-  clean at `95f14c80`, and no local or remote IP-filter topic branch or
-  uncommitted delta was available to include. The existing exact-source
-  IP-filter SHA-256 diagnostics from Rust #171 remain present; any later
-  materialized IP-filter delta must be reviewed and landed as its own granular
-  Rust slice.
+  compilation completed. Commit `3a34079c` (`feat(ipfilter): expose loaded
+  source digest`) was already in `main` ancestry and therefore remained in the
+  base of Rust #174; there was no additional uncommitted IP-filter delta to
+  recover.
 - No public live client was launched for these foundation slices; guarded live
   and tunnel-down acceptance evidence remains outstanding.
 
 ## Storage Audit - 2026-10-25
 
-- The unified Rust event ring is bounded by segment size, rotation age, and
-  retained segment count, but it has no aggregate-byte, retained-age, or
-  minimum-free-space authority. The active segment is allowed to exceed its
-  target for one exact oversized record, which is correct for evidence
-  integrity but must be included in reserve calculations.
+- Resolved by Rust #174: the unified Rust event ring now enforces segment size,
+  rotation age, retained segment count, aggregate bytes, retained age, and
+  minimum free space. The active segment remains protected, and exact
+  oversized records are accepted only when the full growth fits the storage
+  policy. The writer publishes its maximum permitted growth for harness
+  reservation and monitoring.
 - The persisted soak watcher rotates its JSONL history. Detached launcher and
   watcher stdout/stderr and the Rust daemon's merged stdout/stderr are
   campaign-owned exact-byte bounded streams, and the watcher now enforces the
@@ -324,8 +346,9 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   protected process-output stream, and the watcher enforces actual campaign
   bytes and free space throughout the run. Non-stream active outputs such as
   reports, archived profile diagnostics, future bundles, and profiling data do
-  not yet have a complete growth reservation. The watcher also does not yet
-  observe Rust/MFC writer drop, write-error, or retention-error health.
+  not yet have a complete growth reservation. Rust now exposes the required
+  writer policy and fault health, but the watcher does not yet observe it or
+  the corresponding MFC writer health.
 - The optional converged observer also grows five-minute checkpoints,
   per-action reports, and an all-actions summary indefinitely. Diagnostic
   segments must remain immutable and exact; enabling diagnostic tail trimming
@@ -353,10 +376,9 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   use the new missing-family, exact-wire, and lifecycle findings to drive the
   next protocol-parity gaps. `diag_event_v2` remains the only current event
   envelope; `ed2k_client_udp` is a family within it, not a second schema.
-- Extend the Rust common writer with aggregate-byte, retained-age, and
-  minimum-free-space policy plus observable fault/drop accounting. Keep the
-  active segment protected, preserve exact oversized records, and make its
-  maximum growth available to harness reservation and writer-health checks.
+- Inject the strict soak storage limits into the persisted Rust daemon and
+  verify its reported limits and maximum growth match the harness reservation
+  before accepting readiness.
 - Transfer diagnostic-bundle persistence ownership to the bounded campaign
   store so repeated endpoint captures do not grow the Rust profile directory.
 - Add Rust/MFC writer-integrity fault monitoring to persisted watcher health so
