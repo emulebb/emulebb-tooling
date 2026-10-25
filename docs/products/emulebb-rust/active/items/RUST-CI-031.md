@@ -243,6 +243,15 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   preflight and enforcement. Local validation passed 2,418 Python tests with
   one skip and one deselection; all baseline, portability, dependency,
   analysis, CodeQL, and Windows harness PR checks passed.
+- `emulebb/emulebb-build-tests#32` moved the persisted Rust daemon's merged
+  stdout/stderr into `campaigns/<campaign-id>/daemon-output` and applied the
+  mandatory `daemon_output` segment and retention policy without wrapping or
+  replacing the real daemon process identity. Exact bytes are drained
+  asynchronously, sink failures stop Rust and fail the run, teardown includes
+  output integrity, and the campaign manifest records the complete output
+  contract. Local validation passed 2,426 Python tests with one skip and one
+  deselection; all baseline, portability, dependency, analysis, CodeQL, and
+  Windows harness PR checks passed.
 - `emulebb/emulebb-tooling#59` through `#62` aligned the common-v2 product
   contract, segmented filenames and writer-health evidence, and the explicit
   local-only unredacted trace policy.
@@ -320,10 +329,10 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   active segment protected and preserve exact oversized records.
 - Transfer diagnostic-bundle persistence ownership to the bounded campaign
   store so repeated endpoint captures do not grow the Rust profile directory.
-- Bound Rust `daemon.out` under the active campaign's `daemon_output` policy;
-  detached launcher and watcher logs are now campaign-owned and bounded. Then
-  make persisted watcher health fail closed on disk pressure and Rust/MFC
-  writer-integrity faults.
+- Make persisted watcher health enforce aggregate campaign storage and fail
+  closed on disk pressure. Detached launcher, watcher, and Rust daemon output
+  are now campaign-owned and bounded. Then add Rust/MFC writer-integrity fault
+  monitoring.
 - Replace preflight evacuation of every profile segment with hashed,
   identity-preserving promotion of selected closed segments and compact
   manifests under the shared campaign budget.
