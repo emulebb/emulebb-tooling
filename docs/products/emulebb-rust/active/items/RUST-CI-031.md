@@ -69,6 +69,12 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   inventory, maximum growth, policy state, drop causes, and latched storage and
   writer-I/O faults. Invalid configured limits fail initialization instead of
   silently falling back to defaults.
+- The canonical soak launcher now passes all six strict Rust diagnostic writer
+  limits through an explicit child environment, rejects stale inherited writer
+  settings, and verifies the exact reported policy, maximum growth, storage
+  state, identity, counters, and fault latches before any public protocol
+  action. The campaign-store policy and profile-local writer policy remain
+  separate because they govern different volumes.
 - Every active Rust protocol family now emits through the bounded unified
   stream. The peer-TCP, client-UDP, server TCP/UDP, and Kad-UDP legacy packet
   side-file writers are retired, and active harness consumers select exact
@@ -307,6 +313,21 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   conformance checks passed. The broader product-family quality command reached
   only the unrelated pre-existing generated-artifact audit failures for the
   build-tests `.venv` executables and Rust `webui/node_modules`.
+- `emulebb/emulebb-build-tests#36` introduced the breaking
+  `emulebb-build-tests.soak-storage-policy.v2` contract with a dedicated Rust
+  diagnostic writer policy, passed the complete policy through an explicit
+  child-process environment without mutating the controller environment, and
+  made exact `diag_event_v2` writer readiness a prerequisite for public
+  actions. Applied policy and startup writer health are persisted in campaign
+  evidence. Local validation passed 2,481 Python tests with one skip and one
+  deselection; all baseline, portability, dependency, analysis, CodeQL, and
+  Windows harness PR checks passed.
+- The ignored operator input was migrated backup-first to the persisted Rust
+  profile `F:\M\H06T01\dldz\EMULE_RUST_PROFILE_PERSISTED` and storage-policy
+  v2. The configured profile-local writer ring is bounded to 8 GiB with 64 MiB
+  segments, 128 retained segments, seven-day retained age, and a 20 GiB free
+  space floor. The typed repository loader accepted the result. No client was
+  launched.
 - `emulebb/emulebb-tooling#59` through `#62` aligned the common-v2 product
   contract, segmented filenames and writer-health evidence, and the explicit
   local-only unredacted trace policy.
@@ -344,11 +365,11 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   unbounded path.
 - Persisted preflight now reserves the full retained capacity of every standard
   protected process-output stream, and the watcher enforces actual campaign
-  bytes and free space throughout the run. Non-stream active outputs such as
-  reports, archived profile diagnostics, future bundles, and profiling data do
-  not yet have a complete growth reservation. Rust now exposes the required
-  writer policy and fault health, but the watcher does not yet observe it or
-  the corresponding MFC writer health.
+  bytes and free space throughout the run. The launcher independently injects
+  and verifies the bounded Rust profile-writer policy before public actions.
+  Non-stream active outputs such as reports, archived profile diagnostics,
+  future bundles, and profiling data do not yet have a complete growth
+  reservation. The watcher still does not observe Rust or MFC writer health.
 - The optional converged observer also grows five-minute checkpoints,
   per-action reports, and an all-actions summary indefinitely. Diagnostic
   segments must remain immutable and exact; enabling diagnostic tail trimming
@@ -376,9 +397,6 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   use the new missing-family, exact-wire, and lifecycle findings to drive the
   next protocol-parity gaps. `diag_event_v2` remains the only current event
   envelope; `ed2k_client_udp` is a family within it, not a second schema.
-- Inject the strict soak storage limits into the persisted Rust daemon and
-  verify its reported limits and maximum growth match the harness reservation
-  before accepting readiness.
 - Transfer diagnostic-bundle persistence ownership to the bounded campaign
   store so repeated endpoint captures do not grow the Rust profile directory.
 - Add Rust/MFC writer-integrity fault monitoring to persisted watcher health so
