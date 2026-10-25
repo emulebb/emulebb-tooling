@@ -5141,7 +5141,48 @@ components:
     DiagnosticWriterHealth:
       type: object
       additionalProperties: false
-      required: [schema, enabled, configured, initialized, runId, processId, activeSegmentId, activeFileName, activeSegmentBytes, recordsWritten, bytesWritten, droppedEvents, encodeErrors, writeErrors, rotations, retentionDeletes, retentionDeleteErrors, maxSegmentBytes, maxSegmentSeconds, retainedSegments, initializationFailure]
+      required:
+        - schema
+        - enabled
+        - configured
+        - initialized
+        - runId
+        - processId
+        - activeSegmentId
+        - activeFileName
+        - activeSegmentBytes
+        - recordsWritten
+        - bytesWritten
+        - droppedEvents
+        - encodeErrors
+        - writeErrors
+        - rotations
+        - retentionDeletes
+        - retentionDeleteErrors
+        - retentionScanErrors
+        - freeSpaceProbeErrors
+        - retentionPolicyErrors
+        - storagePolicyDrops
+        - storageFaultDrops
+        - retentionLimitDrops
+        - aggregateLimitDrops
+        - minimumFreeSpaceDrops
+        - writerFaultDrops
+        - retainedSegmentCount
+        - retainedBytes
+        - availableBytes
+        - storageAuthorityFaulted
+        - writerIoFaulted
+        - storageBlockReason
+        - storagePolicySatisfied
+        - maximumGrowthBytes
+        - maxSegmentBytes
+        - maxSegmentSeconds
+        - retainedSegments
+        - maxTotalBytes
+        - maxRetainedSeconds
+        - minimumFreeBytes
+        - initializationFailure
       properties:
         schema:
           type: string
@@ -5189,6 +5230,53 @@ components:
         retentionDeleteErrors:
           type: integer
           minimum: 0
+        retentionScanErrors:
+          type: integer
+          minimum: 0
+        freeSpaceProbeErrors:
+          type: integer
+          minimum: 0
+        retentionPolicyErrors:
+          type: integer
+          minimum: 0
+        storagePolicyDrops:
+          type: integer
+          minimum: 0
+        storageFaultDrops:
+          type: integer
+          minimum: 0
+        retentionLimitDrops:
+          type: integer
+          minimum: 0
+        aggregateLimitDrops:
+          type: integer
+          minimum: 0
+        minimumFreeSpaceDrops:
+          type: integer
+          minimum: 0
+        writerFaultDrops:
+          type: integer
+          minimum: 0
+        retainedSegmentCount:
+          type: integer
+          minimum: 0
+        retainedBytes:
+          type: integer
+          minimum: 0
+        availableBytes:
+          type: [integer, "null"]
+          minimum: 0
+        storageAuthorityFaulted:
+          type: boolean
+        writerIoFaulted:
+          type: boolean
+        storageBlockReason:
+          enum: [retentionScanFailure, retentionDeleteFailure, freeSpaceProbeFailure, retainedSegmentLimit, aggregateByteLimit, minimumFreeSpace, pendingRetentionDeletions, null]
+        storagePolicySatisfied:
+          type: [boolean, "null"]
+        maximumGrowthBytes:
+          type: [integer, "null"]
+          minimum: 0
         maxSegmentBytes:
           type: [integer, "null"]
           minimum: 0
@@ -5196,6 +5284,15 @@ components:
           type: [integer, "null"]
           minimum: 0
         retainedSegments:
+          type: [integer, "null"]
+          minimum: 0
+        maxTotalBytes:
+          type: [integer, "null"]
+          minimum: 0
+        maxRetainedSeconds:
+          type: [integer, "null"]
+          minimum: 0
+        minimumFreeBytes:
           type: [integer, "null"]
           minimum: 0
         initializationFailure:
