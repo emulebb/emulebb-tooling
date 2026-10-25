@@ -99,9 +99,11 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   launcher then captures final bundle evidence before teardown. Preflight now
   leaves the profile-resident writer rings intact and promotes only bounded,
   validated, hash-verified Rust/MFC run suffixes after proving both profile-bound
-  process families are quiescent. Arbitrary-length authorization remains blocked
-  until bounded complete-run indexes, observer convergence, and guarded live
-  validation prove the complete path.
+  process families are quiescent. Complete-run indexes and bounded observer
+  state now have deterministic multi-day coverage. Arbitrary-length
+  authorization remains blocked until the observer is integrated as an
+  attach-only controller-owned sidecar, retained-window reporting is aligned,
+  and guarded live validation proves the complete path.
 
 ## Landed Evidence
 
@@ -410,6 +412,17 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   recovery. Local validation passed 2,549 Python tests with one skip and one
   deselection; all duplicated Windows harness, baseline, portability,
   dependency, analysis, and CodeQL checks passed.
+- `emulebb/emulebb-build-tests#43` added storage-policy v7 reservations for
+  observer actions, checkpoints, summaries, and future sidecar process output.
+  It also added the strict
+  `emulebb-build-tests.converged-observer-state.v1` reducer: exact cumulative
+  action, verdict, checkpoint, driver, and retention counters with bounded
+  recent samples and restart-safe canonical persistence. A deterministic
+  logical three-day simulation covers 864 checkpoints, 144 actions, mid-run
+  summary reload, exact cumulative results, and bounded retained files. Local
+  validation passed 2,553 Python tests with one skip and one deselection; all
+  duplicated Windows harness, baseline, portability, dependency, analysis,
+  and CodeQL checks passed.
 - The ignored operator input was migrated backup-first to storage-policy v4
   with a 4 MiB by 48-artifact diagnostic-bundle ring and a 64 MiB by four-file
   diagnostic-segment ring for each client. The typed repository loader accepted
@@ -419,6 +432,11 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   four-file diagnostic evidence-pin ring for each client. The typed repository
   loader accepted both the example and ignored local inputs. No client was
   launched.
+- The ignored operator input was subsequently migrated backup-first to
+  storage-policy v7 with bounded observer action, checkpoint, and singleton
+  summary streams plus capacity for future observer stdout and stderr. The
+  typed repository loader accepted both the example and ignored local inputs.
+  No client was launched.
 - `emulebb/emulebb-tooling#59` through `#62` aligned the common-v2 product
   contract, segmented filenames and writer-health evidence, and the explicit
   local-only unredacted trace policy.
@@ -464,12 +482,15 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   protected process-output stream, and the watcher enforces actual campaign
   bytes and free space throughout the run. The launcher independently injects
   and verifies the bounded Rust profile-writer policy before public actions.
-  Non-stream active outputs such as reports and profiling data do not yet have
-  a complete growth reservation.
-- The optional converged observer also grows five-minute checkpoints,
-  per-action reports, and an all-actions summary indefinitely. Diagnostic
-  segments must remain immutable and exact; enabling diagnostic tail trimming
-  is not an acceptable storage design.
+  Other non-stream active outputs such as profiling data do not yet have a
+  complete growth reservation.
+- Resolved as a storage foundation by build-tests #43: observer actions,
+  checkpoints, and the singleton cumulative summary now have strict bounded
+  stream budgets, and deterministic multi-day restart simulation proves exact
+  cumulative state with a bounded retained detail window. The legacy observer
+  is not yet wired to those owners and still must not be used as a second
+  client launcher. Diagnostic segments remain immutable and exact; enabling
+  diagnostic tail trimming is not an acceptable storage design.
 - Resolved by build-tests #42: arbitrarily long discovery now maintains compact
   complete-run family/event/severity/outcome/opcode and integrity indexes plus
   budget-aware preservation of selected immutable raw anomaly and context
@@ -497,9 +518,13 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
 - Use the complete-run indexes and pinned exact raw evidence from build-tests
   #42 to select and reconstruct the next deterministic and guarded parity gaps;
   retained-suffix coverage remains explicitly incomplete.
-- Converge the optional observer onto the same bounded store and prove stable
-  disk use with deterministic multi-day simulation before any guarded public
-  soak is authorized.
+- Refactor the optional observer into an attach-only controller-owned sidecar
+  that uses the v7 bounded streams and cumulative state from build-tests #43.
+  It must attach to the launcher's existing campaign and must never clean,
+  launch, or stop either client.
+- Update report summarization to combine exact cumulative observer state with
+  the retained detail window and identify intentional rotation as omitted by
+  retention rather than missing evidence.
 - Add aligned MFC and harness coverage for Rust's `ed2k_server_udp` family
   before treating server UDP observations as cross-client parity evidence.
 - Protocol and soak traces, bundles, manifests, and diagnostic payloads are
