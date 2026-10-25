@@ -123,10 +123,13 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   persists both prepared creates before the first POST, persists every terminal
   phase immediately, resumes known search IDs with GET-only polling, and
   recovers a missing evidence-pending marker without replaying an action. It
-  intentionally stops at evidence pending. Arbitrary-length authorization
-  remains blocked until exact diagnostic action diffs and reports are persisted
-  crash-safely, the UTC deadline is reconciled, retained-window reporting is
-  aligned, and guarded live validation proves the complete path.
+  intentionally stops at evidence pending. The diagnostic loader can now select
+  the pinned `(client, processId, runId)` without falling forward to a newer run
+  and returns stable exact-byte segment provenance plus strict envelope and
+  process-sequence validation. Arbitrary-length authorization remains blocked
+  until those snapshots are wired into exact diagnostic action diffs and reports
+  with crash-safe persistence, the UTC deadline is reconciled, retained-window
+  reporting is aligned, and guarded live validation proves the complete path.
 
 ## Landed Evidence
 
@@ -533,6 +536,16 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   one skip and one deselection; all 20 duplicated Windows harness, baseline,
   portability, dependency, analysis, and CodeQL checks passed. No client was
   launched.
+- `emulebb/emulebb-build-tests#52` added exact diagnostic run selection by
+  client, process ID, and run ID without newest-run fallback. One stable run
+  snapshot now retains every selected segment's resolved path, exact byte count,
+  modification time, SHA-256 digest, and parsed records while enforcing segment
+  continuity, exact record envelopes, positive stream/process sequences, and
+  contiguous process sequence across rotated and active segments. The existing
+  latest-run compatibility loader delegates to the same strict implementation.
+  Local validation passed 2,597 Python tests with one skip and one deselection;
+  all 20 duplicated Windows harness, baseline, portability, dependency,
+  analysis, and CodeQL checks passed. No client was launched.
 - `emulebb/emulebb-rust#176` advanced the single current inline bundle contract
   to `emulebb.diagnostic-bundle.v5` and added bounded exact operational
   snapshots for servers, shared files, searches and their evidence-rich
@@ -621,9 +634,10 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   provides the resumable typed create/result execution phases. Build-tests #50
   closes the pre-POST ambiguity gap with the single current state v3 contract,
   and build-tests #51 wires that contract around REST side effects with exact
-  run pinning and immediate phase persistence. Exact evidence capture,
-  idempotent report storage, evidence-first startup reconciliation, and UTC
-  deadline reconciliation still require integration.
+  run pinning and immediate phase persistence. Build-tests #52 provides exact
+  run loading with immutable source provenance and no fallback to a newer run.
+  Observer evidence capture, idempotent report storage, evidence-first startup
+  reconciliation, and UTC deadline reconciliation still require integration.
   Diagnostic segments remain immutable and exact; enabling diagnostic tail
   trimming is not an acceptable storage design.
 - Resolved by build-tests #42: arbitrarily long discovery now maintains compact
@@ -653,13 +667,14 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
 - Use the complete-run indexes and pinned exact raw evidence from build-tests
   #42 to select and reconstruct the next deterministic and guarded parity gaps;
   retained-suffix coverage remains explicitly incomplete.
-- Select diagnostics by exact `(client, processId, runId)`, load all matching
-  rotated and active segments, slice the action window by record timestamp, and
-  retain source segment IDs, paths, byte counts, SHA-256 values, modification
-  times, writer identity, and active-tail status. A client restart, writer-run
-  change, missing segment, parse failure, or incomplete active tail is explicit
-  incomplete evidence; the observer must never silently switch to the newest
-  run.
+- Source the Rust and MFC diagnostic directories only from the persisted
+  session's validated profile authority. Use the build-tests #52 exact snapshot
+  API for the pinned `(client, processId, runId)`, slice the action window by
+  strict record timestamp, and retain source segment IDs, paths, byte counts,
+  SHA-256 values, modification times, writer identity, and active-tail status.
+  A client restart, writer-run change, missing segment, parse failure, malformed
+  timestamp, or incomplete active tail is explicit incomplete evidence; the
+  observer must never silently switch to the newest run.
 - Persist one deterministic report per scheduled cycle, including one-sided and
   both-failed outcomes. Write the immutable report first, fold it into cumulative
   state second, update retention third, and persist the singleton summary last.
