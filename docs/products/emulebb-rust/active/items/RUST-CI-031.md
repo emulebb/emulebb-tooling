@@ -90,11 +90,11 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   correlated socket-boundary send attempts plus exactly one success, failure,
   or cancellation terminal outcome. The Rust `ed2k_server_udp` family still
   lacks an aligned MFC comparator and is not yet cross-client parity evidence.
-  The soak launcher now captures ready and final bundles into a bounded
-  campaign stream. Arbitrary-length authorization remains blocked until sparse
-  periodic and fault-triggered capture, selected-segment promotion, persisted
-  watcher writer-integrity gates, and guarded live validation prove the
-  complete path.
+  The soak launcher now captures ready, low-cadence periodic, and final bundles
+  into a bounded campaign stream while pruning manifest entries as their bundle
+  files rotate. Arbitrary-length authorization remains blocked until
+  fault-triggered capture, selected-segment promotion, persisted watcher
+  writer-integrity gates, and guarded live validation prove the complete path.
 
 ## Landed Evidence
 
@@ -349,6 +349,14 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   the full suite passed 2,484 tests with one skip and one deselection after the
   two compilation-timeout cases passed in isolation. Both Windows harness lanes
   and all baseline, portability, dependency, analysis, and CodeQL checks passed.
+- `emulebb/emulebb-build-tests#38` schedules bundle v4 capture at the configured
+  low cadence after readiness, keeps stop deadlines ahead of periodic capture,
+  and prunes manifest entries when the bounded ring rotates their files. The
+  effective interval is persisted in preflight evidence, and capture failures
+  remain terminal while final evidence and teardown continue. Local validation
+  passed 2,488 Python tests with one skip and one deselection; all Windows
+  harness, baseline, portability, dependency, analysis, and CodeQL checks
+  passed.
 - The ignored operator input was migrated backup-first to storage-policy v3
   with a 4 MiB by 48-artifact diagnostic-bundle ring. The typed repository
   loader accepted the policy and selected persisted profile. No client was
@@ -387,8 +395,8 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   inline and caller-owned, the daemon creates no bundle directory in the
   reusable profile, and the soak harness persists exact immutable JSON into a
   dedicated campaign stream with per-artifact, retained-count, aggregate-byte,
-  age, and free-space enforcement. Ready and final captures are now bounded;
-  low-cadence periodic and fault-triggered captures remain to be added.
+  age, and free-space enforcement. Ready, low-cadence periodic, and final
+  captures are now bounded; fault-triggered capture remains to be added.
 - Persisted preflight now reserves the full retained capacity of every standard
   protected process-output stream, and the watcher enforces actual campaign
   bytes and free space throughout the run. The launcher independently injects
@@ -429,9 +437,8 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
 - Replace preflight evacuation of every profile segment with hashed,
   identity-preserving promotion of selected closed segments and compact
   manifests under the shared campaign budget.
-- Extend the landed ready and final bundle captures with low-cadence periodic
-  checkpoints and writer or health fault captures. Do not capture on every
-  60-second health sample.
+- Add immediate bundle capture for writer or health faults before the run is
+  stopped as inconclusive. Do not capture on every 60-second healthy sample.
 - Add compact complete-run eD2K/Kad family, opcode, outcome, sequence, and
   writer-health indexes with budget-aware pinning of diagnostically interesting
   exact raw segments.
