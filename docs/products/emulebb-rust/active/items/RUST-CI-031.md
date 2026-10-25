@@ -101,10 +101,12 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   validated, hash-verified Rust/MFC run suffixes after proving both profile-bound
   process families are quiescent. Complete-run indexes and bounded observer
   state now have deterministic multi-day coverage, and the passive observer is
-  integrated as an attach-only controller-owned sidecar. Arbitrary-length
-  authorization remains blocked until synchronized action driving uses that
-  sidecar, retained-window reporting is aligned, and guarded live validation
-  proves the complete path.
+  integrated as an attach-only controller-owned sidecar. The synchronized REST
+  action engine and correlation state are now reusable package code rather than
+  legacy second-launcher internals, and retained local action labels are no
+  longer redacted. Arbitrary-length authorization remains blocked until that
+  engine runs inside the sidecar, retained-window reporting is aligned, and
+  guarded live validation proves the complete path.
 
 ## Landed Evidence
 
@@ -435,6 +437,15 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   Python tests with one skip and one deselection; all 20 duplicated Windows
   harness, baseline, portability, dependency, analysis, and CodeQL checks
   passed. No client was launched.
+- `emulebb/emulebb-build-tests#45` extracted synchronized REST search/download
+  driving, candidate policy, typed client endpoints, and action correlation
+  state into `emule_test_harness.converged_action_driver`. The legacy soak
+  runner now delegates to that engine instead of owning a duplicate
+  implementation, and retained local action reports/logs keep exact labels and
+  keys rather than privacy-redacted placeholders. Local validation passed 2,564
+  Python tests with one skip and one deselection; all 20 duplicated Windows
+  harness, baseline, portability, dependency, analysis, and CodeQL checks
+  passed. No client was launched.
 - The ignored operator input was migrated backup-first to storage-policy v4
   with a 4 MiB by 48-artifact diagnostic-bundle ring and a 64 MiB by four-file
   diagnostic-segment ring for each client. The typed repository loader accepted
@@ -501,8 +512,10 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   stream budgets, and deterministic multi-day restart simulation proves exact
   cumulative state with a bounded retained detail window. Build-tests #44 wires
   passive checkpoints and summaries to those owners through an attach-only
-  sidecar while keeping the launcher as the sole client owner. Synchronized
-  action reports still require migration from the legacy second-launcher path.
+  sidecar while keeping the launcher as the sole client owner. Build-tests #45
+  extracted synchronized action driving and correlation from the legacy
+  second-launcher script into reusable package code; scheduling and exact action
+  report persistence still require integration into the sidecar.
   Diagnostic segments remain immutable and exact; enabling diagnostic tail
   trimming is not an acceptable storage design.
 - Resolved by build-tests #42: arbitrarily long discovery now maintains compact
@@ -532,10 +545,10 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
 - Use the complete-run indexes and pinned exact raw evidence from build-tests
   #42 to select and reconstruct the next deterministic and guarded parity gaps;
   retained-suffix coverage remains explicitly incomplete.
-- Migrate synchronized search and download action driving and exact action
-  diffs into the attach-only sidecar from build-tests #44. Actions must use the
-  v7 bounded action stream and cumulative reducer; the sidecar must continue to
-  never clean, launch, or stop either client.
+- Integrate the reusable synchronized search/download engine from build-tests
+  #45 into the attach-only sidecar from build-tests #44, then persist exact
+  action diffs through the v7 bounded action stream and cumulative reducer. The
+  sidecar must continue to never clean, launch, or stop either client.
 - Update report summarization to combine exact cumulative observer state with
   the retained detail window and identify intentional rotation as omitted by
   retention rather than missing evidence.
