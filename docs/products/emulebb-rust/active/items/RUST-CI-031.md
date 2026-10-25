@@ -118,10 +118,15 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   The action driver now exposes typed create/result phases, resumes a persisted
   search identifier without issuing another POST, and preserves exact errors
   and incomplete polling rows while retaining the legacy complete-cycle output.
-  Arbitrary-length authorization remains blocked until those transitions are
-  wired around live side effects and exact diagnostic action diffs are persisted
-  crash-safely, retained-window reporting is aligned, and guarded live
-  validation proves the complete path.
+  The attach-only observer now wires those transitions around live REST side
+  effects, pins exact diagnostic process/run identities before each action,
+  persists both prepared creates before the first POST, persists every terminal
+  phase immediately, resumes known search IDs with GET-only polling, and
+  recovers a missing evidence-pending marker without replaying an action. It
+  intentionally stops at evidence pending. Arbitrary-length authorization
+  remains blocked until exact diagnostic action diffs and reports are persisted
+  crash-safely, the UTC deadline is reconciled, retained-window reporting is
+  aligned, and guarded live validation proves the complete path.
 
 ## Landed Evidence
 
@@ -515,6 +520,19 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   Local validation passed 2,591 Python tests with one skip and one deselection;
   all 20 duplicated Windows harness, baseline, portability, dependency,
   analysis, and CodeQL checks passed. No client was launched.
+- `emulebb/emulebb-build-tests#51` wired observer-state v3 around the phased
+  REST action driver. The observer pins exact healthy diagnostic process/run
+  identities before side effects, persists both prepared creates atomically
+  before the first POST, persists each terminal create and result phase
+  immediately, resumes persisted successful search IDs with GET-only polling,
+  preserves partial result counts, and converts restart-visible prepared
+  creates to exact ambiguity without replay. A crash after driver persistence
+  but before the evidence marker is recovered without another POST or poll.
+  The cycle stops safely at evidence pending until exact diagnostic extraction
+  and report persistence land. Local validation passed 2,593 Python tests with
+  one skip and one deselection; all 20 duplicated Windows harness, baseline,
+  portability, dependency, analysis, and CodeQL checks passed. No client was
+  launched.
 - `emulebb/emulebb-rust#176` advanced the single current inline bundle contract
   to `emulebb.diagnostic-bundle.v5` and added bounded exact operational
   snapshots for servers, shared files, searches and their evidence-rich
@@ -601,9 +619,11 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   per-client action outcomes. Build-tests #48 provides the strict current state
   schema and pure crash-safe transitions for pending actions. Build-tests #49
   provides the resumable typed create/result execution phases. Build-tests #50
-  closes the pre-POST ambiguity gap with the single current state v3 contract.
-  Durable observer orchestration, exact evidence capture, idempotent report
-  storage, and startup reconciliation still require integration.
+  closes the pre-POST ambiguity gap with the single current state v3 contract,
+  and build-tests #51 wires that contract around REST side effects with exact
+  run pinning and immediate phase persistence. Exact evidence capture,
+  idempotent report storage, evidence-first startup reconciliation, and UTC
+  deadline reconciliation still require integration.
   Diagnostic segments remain immutable and exact; enabling diagnostic tail
   trimming is not an acceptable storage design.
 - Resolved by build-tests #42: arbitrarily long discovery now maintains compact
@@ -633,14 +653,6 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
 - Use the complete-run indexes and pinned exact raw evidence from build-tests
   #42 to select and reconstruct the next deterministic and guarded parity gaps;
   retained-suffix coverage remains explicitly incomplete.
-- Wire build-tests #50 transitions into the attach-only observer around the
-  build-tests #49 phased driver. Persist the reserved cycle and each client's
-  prepared create before the matching POST, then persist each terminal create
-  and result outcome immediately after its phase. Resume known search IDs after
-  restart, convert prepared creates to exact fail-closed ambiguity, service the
-  persisted UTC deadline, and never replay an ambiguous, completed, or one-sided
-  public action. The sidecar must continue to never clean, launch, or stop either
-  client.
 - Select diagnostics by exact `(client, processId, runId)`, load all matching
   rotated and active segments, slice the action window by record timestamp, and
   retain source segment IDs, paths, byte counts, SHA-256 values, modification
@@ -656,6 +668,12 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   identity is terminal corruption. Startup reconciles report-first crashes,
   validates a contiguous recoverable retained suffix, and never creates a
   duplicate timestamp-named artifact.
+- After evidence/report commit clears the pending action, reconcile and persist
+  the next UTC deadline before recurring scheduling is enabled. Startup must
+  service the persisted deadline without relying on a previous process's
+  monotonic clock and must never replay an ambiguous, completed, or one-sided
+  public action. The sidecar must continue to never clean, launch, or stop either
+  client.
 - Make protocol assessment method-specific: require `ed2k_tcp` for server
   searches, `ed2k_server_udp` for global searches, and `kad_udp` for Kad
   searches. Global-search evidence must use a server-UDP packet adapter or
