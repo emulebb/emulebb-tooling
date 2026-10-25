@@ -108,10 +108,13 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   exact synchronized Rust/MFC searches through the reusable REST action engine
   under a manifest-only, disabled-by-default configuration with a minimum
   five-minute cadence. Local terms, labels, keys, and failures remain
-  unredacted. The single current observer-state v2 contract is bound to the
+  unredacted. The single current observer-state v3 contract is bound to the
   exact action configuration and can persist a reserved cycle, deterministic
   action/report identity, per-client create/result outcomes, diagnostic run
-  identities, UTC deadline, and evidence-pending state across restart.
+  identities, UTC deadline, and evidence-pending state across restart. Each
+  client create is prepared durably before its public POST; restart ambiguity
+  fails closed, and a skipped sibling is recorded explicitly rather than
+  issuing or replaying a one-sided action.
   The action driver now exposes typed create/result phases, resumes a persisted
   search identifier without issuing another POST, and preserves exact errors
   and incomplete polling rows while retaining the legacy complete-cycle output.
@@ -502,6 +505,16 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   validation passed 2,590 Python tests with one skip and one deselection; all 20
   duplicated Windows harness, baseline, portability, dependency, analysis, and
   CodeQL checks passed. No client was launched.
+- `emulebb/emulebb-build-tests#50` replaced observer-state v2 with the single
+  current v3 contract after a crash-window audit found that outcome-only
+  persistence could replay a POST whose response had not been saved. V3 records
+  a prepared create before each public POST, requires a separate terminal
+  succeeded or failed transition, supports an exact fail-closed skipped sibling,
+  and rejects driver completion until both client paths are terminal. A prepared
+  create survives restart as explicit ambiguity and cannot be issued again.
+  Local validation passed 2,591 Python tests with one skip and one deselection;
+  all 20 duplicated Windows harness, baseline, portability, dependency,
+  analysis, and CodeQL checks passed. No client was launched.
 - `emulebb/emulebb-rust#176` advanced the single current inline bundle contract
   to `emulebb.diagnostic-bundle.v5` and added bounded exact operational
   snapshots for servers, shared files, searches and their evidence-rich
@@ -587,8 +600,9 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   cumulative cycle state. Build-tests #47 preserves exact independent
   per-client action outcomes. Build-tests #48 provides the strict current state
   schema and pure crash-safe transitions for pending actions. Build-tests #49
-  provides the resumable typed create/result execution phases. Durable
-  persistence around each phase, exact evidence capture, idempotent report
+  provides the resumable typed create/result execution phases. Build-tests #50
+  closes the pre-POST ambiguity gap with the single current state v3 contract.
+  Durable observer orchestration, exact evidence capture, idempotent report
   storage, and startup reconciliation still require integration.
   Diagnostic segments remain immutable and exact; enabling diagnostic tail
   trimming is not an acceptable storage design.
@@ -619,12 +633,14 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
 - Use the complete-run indexes and pinned exact raw evidence from build-tests
   #42 to select and reconstruct the next deterministic and guarded parity gaps;
   retained-suffix coverage remains explicitly incomplete.
-- Wire build-tests #48 transitions into the attach-only observer around the
-  build-tests #49 phased driver. Persist the reserved cycle before the first POST
-  and persist each client create and result outcome immediately after its phase.
-  Resume known search IDs after restart, service the persisted UTC deadline, and
-  never replay an ambiguous, completed, or one-sided public action. The sidecar
-  must continue to never clean, launch, or stop either client.
+- Wire build-tests #50 transitions into the attach-only observer around the
+  build-tests #49 phased driver. Persist the reserved cycle and each client's
+  prepared create before the matching POST, then persist each terminal create
+  and result outcome immediately after its phase. Resume known search IDs after
+  restart, convert prepared creates to exact fail-closed ambiguity, service the
+  persisted UTC deadline, and never replay an ambiguous, completed, or one-sided
+  public action. The sidecar must continue to never clean, launch, or stop either
+  client.
 - Select diagnostics by exact `(client, processId, runId)`, load all matching
   rotated and active segments, slice the action window by record timestamp, and
   retain source segment IDs, paths, byte counts, SHA-256 values, modification
