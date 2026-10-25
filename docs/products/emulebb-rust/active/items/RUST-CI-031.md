@@ -100,13 +100,14 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   leaves the profile-resident writer rings intact and promotes only bounded,
   validated, hash-verified Rust/MFC run suffixes after proving both profile-bound
   process families are quiescent. Complete-run indexes and bounded observer
-  state now have deterministic multi-day coverage, and the passive observer is
-  integrated as an attach-only controller-owned sidecar. The synchronized REST
-  action engine and correlation state are now reusable package code rather than
-  legacy second-launcher internals, and retained local action labels are no
-  longer redacted. Arbitrary-length authorization remains blocked until that
-  engine runs inside the sidecar, retained-window reporting is aligned, and
-  guarded live validation proves the complete path.
+  state now have deterministic multi-day coverage, and the observer is
+  integrated as an attach-only controller-owned sidecar. It can now schedule
+  exact synchronized Rust/MFC searches through the reusable REST action engine
+  under a manifest-only, disabled-by-default configuration with a minimum
+  five-minute cadence. Local terms, labels, keys, and failures remain
+  unredacted. Arbitrary-length authorization remains blocked until exact
+  per-client action outcomes and diagnostic diffs are persisted, retained-window
+  reporting is aligned, and guarded live validation proves the complete path.
 
 ## Landed Evidence
 
@@ -446,6 +447,17 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   Python tests with one skip and one deselection; all 20 duplicated Windows
   harness, baseline, portability, dependency, analysis, and CodeQL checks
   passed. No client was launched.
+- `emulebb/emulebb-build-tests#46` integrated search-only synchronized action
+  scheduling into the attach-only observer. Controller start options resolve an
+  exact term snapshot from explicit values or `generic_open`, persist it in the
+  single current `emulebb.persisted-soak-session.v3` manifest, and keep it off
+  the process command line. Action driving is disabled by default, requires the
+  observer and watcher lifecycle, enforces a 300-second minimum cadence, rotates
+  terms deterministically, records exact failures in cumulative state, and
+  gives the observer no client ownership. Local validation passed 2,576 Python
+  tests with one skip and one deselection; all 20 duplicated Windows harness,
+  baseline, portability, dependency, analysis, and CodeQL checks passed. No
+  client was launched.
 - The ignored operator input was migrated backup-first to storage-policy v4
   with a 4 MiB by 48-artifact diagnostic-bundle ring and a 64 MiB by four-file
   diagnostic-segment ring for each client. The typed repository loader accepted
@@ -514,8 +526,10 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   passive checkpoints and summaries to those owners through an attach-only
   sidecar while keeping the launcher as the sole client owner. Build-tests #45
   extracted synchronized action driving and correlation from the legacy
-  second-launcher script into reusable package code; scheduling and exact action
-  report persistence still require integration into the sidecar.
+  second-launcher script into reusable package code. Build-tests #46 integrated
+  search-only scheduling into the sidecar with exact manifest-owned terms and
+  cumulative cycle state. Exact per-client action outcomes and action-report
+  persistence still require integration.
   Diagnostic segments remain immutable and exact; enabling diagnostic tail
   trimming is not an acceptable storage design.
 - Resolved by build-tests #42: arbitrarily long discovery now maintains compact
@@ -545,10 +559,14 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
 - Use the complete-run indexes and pinned exact raw evidence from build-tests
   #42 to select and reconstruct the next deterministic and guarded parity gaps;
   retained-suffix coverage remains explicitly incomplete.
-- Integrate the reusable synchronized search/download engine from build-tests
-  #45 into the attach-only sidecar from build-tests #44, then persist exact
-  action diffs through the v7 bounded action stream and cumulative reducer. The
-  sidecar must continue to never clean, launch, or stop either client.
+- Extend the build-tests #46 sidecar path to preserve partial per-client REST
+  outcomes when one search create or result poll fails, then correlate and
+  persist exact action diffs through the v7 bounded action stream and cumulative
+  reducer. The sidecar must continue to never clean, launch, or stop either
+  client.
+- Add bounded download scheduling only after its safety policy, pending-action
+  state, and restart reconciliation contract are explicit; a restarted observer
+  must not replay a completed or one-sided public action.
 - Update report summarization to combine exact cumulative observer state with
   the retained detail window and identify intentional rotation as omitted by
   retention rather than missing evidence.
