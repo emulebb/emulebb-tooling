@@ -108,9 +108,14 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   exact synchronized Rust/MFC searches through the reusable REST action engine
   under a manifest-only, disabled-by-default configuration with a minimum
   five-minute cadence. Local terms, labels, keys, and failures remain
-  unredacted. Arbitrary-length authorization remains blocked until exact
-  diagnostic action diffs are persisted crash-safely, retained-window reporting
-  is aligned, and guarded live validation proves the complete path.
+  unredacted. The single current observer-state v2 contract is bound to the
+  exact action configuration and can persist a reserved cycle, deterministic
+  action/report identity, per-client create/result outcomes, diagnostic run
+  identities, UTC deadline, and evidence-pending state across restart.
+  Arbitrary-length authorization remains blocked until those transitions are
+  wired around live side effects and exact diagnostic action diffs are persisted
+  crash-safely, retained-window reporting is aligned, and guarded live
+  validation proves the complete path.
 
 ## Landed Evidence
 
@@ -470,6 +475,21 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   before any public action. Local validation passed 2,581 Python tests with one
   skip and one deselection; every final baseline, portability, harness,
   dependency, analysis, and CodeQL check succeeded. No client was launched.
+- `emulebb/emulebb-build-tests#48` replaced the observer summary with the single
+  current `emulebb-build-tests.converged-observer-state.v2` contract. State is
+  bound to a canonical action-configuration SHA-256, enforces strict next-cycle
+  continuity and a restart-safe UTC deadline, assigns a deterministic
+  campaign/cycle action ID and report sequence, and persists exact per-client
+  create/result timestamps, search IDs, incomplete polling, errors, and exact
+  Rust/MFC diagnostic process/run identities. Evidence cannot become pending
+  until both client outcomes and the matching driver outcome are terminal, and
+  only a report with the same action ID, cycle, and sequence may clear the
+  pending action. Duplicate reservations and phase writes, ambiguous creates,
+  skipped or repeated cycles, premature evidence, configuration drift, and the
+  legacy direct-report bypass fail closed. Local validation passed 2,588 Python
+  tests with one skip and one deselection; all 20 duplicated Windows harness,
+  baseline, portability, dependency, analysis, and CodeQL checks passed. No
+  client was launched.
 - `emulebb/emulebb-rust#176` advanced the single current inline bundle contract
   to `emulebb.diagnostic-bundle.v5` and added bounded exact operational
   snapshots for servers, shared files, searches and their evidence-rich
@@ -553,7 +573,9 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   second-launcher script into reusable package code. Build-tests #46 integrated
   search-only scheduling into the sidecar with exact manifest-owned terms and
   cumulative cycle state. Build-tests #47 preserves exact independent
-  per-client action outcomes. Crash-safe action-report persistence and restart
+  per-client action outcomes. Build-tests #48 provides the strict current state
+  schema and pure crash-safe transitions for pending actions. Execution-phase
+  persistence, exact evidence capture, idempotent report storage, and startup
   reconciliation still require integration.
   Diagnostic segments remain immutable and exact; enabling diagnostic tail
   trimming is not an acceptable storage design.
@@ -584,15 +606,12 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
 - Use the complete-run indexes and pinned exact raw evidence from build-tests
   #42 to select and reconstruct the next deterministic and guarded parity gaps;
   retained-suffix coverage remains explicitly incomplete.
-- Integrate build-tests #47 outcomes with the attach-only observer as a
-  recoverable state machine. Persist a reserved cycle before the first POST,
-  then persist each client search ID, issuance timestamp, result completion
-  state, and exact error as each phase finishes. Persist a configuration digest,
-  strict next-cycle value, UTC next-action deadline, stable action ID, allocated
-  report sequence, exact diagnostic process/run identities, and the action
-  window. Resume known search IDs after restart and never replay an ambiguous,
-  completed, or one-sided public action. The sidecar must continue to never
-  clean, launch, or stop either client.
+- Wire build-tests #48 transitions into the attach-only observer around the
+  build-tests #47 engine. Persist the reserved cycle before the first POST and
+  persist each client create and result outcome immediately after its phase.
+  Resume known search IDs after restart, service the persisted UTC deadline, and
+  never replay an ambiguous, completed, or one-sided public action. The sidecar
+  must continue to never clean, launch, or stop either client.
 - Select diagnostics by exact `(client, processId, runId)`, load all matching
   rotated and active segments, slice the action window by record timestamp, and
   retain source segment IDs, paths, byte counts, SHA-256 values, modification
