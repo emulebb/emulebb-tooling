@@ -217,6 +217,22 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   redacting or mutating protocol records. Local validation passed 2,405 Python
   tests with one skip and one deselection; all baseline, fast-harness,
   portability, dependency, analysis, and CodeQL PR checks passed.
+- `emulebb/emulebb-build-tests#29` moved converged reports and archives under
+  the campaign-owned `soak/campaigns/<campaign-id>` boundary and left only
+  stable pointers under `soak/last-run`. This prevents the storage authority
+  from pruning profiles or unrelated operational state under the broader
+  `soak` tree. Local validation passed 2,405 Python tests with one skip and one
+  deselection; all required PR checks passed.
+- `emulebb/emulebb-build-tests#30` made `soak_storage` mandatory for persisted
+  sessions, assigned the campaign identity before launch, proved feasibility
+  without mutation, and then applied and verified pruning under the campaign
+  root before any control-file mutation or process start. The prior selected
+  campaign and the new campaign remain protected. Launch fails closed on an
+  impossible policy, deletion failure, post-delete reserve failure, or a
+  last-run manifest that escapes the campaign root. Local validation passed
+  2,411 Python tests with one skip and one deselection; all baseline,
+  portability, dependency, analysis, CodeQL, and Windows harness PR checks
+  passed.
 - `emulebb/emulebb-tooling#59` through `#62` aligned the common-v2 product
   contract, segmented filenames and writer-health evidence, and the explicit
   local-only unredacted trace policy.
@@ -284,11 +300,11 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   use the new missing-family, exact-wire, and lifecycle findings to drive the
   next protocol-parity gaps. `diag_event_v2` remains the only current event
   envelope; `ed2k_client_udp` is a family within it, not a second schema.
-- Integrate the landed harness storage-policy foundation into persisted
-  controller preflight, launch, watch, stop, and status paths. Preflight must
-  prove a feasible plan without mutation; launch must apply and verify it
-  before profile mutation or process start; watch and stop must fail closed on
-  reserve or evidence-integrity loss.
+- Extend the landed persisted-controller storage enforcement through watch,
+  stop, and status. The launch path now proves feasibility without mutation and
+  applies and verifies the policy before control-file mutation or process start;
+  the remaining lifecycle paths must fail closed on reserve or evidence-
+  integrity loss.
 - Extend the Rust common writer with aggregate-byte, retained-age, and
   minimum-free-space policy plus observable fault/drop accounting. Keep the
   active segment protected and preserve exact oversized records.
