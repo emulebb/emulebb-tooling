@@ -397,10 +397,28 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   live. Local validation passed 2,516 Python tests with one skip and one
   deselection; all duplicated Windows harness, baseline, portability,
   dependency, analysis, and CodeQL checks passed.
+- `emulebb/emulebb-build-tests#42` added restart-safe complete-run indexing for
+  exact closed Rust and MFC `diag_event_v2` segments. The strict
+  `emulebb-build-tests.diagnostic-run-checkpoint.v1` cursor preserves the
+  compact family, event, severity, outcome, opcode, process-sequence,
+  family-sequence, segment-continuity, and exact 41-field writer-health state;
+  rejects parse, identity, envelope, and gap violations; and distinguishes
+  from-run-start coverage from a retained suffix. Storage-policy v6 adds
+  dedicated bounded per-client index and evidence-pin streams. Interesting
+  anomaly segments and their boundary context are copied byte-for-byte under a
+  priority budget with SHA-256 verification and checkpoint-atomic swap
+  recovery. Local validation passed 2,549 Python tests with one skip and one
+  deselection; all duplicated Windows harness, baseline, portability,
+  dependency, analysis, and CodeQL checks passed.
 - The ignored operator input was migrated backup-first to storage-policy v4
   with a 4 MiB by 48-artifact diagnostic-bundle ring and a 64 MiB by four-file
   diagnostic-segment ring for each client. The typed repository loader accepted
   the policy and selected persisted profile. No client was launched.
+- The ignored operator input was subsequently migrated backup-first to
+  storage-policy v6 with an 8 MiB singleton diagnostic index and a 64 MiB by
+  four-file diagnostic evidence-pin ring for each client. The typed repository
+  loader accepted both the example and ignored local inputs. No client was
+  launched.
 - `emulebb/emulebb-tooling#59` through `#62` aligned the common-v2 product
   contract, segmented filenames and writer-health evidence, and the explicit
   local-only unredacted trace policy.
@@ -452,8 +470,9 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   per-action reports, and an all-actions summary indefinitely. Diagnostic
   segments must remain immutable and exact; enabling diagnostic tail trimming
   is not an acceptable storage design.
-- Arbitrarily long discovery needs compact all-run family/opcode/outcome and
-  integrity indexes plus budget-aware preservation of selected immutable raw
+- Resolved by build-tests #42: arbitrarily long discovery now maintains compact
+  complete-run family/event/severity/outcome/opcode and integrity indexes plus
+  budget-aware preservation of selected immutable raw anomaly and context
   segments. Retaining all raw traffic forever is neither required nor safe.
 
 The long-term owner is a harness-level `SoakStoragePolicy` and
@@ -475,9 +494,9 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   use the new missing-family, exact-wire, and lifecycle findings to drive the
   next protocol-parity gaps. `diag_event_v2` remains the only current event
   envelope; `ed2k_client_udp` is a family within it, not a second schema.
-- Add compact complete-run eD2K/Kad family, opcode, outcome, sequence, and
-  writer-health indexes with budget-aware pinning of diagnostically interesting
-  exact raw segments.
+- Use the complete-run indexes and pinned exact raw evidence from build-tests
+  #42 to select and reconstruct the next deterministic and guarded parity gaps;
+  retained-suffix coverage remains explicitly incomplete.
 - Converge the optional observer onto the same bounded store and prove stable
   disk use with deterministic multi-day simulation before any guarded public
   soak is authorized.
