@@ -273,6 +273,17 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   portability, dependency, analysis, CodeQL, and Windows harness PR checks
   passed. Independent fail-closed review found no remaining high- or
   medium-severity issue.
+- `emulebb/emulebb-build-tests#35` made persisted launch planning reserve the
+  full retained capacity of all four controller-output streams and the merged
+  daemon-output stream against both aggregate bytes and minimum free space.
+  The strict policy now rejects totals that cannot contain those streams,
+  planning and enforcement verify the same reservation before any control-file
+  mutation or process start, and persisted evidence records the auditable
+  per-stream derivation. Exact-sliced process output needs no oversized-record
+  slack. Local validation passed 2,470 Python tests with one skip and one
+  deselection; all baseline, portability, dependency, analysis, CodeQL, and
+  Windows harness PR checks passed. Independent capacity review confirmed the
+  retention formula and absence of watcher double-counting.
 - `emulebb/emulebb-tooling#59` through `#62` aligned the common-v2 product
   contract, segmented filenames and writer-health evidence, and the explicit
   local-only unredacted trace policy.
@@ -309,12 +320,12 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   policy removes old bundles. The persisted soak currently captures no bundles;
   adding periodic capture before storage ownership changes would create a new
   unbounded path.
-- Persisted preflight and the watcher enforce the free-space reserve before and
-  throughout the run, but launch planning evaluates current bytes only. It does
-  not reserve the permitted growth of active protected streams, so a feasible
-  launch can still create an unprunable campaign that later exhausts the byte
-  or free-space budget. The watcher also does not yet observe Rust/MFC writer
-  drop, write-error, or retention-error health.
+- Persisted preflight now reserves the full retained capacity of every standard
+  protected process-output stream, and the watcher enforces actual campaign
+  bytes and free space throughout the run. Non-stream active outputs such as
+  reports, archived profile diagnostics, future bundles, and profiling data do
+  not yet have a complete growth reservation. The watcher also does not yet
+  observe Rust/MFC writer drop, write-error, or retention-error health.
 - The optional converged observer also grows five-minute checkpoints,
   per-action reports, and an all-actions summary indefinitely. Diagnostic
   segments must remain immutable and exact; enabling diagnostic tail trimming
@@ -342,14 +353,10 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   use the new missing-family, exact-wire, and lifecycle findings to drive the
   next protocol-parity gaps. `diag_event_v2` remains the only current event
   envelope; `ed2k_client_udp` is a family within it, not a second schema.
-- Reserve projected active-stream growth during persisted launch planning.
-  Current campaign bytes plus the maximum permitted protected growth must fit
-  both the aggregate-byte limit and the minimum-free-space reserve before any
-  control-file mutation or process start. Persist the reservation and verify it
-  with deterministic boundary, impossible-policy, and oversized-record tests.
 - Extend the Rust common writer with aggregate-byte, retained-age, and
   minimum-free-space policy plus observable fault/drop accounting. Keep the
-  active segment protected and preserve exact oversized records.
+  active segment protected, preserve exact oversized records, and make its
+  maximum growth available to harness reservation and writer-health checks.
 - Transfer diagnostic-bundle persistence ownership to the bounded campaign
   store so repeated endpoint captures do not grow the Rust profile directory.
 - Add Rust/MFC writer-integrity fault monitoring to persisted watcher health so
