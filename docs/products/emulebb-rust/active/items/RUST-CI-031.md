@@ -100,10 +100,11 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   leaves the profile-resident writer rings intact and promotes only bounded,
   validated, hash-verified Rust/MFC run suffixes after proving both profile-bound
   process families are quiescent. Complete-run indexes and bounded observer
-  state now have deterministic multi-day coverage. Arbitrary-length
-  authorization remains blocked until the observer is integrated as an
-  attach-only controller-owned sidecar, retained-window reporting is aligned,
-  and guarded live validation proves the complete path.
+  state now have deterministic multi-day coverage, and the passive observer is
+  integrated as an attach-only controller-owned sidecar. Arbitrary-length
+  authorization remains blocked until synchronized action driving uses that
+  sidecar, retained-window reporting is aligned, and guarded live validation
+  proves the complete path.
 
 ## Landed Evidence
 
@@ -423,6 +424,17 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   validation passed 2,553 Python tests with one skip and one deselection; all
   duplicated Windows harness, baseline, portability, dependency, analysis,
   and CodeQL checks passed.
+- `emulebb/emulebb-build-tests#44` added a new attach-only converged observer
+  and made it a default controller-owned sibling of the sole client-owning
+  `launch-soak.py` process. The observer waits for the existing campaign,
+  captures complete Rust and MFC diagnostic-writer health into the v7 bounded
+  checkpoint and cumulative-summary streams, honors the shared stop contract,
+  and has exact PID-plus-creation-time identity, bounded stdout/stderr,
+  startup rollback, status findings, and graceful or exact forced teardown.
+  The legacy second-launcher path is not reused. Local validation passed 2,560
+  Python tests with one skip and one deselection; all 20 duplicated Windows
+  harness, baseline, portability, dependency, analysis, and CodeQL checks
+  passed. No client was launched.
 - The ignored operator input was migrated backup-first to storage-policy v4
   with a 4 MiB by 48-artifact diagnostic-bundle ring and a 64 MiB by four-file
   diagnostic-segment ring for each client. The typed repository loader accepted
@@ -487,10 +499,12 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
 - Resolved as a storage foundation by build-tests #43: observer actions,
   checkpoints, and the singleton cumulative summary now have strict bounded
   stream budgets, and deterministic multi-day restart simulation proves exact
-  cumulative state with a bounded retained detail window. The legacy observer
-  is not yet wired to those owners and still must not be used as a second
-  client launcher. Diagnostic segments remain immutable and exact; enabling
-  diagnostic tail trimming is not an acceptable storage design.
+  cumulative state with a bounded retained detail window. Build-tests #44 wires
+  passive checkpoints and summaries to those owners through an attach-only
+  sidecar while keeping the launcher as the sole client owner. Synchronized
+  action reports still require migration from the legacy second-launcher path.
+  Diagnostic segments remain immutable and exact; enabling diagnostic tail
+  trimming is not an acceptable storage design.
 - Resolved by build-tests #42: arbitrarily long discovery now maintains compact
   complete-run family/event/severity/outcome/opcode and integrity indexes plus
   budget-aware preservation of selected immutable raw anomaly and context
@@ -518,10 +532,10 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
 - Use the complete-run indexes and pinned exact raw evidence from build-tests
   #42 to select and reconstruct the next deterministic and guarded parity gaps;
   retained-suffix coverage remains explicitly incomplete.
-- Refactor the optional observer into an attach-only controller-owned sidecar
-  that uses the v7 bounded streams and cumulative state from build-tests #43.
-  It must attach to the launcher's existing campaign and must never clean,
-  launch, or stop either client.
+- Migrate synchronized search and download action driving and exact action
+  diffs into the attach-only sidecar from build-tests #44. Actions must use the
+  v7 bounded action stream and cumulative reducer; the sidecar must continue to
+  never clean, launch, or stop either client.
 - Update report summarization to combine exact cumulative observer state with
   the retained detail window and identify intentional rotation as omitted by
   retention rather than missing evidence.
@@ -532,10 +546,10 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   exact file, peer, user, hash, endpoint, search, and packet data whenever that
   data helps reconstruct eD2K or Kad behavior. Redaction and privacy-driven
   field omission are not requirements for this lane; completeness is.
-- Arbitrarily long public live soaks remain unauthorized while campaign
-  archives, promoted protocol evidence, optional observer output, and
-  fault-triggered capture are not fully bounded and monitored. No live client
-  has been launched during these implementation slices.
+- Arbitrarily long public live soaks remain unauthorized while synchronized
+  action output, retained-window reporting, remaining non-stream artifacts,
+  and guarded live behavior are not fully bounded and validated. No live
+  client has been launched during these implementation slices.
 
 ## Why This Matters
 
