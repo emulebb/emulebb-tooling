@@ -261,6 +261,18 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   Local validation passed 2,434 Python tests with one skip and one deselection;
   all baseline, portability, dependency, analysis, CodeQL, and Windows harness
   PR checks passed.
+- `emulebb/emulebb-build-tests#34` made the watcher consume that immutable
+  storage authority once and enforce aggregate campaign storage on every
+  sample. Storage, context, evidence, heartbeat-authority, and watcher-liveness
+  faults now fail closed: terminal evidence is persisted, both stop paths are
+  requested, the complete owned process tree is verified or force-terminated,
+  and status surfaces authoritative storage failure, stale evidence, or an
+  unexpected watcher exit. Exact fallback process identity, late descendants,
+  PID reuse, and terminal heartbeat behavior are covered. Local validation
+  passed 2,461 Python tests with one skip and one deselection; all baseline,
+  portability, dependency, analysis, CodeQL, and Windows harness PR checks
+  passed. Independent fail-closed review found no remaining high- or
+  medium-severity issue.
 - `emulebb/emulebb-tooling#59` through `#62` aligned the common-v2 product
   contract, segmented filenames and writer-health evidence, and the explicit
   local-only unredacted trace policy.
@@ -274,7 +286,7 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
 - No public live client was launched for these foundation slices; guarded live
   and tunnel-down acceptance evidence remains outstanding.
 
-## Storage Audit - 2026-10-24
+## Storage Audit - 2026-10-25
 
 - The unified Rust event ring is bounded by segment size, rotation age, and
   retained segment count, but it has no aggregate-byte, retained-age, or
@@ -282,10 +294,11 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   target for one exact oversized record, which is correct for evidence
   integrity but must be included in reserve calculations.
 - The persisted soak watcher rotates its JSONL history. Detached launcher and
-  watcher stdout/stderr and the Rust daemon's merged stdout/stderr are now
-  campaign-owned exact-byte bounded streams, but aggregate campaign policy is
-  not yet enforced on every watcher sample. Rust daily application-log rotation
-  bounds file count but not bytes generated within one day.
+  watcher stdout/stderr and the Rust daemon's merged stdout/stderr are
+  campaign-owned exact-byte bounded streams, and the watcher now enforces the
+  aggregate campaign policy on every sample and fails closed on policy or
+  evidence-integrity loss. Rust daily application-log rotation bounds file
+  count but not bytes generated within one day.
 - Every new campaign creates timestamped archive and report trees with no byte,
   age, campaign-count, or free-space policy. Moving profile evidence to the
   output volume can require a cross-volume copy without destination-space
@@ -296,11 +309,12 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   policy removes old bundles. The persisted soak currently captures no bundles;
   adding periodic capture before storage ownership changes would create a new
   unbounded path.
-- Persisted preflight enforces the free-space reserve before launch, but the
-  watcher does not yet re-enforce it or observe Rust/MFC writer drop,
-  write-error, or retention-error health. Later disk pressure can therefore
-  leave the controller apparently healthy until a secondary failure becomes
-  visible.
+- Persisted preflight and the watcher enforce the free-space reserve before and
+  throughout the run, but launch planning evaluates current bytes only. It does
+  not reserve the permitted growth of active protected streams, so a feasible
+  launch can still create an unprunable campaign that later exhausts the byte
+  or free-space budget. The watcher also does not yet observe Rust/MFC writer
+  drop, write-error, or retention-error health.
 - The optional converged observer also grows five-minute checkpoints,
   per-action reports, and an all-actions summary indefinitely. Diagnostic
   segments must remain immutable and exact; enabling diagnostic tail trimming
@@ -328,23 +342,19 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   use the new missing-family, exact-wire, and lifecycle findings to drive the
   next protocol-parity gaps. `diag_event_v2` remains the only current event
   envelope; `ed2k_client_udp` is a family within it, not a second schema.
-- Extend the landed persisted-controller storage enforcement through watch,
-  stop, and status. The launch path now proves feasibility without mutation,
-  applies and verifies the policy before control-file mutation or process
-  start, and persists a hashed immutable storage context for the watcher. The
-  remaining lifecycle paths must consume that context once and fail closed on
-  reserve or evidence-integrity loss.
+- Reserve projected active-stream growth during persisted launch planning.
+  Current campaign bytes plus the maximum permitted protected growth must fit
+  both the aggregate-byte limit and the minimum-free-space reserve before any
+  control-file mutation or process start. Persist the reservation and verify it
+  with deterministic boundary, impossible-policy, and oversized-record tests.
 - Extend the Rust common writer with aggregate-byte, retained-age, and
   minimum-free-space policy plus observable fault/drop accounting. Keep the
   active segment protected and preserve exact oversized records.
 - Transfer diagnostic-bundle persistence ownership to the bounded campaign
   store so repeated endpoint captures do not grow the Rust profile directory.
-- Make persisted watcher health enforce aggregate campaign storage and fail
-  closed on disk pressure using the manifest-owned policy snapshot, with the
-  active campaign protected and the previous campaign pinned. Persist terminal
-  storage-failure evidence, request both stop paths, and make status expose
-  storage enforcement failure or unexpected watcher death. Then add Rust/MFC
-  writer-integrity fault monitoring.
+- Add Rust/MFC writer-integrity fault monitoring to persisted watcher health so
+  drop, write, retention, and sequence faults become terminal inconclusive
+  evidence rather than latent secondary failures.
 - Replace preflight evacuation of every profile segment with hashed,
   identity-preserving promotion of selected closed segments and compact
   manifests under the shared campaign budget.
