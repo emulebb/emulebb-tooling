@@ -53,12 +53,13 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   writers on Rust and MFC `main`. The harness selects one exact process run,
   enforces sequence and writer-health integrity, and rejects packet-only
   comparisons. Stable connection/session/action correlation remains incomplete.
-- The Rust diagnostic dump endpoint now produces a versioned, bounded local
-  investigation bundle with status, runtime diagnostics, settings provenance,
-  recent logs, and exact records plus integrity summaries from the unified
-  `diag_event_v2` stream only. Bundle v3 deliberately excludes legacy side-file
-  dumps. Its evidence is intentionally unredacted for this local,
-  non-published test lane.
+- The authenticated Rust diagnostic bundle endpoint now returns strict inline
+  `emulebb.diagnostic-bundle.v4` evidence with status, runtime diagnostics,
+  settings provenance, recent logs, and exact records plus integrity summaries
+  from the unified `diag_event_v2` stream only. The daemon no longer persists
+  UUID-named bundles in the reusable profile. WebUI users download the exact
+  inline JSON, while the soak harness owns bounded campaign persistence. The
+  evidence is intentionally unredacted for this local, non-published test lane.
 - Rust and MFC use one process-wide retained-event sequence,
   family-local stream sequences, rotate-before-write segments, persisted-run
   retention, and observable writer/drop/error health.
@@ -89,10 +90,11 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   correlated socket-boundary send attempts plus exactly one success, failure,
   or cancellation terminal outcome. The Rust `ed2k_server_udp` family still
   lacks an aligned MFC comparator and is not yet cross-client parity evidence.
-  Arbitrary-length authorization remains blocked until repeated bundle
-  persistence and selected-segment promotion are owned by the bounded campaign
-  store, persisted watcher health makes writer-integrity faults terminal, and
-  guarded live validation proves the complete path.
+  The soak launcher now captures ready and final bundles into a bounded
+  campaign stream. Arbitrary-length authorization remains blocked until sparse
+  periodic and fault-triggered capture, selected-segment promotion, persisted
+  watcher writer-integrity gates, and guarded live validation prove the
+  complete path.
 
 ## Landed Evidence
 
@@ -322,11 +324,34 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   evidence. Local validation passed 2,481 Python tests with one skip and one
   deselection; all baseline, portability, dependency, analysis, CodeQL, and
   Windows harness PR checks passed.
-- The ignored operator input was migrated backup-first to the persisted Rust
-  profile `F:\M\H06T01\dldz\EMULE_RUST_PROFILE_PERSISTED` and storage-policy
-  v2. The configured profile-local writer ring is bounded to 8 GiB with 64 MiB
-  segments, 128 retained segments, seven-day retained age, and a 20 GiB free
-  space floor. The typed repository loader accepted the result. No client was
+- The ignored operator input was migrated backup-first to the selected
+  operator-owned persisted Rust profile and storage-policy v2. The configured
+  profile-local writer ring is bounded to 8 GiB with 64 MiB segments, 128
+  retained segments, seven-day retained age, and a 20 GiB free space floor.
+  The typed repository loader accepted the result. No client was launched.
+- `emulebb/emulebb-tooling#83` replaced the Rust-only path-returning diagnostic
+  dump contract with authenticated inline `emulebb.diagnostic-bundle.v4`
+  capture. The breaking API uses `POST /api/v1/diagnostics/bundles` with an
+  exact `confirmCapture` sentinel and returns the strict bundle directly.
+- `emulebb/emulebb-rust#175` removed daemon-owned bundle files and the retired
+  dump wrapper, returned bundle v4 inline, embedded the strict summary, and made
+  the WebUI download the exact response through the browser. Local validation
+  passed 131 REST tests, the full workspace suite, strict Clippy, formatting,
+  29 WebUI unit tests, type checking, and the production WebUI build. All
+  Linux, macOS, Windows, policy, dependency, CodeQL, workflow-lint, and live
+  REST/OpenAPI checks passed.
+- `emulebb/emulebb-build-tests#37` introduced storage-policy v3 with a dedicated
+  bounded diagnostic-bundle stream, atomic whole-JSON persistence, aggregate
+  reservation and enforcement, and oldest-first retention. The canonical soak
+  launcher captures strict bundle v4 evidence at ready and final phases before
+  teardown and records exact paths, byte counts, hashes, deletions, and retained
+  inventory in the run manifest. Local focused validation passed 234 tests;
+  the full suite passed 2,484 tests with one skip and one deselection after the
+  two compilation-timeout cases passed in isolation. Both Windows harness lanes
+  and all baseline, portability, dependency, analysis, and CodeQL checks passed.
+- The ignored operator input was migrated backup-first to storage-policy v3
+  with a 4 MiB by 48-artifact diagnostic-bundle ring. The typed repository
+  loader accepted the policy and selected persisted profile. No client was
   launched.
 - `emulebb/emulebb-tooling#59` through `#62` aligned the common-v2 product
   contract, segmented filenames and writer-health evidence, and the explicit
@@ -358,18 +383,19 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   output volume can require a cross-volume copy without destination-space
   preflight, and evacuating every retained segment defeats cross-run writer
   retention by preserving successive copies forever.
-- Each diagnostic bundle is individually bounded, but every confirmed request
-  persists a unique UUID-named file under the Rust profile and no retention
-  policy removes old bundles. The persisted soak currently captures no bundles;
-  adding periodic capture before storage ownership changes would create a new
-  unbounded path.
+- Resolved by tooling #83, Rust #175, and build-tests #37: bundle capture is now
+  inline and caller-owned, the daemon creates no bundle directory in the
+  reusable profile, and the soak harness persists exact immutable JSON into a
+  dedicated campaign stream with per-artifact, retained-count, aggregate-byte,
+  age, and free-space enforcement. Ready and final captures are now bounded;
+  low-cadence periodic and fault-triggered captures remain to be added.
 - Persisted preflight now reserves the full retained capacity of every standard
   protected process-output stream, and the watcher enforces actual campaign
   bytes and free space throughout the run. The launcher independently injects
   and verifies the bounded Rust profile-writer policy before public actions.
-  Non-stream active outputs such as reports, archived profile diagnostics,
-  future bundles, and profiling data do not yet have a complete growth
-  reservation. The watcher still does not observe Rust or MFC writer health.
+  Non-stream active outputs such as reports, archived profile diagnostics, and
+  profiling data do not yet have a complete growth reservation. The watcher
+  still does not observe Rust or MFC writer health.
 - The optional converged observer also grows five-minute checkpoints,
   per-action reports, and an all-actions summary indefinitely. Diagnostic
   segments must remain immutable and exact; enabling diagnostic tail trimming
@@ -397,17 +423,15 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   use the new missing-family, exact-wire, and lifecycle findings to drive the
   next protocol-parity gaps. `diag_event_v2` remains the only current event
   envelope; `ed2k_client_udp` is a family within it, not a second schema.
-- Transfer diagnostic-bundle persistence ownership to the bounded campaign
-  store so repeated endpoint captures do not grow the Rust profile directory.
 - Add Rust/MFC writer-integrity fault monitoring to persisted watcher health so
   drop, write, retention, and sequence faults become terminal inconclusive
   evidence rather than latent secondary failures.
 - Replace preflight evacuation of every profile segment with hashed,
   identity-preserving promotion of selected closed segments and compact
   manifests under the shared campaign budget.
-- Add sparse bundle capture at ready/start, low-cadence periodic checkpoints,
-  writer or health faults, and final stop. Do not capture on every 60-second
-  health sample.
+- Extend the landed ready and final bundle captures with low-cadence periodic
+  checkpoints and writer or health fault captures. Do not capture on every
+  60-second health sample.
 - Add compact complete-run eD2K/Kad family, opcode, outcome, sequence, and
   writer-health indexes with budget-aware pinning of diagnostically interesting
   exact raw segments.
@@ -421,10 +445,10 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   exact file, peer, user, hash, endpoint, search, and packet data whenever that
   data helps reconstruct eD2K or Kad behavior. Redaction and privacy-driven
   field omission are not requirements for this lane; completeness is.
-- Arbitrarily long public live soaks remain unauthorized while controller logs,
-  campaign archives, repeated bundle snapshots, and free-space enforcement are
-  unbounded. No live client has been launched during these implementation
-  slices.
+- Arbitrarily long public live soaks remain unauthorized while campaign
+  archives, promoted protocol evidence, optional observer output, and
+  fault-triggered capture are not fully bounded and monitored. No live client
+  has been launched during these implementation slices.
 
 ## Why This Matters
 
@@ -539,8 +563,8 @@ distinguish observed parity from merely unobserved behavior.
 - [ ] Required eD2K and Kad diagnostic families carry exact local evidence and
       enough stable correlation to reconstruct causal sessions and harness
       actions without privacy-driven omissions.
-- [x] The diagnostic dump API produces a bounded, exact, unredacted local
-      investigation bundle rather than a status-only placeholder.
+- [x] The diagnostic bundle API returns exact, unredacted local investigation
+      evidence inline for bounded caller-owned persistence.
 - [ ] The parity matrix covers server, peer-transfer, source/queue, and Kad
       lifecycle behavior while excluding registered omissions and separating
       negotiated extensions.
