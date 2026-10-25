@@ -54,9 +54,12 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   enforces sequence and writer-health integrity, and rejects packet-only
   comparisons. Stable connection/session/action correlation remains incomplete.
 - The authenticated Rust diagnostic bundle endpoint now returns strict inline
-  `emulebb.diagnostic-bundle.v4` evidence with status, runtime diagnostics,
-  settings provenance, recent logs, and exact records plus integrity summaries
-  from the unified `diag_event_v2` stream only. The daemon no longer persists
+  `emulebb.diagnostic-bundle.v5` evidence with status, runtime diagnostics,
+  settings provenance, recent logs, exact records plus integrity summaries
+  from the unified `diag_event_v2` stream, and bounded deterministic operational
+  snapshots for servers, shared files, searches and evidence-rich results,
+  transfers, uploads, and the upload queue. Every collection reports its exact
+  total, included, omitted, and limit values. The daemon no longer persists
   UUID-named bundles in the reusable profile. WebUI users download the exact
   inline JSON, while the soak harness owns bounded campaign persistence. The
   evidence is intentionally unredacted for this local, non-published test lane.
@@ -106,8 +109,8 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   under a manifest-only, disabled-by-default configuration with a minimum
   five-minute cadence. Local terms, labels, keys, and failures remain
   unredacted. Arbitrary-length authorization remains blocked until exact
-  per-client action outcomes and diagnostic diffs are persisted, retained-window
-  reporting is aligned, and guarded live validation proves the complete path.
+  diagnostic action diffs are persisted crash-safely, retained-window reporting
+  is aligned, and guarded live validation proves the complete path.
 
 ## Landed Evidence
 
@@ -458,6 +461,27 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   tests with one skip and one deselection; all 20 duplicated Windows harness,
   baseline, portability, dependency, analysis, and CodeQL checks passed. No
   client was launched.
+- `emulebb/emulebb-build-tests#47` preserved independent Rust and MFC search
+  create and result-poll outcomes in the shared action engine. Both creates are
+  issued before either result poll; one-sided success retains its exact search
+  ID, result count, completion state, and unredacted error from the failing
+  side; incomplete bounded polling is not reported as a completed cycle; and an
+  unsafe download request without an explicit candidate policy is rejected
+  before any public action. Local validation passed 2,581 Python tests with one
+  skip and one deselection; every final baseline, portability, harness,
+  dependency, analysis, and CodeQL check succeeded. No client was launched.
+- `emulebb/emulebb-rust#176` advanced the single current inline bundle contract
+  to `emulebb.diagnostic-bundle.v5` and added bounded exact operational
+  snapshots for servers, shared files, searches and their evidence-rich
+  results, transfers, uploads, and the upload queue. Hash-map-backed searches
+  and transfers are sorted before newest-tail retention; catalog and queue
+  surfaces retain deterministic prefixes; every bound exposes exact omission
+  counts; and search evidence retains raw names, source identities, AICH, and
+  observation rows without redaction. The canonical quick gate, release builds,
+  full workspace tests, WebUI unit/end-to-end/build checks, and all three VPN
+  egress tests passed locally. All required Linux, macOS, Windows, CodeQL,
+  dependency, policy, and live REST/OpenAPI checks passed. No client was
+  launched.
 - The ignored operator input was migrated backup-first to storage-policy v4
   with a 4 MiB by 48-artifact diagnostic-bundle ring and a 64 MiB by four-file
   diagnostic-segment ring for each client. The typed repository loader accepted
@@ -528,8 +552,9 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   extracted synchronized action driving and correlation from the legacy
   second-launcher script into reusable package code. Build-tests #46 integrated
   search-only scheduling into the sidecar with exact manifest-owned terms and
-  cumulative cycle state. Exact per-client action outcomes and action-report
-  persistence still require integration.
+  cumulative cycle state. Build-tests #47 preserves exact independent
+  per-client action outcomes. Crash-safe action-report persistence and restart
+  reconciliation still require integration.
   Diagnostic segments remain immutable and exact; enabling diagnostic tail
   trimming is not an acceptable storage design.
 - Resolved by build-tests #42: arbitrarily long discovery now maintains compact
@@ -559,11 +584,41 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
 - Use the complete-run indexes and pinned exact raw evidence from build-tests
   #42 to select and reconstruct the next deterministic and guarded parity gaps;
   retained-suffix coverage remains explicitly incomplete.
-- Extend the build-tests #46 sidecar path to preserve partial per-client REST
-  outcomes when one search create or result poll fails, then correlate and
-  persist exact action diffs through the v7 bounded action stream and cumulative
-  reducer. The sidecar must continue to never clean, launch, or stop either
-  client.
+- Integrate build-tests #47 outcomes with the attach-only observer as a
+  recoverable state machine. Persist a reserved cycle before the first POST,
+  then persist each client search ID, issuance timestamp, result completion
+  state, and exact error as each phase finishes. Persist a configuration digest,
+  strict next-cycle value, UTC next-action deadline, stable action ID, allocated
+  report sequence, exact diagnostic process/run identities, and the action
+  window. Resume known search IDs after restart and never replay an ambiguous,
+  completed, or one-sided public action. The sidecar must continue to never
+  clean, launch, or stop either client.
+- Select diagnostics by exact `(client, processId, runId)`, load all matching
+  rotated and active segments, slice the action window by record timestamp, and
+  retain source segment IDs, paths, byte counts, SHA-256 values, modification
+  times, writer identity, and active-tail status. A client restart, writer-run
+  change, missing segment, parse failure, or incomplete active tail is explicit
+  incomplete evidence; the observer must never silently switch to the newest
+  run.
+- Persist one deterministic report per scheduled cycle, including one-sided and
+  both-failed outcomes. Write the immutable report first, fold it into cumulative
+  state second, update retention third, and persist the singleton summary last.
+  Report persistence must be idempotent by stable action ID and sequence:
+  identical replay is already committed, while different payload for the same
+  identity is terminal corruption. Startup reconciles report-first crashes,
+  validates a contiguous recoverable retained suffix, and never creates a
+  duplicate timestamp-named artifact.
+- Make protocol assessment method-specific: require `ed2k_tcp` for server
+  searches, `ed2k_server_udp` for global searches, and `kad_udp` for Kad
+  searches. Global-search evidence must use a server-UDP packet adapter or
+  direct server-UDP window analysis rather than the current TCP-only packet
+  view. Until MFC emits aligned server-UDP evidence, global cycles are
+  `not-assessable` or `evidence-incomplete`, never parity based on Rust alone.
+- Keep checkpoint service independent of long result polling and finalize a
+  pending evidence window before issuing another action. REST action failures
+  remain evidence and may continue the soak; trace loading, report persistence,
+  sequence, identity, or retention failures are harness-integrity failures that
+  stop new actions and fail closed after the existing retry threshold.
 - Add bounded download scheduling only after its safety policy, pending-action
   state, and restart reconciliation contract are explicit; a restarted observer
   must not replay a completed or one-sided public action.
