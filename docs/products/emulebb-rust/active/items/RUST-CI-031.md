@@ -97,8 +97,8 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   complete 41-field health payloads, and stops the launcher fail-closed on any
   contract, drop, write, retention, storage-policy, or writer-I/O fault. The
   launcher then captures final bundle evidence before teardown. Arbitrary-length
-  authorization remains blocked until selected-segment promotion, broader
-  terminal health handling, and guarded live validation prove the complete path.
+  authorization remains blocked until selected-segment promotion, bounded
+  complete-run indexes, and guarded live validation prove the complete path.
 
 ## Landed Evidence
 
@@ -372,6 +372,17 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   dependency, analysis, CodeQL, and duplicated Windows harness checks passed;
   one infrastructure-only GitHub API checkout timeout passed on failed-job
   rerun.
+- `emulebb/emulebb-build-tests#40` added exact per-client REST evidence for
+  blocking VPN Guard state and active `hide.me` P2P binding, then made
+  post-readiness route, Guard, binding, process-count, writer-integrity, and
+  unexpected launcher loss terminal. Diagnostics transport unavailability is
+  distinct from writer-integrity failure; REST and diagnostics availability
+  stop only after three consecutive samples, with same-campaign streaks
+  restored across watcher restart. Every terminal class requests graceful stop
+  and therefore reaches the final pre-teardown bundle capture. Local validation
+  passed 2,507 Python tests with one skip and one deselection; all duplicated
+  Windows harness, baseline, portability, dependency, analysis, and CodeQL
+  checks passed.
 - The ignored operator input was migrated backup-first to storage-policy v3
   with a 4 MiB by 48-artifact diagnostic-bundle ring. The typed repository
   loader accepted the policy and selected persisted profile. No client was
@@ -413,9 +424,8 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   reusable profile, and the soak harness persists exact immutable JSON into a
   dedicated campaign stream with per-artifact, retained-count, aggregate-byte,
   age, and free-space enforcement. Ready, low-cadence periodic, and final
-  captures are now bounded. Writer-integrity faults now request the same final
-  pre-teardown capture; explicit capture for other terminal health classes
-  remains to be added.
+  captures are now bounded. Every classified post-readiness terminal health or
+  integrity fault now requests the same final pre-teardown capture.
 - Persisted preflight now reserves the full retained capacity of every standard
   protected process-output stream, and the watcher enforces actual campaign
   bytes and free space throughout the run. The launcher independently injects
@@ -449,16 +459,9 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   use the new missing-family, exact-wire, and lifecycle findings to drive the
   next protocol-parity gaps. `diag_event_v2` remains the only current event
   envelope; `ed2k_client_udp` is a family within it, not a second schema.
-- Classify and latch post-readiness process, REST-control, VPN-route, and VPN
-  Guard findings with deliberate transient tolerance where safe, then make the
-  terminal classes stop the campaign as inconclusive like writer faults.
 - Replace preflight evacuation of every profile segment with hashed,
   identity-preserving promotion of selected closed segments and compact
   manifests under the shared campaign budget.
-- Add explicit immediate bundle capture for non-writer terminal health faults
-  before the run is stopped as inconclusive. Writer-integrity faults already
-  reach the final pre-teardown capture. Do not capture on every 60-second
-  healthy sample.
 - Add compact complete-run eD2K/Kad family, opcode, outcome, sequence, and
   writer-health indexes with budget-aware pinning of diagnostically interesting
   exact raw segments.
