@@ -92,9 +92,13 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   lacks an aligned MFC comparator and is not yet cross-client parity evidence.
   The soak launcher now captures ready, low-cadence periodic, and final bundles
   into a bounded campaign stream while pruning manifest entries as their bundle
-  files rotate. Arbitrary-length authorization remains blocked until
-  fault-triggered capture, selected-segment promotion, persisted watcher
-  writer-integrity gates, and guarded live validation prove the complete path.
+  files rotate. The persisted watcher now enables strict Rust and MFC writer
+  monitoring only after the current campaign publishes readiness, persists the
+  complete 41-field health payloads, and stops the launcher fail-closed on any
+  contract, drop, write, retention, storage-policy, or writer-I/O fault. The
+  launcher then captures final bundle evidence before teardown. Arbitrary-length
+  authorization remains blocked until selected-segment promotion, broader
+  terminal health handling, and guarded live validation prove the complete path.
 
 ## Landed Evidence
 
@@ -357,6 +361,17 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   passed 2,488 Python tests with one skip and one deselection; all Windows
   harness, baseline, portability, dependency, analysis, and CodeQL checks
   passed.
+- `emulebb/emulebb-build-tests#39` centralized the exact 41-field
+  `diag_event_v2` writer-health integrity contract, published a persisted
+  `running` boundary only after client bring-up and ready-bundle capture, and
+  added complete Rust/MFC writer snapshots to detached watcher evidence. Writer
+  faults after readiness are terminal and request graceful launcher stop, which
+  preserves the final bundle before teardown; startup remains tolerant while
+  the last-run manifest is `starting`. Local validation passed 2,501 Python
+  tests with one skip and one deselection. All baseline, portability,
+  dependency, analysis, CodeQL, and duplicated Windows harness checks passed;
+  one infrastructure-only GitHub API checkout timeout passed on failed-job
+  rerun.
 - The ignored operator input was migrated backup-first to storage-policy v3
   with a 4 MiB by 48-artifact diagnostic-bundle ring. The typed repository
   loader accepted the policy and selected persisted profile. No client was
@@ -383,9 +398,11 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
 - The persisted soak watcher rotates its JSONL history. Detached launcher and
   watcher stdout/stderr and the Rust daemon's merged stdout/stderr are
   campaign-owned exact-byte bounded streams, and the watcher now enforces the
-  aggregate campaign policy on every sample and fails closed on policy or
-  evidence-integrity loss. Rust daily application-log rotation bounds file
-  count but not bytes generated within one day.
+  aggregate campaign policy on every sample. Build-tests #39 also makes the
+  post-readiness Rust/MFC writer-health contract part of every watcher sample
+  and fails closed on storage, watch-evidence, or writer-integrity loss. Rust
+  daily application-log rotation bounds file count but not bytes generated
+  within one day.
 - Every new campaign creates timestamped archive and report trees with no byte,
   age, campaign-count, or free-space policy. Moving profile evidence to the
   output volume can require a cross-volume copy without destination-space
@@ -396,14 +413,15 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   reusable profile, and the soak harness persists exact immutable JSON into a
   dedicated campaign stream with per-artifact, retained-count, aggregate-byte,
   age, and free-space enforcement. Ready, low-cadence periodic, and final
-  captures are now bounded; fault-triggered capture remains to be added.
+  captures are now bounded. Writer-integrity faults now request the same final
+  pre-teardown capture; explicit capture for other terminal health classes
+  remains to be added.
 - Persisted preflight now reserves the full retained capacity of every standard
   protected process-output stream, and the watcher enforces actual campaign
   bytes and free space throughout the run. The launcher independently injects
   and verifies the bounded Rust profile-writer policy before public actions.
   Non-stream active outputs such as reports, archived profile diagnostics, and
-  profiling data do not yet have a complete growth reservation. The watcher
-  still does not observe Rust or MFC writer health.
+  profiling data do not yet have a complete growth reservation.
 - The optional converged observer also grows five-minute checkpoints,
   per-action reports, and an all-actions summary indefinitely. Diagnostic
   segments must remain immutable and exact; enabling diagnostic tail trimming
@@ -431,14 +449,16 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   use the new missing-family, exact-wire, and lifecycle findings to drive the
   next protocol-parity gaps. `diag_event_v2` remains the only current event
   envelope; `ed2k_client_udp` is a family within it, not a second schema.
-- Add Rust/MFC writer-integrity fault monitoring to persisted watcher health so
-  drop, write, retention, and sequence faults become terminal inconclusive
-  evidence rather than latent secondary failures.
+- Classify and latch post-readiness process, REST-control, VPN-route, and VPN
+  Guard findings with deliberate transient tolerance where safe, then make the
+  terminal classes stop the campaign as inconclusive like writer faults.
 - Replace preflight evacuation of every profile segment with hashed,
   identity-preserving promotion of selected closed segments and compact
   manifests under the shared campaign budget.
-- Add immediate bundle capture for writer or health faults before the run is
-  stopped as inconclusive. Do not capture on every 60-second healthy sample.
+- Add explicit immediate bundle capture for non-writer terminal health faults
+  before the run is stopped as inconclusive. Writer-integrity faults already
+  reach the final pre-teardown capture. Do not capture on every 60-second
+  healthy sample.
 - Add compact complete-run eD2K/Kad family, opcode, outcome, sequence, and
   writer-health indexes with budget-aware pinning of diagnostically interesting
   exact raw segments.
