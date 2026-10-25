@@ -302,23 +302,24 @@ paths:
           $ref: "#/components/responses/ErrorResponse"
         default:
           $ref: "#/components/responses/ErrorResponse"
-  /diagnostics/dumps:
+  /diagnostics/bundles:
     post:
       tags: [Diagnostics]
-      summary: Capture an operator-requested daemon diagnostic dump.
-      operationId: captureDiagnosticDump
+      summary: Capture a bounded diagnostic bundle for caller-owned persistence.
+      operationId: captureDiagnosticBundle
       description: >
         Unsafe diagnostic endpoint. It requires API-key authorization and an
-        explicit confirmation field in the request body.
+        explicit confirmation field in the request body. The complete bounded
+        bundle is returned inline and is never persisted by the daemon.
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/DiagnosticDumpRequest"
+              $ref: "#/components/schemas/DiagnosticBundleCaptureRequest"
       responses:
         "200":
-          $ref: "#/components/responses/DiagnosticDumpResponse"
+          $ref: "#/components/responses/DiagnosticBundleResponse"
         "400":
           $ref: "#/components/responses/ErrorResponse"
         "401":
@@ -3163,15 +3164,15 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/ErrorEnvelope"
-    DiagnosticDumpResponse:
-      description: Diagnostic dump envelope.
+    DiagnosticBundleResponse:
+      description: Inline bounded diagnostic bundle envelope.
       headers:
         X-Contract-Version:
           $ref: "#/components/headers/ContractVersionHeader"
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/DiagnosticDumpEnvelope"
+            $ref: "#/components/schemas/DiagnosticBundleEnvelope"
     FriendListResponse:
       description: Friend collection envelope.
       headers:
@@ -3587,54 +3588,145 @@ components:
           const: true
         banned:
           type: boolean
-    DiagnosticDumpEnvelope:
+    DiagnosticBundleEnvelope:
       unevaluatedProperties: false
       allOf:
         - $ref: "#/components/schemas/EnvelopeBase"
         - type: object
           properties:
             data:
-              $ref: "#/components/schemas/DiagnosticDump"
-    DiagnosticDump:
+              $ref: "#/components/schemas/DiagnosticBundle"
+    DiagnosticBundle:
       type: object
       additionalProperties: false
       required:
-        - ok
-        - path
         - schema
-        - byteCount
-        - artifactFileCount
-        - missingArtifactFamilies
-        - issueCount
+        - capturedAt
+        - app
+        - status
+        - runtimeDiagnostics
+        - settings
+        - settingsProvenance
+        - recentLogs
+        - diagnosticHealth
+        - diagnosticArtifacts
+        - limits
+        - summary
       properties:
-        ok:
-          type: boolean
-          const: true
-        path:
-          type: string
-          minLength: 1
         schema:
           type: string
           description: >-
-            Diagnostic bundle contract version. Version 3 contains only bounded
-            unified diag_event_v2 artifacts and excludes legacy side-file dumps.
-          const: emulebb.diagnostic-bundle.v3
-        byteCount:
-          type: integer
-          format: int64
-          minimum: 0
-        artifactFileCount:
-          type: integer
-          format: int64
-          minimum: 0
-        missingArtifactFamilies:
+            Diagnostic bundle contract version. Version 4 is returned inline,
+            contains only bounded unified diag_event_v2 artifacts, and excludes
+            legacy side-file dumps.
+          const: emulebb.diagnostic-bundle.v4
+        capturedAt:
+          type: string
+          format: date-time
+        app:
+          type: object
+          additionalProperties: true
+        status:
+          type: object
+          additionalProperties: true
+        runtimeDiagnostics:
+          type: object
+          additionalProperties: true
+        settings:
+          type: object
+          additionalProperties: true
+        settingsProvenance:
+          type: object
+          additionalProperties: false
+          required: [source, apiKeyIncluded, sensitiveValues, apiKey]
+          properties:
+            source:
+              type: string
+              const: profileState
+            apiKeyIncluded:
+              type: boolean
+              const: true
+            sensitiveValues:
+              type: string
+              const: exact
+            apiKey:
+              type: string
+        recentLogs:
           type: array
           items:
-            type: string
-        issueCount:
-          type: integer
-          format: int64
-          minimum: 0
+            type: object
+            additionalProperties: true
+        diagnosticHealth:
+          type: object
+          additionalProperties: false
+          required: [writerIssues]
+          properties:
+            writerIssues:
+              type: array
+              items:
+                type: object
+                required: [code]
+                additionalProperties: true
+                properties:
+                  code:
+                    type: string
+        diagnosticArtifacts:
+          type: object
+          additionalProperties: false
+          required: [logDirectory, families, directoryScanTruncated]
+          properties:
+            logDirectory:
+              type: object
+              additionalProperties: true
+            families:
+              type: array
+              items:
+                type: object
+                additionalProperties: true
+            directoryScanTruncated:
+              type: boolean
+        limits:
+          type: object
+          additionalProperties: false
+          required:
+            - recentLogRecords
+            - artifactFamilies
+            - directoryEntriesScanned
+            - tailBytesPerArtifact
+            - tailRecordsPerArtifact
+          properties:
+            recentLogRecords:
+              type: integer
+              minimum: 0
+            artifactFamilies:
+              type: integer
+              minimum: 0
+            directoryEntriesScanned:
+              type: integer
+              minimum: 1
+            tailBytesPerArtifact:
+              type: integer
+              minimum: 1
+            tailRecordsPerArtifact:
+              type: integer
+              minimum: 1
+        summary:
+          type: object
+          additionalProperties: false
+          required: [artifactFileCount, missingArtifactFamilies, issueCount]
+          properties:
+            artifactFileCount:
+              type: integer
+              format: int64
+              minimum: 0
+            missingArtifactFamilies:
+              type: array
+              items:
+                type: string
+            issueCount:
+              type: integer
+              format: int64
+              minimum: 0
     ErrorEnvelope:
       type: object
       additionalProperties: false
@@ -6263,12 +6355,12 @@ components:
         confirmShutdown:
           type: boolean
           enum: [true]
-    DiagnosticDumpRequest:
+    DiagnosticBundleCaptureRequest:
       type: object
       additionalProperties: false
-      required: [confirmDump]
+      required: [confirmCapture]
       properties:
-        confirmDump:
+        confirmCapture:
           type: boolean
           enum: [true]
     DiagnosticCrashTestRequest:
