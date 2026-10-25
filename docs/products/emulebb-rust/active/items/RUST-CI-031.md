@@ -233,6 +233,16 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   2,411 Python tests with one skip and one deselection; all baseline,
   portability, dependency, analysis, CodeQL, and Windows harness PR checks
   passed.
+- `emulebb/emulebb-build-tests#31` replaced append-only detached launcher and
+  watcher logs with campaign-owned exact-byte supervisors. Each supervisor
+  drains stdout and stderr concurrently, rotates to the configured hard
+  segment and retention limits, fingerprints the actual supervised process,
+  and fails closed by requesting graceful teardown before process-tree
+  termination. Storage validation now budgets all four active controller
+  output segments, and launch reuses one validated local-input snapshot across
+  preflight and enforcement. Local validation passed 2,418 Python tests with
+  one skip and one deselection; all baseline, portability, dependency,
+  analysis, CodeQL, and Windows harness PR checks passed.
 - `emulebb/emulebb-tooling#59` through `#62` aligned the common-v2 product
   contract, segmented filenames and writer-health evidence, and the explicit
   local-only unredacted trace policy.
@@ -310,8 +320,10 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   active segment protected and preserve exact oversized records.
 - Transfer diagnostic-bundle persistence ownership to the bounded campaign
   store so repeated endpoint captures do not grow the Rust profile directory.
-- Bound detached controller logs and `daemon.out`, then make persisted watcher
-  health fail closed on disk pressure and Rust/MFC writer-integrity faults.
+- Bound Rust `daemon.out` under the active campaign's `daemon_output` policy;
+  detached launcher and watcher logs are now campaign-owned and bounded. Then
+  make persisted watcher health fail closed on disk pressure and Rust/MFC
+  writer-integrity faults.
 - Replace preflight evacuation of every profile segment with hashed,
   identity-preserving promotion of selected closed segments and compact
   manifests under the shared campaign budget.
