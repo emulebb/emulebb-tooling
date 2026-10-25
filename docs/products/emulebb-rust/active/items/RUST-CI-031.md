@@ -96,9 +96,12 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   monitoring only after the current campaign publishes readiness, persists the
   complete 41-field health payloads, and stops the launcher fail-closed on any
   contract, drop, write, retention, storage-policy, or writer-I/O fault. The
-  launcher then captures final bundle evidence before teardown. Arbitrary-length
-  authorization remains blocked until selected-segment promotion, bounded
-  complete-run indexes, and guarded live validation prove the complete path.
+  launcher then captures final bundle evidence before teardown. Preflight now
+  leaves the profile-resident writer rings intact and promotes only bounded,
+  validated, hash-verified Rust/MFC run suffixes after proving both profile-bound
+  process families are quiescent. Arbitrary-length authorization remains blocked
+  until bounded complete-run indexes, observer convergence, and guarded live
+  validation prove the complete path.
 
 ## Landed Evidence
 
@@ -383,10 +386,21 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   passed 2,507 Python tests with one skip and one deselection; all duplicated
   Windows harness, baseline, portability, dependency, analysis, and CodeQL
   checks passed.
-- The ignored operator input was migrated backup-first to storage-policy v3
-  with a 4 MiB by 48-artifact diagnostic-bundle ring. The typed repository
-  loader accepted the policy and selected persisted profile. No client was
-  launched.
+- `emulebb/emulebb-build-tests#41` replaced preflight evacuation of the Rust
+  profile ring with bounded promotion of validated quiesced Rust and MFC
+  `diag_event_v2` run suffixes. Storage-policy v4 reserves per-client segment
+  capacity; exact bytes are copied atomically without removing the profile
+  source, source and destination SHA-256 are verified, and the compact manifest
+  records process/run/segment identity, retained and promoted coverage, omitted
+  prefix counts, byte counts, mtimes, and hashes. Preflight re-enumerates the
+  profile-bound process families and fails before promotion if either remains
+  live. Local validation passed 2,516 Python tests with one skip and one
+  deselection; all duplicated Windows harness, baseline, portability,
+  dependency, analysis, and CodeQL checks passed.
+- The ignored operator input was migrated backup-first to storage-policy v4
+  with a 4 MiB by 48-artifact diagnostic-bundle ring and a 64 MiB by four-file
+  diagnostic-segment ring for each client. The typed repository loader accepted
+  the policy and selected persisted profile. No client was launched.
 - `emulebb/emulebb-tooling#59` through `#62` aligned the common-v2 product
   contract, segmented filenames and writer-health evidence, and the explicit
   local-only unredacted trace policy.
@@ -414,11 +428,13 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   and fails closed on storage, watch-evidence, or writer-integrity loss. Rust
   daily application-log rotation bounds file count but not bytes generated
   within one day.
-- Every new campaign creates timestamped archive and report trees with no byte,
-  age, campaign-count, or free-space policy. Moving profile evidence to the
-  output volume can require a cross-volume copy without destination-space
-  preflight, and evacuating every retained segment defeats cross-run writer
-  retention by preserving successive copies forever.
+- Resolved by build-tests #41: profile diagnostic rings remain in place across
+  campaigns. After stale-process cleanup, preflight proves both profile-bound
+  process families are gone, strictly validates the selected retained run
+  suffix, reserves campaign storage, atomically copies exact whole segments,
+  verifies source and destination hashes, and publishes compact identity and
+  coverage metadata. The bounded per-client promotion rings are part of the
+  aggregate byte, age, and free-space policy.
 - Resolved by tooling #83, Rust #175, and build-tests #37: bundle capture is now
   inline and caller-owned, the daemon creates no bundle directory in the
   reusable profile, and the soak harness persists exact immutable JSON into a
@@ -430,8 +446,8 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   protected process-output stream, and the watcher enforces actual campaign
   bytes and free space throughout the run. The launcher independently injects
   and verifies the bounded Rust profile-writer policy before public actions.
-  Non-stream active outputs such as reports, archived profile diagnostics, and
-  profiling data do not yet have a complete growth reservation.
+  Non-stream active outputs such as reports and profiling data do not yet have
+  a complete growth reservation.
 - The optional converged observer also grows five-minute checkpoints,
   per-action reports, and an all-actions summary indefinitely. Diagnostic
   segments must remain immutable and exact; enabling diagnostic tail trimming
@@ -459,9 +475,6 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   use the new missing-family, exact-wire, and lifecycle findings to drive the
   next protocol-parity gaps. `diag_event_v2` remains the only current event
   envelope; `ed2k_client_udp` is a family within it, not a second schema.
-- Replace preflight evacuation of every profile segment with hashed,
-  identity-preserving promotion of selected closed segments and compact
-  manifests under the shared campaign budget.
 - Add compact complete-run eD2K/Kad family, opcode, outcome, sequence, and
   writer-health indexes with budget-aware pinning of diagnostically interesting
   exact raw segments.
