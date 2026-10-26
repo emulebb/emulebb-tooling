@@ -136,6 +136,9 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   rejects malformed, missing, non-UTC, and legacy-schema timestamps instead of
   silently dropping records, and lets the report diff consume the persisted
   window rather than reconstructing it from observation time.
+  Exact segment snapshots now also retain whether the source ended with a line
+  terminator and whether an allowed partial active tail was ignored, including
+  the distinct complete-JSON-without-terminator case.
   Arbitrary-length authorization remains blocked until exact snapshots are wired
   into diagnostic action diffs, report-first crashes are reconciled into
   cumulative state, the UTC deadline is reconciled, retained-window reporting is
@@ -581,6 +584,14 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   and one deselection; all 20 duplicated Windows harness, baseline,
   portability, dependency, analysis, and CodeQL checks passed. No client was
   launched.
+- `emulebb/emulebb-build-tests#56` added exact per-segment tail provenance to
+  diagnostic snapshots. Each snapshot now distinguishes a line-terminated
+  source, a complete unterminated JSON record, and an allowed malformed active
+  tail that was ignored; exact run snapshots preserve those flags beside the
+  existing path, bytes, modification time, digest, and records. Local
+  validation passed 2,616 Python tests with one skip and one deselection; all
+  20 duplicated Windows harness, baseline, portability, dependency, analysis,
+  and CodeQL checks passed. No client was launched.
 - `emulebb/emulebb-rust#176` advanced the single current inline bundle contract
   to `emulebb.diagnostic-bundle.v5` and added bounded exact operational
   snapshots for servers, shared files, searches and their evidence-rich
@@ -674,9 +685,10 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   build-tests #53 binds its source directories to manifest-owned profile
   authority; build-tests #54 provides deterministic idempotent report storage
   with exact replay and conflict detection; build-tests #55 provides strict
-  authoritative UTC window slicing without silent timestamp loss. Observer
-  evidence capture, report-first startup reconciliation, and UTC deadline
-  reconciliation still require integration.
+  authoritative UTC window slicing without silent timestamp loss; build-tests
+  #56 exposes exact tail termination and ignored-partial-tail provenance.
+  Observer evidence capture, report-first startup reconciliation, and UTC
+  deadline reconciliation still require integration.
   Diagnostic segments remain immutable and exact; enabling diagnostic tail
   trimming is not an acceptable storage design.
 - Resolved by build-tests #42: arbitrarily long discovery now maintains compact
@@ -711,10 +723,10 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   runId)`. Build-tests #55 already supplies strict slicing for the persisted
   `reservedAtUtc` through `windowEndUtc` window. Retain source segment IDs,
   paths, byte counts, SHA-256 values, modification times, writer identity, and
-  active-tail status. A client restart, writer-run change, missing segment,
-  parse failure, malformed timestamp, or incomplete active tail is explicit
-  incomplete evidence; the observer must never silently switch to the newest
-  run.
+  the build-tests #56 tail provenance. A client restart, writer-run change,
+  missing segment, parse failure, malformed timestamp, or ignored incomplete
+  active tail is explicit incomplete evidence; the observer must never silently
+  switch to the newest run.
 - Persist one deterministic report per scheduled cycle, including one-sided and
   both-failed outcomes. Write the immutable report first, fold it into cumulative
   state second, update retention third, and persist the singleton summary last.
