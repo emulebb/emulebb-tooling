@@ -131,8 +131,12 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   existing strict UTC deadline exactly across observer restart, reconciles the
   report-commit crash gap with the normal action interval, and replaces or
   clears the deadline after each action without inheriting a previous process's
-  monotonic clock. The diagnostic loader can now select the pinned
-  `(client, processId, runId)`
+  monotonic clock. The REST action driver now also exposes one bounded,
+  no-wait search-result read and a typed one-shot phase that preserves exact
+  local failures. The legacy blocking poll composes that primitive, but the
+  observer does not yet persist incremental poll progress or yield checkpoint
+  service between result attempts. The diagnostic loader can now select the
+  pinned `(client, processId, runId)`
   without falling forward to a newer run and returns stable exact-byte segment
   provenance plus strict envelope and process-sequence validation. The observer
   runtime now derives Rust
@@ -700,6 +704,15 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   with one skip and one deselection; all 20 duplicated Windows harness,
   baseline, portability, dependency, analysis, and CodeQL checks passed. No
   client was launched.
+- `emulebb/emulebb-build-tests#66` added one bounded search-result snapshot
+  read with no driver-side wait or sleep, plus a typed one-shot result phase
+  that preserves incomplete rows and exact local REST failures. The existing
+  blocking result poll now composes this primitive, retaining its last nonempty
+  rows at timeout while providing the foundation for a single-writer
+  incremental observer state machine. Local validation passed 2,654 Python
+  tests with one skip and one deselection; all 20 duplicated Windows harness,
+  baseline, portability, dependency, analysis, and CodeQL checks passed. No
+  client was launched.
 - `emulebb/emulebb-rust#176` advanced the single current inline bundle contract
   to `emulebb.diagnostic-bundle.v5` and added bounded exact operational
   snapshots for servers, shared files, searches and their evidence-rich
@@ -840,11 +853,15 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
 - Use the complete-run indexes and pinned exact raw evidence from build-tests
   #42 to select and reconstruct the next deterministic and guarded parity gaps;
   retained-suffix coverage remains explicitly incomplete.
-- Keep checkpoint service independent of long result polling and finalize a
-  pending evidence window before issuing another action. REST action failures
-  remain evidence and may continue the soak; trace loading, report persistence,
-  sequence, identity, or retention failures are harness-integrity failures that
-  stop new actions and fail closed after the existing retry threshold.
+- Advance the single current observer-state contract from v5 to v6 with one
+  persisted per-client result-poll deadline, next-attempt time, attempt count,
+  latest result count, and exact latest error. Then make the single-writer
+  observer perform at most one due result GET per loop so checkpoint and stop
+  service remain independent of long polling. Finalize a pending evidence
+  window before issuing another action. REST action failures remain evidence
+  and may continue the soak; trace loading, report persistence, sequence,
+  identity, or retention failures are harness-integrity failures that stop new
+  actions and fail closed after the existing retry threshold.
 - Add bounded download scheduling only after its safety policy, pending-action
   state, and restart reconciliation contract are explicit; a restarted observer
   must not replay a completed or one-sided public action.
