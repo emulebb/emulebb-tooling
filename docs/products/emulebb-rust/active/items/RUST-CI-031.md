@@ -1070,21 +1070,50 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   descriptions. Build-tests commit `f383dce` guards the cross-client source
   contract. Both Rust Kad crates pass, and MFC Debug x64, Release x64, and
   diagnostics Release x64 builds are green.
-- Campaign `20261026T193217Z` now runs the rebuilt binaries against the same
-  persisted profiles with synchronized server-search action driving every ten
-  minutes. Its first proof gate is dual readiness plus named `0x20` and
-  `0xA2`/`0xA3` live evidence; its longer gate remains segment rotation,
-  finalized indexing, and sustained writer/network health.
+- Campaign `20261026T193217Z` proved the rebuilt Rust trace names deprecated
+  Kad routing opcode `0x20`, then exposed an uncaught diagnostic-health timeout
+  before its first synchronized action. Build-tests commit `9644065` records
+  that timeout as a connectivity skip, keeps the observer alive, and preserves
+  repeated watcher failure as the fail-closed authority. Focused observer and
+  controller validation passed `138` tests.
+- Campaign `20261026T193907Z` then exposed one duplicated REST version prefix
+  in the action driver. Build-tests commit `fdf7eed` defines exactly one
+  canonical `/api/v1` client root and resource-relative action paths, with no
+  fallback or compatibility alias. Focused validation passed `228` tests; the
+  campaign finalized `4,599` MFC and `6,194` Rust records with full run-start
+  coverage and no writer-health violation.
+- Campaign `20261026T195054Z` proved synchronized server-search creation and
+  result completion on both clients. It also drove MFC through twelve segment
+  rotations within minutes, proving the watcher incorrectly treated reduced
+  current growth inside a healthy rolling retention ring as a terminal fault.
+  Build-tests commit `8e21761` now validates the active-segment, retained-count,
+  retained-byte, and free-space bounds without requiring a whole fresh segment
+  of instantaneous headroom; `160` focused tests pass.
+- The exact finalized trace diff was unbounded and emitted megabyte-scale
+  repeated mismatch evidence. Build-tests commit `de4808e` replaces that
+  contract with only `diag_event_diff_v2`: exact totals plus at most `32`
+  representative local details per category. The same finalized trace pair now
+  produces a bounded `99,986`-byte report; `123` focused tests pass.
+- Campaign `20261026T200004Z` stopped before launching either client because a
+  rotated legacy MFC packet-text log exceeded the preflight artifact limit by
+  one bounded log line. The common `diag_event_v2` segments already carry the
+  canonical full packet evidence, so the next implementation removes that
+  duplicate producer after preserving its remaining invalid-sub-opcode detail
+  in v2. The one-time archive allowance must cover the legacy logger's bounded
+  line overshoot so existing local files can be cleared normally.
 - The maintained MFC profile remains untouched. The Rust profile is valid and
   subsequent campaigns must continue selecting `reused-persisted`; no repair,
   reset, compatibility conversion, or reimport is allowed.
 
 ## Next Implementation
 
-- Keep action-driven campaign `20261026T193217Z` running across repeated watcher
-  and observer checkpoints. Treat repeated REST timeouts, writer faults,
-  process replacement, bind drift, VPN findings, or action-driver failures as
-  concrete blockers.
+- Remove the redundant MFC packet-text producer after moving its remaining
+  invalid-sub-opcode evidence into `diag_event_v2`; rebuild all required MFC
+  configurations and archive the existing bounded legacy files once.
+- Start the next action-driven campaign across repeated watcher and observer
+  checkpoints. Require successful synchronized actions before and after MFC
+  segment rotation; treat actual drops, writer faults, process replacement,
+  bind drift, VPN findings, or repeated action failures as concrete blockers.
 - Confirm the rebuilt traces name deprecated Kad routing and server-description
   UDP opcodes on both clients without changing unsupported Kad1 behavior.
 - Let both writers rotate naturally, then stop through the persisted controller
