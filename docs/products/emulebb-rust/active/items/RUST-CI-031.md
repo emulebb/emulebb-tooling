@@ -108,7 +108,7 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   exact synchronized Rust/MFC searches through the reusable REST action engine
   under a manifest-only, disabled-by-default configuration with a minimum
   five-minute cadence. Local terms, labels, keys, and failures remain
-  unredacted. The single current observer-state v5 contract is bound to the
+  unredacted. The single current observer-state v6 contract is bound to the
   exact action configuration and can persist a reserved cycle, deterministic
   action/report identity, per-client create/result outcomes, diagnostic run
   identities, strict UTC deadline, and evidence-pending state across restart.
@@ -133,9 +133,16 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   clears the deadline after each action without inheriting a previous process's
   monotonic clock. The REST action driver now also exposes one bounded,
   no-wait search-result read and a typed one-shot phase that preserves exact
-  local failures. The legacy blocking poll composes that primitive, but the
-  observer does not yet persist incremental poll progress or yield checkpoint
-  service between result attempts. The diagnostic loader can now select the
+  local failures. The v6 state persists each client's immutable poll start and
+  deadline, next attempt, attempt/error totals, latest attempt, latest observed
+  count, and exact current and historical errors. The single-writer observer
+  performs at most one due GET per loop, bounds it by the lesser of 30 seconds
+  and the exact remaining UTC budget, classifies a response that finishes after
+  the deadline as a deadline outcome, and retains terminal poll provenance in
+  the immutable driver outcome. Checkpoint, stop, and health service therefore
+  run between attempts instead of waiting behind a blocking result-poll loop.
+  The legacy blocking poll composes the same one-shot primitive. The diagnostic
+  loader can now select the
   pinned `(client, processId, runId)`
   without falling forward to a newer run and returns stable exact-byte segment
   provenance plus strict envelope and process-sequence validation. The observer
@@ -160,8 +167,8 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   Observer state and offline summaries retain dedicated `not-assessable` and
   `evidence-incomplete` totals instead of collapsing them into divergence or an
   unspecified fallback bucket.
-  Arbitrary-length authorization remains blocked until checkpoint/action service
-  isolation is explicit, retained-window reporting is aligned, and guarded live
+  Arbitrary-length authorization remains blocked until retained-window reporting
+  is aligned, remaining non-stream artifacts are bounded, and guarded live
   validation proves the complete path.
 
 ## Landed Evidence
@@ -713,6 +720,18 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   tests with one skip and one deselection; all 20 duplicated Windows harness,
   baseline, portability, dependency, analysis, and CodeQL checks passed. No
   client was launched.
+- `emulebb/emulebb-build-tests#67` advanced the sole current observer-state
+  contract to v6 and made result polling restart-safe and incremental. Each
+  client persists one authoritative UTC poll schedule, attempt/error history,
+  latest count, and exact errors; the observer services at most one bounded GET
+  per loop, uses the exact remaining deadline as its request budget, and treats
+  a response finishing after that deadline as incomplete. Terminal provenance
+  survives pending-state cleanup in the immutable driver outcome, direct
+  terminal-result bypasses and impossible success histories are rejected, and
+  checkpoint/stop/health work can run between result attempts. Local validation
+  passed 2,666 Python tests with one skip and one deselection; all 20 duplicated
+  Windows harness, baseline, portability, dependency, analysis, and CodeQL
+  checks passed. No client was launched.
 - `emulebb/emulebb-rust#176` advanced the single current inline bundle contract
   to `emulebb.diagnostic-bundle.v5` and added bounded exact operational
   snapshots for servers, shared files, searches and their evidence-rich
@@ -853,21 +872,16 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
 - Use the complete-run indexes and pinned exact raw evidence from build-tests
   #42 to select and reconstruct the next deterministic and guarded parity gaps;
   retained-suffix coverage remains explicitly incomplete.
-- Advance the single current observer-state contract from v5 to v6 with one
-  persisted per-client result-poll deadline, next-attempt time, attempt count,
-  latest result count, and exact latest error. Then make the single-writer
-  observer perform at most one due result GET per loop so checkpoint and stop
-  service remain independent of long polling. Finalize a pending evidence
-  window before issuing another action. REST action failures remain evidence
-  and may continue the soak; trace loading, report persistence, sequence,
-  identity, or retention failures are harness-integrity failures that stop new
-  actions and fail closed after the existing retry threshold.
 - Add bounded download scheduling only after its safety policy, pending-action
   state, and restart reconciliation contract are explicit; a restarted observer
   must not replay a completed or one-sided public action.
 - Update report summarization to combine exact cumulative observer state with
   the retained detail window and identify intentional rotation as omitted by
-  retention rather than missing evidence.
+  retention rather than missing evidence. Preserve v6 poll provenance and keep
+  REST action failures as evidence that may continue the soak; trace loading,
+  report persistence, sequence, identity, or retention failures remain
+  harness-integrity failures that stop new actions and fail closed after the
+  existing retry threshold.
 - Add aligned MFC and harness coverage for Rust's `ed2k_server_udp` family
   before treating server UDP observations as cross-client parity evidence.
 - Protocol and soak traces, bundles, manifests, and diagnostic payloads are
