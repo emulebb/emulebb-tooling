@@ -958,8 +958,9 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
 ## Harness Implementation Checkpoint - 2026-10-26
 
 - Work remains isolated on `feature/persisted-protocol-parity-soak` in
-  `emulebb-rust`, `emulebb-build-tests`, and the MFC workspace. Every coherent
-  slice is committed and pushed; no implementation pull request is open.
+  `emulebb-rust`, `emulebb-build-tests`, `emulebb-tooling`, and the MFC
+  workspace. Every coherent slice is committed and pushed; no implementation
+  pull request is open.
 - Rust diagnostics now correlate Kad RPC lifecycles and lookup completions,
   carry peer/file join keys on peer TCP, and record every supported peer TCP
   packet rather than sampling bulk opcodes.
@@ -975,34 +976,50 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   join-key presence across rotation. Stop finalization runs only after both
   clients and the watcher exit, consumes the former active segment, rejects a
   missing retained suffix, and is retry-idempotent after partial persistence.
-- Build-tests validation is green at `2702 passed, 1 skipped, 1 deselected`.
+- Build-tests validation is green at `2708 passed, 1 skipped, 1 deselected`.
   The focused scanner/index/controller suite is green at `104 passed`, and all
   packet-contract consumers are green at `426 passed`.
 - Rust validation at the current branch head is green for formatting, strict
   clippy, and `1192` packet-diagnostics tests. MFC validation at the current
   branch head is green for Debug x64, Release x64, and diagnostics Release x64.
-- The real persisted-soak preflight on 2026-10-26 stopped before launch with
-  `hide.me must already be connected before the full-tunnel live lane starts`.
-  No client was launched and no operator profile was modified.
+- The real persisted-soak preflight is green with loopback REST, hide.me full
+  tunnel, split tunneling disabled, VPN Guard Block, exact diagnostics binaries,
+  and the requested MFC/Rust profile paths.
+- Campaign `20261026T171120Z` exposed a Windows first-import promotion failure:
+  Python committed SQLite transactions without deterministically closing the
+  handles. Build-tests commit `7b22c35` closes every metadata connection before
+  atomic profile promotion.
+- Campaign `20261026T171510Z` proved profile promotion but exposed two later
+  startup defects. The observer required the Rust diagnostic directory before
+  the launcher could create it, and the imported database omitted current Rust
+  transfer invariants.
+- Backtrace campaign `20261026T171904Z` localized the Rust abort to
+  `manifest_from_row`: imported transfers lacked mandatory
+  `transfer_name_state` rows. Build-tests commit `eb8675a` now seeds the current
+  profile singleton and transfer-name state, validates those invariants without
+  repair or compatibility fallback, and rejects any invalid nonempty profile.
+  Commit `08bd3ae` moves diagnostic-directory existence into the observer's
+  bounded readiness loop so first-time import cannot race observer startup.
+- The invalid Rust profile produced by the old importer must be deleted once and
+  imported cleanly. The maintained MFC profile remains untouched.
 
 ## Next Implementation
 
-- Connect hide.me with split tunneling disabled and keep VPN Guard Block enabled
-  for both clients, then rerun the persisted-soak preflight until it is green.
-- Run one guarded short dual-client campaign against the selected persisted MFC
-  and Rust profiles. Verify loopback REST control, one exact process per side,
-  full-tunnel binding, diagnostic writer identity/health, and controlled
-  tunnel-down fail-closed behavior.
+- Delete only the invalid persisted Rust profile, reimport it from the maintained
+  MFC profile with the corrected current-schema importer, and prove subsequent
+  runs select `reused-persisted` without repair or reset.
+- Run a guarded natural-traffic campaign and a deterministic-action campaign.
+  Verify loopback REST control, one exact process per side, full-tunnel binding,
+  VPN Guard Block, and diagnostic writer/index identity and health.
 - Stop through the persisted controller and require both finalized checkpoints
   to include their former active segment with no parse, identity, sequence,
   writer-health, or retained-suffix gap.
 - Run the complete diagnostic analyzer and inspect exact unredacted eD2K/Kad
   traces. Implement only concrete protocol or correlation gaps demonstrated by
   that evidence, each as a separate tested commit.
-- Progress from the short guarded run to longer bounded runs, then an
-  until-stopped soak. Open the implementation pull requests only after the
-  deterministic suites, guarded live run, finalization, and analyzers are all
-  green at the same branch heads.
+- After both bounded campaigns stop and finalize cleanly, start an until-stopped
+  natural-traffic soak. Do not open a pull request until the operator explicitly
+  requests it.
 
 ## Why This Matters
 
