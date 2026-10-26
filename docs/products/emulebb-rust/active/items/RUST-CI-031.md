@@ -1047,34 +1047,55 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   exact writer-health schema. Build-tests commit `fa46889` makes the native
   route inventory and direct-dispatch boundary enforce that contract; focused
   route, schema, writer, and observer validation passed `65` tests.
-- Campaign `20261026T190612Z` reused the unchanged persisted Rust profile and is
-  the first until-stopped run to reach strict dual-writer enforcement. MFC and
-  Rust each report current `diag_event_v2` process/run/segment identity, zero
-  drops and errors, satisfied storage policy, hide.me binding, and VPN Guard
-  Block. One transient Rust REST timeout cleared on the next watcher sample;
-  the campaign remains active so repeated health and checkpoint evidence can
-  establish whether that is noise or a responsiveness defect.
+- Campaign `20261026T190612Z` reused the unchanged persisted Rust profile and
+  was the first until-stopped run to reach strict dual-writer enforcement. MFC
+  and Rust each reported current `diag_event_v2` process/run/segment identity,
+  zero drops and errors, satisfied storage policy, hide.me binding, and VPN
+  Guard Block across four observer checkpoints. One transient Rust REST timeout
+  cleared on the next watcher sample. The final analyzer read `11,355` Rust and
+  `10,645` MFC records. MFC continuously reported zero download sources, which
+  explains the absent MFC client-UDP family without weakening that evidence
+  gate.
+- Build-tests commits `d68ae82` and `c2f1dff` make analyzers snapshot the exact
+  opened prefix of an append-only active segment and compare Windows path and
+  handle metadata portably. Focused run/index/analyzer validation passed `62`
+  tests. The first stop exposed the cross-API timestamp defect; a retry with the
+  fix finalized and pinned both former active segments with full run-start
+  coverage and no writer-health violation.
+- Live traces exposed known opcodes mislabeled as `UNKNOWN`: Kad1 routing
+  request `0x20` in Rust and eD2K server-description request/response
+  `0xA2`/`0xA3` in MFC. Rust commit `52397089` names the known deprecated Kad1
+  routing request/response while leaving those packets behaviorally unsupported.
+  MFC commit `6252f525` names the same known legacy Kad set plus server UDP
+  descriptions. Build-tests commit `f383dce` guards the cross-client source
+  contract. Both Rust Kad crates pass, and MFC Debug x64, Release x64, and
+  diagnostics Release x64 builds are green.
+- Campaign `20261026T193217Z` now runs the rebuilt binaries against the same
+  persisted profiles with synchronized server-search action driving every ten
+  minutes. Its first proof gate is dual readiness plus named `0x20` and
+  `0xA2`/`0xA3` live evidence; its longer gate remains segment rotation,
+  finalized indexing, and sustained writer/network health.
 - The maintained MFC profile remains untouched. The Rust profile is valid and
   subsequent campaigns must continue selecting `reused-persisted`; no repair,
   reset, compatibility conversion, or reimport is allowed.
 
 ## Next Implementation
 
-- Keep campaign `20261026T190612Z` running across repeated watcher and observer
-  checkpoints. Treat any repeated Rust REST timeout, writer fault, process
-  replacement, bind drift, or VPN finding as a concrete blocker rather than
-  tolerating it in the harness.
-- Run a separate deterministic-action campaign only after the natural campaign
-  reaches ready state and stops with complete bilateral evidence.
-- Stop through the persisted controller and require both finalized checkpoints
-  to include their former active segment with no parse, identity, sequence,
+- Keep action-driven campaign `20261026T193217Z` running across repeated watcher
+  and observer checkpoints. Treat repeated REST timeouts, writer faults,
+  process replacement, bind drift, VPN findings, or action-driver failures as
+  concrete blockers.
+- Confirm the rebuilt traces name deprecated Kad routing and server-description
+  UDP opcodes on both clients without changing unsupported Kad1 behavior.
+- Let both writers rotate naturally, then stop through the persisted controller
+  and require finalized indexes with no parse, identity, sequence,
   writer-health, or retained-suffix gap.
 - Run the complete diagnostic analyzer and inspect exact unredacted eD2K/Kad
   traces. Implement only concrete protocol or correlation gaps demonstrated by
   that evidence, each as a separate tested commit.
-- After both bounded campaigns stop and finalize cleanly, start an until-stopped
-  natural-traffic soak. Do not open a pull request until the operator explicitly
-  requests it.
+- Keep the next run until-stopped once the action-driven proof is clean. Do not
+  open a pull request until the complete significant slice is green and the
+  operator explicitly requests it.
 
 ## Why This Matters
 
