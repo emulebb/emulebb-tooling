@@ -654,6 +654,17 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   Python tests with one skip and one deselection; all 20 duplicated Windows
   harness, baseline, portability, dependency, analysis, and CodeQL checks
   passed. No client was launched.
+- `emulebb/emulebb-build-tests#62` added report-first crash reconciliation. A
+  deterministic final or prepared report is loaded and strictly validated
+  against the exact pending action before any mutable active diagnostic segment
+  is recaptured. The validated payload is replayed through the identity store to
+  promote an exact prepared file when needed and recover current retention
+  metadata. Ambiguous final-plus-temporary state and identity, window, driver,
+  diagnostic-run, or assessment drift fail closed; only absence of a candidate
+  permits fresh pinned-run capture. The recurring observer loop remains
+  unchanged. Local validation passed 2,641 Python tests with one skip and one
+  deselection; all 20 duplicated Windows harness, baseline, portability,
+  dependency, analysis, and CodeQL checks passed. No client was launched.
 - `emulebb/emulebb-rust#176` advanced the single current inline bundle contract
   to `emulebb.diagnostic-bundle.v5` and added bounded exact operational
   snapshots for servers, shared files, searches and their evidence-rich
@@ -758,9 +769,9 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   assessment and Kad assessment without a TCP proxy. Build-tests #60 provides
   the single current pure observer report contract and strict validator, and
   build-tests #61 provides the report-first finalization transaction without
-  enabling it in the recurring observer loop. Report-first startup
-  reconciliation, loop integration, and UTC deadline reconciliation still
-  require integration.
+  enabling it in the recurring observer loop. Build-tests #62 reconciles exact
+  final and prepared report-first crashes before diagnostic recapture. Loop
+  integration and UTC deadline reconciliation still require integration.
   Diagnostic segments remain immutable and exact; enabling diagnostic tail
   trimming is not an acceptable storage design.
 - Resolved by build-tests #42: arbitrarily long discovery now maintains compact
@@ -790,18 +801,13 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
 - Use the complete-run indexes and pinned exact raw evidence from build-tests
   #42 to select and reconstruct the next deterministic and guarded parity gaps;
   retained-suffix coverage remains explicitly incomplete.
-- Reconcile report-first crashes on startup before recapturing mutable active
-  segments, then permit build-tests #61 to run from the observer loop. Build-tests
-  #54 already makes persistence idempotent by stable action ID and sequence:
-  identical replay is already committed, while different payload for the same
-  identity is terminal corruption. Startup must locate the deterministic report
-  path, validate the matching payload through build-tests #60, replay it through
-  the existing identity store to recover exact retention metadata, commit it
-  against the pending action, and never recapture or create a duplicate artifact.
-  If no report exists, #61 may capture the pinned runs and finalize normally. A
-  client restart, writer-run change, missing segment, parse failure, malformed
-  timestamp, or ignored incomplete active tail must remain incomplete or terminal
-  evidence; the observer must never silently switch to the newest run.
+- Activate build-tests #61 and #62 in the observer action path. A reportable
+  pending action must finalize immediately on attach and after driver completion,
+  before another action is reserved. An incomplete phased action must resume
+  immediately rather than wait for a fresh start delay. A client restart,
+  writer-run change, missing segment, parse failure, malformed timestamp, or
+  ignored incomplete active tail must remain incomplete or terminal evidence;
+  the observer must never silently switch to the newest run.
 - After evidence/report commit clears the pending action, reconcile and persist
   the next UTC deadline before recurring scheduling is enabled. Startup must
   service the persisted deadline without relying on a previous process's
