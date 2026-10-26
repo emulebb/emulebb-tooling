@@ -132,6 +132,10 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   Observer action reports now have deterministic sequence/action filenames,
   exact-byte idempotent replay, conflict rejection, and recovery from an exact
   interrupted temporary write under the existing bounded stream policy.
+  Action evidence slicing now uses one immutable authoritative UTC window,
+  rejects malformed, missing, non-UTC, and legacy-schema timestamps instead of
+  silently dropping records, and lets the report diff consume the persisted
+  window rather than reconstructing it from observation time.
   Arbitrary-length authorization remains blocked until exact snapshots are wired
   into diagnostic action diffs, report-first crashes are reconciled into
   cumulative state, the UTC deadline is reconciled, retained-window reporting is
@@ -568,6 +572,15 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   closed. Local validation passed 2,607 Python tests with one skip and one
   deselection; all 20 duplicated Windows harness, baseline, portability,
   dependency, analysis, and CodeQL checks passed. No client was launched.
+- `emulebb/emulebb-build-tests#55` added an immutable strict UTC action-window
+  contract and migrated the scheduler, action diff, and offline consumer to it.
+  Slicing now rejects missing, malformed, non-UTC, unsupported, and legacy
+  timestamps instead of silently omitting evidence; current `diag_event_v2`
+  records must use `ts`, and `diff_action` accepts the observer's authoritative
+  persisted window. Local validation passed 2,614 Python tests with one skip
+  and one deselection; all 20 duplicated Windows harness, baseline,
+  portability, dependency, analysis, and CodeQL checks passed. No client was
+  launched.
 - `emulebb/emulebb-rust#176` advanced the single current inline bundle contract
   to `emulebb.diagnostic-bundle.v5` and added bounded exact operational
   snapshots for servers, shared files, searches and their evidence-rich
@@ -660,9 +673,10 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   run loading with immutable source provenance and no fallback to a newer run;
   build-tests #53 binds its source directories to manifest-owned profile
   authority; build-tests #54 provides deterministic idempotent report storage
-  with exact replay and conflict detection. Observer evidence capture,
-  report-first startup reconciliation, and UTC deadline reconciliation still
-  require integration.
+  with exact replay and conflict detection; build-tests #55 provides strict
+  authoritative UTC window slicing without silent timestamp loss. Observer
+  evidence capture, report-first startup reconciliation, and UTC deadline
+  reconciliation still require integration.
   Diagnostic segments remain immutable and exact; enabling diagnostic tail
   trimming is not an acceptable storage design.
 - Resolved by build-tests #42: arbitrarily long discovery now maintains compact
@@ -694,12 +708,13 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   retained-suffix coverage remains explicitly incomplete.
 - Use the build-tests #52 exact snapshot API against the build-tests #53
   manifest-authoritative directories for the pinned `(client, processId,
-  runId)`, slice the action window by strict record timestamp, and retain source
-  segment IDs, paths, byte counts, SHA-256 values, modification times, writer
-  identity, and active-tail status. A client restart, writer-run change, missing
-  segment, parse failure, malformed timestamp, or incomplete active tail is
-  explicit incomplete evidence; the observer must never silently switch to the
-  newest run.
+  runId)`. Build-tests #55 already supplies strict slicing for the persisted
+  `reservedAtUtc` through `windowEndUtc` window. Retain source segment IDs,
+  paths, byte counts, SHA-256 values, modification times, writer identity, and
+  active-tail status. A client restart, writer-run change, missing segment,
+  parse failure, malformed timestamp, or incomplete active tail is explicit
+  incomplete evidence; the observer must never silently switch to the newest
+  run.
 - Persist one deterministic report per scheduled cycle, including one-sided and
   both-failed outcomes. Write the immutable report first, fold it into cumulative
   state second, update retention third, and persist the singleton summary last.
