@@ -1097,26 +1097,54 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
 - Campaign `20261026T200004Z` stopped before launching either client because a
   rotated legacy MFC packet-text log exceeded the preflight artifact limit by
   one bounded log line. The common `diag_event_v2` segments already carry the
-  canonical full packet evidence, so the next implementation removes that
-  duplicate producer after preserving its remaining invalid-sub-opcode detail
-  in v2. The one-time archive allowance must cover the legacy logger's bounded
-  line overshoot so existing local files can be cleared normally.
-- The maintained MFC profile remains untouched. The Rust profile is valid and
-  subsequent campaigns must continue selecting `reused-persisted`; no repair,
-  reset, compatibility conversion, or reimport is allowed.
+  canonical full packet evidence. MFC commit `3becf005` removes that duplicate
+  producer and moves its remaining invalid-sub-opcode detail into full,
+  unredacted `diag_event_v2` records. Build-tests commit `488e214` forbids the
+  retired writer and schemas. The complete source-parity suite passes `194`
+  tests, and MFC Debug x64, Release x64, and diagnostics Release x64 builds are
+  green.
+- Build-tests commit `2bb88c5` lets canonical stop finalize a campaign that
+  failed before either diagnostic writer started, while still requiring exact
+  finalization once writer health becomes authoritative. Commit `cdb566b`
+  admits only the MFC logger's exact 64-KiB maximum line overshoot during
+  preflight archival. The combined controller and input-policy suites pass
+  `96` tests.
+- Campaign `20261026T201442Z` archived the three existing legacy packet-text
+  files once and proved the rebuilt MFC client creates no replacement. Both v2
+  writers, REST APIs, hide.me bindings, VPN Guard Block, watcher, observer, and
+  storage stayed healthy. Canonical stop finalized fifteen MFC segments and
+  retained bounded evidence pins. Its first synchronized zero-result search
+  exposed one harness false negative: the classifier unconditionally required
+  `OP_SEARCHRESULT` even when both clients authoritatively completed with zero
+  results.
+- Build-tests commit `f67de86` makes server-search result traffic optional only
+  when both driver result counts are exactly zero; the shared
+  `OP_SEARCHREQUEST` remains mandatory. Adjacent action, report, summary, and
+  observer-state validation passes `123` tests.
+- Campaign `20261026T202726Z` is the current indefinite run using the unchanged
+  persisted profiles and corrected observer. Its first synchronized server
+  search completed on both clients with zero poll errors and zero results, and
+  now records `coverage-parity` with conformant diagnostics. Both clients,
+  writers, watcher, observer, hide.me full tunnel, VPN Guard Block, and bounded
+  storage are healthy with no findings. Leave this campaign running across
+  repeated actions and natural rotations.
+- The maintained MFC profile and valid Rust persisted profile continue to be
+  reused in place; no repair, reset, compatibility conversion, or reimport is
+  allowed.
 
 ## Next Implementation
 
-- Remove the redundant MFC packet-text producer after moving its remaining
-  invalid-sub-opcode evidence into `diag_event_v2`; rebuild all required MFC
-  configurations and archive the existing bounded legacy files once.
-- Start the next action-driven campaign across repeated watcher and observer
-  checkpoints. Require successful synchronized actions before and after MFC
-  segment rotation; treat actual drops, writer faults, process replacement,
-  bind drift, VPN findings, or repeated action failures as concrete blockers.
+- Keep campaign `20261026T202726Z` running across repeated synchronized actions
+  and natural MFC/Rust rotations. Require continued zero drops, writer faults,
+  process replacement, bind drift, VPN findings, or repeated action failures.
+- Use each bounded action report to separate action-owned coverage parity from
+  strict full-window background traffic differences, then investigate the
+  concrete eD2K/Kad opcode, payload, and lifecycle gaps instead of weakening
+  required-family or diagnostic-conformance gates.
 - Confirm the rebuilt traces name deprecated Kad routing and server-description
   UDP opcodes on both clients without changing unsupported Kad1 behavior.
-- Let both writers rotate naturally, then stop through the persisted controller
+- After multiple action cycles and both writers rotate naturally, stop through
+  the persisted controller
   and require finalized indexes with no parse, identity, sequence,
   writer-health, or retained-suffix gap.
 - Run the complete diagnostic analyzer and inspect exact unredacted eD2K/Kad
