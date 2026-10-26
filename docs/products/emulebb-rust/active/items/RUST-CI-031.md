@@ -1121,20 +1121,35 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   when both driver result counts are exactly zero; the shared
   `OP_SEARCHREQUEST` remains mandatory. Adjacent action, report, summary, and
   observer-state validation passes `123` tests.
-- Campaign `20261026T202726Z` is the current indefinite run using the unchanged
-  persisted profiles and corrected observer. Its first synchronized server
-  search completed on both clients with zero poll errors and zero results, and
-  now records `coverage-parity` with conformant diagnostics. Both clients,
-  writers, watcher, observer, hide.me full tunnel, VPN Guard Block, and bounded
-  storage are healthy with no findings. Leave this campaign running across
-  repeated actions and natural rotations.
+- Campaign `20261026T202726Z` proved the corrected zero-result classifier, then
+  stopped cleanly so the observer could load the canonical packet-projection
+  contract. Both former active v2 segments finalized from run start with no
+  writer-health violation; the retained Rust segment was pinned by policy.
+- Build-tests commit `68cee4a` gives the derived eD2K TCP packet view the exact
+  `ed2k_tcp_packet_view_v2` schema and its bounded comparison report the exact
+  `ed2k_packet_diff_v2` schema. The action slicer accepts only that view or the
+  canonical `diag_event_v2` envelope; the retired packet schema and schema-less
+  fallback remain unsupported. Focused diagnostic, action, offline, observer,
+  and controller validation passes `263` tests. The complete fast suite passes
+  `2,722` tests with one skip and two unrelated existing failures: the Rust REST
+  route inventory contains `/api/v1/events` beyond the current MFC/golden
+  contract, and the release golden still expects `90` routes while the current
+  inventory has `91`.
+- Campaign `20261026T204411Z` is the current indefinite run using the unchanged
+  persisted profiles and committed observer. Both clients, v2 writers, watcher,
+  observer, hide.me full tunnel, VPN Guard Block, and bounded storage are
+  healthy with no findings. Its first synchronized server search completed on
+  both clients with zero poll errors and zero results. The action report records
+  `coverage-parity`, bilateral mandatory `OP_SEARCHREQUEST`, optional absent
+  `OP_SEARCHRESULT`, conformant diagnostics, and packet report schema
+  `ed2k_packet_diff_v2`.
 - The maintained MFC profile and valid Rust persisted profile continue to be
   reused in place; no repair, reset, compatibility conversion, or reimport is
   allowed.
 
 ## Next Implementation
 
-- Keep campaign `20261026T202726Z` running across repeated synchronized actions
+- Keep campaign `20261026T204411Z` running across repeated synchronized actions
   and natural MFC/Rust rotations. Require continued zero drops, writer faults,
   process replacement, bind drift, VPN findings, or repeated action failures.
 - Use each bounded action report to separate action-owned coverage parity from
