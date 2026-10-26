@@ -129,10 +129,13 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   process-sequence validation. The observer runtime now derives Rust
   `packet-dump` and MFC `logs` directories only from the persisted session's
   validated profile authority and rejects missing or malformed profile roots.
+  Observer action reports now have deterministic sequence/action filenames,
+  exact-byte idempotent replay, conflict rejection, and recovery from an exact
+  interrupted temporary write under the existing bounded stream policy.
   Arbitrary-length authorization remains blocked until exact snapshots are wired
-  into diagnostic action diffs and reports with crash-safe persistence, the UTC
-  deadline is reconciled, retained-window reporting is aligned, and guarded live
-  validation proves the complete path.
+  into diagnostic action diffs, report-first crashes are reconciled into
+  cumulative state, the UTC deadline is reconciled, retained-window reporting is
+  aligned, and guarded live validation proves the complete path.
 
 ## Landed Evidence
 
@@ -557,6 +560,14 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   Python tests with one skip and one deselection; all 20 duplicated Windows
   harness, baseline, portability, dependency, analysis, and CodeQL checks
   passed. No client was launched.
+- `emulebb/emulebb-build-tests#54` replaced timestamp-named observer action
+  artifacts with deterministic sequence/action identities. Exact canonical
+  payload replay is accepted as already committed, changed payload reuse is
+  terminal conflict, and an exact interrupted temporary write is recovered
+  without duplication while conflicting or ambiguous temporary state fails
+  closed. Local validation passed 2,607 Python tests with one skip and one
+  deselection; all 20 duplicated Windows harness, baseline, portability,
+  dependency, analysis, and CodeQL checks passed. No client was launched.
 - `emulebb/emulebb-rust#176` advanced the single current inline bundle contract
   to `emulebb.diagnostic-bundle.v5` and added bounded exact operational
   snapshots for servers, shared files, searches and their evidence-rich
@@ -648,8 +659,9 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   run pinning and immediate phase persistence. Build-tests #52 provides exact
   run loading with immutable source provenance and no fallback to a newer run;
   build-tests #53 binds its source directories to manifest-owned profile
-  authority. Observer evidence capture, idempotent report storage,
-  evidence-first startup reconciliation, and UTC deadline reconciliation still
+  authority; build-tests #54 provides deterministic idempotent report storage
+  with exact replay and conflict detection. Observer evidence capture,
+  report-first startup reconciliation, and UTC deadline reconciliation still
   require integration.
   Diagnostic segments remain immutable and exact; enabling diagnostic tail
   trimming is not an acceptable storage design.
@@ -691,11 +703,11 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
 - Persist one deterministic report per scheduled cycle, including one-sided and
   both-failed outcomes. Write the immutable report first, fold it into cumulative
   state second, update retention third, and persist the singleton summary last.
-  Report persistence must be idempotent by stable action ID and sequence:
-  identical replay is already committed, while different payload for the same
-  identity is terminal corruption. Startup reconciles report-first crashes,
-  validates a contiguous recoverable retained suffix, and never creates a
-  duplicate timestamp-named artifact.
+  Build-tests #54 already makes persistence idempotent by stable action ID and
+  sequence: identical replay is already committed, while different payload for
+  the same identity is terminal corruption. Startup must reconcile report-first
+  crashes, validate a contiguous recoverable retained suffix, and never create
+  a duplicate artifact.
 - After evidence/report commit clears the pending action, reconcile and persist
   the next UTC deadline before recurring scheduling is enabled. Startup must
   service the persisted deadline without relying on a previous process's
