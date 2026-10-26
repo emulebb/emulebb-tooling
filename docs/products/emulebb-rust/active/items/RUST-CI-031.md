@@ -108,13 +108,14 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   exact synchronized Rust/MFC searches through the reusable REST action engine
   under a manifest-only, disabled-by-default configuration with a minimum
   five-minute cadence. Local terms, labels, keys, and failures remain
-  unredacted. The single current observer-state v4 contract is bound to the
+  unredacted. The single current observer-state v5 contract is bound to the
   exact action configuration and can persist a reserved cycle, deterministic
   action/report identity, per-client create/result outcomes, diagnostic run
-  identities, UTC deadline, and evidence-pending state across restart. Each
-  client create is prepared durably before its public POST; restart ambiguity
-  fails closed, and a skipped sibling is recorded explicitly rather than
-  issuing or replaying a one-sided action.
+  identities, strict UTC deadline, and evidence-pending state across restart.
+  A deadline cannot coexist with pending public work and is consumed atomically
+  by reservation. Each client create is prepared durably before its public POST;
+  restart ambiguity fails closed, and a skipped sibling is recorded explicitly
+  rather than issuing or replaying a one-sided action.
   The action driver now exposes typed create/result phases, resumes a persisted
   search identifier without issuing another POST, and preserves exact errors
   and incomplete polling rows while retaining the legacy complete-cycle output.
@@ -676,6 +677,14 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   2,642 Python tests with one skip and one deselection; all 20 duplicated
   Windows harness, baseline, portability, dependency, analysis, and CodeQL
   checks passed. No client was launched.
+- `emulebb/emulebb-build-tests#64` advanced the single current observer-state
+  contract to v5 and made `scheduler.nextActionAtUtc` strict scheduling
+  authority. Deadlines must be explicit UTC, cannot coexist with pending public
+  work, and are consumed atomically by cycle reservation, preventing restart
+  recovery from confusing scheduled and in-flight work. Local validation passed
+  2,646 Python tests with one skip and one deselection; all 20 duplicated
+  Windows harness, baseline, portability, dependency, analysis, and CodeQL
+  checks passed. No client was launched.
 - `emulebb/emulebb-rust#176` advanced the single current inline bundle contract
   to `emulebb.diagnostic-bundle.v5` and added bounded exact operational
   snapshots for servers, shared files, searches and their evidence-rich
@@ -783,8 +792,9 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   enabling it in the recurring observer loop. Build-tests #62 reconciles exact
   final and prepared report-first crashes before diagnostic recapture, and
   build-tests #63 activates immediate pending-action service and report
-  finalization in the recurring loop. Persisted UTC deadline reconciliation
-  still requires integration.
+  finalization in the recurring loop. Build-tests #64 provides the strict v5 UTC
+  deadline authority and atomic reservation consumption; recurring-loop
+  deadline reconciliation still requires integration.
   Diagnostic segments remain immutable and exact; enabling diagnostic tail
   trimming is not an acceptable storage design.
 - Resolved by build-tests #42: arbitrarily long discovery now maintains compact
@@ -814,12 +824,12 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
 - Use the complete-run indexes and pinned exact raw evidence from build-tests
   #42 to select and reconstruct the next deterministic and guarded parity gaps;
   retained-suffix coverage remains explicitly incomplete.
-- After evidence/report commit clears the pending action, reconcile and persist
-  the next UTC deadline before recurring scheduling is enabled. Startup must
-  service the persisted deadline without relying on a previous process's
-  monotonic clock and must never replay an ambiguous, completed, or one-sided
-  public action. The sidecar must continue to never clean, launch, or stop either
-  client.
+- Use the strict build-tests #64 v5 deadline authority after evidence/report
+  commit clears the pending action. Reconcile and persist the next UTC deadline
+  before recurring scheduling is enabled. Startup must service the persisted
+  deadline without relying on a previous process's monotonic clock and must
+  never replay an ambiguous, completed, or one-sided public action. The sidecar
+  must continue to never clean, launch, or stop either client.
 - Keep checkpoint service independent of long result polling and finalize a
   pending evidence window before issuing another action. REST action failures
   remain evidence and may continue the soak; trace loading, report persistence,
