@@ -14,6 +14,12 @@ or pull requests, merges work, cleans delivery state, or creates release tags.
   integration branch stays on that branch. Topic branches use
   `feature/<topic>`, `fix/<topic>`, or `chore/<topic>`. Never use `stale/*` as
   an active target without an explicit historical-comparison request.
+- Keep exactly one active work-in-progress topic branch per repository for one
+  operator workstream. Continue every granular checkpoint for that workstream
+  on the same branch until its pull request merges; do not create queued,
+  stacked, replacement, or parallel work-in-progress branches. Cross-repository
+  work should use the same topic name wherever practical so the single logical
+  workstream remains obvious.
 - Treat the end of every coherent work chunk as a mandatory commit boundary.
   During complex work, also create granular commits at independently
   reviewable, validated intermediate checkpoints; do not accumulate the whole
@@ -30,10 +36,12 @@ or pull requests, merges work, cleans delivery state, or creates release tags.
   release pull requests are exempt. A repository may define one
   maintainer-controlled exception label for deliberately parallel work; record
   the reason on both pull requests before applying it.
-- Do not open draft pull requests merely to retain work. An explicitly queued
-  topic branch may remain without a pull request, but it is incomplete work:
-  keep its scope disjoint from the active pull request, rebase it onto the
-  updated default branch before review, and do not report it as delivered.
+- Do not open draft pull requests merely to retain work, and do not open a pull
+  request for each granular commit. Keep the single work-in-progress branch
+  pushed without a pull request until it contains a significant, coherent,
+  review-ready chunk whose required local validation is green and whose scoped
+  implementation is complete. Incomplete work remains incomplete even when
+  committed and pushed; do not report it as delivered.
 - Work performed on a non-default branch is not complete until its full
   delivery lifecycle is finished: commit coherent changes granularly, push the
   branch, open a pull request targeting `main`, resolve required checks and
