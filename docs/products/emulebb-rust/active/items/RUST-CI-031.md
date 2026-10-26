@@ -1009,17 +1009,35 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   removed from the transfer list, matching native Rust local ingest while
   retaining them in the progressively hydrated shared catalog. The focused
   metadata/import suite is green at `60 passed`.
-- The Rust profile produced before `6bcbb8f` must be deleted once and imported
-  cleanly. The maintained MFC profile remains untouched.
+- Campaign `20261026T180304Z` then exposed a native MFC REST contract defect:
+  JSON responses omitted the required `X-Contract-Version: 2.0.0` header.
+  MFC commit `cfa03345` now emits the header from the common native JSON
+  success/error response boundary. Debug x64, Release x64, and diagnostics
+  Release x64 are green with zero warnings.
+- Campaign `20261026T181317Z` reused the corrected persisted Rust profile and
+  proved Rust high-ID eD2K plus Kad v2 packet/RPC activity, MFC high-ID server
+  connectivity, MFC diagnostics readiness, and the corrected MFC REST
+  contract. The mandatory Rust ready bundle then timed out three times because
+  persisted shared-catalog hydration synchronously reparsed uncached media with
+  Symphonia across the imported library, starving REST-critical work.
+- Rust commit `366a67c3` makes persisted catalog hydration database-only,
+  accepts only current-version cached media, leaves stale cache rows untouched,
+  and keeps bulk imported promotion cached-only while preserving eager media
+  extraction for newly ingested files. Validation is green for formatting,
+  all `1184` eD2K tests, all `435` core tests, the imported-promotion
+  regression, and the Release x64 diagnostics build with zero warnings.
+- The maintained MFC profile remains untouched. The Rust profile is valid and
+  subsequent campaigns must continue selecting `reused-persisted`; no repair,
+  reset, compatibility conversion, or reimport is allowed.
 
 ## Next Implementation
 
-- Delete only the invalid persisted Rust profile, reimport it from the maintained
-  MFC profile with the corrected current-schema importer, and prove subsequent
-  runs select `reused-persisted` without repair or reset.
-- Run a guarded natural-traffic campaign and a deterministic-action campaign.
-  Verify loopback REST control, one exact process per side, full-tunnel binding,
-  VPN Guard Block, and diagnostic writer/index identity and health.
+- Rerun the guarded natural-traffic campaign against the unchanged persisted
+  profiles and prove `reused-persisted`, prompt Rust REST/bundle readiness, one
+  exact process per side, full-tunnel binding, VPN Guard Block, and diagnostic
+  writer/index identity and health.
+- Run a separate deterministic-action campaign only after the natural campaign
+  reaches ready state and stops with complete bilateral evidence.
 - Stop through the persisted controller and require both finalized checkpoints
   to include their former active segment with no parse, identity, sequence,
   writer-health, or retained-suffix gap.
@@ -1110,9 +1128,9 @@ distinguish observed parity from merely unobserved behavior.
 - This item may break harness schemas, diagnostic schemas, REST APIs, or test
   profile configuration during the beta phase when the resulting design is
   cleaner and the owning contracts and tests change together.
-- `diag_event_v2` is the only current common event envelope for both Rust and
-  MFC. Legacy v1 input, if retained at all, is isolated from current validation
-  behind an explicit compatibility adapter.
+- `diag_event_v2` is the only common event envelope for both Rust and MFC.
+  Current harness code rejects every other diagnostic schema; there is no
+  legacy input adapter or fallback path.
 - Runtime traces and bundles are unredacted local test artifacts. They may
   contain exact identifiers and raw public-network payloads and must never be
   uploaded, attached to public issues, or committed.
