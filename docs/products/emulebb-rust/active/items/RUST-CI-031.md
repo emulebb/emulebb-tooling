@@ -620,6 +620,16 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   Python tests with one skip and one deselection; all 20 duplicated Windows
   harness, baseline, portability, dependency, analysis, and CodeQL checks
   passed. No client was launched.
+- `emulebb/emulebb-build-tests#59` completed action-specific diagnostic-family
+  assessment. Explicit server searches now require `ed2k_tcp`, explicit Kad
+  searches require `kad_udp`, and global searches compare direct
+  `ed2k_server_udp` records rather than adapting them through the TCP packet
+  view. Missing required Rust families are `evidence-incomplete`; missing
+  aligned MFC server-UDP evidence remains `not-assessable`. Kad assessment no
+  longer depends on synthetic TCP packet lists. Local validation passed 2,627
+  Python tests with one skip and one deselection; all 20 duplicated Windows
+  harness, baseline, portability, dependency, analysis, and CodeQL checks
+  passed. No client was launched.
 - `emulebb/emulebb-rust#176` advanced the single current inline bundle contract
   to `emulebb.diagnostic-bundle.v5` and added bounded exact operational
   snapshots for servers, shared files, searches and their evidence-rich
@@ -719,8 +729,11 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   report metadata and in-memory action-window records. Build-tests #58 replaces
   observer state v3 with the single current v4 contract, adds explicit
   inconclusive verdict buckets, and prevents Rust-only global-search evidence
-  from becoming parity. Observer report assembly, report-first startup
-  reconciliation, and UTC deadline reconciliation still require integration.
+  from becoming parity. Build-tests #59 completes action-specific family
+  selection for server, global, and Kad searches, including direct server-UDP
+  assessment and Kad assessment without a TCP proxy. Observer report assembly,
+  report-first startup reconciliation, and UTC deadline reconciliation still
+  require integration.
   Diagnostic segments remain immutable and exact; enabling diagnostic tail
   trimming is not an acceptable storage design.
 - Resolved by build-tests #42: arbitrarily long discovery now maintains compact
@@ -750,13 +763,15 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
 - Use the complete-run indexes and pinned exact raw evidence from build-tests
   #42 to select and reconstruct the next deterministic and guarded parity gaps;
   retained-suffix coverage remains explicitly incomplete.
-- Wire build-tests #57 into one current observer action-report schema containing
-  the pending action identity, phased driver outcomes, exact diagnostic evidence,
-  and method-specific parity assessment. Keep raw action-window records in
-  memory while persisting bounded exact source provenance. A client restart,
-  writer-run change, missing segment, parse failure, malformed timestamp, or
-  ignored incomplete active tail must remain incomplete or terminal evidence;
-  the observer must never silently switch to the newest run.
+- Build one pure, single-current observer action-report contract that combines
+  the pending action identity, phased driver outcomes, build-tests #57 exact
+  diagnostic evidence, and build-tests #59 method-specific assessment. Keep raw
+  action-window records in memory while persisting bounded exact source
+  provenance. Produce deterministic reports for successful, one-sided, and
+  both-failed driver outcomes. A client restart, writer-run change, missing
+  segment, parse failure, malformed timestamp, or ignored incomplete active tail
+  must remain incomplete or terminal evidence; the observer must never silently
+  switch to the newest run.
 - Persist one deterministic report per scheduled cycle, including one-sided and
   both-failed outcomes. Write the immutable report first, fold it into cumulative
   state second, update retention third, and persist the singleton summary last.
@@ -771,11 +786,6 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   monotonic clock and must never replay an ambiguous, completed, or one-sided
   public action. The sidecar must continue to never clean, launch, or stop either
   client.
-- Complete method-specific observer report assessment: require `ed2k_tcp` for
-  server searches and `kad_udp` for Kad searches. Build-tests #58 already makes
-  global cycles `not-assessable` without aligned MFC `ed2k_server_udp` evidence;
-  a future aligned global comparator must use direct server-UDP window analysis
-  or a dedicated adapter rather than the TCP-only packet view.
 - Keep checkpoint service independent of long result polling and finalize a
   pending evidence window before issuing another action. REST action failures
   remain evidence and may continue the soak; trace loading, report persistence,
