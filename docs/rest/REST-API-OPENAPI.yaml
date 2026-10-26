@@ -157,6 +157,34 @@ paths:
           $ref: "#/components/responses/ErrorResponse"
         default:
           $ref: "#/components/responses/ErrorResponse"
+  /diagnostics:
+    get:
+      tags: [Diagnostics]
+      summary: Return diagnostic writer health.
+      description: >
+        Returns the current lossless `diag_event_v2` writer identity, counters,
+        storage authority, and retention-policy state used by persisted soak
+        monitoring.
+      operationId: getDiagnostics
+      responses:
+        "200":
+          $ref: "#/components/responses/DiagnosticsResponse"
+        "400":
+          $ref: "#/components/responses/ErrorResponse"
+        "401":
+          $ref: "#/components/responses/ErrorResponse"
+        "404":
+          $ref: "#/components/responses/ErrorResponse"
+        "405":
+          $ref: "#/components/responses/MethodNotAllowedResponse"
+        "409":
+          $ref: "#/components/responses/ErrorResponse"
+        "500":
+          $ref: "#/components/responses/ErrorResponse"
+        "503":
+          $ref: "#/components/responses/ErrorResponse"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
   /diagnostics/dumps:
     post:
       tags: [Diagnostics]
@@ -2630,6 +2658,12 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/DiagnosticDumpEnvelope"
+    DiagnosticsResponse:
+      description: Diagnostic writer health envelope.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/DiagnosticsEnvelope"
     FriendListResponse:
       description: Friend collection envelope.
       content:
@@ -2880,6 +2914,180 @@ components:
           const: true
         banned:
           type: boolean
+    DiagnosticsEnvelope:
+      unevaluatedProperties: false
+      allOf:
+        - $ref: "#/components/schemas/EnvelopeBase"
+        - type: object
+          properties:
+            data:
+              $ref: "#/components/schemas/Diagnostics"
+    Diagnostics:
+      type: object
+      additionalProperties: false
+      required: [diagnosticWriter]
+      properties:
+        diagnosticWriter:
+          $ref: "#/components/schemas/DiagnosticWriterHealth"
+    DiagnosticWriterHealth:
+      type: object
+      additionalProperties: false
+      required:
+        - schema
+        - enabled
+        - configured
+        - initialized
+        - runId
+        - processId
+        - activeSegmentId
+        - activeFileName
+        - activeSegmentBytes
+        - recordsWritten
+        - bytesWritten
+        - droppedEvents
+        - encodeErrors
+        - writeErrors
+        - rotations
+        - retentionDeletes
+        - retentionDeleteErrors
+        - retentionScanErrors
+        - freeSpaceProbeErrors
+        - retentionPolicyErrors
+        - storagePolicyDrops
+        - storageFaultDrops
+        - retentionLimitDrops
+        - aggregateLimitDrops
+        - minimumFreeSpaceDrops
+        - writerFaultDrops
+        - retainedSegmentCount
+        - retainedBytes
+        - availableBytes
+        - storageAuthorityFaulted
+        - writerIoFaulted
+        - storageBlockReason
+        - storagePolicySatisfied
+        - maximumGrowthBytes
+        - maxSegmentBytes
+        - maxSegmentSeconds
+        - retainedSegments
+        - maxTotalBytes
+        - maxRetainedSeconds
+        - minimumFreeBytes
+        - initializationFailure
+      properties:
+        schema:
+          type: string
+          enum: [diag_event_v2]
+        enabled:
+          type: boolean
+        configured:
+          type: boolean
+        initialized:
+          type: boolean
+        runId:
+          type: [string, "null"]
+        processId:
+          type: integer
+          minimum: 0
+        activeSegmentId:
+          type: [integer, "null"]
+          minimum: 0
+        activeFileName:
+          type: [string, "null"]
+        activeSegmentBytes:
+          type: integer
+          minimum: 0
+        recordsWritten:
+          type: integer
+          minimum: 0
+        bytesWritten:
+          type: integer
+          minimum: 0
+        droppedEvents:
+          type: integer
+          minimum: 0
+        encodeErrors:
+          type: integer
+          minimum: 0
+        writeErrors:
+          type: integer
+          minimum: 0
+        rotations:
+          type: integer
+          minimum: 0
+        retentionDeletes:
+          type: integer
+          minimum: 0
+        retentionDeleteErrors:
+          type: integer
+          minimum: 0
+        retentionScanErrors:
+          type: integer
+          minimum: 0
+        freeSpaceProbeErrors:
+          type: integer
+          minimum: 0
+        retentionPolicyErrors:
+          type: integer
+          minimum: 0
+        storagePolicyDrops:
+          type: integer
+          minimum: 0
+        storageFaultDrops:
+          type: integer
+          minimum: 0
+        retentionLimitDrops:
+          type: integer
+          minimum: 0
+        aggregateLimitDrops:
+          type: integer
+          minimum: 0
+        minimumFreeSpaceDrops:
+          type: integer
+          minimum: 0
+        writerFaultDrops:
+          type: integer
+          minimum: 0
+        retainedSegmentCount:
+          type: integer
+          minimum: 0
+        retainedBytes:
+          type: integer
+          minimum: 0
+        availableBytes:
+          type: [integer, "null"]
+          minimum: 0
+        storageAuthorityFaulted:
+          type: boolean
+        writerIoFaulted:
+          type: boolean
+        storageBlockReason:
+          enum: [retentionScanFailure, retentionDeleteFailure, freeSpaceProbeFailure, retainedSegmentLimit, aggregateByteLimit, minimumFreeSpace, pendingRetentionDeletions, null]
+        storagePolicySatisfied:
+          type: [boolean, "null"]
+        maximumGrowthBytes:
+          type: [integer, "null"]
+          minimum: 0
+        maxSegmentBytes:
+          type: [integer, "null"]
+          minimum: 0
+        maxSegmentSeconds:
+          type: [integer, "null"]
+          minimum: 0
+        retainedSegments:
+          type: [integer, "null"]
+          minimum: 0
+        maxTotalBytes:
+          type: [integer, "null"]
+          minimum: 0
+        maxRetainedSeconds:
+          type: [integer, "null"]
+          minimum: 0
+        minimumFreeBytes:
+          type: [integer, "null"]
+          minimum: 0
+        initializationFailure:
+          type: [string, "null"]
     DiagnosticDumpEnvelope:
       unevaluatedProperties: false
       allOf:
