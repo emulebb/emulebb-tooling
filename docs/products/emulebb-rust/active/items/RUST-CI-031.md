@@ -138,11 +138,14 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   window rather than reconstructing it from observation time.
   Exact segment snapshots now also retain whether the source ended with a line
   terminator and whether an allowed partial active tail was ignored, including
-  the distinct complete-JSON-without-terminator case.
-  Arbitrary-length authorization remains blocked until exact snapshots are wired
-  into diagnostic action diffs, report-first crashes are reconciled into
-  cumulative state, the UTC deadline is reconciled, retained-window reporting is
-  aligned, and guarded live validation proves the complete path.
+  the distinct complete-JSON-without-terminator case. A pure action-evidence
+  boundary now loads only the manifest-pinned Rust and MFC writer runs, slices
+  every segment against the authoritative persisted UTC window, and retains
+  exact unredacted segment provenance and explicit tail-completeness findings.
+  Arbitrary-length authorization remains blocked until that evidence is wired
+  into the observer's single action report, report-first crashes are reconciled
+  into cumulative state, the UTC deadline is reconciled, retained-window
+  reporting is aligned, and guarded live validation proves the complete path.
 
 ## Landed Evidence
 
@@ -592,6 +595,17 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   validation passed 2,616 Python tests with one skip and one deselection; all
   20 duplicated Windows harness, baseline, portability, dependency, analysis,
   and CodeQL checks passed. No client was launched.
+- `emulebb/emulebb-build-tests#57` added pure exact-run action evidence capture.
+  It accepts only manifest-pinned Rust and MFC process/run identities, performs
+  strict per-segment slicing against the authoritative UTC action window, never
+  falls forward to a newer run, and reports exact unredacted paths, byte counts,
+  modification times, SHA-256 values, record counts, writer identities, and tail
+  provenance. Missing runs, malformed timestamps, parse or identity failures
+  remain terminal harness errors; ignored malformed tails and complete records
+  without a line terminator are explicit incomplete evidence. Local validation
+  passed 2,621 Python tests with one skip and one deselection; all 20 duplicated
+  Windows harness, baseline, portability, dependency, analysis, and CodeQL
+  checks passed. No client was launched.
 - `emulebb/emulebb-rust#176` advanced the single current inline bundle contract
   to `emulebb.diagnostic-bundle.v5` and added bounded exact operational
   snapshots for servers, shared files, searches and their evidence-rich
@@ -686,9 +700,11 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   authority; build-tests #54 provides deterministic idempotent report storage
   with exact replay and conflict detection; build-tests #55 provides strict
   authoritative UTC window slicing without silent timestamp loss; build-tests
-  #56 exposes exact tail termination and ignored-partial-tail provenance.
-  Observer evidence capture, report-first startup reconciliation, and UTC
-  deadline reconciliation still require integration.
+  #56 exposes exact tail termination and ignored-partial-tail provenance; and
+  build-tests #57 provides pure exact-run action evidence capture with bounded
+  report metadata and in-memory action-window records. Observer report assembly,
+  report-first startup reconciliation, and UTC deadline reconciliation still
+  require integration.
   Diagnostic segments remain immutable and exact; enabling diagnostic tail
   trimming is not an acceptable storage design.
 - Resolved by build-tests #42: arbitrarily long discovery now maintains compact
@@ -718,15 +734,13 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
 - Use the complete-run indexes and pinned exact raw evidence from build-tests
   #42 to select and reconstruct the next deterministic and guarded parity gaps;
   retained-suffix coverage remains explicitly incomplete.
-- Use the build-tests #52 exact snapshot API against the build-tests #53
-  manifest-authoritative directories for the pinned `(client, processId,
-  runId)`. Build-tests #55 already supplies strict slicing for the persisted
-  `reservedAtUtc` through `windowEndUtc` window. Retain source segment IDs,
-  paths, byte counts, SHA-256 values, modification times, writer identity, and
-  the build-tests #56 tail provenance. A client restart, writer-run change,
-  missing segment, parse failure, malformed timestamp, or ignored incomplete
-  active tail is explicit incomplete evidence; the observer must never silently
-  switch to the newest run.
+- Wire build-tests #57 into one current observer action-report schema containing
+  the pending action identity, phased driver outcomes, exact diagnostic evidence,
+  and method-specific parity assessment. Keep raw action-window records in
+  memory while persisting bounded exact source provenance. A client restart,
+  writer-run change, missing segment, parse failure, malformed timestamp, or
+  ignored incomplete active tail must remain incomplete or terminal evidence;
+  the observer must never silently switch to the newest run.
 - Persist one deterministic report per scheduled cycle, including one-sided and
   both-failed outcomes. Write the immutable report first, fold it into cumulative
   state second, update retention third, and persist the singleton summary last.
