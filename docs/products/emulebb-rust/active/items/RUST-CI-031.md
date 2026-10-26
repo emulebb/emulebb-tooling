@@ -108,7 +108,7 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   exact synchronized Rust/MFC searches through the reusable REST action engine
   under a manifest-only, disabled-by-default configuration with a minimum
   five-minute cadence. Local terms, labels, keys, and failures remain
-  unredacted. The single current observer-state v3 contract is bound to the
+  unredacted. The single current observer-state v4 contract is bound to the
   exact action configuration and can persist a reserved cycle, deterministic
   action/report identity, per-client create/result outcomes, diagnostic run
   identities, UTC deadline, and evidence-pending state across restart. Each
@@ -142,6 +142,11 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   boundary now loads only the manifest-pinned Rust and MFC writer runs, slices
   every segment against the authoritative persisted UTC window, and retains
   exact unredacted segment provenance and explicit tail-completeness findings.
+  Global-search assessment now remains explicitly `not-assessable` without
+  aligned MFC server-UDP evidence; Rust-only traffic cannot establish parity.
+  Observer state and offline summaries retain dedicated `not-assessable` and
+  `evidence-incomplete` totals instead of collapsing them into divergence or an
+  unspecified fallback bucket.
   Arbitrary-length authorization remains blocked until that evidence is wired
   into the observer's single action report, report-first crashes are reconciled
   into cumulative state, the UTC deadline is reconciled, retained-window
@@ -606,6 +611,15 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   passed 2,621 Python tests with one skip and one deselection; all 20 duplicated
   Windows harness, baseline, portability, dependency, analysis, and CodeQL
   checks passed. No client was launched.
+- `emulebb/emulebb-build-tests#58` removed the Rust-only global-search parity
+  path. Global search is now explicitly `not-assessable` until aligned MFC
+  server-UDP evidence exists, and offline campaign assessment propagates that as
+  inconclusive rather than parity or protocol divergence. The single current
+  observer state is now v4 with dedicated `not-assessable` and
+  `evidence-incomplete` totals and histograms. Local validation passed 2,625
+  Python tests with one skip and one deselection; all 20 duplicated Windows
+  harness, baseline, portability, dependency, analysis, and CodeQL checks
+  passed. No client was launched.
 - `emulebb/emulebb-rust#176` advanced the single current inline bundle contract
   to `emulebb.diagnostic-bundle.v5` and added bounded exact operational
   snapshots for servers, shared files, searches and their evidence-rich
@@ -702,9 +716,11 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   authoritative UTC window slicing without silent timestamp loss; build-tests
   #56 exposes exact tail termination and ignored-partial-tail provenance; and
   build-tests #57 provides pure exact-run action evidence capture with bounded
-  report metadata and in-memory action-window records. Observer report assembly,
-  report-first startup reconciliation, and UTC deadline reconciliation still
-  require integration.
+  report metadata and in-memory action-window records. Build-tests #58 replaces
+  observer state v3 with the single current v4 contract, adds explicit
+  inconclusive verdict buckets, and prevents Rust-only global-search evidence
+  from becoming parity. Observer report assembly, report-first startup
+  reconciliation, and UTC deadline reconciliation still require integration.
   Diagnostic segments remain immutable and exact; enabling diagnostic tail
   trimming is not an acceptable storage design.
 - Resolved by build-tests #42: arbitrarily long discovery now maintains compact
@@ -755,12 +771,11 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   monotonic clock and must never replay an ambiguous, completed, or one-sided
   public action. The sidecar must continue to never clean, launch, or stop either
   client.
-- Make protocol assessment method-specific: require `ed2k_tcp` for server
-  searches, `ed2k_server_udp` for global searches, and `kad_udp` for Kad
-  searches. Global-search evidence must use a server-UDP packet adapter or
-  direct server-UDP window analysis rather than the current TCP-only packet
-  view. Until MFC emits aligned server-UDP evidence, global cycles are
-  `not-assessable` or `evidence-incomplete`, never parity based on Rust alone.
+- Complete method-specific observer report assessment: require `ed2k_tcp` for
+  server searches and `kad_udp` for Kad searches. Build-tests #58 already makes
+  global cycles `not-assessable` without aligned MFC `ed2k_server_udp` evidence;
+  a future aligned global comparator must use direct server-UDP window analysis
+  or a dedicated adapter rather than the TCP-only packet view.
 - Keep checkpoint service independent of long result polling and finalize a
   pending evidence window before issuing another action. REST action failures
   remain evidence and may continue the soak; trace loading, report persistence,
