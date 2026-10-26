@@ -47,12 +47,18 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
 - A dedicated persisted-soak controller now starts the canonical dual-client
   launcher detached and until stopped, records exact launcher and watcher
   identities, reports dual process/REST/VPN health, rotates watcher evidence,
-  and requests graceful teardown before an exact-identity forced fallback.
+  and requests graceful teardown before an exact-identity forced fallback. Its
+  stop transaction now waits for both clients and the watcher, indexes the
+  former active diagnostic segment on both sides, and reports failure rather
+  than claiming a clean stop when the retained segment suffix is incomplete.
 - Packet and semantic diagnostics cover substantial protocol surface. The
   common event stream now has a v2 process/run/segment envelope and bounded
   writers on Rust and MFC `main`. The harness selects one exact process run,
   enforces sequence and writer-health integrity, and rejects packet-only
-  comparisons. Stable connection/session/action correlation remains incomplete.
+  comparisons. Peer TCP now carries truthful clear-frame bytes plus peer/file
+  hashes where available, Kad requests and lookup completions carry stable
+  lifecycle keys, and the harness gates bilateral join-key coverage. Remaining
+  correlation gaps must now be driven by guarded live evidence.
 - The authenticated Rust diagnostic bundle endpoint now returns strict inline
   `emulebb.diagnostic-bundle.v5` evidence with status, runtime diagnostics,
   settings provenance, recent logs, exact records plus integrity summaries
@@ -949,40 +955,54 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   CPU-profile streams; bound control records; bound first-import staging; then
   constrain MFC non-diagnostic artifacts.
 
+## Harness Implementation Checkpoint - 2026-10-26
+
+- Work remains isolated on `feature/persisted-protocol-parity-soak` in
+  `emulebb-rust`, `emulebb-build-tests`, and the MFC workspace. Every coherent
+  slice is committed and pushed; no implementation pull request is open.
+- Rust diagnostics now correlate Kad RPC lifecycles and lookup completions,
+  carry peer/file join keys on peer TCP, and record every supported peer TCP
+  packet rather than sampling bulk opcodes.
+- MFC diagnostics now emit aligned server TCP/UDP `diag_event_v2` records,
+  record every peer TCP packet, report truthful plaintext versus obfuscated
+  transport, preserve the complete clear frame, and carry matching peer/file
+  join keys.
+- Harness analysis now requires bilateral Kad evidence, server-UDP parity, and
+  peer TCP join-key coverage. Packet parsing requires the full clear frame and
+  accepts absent raw wire bytes only for an explicitly obfuscated transport.
+- Live indexing scans the real Rust `packet-dump/` and MFC `logs/` directories.
+  The v2 diagnostic checkpoint retains complete closed-segment aggregates and
+  join-key presence across rotation. Stop finalization runs only after both
+  clients and the watcher exit, consumes the former active segment, rejects a
+  missing retained suffix, and is retry-idempotent after partial persistence.
+- Build-tests validation is green at `2702 passed, 1 skipped, 1 deselected`.
+  The focused scanner/index/controller suite is green at `104 passed`, and all
+  packet-contract consumers are green at `426 passed`.
+- Rust validation at the current branch head is green for formatting, strict
+  clippy, and `1192` packet-diagnostics tests. MFC validation at the current
+  branch head is green for Debug x64, Release x64, and diagnostics Release x64.
+- The real persisted-soak preflight on 2026-10-26 stopped before launch with
+  `hide.me must already be connected before the full-tunnel live lane starts`.
+  No client was launched and no operator profile was modified.
+
 ## Next Implementation
 
-- The `diag_event_v2` identity contract is `(processId, runId, segmentId)`.
-  `seq` is process-wide retained-event order and `streamSeq` is retained-event
-  order within one family. Files are named
-  `emulebb-rust-diag-<processId>-<runId>-<segmentId>.jsonl`.
-- Exercise the aligned `ed2k_client_udp` family in guarded bounded captures and
-  use the new missing-family, exact-wire, and lifecycle findings to drive the
-  next protocol-parity gaps. `diag_event_v2` remains the only current event
-  envelope; `ed2k_client_udp` is a family within it, not a second schema.
-- Use the complete-run indexes and pinned exact raw evidence from build-tests
-  #42 to select and reconstruct the next deterministic and guarded parity gaps;
-  retained-suffix coverage remains explicitly incomplete.
-- Add bounded download scheduling only after its safety policy, pending-action
-  state, and restart reconciliation contract are explicit; a restarted observer
-  must not replay a completed or one-sided public action.
-- Add fail-closed growth guards for the operator-owned persisted Rust profile
-  before guarded live validation. The harness may measure and stop a campaign
-  when configured growth or free-space limits are exceeded, but it must never
-  prune, rotate, reset, or otherwise delete operator profile state. REST action
-  failures remain evidence that may continue the soak; archive, trace-loading,
-  report-persistence, sequence, identity, retention, or profile-growth failures
-  remain harness-integrity failures that stop new actions and fail closed.
-- Add aligned MFC and harness coverage for Rust's `ed2k_server_udp` family
-  before treating server UDP observations as cross-client parity evidence.
-- Protocol and soak traces, bundles, manifests, and diagnostic payloads are
-  explicitly local test evidence and will not be published. They must preserve
-  exact file, peer, user, hash, endpoint, search, and packet data whenever that
-  data helps reconstruct eD2K or Kad behavior. Redaction and privacy-driven
-  field omission are not requirements for this lane; completeness is.
-- Arbitrarily long public live soaks remain unauthorized while remaining
-  non-stream artifacts and guarded live behavior are not fully bounded and
-  validated. No live client has been launched during these implementation
-  slices.
+- Connect hide.me with split tunneling disabled and keep VPN Guard Block enabled
+  for both clients, then rerun the persisted-soak preflight until it is green.
+- Run one guarded short dual-client campaign against the selected persisted MFC
+  and Rust profiles. Verify loopback REST control, one exact process per side,
+  full-tunnel binding, diagnostic writer identity/health, and controlled
+  tunnel-down fail-closed behavior.
+- Stop through the persisted controller and require both finalized checkpoints
+  to include their former active segment with no parse, identity, sequence,
+  writer-health, or retained-suffix gap.
+- Run the complete diagnostic analyzer and inspect exact unredacted eD2K/Kad
+  traces. Implement only concrete protocol or correlation gaps demonstrated by
+  that evidence, each as a separate tested commit.
+- Progress from the short guarded run to longer bounded runs, then an
+  until-stopped soak. Open the implementation pull requests only after the
+  deterministic suites, guarded live run, finalization, and analyzers are all
+  green at the same branch heads.
 
 ## Why This Matters
 
