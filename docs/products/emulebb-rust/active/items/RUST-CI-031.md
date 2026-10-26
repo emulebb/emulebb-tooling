@@ -630,6 +630,19 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   Python tests with one skip and one deselection; all 20 duplicated Windows
   harness, baseline, portability, dependency, analysis, and CodeQL checks
   passed. No client was launched.
+- `emulebb/emulebb-build-tests#60` added the single current pure observer
+  action-report contract,
+  `emulebb-build-tests.observer-action-report.v1`. It combines the pending
+  action identity, exact phased driver outcome, manifest-pinned diagnostic
+  source provenance, and method-specific protocol assessment without copying
+  raw action-window records into the report. Exact incomplete-tail provenance
+  forces an `evidence-incomplete` top-level verdict even when the retained
+  subset otherwise reaches parity. Successful, one-sided, and both-failed
+  driver outcomes all produce deterministic reports, and the strict validator
+  rejects schema, identity, window, provenance, aggregate-count, and assessment
+  drift. Local validation passed 2,634 Python tests with one skip and one
+  deselection; all 20 duplicated Windows harness, baseline, portability,
+  dependency, analysis, and CodeQL checks passed. No client was launched.
 - `emulebb/emulebb-rust#176` advanced the single current inline bundle contract
   to `emulebb.diagnostic-bundle.v5` and added bounded exact operational
   snapshots for servers, shared files, searches and their evidence-rich
@@ -731,9 +744,10 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   inconclusive verdict buckets, and prevents Rust-only global-search evidence
   from becoming parity. Build-tests #59 completes action-specific family
   selection for server, global, and Kad searches, including direct server-UDP
-  assessment and Kad assessment without a TCP proxy. Observer report assembly,
-  report-first startup reconciliation, and UTC deadline reconciliation still
-  require integration.
+  assessment and Kad assessment without a TCP proxy. Build-tests #60 provides
+  the single current pure observer report contract and strict validator.
+  Report-first persistence integration, report-first startup reconciliation,
+  and UTC deadline reconciliation still require integration.
   Diagnostic segments remain immutable and exact; enabling diagnostic tail
   trimming is not an acceptable storage design.
 - Resolved by build-tests #42: arbitrarily long discovery now maintains compact
@@ -763,23 +777,20 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
 - Use the complete-run indexes and pinned exact raw evidence from build-tests
   #42 to select and reconstruct the next deterministic and guarded parity gaps;
   retained-suffix coverage remains explicitly incomplete.
-- Build one pure, single-current observer action-report contract that combines
-  the pending action identity, phased driver outcomes, build-tests #57 exact
-  diagnostic evidence, and build-tests #59 method-specific assessment. Keep raw
-  action-window records in memory while persisting bounded exact source
-  provenance. Produce deterministic reports for successful, one-sided, and
-  both-failed driver outcomes. A client restart, writer-run change, missing
-  segment, parse failure, malformed timestamp, or ignored incomplete active tail
-  must remain incomplete or terminal evidence; the observer must never silently
-  switch to the newest run.
-- Persist one deterministic report per scheduled cycle, including one-sided and
-  both-failed outcomes. Write the immutable report first, fold it into cumulative
-  state second, update retention third, and persist the singleton summary last.
-  Build-tests #54 already makes persistence idempotent by stable action ID and
-  sequence: identical replay is already committed, while different payload for
-  the same identity is terminal corruption. Startup must reconcile report-first
-  crashes, validate a contiguous recoverable retained suffix, and never create
-  a duplicate artifact.
+- Wire build-tests #60 into one pending-action finalization path. Capture only
+  the manifest-pinned runs and authoritative UTC window, build the deterministic
+  report, write the immutable report first, fold it into cumulative state
+  second, update retention third, and persist the singleton summary last. A
+  client restart, writer-run change, missing segment, parse failure, malformed
+  timestamp, or ignored incomplete active tail must remain incomplete or
+  terminal evidence; the observer must never silently switch to the newest run.
+- Reconcile report-first crashes on startup before recapturing mutable active
+  segments. Build-tests #54 already makes persistence idempotent by stable action
+  ID and sequence: identical replay is already committed, while different
+  payload for the same identity is terminal corruption. Startup must validate
+  the matching report through build-tests #60, commit it against the pending
+  action, validate a contiguous recoverable retained suffix, and never create a
+  duplicate artifact.
 - After evidence/report commit clears the pending action, reconcile and persist
   the next UTC deadline before recurring scheduling is enabled. Startup must
   service the persisted deadline without relying on a previous process's
