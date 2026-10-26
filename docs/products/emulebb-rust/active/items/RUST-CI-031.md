@@ -216,8 +216,8 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
 - `emulebb/emulebb-build-tests#22` and `#23` landed run-aware segmented trace
   selection and the strict common-v2 parity gate. Current comparisons select
   one process identity, enforce segment and sequence continuity, require
-  lossless writer health and semantic action coverage, and keep v1 only behind
-  the explicit legacy MFC adapter.
+  lossless writer health and semantic action coverage, and reject every schema
+  other than the single current `diag_event_v2` contract.
 - `emulebb/emulebb#179` landed the MFC segmented `diag_event_v2` writer,
   process/family sequencing, global retention, writer health, and complete
   unredacted eD2K/Kad payloads.
@@ -1026,16 +1026,44 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   extraction for newly ingested files. Validation is green for formatting,
   all `1184` eD2K tests, all `435` core tests, the imported-promotion
   regression, and the Release x64 diagnostics build with zero warnings.
+- Build-tests commit `b39424a` removed the unused MFC v1 diagnostic adapter and
+  its tests. There is no legacy event translation, alias, or fallback in the
+  active soak path; focused validation passed `156` tests.
+- Campaign `20261026T183806Z` proved prompt Rust startup and bundle capture but
+  exposed a redundant MFC Kad-start action after the persisted profile had
+  already enabled Kad. Build-tests commit `cd87d85` now applies both network
+  enablement preferences before launch and waits for observed Kad state instead
+  of issuing a duplicate UI-thread mutation. The full suite passed at
+  `2708 passed, 1 skipped, 1 deselected`.
+- Campaign `20261026T185023Z` then reached dual-client readiness and isolated
+  the next blocker: MFC emitted segmented v2 diagnostics but returned `404` for
+  the observer's required `GET /api/v1/diagnostics` writer-health probe.
+- MFC commit `fb6b0c34` exposes that route as a direct, writer-lock-safe read,
+  emits the exact current 41-field health object from the live writer, reports
+  retained inventory and disk headroom, and bounds closed segments by count,
+  bytes, and age. Debug x64, Release x64, and diagnostics Release x64 all build
+  successfully through the workspace orchestrator.
+- Tooling commit `9fb14a0` defines the maintained MFC diagnostics response and
+  exact writer-health schema. Build-tests commit `fa46889` makes the native
+  route inventory and direct-dispatch boundary enforce that contract; focused
+  route, schema, writer, and observer validation passed `65` tests.
+- Campaign `20261026T190612Z` reused the unchanged persisted Rust profile and is
+  the first until-stopped run to reach strict dual-writer enforcement. MFC and
+  Rust each report current `diag_event_v2` process/run/segment identity, zero
+  drops and errors, satisfied storage policy, hide.me binding, and VPN Guard
+  Block. One transient Rust REST timeout cleared on the next watcher sample;
+  the campaign remains active so repeated health and checkpoint evidence can
+  establish whether that is noise or a responsiveness defect.
 - The maintained MFC profile remains untouched. The Rust profile is valid and
   subsequent campaigns must continue selecting `reused-persisted`; no repair,
   reset, compatibility conversion, or reimport is allowed.
 
 ## Next Implementation
 
-- Rerun the guarded natural-traffic campaign against the unchanged persisted
-  profiles and prove `reused-persisted`, prompt Rust REST/bundle readiness, one
-  exact process per side, full-tunnel binding, VPN Guard Block, and diagnostic
-  writer/index identity and health.
+- Keep campaign `20261026T190612Z` running across repeated watcher and observer
+  checkpoints. Treat any repeated Rust REST timeout, writer fault, process
+  replacement, bind drift, or VPN finding as a concrete blocker rather than
+  tolerating it in the harness.
 - Run a separate deterministic-action campaign only after the natural campaign
   reaches ready state and stops with complete bilateral evidence.
 - Stop through the persisted controller and require both finalized checkpoints
@@ -1183,7 +1211,9 @@ distinguish observed parity from merely unobserved behavior.
 
 ## Notes
 
-- Implementation should land as granular, independently validated pull
-  requests in `emulebb-tooling`, `emulebb-build-tests`, and `emulebb-rust`.
+- Implementation stays as granular commits on the single
+  `feature/persisted-protocol-parity-soak` branch in each participating repo.
+  Open one PR per repo only after the whole significant slice is complete and
+  fully green; do not create parallel WIP branches or per-commit PRs.
 - Update this checklist as each coherent slice lands; keep transient run logs
   out of this item and retain only stable conclusions or evidence references.
