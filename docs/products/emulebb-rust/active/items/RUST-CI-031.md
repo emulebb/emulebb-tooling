@@ -122,11 +122,14 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   effects, pins exact diagnostic process/run identities before each action,
   persists both prepared creates before the first POST, persists every terminal
   phase immediately, resumes known search IDs with GET-only polling, and
-  recovers a missing evidence-pending marker without replaying an action. It
-  intentionally stops at evidence pending. The diagnostic loader can now select
-  the pinned `(client, processId, runId)` without falling forward to a newer run
-  and returns stable exact-byte segment provenance plus strict envelope and
-  process-sequence validation. The observer runtime now derives Rust
+  recovers a missing evidence-pending marker without replaying an action. It now
+  services every persisted pending action immediately on attach, before a fresh
+  start delay or reached cycle limit can block recovery, and finalizes the
+  immutable action report in the same call after driver completion. The
+  diagnostic loader can now select the pinned `(client, processId, runId)`
+  without falling forward to a newer run and returns stable exact-byte segment
+  provenance plus strict envelope and process-sequence validation. The observer
+  runtime now derives Rust
   `packet-dump` and MFC `logs` directories only from the persisted session's
   validated profile authority and rejects missing or malformed profile roots.
   Observer action reports now have deterministic sequence/action filenames,
@@ -147,10 +150,9 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   Observer state and offline summaries retain dedicated `not-assessable` and
   `evidence-incomplete` totals instead of collapsing them into divergence or an
   unspecified fallback bucket.
-  Arbitrary-length authorization remains blocked until that evidence is wired
-  into the observer's single action report, report-first crashes are reconciled
-  into cumulative state, the UTC deadline is reconciled, retained-window
-  reporting is aligned, and guarded live validation proves the complete path.
+  Arbitrary-length authorization remains blocked until the next UTC deadline is
+  reconciled after report commit, retained-window reporting is aligned, and
+  guarded live validation proves the complete path.
 
 ## Landed Evidence
 
@@ -665,6 +667,15 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   unchanged. Local validation passed 2,641 Python tests with one skip and one
   deselection; all 20 duplicated Windows harness, baseline, portability,
   dependency, analysis, and CodeQL checks passed. No client was launched.
+- `emulebb/emulebb-build-tests#63` activated report-first finalization in the
+  recurring attach-only observer. Driver completion now persists the exact
+  evidence window and finalizes the immutable report in the same call. On
+  attach, any persisted pending action bypasses both the configured start delay
+  and a reached cycle limit, so incomplete phased work and report-first crash
+  recovery run before another action can be reserved. Local validation passed
+  2,642 Python tests with one skip and one deselection; all 20 duplicated
+  Windows harness, baseline, portability, dependency, analysis, and CodeQL
+  checks passed. No client was launched.
 - `emulebb/emulebb-rust#176` advanced the single current inline bundle contract
   to `emulebb.diagnostic-bundle.v5` and added bounded exact operational
   snapshots for servers, shared files, searches and their evidence-rich
@@ -770,8 +781,10 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   the single current pure observer report contract and strict validator, and
   build-tests #61 provides the report-first finalization transaction without
   enabling it in the recurring observer loop. Build-tests #62 reconciles exact
-  final and prepared report-first crashes before diagnostic recapture. Loop
-  integration and UTC deadline reconciliation still require integration.
+  final and prepared report-first crashes before diagnostic recapture, and
+  build-tests #63 activates immediate pending-action service and report
+  finalization in the recurring loop. Persisted UTC deadline reconciliation
+  still requires integration.
   Diagnostic segments remain immutable and exact; enabling diagnostic tail
   trimming is not an acceptable storage design.
 - Resolved by build-tests #42: arbitrarily long discovery now maintains compact
@@ -801,13 +814,6 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
 - Use the complete-run indexes and pinned exact raw evidence from build-tests
   #42 to select and reconstruct the next deterministic and guarded parity gaps;
   retained-suffix coverage remains explicitly incomplete.
-- Activate build-tests #61 and #62 in the observer action path. A reportable
-  pending action must finalize immediately on attach and after driver completion,
-  before another action is reserved. An incomplete phased action must resume
-  immediately rather than wait for a fresh start delay. A client restart,
-  writer-run change, missing segment, parse failure, malformed timestamp, or
-  ignored incomplete active tail must remain incomplete or terminal evidence;
-  the observer must never silently switch to the newest run.
 - After evidence/report commit clears the pending action, reconcile and persist
   the next UTC deadline before recurring scheduling is enabled. Startup must
   service the persisted deadline without relying on a previous process's
