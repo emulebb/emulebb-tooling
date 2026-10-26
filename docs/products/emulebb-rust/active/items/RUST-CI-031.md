@@ -770,6 +770,15 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   Python tests with one skip and one deselection; all 20 duplicated Windows
   harness, baseline, portability, dependency, analysis, and CodeQL checks
   passed. No client was launched and no VPN state was changed.
+- `emulebb/emulebb-build-tests#71` resolved the P0 campaign-storage ownership
+  mismatch. The launcher now constructs every bounded store through one
+  campaign-only authority rooted at `soak/campaigns/`. A real pressure test
+  prunes obsolete campaign evidence while proving `control/`, `last-run/`,
+  `transactions/`, and generated `mfc-profile/` files retain their exact bytes.
+  Local validation passed 2,678 Python tests with one skip and one deselection;
+  all 20 duplicated Windows harness, baseline, portability, dependency,
+  analysis, and CodeQL checks passed. No client was launched and no VPN state
+  was changed.
 - `emulebb/emulebb-rust#176` advanced the single current inline bundle contract
   to `emulebb.diagnostic-bundle.v5` and added bounded exact operational
   snapshots for servers, shared files, searches and their evidence-rich
@@ -903,14 +912,13 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
 
 ## Storage Audit - 2026-10-26
 
-- The remaining writer inventory found a P0 ownership mismatch: launcher-owned
-  stores use the whole `soak/` tree as their pruning root, while the controller
-  and observer use only `soak/campaigns/`. Because recursive inventory and
-  enforcement may delete eligible files below the selected root, launcher
-  pressure can currently classify `control/`, `last-run/`, `transactions/`, or
-  generated `mfc-profile/` files as campaign artifacts. Arbitrarily long public
-  soaks remain unauthorized until every store uses the exact campaign root and
-  pressure tests prove those adjacent trees are never inventory candidates.
+- Resolved by build-tests #71: every launcher, controller, and observer bounded
+  store now uses the exact `soak/campaigns/` deletion authority. Pressure
+  coverage prunes obsolete campaign evidence while proving `control/`,
+  `last-run/`, `transactions/`, and generated `mfc-profile/` files are never
+  inventory or deletion candidates. Arbitrarily long public soaks remain
+  unauthorized because the remaining audited non-stream outputs are not yet
+  fully bounded.
 - Process-metric samples and their cumulative summary are bounded and reserved
   by build-tests #70. The remaining campaign writers requiring explicit bounds
   are preflight archives and their manifest, CPU profiling outputs, last-run and
@@ -938,14 +946,15 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
 - Add bounded download scheduling only after its safety policy, pending-action
   state, and restart reconciliation contract are explicit; a restarted observer
   must not replay a completed or one-sided public action.
-- Fix the P0 storage-root ownership mismatch before any guarded live validation:
-  every launcher, controller, and observer `BoundedArtifactStore` must use the
-  exact `soak/campaigns/` authority, and pressure tests must prove `control/`,
-  `last-run/`, `transactions/`, and `mfc-profile/` are never inventoried or
-  deleted. Then bound the remaining non-stream artifacts in the audited order.
-  REST action failures remain evidence that may continue the soak; trace
-  loading, report persistence, sequence, identity, or retention failures remain
-  harness-integrity failures that stop new actions and fail closed.
+- Bound preflight Rust and MFC output archives before guarded live validation.
+  The next storage-policy schema must reserve both archive families and one
+  singleton transaction manifest; preflight must inventory stable exact files,
+  reserve aggregate bytes before mutation, copy and hash-verify every
+  destination before removing any source, and make retries complete an exact
+  recoverable transaction. REST action failures remain evidence that may
+  continue the soak; archive, trace-loading, report-persistence, sequence,
+  identity, or retention failures remain harness-integrity failures that stop
+  new actions and fail closed.
 - Add aligned MFC and harness coverage for Rust's `ed2k_server_udp` family
   before treating server UDP observations as cross-client parity evidence.
 - Protocol and soak traces, bundles, manifests, and diagnostic payloads are
