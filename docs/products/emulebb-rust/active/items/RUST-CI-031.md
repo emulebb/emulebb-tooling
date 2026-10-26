@@ -1000,8 +1000,17 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   repair or compatibility fallback, and rejects any invalid nonempty profile.
   Commit `08bd3ae` moves diagnostic-directory existence into the observer's
   bounded readiness loop so first-time import cannot race observer startup.
-- The invalid Rust profile produced by the old importer must be deleted once and
-  imported cleanly. The maintained MFC profile remains untouched.
+- Campaign `20261026T174343Z` proved both fixes: clean import completed, the
+  observer survived the absent-first-diagnostic-directory interval, and Rust
+  remained alive. Rust still missed the REST readiness deadline because the
+  importer had incorrectly left all `1798` share-in-place files visible in the
+  transfer list, forcing synchronous full-manifest hydration before REST bind.
+  Build-tests commit `6bcbb8f` now persists imported share-in-place rows as
+  removed from the transfer list, matching native Rust local ingest while
+  retaining them in the progressively hydrated shared catalog. The focused
+  metadata/import suite is green at `60 passed`.
+- The Rust profile produced before `6bcbb8f` must be deleted once and imported
+  cleanly. The maintained MFC profile remains untouched.
 
 ## Next Implementation
 
