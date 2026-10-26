@@ -127,7 +127,12 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   services every persisted pending action immediately on attach, before a fresh
   start delay or reached cycle limit can block recovery, and finalizes the
   immutable action report in the same call after driver completion. The
-  diagnostic loader can now select the pinned `(client, processId, runId)`
+  recurring scheduler now initializes a missing deadline once, preserves an
+  existing strict UTC deadline exactly across observer restart, reconciles the
+  report-commit crash gap with the normal action interval, and replaces or
+  clears the deadline after each action without inheriting a previous process's
+  monotonic clock. The diagnostic loader can now select the pinned
+  `(client, processId, runId)`
   without falling forward to a newer run and returns stable exact-byte segment
   provenance plus strict envelope and process-sequence validation. The observer
   runtime now derives Rust
@@ -151,9 +156,9 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   Observer state and offline summaries retain dedicated `not-assessable` and
   `evidence-incomplete` totals instead of collapsing them into divergence or an
   unspecified fallback bucket.
-  Arbitrary-length authorization remains blocked until the next UTC deadline is
-  reconciled after report commit, retained-window reporting is aligned, and
-  guarded live validation proves the complete path.
+  Arbitrary-length authorization remains blocked until checkpoint/action service
+  isolation is explicit, retained-window reporting is aligned, and guarded live
+  validation proves the complete path.
 
 ## Landed Evidence
 
@@ -685,6 +690,16 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   2,646 Python tests with one skip and one deselection; all 20 duplicated
   Windows harness, baseline, portability, dependency, analysis, and CodeQL
   checks passed. No client was launched.
+- `emulebb/emulebb-build-tests#65` moved recurring action scheduling from a
+  process-local monotonic deadline to the persisted v5 UTC authority. Startup
+  initializes a missing deadline once, preserves an existing deadline exactly,
+  services due or pending work, reconciles the report-commit crash gap with the
+  normal interval, replaces the deadline after action completion, and clears it
+  when disabled or cycle-limited. Monotonic time remains limited to readiness,
+  polling, and checkpoint cadence. Local validation passed 2,649 Python tests
+  with one skip and one deselection; all 20 duplicated Windows harness,
+  baseline, portability, dependency, analysis, and CodeQL checks passed. No
+  client was launched.
 - `emulebb/emulebb-rust#176` advanced the single current inline bundle contract
   to `emulebb.diagnostic-bundle.v5` and added bounded exact operational
   snapshots for servers, shared files, searches and their evidence-rich
@@ -793,8 +808,9 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   final and prepared report-first crashes before diagnostic recapture, and
   build-tests #63 activates immediate pending-action service and report
   finalization in the recurring loop. Build-tests #64 provides the strict v5 UTC
-  deadline authority and atomic reservation consumption; recurring-loop
-  deadline reconciliation still requires integration.
+  deadline authority and atomic reservation consumption, and build-tests #65
+  reconciles and services that authority in the recurring loop without relying
+  on process-local action timing.
   Diagnostic segments remain immutable and exact; enabling diagnostic tail
   trimming is not an acceptable storage design.
 - Resolved by build-tests #42: arbitrarily long discovery now maintains compact
@@ -824,12 +840,6 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
 - Use the complete-run indexes and pinned exact raw evidence from build-tests
   #42 to select and reconstruct the next deterministic and guarded parity gaps;
   retained-suffix coverage remains explicitly incomplete.
-- Use the strict build-tests #64 v5 deadline authority after evidence/report
-  commit clears the pending action. Reconcile and persist the next UTC deadline
-  before recurring scheduling is enabled. Startup must service the persisted
-  deadline without relying on a previous process's monotonic clock and must
-  never replay an ambiguous, completed, or one-sided public action. The sidecar
-  must continue to never clean, launch, or stop either client.
 - Keep checkpoint service independent of long result polling and finalize a
   pending evidence window before issuing another action. REST action failures
   remain evidence and may continue the soak; trace loading, report persistence,
