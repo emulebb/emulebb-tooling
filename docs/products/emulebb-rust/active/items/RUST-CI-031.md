@@ -762,6 +762,14 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   passed 2,674 Python tests with one skip and one deselection; all 20 duplicated
   Windows harness, baseline, portability, dependency, analysis, and CodeQL
   checks passed. No client was launched.
+- `emulebb/emulebb-build-tests#70` merged two granular commits. It advanced the
+  sole current storage policy to v8, reserved process-metric sample and summary
+  streams, replaced the unbounded in-memory CSV rewrite with complete-record
+  rotating JSONL, and maintains one atomic O(1)-memory cumulative summary.
+  Oversized records and summaries fail closed. Local validation passed 2,678
+  Python tests with one skip and one deselection; all 20 duplicated Windows
+  harness, baseline, portability, dependency, analysis, and CodeQL checks
+  passed. No client was launched and no VPN state was changed.
 - `emulebb/emulebb-rust#176` advanced the single current inline bundle contract
   to `emulebb.diagnostic-bundle.v5` and added bounded exact operational
   snapshots for servers, shared files, searches and their evidence-rich
@@ -788,6 +796,10 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   summary streams plus capacity for future observer stdout and stderr. The
   typed repository loader accepted both the example and ignored local inputs.
   No client was launched.
+- The ignored operator input was subsequently migrated backup-first to
+  storage-policy v8 with an 8 MiB by eight-file process-metric JSONL ring and a
+  1 MiB singleton cumulative summary. The typed repository loader accepted the
+  required v8 streams. No client was launched.
 - `emulebb/emulebb-tooling#59` through `#62` aligned the common-v2 product
   contract, segmented filenames and writer-health evidence, and the explicit
   local-only unredacted trace policy.
@@ -889,6 +901,27 @@ reserve or evidence-integrity contract cannot be maintained. Evidence remains
 unredacted; bounding is performed by rotating or deleting whole immutable
 artifacts, never by field omission or mutation of `diag_event_v2` records.
 
+## Storage Audit - 2026-10-26
+
+- The remaining writer inventory found a P0 ownership mismatch: launcher-owned
+  stores use the whole `soak/` tree as their pruning root, while the controller
+  and observer use only `soak/campaigns/`. Because recursive inventory and
+  enforcement may delete eligible files below the selected root, launcher
+  pressure can currently classify `control/`, `last-run/`, `transactions/`, or
+  generated `mfc-profile/` files as campaign artifacts. Arbitrarily long public
+  soaks remain unauthorized until every store uses the exact campaign root and
+  pressure tests prove those adjacent trees are never inventory candidates.
+- Process-metric samples and their cumulative summary are bounded and reserved
+  by build-tests #70. The remaining campaign writers requiring explicit bounds
+  are preflight archives and their manifest, CPU profiling outputs, last-run and
+  control records, external-profile growth, exact MFC diagnostic policy, and
+  MFC non-diagnostic logs, performance artifacts, and crash dumps.
+- The next safety order is: unify campaign storage authority; bound preflight
+  archives; add fail-closed external-profile growth guards without deleting
+  operator state; pin exact MFC diagnostics policy; reserve CPU-profile streams;
+  bound control records; bound first-import staging; then constrain MFC
+  non-diagnostic artifacts.
+
 ## Next Implementation
 
 - The `diag_event_v2` identity contract is `(processId, runId, segmentId)`.
@@ -905,10 +938,14 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
 - Add bounded download scheduling only after its safety policy, pending-action
   state, and restart reconciliation contract are explicit; a restarted observer
   must not replay a completed or one-sided public action.
-- Inventory and bound the remaining non-stream artifacts before guarded live
-  validation. REST action failures remain evidence that may continue the soak;
-  trace loading, report persistence, sequence, identity, or retention failures
-  remain harness-integrity failures that stop new actions and fail closed.
+- Fix the P0 storage-root ownership mismatch before any guarded live validation:
+  every launcher, controller, and observer `BoundedArtifactStore` must use the
+  exact `soak/campaigns/` authority, and pressure tests must prove `control/`,
+  `last-run/`, `transactions/`, and `mfc-profile/` are never inventoried or
+  deleted. Then bound the remaining non-stream artifacts in the audited order.
+  REST action failures remain evidence that may continue the soak; trace
+  loading, report persistence, sequence, identity, or retention failures remain
+  harness-integrity failures that stop new actions and fail closed.
 - Add aligned MFC and harness coverage for Rust's `ed2k_server_udp` family
   before treating server UDP observations as cross-client parity evidence.
 - Protocol and soak traces, bundles, manifests, and diagnostic payloads are
