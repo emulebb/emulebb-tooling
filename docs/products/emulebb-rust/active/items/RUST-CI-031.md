@@ -751,6 +751,17 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   with one skip and one deselection; all 20 duplicated Windows harness,
   baseline, portability, dependency, analysis, and CodeQL checks passed. No
   client was launched.
+- `emulebb/emulebb-build-tests#69` advanced the sole current persisted-session
+  status contract to `emulebb.persisted-soak-status.v2` and exposes the exact
+  bounded v2 cumulative-plus-retained observer report through the canonical
+  `persisted-soak-control.py status` entrypoint. Status permits normal startup
+  before observer state exists, but once present requires the canonical session
+  campaign directory and matching campaign identity; retained-window or report
+  integrity failures propagate unchanged, so the unattended watcher treats them
+  as terminal health loss and stops the campaign fail-closed. Local validation
+  passed 2,674 Python tests with one skip and one deselection; all 20 duplicated
+  Windows harness, baseline, portability, dependency, analysis, and CodeQL
+  checks passed. No client was launched.
 - `emulebb/emulebb-rust#176` advanced the single current inline bundle contract
   to `emulebb.diagnostic-bundle.v5` and added bounded exact operational
   snapshots for servers, shared files, searches and their evidence-rich
@@ -894,12 +905,10 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
 - Add bounded download scheduling only after its safety policy, pending-action
   state, and restart reconciliation contract are explicit; a restarted observer
   must not replay a completed or one-sided public action.
-- Integrate the sole current v2 cumulative-plus-retained report into the
-  persisted Rust soak operator status entrypoint, then inventory and bound the
-  remaining non-stream artifacts before guarded live validation. REST action
-  failures remain evidence that may continue the soak; trace loading, report
-  persistence, sequence, identity, or retention failures remain
-  harness-integrity failures that stop new actions and fail closed.
+- Inventory and bound the remaining non-stream artifacts before guarded live
+  validation. REST action failures remain evidence that may continue the soak;
+  trace loading, report persistence, sequence, identity, or retention failures
+  remain harness-integrity failures that stop new actions and fail closed.
 - Add aligned MFC and harness coverage for Rust's `ed2k_server_udp` family
   before treating server UDP observations as cross-client parity evidence.
 - Protocol and soak traces, bundles, manifests, and diagnostic payloads are
