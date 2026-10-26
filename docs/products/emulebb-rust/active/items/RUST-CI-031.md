@@ -141,8 +141,17 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   the deadline as a deadline outcome, and retains terminal poll provenance in
   the immutable driver outcome. Checkpoint, stop, and health service therefore
   run between attempts instead of waiting behind a blocking result-poll loop.
-  The legacy blocking poll composes the same one-shot primitive. The diagnostic
-  loader can now select the
+  The legacy blocking poll composes the same one-shot primitive. The sole
+  current `emulebb-build-tests.converged-soak-report.v2` contract now validates
+  and embeds the exact bounded v6 observer state, reads only current action and
+  checkpoint contracts, and describes the retained physical suffix separately
+  from cumulative history. Whole-artifact rotation is reported as
+  `omittedByRetention`, while retained count, byte, latest-file, campaign,
+  action-sequence, or checkpoint-time inconsistencies retry boundedly during a
+  concurrent update and otherwise fail closed. Retained action summaries read
+  current nested assessments, aggregate v6 poll outcomes, and preserve exact
+  per-action client poll provenance and errors without redaction. The
+  diagnostic loader can now select the
   pinned `(client, processId, runId)`
   without falling forward to a newer run and returns stable exact-byte segment
   provenance plus strict envelope and process-sequence validation. The observer
@@ -167,9 +176,8 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   Observer state and offline summaries retain dedicated `not-assessable` and
   `evidence-incomplete` totals instead of collapsing them into divergence or an
   unspecified fallback bucket.
-  Arbitrary-length authorization remains blocked until retained-window reporting
-  is aligned, remaining non-stream artifacts are bounded, and guarded live
-  validation proves the complete path.
+  Arbitrary-length authorization remains blocked until remaining non-stream
+  artifacts are bounded and guarded live validation proves the complete path.
 
 ## Landed Evidence
 
@@ -732,6 +740,17 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   passed 2,666 Python tests with one skip and one deselection; all 20 duplicated
   Windows harness, baseline, portability, dependency, analysis, and CodeQL
   checks passed. No client was launched.
+- `emulebb/emulebb-build-tests#68` replaced the stale offline summary with the
+  sole current `emulebb-build-tests.converged-soak-report.v2` contract. It embeds
+  exact validated v6 cumulative state, validates current retained action and
+  checkpoint suffixes against their count, byte, latest-file, campaign,
+  sequence, and UTC authorities, reports whole-artifact rotation as
+  `omittedByRetention`, preserves exact unredacted per-client poll provenance,
+  and retries boundedly across concurrent state changes before failing closed
+  on a stable integrity mismatch. Local validation passed 2,671 Python tests
+  with one skip and one deselection; all 20 duplicated Windows harness,
+  baseline, portability, dependency, analysis, and CodeQL checks passed. No
+  client was launched.
 - `emulebb/emulebb-rust#176` advanced the single current inline bundle contract
   to `emulebb.diagnostic-bundle.v5` and added bounded exact operational
   snapshots for servers, shared files, searches and their evidence-rich
@@ -875,13 +894,12 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
 - Add bounded download scheduling only after its safety policy, pending-action
   state, and restart reconciliation contract are explicit; a restarted observer
   must not replay a completed or one-sided public action.
-- Update report summarization to combine exact cumulative observer state with
-  the retained detail window and identify intentional rotation as omitted by
-  retention rather than missing evidence. Preserve v6 poll provenance and keep
-  REST action failures as evidence that may continue the soak; trace loading,
-  report persistence, sequence, identity, or retention failures remain
-  harness-integrity failures that stop new actions and fail closed after the
-  existing retry threshold.
+- Integrate the sole current v2 cumulative-plus-retained report into the
+  persisted Rust soak operator status entrypoint, then inventory and bound the
+  remaining non-stream artifacts before guarded live validation. REST action
+  failures remain evidence that may continue the soak; trace loading, report
+  persistence, sequence, identity, or retention failures remain
+  harness-integrity failures that stop new actions and fail closed.
 - Add aligned MFC and harness coverage for Rust's `ed2k_server_udp` family
   before treating server UDP observations as cross-client parity evidence.
 - Protocol and soak traces, bundles, manifests, and diagnostic payloads are
@@ -889,10 +907,10 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   exact file, peer, user, hash, endpoint, search, and packet data whenever that
   data helps reconstruct eD2K or Kad behavior. Redaction and privacy-driven
   field omission are not requirements for this lane; completeness is.
-- Arbitrarily long public live soaks remain unauthorized while synchronized
-  action output, retained-window reporting, remaining non-stream artifacts,
-  and guarded live behavior are not fully bounded and validated. No live
-  client has been launched during these implementation slices.
+- Arbitrarily long public live soaks remain unauthorized while remaining
+  non-stream artifacts and guarded live behavior are not fully bounded and
+  validated. No live client has been launched during these implementation
+  slices.
 
 ## Why This Matters
 
