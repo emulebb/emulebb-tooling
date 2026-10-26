@@ -779,6 +779,20 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   all 20 duplicated Windows harness, baseline, portability, dependency,
   analysis, and CodeQL checks passed. No client was launched and no VPN state
   was changed.
+- `emulebb/emulebb-build-tests#72` advanced the sole current storage policy to
+  v9 and bounded preflight Rust and MFC outputs plus their singleton recovery
+  manifest. Preflight now inventories stable exact files, reserves aggregate
+  capacity before mutation, atomically copies and hash-verifies every
+  destination, persists `prepared`/`copied`/`complete` transaction state, and
+  removes sources only after all destinations verify. Interrupted copy and
+  partial-removal retries converge without duplicate names; unsafe names,
+  unexpected artifacts, source mutation, stream overflow, and Windows reparse
+  escapes fail closed. Mutable checkpoints distinguish final durable growth
+  from temporary atomic-write space, so replacement succeeds at an exact legal
+  aggregate bound. Local validation passed 2,689 Python tests with one skip and
+  one deselection; all 20 duplicated Windows harness, baseline, portability,
+  dependency, analysis, and CodeQL checks passed. No client was launched and no
+  VPN state was changed.
 - `emulebb/emulebb-rust#176` advanced the single current inline bundle contract
   to `emulebb.diagnostic-bundle.v5` and added bounded exact operational
   snapshots for servers, shared files, searches and their evidence-rich
@@ -809,6 +823,11 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   storage-policy v8 with an 8 MiB by eight-file process-metric JSONL ring and a
   1 MiB singleton cumulative summary. The typed repository loader accepted the
   required v8 streams. No client was launched.
+- The ignored operator input was subsequently migrated backup-first to
+  storage-policy v9 with a 1 MiB singleton preflight transaction manifest, a
+  64 MiB singleton Rust-output archive, and a 64 MiB by sixteen-file MFC-output
+  archive. The typed repository loader accepted the required v9 streams. No
+  client was launched.
 - `emulebb/emulebb-tooling#59` through `#62` aligned the common-v2 product
   contract, segmented filenames and writer-health evidence, and the explicit
   local-only unredacted trace policy.
@@ -920,15 +939,15 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   unauthorized because the remaining audited non-stream outputs are not yet
   fully bounded.
 - Process-metric samples and their cumulative summary are bounded and reserved
-  by build-tests #70. The remaining campaign writers requiring explicit bounds
-  are preflight archives and their manifest, CPU profiling outputs, last-run and
-  control records, external-profile growth, exact MFC diagnostic policy, and
-  MFC non-diagnostic logs, performance artifacts, and crash dumps.
-- The next safety order is: unify campaign storage authority; bound preflight
-  archives; add fail-closed external-profile growth guards without deleting
-  operator state; pin exact MFC diagnostics policy; reserve CPU-profile streams;
-  bound control records; bound first-import staging; then constrain MFC
-  non-diagnostic artifacts.
+  by build-tests #70. Preflight archives and their recoverable transaction
+  manifest are bounded by build-tests #72. The remaining campaign writers
+  requiring explicit bounds are CPU profiling outputs, last-run and control
+  records, external-profile growth, exact MFC diagnostic policy, and MFC
+  non-diagnostic logs, performance artifacts, and crash dumps.
+- The next safety order is: add fail-closed external-profile growth guards
+  without deleting operator state; pin exact MFC diagnostics policy; reserve
+  CPU-profile streams; bound control records; bound first-import staging; then
+  constrain MFC non-diagnostic artifacts.
 
 ## Next Implementation
 
@@ -946,15 +965,13 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
 - Add bounded download scheduling only after its safety policy, pending-action
   state, and restart reconciliation contract are explicit; a restarted observer
   must not replay a completed or one-sided public action.
-- Bound preflight Rust and MFC output archives before guarded live validation.
-  The next storage-policy schema must reserve both archive families and one
-  singleton transaction manifest; preflight must inventory stable exact files,
-  reserve aggregate bytes before mutation, copy and hash-verify every
-  destination before removing any source, and make retries complete an exact
-  recoverable transaction. REST action failures remain evidence that may
-  continue the soak; archive, trace-loading, report-persistence, sequence,
-  identity, or retention failures remain harness-integrity failures that stop
-  new actions and fail closed.
+- Add fail-closed growth guards for the operator-owned persisted Rust profile
+  before guarded live validation. The harness may measure and stop a campaign
+  when configured growth or free-space limits are exceeded, but it must never
+  prune, rotate, reset, or otherwise delete operator profile state. REST action
+  failures remain evidence that may continue the soak; archive, trace-loading,
+  report-persistence, sequence, identity, retention, or profile-growth failures
+  remain harness-integrity failures that stop new actions and fail closed.
 - Add aligned MFC and harness coverage for Rust's `ed2k_server_udp` family
   before treating server UDP observations as cross-client parity evidence.
 - Protocol and soak traces, bundles, manifests, and diagnostic payloads are
