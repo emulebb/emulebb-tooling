@@ -1230,6 +1230,18 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   complete with zero active files. Rust reused `52,431` persisted entries and
   is completing `10,610` new or changed entries with zero hash or stat failures;
   the canonical long waiter is active before the restart-reuse proof.
+- Build-tests commit `ddf9824` adds the explicit persisted-profile
+  `reload-shared-directories` operation so an interrupted one-time
+  reconciliation can be resumed without rewriting roots or profiles. MFC
+  commit `d201cf4c` raises its diagnostic writer from eight retained segments
+  and `512 MiB` to the same 128-segment, `8 GiB`, seven-day window used by
+  Rust. The previous strict index failure was real evidence loss caused by the
+  shorter writer window; the gap detector remains strict. Rebuilt MFC reports
+  the new limits live with zero retention deletions. Campaign
+  `20261027T123202Z` is reconciling `9,115` Rust entries while reusing `53,926`,
+  with zero hash or stat failures. The complete harness suite passed `2,745`
+  tests with one skip and one deselection before the explicit reload command;
+  its focused suite passes `93` tests afterward.
 - The maintained MFC profile and valid Rust persisted profile continue to be
   reused in place; no repair, reset, compatibility conversion, or reimport is
   allowed.
