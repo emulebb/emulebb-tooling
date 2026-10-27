@@ -1223,6 +1223,13 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   `coverage-parity` with zero errors or writer drops. Live analysis written to
   the safe campaign `analysis` directory leaves observer state valid and proves
   the bilateral server lifecycle gate with zero violations.
+- Build-tests commit `c7f8323` updates shared-file inspection to the current
+  Rust keyset-cursor API while keeping the MFC offset contract explicit, and
+  changes the hash-settled proof to poll lightweight runtime counters rather
+  than repeatedly counting the full catalog. Live evidence shows MFC hashing
+  complete with zero active files. Rust reused `52,431` persisted entries and
+  is completing `10,610` new or changed entries with zero hash or stat failures;
+  the canonical long waiter is active before the restart-reuse proof.
 - The maintained MFC profile and valid Rust persisted profile continue to be
   reused in place; no repair, reset, compatibility conversion, or reimport is
   allowed.
@@ -1239,6 +1246,10 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
 - Require the next Kad report to prove v8 uses each client's exact
   `resultTotals` for `lookup_complete` correlation even when the returned page is
   capped at 100 and the independently observed live totals differ.
+- Let Rust shared hashing reach a stable zero count, then perform one controlled
+  canonical stop/start with the same persisted profiles. Require MFC to remain
+  at zero hashing and Rust startup to report an idle reload, zero planned hashes,
+  zero failures, and reuse of the settled catalog before resuming parity work.
 - Use each bounded action report to separate action-owned coverage parity from
   strict full-window background traffic differences, then investigate the
   concrete eD2K/Kad opcode, payload, and lifecycle gaps instead of weakening
