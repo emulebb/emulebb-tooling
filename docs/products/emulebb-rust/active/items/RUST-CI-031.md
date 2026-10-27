@@ -1135,23 +1135,64 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   route inventory contains `/api/v1/events` beyond the current MFC/golden
   contract, and the release golden still expects `90` routes while the current
   inventory has `91`.
-- Campaign `20261026T204411Z` is the current indefinite run using the unchanged
+- Campaign `20261026T204411Z` was the first indefinite run using the unchanged
   persisted profiles and committed observer. Both clients, v2 writers, watcher,
-  observer, hide.me full tunnel, VPN Guard Block, and bounded storage are
+  observer, hide.me full tunnel, VPN Guard Block, and bounded storage were
   healthy with no findings. Its first synchronized server search completed on
   both clients with zero poll errors and zero results. The action report records
   `coverage-parity`, bilateral mandatory `OP_SEARCHREQUEST`, optional absent
   `OP_SEARCHRESULT`, conformant diagnostics, and packet report schema
   `ed2k_packet_diff_v2`.
+- Campaign `20261026T211001Z` produced server coverage parity and the first
+  synchronized nonzero Kad comparison. A transient observer-summary read raced
+  one atomic state replacement and caused a false watchdog stop; build-tests
+  commit `0d6f6f9` makes those read races retryable without weakening terminal
+  evidence failures.
+- Rust commit `14dfa6a5` and MFC commit `36771381` emit one correlated
+  `lookup_started` and `lookup_complete` record per REST-created Kad keyword
+  search. Build-tests commit `acb5d0c` requires exact per-client search IDs,
+  terminal counts, directional `KADEMLIA2_SEARCH_KEY_REQ`/`SEARCH_RES` packets,
+  and both lifecycle milestones; packet-only fallback is not supported.
+- Campaign `20261026T214153Z` proved the rebuilt lifecycle clients and strict
+  server action gate before the operator shut down the host. On resume, canonical
+  stop finalized both run-start diagnostic indexes with no writer-health gap;
+  the missing Kad cycle was an operator interruption, not a product failure.
+- Build-tests commit `9feeb19` gates each action before reservation: server and
+  global searches require both `ed2kConnected`, while Kad requires both
+  `kadConnected`. A disconnected network records an exact readiness skip and
+  cannot issue either search POST.
+- Cold campaign `20261027T100112Z` proved that the persisted MFC profile can
+  spend more than sixty seconds loading its 53,900 known shared files before
+  REST readiness. Build-tests commit `ed09ac8` centralizes the dual-client REST
+  startup ceiling at 300 seconds for both direct and persisted launchers; the
+  ceiling returns immediately when each client is ready.
+- Campaign `20261027T100510Z` produced server coverage parity and a synchronized
+  Kad action whose REST pages each returned 100 rows. Exact lifecycle records
+  reported the uncapped totals instead: Rust `338`, MFC `331`. This exposed a
+  harness semantic defect, not absent lifecycle evidence: the driver discarded
+  the shared REST `total` and compared `lookup_complete.resultCount` with page
+  length. Build-tests commit `579ec1b` removes the ambiguous `resultCounts`
+  shape, records `returnedCounts` separately from authoritative `resultTotals`,
+  advances observer state to exact schema v7, and correlates Kad completion only
+  with each client's total. No v6 state adapter or field fallback exists.
+- Campaign `20261027T103720Z` is the current indefinite v7 run. Both clients,
+  REST APIs, v2 writers, watcher, observer, hide.me full tunnel, VPN Guard Block,
+  and bounded storage are healthy with zero diagnostic drops. Its first server
+  attempt was correctly skipped before reservation because MFC had Kad
+  connectivity but had not yet reconnected eD2K; Rust was connected on both.
 - The maintained MFC profile and valid Rust persisted profile continue to be
   reused in place; no repair, reset, compatibility conversion, or reimport is
   allowed.
 
 ## Next Implementation
 
-- Keep campaign `20261026T204411Z` running across repeated synchronized actions
-  and natural MFC/Rust rotations. Require continued zero drops, writer faults,
-  process replacement, bind drift, VPN findings, or repeated action failures.
+- Keep campaign `20261027T103720Z` running across repeated synchronized server
+  and Kad actions and natural MFC/Rust rotations. Require continued zero drops,
+  writer faults, process replacement, bind drift, VPN findings, or repeated
+  action failures.
+- Require the next Kad report to prove v7 uses each client's exact
+  `resultTotals` for `lookup_complete` correlation even when the returned page is
+  capped at 100 and the independently observed live totals differ.
 - Use each bounded action report to separate action-owned coverage parity from
   strict full-window background traffic differences, then investigate the
   concrete eD2K/Kad opcode, payload, and lifecycle gaps instead of weakening
