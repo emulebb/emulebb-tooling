@@ -1175,22 +1175,46 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   shape, records `returnedCounts` separately from authoritative `resultTotals`,
   advances observer state to exact schema v7, and correlates Kad completion only
   with each client's total. No v6 state adapter or field fallback exists.
-- Campaign `20261027T103720Z` is the current indefinite v7 run. Both clients,
-  REST APIs, v2 writers, watcher, observer, hide.me full tunnel, VPN Guard Block,
-  and bounded storage are healthy with zero diagnostic drops. Its first server
-  attempt was correctly skipped before reservation because MFC had Kad
-  connectivity but had not yet reconnected eD2K; Rust was connected on both.
+- Campaign `20261027T103720Z` stayed healthy at the process, REST, writer,
+  watcher, observer, hide.me full-tunnel, VPN Guard Block, and bounded-storage
+  layers with zero diagnostic drops. MFC Kad and Rust Kad remained active, but
+  MFC eD2K stayed disconnected after sending one server login request with no
+  reply. Canonical stop finalized both diagnostic indexes and retained the
+  pre-stop packet-coverage report. The previous diagnostics exposed packets but
+  not the exact server-connection failure transition, so the evidence could not
+  distinguish timeout, close, or native connection rejection.
+- Build-tests commit `dd47083` aligns the canonical Rust diagnostics route with
+  the current REST inventory and release golden. Commit `87afc2c` advances the
+  observer to exact schema v8 and separates scheduling position from completed
+  action cycles, so a disconnected server readiness skip advances to Kad rather
+  than starving every later method. The complete harness suite passed `2,738`
+  tests with one skip and one deselection after the scheduler change.
+- MFC commit `0a7d7fac` and Rust commit `5965b0c2` now emit the same strict
+  `ed2k_tcp/connection_state` lifecycle: attempt start, transport connection,
+  login acceptance, native failure or timeout, and close, correlated by
+  positive attempt ID and exact server endpoint. Diagnostics Release MFC and
+  diagnostics Rust builds are green; the Rust eD2K unit suite passed `1,185`
+  tests.
+- Build-tests commit `c8da227` makes bilateral server-connection lifecycle
+  evidence mandatory for a complete run, validates exact keys, bodies,
+  transitions, state continuity, severities, and transport mode, and exposes
+  bounded attempt, event, outcome, and violation summaries in packet coverage,
+  cross-client, and offline-soak reports. The complete harness suite passed
+  `2,741` tests with one skip and one deselection.
 - The maintained MFC profile and valid Rust persisted profile continue to be
   reused in place; no repair, reset, compatibility conversion, or reimport is
   allowed.
 
 ## Next Implementation
 
-- Keep campaign `20261027T103720Z` running across repeated synchronized server
-  and Kad actions and natural MFC/Rust rotations. Require continued zero drops,
-  writer faults, process replacement, bind drift, VPN findings, or repeated
-  action failures.
-- Require the next Kad report to prove v7 uses each client's exact
+- Start one new indefinite v8 campaign with the rebuilt diagnostics clients and
+  the unchanged persisted profiles. Allow the known slow MFC profile startup
+  to use the canonical 300-second readiness ceiling rather than treating its
+  53,900 known shared files as a launch failure.
+- Require a disconnected server readiness skip to advance the next scheduled
+  slot to Kad, while leaving the completed action cycle unchanged. Require the
+  first server attempt to preserve its exact connection-state failure outcome.
+- Require the next Kad report to prove v8 uses each client's exact
   `resultTotals` for `lookup_complete` correlation even when the returned page is
   capped at 100 and the independently observed live totals differ.
 - Use each bounded action report to separate action-owned coverage parity from
