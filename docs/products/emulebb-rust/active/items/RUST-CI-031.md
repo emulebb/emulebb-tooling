@@ -1201,14 +1201,36 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   bounded attempt, event, outcome, and violation summaries in packet coverage,
   cross-client, and offline-soak reports. The complete harness suite passed
   `2,741` tests with one skip and one deselection.
+- Campaign `20261027T112504Z` proved the new lifecycle contract on live data:
+  Rust recorded two attempts and seven transitions, MFC one attempt and three
+  transitions, with zero lifecycle violations. Its first synchronized server
+  action reached `coverage-parity` with zero result-poll errors and zero writer
+  drops. An operator analysis output was then written into the observer-owned
+  `report` root; the strict bounded store rejected the foreign artifact and the
+  observer stopped rather than accepting an ambiguous retained window.
+  Canonical teardown was clean and finalized both diagnostic indexes, but the
+  observer summary correctly remains invalid because repeated checkpoint
+  attempts had already made its retained counts inconsistent.
+- Build-tests commit `9819232` rejects analyzer JSON output in an
+  observer-owned report root, directs analysis to the campaign sibling
+  directory, advances persisted status to exact schema v3, and reports bounded
+  `observerReportError` evidence plus a terminal `observer-report-invalid`
+  finding instead of crashing status or post-stop rendering. The complete
+  harness suite passed `2,743` tests with one skip and one deselection.
+- Campaign `20261027T114408Z` is the current clean indefinite v8 run. Both
+  clients, REST APIs, v2 writers, observer, watcher, hide.me full tunnel, VPN
+  Guard Block, and bounded storage are healthy. Its first server action reached
+  `coverage-parity` with zero errors or writer drops. Live analysis written to
+  the safe campaign `analysis` directory leaves observer state valid and proves
+  the bilateral server lifecycle gate with zero violations.
 - The maintained MFC profile and valid Rust persisted profile continue to be
   reused in place; no repair, reset, compatibility conversion, or reimport is
   allowed.
 
 ## Next Implementation
 
-- Start one new indefinite v8 campaign with the rebuilt diagnostics clients and
-  the unchanged persisted profiles. Allow the known slow MFC profile startup
+- Keep campaign `20261027T114408Z` running with the rebuilt diagnostics clients
+  and unchanged persisted profiles. Allow the known slow MFC profile startup
   to use the canonical 300-second readiness ceiling rather than treating its
   53,900 known shared files as a launch failure.
 - Require a disconnected server readiness skip to advance the next scheduled
