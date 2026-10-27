@@ -1243,13 +1243,42 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   tests with one skip and one deselection before the explicit reload command;
   its focused suite passes `93` tests afterward.
 - The maintained MFC profile and valid Rust persisted profile continue to be
-  reused in place; no repair, reset, compatibility conversion, or reimport is
-  allowed.
+  reused in place. Explicit stopped-profile hash refresh is backup-first and
+  may update current hashsets and native fingerprints in place; profile reset,
+  compatibility conversion, and automatic startup reimport remain forbidden.
+- Campaign `20261027T131236Z` proved MFC hashing settled at `53,900` shared
+  files with zero active hashing. Rust completed a `9,115`-entry pass, then
+  immediately queued `4,939` unchanged whole-second files again. The exact
+  defect was the Windows fingerprint policy: runtime fingerprints lacked the
+  filesystem ChangeTime and the reuse gate inferred safety from nonzero
+  subsecond values, permanently rejecting valid whole-second timestamps.
+- Build-tests commit `e234ed2` added a clean-stop, finalized-diagnostics hash
+  backup operation. The stopped campaign produced a verified backup containing
+  MFC `known.met`, `known2_64.met`, and a consistent Rust SQLite snapshot with
+  `58,221` known files before any repair write.
+- Build-tests commits `771ef53`, `87cbfbe`, and `7b5bde6` make the canonical
+  profile importer write Rust-compatible Windows ChangeTime fingerprints, add
+  an explicit idempotent persisted-profile hash upsert that preserves Rust
+  runtime counters and UI state, and seal existing Rust-only hashes only when
+  persisted identity, size, and modified time still match exactly. The live
+  refresh matched `51,565` MFC records across `51,644` source paths and safely
+  upgraded another `15,562` Rust-only fingerprints. All `67,206` persisted
+  shared-source fingerprints are current, with zero mismatches, missing
+  fingerprints, unavailable files, or invalid encodings.
+- Rust commit `41c49f43` reads Windows LastWriteTime and ChangeTime from the
+  same open handle and makes Windows reuse depend on exact identity, size,
+  modified time, and ChangeTime rather than timestamp precision inference.
+  Package validation passed `67` metadata tests, `1,187` ED2K tests, `436` core
+  tests plus core integrations, and a zero-warning Release diagnostics build.
+- Campaign `20261027T155645Z` is the current persisted restart proof. The
+  canonical launcher, watcher, observer, hide.me full tunnel, and VPN Guard
+  Block preflight are active; client readiness and zero-planned-hash settlement
+  remain the immediate gate before protocol action driving resumes.
 
 ## Next Implementation
 
-- Keep campaign `20261027T114408Z` running with the rebuilt diagnostics clients
-  and unchanged persisted profiles. Allow the known slow MFC profile startup
+- Keep campaign `20261027T155645Z` running with the rebuilt diagnostics clients
+  and refreshed persisted hash metadata. Allow the known slow MFC profile startup
   to use the canonical 300-second readiness ceiling rather than treating its
   53,900 known shared files as a launch failure.
 - Require a disconnected server readiness skip to advance the next scheduled
@@ -1258,10 +1287,10 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
 - Require the next Kad report to prove v8 uses each client's exact
   `resultTotals` for `lookup_complete` correlation even when the returned page is
   capped at 100 and the independently observed live totals differ.
-- Let Rust shared hashing reach a stable zero count, then perform one controlled
-  canonical stop/start with the same persisted profiles. Require MFC to remain
-  at zero hashing and Rust startup to report an idle reload, zero planned hashes,
-  zero failures, and reuse of the settled catalog before resuming parity work.
+- Require MFC to remain at zero hashing and Rust startup to report an idle
+  reload, zero planned hashes, zero failures, and reuse of the settled catalog
+  before resuming parity work. Any nonzero plan must identify genuinely changed
+  or new files rather than another compatibility workaround.
 - Use each bounded action report to separate action-owned coverage parity from
   strict full-window background traffic differences, then investigate the
   concrete eD2K/Kad opcode, payload, and lifecycle gaps instead of weakening
