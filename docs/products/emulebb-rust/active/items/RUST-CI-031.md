@@ -1270,27 +1270,41 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   modified time, and ChangeTime rather than timestamp precision inference.
   Package validation passed `67` metadata tests, `1,187` ED2K tests, `436` core
   tests plus core integrations, and a zero-warning Release diagnostics build.
-- Campaign `20261027T155645Z` is the current persisted restart proof. The
-  canonical launcher, watcher, observer, hide.me full tunnel, and VPN Guard
-  Block preflight are active; client readiness and zero-planned-hash settlement
-  remain the immediate gate before protocol action driving resumes.
+- Campaign `20261027T155645Z` completed the first restart after fingerprint
+  repair. Rust scanned `63,065` sources, reused `63,041`, and hashed only `24`
+  genuinely new files, with zero changed files, missing fingerprints, stat
+  failures, or hash failures. MFC remained settled at `53,900` shared files and
+  zero active hashing. Clean teardown finalized both diagnostic indexes, and a
+  second verified stopped-profile hash backup captured `58,254` Rust known
+  files with a successful SQLite quick check.
+- Build-tests commit `f45acbc` advances the strict reload-settlement proof to
+  schema v3 and requires the reload to be neither running nor pending, hashing
+  to be idle at zero, and failure counters to remain zero across three stable
+  samples. It also exposes explicit planned-hash and missing-fingerprint bounds
+  rather than accepting an early idle snapshot during startup hydration. The
+  complete harness suite passes `2,759` tests with one skip and one deselection.
+- Campaign `20261027T160917Z` is the current indefinite persisted soak. Its
+  second restart provides the strict zero-plan proof: Rust scanned and reused
+  all `63,065` sources with zero planned or completed hashes and zero missing
+  fingerprints, while MFC again reports `53,900` shared files and zero active
+  hashing. Both clients, v2 diagnostic writers, watcher, observer, hide.me full
+  tunnel, and VPN Guard Block remain healthy with no campaign findings.
 
 ## Next Implementation
 
-- Keep campaign `20261027T155645Z` running with the rebuilt diagnostics clients
-  and refreshed persisted hash metadata. Allow the known slow MFC profile startup
-  to use the canonical 300-second readiness ceiling rather than treating its
-  53,900 known shared files as a launch failure.
+- Keep campaign `20261027T160917Z` running with the rebuilt diagnostics clients
+  and proven zero-plan persisted restart. Allow the known slow MFC profile
+  startup to use the canonical 300-second readiness ceiling rather than
+  treating its 53,900 known shared files as a launch failure.
 - Require a disconnected server readiness skip to advance the next scheduled
   slot to Kad, while leaving the completed action cycle unchanged. Require the
   first server attempt to preserve its exact connection-state failure outcome.
 - Require the next Kad report to prove v8 uses each client's exact
   `resultTotals` for `lookup_complete` correlation even when the returned page is
   capped at 100 and the independently observed live totals differ.
-- Require MFC to remain at zero hashing and Rust startup to report an idle
-  reload, zero planned hashes, zero failures, and reuse of the settled catalog
-  before resuming parity work. Any nonzero plan must identify genuinely changed
-  or new files rather than another compatibility workaround.
+- Preserve MFC zero hashing and the Rust zero-plan restart invariant while
+  protocol parity work continues. Any future nonzero plan must identify
+  genuinely changed or new files rather than another compatibility workaround.
 - Use each bounded action report to separate action-owned coverage parity from
   strict full-window background traffic differences, then investigate the
   concrete eD2K/Kad opcode, payload, and lifecycle gaps instead of weakening
