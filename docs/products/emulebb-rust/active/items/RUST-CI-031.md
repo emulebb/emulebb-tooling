@@ -1283,25 +1283,83 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   samples. It also exposes explicit planned-hash and missing-fingerprint bounds
   rather than accepting an early idle snapshot during startup hydration. The
   complete harness suite passes `2,759` tests with one skip and one deselection.
-- Campaign `20261027T160917Z` is the current indefinite persisted soak. Its
-  second restart provides the strict zero-plan proof: Rust scanned and reused
-  all `63,065` sources with zero planned or completed hashes and zero missing
-  fingerprints, while MFC again reports `53,900` shared files and zero active
-  hashing. Both clients, v2 diagnostic writers, watcher, observer, hide.me full
-  tunnel, and VPN Guard Block remain healthy with no campaign findings.
+- Campaign `20261027T160917Z` provided the second strict zero-plan restart:
+  Rust scanned and reused all `63,065` sources with zero planned or completed
+  hashes and zero missing fingerprints, while MFC again reported `53,900`
+  shared files and zero active hashing.
+- Rust commit `373b922d` emits one terminal `buddy_request` decision for every
+  inbound Kad buddy request, including accepted, local firewall state,
+  self-endpoint, existing-buddy, firewall-check collision, and response-send
+  failure outcomes. Build-tests commit `08618b6` compares the exact `outcome`
+  and `reason` fields instead of accepting presence-only Kad decisions. Rust
+  core validation passed `438` unit tests plus the core integration suite.
+- Build-tests commits `6437842`, `8fa46b9`, and `0ea5293` make the persisted
+  controller carry separate explicit Rust and MFC server endpoints, reconnect
+  either disconnected client before an action, retry diagnostic-writer health,
+  inspect ordered persisted MFC server candidates through the canonical profile
+  importer, and record both endpoints in the run manifest. The complete harness
+  suite passed `2,765` tests with one skip and one deselection.
+- Campaign `20261027T171323Z` proved a further persisted restart with Rust
+  reusing all `63,065` scanned source rows, zero planned or completed hashes,
+  zero missing fingerprints, and three stable idle samples. Its unique shared
+  catalog contained `58,228` files; MFC remained at `53,900` shared files with
+  zero active hashing. A verified post-stop backup retained MFC `known.met`
+  (`53,900` entries), `known2_64.met`, and a Rust SQLite snapshot with `58,264`
+  known files and a successful quick check.
+- The same campaign showed that connected-server search results are
+  server-local evidence: Rust and MFC emitted the same clear
+  `OP_SEARCHREQUEST`, but only the independently selected MFC server replied.
+  A synchronized Kad action independently returned `360` Rust and `341` MFC
+  total results, proving both public Kad paths while the observer retained exact
+  uncapped totals. The observer then spent minutes copying every interim MFC
+  diagnostic-pin candidate even though policy retained only four final files.
+- Build-tests commit `d732838` selects the final bounded diagnostic-pin winners
+  before file I/O. Its regression proves an over-budget context segment is not
+  copied merely to be replaced immediately; focused controller and adjacent
+  observer/index validation passed `89` and `110` tests respectively.
+- Rust commit `5c25e01c` removes the competing wrapper-level ED2K keyword
+  deadline and makes the connected session the sole on-wire timeout authority.
+  The typed outcome now distinguishes `Replied` from `TimedOut`, preserves
+  completed-search `statusReason=server-timeout`, emits the reason in terminal
+  scheduler diagnostics, and records a terminal server-session `timed_out`
+  phase while keeping the connection alive. Full ED2K and core unit validation
+  passes `1,189` and `438` tests.
+- Campaign `20261027T173650Z` was stopped through the canonical persisted
+  controller after its Kad cycle exposed a false Rust completion: Rust emitted
+  a started and zero-result terminal lookup without a phase-2
+  `KADEMLIA2_SEARCH_KEY_REQ`, while MFC dispatched the request and received
+  results. Both persisted profiles retained their proven idle hashing state.
+- Rust commit `99d6834b` replaces best-effort routing-table admission and silent
+  concurrency rejection with awaited routing authority, a concrete search
+  permit, and typed start failures across keyword, source, and notes searches.
+  The public queue now retries retryable admission failures instead of treating
+  a closed stream as a zero-result completion.
+- Rust commit `65622ac7` carries an authoritative traversal completion receipt
+  through every public Kad search. Diagnostics now record the terminal reason,
+  routing seeds, responding contacts, phase-2 attempted and sent counts, raw
+  and accepted result counts, and elapsed time. A zero-result terminal is
+  successful only after a phase-2 search packet was sent and the traversal
+  completed normally. Full validation passed `132` Kad and `438` core unit
+  tests, Kad clippy with warnings denied, formatting, and changed-crate checks.
+- Build-tests commit `1404969` requires an explicit Rust `outcome=completed`
+  before counting `lookup_complete` as Kad lifecycle coverage while preserving
+  the current MFC record shape with no outcome field. Focused action and
+  offline differential validation passed `100` tests.
 
 ## Next Implementation
 
-- Keep campaign `20261027T160917Z` running with the rebuilt diagnostics clients
-  and proven zero-plan persisted restart. Allow the known slow MFC profile
-  startup to use the canonical 300-second readiness ceiling rather than
-  treating its 53,900 known shared files as a launch failure.
-- Require a disconnected server readiness skip to advance the next scheduled
-  slot to Kad, while leaving the completed action cycle unchanged. Require the
-  first server attempt to preserve its exact connection-state failure outcome.
-- Require the next Kad report to prove v8 uses each client's exact
-  `resultTotals` for `lookup_complete` correlation even when the returned page is
-  capped at 100 and the independently observed live totals differ.
+- Keep the persisted soak paused while this completed Kad admission and
+  completion-receipt slice is reviewed.
+- Rebuild Rust diagnostics from `65622ac7`, restart the same persisted profiles,
+  and require every driven Kad lookup either to show a phase-2 request plus an
+  authoritative completed receipt or to remain explicitly not dispatched with
+  its exact retryable reason. Require a silent connected server to finish as
+  completed with `statusReason=server-timeout` plus a terminal `timed_out`
+  session diagnostic, never as an unexplained zero-result completion.
+- Run a serial or endpoint-swapped live A/B before treating a missing
+  `OP_SEARCHRESULT` as a Rust protocol defect. Connected-server result counts
+  from different public endpoints are not a valid parity assertion; request
+  encoding, parser behavior, timeout cause, and connection continuity are.
 - Preserve MFC zero hashing and the Rust zero-plan restart invariant while
   protocol parity work continues. Any future nonzero plan must identify
   genuinely changed or new files rather than another compatibility workaround.
