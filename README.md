@@ -72,6 +72,15 @@ python scripts\docs-publish-check.py
 The preview and build gate keep generated HTML below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT\artifacts\docs`.
 
+Monitor one pull request's GitHub Actions state without streaming logs:
+
+```powershell
+python scripts\gh-actions-status.py --pr <number>
+```
+
+The monitor emits only state changes and the final result. It also catches
+exact-head workflow-definition failures that do not create PR check jobs.
+
 Run Markdown structure validation:
 
 ```powershell
