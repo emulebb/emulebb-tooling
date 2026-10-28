@@ -60,7 +60,7 @@ Preview the formatted docs locally:
 
 ```powershell
 python -m pip install -r requirements-docs.txt
-python -m mkdocs serve
+python -m mkdocs serve --site-dir "$env:EMULEBB_WORKSPACE_OUTPUT_ROOT\artifacts\docs\emulebb-tooling-site"
 ```
 
 Run the docs build gate used by CI:
@@ -68,6 +68,9 @@ Run the docs build gate used by CI:
 ```powershell
 python scripts\docs-publish-check.py
 ```
+
+The preview and build gate keep generated HTML below
+`EMULEBB_WORKSPACE_OUTPUT_ROOT\artifacts\docs`.
 
 Run Markdown structure validation:
 

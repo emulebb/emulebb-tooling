@@ -4,7 +4,6 @@ site_url: https://emulebb.github.io/emulebb-tooling/
 repo_url: https://github.com/emulebb/emulebb-tooling
 edit_uri: blob/main/docs/
 docs_dir: docs
-site_dir: .local/mkdocs-site
 
 theme:
   name: material

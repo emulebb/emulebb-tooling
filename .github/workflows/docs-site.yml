@@ -39,6 +39,8 @@ jobs:
     name: Build documentation site
     runs-on: ubuntu-latest
     env:
+      EMULEBB_WORKSPACE_ROOT: ${{ github.workspace }}
+      EMULEBB_WORKSPACE_OUTPUT_ROOT: ${{ runner.temp }}/emulebb-output
       NO_MKDOCS_2_WARNING: '1'
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
 
@@ -64,7 +66,9 @@ jobs:
           python scripts/github-roadmap-check.py
 
       - name: Build MkDocs site
-        run: python -m mkdocs build --strict
+        run: >-
+          python -m mkdocs build --strict
+          --site-dir "${{ env.EMULEBB_WORKSPACE_OUTPUT_ROOT }}/artifacts/docs/emulebb-tooling-site"
 
       - name: Configure GitHub Pages
         if: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/main' }}
@@ -74,7 +78,7 @@ jobs:
         if: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/main' }}
         uses: actions/upload-pages-artifact@v5
         with:
-          path: .local/mkdocs-site
+          path: ${{ env.EMULEBB_WORKSPACE_OUTPUT_ROOT }}/artifacts/docs/emulebb-tooling-site
 
   deploy:
     name: Deploy documentation site
