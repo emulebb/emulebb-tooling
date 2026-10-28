@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Poll one pull request's GitHub Actions state with compact output."""
+"""Poll one pull request or exact commit's GitHub Actions state compactly."""
 
 from __future__ import annotations
 
@@ -162,7 +162,21 @@ def format_counts(label: str, buckets: list[str]) -> str:
     return f"{label}[{','.join(values)}]"
 
 
-def snapshot(repo: str, pr_number: int) -> tuple[dict[str, Any], list[dict[str, Any]], list[dict[str, Any]]]:
+def resolve_commit(repo: str, commit: str) -> str:
+    """Resolve one commit-ish to its full repository SHA."""
+
+    value = run_gh(
+        ["api", f"repos/{repo}/commits/{commit}", "--jq", ".sha"],
+        json_output=False,
+    )
+    if not value:
+        raise RuntimeError(f"unable to resolve commit {commit} in {repo}")
+    return value
+
+
+def snapshot_pr(
+    repo: str, pr_number: int
+) -> tuple[dict[str, Any], list[dict[str, Any]], list[dict[str, Any]]]:
     """Read one consistent-enough Actions snapshot for the current PR head."""
 
     pr = read_pr(repo, pr_number)
@@ -173,7 +187,7 @@ def snapshot(repo: str, pr_number: int) -> tuple[dict[str, Any], list[dict[str, 
 
 
 def snapshot_signature(
-    pr: dict[str, Any], checks: list[dict[str, Any]], runs: list[dict[str, Any]]
+    head_sha: str, checks: list[dict[str, Any]], runs: list[dict[str, Any]]
 ) -> tuple[Any, ...]:
     """Return a stable signature used to suppress unchanged polling output."""
 
@@ -191,7 +205,7 @@ def snapshot_signature(
             for item in runs
         )
     )
-    return str(pr.get("headRefOid") or ""), check_values, run_values
+    return head_sha, check_values, run_values
 
 
 def print_summary(checks: list[dict[str, Any]], runs: list[dict[str, Any]]) -> None:
@@ -218,7 +232,9 @@ def parse_args() -> argparse.Namespace:
     """Parse command-line options."""
 
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--pr", type=int, required=True, help="Pull request number to monitor.")
+    target = parser.add_mutually_exclusive_group(required=True)
+    target.add_argument("--pr", type=int, help="Pull request number to monitor.")
+    target.add_argument("--commit", help="Exact commit or commit-ish to monitor.")
     parser.add_argument("--repo", help="Optional OWNER/REPO override. Defaults to the current checkout.")
     parser.add_argument("--once", action="store_true", help="Print one snapshot without waiting.")
     parser.add_argument("--interval-seconds", type=float, default=20.0)
@@ -245,13 +261,21 @@ def main() -> int:
     try:
         validate_timing(args)
         repo = resolve_repo(args.repo)
+        commit_sha = resolve_commit(repo, args.commit) if args.commit else None
         deadline = time.monotonic() + args.timeout_seconds
         last_signature: tuple[Any, ...] | None = None
         stable_since = time.monotonic()
 
         while True:
-            pr, checks, runs = snapshot(repo, args.pr)
-            signature = snapshot_signature(pr, checks, runs)
+            if args.pr is not None:
+                pr, checks, runs = snapshot_pr(repo, args.pr)
+                head_sha = str(pr["headRefOid"])
+            else:
+                pr = None
+                head_sha = str(commit_sha)
+                checks = []
+                runs = read_head_runs(repo, head_sha)
+            signature = snapshot_signature(head_sha, checks, runs)
             now = time.monotonic()
             if signature != last_signature:
                 print_summary(checks, runs)
@@ -272,14 +296,18 @@ def main() -> int:
             if args.once:
                 return 0 if observed and not pending else 8
             if observed and not pending and now - stable_since >= args.settle_seconds:
-                print(
-                    f"complete: PR #{args.pr} head={str(pr['headRefOid'])[:8]} "
-                    f"merge={pr.get('mergeStateStatus')}/{pr.get('mergeable')} {pr.get('url')}",
-                    flush=True,
-                )
+                if pr is not None:
+                    detail = (
+                        f"PR #{args.pr} head={head_sha[:8]} "
+                        f"merge={pr.get('mergeStateStatus')}/{pr.get('mergeable')} {pr.get('url')}"
+                    )
+                else:
+                    detail = f"commit {head_sha[:8]} https://github.com/{repo}/commit/{head_sha}"
+                print(f"complete: {detail}", flush=True)
                 return 0
             if now >= deadline:
-                print(f"timeout: PR #{args.pr} did not reach a final Actions state", file=sys.stderr)
+                target_name = f"PR #{args.pr}" if args.pr is not None else f"commit {head_sha[:8]}"
+                print(f"timeout: {target_name} did not reach a final Actions state", file=sys.stderr)
                 return 3
             time.sleep(args.interval_seconds)
     except (OSError, RuntimeError) as exc:
