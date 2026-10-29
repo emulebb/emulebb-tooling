@@ -44,6 +44,10 @@ policy rather than choosing one silently.
   `workspaces\workspace\app\emulebb-main`. `repos\emulebb` is its branch store,
   not its normal edit location. Add build, harness, or tooling support only when
   required.
+- `repos\ed2k-server` is a transitional stock-upstream integration dependency,
+  not an eMuleBB product or parallel server-development lane. Do not change its
+  code unless stock upstream blocks a current approved workspace workflow; use
+  the blocker and upstream-exit rules in the Workspace Operations Policy.
 - Broad workspace scans are allowed only for an explicitly workspace-wide
   request, unclear dependency topology, required orchestration, or genuinely
   cross-product behavior.
