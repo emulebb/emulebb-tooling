@@ -111,6 +111,29 @@ sync configure the shared hook and must not overwrite dirty managed work.
 - Build output stays outside source trees. CMake uses out-of-source output below
   the output root, staged tools use `tools\<name>`, and Rust follows the
   [Rust Product Policy](../products/emulebb-rust/reference/AGENT-POLICY.md).
+- `repos\ed2k-server` is a transitional integration dependency whose desired
+  end state is stock `andrey23127/ed2k-server` at a reviewed, tested upstream
+  commit. The eMuleBB remote exists to keep current CI/CD and interoperability
+  workflows deterministic while that transition remains incomplete; it is not
+  a parallel product, an independent roadmap, or a fork that the workspace aims
+  to maintain indefinitely.
+- Local `ed2k-server` code changes are frozen by default. A local patch is
+  permitted only when stock upstream demonstrably blocks a current approved
+  build, validation, deterministic harness, or interoperability workflow and
+  no reasonable fix can live in `emulebb-build`, `emulebb-build-tests`, or
+  `emulebb-tooling`. A potential defect, proactive hardening opportunity,
+  refactor, dependency refresh, observability improvement, or CI convenience is
+  not by itself a workflow blocker.
+- An exceptional local server patch requires explicit operator approval and
+  must be minimal, generic, upstreamable, covered by focused evidence, tracked
+  in an upstream issue or pull request, and paired with an exit condition for
+  removing it. Do not add eMuleBB-specific product behavior, provider logic,
+  fixtures, workflow policy, or release ownership to the server repository.
+- Prefer an upstream issue or pull request and keep temporary compatibility in
+  the harness or orchestration layer whenever possible. Once reviewed upstream
+  stock supports the required workflows, materialization and validation must
+  move to that upstream commit and the eMuleBB fork must stop acting as the
+  local implementation authority.
 - Official `amule-org/amule` under `repos\amule` is the single managed moving
   interoperability and offline-fixture reference. Sync may fast-forward only a
   clean `master`; parity evidence records the tested commit. The archival
