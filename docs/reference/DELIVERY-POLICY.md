@@ -66,6 +66,9 @@ or pull requests, merges work, cleans delivery state, or creates release tags.
   request checks and exact-head workflow runs so workflow-definition failures
   with no jobs are not hidden. After merging, monitor a distinct merge SHA with
   `python scripts/gh-actions-status.py --commit <sha> --repo <owner/repo>`.
+  For a manual dispatch, rerun, or another workflow run sharing a commit with
+  older failures, monitor only that run with
+  `python scripts/gh-actions-status.py --run <run-id> --repo <owner/repo>`.
   Do not use `gh run watch`, streamed logs, or
   newly improvised polling loops for routine monitoring. Use `--once` for a
   non-waiting snapshot and inspect logs only after the compact poller reports a
