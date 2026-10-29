@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Poll one pull request or exact commit's GitHub Actions state compactly."""
+"""Poll one pull request, exact commit, or workflow run compactly."""
 
 from __future__ import annotations
 
@@ -129,6 +129,15 @@ def read_head_runs(repo: str, head_sha: str) -> list[dict[str, Any]]:
     return value["workflow_runs"]
 
 
+def read_run(repo: str, run_id: int) -> dict[str, Any]:
+    """Return one exact workflow run."""
+
+    value = run_gh(["api", f"repos/{repo}/actions/runs/{run_id}"])
+    if not isinstance(value, dict) or not value.get("id"):
+        raise RuntimeError(f"workflow run {run_id} returned invalid data")
+    return value
+
+
 def check_bucket(check: dict[str, Any]) -> str:
     """Classify one pull request check."""
 
@@ -235,6 +244,7 @@ def parse_args() -> argparse.Namespace:
     target = parser.add_mutually_exclusive_group(required=True)
     target.add_argument("--pr", type=int, help="Pull request number to monitor.")
     target.add_argument("--commit", help="Exact commit or commit-ish to monitor.")
+    target.add_argument("--run", type=int, help="Exact workflow run ID to monitor.")
     parser.add_argument("--repo", help="Optional OWNER/REPO override. Defaults to the current checkout.")
     parser.add_argument("--once", action="store_true", help="Print one snapshot without waiting.")
     parser.add_argument("--interval-seconds", type=float, default=20.0)
@@ -270,6 +280,12 @@ def main() -> int:
             if args.pr is not None:
                 pr, checks, runs = snapshot_pr(repo, args.pr)
                 head_sha = str(pr["headRefOid"])
+            elif args.run is not None:
+                pr = None
+                run = read_run(repo, args.run)
+                head_sha = str(run.get("head_sha") or "")
+                checks = []
+                runs = [run]
             else:
                 pr = None
                 head_sha = str(commit_sha)
@@ -301,12 +317,19 @@ def main() -> int:
                         f"PR #{args.pr} head={head_sha[:8]} "
                         f"merge={pr.get('mergeStateStatus')}/{pr.get('mergeable')} {pr.get('url')}"
                     )
+                elif args.run is not None:
+                    detail = f"run {args.run} head={head_sha[:8]} {runs[0].get('html_url') or ''}".rstrip()
                 else:
                     detail = f"commit {head_sha[:8]} https://github.com/{repo}/commit/{head_sha}"
                 print(f"complete: {detail}", flush=True)
                 return 0
             if now >= deadline:
-                target_name = f"PR #{args.pr}" if args.pr is not None else f"commit {head_sha[:8]}"
+                if args.pr is not None:
+                    target_name = f"PR #{args.pr}"
+                elif args.run is not None:
+                    target_name = f"run {args.run}"
+                else:
+                    target_name = f"commit {head_sha[:8]}"
                 print(f"timeout: {target_name} did not reach a final Actions state", file=sys.stderr)
                 return 3
             time.sleep(args.interval_seconds)
