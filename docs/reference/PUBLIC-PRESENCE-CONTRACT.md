@@ -9,6 +9,11 @@ making one public repository mutate another. Schema version 1 requires the
 `emulebb-rust` product record while remaining the same contract version for
 existing consumers.
 
+The Rust product record treats `nightly_url` as the current public download
+channel. `published_version` and `release_url` retain the latest immutable
+formal tag only as archival release metadata; current-facing generators must
+not render them as a baseline, call to action, or recommendation.
+
 ## Ownership
 
 - `emulebb-tooling` owns the contract, validator, and deterministic organization

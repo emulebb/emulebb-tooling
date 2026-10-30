@@ -23,8 +23,9 @@ Do not load unrelated Rust annexes merely because the repository is active.
 
 ## Product Direction
 
-- `rust-v0.1.0-beta.2` is the current published beta baseline. Development
-  continues on the beta lane; do not rewrite published beta tags or artifacts.
+- CI-gated nightlies from `main` are the current beta testing lane. Published
+  beta tags remain immutable release evidence; do not rewrite their tags or
+  artifacts, and do not promote stale tags as the current download path.
 - The product is an automation-first integrated suite delivered through hard-
   gated Client, Indexer, and Arr phases. Production work stays in the Client
   phase until every active client item, including newly accepted items, closes.

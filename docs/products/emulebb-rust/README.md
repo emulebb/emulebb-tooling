@@ -1,12 +1,13 @@
 # eMuleBB Rust
 
-**Active beta — public `0.1.0-beta.2`, working toward Beta 3.** Repeatedly
-tested on live eD2K/Kad networks.
+**Active beta, led by CI-gated nightly builds.** Repeatedly tested on live
+eD2K/Kad networks. Beta 3 is expected after a few more weeks of implementation
+and stabilization.
 
-Use the [CI-gated nightly builds](https://github.com/emulebb/emulebb-rust/releases)
-for current public testing. Use the formal
-[`0.1.0-beta.2` release](https://github.com/emulebb/emulebb-rust/releases/tag/rust-v0.1.0-beta.2)
-when a fixed published baseline is more important than the latest changes.
+Use the [GitHub Releases page](https://github.com/emulebb/emulebb-rust/releases)
+and choose the newest dated nightly prerelease for current public testing.
+Formal beta tags remain immutable release history, not the recommended download
+path.
 
 eMuleBB Rust, its WebUI, product documentation, and release notes are
 English-only. The organization website may localize its homepage and FAQ, but
@@ -20,7 +21,7 @@ Client phase until its complete gate closes.
 
 Current beta direction:
 
-- [`0.1.0-beta.2` release scope](RELEASE-SCOPE.md)
+- [Client release scope](RELEASE-SCOPE.md)
 - [Current-head parity evidence and documentation reconciliation](active/items/RUST-CI-006.md)
 - [Beta 3 candidate certification without publication](active/items/RUST-CI-009.md)
 

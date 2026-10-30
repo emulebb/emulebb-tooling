@@ -69,7 +69,6 @@ nav:
       - Architecture: products/emulebb-rust/design/architecture.md
       - Design — Integrated Suite: products/emulebb-rust/design/integrated-suite.md
       - Nightly Builds: https://github.com/emulebb/emulebb-rust/releases
-      - 0.1.0-beta.2 Release: https://github.com/emulebb/emulebb-rust/releases/tag/rust-v0.1.0-beta.2
       - Code Quality And Test Placement: products/emulebb-rust/reference/CODE-QUALITY.md
       - Running On macOS And Linux: reference/GUIDE-CROSS-PLATFORM.md
       - REST API — Forward OpenAPI: products/emulebb-rust/api/REST-API-OPENAPI.yaml

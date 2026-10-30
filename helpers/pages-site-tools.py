@@ -23,6 +23,14 @@ PROHIBITED_ASSET_PATTERN = re.compile(
 ALLOWED_IMAGE_SRC_PATTERN = re.compile(
     r"^(?:\.\./)*assets/(?:team/[a-z0-9-]+|brand/emulebb-broadband-edition-logo)\.png$"
 )
+ARCHIVAL_RUST_PROMOTION_PATTERN = re.compile(
+    r"0\.1\.0-beta\.2|rust-v0\.1\.0-beta\.2|formal\s+Beta\s*2|public\s+Beta\s*2|fixed\s+baseline",
+    re.IGNORECASE,
+)
+LOCALIZED_RELEASE_STATUS_PATTERN = re.compile(
+    r"\bBeta\s*[23]\b|\b\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?\b|nightl",
+    re.IGNORECASE,
+)
 
 
 @dataclass(frozen=True)
@@ -447,11 +455,49 @@ def validate_rust_page(pages_root: Path, errors: list[str]) -> None:
     expect(errors, parsed.icons == [RUST_PAGE.favicon_href], f"{RUST_PAGE.relative_file}: favicon link mismatch")
     expect(errors, not parsed.alternates, f"{RUST_PAGE.relative_file}: English-only Rust page must not publish hreflang alternates")
     expect(errors, not parsed.images, f"{RUST_PAGE.relative_file}: Rust page must remain text-only")
+    expect(
+        errors,
+        not ARCHIVAL_RUST_PROMOTION_PATTERN.search(text),
+        f"{RUST_PAGE.relative_file}: archived Beta 2 release must not be promoted",
+    )
+    expect(errors, '"softwareVersion"' not in text, f"{RUST_PAGE.relative_file}: softwareVersion must not advertise an archived release")
+    expect(errors, '"releaseNotes"' not in text, f"{RUST_PAGE.relative_file}: releaseNotes must not advertise an archived release")
+    expect(
+        errors,
+        '"downloadUrl": "https://github.com/emulebb/emulebb-rust/releases"' in text,
+        f"{RUST_PAGE.relative_file}: downloadUrl must use the nightly releases page",
+    )
     localized_rust_pages = sorted(
         candidate.relative_to(pages_root)
         for candidate in pages_root.glob("*/rust/index.html")
     )
     expect(errors, not localized_rust_pages, "localized Rust product page must not exist")
+
+
+def validate_release_positioning(pages_root: Path, errors: list[str]) -> None:
+    """Keep current English surfaces nightly-first and translations evergreen."""
+
+    for relative in (Path("index.html"), ENGLISH_FAQ_PAGE.relative_file):
+        path = pages_root / relative
+        if not path.is_file():
+            continue
+        expect(
+            errors,
+            not ARCHIVAL_RUST_PROMOTION_PATTERN.search(read_text(path)),
+            f"{relative}: archived Beta 2 release must not be promoted",
+        )
+
+    localized_pages = [page for page in CANONICAL_PAGES if page.html_lang != "en"]
+    localized_pages.extend(page for page in FAQ_PAGES if page.html_lang != "en")
+    for page in localized_pages:
+        path = pages_root / page.relative_file
+        if not path.is_file():
+            continue
+        expect(
+            errors,
+            not LOCALIZED_RELEASE_STATUS_PATTERN.search(read_text(path)),
+            f"{page.relative_file}: localized copy must remain evergreen without versions or beta targets",
+        )
 
 
 def validate_sitemap(pages_root: Path, errors: list[str]) -> None:
@@ -508,6 +554,7 @@ def validate_site(pages_root: Path) -> int:
     for page in FAQ_PAGES:
         validate_faq_page(pages_root, page, errors)
     validate_rust_page(pages_root, errors)
+    validate_release_positioning(pages_root, errors)
     validate_sitemap(pages_root, errors)
     validate_prohibited_assets(pages_root, errors)
 
