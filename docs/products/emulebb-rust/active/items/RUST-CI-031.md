@@ -114,10 +114,14 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   exact synchronized Rust/MFC searches through the reusable REST action engine
   under a manifest-only, disabled-by-default configuration with a minimum
   five-minute cadence. Local terms, labels, keys, and failures remain
-  unredacted. The single current observer-state v6 contract is bound to the
+  unredacted. The single current observer-state v9 contract is bound to the
   exact action configuration and can persist a reserved cycle, deterministic
   action/report identity, per-client create/result outcomes, diagnostic run
   identities, strict UTC deadline, and evidence-pending state across restart.
+  It also persists one durable success-counted parity gate with separate server
+  and Kad targets, non-counting retryable outcomes, a sticky first confirmed
+  divergence receipt, and the original green timestamp while action driving
+  continues after either terminal gate state.
   A deadline cannot coexist with pending public work and is consumed atomically
   by reservation. Each client create is prepared durably before its public POST;
   restart ambiguity fails closed, and a skipped sibling is recorded explicitly
@@ -139,7 +143,7 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   clears the deadline after each action without inheriting a previous process's
   monotonic clock. The REST action driver now also exposes one bounded,
   no-wait search-result read and a typed one-shot phase that preserves exact
-  local failures. The v6 state persists each client's immutable poll start and
+  local failures. The v9 state persists each client's immutable poll start and
   deadline, next attempt, attempt/error totals, latest attempt, latest observed
   count, and exact current and historical errors. The single-writer observer
   performs at most one due GET per loop, bounds it by the lesser of 30 seconds
@@ -148,14 +152,14 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   the immutable driver outcome. Checkpoint, stop, and health service therefore
   run between attempts instead of waiting behind a blocking result-poll loop.
   The legacy blocking poll composes the same one-shot primitive. The sole
-  current `emulebb-build-tests.converged-soak-report.v2` contract now validates
-  and embeds the exact bounded v6 observer state, reads only current action and
+  current `emulebb-build-tests.converged-soak-report.v3` contract now validates
+  and embeds the exact bounded v9 observer state, reads only current action and
   checkpoint contracts, and describes the retained physical suffix separately
   from cumulative history. Whole-artifact rotation is reported as
   `omittedByRetention`, while retained count, byte, latest-file, campaign,
   action-sequence, or checkpoint-time inconsistencies retry boundedly during a
   concurrent update and otherwise fail closed. Retained action summaries read
-  current nested assessments, aggregate v6 poll outcomes, and preserve exact
+  current nested assessments, aggregate v9 poll outcomes, and preserve exact
   per-action client poll provenance and errors without redaction. The
   diagnostic loader can now select the
   pinned `(client, processId, runId)`
@@ -182,8 +186,10 @@ evidence. Repeatable bounded captures remain the authority for a parity claim.
   Observer state and offline summaries retain dedicated `not-assessable` and
   `evidence-incomplete` totals instead of collapsing them into divergence or an
   unspecified fallback bucket.
-  Arbitrary-length authorization remains blocked until remaining non-stream
-  artifacts are bounded and guarded live validation proves the complete path.
+  The persisted-profile discovery lane is now authorized for until-stopped
+  operation because non-stream artifacts are bounded and guarded live
+  validation proved the complete start, gate, continued-action, and clean-stop
+  path. Release certification still requires its separately bounded evidence.
 
 ## Landed Evidence
 
@@ -1423,20 +1429,52 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   This work does not evolve its product scope or use it as the public soak
   target.
 
+## Durable Parity Gate Checkpoint - 2026-10-30
+
+- Build-tests commit `4dd78f32209cc16635a6f8e4fcaadc0bb9341a80`
+  aligned deterministic live fixtures with the current required bandwidth,
+  search-network, passive-cache-origin, and passive-replay contracts. Commit
+  `f4c542530b035a8e32f58188c2be54d2764ed7b6` replaced attempt-counted action
+  limits with the durable gate and removed the replaced action-term, method,
+  source-profile, and maximum-cycle CLI/configuration shapes without adapters.
+- The sole current action report is
+  `emulebb-build-tests.observer-action-report.v3`, observer state is
+  `emulebb-build-tests.converged-observer-state.v9`, aggregate report is
+  `emulebb-build-tests.converged-soak-report.v3`, persisted session is
+  `emulebb.persisted-soak-session.v5`, and controller status is
+  `emulebb.persisted-soak-status.v4`. The dedicated
+  `emulebb.persisted-soak-gate-status.v1` command exits successfully only for a
+  green gate.
+- The complete deterministic harness matrix passed `2,810` tests with one
+  platform skip and one deselected live lane. Focused observer, state, report,
+  and controller validation passed `190` tests. No compatibility schema or
+  parser is retained.
+- Campaign `20261030T193743Z` reused both persisted profiles under full-tunnel
+  hide.me and VPN Guard Block, kept the common upload cap at `8 KiB/s`, and
+  re-proved the Rust restart invariant with `plannedHashCount=0`,
+  `hashedCount=0`, `sharedHashingCount=0`, and a complete shared catalog.
+- The campaign reached four successful synchronized eD2K server cycles and four
+  successful synchronized Kad cycles with zero retryable outcomes, zero driver
+  errors, zero connectivity skips, and zero confirmed divergences. The gate
+  command changed from exit `1` while pending to exit `0` when green. A ninth
+  post-green server cycle completed successfully, increasing the retained
+  server count to five and proving action driving continues after green.
+- Canonical graceful stop ended both clients and all three controller
+  processes. The final Rust index covered one closed segment and `38,980`
+  records; the MFC index covered three closed segments and `48,887` records.
+  Both writer histories reported zero violations, with one Rust and three MFC
+  evidence pins retained for exact anomaly context.
+- Two final Rust `emulebb.diagnostic-bundle.v6` responses were persisted as
+  exact server bytes: `560,478` and `664,615` bytes against the
+  `4,194,304`-byte limit. Both budgets matched the file byte count exactly and
+  reported no truncation.
+- The common work-in-progress branch remains
+  `feature/persisted-soak-parity-gate`. The significant harness slice is now
+  green and ready for normal cross-repository review; no trace or profile path
+  is tracked.
+
 ## Next Implementation
 
-- Replace finite attempt-counting with one canonical durable parity gate:
-  require four successful server cycles and four successful Kad cycles, keep
-  retryable public-network misses and connectivity skips non-counting, retain a
-  sticky first confirmed divergence, and continue action driving after green.
-- Generate and persist campaign-stable NFC-normalized ASCII and Unicode terms,
-  expose the authoritative gate through controller status and a dedicated
-  machine-readable gate command, and add no compatibility parser for the
-  replaced observer schemas or CLI.
-- Stop the current discovery campaign after the new gate implementation is
-  ready, restart from the same persisted profiles, re-prove the zero-plan hash
-  invariant, and require the new four-server plus four-Kad gate to turn green
-  before final teardown.
 - Treat request encoding, parser behavior, lifecycle decisions, timeout cause,
   packet correlation, and connection continuity as parity authority. Public
   result counts may differ and are comparable only when both clients used the
