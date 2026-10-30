@@ -28,7 +28,7 @@ ARCHIVAL_RUST_PROMOTION_PATTERN = re.compile(
     re.IGNORECASE,
 )
 LOCALIZED_RELEASE_STATUS_PATTERN = re.compile(
-    r"\bBeta\s*[23]\b|\b\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?\b",
+    r"\bBeta\s*[23]\b|\b\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?\b|nightl",
     re.IGNORECASE,
 )
 
