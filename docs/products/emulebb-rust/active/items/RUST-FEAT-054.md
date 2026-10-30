@@ -5,7 +5,7 @@ product: emulebb-rust
 phase: Phase 1
 github_issue: https://github.com/emulebb/emulebb-rust/issues/183
 title: Prioritize nightly eMuleBB Rust public presence
-status: IN_PROGRESS
+status: DONE
 priority: Minor
 category: feature
 labels: [rust, beta, documentation, website, releases, public-presence]
@@ -61,16 +61,16 @@ and stabilization.
 
 ## Acceptance Criteria
 
-- [ ] Nightlies are the first and only current Rust download/testing CTA.
-- [ ] Current-facing copy tells users to choose the newest dated nightly from
+- [x] Nightlies are the first and only current Rust download/testing CTA.
+- [x] Current-facing copy tells users to choose the newest dated nightly from
       GitHub Releases.
-- [ ] Beta 2 appears only as archival or technical history.
-- [ ] Current English Rust surfaces include the approved Beta 3 directional ETA.
-- [ ] Principal Rust surfaces retain the exact live-network evidence statement.
-- [ ] `/rust/` stays English-only and removes Beta 2 structured release data.
-- [ ] Localized home and FAQ pages contain no versions, beta targets, or ETAs.
-- [ ] The existing site layout and professional dark theme remain unchanged.
-- [ ] Contract, profile, site, docs, and focused Rust validation pass.
+- [x] Beta 2 appears only as archival or technical history.
+- [x] Current English Rust surfaces include the approved Beta 3 directional ETA.
+- [x] Principal Rust surfaces retain the exact live-network evidence statement.
+- [x] `/rust/` stays English-only and removes Beta 2 structured release data.
+- [x] Localized home and FAQ pages contain no versions, beta targets, or ETAs.
+- [x] The existing site layout and professional dark theme remain unchanged.
+- [x] Contract, profile, site, docs, and focused Rust validation pass.
 
 ## Validation
 
@@ -87,3 +87,12 @@ Earlier public-presence commits used `RUST-FEAT-052`, but that identifier
 already belongs to issue #146. Issue #148 owns `RUST-FEAT-053`. Historical
 commit messages are not rewritten; this follow-up and its durable tracking use
 `RUST-FEAT-054`.
+
+Completed and delivered 2026-10-30 through tooling PR #125, Rust PR #185,
+organization-profile PR #2, and Pages PR #2. Delivered SHAs are `6e855f7`,
+`c23bb263`, `486b86e`, and `a93e322` respectively. Contract, taxonomy,
+structure, Roadmap, strict MkDocs, deterministic profile, Pages render/static,
+rendered-link, installer checksum, Rust policy, and all 16 focused nightly tests
+passed. Every PR and post-merge workflow completed successfully, and live
+checks returned HTTP 200 with the new content for `/`, `/rust/`, `/de/`, and
+`/ja/faq/`.
