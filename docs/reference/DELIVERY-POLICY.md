@@ -53,6 +53,9 @@ or pull requests, merges work, cleans delivery state, or creates release tags.
   rebase or merge-commit method for a multi-commit pull request; do not squash
   it into one commit. Squash is acceptable only when the pull request already
   contains one coherent commit or when the operator explicitly requests it.
+- `emulebb-rust` is rebase-merge only. Merge its pull requests with
+  `gh pr merge <number> --rebase --delete-branch`; never probe or retry that
+  repository with `--merge` because merge commits are disabled.
 - Before final handoff, audit open pull requests plus local and remote
   non-default branches in every touched repository. Merge completed work and
   delete branches that are integrated or superseded. Explicitly designated
