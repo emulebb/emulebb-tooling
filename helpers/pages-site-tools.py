@@ -28,6 +28,16 @@ LOCALIZED_RELEASE_STATUS_PATTERN = re.compile(
     r"\bBeta\s*[23]\b|\b\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?\b|nightl",
     re.IGNORECASE,
 )
+PRODUCT_CAPABILITY_TERMS = (
+    "ed2k/kad client",
+    "search",
+    "downloads",
+    "uploads",
+    "sharing",
+    "seeding",
+    "embedded browser operations console",
+    "rest api",
+)
 
 
 @dataclass(frozen=True)
@@ -159,8 +169,12 @@ class ParsedPage(HTMLParser):
         self.alternates: dict[str, str] = {}
         self.og_urls: list[str] = []
         self.images: list[dict[str, str]] = []
+        self.visible_text: list[str] = []
+        self._ignored_text_depth = 0
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        if tag in {"script", "style"}:
+            self._ignored_text_depth += 1
         attrs_by_name = {name.lower(): value or "" for name, value in attrs}
         if tag == "html":
             self.html_lang = attrs_by_name.get("lang")
@@ -190,6 +204,14 @@ class ParsedPage(HTMLParser):
             self.icons.append(href)
         if "alternate" in rel_tokens and "hreflang" in attrs_by_name:
             self.alternates[attrs_by_name["hreflang"]] = href
+
+    def handle_endtag(self, tag: str) -> None:
+        if tag in {"script", "style"} and self._ignored_text_depth:
+            self._ignored_text_depth -= 1
+
+    def handle_data(self, data: str) -> None:
+        if not self._ignored_text_depth and data.strip():
+            self.visible_text.append(data.strip())
 
 
 def parse_args() -> argparse.Namespace:
@@ -348,6 +370,15 @@ def validate_page(pages_root: Path, page: PageSpec, errors: list[str]) -> None:
     validate_images(page.relative_file, parsed, errors)
 
     if not page.directory:
+        visible_text = " ".join(parsed.visible_text).lower()
+        missing_capabilities = [
+            term for term in PRODUCT_CAPABILITY_TERMS if term not in visible_text
+        ]
+        expect(
+            errors,
+            not missing_capabilities,
+            f"index.html: missing product definition terms: {missing_capabilities}",
+        )
         expect(errors, '"@type": "Organization"' in text, "index.html: missing Organization structured data")
         expect(errors, '"@type": "WebSite"' in text, "index.html: missing WebSite structured data")
         expect(errors, '"@type": "SoftwareApplication"' in text, "index.html: missing SoftwareApplication structured data")
