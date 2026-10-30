@@ -74,11 +74,10 @@ gate.
 
 After each closeout run, record the current artifact paths in:
 
-- [AMUT-001](../history/items/AMUT-001.md) and [AMUT-002](../history/items/AMUT-002.md) for the legacy aMuTorrent controller path
-- [ARR-001](../history/items/ARR-001.md) for Prowlarr/Radarr/Sonarr and qBit-compatible flows
-- [CI-024](../history/items/CI-024.md) for controller replay status
-- [CI-025](../history/items/CI-025.md) for native REST and adapter contract drift
-- [RELEASE-0.7.3-CHECKLIST](RELEASE-0.7.3-CHECKLIST.md) before tagging
+- the [legacy item catalog](../history/LEGACY-ITEM-CATALOG.md) for the retained
+  `AMUT-001`, `AMUT-002`, `ARR-001`, `CI-024`, and `CI-025` dispositions; and
+- the [0.7.3 proof summary](../history/releases/0.7.3/RELEASE-0.7.3-PROOF-SUMMARY.md)
+  for the shipped controller evidence boundary.
 
 All live reports must show the workspace live-network policy:
 `BindInterface=hide.me`, empty P2P `BindAddr`, and P2P UPnP enabled.

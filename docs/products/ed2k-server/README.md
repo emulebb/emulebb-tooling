@@ -20,7 +20,7 @@ preserved in the history archive.
 
 ## Tracking
 
-- [Retired production-hardening roadmap](../../history/HIST-ED2K-SERVER-PRODUCTION-ROADMAP.md)
+- [Archived production-hardening context](../../history/INDEX.md)
 - [Repository issues](https://github.com/emulebb/ed2k-server/issues)
 - [eMuleBB Roadmap](https://github.com/orgs/emulebb/projects/3)
 - [Source repository](https://github.com/emulebb/ed2k-server)

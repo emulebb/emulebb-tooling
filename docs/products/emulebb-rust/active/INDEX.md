@@ -32,7 +32,9 @@ in `repos/emulebb-rust/policy` remain authoritative for approved differences.
 
 Rust item IDs use `RUST-<CLASS>-<NNN>` with `BUG`, `FEAT`, `REF`, or `CI`.
 Allocate against both active and historical item directories; IDs are never
-reused. Parked ideas are not backlog items until explicitly activated.
+reused. Parked ideas are not backlog items until explicitly activated. The
+pre-product migration item `CI-054` retains its stable ID as the only legacy
+exception; new Rust items always use the `RUST-*` form.
 
 ## Client Gate — Major
 
@@ -44,6 +46,7 @@ reused. Parked ideas are not backlog items until explicitly activated.
 | [RUST-CI-029](items/RUST-CI-029.md) | Evidence | Test packet diagnostics without unsafe environment mutation |
 | [RUST-CI-030](items/RUST-CI-030.md) | Evidence | Verify Rust FFI layouts against vendored C headers |
 | [RUST-CI-031](items/RUST-CI-031.md) | Evidence | Build persisted full-tunnel protocol parity soaks |
+| [CI-054](items/CI-054.md) | Evidence | Add native Windows Rust/MFC protocol-parity diagnostics campaign |
 | [RUST-BUG-129](items/RUST-BUG-129.md) | Bug | Queue targeted re-hash after upload-time source invalidation |
 | [RUST-BUG-130](items/RUST-BUG-130.md) | Bug | Release search drain ownership when persistence fails |
 | [RUST-BUG-131](items/RUST-BUG-131.md) | Bug | Make category deletion and transfer remap atomic |
@@ -69,7 +72,6 @@ reused. Parked ideas are not backlog items until explicitly activated.
 | [RUST-FEAT-039](items/RUST-FEAT-039.md) | Feature | Size ED2K request depth from measured RTT and bandwidth |
 | [RUST-FEAT-040](items/RUST-FEAT-040.md) | Feature | Carry ED2K and Kad search metadata end to end |
 | [RUST-FEAT-048](items/RUST-FEAT-048.md) | Feature | Use sparse part files without weakening capacity reservations |
-| [RUST-FEAT-054](items/RUST-FEAT-054.md) | Feature | Prioritize nightly eMuleBB Rust public presence |
 | [RUST-REF-007](items/RUST-REF-007.md) | Refactor | Review Rust upload hot-path performance candidates |
 | [RUST-REF-011](items/RUST-REF-011.md) | Refactor | Consolidate duplicated ED2K opcode and capability constants |
 

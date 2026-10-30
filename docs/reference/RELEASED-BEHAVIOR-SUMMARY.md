@@ -6,8 +6,8 @@ the focused operator guides; it is not a replacement for the active release
 dashboard.
 
 Open, deferred, exploratory, and historical items are not product promises.
-Current release state remains in the
-[0.7.3 release dashboard](../active/RELEASE-0.7.3.md).
+Published release state remains in the
+[0.7.3 proof summary](../history/releases/0.7.3/RELEASE-0.7.3-PROOF-SUMMARY.md).
 
 ## Landed Feature Matrix
 
@@ -166,7 +166,7 @@ docs cover the relevant surface:
 | Network behavior | [Network Guide](GUIDE-NETWORK.md), including bind, firewall, UPnP, WebServer/REST, and diagnosis boundaries |
 | Controller behavior | [Controllers And REST Guide](GUIDE-CONTROLLERS-REST.md), REST contract, and OpenAPI |
 | Command line | [Development Guide](DEVELOPMENT-GUIDE.md), plus setup/product summary when the option affects operators |
-| Testing and release proof | [Development Guide](DEVELOPMENT-GUIDE.md), [Release Test Strategy](../active/RELEASE-TEST-STRATEGY.md), and active release docs |
+| Testing and release proof | [Development Guide](DEVELOPMENT-GUIDE.md), [Test Strategy](../active/TEST-STRATEGY.md), and retained release proof |
 
 ## Evidence Model
 
@@ -182,8 +182,7 @@ one manual smoke test. Current confidence layers include:
 - x64 and ARM64 build/package provenance, manifests, SHA-256 hashes, SPDX SBOMs,
   and GitHub artifact attestations where published
 
-Use [Release Test Strategy](../active/RELEASE-TEST-STRATEGY.md) for the generic
-testing model and [Release Test Campaigns](../active/RELEASE-TEST-CAMPAIGNS.md)
-for the current campaign view. The RC dashboard remains the release authority
-for what has passed, what is still open, and whether public packages may be
+Use [Test Strategy](../active/TEST-STRATEGY.md) for the current lifecycle-based
+testing model. The retained proof summary records what passed and the evidence
+boundary for the published MFC packages.
 tagged.

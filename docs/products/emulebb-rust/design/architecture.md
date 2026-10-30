@@ -217,7 +217,7 @@ graph TB
   release TCP and retain queue position through stock-framed datagrams, with a
   bounded TCP reconnect fallback when UDP is unavailable.
 - `enable_udp_reask` is on by default. The closed
-  [`RUST-FEAT-001`](../history/items/RUST-FEAT-001.md) record owns the protocol
+  [`RUST-FEAT-001`](https://github.com/emulebb/emulebb-tooling/blob/main/docs/products/emulebb-rust/history/items/RUST-FEAT-001.md) record owns the protocol
   detail, phased implementation history, and deterministic live evidence.
 
 ---

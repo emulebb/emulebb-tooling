@@ -375,8 +375,8 @@ request, response, and version-tracking paths are intentionally absent.
 
 Do not treat missing live `OP_REQUESTSOURCES` or `OP_ANSWERSOURCES` SX1 support
 as a protocol regression. Local eD2K-link source import remains separate from
-live SX1 packet support. The durable decision record is
-[REF-002](../history/items/REF-002.md).
+live SX1 packet support. The legacy `REF-002` decision is retained in the
+[legacy item catalog](../history/LEGACY-ITEM-CATALOG.md).
 
 ## IPv6 And Kad Roadmap
 
@@ -386,12 +386,12 @@ work is future connectivity modernization, not a shipped 0.7.3 capability.
 The docs intentionally split IPv6 Kad into two tracks:
 
 - **Current-network dual-stack compatibility**
-  - Status: Active future item: [FEAT-035](../active/items/FEAT-035.md)
+  - Status: archived MFC proposal; future direction belongs to eMuleBB Rust
   - Meaning: Add IPv6-capable endpoints, address abstraction, display, logging, bind
              policy, and safe source/Kad handoff without breaking today's network
 
 - **Distinct IPv6 Kad network**
-  - Status: Exploratory idea: [IDEA-IPV6-KAD-NETWORK](../ideas/IDEA-IPV6-KAD-NETWORK.md)
+  - Status: archived exploratory proposal, not current product scope
   - Meaning: Consider a separate IPv6 Kad routing/bootstrap space inspired by
              qBittorrent/libtorrent dual-stack DHT state separation
 

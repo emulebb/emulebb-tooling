@@ -6,6 +6,8 @@ release scope, design docs, or retained evidence.
 - Keep `docs/products/emulebb-rust/active/` limited to `INDEX.md` and `items/`.
   Track every actionable slice and its progress in its owning item instead of
   creating branch-wide ledgers, reviews, or checklists.
+- New Rust item IDs use `RUST-<CLASS>-<NNN>`. The migrated cross-product item
+  `CI-054` keeps its stable legacy ID; do not reuse or renumber it.
 - Keep current scope in `RELEASE-SCOPE.md`, implemented structure in
   `design/architecture.md`, and genuinely forward designs in `design/`.
 - Published release notes belong to GitHub Releases. Persisted live and soak

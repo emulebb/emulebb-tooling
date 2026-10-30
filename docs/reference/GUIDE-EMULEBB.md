@@ -487,12 +487,11 @@ live-network SX1 advertise, request, response, and version-tracking paths. Do
 not treat missing live `OP_REQUESTSOURCES` or `OP_ANSWERSOURCES` SX1 support as
 an accidental protocol regression.
 
-IPv6 roadmap language has two separate meanings. Current-network dual-stack
-compatibility is tracked by [FEAT-035](../active/items/FEAT-035.md). A separate
-IPv6 Kad network is only an exploratory design note in
-[IDEA-IPV6-KAD-NETWORK](../ideas/IDEA-IPV6-KAD-NETWORK.md), inspired by the
-qBittorrent/libtorrent approach of keeping IPv4 and IPv6 DHT state separate.
-Neither track changes planned 0.7.3 RC2 release behavior unless the active release
+IPv6 roadmap language historically had two separate meanings: compatibility
+with the current network and a distinct IPv6 Kad network. Neither is active MFC
+maintenance work; future product direction belongs to eMuleBB Rust under the
+[Product Direction](../active/PRODUCT-DIRECTION.md). Neither track changes
+published 0.7.3 behavior unless a new maintenance issue
 docs later say otherwise.
 
 ## Unsupported Legacy Areas
@@ -521,9 +520,8 @@ recurring tasks, and normal diagnostic snapshots for support. See
 Product usage docs do not duplicate release proof. Current release state remains
 in:
 
-- [0.7.3 release-train dashboard](../active/RELEASE-0.7.3.md)
-- [0.7.3 release checklist](../active/RELEASE-0.7.3-CHECKLIST.md)
-- [0.7.3 release runbook](../active/RELEASE-0.7.3-RUNBOOK.md)
-- [Active backlog index](../active/INDEX.md)
+- [0.7.3 release proof summary](../history/releases/0.7.3/RELEASE-0.7.3-PROOF-SUMMARY.md)
+- [0.7.3 release notes](../history/releases/0.7.3/RELEASE-0.7.3-NOTES.md)
+- [Current work index](../active/INDEX.md)
 
 When user-visible behavior changes, update the guide chapter that owns it.

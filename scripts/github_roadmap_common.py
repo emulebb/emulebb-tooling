@@ -15,7 +15,6 @@ from typing import Iterable
 ROOT = Path(__file__).resolve().parents[1]
 DOCS = ROOT / "docs"
 ACTIVE_ITEMS = DOCS / "active" / "items"
-FUTURE_ROADMAP = DOCS / "active" / "FUTURE-ROADMAP.md"
 
 OWNER = "emulebb"
 ISSUE_REPO = "emulebb/emulebb"
@@ -329,31 +328,9 @@ def parse_label_list(raw_value: str) -> tuple[str, ...]:
 
 
 def active_item_ids_by_lane() -> dict[str, str]:
-    """Return active backlog item IDs mapped to their approved lane."""
+    """Return legacy central-backlog lane overrides when that backlog exists."""
 
-    lanes: dict[str, str] = {}
-    text = read_text(FUTURE_ROADMAP)
-    section_pattern = re.compile(r"^### ([^\n]+)\n(.*?)(?=^### |\Z)", re.MULTILINE | re.DOTALL)
-    for match in section_pattern.finditer(text):
-        lane_title = match.group(1).strip()
-        lane = LANE_BY_TITLE.get(lane_title.casefold())
-        if not lane:
-            continue
-        for item_id in ID_PATTERN.findall(match.group(2)):
-            if (ACTIVE_ITEMS / f"{item_id}.md").exists():
-                lanes[item_id] = lane
-
-    table_pattern = re.compile(r"^\| ([^|]+) \| [^|]+ \| ([^|]+) \|$", re.MULTILINE)
-    for match in table_pattern.finditer(text):
-        lane_title = match.group(1).strip()
-        lane = LANE_BY_TITLE.get(lane_title.casefold())
-        if not lane:
-            continue
-        for item_id in ID_PATTERN.findall(match.group(2)):
-            if (ACTIVE_ITEMS / f"{item_id}.md").exists():
-                lanes[item_id] = lane
-    lanes["FEAT-064"] = "Planning"
-    return dict(sorted(lanes.items()))
+    return {}
 
 
 def infer_lane(fields: dict[str, str]) -> str:

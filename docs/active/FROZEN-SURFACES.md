@@ -12,10 +12,10 @@ and keep maintenance risk low. A change is justified only when a frozen area
 affects supported shared infrastructure, security, data integrity, buildability,
 or application stability.
 
-The former `0.8.0` removal program is not active. Its deletion proposals remain
-available in the
-[parked lean-removal design](../ideas/IDEA-MFC-0.8.0-LEAN-REMOVAL-PLAN.md),
-but no removal is scheduled without a new explicit decision.
+The former `0.8.0` removal program is retired. Its detailed proposals remain
+recoverable from the archival commit recorded in the
+[history overview](../history/INDEX.md), but no removal is scheduled without a
+new explicit decision.
 
 ## Frozen Areas
 
