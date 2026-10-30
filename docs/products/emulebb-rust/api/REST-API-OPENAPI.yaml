@@ -4593,24 +4593,8 @@ components:
           type: boolean
         routingMaintenanceEnabled:
           type: boolean
-        snoopQueueDedupWindowSecs:
-          type: integer
-          minimum: 1
-        snoopQueueGeneralMaxQueriesPer600s:
-          type: integer
-          minimum: 1
-        snoopQueueGeneralDrainCooldownSecs:
-          type: integer
-          minimum: 1
-        snoopQueueSourceMaxQueriesPer600s:
-          type: integer
-          minimum: 1
-        snoopQueueSourceDrainCooldownSecs:
-          type: integer
-          minimum: 1
-        snoopQueueSourceStopAfterResults:
-          type: integer
-          minimum: 1
+        passiveReplayEnabled:
+          type: boolean
     KadSettings:
       type: object
       additionalProperties: false
@@ -4670,24 +4654,8 @@ components:
           type: boolean
         routingMaintenanceEnabled:
           type: boolean
-        snoopQueueDedupWindowSecs:
-          type: integer
-          minimum: 1
-        snoopQueueGeneralMaxQueriesPer600s:
-          type: integer
-          minimum: 1
-        snoopQueueGeneralDrainCooldownSecs:
-          type: integer
-          minimum: 1
-        snoopQueueSourceMaxQueriesPer600s:
-          type: integer
-          minimum: 1
-        snoopQueueSourceDrainCooldownSecs:
-          type: integer
-          minimum: 1
-        snoopQueueSourceStopAfterResults:
-          type: integer
-          minimum: 1
+        passiveReplayEnabled:
+          type: boolean
     NatSettings:
       type: object
       additionalProperties: false
