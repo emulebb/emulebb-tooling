@@ -1523,6 +1523,42 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   approved direct transfer once per campaign. Focused tests passed, followed by
   the complete harness suite: `2,817` passed, one skipped, one deselected.
 
+## Focused Transfer Capture Harness Checkpoint - 2026-10-31
+
+- The first sequential Rust attempt confirmed the persisted client connected
+  with HighID and Kad, applied the exact `8 KiB/s` upload limit, accepted the
+  approved direct transfer, and emitted `download_attempt_started`. It also
+  exposed harness defects before producing a valid parity claim: the solo lane
+  reapplied persisted shared roots, and its end-only raw-dump copy allowed the
+  high-volume Rust diagnostic ring to rotate away the early action window.
+- Build-tests commits `f420a08` and `beeb919` now reuse persisted Rust shared
+  state without another hashing pass and expose complete local harness failures.
+  No compatibility adapter, profile reset, or Rust product workaround was added.
+- Build-tests commit `337122a` derives a focused Rust writer ring from the
+  approved soak storage contract: short `4 MiB` / `60 s` segments, `64` retained
+  segments, and a `256 MiB` total ring under the existing minimum-free-space
+  authority. The raw ring remains bounded while closed segments become available
+  quickly enough for incremental inspection.
+- Build-tests commit `5feb73f` adds the sole current compact transfer-proof
+  contract. It preserves exact `diag_event_v2` envelopes plus immutable segment
+  byte count, modification time, SHA-256, and record-count provenance for a
+  bounded source/queue/client-UDP milestone set. It retains exact local values
+  without redaction, rejects changed segments and malformed contracts, and fails
+  rather than truncating when its approved byte budget is exceeded.
+- Build-tests commit `a50ea18` adds an explicit persisted-VPN wait mode. An empty
+  search-method set now creates a transfer-only action sequence; the runner scans
+  newly closed segments until a delivery-confirmed eD2K client-UDP request
+  lifecycle is observed, a bounded timeout expires, or the operator presses
+  Ctrl-C. Graceful shutdown then indexes the former active segment before the
+  compact proof is atomically finalized and moved to the private-artifact sibling.
+- Build-tests commit `e33811e` makes the offline diff merge that exact compact
+  proof with the final retained raw suffix. Declared focused recordings fail when
+  the private proof is missing, mismatched, conflicting, or undeclared; no legacy
+  trace format or fallback parser was introduced.
+- Focused scanner, collector, launcher, packaging, and offline-diff validation is
+  green: `124` tests passed. The complete harness suite then passed with `2,832`
+  tests passed, one skipped, and one deselected in `123.15 s`.
+
 ## Next Implementation
 
 - Treat request encoding, parser behavior, lifecycle decisions, timeout cause,
@@ -1537,9 +1573,10 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   protocol parity work continues. Any future nonzero plan must identify
   genuinely changed or new files rather than another compatibility workaround.
 - Run the approved direct-transfer action sequentially against Rust and MFC on
-  their configured persisted profiles. Hold each client long enough for source,
-  queue, and UDP-reask behavior, retain exact unredacted action windows, and then
-  compare the paired recordings offline by deterministic action identifier.
+  their configured persisted profiles. Use the incremental exact transfer-proof
+  gate rather than a fixed sleep, retain the complete source/queue/client-UDP
+  chain within the bounded private artifact, and compare the paired recordings
+  offline by deterministic action identifier.
 - Keep the proven server/Kad search gate unchanged. Treat the sequential transfer
   capture as a separate protocol-coverage proof; do not weaken required-family
   or diagnostic-conformance gates when an action did not generate the family.
