@@ -127,6 +127,7 @@ def validate_contract(payload: dict[str, Any]) -> list[str]:
             "lifecycle_label",
             "published_version",
             "development_target",
+            "development_eta",
             "testing_summary",
         ):
             require_text(errors, product, key, prefix)
@@ -225,15 +226,13 @@ def render_org_profile(payload: dict[str, Any]) -> str:
         "",
         f"## {rust_product['display_name']}",
         "",
-        (
-            f"**{rust_product['lifecycle_label']} — public {rust_product['published_version']}, "
-            f"working toward {rust_product['development_target']}.**"
-        ),
+        f"**{rust_product['lifecycle_label']}.**",
         "",
         rust_product["testing_summary"],
         "",
-        f"- [Download CI-gated nightly builds]({rust_product['nightly_url']})",
-        f"- [Download the formal {rust_product['published_version']} release]({rust_product['release_url']})",
+        rust_product["development_eta"],
+        "",
+        f"- [Choose the newest dated nightly build]({rust_product['nightly_url']})",
         f"- [Read the {rust_product['display_name']} product docs]({rust_product['docs_url']})",
         f"- [Report {rust_product['display_name']} issues]({rust_product['issues_url']})",
         "",

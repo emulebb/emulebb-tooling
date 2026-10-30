@@ -3,11 +3,11 @@
 <section class="docs-hero">
   <div>
     <p class="docs-eyebrow">eMuleBB Rust</p>
-    <h2>Active eD2K/Kad beta, working toward Beta 3.</h2>
+    <h2>Active eD2K/Kad beta, led by CI-gated nightlies.</h2>
     <p>
-      Public 0.1.0-beta.2 is the formal baseline; CI-gated nightlies are the
-      current public testing channel. Repeatedly tested on live eD2K/Kad
-      networks.
+      Choose the newest dated nightly prerelease from GitHub Releases.
+      Repeatedly tested on live eD2K/Kad networks. Beta 3 is expected after a
+      few more weeks of implementation and stabilization.
     </p>
     <p>
       The maintained Windows 0.7.x client remains available for diagnostics,
@@ -32,8 +32,7 @@ server; server changes stay minimal, generic, and upstreamable. See the
 
 ## Start With eMuleBB Rust
 
-- **Current testing:** [download CI-gated nightly builds](https://github.com/emulebb/emulebb-rust/releases).
-- **Fixed baseline:** [download the formal `0.1.0-beta.2` release](https://github.com/emulebb/emulebb-rust/releases/tag/rust-v0.1.0-beta.2).
+- **Current testing:** [choose the newest dated CI-gated nightly build](https://github.com/emulebb/emulebb-rust/releases).
 - **Product scope:** read the [eMuleBB Rust product section](products/emulebb-rust/README.md)
   and [release scope](products/emulebb-rust/RELEASE-SCOPE.md).
 - **First launch:** follow the repository

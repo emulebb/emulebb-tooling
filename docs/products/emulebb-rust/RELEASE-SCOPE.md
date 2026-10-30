@@ -51,9 +51,11 @@ gate.
 
 ## Current phase: Client
 
-eMuleBB Rust is an active beta with public `0.1.0-beta.2` and Beta 3 in
-development. Repeatedly tested on live eD2K/Kad networks. Retained evidence
-includes the persisted live-profile campaign recorded by
+eMuleBB Rust is an active beta led by CI-gated nightly builds from `main`.
+Choose the newest dated nightly prerelease from GitHub Releases. Repeatedly
+tested on live eD2K/Kad networks. Beta 3 is expected after a few more weeks of
+implementation and stabilization. Retained evidence includes the persisted
+live-profile campaign recorded by
 [RUST-FEAT-033](history/items/RUST-FEAT-033.md) and exact-candidate Windows and
 Linux campaigns from the same work. Current-head reconciliation remains tracked
 by [RUST-CI-006](active/items/RUST-CI-006.md), and immutable Beta 3 candidate

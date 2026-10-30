@@ -69,7 +69,7 @@ reused. Parked ideas are not backlog items until explicitly activated.
 | [RUST-FEAT-039](items/RUST-FEAT-039.md) | Feature | Size ED2K request depth from measured RTT and bandwidth |
 | [RUST-FEAT-040](items/RUST-FEAT-040.md) | Feature | Carry ED2K and Kad search metadata end to end |
 | [RUST-FEAT-048](items/RUST-FEAT-048.md) | Feature | Use sparse part files without weakening capacity reservations |
-| [RUST-FEAT-052](items/RUST-FEAT-052.md) | Feature | Promote eMuleBB Rust beta across public surfaces |
+| [RUST-FEAT-054](items/RUST-FEAT-054.md) | Feature | Prioritize nightly eMuleBB Rust public presence |
 | [RUST-REF-007](items/RUST-REF-007.md) | Refactor | Review Rust upload hot-path performance candidates |
 | [RUST-REF-011](items/RUST-REF-011.md) | Refactor | Consolidate duplicated ED2K opcode and capability constants |
 

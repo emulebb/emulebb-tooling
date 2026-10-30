@@ -16,6 +16,7 @@
       "lifecycle_label": "Active beta",
       "published_version": "0.1.0-beta.2",
       "development_target": "Beta 3",
+      "development_eta": "Beta 3 is expected after a few more weeks of implementation and stabilization.",
       "testing_summary": "Repeatedly tested on live eD2K/Kad networks.",
       "nightly_url": "https://github.com/emulebb/emulebb-rust/releases",
       "release_url": "https://github.com/emulebb/emulebb-rust/releases/tag/rust-v0.1.0-beta.2",
