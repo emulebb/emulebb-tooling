@@ -6,7 +6,7 @@
     <h2>Active eD2K/Kad beta, led by CI-gated nightlies.</h2>
     <p>
       Choose the newest dated nightly prerelease from GitHub Releases.
-      Repeatedly tested on live eD2K/Kad networks. Beta 3 is expected after a
+      Tested for months on live eD2K/Kad networks. Beta 3 is expected after a
       few more weeks of implementation and stabilization.
     </p>
     <p>
@@ -27,8 +27,7 @@ Former BitTorrent and controller forks are retired from the current workspace;
 TrackMuleBB is archived.
 The upstream-aligned Rust `ed2k-server` fork is the sole local deterministic
 server; server changes stay minimal, generic, and upstreamable. See the
-[Product Portfolio](active/PRODUCT-PORTFOLIO.md) and
-[Roadmap Summary](reference/ROADMAP-SUMMARY.md).
+[Product Direction](active/PRODUCT-DIRECTION.md).
 
 ## Start With eMuleBB Rust
 
@@ -79,7 +78,7 @@ Use these guides in order for a first real profile:
 7. [Stack Integration Guide](reference/GUIDE-STACK-INTEGRATIONS.md) covers
    qBittorrent-compatible and Torznab adapter workflows with Prowlarr and Arr.
 
-For Windows maintenance release testing, use the [0.7.3 release notes](active/RELEASE-0.7.3-NOTES.md)
+For Windows maintenance release testing, use the [0.7.3 release notes](history/releases/0.7.3/RELEASE-0.7.3-NOTES.md)
 before downloading or reporting package behavior.
 
 ## Developer And Release Operator Paths
@@ -92,7 +91,7 @@ workspace and release controls instead of the product manual:
 | Contributor or AI agent | [Workspace Policy](WORKSPACE-POLICY.md), then only its task-routed annexes; use the [Agent Checklist](reference/AGENT-CHECKLIST.md) when useful |
 | Routine developer | [Development Guide](reference/DEVELOPMENT-GUIDE.md) |
 | Backlog owner | [Active Backlog](active/INDEX.md) and [Backlog Process](reference/BACKLOG-PROCESS.md) |
-| Release operator | [0.7.3 Release Train Dashboard](active/RELEASE-0.7.3.md) |
+| Release operator | [0.7.3 Proof Summary](history/releases/0.7.3/RELEASE-0.7.3-PROOF-SUMMARY.md) |
 | REST/controller reviewer | [REST Contract](rest/REST-API-CONTRACT.md) and [Controller Surface Matrix](active/CONTROLLER-SURFACE-MATRIX.md) |
 
 The routed policy annexes are
@@ -102,9 +101,9 @@ The routed policy annexes are
 [emulebb-rust](products/emulebb-rust/reference/AGENT-POLICY.md), and
 [emulebb-mfc](products/emulebb-mfc/reference/AGENT-POLICY.md).
 
-Release operators should also use the
-[Execution Plan](active/plans/RELEASE-0.7.3-EXECUTION-PLAN.md) and
-[Runbook](active/RELEASE-0.7.3-RUNBOOK.md).
+Release operators should use the owning product's repository policy and the
+organization-wide [test strategy](active/TEST-STRATEGY.md). Retained MFC
+release proof is historical evidence, not a current release train.
 
 ## Power User Paths
 
@@ -180,7 +179,7 @@ desktop app first, then layer automation on top.
 |---|---|
 | Product overview and operating model | [reference/GUIDE-EMULEBB](reference/GUIDE-EMULEBB.md) |
 | Landed behavior matrix and evidence model | [reference/RELEASED-BEHAVIOR-SUMMARY](reference/RELEASED-BEHAVIOR-SUMMARY.md) |
-| Public-readable roadmap themes | [reference/ROADMAP-SUMMARY](reference/ROADMAP-SUMMARY.md) |
+| Product focus and lifecycle | [active/PRODUCT-DIRECTION](active/PRODUCT-DIRECTION.md) |
 | Complete eMule manual from zero to power-user operation | [reference/GUIDE-POWER-USERS](reference/GUIDE-POWER-USERS.md) |
 | Setup, `-c` profiles, release package testing | [reference/GUIDE-SETUP](reference/GUIDE-SETUP.md) |
 | Running on macOS or Linux via VM, Wine, or remote control | [reference/GUIDE-CROSS-PLATFORM](reference/GUIDE-CROSS-PLATFORM.md) |
@@ -235,13 +234,11 @@ are not the best first read for users.
 | Workspace repository map | [reference/WORKSPACE-REPO-MAP](reference/WORKSPACE-REPO-MAP.md) |
 | Public website and organization profile contract | [reference/PUBLIC-PRESENCE-CONTRACT](reference/PUBLIC-PRESENCE-CONTRACT.md) |
 | Development and validation guide | [reference/DEVELOPMENT-GUIDE](reference/DEVELOPMENT-GUIDE.md) |
-| Active backlog and release dashboard | [active/INDEX](active/INDEX.md) |
-| Retired cross-product planning | [history/HIST-SUITE-JOINT-ROADMAP](history/HIST-SUITE-JOINT-ROADMAP.md) |
-| 0.7.3 release-train control document | [active/RELEASE-0.7.3](active/RELEASE-0.7.3.md) |
-| Public 0.7.3 release notes | [active/RELEASE-0.7.3-NOTES](active/RELEASE-0.7.3-NOTES.md) |
-| 0.7.3 stable changelog | [active/RELEASE-0.7.3-STABLE-CHANGELOG](active/RELEASE-0.7.3-STABLE-CHANGELOG.md) |
-| 0.7.3 release checklist | [active/RELEASE-0.7.3-CHECKLIST](active/RELEASE-0.7.3-CHECKLIST.md) |
-| 0.7.3 release runbook | [active/RELEASE-0.7.3-RUNBOOK](active/RELEASE-0.7.3-RUNBOOK.md) |
+| Current direction and active policy | [active/INDEX](active/INDEX.md) |
+| Curated history overview | [history/INDEX](history/INDEX.md) |
+| 0.7.3 release proof | [history/releases/0.7.3/RELEASE-0.7.3-PROOF-SUMMARY](history/releases/0.7.3/RELEASE-0.7.3-PROOF-SUMMARY.md) |
+| Public 0.7.3 release notes | [history/releases/0.7.3/RELEASE-0.7.3-NOTES](history/releases/0.7.3/RELEASE-0.7.3-NOTES.md) |
+| 0.7.3 stable changelog | [history/releases/0.7.3/RELEASE-0.7.3-STABLE-CHANGELOG](history/releases/0.7.3/RELEASE-0.7.3-STABLE-CHANGELOG.md) |
 | Backlog process | [reference/BACKLOG-PROCESS](reference/BACKLOG-PROCESS.md) |
 | Backlog item template | [reference/BACKLOG-ITEM-TEMPLATE](reference/BACKLOG-ITEM-TEMPLATE.md) |
 | Evidence retention policy | [reference/EVIDENCE-RETENTION](reference/EVIDENCE-RETENTION.md) |
@@ -249,12 +246,11 @@ are not the best first read for users.
 | Test tiers runbook | [reference/TEST-TIERS](reference/TEST-TIERS.md) |
 | Test suite inventory | [reference/TEST-INVENTORY](reference/TEST-INVENTORY.md) |
 | Test curation decisions | [reference/TEST-CURATION](reference/TEST-CURATION.md) |
-| Exploratory Kad publishing and distributed-search design | [ideas/IDEA-KAD-PUBLISHING-AND-DISTRIBUTED-SEARCH](ideas/IDEA-KAD-PUBLISHING-AND-DISTRIBUTED-SEARCH.md) |
 | Release branching and packaging | [reference/RELEASE-BRANCHING-AND-PACKAGING](reference/RELEASE-BRANCHING-AND-PACKAGING.md) |
 | eD2K ecosystem inventory dashboard and ranked category index | [reference/ED2K-PROJECT-INVENTORY](reference/ED2K-PROJECT-INVENTORY.md) |
 | eD2K forums and sites inventory | [reference/ED2K-FORUMS-AND-SITES](reference/ED2K-FORUMS-AND-SITES.md) |
 | Dependency status | [dependencies/DEP-STATUS](dependencies/DEP-STATUS.md) |
-| Historical-reference rules | [HISTORICAL-REFERENCES](HISTORICAL-REFERENCES.md) |
+| Historical-reference rules | [history/INDEX](history/INDEX.md) |
 
 If a status claim outside `docs/active/` conflicts with `docs/active/`, treat
 `docs/active/` as authoritative for current local backlog and release state.

@@ -27,5 +27,5 @@ repository's current lifecycle and the risk of the proposed change.
   explicitly selects a VPN mode, it must fail closed and must never silently
   fall back to a direct route.
 
-The superseded cross-product planning document is retained as
-[historical context](../history/HIST-TEST-STRATEGY-2026-06-15.md).
+The superseded cross-product planning document is recoverable from the archival
+commit recorded in the [history overview](../history/INDEX.md).

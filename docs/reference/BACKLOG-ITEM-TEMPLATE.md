@@ -1,7 +1,8 @@
 # Backlog Item Template
 
 This is the canonical shape for an active backlog item under
-`docs/active/items/<ID>.md`. It exists so every item reads the same way. Use
+`docs/products/<product>/active/items/<ID>.md`. It exists so every item reads
+the same way. Use
 [Backlog Process](BACKLOG-PROCESS.md) for the surrounding create/update/close
 workflow; this page only fixes the **document structure and section
 vocabulary**.
@@ -14,15 +15,15 @@ matter and IDs; section structure below is a convention, not yet a hard gate.
 
 ```markdown
 ---
-id: FEAT-000
+id: RUST-FEAT-000
 workflow: github
 github_issue: https://github.com/emulebb/emulebb/issues/<number>
-title: Short sentence-case item title
+title: Short sentence-case Rust item title
 status: OPEN
 priority: Minor
-category: feature
+category: rust-feature
 labels: [area, risk, evidence]
-milestone: post-0.7.3
+milestone: Beta 3
 created: YYYY-MM-DD
 source: short provenance note
 ---
@@ -48,7 +49,7 @@ local-only items omit it.
 
 - Every item body starts with a single H1 of the form `# <ID> - <title>`, where
   `<title>` is the front-matter `title` value **verbatim**. The H1, the
-  front-matter `title`, and the `docs/active/INDEX.md` row title must match.
+  front-matter `title`, and the product active-index row title must match.
 - On `workflow: github` items the H1 follows the workflow blockquote.
 - Use `##` for the sections below and `###` for sub-points. Do not introduce a
   second H1.
@@ -102,3 +103,7 @@ Item docs are current specs, not running logs.
   `## Notes`.
 - Keep tables browser-readable: two to four columns, with long evidence text in
   bullets below the table.
+
+New items use the owning product's current prefix. `CI-054` is the one retained
+legacy-ID exception in the Rust product section; do not copy that exception for
+new work.

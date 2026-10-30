@@ -7,7 +7,7 @@ This guide covers practical setup for eMuleBB. It complements the
 
 Stable `0.7.3` is published on GitHub Releases. Use the standalone application
 package for current maintenance installs. The retired controller bundle remains
-documented only in the [0.7.3 release notes](../active/RELEASE-0.7.3-NOTES.md).
+documented only in the [0.7.3 release notes](../history/releases/0.7.3/RELEASE-0.7.3-NOTES.md).
 
 ### Standalone ZIP {#quick-install-zip-extract-run}
 
@@ -316,10 +316,9 @@ Setup confidence comes from the same release evidence model used elsewhere:
 - live eD2K/Kad and live-wire scenarios
 - x64 and ARM64 package provenance with recorded hashes
 
-See [Release Test Strategy](../active/RELEASE-TEST-STRATEGY.md),
-[Release Test Campaigns](../active/RELEASE-TEST-CAMPAIGNS.md), and the
-[0.7.3 release dashboard](../active/RELEASE-0.7.3.md) for the current release
-proof model.
+See [Test Strategy](../active/TEST-STRATEGY.md) and the
+[0.7.3 proof summary](../history/releases/0.7.3/RELEASE-0.7.3-PROOF-SUMMARY.md)
+for the published MFC release proof model.
 
 ## Unsupported Setup Targets
 

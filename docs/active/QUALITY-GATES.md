@@ -21,7 +21,7 @@ MFC changes require the maintained Windows build matrix, native and shared
 harness tests appropriate to the change, workspace validation, REST/OpenAPI
 checks when the controller surface is touched, and release/package evidence for
 published patches. Changes must remain within the bounded `0.7.x` maintenance
-scope defined by the [MFC maintenance roadmap](FUTURE-ROADMAP.md).
+scope defined by the [Product Direction](PRODUCT-DIRECTION.md).
 
 ## Supporting repositories
 
@@ -30,9 +30,8 @@ scope defined by the [MFC maintenance roadmap](FUTURE-ROADMAP.md).
 - `ed2k-server` is the sole local deterministic server and an upstream-aligned
   reference fork. Validate its required harness behavior and any proposed
   upstream patch, while keeping server changes minimal, generic, and
-  upstreamable. The retired production-hardening gates are historical:
-  [ED2KSRV-CI-002](../history/ed2k-server/items/ED2KSRV-CI-002.md) and
-  [ED2KSRV-CI-003](../history/ed2k-server/items/ED2KSRV-CI-003.md).
+  upstreamable. The retired production-hardening gates remain available from
+  the archival commit recorded in the [history overview](../history/INDEX.md).
 - The aMule fork remains an analysis/build reference with its existing
   automation.
 

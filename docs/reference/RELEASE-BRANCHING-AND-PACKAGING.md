@@ -1,184 +1,77 @@
 # Release Branching And Packaging
 
-This is the durable release policy for eMuleBB branch, tag, version, and
-portable package naming. The workspace-wide authority remains
-[WORKSPACE-POLICY](../WORKSPACE-POLICY.md); this page gives the operational
-shape release work should follow.
+Status: current organization-wide release boundary. Updated 2026-10-30.
 
-## Version Flow
+This page applies the lifecycle decisions in
+[Product Direction](../active/PRODUCT-DIRECTION.md) to branches, tags, packages,
+and public release claims. Product repositories own their exact build commands,
+artifact matrices, and release checklists.
 
-Use explicit prerelease suffixes for public builds that are not stable:
+## eMuleBB Rust
 
-```text
-0.7.3-rc.1
-0.7.3-rc.2
-0.7.3-rc.3
-0.7.3
-0.7.4
-0.8.0
-```
+eMuleBB Rust is the primary product and the only active product-development
+lane. CI-gated nightly prereleases from `main` are the first public download
+path and should be recommended ahead of the stale Beta 2 release.
 
-The first stable eMuleBB release is `0.7.3`. The historical `0.7.3` candidate
-train was fixed as `rc.1`, `rc.2`, `rc.3`, then stable `0.7.3`. If a stable
-hotfix is needed after `0.7.3`, ship it as `0.7.4` from the `0.7.x` legacy
-support line. `0.8.0` is the next modernization line and may remove surfaces
-that were frozen during `0.7.x`.
+- Keep `main` releasable enough to produce dated nightly packages.
+- Use short-lived reviewed branches for changes; do not maintain a parallel
+  long-running release branch without an explicit release need.
+- Publish nightly artifacts through the Rust repository's release workflow and
+  preserve its platform, manifest, checksum, and provenance gates.
+- Treat the product as an active beta tested for months on live eD2K/Kad
+  networks, not as experimental software.
+- Beta 3 follows the remaining implementation and stabilization work. The
+  current expectation is a few weeks, but release readiness and evidence—not a
+  calendar promise—control promotion.
+- Keep the Rust application, WebUI, product docs, and release notes
+  English-only. Organization-site homepage and FAQ translations are separate
+  from the product.
 
-## Branches
+The Rust product repository and its release scope own exact tag names, package
+names, supported platforms, and promotion criteria. This repository must not
+duplicate those details as a competing release specification.
 
-`main` is the active integration branch. Normal feature work, hardening, and
-future roadmap work happen on `main` unless the operator asks for a separate
-short-lived branch.
+## eMuleBB MFC
 
-Create a release branch when the operator starts release-branch stabilization:
+The MFC application is a maintenance product on the published `0.7.x` line.
+There is no active `0.8.x` modernization program.
 
-```text
-release/0.7.3
-```
+- Start maintenance work only from a current owning issue and explicit roadmap
+  placement.
+- Keep fixes bounded to accepted maintenance categories in Product Direction.
+- Create a maintenance branch only when a concrete `0.7.x` release needs one;
+  otherwise use reviewed short-lived branches against the maintained base.
+- Preserve existing package names and compatibility unless a maintenance issue
+  explicitly requires a change.
+- Require focused build, package, smoke, and regression proof appropriate to
+  the changed surface before publishing another `0.7.x` package.
 
-Release branches are stabilization branches. Some release candidates may be
-prepared directly from reviewed `main` until the active release dashboard or
-operator starts the stabilization branch. Once a release branch exists, accept
-only:
+The retained [0.7.3 proof summary](../history/releases/0.7.3/RELEASE-0.7.3-PROOF-SUMMARY.md)
+describes the already-published line. It is historical evidence, not an active
+RC dashboard or a future-product roadmap.
 
-- blocker and high-confidence bug fixes;
-- release proof and packaging fixes;
-- release documentation, changelog, and version metadata;
-- localized release-string fixes required by the release gate.
+## Infrastructure And Reference Repositories
 
-Do not add new features or broad refactors to a release branch. New work goes
-to `main` and waits for a later release.
+Build, test, tooling, and reference repositories publish only what their
+support role requires. A tag or package in those repositories does not create a
+new eMuleBB product or change product lifecycle status.
 
-After stable `0.7.3`, move `main` to `0.8.0` modernization work and create a
-long-lived legacy support branch:
+`ed2k-server` remains a harness/reference component. TrackMuleBB and former
+product-family experiments remain archived. aMuTorrent artifacts may be
+retained as historical MFC bundle evidence but are not a current product lane.
 
-```text
-emulebb-v0.7.3 -> release/0.7.x
-```
+## Release Evidence
 
-`release/0.7.x` accepts compatibility-preserving bug fixes on supported
-surfaces plus security, crash/data-loss, packaging, update-check, proof, and
-release-documentation fixes. It does not accept new features, new controller
-capability, or frozen-surface repairs unless the issue affects shared supported
-infrastructure, security, or app stability.
+Every public package claim must be traceable to the owning source revision and
+the repository's required CI or operator evidence. At minimum, retain:
 
-Every applicable fix made on `release/0.7.x` should be evaluated for `main`.
-Cherry-pick or merge it forward when the fix still applies after `0.8.0`
-surface removals.
+- source tag or immutable source revision;
+- package identity and supported platform;
+- checksums, manifests, and SBOM/provenance where the product workflow produces
+  them;
+- the release notes or proof summary that states the tested boundary; and
+- known limitations that materially affect users.
 
-## Tags
-
-Published tags are immutable annotated tags. Do not move a published tag; if a
-candidate is bad, publish the next candidate number.
-
-Tag shapes:
-
-```text
-emulebb-v0.7.3-rc.1
-emulebb-v0.7.3-rc.2
-emulebb-v0.7.3-rc.3
-emulebb-v0.7.3
-emulebb-v0.7.4
-emulebb-v0.8.0
-```
-
-Tags are created only after release proof passes and the operator gives a
-separate tagging instruction.
-
-## Packages
-
-Portable ZIP assets include the version and architecture in the package name:
-
-```text
-emulebb-0.7.3-rc.1-x64.zip
-emulebb-0.7.3-rc.1-arm64.zip
-emulebb-0.7.3-rc.3-x64.zip
-emulebb-0.7.3-x64.zip
-emulebb-0.7.3-arm64.zip
-emulebb-0.7.4-x64.zip
-emulebb-0.8.0-x64.zip
-```
-
-SBOM and manifest assets use the same package stem with their normal suffixes.
-
-### Local Rebuild Shortcut
-
-Do not search the workspace for package artifacts. Rebuild the local app
-package from the build repo and use the deterministic release output directory:
-
-```powershell
-if ([string]::IsNullOrWhiteSpace($env:EMULEBB_WORKSPACE_ROOT)) {
-  throw 'Set EMULEBB_WORKSPACE_ROOT to the canonical workspace root first.'
-}
-$version = '0.7.3'
-cd "$env:EMULEBB_WORKSPACE_ROOT\repos\emulebb-build"
-
-python -m emule_workspace package-release `
-  --release-version $version `
-  --platform x64 `
-  --config Release `
-  --build-output-mode ErrorsOnly
-```
-
-The artifacts are written to:
-
-```text
-%EMULEBB_WORKSPACE_OUTPUT_ROOT%\release\emulebb-v<VERSION>
-```
-
-Main app ZIPs ship the runtime executable, the full release language DLL set,
-package-facing notices, REST API docs, and SPDX SBOM/manifest provenance. The
-legacy template-based `webserver` payload is not shipped in RC/stable release
-assets; REST support is validated through the in-process API and documented
-under the packaged `docs/` directory.
-
-Official RC and stable packages use the workspace baseline MSVC toolset
-documented in [WORKSPACE-POLICY](../WORKSPACE-POLICY.md), currently `v143`.
-The `v145` toolset is a forward-compatibility probe target. It may be published
-only as an explicitly labeled experimental CI artifact for tester feedback, not
-as an official release asset, until the operator promotes it after sustained
-green probe history, package proof, and smoke coverage.
-
-If an experimental `v145` package is produced, the artifact name must make the
-toolset status explicit, for example:
-
-```text
-emulebb-0.7.3-rc.1-v145-probe-x64.zip
-```
-
-Do not reuse the official package stem for a probe build. Probe artifacts must
-not be attached to a stable release unless the release notes and operator
-approval explicitly classify them as experimental.
-
-The executable inside the standard package remains:
-
-```text
-emulebb.exe
-```
-
-The paired diagnostics package uses:
-
-```text
-emulebb-diagnostics.exe
-```
-
-Do not put the version in the executable filename. Version identity belongs in
-Windows file properties, About/version UI, logs, package names, manifests,
-SBOMs, release notes, and Git tags.
-
-## Fix Timing
-
-During RC:
-
-- fix release blockers on reviewed `main` until the operator starts the
-  release branch, then on `release/0.7.3`;
-- publish the fixed `emulebb-v0.7.3-rc.1`, `rc.2`, and `rc.3` train before
-  stable `0.7.3`;
-- backport applicable fixes to `main`.
-
-After stable:
-
-- fix accepted legacy-line regressions on `release/0.7.x`;
-- publish `emulebb-v0.7.4` after focused proof;
-- forward-port applicable fixes to `main`;
-- keep unrelated future work on `main` for `0.8.0`.
+Use [Test Strategy](../active/TEST-STRATEGY.md) for lifecycle-based validation,
+[Quality Gates](../active/QUALITY-GATES.md) for repository expectations, and
+[Evidence Retention](EVIDENCE-RETENTION.md) for durable proof handling.

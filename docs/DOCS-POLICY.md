@@ -1,177 +1,96 @@
 # Documentation Policy
 
-This repo keeps all Markdown under `docs/`. Document role is determined by
-path, not by filename alone.
+This repo keeps maintained Markdown under `docs/`. Document authority is
+determined by path and lifecycle, not by age or filename alone.
 
-## Active Docs
+## Current Authority
 
-`docs/active/` owns current local backlog/spec and release truth:
+- `docs/active/` owns current organization-wide direction, compatibility,
+  quality, test, and release-operation guidance.
+- `docs/products/<product>/` owns current product scope, design, policy, and
+  backlog records.
+- `docs/reference/`, `docs/rest/`, and `docs/dependencies/` own durable current
+  specialist references and contracts.
+- `docs/history/` is a curated archive overview and essential evidence set. It
+  is never workflow or product-direction authority.
 
-- `docs/active/INDEX.md`: active backlog dashboard and item tables
-- `docs/active/RELEASE-0.7.3*.md`: RC release control, checklist, runbook,
-  and release operator docs
-- `docs/active/items/`: active item records for `OPEN`, `IN_PROGRESS`,
-  `BLOCKED`, and `DEFERRED` work
-- `docs/active/plans/`: current execution/integration plans (the RC release
-  execution plan plus suite/cross-product plans such as the ecosystem bootstrap
-  and product-family integration plans)
+The canonical organization-wide lifecycle and focus document is
+`docs/active/PRODUCT-DIRECTION.md`. Other current documents link to it instead
+of restating portfolio or roadmap direction.
 
-If another doc conflicts with `docs/active/`, `docs/active/` wins for current
-status.
+For GitHub-primary work, Project #3 owns `Status`, `Product`, `Phase`, and
+`Priority`; the owning product issue owns discussion, ownership, and pull
+request linkage; the local item owns the durable engineering specification and
+retained evidence. Project #2 and closed MFC issues are archive provenance.
 
-For GitHub-primary backlog items, workflow status is an exception: the public
-org-level `eMuleBB Roadmap` Project #3 owns `Status`, `Product`, `Phase`, and
-`Priority`; the owning product repo issue milestone owns release placement;
-and the issue owns discussion, ownership, and PR linkage. The canonical forward
-board is `https://github.com/orgs/emulebb/projects/3`. MFC-era items in
-`emulebb/emulebb` and Project #2 (`eMuleBB Roadmap MFC (archive)`) are
-archive/provenance only unless they are critical maintenance or
-non-behavior-expanding diagnostics/instrumentation. The local active item doc
-remains the engineering spec/evidence record. Its `priority:` and `milestone:`
-front matter mirror GitHub, while `labels:` remains durable engineering
-taxonomy and need not match issue labels token for token. Such files carry
-`workflow: github` and `github_issue:` front matter. Their legacy `status:` field
-is retained only for the current taxonomy tooling until the active-doc model is
-migrated more broadly.
+## Active Work Rules
 
-## Reference Docs
+- Active item records live only below the owning product's `active/items/`
+  directory and appear in that product's active index.
+- Every active product item has an open owning issue and current Project #3
+  placement unless policy explicitly marks it local-only infrastructure.
+- Active directories may contain only `OPEN`, `IN_PROGRESS`, or `BLOCKED`
+  work. Completed, rejected, parked, ownerless, and indefinitely deferred work
+  must not remain active.
+- Future direction without an implementation commitment belongs in concise
+  product design. It does not require a backlog item or standalone idea file.
+- Rust active docs are limited to `active/INDEX.md` and `active/items/`.
+  Current scope stays in `RELEASE-SCOPE.md`; implemented structure stays in
+  `design/architecture.md`; genuinely forward design stays in `design/`.
 
-- `docs/rest/`: current REST contract and API reference
-- `docs/reference/`: durable current product guides and specialist references
-- `docs/dependencies/`: current dependency health and decision records
-- `docs/history/`: closed item records, dated review findings, historical
-  comparisons, source salvage, old ledgers, dated audits, stale dependency
-  analysis, and superseded release plans
+## Archive And Retention
 
-Reference docs may preserve historical branch names, old paths, and old
-decisions as provenance, but they do not override active status.
-
-## Ideas
-
-`docs/ideas/` contains exploratory proposals only. These documents are not
-active implementation plans and must not be treated as current release scope or
-current branch direction unless a future active item explicitly promotes a
-specific slice.
-
-Examples: IPv6 Kad experiments and source-structure proposals.
-
-Abandoned exploratory proposals move to `docs/history/ideas/` and are retained
-as provenance only.
+- Preserve stable IDs, final dispositions, essential release evidence, binding
+  compatibility/security decisions, and unique source-lineage records.
+- Reconcile completed temporary plans, checklists, dated reviews, and audits
+  into their owning item, current policy, or one concise evidence summary, then
+  delete the redundant detail.
+- Retain detailed closed records for the active Rust product under
+  `docs/products/emulebb-rust/history/items/`; publish their index, not every
+  individual record.
+- Legacy MFC and retired integration IDs live in
+  `docs/history/LEGACY-ITEM-CATALOG.md`. Their full specifications remain
+  recoverable from the archival Git commit recorded there.
+- Do not create new session-resume archives, duplicate backlog ledgers,
+  standalone audit dumps, or historical guide snapshots.
+- Historical source paths and branch names are provenance only and never
+  override current `main`, product policy, or active issue state.
 
 ## Writing Rules
 
-- Keep current decisions in `docs/active/`, not in historical reference docs.
-- Current non-item Markdown filenames use uppercase words separated by hyphens:
-  `WORKSPACE-POLICY.md`, `GUIDE-NETWORK.md`, `REST-API-CONTRACT.md`.
-- `docs/INDEX.md` is also the MkDocs web entrypoint. Do not add a separate
-  lowercase `docs/index.md`; case-only twins are unsafe on Windows checkouts.
-- `docs/index.html` is the static MkDocs root redirect to `INDEX/` for GitHub
-  Pages hosting.
-- Release-control filenames may include version dots inside the existing
-  `RELEASE-*` family, such as `RELEASE-0.7.3.md`.
-- Active and historical item records keep their stable item-ID filenames, such
-  as `BUG-117.md` and `CI-039.md`.
-- Historical provenance docs are not renamed only for style.
-- Move closed item records (`DONE`, `PASSED`, `WONT_DO`) to
-  `docs/history/items/`.
-- Move dated review reports to `docs/history/reviews/` after they stop driving
-  active execution.
-- Move stale audit reports to `docs/history/audits/`; move release-specific
-  audit snapshots under that release's `docs/history/release-*` folder.
-- Prefix historical analysis files outside the standard closed-item/review
-  folders with `HIST-`; prefix speculative proposals with `IDEA-`.
-- Keep the current release execution sequence in one active plan. Superseded
-  release cluster plans belong under `docs/history/`.
-- Every actionable active task must have its own item ID under
-  `docs/active/items/`; release dashboards and plans should point to item IDs
-  instead of carrying anonymous task rows.
-- Product-specific active directories may impose a stricter shape. For
-  `docs/products/emulebb-rust`, keep only `active/INDEX.md` beside
-  `active/items/`: put current product boundaries in `RELEASE-SCOPE.md`, current
-  implemented structure in `design/architecture.md`, forward designs in
-  `design/`, and all actionable execution or evidence work in owning item docs.
-  Do not create standalone Rust ledgers, dated reviews, release checklists, or
-  runbooks in the active product directory.
-- New externally actionable backlog items should be GitHub-primary by default:
-  create or update the local item, the owning product repo issue, and membership
-  in the `eMuleBB Roadmap` Project #3 unless the item is explicitly local-only,
-  historical, exploratory, or provenance-only. Do not add new MFC items to the
-  archived roadmap unless they meet the frozen-line maintenance rule.
-- Do not create new top-level Markdown files in `docs/` unless they are policy
-  or navigation entry points.
-- Add new exploratory proposals under `docs/ideas/` with an explicit
-  exploratory-only banner.
-- Keep Markdown tables browser-readable. Prefer two to four columns, move long
-  evidence text into bullets below the table, split large inventories by
-  section, and avoid long comma-separated ID lists inside table cells.
-- Before RC documentation closeout, current docs under `docs/active/`,
-  `docs/reference/`, and `docs/rest/` should pass
-  `python scripts\docs-structure-check.py --fail-on-wide-tables`. Historical
-  provenance docs may stay warning-only unless they are promoted back into
-  current release guidance.
+- Keep one authority for each decision and link to it elsewhere.
+- Current non-item filenames use uppercase words separated by hyphens.
+- Stable item filenames match their item IDs exactly; IDs are never reused.
+- Do not create new top-level Markdown files unless they are policy or
+  navigation entry points.
+- Keep tables browser-readable; move long evidence into prose or bullets.
+- Product documentation and release notes for eMuleBB Rust are English-only.
+  Organization-site translations are limited to the homepage and FAQ and are
+  not product translations.
 
 ## Item IDs And Statuses
 
-Item IDs use a typed key format: `PREFIX-###`. Prefixes are uppercase, followed
-by a hyphen and a zero-padded numeric sequence. IDs are never reused; skipped
-ranges stay skipped.
+Core legacy IDs use `PREFIX-###`; Rust IDs use `RUST-<CLASS>-<NNN>`. The
+migrated Rust-owned `CI-054` record keeps its stable legacy ID as a documented
+exception. Supported classes are bug, feature, refactor, and CI/evidence work.
 
-Canonical core prefixes:
+Canonical active statuses are `OPEN`, `IN_PROGRESS`, and `BLOCKED`. Canonical
+closed statuses are `DONE`, `PASSED`, and `WONT_DO`. `DEFERRED` remains valid
+only as an archival recorded status; it is not an active-work state.
 
-- `BUG`: user-visible or runtime correctness defects
-- `FEAT`: product behavior, UX, or capability work
-- `REF`: refactoring, architecture cleanup, and internal modernization
-- `CI`: build, packaging, validation, release proof, and tooling gates
+## Validation And Publishing
 
-Integration-specific prefixes are allowed only when they name an external
-consumer or adapter surface. Current accepted integration prefixes are `AMUT`
-and `ARR`.
+Run these checks after documentation changes:
 
-Canonical active statuses:
+```powershell
+python scripts\docs-publish-check.py
+python scripts\docs-item-taxonomy-check.py
+python scripts\docs-structure-check.py
+python scripts\github-roadmap-check.py
+python scripts\github-roadmap-check.py --product emulebb-rust
+python -m mkdocs build --strict
+```
 
-- `OPEN`: accepted backlog item that is not currently being worked
-- `IN_PROGRESS`: active implementation, validation, or investigation is
-  underway
-- `BLOCKED`: cannot proceed without an external decision, dependency, or proof
-- `DEFERRED`: intentionally postponed but still a valid item
-
-Canonical closed statuses:
-
-- `DONE`: implementation or documentation work landed
-- `PASSED`: validation, audit, proof, or gate succeeded without necessarily
-  landing an implementation
-- `WONT_DO`: explicitly rejected or accepted as not worth doing
-
-Legacy title-case status spellings in historical files are provenance only.
-`Wont-Fix` maps to `WONT_DO`.
-
-Use `python scripts\docs-item-taxonomy-check.py` after item or active-index
-changes to validate item IDs, statuses, duplicate front matter IDs, and active
-index consistency.
-
-Treat `python scripts\github-roadmap-sync.py` as legacy MFC archive tooling until
-it is generalized for per-product Suite synchronization. Use
-`python scripts\github-roadmap-check.py` after migration to validate local
-GitHub metadata; pass `--github` when the local GitHub token has `project`
-scope and network access.
-
-Use [reference/BACKLOG-PROCESS](reference/BACKLOG-PROCESS.md) as the repeatable
-operator runbook for creating, updating, validating, and closing backlog items.
-
-Use `python scripts\docs-structure-check.py` after current-doc navigation,
-naming, or table-heavy edits. Use
-`python scripts\docs-structure-check.py --fail-on-wide-tables` before RC docs
-closeout and before publishing current docs as HTML.
-
-Use MkDocs for browser-formatted documentation:
-
-- install dependencies with `python -m pip install -r requirements-docs.txt`
-- preview locally with `python -m mkdocs serve`
-- run the repeatable local publish gate with
-  `python scripts\docs-publish-check.py`
-- the publish gate runs item taxonomy, docs structure, GitHub roadmap metadata,
-  and strict MkDocs HTML generation checks
-
-Generated HTML belongs under `.local/mkdocs-site` and must not be committed.
-GitHub Pages publishing is owned by `.github/workflows/docs-site.yml`; the
-rendered site URL is `https://emulebb.github.io/emulebb-tooling/`.
+Generated HTML belongs below the configured output root or another ignored
+local build directory and must not be committed. GitHub Pages publishing is
+owned by `.github/workflows/docs-site.yml`.

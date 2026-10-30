@@ -43,7 +43,7 @@ Before editing:
 | Documentation taxonomy | `docs\DOCS-POLICY.md` | Naming, nav, table, and docs-structure rules. |
 | Contributor workflow | `docs\reference\DEVELOPMENT-GUIDE.md` | Practical checklists for routine work. |
 | Backlog process | `docs\reference\BACKLOG-PROCESS.md` | Repeatable backlog mechanics and item lifecycle. |
-| Active release/status docs | `docs\active\...` | Current release, roadmap, and item state. |
+| Current organization policy | `docs\active\...` | Product direction, quality gates, and cross-workspace test policy. |
 | Product/user guides | `docs\reference\GUIDE-*.md` | User-facing behavior after source and evidence agree. |
 | REST docs | `docs\rest\...` | Contract, adapter, and parity documentation. |
 | App code | `workspaces\workspace\app\emulebb-main` | Do not edit `repos\emulebb` for routine app work. |

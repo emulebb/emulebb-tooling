@@ -42,50 +42,6 @@ WIDE_TABLE_BASELINE = (
         "docs/active/FROZEN-SURFACES.md",
         "5a296e0ffbc300f02e39c5d4fef36a4732ed621efb78955cdf33d8aa67246452",
     ),
-    (
-        "docs/active/FUTURE-ROADMAP.md",
-        "b0b92763d8327b3f4e9f31ac6f63225c2c4b1183e84f9664f2b40f4ac03d50b3",
-    ),
-    (
-        "docs/active/plans/MFC-0.8.0-LEAN-REMOVAL-PLAN.md",
-        "c38b6cb18b9a9176197762bc8dc8cb687aab6546ae288309c99d8f11276ca794",
-    ),
-    (
-        "docs/active/plans/MFC-0.8.0-LEAN-REMOVAL-PLAN.md",
-        "e3a989a98d9dd16dee6538400ea8abb68e179bca3b781fb211d1ff00efbe5dca",
-    ),
-    (
-        "docs/active/plans/MFC-0.8.0-LEAN-REMOVAL-PLAN.md",
-        "9d29cf6f519f10cf5c91cb4da8e24b0b3e9bc4a2cba42d39be7bf6a01228ea25",
-    ),
-    (
-        "docs/active/plans/MFC-0.8.0-LEAN-REMOVAL-PLAN.md",
-        "33005203d88d2338b1743884bef0a27d096fe06ae56433ea24d7f440f9d4d497",
-    ),
-    (
-        "docs/active/plans/MFC-0.8.0-LEAN-REMOVAL-PLAN.md",
-        "c48edd71721231c7f499a6fcf68ee1dcdaaaf2556b02c69087939ba0f571315b",
-    ),
-    (
-        "docs/active/plans/MFC-0.8.0-LEAN-REMOVAL-PLAN.md",
-        "df9ddb9fe5fc5c72d0ee9b345fb619ca77278261bd1651240c6a236d858ce2e4",
-    ),
-    (
-        "docs/active/plans/MFC-0.8.0-LEAN-REMOVAL-PLAN.md",
-        "c3e0b099832fea311e727d4f262eb4107cd266fb2764f2cbb4fe52ffeb4aa584",
-    ),
-    (
-        "docs/active/plans/MFC-0.8.0-LEAN-REMOVAL-PLAN.md",
-        "e95832f98a8d989e005d2eb6b4605b214099803a762beff53c2ea773cf5f51b8",
-    ),
-    (
-        "docs/active/plans/MFC-0.8.0-LEAN-REMOVAL-PLAN.md",
-        "28fd86c838ed3cdc3fe9b86bdb296efa892d541daeaa15b2fc81a84d723282e7",
-    ),
-    (
-        "docs/active/plans/MFC-0.8.0-STARTUP-TIME-TO-INTERACTIVE.md",
-        "7ec2409e43bc3e31058d00211572bccf936a8990d9879140ee028d10e18cc009",
-    ),
 )
 
 CURRENT_DOC_DIRS = {
@@ -144,7 +100,10 @@ def frontmatter_field(text: str, name: str) -> str:
 def current_markdown_files() -> list[Path]:
     """Return Markdown files that belong to the current documentation surface."""
 
-    files = [DOCS / name for name in ("HELP.md", "INDEX.md", "DOCS-POLICY.md", "WORKSPACE-POLICY.md", "HISTORICAL-REFERENCES.md")]
+    files = [
+        DOCS / name
+        for name in ("HELP.md", "INDEX.md", "DOCS-POLICY.md", "WORKSPACE-POLICY.md")
+    ]
     for dirname in sorted(CURRENT_DOC_DIRS):
         root = DOCS / dirname
         if root.exists():

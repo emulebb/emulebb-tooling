@@ -1,22 +1,24 @@
 #!/usr/bin/env python3
-"""Validate eMule tooling backlog item IDs and statuses."""
+"""Validate current Rust item records and the compact legacy ID catalog."""
 
 from __future__ import annotations
 
 import re
 import sys
-from collections import Counter
 from collections import defaultdict
 from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
 DOCS = ROOT / "docs"
+RUST = DOCS / "products" / "emulebb-rust"
+RUST_ACTIVE = RUST / "active" / "items"
+RUST_HISTORY = RUST / "history" / "items"
+LEGACY_CATALOG = DOCS / "history" / "LEGACY-ITEM-CATALOG.md"
 
-ALLOWED_PREFIXES = {"BUG", "FEAT", "REF", "CI", "AMUT", "ARR"}
-ACTIVE_STATUSES = {"OPEN", "IN_PROGRESS", "BLOCKED", "DEFERRED"}
+ACTIVE_STATUSES = {"OPEN", "IN_PROGRESS", "BLOCKED"}
 CLOSED_STATUSES = {"DONE", "PASSED", "WONT_DO"}
-ALLOWED_STATUSES = ACTIVE_STATUSES | CLOSED_STATUSES
+RECORDED_STATUSES = ACTIVE_STATUSES | CLOSED_STATUSES | {"DEFERRED"}
 REQUIRED_ACTIVE_FIELDS = (
     "id",
     "title",
@@ -28,19 +30,16 @@ REQUIRED_ACTIVE_FIELDS = (
     "created",
     "source",
 )
-LEGACY_STATUS_MAP = {
-    "Open": "OPEN",
-    "In Progress": "IN_PROGRESS",
-    "Blocked": "BLOCKED",
-    "Deferred": "DEFERRED",
-    "Done": "DONE",
-    "Passed": "PASSED",
-    "Wont-Fix": "WONT_DO",
-}
+RUST_ID = re.compile(r"^RUST-(?:BUG|FEAT|REF|CI)-\d{3}$")
+LEGACY_ID = re.compile(r"^(?:BUG|FEAT|REF|CI|AMUT|ARR)-\d{3}$")
+CATALOG_ROW = re.compile(
+    r"^\| `([A-Z]+-\d{3,})` \| ([^|]+) \| ([^|]+) \| (.*?) \|$",
+    re.MULTILINE,
+)
 
 
 def read_text(path: Path) -> str:
-    return path.read_text(encoding="utf-8", errors="ignore")
+    return path.read_text(encoding="utf-8", errors="strict")
 
 
 def parse_frontmatter(text: str) -> dict[str, str]:
@@ -58,199 +57,110 @@ def parse_frontmatter(text: str) -> dict[str, str]:
     return fields
 
 
-def frontmatter_field(text: str, name: str) -> str:
-    return parse_frontmatter(text).get(name, "")
+def check_catalog(errors: list[str], ids: defaultdict[str, list[Path]]) -> int:
+    text = read_text(LEGACY_CATALOG)
+    rows = list(CATALOG_ROW.finditer(text))
+    if not rows:
+        errors.append(f"{LEGACY_CATALOG}: no legacy item rows found")
+        return 0
 
-
-def item_files() -> list[Path]:
-    # INDEX.md under an items dir is a navigation index, not an item record.
-    paths = sorted((DOCS / "active" / "items").glob("*.md")) + sorted(
-        (DOCS / "history" / "items").glob("*.md")
-    )
-    return [path for path in paths if path.name != "INDEX.md"]
-
-
-def parse_active_index() -> dict[str, dict[str, str]]:
-    text = read_text(DOCS / "active" / "INDEX.md")
-    rows: dict[str, dict[str, str]] = {}
-    pattern = re.compile(
-        r"^\| \[([A-Z]+-\d+)\]\(([^)]+)\) \| ([^|]+) \| ([^|]+) \| (.*?) \|$",
-        re.MULTILINE,
-    )
-    for match in pattern.finditer(text):
-        rows[match.group(1)] = {
-            "link": match.group(2),
-            "priority": match.group(3).strip(),
-            "status": match.group(4).strip(),
-            "title": match.group(5).strip(),
-        }
-    return rows
-
-
-def item_sort_key(item_id: str) -> tuple[str, int]:
-    prefix, number = item_id.split("-", 1)
-    return prefix, int(number)
-
-
-def check_active_index_order(errors: list[str]) -> None:
-    text = read_text(DOCS / "active" / "INDEX.md")
-    section_heading = re.compile(r"^## (.+)$", re.MULTILINE)
-    headings = list(section_heading.finditer(text))
-    row_pattern = re.compile(
-        r"^\| \[([A-Z]+-\d+)\]\([^)]+\) \| [^|]+ \| [^|]+ \| .*? \|$",
-        re.MULTILINE,
-    )
-
-    for index, heading in enumerate(headings):
-        start = heading.end()
-        end = headings[index + 1].start() if index + 1 < len(headings) else len(text)
-        section = text[start:end]
-        item_ids = [match.group(1) for match in row_pattern.finditer(section)]
-        if len(item_ids) < 2:
-            continue
-        expected = sorted(item_ids, key=item_sort_key)
-        if item_ids != expected:
-            section_name = heading.group(1).strip()
+    for row in rows:
+        item_id = row.group(1)
+        status = row.group(2).strip()
+        if not LEGACY_ID.fullmatch(item_id):
+            errors.append(f"{LEGACY_CATALOG}: invalid legacy item id {item_id!r}")
+        if status not in RECORDED_STATUSES:
             errors.append(
-                "docs/active/INDEX.md: item rows in section "
-                f"{section_name!r} are not sorted by item id"
+                f"{LEGACY_CATALOG}: unsupported recorded status {status!r} for {item_id}"
             )
+        ids[item_id].append(LEGACY_CATALOG)
+    return len(rows)
 
 
-def check_active_snapshot_counts(
-    active_paths: dict[str, Path], errors: list[str]
-) -> None:
-    text = read_text(DOCS / "active" / "INDEX.md")
-    counts = Counter()
-    for path in active_paths.values():
-        status = frontmatter_field(read_text(path), "status")
-        if status in ACTIVE_STATUSES:
-            counts[status] += 1
+def check_rust_items(
+    root: Path,
+    active: bool,
+    errors: list[str],
+    ids: defaultdict[str, list[Path]],
+) -> dict[str, Path]:
+    found: dict[str, Path] = {}
+    for path in sorted(root.glob("*.md")):
+        if path.name == "INDEX.md":
+            continue
+        fields = parse_frontmatter(read_text(path))
+        item_id = fields.get("id", "")
+        status = fields.get("status", "").upper().replace("-", "_")
+        if status == "WONT_FIX":
+            status = "WONT_DO"
+        if not item_id:
+            errors.append(f"{path}: missing id frontmatter")
+            continue
+        if path.stem != item_id:
+            errors.append(f"{path}: filename stem must match id {item_id!r}")
+        if item_id != "CI-054" and not RUST_ID.fullmatch(item_id):
+            errors.append(f"{path}: invalid Rust item id {item_id!r}")
+        if item_id == "CI-054" and path.parent != RUST_ACTIVE:
+            errors.append(f"{path}: CI-054 is allowed only as the active migration exception")
+        if active:
+            missing = [name for name in REQUIRED_ACTIVE_FIELDS if not fields.get(name)]
+            if missing:
+                errors.append(f"{path}: missing active fields {', '.join(missing)}")
+            if status not in ACTIVE_STATUSES:
+                errors.append(f"{path}: active status must be OPEN, IN_PROGRESS, or BLOCKED")
+        elif status and status not in CLOSED_STATUSES:
+            errors.append(f"{path}: historical status must be closed, got {status!r}")
+        ids[item_id].append(path)
+        found[item_id] = path
+    return found
 
-    total = sum(counts.values())
-    total_match = re.search(r"\*\*Current non-done count:\*\* `(\d+)`", text)
-    if not total_match:
-        errors.append("docs/active/INDEX.md: missing current non-done count")
-    elif int(total_match.group(1)) != total:
-        errors.append(
-            "docs/active/INDEX.md: current non-done count does not match "
-            f"active items ({total_match.group(1)} != {total})"
+
+def check_rust_index(active_paths: dict[str, Path], errors: list[str]) -> int:
+    text = read_text(RUST / "active" / "INDEX.md")
+    rows = {
+        match.group(1): match.group(2)
+        for match in re.finditer(
+            r"^\| \[([A-Z]+(?:-[A-Z]+)?-\d+)\]\((items/[^)]+)\) \|",
+            text,
+            re.MULTILINE,
         )
-
-    status_match = re.search(
-        r"\*\*Non-done by status:\*\* `(\d+)` OPEN, `(\d+)` IN_PROGRESS, "
-        r"`(\d+)` DEFERRED, `(\d+)` BLOCKED\.",
-        text,
-    )
-    if not status_match:
-        errors.append("docs/active/INDEX.md: missing canonical non-done status counts")
-        return
-
-    expected = [
-        counts["OPEN"],
-        counts["IN_PROGRESS"],
-        counts["DEFERRED"],
-        counts["BLOCKED"],
-    ]
-    actual = [int(value) for value in status_match.groups()]
-    if actual != expected:
-        errors.append(
-            "docs/active/INDEX.md: non-done status counts do not match "
-            f"active items ({actual} != {expected})"
-        )
+    }
+    for item_id, path in sorted(active_paths.items()):
+        expected = f"items/{path.name}"
+        actual = rows.get(item_id)
+        if actual != expected:
+            errors.append(
+                f"{item_id}: Rust active index link is {actual!r}, expected {expected!r}"
+            )
+    for item_id in sorted(rows):
+        if item_id not in active_paths:
+            errors.append(f"{item_id}: Rust active index row has no active item file")
+    return len(rows)
 
 
 def main() -> int:
     errors: list[str] = []
-    warnings: list[str] = []
     ids: defaultdict[str, list[Path]] = defaultdict(list)
 
-    id_pattern = re.compile(r"^([A-Z]+)-(\d{3,})$")
+    legacy_count = check_catalog(errors, ids)
+    active_paths = check_rust_items(RUST_ACTIVE, True, errors, ids)
+    history_paths = check_rust_items(RUST_HISTORY, False, errors, ids)
+    row_count = check_rust_index(active_paths, errors)
 
-    for path in item_files():
-        text = read_text(path)
-        item_id = frontmatter_field(text, "id")
-        status = frontmatter_field(text, "status")
-        is_active = "docs/active/items" in path.as_posix()
-
-        if not item_id:
-            errors.append(f"{path}: missing id frontmatter")
-            continue
-
-        ids[item_id].append(path)
-        if path.stem != item_id:
-            errors.append(f"{path}: filename stem must match id frontmatter {item_id!r}")
-        match = id_pattern.match(item_id)
-        if not match:
-            errors.append(f"{path}: id must match PREFIX-###, got {item_id!r}")
-        elif match.group(1) not in ALLOWED_PREFIXES:
-            errors.append(f"{path}: unsupported item prefix {match.group(1)!r}")
-
-        if is_active:
-            fields = parse_frontmatter(text)
-            missing = [name for name in REQUIRED_ACTIVE_FIELDS if not fields.get(name)]
-            if missing:
-                errors.append(
-                    f"{path}: missing required active frontmatter fields "
-                    + ", ".join(missing)
-                )
-            if status not in ALLOWED_STATUSES:
-                errors.append(f"{path}: active status must be canonical, got {status!r}")
-        elif status and status not in ALLOWED_STATUSES:
-            canonical = LEGACY_STATUS_MAP.get(status)
-            if canonical:
-                warnings.append(f"{path}: legacy status {status!r} maps to {canonical!r}")
-            else:
-                errors.append(f"{path}: unknown historical status {status!r}")
+    obsolete_active = DOCS / "active" / "items"
+    if obsolete_active.exists():
+        errors.append(f"{obsolete_active}: central active item directory must not exist")
 
     for item_id, paths in sorted(ids.items()):
         if len(paths) > 1:
             joined = ", ".join(str(path.relative_to(ROOT)) for path in paths)
-            errors.append(f"{item_id}: duplicate frontmatter id in {joined}")
+            errors.append(f"{item_id}: duplicate reserved id in {joined}")
 
-    rows = parse_active_index()
-    active_paths = {path.stem: path for path in (DOCS / "active" / "items").glob("*.md")}
-    check_active_snapshot_counts(active_paths, errors)
-    check_active_index_order(errors)
-
-    for item_id, path in sorted(active_paths.items()):
-        row = rows.get(item_id)
-        text = read_text(path)
-        if not row:
-            errors.append(f"{item_id}: active item missing from docs/active/INDEX.md")
-            continue
-        if not row["link"].startswith("items/"):
-            errors.append(f"{item_id}: active index row must link to items/, got {row['link']!r}")
-        if row["status"] != frontmatter_field(text, "status"):
-            errors.append(f"{item_id}: index status does not match item frontmatter")
-        if row["priority"] != frontmatter_field(text, "priority"):
-            errors.append(f"{item_id}: index priority does not match item frontmatter")
-        if row["title"] != frontmatter_field(text, "title"):
-            errors.append(f"{item_id}: index title does not match item frontmatter")
-
-    for item_id, row in sorted(rows.items()):
-        status = row["status"]
-        if status not in ALLOWED_STATUSES:
-            errors.append(f"{item_id}: active index uses unsupported status {status!r}")
-        if status in ACTIVE_STATUSES and not row["link"].startswith("items/"):
-            errors.append(f"{item_id}: non-closed status links outside active items")
-        if status in CLOSED_STATUSES and row["link"].startswith("items/"):
-            errors.append(f"{item_id}: closed status links into active items")
-
-    max_warnings = 20
-    for warning in warnings[:max_warnings]:
-        print(f"warning: {warning}")
-    if len(warnings) > max_warnings:
-        print(f"warning: {len(warnings) - max_warnings} additional historical warnings suppressed")
     for error in errors:
         print(f"error: {error}", file=sys.stderr)
-
     print(
-        f"checked {len(ids)} item ids, {len(active_paths)} active items, "
-        f"{len(rows)} active index rows"
+        f"checked {legacy_count} legacy ids, {len(active_paths)} active Rust items, "
+        f"{len(history_paths)} closed Rust items, {row_count} Rust index rows"
     )
-    if warnings:
-        print(f"warnings: {len(warnings)}")
     if errors:
         print(f"errors: {len(errors)}", file=sys.stderr)
         return 1

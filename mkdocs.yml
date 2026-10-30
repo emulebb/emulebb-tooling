@@ -45,14 +45,27 @@ markdown_extensions:
 
 plugins:
   - search
+  - redirects:
+      redirect_maps:
+        active/PRODUCT-PORTFOLIO.md: active/PRODUCT-DIRECTION.md
+        reference/ROADMAP-SUMMARY.md: active/PRODUCT-DIRECTION.md
+        active/FUTURE-ROADMAP.md: active/PRODUCT-DIRECTION.md
+        HISTORICAL-REFERENCES.md: history/INDEX.md
+        active/RELEASE-0.7.3.md: history/releases/0.7.3/RELEASE-0.7.3-PROOF-SUMMARY.md
+        active/RELEASE-0.7.3-NOTES.md: history/releases/0.7.3/RELEASE-0.7.3-NOTES.md
+        active/RELEASE-0.7.3-STABLE-CHANGELOG.md: history/releases/0.7.3/RELEASE-0.7.3-STABLE-CHANGELOG.md
+        active/RELEASE-0.7.3-RC2-CHANGELOG.md: history/releases/0.7.3/RELEASE-0.7.3-STABLE-CHANGELOG.md
+        active/RELEASE-0.7.3-RC3-CHANGELOG.md: history/releases/0.7.3/RELEASE-0.7.3-STABLE-CHANGELOG.md
+        active/RELEASE-0.7.3-CHECKLIST.md: history/releases/0.7.3/RELEASE-0.7.3-PROOF-SUMMARY.md
+        active/RELEASE-0.7.3-RUNBOOK.md: history/releases/0.7.3/RELEASE-0.7.3-PROOF-SUMMARY.md
+        active/plans/RELEASE-0.7.3-EXECUTION-PLAN.md: history/releases/0.7.3/RELEASE-0.7.3-PROOF-SUMMARY.md
 
 nav:
   - Home: INDEX.md
   - Quick Help: HELP.md
   - eMuleBB Projects:
       - Brand & Naming: active/BRAND-AND-NAMING.md
-      - Roadmap Summary: reference/ROADMAP-SUMMARY.md
-      - Product Portfolio: active/PRODUCT-PORTFOLIO.md
+      - Product Direction: active/PRODUCT-DIRECTION.md
       - Quality Gates: active/QUALITY-GATES.md
       - Test Strategy: active/TEST-STRATEGY.md
       - REST API Contract Lineage: active/API-V1-COMPATIBILITY.md
@@ -111,21 +124,12 @@ nav:
       - Legacy emulebb-mfc OpenAPI Alias: rest/REST-API-OPENAPI.yaml
       - Parity Inventory: rest/REST-API-PARITY-INVENTORY.md
       - Controller Surface Matrix: active/CONTROLLER-SURFACE-MATRIX.md
-  - Active Release (eMuleBB 0.7.x):
-      - Backlog Index: active/INDEX.md
-      - 0.7.3 Release Dashboard: active/RELEASE-0.7.3.md
-      - 0.7.3 Release Notes: active/RELEASE-0.7.3-NOTES.md
-      - 0.7.3 Stable Changelog: active/RELEASE-0.7.3-STABLE-CHANGELOG.md
-      - 0.7.3 RC2 Changelog: active/RELEASE-0.7.3-RC2-CHANGELOG.md
-      - 0.7.3 RC3 Changelog: active/RELEASE-0.7.3-RC3-CHANGELOG.md
-      - Current Execution Plan: active/plans/RELEASE-0.7.3-EXECUTION-PLAN.md
-      - Release Checklist: active/RELEASE-0.7.3-CHECKLIST.md
-      - Release Runbook: active/RELEASE-0.7.3-RUNBOOK.md
-      - Release Test Strategy: active/RELEASE-TEST-STRATEGY.md
-      - Release Test Campaigns: active/RELEASE-TEST-CAMPAIGNS.md
-      - Installer Test Materialization Plan: active/plans/INSTALLER-TEST-MATERIALIZATION-AND-SCENARIO-MATRIX.md
+  - MFC Maintenance And Release History:
+      - Current Work: active/INDEX.md
+      - 0.7.3 Release Notes: history/releases/0.7.3/RELEASE-0.7.3-NOTES.md
+      - 0.7.3 Stable Changelog: history/releases/0.7.3/RELEASE-0.7.3-STABLE-CHANGELOG.md
+      - 0.7.3 Proof Summary: history/releases/0.7.3/RELEASE-0.7.3-PROOF-SUMMARY.md
       - Frozen Surfaces: active/FROZEN-SURFACES.md
-      - Future Roadmap (emulebb-mfc): active/FUTURE-ROADMAP.md
   - Developer And Workspace:
       - Workspace Policy: WORKSPACE-POLICY.md
       - Workspace Operations Policy: reference/WORKSPACE-OPERATIONS-POLICY.md
@@ -142,7 +146,6 @@ nav:
       - Test Tiers: reference/TEST-TIERS.md
       - Test Inventory: reference/TEST-INVENTORY.md
       - Test Curation: reference/TEST-CURATION.md
-      - Test Campaign Architecture Plan: active/plans/TEST-CAMPAIGN-ARCHITECTURE-PLAN.md
       - CI Baseline: reference/CI-BASELINE.md
       - Release Branching And Packaging: reference/RELEASE-BRANCHING-AND-PACKAGING.md
       - eD2K Inventory:
@@ -157,37 +160,20 @@ nav:
       - eD2K Forums And Sites: reference/ED2K-FORUMS-AND-SITES.md
   - Dependencies:
       - Status: dependencies/DEP-STATUS.md
-  - Ideas:
-      - Cooperative DHT: ideas/IDEA-COOPERATIVE-DHT-COOPERATION.md
-      - Kad Publishing And Distributed Search: ideas/IDEA-KAD-PUBLISHING-AND-DISTRIBUTED-SEARCH.md
-      - aMule Watchlist: ideas/IDEA-AMULE-WATCHLIST.md
-      - eD2K Extension Interoperability: ideas/IDEA-ED2K-EXTENSION-INTEROPERABILITY.md
-      - Kad Protocol Modernization: ideas/IDEA-KAD-PROTOCOL-MODERNIZATION.md
-      - IPv6 Kad Network: ideas/IDEA-IPV6-KAD-NETWORK.md
-      - NAT Traversal And uTP: ideas/IDEA-NAT-TRAVERSAL-UTP.md
-      - Parked MFC 0.8 Lean Removal: ideas/IDEA-MFC-0.8.0-LEAN-REMOVAL-PLAN.md
-      - Parked MFC 0.8 Network Core Thread: ideas/IDEA-MFC-0.8.0-NETWORK-CORE-THREAD.md
-      - Parked MFC 0.8 Performance And Async: ideas/IDEA-MFC-0.8.0-PERF-ASYNC-PLAN.md
-      - Parked MFC 0.8 Process Loop Migration: ideas/IDEA-MFC-0.8.0-PROCESS-LOOP-MIGRATION.md
-      - Parked MFC 0.8 Startup: ideas/IDEA-MFC-0.8.0-STARTUP-TIME-TO-INTERACTIVE.md
   - History:
       - History Archive: history/INDEX.md
-      - Historical References: HISTORICAL-REFERENCES.md
-      - Abandoned Boost / POCO Adoption: history/ideas/IDEA-BOOST.md
-      - Abandoned CMake / Ninja / vcpkg Adoption: history/ideas/IDEA-CMAKE.md
-      - Abandoned eMule 2026 Modernization Roadmap: history/ideas/IDEA-MODERNIZATION-2026.md
-      - Abandoned emulebb-mfc Restructure Guidance: history/ideas/IDEA-RESTRUCTURE.md
-      - Archived p2p-overlord Integration Reference: history/GUIDE-P2P-OVERLORD-EMULE-AGENT.md
+      - Legacy Item Catalog: history/LEGACY-ITEM-CATALOG.md
+      - Source Lineage Changelog: history/HISTORY-CHANGELOG.md
+      - 0.70b vs 0.72a: history/HISTORY-070-VS-072.md
 not_in_nav: |
-  /active/items/**
-  /history/**
-  /ideas/IDEA-EMULEBB-LIBTORRENT-FORK.md
-  /ideas/IDEA-LIBTORRENT-MESH.md
-  /ideas/IDEA-QBITTORRENTBB-MESH.md
   /reference/ed2k-inventory/AGENTS.md
   /rest/REST-API-OPENAPI.yaml
   /products/emulebb-rust/active/items/**
-  /products/emulebb-rust/history/**
+  /products/emulebb-rust/history/items/**
+
+exclude_docs: |
+  products/emulebb-rust/history/items/*
+  !products/emulebb-rust/history/items/INDEX.md
 
 validation:
   nav:

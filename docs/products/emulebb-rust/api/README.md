@@ -32,7 +32,7 @@ Sharing management is folder-tree only:
 
 Change this spec in the same change as the implementation. The Rust conformance
 gate is tracked by
-[`RUST-CI-003`](../history/items/RUST-CI-003.md).
+[`RUST-CI-003`](https://github.com/emulebb/emulebb-tooling/blob/main/docs/products/emulebb-rust/history/items/RUST-CI-003.md).
 
 Every `/api/v1` response carries `X-Contract-Version`, matching
 `info.x-contract-version` and `GET /capabilities.data.contractVersion`, so
