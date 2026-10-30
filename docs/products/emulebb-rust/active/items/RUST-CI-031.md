@@ -1495,11 +1495,33 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   retryable outcomes and zero confirmed divergences. Before the gate completed,
   both diagnostic writers rotated naturally at least once and continued with
   zero dropped events, encoding errors, write errors, or storage-policy faults.
-  The campaign remains active so the action driver can collect longer
-  post-green causal-session evidence.
-- This is an in-progress discovery checkpoint, not a parity conclusion. Final
-  evidence still requires canonical stop, finalized indexes, complete analyzer
-  review, and explicit inspection of exact unredacted protocol traces.
+  The campaign continued through five successful cycles per method, then stopped
+  through the canonical controller. Both clients, the observer, launcher, and
+  watcher were verified stopped, and both diagnostic indexes finalized over
+  three closed segments per client after two natural rotations.
+- The final observer summary retained all ten action reports and thirteen
+  checkpoints with zero retryable outcomes, divergences, connectivity skips,
+  driver errors, incomplete-evidence classifications, or storage/writer faults.
+  A canonical stopped-profile hash-state backup also completed with the MFC
+  known-file state and Rust metadata database passing their integrity checks.
+- Full-window packet analysis found one concrete evidence gap rather than a
+  search-gate failure: MFC recorded one conformant inbound eD2K client-UDP reask,
+  while Rust recorded six undecodable shared-socket datagrams and no conformant
+  client-UDP packet or tracked reask attempt. The synchronized driver scheduled
+  no downloads, so the run never deliberately exercised Rust source, queue, or
+  UDP-reask state. Existing server TCP/UDP, peer TCP, Kad UDP, upload-path, and
+  action-owned server/Kad evidence remained present.
+- Deprecated Kad1 background opcodes seen only by MFC are not Rust scope and do
+  not justify product changes. The next parity proof therefore uses the existing
+  sequential solo-capture model with one operator-approved direct transfer,
+  identical campaign fixtures, the configured persisted profile for each
+  client, and the shared low upload cap. This avoids simultaneous HighID identity
+  contention and generates deliberate source/queue/client-UDP evidence.
+- Build-tests commits `472ad28` and `5dcbfe7` make that capture fail closed on
+  missing persisted-profile authority, apply the live-wire bandwidth limit to
+  both clients, remove dynamic public-result fixture selection, and snapshot the
+  approved direct transfer once per campaign. Focused tests passed, followed by
+  the complete harness suite: `2,817` passed, one skipped, one deselected.
 
 ## Next Implementation
 
@@ -1514,19 +1536,18 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
 - Preserve MFC zero hashing and the Rust zero-plan restart invariant while
   protocol parity work continues. Any future nonzero plan must identify
   genuinely changed or new files rather than another compatibility workaround.
-- Use each bounded action report to separate action-owned coverage parity from
-  strict full-window background traffic differences, then investigate the
-  concrete eD2K/Kad opcode, payload, and lifecycle gaps instead of weakening
-  required-family or diagnostic-conformance gates.
+- Run the approved direct-transfer action sequentially against Rust and MFC on
+  their configured persisted profiles. Hold each client long enough for source,
+  queue, and UDP-reask behavior, retain exact unredacted action windows, and then
+  compare the paired recordings offline by deterministic action identifier.
+- Keep the proven server/Kad search gate unchanged. Treat the sequential transfer
+  capture as a separate protocol-coverage proof; do not weaken required-family
+  or diagnostic-conformance gates when an action did not generate the family.
 - Confirm the rebuilt traces name deprecated Kad routing and server-description
   UDP opcodes on both clients without changing unsupported Kad1 behavior.
-- After multiple action cycles and both writers rotate naturally, stop through
-  the persisted controller
-  and require finalized indexes with no parse, identity, sequence,
-  writer-health, or retained-suffix gap.
-- Run the complete diagnostic analyzer and inspect exact unredacted eD2K/Kad
-  traces. Implement only concrete protocol or correlation gaps demonstrated by
-  that evidence, each as a separate tested commit.
+- Run the complete diagnostic analyzer and offline action diff after both solo
+  recordings exist. Implement only concrete protocol or correlation gaps
+  demonstrated by exact traces, each as a separate tested commit.
 - Keep the next run until-stopped once the action-driven proof is clean. Do not
   open a pull request until the complete significant slice is green and the
   operator explicitly requests it. This slice makes no VPN-safety claim until a
