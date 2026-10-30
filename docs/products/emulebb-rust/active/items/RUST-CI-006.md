@@ -9,7 +9,7 @@ status: OPEN
 priority: Major
 category: ci
 labels: [rust, ed2k, kad, parity, evidence, documentation]
-milestone: post-beta-compatibility
+milestone: rust-v0.1.0-beta.3
 created: 2026-10-03
 source: Stock compatibility review and retained parity evidence audit
 ---
