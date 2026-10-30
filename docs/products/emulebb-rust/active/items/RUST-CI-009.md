@@ -32,8 +32,10 @@ continue normally until an operator explicitly selects a candidate revision.
 
 ## Current State
 
-- The six implementation items originally assigned to the
-  `rust-v0.1.0-beta.3` milestone are closed.
+- The bounded parity, persistence, lifecycle, and policy findings merged through
+  Rust PR [#194](https://github.com/emulebb/emulebb-rust/pull/194) at
+  `431d45a8283fe5edbc8357be412e933771af3232`; their fifteen owning issues are
+  closed. Remaining milestone items still block candidate selection.
 - The current published baseline remains `rust-v0.1.0-beta.2`.
 - RUST-CI-006 still owns the same-head stock eMule/current-aMule/Rust parity
   campaign and documentation reconciliation.

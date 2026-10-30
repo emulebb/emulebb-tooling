@@ -1346,11 +1346,26 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   the current MFC record shape with no outcome field. Focused action and
   offline differential validation passed `100` tests.
 
+## Harness Preflight Checkpoint - 2026-10-30
+
+- Build-tests PR [#80](https://github.com/emulebb/emulebb-build-tests/pull/80)
+  merged at `00467b7600288989797703785f10b4a2eab2fdc7`.
+- Persisted-soak preflight now proves both loopback REST ports and every Rust
+  and MFC TCP/UDP P2P port can bind on the selected full-tunnel interface
+  before either client launches. The result retains structured bindability
+  evidence in the preflight payload.
+- The focused harness matrix passed `155` tests. The complete deterministic
+  harness matrix passed `2,788` tests with one platform skip and one deselected
+  live lane.
+- No live client, VPN, or public-network action was launched. Tunnel-down,
+  dual-client, rotation, action-parity, and clean-stop evidence remains open.
+
 ## Next Implementation
 
 - Keep the persisted soak paused while this completed Kad admission and
   completion-receipt slice is reviewed.
-- Rebuild Rust diagnostics from `65622ac7`, restart the same persisted profiles,
+- Rebuild Rust diagnostics from `431d45a8283fe5edbc8357be412e933771af3232`
+  with harness `00467b7600288989797703785f10b4a2eab2fdc7`, restart the same persisted profiles,
   and require every driven Kad lookup either to show a phase-2 request plus an
   authoritative completed receipt or to remain explicitly not dispatched with
   its exact retryable reason. Require a silent connected server to finish as
@@ -1477,7 +1492,7 @@ distinguish observed parity from merely unobserved behavior.
 
 - [x] The harness/live policy defines the persisted full-tunnel diagnostic soak
       lane and its evidence limitations.
-- [ ] Preflight fails before launch unless hide.me is active, split tunneling is
+- [x] Preflight fails before launch unless hide.me is active, split tunneling is
       off, loopback control is available, and both P2P planes can bind the
       selected interface.
 - [ ] Both clients start with VPN Guard Block and a controlled tunnel-down proof
@@ -1515,8 +1530,8 @@ distinguish observed parity from merely unobserved behavior.
 
 ## Notes
 
-- Implementation stays as granular commits on the single
-  `feature/persisted-protocol-parity-soak` branch in each participating repo.
+- Further implementation stays as granular commits on one topic branch per
+  participating repository for the active workstream.
   Open one PR per repo only after the whole significant slice is complete and
   fully green; do not create parallel WIP branches or per-commit PRs.
 - Update this checklist as each coherent slice lands; keep transient run logs
