@@ -1468,17 +1468,35 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   exact server bytes: `560,478` and `664,615` bytes against the
   `4,194,304`-byte limit. Both budgets matched the file byte count exactly and
   reported no truncation.
-- The common work-in-progress branch remains
-  `feature/persisted-soak-parity-gate`. The significant harness slice is now
-  green and ready for normal cross-repository review; no trace or profile path
-  is tracked.
-- Review is open as Rust PR
+- The completed slice merged in dependency order as Rust PR
   [#206](https://github.com/emulebb/emulebb-rust/pull/206), build-tests PR
   [#81](https://github.com/emulebb/emulebb-build-tests/pull/81), and tooling PR
-  [#132](https://github.com/emulebb/emulebb-tooling/pull/132). Build-tests
-  depends on the Rust bundle contract, and tooling records both implementation
-  PRs; the single topic branch remains active until the dependency-ordered
-  review and merge lifecycle completes.
+  [#132](https://github.com/emulebb/emulebb-tooling/pull/132). All required
+  checks passed, each repository returned to synchronized clean `main`, and the
+  local and remote `feature/persisted-soak-parity-gate` branches were deleted.
+
+## Extended Parity Soak Checkpoint - 2026-10-30
+
+- Campaign `20261030T215509Z` started from the merged harness through the
+  canonical persisted controller after full-tunnel hide.me, VPN Guard Block,
+  loopback control, selected P2P port, profile, executable, and bounded-storage
+  preflight all passed.
+- The controller reused the selected persisted MFC and Rust profiles, selected
+  the same exact public eD2K server endpoint for both clients, retained the
+  shared `8 KiB/s` upload cap, and launched the observer and watcher detached
+  for an until-stopped run.
+- MFC completed its expected slower persisted-profile startup. Both client
+  processes, REST endpoints, diagnostic writers, Guard Block checks, observer,
+  watcher, storage policy, and full-tunnel route checks then reported healthy
+  with no findings. Both writers reported zero drops, encoding errors, write
+  errors, or storage-policy faults.
+- The durable gate currently retains one successful eD2K server cycle and one
+  successful Kad cycle with zero retryable outcomes and zero confirmed
+  divergences. The campaign remains active so both writers can rotate
+  naturally and the action driver can collect longer causal-session evidence.
+- This is an in-progress discovery checkpoint, not a parity conclusion. Final
+  evidence still requires canonical stop, finalized indexes, complete analyzer
+  review, and explicit inspection of exact unredacted protocol traces.
 
 ## Next Implementation
 
