@@ -1386,20 +1386,57 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   `feature/persisted-soak-parity-gate`; it remains intentionally unmerged until
   the complete live parity slice and clean finalization are green.
 
+## Persisted Profile Smoke Checkpoint - 2026-10-30
+
+- The canonical Rust diagnostics build completed without warnings or failures,
+  and the persisted controller preflight proved full-tunnel hide.me routing,
+  loopback control, VPN Guard Block, profile validity, selected-port
+  bindability, and feasible bounded storage before launch. This lane assumes
+  hide.me carries all application traffic; it does not implement or maintain a
+  split-tunnel workflow.
+- The first rebuilt dual-client campaign reused both persisted profiles and the
+  same exact public eD2K server endpoint. Rust reused `51,644` persisted source
+  identities, hashed `11,423` genuinely new source identities, and completed
+  the `142,596,946,563`-byte plan with zero hash failures. Both clients retained
+  the shared `8 KiB/s` upload cap.
+- One synchronized server search and one synchronized Kad search completed on
+  both clients with action-owned diagnostic coverage parity and zero driver
+  errors or connectivity skips. Public result counts were not used as the
+  parity authority.
+- Graceful controller stop finalized both diagnostic indexes and persisted
+  three exact `emulebb.diagnostic-bundle.v6` responses between `600,744` and
+  `657,340` bytes against the `4,194,304`-byte budget, with no truncation or
+  reported omission.
+- The stopped profiles were backed up through the canonical hash-state command.
+  Both MFC hash stores were checksummed, and the Rust metadata database passed
+  SQLite quick-check before the backup was accepted.
+- The next launch proved the restart invariant: the persisted Rust profile
+  reached a complete shared catalog with `plannedHashCount=0`,
+  `sharedHashingCount=0`, and no new, changed, missing-fingerprint, or failed
+  hash entries.
+- A focused observer audit found that the existing finite `maxCycles` setting
+  counts terminal attempts rather than successful per-method parity cycles.
+  The current long-running campaign is useful discovery evidence but is not the
+  final four-server plus four-Kad green gate until that contract is replaced by
+  success-counted, retry-tolerant, sticky-failure state.
+- The Rust eD2k server remains CI and deterministic test infrastructure only.
+  This work does not evolve its product scope or use it as the public soak
+  target.
+
 ## Next Implementation
 
-- Build Rust diagnostics from `54ab0191e9dae2c531b8649e9cec4f757690b052`
-  with harness `913320f45efc0c6c27931c8f5f7f2ac19ec1e2a4`, then run the
-  canonical read-only persisted preflight while hide.me is active in
-  full-tunnel mode with split tunneling disabled and VPN Guard Block selected.
-- Run one bounded dual-client smoke against the same exact server endpoint:
-  verify zero-plan profile reuse, the shared `8 KiB/s` upload cap, one server
-  search, one Kad search, exact lifecycle receipts, graceful stop, byte-bounded
-  final bundle capture, and finalized diagnostic indexes with no integrity gap.
-- After the smoke is green, require four successful server action cycles and
-  four successful Kad action cycles using campaign-stable ASCII and Unicode
-  terms. Retry public-network misses that remain explicitly inconclusive; do
-  not count them as successful cycles or protocol divergences.
+- Replace finite attempt-counting with one canonical durable parity gate:
+  require four successful server cycles and four successful Kad cycles, keep
+  retryable public-network misses and connectivity skips non-counting, retain a
+  sticky first confirmed divergence, and continue action driving after green.
+- Generate and persist campaign-stable NFC-normalized ASCII and Unicode terms,
+  expose the authoritative gate through controller status and a dedicated
+  machine-readable gate command, and add no compatibility parser for the
+  replaced observer schemas or CLI.
+- Stop the current discovery campaign after the new gate implementation is
+  ready, restart from the same persisted profiles, re-prove the zero-plan hash
+  invariant, and require the new four-server plus four-Kad gate to turn green
+  before final teardown.
 - Treat request encoding, parser behavior, lifecycle decisions, timeout cause,
   packet correlation, and connection continuity as parity authority. Public
   result counts may differ and are comparable only when both clients used the
