@@ -1,30 +1,28 @@
-# eMuleBB User Guide
+# eMuleBB Documentation
 
 <section class="docs-hero">
   <div>
-    <p class="docs-eyebrow">eMule broadband edition</p>
-    <h2>Classic eMule control, modern broadband operation.</h2>
+    <p class="docs-eyebrow">eMuleBB Rust</p>
+    <h2>Active eD2K/Kad beta, working toward Beta 3.</h2>
     <p>
-      eMuleBB is for power users who want a native Windows eMule client that can
-      run for long sessions, keep large libraries predictable, expose a trusted
-      local REST surface, and still respect stock eD2K/Kad behavior.
+      Public 0.1.0-beta.2 is the formal baseline; CI-gated nightlies are the
+      current public testing channel. Repeatedly tested on live eD2K/Kad
+      networks.
     </p>
     <p>
-      Start here if you are setting up a profile, moving an existing eMule
-      install, testing a release package, or wiring eMuleBB into Prowlarr,
-      Radarr, or Sonarr.
+      The maintained Windows 0.7.x client remains available for diagnostics,
+      critical fixes, and bounded low-risk maintenance.
     </p>
   </div>
-  <img alt="eMuleBB broadband edition logo" src="../assets/brand/emulebb-broadband-edition-logo.png" />
 </section>
 
 ## The eMuleBB Projects
 
-This guide covers the **eMuleBB Windows client** (the stable `0.7.3` eD2K/Kad
-desktop app) and the active **emulebb-rust** beta with CI-gated nightly builds.
-The MFC `0.7.x` line remains buildable and shippable for diagnostics, critical
-fixes, and bounded low-risk maintenance; Rust is the only active
-product-development lane.
+This guide leads with **eMuleBB Rust**, the active beta and only active product-
+development lane. Use **eMuleBB Rust** as the display name and `emulebb-rust`
+for repository and technical identifiers. The **eMuleBB Windows client** is the
+stable `0.7.3` eD2K/Kad desktop app and remains buildable and shippable for
+diagnostics, critical fixes, and bounded low-risk maintenance.
 Former BitTorrent and controller forks are retired from the current workspace;
 TrackMuleBB is archived.
 The upstream-aligned Rust `ed2k-server` fork is the sole local deterministic
@@ -32,9 +30,26 @@ server; server changes stay minimal, generic, and upstreamable. See the
 [Product Portfolio](active/PRODUCT-PORTFOLIO.md) and
 [Roadmap Summary](reference/ROADMAP-SUMMARY.md).
 
-## Start Here
+## Start With eMuleBB Rust
 
-### Install Fast Path
+- **Current testing:** [download CI-gated nightly builds](https://github.com/emulebb/emulebb-rust/releases).
+- **Fixed baseline:** [download the formal `0.1.0-beta.2` release](https://github.com/emulebb/emulebb-rust/releases/tag/rust-v0.1.0-beta.2).
+- **Product scope:** read the [eMuleBB Rust product section](products/emulebb-rust/README.md)
+  and [release scope](products/emulebb-rust/RELEASE-SCOPE.md).
+- **First launch:** follow the repository
+  [README](https://github.com/emulebb/emulebb-rust#first-launch) for package,
+  profile, authentication, and browser-console startup.
+- **Roadmap:** follow the [active Rust backlog](products/emulebb-rust/active/INDEX.md)
+  and [Beta 3 certification item](products/emulebb-rust/active/items/RUST-CI-009.md).
+
+The beta API, configuration, and persistence schemas remain compatibility-
+unstable. Breaking changes are allowed when all owned Rust surfaces move
+together; this compatibility warning does not change the product's active-beta
+status.
+
+## Maintained Windows Client
+
+### Install And Operate
 
 - [Standalone ZIP](reference/GUIDE-SETUP.md#quick-install-zip-extract-run):
   download the current stable `0.7.3` eMuleBB ZIP, extract it into a new app
@@ -65,9 +80,8 @@ Use these guides in order for a first real profile:
 7. [Stack Integration Guide](reference/GUIDE-STACK-INTEGRATIONS.md) covers
    qBittorrent-compatible and Torznab adapter workflows with Prowlarr and Arr.
 
-For public release testing, use the
-[0.7.3 release notes](active/RELEASE-0.7.3-NOTES.md) before downloading or
-reporting package behavior.
+For Windows maintenance release testing, use the [0.7.3 release notes](active/RELEASE-0.7.3-NOTES.md)
+before downloading or reporting package behavior.
 
 ## Developer And Release Operator Paths
 

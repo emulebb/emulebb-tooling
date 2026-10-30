@@ -4,14 +4,14 @@ info:
   version: 2.0.0
   x-contract-version: "2.0.0"
   x-contract-baseline: "emulebb-rust forward contract"
-  summary: The experimental first-party /api/v1 contract for emulebb-rust and its embedded WebUI.
+  summary: The compatibility-unstable beta /api/v1 contract for emulebb-rust and its embedded WebUI.
   description: >
     Source of truth for the forward emulebb-rust `/api/v1` contract. This is no
     longer a shared emulebb-mfc/Rust superset contract: the emulebb-mfc `0.7.3`
     contract is frozen separately under
     `emulebb-tooling/docs/products/emulebb-mfc/api`, while this document
-    evolves with emulebb-rust and its embedded WebUI. During the experimental
-    beta period, breaking schema or route changes are allowed when the owned
+    evolves with emulebb-rust and its embedded WebUI. During the beta period,
+    breaking schema or route changes are allowed when the owned
     Rust surfaces move together; external API stability requires a later freeze
     decision.
     Versioning policy and lineage:

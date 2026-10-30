@@ -30,8 +30,8 @@ The maintenance roadmap does not include:
 - retired product-family or controller-platform development;
 - native Windows VPN integration as a forward product priority.
 
-New product development belongs to `emulebb-rust`, which is the active
-experimental beta lane.
+New product development belongs to eMuleBB Rust (`emulebb-rust`), which is the
+active beta lane.
 
 ## Parked proposals
 

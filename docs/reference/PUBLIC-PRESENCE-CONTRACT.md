@@ -3,9 +3,11 @@
 The versioned contract at
 `manifests/public-presence.v1.json` is the machine-readable authority for the
 organization website and GitHub organization profile. It keeps current product
-lanes, repository roles, compatibility references, public surfaces, and the
-stable installer owner aligned without making one public repository mutate
-another.
+identity and release links, client lanes, repository roles, compatibility
+references, public surfaces, and the stable installer owner aligned without
+making one public repository mutate another. Schema version 1 requires the
+`emulebb-rust` product record while remaining the same contract version for
+existing consumers.
 
 ## Ownership
 

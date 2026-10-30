@@ -9,7 +9,7 @@ repository's current lifecycle and the risk of the proposed change.
 
 | Lane | Required direction |
 |---|---|
-| **emulebb-rust** | Active experimental beta. Repo-native quality, test, and cross-platform build gates are primary; add targeted workspace evidence as needed. |
+| **emulebb-rust** | Active beta. Repo-native quality, test, and cross-platform build gates are primary; add targeted workspace evidence as needed. |
 | **emulebb-mfc `0.7.x`** | Diagnostics and critical-fix maintenance. Keep it buildable and shippable; require proof proportional to the touched surface. |
 | **ed2k-server** | Sole local deterministic server and upstream-aligned Rust fork. Use minimal upstreamable changes and focused harness proof; no production-service gate. |
 | **aMule upstream** | Managed official upstream used for interoperability and protocol parity. It is not an eMuleBB product release lane. |

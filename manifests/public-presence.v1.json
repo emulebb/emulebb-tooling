@@ -2,12 +2,27 @@
   "schema_version": 1,
   "organization": {
     "name": "eMuleBB",
-    "summary": "A small eD2K/Kad workshop with an active Rust beta and a stable Windows maintenance lane.",
-    "development_posture": "Rust is the active product-development lane. The MFC client remains the stable diagnostic baseline and may receive critical fixes and bounded, low-risk maintenance.",
+    "summary": "eMuleBB Rust is the active eD2K/Kad beta, backed by a maintained Windows client and focused protocol tooling.",
+    "development_posture": "eMuleBB Rust is the active product-development lane. The MFC client remains the stable Windows diagnostic baseline and may receive critical fixes and bounded, low-risk maintenance.",
     "website_url": "https://emulebb.github.io/",
     "docs_url": "https://emulebb.github.io/emulebb-tooling/",
     "roadmap_url": "https://github.com/orgs/emulebb/projects/3"
   },
+  "products": [
+    {
+      "key": "emulebb-rust",
+      "repository_key": "emulebb-rust",
+      "display_name": "eMuleBB Rust",
+      "lifecycle_label": "Active beta",
+      "published_version": "0.1.0-beta.2",
+      "development_target": "Beta 3",
+      "testing_summary": "Repeatedly tested on live eD2K/Kad networks.",
+      "nightly_url": "https://github.com/emulebb/emulebb-rust/releases",
+      "release_url": "https://github.com/emulebb/emulebb-rust/releases/tag/rust-v0.1.0-beta.2",
+      "docs_url": "https://emulebb.github.io/emulebb-tooling/products/emulebb-rust/",
+      "issues_url": "https://github.com/emulebb/emulebb-rust/issues"
+    }
+  ],
   "release_channels": [
     {
       "key": "rust-nightly",
@@ -52,7 +67,7 @@
       "name": "emulebb-build-tests",
       "url": "https://github.com/emulebb/emulebb-build-tests",
       "lifecycle": "active-support",
-      "role": "Shared MFC diagnostics, compatibility, live-network, and parity harness."
+      "role": "Shared Rust and MFC diagnostics, compatibility, live-network, and parity harness."
     },
     {
       "key": "emulebb-build",
@@ -90,7 +105,7 @@
       "key": "root-site",
       "repository": "emulebb/emulebb.github.io",
       "url": "https://emulebb.github.io/",
-      "role": "Root organization website and stable installer entrypoint."
+      "role": "Root organization product website; it also owns the stable MFC installer entrypoint."
     },
     {
       "key": "org-profile",

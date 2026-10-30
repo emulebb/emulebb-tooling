@@ -6,7 +6,7 @@ Quality gates follow repository lifecycle. A retained experiment does not
 inherit the release burden of an active product, and a reference fork must not
 be presented as a production candidate merely because CI can build it.
 
-## Active experimental beta: emulebb-rust
+## Active beta: emulebb-rust
 
 Rust changes require the repository's supported platform build and test
 matrix, formatting and lint checks, dependency policy, tracked-content privacy

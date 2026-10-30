@@ -7,8 +7,9 @@ Status: governance. Updated 2026-10-02.
 - **Organization / house:** **eMuleBB**; GitHub slug `emulebb`.
 - **MFC product:** **eMule broadband edition**, compactly **eMuleBB** or the
   **eMuleBB Windows client**.
-- **Active Rust project:** **emulebb-rust**. Describe it as the active
-  experimental eD2K/Kad beta, not as production-ready.
+- **Active Rust product:** **eMuleBB Rust**. Retain `emulebb-rust` for repository
+  and technical identifiers. Describe it as the active eD2K/Kad beta: public
+  `0.1.0-beta.2`, working toward Beta 3, not as a stable release.
 - **Current planning board:** **eMuleBB Roadmap**.
 - **Historical release bundle:** **eMuleBB Suite** applies to the shipped
   `0.7.3` MFC/aMuTorrent bundle, existing artifact names, and historical plans.
@@ -22,7 +23,7 @@ name instead.
 | Repository | Public description |
 |---|---|
 | `emulebb` | Stable Windows eD2K/Kad client on the maintained `0.7.x` line |
-| `emulebb-rust` | Active experimental Rust eD2K/Kad client; public beta |
+| `emulebb-rust` | eMuleBB Rust, the active Rust eD2K/Kad client; public Beta 2 working toward Beta 3 |
 | `ed2k-server` | Sole local deterministic eD2K test server; upstream-aligned Rust fork |
 | `amule` | Managed official aMule upstream; interoperability and protocol-parity reference |
 

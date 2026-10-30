@@ -18,7 +18,7 @@ Ranking badges and thresholds are defined in [Methodology](METHODOLOGY.md). Stat
 | aMule | 🟢 Active/current | 🟢 Established | Active development | Direct competitor/watchlist | 2026-10-13 |
 | eMule Community | 🟢 Active/current | 🟢 Established | Maintained | Direct competitor/watchlist | 2026-08-20 |
 | eMuleAI | 🟢 Active/current | 🟡 Visible | Active development | Direct competitor/watchlist | 2026-07-25 |
-| emulebb-rust | 🟢 Active/current | ⚪ Niche | Experimental | Direct competitor/watchlist | 2026-10-23 |
+| emulebb-rust | 🟢 Active/current | ⚪ Niche | Public beta | Direct competitor/watchlist | 2026-10-29 |
 | Ember | 🟢 Active/current | ⚪ Niche | Active development | Direct competitor/watchlist | 2026-10-21 |
 | eMuleRust (`laurentgeynet-ux/eMule-Rust`) | 🟢 Active/current | ⚪ Niche | Experimental | Direct competitor/watchlist | 2026-10-18 |
 | Mulee | 🟢 Active/current | ⚪ Niche | Experimental | Ecosystem watchlist | 2026-10-17 |
@@ -176,20 +176,20 @@ Ranking badges and thresholds are defined in [Methodology](METHODOLOGY.md). Stat
 
 #### emulebb-rust
 
-- Assessment: **🟢 Active/current** · **⚪ Niche** · **Experimental** · **Direct competitor/watchlist** · **❔ Contribution mode not independently classified**
+- Assessment: **🟢 Active/current** · **⚪ Niche** · **Public beta** · **Direct competitor/watchlist** · **❔ Contribution mode not independently classified**
 - Status: 🟢 Active, public-beta forward client
 - Language/platform: Rust; headless multiplatform daemon plus embedded SPA WebUI
 - Link: https://github.com/emulebb/emulebb-rust
-- Repo stats (GitHub, 2026-10-23):
-  - `emulebb/emulebb-rust`: 7 stars, 0 forks, 30 open issues; default `main`;
-    default-branch commit 2026-10-23 `c93cbc7`; public prerelease
+- Repo stats (GitHub, 2026-10-29):
+  - `emulebb/emulebb-rust`: 9 stars, 0 forks, 32 open issues; default `main`;
+    default-branch commit 2026-10-29 `17003d6`; public prerelease
     `rust-v0.1.0-beta.2` on 2026-10-02; nightly prereleases through
-    2026-10-23; GPL-2.0.
+    2026-10-26; GPL-2.0.
 - Notes: Workspace-owned forward eD2K/Kad client. It targets stock-compatible
          wire behavior while remaining a separate implementation from the MFC
          product. The public beta ships Windows, Linux, macOS, and container
-         artifacts, and all 15 checks on the reviewed default-branch commit
-         passed. The broader Client gate remains open, so do not infer stable
+         artifacts. CI, CodeQL, and Nightly workflows passed for the reviewed
+         default-branch commit. The broader Client gate remains open, so do not infer stable
          release readiness from the beta or repository activity.
 
 #### Ember
