@@ -16,6 +16,11 @@
   word-break: break-word;
 }
 
+.md-header__button.md-logo,
+.md-nav__button.md-logo {
+  display: none;
+}
+
 .docs-hero {
   align-items: center;
   background: color-mix(in srgb, var(--md-primary-fg-color) 7%, var(--md-default-bg-color));
@@ -23,7 +28,7 @@
   border-radius: 0.45rem;
   display: grid;
   gap: 1.4rem;
-  grid-template-columns: minmax(0, 1fr) minmax(7rem, 11rem);
+  grid-template-columns: minmax(0, 1fr);
   margin: 1.1rem 0 1.6rem;
   padding: 1.25rem;
 }
@@ -36,18 +41,6 @@
 
 .docs-hero p {
   margin: 0.55rem 0 0;
-}
-
-.docs-hero img {
-  height: auto;
-  justify-self: center;
-  max-width: 11rem;
-  width: 100%;
-}
-
-.md-header__button.md-logo img {
-  height: 1.8rem;
-  width: 1.8rem;
 }
 
 .docs-eyebrow {
@@ -111,10 +104,6 @@
 @media screen and (max-width: 44rem) {
   .docs-hero {
     grid-template-columns: 1fr;
-  }
-
-  .docs-hero img {
-    max-width: 8rem;
   }
 }
 
