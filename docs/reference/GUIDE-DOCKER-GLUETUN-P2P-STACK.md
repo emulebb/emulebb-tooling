@@ -410,8 +410,8 @@ profiles as interchangeable formats.
 
 ## Where emulebb-rust Fits
 
-`emulebb-rust` `0.1.0-beta.1` is the active experimental eMuleBB development
-lane and has its own
+eMuleBB Rust `0.1.0-beta.2` is the active beta eMuleBB development lane and has
+its own
 [Gluetun Compose example](https://github.com/emulebb/emulebb-rust/blob/main/packaging/docker/compose.gluetun.example.yaml).
 That example uses the same central pattern—Gluetun owns the namespace and the
 Rust client binds P2P to `tun0`—but it is independent of the aMule deployment

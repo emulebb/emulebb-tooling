@@ -110,6 +110,7 @@ CANONICAL_PAGES = (
     PageSpec("zh-TW", "zh-TW", "zh-tw", "0.8"),
 )
 LANGUAGE_PAGE = PageSpec("en", "en", "languages", "0.7")
+RUST_PAGE = PageSpec("en", "en", "rust", "0.9")
 FAQ_LOCALE_DIRECTORIES = (
     ("en", "en", "faq"),
     ("it", "it", "it/faq"),
@@ -341,6 +342,10 @@ def validate_page(pages_root: Path, page: PageSpec, errors: list[str]) -> None:
             expect(errors, href[1:] in parsed.ids, f"{page.relative_file}: missing anchor target {href}")
     validate_images(page.relative_file, parsed, errors)
 
+    if not page.directory:
+        expect(errors, '"@type": "Organization"' in text, "index.html: missing Organization structured data")
+        expect(errors, '"@type": "WebSite"' in text, "index.html: missing WebSite structured data")
+
 
 def validate_images(relative_file: Path, parsed: ParsedPage, errors: list[str]) -> None:
     """Allow only the header brand logo and section-local Team/lore images."""
@@ -420,6 +425,35 @@ def validate_faq_page(pages_root: Path, page: PageSpec, errors: list[str]) -> No
     validate_images(page.relative_file, parsed, errors)
 
 
+def validate_rust_page(pages_root: Path, errors: list[str]) -> None:
+    """Validate the English-only eMuleBB Rust product page."""
+
+    path = pages_root / RUST_PAGE.relative_file
+    expect(errors, path.is_file(), f"{RUST_PAGE.relative_file}: missing Rust product page")
+    if not path.is_file():
+        return
+
+    text = read_text(path)
+    parsed = parse_page(path)
+    expect(errors, text.lower().count("<!doctype html>") == 1, f"{RUST_PAGE.relative_file}: expected one doctype")
+    expect(errors, '"@type": "SoftwareApplication"' in text, f"{RUST_PAGE.relative_file}: missing SoftwareApplication structured data")
+    expect(errors, parsed.html_lang == "en", f"{RUST_PAGE.relative_file}: html lang should be en")
+    expect(errors, parsed.robots == ["index,follow"], f"{RUST_PAGE.relative_file}: robots should be index,follow")
+    expect(errors, parsed.canonicals == [RUST_PAGE.url], f"{RUST_PAGE.relative_file}: canonical should be {RUST_PAGE.url}")
+    expect(errors, parsed.og_urls == [RUST_PAGE.url], f"{RUST_PAGE.relative_file}: og:url should be {RUST_PAGE.url}")
+    expect(errors, parsed.sitemaps == [f"{SITE_BASE_URL}/sitemap.xml"], f"{RUST_PAGE.relative_file}: sitemap link mismatch")
+    expect(errors, PICO_CDN in parsed.stylesheets, f"{RUST_PAGE.relative_file}: missing Pico CSS CDN")
+    expect(errors, RUST_PAGE.stylesheet_href in parsed.stylesheets, f"{RUST_PAGE.relative_file}: missing {RUST_PAGE.stylesheet_href}")
+    expect(errors, parsed.icons == [RUST_PAGE.favicon_href], f"{RUST_PAGE.relative_file}: favicon link mismatch")
+    expect(errors, not parsed.alternates, f"{RUST_PAGE.relative_file}: English-only Rust page must not publish hreflang alternates")
+    expect(errors, not parsed.images, f"{RUST_PAGE.relative_file}: Rust page must remain text-only")
+    localized_rust_pages = sorted(
+        candidate.relative_to(pages_root)
+        for candidate in pages_root.glob("*/rust/index.html")
+    )
+    expect(errors, not localized_rust_pages, "localized Rust product page must not exist")
+
+
 def validate_sitemap(pages_root: Path, errors: list[str]) -> None:
     """Validate sitemap.xml against the canonical page list."""
 
@@ -436,12 +470,13 @@ def validate_sitemap(pages_root: Path, errors: list[str]) -> None:
 
     namespace = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
     locs = [node.text or "" for node in root.findall(".//sm:loc", namespace)]
-    expected_locs = [page.url for page in (*CANONICAL_PAGES, LANGUAGE_PAGE, *FAQ_PAGES)]
+    sitemap_pages = (*CANONICAL_PAGES, RUST_PAGE, LANGUAGE_PAGE, *FAQ_PAGES)
+    expected_locs = [page.url for page in sitemap_pages]
     expect(errors, locs == expected_locs, "sitemap.xml: loc list does not match canonical locale order")
     priorities = [node.text or "" for node in root.findall(".//sm:priority", namespace)]
     expect(
         errors,
-        priorities == [page.priority for page in (*CANONICAL_PAGES, LANGUAGE_PAGE, *FAQ_PAGES)],
+        priorities == [page.priority for page in sitemap_pages],
         "sitemap.xml: priority list does not match canonical locale order",
     )
 
@@ -472,6 +507,7 @@ def validate_site(pages_root: Path) -> int:
     validate_language_page(pages_root, errors)
     for page in FAQ_PAGES:
         validate_faq_page(pages_root, page, errors)
+    validate_rust_page(pages_root, errors)
     validate_sitemap(pages_root, errors)
     validate_prohibited_assets(pages_root, errors)
 
@@ -488,7 +524,7 @@ def render_sitemap(lastmod: str) -> str:
 
     lines = ['<?xml version="1.0" encoding="UTF-8"?>']
     lines.append('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">')
-    for page in (*CANONICAL_PAGES, LANGUAGE_PAGE, *FAQ_PAGES):
+    for page in (*CANONICAL_PAGES, RUST_PAGE, LANGUAGE_PAGE, *FAQ_PAGES):
         lines.extend(
             [
                 "  <url>",

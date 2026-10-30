@@ -3,7 +3,7 @@
 This task-routed annex applies only to persisted settings, metadata, database
 schemas, or profile compatibility.
 
-- During the experimental phase, every persisted-data change reviews whether
+- During the compatibility-unstable beta phases, every persisted-data change reviews whether
   the checked-in schema remains the clean current model. Evolve it when
   warranted; do not preserve inferior shapes for development profiles.
 - Product code requires the current schema exactly. It must not contain legacy

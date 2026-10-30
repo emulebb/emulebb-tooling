@@ -43,7 +43,13 @@ def url_path_to_source(url_path: str, docs_root: Path) -> Path:
         return docs_root / "INDEX.md"
     if Path(clean).suffix.lower() in STATIC_SUFFIXES:
         return docs_root / clean
-    return docs_root / f"{clean}.md"
+    page_source = docs_root / f"{clean}.md"
+    if page_source.exists():
+        return page_source
+    directory_readme = docs_root / clean / "README.md"
+    if directory_readme.exists():
+        return directory_readme
+    return page_source
 
 
 def iter_inputs(paths: list[Path]) -> list[Path]:

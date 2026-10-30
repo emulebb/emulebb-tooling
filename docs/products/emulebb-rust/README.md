@@ -1,14 +1,25 @@
-# emulebb-rust
+# eMuleBB Rust
 
-This section is the canonical home for active emulebb-rust product docs,
+**Active beta — public `0.1.0-beta.2`, working toward Beta 3.** Repeatedly
+tested on live eD2K/Kad networks.
+
+Use the [CI-gated nightly builds](https://github.com/emulebb/emulebb-rust/releases)
+for current public testing. Use the formal
+[`0.1.0-beta.2` release](https://github.com/emulebb/emulebb-rust/releases/tag/rust-v0.1.0-beta.2)
+when a fixed published baseline is more important than the latest changes.
+
+eMuleBB Rust, its WebUI, product documentation, and release notes are
+English-only. The organization website may localize its homepage and FAQ, but
+those pages are not product translations.
+
+This section is the canonical home for active `emulebb-rust` product docs,
 backlog, design notes, history, release scope, embedded SPA WebUI scope, and
 forward REST contract. The product is an automation-first integrated suite with
 hard-gated Client, Indexer, and Arr phases; production work remains in the
 Client phase until its complete gate closes.
 
-Current published beta baseline:
+Current beta direction:
 
-- [`0.1.0-beta.2` GitHub release](https://github.com/emulebb/emulebb-rust/releases/tag/rust-v0.1.0-beta.2)
 - [`0.1.0-beta.2` release scope](RELEASE-SCOPE.md)
 - [Current-head parity evidence and documentation reconciliation](active/items/RUST-CI-006.md)
 - [Beta 3 candidate certification without publication](active/items/RUST-CI-009.md)

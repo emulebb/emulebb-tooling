@@ -39,7 +39,7 @@ maintenance.
 **Post-stable line split:** after stable `0.7.3`, MFC is frozen on the `0.7.x`
 legacy support line. Accept bugs and bounded low-risk UX, performance,
 compatibility, build, packaging, documentation, diagnostics, and release work.
-`emulebb-rust` is the active experimental product-development lane.
+`emulebb-rust` is the active beta product-development lane.
 **Release backlog view:** [RELEASE-0.7.3](RELEASE-0.7.3.md)
 **Release checklist:** [RELEASE-0.7.3-CHECKLIST](RELEASE-0.7.3-CHECKLIST.md)
 **Release runbook:** [RELEASE-0.7.3-RUNBOOK](RELEASE-0.7.3-RUNBOOK.md)

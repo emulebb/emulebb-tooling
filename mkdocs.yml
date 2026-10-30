@@ -1,5 +1,5 @@
 site_name: eMuleBB Documentation
-site_description: Documentation for the active experimental Rust client, maintained Windows client, and eMuleBB engineering workspace.
+site_description: Documentation for the eMuleBB Rust active beta, maintained Windows client, and eMuleBB engineering workspace.
 site_url: https://emulebb.github.io/emulebb-tooling/
 repo_url: https://github.com/emulebb/emulebb-tooling
 edit_uri: blob/main/docs/
@@ -57,6 +57,25 @@ nav:
       - Test Strategy: active/TEST-STRATEGY.md
       - REST API Contract Lineage: active/API-V1-COMPATIBILITY.md
       - Roadmap Board (GitHub): https://github.com/orgs/emulebb/projects/3
+  - eMuleBB Rust:
+      - Product Section: products/emulebb-rust/README.md
+      - Agent Policy: products/emulebb-rust/reference/AGENT-POLICY.md
+      - API And UI Policy: products/emulebb-rust/reference/API-UI-POLICY.md
+      - Persistence Policy: products/emulebb-rust/reference/PERSISTENCE-POLICY.md
+      - Protocol Policy: products/emulebb-rust/reference/PROTOCOL-POLICY.md
+      - Product Documentation Policy: products/emulebb-rust/reference/PRODUCT-DOCS-POLICY.md
+      - Active Backlog: products/emulebb-rust/active/INDEX.md
+      - Release Scope: products/emulebb-rust/RELEASE-SCOPE.md
+      - Architecture: products/emulebb-rust/design/architecture.md
+      - Design — Integrated Suite: products/emulebb-rust/design/integrated-suite.md
+      - Nightly Builds: https://github.com/emulebb/emulebb-rust/releases
+      - 0.1.0-beta.2 Release: https://github.com/emulebb/emulebb-rust/releases/tag/rust-v0.1.0-beta.2
+      - Code Quality And Test Placement: products/emulebb-rust/reference/CODE-QUALITY.md
+      - Running On macOS And Linux: reference/GUIDE-CROSS-PLATFORM.md
+      - REST API — Forward OpenAPI: products/emulebb-rust/api/REST-API-OPENAPI.yaml
+      - REST API — Notes: products/emulebb-rust/api/README.md
+      - Design — Kad/eD2K Indexer: products/emulebb-rust/design/kad-ed2k-indexer.md
+      - Source And Issues (GitHub): https://github.com/emulebb/emulebb-rust
   - Product Sections:
       - emulebb-mfc: products/emulebb-mfc/README.md
       - emulebb-mfc Agent Policy: products/emulebb-mfc/reference/AGENT-POLICY.md
@@ -80,25 +99,6 @@ nav:
       - Diagnostics: reference/GUIDE-DIAGNOSTICS.md
       - Troubleshooting: reference/GUIDE-TROUBLESHOOTING.md
       - Translations: reference/GUIDE-TRANSLATIONS.md
-  - emulebb-rust (Core):
-      - Product Section: products/emulebb-rust/README.md
-      - Agent Policy: products/emulebb-rust/reference/AGENT-POLICY.md
-      - API And UI Policy: products/emulebb-rust/reference/API-UI-POLICY.md
-      - Persistence Policy: products/emulebb-rust/reference/PERSISTENCE-POLICY.md
-      - Protocol Policy: products/emulebb-rust/reference/PROTOCOL-POLICY.md
-      - Product Documentation Policy: products/emulebb-rust/reference/PRODUCT-DOCS-POLICY.md
-      - Active Backlog: products/emulebb-rust/active/INDEX.md
-      - Release Scope: products/emulebb-rust/RELEASE-SCOPE.md
-      - Architecture: products/emulebb-rust/design/architecture.md
-      - Design — Integrated Suite: products/emulebb-rust/design/integrated-suite.md
-      - 0.1.0-beta.1 Release: https://github.com/emulebb/emulebb-rust/releases/tag/rust-v0.1.0-beta.1
-      - 0.1.0-beta.2 Release: https://github.com/emulebb/emulebb-rust/releases/tag/rust-v0.1.0-beta.2
-      - Code Quality And Test Placement: products/emulebb-rust/reference/CODE-QUALITY.md
-      - Running On macOS And Linux: reference/GUIDE-CROSS-PLATFORM.md
-      - REST API — Forward OpenAPI: products/emulebb-rust/api/REST-API-OPENAPI.yaml
-      - REST API — Notes: products/emulebb-rust/api/README.md
-      - Design — Kad/eD2K Indexer: products/emulebb-rust/design/kad-ed2k-indexer.md
-      - Source And Backlog (GitHub): https://github.com/emulebb/emulebb-rust
   - P2P Operations:
       - Docker And Gluetun Migration: reference/GUIDE-DOCKER-GLUETUN-P2P-STACK.md
   - API And Automation:

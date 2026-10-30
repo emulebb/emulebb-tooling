@@ -17,7 +17,7 @@ sources are not materialized as workspace repositories.
 |---|---|---|---|
 | `repos/emulebb` | `main` seed | Canonical app branch-store clone. | `validate` |
 | `workspaces/workspace/app/emulebb-main` | `main` | Maintained MFC app worktree for diagnostics and critical fixes. | `build app --variant main` |
-| `repos/emulebb-rust` | `main` | Active experimental Rust eD2K/Kad client and embedded SPA WebUI. | Cargo checks via workspace policy |
+| `repos/emulebb-rust` | `main` | eMuleBB Rust active beta eD2K/Kad client and embedded SPA WebUI. | Cargo checks via workspace policy |
 | `workspaces/workspace/app/emulebb-community-baseline` | `baseline/community-0.72a` | Community baseline worktree. | compare/live-diff |
 | `workspaces/workspace/app/emulebb-community-tracing-harness` | `tracing-harness/community-0.72a` | Tracing baseline worktree. | harness tests |
 
