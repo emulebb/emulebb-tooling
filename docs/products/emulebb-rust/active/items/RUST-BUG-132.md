@@ -22,7 +22,9 @@ source: 2026-10-23 Rust async and portability audit
 
 Give every daemon background task explicit runtime ownership, cancellation, and
 bounded joining so graceful shutdown cannot race detached work that still
-mutates state, accesses persistence, or reinstalls services.
+mutates state, accesses persistence, or reinstalls services. Download workers
+must quiesce cooperatively and persist their final acknowledged progress before
+bounded fallback aborts a non-cooperative task.
 
 ## Current State
 
@@ -57,6 +59,10 @@ ordinary fast shutdown appears to pass.
   bounded deadlines, then finalize network and durable state.
 - Treat timeout or task panic as a surfaced shutdown failure with diagnostics,
   not as permission to silently abandon stateful work.
+- Stop download admission, request cooperative worker drain, capture final
+  transfer progress, and persist the dirty checkpoint before abort fallback.
+- Bound the drain and checkpoint phases independently so one stalled worker or
+  persistence failure cannot hang process shutdown.
 
 ## Scope Constraints
 
@@ -80,10 +86,16 @@ ordinary fast shutdown appears to pass.
       observable.
 - [ ] Repeated startup/shutdown and profile restart leave no orphan tasks,
       listeners, monitor handles, or post-shutdown database writes.
+- [ ] A clean shutdown persists every acknowledged transfer byte before worker
+      ownership is released, so restart does not unnecessarily redownload it.
+- [ ] A non-cooperative download is aborted only after the bounded cooperative
+      drain expires, with the task and checkpoint outcome reported.
 
 ## Validation
 
 - Deterministic paused-time lifecycle tests for cancellation ordering.
 - Delayed monitor-start regression that begins shutdown before installation.
 - Task panic and timeout tests with named diagnostics.
+- In-flight download tests for final progress persistence, checkpoint failure,
+  bounded forced abort, and restart recovery.
 - Existing package lifecycle smoke on every supported operating system.
