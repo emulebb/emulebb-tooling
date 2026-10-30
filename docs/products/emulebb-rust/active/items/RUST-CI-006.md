@@ -37,6 +37,12 @@ declared set, not a proven complete set, until this campaign passes.
 - Large-library, live, and targeted peer witnesses exist for later changes, but
   no single retained campaign reruns the complete stock/MFC/current-aMule matrix
   at the current immutable head.
+- The bounded Beta 3 implementation checkpoint merged as Rust
+  `431d45a8283fe5edbc8357be412e933771af3232` with harness support at
+  `00467b7600288989797703785f10b4a2eab2fdc7`, stock eMule at
+  `ac3d52e`, and current aMule at
+  `c2603a75da93ee248b17cb1d4187237601152d27`. This is a reproducible input
+  set, not completed same-head parity evidence.
 - The obsolete upload/download gap analysis and beta.1 soak runbook were retired
   on 2026-10-13. Archived `RUST-CI-002` and `RUST-FEAT-033` now own those results;
   the remaining gap is a same-head full campaign.
