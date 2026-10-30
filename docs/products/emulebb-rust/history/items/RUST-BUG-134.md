@@ -5,7 +5,7 @@ product: emulebb-rust
 phase: Phase 0
 github_issue: https://github.com/emulebb/emulebb-rust/issues/159
 title: Own MiniUPnPc URL allocations across fallible discovery
-status: OPEN
+status: DONE
 priority: Major
 category: bug
 labels: [rust, ffi, upnp, nat, memory, resource-ownership, beta]
@@ -72,15 +72,15 @@ free.
 
 ## Acceptance Criteria
 
-- [ ] Every native call that initializes `UPNPUrls` transfers it immediately to
+- [x] Every native call that initializes `UPNPUrls` transfers it immediately to
       one RAII owner.
-- [ ] Every success, validation error, unexpected-status error, and constructor
+- [x] Every success, validation error, unexpected-status error, and constructor
       error frees the URLs exactly once.
-- [ ] Moving URLs into a live `Gateway` prevents the temporary guard from
+- [x] Moving URLs into a live `Gateway` prevents the temporary guard from
       releasing them early.
-- [ ] Null, partial, and malformed gateway metadata remain recoverable errors
+- [x] Null, partial, and malformed gateway metadata remain recoverable errors
       without leaks or double frees.
-- [ ] No unsafe `Send`/`Sync` implementation is introduced for the gateway.
+- [x] No unsafe `Send`/`Sync` implementation is introduced for the gateway.
 
 ## Validation
 
@@ -89,3 +89,15 @@ free.
 - Repeated discovery-failure test under a native leak detector where available.
 - Existing MiniUPnPc, NAT backend, and daemon startup tests on all supported
   operating systems.
+
+## Resolution
+
+- Wrapped MiniUPnPc URL allocations in an immediate RAII owner across every discovery outcome.
+- Merged by [emulebb-rust#194](https://github.com/emulebb/emulebb-rust/pull/194) at [431d45a8](https://github.com/emulebb/emulebb-rust/commit/431d45a8283fe5edbc8357be412e933771af3232).
+
+## Evidence
+
+- `cargo test -p emulebb-miniupnpc`
+- `cargo test --workspace`
+- `cargo clippy --workspace --all-targets -- -D warnings`
+- `python tools/rust_quality_gate.py build`

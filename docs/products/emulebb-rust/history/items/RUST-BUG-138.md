@@ -5,7 +5,7 @@ product: emulebb-rust
 phase: Phase 0
 github_issue: https://github.com/emulebb/emulebb-rust/issues/187
 title: Correlate Kad search responses before flood limiting
-status: OPEN
+status: DONE
 priority: Major
 category: bug
 labels: [rust, kad, protocol, correlation, abuse-resistance]
@@ -33,12 +33,24 @@ legitimate response allowance of an active lookup.
 
 ## Acceptance Criteria
 
-- [ ] Correlation precedes response-rate accounting.
-- [ ] Invalid traffic cannot starve a later legitimate response.
-- [ ] Valid stock-shaped responses retain current traversal behavior.
-- [ ] Deterministic spoofed-flood and legitimate-response tests pass.
+- [x] Correlation precedes response-rate accounting.
+- [x] Invalid traffic cannot starve a later legitimate response.
+- [x] Valid stock-shaped responses retain current traversal behavior.
+- [x] Deterministic spoofed-flood and legitimate-response tests pass.
 
 ## Validation
 
 - Focused Kad RPC correlation and limiter tests.
 - Packet diagnostics proving rejection reason and valid-request continuity.
+
+## Resolution
+
+- Registered expected Kad response targets and endpoints before flood accounting, with RAII cleanup.
+- Merged by [emulebb-rust#194](https://github.com/emulebb/emulebb-rust/pull/194) at [431d45a8](https://github.com/emulebb/emulebb-rust/commit/431d45a8283fe5edbc8357be412e933771af3232).
+
+## Evidence
+
+- `cargo test -p emulebb-kad-net`; `cargo test -p emulebb-kad-dht`
+- `cargo test --workspace`
+- `cargo clippy --workspace --all-targets -- -D warnings`
+- `python tools/rust_quality_gate.py build`

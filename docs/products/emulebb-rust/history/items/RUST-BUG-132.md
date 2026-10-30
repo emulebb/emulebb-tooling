@@ -5,7 +5,7 @@ product: emulebb-rust
 phase: Phase 0
 github_issue: https://github.com/emulebb/emulebb-rust/issues/154
 title: Own daemon background tasks through graceful shutdown
-status: OPEN
+status: DONE
 priority: Major
 category: bug
 labels: [rust, tokio, shutdown, lifecycle, concurrency, beta]
@@ -76,19 +76,19 @@ ordinary fast shutdown appears to pass.
 
 ## Acceptance Criteria
 
-- [ ] Every daemon-spawned background task is registered with one lifecycle
+- [x] Every daemon-spawned background task is registered with one lifecycle
       owner and observes explicit cancellation.
-- [ ] Graceful teardown joins all registered tasks before final network and
+- [x] Graceful teardown joins all registered tasks before final network and
       persistence resources are released.
-- [ ] Shared-directory monitor startup cannot install or replace a monitor after
+- [x] Shared-directory monitor startup cannot install or replace a monitor after
       shutdown begins.
-- [ ] Task panic and join timeout identify the task and make shutdown failure
+- [x] Task panic and join timeout identify the task and make shutdown failure
       observable.
-- [ ] Repeated startup/shutdown and profile restart leave no orphan tasks,
+- [x] Repeated startup/shutdown and profile restart leave no orphan tasks,
       listeners, monitor handles, or post-shutdown database writes.
-- [ ] A clean shutdown persists every acknowledged transfer byte before worker
+- [x] A clean shutdown persists every acknowledged transfer byte before worker
       ownership is released, so restart does not unnecessarily redownload it.
-- [ ] A non-cooperative download is aborted only after the bounded cooperative
+- [x] A non-cooperative download is aborted only after the bounded cooperative
       drain expires, with the task and checkpoint outcome reported.
 
 ## Validation
@@ -99,3 +99,15 @@ ordinary fast shutdown appears to pass.
 - In-flight download tests for final progress persistence, checkpoint failure,
   bounded forced abort, and restart recovery.
 - Existing package lifecycle smoke on every supported operating system.
+
+## Resolution
+
+- Added cooperative daemon quiescence, bounded task joins, and a final dirty-progress checkpoint before forced abort.
+- Merged by [emulebb-rust#194](https://github.com/emulebb/emulebb-rust/pull/194) at [431d45a8](https://github.com/emulebb/emulebb-rust/commit/431d45a8283fe5edbc8357be412e933771af3232).
+
+## Evidence
+
+- `cargo test -p emulebb-core`; `cargo test -p emulebb-ed2k`
+- `cargo test --workspace`
+- `cargo clippy --workspace --all-targets -- -D warnings`
+- `python tools/rust_quality_gate.py build`

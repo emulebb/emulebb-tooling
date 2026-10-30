@@ -5,7 +5,7 @@ product: emulebb-rust
 phase: Phase 0
 github_issue: https://github.com/emulebb/emulebb-rust/issues/160
 title: Test packet diagnostics without unsafe environment mutation
-status: OPEN
+status: DONE
 priority: Major
 category: ci
 labels: [rust, tests, safety, environment, diagnostics, concurrency, beta]
@@ -71,15 +71,15 @@ precondition merely to exercise configuration refresh behavior.
 
 ## Acceptance Criteria
 
-- [ ] No in-process Rust test calls unsafe `std::env::set_var` or
+- [x] No in-process Rust test calls unsafe `std::env::set_var` or
       `std::env::remove_var` after the test runtime may be multithreaded.
-- [ ] The early-miss/late-success dump regression remains deterministic and
+- [x] The early-miss/late-success dump regression remains deterministic and
       restores all injected state through ordinary ownership.
-- [ ] Any subprocess-based environment test sets its environment before child
+- [x] Any subprocess-based environment test sets its environment before child
       execution and does not mutate the parent environment.
-- [ ] Packet-diagnostics tests pass under default parallel execution and when
+- [x] Packet-diagnostics tests pass under default parallel execution and when
       repeatedly filtered or reordered.
-- [ ] Production dump lookup remains retryable after an initially unavailable
+- [x] Production dump lookup remains retryable after an initially unavailable
       destination.
 
 ## Validation
@@ -88,3 +88,15 @@ precondition merely to exercise configuration refresh behavior.
 - A deterministic early-miss/late-success test through the injected seam.
 - Existing persisted diagnostics harness validation without ad-hoc launch
   logic.
+
+## Resolution
+
+- Replaced process-environment mutation with injected diagnostics configuration and retryable dump ownership.
+- Merged by [emulebb-rust#194](https://github.com/emulebb/emulebb-rust/pull/194) at [431d45a8](https://github.com/emulebb/emulebb-rust/commit/431d45a8283fe5edbc8357be412e933771af3232).
+
+## Evidence
+
+- `cargo test -p emulebb-diagnostics`
+- `cargo test --workspace`
+- `cargo clippy --workspace --all-targets -- -D warnings`
+- `python tools/rust_quality_gate.py build`

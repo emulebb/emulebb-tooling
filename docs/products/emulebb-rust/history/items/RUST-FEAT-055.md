@@ -5,7 +5,7 @@ product: emulebb-rust
 phase: Phase 0
 github_issue: https://github.com/emulebb/emulebb-rust/issues/192
 title: Register bounded automatic Kad search widening
-status: OPEN
+status: DONE
 priority: Major
 category: feature
 labels: [rust, kad, search, protocol-extension, interoperability]
@@ -35,13 +35,25 @@ action while preserving stock-compatible packet shapes.
 
 ## Acceptance Criteria
 
-- [ ] Public value searches retain bounded automatic widening by default.
-- [ ] No wider request is duplicated or sent after deadline or cancellation.
-- [ ] Non-user-facing traversals retain recovery-only behavior.
-- [ ] Diagnostics expose widening cost and yield.
-- [ ] The extension registry documents compatibility, policy, and bounds.
+- [x] Public value searches retain bounded automatic widening by default.
+- [x] No wider request is duplicated or sent after deadline or cancellation.
+- [x] Non-user-facing traversals retain recovery-only behavior.
+- [x] Diagnostics expose widening cost and yield.
+- [x] The extension registry documents compatibility, policy, and bounds.
 
 ## Validation
 
 - Traversal state-machine tests for four-reask, distinct-peer, deadline, cancellation, and deduplication behavior.
 - Stock packet-shape goldens and current-aMule comparison evidence.
+
+## Resolution
+
+- Retained bounded Maximize widening for public value searches while keeping non-user traversals recovery-only, with yield diagnostics.
+- Merged by [emulebb-rust#194](https://github.com/emulebb/emulebb-rust/pull/194) at [431d45a8](https://github.com/emulebb/emulebb-rust/commit/431d45a8283fe5edbc8357be412e933771af3232).
+
+## Evidence
+
+- `cargo test -p emulebb-kad-dht`
+- `cargo test --workspace`
+- `cargo clippy --workspace --all-targets -- -D warnings`
+- `python tools/rust_quality_gate.py build`

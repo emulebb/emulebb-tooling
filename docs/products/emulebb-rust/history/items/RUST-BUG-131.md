@@ -5,7 +5,7 @@ product: emulebb-rust
 phase: Phase 0
 github_issue: https://github.com/emulebb/emulebb-rust/issues/153
 title: Make category deletion and transfer remap atomic
-status: OPEN
+status: DONE
 priority: Major
 category: bug
 labels: [rust, categories, sqlite, transactions, persistence, beta]
@@ -75,15 +75,15 @@ correctness defect rather than a recoverable display issue.
 
 ## Acceptance Criteria
 
-- [ ] Category deletion and every affected transfer assignment commit in one
+- [x] Category deletion and every affected transfer assignment commit in one
       atomic durable transaction.
-- [ ] Failure injection at each write boundary leaves the pre-delete snapshot
+- [x] Failure injection at each write boundary leaves the pre-delete snapshot
       intact both in memory and after restart.
-- [ ] Successful deletion resets transfers in the removed category and shifts
+- [x] Successful deletion resets transfers in the removed category and shifts
       later user-visible categories exactly once.
-- [ ] Category identifiers cannot refer to a different logical category after
+- [x] Category identifiers cannot refer to a different logical category after
       crash, rollback, retry, or restart.
-- [ ] Concurrent category and transfer mutations are serialized through an
+- [x] Concurrent category and transfer mutations are serialized through an
       explicit ownership boundary instead of incidental global locking.
 
 ## Validation
@@ -93,3 +93,15 @@ correctness defect rather than a recoverable display issue.
   deletion.
 - Concurrent category edit and transfer update tests.
 - Imported MFC profile regression preserving expected positional behavior.
+
+## Resolution
+
+- Moved category deletion and transfer remapping into one cancellation-safe SQLite transaction with failure injection.
+- Merged by [emulebb-rust#194](https://github.com/emulebb/emulebb-rust/pull/194) at [431d45a8](https://github.com/emulebb/emulebb-rust/commit/431d45a8283fe5edbc8357be412e933771af3232).
+
+## Evidence
+
+- `cargo test -p emulebb-metadata`
+- `cargo test --workspace`
+- `cargo clippy --workspace --all-targets -- -D warnings`
+- `python tools/rust_quality_gate.py build`

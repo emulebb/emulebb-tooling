@@ -43,24 +43,9 @@ exception; new Rust items always use the `RUST-*` form.
 | [RUST-CI-006](items/RUST-CI-006.md) | Evidence | Refresh current-head stock parity evidence and reconcile docs |
 | [RUST-CI-008](items/RUST-CI-008.md) | Evidence | Prove Unicode and long-path large-library behavior across platforms |
 | [RUST-CI-009](items/RUST-CI-009.md) | Evidence | Certify a Beta 3 candidate without publishing |
-| [RUST-CI-029](items/RUST-CI-029.md) | Evidence | Test packet diagnostics without unsafe environment mutation |
 | [RUST-CI-030](items/RUST-CI-030.md) | Evidence | Verify Rust FFI layouts against vendored C headers |
 | [RUST-CI-031](items/RUST-CI-031.md) | Evidence | Build persisted full-tunnel protocol parity soaks |
 | [CI-054](items/CI-054.md) | Evidence | Add native Windows Rust/MFC protocol-parity diagnostics campaign |
-| [RUST-BUG-129](items/RUST-BUG-129.md) | Bug | Queue targeted re-hash after upload-time source invalidation |
-| [RUST-BUG-130](items/RUST-BUG-130.md) | Bug | Release search drain ownership when persistence fails |
-| [RUST-BUG-131](items/RUST-BUG-131.md) | Bug | Make category deletion and transfer remap atomic |
-| [RUST-BUG-132](items/RUST-BUG-132.md) | Bug | Own daemon background tasks through graceful shutdown |
-| [RUST-BUG-133](items/RUST-BUG-133.md) | Bug | Bound REST request bodies before metadata validation |
-| [RUST-BUG-134](items/RUST-BUG-134.md) | Bug | Own MiniUPnPc URL allocations across fallible discovery |
-| [RUST-BUG-137](items/RUST-BUG-137.md) | Bug | Decode legacy eD2K strings with negotiated stock semantics |
-| [RUST-BUG-138](items/RUST-BUG-138.md) | Bug | Correlate Kad search responses before flood limiting |
-| [RUST-BUG-139](items/RUST-BUG-139.md) | Bug | Bound Kad restrictive-search evaluation work |
-| [RUST-BUG-140](items/RUST-BUG-140.md) | Bug | Preflight Kad counted vectors before allocation |
-| [RUST-BUG-141](items/RUST-BUG-141.md) | Bug | Converge OFFERFILES v1 negotiation with the documented contract |
-| [RUST-BUG-142](items/RUST-BUG-142.md) | Bug | Bound shared-directory watcher ingress before coalescing |
-| [RUST-BUG-143](items/RUST-BUG-143.md) | Bug | Align machine-readable client scope and HTTP defaults |
-| [RUST-FEAT-055](items/RUST-FEAT-055.md) | Feature | Register bounded automatic Kad search widening |
 | [RUST-REF-005](items/RUST-REF-005.md) | Refactor | Decompose oversized Rust modules by responsibility |
 | [RUST-REF-006](items/RUST-REF-006.md) | Refactor | Consolidate Rust NAT and runtime safety internals |
 | [RUST-REF-008](items/RUST-REF-008.md) | Refactor | Reduce large-library metadata and scan I/O amplification |
