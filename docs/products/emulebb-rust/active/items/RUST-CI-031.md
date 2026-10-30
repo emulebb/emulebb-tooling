@@ -1490,10 +1490,13 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   watcher, storage policy, and full-tunnel route checks then reported healthy
   with no findings. Both writers reported zero drops, encoding errors, write
   errors, or storage-policy faults.
-- The durable gate currently retains one successful eD2K server cycle and one
-  successful Kad cycle with zero retryable outcomes and zero confirmed
-  divergences. The campaign remains active so both writers can rotate
-  naturally and the action driver can collect longer causal-session evidence.
+- The durable gate reached green at `2026-10-30T22:44:59.000212+00:00` after
+  four successful eD2K server cycles and four successful Kad cycles, with zero
+  retryable outcomes and zero confirmed divergences. Before the gate completed,
+  both diagnostic writers rotated naturally at least once and continued with
+  zero dropped events, encoding errors, write errors, or storage-policy faults.
+  The campaign remains active so the action driver can collect longer
+  post-green causal-session evidence.
 - This is an in-progress discovery checkpoint, not a parity conclusion. Final
   evidence still requires canonical stop, finalized indexes, complete analyzer
   review, and explicit inspection of exact unredacted protocol traces.
