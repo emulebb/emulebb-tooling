@@ -1360,17 +1360,50 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
 - No live client, VPN, or public-network action was launched. Tunnel-down,
   dual-client, rotation, action-parity, and clean-stop evidence remains open.
 
+## Exact Bundle And Bandwidth Checkpoint - 2026-10-30
+
+- The previous persisted campaign reached teardown but failed because its final
+  Rust bundle required `4,325,190` bytes against a `4,194,304`-byte stream
+  contract. This was an evidence-finalization defect, not a protocol result.
+- Build-tests commit `e308380` replaced the live-wire input contract with one
+  canonical v2 schema. It requires one shared upload limit, removes the prior
+  schema and Sonarr fallback paths, and applies the same configured value to
+  Rust and MFC. The operator-local campaign input now selects `8 KiB/s` so a
+  long search-focused soak cannot generate high-rate upload traces.
+- Rust commit `54ab0191e9dae2c531b8649e9cec4f757690b052` replaced diagnostic
+  bundle v5 with the sole current `emulebb.diagnostic-bundle.v6` contract. The
+  request supplies an explicit byte budget, the endpoint serializes the exact
+  response once, deterministically removes only duplicated snapshot rows when
+  necessary, reports every budget omission, and rejects an oversized mandatory
+  core. The segmented `diag_event_v2` stream remains the complete packet and
+  semantic evidence authority.
+- Build-tests commit `913320f45efc0c6c27931c8f5f7f2ac19ec1e2a4` requests the
+  configured stream budget and persists the exact server bytes without JSON
+  reserialization. Focused harness validation passed `424` bandwidth-contract
+  tests and `197` exact-bundle/storage/controller tests. Rust validation passed
+  `140` REST tests, strict Clippy, and formatting.
+- No PR is open. The common work-in-progress branch is
+  `feature/persisted-soak-parity-gate`; it remains intentionally unmerged until
+  the complete live parity slice and clean finalization are green.
+
 ## Next Implementation
 
-- Keep the persisted soak paused while this completed Kad admission and
-  completion-receipt slice is reviewed.
-- Rebuild Rust diagnostics from `431d45a8283fe5edbc8357be412e933771af3232`
-  with harness `00467b7600288989797703785f10b4a2eab2fdc7`, restart the same persisted profiles,
-  and require every driven Kad lookup either to show a phase-2 request plus an
-  authoritative completed receipt or to remain explicitly not dispatched with
-  its exact retryable reason. Require a silent connected server to finish as
-  completed with `statusReason=server-timeout` plus a terminal `timed_out`
-  session diagnostic, never as an unexplained zero-result completion.
+- Build Rust diagnostics from `54ab0191e9dae2c531b8649e9cec4f757690b052`
+  with harness `913320f45efc0c6c27931c8f5f7f2ac19ec1e2a4`, then run the
+  canonical read-only persisted preflight while hide.me is active in
+  full-tunnel mode with split tunneling disabled and VPN Guard Block selected.
+- Run one bounded dual-client smoke against the same exact server endpoint:
+  verify zero-plan profile reuse, the shared `8 KiB/s` upload cap, one server
+  search, one Kad search, exact lifecycle receipts, graceful stop, byte-bounded
+  final bundle capture, and finalized diagnostic indexes with no integrity gap.
+- After the smoke is green, require four successful server action cycles and
+  four successful Kad action cycles using campaign-stable ASCII and Unicode
+  terms. Retry public-network misses that remain explicitly inconclusive; do
+  not count them as successful cycles or protocol divergences.
+- Treat request encoding, parser behavior, lifecycle decisions, timeout cause,
+  packet correlation, and connection continuity as parity authority. Public
+  result counts may differ and are comparable only when both clients used the
+  same exact server endpoint.
 - Run a serial or endpoint-swapped live A/B before treating a missing
   `OP_SEARCHRESULT` as a Rust protocol defect. Connected-server result counts
   from different public endpoints are not a valid parity assertion; request
@@ -1393,7 +1426,8 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   that evidence, each as a separate tested commit.
 - Keep the next run until-stopped once the action-driven proof is clean. Do not
   open a pull request until the complete significant slice is green and the
-  operator explicitly requests it.
+  operator explicitly requests it. This slice makes no VPN-safety claim until a
+  separate controlled tunnel-down proof is completed.
 
 ## Why This Matters
 
