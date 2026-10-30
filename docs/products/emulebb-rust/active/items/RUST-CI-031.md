@@ -1472,6 +1472,13 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   `feature/persisted-soak-parity-gate`. The significant harness slice is now
   green and ready for normal cross-repository review; no trace or profile path
   is tracked.
+- Review is open as Rust PR
+  [#206](https://github.com/emulebb/emulebb-rust/pull/206), build-tests PR
+  [#81](https://github.com/emulebb/emulebb-build-tests/pull/81), and tooling PR
+  [#132](https://github.com/emulebb/emulebb-tooling/pull/132). Build-tests
+  depends on the Rust bundle contract, and tooling records both implementation
+  PRs; the single topic branch remains active until the dependency-ordered
+  review and merge lifecycle completes.
 
 ## Next Implementation
 
