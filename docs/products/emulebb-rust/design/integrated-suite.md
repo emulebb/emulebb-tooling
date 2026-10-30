@@ -92,8 +92,8 @@ are forbidden.
 
 Torznab and qBittorrent-compatible routes use their native paths on the same
 listener. Route-family authentication and rate controls remain explicit. The
-listener is LAN-reachable by default and never treats LAN location as
-authentication.
+listener is loopback-only by default; explicit non-loopback exposure remains
+authenticated and never treats network location as authentication.
 
 The contract freezes only after the Arr gate. At that point, `/api/v1`, config,
 and the durable schema acquire coordinated compatibility obligations.
