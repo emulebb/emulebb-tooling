@@ -20,9 +20,6 @@ PROHIBITED_ASSET_PATTERN = re.compile(
     r"emule-logo|Logo\.jpg|screenshot",
     re.IGNORECASE,
 )
-ALLOWED_IMAGE_SRC_PATTERN = re.compile(
-    r"^(?:\.\./)*assets/(?:team/[a-z0-9-]+|brand/emulebb-broadband-edition-logo)\.png$"
-)
 ARCHIVAL_RUST_PROMOTION_PATTERN = re.compile(
     r"0\.1\.0-beta\.2|rust-v0\.1\.0-beta\.2|formal\s+Beta\s*2|public\s+Beta\s*2|fixed\s+baseline",
     re.IGNORECASE,
@@ -118,7 +115,7 @@ CANONICAL_PAGES = (
     PageSpec("zh-TW", "zh-TW", "zh-tw", "0.8"),
 )
 LANGUAGE_PAGE = PageSpec("en", "en", "languages", "0.7")
-RUST_PAGE = PageSpec("en", "en", "rust", "0.9")
+RUST_REDIRECT_FILE = Path("rust") / "index.html"
 FAQ_LOCALE_DIRECTORIES = (
     ("en", "en", "faq"),
     ("it", "it", "it/faq"),
@@ -353,18 +350,25 @@ def validate_page(pages_root: Path, page: PageSpec, errors: list[str]) -> None:
     if not page.directory:
         expect(errors, '"@type": "Organization"' in text, "index.html: missing Organization structured data")
         expect(errors, '"@type": "WebSite"' in text, "index.html: missing WebSite structured data")
+        expect(errors, '"@type": "SoftwareApplication"' in text, "index.html: missing SoftwareApplication structured data")
+        expect(
+            errors,
+            '"downloadUrl": "https://github.com/emulebb/emulebb-rust/releases"' in text,
+            "index.html: downloadUrl must use the Rust releases page",
+        )
+        expect(errors, '"softwareVersion"' not in text, "index.html: softwareVersion must not advertise an archived release")
+        expect(errors, '"releaseNotes"' not in text, "index.html: releaseNotes must not advertise an archived release")
+        for section_id in ("top", "proof", "docs", "repos"):
+            expect(errors, section_id in parsed.ids, f"index.html: missing focused section #{section_id}")
+        for section_id in ("install", "why", "features", "team", "release"):
+            expect(errors, section_id not in parsed.ids, f"index.html: obsolete section #{section_id} must not exist")
 
 
 def validate_images(relative_file: Path, parsed: ParsedPage, errors: list[str]) -> None:
-    """Allow only the header brand logo and section-local Team/lore images."""
+    """Keep every public HTML page free of in-page images."""
 
     for attrs in parsed.images:
-        src = attrs.get("src", "")
-        alt = attrs.get("alt", "")
-        if not ALLOWED_IMAGE_SRC_PATTERN.match(src):
-            errors.append(f"{relative_file}: unsupported image source: {src}")
-        if not alt.strip():
-            errors.append(f"{relative_file}: image is missing alt text: {src}")
+        errors.append(f"{relative_file}: in-page image is not allowed: {attrs.get('src', '')}")
 
 
 def validate_language_page(pages_root: Path, errors: list[str]) -> None:
@@ -433,40 +437,25 @@ def validate_faq_page(pages_root: Path, page: PageSpec, errors: list[str]) -> No
     validate_images(page.relative_file, parsed, errors)
 
 
-def validate_rust_page(pages_root: Path, errors: list[str]) -> None:
-    """Validate the English-only eMuleBB Rust product page."""
+def validate_rust_redirect(pages_root: Path, errors: list[str]) -> None:
+    """Validate the compatibility redirect left at the retired Rust page URL."""
 
-    path = pages_root / RUST_PAGE.relative_file
-    expect(errors, path.is_file(), f"{RUST_PAGE.relative_file}: missing Rust product page")
+    path = pages_root / RUST_REDIRECT_FILE
+    expect(errors, path.is_file(), f"{RUST_REDIRECT_FILE}: missing compatibility redirect")
     if not path.is_file():
         return
 
     text = read_text(path)
     parsed = parse_page(path)
-    expect(errors, text.lower().count("<!doctype html>") == 1, f"{RUST_PAGE.relative_file}: expected one doctype")
-    expect(errors, '"@type": "SoftwareApplication"' in text, f"{RUST_PAGE.relative_file}: missing SoftwareApplication structured data")
-    expect(errors, parsed.html_lang == "en", f"{RUST_PAGE.relative_file}: html lang should be en")
-    expect(errors, parsed.robots == ["index,follow"], f"{RUST_PAGE.relative_file}: robots should be index,follow")
-    expect(errors, parsed.canonicals == [RUST_PAGE.url], f"{RUST_PAGE.relative_file}: canonical should be {RUST_PAGE.url}")
-    expect(errors, parsed.og_urls == [RUST_PAGE.url], f"{RUST_PAGE.relative_file}: og:url should be {RUST_PAGE.url}")
-    expect(errors, parsed.sitemaps == [f"{SITE_BASE_URL}/sitemap.xml"], f"{RUST_PAGE.relative_file}: sitemap link mismatch")
-    expect(errors, PICO_CDN in parsed.stylesheets, f"{RUST_PAGE.relative_file}: missing Pico CSS CDN")
-    expect(errors, RUST_PAGE.stylesheet_href in parsed.stylesheets, f"{RUST_PAGE.relative_file}: missing {RUST_PAGE.stylesheet_href}")
-    expect(errors, parsed.icons == [RUST_PAGE.favicon_href], f"{RUST_PAGE.relative_file}: favicon link mismatch")
-    expect(errors, not parsed.alternates, f"{RUST_PAGE.relative_file}: English-only Rust page must not publish hreflang alternates")
-    expect(errors, not parsed.images, f"{RUST_PAGE.relative_file}: Rust page must remain text-only")
-    expect(
-        errors,
-        not ARCHIVAL_RUST_PROMOTION_PATTERN.search(text),
-        f"{RUST_PAGE.relative_file}: archived Beta 2 release must not be promoted",
-    )
-    expect(errors, '"softwareVersion"' not in text, f"{RUST_PAGE.relative_file}: softwareVersion must not advertise an archived release")
-    expect(errors, '"releaseNotes"' not in text, f"{RUST_PAGE.relative_file}: releaseNotes must not advertise an archived release")
-    expect(
-        errors,
-        '"downloadUrl": "https://github.com/emulebb/emulebb-rust/releases"' in text,
-        f"{RUST_PAGE.relative_file}: downloadUrl must use the nightly releases page",
-    )
+    expect(errors, text.lower().count("<!doctype html>") == 1, f"{RUST_REDIRECT_FILE}: expected one doctype")
+    expect(errors, parsed.html_lang == "en", f"{RUST_REDIRECT_FILE}: html lang should be en")
+    expect(errors, parsed.robots == ["noindex,follow"], f"{RUST_REDIRECT_FILE}: robots should be noindex,follow")
+    expect(errors, parsed.canonicals == [f"{SITE_BASE_URL}/"], f"{RUST_REDIRECT_FILE}: canonical should be the homepage")
+    expect(errors, not parsed.alternates, f"{RUST_REDIRECT_FILE}: redirect must not publish hreflang alternates")
+    expect(errors, not parsed.images, f"{RUST_REDIRECT_FILE}: redirect must remain text-only")
+    expect(errors, 'http-equiv="refresh"' in text, f"{RUST_REDIRECT_FILE}: missing meta refresh")
+    expect(errors, "url=../" in text, f"{RUST_REDIRECT_FILE}: redirect must point to the homepage")
+    expect(errors, '"@type": "SoftwareApplication"' not in text, f"{RUST_REDIRECT_FILE}: redirect must not duplicate product content")
     localized_rust_pages = sorted(
         candidate.relative_to(pages_root)
         for candidate in pages_root.glob("*/rust/index.html")
@@ -516,7 +505,7 @@ def validate_sitemap(pages_root: Path, errors: list[str]) -> None:
 
     namespace = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
     locs = [node.text or "" for node in root.findall(".//sm:loc", namespace)]
-    sitemap_pages = (*CANONICAL_PAGES, RUST_PAGE, LANGUAGE_PAGE, *FAQ_PAGES)
+    sitemap_pages = (*CANONICAL_PAGES, LANGUAGE_PAGE, *FAQ_PAGES)
     expected_locs = [page.url for page in sitemap_pages]
     expect(errors, locs == expected_locs, "sitemap.xml: loc list does not match canonical locale order")
     priorities = [node.text or "" for node in root.findall(".//sm:priority", namespace)]
@@ -528,10 +517,17 @@ def validate_sitemap(pages_root: Path, errors: list[str]) -> None:
 
 
 def validate_prohibited_assets(pages_root: Path, errors: list[str]) -> None:
-    """Ensure static pages do not regain prohibited image dependencies."""
+    """Keep the favicon as the only published image asset."""
 
     favicon = pages_root / "assets" / "brand" / "emulebb-favicon.ico"
     expect(errors, favicon.is_file(), "assets/brand/emulebb-favicon.ico: missing favicon")
+    image_suffixes = {".gif", ".jpeg", ".jpg", ".png", ".webp"}
+    unexpected_images = sorted(
+        path.relative_to(pages_root)
+        for path in (pages_root / "assets").rglob("*")
+        if path.is_file() and path.suffix.lower() in image_suffixes
+    )
+    expect(errors, not unexpected_images, f"assets: unexpected raster images: {unexpected_images}")
     paths = [pages_root / "styles.css", pages_root / "index.html", pages_root / LANGUAGE_PAGE.relative_file]
     paths.extend(pages_root / page.relative_file for page in CANONICAL_PAGES if page.directory)
     paths.extend(pages_root / page.relative_file for page in FAQ_PAGES)
@@ -553,7 +549,7 @@ def validate_site(pages_root: Path) -> int:
     validate_language_page(pages_root, errors)
     for page in FAQ_PAGES:
         validate_faq_page(pages_root, page, errors)
-    validate_rust_page(pages_root, errors)
+    validate_rust_redirect(pages_root, errors)
     validate_release_positioning(pages_root, errors)
     validate_sitemap(pages_root, errors)
     validate_prohibited_assets(pages_root, errors)
@@ -571,7 +567,7 @@ def render_sitemap(lastmod: str) -> str:
 
     lines = ['<?xml version="1.0" encoding="UTF-8"?>']
     lines.append('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">')
-    for page in (*CANONICAL_PAGES, RUST_PAGE, LANGUAGE_PAGE, *FAQ_PAGES):
+    for page in (*CANONICAL_PAGES, LANGUAGE_PAGE, *FAQ_PAGES):
         lines.extend(
             [
                 "  <url>",
