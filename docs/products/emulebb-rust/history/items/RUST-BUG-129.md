@@ -3,7 +3,7 @@ id: RUST-BUG-129
 workflow: github
 github_issue: https://github.com/emulebb/emulebb-rust/issues/151
 title: Queue targeted re-hash after upload-time source invalidation
-status: OPEN
+status: DONE
 priority: Major
 category: bug
 labels: [rust, sharing, hashing, upload, integrity, beta]
@@ -87,19 +87,19 @@ recovering automatically and cheaply when the changed file becomes stable.
 
 ## Acceptance Criteria
 
-- [ ] Upload-time source mismatch withdraws the stale hash before any payload
+- [x] Upload-time source mismatch withdraws the stale hash before any payload
       bytes are served.
-- [ ] The mismatch queues one targeted reconciliation for the normalized source
+- [x] The mismatch queues one targeted reconciliation for the normalized source
       path without requiring a full reload or watcher event.
-- [ ] Duplicate invalidations are coalesced and cannot produce concurrent
+- [x] Duplicate invalidations are coalesced and cannot produce concurrent
       re-hashes or peer-amplified unbounded disk work.
-- [ ] A stable readable replacement is re-hashed, replaces the stale source
+- [x] A stable readable replacement is re-hashed, replaces the stale source
       mapping, and becomes eligible for normal eD2K and Kad publication.
-- [ ] A missing, excluded, or unreadable replacement remains withdrawn and does
+- [x] A missing, excluded, or unreadable replacement remains withdrawn and does
       not enter a hot retry loop.
-- [ ] Restart and explicit shared-directory reload remain correct fallbacks and
+- [x] Restart and explicit shared-directory reload remain correct fallbacks and
       do not create duplicate catalog entries.
-- [ ] Focused regressions and retained live evidence cover changed-after-import,
+- [x] Focused regressions and retained live evidence cover changed-after-import,
       missed-watcher, duplicate-request, and unavailable-file cases.
 
 ## Validation
@@ -111,3 +111,15 @@ recovering automatically and cheaply when the changed file becomes stable.
   mapping survives reconciliation.
 - A retained imported-profile live run showing withdrawal followed by bounded
   re-hash and republication without restart or full reload.
+
+## Resolution
+
+- Added bounded, coalesced targeted re-hashing after upload-time source invalidation without falling back to a full scan.
+- Merged by [emulebb-rust#194](https://github.com/emulebb/emulebb-rust/pull/194) at [431d45a8](https://github.com/emulebb/emulebb-rust/commit/431d45a8283fe5edbc8357be412e933771af3232).
+
+## Evidence
+
+- `cargo test -p emulebb-core shared_dir_monitor`
+- `cargo test --workspace`
+- `cargo clippy --workspace --all-targets -- -D warnings`
+- `python tools/rust_quality_gate.py build`

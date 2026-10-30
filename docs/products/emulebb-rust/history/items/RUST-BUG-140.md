@@ -5,7 +5,7 @@ product: emulebb-rust
 phase: Phase 0
 github_issue: https://github.com/emulebb/emulebb-rust/issues/189
 title: Preflight Kad counted vectors before allocation
-status: OPEN
+status: DONE
 priority: Major
 category: bug
 labels: [rust, kad, protocol, decoding, resource-bounds]
@@ -32,12 +32,24 @@ packet size before allocation or iterative parsing.
 
 ## Acceptance Criteria
 
-- [ ] Impossible counts fail before allocation.
-- [ ] Truncated and oversized vectors return structured decode errors.
-- [ ] Valid boundary packets decode unchanged.
-- [ ] Every remotely controlled counted-vector shape has focused coverage.
+- [x] Impossible counts fail before allocation.
+- [x] Truncated and oversized vectors return structured decode errors.
+- [x] Valid boundary packets decode unchanged.
+- [x] Every remotely controlled counted-vector shape has focused coverage.
 
 ## Validation
 
 - Kad protocol decode tests and malformed packet vectors.
 - Existing packet round-trip and golden tests.
+
+## Resolution
+
+- Preflighted remotely controlled Kad vector counts against minimum encoded sizes before allocation.
+- Merged by [emulebb-rust#194](https://github.com/emulebb/emulebb-rust/pull/194) at [431d45a8](https://github.com/emulebb/emulebb-rust/commit/431d45a8283fe5edbc8357be412e933771af3232).
+
+## Evidence
+
+- `cargo test -p emulebb-kad-proto`
+- `cargo test --workspace`
+- `cargo clippy --workspace --all-targets -- -D warnings`
+- `python tools/rust_quality_gate.py build`

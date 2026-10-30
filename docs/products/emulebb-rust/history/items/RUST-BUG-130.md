@@ -5,7 +5,7 @@ product: emulebb-rust
 phase: Phase 0
 github_issue: https://github.com/emulebb/emulebb-rust/issues/152
 title: Release search drain ownership when persistence fails
-status: OPEN
+status: DONE
 priority: Major
 category: bug
 labels: [rust, search, async, persistence, reliability, beta]
@@ -66,13 +66,13 @@ behavior.
 
 ## Acceptance Criteria
 
-- [ ] Injected initial-search persistence failure leaves no orphan queue entry
+- [x] Injected initial-search persistence failure leaves no orphan queue entry
       and no claimed drain without a live task.
-- [ ] A search submitted after the injected failure can be persisted, drained,
+- [x] A search submitted after the injected failure can be persisted, drained,
       dispatched, and completed without restarting the daemon.
-- [ ] Queue cancellation and shutdown release ownership on every error path.
-- [ ] Concurrent submissions preserve exactly one active drain and FIFO policy.
-- [ ] Search status persistence and REST responses never expose a runnable
+- [x] Queue cancellation and shutdown release ownership on every error path.
+- [x] Concurrent submissions preserve exactly one active drain and FIFO policy.
+- [x] Search status persistence and REST responses never expose a runnable
       search that lacks its durable session row.
 
 ## Validation
@@ -81,3 +81,15 @@ behavior.
   cancellation boundaries.
 - Concurrency test that submits searches during and after a persistence failure.
 - Existing eD2K/Kad search scheduler and REST conformance tests.
+
+## Resolution
+
+- Separated search prepare, durable persistence, and queue commit so failed persistence cannot orphan drain ownership.
+- Merged by [emulebb-rust#194](https://github.com/emulebb/emulebb-rust/pull/194) at [431d45a8](https://github.com/emulebb/emulebb-rust/commit/431d45a8283fe5edbc8357be412e933771af3232).
+
+## Evidence
+
+- `cargo test -p emulebb-core search_queue`
+- `cargo test --workspace`
+- `cargo clippy --workspace --all-targets -- -D warnings`
+- `python tools/rust_quality_gate.py build`

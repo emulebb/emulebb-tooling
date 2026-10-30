@@ -5,7 +5,7 @@ product: emulebb-rust
 phase: Phase 1
 github_issue: https://github.com/emulebb/emulebb-rust/issues/191
 title: Bound shared-directory watcher ingress before coalescing
-status: OPEN
+status: DONE
 priority: Major
 category: bug
 labels: [rust, sharing, watcher, resource-bounds, reliability]
@@ -33,12 +33,24 @@ collapses overflow into one authoritative reconcile requirement.
 
 ## Acceptance Criteria
 
-- [ ] Event bursts cannot grow memory without bound.
-- [ ] Overflow cannot lose eventual catalog authority.
-- [ ] Rename and final-intent coalescing remain correct.
-- [ ] Burst tests prove bounded queue depth and convergence.
+- [x] Event bursts cannot grow memory without bound.
+- [x] Overflow cannot lose eventual catalog authority.
+- [x] Rename and final-intent coalescing remain correct.
+- [x] Burst tests prove bounded queue depth and convergence.
 
 ## Validation
 
 - Deterministic ingress saturation and overflow-collapse tests.
 - Existing watcher action/coalescing and platform integration tests.
+
+## Resolution
+
+- Bound watcher ingress at 256 events and latched authoritative reconciliation after overflow.
+- Merged by [emulebb-rust#194](https://github.com/emulebb/emulebb-rust/pull/194) at [431d45a8](https://github.com/emulebb/emulebb-rust/commit/431d45a8283fe5edbc8357be412e933771af3232).
+
+## Evidence
+
+- `cargo test -p emulebb-core shared_dir_monitor`
+- `cargo test --workspace`
+- `cargo clippy --workspace --all-targets -- -D warnings`
+- `python tools/rust_quality_gate.py build`

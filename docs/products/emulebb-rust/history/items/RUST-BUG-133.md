@@ -5,7 +5,7 @@ product: emulebb-rust
 phase: Phase 0
 github_issue: https://github.com/emulebb/emulebb-rust/issues/157
 title: Bound REST request bodies before metadata validation
-status: OPEN
+status: DONE
 priority: Major
 category: bug
 labels: [rust, rest, security, safety, resource-bounds, beta]
@@ -71,16 +71,16 @@ request.
 
 ## Acceptance Criteria
 
-- [ ] Every `/api/v1` request body is capped before route metadata validation
+- [x] Every `/api/v1` request body is capped before route metadata validation
       or full-body materialization.
-- [ ] Chunked/streamed bodies and incorrect or absent `Content-Length` values
+- [x] Chunked/streamed bodies and incorrect or absent `Content-Length` values
       cannot bypass the cap.
-- [ ] Oversized bodies return `413 Payload Too Large` without invoking the
+- [x] Oversized bodies return `413 Payload Too Large` without invoking the
       handler or allocating beyond the configured policy plus bounded overhead.
-- [ ] Unauthorized requests are rejected before their bodies are consumed.
-- [ ] Normal body-field validation and bounded JSON extraction continue to
+- [x] Unauthorized requests are rejected before their bodies are consumed.
+- [x] Normal body-field validation and bounded JSON extraction continue to
       produce the documented API errors.
-- [ ] The limit and any route-specific exceptions have one documented owner.
+- [x] The limit and any route-specific exceptions have one documented owner.
 
 ## Validation
 
@@ -88,3 +88,15 @@ request.
   bodies immediately below and above the limit.
 - A streaming-body regression proving early termination and no handler call.
 - Existing REST contract, route metadata, OpenAPI, and WebUI tests.
+
+## Resolution
+
+- Enforced the authenticated 1 MiB REST body cap before route metadata parsing or handler extraction.
+- Merged by [emulebb-rust#194](https://github.com/emulebb/emulebb-rust/pull/194) at [431d45a8](https://github.com/emulebb/emulebb-rust/commit/431d45a8283fe5edbc8357be412e933771af3232).
+
+## Evidence
+
+- `cargo test -p emulebb-rest`
+- `cargo test --workspace`
+- `cargo clippy --workspace --all-targets -- -D warnings`
+- `python tools/rust_quality_gate.py build`
