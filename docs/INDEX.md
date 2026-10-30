@@ -6,7 +6,7 @@
     <h2>Active eD2K/Kad beta, led by CI-gated nightlies.</h2>
     <p>
       Choose the newest dated nightly prerelease from GitHub Releases.
-      Repeatedly tested on live eD2K/Kad networks. Beta 3 is expected after a
+      Tested for months on live eD2K/Kad networks. Beta 3 is expected after a
       few more weeks of implementation and stabilization.
     </p>
     <p>
@@ -27,8 +27,7 @@ Former BitTorrent and controller forks are retired from the current workspace;
 TrackMuleBB is archived.
 The upstream-aligned Rust `ed2k-server` fork is the sole local deterministic
 server; server changes stay minimal, generic, and upstreamable. See the
-[Product Portfolio](active/PRODUCT-PORTFOLIO.md) and
-[Roadmap Summary](reference/ROADMAP-SUMMARY.md).
+[Product Direction](active/PRODUCT-DIRECTION.md).
 
 ## Start With eMuleBB Rust
 

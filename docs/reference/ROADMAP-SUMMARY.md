@@ -35,5 +35,5 @@ Existing direct/VPN behavior must remain accurately documented and
 evidence-bound. No unspecified Docker/Gluetun stack is currently an eMuleBB
 product.
 
-See [Product Portfolio](../active/PRODUCT-PORTFOLIO.md) for the complete
+See [Product Direction](../active/PRODUCT-DIRECTION.md) for the complete
 lifecycle map and [Workspace Policy](../WORKSPACE-POLICY.md) for binding rules.

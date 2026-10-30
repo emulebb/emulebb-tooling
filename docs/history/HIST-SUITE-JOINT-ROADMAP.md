@@ -11,7 +11,7 @@ work, and **TrackMuleBB** is parked until qBittorrentBB progresses enough to
 justify a cross-network controller. The MFC
 [FUTURE-ROADMAP](../active/FUTURE-ROADMAP.md) records retained ideas and any later MFC
 decision. Companion governance:
-[PRODUCT-PORTFOLIO](../active/PRODUCT-PORTFOLIO.md), [QUALITY-GATES](../active/QUALITY-GATES.md),
+[PRODUCT-DIRECTION](../active/PRODUCT-DIRECTION.md), [QUALITY-GATES](../active/QUALITY-GATES.md),
 [API-V1-COMPATIBILITY](../active/API-V1-COMPATIBILITY.md). It is **not** a `0.7.3` gate and
 does **not** touch the shipping `0.7.x` MFC line.
 

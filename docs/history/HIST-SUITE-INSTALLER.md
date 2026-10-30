@@ -21,7 +21,7 @@ direction only (it begins after `0.7.3` ships). It must not be described as the
 current Pages one-liner until it is built, packaged, and release-proven.
 
 Governance companions: [SUITE-JOINT-ROADMAP](HIST-SUITE-JOINT-ROADMAP.md),
-[PRODUCT-PORTFOLIO](../active/PRODUCT-PORTFOLIO.md),
+[PRODUCT-DIRECTION](../active/PRODUCT-DIRECTION.md),
 [API-V1-COMPATIBILITY](../active/API-V1-COMPATIBILITY.md),
 `plans/ECOSYSTEM-SUITE-BOOTSTRAP-PLAN.md`.
 

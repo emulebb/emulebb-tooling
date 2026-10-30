@@ -52,7 +52,7 @@ nav:
   - eMuleBB Projects:
       - Brand & Naming: active/BRAND-AND-NAMING.md
       - Roadmap Summary: reference/ROADMAP-SUMMARY.md
-      - Product Portfolio: active/PRODUCT-PORTFOLIO.md
+      - Product Direction: active/PRODUCT-DIRECTION.md
       - Quality Gates: active/QUALITY-GATES.md
       - Test Strategy: active/TEST-STRATEGY.md
       - REST API Contract Lineage: active/API-V1-COMPATIBILITY.md

@@ -58,5 +58,5 @@ not presented as the active roadmap.
   [eMuleBB Roadmap](https://github.com/orgs/emulebb/projects/3).
 
 For the organization-wide view, see the
-[Product Portfolio](PRODUCT-PORTFOLIO.md) and
+[Product Direction](PRODUCT-DIRECTION.md) and
 [Roadmap Summary](../reference/ROADMAP-SUMMARY.md).

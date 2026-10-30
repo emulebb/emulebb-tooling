@@ -32,5 +32,5 @@ unofficial and link to the upstream project. Existing release artifacts keep
 their published names; this cleanup does not rename tags, packages, executable
 files, or the `0.7.3` bootstrapper.
 
-Related: [PRODUCT-PORTFOLIO](PRODUCT-PORTFOLIO.md) and
+Related: [PRODUCT-DIRECTION](PRODUCT-DIRECTION.md) and
 [WORKSPACE-POLICY](../WORKSPACE-POLICY.md).

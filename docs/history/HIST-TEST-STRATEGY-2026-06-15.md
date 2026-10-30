@@ -15,7 +15,7 @@ VPN-mode lanes. Direct-mode lanes remain available only when deliberately
 selected and labeled; they must never be a fallback from failed VPN mode.
 
 Companion governance: [QUALITY-GATES](../active/QUALITY-GATES.md),
-[PRODUCT-PORTFOLIO](../active/PRODUCT-PORTFOLIO.md),
+[PRODUCT-DIRECTION](../active/PRODUCT-DIRECTION.md),
 [Harness And Live Policy](../reference/HARNESS-LIVE-POLICY.md#selected-route-safety).
 
 ## Goal
