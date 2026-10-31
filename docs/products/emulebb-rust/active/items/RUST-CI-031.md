@@ -1555,9 +1555,34 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   proof with the final retained raw suffix. Declared focused recordings fail when
   the private proof is missing, mismatched, conflicting, or undeclared; no legacy
   trace format or fallback parser was introduced.
-- Focused scanner, collector, launcher, packaging, and offline-diff validation is
-  green: `124` tests passed. The complete harness suite then passed with `2,832`
-  tests passed, one skipped, and one deselected in `123.15 s`.
+- Build-tests commits `c3ce4a0` and `d1f4562` remove the retired split-tunnel
+  mutator from the solo lane, require read-only full-tunnel readiness, keep REST
+  on loopback, pass VPN Guard Block to both clients, and address the diagnostic
+  writer through its canonical `/api/v1` base.
+- A Rust-only transfer capture then retained a complete delivery-confirmed
+  client-UDP request lifecycle plus source engagement, server source request and
+  response, Kad lookup, queue rank, reask, and accepted payload evidence. The
+  recording itself packed successfully, but its action result exposed one final
+  persisted-profile defect: reposting an already active approved transfer returned
+  a structured duplicate conflict.
+- Build-tests commit `9b859c5` makes the approved transfer action deterministic
+  for persisted profiles: add when absent, resume when paused, reuse only exact
+  runnable hash-and-size state, and fail explicitly for stopped, completed,
+  mismatched, or otherwise non-runnable state. No profile reset, transfer deletion,
+  or duplicate-conflict compatibility shim was added. The next Rust capture exited
+  cleanly with exact client-UDP proof and a packed bounded recording.
+- The sequential MFC half added the same frozen fixture and retained server source
+  request/response, source engagement, and queue-rank evidence, but produced no
+  outbound client-UDP attempt or terminal outcome across multiple normal reask
+  intervals. During the extended standby wait hide.me later disconnected. Guard
+  Block and interface binding prevented a direct-route fallback, both clients were
+  confirmed stopped, and the incomplete MFC run remains local evidence rather than
+  a parity claim.
+- Build-tests commit `efa206e` adds a read-only full-tunnel guard to every focused
+  transfer-proof poll and immediately converts route loss into a non-green retained
+  result followed by normal teardown, final-segment collection, and packing. The
+  complete harness suite is green at `2,842` passed, one skipped, and one deselected
+  in `130.02 s`.
 
 ## Next Implementation
 
@@ -1572,11 +1597,14 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
 - Preserve MFC zero hashing and the Rust zero-plan restart invariant while
   protocol parity work continues. Any future nonzero plan must identify
   genuinely changed or new files rather than another compatibility workaround.
-- Run the approved direct-transfer action sequentially against Rust and MFC on
-  their configured persisted profiles. Use the incremental exact transfer-proof
-  gate rather than a fixed sleep, retain the complete source/queue/client-UDP
-  chain within the bounded private artifact, and compare the paired recordings
-  offline by deterministic action identifier.
+- Reconnect hide.me, rerun only the MFC half under the same sequential model, and
+  let the new route guard produce either a complete packed proof or a packed
+  non-green route-loss result. Do not rerun the already-green Rust half unless the
+  frozen campaign fixture or diagnostic contract changes.
+- If MFC again retains source engagement and queue rank without an outbound
+  client-UDP attempt, inspect the exact MFC queue/reask diagnostics before changing
+  either product. Determine whether the gap is MFC runtime behavior, missing MFC
+  instrumentation, or a transfer-state precondition; do not weaken the proof gate.
 - Keep the proven server/Kad search gate unchanged. Treat the sequential transfer
   capture as a separate protocol-coverage proof; do not weaken required-family
   or diagnostic-conformance gates when an action did not generate the family.
