@@ -1584,6 +1584,36 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   complete harness suite is green at `2,842` passed, one skipped, and one deselected
   in `130.02 s`.
 
+## UDP Reask Decision Instrumentation Checkpoint - 2026-10-31
+
+- MFC commit `a1bc3551` and build-tests commits `13176a9` and `c6b02e3`
+  enforce the same focused `256 MiB` aggregate diagnostic budget on MFC, prune
+  retained closed segments when a lowered aggregate cap is exceeded, fail closed
+  when writer health is not ready, and cover the aggregate-retention policy in the
+  native parity suite.
+- Build-tests commit `cadd8c4` makes the sole current recording contract carry an
+  explicit server endpoint for each client. The offline analyzer now requires that
+  authority directly and has no old-field fallback or recording adapter.
+- A current-contract sequential capture completed exact delivery-confirmed Rust
+  client-UDP proof. The matching MFC half retained server source, source-engagement,
+  queue-rank, and peer-TCP evidence for the full bounded hour but no outbound
+  client-UDP attempt or terminal client-UDP outcome. The offline comparison therefore
+  failed the MFC required-family gate rather than weakening it.
+- MFC commit `0ac94213` instruments every `UDPReaskForDownload` decision with the
+  current `sched/udp_reask_decision` event. Stable reasons cover missing request or
+  pending state, historical UDP failure ratio, remote/local UDP capability,
+  firewall, live TCP connection, proxy, LowID buddy prerequisites, source-exchange
+  priority, A4AF swap, and direct or callback send. Each event retains the exact
+  peer/file keys and the complete pre-decision eligibility snapshot.
+- Repeated identical peer/file decisions are limited to one event per five minutes;
+  reason or file changes log immediately. Build-tests commit `9a6c492` covers gate
+  ordering, the existing failure-ratio threshold, direct and callback eligibility,
+  transport-versus-send classification, file-keyed suppression, reason changes,
+  interval expiry, and clock rollback.
+- Validation passed MFC `Release|x64` diagnostics, MFC `Debug|x64`, and the complete
+  native parity suite: `840` tests and `5,396` assertions. No new soak was launched
+  after instrumentation; both clients remain stopped pending the next operator step.
+
 ## Next Implementation
 
 - Treat request encoding, parser behavior, lifecycle decisions, timeout cause,
@@ -1597,14 +1627,13 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
 - Preserve MFC zero hashing and the Rust zero-plan restart invariant while
   protocol parity work continues. Any future nonzero plan must identify
   genuinely changed or new files rather than another compatibility workaround.
-- Reconnect hide.me, rerun only the MFC half under the same sequential model, and
-  let the new route guard produce either a complete packed proof or a packed
-  non-green route-loss result. Do not rerun the already-green Rust half unless the
-  frozen campaign fixture or diagnostic contract changes.
-- If MFC again retains source engagement and queue rank without an outbound
-  client-UDP attempt, inspect the exact MFC queue/reask diagnostics before changing
-  either product. Determine whether the gap is MFC runtime behavior, missing MFC
-  instrumentation, or a transfer-state precondition; do not weaken the proof gate.
+- When the operator resumes the campaign, run only the instrumented MFC half under
+  the same sequential model and current frozen fixture. Do not rerun the already-green
+  Rust half unless that fixture or the diagnostic contract changes.
+- Inspect the exact `udp_reask_decision` reason distribution before changing either
+  product. Determine whether the missing family is expected MFC runtime scheduling,
+  a transfer-state precondition, or a concrete protocol defect; do not weaken the
+  proof gate and do not add a compatibility adapter.
 - Keep the proven server/Kad search gate unchanged. Treat the sequential transfer
   capture as a separate protocol-coverage proof; do not weaken required-family
   or diagnostic-conformance gates when an action did not generate the family.
