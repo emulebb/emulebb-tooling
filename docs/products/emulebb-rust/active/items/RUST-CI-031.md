@@ -1613,6 +1613,36 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
 - Validation passed MFC `Release|x64` diagnostics, MFC `Debug|x64`, and the complete
   native parity suite: `840` tests and `5,396` assertions. No new soak was launched
   after instrumentation; both clients remain stopped pending the next operator step.
+- A subsequent full-hour MFC replay remained route-healthy and packed successfully,
+  but produced zero `udp_reask_decision` events. Build-tests commit `060333d`
+  upgrades the sole current offline report to `soak_offline_diff_v2` and retains
+  bounded exact examples plus outcome/reason distributions. The zero count proves
+  `UDPReaskForDownload` was never entered; it is not evidence for any transport
+  eligibility reason.
+- MFC commit `bd3dc224` replaces the opaque `DS_ONQUEUE` compound condition with a
+  behavior-equivalent pure scheduler evaluator and emits
+  `sched/udp_reask_schedule_decision` for app connectivity, the strict two-minute
+  and one-second reask-window boundaries, the twenty-minute connect cooldown, and
+  the eligible transition. Build-tests commit `bca0455` covers every boundary, and
+  commit `d04cefb` includes both scheduler and transport distributions in the same
+  current offline report. MFC `Release|x64` diagnostics, MFC `Debug|x64`, and `842`
+  native tests with `5,408` assertions passed.
+- The scheduler-aware full-hour replay also retained zero target scheduler and
+  transport decisions because the scripted download action failed before the frozen
+  fixture entered `DS_ONQUEUE`. Build-tests commit `0dbdb25` now retains structured
+  REST operation, HTTP status, and API error code for action failures. A bounded
+  probe identified `add`, HTTP `409`, `INVALID_STATE`.
+- Build-tests commit `4ddd3b5` adds the missing persisted-state authority: after an
+  active-transfer miss the action checks the exact shared-file endpoint before add,
+  validates hash and size, and reports stable non-runnable state without deleting,
+  moving, resetting, or reimporting profile data. The sole approved campaign fixture
+  is already completed in the persisted MFC profile, so it cannot drive another
+  queue/reask cycle. The complete harness is green at `2,852` passed, one skipped,
+  and one deselected.
+- Two short diagnostic probes stopped the client and restored bindability, confirmed
+  by the canonical preflight, but failed strict packing with `mfc-clean-teardown`.
+  Their markers are local troubleshooting evidence only, not valid recordings. No
+  client remains running and no pull request has been opened.
 
 ## Next Implementation
 
@@ -1627,13 +1657,17 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
 - Preserve MFC zero hashing and the Rust zero-plan restart invariant while
   protocol parity work continues. Any future nonzero plan must identify
   genuinely changed or new files rather than another compatibility workaround.
-- When the operator resumes the campaign, run only the instrumented MFC half under
-  the same sequential model and current frozen fixture. Do not rerun the already-green
-  Rust half unless that fixture or the diagnostic contract changes.
-- Inspect the exact `udp_reask_decision` reason distribution before changing either
-  product. Determine whether the missing family is expected MFC runtime scheduling,
-  a transfer-state precondition, or a concrete protocol defect; do not weaken the
-  proof gate and do not add a compatibility adapter.
+- Obtain a second operator-approved direct-transfer fixture with exact name, eD2K
+  hash, and size in ignored local input. The current frozen fixture is completed and
+  must not be deleted or moved merely to manufacture another run. Because the fixture
+  changes, start a new campaign and rerun both sequential halves.
+- Once the new action is active, inspect `udp_reask_schedule_decision` first and
+  `udp_reask_decision` second. Determine whether any remaining gap is expected MFC
+  runtime scheduling, a transfer-state precondition, or a concrete protocol defect;
+  do not weaken the proof gate and do not add a compatibility adapter.
+- Resolve the strict short-run `mfc-clean-teardown` failure before treating short
+  probes as packable evidence. Long bounded captures already complete clean teardown;
+  do not conflate this harness issue with protocol behavior.
 - Keep the proven server/Kad search gate unchanged. Treat the sequential transfer
   capture as a separate protocol-coverage proof; do not weaken required-family
   or diagnostic-conformance gates when an action did not generate the family.
