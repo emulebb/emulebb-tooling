@@ -1678,6 +1678,30 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   and the complete harness suite: 2,859 passed, one skipped, and one
   deselected.
 
+## Fixture-Owned Client-UDP Producer Checkpoint - 2026-11-01
+
+- Rust commit `ec19a5d8` carries the logical transfer hash in typed outbound
+  client-UDP metadata for direct `OP_REASKFILEPING` and buddy-relayed
+  `OP_REASKCALLBACKUDP` requests. The socket attempt emits the lower-case hash
+  as `keys.fileHash`; unrelated packets omit it.
+- MFC commit `91b770d2` copies the producer-owned request hash into the queued
+  UDP packet and emits the same `keys.fileHash` on the actual socket attempt.
+  Diagnostics now classify outgoing client UDP by the `OP_EMULEPROT` wire
+  marker, so buddy-relayed requests remain visible even though their queue
+  routing flag is Kad-owned.
+- Neither client decodes or infers transfer identity from obfuscated wire
+  bytes. Terminal events remain compact and correlate to the fixture-owned
+  attempt only through `sendAttemptId`; no compatibility field, fallback, or
+  legacy schema was added.
+- Build-tests commit `c37eed4` covers wire-family classification independently
+  of queue routing. The native parity suite passed 843 cases and 5,411
+  assertions. MFC `Debug|x64`, `Release|x64`, and diagnostics `Release|x64`
+  builds passed.
+- The Rust diagnostics binary check passed, and the complete diagnostics-feature
+  `emulebb-ed2k` suite passed 1,223 tests. This checkpoint changes producers
+  only; a new focused live recording is still required before claiming
+  fixture-owned coverage.
+
 ## Next Implementation
 
 - Treat request encoding, parser behavior, lifecycle decisions, timeout cause,
@@ -1691,10 +1715,6 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
 - Preserve MFC zero hashing and the Rust zero-plan restart invariant while
   protocol parity work continues. Any future nonzero plan must identify
   genuinely changed or new files rather than another compatibility workaround.
-- Add the exact logical file hash to Rust and MFC client-UDP send-attempt
-  diagnostics and retain it through the compact proof. MFC scheduler and
-  transport decisions already own the required file key; do not infer fixture
-  ownership from process timing, peer coincidence, or packet presence.
 - Rerun both sequential focused halves under the current contract. Do not use
   V8 as a green fixture-owned proof, and do not weaken the correlation gate if
   unrelated persisted downloads emit client UDP first.
