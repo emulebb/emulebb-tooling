@@ -2145,6 +2145,60 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   deliberate deselection in 124.73 seconds. The focused protocol gate passes
   135 tests; catalog validation, Ruff, and `git diff --check` also pass.
 
+## Bilateral Server Transport Checkpoint - 2026-11-01
+
+- The ambiguous server metadata authorities were split before any new verdict:
+  TCP `OP_SERVERIDENT` and `OP_SERVERSTATUS` are now distinct from UDP
+  `OP_SERVER_DESC_RES` and `OP_GLOBSERVSTATRES`. The stock corpus contains
+  transport- and opcode-exact framed replies rather than request opcodes or an
+  invalid search response. This raises the catalog inventory from 98 to 100
+  IDs and from 15 to 17 groups without claiming those four metadata states.
+- The singular deterministic server-login schema now requires the configured
+  transport on both Rust and MFC at all three causal boundaries: login packet,
+  `OP_IDCHANGE`, and accepted connection state. Only forced plaintext and
+  forced-obfuscated cases are eligible. Preferred/fallback configurations
+  cannot accidentally claim either transport.
+- Plaintext run `20261101T194931Z-emulebb-main-release-15012` passed on runner
+  `b880c382da408ae7c425db40100e87d7365b7831`. Receipt
+  `rust-mfc-transfer-20261101t194931z` records report SHA-256
+  `e13ea2806cdf88fa85b033dec524dc270850175d3d54e3a41d8e5de1c451ceaa`
+  and owns `server.connect.plaintext` plus the repeated bilateral login claim.
+- The first forced-obfuscation run,
+  `20261101T194957Z-emulebb-main-release-5604`, failed evidence collection
+  truthfully: Rust recorded obfuscated transport throughout, while MFC labeled
+  the selected encrypted attempt plaintext until handshake completion. The
+  MFC oracle used the late stream-state predicate instead of the already-fixed
+  per-attempt server-crypt selection. No coverage was registered from that run.
+- MFC oracle commit `dd3123e0` changes only the three diagnostics labels to use
+  the selected server transport before handshake completion. Commit `84415e72`
+  fixes the independent standard-build regression exposed by canonical
+  validation by guarding diagnostics-writer shutdown with its compile feature.
+  Build-tests commits `06edf6c` and `7a35545` enforce both source contracts.
+  Canonical MFC Debug x64, Release x64, and diagnostics Release x64 builds all
+  pass; the diagnostics build has zero warnings.
+- Corrected forced-obfuscation run
+  `20261101T195457Z-emulebb-main-release-2528` passed on runner
+  `7a35545fa799b2d6008f6aeceae295a5fe768043`. Both clients recorded
+  obfuscated login, ID-change, and accepted state. Independent receipt
+  `rust-mfc-transfer-20261101t195457z` pins report SHA-256
+  `b1dfb5bb70970e3f317d7d2b7c1cce39aebfdaae82196bf99aa94d46435bacb7`,
+  MFC revision `84415e72c4e35120ee87f9c29780cadfb65d60f6` and executable
+  `dee24e99e7fad4553e37915ae0bf0aa79bd145eab49eb42529ed896a328cc0aa`,
+  plus Rust revision `4def7119f32e0230d3cc0f09f6117825b1a65d46` and executable
+  `6c2ba174164af085695e6dc68fb038142ad6f8324d58aa113f65c6de0f23f8d3`.
+- Catalog commit `fed7a04` registers only the independently revalidated
+  plaintext and obfuscated receipts. Catalog validation now reports 9/100
+  covered IDs and 0/17 complete groups; `server-session` is truthfully 3/4,
+  with `server.connect.fallback` still evidence-incomplete. The stock-proof
+  inventory assertion was refreshed in `b97b368` after the authority split.
+- The build-tests commits for this checkpoint are `d913ae0`, `b880c38`,
+  `06edf6c`, `7a35545`, `fed7a04`, and `b97b368`; the MFC commits are
+  `dd3123e0` and `84415e72`. Final validation passes 2,874 harness tests with
+  one POSIX-only skip and one deliberate deselection in 127.41 seconds. The
+  focused 235-test protocol/source gate, catalog validator, changed-file Ruff,
+  and `git diff --check` also pass. A repository-wide Ruff sweep is not a
+  configured gate and still reports the unrelated pre-existing legacy backlog.
+
 Representative granular commits are `89e771d`, `ba19118`, `73d2a43`,
 `cfc9f98`, `db3145b`, `fe30438`, `565bf60`, `123246a`, `dbaa27b`,
 `8e8b663`, `7f384b1`, `7f0b748`, `80ec675`, `36f2f60`, `db77fcd`,
@@ -2157,16 +2211,16 @@ pushed without a pull request.
 
 ## Next Implementation
 
-- Correct the catalog authority for server status and description before
-  claiming either transition. The current corpus ambiguously mixes request and
-  response opcodes and does not distinguish TCP `OP_SERVERSTATUS` from UDP
-  `OP_GLOBSERVSTATRES` or TCP `OP_SERVERIDENT` from UDP
-  `OP_SERVER_DESC_RES`.
-- Add deterministic bilateral server connection-transport cases and then a
-  bilateral keyword-search case. One-sided product observations remain useful
-  diagnostics, but they cannot change catalog parity verdicts.
-- Do not claim preferred-mode fallback or server obfuscation until a scenario
-  causally records those exact transitions on both relevant sides.
+- Add one deterministic fallback campaign that forces an obfuscated preferred
+  attempt to fail and records the subsequent plaintext retry and accepted
+  session on both Rust and MFC. Keep `server.connect.fallback` incomplete until
+  the independent registrar can prove that exact sequence bilaterally.
+- Add the bilateral keyword-search campaign next. Both clients must issue and
+  receive the matching search transition; the existing one-sided Rust
+  observation remains diagnostics-only and cannot change a parity verdict.
+- Prove the now-separate TCP and UDP server metadata reply states using their
+  exact transport/opcode authorities. The corrected corpus is a static oracle,
+  not runtime parity evidence by itself.
 - Continue domain by domain through server session/source replies,
   peer-transfer queue/callback states, client UDP, and Kad. Add the smallest
   deterministic transcript or local cross-client scenario that can causally
