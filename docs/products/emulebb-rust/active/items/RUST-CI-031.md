@@ -1758,11 +1758,36 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   report for analysis. Two regression levels cover the family gate and the full
   server-action verdict. The complete build-tests suite passes 2,869 tests with
   one skip and one deselection.
-- Corrected campaign `20261101T153238Z` is the active bounded soak. Both clients,
-  REST planes, diagnostics writers, VPN routing, and guards are healthy. Its first
-  server action completed as `coverage-parity`; the gate is at server 1/4 and Kad
-  0/4 with zero confirmed divergences. This is an in-progress action-lane result,
-  not a whole-protocol parity claim.
+- Build-tests commit `af44832` closes a gate false-green: a REST search must now
+  report `completed=true` for both clients before identical packet diagnostics
+  can count as parity. Deadline snapshots retain their counts but remain
+  `evidence-incomplete` and retryable. Completed zero-result Kad searches remain
+  valid when both exact lookup lifecycles and request diagnostics are present.
+- Build-tests commit `26f707a` adds the blocking `run-to-gate` operation. It starts
+  the canonical persisted-profile controller, waits for the configured server/Kad
+  gate while all three owned processes remain alive, and always stops and finalizes
+  diagnostics. Both Rust release campaign manifests now use this command with
+  localhost control and full-tunnel assumptions; a detached `start` can no longer
+  create a false-green release scenario.
+- Build-tests commit `088e06f` retires the unsafe whole-trace
+  `converged-soak-live.py` implementation and 4,846 lines of runner-specific code
+  and tests. The filename is a fail-fast tombstone with canonical guidance, while
+  stale-process recognition remains for recovery. The complete build-tests suite
+  passed 2,786 tests with one skip and one deselection after this cleanup.
+- Build-tests commit `e27a8d0` scopes diagnostic conformance to action-relevant
+  records inside the exact window. Server searches gate only their request/result
+  packet records; Kad searches gate their request/result packets and exact
+  search-ID lookup lifecycle. Unrelated traffic remains in the full diagnostic
+  diff for analysis but cannot create a same-family false protocol divergence.
+- Campaign `20261101T154310Z` independently confirmed one authoritative server
+  action before that final scoping change: both REST searches completed, both
+  clients emitted `OP_SEARCHREQUEST` to the same configured public server, both
+  result totals were zero, diagnostic evidence was complete, and the verdict was
+  `coverage-parity`. No Rust protocol defect was established.
+- Final corrected campaign `20261101T155047Z` is the active bounded soak. It uses
+  the latest gate and action-scoping code, reuses both persisted profiles and hash
+  state, and targets four completed server plus four completed Kad actions. This
+  remains an in-progress action-lane proof, not a whole-protocol parity claim.
 
 ## Next Implementation
 
