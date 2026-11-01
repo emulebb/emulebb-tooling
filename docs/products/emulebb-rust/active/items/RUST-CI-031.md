@@ -4,7 +4,7 @@ workflow: github
 product: emulebb-rust
 phase: Phase 0
 github_issue: https://github.com/emulebb/emulebb-rust/issues/164
-title: Build persisted full-tunnel protocol parity soaks
+title: Consolidate deterministic eD2K and Kad protocol-parity testing
 status: IN_PROGRESS
 priority: Major
 category: ci
@@ -16,29 +16,43 @@ source: 2026-10-24 operator request for long-running persisted eD2K and Kad pari
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb-rust/issues/164. This local document is retained as the durable engineering spec and evidence record.
 
-# RUST-CI-031 - Build persisted full-tunnel protocol parity soaks
+# RUST-CI-031 - Consolidate deterministic eD2K and Kad protocol-parity testing
 
 ## Summary
 
-Provide a supported, restartable Rust-versus-MFC diagnostics workflow for
-arbitrarily long eD2K and Kad investigation against explicitly selected
-operator-owned persisted profiles. The workflow must use hide.me in full-tunnel
-mode, keep both P2P planes fail-closed through VPN Guard, use loopback for local
-control, import the MFC profile into an empty Rust profile exactly once, and
-reuse a valid nonempty Rust profile thereafter.
+Consolidate Rust protocol-parity testing into one evidence-driven harness. Make
+deterministic eD2K/Kad state-machine and local cross-client campaigns
+authoritative; use emulebb MFC only as the preferred diagnostics oracle, frozen
+stock/aMule references as independent authorities, and the persisted public
+soak only for discovery. Require causally recorded evidence for every parity or
+divergence result, classify and consolidate the existing scattered tests, and
+retire or isolate duplicate and legacy MFC paths without losing unique coverage.
 
-The workflow is a diagnostic discovery lane, not unbounded certification
-evidence. Repeatable bounded captures remain the authority for a parity claim.
+The supported, restartable Rust-versus-MFC persisted-profile workflow remains
+the arbitrarily long discovery lane. It uses inherited hide.me full-tunnel
+state, keeps both P2P planes fail-closed through VPN Guard, uses loopback for
+local control, imports an empty Rust profile exactly once, and reuses a valid
+nonempty profile thereafter. Its runtime and observations are not certification
+evidence until reduced to a bounded deterministic catalog claim.
 
-## Focused Protocol-Parity Goal - 2026-11-01
+## Operating Objective
 
-Consolidate Rust protocol-parity testing into one evidence-driven harness in
-`repos\emulebb-build-tests`. Deterministic eD2K/Kad codec, transcript,
-state-machine, and local cross-client campaigns are the parity authority. The
-persisted public-network soak remains a discovery lane that supplies candidate
-findings and rare-state recordings; it cannot certify a state it did not
-observe and cannot report useful progress when no causally attributable action
-completed.
+Consolidate emulebb Rust protocol-parity testing into one evidence-driven
+harness: make deterministic eD2K/Kad state-machine and local cross-client
+campaigns authoritative; use emulebb MFC only as the preferred diagnostics
+oracle, frozen stock/aMule references as independent authorities, and the
+persisted public soak only for discovery; require causally recorded evidence
+for every parity or divergence result; retire or isolate duplicate and legacy
+MFC test paths; keep `ed2k-server` upstream-clean; work on the existing single
+feature branch with granular commits and open coordinated pull requests only
+after a significant complete chunk is fully green.
+
+The current machine-measured baseline is 16 of 100 catalog entries covered and
+3 of 17 groups complete. The active bounded slice is
+`server.source.tcp-plain` plus the causally joined `server.reply.sources`
+result. Until that slice has an immutable receipt, independent registration,
+catalog admission, and scoped green validation, unrelated protocol slices do
+not begin.
 
 The governing role model is:
 

@@ -46,14 +46,21 @@ live evidence.
 
 ## Protocol-Parity Evidence
 
-The active goal is one evidence-driven Rust protocol-parity harness, not a
-collection of independent test scripts. The harness must maintain one
-machine-readable catalog of the supported eD2K and Kad variants and state
-transitions. Each catalog entry identifies its starting state, stimulus,
-expected wire/state result, authority, required evidence, deterministic runner,
-optional live runner, exact build provenance, and current evidence status.
-Named campaigns are selections from that catalog; they do not define competing
-coverage or verdict models.
+The harness has one mission: determine and improve emulebb Rust parity for the
+supported eD2K and Kad scope through causally evidenced, reproducible tests. It
+is not a general MFC test program, a soak framework that happens to compare
+clients, or a collection of independent campaigns. emulebb Rust is the product
+under test; MFC is the preferred observable runtime oracle; stock source and
+accepted goldens define protocol intent; frozen stable aMule is an independent
+reference; and public traffic is a discovery input.
+
+The harness maintains one machine-readable catalog of the supported variants
+and state transitions. The catalog is the coverage authority. Each entry
+identifies its starting state, stimulus, expected wire/state result, authority,
+required evidence, deterministic runner, optional live runner, exact build
+provenance, and current evidence status. Named campaigns are selections from
+that catalog; runner lists, test counts, trace volume, and soak duration do not
+create implicit scope or competing coverage and verdict models.
 
 Use these evidence layers in order:
 
@@ -86,7 +93,9 @@ Verdicts have strict meanings:
 `evidence-incomplete` and `not-observed` never count as parity, divergence, or
 green coverage. A campaign reports the exact covered/required count and each
 non-covered catalog entry. Zero recorded divergences without covered entries is
-not progress or protocol evidence.
+not progress or protocol evidence. Harness progress is measured by covered
+catalog entries and complete catalog groups, not by elapsed runtime, generated
+artifacts, emitted events, process success, or raw test count.
 
 Protocol-parity implementation proceeds as one bounded catalog slice at a
 time. Before product, oracle, or harness code changes, the slice identifies the
@@ -94,8 +103,10 @@ exact catalog entries, deterministic stimulus, selected clients, protocol
 authority, required causal joins, expected verdict, and validation gate. Work
 outside that boundary is allowed only when it directly blocks the selected
 slice; record the dependency, resolve the smallest sufficient blocker, and
-return to the same slice. General diagnostics, orchestration, storage, or soak
-work does not advance protocol coverage by itself.
+return to the same slice. At any time, implementation work must either prove the
+selected entries, remove a direct blocker to that proof, or consolidate an
+existing test under its canonical owner. General diagnostics, orchestration,
+storage, or soak work does not advance protocol coverage by itself.
 
 A slice is complete only when its deterministic run produces an immutable
 receipt, an independent registrar validates the receipt against exact build
