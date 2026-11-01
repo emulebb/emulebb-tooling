@@ -1702,6 +1702,36 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   only; a new focused live recording is still required before claiming
   fixture-owned coverage.
 
+## Fixture-Owned Client-UDP Live Proof - 2026-11-01
+
+- Build-tests commit `8aa8697` makes each selected soak half run the supported
+  incremental diagnostics build before resolving and launching that client's
+  canonical executable. A failed build stops before launch; the harness does
+  not search for or silently reuse a different binary.
+- Build-tests commits `94dff83` and `6112466` keep immutable snapshots of closed
+  segments already read by the scanner and establish the focused scan checkpoint
+  immediately before the scripted transfer action. Retention can no longer remove
+  evidence between scanning and collection, and startup backlog cannot outrun the
+  bounded segment ring. Every segment from the action boundary remains contiguous
+  and mandatory.
+- A sequential current-contract campaign reused both persisted profiles and the
+  same operator-approved fixture. Rust completed nine fixture-owned client-UDP
+  attempts with nine successful correlated terminals. MFC completed 94 attempts
+  with 94 successful terminals and retained fixture-owned scheduler eligibility
+  plus transport-send evidence. Both halves finalized and packed cleanly without
+  reimporting profiles or rehashing shared content.
+- Offline adjudication initially exposed one harness false positive: MFC happened
+  to receive a routed reply carrying the conditional packet `note`, while the Rust
+  half contained send attempts and outcomes only. Rust already emits a routed-reply
+  note when that receive state occurs. Build-tests commit `35f107a` classifies this
+  receive/drop decision field as conditional across independent captures and adds
+  regression coverage; required wire fields and family-presence gates remain strict.
+- Re-adjudication completed as `coverage-proven` with matching fixture authority,
+  both required diagnostic families present, valid client-UDP lifecycles on both
+  clients, and no focused-contract findings. This is fixture-owned client-UDP
+  lifecycle coverage, not a claim of whole-run ED2K/Kad parity. The complete
+  build-tests suite passed 2,866 tests with one skip and one deselection.
+
 ## Next Implementation
 
 - Treat request encoding, parser behavior, lifecycle decisions, timeout cause,
@@ -1715,27 +1745,19 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
 - Preserve MFC zero hashing and the Rust zero-plan restart invariant while
   protocol parity work continues. Any future nonzero plan must identify
   genuinely changed or new files rather than another compatibility workaround.
-- Rerun both sequential focused halves under the current contract. Do not use
-  V8 as a green fixture-owned proof, and do not weaken the correlation gate if
-  unrelated persisted downloads emit client UDP first.
-- Obtain a second operator-approved direct-transfer fixture with exact name, eD2K
-  hash, and size in ignored local input. The current frozen fixture is completed and
-  must not be deleted or moved merely to manufacture another run. Because the fixture
-  changes, start a new campaign and rerun both sequential halves.
-- Once the new action is active, inspect `udp_reask_schedule_decision` first and
-  `udp_reask_decision` second. Determine whether any remaining gap is expected MFC
-  runtime scheduling, a transfer-state precondition, or a concrete protocol defect;
-  do not weaken the proof gate and do not add a compatibility adapter.
-- Resolve the strict short-run `mfc-clean-teardown` failure before treating short
-  probes as packable evidence. Long bounded captures already complete clean teardown;
-  do not conflate this harness issue with protocol behavior.
+- Use the completed fixture-owned proof as the baseline for the next until-stopped
+  paired soak. Keep broad server lifecycle, secure-ident, peer-transfer, server UDP,
+  Kad, sequence-integrity, and writer-health gates active; the focused proof does not
+  satisfy those whole-run surfaces.
+- Keep selected-client incremental build refresh and action-boundary tailing as the
+  sole launch path. Reuse the persisted profiles and hash state; fail rather than
+  reset, reimport, rehash, or select a different executable implicitly.
 - Keep the proven server/Kad search gate unchanged. Treat the sequential transfer
   capture as a separate protocol-coverage proof; do not weaken required-family
   or diagnostic-conformance gates when an action did not generate the family.
 - Confirm the rebuilt traces name deprecated Kad routing and server-description
   UDP opcodes on both clients without changing unsupported Kad1 behavior.
-- Run the complete diagnostic analyzer and offline action diff after both solo
-  recordings exist. Implement only concrete protocol or correlation gaps
+- During the next broad soak, implement only concrete protocol or correlation gaps
   demonstrated by exact traces, each as a separate tested commit.
 - Keep the next run until-stopped once the action-driven proof is clean. Do not
   open a pull request until the complete significant slice is green and the
