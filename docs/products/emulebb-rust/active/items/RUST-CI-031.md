@@ -2044,6 +2044,48 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   skip, and one deliberate deselection in 123.41 seconds; catalog validation,
   focused Ruff, and `git diff --check` also pass.
 
+## Canonical Startup Metadata Checkpoint - 2026-11-01
+
+- The canonical Rust-downloader/MFC-publisher gate now proves exact bilateral
+  `OP_MULTIPACKET_EXT2` request/answer and `OP_HASHSETREQUEST2`/answer frames,
+  decodes their nested file identifiers and metadata, and requires exact MD4
+  and AICH equality between the wire exchange and the persisted Rust transfer
+  manifest. These checks own `peer.startup.multipacket-ext2` and
+  `peer.startup.aich`; they do not imply crypt startup, fallback, SX2, server
+  obfuscation, or client UDP coverage.
+- Standard live run `20261101T190951Z-emulebb-main-release-14504` on runner
+  `ddbd352` passed with report SHA-256
+  `387b4e7f69ed5b9ace9d95aab93a99cb29ac03002811f1fbea3224526f90973f`.
+  It recorded one exact bilateral metadata request/answer, one exact bilateral
+  hashset request/answer, and two exact persisted MD4 and AICH parts.
+- The catalog now models hash-only metadata recovery explicitly as
+  `peer.startup.metadata-recovery`, increasing the catalog from 97 to 98 IDs.
+  Its canonical scenario gives Rust only the file MD4, a zero size, and the
+  exact MFC source identity; Rust must recover the Unicode name, size, AICH
+  root, MD4 hashset, and AICH hashset before completing the transfer.
+- The first hash-only live run exposed a valid protocol distinction: a client
+  that does not yet know the AICH root sends an MD4-only metadata identifier.
+  The gate now permits that request shape while still requiring a full exact
+  MFC answer and exact persisted AICH data. Corrected run
+  `20261101T191416Z-emulebb-main-release-10176` on runner `8f480e8` passed with
+  report SHA-256
+  `5fc02b960fcf4503505bf2d7b706484beecbfd3cab9a9dac59461bf71ffbbd38`.
+  It recovered the exact Unicode name and size and recorded the causal order:
+  source engaged at event 26, metadata answer at 42, hashset answer at 46,
+  payload at 70, and settled completion at 1282.
+- Catalog validation now reports 6/98 covered IDs and 0/15 complete groups;
+  `peer-startup-profiles` is 3/11, `queue-upload-state` is 1/5, and
+  `transfer-blocks` is 2/4. The aggregate MFC and Rust protocol-combination
+  matrices are historical donors, not evidence authorities. LowID callback
+  ownership is assigned to the canonical deterministic transfer runner. The
+  only useful state still awaiting extraction from the old Rust matrix is
+  server keyword search and its exact reply.
+- Granular build-tests commits for this checkpoint are `ddbd352`, `01ff636`,
+  `d7d742d`, `ee9781a`, `88ce714`, `8f480e8`, `d0b17c8`, `a5ff041`, and
+  `ef1cfdf`. Final validation is 2,869 passing harness tests, one POSIX-only
+  skip, and one deliberate deselection in 124.18 seconds. Catalog validation
+  and `git diff --check` also pass.
+
 Representative granular commits are `89e771d`, `ba19118`, `73d2a43`,
 `cfc9f98`, `db3145b`, `fe30438`, `565bf60`, `123246a`, `dbaa27b`,
 `8e8b663`, `7f384b1`, `7f0b748`, `80ec675`, `36f2f60`, `db77fcd`,
@@ -2056,13 +2098,17 @@ pushed without a pull request.
 
 ## Next Implementation
 
-- Migrate metadata exchange, hash-only lookup, hashset/AICH, connection reuse,
-  recovery, and multi-transfer states one by one from the historical Rust
-  protocol-combination donor into diagnostics-gated canonical scenarios. Do
-  not credit the donor's old transport assertions.
-- Delete the old Rust and MFC protocol-combination scripts after every unique
-  useful state has an authoritative owner. Do not retain wrappers, aliases, or
-  compatibility readers.
+- Extract exact server keyword search and reply into a separate canonical
+  deterministic transfer scenario. Credit only causally observed search
+  request/reply evidence and the exact result hash, name, and size. Do not
+  claim plain or obfuscated server-source coverage unless exact
+  `GETSOURCES`/`FOUNDSOURCES` frames are also observed.
+- Delete the old Rust protocol-combination script, its synthetic tests, and its
+  campaign invocation after server search has an authoritative owner. Delete
+  the old MFC aggregate matrix when its historical caller is removed. Do not
+  retain wrappers, aliases, or compatibility readers. The old donor's three
+  transfers do not prove connection reuse; that state remains owned by the
+  existing dedicated cross-client runner.
 - Register exact current source, binary, profile, runner, diagnostics, wire,
   and artifact receipts before the affected server or peer-transfer coverage
   groups become green. Keep deterministic server protocol evidence separate
