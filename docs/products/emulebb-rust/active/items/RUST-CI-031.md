@@ -2001,6 +2001,49 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   seconds. Focused registration, catalog, transfer-gate, inventory, and runner
   tests pass, as do Ruff and `git diff --check`.
 
+## Canonical Transport Matrix Checkpoint - 2026-11-01
+
+- The canonical Rust-downloader/MFC-publisher vertical now owns four explicit
+  transport cases: plain server plus plain clients, obfuscation preferred,
+  obfuscation required, and obfuscation required with a compressible fixture.
+  Case intent configures both clients, the server, and the fixture, but never
+  substitutes for observed evidence.
+- The transfer gate requires exact bilateral request and payload frames to
+  report the expected peer transport mode and obfuscation state. It also
+  requires the expected compressed or uncompressed payload opcode family.
+  Server transport, crypt startup, preferred-mode fallback, and client UDP are
+  not claimed by these cases.
+- The first preferred-mode attempt correctly failed because the direct source
+  carried only an endpoint, so Rust could not derive the MFC crypt identity and
+  negotiated plaintext. A server-search experiment then proved that two local
+  LowID clients cannot obtain a routable source from the stock local server.
+  The canonical direct source now carries the exact MFC profile user hash and
+  the case-derived crypt capability bits; no private HighID is fabricated.
+- Four immutable runs on runner `03a21bbebaece261061f8f309e625a9a2e461ad4`
+  passed with the same diagnostics Rust and MFC builds used by the first
+  registered transfer receipt:
+  `20261101T185845Z-emulebb-main-release-6756` proved preferred obfuscation,
+  `20261101T185904Z-emulebb-main-release-5464` proved bilateral plaintext,
+  `20261101T185917Z-emulebb-main-release-16176` proved required obfuscation,
+  and `20261101T185931Z-emulebb-main-release-14948` proved required
+  obfuscation plus 58 exact paired `OP_COMPRESSEDPART` payload frames.
+- The compressed receipt SHA-256 is
+  `118caf7127d9a85d26fb628eaced1ed7ae200ce813f0b7c478f2943d6605cfab`.
+  It is registered for `transfer.block.compressed` and also supplies a second
+  independent `queue.admission` receipt. Catalog validation now reports 3/97
+  coverage IDs and 0/15 complete groups; `transfer-blocks` is 2/4 and
+  `queue-upload-state` remains 1/5.
+- The former MFC and Rust protocol-combination scripts are historical donors,
+  not parity authorities. Their transport claims are superseded by the
+  diagnostics-gated canonical runner. The Rust donor remains temporarily only
+  for unique metadata, hashset/AICH, recovery, connection-reuse, and
+  multi-transfer states that still need migration.
+- Granular build-tests commits for this checkpoint are `aa748a6`, `023b7cb`,
+  `bbbf25e`, `7f8f569`, `20f26ee`, `5b42c89`, `03a21bb`, `bf07037`, and
+  `5423d9c`. Final validation is 2,862 passing harness tests, one POSIX-only
+  skip, and one deliberate deselection in 123.41 seconds; catalog validation,
+  focused Ruff, and `git diff --check` also pass.
+
 Representative granular commits are `89e771d`, `ba19118`, `73d2a43`,
 `cfc9f98`, `db3145b`, `fe30438`, `565bf60`, `123246a`, `dbaa27b`,
 `8e8b663`, `7f384b1`, `7f0b748`, `80ec675`, `36f2f60`, `db77fcd`,
@@ -2013,15 +2056,20 @@ pushed without a pull request.
 
 ## Next Implementation
 
-- Reuse the canonical runner from the protocol matrix instead of retaining
-  separate orchestration in older local combinations and bidirectional
-  cross-client scripts. Map their unique cases first, then isolate or remove
-  duplicate and historical paths without a compatibility layer.
+- Migrate metadata exchange, hash-only lookup, hashset/AICH, connection reuse,
+  recovery, and multi-transfer states one by one from the historical Rust
+  protocol-combination donor into diagnostics-gated canonical scenarios. Do
+  not credit the donor's old transport assertions.
+- Delete the old Rust and MFC protocol-combination scripts after every unique
+  useful state has an authoritative owner. Do not retain wrappers, aliases, or
+  compatibility readers.
 - Register exact current source, binary, profile, runner, diagnostics, wire,
   and artifact receipts before the affected server or peer-transfer coverage
   groups become green. Keep deterministic server protocol evidence separate
   from direct peer transfer evidence so local LowID server behavior does not
   require a fabricated private HighID.
+- Do not claim preferred-mode fallback or server obfuscation until a scenario
+  causally records those exact transitions on both relevant sides.
 - Continue domain by domain through peer transfer/queue/callback, client UDP,
   and Kad. Promote every reproducible soak finding into the lowest applicable
   deterministic layer and delete the two cataloged duplicate/historical runner
