@@ -17,9 +17,11 @@ runtime work.
   recorded in both contracts, and non-core repositories are exposed separately
   rather than implied by paths. Consumers do not reconstruct old names or
   establish an independent topology authority.
-- The canonical MFC worktrees are `emulebb-main`,
-  `emulebb-community-baseline`, and `emulebb-community-tracing-harness` on
+- The active MFC worktrees are `emulebb-main`, the preferred diagnostics oracle,
+  and `emulebb-community-baseline`, the frozen instrumented stock reference, on
   topology-defined branches. `repos\emulebb` is their branch-store anchor.
+  `emulebb-community-tracing-harness` is retired and is not part of active
+  topology, materialization, build, or parity-gate workflows.
 - Retired pre-rename `eMule*` paths are historical references only.
 - Output-root children are `builds`, `logs`, `reports`, `artifacts`,
   `packages`, `release`, `tmp`, `tools`, `cache`, and `profiles`.
@@ -96,15 +98,16 @@ sync configure the shared hook and must not overwrite dirty managed work.
 ## Managed Repositories
 
 - The default `core` profile contains the active Rust product, the MFC seed and
-  all three diagnostic/release worktrees, their required third-party forks,
-  workspace support repos, the single aMule reference, the stock eMule 0.72
-  reference, and the sole local Rust ED2K server. MFC remains buildable and
-  shippable for diagnostics and critical fixes; it is not a historical-only
-  lane.
+  its two active diagnostic/reference worktrees, their required third-party
+  forks, workspace support repos, the frozen aMule parity authority, the frozen
+  stock eMule 0.72a reference, the explicitly named aMule HEAD analysis
+  checkout, and the sole local Rust ED2K server. MFC remains buildable for
+  diagnostics and critical fixes; it is not a product-development lane.
 - Public-presence repositories use an explicit optional profile. Historical
-  analysis repositories are not workspace profiles and must not be materialized
-  by setup or synchronization. Normal operations must not pull archived, stale,
-  paused, frozen, or unrelated product-family repositories.
+  analysis repositories are not workspace profiles and must not be
+  materialized by setup or synchronization. The active `amule-head` analysis
+  checkout is an explicit exception, not an archive. Normal operations must not
+  pull archived, stale, paused, or unrelated product-family repositories.
 - `stale/*` branches are Git provenance only. Inspect one only when a task names
   the exact historical comparison; do not create a persistent workspace clone
   or worktree for it.
@@ -134,14 +137,21 @@ sync configure the shared hook and must not overwrite dirty managed work.
   stock supports the required workflows, materialization and validation must
   move to that upstream commit and the eMuleBB fork must stop acting as the
   local implementation authority.
-- Official `amule-org/amule` under `repos\amule` is the single managed moving
-  interoperability and offline-fixture reference. Sync may fast-forward only a
-  clean `master`; parity evidence records the tested commit. The archival
-  `emulebb/amule` fork may remain a secondary remote, not a second checkout,
-  product worktree, or release gate.
-- Stock eMule 0.72 under `repos\emule-stock` is the single clean moving stock
-  compatibility reference. Instrumented eMuleBB MFC branches remain in the
-  canonical app seed and worktrees; they do not replace the clean stock oracle.
+- Official aMule 3.0.1 under `repos\amule-stable` is the frozen parity authority,
+  pinned to commit `02db0d7faecfc377694ff6242bc23346185990ed`. Diagnostics-only
+  patches are permitted only as separately recorded exact revisions; evidence
+  must identify both the 3.0.1 base and the exact instrumented revision. Such
+  patches must not change protocol behavior or silently replace the frozen
+  authority.
+- Official `amule-org/amule` under `repos\amule` tracks upstream `master` for
+  analysis and future-interoperability work. Sync may fast-forward only a clean
+  branch. This moving checkout is never an authority or gate for current parity
+  claims. The archival `emulebb/amule` fork may remain a secondary remote for
+  provenance, not a product or release authority.
+- Stock eMule v0.72a under `repos\emule-stock` is the frozen clean stock source
+  authority. `emulebb-community-baseline` is its frozen instrumented MFC
+  counterpart; diagnostics may differ, but protocol behavior must remain tied
+  to the recorded stock revision.
 - Shared tests are extended in `emulebb-build-tests` rather than forked into
   parallel per-client suites.
 

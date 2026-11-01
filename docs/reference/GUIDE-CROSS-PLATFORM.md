@@ -136,10 +136,12 @@ and eMuleBB peers interoperate normally.
 The trade-off is that aMule is a different client: you do not get eMuleBB-specific
 features such as the broadband upload-slot controller or the eMuleBB MFC/Rust
 REST contracts and integrations. Current upstream aMule has its own REST API and
-WebUI; these are not eMuleBB controller compatibility surfaces. In this workspace,
-`repos/amule` is the single managed official upstream source, build, and parity
-reference. The historical eMuleBB fork is retained only as a secondary Git
-remote for provenance.
+WebUI; these are not eMuleBB controller compatibility surfaces. In this
+workspace, `repos/amule-stable` is the frozen aMule 3.0.1 protocol-parity
+authority at commit `02db0d7faecfc377694ff6242bc23346185990ed`.
+Diagnostics-only patches must be separate exact revisions recorded with their
+pinned base. `repos/amule` follows upstream HEAD for analysis and future
+interoperability only and is never a current parity gate.
 
 ## Native Cross-Platform Future: emulebb-rust
 
