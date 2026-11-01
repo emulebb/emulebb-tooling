@@ -1909,9 +1909,17 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   fork-dependent `local-ed2k-search-soak.py` as historical. The canonical Rust
   product vertical remains `deterministic-two-client-transfer.py`. Coverage is
   still truthfully 0/15 with all groups `evidence-incomplete`.
+- Final validation for this slice is 2,824 passing harness tests with one
+  platform skip and one deliberate deselection; 626 upstream server unit tests
+  and 29 integration tests; the upstream-owned path audit; the canonical
+  zero-warning Release build; the committed live server-state campaign; catalog
+  validation; changed-file lint; and documentation structure and active-item
+  checks. Repository-wide Ruff remains a known non-gate with 166 unrelated
+  pre-existing findings; every file changed by this slice passes Ruff.
 
 Representative granular commits are `89e771d`, `ba19118`, `73d2a43`,
-`cfc9f98`, `db3145b`, `fe30438`, `565bf60`, `123246a`, and `dbaa27b` in
+`cfc9f98`, `db3145b`, `fe30438`, `565bf60`, `123246a`, `dbaa27b`, and
+`8e8b663` in
 `emulebb-build-tests`; `bcaf9f3` and `b865ee0` in `emulebb-build`; `0fa207d`,
 `184718c`, and `68a9167` in `emulebb-tooling`; `da1c873` and `66b892d` in
 `ed2k-server`; and `03da20c9` in the MFC oracle branch. All are on the single
