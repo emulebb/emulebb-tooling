@@ -1887,26 +1887,49 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   MkDocs checks pass. Full workspace validation reaches the pre-existing
   `docs/active/INDEX.md` non-done-count metadata failure after all topology
   checks pass.
+- The managed `ed2k-server` is now synchronized with upstream 0.9.87 at
+  `3742f9e4bc64e36faf4b8ed4cb355be3744ff96c`. Runtime source, configuration,
+  and tests match upstream; the fork retains only repository policy, CI, and
+  artifact-packaging ownership. CI fetches that exact upstream commit and
+  rejects future upstream-owned path drift. The canonical Release build passed
+  with zero warnings.
+- A harness-owned wire client and bounded server-dependency campaign now prove
+  stock local LowID login, file publication, exact-hash and keyword search,
+  plain and obfuscated source replies, publisher disconnect, and indexed-file
+  and source withdrawal. The committed live receipt at
+  `reports/ed2k-server-state-campaign/20261101T173415Z/report.json` passed with
+  runner `123246ad4a24ee9c676cf27643e7ac9467155202`, server fork
+  `66b892d215821d499dd9c351f14e234ae309d2f1`, upstream `3742f9e4`, and staged
+  binary SHA-256
+  `ffb5655198a882156627e0ff6d5d5a3a94ce02a423023f3b94f0bd8c00569886`.
+  Reports retain every reached state, check, and frame on failure as well as on
+  success. This external receipt is local infrastructure evidence and is not
+  committed or registered as Rust parity evidence.
+- The catalog classifies the new server campaign as a support gate and the old
+  fork-dependent `local-ed2k-search-soak.py` as historical. The canonical Rust
+  product vertical remains `deterministic-two-client-transfer.py`. Coverage is
+  still truthfully 0/15 with all groups `evidence-incomplete`.
 
 Representative granular commits are `89e771d`, `ba19118`, `73d2a43`,
-`cfc9f98`, and `db3145b` in `emulebb-build-tests`; `bcaf9f3` and `b865ee0` in
-`emulebb-build`; `0fa207d`, `184718c`, and `68a9167` in `emulebb-tooling`; and
-`03da20c9` in the MFC oracle branch. All are on the single
+`cfc9f98`, `db3145b`, `fe30438`, `565bf60`, `123246a`, and `dbaa27b` in
+`emulebb-build-tests`; `bcaf9f3` and `b865ee0` in `emulebb-build`; `0fa207d`,
+`184718c`, and `68a9167` in `emulebb-tooling`; `da1c873` and `66b892d` in
+`ed2k-server`; and `03da20c9` in the MFC oracle branch. All are on the single
 `feature/persisted-soak-parity-analysis` workstream branch and pushed without a
 pull request.
 
 ## Next Implementation
 
-- Reconcile `ed2k-server` to upstream-clean code behavior. Inventory its current
-  divergence (38 commits ahead of and four behind `upstream/master`), retain
-  only CI/CD wiring outside server protocol code, and move required
-  deterministic adaptation into the harness before changing the managed server
-  authority.
-- Consolidate the first complete vertical campaign around server session,
-  search, source discovery, and source lifecycle because that area already has
-  the strongest deterministic and cross-client evidence. Register exact
-  current source, binary, profile, runner, and artifact receipts before any
-  group can become green.
+- Remove the canonical Rust product campaign's remaining dependencies on the
+  retired server `/api/files/:hash` probe and old `highid_verify_*` fields. Use
+  harness-owned wire observations and the current `highid_observe_*` contract;
+  do not add a compatibility reader or restore fork-only server APIs.
+- Complete the first Rust product vertical around server session, search,
+  source discovery, source lifecycle, and a local Rust-versus-MFC transfer.
+  Keep deterministic server protocol evidence separate from direct peer
+  transfer evidence so local LowID server behavior does not require a fabricated
+  private HighID. Register exact current source, binary, profile, runner, and
+  artifact receipts before either server coverage group can become green.
 - Continue domain by domain through peer transfer/queue/callback, client UDP,
   and Kad. Promote every reproducible soak finding into the lowest applicable
   deterministic layer and delete the two cataloged duplicate/historical runner
