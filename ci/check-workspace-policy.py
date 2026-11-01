@@ -509,7 +509,6 @@ def audit_project_entrypoints(root: Path) -> None:
     for variant in (
         r"workspaces\workspace\app\emulebb-main",
         r"workspaces\workspace\app\emulebb-community-baseline",
-        r"workspaces\workspace\app\emulebb-community-tracing-harness",
     ):
         app_root = resolve_workspace_path(root, variant)
         assert_path_missing(app_root / r"srchybrid\emule.sln")
@@ -645,7 +644,6 @@ def audit_powershell_boundary(root: Path) -> None:
         resolve_workspace_path(root, r"repos\emulebb"),
         resolve_workspace_path(root, r"workspaces\workspace\app\emulebb-main"),
         resolve_workspace_path(root, r"workspaces\workspace\app\emulebb-community-baseline"),
-        resolve_workspace_path(root, r"workspaces\workspace\app\emulebb-community-tracing-harness"),
     )
     issues: list[str] = []
     for repo_root in scan_roots:
@@ -706,7 +704,6 @@ def audit_editorconfig_policy(root: Path) -> None:
         ("tests", resolve_workspace_path(root, r"repos\emulebb-build-tests")),
         ("app-main", resolve_workspace_path(root, r"workspaces\workspace\app\emulebb-main")),
         ("app-community", resolve_workspace_path(root, r"workspaces\workspace\app\emulebb-community-baseline")),
-        ("app-tracing-harness", resolve_workspace_path(root, r"workspaces\workspace\app\emulebb-community-tracing-harness")),
     ):
         if not repo_root.is_dir():
             raise RuntimeError(f"Editorconfig audit root is missing: {repo_root}")
@@ -749,7 +746,6 @@ def collect_doc_path_issues(root: Path) -> list[str]:
         (resolve_workspace_path(root, r"repos\emulebb-build-tests"), ("README.md", "AGENTS.md")),
         (resolve_workspace_path(root, r"workspaces\workspace\app\emulebb-main"), ("README.md", "AGENTS.md")),
         (resolve_workspace_path(root, r"workspaces\workspace\app\emulebb-community-baseline"), ("AGENTS.md",)),
-        (resolve_workspace_path(root, r"workspaces\workspace\app\emulebb-community-tracing-harness"), ("AGENTS.md",)),
     )
     absolute_path_re = re.compile(r"\b[a-z]:\\", re.IGNORECASE)
     for repo_root, patterns in scan_scopes:
@@ -907,7 +903,6 @@ def audit_doc_paths(root: Path) -> None:
         (resolve_workspace_path(root, r"repos\emulebb-build-tests"), "AGENTS.md"),
         (resolve_workspace_path(root, r"workspaces\workspace\app\emulebb-main"), "AGENTS.md"),
         (resolve_workspace_path(root, r"workspaces\workspace\app\emulebb-community-baseline"), "AGENTS.md"),
-        (resolve_workspace_path(root, r"workspaces\workspace\app\emulebb-community-tracing-harness"), "AGENTS.md"),
     )
     for repo_root, relative_path in agent_files:
         assert_text_contains(issues, repo_root, relative_path, policy_text, "AGENTS.md must point to the central workspace policy.")
