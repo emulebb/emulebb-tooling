@@ -1939,23 +1939,56 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
 - Final build-tests validation on the committed runner is 2,837 passing tests,
   one POSIX-only skip, and one deliberate deselection. The focused changed
   files also pass Ruff and `git diff --check`.
+- The canonical Rust-from-MFC transfer now requires diagnostics builds for both
+  clients and passed the causal evidence gate at
+  `reports/deterministic-two-client-transfer/latest/deterministic-two-client-transfer-result.json`.
+  The 10 MiB fixture completed in about 13 seconds with eD2K hash
+  `684b18845d856fd43f44e0493d2fdc3f`: all 30 Rust-to-MFC
+  `OP_REQUESTPARTS` frames and all 1,024 MFC-to-Rust `OP_SENDINGPART` frames
+  matched exactly, with no unmatched decisive frames.
+- The same receipt correlates Rust source engagement, 58 positive payload
+  acceptances, and manifest-backed `download_task_settled=completed` with MFC
+  exact-hash publication, upload-slot opening, 58 admitted requests, and nine
+  positive upload-accounting events. `download_attempt_outcome` is not an
+  authority because the successful direct-completion path returns before that
+  event; completed task state, exact wire frames, and final byte/hash
+  verification form the truthful chain.
+- That diagnostics-gated receipt pins runner revision
+  `2ab3e0b3104ad3cc66a18a3c4b2bf2a60b8ee721`, Rust revision
+  `4def7119f32e0230d3cc0f09f6117825b1a65d46` and executable SHA-256
+  `6c2ba174164af085695e6dc68fb038142ad6f8324d58aa113f65c6de0f23f8d3`,
+  and MFC revision `1c99b8f9cd7d4d701a104514882e6c1557e5eee1` and executable SHA-256
+  `637457534644390e72b9d5f020a369283c12a3fdb91028b1ac431978cc551778`.
+  Canonical diagnostics build receipts are
+  `20261101T182436Z-build-clients/build-result.json` for Rust and
+  `20261101T182834Z-build-app/build-result.json` for MFC.
+- Strict post-shutdown loading exposed an MFC writer-health defect rather than
+  a harness timing exception. MFC now explicitly finalizes diagnostic writer
+  health during application shutdown; the loader remains strict. Raw,
+  unredacted diagnostic segments remain in the timestamped run artifacts while
+  the receipt stores compact causal summaries.
+- Final validation for the diagnostics-gated vertical is 2,849 passing harness
+  tests, one POSIX-only skip, and one deliberate deselection in 215.53 seconds.
+  The 193 focused tests pass with one skip, and all changed Python files pass
+  Ruff and `git diff --check`.
 
 Representative granular commits are `89e771d`, `ba19118`, `73d2a43`,
-`cfc9f98`, `db3145b`, `fe30438`, `565bf60`, `123246a`, `dbaa27b`, and
-`8e8b663` in
+`cfc9f98`, `db3145b`, `fe30438`, `565bf60`, `123246a`, `dbaa27b`,
+`8e8b663`, `7f384b1`, `7f0b748`, `80ec675`, `36f2f60`, `db77fcd`, and
+`2ab3e0b` in
 `emulebb-build-tests`; `bcaf9f3` and `b865ee0` in `emulebb-build`; `0fa207d`,
 `184718c`, and `68a9167` in `emulebb-tooling`; `da1c873` and `66b892d` in
-`ed2k-server`; and `03da20c9` in the MFC oracle branch. All are on the single
-`feature/persisted-soak-parity-analysis` workstream branch and pushed without a
-pull request.
+`ed2k-server`; and `03da20c9` plus `1c99b8f9` in the MFC oracle branch. All are
+on the single `feature/persisted-soak-parity-analysis` workstream branch and
+pushed without a pull request.
 
 ## Next Implementation
 
-- Make converged Rust and MFC diagnostics mandatory evidence for the canonical
-  transfer vertical. Correlate MFC publication, exact wire hash/source
-  observation, Rust source acceptance and request state, MFC upload state, and
-  Rust completion by the same file hash. A completed file without that causal
-  chain remains infrastructure proof, not protocol-parity evidence.
+- Register the diagnostics-gated canonical transfer receipt in the parity
+  catalog and generated coverage report with exact runner, source, executable,
+  diagnostics, wire, and artifact provenance. Only then may the affected
+  peer-transfer coverage IDs become green; the successful standalone receipt
+  does not update coverage implicitly.
 - Reuse the canonical runner from the protocol matrix instead of retaining
   separate orchestration in older local combinations and bidirectional
   cross-client scripts. Map their unique cases first, then isolate or remove
