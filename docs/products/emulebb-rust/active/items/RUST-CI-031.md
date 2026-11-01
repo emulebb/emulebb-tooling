@@ -1971,11 +1971,40 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   tests, one POSIX-only skip, and one deliberate deselection in 215.53 seconds.
   The 193 focused tests pass with one skip, and all changed Python files pass
   Ruff and `git diff --check`.
+- Catalog evidence is now owned per coverage ID, not per group. The obsolete
+  group-wide `latestEvidence` shape was removed without a compatibility reader;
+  a group becomes green only when every owned ID has decisive evidence. Missing
+  IDs are derived as `evidence-incomplete` instead of requiring 95 placeholder
+  records.
+- The canonical transfer diagnostics now emit eligible coverage claims from
+  the decisive matched frames. The successful uncompressed run claims only
+  `queue.admission` and `transfer.block.uncompressed`; it does not claim
+  compression-error handling, rank transitions, slot promotion/recycle, abuse
+  escalation, framing, startup profiles, or any other coincidental traffic.
+- A persisted registration tool rejects mutable `latest` aliases, report or
+  delivered-file hash drift, unmatched frames, malformed subject provenance,
+  and coverage overclaims before producing catalog rows. Catalog validation
+  also requires every receipt claim to be registered exactly once with the
+  same evidence layers and canonical runner.
+- The registered immutable receipt is
+  `output-root:reports/deterministic-two-client-transfer/20261101T183823Z-emulebb-main-release-15004/deterministic-two-client-transfer-result.json`
+  with SHA-256
+  `4d26bd2319ec9eafaee3d84c2800e609a1f6765a2fc05b0139ac9ee5db8ab91a`.
+  It pins runner `4417566425047daaf8968adfae6db9eded056f97`, the same Rust and
+  MFC revisions and executable hashes above, 30 exact request-frame matches,
+  1,024 exact uncompressed payload-frame matches, 58 MFC admissions, and final
+  delivered-file hash equality.
+- The generated catalog report now truthfully shows 2/97 coverage IDs and
+  0/15 complete groups. `queue-upload-state` is 1/5 and `transfer-blocks` is
+  1/4; every other group remains 0 covered. Full harness validation is 2,856
+  passing tests, one POSIX-only skip, and one deliberate deselection in 132.95
+  seconds. Focused registration, catalog, transfer-gate, inventory, and runner
+  tests pass, as do Ruff and `git diff --check`.
 
 Representative granular commits are `89e771d`, `ba19118`, `73d2a43`,
 `cfc9f98`, `db3145b`, `fe30438`, `565bf60`, `123246a`, `dbaa27b`,
-`8e8b663`, `7f384b1`, `7f0b748`, `80ec675`, `36f2f60`, `db77fcd`, and
-`2ab3e0b` in
+`8e8b663`, `7f384b1`, `7f0b748`, `80ec675`, `36f2f60`, `db77fcd`,
+`2ab3e0b`, `8df3921`, `4417566`, `2420da3`, and `55bd85e` in
 `emulebb-build-tests`; `bcaf9f3` and `b865ee0` in `emulebb-build`; `0fa207d`,
 `184718c`, and `68a9167` in `emulebb-tooling`; `da1c873` and `66b892d` in
 `ed2k-server`; and `03da20c9` plus `1c99b8f9` in the MFC oracle branch. All are
@@ -1984,11 +2013,6 @@ pushed without a pull request.
 
 ## Next Implementation
 
-- Register the diagnostics-gated canonical transfer receipt in the parity
-  catalog and generated coverage report with exact runner, source, executable,
-  diagnostics, wire, and artifact provenance. Only then may the affected
-  peer-transfer coverage IDs become green; the successful standalone receipt
-  does not update coverage implicitly.
 - Reuse the canonical runner from the protocol matrix instead of retaining
   separate orchestration in older local combinations and bidirectional
   cross-client scripts. Map their unique cases first, then isolate or remove
