@@ -2033,11 +2033,10 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   independent `queue.admission` receipt. Catalog validation now reports 3/97
   coverage IDs and 0/15 complete groups; `transfer-blocks` is 2/4 and
   `queue-upload-state` remains 1/5.
-- The former MFC and Rust protocol-combination scripts are historical donors,
+- The former MFC and Rust protocol-combination scripts were historical donors,
   not parity authorities. Their transport claims are superseded by the
-  diagnostics-gated canonical runner. The Rust donor remains temporarily only
-  for unique metadata, hashset/AICH, recovery, connection-reuse, and
-  multi-transfer states that still need migration.
+  diagnostics-gated canonical runner, and both aggregate scripts have now
+  been deleted after their useful states received explicit owners.
 - Granular build-tests commits for this checkpoint are `aa748a6`, `023b7cb`,
   `bbbf25e`, `7f8f569`, `20f26ee`, `5b42c89`, `03a21bb`, `bf07037`, and
   `5423d9c`. Final validation is 2,862 passing harness tests, one POSIX-only
@@ -2078,13 +2077,57 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   `transfer-blocks` is 2/4. The aggregate MFC and Rust protocol-combination
   matrices are historical donors, not evidence authorities. LowID callback
   ownership is assigned to the canonical deterministic transfer runner. The
-  only useful state still awaiting extraction from the old Rust matrix is
-  server keyword search and its exact reply.
+  remaining useful server keyword-search state was extracted into its own
+  canonical scenario before both matrices were deleted.
 - Granular build-tests commits for this checkpoint are `ddbd352`, `01ff636`,
   `d7d742d`, `ee9781a`, `88ce714`, `8f480e8`, `d0b17c8`, `a5ff041`, and
   `ef1cfdf`. Final validation is 2,869 passing harness tests, one POSIX-only
   skip, and one deliberate deselection in 124.18 seconds. Catalog validation
   and `git diff --check` also pass.
+
+## Canonical Server Search and Harness Consolidation Checkpoint - 2026-11-01
+
+- The catalog now has one canonical deterministic `server-keyword-search`
+  scenario. It issues exactly one Rust `OP_SEARCHREQUEST`, requires its
+  successful socket outcome, decodes exactly one matching `OP_SEARCHRESULT`,
+  verifies the exact REST row and endpoint, and enforces causal ordering. It
+  owns only `server.search.keyword` and `server.reply.search`; it does not
+  infer any server-source transport claim.
+- The first live attempt,
+  `20261101T192311Z-emulebb-main-release-6964`, proved that the search and REST
+  result worked but correctly failed the evidence gate because the following
+  132 MiB transfer rotated the early search records out of the retained ring.
+  This was a harness evidence-lifetime defect, not protocol divergence.
+- The corrected runner snapshots compact search evidence before transfer and
+  uses a 10 MiB fixture for this search case. Immutable run
+  `20261101T192443Z-emulebb-main-release-14604` passed on runner
+  `567cefa875f1bad8c10597c005156527b3bee592` with report SHA-256
+  `16de57d51e2259118520d379a3fb39ca8af9000411603e9fc509385b3a4d3c42`.
+  Request sequence 14 and reply sequence 16 matched the exact result name,
+  10,485,760-byte size, hash `684b18845d856fd43f44e0493d2fdc3f`,
+  and endpoint. The run also retained the already-authoritative startup,
+  queue, and uncompressed-transfer claims.
+- The receipt pins Rust revision
+  `4def7119f32e0230d3cc0f09f6117825b1a65d46` and executable SHA-256
+  `6c2ba174164af085695e6dc68fb038142ad6f8324d58aa113f65c6de0f23f8d3`,
+  plus MFC revision `1c99b8f9cd7d4d701a104514882e6c1557e5eee1`
+  and executable SHA-256
+  `637457534644390e72b9d5f020a369283c12a3fdb91028b1ac431978cc551778`.
+- With server search registered, both aggregate protocol-combination runners,
+  their synthetic tests, and their campaign invocation were deleted. The
+  competing total-parity audit, its tests, and its release invocation were
+  also deleted. No wrapper, compatibility reader, or alias remains. The
+  protocol catalog, canonical receipts, and named campaigns are now the sole
+  verdict model.
+- Catalog validation reports 8/98 covered IDs and 0/15 complete groups;
+  `server-query-reply` is 2/11. Assets are classified as six canonical, zero
+  duplicate, two historical, two product-only, and eleven support assets.
+- Granular build-tests commits for this checkpoint are `16413ab`, `bc9fecc`,
+  `22fcd4c`, `08b6376`, `567cefa`, `557c425`, `ed15e0d`, and `fd37930`.
+  Final validation is 2,854 passing harness tests, one POSIX-only skip, and one
+  deliberate deselection in 128.06 seconds. The focused release/catalog/
+  inventory gate has 48 passing tests; catalog validation, Ruff, rendered
+  campaign inspection, and `git diff --check` also pass.
 
 Representative granular commits are `89e771d`, `ba19118`, `73d2a43`,
 `cfc9f98`, `db3145b`, `fe30438`, `565bf60`, `123246a`, `dbaa27b`,
@@ -2098,28 +2141,16 @@ pushed without a pull request.
 
 ## Next Implementation
 
-- Extract exact server keyword search and reply into a separate canonical
-  deterministic transfer scenario. Credit only causally observed search
-  request/reply evidence and the exact result hash, name, and size. Do not
-  claim plain or obfuscated server-source coverage unless exact
-  `GETSOURCES`/`FOUNDSOURCES` frames are also observed.
-- Delete the old Rust protocol-combination script, its synthetic tests, and its
-  campaign invocation after server search has an authoritative owner. Delete
-  the old MFC aggregate matrix when its historical caller is removed. Do not
-  retain wrappers, aliases, or compatibility readers. The old donor's three
-  transfers do not prove connection reuse; that state remains owned by the
-  existing dedicated cross-client runner.
-- Register exact current source, binary, profile, runner, diagnostics, wire,
-  and artifact receipts before the affected server or peer-transfer coverage
-  groups become green. Keep deterministic server protocol evidence separate
-  from direct peer transfer evidence so local LowID server behavior does not
-  require a fabricated private HighID.
 - Do not claim preferred-mode fallback or server obfuscation until a scenario
   causally records those exact transitions on both relevant sides.
-- Continue domain by domain through peer transfer/queue/callback, client UDP,
-  and Kad. Promote every reproducible soak finding into the lowest applicable
-  deterministic layer and delete the two cataloged duplicate/historical runner
-  candidates only after their remaining useful coverage is mapped.
+- Continue domain by domain through server session/source replies,
+  peer-transfer queue/callback states, client UDP, and Kad. Add the smallest
+  deterministic transcript or local cross-client scenario that can causally
+  own each transition, then register its immutable receipt before changing a
+  catalog verdict.
+- Consolidate remaining historical MFC test material only after its unique
+  protocol states have an explicit canonical owner. MFC remains the preferred
+  diagnostics oracle and receives no product evolution.
 - Treat the persisted public soak as discovery only. Its gate remains pending
   until causally attributed actions complete; a zero-action run makes no parity
   statement.
