@@ -164,8 +164,10 @@ schema readers, or parallel work-in-progress branches during the consolidation.
   captures while keeping narrow action windows sampling-tolerant.
   Rust server TCP and UDP diagnostics now preserve trace/state context and emit
   correlated socket-boundary send attempts plus exactly one success, failure,
-  or cancellation terminal outcome. The Rust `ed2k_server_udp` family still
-  lacks an aligned MFC comparator and is not yet cross-client parity evidence.
+  or cancellation terminal outcome. Challenged UDP server status and
+  description replies now have an aligned MFC comparator and deterministic
+  bilateral evidence; the remaining server UDP source/search/callback states
+  are still evidence-incomplete until their own bounded slices run.
   The soak launcher now captures ready, low-cadence periodic, and final bundles
   into a bounded campaign stream while pruning manifest entries as their bundle
   files rotate. The persisted watcher now enables strict Rust and MFC writer
@@ -2329,12 +2331,68 @@ pushed without a pull request.
   `git diff --check`, the catalog validator, Rust packet-diagnostics tests, and
   all three canonical MFC builds are green. No pull request has been opened.
 
+## Bilateral UDP Server Metadata Checkpoint - 2026-11-02
+
+- MFC diagnostics commit `c32a1589` and Rust diagnostics commit `9456eed6`
+  emit post-apply status and description events with the exact challenge,
+  receive trace, peer endpoint, transport, and decoded metadata. MFC remains a
+  diagnostics-only oracle; no MFC product behavior changed.
+- The deterministic `server-udp-metadata` scenario connects each client to an
+  anchor server and polls a second server containing exactly one synthetic
+  publisher and one file. Status is challenged plaintext UDP at the stock
+  `base+4` endpoint. Description is accepted only once across either that
+  plaintext endpoint or the status-negotiated obfuscated UDP endpoint. Both
+  clients must then post-apply the decoded values and expose the same target
+  server state through REST.
+- The first routed campaign exposed two real defects instead of weakening the
+  gate. Build-tests commit `c4e7344` stopped encoding a numeric MFC `server.met`
+  entry as dynamic DNS, allowing MFC to associate the reply. Rust commit
+  `fd639054` keys the one-shot poll to stable session, endpoint topology, and
+  operator configuration, so metadata learned from a successful reply cannot
+  immediately schedule the same poll again.
+- Build-tests commits `d28dc8d` and `65683df` make the evidence gate
+  transport-aware and derive the actual Windows-to-WSL protocol route while
+  keeping REST on loopback. The canonical command no longer requires transient
+  WSL or Windows route addresses. Commit `ba77ac4` independently reloads the
+  exact retained Rust and MFC diagnostic segments and rebuilds the evidence
+  before catalog admission; receipt facts not backed by those immutable
+  captures are rejected.
+- The final clean-source campaign passed at
+  `reports/deterministic-two-client-transfer/20261101T230237Z-emulebb-main-release-11248/deterministic-two-client-transfer-result.json`
+  on runner revision `ba77ac42536e425df260cdcad6ae3272da6ca750`.
+  Rust recorded one plaintext status transaction and one negotiated obfuscated
+  description transaction; MFC recorded one plaintext transaction for each.
+  Both sides decoded, applied, and exposed the same one-user, one-file metadata.
+- Receipt `rust-mfc-transfer-20261101t230237z` pins report SHA-256
+  `e89a79f10dc17e238a9084379fdc2aa69348eae3d069843ffa89618be6874a59`,
+  Rust revision `fd6390543d5042162c6ec4a6f8e27d70f47bc9f6` and executable
+  `d9dc0cc3daf16563ce51c5b06dbed4cd6ae48999d98adc4b8c34ef2abfb2617c`,
+  plus MFC revision `c32a15896e952468463c75ff4d89b919ca1f94e5` and executable
+  `10de8cb83f390ea2759ab123992fbe352fa554200b21bf6f44fff5fef8f640c1`.
+  The canonical Rust diagnostics build receipt is
+  `logs/builds/20261101T225207Z-build-clients/build-result.json`; it completed
+  with zero warnings and failures.
+- Build-tests commit `38920e7` registers only the two new IDs,
+  `server.reply.udp-description` and `server.reply.udp-status`, while retaining
+  the four repeated transfer claims as corroborating receipt ownership. Catalog
+  validation now reports 16/100 covered IDs and 3/17 complete groups; the
+  `server-udp-metadata` group is complete. `ed2k-server` remained untouched and
+  upstream-clean at `66b892d`.
+- Final harness validation passes 2,997 tests with one POSIX-only skip and one
+  deliberate deselection in 235.04 seconds. The focused 190-test route,
+  diagnostics, runner, and registrar gate, the 75-test catalog/registrar gate,
+  changed-file Ruff, `git diff --check`, two complete Rust library suites
+  (1,220 and 1,228 tests), and the canonical Rust diagnostics build are green.
+  Strict Rust Clippy reaches only seven pre-existing unfulfilled lint
+  expectations in unrelated files. No pull request has been opened.
+
 ## Next Implementation
 
-- Prove the separate UDP server metadata reply states using their exact
-  transport/opcode authorities. The corrected corpus is a static oracle, not
-  runtime parity evidence by itself; TCP status and ident are now causally
-  proven and registered.
+- Take the next bounded `server-query-reply` slice:
+  `server.source.tcp-plain` plus its causally joined `server.reply.sources`
+  result. Reuse the current anchor/publisher fixture and independent receipt
+  registration; add diagnostics only where the exact request, reply, apply, or
+  REST join is missing. Do not change `ed2k-server` protocol behavior.
 - Continue domain by domain through server session/source replies,
   peer-transfer queue/callback states, client UDP, and Kad. Add the smallest
   deterministic transcript or local cross-client scenario that can causally
