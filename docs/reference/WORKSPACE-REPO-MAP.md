@@ -16,10 +16,12 @@ sources are not materialized as workspace repositories.
 | Path | Branch | Role | Validation |
 |---|---|---|---|
 | `repos/emulebb` | `main` seed | Canonical app branch-store clone. | `validate` |
-| `workspaces/workspace/app/emulebb-main` | `main` | Maintained MFC app worktree for diagnostics and critical fixes. | `build app --variant main` |
+| `workspaces/workspace/app/emulebb-main` | `main` | Preferred MFC diagnostics oracle for Rust protocol-parity work. | `build app --variant main` |
 | `repos/emulebb-rust` | `main` | eMuleBB Rust active beta eD2K/Kad client and embedded SPA WebUI. | Cargo checks via workspace policy |
-| `workspaces/workspace/app/emulebb-community-baseline` | `baseline/community-0.72a` | Community baseline worktree. | compare/live-diff |
-| `workspaces/workspace/app/emulebb-community-tracing-harness` | `tracing-harness/community-0.72a` | Tracing baseline worktree. | harness tests |
+| `workspaces/workspace/app/emulebb-community-baseline` | `baseline/community-0.72a` | Frozen instrumented stock eMule v0.72a reference. | compare/live-diff |
+
+`workspaces/workspace/app/emulebb-community-tracing-harness` is retired. It is
+not an active topology entry, build target, or parity authority.
 
 ## Project Focus Map
 
@@ -42,10 +44,15 @@ Use these operator terms exactly in protocol audits and source comparisons.
 Every path is relative to `EMULEBB_WORKSPACE_ROOT`; the Lugdunum evidence is a
 read-only sibling outside the canonical workspace source boundary.
 
-- `aMule` means `repos/amule`, the managed `amule-org/amule` upstream
-  reference.
-- `stock eMule` means `repos/emule-stock`, the community eMule 0.72 stock
-  reference.
+- `aMule stable` means `repos/amule-stable`, the frozen aMule 3.0.1 parity
+  authority pinned to commit `02db0d7faecfc377694ff6242bc23346185990ed`.
+  Diagnostics-only patches are valid only as separately recorded exact
+  revisions and must retain that pinned base.
+- `aMule HEAD` means `repos/amule`, the moving `amule-org/amule` upstream HEAD
+  checkout used only for analysis and future-interoperability work. It is never
+  a current parity gate.
+- `stock eMule` means `repos/emule-stock`, the frozen community eMule v0.72a
+  stock source authority.
 - `eD2K Rust server` means `repos/ed2k-server`, the managed upstream-aligned
   fork and sole local deterministic server.
 - `Lugdunum decompiled` means
@@ -53,11 +60,14 @@ read-only sibling outside the canonical workspace source boundary.
   decompiled Lugdunum 17.15 protocol evidence with no Git synchronization
   contract.
 
-For any current-state comparison, refresh the relevant Git remote refs first.
-Only fast-forward a clean tracking branch; stop and report rewritten or
-divergent history instead of resetting, rebasing, or merging it implicitly.
-Keep `repos/amule` current with `origin/master`; keep `repos/ed2k-server`
-current with `origin/master` and review `upstream/master` before merging it.
+For moving-source analysis, refresh the relevant Git remote refs first. Only
+fast-forward a clean tracking branch; stop and report rewritten or divergent
+history instead of resetting, rebasing, or merging it implicitly. Keep
+`repos/amule` current with `origin/master` without using it as a parity gate.
+Do not move the pinned `repos/amule-stable` or `repos/emule-stock` authorities.
+Keep `repos/ed2k-server` current with upstream and preserve the intent that its
+code remain upstream-clean; harness and CI/CD adaptation belongs outside that
+repository.
 
 ## Workspace Orchestration
 
@@ -74,9 +84,10 @@ products require explicit work and are not materialized by the core profile.
 
 | Path | Branch | Role | Validation |
 |---|---|---|---|
-| `repos/ed2k-server` | `master` | Sole local deterministic ED2K server and upstream-aligned Rust reference fork. | workspace build, harness, and quality checks |
-| `repos/amule` | `master` | Managed official aMule upstream and moving parity reference. | clean fast-forward sync; record tested SHA in parity evidence |
-| `repos/emule-stock` | `v0.72a` | Clean stock eMule compatibility oracle. | clean fast-forward sync; source/parity comparison |
+| `repos/ed2k-server` | `master` | Upstream-clean deterministic ED2K server for CI/CD and tests only. | build, harness, quality |
+| `repos/amule-stable` | pinned aMule 3.0.1 | Frozen parity authority; diagnostics revisions are recorded exactly. | verify pin and evidence |
+| `repos/amule` | `master` | Moving official upstream HEAD for analysis and future interoperability only; never a current parity gate. | clean fast-forward sync; analysis only |
+| `repos/emule-stock` | `v0.72a` | Frozen clean stock eMule source authority. | verify pinned revision; source/parity comparison |
 
 Historical documentation does not make retired product-family checkouts part
 of normal materialization or validation.
