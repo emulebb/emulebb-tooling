@@ -1858,22 +1858,62 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   divergence was recorded. This remains an in-progress action-lane proof, not a
   whole-protocol parity claim.
 
+## Consolidation Checkpoint - 2026-11-01
+
+- `emulebb-build-tests` now owns one strict protocol-parity catalog with 97
+  coverage IDs in 15 groups, seven campaign selections, five verdicts, exact
+  provenance requirements, and explicit asset classifications. The old
+  protocol-golden naming and MFC `harness` client alias are gone; there is no
+  compatibility reader.
+- The current generated report is intentionally `0/15` covered with all 15
+  groups `evidence-incomplete`. This is the truthful starting point until
+  current receipts are registered; zero recorded divergences is not presented
+  as progress.
+- aMule parity now resolves only the frozen 3.0.1 checkout at
+  `02db0d7faecfc377694ff6242bc23346185990ed`. Moving aMule HEAD at
+  `59425b0c7d9f0e661dd57e7c42b5e92069cf0774` is a separately named
+  analysis-only checkout and cannot supply the executable parity runtime.
+- Active topology now contains only the `main` MFC diagnostics oracle and the
+  frozen `community` instrumented-stock worktree. The clean tracing worktree at
+  `a4fb0564018e49043c266baaaa04b062e343abdb` was removed after its consumers
+  migrated; its local and remote Git branch remain available as history.
+- Controlled smoke, local live resolution, and VM payload staging now rebuild
+  and select `main` explicitly as `mfc-oracle`. Old tracing executable names,
+  folders, window-title support, and command aliases are removed.
+- Green evidence for this checkpoint is 2,816 Python harness tests with one
+  platform skip and one deselection, plus 464 orchestration tests after
+  excluding the two known unrelated baseline-red modules. Focused policy,
+  entrypoint, PowerShell-boundary, normalization, docs-structure, and strict
+  MkDocs checks pass. Full workspace validation reaches the pre-existing
+  `docs/active/INDEX.md` non-done-count metadata failure after all topology
+  checks pass.
+
+Representative granular commits are `89e771d`, `ba19118`, `73d2a43`,
+`cfc9f98`, and `db3145b` in `emulebb-build-tests`; `bcaf9f3` and `b865ee0` in
+`emulebb-build`; `0fa207d`, `184718c`, and `68a9167` in `emulebb-tooling`; and
+`03da20c9` in the MFC oracle branch. All are on the single
+`feature/persisted-soak-parity-analysis` workstream branch and pushed without a
+pull request.
+
 ## Next Implementation
 
-- Treat the running persisted soak as discovery only. Its current gate remains
-  pending until causally attributed actions complete; a zero-action run makes no
-  parity statement.
-- Build the catalog from the existing golden manifest, deterministic lifecycle
-  evidence, native Rust tests, and live-suite inventory before adding another
-  runner.
-- Produce the classification and proposed removal/migration list before deleting
-  historical tests or changing workspace topology.
+- Reconcile `ed2k-server` to upstream-clean code behavior. Inventory its current
+  divergence (38 commits ahead of and four behind `upstream/master`), retain
+  only CI/CD wiring outside server protocol code, and move required
+  deterministic adaptation into the harness before changing the managed server
+  authority.
 - Consolidate the first complete vertical campaign around server session,
   search, source discovery, and source lifecycle because that area already has
-  the strongest deterministic and cross-client evidence.
+  the strongest deterministic and cross-client evidence. Register exact
+  current source, binary, profile, runner, and artifact receipts before any
+  group can become green.
 - Continue domain by domain through peer transfer/queue/callback, client UDP,
   and Kad. Promote every reproducible soak finding into the lowest applicable
-  deterministic layer.
+  deterministic layer and delete the two cataloged duplicate/historical runner
+  candidates only after their remaining useful coverage is mapped.
+- Treat the persisted public soak as discovery only. Its gate remains pending
+  until causally attributed actions complete; a zero-action run makes no parity
+  statement.
 - Preserve the persisted MFC and Rust profile/hash state while this
   consolidation proceeds. Harness restructuring does not authorize profile
   reset, reimport, or rehash.
