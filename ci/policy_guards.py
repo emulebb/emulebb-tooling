@@ -48,6 +48,7 @@ class CleanWorktreeFailure(RuntimeError):
 WORKSPACE_CLEAN_REPO_PATHS = (
     "repos/emulebb",
     "repos/amule",
+    "repos/amule-stable",
     "repos/emulebb-build",
     "repos/emulebb-build-tests",
     "repos/ed2k-server",
@@ -62,7 +63,6 @@ WORKSPACE_CLEAN_REPO_PATHS = (
     "repos/third_party/emulebb-zlib",
     "workspaces/workspace/app/emulebb-main",
     "workspaces/workspace/app/emulebb-community-baseline",
-    "workspaces/workspace/app/emulebb-community-tracing-harness",
 )
 
 
