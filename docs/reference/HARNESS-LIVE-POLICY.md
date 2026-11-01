@@ -88,6 +88,22 @@ green coverage. A campaign reports the exact covered/required count and each
 non-covered catalog entry. Zero recorded divergences without covered entries is
 not progress or protocol evidence.
 
+Protocol-parity implementation proceeds as one bounded catalog slice at a
+time. Before product, oracle, or harness code changes, the slice identifies the
+exact catalog entries, deterministic stimulus, selected clients, protocol
+authority, required causal joins, expected verdict, and validation gate. Work
+outside that boundary is allowed only when it directly blocks the selected
+slice; record the dependency, resolve the smallest sufficient blocker, and
+return to the same slice. General diagnostics, orchestration, storage, or soak
+work does not advance protocol coverage by itself.
+
+A slice is complete only when its deterministic run produces an immutable
+receipt, an independent registrar validates the receipt against exact build
+provenance and required causal evidence, the catalog records only the proven
+claims, and every changed repository passes its scoped green gate. Ad hoc
+manual traffic and public-soak observations may identify the next slice but
+cannot own a catalog verdict.
+
 Before adding a runner or suite, map it to catalog entries and search the
 existing harness. Every existing protocol test must ultimately be classified
 as canonical coverage, a shared fixture/helper, a duplicate to remove, a
