@@ -1907,8 +1907,10 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   committed or registered as Rust parity evidence.
 - The catalog classifies the new server campaign as a support gate and the old
   fork-dependent `local-ed2k-search-soak.py` as historical. The canonical Rust
-  product vertical remains `deterministic-two-client-transfer.py`. Coverage is
-  still truthfully 0/15 with all groups `evidence-incomplete`.
+  product vertical is `deterministic-two-client-transfer.py`; it now runs Rust
+  as the product-under-test downloader and MFC as the diagnostics-oracle
+  publisher. Coverage remains truthfully 0/15 until the current receipts gain
+  the required hash-correlated diagnostics and are registered in the catalog.
 - Final validation for this slice is 2,824 passing harness tests with one
   platform skip and one deliberate deselection; 626 upstream server unit tests
   and 29 integration tests; the upstream-owned path audit; the canonical
@@ -1916,6 +1918,27 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   validation; changed-file lint; and documentation structure and active-item
   checks. Repository-wide Ruff remains a known non-gate with 166 unrelated
   pre-existing findings; every file changed by this slice passes Ruff.
+- Build-tests commits `2944027`, `9093718`, `f75e48b`, and `0dcb69f` remove
+  legacy executable fallback, model local LowID source references from the
+  wire, assign the canonical Rust/MFC roles, and record both source revisions.
+  The committed live receipt at
+  `reports/deterministic-two-client-transfer/latest/deterministic-two-client-transfer-result.json`
+  passed a 10 MiB Rust download from MFC in about ten seconds. It records the
+  exact eD2K hash `684b18845d856fd43f44e0493d2fdc3f`, completed byte count,
+  SHA-256 verification, LowID wire source reference, direct peer endpoint, and
+  cleanup outcome.
+- That receipt pins Rust revision
+  `ebae9ae1f65fd45f70ca7ea6046a1239c97c7ab7` with executable SHA-256
+  `853aa5622ba8d92b32b938a76b9ebcea3eee83f0921049173c0dbd19861d8293`,
+  MFC revision `03da20c9cd339da2e6f1287e908e577ac1386e81` with executable SHA-256
+  `6645d3270c30aa7fc1cf92edef3512970cb831bfd0f116ff50b7b885c2b6283a`,
+  and runner revision `0dcb69f7512c5d6ba0efb681e41e5fdfa814b574`.
+  Canonical Release build receipts are
+  `20261101T180402Z-build-clients/build-result.json` for Rust and
+  `20261101T174427Z-build-app/build-result.json` for MFC.
+- Final build-tests validation on the committed runner is 2,837 passing tests,
+  one POSIX-only skip, and one deliberate deselection. The focused changed
+  files also pass Ruff and `git diff --check`.
 
 Representative granular commits are `89e771d`, `ba19118`, `73d2a43`,
 `cfc9f98`, `db3145b`, `fe30438`, `565bf60`, `123246a`, `dbaa27b`, and
@@ -1928,16 +1951,20 @@ pull request.
 
 ## Next Implementation
 
-- Remove the canonical Rust product campaign's remaining dependencies on the
-  retired server `/api/files/:hash` probe and old `highid_verify_*` fields. Use
-  harness-owned wire observations and the current `highid_observe_*` contract;
-  do not add a compatibility reader or restore fork-only server APIs.
-- Complete the first Rust product vertical around server session, search,
-  source discovery, source lifecycle, and a local Rust-versus-MFC transfer.
-  Keep deterministic server protocol evidence separate from direct peer
-  transfer evidence so local LowID server behavior does not require a fabricated
-  private HighID. Register exact current source, binary, profile, runner, and
-  artifact receipts before either server coverage group can become green.
+- Make converged Rust and MFC diagnostics mandatory evidence for the canonical
+  transfer vertical. Correlate MFC publication, exact wire hash/source
+  observation, Rust source acceptance and request state, MFC upload state, and
+  Rust completion by the same file hash. A completed file without that causal
+  chain remains infrastructure proof, not protocol-parity evidence.
+- Reuse the canonical runner from the protocol matrix instead of retaining
+  separate orchestration in older local combinations and bidirectional
+  cross-client scripts. Map their unique cases first, then isolate or remove
+  duplicate and historical paths without a compatibility layer.
+- Register exact current source, binary, profile, runner, diagnostics, wire,
+  and artifact receipts before the affected server or peer-transfer coverage
+  groups become green. Keep deterministic server protocol evidence separate
+  from direct peer transfer evidence so local LowID server behavior does not
+  require a fabricated private HighID.
 - Continue domain by domain through peer transfer/queue/callback, client UDP,
   and Kad. Promote every reproducible soak finding into the lowest applicable
   deterministic layer and delete the two cataloged duplicate/historical runner
