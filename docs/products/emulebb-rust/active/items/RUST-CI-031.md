@@ -2212,6 +2212,27 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   focused 235-test protocol/source gate, catalog validator, changed-file Ruff,
   and `git diff --check` also pass. A repository-wide Ruff sweep is not a
   configured gate and still reports the unrelated pre-existing legacy backlog.
+- The forced fallback slice is now complete. Rust commits `b98beb8d` and
+  `b365ba14`, MFC commits `12a2b126` and `acc007d0`, and build-tests commits
+  `19de036`, `19bd7e7`, `c1146ef`, `e4b7988`, and `7cff7ae` add causal
+  attempt, failure, fallback, retry, login-send, ID-change, and acceptance
+  evidence without changing wire behavior or accepting a legacy schema.
+- Deterministic run `20261101T204626Z-emulebb-main-release-6532` passed with
+  endpoint-only Rust seed metadata and independently proved the exact
+  obfuscated-failure-to-plaintext-success sequence on both clients. Receipt
+  `rust-mfc-transfer-20261101t204626z` pins report SHA-256
+  `7ae22d90cb05d4dc69bc637d7ee1890eb4ed3e692f0560d9489c30caa72243d4`,
+  runner revision `7cff7aee08fdad05045583ec3019d8a8db2dae2f`, MFC revision
+  `acc007d07a0107b5a20557d8648dd172f83bd163` and executable
+  `1ca1adf48b9d0d9310601e9eb2d0eda1acdd8b34cffba85df8b1c8fac29db258`,
+  plus Rust revision `b365ba140f5db9ba28bbc1138eb9e1512d6e9803` and executable
+  `3fca4e29e4bc18426491cf729f45eadbff4b269dc34761802fe37695277b2545`.
+- Build-tests commit `e1178c8` registers that immutable receipt only after the
+  independent registrar revalidated both attempt graphs. Catalog validation
+  now reports 10/100 covered IDs and 1/17 complete groups: `server-session` is
+  4/4 parity, while all other incomplete groups remain explicitly
+  evidence-incomplete. The complete harness suite passes 2,909 tests with one
+  POSIX-only skip and one deliberate deselection in 122.62 seconds.
 
 Representative granular commits are `89e771d`, `ba19118`, `73d2a43`,
 `cfc9f98`, `db3145b`, `fe30438`, `565bf60`, `123246a`, `dbaa27b`,
@@ -2225,10 +2246,6 @@ pushed without a pull request.
 
 ## Next Implementation
 
-- Add one deterministic fallback campaign that forces an obfuscated preferred
-  attempt to fail and records the subsequent plaintext retry and accepted
-  session on both Rust and MFC. Keep `server.connect.fallback` incomplete until
-  the independent registrar can prove that exact sequence bilaterally.
 - Add the bilateral keyword-search campaign next. Both clients must issue and
   receive the matching search transition; the existing one-sided Rust
   observation remains diagnostics-only and cannot change a parity verdict.
