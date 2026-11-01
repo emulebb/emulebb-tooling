@@ -14,26 +14,86 @@ live evidence.
 - Search existing `scripts` and `emule_test_harness` capabilities before adding
   a helper. Prefer an existing module, then extending the closest script, then a
   reusable module with a thin operator wrapper.
-- `baseline/community-0.72a` is the seam-enabled parity/regression baseline.
-  Its maintenance is limited to inert seams, deterministic probes/adapters,
-  narrow tracing, and required buildability fixes; normal runtime behavior,
-  persistence, network behavior, and default control flow must not change.
-- `tracing-harness/community-0.72a` is the only sanctioned location for parity
-  behavior that intentionally changes runtime decisions. It is neither a
-  release branch nor the default regression baseline.
-- `repos/amule` is the managed official upstream aMule checkout and the moving
-  interoperability target. Refresh it through workspace sync before current
-  parity work and record its exact commit in retained evidence. Never silently
-  substitute it for the fixed Community 0.72a regression baseline; campaigns
-  report fixed-stock and moving-upstream results as distinct lanes.
-- `ed2k-server` is the sole local deterministic harness server and an
-  upstream-contribution reference. Keep it close to upstream, prefer
-  harness-side adaptation, and keep server changes minimal, generic, and
-  upstreamable. Local live and parity campaigns may select it; release and
-  public-production campaigns do not.
+- `workspaces\workspace\app\emulebb-main` is the preferred observable runtime
+  oracle for eD2K/Kad parity because it carries the maintained MFC diagnostics
+  surface. It is not a second product-development target. Changes are limited
+  to diagnostics, deterministic test control, and buildability required for
+  oracle use; do not evolve product or protocol behavior there.
+- Stock eMule source and accepted protocol goldens remain the authority for wire
+  and state-machine intent. `baseline/community-0.72a` is the frozen,
+  seam-enabled executable stock lane. Its maintenance is limited to inert
+  probes/adapters, narrow tracing, and required buildability fixes; normal
+  runtime behavior, persistence, network behavior, and default control flow
+  must not change.
+- `tracing-harness/community-0.72a` is retired from active parity work. Do not
+  add new runners, aliases, tests, or topology dependencies for it. Preserve
+  historical work in Git and migrate or remove remaining consumers before the
+  worktree is archived.
+- aMule has two explicit roles. The parity lane uses one frozen stable release
+  and records its exact revision plus any diagnostics-only patch revision. The
+  moving upstream HEAD lane is source-analysis and future-interoperability
+  evidence only; it is never silently substituted for the frozen parity lane
+  and never gates a current parity claim.
+- `ed2k-server` is an upstream-clean deterministic test dependency. Its code
+  must follow upstream without emulebb-specific protocol behavior. CI,
+  packaging, and test wiring may be carried locally when necessary, but packet,
+  state-machine, and client-compatibility adaptation belongs in the harness or
+  a scripted fixture. A result that depends on fork-only server behavior is not
+  stock protocol-parity evidence.
 - Rust metadata schema helpers are internal, bounded, backup-first
   infrastructure for known persisted test/soak profiles. They are never an
   end-user migration or recovery path.
+
+## Protocol-Parity Evidence
+
+The active goal is one evidence-driven Rust protocol-parity harness, not a
+collection of independent test scripts. The harness must maintain one
+machine-readable catalog of the supported eD2K and Kad variants and state
+transitions. Each catalog entry identifies its starting state, stimulus,
+expected wire/state result, authority, required evidence, deterministic runner,
+optional live runner, exact build provenance, and current evidence status.
+Named campaigns are selections from that catalog; they do not define competing
+coverage or verdict models.
+
+Use these evidence layers in order:
+
+1. codec and transcript tests for packet, tag, boundary, malformed-input, and
+   compatibility variants;
+2. deterministic local state-machine tests with controlled time, faults, and
+   exact ordered transitions;
+3. deterministic local cross-client campaigns, with Rust versus MFC as the
+   primary observable comparison and frozen stock/aMule lanes as independent
+   references where applicable; and
+4. public-network persisted-profile soaks for discovery and rare-state
+   collection only.
+
+A public finding must be reduced to a deterministic regression whenever the
+state can be reproduced locally. Public-network success cannot replace missing
+deterministic coverage.
+
+Verdicts have strict meanings:
+
+- `parity`: the required transition occurred on both selected clients and all
+  required, causally attributed evidence was recorded and compared;
+- `divergence`: comparable causal evidence exists on both sides and establishes
+  an actual mismatch;
+- `evidence-incomplete`: an action or transition may have occurred, but required
+  evidence is absent, ambiguous, dropped, malformed, or cannot be attributed;
+- `not-observed`: the required action or transition did not occur; and
+- `intentional-difference`: an approved supported-scope difference with its
+  authority and rationale recorded in the catalog.
+
+`evidence-incomplete` and `not-observed` never count as parity, divergence, or
+green coverage. A campaign reports the exact covered/required count and each
+non-covered catalog entry. Zero recorded divergences without covered entries is
+not progress or protocol evidence.
+
+Before adding a runner or suite, map it to catalog entries and search the
+existing harness. Every existing protocol test must ultimately be classified
+as canonical coverage, a shared fixture/helper, a duplicate to remove, a
+non-protocol product test, or historical material isolated from active Rust
+parity campaigns. Do not preserve obsolete client aliases, report adapters, or
+schema compatibility shims during this beta consolidation.
 
 ## Selected-Route Safety
 
@@ -56,12 +116,9 @@ separate. Never fall back silently from VPN to direct.
   hooks from operator-local configuration. VPN mode must prove tunnel-down
   blocks off-tunnel data before a VPN-safe claim can be made.
 - Public profiles enable main P2P UPnP when the selected route supports it and
-  record mapping/reachability evidence. Native Windows VPN integration is not a
-  forward development priority, but existing safety claims still require proof.
-- On the operator split-tunnel machine, non-P2P services and control/probe
-  traffic use inherited `X_LOCAL_IP` / `--lan-bind-addr`, never loopback or
-  wildcard. Product runtime and other machines retain deliberate loopback and
-  wildcard compatibility.
+  record mapping/reachability evidence. The persisted native-Windows hide.me
+  lane treats provider state as inherited operator state and remains read-only;
+  it does not configure, repair, or bypass the provider.
 - A full-tunnel host lane must prove split tunneling is disabled and must not
   call helpers that add application allow-list entries, excluded ranges, or
   other provider settings. Its local control planes use loopback while P2P
@@ -75,8 +132,8 @@ separate. Never fall back silently from VPN to direct.
 A direct Rust beta public test must be explicitly selected, use a fresh isolated
 profile with empty shared roots, accept only operator-approved hashes with exact
 size and SHA-256, bound traffic and runtime, tear down automatically, and retain
-evidence. WSL REST stays on loopback; Windows control follows the split-tunnel
-LAN rule.
+evidence. WSL and Windows REST control stay on loopback unless a selected
+scenario explicitly tests LAN control.
 
 An explicitly selected native-Windows Rust-versus-MFC protocol-parity campaign
 may use a narrower operator-approved exception to that direct-test baseline. It
@@ -86,8 +143,8 @@ clients must use fresh isolated profiles and output-root incoming directories,
 must never open or execute the downloaded payloads, and must compute SHA-256
 after completion and require cross-client equality. That equality proves parity
 between the two completed payloads; it does not establish content provenance or
-trust. The campaign must remain bounded, tear down automatically, retain
-sanitized evidence, and leave the ordinary direct Rust beta requirements above
+trust. The campaign must remain bounded, tear down automatically, retain exact
+local-only evidence, and leave the ordinary direct Rust beta requirements above
 unchanged for every other workflow.
 
 An explicitly selected persisted-profile diagnostic soak is a separate
@@ -97,7 +154,7 @@ outside the workspace output root under the core policy exception, provided
 all of the following remain true:
 
 - profile paths come only from ignored local input or explicit runtime
-  arguments and never enter tracked files or retained messages;
+  arguments and never enter tracked files;
 - hide.me is already active in full-tunnel mode, split tunneling is off, both
   P2P planes use `BindInterface`, both clients use VPN Guard Block, and the
   harness fails before launch rather than changing provider settings;
@@ -120,7 +177,10 @@ Discoveries from this lane require a separate bounded, reproducible campaign
 before they support a parity, certification, release, or VPN-safety claim.
 
 Never put real media titles or live search terms in tracked harness code, docs,
-tests, or retained evidence.
+or tests. Retained local-only diagnostic evidence is intentionally unredacted
+and may contain exact titles, terms, hashes, addresses, paths, identifiers, and
+packet payloads. Never publish, upload, commit, or attach those artifacts to a
+  public issue or pull request.
 
 ## Persisted Rust Soak Workflow
 
