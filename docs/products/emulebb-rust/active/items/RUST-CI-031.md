@@ -2234,6 +2234,42 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   evidence-incomplete. The complete harness suite passes 2,909 tests with one
   POSIX-only skip and one deliberate deselection in 122.62 seconds.
 
+## Bilateral Server Keyword Search Checkpoint - 2026-11-01
+
+- Build-tests commit `f68cf4c` replaces the unilateral search observation with
+  one strict bilateral schema. A neutral raw-wire publisher offers a fixture
+  distinct from the transfer fixture; Rust and MFC each issue exactly one
+  terminal keyword search through their REST control plane over an obfuscated
+  server session.
+- Eligibility requires exact request bytes, one accepted decoded reply, the
+  same result identity and availability on wire and REST, and complete causal
+  joins from request through apply/completion. Rust must prove its active,
+  request, send, reply, completed, and scheduler transitions. MFC must prove
+  its request, reply, and post-parse applied transition with exact before/after
+  counters. Structured failures retain partial evidence and cannot create a
+  claim.
+- MFC diagnostics commit `6db52bee` adds only the post-parse
+  `ed2k_tcp/search_result_applied` oracle event. Canonical Debug, Release, and
+  diagnostics Release builds pass, including the zero-warning diagnostics
+  build. This is observability work only, not MFC product evolution.
+- Deterministic run `20261101T212829Z-emulebb-main-release-14724` passed on
+  runner `f68cf4c259fb936991dd80efc65b256c3ad1a150`. Independent receipt
+  `rust-mfc-transfer-20261101t212829z` pins report SHA-256
+  `8e5b9d419aa755a0913855ed69a11745e1c339979ceef6e4167c513b07f72059`,
+  MFC revision `6db52beecf725d9248bee1bffb0809160c932d02` and executable
+  `d3fb07ad2865c6909dffb865b58e91e8f4538844016242448af4a1447df398d5`,
+  plus Rust revision `b365ba140f5db9ba28bbc1138eb9e1512d6e9803` and executable
+  `3fca4e29e4bc18426491cf729f45eadbff4b269dc34761802fe37695277b2545`.
+- Build-tests commit `1fce8aa` registers the immutable receipt only after the
+  independent registrar revalidated all six claims. Four are repeat evidence;
+  the only new coverage is `server.search.keyword` and `server.reply.search`.
+  Catalog validation now reports 12/100 covered IDs and 1/17 complete groups;
+  `server-query-reply` is explicitly partial at 2/9.
+- Final validation passes 2,942 harness tests with one POSIX-only skip and one
+  deliberate deselection in 122.00 seconds. The focused catalog/registrar set
+  passes 60 tests, the catalog validator passes, and `git diff --check` passes.
+  No pull request has been opened.
+
 Representative granular commits are `89e771d`, `ba19118`, `73d2a43`,
 `cfc9f98`, `db3145b`, `fe30438`, `565bf60`, `123246a`, `dbaa27b`,
 `8e8b663`, `7f384b1`, `7f0b748`, `80ec675`, `36f2f60`, `db77fcd`,
@@ -2246,9 +2282,6 @@ pushed without a pull request.
 
 ## Next Implementation
 
-- Add the bilateral keyword-search campaign next. Both clients must issue and
-  receive the matching search transition; the existing one-sided Rust
-  observation remains diagnostics-only and cannot change a parity verdict.
 - Prove the now-separate TCP and UDP server metadata reply states using their
   exact transport/opcode authorities. The corrected corpus is a static oracle,
   not runtime parity evidence by itself.
