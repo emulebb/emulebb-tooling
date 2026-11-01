@@ -1784,10 +1784,26 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   clients emitted `OP_SEARCHREQUEST` to the same configured public server, both
   result totals were zero, diagnostic evidence was complete, and the verdict was
   `coverage-parity`. No Rust protocol defect was established.
-- Final corrected campaign `20261101T155047Z` is the active bounded soak. It uses
-  the latest gate and action-scoping code, reuses both persisted profiles and hash
-  state, and targets four completed server plus four completed Kad actions. This
-  remains an in-progress action-lane proof, not a whole-protocol parity claim.
+- Campaign `20261101T155047Z` was stopped and retained as provisional discovery
+  evidence after review proved that same-opcode traffic was not yet sufficient
+  causal authority. Its single server success does not count toward the final
+  deterministic gate.
+- Rust commit `4def7119` and MFC commit `9bee814d` add the canonical Kad target to
+  each public lookup's exact search-ID lifecycle. Build-tests commit `64a151a`
+  then attributes server requests by exact query plus configured endpoint and
+  Kad request/response packets by exact search ID plus canonical target. Missing,
+  duplicate, overlapping, conflicting, or bilaterally different authority is
+  retryable `evidence-incomplete`, never protocol parity or confirmed divergence.
+- The causal-attribution change passed 2,811 build-tests tests with one skip and
+  one deselection. Independent review verified the Kad request/response target
+  offsets, UInt128 byte order, bilateral target equality, server overlap rejection,
+  exact query-only payload parsing, lifecycle uniqueness, and report validation.
+- Final campaign `20261101T162656Z` refreshed both selected diagnostics builds,
+  reused both persisted profiles and hash state, and started the four-server plus
+  four-Kad gate with healthy full-tunnel binding and VPN Guard Block. Its first
+  server slot was safely skipped while MFC completed eD2K connection; no retry or
+  divergence was recorded. This remains an in-progress action-lane proof, not a
+  whole-protocol parity claim.
 
 ## Next Implementation
 
