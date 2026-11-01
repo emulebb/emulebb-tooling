@@ -2085,49 +2085,65 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   skip, and one deliberate deselection in 124.18 seconds. Catalog validation
   and `git diff --check` also pass.
 
-## Canonical Server Search and Harness Consolidation Checkpoint - 2026-11-01
+## Server Observation and Bilateral Login Checkpoint - 2026-11-01
 
-- The catalog now has one canonical deterministic `server-keyword-search`
-  scenario. It issues exactly one Rust `OP_SEARCHREQUEST`, requires its
-  successful socket outcome, decodes exactly one matching `OP_SEARCHRESULT`,
-  verifies the exact REST row and endpoint, and enforces causal ordering. It
-  owns only `server.search.keyword` and `server.reply.search`; it does not
-  infer any server-source transport claim.
-- The first live attempt,
-  `20261101T192311Z-emulebb-main-release-6964`, proved that the search and REST
-  result worked but correctly failed the evidence gate because the following
-  132 MiB transfer rotated the early search records out of the retained ring.
-  This was a harness evidence-lifetime defect, not protocol divergence.
-- The corrected runner snapshots compact search evidence before transfer and
-  uses a 10 MiB fixture for this search case. Immutable run
-  `20261101T192443Z-emulebb-main-release-14604` passed on runner
-  `567cefa875f1bad8c10597c005156527b3bee592` with report SHA-256
-  `16de57d51e2259118520d379a3fb39ca8af9000411603e9fc509385b3a4d3c42`.
-  Request sequence 14 and reply sequence 16 matched the exact result name,
-  10,485,760-byte size, hash `684b18845d856fd43f44e0493d2fdc3f`,
-  and endpoint. The run also retained the already-authoritative startup,
-  queue, and uncompressed-transfer claims.
-- The receipt pins Rust revision
+- The deterministic `server-keyword-search` scenario remains the canonical
+  exact Rust product observation for one `OP_SEARCHREQUEST`, its successful
+  socket outcome, one decoded matching `OP_SEARCHRESULT`, the matching REST
+  row and endpoint, and causal ordering. It does not prove parity: Rust
+  performed the search while MFC only published the fixture result. The
+  scenario therefore reports the observed coverage IDs but no eligible parity
+  claims.
+- The first search attempt,
+  `20261101T192311Z-emulebb-main-release-6964`, also exposed an evidence-lifetime
+  defect when a following 132 MiB transfer rotated the early search records out
+  of the retained ring. The corrected runner snapshots the compact search
+  evidence before a bounded 10 MiB transfer. Immutable run
+  `20261101T192443Z-emulebb-main-release-14604` remains valid local Rust
+  diagnostic evidence, but its unilateral `server.search.keyword` and
+  `server.reply.search` parity claims and catalog receipt were withdrawn.
+- Exact server-session decoders and a bilateral diagnostic gate now compare
+  one Rust and one MFC login request, profile identity, stock user-hash markers,
+  version, server flags, UDP-port tag, the known Rust `offerfiles_v=1`
+  extension, exact sends, `OP_IDCHANGE`, accepted-session transitions, and the
+  assigned ID class. The known extension is recorded separately instead of
+  weakening the stock-core comparison.
+- Run `20261101T193947Z-emulebb-main-release-2224` failed preflight before client
+  launch because the selected loopback bind was rejected. Run
+  `20261101T193958Z-emulebb-main-release-10216` reached the bilateral gate and
+  exposed an incorrect requirement for the optional `SUPPORTCRYPT` capability
+  in a plaintext case. Commit `0c04531` corrected the invariant capability
+  mask without relaxing exact equality between the two clients.
+- Immutable run `20261101T194032Z-emulebb-main-release-14448` then passed in
+  12.7 seconds on runner revision
+  `0c045312d948ef745e1483e13e07df4330f65bb8`. Its report SHA-256 is
+  `c13af999bb23ff1989f57e2cc3e16fc646f7200ed1e8a086c9c998c64dba01a8`.
+  Rust and MFC each emitted one decoded stock-core login followed by exact
+  ID-change and accepted-session transitions at login sequences 2 and 3.
+- Receipt `rust-mfc-transfer-20261101t194032z` pins Rust revision
   `4def7119f32e0230d3cc0f09f6117825b1a65d46` and executable SHA-256
   `6c2ba174164af085695e6dc68fb038142ad6f8324d58aa113f65c6de0f23f8d3`,
   plus MFC revision `1c99b8f9cd7d4d701a104514882e6c1557e5eee1`
   and executable SHA-256
   `637457534644390e72b9d5f020a369283c12a3fdb91028b1ac431978cc551778`.
-- With server search registered, both aggregate protocol-combination runners,
-  their synthetic tests, and their campaign invocation were deleted. The
-  competing total-parity audit, its tests, and its release invocation were
-  also deleted. No wrapper, compatibility reader, or alias remains. The
-  protocol catalog, canonical receipts, and named campaigns are now the sole
-  verdict model.
-- Catalog validation reports 8/98 covered IDs and 0/15 complete groups;
-  `server-query-reply` is 2/11. Assets are classified as six canonical, zero
-  duplicate, two historical, two product-only, and eleven support assets.
-- Granular build-tests commits for this checkpoint are `16413ab`, `bc9fecc`,
-  `22fcd4c`, `08b6376`, `567cefa`, `557c425`, `ed15e0d`, and `fd37930`.
-  Final validation is 2,854 passing harness tests, one POSIX-only skip, and one
-  deliberate deselection in 128.06 seconds. The focused release/catalog/
-  inventory gate has 48 passing tests; catalog validation, Ruff, rendered
-  campaign inspection, and `git diff --check` also pass.
+  It owns `server.login.request` and repeats four already-authoritative startup,
+  queue, and uncompressed-transfer observations.
+- Both aggregate protocol-combination runners, their synthetic tests and
+  campaign invocation, plus the competing total-parity audit, remain deleted.
+  No wrapper, compatibility reader, or alias remains. The protocol catalog,
+  canonical receipts, and named campaigns are the sole verdict model.
+- Catalog validation now truthfully reports 7/98 covered IDs and 0/15 complete
+  groups. `server-session` is 1/4 and `server-query-reply` remains 0/11. Assets
+  are six canonical, zero duplicate, two historical, two product-only, and
+  eleven support assets.
+- The search checkpoint commits are `16413ab`, `bc9fecc`, `22fcd4c`, `08b6376`,
+  `567cefa`, `557c425`, `ed15e0d`, and `fd37930`. The bilateral-login commits
+  are `17889fe`, `5cd0b89`, `39f1df2`, `8bbc75a`, `f41e875`, `06ede5d`,
+  `0c04531`, and `17479f6`; the provisional `5cd0b89` implementation was
+  replaced in the next granular commit by the strict bilateral gate. Final
+  validation passes 2,867 harness tests with one POSIX-only skip and one
+  deliberate deselection in 124.73 seconds. The focused protocol gate passes
+  135 tests; catalog validation, Ruff, and `git diff --check` also pass.
 
 Representative granular commits are `89e771d`, `ba19118`, `73d2a43`,
 `cfc9f98`, `db3145b`, `fe30438`, `565bf60`, `123246a`, `dbaa27b`,
@@ -2141,6 +2157,14 @@ pushed without a pull request.
 
 ## Next Implementation
 
+- Correct the catalog authority for server status and description before
+  claiming either transition. The current corpus ambiguously mixes request and
+  response opcodes and does not distinguish TCP `OP_SERVERSTATUS` from UDP
+  `OP_GLOBSERVSTATRES` or TCP `OP_SERVERIDENT` from UDP
+  `OP_SERVER_DESC_RES`.
+- Add deterministic bilateral server connection-transport cases and then a
+  bilateral keyword-search case. One-sided product observations remain useful
+  diagnostics, but they cannot change catalog parity verdicts.
 - Do not claim preferred-mode fallback or server obfuscation until a scenario
   causally records those exact transitions on both relevant sides.
 - Continue domain by domain through server session/source replies,
