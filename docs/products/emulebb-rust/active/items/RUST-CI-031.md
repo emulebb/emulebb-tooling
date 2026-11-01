@@ -61,22 +61,36 @@ ambiguous, malformed, dropped, or unattributable evidence is
 counts as parity or divergence. Zero divergences with zero covered entries is
 not evidence.
 
-The current significant chunk is consolidation, not expansion of the soak
-controller:
+The goal is bounded by catalog coverage and consolidation, not by soak duration
+or infrastructure volume. It is complete only when every supported catalog
+entry has one canonical deterministic owner and a causally proven verdict,
+every existing protocol test has been classified, duplicate and retired MFC
+paths are removed or isolated, exact build provenance is enforced, and the
+machine-generated coverage report plus the complete harness validation are
+green. The public soak may continue as a discovery tool, but it is not a goal
+completion gate.
+
+Implementation proceeds through one catalog group at a time:
 
 1. establish the single catalog and verdict model;
 2. import the existing protocol-golden groups and proven deterministic cases;
-3. classify every current protocol test as canonical coverage, shared support,
-   duplicate, non-protocol product coverage, or historical material;
-4. freeze and name the MFC, stock, stable-aMule, and aMule-HEAD roles;
-5. remove the tracing harness from active topology after its remaining
-   consumers are migrated or retired;
-6. restore `ed2k-server` to upstream code behavior and move test-specific
-   adaptation into the harness;
-7. make exact source/binary/profile provenance and stale-build rejection part
-   of every executable campaign; and
-8. finish with a machine-generated coverage report and the complete harness
+3. complete `server-session`, beginning with the currently missing forced
+   obfuscated-to-plaintext fallback sequence;
+4. complete bilateral server query and reply coverage, beginning with keyword
+   search and the separated TCP/UDP metadata replies;
+5. continue through server source, peer transfer and queue/callback, client
+   UDP, and Kad groups without opening parallel implementation lanes;
+6. classify every current protocol test as canonical coverage, shared support,
+   duplicate, non-protocol product coverage, or historical material, retiring
+   old MFC paths only after their unique states have a canonical owner; and
+7. finish with a machine-generated coverage report and the complete harness
    validation green.
+
+For each group, the mandatory loop is diagnostics only where causal evidence is
+missing, then the smallest deterministic runner, immutable receipt, independent
+registration, catalog update, and full scoped validation. A diagnostic event,
+runner, successful process exit, packet capture, or zero-divergence report is
+not progress until that loop proves at least one named catalog entry.
 
 Work continues through granular commits on the existing single workstream
 branch. Do not open coordinated pull requests until this whole chunk is
