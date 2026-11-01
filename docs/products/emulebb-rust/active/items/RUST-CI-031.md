@@ -2280,11 +2280,61 @@ Representative granular commits are `89e771d`, `ba19118`, `73d2a43`,
 on the single `feature/persisted-soak-parity-analysis` workstream branch and
 pushed without a pull request.
 
+## Bilateral TCP Server Metadata Checkpoint - 2026-11-01
+
+- Rust commit `3c2c0b27` emits `server_status_applied` and
+  `server_ident_applied` only after the decoded `OP_SERVERSTATUS` and
+  `OP_SERVERIDENT` values mutate the server model. MFC oracle commit
+  `c014f880` emits the same `diag_event_v2` state transitions after its
+  corresponding model updates. Both commits are pushed on the single workstream
+  branch; MFC received diagnostics only, not product evolution.
+- Build-tests commits `576df52`, `0b91d6e`, and `564423c` add the exact ident
+  codec, ephemeral profile controls, bilateral causal gate, deterministic
+  `server-tcp-metadata` scenario, and strict independent registration. Follow-up
+  commits `78c75b5`, `410bd04`, `3f6124d`, and `53fea9b` corrected assumptions
+  exposed by real execution instead of weakening the gate.
+- The final evidence model uses `/api/v1/status` only to prove the active server
+  endpoint and `GET /api/v1/servers/{address}:{port}` to prove the applied
+  server-list metadata. This distinction is required because MFC updates its
+  canonical server-list entry after the two replies while its separate current
+  connection snapshot retains the seed name and counters. Comparing that stale
+  duplicate object would manufacture a false protocol divergence.
+- The outbound `OP_GETSERVERLIST` boundary is also explicit rather than
+  normalized away: Rust records the packet as `attempted`, while MFC records it
+  as `send_succeeded`. The gate requires those exact client-specific outcomes,
+  then joins one ID-change, request, status, ident, post-apply status, post-apply
+  ident, and REST state through one positive trace ID per client.
+- The canonical local campaign passed at
+  `reports/deterministic-two-client-transfer/20261101T220451Z-emulebb-main-release-10372/deterministic-two-client-transfer-result.json`.
+  It used runner revision `53fea9b3380ab2c338b1923f4e83f54abf2e59d9`,
+  Rust revision `3c2c0b27a67bdd7b5af21d9fe611a139831ec1ba` and
+  executable SHA-256
+  `29efd66ad3841672b7a8fbd86f0a5b2a536f8d7383de224b01f63f7f4d7349ff`,
+  plus MFC revision `c014f88019256e02be7dbfd673f08e025a9ed006` and
+  executable SHA-256
+  `040ff59f632d15324fce0e163bbcc5b8dc351ea50e2fbc7191836291d8f4b392`.
+  The Rust diagnostics build receipt is
+  `logs/builds/20261101T214857Z-build-clients/build-result.json`; it completed
+  with zero warnings and failures.
+- The independent registrar re-derived all six claims from immutable receipt
+  SHA-256
+  `c9acf8151a9fddefce4ddcd828764298d654c6c9f6df9f98354d2b6f2e82b4c8`.
+  Build-tests commit `7e94cc3` registers only the two new IDs,
+  `server.reply.tcp-ident` and `server.reply.tcp-status`, while retaining the
+  four repeated transfer claims as corroborating receipt ownership. Catalog
+  validation now reports 14/100 covered IDs and 2/17 complete groups; the
+  `server-tcp-metadata` group is complete.
+- Final build-tests validation passes 2,965 tests with one POSIX-only skip and
+  one deliberate deselection in 122.61 seconds. Changed-file Ruff,
+  `git diff --check`, the catalog validator, Rust packet-diagnostics tests, and
+  all three canonical MFC builds are green. No pull request has been opened.
+
 ## Next Implementation
 
-- Prove the now-separate TCP and UDP server metadata reply states using their
-  exact transport/opcode authorities. The corrected corpus is a static oracle,
-  not runtime parity evidence by itself.
+- Prove the separate UDP server metadata reply states using their exact
+  transport/opcode authorities. The corrected corpus is a static oracle, not
+  runtime parity evidence by itself; TCP status and ident are now causally
+  proven and registered.
 - Continue domain by domain through server session/source replies,
   peer-transfer queue/callback states, client UDP, and Kad. Add the smallest
   deterministic transcript or local cross-client scenario that can causally
