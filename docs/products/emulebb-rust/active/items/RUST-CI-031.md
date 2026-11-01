@@ -1732,6 +1732,38 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   lifecycle coverage, not a claim of whole-run ED2K/Kad parity. The complete
   build-tests suite passed 2,866 tests with one skip and one deselection.
 
+## Maintained Persisted Soak Checkpoint - 2026-11-01
+
+- `persisted-soak-control.py` is the maintained until-stopped authority. It owns
+  the detached `launch-soak.py` lifecycle plus the attach-only bounded observer
+  and watcher. The older all-in-one `converged-soak-live.py` loaded complete
+  growing traces during a checkpoint and reached unbounded process memory; that
+  run was stopped cleanly and the script is not an authority for long soaks.
+- Build-tests commits `956cb87` and `f9b6eb3` put the supported incremental Rust
+  and MFC diagnostics builds directly in both maintained launch paths. Commits
+  `bbcacd9`, `7cc232e`, and `c1218b2` preserve campaign retention wiring, direct
+  persisted MFC diagnostics, and loopback REST control in full-tunnel mode.
+- The first maintained campaign reused both persisted profiles and their hash
+  state, refreshed both selected diagnostics builds, applied the 8 KiB/s upload
+  cap, and reached healthy full-tunnel operation with VPN Guard Block and active
+  `diag_event_v2` writers on both clients. No profile import, reset, rehash, or
+  storage deletion occurred.
+- Its first server-search action proved the required `OP_SEARCHREQUEST` on both
+  clients, but the original adjudicator incorrectly failed the action because
+  unrelated background client-UDP traffic had different event shapes in the same
+  time window. The action-owned server diagnostics were conformant; no Rust
+  protocol defect was established.
+- Build-tests commit `5644b9e` scopes an action verdict to that lane's explicitly
+  required diagnostic families while retaining every unrelated family in the
+  report for analysis. Two regression levels cover the family gate and the full
+  server-action verdict. The complete build-tests suite passes 2,869 tests with
+  one skip and one deselection.
+- Corrected campaign `20261101T153238Z` is the active bounded soak. Both clients,
+  REST planes, diagnostics writers, VPN routing, and guards are healthy. Its first
+  server action completed as `coverage-parity`; the gate is at server 1/4 and Kad
+  0/4 with zero confirmed divergences. This is an in-progress action-lane result,
+  not a whole-protocol parity claim.
+
 ## Next Implementation
 
 - Treat request encoding, parser behavior, lifecycle decisions, timeout cause,
@@ -1774,9 +1806,9 @@ distinguish observed parity from merely unobserved behavior.
 
 ## Representative Sites
 
-- `repos/emulebb-build-tests/scripts/converged-soak-live.py`
+- `repos/emulebb-build-tests/scripts/persisted-soak-control.py`
 - `repos/emulebb-build-tests/scripts/launch-soak.py`
-- `repos/emulebb-build-tests/scripts/rust-soak-control.py`
+- `repos/emulebb-build-tests/scripts/converged-soak-observer.py`
 - `repos/emulebb-build-tests/emule_test_harness/soak_launch.py`
 - `repos/emulebb-build-tests/emule_test_harness/hideme_split_tunnel.py`
 - `repos/emulebb-build-tests/emule_test_harness/mfc_profile_import.py`
