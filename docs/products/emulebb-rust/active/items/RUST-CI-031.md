@@ -1644,6 +1644,40 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
   Their markers are local troubleshooting evidence only, not valid recordings. No
   client remains running and no pull request has been opened.
 
+## Fixture-Owned Client-UDP Contract Checkpoint - 2026-11-01
+
+- The V8 focused recordings retained valid general client-UDP lifecycle evidence:
+  Rust emitted two attempts with two successful terminals, and MFC emitted four
+  attempts with four successful terminals. MFC also retained 69 scheduler
+  decisions with ten eligible transitions and 16 transport decisions with six
+  sends. These events confirm that both persisted clients exercised client UDP.
+- A contract audit found that this was not yet evidence for the selected
+  transfer fixture. The compact proof admitted packet and socket records that
+  carried no file hash, and the MFC scheduler and transport decisions matching
+  the selected fixture numbered zero. The selected transfer and the observed
+  client-UDP lifecycle therefore coexisted in the same process run but were not
+  causally correlated. V8 is general discovery evidence, not a fixture-owned
+  parity or coverage proof.
+- Build-tests commit `1bbb722` replaces that permissive behavior with the sole
+  current `focused-client-udp-request-lifecycle` contract. A UDP attempt must
+  carry the exact fixture hash, its terminal must match the same
+  `sendAttemptId`, and MFC must additionally retain fixture-owned scheduler
+  eligibility and transport-send decisions. Hashless activity can no longer
+  complete the focused wait.
+- Focused adjudication now reports the successful terminal state as
+  `coverage-proven`, never `parity`. Native packet capture, cumulative Kad
+  coverage, startup lifecycle, and narrow action-window traffic are explicitly
+  outside that focused claim; the full-campaign parity contract retains all of
+  those gates unchanged.
+- The current contract intentionally rejects the retained V8 compact evidence
+  with a harness failure. No legacy summary, proof adapter, or compatibility
+  fallback was added. The next recording requires current Rust and MFC
+  diagnostics to place the logical file hash on the client-UDP attempt before
+  the focused proof can become green.
+- Validation passed 124 focused tests, Ruff checks for every changed module,
+  and the complete harness suite: 2,859 passed, one skipped, and one
+  deselected.
+
 ## Next Implementation
 
 - Treat request encoding, parser behavior, lifecycle decisions, timeout cause,
@@ -1657,6 +1691,13 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
 - Preserve MFC zero hashing and the Rust zero-plan restart invariant while
   protocol parity work continues. Any future nonzero plan must identify
   genuinely changed or new files rather than another compatibility workaround.
+- Add the exact logical file hash to Rust and MFC client-UDP send-attempt
+  diagnostics and retain it through the compact proof. MFC scheduler and
+  transport decisions already own the required file key; do not infer fixture
+  ownership from process timing, peer coincidence, or packet presence.
+- Rerun both sequential focused halves under the current contract. Do not use
+  V8 as a green fixture-owned proof, and do not weaken the correlation gate if
+  unrelated persisted downloads emit client UDP first.
 - Obtain a second operator-approved direct-transfer fixture with exact name, eD2K
   hash, and size in ignored local input. The current frozen fixture is completed and
   must not be deleted or moved merely to manufacture another run. Because the fixture
