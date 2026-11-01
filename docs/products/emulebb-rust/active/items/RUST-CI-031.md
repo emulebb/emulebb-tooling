@@ -30,13 +30,66 @@ reuse a valid nonempty Rust profile thereafter.
 The workflow is a diagnostic discovery lane, not unbounded certification
 evidence. Repeatable bounded captures remain the authority for a parity claim.
 
+## Focused Protocol-Parity Goal - 2026-11-01
+
+Consolidate Rust protocol-parity testing into one evidence-driven harness in
+`repos\emulebb-build-tests`. Deterministic eD2K/Kad codec, transcript,
+state-machine, and local cross-client campaigns are the parity authority. The
+persisted public-network soak remains a discovery lane that supplies candidate
+findings and rare-state recordings; it cannot certify a state it did not
+observe and cannot report useful progress when no causally attributable action
+completed.
+
+The governing role model is:
+
+- emulebb Rust is the product under test;
+- emulebb MFC is the preferred observable runtime oracle and receives only
+  diagnostics, deterministic test control, and required oracle buildability
+  work;
+- stock eMule source and accepted goldens define protocol intent;
+- one frozen stable aMule lane is an independent parity reference, while aMule
+  HEAD is analysis-only;
+- `ed2k-server` is an upstream-clean deterministic dependency, not an emulebb
+  protocol fork; and
+- the historical community tracing harness is retired from active parity work.
+
+One machine-readable catalog will own supported protocol variants, states,
+transitions, required evidence, runners, authorities, build provenance, and
+current status. Campaigns are named selections from that catalog. Missing,
+ambiguous, malformed, dropped, or unattributable evidence is
+`evidence-incomplete`; an unexercised transition is `not-observed`. Neither
+counts as parity or divergence. Zero divergences with zero covered entries is
+not evidence.
+
+The current significant chunk is consolidation, not expansion of the soak
+controller:
+
+1. establish the single catalog and verdict model;
+2. import the existing protocol-golden groups and proven deterministic cases;
+3. classify every current protocol test as canonical coverage, shared support,
+   duplicate, non-protocol product coverage, or historical material;
+4. freeze and name the MFC, stock, stable-aMule, and aMule-HEAD roles;
+5. remove the tracing harness from active topology after its remaining
+   consumers are migrated or retired;
+6. restore `ed2k-server` to upstream code behavior and move test-specific
+   adaptation into the harness;
+7. make exact source/binary/profile provenance and stale-build rejection part
+   of every executable campaign; and
+8. finish with a machine-generated coverage report and the complete harness
+   validation green.
+
+Work continues through granular commits on the existing single workstream
+branch. Do not open coordinated pull requests until this whole chunk is
+complete, reviewed, and green. Do not create compatibility aliases, legacy
+schema readers, or parallel work-in-progress branches during the consolidation.
+
 ## Current State
 
 - The canonical dual-client launchers now expose an explicit full-tunnel mode,
   perform a read-only hide.me preflight, use IPv4 loopback for control, and
   require VPN Guard Block configuration before client launch.
 - The full-tunnel lane accepts an explicitly selected operator-owned Rust
-  profile outside `EMULEBB_WORKSPACE_OUTPUT_ROOT`; split-tunnel runs retain the
+  profile outside `EMULEBB_WORKSPACE_OUTPUT_ROOT`; other workflows retain the
   managed-output boundary.
 - An empty persisted Rust profile is imported transactionally from the selected
   MFC profile, while a populated profile must contain the current Rust settings
@@ -1807,35 +1860,23 @@ artifacts, never by field omission or mutation of `diag_event_v2` records.
 
 ## Next Implementation
 
-- Treat request encoding, parser behavior, lifecycle decisions, timeout cause,
-  packet correlation, and connection continuity as parity authority. Public
-  result counts may differ and are comparable only when both clients used the
-  same exact server endpoint.
-- Run a serial or endpoint-swapped live A/B before treating a missing
-  `OP_SEARCHRESULT` as a Rust protocol defect. Connected-server result counts
-  from different public endpoints are not a valid parity assertion; request
-  encoding, parser behavior, timeout cause, and connection continuity are.
-- Preserve MFC zero hashing and the Rust zero-plan restart invariant while
-  protocol parity work continues. Any future nonzero plan must identify
-  genuinely changed or new files rather than another compatibility workaround.
-- Use the completed fixture-owned proof as the baseline for the next until-stopped
-  paired soak. Keep broad server lifecycle, secure-ident, peer-transfer, server UDP,
-  Kad, sequence-integrity, and writer-health gates active; the focused proof does not
-  satisfy those whole-run surfaces.
-- Keep selected-client incremental build refresh and action-boundary tailing as the
-  sole launch path. Reuse the persisted profiles and hash state; fail rather than
-  reset, reimport, rehash, or select a different executable implicitly.
-- Keep the proven server/Kad search gate unchanged. Treat the sequential transfer
-  capture as a separate protocol-coverage proof; do not weaken required-family
-  or diagnostic-conformance gates when an action did not generate the family.
-- Confirm the rebuilt traces name deprecated Kad routing and server-description
-  UDP opcodes on both clients without changing unsupported Kad1 behavior.
-- During the next broad soak, implement only concrete protocol or correlation gaps
-  demonstrated by exact traces, each as a separate tested commit.
-- Keep the next run until-stopped once the action-driven proof is clean. Do not
-  open a pull request until the complete significant slice is green and the
-  operator explicitly requests it. This slice makes no VPN-safety claim until a
-  separate controlled tunnel-down proof is completed.
+- Treat the running persisted soak as discovery only. Its current gate remains
+  pending until causally attributed actions complete; a zero-action run makes no
+  parity statement.
+- Build the catalog from the existing golden manifest, deterministic lifecycle
+  evidence, native Rust tests, and live-suite inventory before adding another
+  runner.
+- Produce the classification and proposed removal/migration list before deleting
+  historical tests or changing workspace topology.
+- Consolidate the first complete vertical campaign around server session,
+  search, source discovery, and source lifecycle because that area already has
+  the strongest deterministic and cross-client evidence.
+- Continue domain by domain through peer transfer/queue/callback, client UDP,
+  and Kad. Promote every reproducible soak finding into the lowest applicable
+  deterministic layer.
+- Preserve the persisted MFC and Rust profile/hash state while this
+  consolidation proceeds. Harness restructuring does not authorize profile
+  reset, reimport, or rehash.
 
 ## Why This Matters
 
@@ -1851,7 +1892,6 @@ distinguish observed parity from merely unobserved behavior.
 - `repos/emulebb-build-tests/scripts/launch-soak.py`
 - `repos/emulebb-build-tests/scripts/converged-soak-observer.py`
 - `repos/emulebb-build-tests/emule_test_harness/soak_launch.py`
-- `repos/emulebb-build-tests/emule_test_harness/hideme_split_tunnel.py`
 - `repos/emulebb-build-tests/emule_test_harness/mfc_profile_import.py`
 - `repos/emulebb-build-tests/emule_test_harness/diag_event_diff.py`
 - `repos/emulebb-build-tests/emule_test_harness/packet_trace_diff.py`
@@ -1909,8 +1949,8 @@ distinguish observed parity from merely unobserved behavior.
 ## Scope Constraints
 
 - Stock/community eMule remains the authority for wire behavior. Maintained
-  eMuleBB MFC is the operational comparator, and current aMule is a distinct
-  interoperability evidence lane.
+  eMuleBB MFC is the preferred observable runtime oracle. Frozen stable aMule is
+  a distinct parity-reference lane, while moving aMule HEAD is analysis-only.
 - Supported scope is IPv4 eD2K/Kad behavior minus the registered permanent
   omissions. Intentional extensions such as `offerfiles-v1` remain separate
   negotiated/fallback lanes.
