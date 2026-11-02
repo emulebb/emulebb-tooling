@@ -47,12 +47,13 @@ MFC test paths; keep `ed2k-server` upstream-clean; work on the existing single
 feature branch with granular commits and open coordinated pull requests only
 after a significant complete chunk is fully green.
 
-The current machine-measured baseline is 23 of 100 catalog entries covered and
-4 of 17 groups complete. `server-query-reply` is complete at 9/9. The active
-bounded slice is `lowid.server-callback`; unrelated protocol slices do not
-begin until that distinct LowID state transition has an exact authority,
-causal evidence contract, independent registration, catalog admission, and
-scoped green validation.
+The current machine-measured baseline is 24 of 100 catalog entries covered and
+4 of 17 groups complete. `server-query-reply` is complete at 9/9 and
+`lowid-callbacks` is partial at 1/4. The active bounded slice is
+`lowid.direct-callback`; unrelated protocol slices do not begin until that
+distinct LowID state transition has an exact authority, causal evidence
+contract, independent registration, catalog admission, and scoped green
+validation.
 
 The governing role model is:
 
@@ -2622,17 +2623,51 @@ pushed without a pull request.
   pass. `ed2k-server` remains untouched and upstream-clean at `66b892d`; no
   pull request has been opened.
 
+## LowID Server Callback Checkpoint - 2026-11-02
+
+- The consolidated foundation merged only after coordinated green gates:
+  Rust PR `#208`, MFC diagnostics PR `#183`, upstream-clean `ed2k-server` PR
+  `#21`, build-tests PR `#82`, and tooling PR `#133`. Every repository is now
+  clean on its default branch, the shared work-in-progress branch is deleted,
+  and no pull request remains open.
+- Hosted Fast Harness attempt `41378733721/2` passed both Windows images after
+  checking out merged MFC `9dfe5fd0`, merged Rust `cc2db5ab`, merged tooling
+  `307a6f6`, stock source `ac3d52ea`, instrumented stock `c547b7cf`, frozen
+  aMule `02db0d7f`, and analysis-only aMule `59425b0c`. The authority revisions
+  are pinned by the catalog and checked by the workflow test; missing or moving
+  references fail the clean-room gate.
+- Build-tests `1da6713` makes registration authoritative over producer-declared
+  coverage: a producer may not overclaim the independently proven IDs, while a
+  later registrar may recognize a new taxonomy ID from unchanged immutable
+  evidence. The complete LowID path is revalidated from accepted LowID login,
+  exact HighID requester command/control receipts, exact server-routed reply,
+  same-trace application, managed `/32` route, and raw callback HELLO identity.
+  This is an evidence-model improvement, not a compatibility reader.
+- The original artifact remains unchanged at SHA-256
+  `5f0e895b0b2b231f55531abb9cb813308de57de906f5e89424ebfddd0d08088c`.
+  Independent registration now admits `lowid.server-callback` on receipt
+  `rust-mfc-transfer-20261102t020224z`: Rust sequences 17/18 and MFC sequences
+  19/21 each complete the transition from accepted LowID assignment through
+  `OP_CALLBACKREQUEST`, server-routed `OP_CALLBACKREQUESTED`, application, and
+  matching HELLO to the HighID requester. No traffic was rerun and no Rust,
+  MFC, or `ed2k-server` behavior or diagnostics changed.
+- Build-tests `99ce0d8` records the new per-ID claim. Catalog validation reports
+  24/100 covered IDs and 4/17 complete groups; `lowid-callbacks` is honestly
+  partial at 1/4. The focused callback, registrar, and catalog gate passes 131
+  tests. The complete local harness gate passes 3,178 tests with one POSIX-only
+  skip and one deliberate deselection in 199.50 seconds.
+
 ## Next Implementation
 
 - Take the next bounded `lowid-callbacks` slice:
-  `lowid.server-callback`. First determine whether the immutable callback
-  receipt above already proves the distinct full LowID transition from
-  accepted LowID login through exact `OP_CALLBACKREQUEST`, server-routed
-  `OP_CALLBACKREQUESTED`, application, and callback HELLO. Reuse that receipt
-  only if an independent gate can prove the complete state transition; add the
-  smallest missing diagnostic or deterministic stimulus otherwise. Do not
-  rerun unchanged traffic, add a parallel runner, or change `ed2k-server`
-  protocol behavior.
+  `lowid.direct-callback`. First inventory the existing direct-callback codec
+  proof and canonical reask/cross-client runner. Admit no claim until one local
+  deterministic transcript proves the accepted LowID start state, exact
+  `OP_DIRECTCALLBACKREQ` stimulus, receiver application, and resulting
+  identity-correlated connection or reask transition. Extend the canonical
+  runner or the smallest missing diagnostic only when the current evidence
+  cannot prove that chain; do not add a parallel runner or change
+  `ed2k-server` protocol behavior.
 - Continue domain by domain through server session/source replies,
   peer-transfer queue/callback states, client UDP, and Kad. Add the smallest
   deterministic transcript or local cross-client scenario that can causally
