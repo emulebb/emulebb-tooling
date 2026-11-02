@@ -47,9 +47,9 @@ MFC test paths; keep `ed2k-server` upstream-clean; work on the existing single
 feature branch with granular commits and open coordinated pull requests only
 after a significant complete chunk is fully green.
 
-The current machine-measured baseline is 20 of 100 catalog entries covered and
+The current machine-measured baseline is 21 of 100 catalog entries covered and
 3 of 17 groups complete. The active bounded slice is
-`server.source.udp-v2`. Until that slice has an immutable receipt,
+`server.search.advanced`. Until that slice has an immutable receipt,
 independent registration, catalog admission, and scoped green validation,
 unrelated protocol slices do not begin.
 
@@ -2498,15 +2498,49 @@ pushed without a pull request.
   deselection. `ed2k-server` remained untouched and upstream-clean at
   `66b892d`; no pull request has been opened.
 
+## UDP v2 Server Source Checkpoint - 2026-11-02
+
+- Build-tests `e555c09` codifies the accepted stock UDP v2 request grammar:
+  `OP_GLOBGETSOURCES2` followed by repeated `<hash16><size32>` entries, or
+  `<hash16><zero32><size64>` for a large file. The shared
+  `OP_GLOBFOUNDSOURCES` reply API is no longer mislabeled as v1-only.
+- Build-tests `e91871e` extends the single harness-owned source fixture to
+  explicit v1/v2 modes and exact v2 size matching. Commits `f4e495f` and
+  `1cd2ed6` rename and generalize the bilateral evidence gate without aliases;
+  `df56e58` adds the bounded v2 campaign; `a240a46` independently reconstructs
+  either version; and `83aeb64` admits the immutable result.
+- The canonical campaign passed on its first run at
+  `output-root:reports/deterministic-two-client-transfer/20261102T011511Z-emulebb-main-release-500/deterministic-two-client-transfer-result.json`
+  with artifact SHA-256
+  `6e4fe12abaeb4e02d255e429d3ca18bf27c6a08d2107ab9ee81506fc3e49186a`.
+  The harness revision was `a240a46`; no Rust or MFC source rebuild was needed.
+  Rust remained at `eb1256ba` with executable SHA-256
+  `f8718d0530552885d4ba7fa3d9b079e34f1e7d1b6709deea8d5c2841af449136`;
+  MFC remained at diagnostics revision `2d8fb8b3` with executable SHA-256
+  `a56cc028191b51523a60fd2ab44abd45e657a6e8d322e4524d5b556af7098352`.
+- Rust and MFC each emitted the exact payload
+  `22334455667788990011aabbccddeeff32090100`: the canonical file hash plus
+  67,890 as little-endian `u32`. The fixture observed no v1 request; the gate
+  causally joined Rust's terminal send outcome and each client's exact reply to
+  its `0 -> 1` source-state application.
+- Independent receipt `rust-mfc-transfer-20261102t011511z` admits
+  `server.source.udp-v2` as the sole new coverage ID. The source reply and four
+  transfer IDs are corroboration only. Catalog validation now reports 21/100
+  covered IDs and 3/17 complete groups; `server-query-reply` is 7/9.
+- The final harness gate passes 3,138 tests with one POSIX-only skip and one
+  deliberate deselection in 125.85 seconds. The focused 240-test gate, catalog
+  validator, changed-file Ruff, and `git diff --check` also pass. `ed2k-server`
+  remained untouched and upstream-clean at `66b892d`; no pull request has been
+  opened.
+
 ## Next Implementation
 
 - Take the next bounded `server-query-reply` slice:
-  `server.source.udp-v2`. Bind the accepted stock v2 request/reply wire contract,
-  including its exact source-size payload, to the existing Rust/MFC diagnostics
-  and one harness-owned managed or scripted fixture. Add only the smallest
-  bounded cross-client scenario needed to prove exact endpoint, file identity,
-  request and reply opcodes, source decode, and post-apply state. Register its
-  immutable receipt before advanced search or callback work. Do not change
+  `server.search.advanced`. Bind the accepted stock advanced-search expression
+  grammar to the existing managed local search fixture and prove the exact Rust
+  and MFC request bytes, reply correlation, decoded result, and post-apply REST
+  state. Reuse the existing keyword-search lane and add no parallel runner.
+  Register its immutable receipt before callback work. Do not change
   `ed2k-server` protocol behavior.
 - Continue domain by domain through server session/source replies,
   peer-transfer queue/callback states, client UDP, and Kad. Add the smallest
