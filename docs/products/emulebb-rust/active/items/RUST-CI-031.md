@@ -47,11 +47,12 @@ MFC test paths; keep `ed2k-server` upstream-clean; work on the existing single
 feature branch with granular commits and open coordinated pull requests only
 after a significant complete chunk is fully green.
 
-The current machine-measured baseline is 22 of 100 catalog entries covered and
-3 of 17 groups complete. The active bounded slice is
-`server.reply.callback`. Until that slice has an immutable receipt,
-independent registration, catalog admission, and scoped green validation,
-unrelated protocol slices do not begin.
+The current machine-measured baseline is 23 of 100 catalog entries covered and
+4 of 17 groups complete. `server-query-reply` is complete at 9/9. The active
+bounded slice is `lowid.server-callback`; unrelated protocol slices do not
+begin until that distinct LowID state transition has an exact authority,
+causal evidence contract, independent registration, catalog admission, and
+scoped green validation.
 
 The governing role model is:
 
@@ -2580,15 +2581,58 @@ pushed without a pull request.
   `git diff --check` pass. `ed2k-server` remains untouched and upstream-clean
   at `66b892d`; no pull request has been opened.
 
+## Server Callback Reply Checkpoint - 2026-11-02
+
+- Rust `e8ff2faf` and MFC `9c556184` add causal callback-reply application
+  diagnostics. MFC remains a diagnostics-only oracle; no MFC or Rust protocol
+  behavior changed and no diagnostic compatibility reader was added.
+- Build-tests `cb6332f`, `4ad003d`, `c7192f3`, and `7a0ce5f` establish the
+  stock callback codecs, managed HighID requester, bilateral evidence gate,
+  and bounded campaign in the existing deterministic transfer runner. Commits
+  `697bc8f`, `30b0917`, `8f7ebea`, and `ba86acb` require honest login delivery
+  proof and route only the isolated callback requester through the managed WSL
+  host and Docker bridge. Failed pre-route and pre-ingress runs remain local
+  diagnostic evidence and admitted no catalog claim.
+- The canonical campaign passed in 17 seconds at
+  `output-root:reports/deterministic-two-client-transfer/20261102T020224Z-emulebb-main-release-12340/deterministic-two-client-transfer-result.json`
+  with artifact SHA-256
+  `5f0e895b0b2b231f55531abb9cb813308de57de906f5e89424ebfddd0d08088c`.
+  Rust used revision `e8ff2faf` and executable SHA-256
+  `15cb10e6a8753ac78c3f9716b06abae10eaa74ac746c292bf0c0f238f07bc154`;
+  MFC used diagnostics revision `9c556184` and executable SHA-256
+  `fa0a5961caaefb29dfba440d3cf771ec4d9329c6b9f8070efde1d7160a824b1f`;
+  the campaign runner revision was `ba86acb`.
+- The requester issued exact `OP_CALLBACKREQUEST` commands for LowIDs 4 and 2.
+  Rust applied the exact short `OP_CALLBACKREQUESTED` reply at wire/application
+  sequences 17/18; MFC did so at 19/21. Both resulting callback HELLO payloads
+  independently decode to the accepted login hash, LowID, and TCP port. The
+  exact `/32` Windows route was removed during clean teardown.
+- Build-tests `8288de4` binds the parsed callback identity to the retained raw
+  HELLO bytes. Commit `85fd1e7` independently reloads the exact diagnostic
+  segments, readiness receipt, request/result control files, route, requester
+  runtime, accepted LowID targets, and build provenance. Receipt
+  `rust-mfc-transfer-20261102t020224z` admits only
+  `server.reply.callback` as the new catalog ID; existing login and transfer
+  IDs are corroboration. Commit `7e7deb9` records that receipt.
+- Catalog validation now reports 23/100 covered IDs and 4/17 complete groups;
+  `server-query-reply` is complete at 9/9. The focused callback, registrar, and
+  catalog gate passes 131 tests. The complete harness gate passes 3,177 tests
+  with one POSIX-only skip and one deliberate deselection in 201.69 seconds.
+  Changed-file Ruff, formatting, catalog validation, and `git diff --check`
+  pass. `ed2k-server` remains untouched and upstream-clean at `66b892d`; no
+  pull request has been opened.
+
 ## Next Implementation
 
-- Take the next bounded `server-query-reply` slice:
-  `server.reply.callback`. First map the stock callback request/reply grammar,
-  the existing Rust/MFC control surfaces, and the smallest deterministic LowID
-  server state that can causally produce the reply. Extend the existing managed
-  server-session lane rather than adding a parallel runner. Prove the exact
-  request, exact reply, trace/state join, and post-apply client state before
-  catalog admission. Do not change `ed2k-server` protocol behavior.
+- Take the next bounded `lowid-callbacks` slice:
+  `lowid.server-callback`. First determine whether the immutable callback
+  receipt above already proves the distinct full LowID transition from
+  accepted LowID login through exact `OP_CALLBACKREQUEST`, server-routed
+  `OP_CALLBACKREQUESTED`, application, and callback HELLO. Reuse that receipt
+  only if an independent gate can prove the complete state transition; add the
+  smallest missing diagnostic or deterministic stimulus otherwise. Do not
+  rerun unchanged traffic, add a parallel runner, or change `ed2k-server`
+  protocol behavior.
 - Continue domain by domain through server session/source replies,
   peer-transfer queue/callback states, client UDP, and Kad. Add the smallest
   deterministic transcript or local cross-client scenario that can causally
