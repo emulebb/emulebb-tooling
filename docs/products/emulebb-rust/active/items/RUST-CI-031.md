@@ -47,10 +47,10 @@ MFC test paths; keep `ed2k-server` upstream-clean; work on the existing single
 feature branch with granular commits and open coordinated pull requests only
 after a significant complete chunk is fully green.
 
-The current machine-measured baseline is 25 of 100 catalog entries covered and
+The current machine-measured baseline is 26 of 100 catalog entries covered and
 4 of 17 groups complete. `server-query-reply` is complete at 9/9 and
-`lowid-callbacks` is partial at 2/4. The active bounded slice is
-`lowid.relayed-reask`; unrelated protocol slices do not begin until that
+`lowid-callbacks` is partial at 3/4. The active bounded slice is solely
+`lowid.buddy-callback`; unrelated protocol slices do not begin until that
 distinct LowID state transition has an exact authority, causal evidence
 contract, independent registration, catalog admission, and scoped green
 validation.
@@ -84,6 +84,37 @@ paths are removed or isolated, exact build provenance is enforced, and the
 machine-generated coverage report plus the complete harness validation are
 green. The public soak may continue as a discovery tool, but it is not a goal
 completion gate.
+
+### Active bounded slice: `lowid.buddy-callback`
+
+- **Sole claim:** this slice may add evidence only for
+  `lowid.buddy-callback`. Existing LowID receipts remain prerequisites and must
+  not be reinterpreted as proof of this transition.
+- **Selected clients:** the emulebb Rust diagnostics build is the product under
+  test and the emulebb MFC diagnostics build is the preferred observable
+  oracle. Each client is exercised as a Kad buddy relay for a harness-owned
+  LowID peer. MFC changes remain limited to diagnostics or the smallest
+  deterministic test control required to expose production behavior.
+- **Authority:** stock eMule source and accepted wire goldens define buddy
+  eligibility, `KADEMLIA_FINDBUDDY_REQ`, `KADEMLIA_CALLBACK_REQ`, held-buddy
+  socket selection, `OP_CALLBACK`, and the resulting requester connection.
+  Frozen aMule may corroborate the result but is not required to make the
+  primary Rust-versus-MFC comparison.
+- **Deterministic proof obligation:** for each selected client, one canonical
+  local scenario must prove the exact served-buddy identity and accepted held
+  socket, the exact callback request and relay decision, correlation to that
+  socket, the exact relayed callback fields, and the resulting peer-session
+  transition at the requester. Every join must be attributable within one
+  immutable run; missing or ambiguous evidence is `evidence-incomplete`, not
+  parity or divergence.
+- **Implementation boundary:** extend the existing canonical two-client runner
+  and production diagnostics only where the inventory proves evidence is
+  missing. Do not add a parallel runner, use public-soak traffic as proof,
+  evolve MFC product behavior, or change `ed2k-server` protocol behavior.
+- **Green condition:** an independently validated immutable receipt admits
+  exactly this catalog ID, moves measured coverage to 27/100 and completes
+  `lowid-callbacks` at 4/4, and every changed repository passes its scoped full
+  gate. Pull requests open only after this complete coordinated chunk is green.
 
 Implementation proceeds through one catalog group at a time:
 
