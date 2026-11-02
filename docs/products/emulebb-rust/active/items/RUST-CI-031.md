@@ -2693,7 +2693,7 @@ pushed without a pull request.
   clean-room harness matrices; no pull request was opened before those branch
   gates were green.
 
-## Active Slice Contract - `lowid.relayed-reask`
+## Completed Slice Contract - `lowid.relayed-reask`
 
 - **Catalog boundary:** this slice may admit only `lowid.relayed-reask`. The
   existing `lowid.server-callback` and `lowid.direct-callback` receipts are
@@ -2740,14 +2740,57 @@ pushed without a pull request.
   MFC changes. Push granular validated commits on the one shared topic branch;
   open coordinated pull requests only when this complete slice is green.
 
+## LowID Relayed Reask Checkpoint - 2026-11-02
+
+- The existing deterministic two-client transfer runner now owns the relayed
+  UDP reask transition. It provisions one scoped TEST-NET `/32` HighID
+  authority, waits for the MFC diagnostics control plane to become mutation
+  ready, installs the same queued LowID source in both real clients, and uses a
+  local buddy probe to validate and answer each real scheduler's
+  `OP_REASKCALLBACKUDP`. No parallel runner, generic packet injector,
+  compatibility reader, persisted source, or server protocol behavior was
+  added.
+- Rust `4b14f34e` evaluates the outgoing UDP reask firewall gate from the live
+  connected-server/Kad authorities with the same open-or expression as MFC and
+  records an exact skipped decision when neither authority proves TCP
+  reachability. MFC `40f7b003` drives only the diagnostics fixture's supplied
+  scheduler clock through the production eligibility window. Rust and MFC
+  record the accepted inbound ACK before the post-application state receipt;
+  MFC `a576a566` makes that observation boundary explicit. MFC remains a
+  diagnostics-only oracle.
+- The final campaign passed at
+  `output-root:reports/deterministic-two-client-transfer/20261102T060324Z-emulebb-main-release-5788/deterministic-two-client-transfer-result.json`
+  with artifact SHA-256
+  `f3be72053dd8b7ddb563fe72dbb573fb7ed71857b42f7c602e37474d1f5f3574`.
+  Both clients emitted byte-identical relayed requests, accepted the same
+  source-endpoint ACK with queue rank 37, and recorded strict packet-before-
+  state order at Rust sequences 36/37 and MFC sequences 26/27.
+- The immutable receipt names runner `eede500`, Rust `ebe2740f` with executable
+  SHA-256
+  `64a8feb064d685518b7cca248281c435be6f565f019f20fff51cd38e9d3f544e`,
+  and MFC `a576a566` with executable SHA-256
+  `068f3d94039ddc74aa6a882f58a0fb9be51e3c66486273415a8d9f43bc4852ee`.
+  Build-tests `afcc990` registers
+  `rust-mfc-transfer-20261102t060324z`; only `lowid.relayed-reask` is newly
+  admitted, while four existing transfer/startup IDs receive corroborating
+  receipt references.
+- Catalog validation reports 26/100 covered IDs and 4/17 complete groups;
+  `lowid-callbacks` is partial at 3/4. The focused registrar/catalog gate passes
+  141 tests. The complete harness gate passes 3,223 tests with one POSIX-only
+  skip and one deliberate deselection. Rust's canonical `ci` gate passes
+  policy, formatting, clippy, diagnostics, WebUI unit/E2E, fresh builds, full
+  workspace tests, and three observed-egress VPN leak tests. MFC Debug x64,
+  Release x64, and diagnostics Release x64 builds pass; diagnostics is
+  zero-warning. `ed2k-server` remains untouched.
+
 ## Next Implementation
 
 - Take the next bounded `lowid-callbacks` slice:
-  `lowid.relayed-reask`. Inventory the existing client-UDP reask codec,
-  MFC `UDPReaskForDownload` eligibility/skip diagnostics, and canonical local
-  runner before changing code. Admit no claim until one deterministic
-  transcript proves the exact LowID start state, relayed reask decision,
-  request/reply correlation, and resulting transfer-state transition. Extend
+  `lowid.buddy-callback`. Inventory the existing Kad buddy callback codec,
+  held-buddy socket state, MFC callback diagnostics, and canonical local runner
+  before changing code. Admit no claim until one deterministic transcript
+  proves the exact LowID/buddy start state, callback relay decision,
+  request/socket correlation, and resulting peer-session transition. Extend
   only the smallest missing diagnostic or canonical scenario; do not add a
   parallel runner or change `ed2k-server` protocol behavior.
 - Continue domain by domain through server session/source replies,
