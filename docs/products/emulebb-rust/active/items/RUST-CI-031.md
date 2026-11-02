@@ -47,9 +47,9 @@ MFC test paths; keep `ed2k-server` upstream-clean; work on the existing single
 feature branch with granular commits and open coordinated pull requests only
 after a significant complete chunk is fully green.
 
-The current machine-measured baseline is 21 of 100 catalog entries covered and
+The current machine-measured baseline is 22 of 100 catalog entries covered and
 3 of 17 groups complete. The active bounded slice is
-`server.search.advanced`. Until that slice has an immutable receipt,
+`server.reply.callback`. Until that slice has an immutable receipt,
 independent registration, catalog admission, and scoped green validation,
 unrelated protocol slices do not begin.
 
@@ -2533,15 +2533,62 @@ pushed without a pull request.
   remained untouched and upstream-clean at `66b892d`; no pull request has been
   opened.
 
+## Advanced Server Search Checkpoint - 2026-11-02
+
+- Build-tests `e3161b2` adds an independent stock server-search codec and
+  literal golden vector for
+  `AND(keyword, AND(size >= 12345, size <= 12345))`. The old
+  `encode_term_search` API was removed rather than retained as an alias.
+  Commit `96a88e7` drives the exact shared Rust/MFC REST request and persists
+  that stimulus in both successful and failed evidence.
+- Build-tests `d8777a1` replaces server-search diagnostics v2 with the single
+  current `emulebb-build-tests.deterministic-server-search-diagnostics.v3`
+  contract. It accepts explicit keyword or advanced variants, requires the
+  recorded REST stimulus, independently encoded wire expression, reply, and
+  application lifecycle to agree, and has no v2 reader. Commit `cdacb72` adds
+  the advanced scenario through the existing neutral publisher and bilateral
+  search lane; no parallel runner was created.
+- Build-tests `0c79d5e` derives registration directly from the one evidence
+  contract and requires exact fixture-sized lower and upper bounds for the
+  advanced claim. The canonical keyword v3 replacement passed at
+  `output-root:reports/deterministic-two-client-transfer/20261102T012738Z-emulebb-main-release-11248/deterministic-two-client-transfer-result.json`
+  with artifact SHA-256
+  `62c486faafd62375c727afd27f89eb1b1794b120c10126b7ce917721c632b35e`.
+  Receipt `rust-mfc-transfer-20261102t012738z` replaces the obsolete v2
+  keyword receipt.
+- The canonical advanced campaign passed on its first run at
+  `output-root:reports/deterministic-two-client-transfer/20261102T012801Z-emulebb-main-release-3136/deterministic-two-client-transfer-result.json`
+  with artifact SHA-256
+  `272af4a45cd2bc6f3c7d8362c4a459e03dda4312f0a62799a9dd69578c7f0fcd`.
+  Rust and MFC emitted the identical request payload
+  `000001190064657465726d696e69737469637061726974797365617263680000033930000003010002033930000004010002`
+  at sequences 20/19 and applied the exact reply at sequences 22/20.
+  Receipt `rust-mfc-transfer-20261102t012801z` independently admits
+  `server.search.advanced`.
+- Both runs used harness revision `0c79d5e`, Rust revision `eb1256ba` with
+  executable SHA-256
+  `f8718d0530552885d4ba7fa3d9b079e34f1e7d1b6709deea8d5c2841af449136`,
+  and MFC diagnostics revision `2d8fb8b3` with executable SHA-256
+  `a56cc028191b51523a60fd2ab44abd45e657a6e8d322e4524d5b556af7098352`.
+  No Rust, MFC, or `ed2k-server` product behavior changed.
+- Build-tests `d25e198` records both immutable receipts and advances the
+  catalog to 22/100 covered IDs and 3/17 complete groups;
+  `server-query-reply` is now 8/9 with only `server.reply.callback` remaining.
+  At that exact committed head the complete harness gate passes 3,147 tests
+  with one POSIX-only skip and one deliberate deselection in 126.58 seconds.
+  Both independent registrations, catalog validation, changed-file Ruff, and
+  `git diff --check` pass. `ed2k-server` remains untouched and upstream-clean
+  at `66b892d`; no pull request has been opened.
+
 ## Next Implementation
 
 - Take the next bounded `server-query-reply` slice:
-  `server.search.advanced`. Bind the accepted stock advanced-search expression
-  grammar to the existing managed local search fixture and prove the exact Rust
-  and MFC request bytes, reply correlation, decoded result, and post-apply REST
-  state. Reuse the existing keyword-search lane and add no parallel runner.
-  Register its immutable receipt before callback work. Do not change
-  `ed2k-server` protocol behavior.
+  `server.reply.callback`. First map the stock callback request/reply grammar,
+  the existing Rust/MFC control surfaces, and the smallest deterministic LowID
+  server state that can causally produce the reply. Extend the existing managed
+  server-session lane rather than adding a parallel runner. Prove the exact
+  request, exact reply, trace/state join, and post-apply client state before
+  catalog admission. Do not change `ed2k-server` protocol behavior.
 - Continue domain by domain through server session/source replies,
   peer-transfer queue/callback states, client UDP, and Kad. Add the smallest
   deterministic transcript or local cross-client scenario that can causally
