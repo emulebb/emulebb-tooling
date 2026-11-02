@@ -112,9 +112,9 @@ their scoped gates.
 
 The catalog currently validates at:
 
-- **31/100** coverage IDs with a proven `parity` verdict;
+- **32/100** coverage IDs with a proven `parity` verdict;
 - **5/17** groups complete;
-- **69/100** IDs explicitly `evidence-incomplete`;
+- **68/100** IDs explicitly `evidence-incomplete`;
 - **0** recorded divergences, which makes no claim about uncovered IDs; and
 - **21** classified protocol assets: 6 canonical, 11 support, 2 product-only,
   2 historical, and 0 duplicate.
@@ -127,7 +127,7 @@ Complete groups are:
 - `server-udp-metadata` - 2/2; and
 - `lowid-callbacks` - 4/4.
 
-Partial covered groups are `client-udp` at 4/9, `peer-startup-profiles` at
+Partial covered groups are `client-udp` at 5/9, `peer-startup-profiles` at
 3/11, `queue-upload-state` at 1/5, and `transfer-blocks` at 2/4. Every other
 group is currently uncovered. Reproduce the authoritative report from
 `repos/emulebb-build-tests` with:
@@ -152,10 +152,13 @@ version negotiation, unsolicited handling, or peer-TCP obfuscation.
   already-proven V4 request and ACK payload shape but cannot admit another
   version claim.
 - **Selected clients:** exact protected-main emulebb Rust revision `fb673418`
-  and emulebb MFC diagnostics-oracle revision `0faeaa3c` each act once as
+  and emulebb MFC diagnostics-oracle revision `367747a1` each act once as
   requester and once as responder in the same deterministic local campaign.
-  Product-source changes are out of scope unless a concrete diagnostic gap
-  prevents proof; any such change must remain diagnostics-only.
+  MFC revision `367747a1` is the diagnostics-only correction over protected-main
+  `0faeaa3c` required after the first real run proved that the oracle recorded a
+  receive buffer after in-place decryption. Product-source changes remain out
+  of scope unless another concrete diagnostic gap prevents proof; any such
+  change must remain diagnostics-only.
 - **Authority:** stock eMule client-UDP obfuscation keyed by the receiver user
   hash and sender public IPv4, with the stock eight-byte envelope around the
   clear `OP_EMULEPROT` frame. The encrypted datagram is intentionally
@@ -186,10 +189,11 @@ version negotiation, unsolicited handling, or peer-TCP obfuscation.
   the current hairpin topology already reports each client's actual TEST-NET
   bind address. Do not add packet injection, a second runner, compatibility
   controls, public-soak verdicts, or any ed2k-server change.
-- **Green condition:** a real bilateral run produces one immutable receipt,
+- **Green condition:** a real bilateral run has produced one immutable receipt,
   the independent registrar hash-checks and re-reduces the raw evidence, and
   the catalog admits exactly `client-udp.encrypted`. The expected measured
-  state is 32/100 overall and 5/9 for the still-partial `client-udp` group.
+  state is now realized at 32/100 overall and 5/9 for the still-partial
+  `client-udp` group.
   Every changed repository must pass its scoped full gate before coordinated
   pull requests are opened.
 
@@ -342,12 +346,62 @@ workflows passed. The shared `feature/client-udp-clear-evidence` branches were
 deleted locally and remotely, and every participating checkout was synchronized
 to clean `main` before the encrypted slice was selected.
 
+## Encrypted Slice Evidence Checkpoint
+
+The canonical runner and independent registrar were extended on the single
+shared branch `feature/client-udp-encrypted-evidence`. Granular pushed commits
+are:
+
+- build-tests `7488867` - add the explicit encrypted scenario, strict reducer,
+  independent raw-evidence re-reduction, registration route, and adversarial
+  tests;
+- MFC `367747a1` - preserve the exact pre-decryption client-UDP wire datagram and
+  classify user-hash obfuscation from the wire/decrypted length boundary; and
+- build-tests `9fe2306` - register only the independently validated
+  `client-udp.encrypted` receipt and advance the catalog.
+
+The first real campaign was correctly retained as `evidence-incomplete` at
+`output-root:artifacts/emulebb-rust-reask-cross-client/20261102T215244Z-emulebb-main-release-11536/emulebb-rust-reask-cross-client-result.json`,
+SHA-256 `101ea92f68eca6a01947e9f918b4b47665864e2160176461dd3ae4950bd537aa`.
+Both production transitions applied, but MFC's receive diagnostic took its raw
+snapshot after `DecryptReceivedClient` had rewritten the encrypted region in
+place and inferred transport from Kad-only verify keys. The result joined an
+encrypted eight-byte header to a clear payload and could not prove in-flight
+wire identity. No protocol behavior failed or changed.
+
+MFC commit `367747a1` fixed only that oracle boundary. The succeeding bilateral
+campaign is immutable at
+`output-root:artifacts/emulebb-rust-reask-cross-client/20261102T215826Z-emulebb-main-release-12576/emulebb-rust-reask-cross-client-result.json`:
+
+- receipt ID `rust-mfc-client-udp-encrypted-20261102t215826z`;
+- report SHA-256
+  `f372f50a7a0b31cbc37740711f9c66be4f0a8df38172320141eadcc9d9fb52e8`;
+- raw reducer-input SHA-256
+  `bf46203a660f2787cedc3a63373fd01f1f8ad753865ba791698437a6f0a26de1`;
+- Rust executable SHA-256
+  `5e96ab23ddb678e829e352b4549ce2d5f7a08d34b1171a63089851c07653ae3c`
+  from protected-main `fb673418`;
+- MFC executable SHA-256
+  `9102cd445da3de060183e928f912138944f287c224a1d38329fd4c458f21fc8c`
+  from diagnostics revision `367747a1`;
+- runner revision `7488867`;
+- both directions recorded `shouldCrypt=true`, exact eight-byte stock
+  obfuscation overhead, nonreserved odd markers, byte-identical sender/receiver
+  ciphertext per datagram, identical decoded V4 request/ACK frames, and the same
+  applied queue-rank/complete-source state; and
+- the independent registrar hash-checked and re-reduced the raw records before
+  producing the sole `client-udp.encrypted` claim.
+
+The focused 94-test harness set and protocol-catalog validator pass at 32/100
+overall and 5/9 for `client-udp`. Rust required no source change. `ed2k-server`
+was rebuilt by the canonical runner but remained untouched and upstream-clean.
+
 ## Next Step
 
-Implement only the bound `client-udp.encrypted` slice on
-`feature/client-udp-encrypted-evidence`. First make the existing canonical
-runner and independent reducer prove the encrypted bilateral transport without
-product or server changes. Run focused tests, then a real deterministic
-campaign. Admit the claim only after independent registration and complete
-local green gates; open coordinated pull requests only for the repositories
-that actually changed.
+Run the complete local green gates at the exact pushed MFC, build-tests, and
+tooling heads, including the MFC diagnostics and Debug builds, the full
+build-tests suite plus catalog validator, and strict tooling docs publication.
+Perform an independent read-only review of the bounded slice and correct any
+material finding. Open coordinated pull requests only after all participating
+repositories are fully green; Rust and `ed2k-server` have no source changes and
+must not receive empty delivery branches.
