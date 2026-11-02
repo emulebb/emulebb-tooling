@@ -140,59 +140,58 @@ The catalog embeds the exact receipt IDs and provenance for every admitted
 claim. Detailed superseded checkpoints remain available in Git history rather
 than accumulating in this active item.
 
-## Completed Bounded Slice Awaiting Delivery: `client-udp.clear`
+## Active Bounded Slice: `client-udp.encrypted`
 
 This is the only delivery slice in progress. It starts from the merged,
-protected-main-green `client-udp.file-not-found` baseline and establishes the
-explicit plaintext transport authority needed before encrypted client-UDP is
-attempted. It must not broaden its claim to version negotiation, encryption,
-or unsolicited handling.
+protected-main-green `client-udp.clear` authority and proves the complementary
+production obfuscated transport. It must not broaden its claim to UDP payload
+version negotiation, unsolicited handling, or peer-TCP obfuscation.
 
-- **Sole claim:** admit only `client-udp.clear`. V1, V2, V3, encrypted
-  transport, and unsolicited replies remain independently measured catalog
-  IDs. The campaign may use the already-supported V4 payload shape, but that
-  fact cannot admit another V4 claim.
-- **Selected clients:** exact committed emulebb Rust diagnostics revision
-  `ae01da50` and emulebb MFC diagnostics-oracle revision `ac8c33f0` each act
-  once as requester and once as responder in the same deterministic local
-  campaign. Their only product-source changes expose the already-computed
-  per-source `shouldCrypt` decision; packet behavior is unchanged.
-- **Authority:** stock eMule client-UDP framing when crypt is not requested:
-  one clear `OP_EMULEPROT` datagram containing `OP_REASKFILEPING`, followed by
-  one clear `OP_REASKACK` reply. The exact bytes and plaintext classification
-  in `stock.client-udp.corpus` remain the wire authority; the live clients must
-  prove the same transport choice through their production send and receive
-  paths.
+- **Sole claim:** admit only `client-udp.encrypted`. V1, V2, V3, and unsolicited
+  replies remain independently measured catalog IDs. The campaign reuses the
+  already-proven V4 request and ACK payload shape but cannot admit another
+  version claim.
+- **Selected clients:** exact protected-main emulebb Rust revision `fb673418`
+  and emulebb MFC diagnostics-oracle revision `0faeaa3c` each act once as
+  requester and once as responder in the same deterministic local campaign.
+  Product-source changes are out of scope unless a concrete diagnostic gap
+  prevents proof; any such change must remain diagnostics-only.
+- **Authority:** stock eMule client-UDP obfuscation keyed by the receiver user
+  hash and sender public IPv4, with the stock eight-byte envelope around the
+  clear `OP_EMULEPROT` frame. The encrypted datagram is intentionally
+  randomized and therefore is not compared byte-for-byte across clients. The
+  deobfuscated request and ACK must equal the already-proven clear V4 frames
+  and decode to the same state transition.
 - **Deterministic start and stimulus:** reuse the canonical bilateral queued
-  source setup with the harness-owned shared fixture and a real responder-side
-  upload waiter. Disable obfuscation through the existing ephemeral profile
-  configuration for both clients, prove the registered source has no crypt
-  capability/request/requirement, then wake the existing source through the
-  canonical queued-source reask control so the ordinary scheduler emits one
-  production request and consumes one production ACK.
+  source setup, harness-owned shared fixture, and real responder-side upload
+  waiter. Enable the existing crypt preference in both ephemeral profiles;
+  prove each client is HighID at its actual TEST-NET bind address and the
+  registered source records `shouldCrypt=true`; then wake that exact source
+  through the existing diagnostics control so the ordinary scheduler emits
+  one production encrypted request and consumes one production encrypted ACK.
 - **Proof obligation:** causally join source registration, due scheduler
-  decision, request send terminal, responder receive/decode, ACK send terminal,
-  requester receive under the matching pending request, and queue-rank/state
+  decision, request send terminal, responder decrypt/decode, ACK send terminal,
+  requester decrypt under the matching pending request, and queue-rank/state
   application in both directions. Request and reply diagnostics must report
-  `obfuscated=false`; exact datagram bytes must begin with clear
-  `OP_EMULEPROT` plus the expected opcode and match the decoded payload. No
-  encrypted frame, queue-full, file-not-found, timeout, unrelated packet, or
-  merely recorded fixture can satisfy the claim.
-- **Implementation boundary:** add one explicit `clear` scenario to the
+  `obfuscated=true`; each raw datagram must differ from its clear frame, add
+  exactly the stock eight-byte overhead, and avoid a clear reserved protocol
+  marker. The clear frames and decoded payloads must match across clients.
+  Any contradictory plaintext packet, duplicate attempt, failed decryption,
+  unsolicited reply, timeout, unrelated packet, or recorded-only fixture makes
+  the evidence incomplete.
+- **Implementation boundary:** add one explicit `encrypted` scenario to the
   existing canonical `scripts/emulebb-rust-reask-cross-client.py` runner,
-  reducer, independent registrar, and catalog path. Reuse the existing real
-  V4 queued-source campaign rather than adding packet injection, a second
-  runner, or product compatibility controls. The live diagnostics were
-  insufficient to prove the transport choice, so both clients now emit the
-  existing per-source crypt decision in `udp_reask_source_registered`; no
-  protocol behavior changed. Do not change ed2k-server or derive a verdict
-  from public soak observations.
+  reducer, independent registrar, and catalog path. Make profile crypt mode a
+  scenario-owned input and remove the obsolete synthetic-public-IP comment;
+  the current hairpin topology already reports each client's actual TEST-NET
+  bind address. Do not add packet injection, a second runner, compatibility
+  controls, public-soak verdicts, or any ed2k-server change.
 - **Green condition:** a real bilateral run produces one immutable receipt,
-  the independent registrar re-derives the exact result and provenance, and
-  the catalog admits exactly `client-udp.clear`. The resulting measured state
-  is 31/100 overall and 4/9 for the still-partial `client-udp` group. Every
-  changed repository must pass its scoped full gate before coordinated pull
-  requests are opened.
+  the independent registrar hash-checks and re-reduces the raw evidence, and
+  the catalog admits exactly `client-udp.encrypted`. The expected measured
+  state is 32/100 overall and 5/9 for the still-partial `client-udp` group.
+  Every changed repository must pass its scoped full gate before coordinated
+  pull requests are opened.
 
 ## Delivery Discipline
 
@@ -337,12 +336,18 @@ post-merge results are:
 - MFC `0faeaa3cb5807ca27805636cdad1cc86406b273f`: 2/2 workflows green; and
 - build-tests `80c7e67b832e41480196fed9506936d76bac8dbd`: 4/4 workflows green.
 
-Tooling PR #141 remains open while this lifecycle evidence is added to its
-existing branch.
+Tooling PR #141 rebase-merged as
+`151d83deaf9eaacb524e0e926ff301ebe3351360`; all 4/4 exact post-merge
+workflows passed. The shared `feature/client-udp-clear-evidence` branches were
+deleted locally and remotely, and every participating checkout was synchronized
+to clean `main` before the encrypted slice was selected.
 
 ## Next Step
 
-Revalidate this final tooling head, merge tooling PR #141 by rebase, and verify
-its exact post-merge main workflows. Then delete the shared feature branches
-locally and remotely and synchronize every participating checkout to clean
-`main`. Do not select the next catalog slice until that delivery is complete.
+Implement only the bound `client-udp.encrypted` slice on
+`feature/client-udp-encrypted-evidence`. First make the existing canonical
+runner and independent reducer prove the encrypted bilateral transport without
+product or server changes. Run focused tests, then a real deterministic
+campaign. Admit the claim only after independent registration and complete
+local green gates; open coordinated pull requests only for the repositories
+that actually changed.
