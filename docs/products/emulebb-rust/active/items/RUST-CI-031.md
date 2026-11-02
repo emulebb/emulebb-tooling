@@ -213,7 +213,9 @@ or cleanup work does not advance protocol coverage by itself.
   `rust-mfc-client-udp-v4-20261102t123752z`. It advances only that ID; the
   remaining eight client-UDP IDs stay `evidence-incomplete`.
 - `ed2k-server` remained untouched and upstream-clean throughout the completed
-  slice.
+  slice against its CI-reviewed upstream pin `3742f9e4`. The latest fetched
+  upstream now has one newer commit, `97f97ff`; updating that reviewed pin is a
+  separate upstream-sync delivery and is not mixed into this evidence receipt.
 
 ## Active Slice Checkpoint
 
@@ -259,13 +261,28 @@ receive-before-reply diagnostic ordering. MFC changes remained limited to
 diagnostic control and converged evidence naming. The pushed granular commits
 are Rust `dda3b341`, `0675bd76`, `e6373e5c`, and `938bce6c`; MFC `56564044`
 and `64b531b6`; and build-tests `1f2437a`, `d9c8df6`, `be28902`, `027cd63`,
-`7be201a`, `057667d`, and `52ad4c8`.
+`7be201a`, `057667d`, `52ad4c8`, `0a3d988`, and `301a7ef`.
+
+The complete local delivery gate is green:
+
+- Rust: 1,238 package tests passed; the diagnostics client build passed with
+  zero warnings at
+  `C:\var\build\emulebb_out\logs\builds\20261102T122933Z-build-clients`;
+- MFC: diagnostics Release plus standard Debug and Release builds passed with
+  zero warnings at build runs `20261102T122126Z`, `20261102T123515Z`, and
+  `20261102T123532Z`;
+- build-tests: 3,271 tests passed, one POSIX-only test skipped on Windows, and
+  one intentionally deselected test; all 13 changed Python files pass Ruff;
+  the catalog validation passes at 28/100;
+- tooling: the strict docs publish gate passes; and
+- every participating repository is clean, pushed, and on the sole shared
+  `feature/client-udp-v4-evidence` branch. The server fork is clean on `master`,
+  and its upstream-owned paths exactly match the reviewed pin.
 
 ## Next Step
 
-Run every changed repository's complete scoped gate from the pushed branch.
-Open coordinated Rust, MFC, build-tests, and tooling pull requests only if all
-gates remain green and confirm again that `ed2k-server` is untouched and
-upstream-clean. After protected-main merge, delete the shared workstream branch
-locally and remotely. Select and bind the next catalog slice separately; do not
-silently extend this receipt to any remaining client-UDP variant.
+Open coordinated Rust, MFC, build-tests, and tooling pull requests. Monitor the
+exact PR heads and protected-main checks through completion. After merge, delete
+the shared workstream branch locally and remotely. Select and bind the next
+catalog slice separately; do not silently extend this receipt to any remaining
+client-UDP variant.
