@@ -281,10 +281,34 @@ and exact subjects MFC `be2a0f79` and Rust `056a91d0`. The catalog admits only
 `client-udp.file-not-found`; the other six client-UDP IDs remain
 `evidence-incomplete`.
 
+## Final Slice Validation
+
+The complete changed-repository gate is green on the exact admitted revisions:
+
+- Rust `056a91d0`: the canonical `quick` quality gate passed policy checks,
+  128 policy tests, rustfmt, workspace Clippy with warnings denied, diagnostics
+  compilation, 29 WebUI unit tests, 17 Playwright tests, type checking, and the
+  production SPA build. The managed Release x64 Rust unit gate passed every
+  workspace unit, integration, and documentation test.
+- build-tests `c576009`: the full managed fast harness passed 3302 tests with
+  one platform skip and one intentional deselection. All five changed Python
+  files pass focused Ruff checks and formatting, the 173 focused
+  runner/reducer/registrar tests pass, and the catalog validator reports
+  30/100 overall plus 3/9 client-UDP coverage.
+- MFC `be2a0f79`: managed Debug x64, Release x64, and Release diagnostics x64
+  builds all passed. The diagnostics build completed with zero warnings.
+- tooling: the full documentation publish check passed taxonomy, structure,
+  roadmap metadata, and strict MkDocs rendering after the receipt update.
+
+An additional workspace-wide validation passed its active-build, branch, and
+dependency-pin audits, then stopped on the unchanged `origin/main`
+`docs/active/INDEX.md` because that organization-wide index lacks current
+non-done-count metadata. The selected Rust, harness, MFC, and tooling gates
+above are green; this slice did not alter that unrelated central-index baseline.
+
 ## Next Step
 
-Run every changed repository's scoped full gate against the exact admitted
-revisions. If all gates remain green, update this checkpoint with the final
-validation matrix and open the coordinated Rust, MFC, build-tests, and tooling
-pull requests. Do not select another catalog slice before this one merges and
-its shared workstream branches are deleted.
+Open the coordinated Rust, MFC, build-tests, and tooling pull requests, monitor
+their exact-head checks, preserve the granular commits during merge, then
+delete the shared workstream branches locally and remotely. Do not select
+another catalog slice until that delivery lifecycle is complete.
