@@ -2688,6 +2688,10 @@ pushed without a pull request.
   values `fa0a5961caaefb29dfba440d3cf771ec4d9329c6b9f8070efde1d7160a824b1f`
   and `15cb10e6a8753ac78c3f9716b06abae10eaa74ac746c292bf0c0f238f07bc154`.
   Neither product nor `ed2k-server` changed for this slice.
+- Final-head Baseline run `41385720635` passed. Fast Harness run
+  `41385720282` passed Linux, macOS, and Windows portability plus both Windows
+  clean-room harness matrices; no pull request was opened before those branch
+  gates were green.
 
 ## Next Implementation
 
