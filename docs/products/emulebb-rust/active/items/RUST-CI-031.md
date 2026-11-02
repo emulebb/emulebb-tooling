@@ -368,8 +368,14 @@ are:
   clean-built diagnostics executable rather than retaining a hidden dependency
   on a separately staged regular binary; and
 - build-tests `bd88344` - replace the earlier non-causal encrypted receipt with
-  the independently validated authoritative-build receipt. The earlier receipt
-  is not retained as a legacy registration path.
+  the first independently validated authoritative-build receipt;
+- build-tests `9f39f81` - allow this build-owning runner to prepare retained
+  report paths before the canonical MFC executable exists, while preserving the
+  mandatory clean build, exact-path validation, and binary hash before launch;
+  and
+- build-tests `bcc0e76` - replace the superseded encrypted receipt with a fresh
+  campaign from the corrected runner. Neither earlier receipt is retained as a
+  legacy registration path.
 
 The first real campaign was correctly retained as `evidence-incomplete` at
 `output-root:artifacts/emulebb-rust-reask-cross-client/20261102T215244Z-emulebb-main-release-11536/emulebb-rust-reask-cross-client-result.json`,
@@ -384,24 +390,29 @@ MFC commit `367747a1` fixed only that oracle boundary. A succeeding bilateral ru
 proved the protocol claim, but its report merely combined staged executable
 hashes with current repository HEADs and therefore did not causally prove which
 source revision built each binary. That receipt was superseded rather than
-grandfathered. The authoritative succeeding campaign is immutable at
-`output-root:artifacts/emulebb-rust-reask-cross-client/20261102T222336Z-emulebb-main-release-12052/emulebb-rust-reask-cross-client-result.json`:
+grandfathered. A later causally bound campaign passed, but independent review
+found that its runner still required an already-staged MFC executable before
+reaching the clean build it owned. Build-tests `9f39f81` corrected that ordering
+without introducing an alternate binary or build path, and the evidence was
+rerun rather than grandfathered. The final authoritative campaign is immutable
+at
+`output-root:artifacts/emulebb-rust-reask-cross-client/20261102T223823Z-emulebb-main-release-7472/emulebb-rust-reask-cross-client-result.json`:
 
-- receipt ID `rust-mfc-client-udp-encrypted-20261102t222336z`;
+- receipt ID `rust-mfc-client-udp-encrypted-20261102t223823z`;
 - report SHA-256
-  `f37c36fb8ec0150d60e1e256c07b65cb58b6280db901074bea3ef32556b97be9`;
+  `d7a35823b5e39a8d925ac6b3c7358348f6cdff7df832669aa1330d80d92c0471`;
 - raw reducer-input SHA-256
-  `59aee44f547cf8fc3df4a5de3af2e6fdc0362c78936e71d6b8981dff7c5f2d25`;
+  `61b173587bf5afc797c38ca17a5cd0f953eb8912075e896e809622bb4189e93e`;
 - Rust executable SHA-256
   `5e96ab23ddb678e829e352b4549ce2d5f7a08d34b1171a63089851c07653ae3c`
   from protected-main `fb673418`;
 - MFC executable SHA-256
-  `23f8177e9aadc4b5b22deb694db085f03085da834396d5c6b7c95b5753b3aef3`
+  `7c08aa3461800d7924d751d0cd94d54e595c271a585b9c6fb65a777bbda7f299`
   from diagnostics revision `367747a1`;
 - ed2k-server executable SHA-256
   `ffb5655198a882156627e0ff6d5d5a3a94ce02a423023f3b94f0bd8c00569886`
   from clean upstream-aligned source `d6a6dd67`;
-- runner revision `317f48b` and clean build-orchestrator revision `178ac00`;
+- runner revision `9f39f81` and clean build-orchestrator revision `178ac00`;
 - both directions recorded `shouldCrypt=true`, exact eight-byte stock
   obfuscation overhead, nonreserved odd markers, byte-identical sender/receiver
   ciphertext per datagram, identical decoded V4 request/ACK frames, and the same
@@ -409,19 +420,30 @@ grandfathered. The authoritative succeeding campaign is immutable at
 - the independent registrar hash-checked and re-reduced the raw records before
   producing the sole `client-udp.encrypted` claim.
 
-The focused 108-test harness set and protocol-catalog validator pass at 32/100
-overall and 5/9 for `client-udp`. Rust required no source change. `ed2k-server`
-was clean-built and hash-bound by the canonical runner, while its repository
-remained untouched and upstream-clean. Full changed-repository gates remain the
-last condition before coordinated pull requests are opened.
+The final pushed heads satisfy the local delivery gates:
+
+- build-tests `bcc0e76`: full suite 3339 passed, 1 skipped, and 1 configured
+  deselection; changed-file Ruff and the protocol-catalog validator pass at
+  32/100 overall and 5/9 for `client-udp` with zero duplicate assets;
+- MFC `367747a1`: exact Release diagnostics and Debug x64 app gates pass, and
+  the retained bilateral campaign proves the diagnostics runtime path;
+- build `178ac00`: the canonical hosted gate plus the changed build-client area
+  passes 35 tests, and the real clean Release ed2k-server build passes with zero
+  warnings. The repository-wide raw pytest command still exposes 12 unrelated
+  failures already present outside this branch's server-staging scope;
+- tooling: the strict documentation publication gate passes; and
+- independent read-only review found no remaining material issue after the
+  fresh campaign and receipt replacement.
+
+Rust required no source change. `ed2k-server` was clean-built and hash-bound by
+the canonical runner, while its repository remained untouched and
+upstream-clean.
 
 ## Next Step
 
-Run the complete local green gates at the exact pushed MFC, build,
-build-tests, and tooling heads, including the MFC diagnostics and Debug builds,
-the full build and build-tests suites, catalog validator, and strict tooling
-docs publication.
-Perform an independent read-only review of the bounded slice and correct any
-material finding. Open coordinated pull requests only after all participating
-repositories are fully green; Rust and `ed2k-server` have no source changes and
-must not receive empty delivery branches.
+Open the coordinated MFC, build, build-tests, and tooling pull requests for this
+complete encrypted client-UDP slice, monitor their required checks, merge only
+when green while preserving granular commits, then delete the shared work-in-
+progress branches and synchronize the participating checkouts. Rust and
+`ed2k-server` have no source changes and must not receive empty delivery
+branches.
