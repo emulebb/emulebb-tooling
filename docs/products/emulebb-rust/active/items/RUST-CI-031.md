@@ -304,11 +304,21 @@ The succeeding real bilateral campaign is immutable at
 The catalog validates at 31/100 overall and 4/9 for `client-udp`. No other
 client-UDP ID is admitted. `ed2k-server` remains untouched and upstream-clean.
 
+Final local gates at the exact pushed heads are green:
+
+- Rust canonical `python tools/rust_quality_gate.py ci`, including policy,
+  rustfmt, Clippy with warnings denied, diagnostics build, 29 WebUI unit tests,
+  17 Playwright tests, fresh Debug and Release workspace builds, all workspace
+  and doc tests, and three serialized VPN leak tests;
+- MFC Release x64 diagnostics and Debug x64 app builds;
+- build-tests full suite: 3313 passed, one POSIX-only skip, one configured
+  deselection, plus a separately green protocol-catalog validator; and
+- tooling strict docs publish check.
+
 ## Next Step
 
-Run the final scoped full gates at the exact pushed heads. If all participating
-repositories remain green, open the coordinated Rust, MFC, build-tests, and
-tooling pull requests, monitor every required workflow, merge while preserving
-the granular commits, verify exact post-merge main workflows, and delete the
-shared feature branches locally and remotely. Do not select the next catalog
-slice until that delivery is complete.
+Open the coordinated Rust, MFC, build-tests, and tooling pull requests, monitor
+every required workflow, merge while preserving the granular commits, verify
+exact post-merge main workflows, and delete the shared feature branches locally
+and remotely. Do not select the next catalog slice until that delivery is
+complete.
