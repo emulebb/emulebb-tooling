@@ -140,40 +140,55 @@ The catalog embeds the exact receipt IDs and provenance for every admitted
 claim. Detailed superseded checkpoints remain available in Git history rather
 than accumulating in this active item.
 
-## Active Bounded Slice: `client-udp.v4`
+## Active Bounded Slice: `client-udp.queue-full`
 
-This is the only implementation slice in progress. Its implementation and
-evidence admission are complete; branch-wide delivery validation and the
-coordinated pull-request handoff remain.
+This is the only implementation slice in progress. It starts from the merged,
+protected-main-green `client-udp.v4` baseline and must not broaden its claim to
+any other client-UDP variant.
 
-- **Sole claim:** admit only `client-udp.v4`. The fixture's clear transport is
-  a controlled start condition, not proof of `client-udp.clear`. Versions 1-3,
-  encryption, queue-full, file-not-found, and unsolicited handling remain
-  separate catalog IDs.
+- **Sole claim:** admit only `client-udp.queue-full`. Version negotiation,
+  clear transport, the happy-path ACK, file-not-found, encryption, and
+  unsolicited handling remain independently measured catalog IDs.
 - **Selected clients:** the emulebb Rust diagnostics build and the emulebb MFC
-  diagnostics oracle must each complete the same version-4 direct client-UDP
-  reask transition under controlled local queue state.
-- **Authority:** stock eMule `UDPReaskForDownload` and
-  `ClientUDPSocket::ProcessPacket` behavior plus the accepted
-  `stock.client-udp.corpus` record. The V4 request carries file hash, part
-  status, and complete-source count; its ACK carries responder part status and
-  queue rank.
-- **Proof obligation:** join the exact queued source and V4 capability to the
-  due scheduler decision, one production-originated `OP_REASKFILEPING`, its
-  send terminal, the responder's exact receive/decode, one exact
-  `OP_REASKACK`, and application of its part status and queue rank to the same
-  source. Compare exact bytes and all version-gated fields against the stock
-  corpus and between clients in one immutable run.
-- **Implementation boundary:** extend the existing canonical
-  `scripts/emulebb-rust-reask-cross-client.py` runner and production
-  diagnostics only where causal evidence is missing. Replace the legacy
-  log-string verdict with exact `diag_event_v2` evidence. Do not add a parallel
-  runner, generic packet-injection API, public-soak claim, MFC product behavior,
-  or ed2k-server protocol behavior.
-- **Green condition:** an independent registrar validates one immutable receipt
-  and admits exactly `client-udp.v4`; measured coverage becomes 28/100 while
-  `client-udp` remains honestly partial at 1/9; every changed repository passes
-  its scoped full gate.
+  diagnostics oracle must each act once as requester and once as responder in
+  the same deterministic local campaign.
+- **Authority:** stock eMule `CClientUDPSocket::ProcessPacket` behavior for
+  `OP_REASKFILEPING` and `OP_QUEUEFULL`, the downloader-side pending-request
+  gate and `UDPReaskACK(0)` state transition, and the accepted
+  `stock.client-udp.corpus` clear `c5 93` queue-full frame. A responder answers
+  queue-full only when it still shares the requested file, cannot locate the
+  sender in its upload waiting queue, has no same-IP ambiguity, and
+  `waitingUserCount + 50 > queueSize`.
+- **Deterministic start and stimulus:** establish the requester as a real V4
+  queued download source and a real responder-side upload waiter, remove that
+  exact waiter through the existing upload operation while retaining the
+  requester's source registration, and arm an exact, one-shot,
+  diagnostics-build-only queue-pressure prerequisite for the same file and UDP
+  endpoint. Then wake the existing source through the canonical queued-source
+  reask control so the ordinary scheduler emits one production
+  `OP_REASKFILEPING`.
+- **Proof obligation:** causally join fixture receipt, exact waiter removal,
+  due scheduler decision, request send terminal, responder receive/decode,
+  stock queue-full decision facts, one clear zero-payload `OP_QUEUEFULL`, reply
+  send terminal, requester receive under a matching pending request, and final
+  application to the same source. The final state must retain the source, set
+  remote queue-full, set rank zero, count a received reply rather than a
+  failure, clear the pending request, and schedule the next reask. No ACK,
+  file-not-found, timeout, or unrelated packet may satisfy the claim.
+- **Implementation boundary:** evolve the existing canonical
+  `scripts/emulebb-rust-reask-cross-client.py` runner and its reducer into a
+  scenario-aware client-UDP owner without compatibility aliases or a parallel
+  runner. The narrow queue-pressure fixture may establish decision facts but
+  must be authenticated, diagnostics-build-only, exact, expiring, one-shot,
+  and incapable of injecting or directly applying a packet. MFC changes remain
+  diagnostics/test control only. Do not change ed2k-server or derive a verdict
+  from public-soak observations.
+- **Green condition:** a real bilateral run produces one immutable receipt, an
+  independent registrar re-derives the exact result and provenance, and the
+  catalog admits exactly `client-udp.queue-full`. Coverage then becomes 29/100
+  overall and 2/9 for the still-partial `client-udp` group. Every changed
+  repository must pass its scoped full gate before coordinated pull requests
+  are opened.
 
 ## Delivery Discipline
 
@@ -209,9 +224,12 @@ or cleanup work does not advance protocol coverage by itself.
   `rust-mfc-transfer-20261102t084332z`. Coordinated Rust PR #213, MFC PR #185,
   build-tests PR #86, and tooling PR #137 merged with protected-main checks
   green; their shared workstream branches were deleted.
-- The current `client-udp.v4` slice is admitted by receipt
+- The completed `client-udp.v4` slice is admitted by receipt
   `rust-mfc-client-udp-v4-20261102t123752z`. It advances only that ID; the
   remaining eight client-UDP IDs stay `evidence-incomplete`.
+- Rust PR #214, MFC PR #186, build-tests PR #87, and tooling PR #138 merged the
+  `client-udp.v4` slice with protected-main checks green. Its shared feature
+  branches were deleted locally and remotely before this slice was selected.
 - `ed2k-server` remained untouched and upstream-clean throughout the completed
   slice against its CI-reviewed upstream pin `3742f9e4`. The latest fetched
   upstream now has one newer commit, `97f97ff`; updating that reviewed pin is a
@@ -219,70 +237,31 @@ or cleanup work does not advance protocol coverage by itself.
 
 ## Active Slice Checkpoint
 
-The unmerged `client-udp.v4` workstream has completed its bounded proof:
+The `client-udp.queue-full` contract was bound on 2026-11-02 before code
+changes. All participating repositories started clean from protected `main` on
+the single shared branch `feature/client-udp-queue-full-evidence`:
 
-- the canonical runner executes both Rust-requester/MFC-responder and
-  MFC-requester/Rust-responder directions in one deterministic local campaign,
-  using real HighID publication, real production upload slots, ordinary
-  scheduler and transport paths, and no public traffic;
-- both directions emitted request bytes
-  `c5907a95c62c0a406c3fd822ed7de2429f8f0100000100` and ACK bytes
-  `c59100000100`, then applied the same part status, complete-source state, and
-  queue rank through exact causal chains;
-- the independent registrar rechecked raw bytes, causal order, application
-  state, control semantics, HighID and slot preconditions, stock-corpus digest,
-  source revisions, executable hashes, and immutable artifact location rather
-  than trusting the campaign's `ok` field;
-- tamper tests reject changed wire bytes, broken causal order, and changed
-  source provenance;
-- the obsolete 35-minute inverse log-string capture was removed after its only
-  direction was subsumed by the bilateral canonical campaign; no compatibility
-  shim remains; and
-- the catalog admits only `client-udp.v4`, at 28/100 overall and 1/9 for the
-  still-incomplete `client-udp` group.
+- Rust `00f723080448d77e2d5e2630a78a0702580a1507`;
+- MFC `6806e9d73c3b3338bccfa4f560403f8df94cd8d0`;
+- build-tests `74da5c164e1d3a8fd76560c9c50e0bcb1283c0a2`; and
+- tooling `4042e685ff5acb0980e75a1099c9c9381632807c`.
 
-The real evidence is:
-
-- artifact:
-  `C:\var\build\emulebb_out\artifacts\emulebb-rust-reask-cross-client\20261102T123752Z-emulebb-main-release-16288`;
-- report SHA-256:
-  `0cec92b67d903bfca9aa5e94ef8bb7161613a84217f4dca9fa0a55eeff26f290`;
-- Rust source `938bce6cf18971e900cbb78a2c92f2dc585e1a3f`, executable
-  `8ced5390b7739cf0b6649d5306f15fa05873d572a8ff4f700b7a86d6c5e25b34`;
-- MFC source `64b531b67a4e7bfc8b567d00edaf7a60e49a250d`, executable
-  `90e441b7f38c8558c4830d277f029ddeb5216b3590304f4c7f5e4880148194c3`;
-  and
-- runner revision `027cd63bdf543d3b28d59994624bc25ffe04ea8e`.
-
-The proof exposed and fixed four product-significant Rust defects: modern MFC
-HELLO UDP-version learning, one-part source completeness inference when stock
-omits `OP_FILESTATUS`, protocol-source retention across a 29-minute reask, and
-receive-before-reply diagnostic ordering. MFC changes remained limited to
-diagnostic control and converged evidence naming. The pushed granular commits
-are Rust `dda3b341`, `0675bd76`, `e6373e5c`, and `938bce6c`; MFC `56564044`
-and `64b531b6`; and build-tests `1f2437a`, `d9c8df6`, `be28902`, `027cd63`,
-`7be201a`, `057667d`, `52ad4c8`, `0a3d988`, and `301a7ef`.
-
-The complete local delivery gate is green:
-
-- Rust: 1,238 package tests passed; the diagnostics client build passed with
-  zero warnings at
-  `C:\var\build\emulebb_out\logs\builds\20261102T122933Z-build-clients`;
-- MFC: diagnostics Release plus standard Debug and Release builds passed with
-  zero warnings at build runs `20261102T122126Z`, `20261102T123515Z`, and
-  `20261102T123532Z`;
-- build-tests: 3,271 tests passed, one POSIX-only test skipped on Windows, and
-  one intentionally deselected test; all 13 changed Python files pass Ruff;
-  the catalog validation passes at 28/100;
-- tooling: the strict docs publish gate passes; and
-- every participating repository is clean, pushed, and on the sole shared
-  `feature/client-udp-v4-evidence` branch. The server fork is clean on `master`,
-  and its upstream-owned paths exactly match the reviewed pin.
+Source review confirms that both clients already implement the stock decision,
+clear `OP_QUEUEFULL` frame, correlated pending-reply gate, rank-zero update,
+remote-queue-full state, and next-reask scheduling. Both also expose ordinary
+upload-waiter removal. The missing capability is only a narrow deterministic
+way to create near-full queue decision facts without launching at least 1,951
+network clients against the production minimum queue size of 2,000. The active
+implementation therefore adds the exact expiring one-shot prerequisite defined
+above, extends causal diagnostics where the existing stream cannot prove its
+consumption, and then generalizes the current V4-only reducer into the one
+canonical client-UDP scenario reducer.
 
 ## Next Step
 
-Open coordinated Rust, MFC, build-tests, and tooling pull requests. Monitor the
-exact PR heads and protected-main checks through completion. After merge, delete
-the shared workstream branch locally and remotely. Select and bind the next
-catalog slice separately; do not silently extend this receipt to any remaining
-client-UDP variant.
+Implement and unit-test the diagnostics-only queue-pressure prerequisite in
+Rust and MFC, preserving ordinary packet generation and application. Extend the
+canonical runner and independent registrar for the bilateral queue-full causal
+chain, run the real campaign, admit only its exact receipt, then execute all
+four full repository gates. Open coordinated pull requests only after that
+whole condition is green.
