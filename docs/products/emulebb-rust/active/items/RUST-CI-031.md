@@ -112,9 +112,9 @@ their scoped gates.
 
 The catalog currently validates at:
 
-- **28/100** coverage IDs with a proven `parity` verdict;
+- **29/100** coverage IDs with a proven `parity` verdict;
 - **5/17** groups complete;
-- **72/100** IDs explicitly `evidence-incomplete`;
+- **71/100** IDs explicitly `evidence-incomplete`;
 - **0** recorded divergences, which makes no claim about uncovered IDs; and
 - **21** classified protocol assets: 6 canonical, 11 support, 2 product-only,
   2 historical, and 0 duplicate.
@@ -127,7 +127,7 @@ Complete groups are:
 - `server-udp-metadata` - 2/2; and
 - `lowid-callbacks` - 4/4.
 
-Partial covered groups are `client-udp` at 1/9, `peer-startup-profiles` at
+Partial covered groups are `client-udp` at 2/9, `peer-startup-profiles` at
 3/11, `queue-upload-state` at 1/5, and `transfer-blocks` at 2/4. Every other
 group is currently uncovered. Reproduce the authoritative report from
 `repos/emulebb-build-tests` with:
@@ -243,26 +243,35 @@ or cleanup work does not advance protocol coverage by itself.
 
 The `client-udp.file-not-found` contract was bound on 2026-11-02 before code
 changes. All participating repositories started clean from protected `main` on
-the single shared branch `feature/client-udp-file-not-found-evidence`:
+the single shared branch `feature/client-udp-file-not-found-evidence`. Granular
+validated checkpoints are pushed at:
 
-- Rust `b012b95ace4559fe3da774a2688292876690e1ee`;
-- MFC `9e01e90bdd089c2b606967efb9da3fd1ce5a1c22`;
-- build-tests `5cfeeb33baea7f81c3647990f74512e0208e2ed7`; and
-- tooling `091ab32eb58612a8b9adfc6f16ee4391000265c1`.
+- Rust `056a91d0`: retain exact UDP FNF source identity and remove the exact
+  source from both the runtime registry and persisted transfer model;
+- MFC `be2a0f79`: trace FNF reply application, stock dead-list insertion, and
+  source removal without changing protocol behavior;
+- build-tests `6258a80`: run and independently register the bilateral real-file
+  withdrawal scenario with exact causal joins; and
+- tooling `b835d56`: bind the slice contract before implementation.
 
-Source review confirms both clients already implement the stock responder
-decision, clear `OP_FILENOTFOUND` frame, correlated pending-reply gate,
-45-minute dead-list insertion, and source removal. Rust already emits
-`udp_reask_reply_applied`, `source_dead_listed`, and `source_dropped`. MFC
-already emits `source_dropped`, but its delete-capable `UDPReaskFNF` path needs
-a lifetime-safe diagnostics snapshot after packet receipt and a matching
-`source_dead_listed` reason. The canonical runner already owns the exact fixture
-and production reload controls; it needs one reversible withdrawal receipt and
-one scenario-specific causal reducer, not another runner or protocol fixture.
+The first retained bilateral campaign proved that MFC sent the exact clear
+zero-payload `OP_FILENOTFOUND` and Rust received and applied it, but exposed an
+IP-only Rust source lookup that could not identify the correct source when an
+address had multiple candidates. Rust checkpoint `38742ea6` fixed the lookup by
+the exact TCP endpoint and learned user hash.
+
+The second retained campaign then proved Rust's reply application,
+`source_dead_listed` with the stock 2700-second block, and `source_dropped`, but
+the exact source remained visible through REST because its persisted transfer
+hint survived the protocol drop. Rust checkpoint `056a91d0` now removes that
+exact persisted relation for both UDP and TCP/AICH file-not-found outcomes.
+These failed campaigns are blocker evidence only; neither admits catalog
+coverage.
 
 ## Next Step
 
-Commit and push this bound contract, then converge MFC's existing
-`UDPReaskFNF` diagnostics before extending the canonical runner and reducer. Do
-not admit coverage or open pull requests until the real bilateral causal proof
-and all scoped full gates are green.
+Build the Rust diagnostics client from exact checkpoint `056a91d0`, rerun the
+same bilateral deterministic campaign, and independently register the immutable
+receipt only if both directions satisfy the full causal contract. Then admit
+exactly `client-udp.file-not-found`, run every changed repository's scoped full
+gate, and open coordinated pull requests only when the whole slice is green.
