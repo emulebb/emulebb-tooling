@@ -329,12 +329,20 @@ condition:
 All four heads are clean and mergeable. No protocol or evidence change was
 made to obtain the green result.
 
+Rust PR #217, MFC PR #190, and build-tests PR #90 were rebase-merged while
+preserving their granular commits. Their exact protected-main revisions and
+post-merge results are:
+
+- Rust `fb673418fd42946f56893081c43494fc1172ed7a`: 2/2 workflows green;
+- MFC `0faeaa3cb5807ca27805636cdad1cc86406b273f`: 2/2 workflows green; and
+- build-tests `80c7e67b832e41480196fed9506936d76bac8dbd`: 4/4 workflows green.
+
+Tooling PR #141 remains open while this lifecycle evidence is added to its
+existing branch.
+
 ## Next Step
 
-Merge Rust PR #217, MFC PR #190, and build-tests PR #90 by rebase while
-preserving their granular commits, then verify every exact post-merge main
-workflow. Record those merge revisions and results here while tooling PR #141
-remains open, revalidate that final tooling head, and merge it by rebase. After
-the tooling main workflow also passes, delete the shared feature branches
+Revalidate this final tooling head, merge tooling PR #141 by rebase, and verify
+its exact post-merge main workflows. Then delete the shared feature branches
 locally and remotely and synchronize every participating checkout to clean
 `main`. Do not select the next catalog slice until that delivery is complete.
