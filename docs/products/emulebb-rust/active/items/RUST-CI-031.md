@@ -2693,6 +2693,53 @@ pushed without a pull request.
   clean-room harness matrices; no pull request was opened before those branch
   gates were green.
 
+## Active Slice Contract - `lowid.relayed-reask`
+
+- **Catalog boundary:** this slice may admit only `lowid.relayed-reask`. The
+  existing `lowid.server-callback` and `lowid.direct-callback` receipts are
+  prerequisites, not claims to reproduce. `lowid.buddy-callback` remains a
+  separate future slice.
+- **Selected clients:** the emulebb Rust diagnostics binary and the emulebb MFC
+  diagnostics binary each act as a queued downloader. MFC remains the preferred
+  observable runtime oracle and receives only diagnostics/test-control changes.
+- **Authority:** stock eMule source and the accepted stock wire corpus define
+  `OP_REASKCALLBACKUDP`, `OP_REASKACK`, endpoint routing, and queue-state intent.
+  MFC supplies the independently observable state-machine execution. The forked
+  `ed2k-server` is not part of this stimulus and must remain upstream-clean.
+- **Deterministic start state:** the existing canonical two-client runner adds
+  the same fixture transfer to both clients, then uses one diagnostics-build-only
+  operation to install one exact queued LowID source per client. The source has
+  an explicit TCP/UDP endpoint, user hash, UDP version, buddy ID, and buddy UDP
+  endpoint. The operation may only feed the production source/reask state and
+  wake its normal scheduler; it must not construct or send protocol packets.
+- **Stimulus:** a harness-owned local UDP probe listens as the source's buddy.
+  Each real client scheduler must select the buddy route and send one plaintext
+  `OP_REASKCALLBACKUDP`. After validating the exact buddy ID, file hash, version
+  tail, client source endpoint, and destination, the probe sends one exact
+  `OP_REASKACK` from the configured source UDP endpoint to that client.
+- **Required causal joins:** the immutable evidence must join the accepted
+  fixture state to the exact file/source/buddy identity; the eligible schedule
+  and callback-path decision; the outbound packet bytes and buddy destination;
+  the socket terminal through one send-attempt ID; the probe's receive/send
+  transcript; the inbound ACK's configured source endpoint and exact bytes; and
+  the post-parse queue-rank application to the same source. Exact diagnostics
+  run/process identity and executable/source provenance remain mandatory.
+- **Verdict:** `parity` is possible only when both clients complete that full
+  chain and the independent registrar reproduces every comparison. Missing,
+  ambiguous, malformed, dropped, or unjoined evidence is
+  `evidence-incomplete`; an absent transition is `not-observed`; only complete
+  comparable evidence may establish `divergence`.
+- **Implementation boundary:** extend the existing deterministic transfer
+  runner, diagnostic schema, receipt, and registrar. Do not add a parallel
+  runner, generic packet-injection API, compatibility reader, persisted source,
+  public-soak claim, MFC product behavior, or server behavior.
+- **Green gate:** focused codec/control/evidence tests; a real local bilateral
+  campaign with immutable registered receipt; the full build-tests gate; Rust
+  format, lint, unit/integration, policy, and diagnostics build gates if Rust
+  changes; and MFC Debug x64, Release x64, and diagnostics Release x64 builds if
+  MFC changes. Push granular validated commits on the one shared topic branch;
+  open coordinated pull requests only when this complete slice is green.
+
 ## Next Implementation
 
 - Take the next bounded `lowid-callbacks` slice:
