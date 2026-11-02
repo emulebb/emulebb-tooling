@@ -47,9 +47,9 @@ MFC test paths; keep `ed2k-server` upstream-clean; work on the existing single
 feature branch with granular commits and open coordinated pull requests only
 after a significant complete chunk is fully green.
 
-The current machine-measured baseline is 18 of 100 catalog entries covered and
+The current machine-measured baseline is 19 of 100 catalog entries covered and
 3 of 17 groups complete. The active bounded slice is
-`server.source.tcp-obfuscated`. Until that slice has an immutable receipt,
+`server.source.udp-v1`. Until that slice has an immutable receipt,
 independent registration, catalog admission, and scoped green validation,
 unrelated protocol slices do not begin.
 
@@ -2420,14 +2420,52 @@ pushed without a pull request.
   remained untouched and upstream-clean at `66b892d`; no pull request has been
   opened.
 
+## Obfuscated TCP Server Source Checkpoint - 2026-11-02
+
+- The first bounded obfuscated run was retained as a failed diagnostic receipt,
+  not parity evidence. Its publisher advertised plaintext-era server flags
+  `0x0119`, so the local server returned source crypt options `0x00`; the
+  crypt-required MFC oracle correctly decoded one wire source and declined to
+  add it. No catalog claim was admitted from that run.
+- Build-tests `0a4df98` parameterized the source scenario by the selected
+  singular server transport. Follow-up `97603af` binds the obfuscated proof to
+  exact `OP_GETSOURCES_OBFU`/`OP_FOUNDSOURCES_OBFU` opcodes (`0x23`/`0x44`),
+  publisher flags `0x0319`, source crypt options `0x81`, the canonical publisher
+  user hash, exact trace and sequence joins, a source-free eD2K-link stimulus,
+  post-apply source state, REST corroboration, and immutable diagnostic
+  captures. Opposite-family, duplicate, malformed, truncated, or conflicting
+  source frames and publisher login frames fail closed. No compatibility shim
+  or legacy diagnostic schema was added.
+- The canonical campaign passed at
+  `output-root:reports/deterministic-two-client-transfer/20261102T002608Z-emulebb-main-release-12868/deterministic-two-client-transfer-result.json`
+  with artifact SHA-256
+  `c6673a16d172c9e41a4218d41e3c113da700a34b303cd47a5194408af4eb972e`.
+  Rust used revision `dc9804c9` and executable SHA-256
+  `b636909c95b0887a455709a57b8eab8ef7544ec8275cdc2551ad735a5b373f9c`;
+  MFC used diagnostics revision `aebbc5b2` and executable SHA-256
+  `6223a2eb1c8d6e6cd508eddbd500006275de468b299ddbd728fcc2f7b868f832`;
+  the harness revision was `97603af`.
+- The independent registrar reloaded the exact retained Rust and MFC segments,
+  reconstructed the publisher login and publication transcript, and admitted
+  `server.source.tcp-obfuscated` as the sole new coverage ID. The source reply
+  and four transfer IDs are corroboration only. Build-tests `e3595a7` records
+  receipt `rust-mfc-transfer-20261102t002608z`; catalog validation now reports
+  19/100 covered IDs and 3/17 complete groups.
+- The final pre-catalog harness gate passes 3,107 tests with one POSIX-only skip
+  and one deliberate deselection in 124.80 seconds. The final catalog and
+  inventory gate passes 25 tests, the catalog validator and changed-file Ruff
+  pass, and `git diff --check` is clean. `ed2k-server` remained untouched and
+  upstream-clean at `66b892d`; no pull request has been opened.
+
 ## Next Implementation
 
 - Take the next bounded `server-query-reply` slice:
-  `server.source.tcp-obfuscated`. Reuse the reachable HighID publisher and
-  independent receipt registration, require exact obfuscated request/reply
-  transport plus the already-defined source-state causal joins, and add
-  diagnostics only if that proof is incomplete. Do not change `ed2k-server`
-  protocol behavior.
+  `server.source.udp-v1`. First bind the stock v1 request/reply wire contract and
+  existing Rust/MFC diagnostics to one local managed-server fixture; then add
+  only the smallest bounded cross-client scenario needed to prove the exact
+  endpoint, file identity, request and reply opcodes, source decode, and
+  post-apply state. Register its immutable receipt before considering UDP v2.
+  Do not change `ed2k-server` protocol behavior.
 - Continue domain by domain through server session/source replies,
   peer-transfer queue/callback states, client UDP, and Kad. Add the smallest
   deterministic transcript or local cross-client scenario that can causally
