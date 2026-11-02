@@ -47,10 +47,10 @@ MFC test paths; keep `ed2k-server` upstream-clean; work on the existing single
 feature branch with granular commits and open coordinated pull requests only
 after a significant complete chunk is fully green.
 
-The current machine-measured baseline is 24 of 100 catalog entries covered and
+The current machine-measured baseline is 25 of 100 catalog entries covered and
 4 of 17 groups complete. `server-query-reply` is complete at 9/9 and
-`lowid-callbacks` is partial at 1/4. The active bounded slice is
-`lowid.direct-callback`; unrelated protocol slices do not begin until that
+`lowid-callbacks` is partial at 2/4. The active bounded slice is
+`lowid.relayed-reask`; unrelated protocol slices do not begin until that
 distinct LowID state transition has an exact authority, causal evidence
 contract, independent registration, catalog admission, and scoped green
 validation.
@@ -2657,17 +2657,52 @@ pushed without a pull request.
   tests. The complete local harness gate passes 3,178 tests with one POSIX-only
   skip and one deliberate deselection in 199.50 seconds.
 
+## LowID Direct Callback Checkpoint - 2026-11-02
+
+- The canonical deterministic two-client runner now owns the direct UDP
+  callback transition. It assigns both Rust and MFC LowIDs through the local
+  upstream-clean server, starts isolated offline Kad runtimes, sends the same
+  exact 21-byte `C5 95 OP_DIRECTCALLBACKREQ` stimulus to each assigned UDP
+  endpoint, and requires each callback connection to carry the HELLO identity
+  accepted during server login. No parallel runner was added.
+- MFC starts with an empty `nodes.dat`: a private seed would put the oracle in
+  Kad LAN mode and invalidate the stock firewalled callback gate. Rust starts
+  with one nonresponsive local seed so its DHT stays running without public
+  fallback. The runner retains exact pre-launch copies and SHA-256 receipts
+  outside the client-mutated profile trees; this is necessary because MFC
+  legitimately rewrites its live `nodes.dat` on shutdown.
+- The final campaign passed at
+  `reports/deterministic-two-client-transfer/20261102T035422Z-emulebb-main-release-14940/`.
+  Its report SHA-256 is
+  `a589f43f899c7b19ea65b6aae86af45ea5a02b4e2bbd1950fd771fc4a3a9741f`.
+  Rust sequence 17 and MFC sequence 21 record application of the same request;
+  both then connect to the isolated requester with the assigned identity and
+  complete the deterministic transfer.
+- Independent registration admits `lowid.direct-callback` on receipt
+  `rust-mfc-transfer-20261102t035422z`. Build-tests `f533f83` records the claim;
+  catalog validation reports 25/100 covered IDs and 4/17 complete groups, with
+  `lowid-callbacks` partial at 2/4. The complete local harness gate passes 3,198
+  tests with one POSIX-only skip and one deliberate deselection in 127.51
+  seconds.
+- The campaign used MFC `9dfe5fd0` and Rust `cc2db5ab` with executable SHA-256
+  values `fa0a5961caaefb29dfba440d3cf771ec4d9329c6b9f8070efde1d7160a824b1f`
+  and `15cb10e6a8753ac78c3f9716b06abae10eaa74ac746c292bf0c0f238f07bc154`.
+  Neither product nor `ed2k-server` changed for this slice.
+- Final-head Baseline run `41385720635` passed. Fast Harness run
+  `41385720282` passed Linux, macOS, and Windows portability plus both Windows
+  clean-room harness matrices; no pull request was opened before those branch
+  gates were green.
+
 ## Next Implementation
 
 - Take the next bounded `lowid-callbacks` slice:
-  `lowid.direct-callback`. First inventory the existing direct-callback codec
-  proof and canonical reask/cross-client runner. Admit no claim until one local
-  deterministic transcript proves the accepted LowID start state, exact
-  `OP_DIRECTCALLBACKREQ` stimulus, receiver application, and resulting
-  identity-correlated connection or reask transition. Extend the canonical
-  runner or the smallest missing diagnostic only when the current evidence
-  cannot prove that chain; do not add a parallel runner or change
-  `ed2k-server` protocol behavior.
+  `lowid.relayed-reask`. Inventory the existing client-UDP reask codec,
+  MFC `UDPReaskForDownload` eligibility/skip diagnostics, and canonical local
+  runner before changing code. Admit no claim until one deterministic
+  transcript proves the exact LowID start state, relayed reask decision,
+  request/reply correlation, and resulting transfer-state transition. Extend
+  only the smallest missing diagnostic or canonical scenario; do not add a
+  parallel runner or change `ed2k-server` protocol behavior.
 - Continue domain by domain through server session/source replies,
   peer-transfer queue/callback states, client UDP, and Kad. Add the smallest
   deterministic transcript or local cross-client scenario that can causally
