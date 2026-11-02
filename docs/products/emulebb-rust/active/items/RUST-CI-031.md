@@ -112,9 +112,9 @@ their scoped gates.
 
 The catalog currently validates at:
 
-- **29/100** coverage IDs with a proven `parity` verdict;
+- **30/100** coverage IDs with a proven `parity` verdict;
 - **5/17** groups complete;
-- **71/100** IDs explicitly `evidence-incomplete`;
+- **70/100** IDs explicitly `evidence-incomplete`;
 - **0** recorded divergences, which makes no claim about uncovered IDs; and
 - **21** classified protocol assets: 6 canonical, 11 support, 2 product-only,
   2 historical, and 0 duplicate.
@@ -127,7 +127,7 @@ Complete groups are:
 - `server-udp-metadata` - 2/2; and
 - `lowid-callbacks` - 4/4.
 
-Partial covered groups are `client-udp` at 2/9, `peer-startup-profiles` at
+Partial covered groups are `client-udp` at 3/9, `peer-startup-profiles` at
 3/11, `queue-upload-state` at 1/5, and `transfer-blocks` at 2/4. Every other
 group is currently uncovered. Reproduce the authoritative report from
 `repos/emulebb-build-tests` with:
@@ -160,11 +160,14 @@ claim to any other client-UDP variant.
   source for the stock 45-minute block, and remove it from the requested file.
 - **Deterministic start and stimulus:** establish a real V4 queued download
   source and responder-side upload waiter while the harness-owned fixture is
-  genuinely shared. Atomically move that fixture outside the responder's
-  shared root, invoke the production shared-catalog reload, and prove the exact
-  hash was present before withdrawal and absent afterwards. Then wake the
-  existing source through the canonical queued-source reask control so the
-  ordinary scheduler emits one production `OP_REASKFILEPING`.
+  genuinely shared. Withdraw the fixture through the responder's production
+  sharing controls, invoke the production shared-catalog reload, and prove the
+  exact hash was present before withdrawal and absent afterwards. MFC uses a
+  reversible move outside its shared root; Rust clears the ephemeral profile's
+  configured shared roots because its live Windows file handle correctly
+  prevents a rename. Then wake the existing source through the canonical
+  queued-source reask control so the ordinary scheduler emits one production
+  `OP_REASKFILEPING`.
 - **Proof obligation:** causally join the exact withdrawal receipt, source
   registration, due scheduler decision, request send terminal, responder
   receive/decode, absent shared-catalog fact, one clear zero-payload
@@ -176,16 +179,17 @@ claim to any other client-UDP variant.
 - **Implementation boundary:** extend the existing canonical
   `scripts/emulebb-rust-reask-cross-client.py` runner, reducer, registrar, and
   catalog path with one explicit `file-not-found` scenario. Use the real
-  shared catalog and harness-owned file movement; do not add packet injection
-  or a file-not-found decision fixture. Rust protocol behavior already exists.
+  shared catalog and client-appropriate production withdrawal; do not add
+  packet injection or a file-not-found decision fixture. Rust protocol behavior
+  already exists.
   MFC changes remain diagnostics-only convergence around its existing
   `UDPReaskFNF` path. Do not change ed2k-server or derive a verdict from public
   soak observations.
 - **Green condition:** a real bilateral run produces one immutable receipt, an
   independent registrar re-derives the exact result and provenance, and the
-  catalog admits exactly `client-udp.file-not-found`. Coverage then becomes
-  30/100 overall and 3/9 for the still-partial `client-udp` group. Every
-  changed repository must pass its scoped full gate before coordinated pull
+  catalog admits exactly `client-udp.file-not-found`. That proof is complete at
+  30/100 overall and 3/9 for the still-partial `client-udp` group. Every changed
+  repository must still pass its scoped full gate before coordinated pull
   requests are opened.
 
 ## Delivery Discipline
@@ -250,8 +254,8 @@ validated checkpoints are pushed at:
   source from both the runtime registry and persisted transfer model;
 - MFC `be2a0f79`: trace FNF reply application, stock dead-list insertion, and
   source removal without changing protocol behavior;
-- build-tests `6258a80`: run and independently register the bilateral real-file
-  withdrawal scenario with exact causal joins; and
+- build-tests `f76c0df`: run and independently register the bilateral
+  production-catalog withdrawal scenario with exact causal joins; and
 - tooling `b835d56`: bind the slice contract before implementation.
 
 The first retained bilateral campaign proved that MFC sent the exact clear
@@ -268,10 +272,19 @@ exact persisted relation for both UDP and TCP/AICH file-not-found outcomes.
 These failed campaigns are blocker evidence only; neither admits catalog
 coverage.
 
+The exact bilateral campaign at
+`output-root:artifacts/emulebb-rust-reask-cross-client/20261102T173926Z-emulebb-main-release-9780/emulebb-rust-reask-cross-client-result.json`
+passed both directions. Independent registration produced receipt
+`rust-mfc-client-udp-file-not-found-20261102t173926z`, artifact SHA-256
+`b420db82edd4f12a447e44a080c42166eda917ef9189e3d7e2f1133c0d92f808`,
+and exact subjects MFC `be2a0f79` and Rust `056a91d0`. The catalog admits only
+`client-udp.file-not-found`; the other six client-UDP IDs remain
+`evidence-incomplete`.
+
 ## Next Step
 
-Build the Rust diagnostics client from exact checkpoint `056a91d0`, rerun the
-same bilateral deterministic campaign, and independently register the immutable
-receipt only if both directions satisfy the full causal contract. Then admit
-exactly `client-udp.file-not-found`, run every changed repository's scoped full
-gate, and open coordinated pull requests only when the whole slice is green.
+Run every changed repository's scoped full gate against the exact admitted
+revisions. If all gates remain green, update this checkpoint with the final
+validation matrix and open the coordinated Rust, MFC, build-tests, and tooling
+pull requests. Do not select another catalog slice before this one merges and
+its shared workstream branches are deleted.
