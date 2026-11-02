@@ -47,9 +47,9 @@ MFC test paths; keep `ed2k-server` upstream-clean; work on the existing single
 feature branch with granular commits and open coordinated pull requests only
 after a significant complete chunk is fully green.
 
-The current machine-measured baseline is 19 of 100 catalog entries covered and
+The current machine-measured baseline is 20 of 100 catalog entries covered and
 3 of 17 groups complete. The active bounded slice is
-`server.source.udp-v1`. Until that slice has an immutable receipt,
+`server.source.udp-v2`. Until that slice has an immutable receipt,
 independent registration, catalog admission, and scoped green validation,
 unrelated protocol slices do not begin.
 
@@ -2457,15 +2457,57 @@ pushed without a pull request.
   pass, and `git diff --check` is clean. `ed2k-server` remained untouched and
   upstream-clean at `66b892d`; no pull request has been opened.
 
+## UDP v1 Server Source Checkpoint - 2026-11-02
+
+- Rust `eb1256ba` and MFC `2d8fb8b3` add causal UDP source-application
+  diagnostics. MFC remains diagnostics-only; no MFC product behavior or legacy
+  diagnostic schema was added.
+- Build-tests `013512f`, `4615d22`, `51fa9eb`, and `e5ecbf8` establish the
+  managed UDP source fixture, exact wire codecs, evidence gate, and bounded
+  runner scenario. Follow-up commits `7bea419`, `280b7d9`, `0739a36`,
+  `4618bfa`, and `5985d2d` add the accepted stock reply vector, independent
+  registrar, send-attempt correlation, file-hash-scoped reconstruction, and
+  catalog registration.
+- The first canonical run at
+  `output-root:reports/deterministic-two-client-transfer/20261102T005632Z-emulebb-main-release-14764/deterministic-two-client-transfer-result.json`
+  was retained as failed diagnostic evidence. It exposed that stateless Rust
+  UDP sends use `sendAttemptId` for request-to-terminal-outcome correlation and
+  reserve a positive `traceId` for reply-to-application correlation. No catalog
+  evidence was admitted from that run.
+- The corrected canonical campaign passed at
+  `output-root:reports/deterministic-two-client-transfer/20261102T005817Z-emulebb-main-release-14048/deterministic-two-client-transfer-result.json`
+  with artifact SHA-256
+  `6b15f9da1758ffe9420b8f22714de6e2788b81eef578007f86ff88ce6642a94b`.
+  Rust used revision `eb1256ba` and executable SHA-256
+  `f8718d0530552885d4ba7fa3d9b079e34f1e7d1b6709deea8d5c2841af449136`;
+  MFC used diagnostics revision `2d8fb8b3` and executable SHA-256
+  `a56cc028191b51523a60fd2ab44abd45e657a6e8d322e4524d5b556af7098352`;
+  the harness revision was `0739a36`.
+- The independent registrar reloaded the exact immutable segments and fixture
+  transcript, reconstructed exact plaintext UDP v1
+  `OP_GLOBGETSOURCES`/`OP_GLOBFOUNDSOURCES` traffic, terminal Rust send outcome,
+  per-client reply-to-application joins, and the exact source-state transition.
+  Receipt `rust-mfc-transfer-20261102t005817z` admits
+  `server.source.udp-v1` as the sole new coverage ID. The source reply and four
+  transfer IDs are corroboration only.
+- Catalog validation now reports 20/100 covered IDs and 3/17 complete groups;
+  `server-query-reply` is 6/9. Canonical build receipts are
+  `logs/builds/20261102T005332Z-build-clients/build-result.json` for Rust and
+  `logs/builds/20261102T003550Z-build-app/build-result.json` for MFC. The final
+  harness gate passes 3,131 tests with one POSIX-only skip and one deliberate
+  deselection. `ed2k-server` remained untouched and upstream-clean at
+  `66b892d`; no pull request has been opened.
+
 ## Next Implementation
 
 - Take the next bounded `server-query-reply` slice:
-  `server.source.udp-v1`. First bind the stock v1 request/reply wire contract and
-  existing Rust/MFC diagnostics to one local managed-server fixture; then add
-  only the smallest bounded cross-client scenario needed to prove the exact
-  endpoint, file identity, request and reply opcodes, source decode, and
-  post-apply state. Register its immutable receipt before considering UDP v2.
-  Do not change `ed2k-server` protocol behavior.
+  `server.source.udp-v2`. Bind the accepted stock v2 request/reply wire contract,
+  including its exact source-size payload, to the existing Rust/MFC diagnostics
+  and one harness-owned managed or scripted fixture. Add only the smallest
+  bounded cross-client scenario needed to prove exact endpoint, file identity,
+  request and reply opcodes, source decode, and post-apply state. Register its
+  immutable receipt before advanced search or callback work. Do not change
+  `ed2k-server` protocol behavior.
 - Continue domain by domain through server session/source replies,
   peer-transfer queue/callback states, client UDP, and Kad. Add the smallest
   deterministic transcript or local cross-client scenario that can causally
