@@ -112,9 +112,9 @@ their scoped gates.
 
 The catalog currently validates at:
 
-- **27/100** coverage IDs with a proven `parity` verdict;
+- **28/100** coverage IDs with a proven `parity` verdict;
 - **5/17** groups complete;
-- **73/100** IDs explicitly `evidence-incomplete`;
+- **72/100** IDs explicitly `evidence-incomplete`;
 - **0** recorded divergences, which makes no claim about uncovered IDs; and
 - **21** classified protocol assets: 6 canonical, 11 support, 2 product-only,
   2 historical, and 0 duplicate.
@@ -127,9 +127,9 @@ Complete groups are:
 - `server-udp-metadata` - 2/2; and
 - `lowid-callbacks` - 4/4.
 
-Partial covered groups are `peer-startup-profiles` at 3/11,
-`queue-upload-state` at 1/5, and `transfer-blocks` at 2/4. Every other group is
-currently uncovered. Reproduce the authoritative report from
+Partial covered groups are `client-udp` at 1/9, `peer-startup-profiles` at
+3/11, `queue-upload-state` at 1/5, and `transfer-blocks` at 2/4. Every other
+group is currently uncovered. Reproduce the authoritative report from
 `repos/emulebb-build-tests` with:
 
 ```powershell
@@ -142,7 +142,9 @@ than accumulating in this active item.
 
 ## Active Bounded Slice: `client-udp.v4`
 
-This is the only implementation slice in progress.
+This is the only implementation slice in progress. Its implementation and
+evidence admission are complete; branch-wide delivery validation and the
+coordinated pull-request handoff remain.
 
 - **Sole claim:** admit only `client-udp.v4`. The fixture's clear transport is
   a controlled start condition, not proof of `client-udp.clear`. Versions 1-3,
@@ -207,36 +209,63 @@ or cleanup work does not advance protocol coverage by itself.
   `rust-mfc-transfer-20261102t084332z`. Coordinated Rust PR #213, MFC PR #185,
   build-tests PR #86, and tooling PR #137 merged with protected-main checks
   green; their shared workstream branches were deleted.
+- The current `client-udp.v4` slice is admitted by receipt
+  `rust-mfc-client-udp-v4-20261102t123752z`. It advances only that ID; the
+  remaining eight client-UDP IDs stay `evidence-incomplete`.
 - `ed2k-server` remained untouched and upstream-clean throughout the completed
   slice.
 
 ## Active Slice Checkpoint
 
-The unmerged `client-udp.v4` workstream has reached the following bounded
-checkpoint:
+The unmerged `client-udp.v4` workstream has completed its bounded proof:
 
-- Rust and MFC expose the same diagnostics-only control for waking one exact,
-  already queued direct V4 source through each client's ordinary production
-  scheduler and transport path;
-- both controls reject ambiguous, LowID, pending, fallback, or
-  identity-mismatched sources and do not create sources or inject packets;
-- the harness owns one strict reducer that requires the complete bilateral
-  request/ACK/application causal chain, exact packet bytes, exact identity and
-  send-attempt joins, stock-corpus agreement, and matching normalized state;
-- focused Rust, MFC, and harness tests for those checkpoints are green and the
-  granular commits are pushed on the shared workstream branch; and
-- no catalog claim has been admitted: the canonical runner is not yet
-  bilateral, no immutable campaign receipt exists, and `client-udp.v4` remains
-  `evidence-incomplete`.
+- the canonical runner executes both Rust-requester/MFC-responder and
+  MFC-requester/Rust-responder directions in one deterministic local campaign,
+  using real HighID publication, real production upload slots, ordinary
+  scheduler and transport paths, and no public traffic;
+- both directions emitted request bytes
+  `c5907a95c62c0a406c3fd822ed7de2429f8f0100000100` and ACK bytes
+  `c59100000100`, then applied the same part status, complete-source state, and
+  queue rank through exact causal chains;
+- the independent registrar rechecked raw bytes, causal order, application
+  state, control semantics, HighID and slot preconditions, stock-corpus digest,
+  source revisions, executable hashes, and immutable artifact location rather
+  than trusting the campaign's `ok` field;
+- tamper tests reject changed wire bytes, broken causal order, and changed
+  source provenance;
+- the obsolete 35-minute inverse log-string capture was removed after its only
+  direction was subsumed by the bilateral canonical campaign; no compatibility
+  shim remains; and
+- the catalog admits only `client-udp.v4`, at 28/100 overall and 1/9 for the
+  still-incomplete `client-udp` group.
+
+The real evidence is:
+
+- artifact:
+  `C:\var\build\emulebb_out\artifacts\emulebb-rust-reask-cross-client\20261102T123752Z-emulebb-main-release-16288`;
+- report SHA-256:
+  `0cec92b67d903bfca9aa5e94ef8bb7161613a84217f4dca9fa0a55eeff26f290`;
+- Rust source `938bce6cf18971e900cbb78a2c92f2dc585e1a3f`, executable
+  `8ced5390b7739cf0b6649d5306f15fa05873d572a8ff4f700b7a86d6c5e25b34`;
+- MFC source `64b531b67a4e7bfc8b567d00edaf7a60e49a250d`, executable
+  `90e441b7f38c8558c4830d277f029ddeb5216b3590304f4c7f5e4880148194c3`;
+  and
+- runner revision `027cd63bdf543d3b28d59994624bc25ffe04ea8e`.
+
+The proof exposed and fixed four product-significant Rust defects: modern MFC
+HELLO UDP-version learning, one-part source completeness inference when stock
+omits `OP_FILESTATUS`, protocol-source retention across a 29-minute reask, and
+receive-before-reply diagnostic ordering. MFC changes remained limited to
+diagnostic control and converged evidence naming. The pushed granular commits
+are Rust `dda3b341`, `0675bd76`, `e6373e5c`, and `938bce6c`; MFC `56564044`
+and `64b531b6`; and build-tests `1f2437a`, `d9c8df6`, `be28902`, `027cd63`,
+`7be201a`, `057667d`, and `52ad4c8`.
 
 ## Next Step
 
-Upgrade only the existing canonical
-`scripts/emulebb-rust-reask-cross-client.py` runner to execute the two local
-directions in one campaign: Rust requester to MFC responder, then MFC requester
-to Rust responder. Drive each exact queued source once through the converged
-diagnostics control, derive the verdict solely from the strict reducer, and
-remove the legacy log-string verdict. Then execute the real campaign,
-independently register its immutable receipt, admit only `client-udp.v4`, and
-run every changed repository's complete scoped gate before opening coordinated
-pull requests.
+Run every changed repository's complete scoped gate from the pushed branch.
+Open coordinated Rust, MFC, build-tests, and tooling pull requests only if all
+gates remain green and confirm again that `ed2k-server` is untouched and
+upstream-clean. After protected-main merge, delete the shared workstream branch
+locally and remotely. Select and bind the next catalog slice separately; do not
+silently extend this receipt to any remaining client-UDP variant.
