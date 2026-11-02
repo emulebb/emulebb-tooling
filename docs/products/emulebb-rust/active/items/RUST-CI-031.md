@@ -315,10 +315,26 @@ Final local gates at the exact pushed heads are green:
   deselection, plus a separately green protocol-catalog validator; and
 - tooling strict docs publish check.
 
+Coordinated pull requests were opened only after that complete local green
+condition:
+
+- Rust PR #217 at `ae01da50`: 15/15 checks and 2/2 head workflows green;
+- MFC PR #190 at `ac8c33f0`: 8/8 checks and 4/4 head workflows green;
+- build-tests PR #90 at `2720dc6`: 20/20 checks and 7/7 head workflows green;
+  the macOS portability job was twice cancelled by the runner before setup
+  with zero steps or logs, while its Windows and Linux peers passed, then the
+  policy-permitted same-head retry passed; and
+- tooling PR #141 at `4dc29c1`: 11/11 checks and 6/6 head workflows green.
+
+All four heads are clean and mergeable. No protocol or evidence change was
+made to obtain the green result.
+
 ## Next Step
 
-Open the coordinated Rust, MFC, build-tests, and tooling pull requests, monitor
-every required workflow, merge while preserving the granular commits, verify
-exact post-merge main workflows, and delete the shared feature branches locally
-and remotely. Do not select the next catalog slice until that delivery is
-complete.
+Merge Rust PR #217, MFC PR #190, and build-tests PR #90 by rebase while
+preserving their granular commits, then verify every exact post-merge main
+workflow. Record those merge revisions and results here while tooling PR #141
+remains open, revalidate that final tooling head, and merge it by rebase. After
+the tooling main workflow also passes, delete the shared feature branches
+locally and remotely and synchronize every participating checkout to clean
+`main`. Do not select the next catalog slice until that delivery is complete.
