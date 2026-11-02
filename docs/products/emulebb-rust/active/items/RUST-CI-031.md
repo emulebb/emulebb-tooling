@@ -356,9 +356,20 @@ are:
   independent raw-evidence re-reduction, registration route, and adversarial
   tests;
 - MFC `367747a1` - preserve the exact pre-decryption client-UDP wire datagram and
-  classify user-hash obfuscation from the wire/decrypted length boundary; and
-- build-tests `9fe2306` - register only the independently validated
-  `client-udp.encrypted` receipt and advance the catalog.
+  classify user-hash obfuscation from the wire/decrypted length boundary;
+- build-tests `79bfc10`, `b0a4a00`, and `c492408` - bind canonical clean builds
+  to clean, unchanged product and orchestrator revisions; remove executable and
+  source overrides from the authoritative runner; and require those causal
+  receipts in the independent registrar;
+- build `178ac00` - keep WSL server clean/build/stage operations in one
+  filesystem view after the authoritative build exposed a deterministic DrvFS
+  staging race;
+- build-tests `317f48b` - run every campaign-owned Rust peer from the single
+  clean-built diagnostics executable rather than retaining a hidden dependency
+  on a separately staged regular binary; and
+- build-tests `bd88344` - replace the earlier non-causal encrypted receipt with
+  the independently validated authoritative-build receipt. The earlier receipt
+  is not retained as a legacy registration path.
 
 The first real campaign was correctly retained as `evidence-incomplete` at
 `output-root:artifacts/emulebb-rust-reask-cross-client/20261102T215244Z-emulebb-main-release-11536/emulebb-rust-reask-cross-client-result.json`,
@@ -369,22 +380,28 @@ place and inferred transport from Kad-only verify keys. The result joined an
 encrypted eight-byte header to a clear payload and could not prove in-flight
 wire identity. No protocol behavior failed or changed.
 
-MFC commit `367747a1` fixed only that oracle boundary. The succeeding bilateral
-campaign is immutable at
-`output-root:artifacts/emulebb-rust-reask-cross-client/20261102T215826Z-emulebb-main-release-12576/emulebb-rust-reask-cross-client-result.json`:
+MFC commit `367747a1` fixed only that oracle boundary. A succeeding bilateral run
+proved the protocol claim, but its report merely combined staged executable
+hashes with current repository HEADs and therefore did not causally prove which
+source revision built each binary. That receipt was superseded rather than
+grandfathered. The authoritative succeeding campaign is immutable at
+`output-root:artifacts/emulebb-rust-reask-cross-client/20261102T222336Z-emulebb-main-release-12052/emulebb-rust-reask-cross-client-result.json`:
 
-- receipt ID `rust-mfc-client-udp-encrypted-20261102t215826z`;
+- receipt ID `rust-mfc-client-udp-encrypted-20261102t222336z`;
 - report SHA-256
-  `f372f50a7a0b31cbc37740711f9c66be4f0a8df38172320141eadcc9d9fb52e8`;
+  `f37c36fb8ec0150d60e1e256c07b65cb58b6280db901074bea3ef32556b97be9`;
 - raw reducer-input SHA-256
-  `bf46203a660f2787cedc3a63373fd01f1f8ad753865ba791698437a6f0a26de1`;
+  `59aee44f547cf8fc3df4a5de3af2e6fdc0362c78936e71d6b8981dff7c5f2d25`;
 - Rust executable SHA-256
   `5e96ab23ddb678e829e352b4549ce2d5f7a08d34b1171a63089851c07653ae3c`
   from protected-main `fb673418`;
 - MFC executable SHA-256
-  `9102cd445da3de060183e928f912138944f287c224a1d38329fd4c458f21fc8c`
+  `23f8177e9aadc4b5b22deb694db085f03085da834396d5c6b7c95b5753b3aef3`
   from diagnostics revision `367747a1`;
-- runner revision `7488867`;
+- ed2k-server executable SHA-256
+  `ffb5655198a882156627e0ff6d5d5a3a94ce02a423023f3b94f0bd8c00569886`
+  from clean upstream-aligned source `d6a6dd67`;
+- runner revision `317f48b` and clean build-orchestrator revision `178ac00`;
 - both directions recorded `shouldCrypt=true`, exact eight-byte stock
   obfuscation overhead, nonreserved odd markers, byte-identical sender/receiver
   ciphertext per datagram, identical decoded V4 request/ACK frames, and the same
@@ -392,15 +409,18 @@ campaign is immutable at
 - the independent registrar hash-checked and re-reduced the raw records before
   producing the sole `client-udp.encrypted` claim.
 
-The focused 94-test harness set and protocol-catalog validator pass at 32/100
+The focused 108-test harness set and protocol-catalog validator pass at 32/100
 overall and 5/9 for `client-udp`. Rust required no source change. `ed2k-server`
-was rebuilt by the canonical runner but remained untouched and upstream-clean.
+was clean-built and hash-bound by the canonical runner, while its repository
+remained untouched and upstream-clean. Full changed-repository gates remain the
+last condition before coordinated pull requests are opened.
 
 ## Next Step
 
-Run the complete local green gates at the exact pushed MFC, build-tests, and
-tooling heads, including the MFC diagnostics and Debug builds, the full
-build-tests suite plus catalog validator, and strict tooling docs publication.
+Run the complete local green gates at the exact pushed MFC, build,
+build-tests, and tooling heads, including the MFC diagnostics and Debug builds,
+the full build and build-tests suites, catalog validator, and strict tooling
+docs publication.
 Perform an independent read-only review of the bounded slice and correct any
 material finding. Open coordinated pull requests only after all participating
 repositories are fully green; Rust and `ed2k-server` have no source changes and
