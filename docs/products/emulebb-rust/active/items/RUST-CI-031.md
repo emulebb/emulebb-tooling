@@ -112,9 +112,9 @@ their scoped gates.
 
 The catalog currently validates at:
 
-- **30/100** coverage IDs with a proven `parity` verdict;
+- **31/100** coverage IDs with a proven `parity` verdict;
 - **5/17** groups complete;
-- **70/100** IDs explicitly `evidence-incomplete`;
+- **69/100** IDs explicitly `evidence-incomplete`;
 - **0** recorded divergences, which makes no claim about uncovered IDs; and
 - **21** classified protocol assets: 6 canonical, 11 support, 2 product-only,
   2 historical, and 0 duplicate.
@@ -127,7 +127,7 @@ Complete groups are:
 - `server-udp-metadata` - 2/2; and
 - `lowid-callbacks` - 4/4.
 
-Partial covered groups are `client-udp` at 3/9, `peer-startup-profiles` at
+Partial covered groups are `client-udp` at 4/9, `peer-startup-profiles` at
 3/11, `queue-upload-state` at 1/5, and `transfer-blocks` at 2/4. Every other
 group is currently uncovered. Reproduce the authoritative report from
 `repos/emulebb-build-tests` with:
@@ -140,9 +140,9 @@ The catalog embeds the exact receipt IDs and provenance for every admitted
 claim. Detailed superseded checkpoints remain available in Git history rather
 than accumulating in this active item.
 
-## Active Bounded Slice: `client-udp.clear`
+## Completed Bounded Slice Awaiting Delivery: `client-udp.clear`
 
-This is the only implementation slice in progress. It starts from the merged,
+This is the only delivery slice in progress. It starts from the merged,
 protected-main-green `client-udp.file-not-found` baseline and establishes the
 explicit plaintext transport authority needed before encrypted client-UDP is
 attempted. It must not broaden its claim to version negotiation, encryption,
@@ -152,9 +152,11 @@ or unsolicited handling.
   transport, and unsolicited replies remain independently measured catalog
   IDs. The campaign may use the already-supported V4 payload shape, but that
   fact cannot admit another V4 claim.
-- **Selected clients:** the unchanged emulebb Rust diagnostics build and the
-  unchanged emulebb MFC diagnostics oracle must each act once as requester and
-  once as responder in the same deterministic local campaign.
+- **Selected clients:** exact committed emulebb Rust diagnostics revision
+  `ae01da50` and emulebb MFC diagnostics-oracle revision `ac8c33f0` each act
+  once as requester and once as responder in the same deterministic local
+  campaign. Their only product-source changes expose the already-computed
+  per-source `shouldCrypt` decision; packet behavior is unchanged.
 - **Authority:** stock eMule client-UDP framing when crypt is not requested:
   one clear `OP_EMULEPROT` datagram containing `OP_REASKFILEPING`, followed by
   one clear `OP_REASKACK` reply. The exact bytes and plaintext classification
@@ -180,10 +182,11 @@ or unsolicited handling.
   existing canonical `scripts/emulebb-rust-reask-cross-client.py` runner,
   reducer, independent registrar, and catalog path. Reuse the existing real
   V4 queued-source campaign rather than adding packet injection, a second
-  runner, or product compatibility controls. Rust and MFC source changes are
-  out of scope unless the live diagnostics are insufficient to prove the
-  transport choice. Do not change ed2k-server or derive a verdict from public
-  soak observations.
+  runner, or product compatibility controls. The live diagnostics were
+  insufficient to prove the transport choice, so both clients now emit the
+  existing per-source crypt decision in `udp_reask_source_registered`; no
+  protocol behavior changed. Do not change ed2k-server or derive a verdict
+  from public soak observations.
 - **Green condition:** a real bilateral run produces one immutable receipt,
   the independent registrar re-derives the exact result and provenance, and
   the catalog admits exactly `client-udp.clear`. The resulting measured state
@@ -254,26 +257,58 @@ or cleanup work does not advance protocol coverage by itself.
   upstream now has one newer commit, `97f97ff`; updating that reviewed pin is a
   separate upstream-sync delivery and is not mixed into this evidence receipt.
 
-## Active Slice Checkpoint
+## Completed Slice Checkpoint
 
-The `client-udp.clear` contract was bound on 2026-11-02 before harness code
-changes. The participating build-tests and tooling repositories started clean
-from protected `main` on the single shared branch
-`feature/client-udp-clear-evidence`. Rust and MFC remain on their exact green
-main revisions because this slice must first prove whether the existing
-diagnostics are sufficient.
+The `client-udp.clear` contract was bound on 2026-11-02 before code changes and
+implemented on the single shared branch `feature/client-udp-clear-evidence`.
+Granular pushed commits are:
 
-The implementation starts by separating the clear-transport verdict from the
-already-admitted V4 payload-shape verdict. The canonical runner must emit one
-new scenario schema, and the reducer and registrar must reject any artifact
-that lacks bilateral plaintext request/reply wire evidence or attempts to admit
-another client-UDP ID.
+- Rust `ae01da50` - expose the production UDP-reask crypt decision in the
+  source-registration diagnostic;
+- MFC `ac8c33f0` - expose the corresponding oracle decision;
+- build-tests `13af840` - add the clear-only reducer, canonical runner route,
+  hashed raw reducer-input artifact, independent re-reduction, registrar, and
+  adversarial tests;
+- build-tests `ddc7de5` - preserve legitimate prior scheduler skips while
+  retaining strict contradictory crypt-registration and duplicate-packet
+  rejection;
+- build-tests `2720dc6` - register the independently validated receipt and
+  advance the catalog; and
+- tooling `ca754e7` - bind this contract before implementation.
+
+The first real campaign correctly failed because MFC records an expected
+`reask_window_not_open` scheduler observation before the controlled eligible
+decision. The reducer had over-tightened uniqueness beyond the transport
+boundary. The focused correction now selects the exact eligible scheduler
+state while still counting every same-identity crypt registration and wire
+attempt, and a regression test fixes that distinction.
+
+The succeeding real bilateral campaign is immutable at
+`output-root:artifacts/emulebb-rust-reask-cross-client/20261102T202501Z-emulebb-main-release-10912/emulebb-rust-reask-cross-client-result.json`:
+
+- receipt ID `rust-mfc-client-udp-clear-20261102t202501z`;
+- report SHA-256
+  `c99c90d1ca3d83038f463f773d9b94078ff3b35a2668af88494a95d783ae24a7`;
+- raw reducer-input SHA-256
+  `594451a0c600638fc41516a9ff073ed31beb102e18ee4fbad3f8ab4af0c16e75`;
+- Rust executable SHA-256
+  `4effb2103108173782b9183682621529217a7e29d4bd09b2f7fa2bbd4385799f`;
+- MFC executable SHA-256
+  `36222d2e3aa9fb6c3ad0b2843a8290e5c49a2561b26d20af31ff6389248925ac`;
+- both directions recorded `shouldCrypt=false`, plaintext/non-obfuscated
+  request and ACK observations, byte-identical frames, and identical applied
+  queue-rank/complete-source state; and
+- the independent registrar hash-checked and re-reduced the raw records before
+  producing the sole `client-udp.clear` claim.
+
+The catalog validates at 31/100 overall and 4/9 for `client-udp`. No other
+client-UDP ID is admitted. `ed2k-server` remains untouched and upstream-clean.
 
 ## Next Step
 
-Implement the explicit `clear` scenario in the canonical runner, reducer, and
-independent registrar; validate it with focused tests; build exact current-main
-Rust and MFC diagnostics binaries; run the real bilateral campaign; and admit
-only `client-udp.clear` if every causal and provenance gate passes. Do not open
-pull requests before the immutable receipt, 31/100 catalog snapshot, and all
-changed-repository gates are green.
+Run the final scoped full gates at the exact pushed heads. If all participating
+repositories remain green, open the coordinated Rust, MFC, build-tests, and
+tooling pull requests, monitor every required workflow, merge while preserving
+the granular commits, verify exact post-merge main workflows, and delete the
+shared feature branches locally and remotely. Do not select the next catalog
+slice until that delivery is complete.
