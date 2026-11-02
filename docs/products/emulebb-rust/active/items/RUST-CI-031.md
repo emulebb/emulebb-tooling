@@ -210,10 +210,33 @@ or cleanup work does not advance protocol coverage by itself.
 - `ed2k-server` remained untouched and upstream-clean throughout the completed
   slice.
 
+## Active Slice Checkpoint
+
+The unmerged `client-udp.v4` workstream has reached the following bounded
+checkpoint:
+
+- Rust and MFC expose the same diagnostics-only control for waking one exact,
+  already queued direct V4 source through each client's ordinary production
+  scheduler and transport path;
+- both controls reject ambiguous, LowID, pending, fallback, or
+  identity-mismatched sources and do not create sources or inject packets;
+- the harness owns one strict reducer that requires the complete bilateral
+  request/ACK/application causal chain, exact packet bytes, exact identity and
+  send-attempt joins, stock-corpus agreement, and matching normalized state;
+- focused Rust, MFC, and harness tests for those checkpoints are green and the
+  granular commits are pushed on the shared workstream branch; and
+- no catalog claim has been admitted: the canonical runner is not yet
+  bilateral, no immutable campaign receipt exists, and `client-udp.v4` remains
+  `evidence-incomplete`.
+
 ## Next Step
 
-Inventory the existing Rust and MFC client-UDP receive/application diagnostics,
-then add only the missing causal fields or events required by the bound
-`client-udp.v4` proof. Upgrade the existing canonical runner, execute the real
-bilateral campaign, independently register its receipt, admit only that catalog
-ID, and run the complete scoped gates before opening any pull request.
+Upgrade only the existing canonical
+`scripts/emulebb-rust-reask-cross-client.py` runner to execute the two local
+directions in one campaign: Rust requester to MFC responder, then MFC requester
+to Rust responder. Drive each exact queued source once through the converged
+diagnostics control, derive the verdict solely from the strict reducer, and
+remove the legacy log-string verdict. Then execute the real campaign,
+independently register its immutable receipt, admit only `client-udp.v4`, and
+run every changed repository's complete scoped gate before opening coordinated
+pull requests.
