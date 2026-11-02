@@ -47,13 +47,13 @@ MFC test paths; keep `ed2k-server` upstream-clean; work on the existing single
 feature branch with granular commits and open coordinated pull requests only
 after a significant complete chunk is fully green.
 
-The current machine-measured baseline is 25 of 100 catalog entries covered and
-4 of 17 groups complete. `server-query-reply` is complete at 9/9 and
-`lowid-callbacks` is partial at 2/4. The active bounded slice is
-`lowid.relayed-reask`; unrelated protocol slices do not begin until that
-distinct LowID state transition has an exact authority, causal evidence
-contract, independent registration, catalog admission, and scoped green
-validation.
+The current machine-measured baseline is 27 of 100 catalog entries covered and
+5 of 17 groups complete. `server-query-reply` is complete at 9/9 and
+`lowid-callbacks` is complete at 4/4. The current delivery slice remains solely
+`lowid.buddy-callback`: its exact authority, causal evidence contract,
+independent registration, catalog admission, and scoped green validation are
+complete. Unrelated protocol slices do not begin until this coordinated slice
+is delivered and its single work-in-progress branch is retired.
 
 The governing role model is:
 
@@ -84,6 +84,37 @@ paths are removed or isolated, exact build provenance is enforced, and the
 machine-generated coverage report plus the complete harness validation are
 green. The public soak may continue as a discovery tool, but it is not a goal
 completion gate.
+
+### Current delivery slice: `lowid.buddy-callback`
+
+- **Sole claim:** this slice may add evidence only for
+  `lowid.buddy-callback`. Existing LowID receipts remain prerequisites and must
+  not be reinterpreted as proof of this transition.
+- **Selected clients:** the emulebb Rust diagnostics build is the product under
+  test and the emulebb MFC diagnostics build is the preferred observable
+  oracle. Each client is exercised as a Kad buddy relay for a harness-owned
+  LowID peer. MFC changes remain limited to diagnostics or the smallest
+  deterministic test control required to expose production behavior.
+- **Authority:** stock eMule source and accepted wire goldens define buddy
+  eligibility, `KADEMLIA_FINDBUDDY_REQ`, `KADEMLIA_CALLBACK_REQ`, held-buddy
+  socket selection, `OP_CALLBACK`, and the resulting requester connection.
+  Frozen aMule may corroborate the result but is not required to make the
+  primary Rust-versus-MFC comparison.
+- **Deterministic proof obligation:** for each selected client, one canonical
+  local scenario must prove the exact served-buddy identity and accepted held
+  socket, the exact callback request and relay decision, correlation to that
+  socket, the exact relayed callback fields, and the resulting peer-session
+  transition at the requester. Every join must be attributable within one
+  immutable run; missing or ambiguous evidence is `evidence-incomplete`, not
+  parity or divergence.
+- **Implementation boundary:** extend the existing canonical two-client runner
+  and production diagnostics only where the inventory proves evidence is
+  missing. Do not add a parallel runner, use public-soak traffic as proof,
+  evolve MFC product behavior, or change `ed2k-server` protocol behavior.
+- **Green condition:** an independently validated immutable receipt admits
+  exactly this catalog ID, moves measured coverage to 27/100 and completes
+  `lowid-callbacks` at 4/4, and every changed repository passes its scoped full
+  gate. Pull requests open only after this complete coordinated chunk is green.
 
 Implementation proceeds through one catalog group at a time:
 
@@ -2783,16 +2814,53 @@ pushed without a pull request.
   Release x64, and diagnostics Release x64 builds pass; diagnostics is
   zero-warning. `ed2k-server` remains untouched.
 
+## LowID Buddy Callback Checkpoint - 2026-11-02
+
+- The existing deterministic two-client transfer runner now owns the Kad buddy
+  callback transition. It starts isolated local Kad inputs, makes each real
+  diagnostics client accept the same served-buddy identity and held socket,
+  then drives the stock `KADEMLIA_FINDBUDDY_REQ`,
+  `KADEMLIA_CALLBACK_REQ`, and `OP_CALLBACK` path. No parallel runner,
+  public-network evidence, compatibility reader, or server behavior was added.
+- Rust `30e1bdfd` matches stock peer-HELLO identity selection independently of
+  the server endpoint trailer, and Rust `ff638f7c` emits canonical Kad node IDs
+  in diagnostics. MFC `40de9547` exposes only diagnostics/test-control state
+  needed to prove relay readiness and causality. MFC remains the preferred
+  observable oracle rather than a product-development target.
+- The final bilateral campaign passed at
+  `output-root:reports/deterministic-two-client-transfer/20261102T084332Z-emulebb-main-release-15648/deterministic-two-client-transfer-result.json`
+  with artifact SHA-256
+  `38d4e6fa88ed0de399ec7e9866552edf485bd760359fc7e2517d9b5681294e66`.
+  Both clients accepted the same find-buddy identity, received byte-identical
+  callback requests, selected the matching held socket, and emitted
+  byte-identical callback relays. Rust records callback request, relay decision,
+  and relay packet at sequences 26/27/29; MFC records callback request, relay
+  packet, and relay decision at sequences 27/28/29.
+- Independent registration produced receipt
+  `rust-mfc-transfer-20261102t084332z` from runner `b46ce27`. The receipt pins
+  Rust `ff638f7c` with executable SHA-256
+  `8750463baff1a75d9584f501b0cee48c487cf7f604d58450d680d840442d1f54`
+  and MFC `40de9547` with executable SHA-256
+  `425fd3bd6cbc845288973192c44bffafc731cd3e7552954113cb89fe3cb8ae19`.
+  Build-tests `d559f05` independently validates the immutable capture and
+  `7bc33bc` admits exactly `lowid.buddy-callback`; the other receipt IDs are
+  corroboration only.
+- Catalog validation passes at 27/100 covered IDs and 5/17 complete groups;
+  `lowid-callbacks` is complete at 4/4. The complete harness gate passes 3,250
+  tests with one POSIX-only skip and one deliberate deselection. Rust's
+  canonical `ci` gate passes policy, formatting, strict Clippy, diagnostics,
+  WebUI unit/E2E, fresh builds, full workspace tests, and three observed-egress
+  VPN leak tests. MFC Debug x64, Release x64, and diagnostics Release x64 builds
+  pass; diagnostics is zero-warning. `ed2k-server` is clean and synchronized
+  with its upstream-tracking branch at `d6a6dd6`.
+
 ## Next Implementation
 
-- Take the next bounded `lowid-callbacks` slice:
-  `lowid.buddy-callback`. Inventory the existing Kad buddy callback codec,
-  held-buddy socket state, MFC callback diagnostics, and canonical local runner
-  before changing code. Admit no claim until one deterministic transcript
-  proves the exact LowID/buddy start state, callback relay decision,
-  request/socket correlation, and resulting peer-session transition. Extend
-  only the smallest missing diagnostic or canonical scenario; do not add a
-  parallel runner or change `ed2k-server` protocol behavior.
+- Deliver the completed `lowid.buddy-callback` slice through coordinated pull
+  requests. Do not start another protocol slice on this branch. After merge,
+  delete the work-in-progress branch and select exactly one next catalog ID
+  from the generated incomplete-coverage report, with its authority, stimulus,
+  evidence joins, canonical owner, and green gate bound before implementation.
 - Continue domain by domain through server session/source replies,
   peer-transfer queue/callback states, client UDP, and Kad. Add the smallest
   deterministic transcript or local cross-client scenario that can causally
