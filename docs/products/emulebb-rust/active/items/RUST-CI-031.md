@@ -257,11 +257,32 @@ above, extends causal diagnostics where the existing stream cannot prove its
 consumption, and then generalizes the current V4-only reducer into the one
 canonical client-UDP scenario reducer.
 
+The bounded implementation and real proof are now complete on the shared branch:
+
+- Rust commits `05e9e70d`, `dfd1a472`, and `ac6fc442` implement the exact
+  expiring prerequisite and expose the final queue-full application health;
+- MFC commits `638855a3`, `90587116`, and `b7abc28b` implement the matching
+  diagnostics-only prerequisite and converged application diagnostics, with
+  diagnostics Release x64, Debug x64, and plain Release x64 builds green;
+- build-tests commits through `22448af` make the one canonical runner and
+  registrar scenario-explicit, prove the bilateral causal chain, and admit only
+  `client-udp.queue-full`; and
+- the real local campaign at
+  `output-root:artifacts/emulebb-rust-reask-cross-client/20261102T150409Z-emulebb-main-release-16096/emulebb-rust-reask-cross-client-result.json`
+  passed with `publicTraffic=false` against Rust `ac6fc442` and MFC `b7abc28b`.
+
+The independent registrar re-derived receipt
+`rust-mfc-client-udp-queue-full-20261102t150409z` with artifact SHA-256
+`d55e6455348e8cbf66db533fea7f26c591ad76091397113c92178a7c4ea508d1`.
+Both directions recorded one real waiter removal with confirmed absence, one
+exact consumed queue-pressure prerequisite, byte-identical V4 requests,
+byte-identical clear zero-payload `c5 93` replies, no ACK or file-not-found
+substitute, and matching healthy final state. Catalog validation is green at
+29/100 overall and 2/9 for `client-udp`.
+
 ## Next Step
 
-Implement and unit-test the diagnostics-only queue-pressure prerequisite in
-Rust and MFC, preserving ordinary packet generation and application. Extend the
-canonical runner and independent registrar for the bilateral queue-full causal
-chain, run the real campaign, admit only its exact receipt, then execute all
-four full repository gates. Open coordinated pull requests only after that
-whole condition is green.
+Execute the scoped full gates for Rust, MFC, build-tests, and tooling from their
+exact shared-branch heads. Repair only failures caused by this slice. Once all
+four repositories are green and clean, push the final checkpoint and open the
+coordinated pull requests; do not start another protocol slice on this branch.
