@@ -6326,11 +6326,17 @@ components:
     DiagnosticBundleCaptureRequest:
       type: object
       additionalProperties: false
-      required: [confirmCapture]
+      required: [confirmCapture, maxBytes]
       properties:
         confirmCapture:
           type: boolean
           enum: [true]
+        maxBytes:
+          type: integer
+          format: int64
+          minimum: 65536
+          maximum: 67108864
+          description: Maximum encoded bundle size in bytes.
     DiagnosticCrashTestRequest:
       type: object
       additionalProperties: false
