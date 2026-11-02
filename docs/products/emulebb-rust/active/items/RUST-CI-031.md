@@ -259,8 +259,9 @@ canonical client-UDP scenario reducer.
 
 The bounded implementation and real proof are now complete on the shared branch:
 
-- Rust commits `05e9e70d`, `dfd1a472`, and `ac6fc442` implement the exact
-  expiring prerequisite and expose the final queue-full application health;
+- Rust commits `05e9e70d`, `dfd1a472`, `ac6fc442`, and `c84632d9` implement the
+  exact expiring prerequisite, expose the final queue-full application health,
+  and keep its diagnostics-only opcode import feature-gated;
 - MFC commits `638855a3`, `90587116`, and `b7abc28b` implement the matching
   diagnostics-only prerequisite and converged application diagnostics, with
   diagnostics Release x64, Debug x64, and plain Release x64 builds green;
@@ -280,9 +281,25 @@ byte-identical clear zero-payload `c5 93` replies, no ACK or file-not-found
 substitute, and matching healthy final state. Catalog validation is green at
 29/100 overall and 2/9 for `client-udp`.
 
+The final shared-branch gate matrix is green on 2026-11-02:
+
+- Rust `quick` passed policy, 128 policy tests, formatting, full-workspace
+  Clippy with warnings denied, the packet-diagnostics target, 29 WebUI unit
+  tests, 17 browser tests, type checking, and the production WebUI build;
+- Rust `ci-test` passed fresh debug and release workspace builds, the release
+  packet-diagnostics build, the full workspace test and doctest sweep, and all
+  three observed-egress VPN leak tests;
+- build-tests passed the OpenAPI route-drift check and its full default suite
+  with 3,285 passed, one skipped, and one explicitly deselected test;
+- tooling passed public-presence, taxonomy, structure, roadmap, and strict
+  MkDocs checks; and
+- MFC passed diagnostics Release x64 (`20261102T144834Z`), Debug x64
+  (`20261102T145000Z`), and plain Release x64 (`20261102T145020Z`) builds. The
+  exact staged diagnostics binary was also exercised by the admitted bilateral
+  campaign.
+
 ## Next Step
 
-Execute the scoped full gates for Rust, MFC, build-tests, and tooling from their
-exact shared-branch heads. Repair only failures caused by this slice. Once all
-four repositories are green and clean, push the final checkpoint and open the
-coordinated pull requests; do not start another protocol slice on this branch.
+Commit and push this final checkpoint, verify all four shared-branch worktrees
+are clean, and open the coordinated pull requests. Do not start another
+protocol slice on this branch.
