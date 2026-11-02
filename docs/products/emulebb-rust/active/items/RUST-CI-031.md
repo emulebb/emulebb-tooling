@@ -47,12 +47,11 @@ MFC test paths; keep `ed2k-server` upstream-clean; work on the existing single
 feature branch with granular commits and open coordinated pull requests only
 after a significant complete chunk is fully green.
 
-The current machine-measured baseline is 16 of 100 catalog entries covered and
+The current machine-measured baseline is 18 of 100 catalog entries covered and
 3 of 17 groups complete. The active bounded slice is
-`server.source.tcp-plain` plus the causally joined `server.reply.sources`
-result. Until that slice has an immutable receipt, independent registration,
-catalog admission, and scoped green validation, unrelated protocol slices do
-not begin.
+`server.source.tcp-obfuscated`. Until that slice has an immutable receipt,
+independent registration, catalog admission, and scoped green validation,
+unrelated protocol slices do not begin.
 
 The governing role model is:
 
@@ -2399,14 +2398,36 @@ pushed without a pull request.
   (1,220 and 1,228 tests), and the canonical Rust diagnostics build are green.
   Strict Rust Clippy reaches only seven pre-existing unfulfilled lint
   expectations in unrelated files. No pull request has been opened.
+- The bounded plaintext server-source slice is complete. The canonical run at
+  `output-root:reports/deterministic-two-client-transfer/20261101T235531Z-emulebb-main-release-11696/deterministic-two-client-transfer-result.json`
+  passed with artifact SHA-256
+  `a226acc680c505e8ea20681de3d915463c36542bc89b1468b923b5f7eb9df4b8`.
+  Its independently reconstructed receipt proves
+  `server.source.tcp-plain` and `server.reply.sources` against Rust
+  `dc9804c9`, MFC oracle `aebbc5b2`, and harness `c50f8f7`, while four
+  existing transfer claims are retained only as corroboration.
+- MFC server-TCP packet diagnostics now truthfully report the pre-queue send
+  record as `attempted`. Rust still requires its terminal socket
+  `send_outcome`; MFC delivery is instead proven by the exact later reply with
+  the same trace ID, followed by the exact source-state application. No
+  fabricated terminal MFC event or compatibility path was added.
+- Build-tests `b127c98` admits the immutable source receipt. Catalog validation
+  now reports 18/100 covered IDs and 3/17 complete groups. The focused catalog,
+  registrar, diagnostics, and MFC-source gate passes 345 tests; the complete
+  harness gate passes 3,084 tests with one POSIX-only skip and one deliberate
+  deselection in 236.00 seconds. The canonical MFC diagnostics build receipt is
+  `logs/builds/20261101T235454Z-build-app/build-result.json`. `ed2k-server`
+  remained untouched and upstream-clean at `66b892d`; no pull request has been
+  opened.
 
 ## Next Implementation
 
 - Take the next bounded `server-query-reply` slice:
-  `server.source.tcp-plain` plus its causally joined `server.reply.sources`
-  result. Reuse the current anchor/publisher fixture and independent receipt
-  registration; add diagnostics only where the exact request, reply, apply, or
-  REST join is missing. Do not change `ed2k-server` protocol behavior.
+  `server.source.tcp-obfuscated`. Reuse the reachable HighID publisher and
+  independent receipt registration, require exact obfuscated request/reply
+  transport plus the already-defined source-state causal joins, and add
+  diagnostics only if that proof is incomplete. Do not change `ed2k-server`
+  protocol behavior.
 - Continue domain by domain through server session/source replies,
   peer-transfer queue/callback states, client UDP, and Kad. Add the smallest
   deterministic transcript or local cross-client scenario that can causally
