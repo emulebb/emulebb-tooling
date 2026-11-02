@@ -49,11 +49,11 @@ after a significant complete chunk is fully green.
 
 The current machine-measured baseline is 27 of 100 catalog entries covered and
 5 of 17 groups complete. `server-query-reply` is complete at 9/9 and
-`lowid-callbacks` is complete at 4/4. The current delivery slice remains solely
-`lowid.buddy-callback`: its exact authority, causal evidence contract,
-independent registration, catalog admission, and scoped green validation are
-complete. Unrelated protocol slices do not begin until this coordinated slice
-is delivered and its single work-in-progress branch is retired.
+`lowid-callbacks` is complete at 4/4. The active bounded slice is solely
+`client-udp.v4`; unrelated protocol slices do not begin until that exact
+version-gated transition has an authority, deterministic stimulus, causal
+evidence contract, independent registration, catalog admission, and scoped
+green validation.
 
 The governing role model is:
 
@@ -85,36 +85,45 @@ machine-generated coverage report plus the complete harness validation are
 green. The public soak may continue as a discovery tool, but it is not a goal
 completion gate.
 
-### Current delivery slice: `lowid.buddy-callback`
+### Active bounded slice: `client-udp.v4`
 
-- **Sole claim:** this slice may add evidence only for
-  `lowid.buddy-callback`. Existing LowID receipts remain prerequisites and must
-  not be reinterpreted as proof of this transition.
+- **Sole claim:** this slice may add evidence only for `client-udp.v4`. The
+  clear transport used by the fixture is a controlled start condition, not a
+  claim for `client-udp.clear`; versions 1-3, encryption, queue-full,
+  file-not-found, and unsolicited handling remain separate catalog IDs.
 - **Selected clients:** the emulebb Rust diagnostics build is the product under
   test and the emulebb MFC diagnostics build is the preferred observable
-  oracle. Each client is exercised as a Kad buddy relay for a harness-owned
-  LowID peer. MFC changes remain limited to diagnostics or the smallest
-  deterministic test control required to expose production behavior.
-- **Authority:** stock eMule source and accepted wire goldens define buddy
-  eligibility, `KADEMLIA_FINDBUDDY_REQ`, `KADEMLIA_CALLBACK_REQ`, held-buddy
-  socket selection, `OP_CALLBACK`, and the resulting requester connection.
-  Frozen aMule may corroborate the result but is not required to make the
-  primary Rust-versus-MFC comparison.
-- **Deterministic proof obligation:** for each selected client, one canonical
-  local scenario must prove the exact served-buddy identity and accepted held
-  socket, the exact callback request and relay decision, correlation to that
-  socket, the exact relayed callback fields, and the resulting peer-session
-  transition at the requester. Every join must be attributable within one
-  immutable run; missing or ambiguous evidence is `evidence-incomplete`, not
-  parity or divergence.
-- **Implementation boundary:** extend the existing canonical two-client runner
-  and production diagnostics only where the inventory proves evidence is
-  missing. Do not add a parallel runner, use public-soak traffic as proof,
-  evolve MFC product behavior, or change `ed2k-server` protocol behavior.
+  oracle. Each must complete the same version-4 direct client-UDP reask state
+  transition under controlled local queue state. MFC changes remain limited to
+  diagnostics or the smallest deterministic test control required to expose
+  production behavior.
+- **Authority:** stock eMule `UDPReaskForDownload` and
+  `ClientUDPSocket::ProcessPacket` behavior plus the accepted
+  `stock.client-udp.corpus` record define the version-4 wire contract. A request
+  carries the file hash, part-status field, and complete-source count; its ACK
+  carries the responder part-status field and queue rank. Frozen aMule may
+  corroborate the result but is not required for the primary Rust-versus-MFC
+  comparison.
+- **Deterministic proof obligation:** for each selected client, the canonical
+  local scenario must join an exact queued source and version-4 capability to
+  the due scheduler decision, one production-originated plaintext
+  `OP_REASKFILEPING`, its send terminal, the exact responder receive/decode,
+  one exact `OP_REASKACK`, and application of its part status and queue rank to
+  the same source. Packet bytes and all version-gated fields must compare
+  against the stock corpus and between selected clients within one immutable
+  run. Missing or ambiguous evidence is `evidence-incomplete`, not parity or
+  divergence.
+- **Implementation boundary:** extend the existing canonical
+  `emulebb-rust-reask-cross-client.py` runner and production diagnostics only
+  where the inventory proves causal evidence is missing. Replace its legacy
+  log-string verdict with exact `diag_event_v2` evidence; do not add a parallel
+  runner, generic packet-injection API, public-soak claim, MFC product behavior,
+  or `ed2k-server` protocol behavior.
 - **Green condition:** an independently validated immutable receipt admits
-  exactly this catalog ID, moves measured coverage to 27/100 and completes
-  `lowid-callbacks` at 4/4, and every changed repository passes its scoped full
-  gate. Pull requests open only after this complete coordinated chunk is green.
+  exactly this catalog ID, moves measured coverage to 28/100 while
+  `client-udp` remains honestly partial at 1/9, and every changed repository
+  passes its scoped full gate. Pull requests open only after this complete
+  coordinated chunk is green.
 
 Implementation proceeds through one catalog group at a time:
 
@@ -2853,14 +2862,19 @@ pushed without a pull request.
   VPN leak tests. MFC Debug x64, Release x64, and diagnostics Release x64 builds
   pass; diagnostics is zero-warning. `ed2k-server` is clean and synchronized
   with its upstream-tracking branch at `d6a6dd6`.
+- Coordinated Rust PR `#213`, MFC diagnostics PR `#185`, build-tests PR `#86`,
+  and tooling PR `#137` merged with protected-main validation green. The shared
+  `feature/lowid-buddy-callback-evidence` branch is deleted locally and
+  remotely in every participating repository; no human-authored PR remains.
 
 ## Next Implementation
 
-- Deliver the completed `lowid.buddy-callback` slice through coordinated pull
-  requests. Do not start another protocol slice on this branch. After merge,
-  delete the work-in-progress branch and select exactly one next catalog ID
-  from the generated incomplete-coverage report, with its authority, stimulus,
-  evidence joins, canonical owner, and green gate bound before implementation.
+- Take only the bound `client-udp.v4` slice. Upgrade the existing canonical
+  reask runner from its log-string verdict to exact causal `diag_event_v2`
+  evidence, exercise the same controlled version-4 state for Rust and MFC, and
+  independently register one immutable receipt before admitting that catalog
+  ID. Do not claim the clear-transport or other client-UDP variants from this
+  run and do not add another runner.
 - Continue domain by domain through server session/source replies,
   peer-transfer queue/callback states, client UDP, and Kad. Add the smallest
   deterministic transcript or local cross-client scenario that can causally
