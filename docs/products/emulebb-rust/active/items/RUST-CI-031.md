@@ -140,92 +140,70 @@ The catalog embeds the exact receipt IDs and provenance for every admitted
 claim. Detailed superseded checkpoints remain available in Git history rather
 than accumulating in this active item.
 
-## Active Bounded Slice: `client-udp.v2`
+## Active Bounded Slice: `client-udp.v1`
 
 This is the only delivery slice in progress. It starts from the merged,
-protected-main-green V3 authority and proves the independently negotiated V2
-payload contract. It must not broaden its claim to V1, unsolicited replies, or
-transport obfuscation.
+protected-main-green V2 authority and proves the independently negotiated V1
+contract. It must not broaden its claim to unsolicited replies, transport
+obfuscation, or any other client-UDP state.
 
-- **Sole claim:** admit only `client-udp.v2`. V1 and unsolicited replies remain
-  independently measured catalog IDs. V1 and V2 have the same request and ACK
-  byte shapes, but one advertised-version result cannot stand in for the other
-  catalog claim.
+- **Sole claim:** admit only `client-udp.v1`. V1 and V2 have the same request
+  and ACK byte shapes, but one advertised-version result cannot stand in for
+  the other catalog claim. `client-udp.unsolicited` remains independently
+  incomplete.
 - **Selected clients:** emulebb Rust and the emulebb MFC diagnostics oracle each
   act once as requester and once as responder in the same deterministic local
   campaign. The immutable receipt must bind their exact source revisions and
-  executable hashes. Version selection remains diagnostics-only and defaults to
-  the current V4 capability outside this campaign.
-- **Authority:** stock eMule `CUpDownClient::UDPReaskForDownload` and
-  `CClientUDPSocket::ProcessPacket` version gates. V2 fails both `> 2` and `> 3`
-  optional-tail gates. A V2 request is exactly `OP_EMULEPROT`,
-  `OP_REASKFILEPING`, and the 16-byte file hash. A V2 ACK is exactly
-  `OP_EMULEPROT`, `OP_REASKACK`, and the two-byte queue rank. Neither frame has
-  a complete-source count or part status.
+  executable hashes. Version selection remains diagnostics-only and normal
+  builds continue to advertise V4.
+- **Authority:** stock eMule `CUpDownClient::UDPReaskForDownload`,
+  `CClientUDPSocket::ProcessPacket`, and `SupportsUDP`. V1 is a supported,
+  nonzero UDP version but fails both the `> 2` and `> 3` optional-tail gates. A
+  V1 request is exactly `OP_EMULEPROT`, `OP_REASKFILEPING`, and the 16-byte file
+  hash. A V1 ACK is exactly `OP_EMULEPROT`, `OP_REASKACK`, and the two-byte queue
+  rank. Neither frame has a complete-source count or part status.
 - **Deterministic start and stimulus:** reuse the canonical bilateral queued
   source setup, harness-owned shared fixture, real responder-side upload
   waiter, and ordinary scheduler wake control. Both diagnostics clients
-  advertise V2 naturally and register the opposite client as a real V2 source
-  before the harness wakes that exact source once. Rust selects V2 with
-  `EMULEBB_DIAGNOSTIC_CLIENT_UDP_VERSION=2`; MFC selects it with the existing
-  diagnostics-only `--diagnostic-client-udp-version=2` argument.
-- **Proof obligation:** causally join V2 source registration, due scheduler
+  advertise V1 naturally and register the opposite client as a real V1 source
+  before the harness wakes that exact source once. Rust selects V1 with
+  `EMULEBB_DIAGNOSTIC_CLIENT_UDP_VERSION=1`; MFC selects it with the existing
+  diagnostics-only `--diagnostic-client-udp-version=1` argument.
+- **Proof obligation:** causally join V1 source registration, due scheduler
   decision, request send terminal, responder decode, ACK send terminal,
   requester correlation under the matching pending request, and queue-rank
   application in both directions. Compare exact request and ACK bytes across
   clients; prove complete-source count and part status are both absent and the
-  same queue rank is applied. A non-V2 registration, contradictory frame,
+  same queue rank is applied. A non-V1 registration, contradictory frame,
   duplicate attempt, unsolicited reply, timeout, unrelated packet, or missing
   causal join makes the evidence incomplete.
-- **Implementation boundary:** extend the existing canonical
+- **Implementation boundary:** extend only the existing canonical
   `scripts/emulebb-rust-reask-cross-client.py` runner, generic ACK reducer,
-  independent registrar, and catalog path with one explicit `v2` scenario.
-  Correct the misleading Rust codec test labels and cover the exact V2 frame;
-  do not change production behavior, MFC source, registered peer state,
-  `ed2k-server`, or the public soak. Do not inject packets, create a second
-  runner, add a compatibility shim, or infer a verdict from process success.
+  independent registrar, and catalog path with one explicit `v1` scenario.
+  Add explicit Rust codec tests for the exact V1 request and ACK. Do not change
+  production behavior, MFC source, registered peer state, `ed2k-server`, or the
+  public soak. Do not inject packets, create a second runner, add a compatibility
+  shim, or infer a verdict from process success.
 - **Green condition:** a real bilateral run produces one immutable receipt,
   the independent registrar hash-checks and re-reduces the raw evidence, and
-  the catalog admits exactly `client-udp.v2`. The expected measured state is
-  34/100 overall and 7/9 for the still-partial `client-udp` group. Every changed
+  the catalog admits exactly `client-udp.v1`. The expected measured state is
+  35/100 overall and 8/9 for the still-partial `client-udp` group. Every changed
   repository must pass its scoped full gate before coordinated pull requests
   are opened.
 
-The stock contract and implementation boundary were reviewed on 2026-11-03.
-Rust and MFC already expose the required strict diagnostics-only V2 selectors,
-and the canonical reducer already models the stock `> 2` and `> 3` gates. No
-product defect or MFC/server source dependency is known at slice start. The
-single shared workstream branch is `feature/client-udp-v2-evidence` in Rust,
+The V2 baseline reached protected `main` on 2026-11-03 as Rust PR #219 at
+`6a399358e6fae9039e4d2251cfe8ed12362d226f`, build-tests PR #93 at
+`64891dd2e87f7764e606f649d10374ee91bcf4c8`, and tooling PR #144 at
+`1fae7d2ccebed61efa18c9d6a4abcc1764392bef`; every exact post-merge workflow
+passed and the shared V2 branches were removed locally and remotely. The
+catalog validates at 34/100 overall and 7/9 for `client-udp` before this slice.
+
+The V1 stock contract and implementation boundary were reviewed on 2026-11-03.
+Rust and MFC already expose strict diagnostics-only selectors accepting V1, and
+the canonical reducer already models the stock `> 2` and `> 3` gates. No product
+defect or MFC/server source dependency is known at slice start. The single
+shared workstream branch is `feature/client-udp-v1-evidence` in Rust,
 build-tests, and tooling only.
-
-The protocol proof and catalog-admission portions of the green condition are
-now satisfied. Canonical run
-`20261103T185615Z-emulebb-main-release-5816` clean-built every subject from a
-clean source tree and passed both Rust-requester/MFC-responder and
-MFC-requester/Rust-responder directions. Both transitions emitted the exact
-V2 request `c590 + hash16`, the exact ACK `c591 + queue-rank2`, no
-complete-source count, and no part-status field, then causally applied queue
-rank 1 with equal state semantics. The independent registrar re-reduced the
-3,818,213-byte raw evidence object with SHA-256
-`8b91cb60b1fd54b2e427757b5d5a5e20019785a1755407f2a219a597a73bc814`
-and emitted receipt `rust-mfc-client-udp-v2-20261103t185615z`, bound to result
-SHA-256 `cebe029046be75d120e3b0d9b035da794fc3a3e87d279817750e0da2f4e018aa`.
-The catalog validates at 34/100 overall and 7/9 for `client-udp`. Full local
-validation is green at the exact pushed heads: Rust policy, 128 policy tests,
-rustfmt, warning-denied workspace Clippy, diagnostics build, WebUI unit/browser
-tests, fresh Debug and Release workspace builds, locked workspace/doc tests,
-and 3/3 VPN leak tests; build-tests 3,355 passed with one expected POSIX-only
-skip and one configured deselection; catalog validation and the tooling strict
-documentation build also pass. No V1 or unsolicited-reply claim is implied.
-
-The product and evidence changes reached protected `main` on 2026-11-03 after
-their exact pull-request heads passed every required hosted check. Rust PR #219
-was squash-merged as `6a399358e6fae9039e4d2251cfe8ed12362d226f`, and
-build-tests PR #93 was rebase-merged with protected-main tip
-`64891dd2e87f7764e606f649d10374ee91bcf4c8`. Tooling PR #144 is the final
-coordinated delivery member; this exact-revision checkpoint is its only
-post-green change. The slice is complete once that documentation check passes,
-PR #144 merges, and the shared topic branches are removed locally and remotely.
 
 ## Delivery Discipline
 
