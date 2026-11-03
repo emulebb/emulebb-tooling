@@ -375,7 +375,11 @@ are:
   and
 - build-tests `bcc0e76` - replace the superseded encrypted receipt with a fresh
   campaign from the corrected runner. Neither earlier receipt is retained as a
-  legacy registration path.
+  legacy registration path; and
+- build-tests `15121b2` - pin and materialize the exact upstream-clean
+  ed2k-server evidence authority in fast-harness CI after the first PR head
+  correctly failed catalog validation because that new authority checkout was
+  absent. Validation was not weakened or bypassed.
 
 The first real campaign was correctly retained as `evidence-incomplete` at
 `output-root:artifacts/emulebb-rust-reask-cross-client/20261102T215244Z-emulebb-main-release-11536/emulebb-rust-reask-cross-client-result.json`,
@@ -422,9 +426,10 @@ at
 
 The final pushed heads satisfy the local delivery gates:
 
-- build-tests `bcc0e76`: full suite 3339 passed, 1 skipped, and 1 configured
+- build-tests `15121b2`: full suite 3339 passed, 1 skipped, and 1 configured
   deselection; changed-file Ruff and the protocol-catalog validator pass at
-  32/100 overall and 5/9 for `client-udp` with zero duplicate assets;
+  32/100 overall and 5/9 for `client-udp` with zero duplicate assets; the
+  replacement PR head passes 20/20 checks across 7/7 workflow runs;
 - MFC `367747a1`: exact Release diagnostics and Debug x64 app gates pass, and
   the retained bilateral campaign proves the diagnostics runtime path;
 - build `178ac00`: the canonical hosted gate plus the changed build-client area
@@ -437,13 +442,14 @@ The final pushed heads satisfy the local delivery gates:
 
 Rust required no source change. `ed2k-server` was clean-built and hash-bound by
 the canonical runner, while its repository remained untouched and
-upstream-clean.
+upstream-clean. Coordinated PRs are build-tests #91, MFC #191, build #22, and
+tooling #142. Their code heads are green; this tracker-only tooling update must
+complete its replacement documentation checks before merge.
 
 ## Next Step
 
-Open the coordinated MFC, build, build-tests, and tooling pull requests for this
-complete encrypted client-UDP slice, monitor their required checks, merge only
-when green while preserving granular commits, then delete the shared work-in-
-progress branches and synchronize the participating checkouts. Rust and
-`ed2k-server` have no source changes and must not receive empty delivery
-branches.
+Wait for the tracker-only update on tooling PR #142 to complete its required
+checks, then merge all four coordinated PRs while preserving granular commits.
+Delete the shared work-in-progress branches and synchronize the participating
+checkouts. Rust and `ed2k-server` have no source changes and must not receive
+empty delivery branches.
