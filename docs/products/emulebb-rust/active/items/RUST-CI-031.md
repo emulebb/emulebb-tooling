@@ -112,9 +112,9 @@ their scoped gates.
 
 The catalog currently validates at:
 
-- **31/100** coverage IDs with a proven `parity` verdict;
+- **32/100** coverage IDs with a proven `parity` verdict;
 - **5/17** groups complete;
-- **69/100** IDs explicitly `evidence-incomplete`;
+- **68/100** IDs explicitly `evidence-incomplete`;
 - **0** recorded divergences, which makes no claim about uncovered IDs; and
 - **21** classified protocol assets: 6 canonical, 11 support, 2 product-only,
   2 historical, and 0 duplicate.
@@ -127,7 +127,7 @@ Complete groups are:
 - `server-udp-metadata` - 2/2; and
 - `lowid-callbacks` - 4/4.
 
-Partial covered groups are `client-udp` at 4/9, `peer-startup-profiles` at
+Partial covered groups are `client-udp` at 5/9, `peer-startup-profiles` at
 3/11, `queue-upload-state` at 1/5, and `transfer-blocks` at 2/4. Every other
 group is currently uncovered. Reproduce the authoritative report from
 `repos/emulebb-build-tests` with:
@@ -140,59 +140,62 @@ The catalog embeds the exact receipt IDs and provenance for every admitted
 claim. Detailed superseded checkpoints remain available in Git history rather
 than accumulating in this active item.
 
-## Completed Bounded Slice Awaiting Delivery: `client-udp.clear`
+## Active Bounded Slice: `client-udp.encrypted`
 
 This is the only delivery slice in progress. It starts from the merged,
-protected-main-green `client-udp.file-not-found` baseline and establishes the
-explicit plaintext transport authority needed before encrypted client-UDP is
-attempted. It must not broaden its claim to version negotiation, encryption,
-or unsolicited handling.
+protected-main-green `client-udp.clear` authority and proves the complementary
+production obfuscated transport. It must not broaden its claim to UDP payload
+version negotiation, unsolicited handling, or peer-TCP obfuscation.
 
-- **Sole claim:** admit only `client-udp.clear`. V1, V2, V3, encrypted
-  transport, and unsolicited replies remain independently measured catalog
-  IDs. The campaign may use the already-supported V4 payload shape, but that
-  fact cannot admit another V4 claim.
-- **Selected clients:** exact committed emulebb Rust diagnostics revision
-  `ae01da50` and emulebb MFC diagnostics-oracle revision `ac8c33f0` each act
-  once as requester and once as responder in the same deterministic local
-  campaign. Their only product-source changes expose the already-computed
-  per-source `shouldCrypt` decision; packet behavior is unchanged.
-- **Authority:** stock eMule client-UDP framing when crypt is not requested:
-  one clear `OP_EMULEPROT` datagram containing `OP_REASKFILEPING`, followed by
-  one clear `OP_REASKACK` reply. The exact bytes and plaintext classification
-  in `stock.client-udp.corpus` remain the wire authority; the live clients must
-  prove the same transport choice through their production send and receive
-  paths.
+- **Sole claim:** admit only `client-udp.encrypted`. V1, V2, V3, and unsolicited
+  replies remain independently measured catalog IDs. The campaign reuses the
+  already-proven V4 request and ACK payload shape but cannot admit another
+  version claim.
+- **Selected clients:** exact protected-main emulebb Rust revision `fb673418`
+  and emulebb MFC diagnostics-oracle revision `367747a1` each act once as
+  requester and once as responder in the same deterministic local campaign.
+  MFC revision `367747a1` is the diagnostics-only correction over protected-main
+  `0faeaa3c` required after the first real run proved that the oracle recorded a
+  receive buffer after in-place decryption. Product-source changes remain out
+  of scope unless another concrete diagnostic gap prevents proof; any such
+  change must remain diagnostics-only.
+- **Authority:** stock eMule client-UDP obfuscation keyed by the receiver user
+  hash and sender public IPv4, with the stock eight-byte envelope around the
+  clear `OP_EMULEPROT` frame. The encrypted datagram is intentionally
+  randomized and therefore is not compared byte-for-byte across clients. The
+  deobfuscated request and ACK must equal the already-proven clear V4 frames
+  and decode to the same state transition.
 - **Deterministic start and stimulus:** reuse the canonical bilateral queued
-  source setup with the harness-owned shared fixture and a real responder-side
-  upload waiter. Disable obfuscation through the existing ephemeral profile
-  configuration for both clients, prove the registered source has no crypt
-  capability/request/requirement, then wake the existing source through the
-  canonical queued-source reask control so the ordinary scheduler emits one
-  production request and consumes one production ACK.
+  source setup, harness-owned shared fixture, and real responder-side upload
+  waiter. Enable the existing crypt preference in both ephemeral profiles;
+  prove each client is HighID at its actual TEST-NET bind address and the
+  registered source records `shouldCrypt=true`; then wake that exact source
+  through the existing diagnostics control so the ordinary scheduler emits
+  one production encrypted request and consumes one production encrypted ACK.
 - **Proof obligation:** causally join source registration, due scheduler
-  decision, request send terminal, responder receive/decode, ACK send terminal,
-  requester receive under the matching pending request, and queue-rank/state
+  decision, request send terminal, responder decrypt/decode, ACK send terminal,
+  requester decrypt under the matching pending request, and queue-rank/state
   application in both directions. Request and reply diagnostics must report
-  `obfuscated=false`; exact datagram bytes must begin with clear
-  `OP_EMULEPROT` plus the expected opcode and match the decoded payload. No
-  encrypted frame, queue-full, file-not-found, timeout, unrelated packet, or
-  merely recorded fixture can satisfy the claim.
-- **Implementation boundary:** add one explicit `clear` scenario to the
+  `obfuscated=true`; each raw datagram must differ from its clear frame, add
+  exactly the stock eight-byte overhead, and avoid a clear reserved protocol
+  marker. The clear frames and decoded payloads must match across clients.
+  Any contradictory plaintext packet, duplicate attempt, failed decryption,
+  unsolicited reply, timeout, unrelated packet, or recorded-only fixture makes
+  the evidence incomplete.
+- **Implementation boundary:** add one explicit `encrypted` scenario to the
   existing canonical `scripts/emulebb-rust-reask-cross-client.py` runner,
-  reducer, independent registrar, and catalog path. Reuse the existing real
-  V4 queued-source campaign rather than adding packet injection, a second
-  runner, or product compatibility controls. The live diagnostics were
-  insufficient to prove the transport choice, so both clients now emit the
-  existing per-source crypt decision in `udp_reask_source_registered`; no
-  protocol behavior changed. Do not change ed2k-server or derive a verdict
-  from public soak observations.
-- **Green condition:** a real bilateral run produces one immutable receipt,
-  the independent registrar re-derives the exact result and provenance, and
-  the catalog admits exactly `client-udp.clear`. The resulting measured state
-  is 31/100 overall and 4/9 for the still-partial `client-udp` group. Every
-  changed repository must pass its scoped full gate before coordinated pull
-  requests are opened.
+  reducer, independent registrar, and catalog path. Make profile crypt mode a
+  scenario-owned input and remove the obsolete synthetic-public-IP comment;
+  the current hairpin topology already reports each client's actual TEST-NET
+  bind address. Do not add packet injection, a second runner, compatibility
+  controls, public-soak verdicts, or any ed2k-server change.
+- **Green condition:** a real bilateral run has produced one immutable receipt,
+  the independent registrar hash-checks and re-reduces the raw evidence, and
+  the catalog admits exactly `client-udp.encrypted`. The expected measured
+  state is now realized at 32/100 overall and 5/9 for the still-partial
+  `client-udp` group.
+  Every changed repository must pass its scoped full gate before coordinated
+  pull requests are opened.
 
 ## Delivery Discipline
 
@@ -337,12 +340,116 @@ post-merge results are:
 - MFC `0faeaa3cb5807ca27805636cdad1cc86406b273f`: 2/2 workflows green; and
 - build-tests `80c7e67b832e41480196fed9506936d76bac8dbd`: 4/4 workflows green.
 
-Tooling PR #141 remains open while this lifecycle evidence is added to its
-existing branch.
+Tooling PR #141 rebase-merged as
+`151d83deaf9eaacb524e0e926ff301ebe3351360`; all 4/4 exact post-merge
+workflows passed. The shared `feature/client-udp-clear-evidence` branches were
+deleted locally and remotely, and every participating checkout was synchronized
+to clean `main` before the encrypted slice was selected.
+
+## Encrypted Slice Evidence Checkpoint
+
+The canonical runner and independent registrar were extended on the single
+shared branch `feature/client-udp-encrypted-evidence`. Granular pushed commits
+are:
+
+- build-tests `7488867` - add the explicit encrypted scenario, strict reducer,
+  independent raw-evidence re-reduction, registration route, and adversarial
+  tests;
+- MFC `367747a1` - preserve the exact pre-decryption client-UDP wire datagram and
+  classify user-hash obfuscation from the wire/decrypted length boundary;
+- build-tests `79bfc10`, `b0a4a00`, and `c492408` - bind canonical clean builds
+  to clean, unchanged product and orchestrator revisions; remove executable and
+  source overrides from the authoritative runner; and require those causal
+  receipts in the independent registrar;
+- build `178ac00` - keep WSL server clean/build/stage operations in one
+  filesystem view after the authoritative build exposed a deterministic DrvFS
+  staging race;
+- build-tests `317f48b` - run every campaign-owned Rust peer from the single
+  clean-built diagnostics executable rather than retaining a hidden dependency
+  on a separately staged regular binary; and
+- build-tests `bd88344` - replace the earlier non-causal encrypted receipt with
+  the first independently validated authoritative-build receipt;
+- build-tests `9f39f81` - allow this build-owning runner to prepare retained
+  report paths before the canonical MFC executable exists, while preserving the
+  mandatory clean build, exact-path validation, and binary hash before launch;
+  and
+- build-tests `bcc0e76` - replace the superseded encrypted receipt with a fresh
+  campaign from the corrected runner. Neither earlier receipt is retained as a
+  legacy registration path; and
+- build-tests `15121b2` - pin and materialize the exact upstream-clean
+  ed2k-server evidence authority in fast-harness CI after the first PR head
+  correctly failed catalog validation because that new authority checkout was
+  absent. Validation was not weakened or bypassed.
+
+The first real campaign was correctly retained as `evidence-incomplete` at
+`output-root:artifacts/emulebb-rust-reask-cross-client/20261102T215244Z-emulebb-main-release-11536/emulebb-rust-reask-cross-client-result.json`,
+SHA-256 `101ea92f68eca6a01947e9f918b4b47665864e2160176461dd3ae4950bd537aa`.
+Both production transitions applied, but MFC's receive diagnostic took its raw
+snapshot after `DecryptReceivedClient` had rewritten the encrypted region in
+place and inferred transport from Kad-only verify keys. The result joined an
+encrypted eight-byte header to a clear payload and could not prove in-flight
+wire identity. No protocol behavior failed or changed.
+
+MFC commit `367747a1` fixed only that oracle boundary. A succeeding bilateral run
+proved the protocol claim, but its report merely combined staged executable
+hashes with current repository HEADs and therefore did not causally prove which
+source revision built each binary. That receipt was superseded rather than
+grandfathered. A later causally bound campaign passed, but independent review
+found that its runner still required an already-staged MFC executable before
+reaching the clean build it owned. Build-tests `9f39f81` corrected that ordering
+without introducing an alternate binary or build path, and the evidence was
+rerun rather than grandfathered. The final authoritative campaign is immutable
+at
+`output-root:artifacts/emulebb-rust-reask-cross-client/20261102T223823Z-emulebb-main-release-7472/emulebb-rust-reask-cross-client-result.json`:
+
+- receipt ID `rust-mfc-client-udp-encrypted-20261102t223823z`;
+- report SHA-256
+  `d7a35823b5e39a8d925ac6b3c7358348f6cdff7df832669aa1330d80d92c0471`;
+- raw reducer-input SHA-256
+  `61b173587bf5afc797c38ca17a5cd0f953eb8912075e896e809622bb4189e93e`;
+- Rust executable SHA-256
+  `5e96ab23ddb678e829e352b4549ce2d5f7a08d34b1171a63089851c07653ae3c`
+  from protected-main `fb673418`;
+- MFC executable SHA-256
+  `7c08aa3461800d7924d751d0cd94d54e595c271a585b9c6fb65a777bbda7f299`
+  from diagnostics revision `367747a1`;
+- ed2k-server executable SHA-256
+  `ffb5655198a882156627e0ff6d5d5a3a94ce02a423023f3b94f0bd8c00569886`
+  from clean upstream-aligned source `d6a6dd67`;
+- runner revision `9f39f81` and clean build-orchestrator revision `178ac00`;
+- both directions recorded `shouldCrypt=true`, exact eight-byte stock
+  obfuscation overhead, nonreserved odd markers, byte-identical sender/receiver
+  ciphertext per datagram, identical decoded V4 request/ACK frames, and the same
+  applied queue-rank/complete-source state; and
+- the independent registrar hash-checked and re-reduced the raw records before
+  producing the sole `client-udp.encrypted` claim.
+
+The final pushed heads satisfy the local delivery gates:
+
+- build-tests `15121b2`: full suite 3339 passed, 1 skipped, and 1 configured
+  deselection; changed-file Ruff and the protocol-catalog validator pass at
+  32/100 overall and 5/9 for `client-udp` with zero duplicate assets; the
+  replacement PR head passes 20/20 checks across 7/7 workflow runs;
+- MFC `367747a1`: exact Release diagnostics and Debug x64 app gates pass, and
+  the retained bilateral campaign proves the diagnostics runtime path;
+- build `178ac00`: the canonical hosted gate plus the changed build-client area
+  passes 35 tests, and the real clean Release ed2k-server build passes with zero
+  warnings. The repository-wide raw pytest command still exposes 12 unrelated
+  failures already present outside this branch's server-staging scope;
+- tooling: the strict documentation publication gate passes; and
+- independent read-only review found no remaining material issue after the
+  fresh campaign and receipt replacement.
+
+Rust required no source change. `ed2k-server` was clean-built and hash-bound by
+the canonical runner, while its repository remained untouched and
+upstream-clean. Coordinated PRs are build-tests #91, MFC #191, build #22, and
+tooling #142. Their code heads are green; this tracker-only tooling update must
+complete its replacement documentation checks before merge.
 
 ## Next Step
 
-Revalidate this final tooling head, merge tooling PR #141 by rebase, and verify
-its exact post-merge main workflows. Then delete the shared feature branches
-locally and remotely and synchronize every participating checkout to clean
-`main`. Do not select the next catalog slice until that delivery is complete.
+Wait for the tracker-only update on tooling PR #142 to complete its required
+checks, then merge all four coordinated PRs while preserving granular commits.
+Delete the shared work-in-progress branches and synchronize the participating
+checkouts. Rust and `ed2k-server` have no source changes and must not receive
+empty delivery branches.
