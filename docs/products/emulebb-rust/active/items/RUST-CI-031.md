@@ -210,9 +210,14 @@ rank 1 with equal state semantics. The independent registrar re-reduced the
 `8b91cb60b1fd54b2e427757b5d5a5e20019785a1755407f2a219a597a73bc814`
 and emitted receipt `rust-mfc-client-udp-v2-20261103t185615z`, bound to result
 SHA-256 `cebe029046be75d120e3b0d9b035da794fc3a3e87d279817750e0da2f4e018aa`.
-The catalog validates at 34/100 overall and 7/9 for `client-udp`. Scoped full
-repository validation and coordinated delivery remain before this slice is
-complete; no V1 or unsolicited-reply claim is implied.
+The catalog validates at 34/100 overall and 7/9 for `client-udp`. Full local
+validation is green at the exact pushed heads: Rust policy, 128 policy tests,
+rustfmt, warning-denied workspace Clippy, diagnostics build, WebUI unit/browser
+tests, fresh Debug and Release workspace builds, locked workspace/doc tests,
+and 3/3 VPN leak tests; build-tests 3,355 passed with one expected POSIX-only
+skip and one configured deselection; catalog validation and the tooling strict
+documentation build also pass. Coordinated delivery is the only remaining work
+for this slice; no V1 or unsolicited-reply claim is implied.
 
 ## Delivery Discipline
 
@@ -475,7 +480,6 @@ complete its replacement documentation checks before merge.
 
 ## Next Step
 
-Run every scoped full repository gate at the exact pushed heads, reconcile any
-gate failure without weakening the V2 evidence contract, then open coordinated
-Rust, build-tests, and tooling pull requests only after the complete slice is
-green.
+Open the coordinated Rust, build-tests, and tooling pull requests, require all
+protected-main checks at the exact heads, then merge and delete the shared
+workstream branch locally and remotely before selecting the next slice.
