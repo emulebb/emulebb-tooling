@@ -150,7 +150,7 @@ unsolicited replies, or transport obfuscation.
 - **Sole claim:** admit only `client-udp.v3`. V1, V2, and unsolicited replies
   remain independently measured catalog IDs. Equal packet shapes do not permit
   one advertised-version result to stand in for another catalog claim.
-- **Selected clients:** exact emulebb Rust revision `84a58d22` and emulebb MFC
+- **Selected clients:** exact emulebb Rust revision `c0941a3e` and emulebb MFC
   diagnostics-oracle revision `53070f48` each act once as
   requester and once as responder in the same deterministic local campaign.
   Version selection remains diagnostics-only and defaults to the current V4
@@ -193,15 +193,15 @@ unsolicited replies, or transport obfuscation.
 
 The protocol proof and catalog-admission portions of the green condition are
 now satisfied. Canonical run
-`20261103T173903Z-emulebb-main-release-9396` clean-built every subject from a
+`20261103T180856Z-emulebb-main-release-11240` clean-built every subject from a
 clean source tree and passed both Rust-requester/MFC-responder and
 MFC-requester/Rust-responder directions. The independent registrar re-reduced
-the 3,820,782-byte raw evidence object with SHA-256
-`f45b1f242ce994fa293d77bbe24c7f7ba3fc202df2f707bf09f29d522ed0aedc`
-and emitted receipt `rust-mfc-client-udp-v3-20261103t173903z`, bound to result
-SHA-256 `10ffc2594447a1cafa8db0be302511e190ba3294375de6260af35ab0ad3c5d2f`.
-The remaining work for this slice is repository-wide scoped validation and
-coordinated delivery; no additional protocol claim is implied.
+the 3,810,397-byte raw evidence object with SHA-256
+`40927f27775c2ca70526e51cf26e2bd19f4b6d1ae8851e764f8a6eb1350bb694`
+and emitted receipt `rust-mfc-client-udp-v3-20261103t180856z`, bound to result
+SHA-256 `8b66f9f58a4dcbc8f1ca3e5161065a63ad8b8e16af3a36de6b7b73b20c06c20a`.
+Repository-wide scoped validation is green; coordinated delivery is the only
+remaining work for this slice. No additional protocol claim is implied.
 
 ## Delivery Discipline
 
