@@ -216,8 +216,16 @@ rustfmt, warning-denied workspace Clippy, diagnostics build, WebUI unit/browser
 tests, fresh Debug and Release workspace builds, locked workspace/doc tests,
 and 3/3 VPN leak tests; build-tests 3,355 passed with one expected POSIX-only
 skip and one configured deselection; catalog validation and the tooling strict
-documentation build also pass. Coordinated delivery is the only remaining work
-for this slice; no V1 or unsolicited-reply claim is implied.
+documentation build also pass. No V1 or unsolicited-reply claim is implied.
+
+The product and evidence changes reached protected `main` on 2026-11-03 after
+their exact pull-request heads passed every required hosted check. Rust PR #219
+was squash-merged as `6a399358e6fae9039e4d2251cfe8ed12362d226f`, and
+build-tests PR #93 was rebase-merged with protected-main tip
+`64891dd2e87f7764e606f649d10374ee91bcf4c8`. Tooling PR #144 is the final
+coordinated delivery member; this exact-revision checkpoint is its only
+post-green change. The slice is complete once that documentation check passes,
+PR #144 merges, and the shared topic branches are removed locally and remotely.
 
 ## Delivery Discipline
 
