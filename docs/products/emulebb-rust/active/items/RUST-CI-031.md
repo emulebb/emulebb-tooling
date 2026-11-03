@@ -237,6 +237,15 @@ reports exactly 35/100 and 8/9 client UDP. The strict tooling documentation
 build also passes. MFC and `ed2k-server` remain clean and unchanged. Coordinated
 protected-branch delivery is the only remaining work for this slice.
 
+The product and evidence changes reached protected `main` on 2026-11-03 after
+their exact pull-request heads passed every required hosted check. Rust PR #220
+was squash-merged as `f40aa063432361cd34330de87ac28d613d7d8281`, and
+build-tests PR #94 was rebase-merged with protected-main tip
+`dc04bcd520ce1dd3d9b2602cd5fe9e62261aafb4`. Tooling PR #145 is the final
+coordinated delivery member; this exact-revision checkpoint is its only
+post-green change. The slice is complete once that documentation check passes,
+PR #145 merges, and the shared topic branches are removed locally and remotely.
+
 ## Delivery Discipline
 
 Work one catalog slice at a time on one shared topic branch per participating
