@@ -140,62 +140,55 @@ The catalog embeds the exact receipt IDs and provenance for every admitted
 claim. Detailed superseded checkpoints remain available in Git history rather
 than accumulating in this active item.
 
-## Active Bounded Slice: `client-udp.encrypted`
+## Active Bounded Slice: `client-udp.v3`
 
 This is the only delivery slice in progress. It starts from the merged,
-protected-main-green `client-udp.clear` authority and proves the complementary
-production obfuscated transport. It must not broaden its claim to UDP payload
-version negotiation, unsolicited handling, or peer-TCP obfuscation.
+protected-main-green V4 clear and encrypted authority and proves the distinct
+legacy V3 payload contract. It must not broaden its claim to V1, V2,
+unsolicited replies, or transport obfuscation.
 
-- **Sole claim:** admit only `client-udp.encrypted`. V1, V2, V3, and unsolicited
-  replies remain independently measured catalog IDs. The campaign reuses the
-  already-proven V4 request and ACK payload shape but cannot admit another
-  version claim.
+- **Sole claim:** admit only `client-udp.v3`. V1, V2, and unsolicited replies
+  remain independently measured catalog IDs. Equal packet shapes do not permit
+  one advertised-version result to stand in for another catalog claim.
 - **Selected clients:** exact protected-main emulebb Rust revision `fb673418`
-  and emulebb MFC diagnostics-oracle revision `367747a1` each act once as
+  and emulebb MFC diagnostics-oracle revision `e415c115` each act once as
   requester and once as responder in the same deterministic local campaign.
-  MFC revision `367747a1` is the diagnostics-only correction over protected-main
-  `0faeaa3c` required after the first real run proved that the oracle recorded a
-  receive buffer after in-place decryption. Product-source changes remain out
-  of scope unless another concrete diagnostic gap prevents proof; any such
-  change must remain diagnostics-only.
-- **Authority:** stock eMule client-UDP obfuscation keyed by the receiver user
-  hash and sender public IPv4, with the stock eight-byte envelope around the
-  clear `OP_EMULEPROT` frame. The encrypted datagram is intentionally
-  randomized and therefore is not compared byte-for-byte across clients. The
-  deobfuscated request and ACK must equal the already-proven clear V4 frames
-  and decode to the same state transition.
+  Product-source changes are limited to diagnostics-only selection and
+  observation needed to run the stock V3 state machine; normal builds remain
+  fixed at the current V4 capability.
+- **Authority:** stock eMule `UDPReaskForDownload` and `OP_REASKACK` version
+  gates. A V3 request is `OP_EMULEPROT`, `OP_REASKFILEPING`, the 16-byte file
+  hash, and the two-byte complete-source count. It has no part status. A V3 ACK
+  is `OP_EMULEPROT`, `OP_REASKACK`, and the two-byte queue rank, also with no
+  part status.
 - **Deterministic start and stimulus:** reuse the canonical bilateral queued
-  source setup, harness-owned shared fixture, and real responder-side upload
-  waiter. Enable the existing crypt preference in both ephemeral profiles;
-  prove each client is HighID at its actual TEST-NET bind address and the
-  registered source records `shouldCrypt=true`; then wake that exact source
-  through the existing diagnostics control so the ordinary scheduler emits
-  one production encrypted request and consumes one production encrypted ACK.
-- **Proof obligation:** causally join source registration, due scheduler
-  decision, request send terminal, responder decrypt/decode, ACK send terminal,
-  requester decrypt under the matching pending request, and queue-rank/state
-  application in both directions. Request and reply diagnostics must report
-  `obfuscated=true`; each raw datagram must differ from its clear frame, add
-  exactly the stock eight-byte overhead, and avoid a clear reserved protocol
-  marker. The clear frames and decoded payloads must match across clients.
-  Any contradictory plaintext packet, duplicate attempt, failed decryption,
-  unsolicited reply, timeout, unrelated packet, or recorded-only fixture makes
-  the evidence incomplete.
-- **Implementation boundary:** add one explicit `encrypted` scenario to the
-  existing canonical `scripts/emulebb-rust-reask-cross-client.py` runner,
-  reducer, independent registrar, and catalog path. Make profile crypt mode a
-  scenario-owned input and remove the obsolete synthetic-public-IP comment;
-  the current hairpin topology already reports each client's actual TEST-NET
-  bind address. Do not add packet injection, a second runner, compatibility
-  controls, public-soak verdicts, or any ed2k-server change.
-- **Green condition:** a real bilateral run has produced one immutable receipt,
+  source setup, harness-owned shared fixture, real responder-side upload
+  waiter, and ordinary scheduler wake control. Both diagnostics clients start
+  with the exact process-scoped
+  `EMULEBB_DIAGNOSTIC_CLIENT_UDP_VERSION=3` control, advertise V3 naturally,
+  and register the opposite client as a real V3 source before the harness wakes
+  that exact source once.
+- **Proof obligation:** causally join V3 source registration, due scheduler
+  decision, request send terminal, responder decode, ACK send terminal,
+  requester correlation under the matching pending request, and queue-rank
+  application in both directions. Compare exact request and ACK bytes across
+  clients; prove the complete-source count is present, part status is absent,
+  and the same queue rank is applied. A V4 registration, contradictory frame,
+  duplicate attempt, unsolicited reply, timeout, unrelated packet, or missing
+  causal join makes the evidence incomplete.
+- **Implementation boundary:** extend the existing canonical
+  `scripts/emulebb-rust-reask-cross-client.py` runner, reducer, independent
+  registrar, and catalog path with one explicit `v3` scenario. Add one strict
+  diagnostics-only process setting shared by both clients; reject values
+  outside `1..4`; do not mutate registered peer state, inject packets, create a
+  second runner, add a compatibility shim, derive a verdict from the public
+  soak, or change `ed2k-server`.
+- **Green condition:** a real bilateral run produces one immutable receipt,
   the independent registrar hash-checks and re-reduces the raw evidence, and
-  the catalog admits exactly `client-udp.encrypted`. The expected measured
-  state is now realized at 32/100 overall and 5/9 for the still-partial
-  `client-udp` group.
-  Every changed repository must pass its scoped full gate before coordinated
-  pull requests are opened.
+  the catalog admits exactly `client-udp.v3`. The expected measured state is
+  33/100 overall and 6/9 for the still-partial `client-udp` group. Every changed
+  repository must pass its scoped full gate before coordinated pull requests
+  are opened.
 
 ## Delivery Discipline
 
@@ -448,8 +441,7 @@ complete its replacement documentation checks before merge.
 
 ## Next Step
 
-Wait for the tracker-only update on tooling PR #142 to complete its required
-checks, then merge all four coordinated PRs while preserving granular commits.
-Delete the shared work-in-progress branches and synchronize the participating
-checkouts. Rust and `ed2k-server` have no source changes and must not receive
-empty delivery branches.
+Implement the diagnostics-only V3 selection seam in Rust and the MFC oracle,
+then extend the canonical client-UDP runner and evidence reducer without adding
+another campaign. Validate each component at its granular commit boundary
+before running and independently registering the real bilateral campaign.
