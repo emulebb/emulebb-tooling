@@ -224,6 +224,19 @@ The receipt binds Rust `3f51f2792b8a43e184016ba667e2b006f1321058`, MFC
 35/100 overall and 8/9 for `client-udp`; full repository gates remain required
 before coordinated pull requests may open.
 
+The full local green condition is now satisfied at the exact pushed Rust head
+`3f51f2792b8a43e184016ba667e2b006f1321058` and build-tests head
+`8988b9c7ab94c1b9629d2c3ebef1b7938c8e9223`. Rust passed policy, 128 policy
+tests, rustfmt, warning-denied workspace Clippy, diagnostics compilation, 29
+WebUI unit tests, 17 browser tests, typecheck, production WebUI build, fresh
+Debug and Release workspace builds, the Release diagnostics build, all locked
+workspace and doc tests, and 3/3 serialized VPN egress tests. Build-tests passed
+3,362 tests with one expected POSIX-only skip and one configured deselection;
+every changed Python file passes Ruff and format checks, and catalog validation
+reports exactly 35/100 and 8/9 client UDP. The strict tooling documentation
+build also passes. MFC and `ed2k-server` remain clean and unchanged. Coordinated
+protected-branch delivery is the only remaining work for this slice.
+
 ## Delivery Discipline
 
 Work one catalog slice at a time on one shared topic branch per participating
