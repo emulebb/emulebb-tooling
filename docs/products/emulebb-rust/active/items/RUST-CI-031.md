@@ -205,6 +205,25 @@ defect or MFC/server source dependency is known at slice start. The single
 shared workstream branch is `feature/client-udp-v1-evidence` in Rust,
 build-tests, and tooling only.
 
+The protocol proof and catalog-admission portions of the green condition are
+now satisfied. Canonical run
+`20261103T200530Z-emulebb-main-release-11272` clean-built every subject from a
+clean source tree and passed both Rust-requester/MFC-responder and
+MFC-requester/Rust-responder directions. Both transitions independently
+advertised and registered V1, emitted the exact request `c590 + hash16` and ACK
+`c5910100`, omitted complete-source count and part status, and causally applied
+queue rank 1 with equal state semantics. The independent registrar re-reduced
+the 3,821,677-byte raw evidence object with SHA-256
+`9481580abb8d6cb3022cc03417d92f2d9dbabf073544cae45c27987ce39d90e3`
+and emitted receipt `rust-mfc-client-udp-v1-20261103t200530z`, bound to result
+SHA-256 `a690921d345c279bbbb6a4bda4f5d5443389e86e32814ff61bf4bc38c93b6b30`.
+The receipt binds Rust `3f51f2792b8a43e184016ba667e2b006f1321058`, MFC
+`e85415047c6648a2ce40d1b1ec7689987f2612ea`, runner
+`8775705f896cf12dc5f6856864e10eb5694c9897`, and upstream-clean server
+`d6a6dd672815a13265393ff22622c7fd97b58eee`. The catalog now validates at
+35/100 overall and 8/9 for `client-udp`; full repository gates remain required
+before coordinated pull requests may open.
+
 ## Delivery Discipline
 
 Work one catalog slice at a time on one shared topic branch per participating
