@@ -112,9 +112,9 @@ their scoped gates.
 
 The catalog currently validates at:
 
-- **32/100** coverage IDs with a proven `parity` verdict;
+- **33/100** coverage IDs with a proven `parity` verdict;
 - **5/17** groups complete;
-- **68/100** IDs explicitly `evidence-incomplete`;
+- **67/100** IDs explicitly `evidence-incomplete`;
 - **0** recorded divergences, which makes no claim about uncovered IDs; and
 - **21** classified protocol assets: 6 canonical, 11 support, 2 product-only,
   2 historical, and 0 duplicate.
@@ -127,7 +127,7 @@ Complete groups are:
 - `server-udp-metadata` - 2/2; and
 - `lowid-callbacks` - 4/4.
 
-Partial covered groups are `client-udp` at 5/9, `peer-startup-profiles` at
+Partial covered groups are `client-udp` at 6/9, `peer-startup-profiles` at
 3/11, `queue-upload-state` at 1/5, and `transfer-blocks` at 2/4. Every other
 group is currently uncovered. Reproduce the authoritative report from
 `repos/emulebb-build-tests` with:
@@ -140,62 +140,68 @@ The catalog embeds the exact receipt IDs and provenance for every admitted
 claim. Detailed superseded checkpoints remain available in Git history rather
 than accumulating in this active item.
 
-## Active Bounded Slice: `client-udp.encrypted`
+## Active Bounded Slice: `client-udp.v3`
 
 This is the only delivery slice in progress. It starts from the merged,
-protected-main-green `client-udp.clear` authority and proves the complementary
-production obfuscated transport. It must not broaden its claim to UDP payload
-version negotiation, unsolicited handling, or peer-TCP obfuscation.
+protected-main-green V4 clear and encrypted authority and proves the distinct
+legacy V3 payload contract. It must not broaden its claim to V1, V2,
+unsolicited replies, or transport obfuscation.
 
-- **Sole claim:** admit only `client-udp.encrypted`. V1, V2, V3, and unsolicited
-  replies remain independently measured catalog IDs. The campaign reuses the
-  already-proven V4 request and ACK payload shape but cannot admit another
-  version claim.
-- **Selected clients:** exact protected-main emulebb Rust revision `fb673418`
-  and emulebb MFC diagnostics-oracle revision `367747a1` each act once as
+- **Sole claim:** admit only `client-udp.v3`. V1, V2, and unsolicited replies
+  remain independently measured catalog IDs. Equal packet shapes do not permit
+  one advertised-version result to stand in for another catalog claim.
+- **Selected clients:** exact emulebb Rust revision `c0941a3e` and emulebb MFC
+  diagnostics-oracle revision `53070f48` each act once as
   requester and once as responder in the same deterministic local campaign.
-  MFC revision `367747a1` is the diagnostics-only correction over protected-main
-  `0faeaa3c` required after the first real run proved that the oracle recorded a
-  receive buffer after in-place decryption. Product-source changes remain out
-  of scope unless another concrete diagnostic gap prevents proof; any such
-  change must remain diagnostics-only.
-- **Authority:** stock eMule client-UDP obfuscation keyed by the receiver user
-  hash and sender public IPv4, with the stock eight-byte envelope around the
-  clear `OP_EMULEPROT` frame. The encrypted datagram is intentionally
-  randomized and therefore is not compared byte-for-byte across clients. The
-  deobfuscated request and ACK must equal the already-proven clear V4 frames
-  and decode to the same state transition.
+  Version selection remains diagnostics-only and defaults to the current V4
+  capability. The campaign also found and fixed one product parity defect:
+  outbound Rust download sessions decoded but discarded the peer's hello UDP
+  version, incorrectly falling back to V4 when MFC had advertised V3.
+- **Authority:** stock eMule `UDPReaskForDownload` and `OP_REASKACK` version
+  gates. A V3 request is `OP_EMULEPROT`, `OP_REASKFILEPING`, the 16-byte file
+  hash, and the two-byte complete-source count. It has no part status. A V3 ACK
+  is `OP_EMULEPROT`, `OP_REASKACK`, and the two-byte queue rank, also with no
+  part status.
 - **Deterministic start and stimulus:** reuse the canonical bilateral queued
-  source setup, harness-owned shared fixture, and real responder-side upload
-  waiter. Enable the existing crypt preference in both ephemeral profiles;
-  prove each client is HighID at its actual TEST-NET bind address and the
-  registered source records `shouldCrypt=true`; then wake that exact source
-  through the existing diagnostics control so the ordinary scheduler emits
-  one production encrypted request and consumes one production encrypted ACK.
-- **Proof obligation:** causally join source registration, due scheduler
-  decision, request send terminal, responder decrypt/decode, ACK send terminal,
-  requester decrypt under the matching pending request, and queue-rank/state
-  application in both directions. Request and reply diagnostics must report
-  `obfuscated=true`; each raw datagram must differ from its clear frame, add
-  exactly the stock eight-byte overhead, and avoid a clear reserved protocol
-  marker. The clear frames and decoded payloads must match across clients.
-  Any contradictory plaintext packet, duplicate attempt, failed decryption,
-  unsolicited reply, timeout, unrelated packet, or recorded-only fixture makes
-  the evidence incomplete.
-- **Implementation boundary:** add one explicit `encrypted` scenario to the
-  existing canonical `scripts/emulebb-rust-reask-cross-client.py` runner,
-  reducer, independent registrar, and catalog path. Make profile crypt mode a
-  scenario-owned input and remove the obsolete synthetic-public-IP comment;
-  the current hairpin topology already reports each client's actual TEST-NET
-  bind address. Do not add packet injection, a second runner, compatibility
-  controls, public-soak verdicts, or any ed2k-server change.
-- **Green condition:** a real bilateral run has produced one immutable receipt,
+  source setup, harness-owned shared fixture, real responder-side upload
+  waiter, and ordinary scheduler wake control. Both diagnostics clients
+  advertise V3 naturally and register the opposite client as a real V3 source
+  before the harness wakes that exact source once. Rust selects V3 with
+  `EMULEBB_DIAGNOSTIC_CLIENT_UDP_VERSION=3`; MFC selects it with the
+  diagnostics-only `--diagnostic-client-udp-version=3` argument.
+- **Proof obligation:** causally join V3 source registration, due scheduler
+  decision, request send terminal, responder decode, ACK send terminal,
+  requester correlation under the matching pending request, and queue-rank
+  application in both directions. Compare exact request and ACK bytes across
+  clients; prove the complete-source count is present, part status is absent,
+  and the same queue rank is applied. A V4 registration, contradictory frame,
+  duplicate attempt, unsolicited reply, timeout, unrelated packet, or missing
+  causal join makes the evidence incomplete.
+- **Implementation boundary:** extend the existing canonical
+  `scripts/emulebb-rust-reask-cross-client.py` runner, reducer, independent
+  registrar, and catalog path with one explicit `v3` scenario. Add strict
+  diagnostics-only version selectors, reject values outside `1..4`, and do not
+  mutate registered peer state, inject packets, create a second runner, add a
+  compatibility shim, derive a verdict from the public soak, or change
+  `ed2k-server`.
+- **Green condition:** a real bilateral run produces one immutable receipt,
   the independent registrar hash-checks and re-reduces the raw evidence, and
-  the catalog admits exactly `client-udp.encrypted`. The expected measured
-  state is now realized at 32/100 overall and 5/9 for the still-partial
-  `client-udp` group.
-  Every changed repository must pass its scoped full gate before coordinated
-  pull requests are opened.
+  the catalog admits exactly `client-udp.v3`. The expected measured state is
+  33/100 overall and 6/9 for the still-partial `client-udp` group. Every changed
+  repository must pass its scoped full gate before coordinated pull requests
+  are opened.
+
+The protocol proof and catalog-admission portions of the green condition are
+now satisfied. Canonical run
+`20261103T180856Z-emulebb-main-release-11240` clean-built every subject from a
+clean source tree and passed both Rust-requester/MFC-responder and
+MFC-requester/Rust-responder directions. The independent registrar re-reduced
+the 3,810,397-byte raw evidence object with SHA-256
+`40927f27775c2ca70526e51cf26e2bd19f4b6d1ae8851e764f8a6eb1350bb694`
+and emitted receipt `rust-mfc-client-udp-v3-20261103t180856z`, bound to result
+SHA-256 `8b66f9f58a4dcbc8f1ca3e5161065a63ad8b8e16af3a36de6b7b73b20c06c20a`.
+Repository-wide scoped validation is green; coordinated delivery is the only
+remaining work for this slice. No additional protocol claim is implied.
 
 ## Delivery Discipline
 
@@ -448,8 +454,7 @@ complete its replacement documentation checks before merge.
 
 ## Next Step
 
-Wait for the tracker-only update on tooling PR #142 to complete its required
-checks, then merge all four coordinated PRs while preserving granular commits.
-Delete the shared work-in-progress branches and synchronize the participating
-checkouts. Rust and `ed2k-server` have no source changes and must not receive
-empty delivery branches.
+Implement the diagnostics-only V3 selection seam in Rust and the MFC oracle,
+then extend the canonical client-UDP runner and evidence reducer without adding
+another campaign. Validate each component at its granular commit boundary
+before running and independently registering the real bilateral campaign.
