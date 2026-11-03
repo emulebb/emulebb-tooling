@@ -112,9 +112,9 @@ their scoped gates.
 
 The catalog currently validates at:
 
-- **33/100** coverage IDs with a proven `parity` verdict;
+- **34/100** coverage IDs with a proven `parity` verdict;
 - **5/17** groups complete;
-- **67/100** IDs explicitly `evidence-incomplete`;
+- **66/100** IDs explicitly `evidence-incomplete`;
 - **0** recorded divergences, which makes no claim about uncovered IDs; and
 - **21** classified protocol assets: 6 canonical, 11 support, 2 product-only,
   2 historical, and 0 duplicate.
@@ -127,7 +127,7 @@ Complete groups are:
 - `server-udp-metadata` - 2/2; and
 - `lowid-callbacks` - 4/4.
 
-Partial covered groups are `client-udp` at 6/9, `peer-startup-profiles` at
+Partial covered groups are `client-udp` at 7/9, `peer-startup-profiles` at
 3/11, `queue-upload-state` at 1/5, and `transfer-blocks` at 2/4. Every other
 group is currently uncovered. Reproduce the authoritative report from
 `repos/emulebb-build-tests` with:
@@ -197,6 +197,22 @@ and the canonical reducer already models the stock `> 2` and `> 3` gates. No
 product defect or MFC/server source dependency is known at slice start. The
 single shared workstream branch is `feature/client-udp-v2-evidence` in Rust,
 build-tests, and tooling only.
+
+The protocol proof and catalog-admission portions of the green condition are
+now satisfied. Canonical run
+`20261103T185615Z-emulebb-main-release-5816` clean-built every subject from a
+clean source tree and passed both Rust-requester/MFC-responder and
+MFC-requester/Rust-responder directions. Both transitions emitted the exact
+V2 request `c590 + hash16`, the exact ACK `c591 + queue-rank2`, no
+complete-source count, and no part-status field, then causally applied queue
+rank 1 with equal state semantics. The independent registrar re-reduced the
+3,818,213-byte raw evidence object with SHA-256
+`8b91cb60b1fd54b2e427757b5d5a5e20019785a1755407f2a219a597a73bc814`
+and emitted receipt `rust-mfc-client-udp-v2-20261103t185615z`, bound to result
+SHA-256 `cebe029046be75d120e3b0d9b035da794fc3a3e87d279817750e0da2f4e018aa`.
+The catalog validates at 34/100 overall and 7/9 for `client-udp`. Scoped full
+repository validation and coordinated delivery remain before this slice is
+complete; no V1 or unsolicited-reply claim is implied.
 
 ## Delivery Discipline
 
@@ -459,8 +475,7 @@ complete its replacement documentation checks before merge.
 
 ## Next Step
 
-Add exact Rust V2 codec coverage, then extend the existing canonical
-client-UDP campaign, raw-evidence schema, independent re-reduction, registrar,
-and adversarial tests for the sole `client-udp.v2` claim. Validate each
-granular checkpoint before running and independently registering the real
-bilateral campaign.
+Run every scoped full repository gate at the exact pushed heads, reconcile any
+gate failure without weakening the V2 evidence contract, then open coordinated
+Rust, build-tests, and tooling pull requests only after the complete slice is
+green.
