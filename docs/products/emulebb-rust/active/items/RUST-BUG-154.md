@@ -3,7 +3,7 @@ id: RUST-BUG-154
 workflow: github
 github_issue: https://github.com/emulebb/emulebb-rust/issues/221
 title: Admit Kad datagrams before learning sender state
-status: OPEN
+status: IN_PROGRESS
 priority: Major
 category: bug
 labels: [rust, kad, protocol, security, state-machine, beta]
