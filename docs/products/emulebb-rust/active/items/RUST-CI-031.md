@@ -5,11 +5,11 @@ product: emulebb-rust
 phase: Phase 0
 github_issue: https://github.com/emulebb/emulebb-rust/issues/164
 title: Consolidate deterministic eD2K and Kad protocol-parity testing
-status: IN_PROGRESS
+status: OPEN
 priority: Major
 category: ci
 labels: [rust, tests, harness, diagnostics, protocol, ed2k, kad, vpn, soak, beta]
-milestone: rust-v0.1.0-beta.3
+milestone: post-beta-compatibility
 created: 2026-10-24
 source: 2026-10-24 operator request for long-running persisted eD2K and Kad parity diagnostics
 ---
@@ -108,9 +108,46 @@ receipt, an independent registrar validates its exact evidence and provenance,
 the catalog records only the proven claim, and all changed repositories pass
 their scoped gates.
 
+## Deferred Resume Checkpoint
+
+This item is intentionally open but not in progress. Resume it after the Beta 3
+workstream, with a review on or after 2026-12-01 so it is not forgotten. The
+focused outcome is:
+
+> Prove emulebb Rust parity for its explicitly supported eD2K and Kad behavior
+> through one authoritative deterministic harness, one cataloged protocol state
+> at a time, using causally joined Rust-versus-MFC evidence and independent
+> stock/aMule authority. Public soaks discover states; they never prove parity.
+
+On resume:
+
+1. Restore the catalog's pinned support checkouts and rerun
+   `python scripts\validate-protocol-catalog.py --format text`. At deferral the
+   catalog contains 35 proven IDs out of 108, but local validation reports only
+   an aMule HEAD analysis-checkout revision drift; do not update an authority
+   pin merely to match incidental local checkout state.
+2. Rerun only the cancelled macOS portability job from build-tests workflow run
+   `41717413561`; every job that obtained a runner passed, while macOS was
+   cancelled before executing a step.
+3. Revalidate clean protected-main revisions Rust
+   `3d313a7a4a475c2e6863a0e568267257fa267c35`, build-tests
+   `a496d74b992cbd563a95d911e7e1c2e138891c4b`, and tooling
+   `8b0a7dbfe3a12379ff4c1410108abe58fe21c947` against the then-current heads.
+4. Select only `client-udp.unsolicited`, define its authority, deterministic
+   starting state, stimulus, causal joins, and green condition, then create one
+   shared topic branch for that bounded slice.
+
+Do not expand the resumed work into general CI, storage, profile, hashing,
+workspace, soak, or diagnostics improvements unless one directly blocks the
+selected protocol proof. MFC remains a diagnostics oracle, `ed2k-server`
+remains upstream-clean, and no process-success, packet-presence, trace-volume,
+elapsed-soak, or zero-divergence observation can substitute for complete causal
+evidence. Retain no legacy schema, compatibility shim, duplicate runner, or
+parallel verdict path.
+
 ## Current Measured State
 
-The catalog currently validates at:
+The catalog currently defines:
 
 - **35/108** coverage IDs with a proven `parity` verdict;
 - **5/20** groups complete;
@@ -147,10 +184,10 @@ The catalog embeds the exact receipt IDs and provenance for every admitted
 claim. Detailed superseded checkpoints remain available in Git history rather
 than accumulating in this active item.
 
-## Active Bounded Slice: `client-udp.v1`
+## Latest Delivered Slice: `client-udp.v1`
 
-This is the only delivery slice in progress. It starts from the merged,
-protected-main-green V2 authority and proves the independently negotiated V1
+This was the final bounded slice before deferral. It started from the merged,
+protected-main-green V2 authority and proved the independently negotiated V1
 contract. It must not broaden its claim to unsolicited replies, transport
 obfuscation, or any other client-UDP state.
 
@@ -209,7 +246,7 @@ The V1 stock contract and implementation boundary were reviewed on 2026-11-03.
 Rust and MFC already expose strict diagnostics-only selectors accepting V1, and
 the canonical reducer already models the stock `> 2` and `> 3` gates. No product
 defect or MFC/server source dependency is known at slice start. The single
-shared workstream branch is `feature/client-udp-v1-evidence` in Rust,
+shared workstream branch was `feature/client-udp-v1-evidence` in Rust,
 build-tests, and tooling only.
 
 The protocol proof and catalog-admission portions of the green condition are
@@ -227,9 +264,8 @@ SHA-256 `a690921d345c279bbbb6a4bda4f5d5443389e86e32814ff61bf4bc38c93b6b30`.
 The receipt binds Rust `3f51f2792b8a43e184016ba667e2b006f1321058`, MFC
 `e85415047c6648a2ce40d1b1ec7689987f2612ea`, runner
 `8775705f896cf12dc5f6856864e10eb5694c9897`, and upstream-clean server
-`d6a6dd672815a13265393ff22622c7fd97b58eee`. The catalog now validates at
-35/100 overall and 8/9 for `client-udp`; full repository gates remain required
-before coordinated pull requests may open.
+`d6a6dd672815a13265393ff22622c7fd97b58eee`. The catalog admitted 35/100 IDs
+overall and 8/9 for `client-udp` at delivery.
 
 The full local green condition is now satisfied at the exact pushed Rust head
 `3f51f2792b8a43e184016ba667e2b006f1321058` and build-tests head
@@ -241,17 +277,22 @@ workspace and doc tests, and 3/3 serialized VPN egress tests. Build-tests passed
 3,362 tests with one expected POSIX-only skip and one configured deselection;
 every changed Python file passes Ruff and format checks, and catalog validation
 reports exactly 35/100 and 8/9 client UDP. The strict tooling documentation
-build also passes. MFC and `ed2k-server` remain clean and unchanged. Coordinated
-protected-branch delivery is the only remaining work for this slice.
+build also passes. MFC and `ed2k-server` remained clean and unchanged.
 
 The product and evidence changes reached protected `main` on 2026-11-03 after
 their exact pull-request heads passed every required hosted check. Rust PR #220
 was squash-merged as `f40aa063432361cd34330de87ac28d613d7d8281`, and
 build-tests PR #94 was rebase-merged with protected-main tip
-`dc04bcd520ce1dd3d9b2602cd5fe9e62261aafb4`. Tooling PR #145 is the final
-coordinated delivery member; this exact-revision checkpoint is its only
-post-green change. The slice is complete once that documentation check passes,
-PR #145 merges, and the shared topic branches are removed locally and remotely.
+`dc04bcd520ce1dd3d9b2602cd5fe9e62261aafb4`. Tooling PR #145 was the final
+coordinated delivery member and rebase-merged as
+`7a5c55a0026d6e135d830d54bcedd04d17ca410e`. Rust's exact post-merge CI and
+CodeQL workflows passed on every platform, including live REST/OpenAPI
+conformance. Tooling's exact post-merge workflows also passed. Build-tests run
+`41717413561` passed both Windows harness suites plus Linux and Windows
+portability; its macOS portability job was cancelled before receiving a runner
+and remains a resume action. The shared topic branches were removed locally and
+remotely, and all participating repositories returned cleanly to their
+protected default branches.
 
 ## Delivery Discipline
 
