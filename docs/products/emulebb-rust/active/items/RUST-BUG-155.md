@@ -3,7 +3,7 @@ id: RUST-BUG-155
 workflow: github
 github_issue: https://github.com/emulebb/emulebb-rust/issues/222
 title: Share established peer identity and control state
-status: OPEN
+status: IN_PROGRESS
 priority: Major
 category: bug
 labels: [rust, ed2k, protocol, peer, callback, state-machine, beta]

@@ -3,10 +3,12 @@ id: RUST-BUG-117
 workflow: github
 github_issue: https://github.com/emulebb/emulebb-rust/issues/103
 title: Expire silent Kad buddy links from received activity
-status: OPEN
+status: IN_PROGRESS
 priority: Major
 category: bug
 labels: [rust, kad, buddy, liveness, callback, reliability]
+product: emulebb-rust
+phase: Phase 0
 milestone: rust-v0.1.0-beta.3
 created: 2026-10-13
 source: aMule buddy-liveness fix #1831 and emulebb-rust static audit 2026-10-13

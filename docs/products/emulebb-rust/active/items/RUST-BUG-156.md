@@ -3,7 +3,7 @@ id: RUST-BUG-156
 workflow: github
 github_issue: https://github.com/emulebb/emulebb-rust/issues/223
 title: Give ED2K server settings one authority
-status: OPEN
+status: IN_PROGRESS
 priority: Major
 category: bug
 labels: [rust, ed2k, config, api, webui, beta]
