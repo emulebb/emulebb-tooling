@@ -3,11 +3,11 @@ id: RUST-BUG-117
 workflow: github
 github_issue: https://github.com/emulebb/emulebb-rust/issues/103
 title: Expire silent Kad buddy links from received activity
-status: DONE
+status: OPEN
 priority: Major
 category: bug
 labels: [rust, kad, buddy, liveness, callback, reliability]
-milestone: rust-v0.1.0-beta.2
+milestone: rust-v0.1.0-beta.3
 created: 2026-10-13
 source: aMule buddy-liveness fix #1831 and emulebb-rust static audit 2026-10-13
 ---
@@ -37,6 +37,28 @@ and re-search.
 Current aMule added a dedicated buddy-liveness helper after observing the same
 failure mode. Its maintained policy expires a buddy after 25 minutes without
 received activity, comfortably above normal ping cadence.
+
+The item was reopened on 2026-11-04 because accepted inbound buddy sockets use
+the generic upload-queue read timeout and polling lifecycle. A held buddy with
+no upload session can therefore close after roughly 30 seconds even though the
+outbound buddy path correctly owns a 25-minute received-activity lease.
+
+## Current Slice Binding
+
+- Catalog ID: `peer.buddy.receive-liveness`.
+- Authority: stock/community eMule state behavior, corroborated by maintained
+  aMule's 25-minute received-activity policy.
+- Start/stimulus: accept and identify a buddy socket, hold it without an upload
+  session, then advance deterministic time with and without valid inbound
+  buddy frames.
+- Expected result: generic upload polling does not close the held socket; valid
+  inbound frames refresh one 25-minute receive lease; silence expires through
+  the existing buddy cleanup owner.
+- Clients/runner: focused Rust paused-time state-machine tests first;
+  `source-queue-callback` through the canonical deterministic two-client runner
+  before catalog admission.
+- Green gates: focused ED2K tests, full Rust gates, and the selected local
+  callback campaign before delivery.
 
 ## Why This Matters
 
@@ -76,14 +98,18 @@ never arrive.
 
 ## Acceptance Criteria
 
-- [x] A buddy link that receives no valid frames for 25 minutes terminates with
+- [ ] Accepted inbound and outbound buddy links use the same 25-minute
+      received-activity lease.
+- [ ] A buddy link that receives no valid frames for 25 minutes terminates with
       the inactivity outcome even while ping writes continue to succeed.
-- [x] Valid inbound activity refreshes the deadline and prevents premature
+- [ ] Valid inbound activity refreshes the deadline and prevents premature
       expiry.
-- [x] Partial or malformed traffic does not refresh the deadline.
-- [x] Inactivity flows through existing cleanup and reconnect/backoff without a
+- [ ] Partial or malformed traffic does not refresh the deadline.
+- [ ] A held inbound buddy is not closed by generic upload-queue timeout or
+      upload-session polling.
+- [ ] Inactivity flows through existing cleanup and reconnect/backoff without a
       duplicate live buddy assignment.
-- [x] Focused tests cover expiry, refresh, malformed input, shutdown, and
+- [ ] Focused tests cover expiry, refresh, malformed input, shutdown, and
       reconnect handoff with deterministic Tokio time.
 
 ## Validation

@@ -112,9 +112,9 @@ their scoped gates.
 
 The catalog currently validates at:
 
-- **34/100** coverage IDs with a proven `parity` verdict;
-- **5/17** groups complete;
-- **66/100** IDs explicitly `evidence-incomplete`;
+- **35/108** coverage IDs with a proven `parity` verdict;
+- **5/20** groups complete;
+- **73/108** IDs explicitly `evidence-incomplete`;
 - **0** recorded divergences, which makes no claim about uncovered IDs; and
 - **21** classified protocol assets: 6 canonical, 11 support, 2 product-only,
   2 historical, and 0 duplicate.
@@ -127,7 +127,7 @@ Complete groups are:
 - `server-udp-metadata` - 2/2; and
 - `lowid-callbacks` - 4/4.
 
-Partial covered groups are `client-udp` at 7/9, `peer-startup-profiles` at
+Partial covered groups are `client-udp` at 8/9, `peer-startup-profiles` at
 3/11, `queue-upload-state` at 1/5, and `transfer-blocks` at 2/4. Every other
 group is currently uncovered. Reproduce the authoritative report from
 `repos/emulebb-build-tests` with:
@@ -135,6 +135,13 @@ group is currently uncovered. Reproduce the authoritative report from
 ```powershell
 python scripts\validate-protocol-catalog.py --format text
 ```
+
+The 2026-11-04 protocol-state audit expanded the authority from 100 to 108 IDs
+and from 17 to 20 groups before product changes. The new incomplete boundaries
+cover cumulative legacy server publication, established-peer mutable controls
+and buddy receive liveness, and Kad ingress admission before mutation. The
+previous client-UDP V1 slice remains admitted at 35 proven IDs; the denominator
+increase records newly explicit obligations rather than a coverage regression.
 
 The catalog embeds the exact receipt IDs and provenance for every admitted
 claim. Detailed superseded checkpoints remain available in Git history rather

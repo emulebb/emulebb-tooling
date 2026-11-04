@@ -3,7 +3,7 @@ id: RUST-BUG-128
 workflow: github
 github_issue: https://github.com/emulebb/emulebb-rust/issues/136
 title: Preserve incremental ED2K offer publication
-status: DONE
+status: OPEN
 priority: Major
 category: bug
 labels: [rust, ed2k, protocol, server, beta]
@@ -39,6 +39,25 @@ records per packet and previously unseen hashes per connection.
   unchanged wire records.
 - Current aMule history identifies the exact warning as its incremental
   publication bug 303 and fixes it with per-file publication state.
+- The item was reopened on 2026-11-04 because the stock fallback path still
+  applies `ST_SOFTFILES` as a per-packet cap. A legacy session can therefore
+  publish another batch after exhausting the server-advertised cumulative raw
+  candidate budget.
+
+## Current Slice Binding
+
+- Catalog ID: `server.offer.legacy-soft-budget`.
+- Authority: stock/community eMule's connection-scoped legacy publication
+  behavior, checked against Lugdunum and the maintained local `ed2k-server`.
+- Start/stimulus: authenticated legacy session, `ST_SOFTFILES=350`, 1,000 raw
+  catalog candidates; pump publication to exhaustion and reconnect once.
+- Expected result: packets contain 200 then 150 candidates and stop; rejected
+  or duplicate raw candidates retain stock budget semantics; reconnect starts
+  a fresh 350-candidate epoch.
+- Clients/runner: focused Rust state-machine tests, then the canonical local
+  ED2K server-session runner against `repos/ed2k-server`.
+- Green gates: focused ED2K tests, full Rust gates, catalog validation, and the
+  selected deterministic server-session campaign before delivery.
 
 ## Current Protocol Evidence
 
@@ -82,7 +101,13 @@ records per packet and previously unseen hashes per connection.
       wire state.
 - [x] Same-hash refreshes remain eligible after soft-budget exhaustion without
       consuming another distinct slot.
-- [x] New hashes stop at the connection-scoped soft limit.
+- [ ] Legacy raw candidates stop cumulatively at the connection-scoped
+      `ST_SOFTFILES` limit, independently of the packet ceiling.
+- [ ] A 350-candidate budget produces packets of 200 and 150, then no empty or
+      repeated publication pump.
+- [ ] Rejected and duplicate raw candidates retain the stock legacy accounting
+      behavior.
+- [ ] Reconnect resets the legacy publication budget.
 - [x] Every packet stays below the hard limit and local packet ceiling.
 - [x] Exhausted budgets do not create empty publication timer loops.
 - [x] Reconnect resets publication and distinct-hash state.
