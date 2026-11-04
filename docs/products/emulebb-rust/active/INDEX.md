@@ -51,6 +51,9 @@ exception; new Rust items always use the `RUST-*` form.
 | [RUST-BUG-155](items/RUST-BUG-155.md) | Bug | Share established peer identity and control state |
 | [RUST-BUG-156](items/RUST-BUG-156.md) | Bug | Give ED2K server settings one authority |
 | [CI-054](items/CI-054.md) | Evidence | Add native Windows Rust/MFC protocol-parity diagnostics campaign |
+| [RUST-FEAT-056](items/RUST-FEAT-056.md) | Feature | Deliver supported Android and Fire OS APKs with device harnesses |
+| [RUST-FEAT-057](items/RUST-FEAT-057.md) | Feature | Publish portable Linux musl builds for x64 and ARM64 |
+| [RUST-FEAT-058](items/RUST-FEAT-058.md) | Feature | Certify NAS deployments across supported appliance systems |
 | [RUST-REF-005](items/RUST-REF-005.md) | Refactor | Decompose oversized Rust modules by responsibility |
 | [RUST-REF-006](items/RUST-REF-006.md) | Refactor | Consolidate Rust NAT and runtime safety internals |
 | [RUST-REF-008](items/RUST-REF-008.md) | Refactor | Reduce large-library metadata and scan I/O amplification |
@@ -71,6 +74,9 @@ exception; new Rust items always use the `RUST-*` form.
 | [RUST-FEAT-039](items/RUST-FEAT-039.md) | Feature | Size ED2K request depth from measured RTT and bandwidth |
 | [RUST-FEAT-040](items/RUST-FEAT-040.md) | Feature | Carry ED2K and Kad search metadata end to end |
 | [RUST-FEAT-048](items/RUST-FEAT-048.md) | Feature | Use sparse part files without weakening capacity reservations |
+| [RUST-FEAT-059](items/RUST-FEAT-059.md) | Feature | Support FreeBSD on x64 and ARM64 |
+| [RUST-FEAT-060](items/RUST-FEAT-060.md) | Feature | Support ChromeOS through Android and Crostini lanes |
+| [RUST-FEAT-061](items/RUST-FEAT-061.md) | Feature | Support illumos, NetBSD, and OpenBSD as portable Unix targets |
 | [RUST-REF-007](items/RUST-REF-007.md) | Refactor | Review Rust upload hot-path performance candidates |
 | [RUST-REF-011](items/RUST-REF-011.md) | Refactor | Consolidate duplicated ED2K opcode and capability constants |
 
