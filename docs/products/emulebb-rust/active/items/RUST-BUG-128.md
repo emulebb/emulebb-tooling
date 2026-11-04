@@ -3,7 +3,7 @@ id: RUST-BUG-128
 workflow: github
 github_issue: https://github.com/emulebb/emulebb-rust/issues/136
 title: Preserve incremental ED2K offer publication
-status: OPEN
+status: IN_PROGRESS
 priority: Major
 category: bug
 labels: [rust, ed2k, protocol, server, beta]
@@ -69,6 +69,16 @@ records per packet and previously unseen hashes per connection.
 - The Rust client logs the Lugdunum `OP_SERVERMESSAGE` text verbatim; the text
   is evidence of server rejection, not a client-side error category.
 
+## Remaining Live Evidence Gap
+
+The 2026-11-04 local-server scale campaign proves negotiated
+`offerfiles_v=1` cancellation, reconnect, pacing, and complete 100,000-record
+publication. Focused Rust tests prove the corrected legacy packet and
+connection-budget logic, but no dedicated live session disabled the extension
+and observed the legacy 200-plus-150 sequence on the wire. This item remains
+open until the existing canonical local ED2K server-session runner covers that
+legacy mode; the v1 scale result cannot stand in for it.
+
 ## Intended Shape
 
 - Reconcile the old and refreshed ranked catalogs by hash and exact wire entry.
@@ -108,6 +118,9 @@ records per packet and previously unseen hashes per connection.
 - [ ] Rejected and duplicate raw candidates retain the stock legacy accounting
       behavior.
 - [ ] Reconnect resets the legacy publication budget.
+- [ ] A dedicated local-server session with `offerfiles_v1=false` observes the
+      legacy 200-plus-150 packet sequence, cumulative 350-candidate stop, no
+      empty/repeated pump, and a fresh budget after reconnect.
 - [x] Every packet stays below the hard limit and local packet ceiling.
 - [x] Exhausted budgets do not create empty publication timer loops.
 - [x] Reconnect resets publication and distinct-hash state.
@@ -145,5 +158,7 @@ records per packet and previously unseen hashes per connection.
 - Focused catalog reconciliation, mutation, soft-budget, hard-boundary, and
   empty-pump regressions.
 - Canonical `emulebb-ed2k` unit suite and Rust static validation.
+- Existing deterministic local ED2K server-session runner configured for
+  legacy publication; do not introduce a parallel harness.
 - RUST-CI-005 retained large-library pacing, cancellation, reconnect, and
   memory evidence.
