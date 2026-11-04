@@ -45,6 +45,11 @@ exception; new Rust items always use the `RUST-*` form.
 | [RUST-CI-009](items/RUST-CI-009.md) | Evidence | Certify a Beta 3 candidate without publishing |
 | [RUST-CI-030](items/RUST-CI-030.md) | Evidence | Verify Rust FFI layouts against vendored C headers |
 | [RUST-CI-031](items/RUST-CI-031.md) | Evidence | Consolidate deterministic eD2K and Kad protocol-parity testing |
+| [RUST-BUG-117](items/RUST-BUG-117.md) | Bug | Expire silent Kad buddy links from received activity |
+| [RUST-BUG-128](items/RUST-BUG-128.md) | Bug | Preserve incremental ED2K offer publication |
+| [RUST-BUG-154](items/RUST-BUG-154.md) | Bug | Admit Kad datagrams before learning sender state |
+| [RUST-BUG-155](items/RUST-BUG-155.md) | Bug | Share established peer identity and control state |
+| [RUST-BUG-156](items/RUST-BUG-156.md) | Bug | Give ED2K server settings one authority |
 | [CI-054](items/CI-054.md) | Evidence | Add native Windows Rust/MFC protocol-parity diagnostics campaign |
 | [RUST-REF-005](items/RUST-REF-005.md) | Refactor | Decompose oversized Rust modules by responsibility |
 | [RUST-REF-006](items/RUST-REF-006.md) | Refactor | Consolidate Rust NAT and runtime safety internals |
