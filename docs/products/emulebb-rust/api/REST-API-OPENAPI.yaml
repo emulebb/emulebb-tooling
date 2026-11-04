@@ -4051,15 +4051,8 @@ components:
           maximum: 10000
         autoConnect:
           type: boolean
-        reconnect:
-          type: boolean
         creditSystem:
           type: boolean
-        safeServerConnect:
-          type: boolean
-        addServersFromServer:
-          type: boolean
-          description: Add servers advertised by a connected server (OP_SERVERLIST); eMule GetAddServersFromServer, default true.
         networkKademlia:
           type: boolean
         networkEd2k:
@@ -4108,15 +4101,8 @@ components:
           maximum: 10000
         autoConnect:
           type: boolean
-        reconnect:
-          type: boolean
         creditSystem:
           type: boolean
-        safeServerConnect:
-          type: boolean
-        addServersFromServer:
-          type: boolean
-          description: Add servers advertised by a connected server (OP_SERVERLIST); eMule GetAddServersFromServer, default true.
         networkKademlia:
           type: boolean
         networkEd2k:
@@ -4239,17 +4225,21 @@ components:
           minimum: 0
         reconnectEnabled:
           type: boolean
+          description: Automatically reconnect after an ED2K server session ends; owned only by the ed2k settings block.
         safeServerConnect:
           type: boolean
+          description: Limit automatic server connection attempts to one at a time; stock default false.
         useServerPriorities:
           type: boolean
           description: Apply stable high, normal, then low server-priority ordering; stock default true.
         autoConnectStaticOnly:
           type: boolean
           description: Restrict application startup auto-connect to static servers; explicit targeted connects are unaffected.
-        keepaliveSecs:
+        serverKeepaliveMinutes:
           type: integer
           minimum: 0
+          maximum: 1440
+          description: Whole-minute idle ED2K server keepalive interval; 0 disables keepalive and is the default.
         sessionRotationSecs:
           type: integer
           minimum: 0
@@ -4327,6 +4317,7 @@ components:
           description: Honor a complete validated offerfiles_v=1 server pacing advertisement; restart required.
         addServersFromServer:
           type: boolean
+          description: Add servers advertised by a connected server through OP_SERVERLIST; stock default false.
         deadServerRetries:
           type: integer
           minimum: 1
@@ -4360,17 +4351,21 @@ components:
           minimum: 0
         reconnectEnabled:
           type: boolean
+          description: Automatically reconnect after an ED2K server session ends; owned only by the ed2k settings block.
         safeServerConnect:
           type: boolean
+          description: Limit automatic server connection attempts to one at a time; stock default false.
         useServerPriorities:
           type: boolean
           description: Apply stable high, normal, then low server-priority ordering; stock default true.
         autoConnectStaticOnly:
           type: boolean
           description: Restrict application startup auto-connect to static servers; explicit targeted connects are unaffected.
-        keepaliveSecs:
+        serverKeepaliveMinutes:
           type: integer
           minimum: 0
+          maximum: 1440
+          description: Whole-minute idle ED2K server keepalive interval; 0 disables keepalive and is the default.
         sessionRotationSecs:
           type: integer
           minimum: 0
@@ -4448,6 +4443,7 @@ components:
           description: Honor a complete validated offerfiles_v=1 server pacing advertisement; restart required.
         addServersFromServer:
           type: boolean
+          description: Add servers advertised by a connected server through OP_SERVERLIST; stock default false.
         deadServerRetries:
           type: integer
           minimum: 1
