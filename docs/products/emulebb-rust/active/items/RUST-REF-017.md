@@ -63,7 +63,7 @@ partial-file sharing, ED2K/Kad publication, and upload integrity.
 The `feature/shared-library-domain` Rust branch has granular pushed commits for
 the verified local-content boundary, independent publication, implicit roots,
 completion promotion, crash-safe piece-store retirement, and pattern ignores.
-The clean schema is version 53. Persisted transfers are download-only:
+The clean schema is version 54. Persisted transfers are download-only:
 `source_path_id`, `shared_file_sources`, and the `not_applicable` delivery state
 are gone. A read-only protocol view may still describe a verified local file,
 but that view is rejected by transfer persistence. Transfer deletion preserves
@@ -79,6 +79,24 @@ receipt, transfer retirement into the shared library, and the delivered file's
 SHA256. The local network assigns both clients LowID, so server-only discovery
 did not transfer bytes; the direct-source hint supplies a deterministic peer
 address for this upload proof.
+
+A fresh review of the domain and workflow led to further branch commits. An
+upload invalidation now withdraws a path only when its stored hash and native
+fingerprint still match the failed read, so a concurrent watcher admission can
+survive. Retired downloads are excluded from persisted completed offers and
+their live offer is reconciled by hash. Clean-profile startup no longer handles
+pre-SQL JSON resume manifests. Download pieces persist only `Missing` and
+`Verified`; request and write progress is rebuilt from durable block evidence.
+Malformed persisted block bitmaps fail loading instead of becoming a contiguous
+prefix. REST lists only root members whose current stored fingerprint was
+validated during this daemon session; restart clears that session gate and
+progressive hydration or admission fills it. Watcher admissions, renames, and
+removals refresh the affected hash instead of rebuilding the whole offer set.
+REST path-ordered pages stream candidates into bounded application memory;
+snapshot pages request a bounded hash page. Focused regressions, full metadata,
+core, eD2K, and REST suites, REST contract tests, formatting, and scoped Clippy
+passed across the review commits. The new pagination path has not yet been
+measured against a 100,000-file post-refactor library.
 
 Live Kad source discovery remains unproven in the current one-address Windows
 harness. A local two-client run bootstrapped Kad and reached `kadConnected=true`,
