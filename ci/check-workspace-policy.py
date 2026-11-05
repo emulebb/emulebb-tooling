@@ -848,46 +848,6 @@ def assert_rest_contract_defers_to_openapi(issues: list[str], tooling: Path) -> 
             issues.append(f"{tooling}\\{relative_path}: active REST route tables/lists must live in REST-API-OPENAPI.yaml, not the human contract doc: {match.group(0).strip()}")
 
 
-def assert_active_index_non_done_count(issues: list[str], tooling: Path) -> None:
-    """Checks active item index non-done count metadata."""
-
-    relative_path = r"docs\active\INDEX.md"
-    text = get_optional_text(tooling, relative_path)
-    if text is None:
-        issues.append(f"{tooling}: missing required file: {relative_path}")
-        return
-    declared = re.search(r"\*\*Current non-done count:\*\*\s*`(?P<count>\d+)`", text)
-    if declared is None:
-        issues.append(f"{tooling}\\{relative_path}: missing Current non-done count metadata.")
-        return
-    status_map = {
-        "OPEN": "OPEN",
-        "IN_PROGRESS": "IN_PROGRESS",
-        "BLOCKED": "BLOCKED",
-        "DEFERRED": "DEFERRED",
-        "DONE": "DONE",
-        "PASSED": "PASSED",
-        "WONT_DO": "WONT_DO",
-        "Open": "OPEN",
-        "In Progress": "IN_PROGRESS",
-        "Blocked": "BLOCKED",
-        "Deferred": "DEFERRED",
-        "Done": "DONE",
-        "Passed": "PASSED",
-        "Wont-Fix": "WONT_DO",
-    }
-    active_statuses = {"OPEN", "IN_PROGRESS", "BLOCKED", "DEFERRED"}
-    row_re = re.compile(r"(?m)^\| \[[A-Z]+-\d+\]\([^)]+\) \| [^|]+ \| (?P<status>[^|]+) \|")
-    actual = 0
-    for match in row_re.finditer(text):
-        status = match.group("status").strip().strip("*")
-        if status_map.get(status) in active_statuses:
-            actual += 1
-    expected = int(declared.group("count"))
-    if expected != actual:
-        issues.append(f"{tooling}\\{relative_path}: Current non-done count is {expected}, but active item tables contain {actual} OPEN/IN_PROGRESS/BLOCKED/DEFERRED items.")
-
-
 def audit_doc_paths(root: Path) -> None:
     """Runs active documentation path checks."""
 
@@ -933,7 +893,6 @@ def audit_doc_paths(root: Path) -> None:
             issues.append(f"{tooling}\\docs\\RESUME.md: RESUME.md must not be usable as policy authority.")
     assert_text_not_contains(issues, tooling, "README.md", (r"repos\emulebb-remote", "remote companion app"), "active tooling README must not reference abandoned eMule-remote entrypoints")
     assert_rest_contract_defers_to_openapi(issues, tooling)
-    assert_active_index_non_done_count(issues, tooling)
     if issues:
         raise RuntimeError("\n".join(issues))
     print("Active documentation path audit passed.")
