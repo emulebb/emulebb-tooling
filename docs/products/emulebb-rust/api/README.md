@@ -25,6 +25,8 @@ Sharing management is folder-tree only:
 
 - configure roots with `/api/v1/shared-directories`;
 - every root is recursively scanned and monitored;
+- custom case-insensitive file-name globs and configurable built-in ignores
+  apply across every shared tree through `/api/v1/shared-directories/ignores`;
 - single-file share/unshare/delete-sharing routes are not part of the Rust
   public contract.
 

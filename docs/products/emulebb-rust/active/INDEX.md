@@ -60,6 +60,7 @@ exception; new Rust items always use the `RUST-*` form.
 | [RUST-REF-009](items/RUST-REF-009.md) | Refactor | Use native storage domains for cross-platform library scheduling |
 | [RUST-REF-010](items/RUST-REF-010.md) | Refactor | Bound watcher reconciliation I/O for large shared libraries |
 | [RUST-REF-016](items/RUST-REF-016.md) | Refactor | Move blocking SQLite work behind bounded async persistence |
+| [RUST-REF-017](items/RUST-REF-017.md) | Refactor | Separate verified shared files from download transfers |
 
 ## Client Gate — Minor
 
