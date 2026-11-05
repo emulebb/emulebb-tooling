@@ -78,5 +78,14 @@ confirmed the managed server offer, an active seeder upload, full 1 MiB leecher
 receipt, transfer retirement into the shared library, and the delivered file's
 SHA256. The local network assigns both clients LowID, so server-only discovery
 did not transfer bytes; the direct-source hint supplies a deterministic peer
-address for this upload proof. The implementation branches are ready for a
-single PR after operator review.
+address for this upload proof.
+
+Live Kad source discovery remains unproven in the current one-address Windows
+harness. A local two-client run bootstrapped Kad and reached `kadConnected=true`,
+but the seeder's publish gate reported `firewalledWithoutBuddyOrUdp` and sent
+zero source publishes. Both clients had ED2K LowID; the Kad UDP firewall check
+cannot use a helper on the same local IP (`emulebb-kad-dht` routing filter), so
+the verified-open-UDP term in the stock publication gate never became true.
+A topology with independently reachable peer IPs or a verified buddy is needed
+for this remaining acceptance proof. Keep the item in progress until that
+proof and final branch review are complete; then request one implementation PR.
