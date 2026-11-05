@@ -5,11 +5,11 @@ product: emulebb-rust
 phase: Phase 1
 github_issue: https://github.com/emulebb/emulebb-rust/issues/161
 title: Return errors for Kad wire-count overflow
-status: OPEN
+status: DONE
 priority: Minor
 category: bug
 labels: [rust, kad, protocol, serialization, panic-safety, api]
-milestone: post-beta-polish
+milestone: rust-v0.1.0-beta.3
 created: 2026-10-23
 source: 2026-10-23 Rust best-practices and safety audit
 ---
@@ -71,14 +71,14 @@ would diverge from stock framing and corrupt packet boundaries.
 
 ## Acceptance Criteria
 
-- [ ] No Kad packet encoder uses `expect`, unchecked narrowing, or truncation
+- [x] No Kad packet encoder uses `expect`, unchecked narrowing, or truncation
       for a wire count derived from a collection length.
-- [ ] Every count overflow returns a typed `ProtoError` before any packet bytes
+- [x] Every count overflow returns a typed `ProtoError` before any packet bytes
       are exposed to the transport.
-- [ ] Maximum valid `u8` and `u16` counts encode successfully with stock framing.
-- [ ] One-over-maximum counts fail deterministically for every affected packet
+- [x] Maximum valid `u8` and `u16` counts encode successfully with stock framing.
+- [x] One-over-maximum counts fail deterministically for every affected packet
       family.
-- [ ] DHT response paging continues to honor the UDP datagram ceiling as an
+- [x] DHT response paging continues to honor the UDP datagram ceiling as an
       independent constraint.
 
 ## Validation
@@ -89,3 +89,21 @@ would diverge from stock framing and corrupt packet boundaries.
   values.
 - Existing stock packet fixtures, Kad interoperability tests, and response-size
   tests.
+
+## Resolution
+
+- Added typed `ProtoError::WireCountOverflow` failures with field, maximum, and
+  actual counts.
+- Prevalidated packet and tag collection widths before serialization and
+  replaced infallible binrw count calculations with fallible calculations.
+- Added maximum, maximum-plus-one, and non-panicking boundary coverage for the
+  affected `u8` and `u16` packet and tag families.
+- Merged by [emulebb-rust#205](https://github.com/emulebb/emulebb-rust/pull/205)
+  in focused commit
+  [`742ee414`](https://github.com/emulebb/emulebb-rust/commit/742ee414).
+
+## Evidence
+
+- `cargo test -p emulebb-kad-proto`
+- `python tools/rust_quality_gate.py ci`
+- Full locked workspace build and test suite from emulebb-rust PR #205.
