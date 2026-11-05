@@ -66,7 +66,6 @@ exception; new Rust items always use the `RUST-*` form.
 | ID | Class | Title |
 |---|---|---|
 | [RUST-CI-028](items/RUST-CI-028.md) | Evidence | Make Windows manifest embedding target-aware |
-| [RUST-BUG-135](items/RUST-BUG-135.md) | Bug | Return errors for Kad wire-count overflow |
 | [RUST-BUG-136](items/RUST-BUG-136.md) | Bug | Bound transfer deletion marker validation reads |
 | [RUST-BUG-157](items/RUST-BUG-157.md) | Bug | Eliminate unexplained ED2K offer publication stalls |
 | [RUST-FEAT-025](items/RUST-FEAT-025.md) | Feature | Validate conformant duplicate-block rejection diagnostics |
