@@ -24,7 +24,7 @@ Reduce the database, catalog, and filesystem-metadata amplification that now
 dominates large-library cold ingestion and mutation. The combined MD4/AICH
 payload path is already close to one physical read of the library; the next
 large gain is to preserve that behavior while avoiding per-file durable commits,
-repeated stale-source scans, and unnecessary media-enrichment I/O.
+repeated membership work, and unnecessary media-enrichment I/O.
 
 Retain bounded, representative multi-HDD measurement as the final proof lane.
 Do not restart an unbounded real-media scan under this item.
@@ -43,12 +43,12 @@ one-percent mutation, long-path, watcher, persistence, and cleanup checks:
 - Rehashing a 1,000-file, 100 MB mutation reported about 25.56 GB of process
   reads and about 399.8 MB of physical writes.
 
-Each new share currently commits a `synchronous=FULL` manifest transaction and
-normally follows it with a separate media-metadata update. Stale-hash removal
-queries `shared_file_sources` by `known_file_id`, but that column has no dedicated
-index, and removes hashes one transaction at a time. These sites are the first
-attribution targets; the process logical-read counter must still be traced
-before every byte is assigned to a cause.
+The shared-library domain refactor in `RUST-REF-017` replaced the old
+share-in-place transfer manifest and `shared_file_sources` table with
+`verified_local_content`, `local_file_instances`, and
+`shared_file_memberships`. The old stale-source lookup hypothesis is therefore
+retired. Measure the current local-content commits, root membership updates,
+and optional media enrichment before assigning process logical reads to a cause.
 
 The cold-cohort entry limit currently counts directories and errors, which can
 starve publishable files in directory-heavy prefixes and is not fair across
@@ -69,22 +69,21 @@ remaining large-library I/O cost.
 
 ## Representative Sites
 
-- `crates/emulebb-ed2k/src/ed2k_transfer/store.rs`
-  `store_manifest_unlocked`
-- `crates/emulebb-ed2k/src/ed2k_transfer/shared_catalog.rs`
-  `upsert_verified_catalog_entry`
-- `crates/emulebb-metadata/src/transfer_store.rs`
-  `upsert_transfer_manifest`, `update_transfer_media_metadata`, and
-  `delete_transfer_manifest`
-- `crates/emulebb-metadata/src/schema.sql` `shared_file_sources`
+- `crates/emulebb-ed2k/src/ed2k_transfer/ingest.rs`
+  `ingest_local_file_inner`
+- `crates/emulebb-metadata/src/local_file_store.rs`
+  `upsert_verified_local_content`
+- `crates/emulebb-metadata/src/shared_membership_store.rs`
+  `replace_root_memberships`
+- `crates/emulebb-metadata/src/schema.sql` local content and membership tables
 - `crates/emulebb-core/src/shared_directories.rs`
   `forget_stale_shares` and `hash_reload_targets`
 - `repos/emulebb-build-tests/emule_test_harness/rust_shared_library_io.py`
 
 ## Intended Shape
 
-- Add the missing lookup support for stale-source operations and batch stale
-  removal so a mutation does not repeatedly scan a 100k-row source table.
+- Profile local-instance lookup and membership replacement under a 100k-file
+  mutation before changing indexes or batching boundaries.
 - Introduce a bounded single metadata-writer path for initial share ingestion.
   Preserve `synchronous=FULL`, but commit small file/time-bounded groups instead
   of one transaction per file. Keep the first publishable cohort responsive.
@@ -92,7 +91,7 @@ remaining large-library I/O cost.
   commit latency and keep REST/network metadata operations responsive.
 - Publish the hash/name/size entry before optional media enrichment. Persist
   derived media fields through the bounded writer, or combine them with the
-  manifest transaction when doing so does not delay first publication.
+  local-content transaction when doing so does not delay first publication.
 - Instrument SQLite transaction count, WAL bytes, statement/page reads, media
   probe bytes, and stale-removal work so logical-read amplification is attributed
   rather than inferred.
@@ -119,10 +118,10 @@ remaining large-library I/O cost.
 
 ## Acceptance Criteria
 
-- [ ] `shared_file_sources` stale-source lookups are indexed and a 1,000-file
-      mutation no longer performs per-hash full-table work.
-- [ ] Initial share persistence uses bounded batching while keeping committed
-      manifests crash-consistent and the first publication cohort prompt.
+- [ ] A 1,000-file mutation has no per-hash full-table work in the current
+      local-instance and membership schema, verified by query plans and counters.
+- [ ] Initial share persistence uses bounded batching while keeping verified
+      local content crash-consistent and the first publication cohort prompt.
 - [ ] Optional media enrichment does not block a newly hashed file from entering
       the live publication catalog.
 - [ ] The harness records payload bytes, process/physical reads and writes,
@@ -137,7 +136,8 @@ remaining large-library I/O cost.
 
 ## Validation
 
-- Metadata schema/query-plan tests for source lookup and batch deletion.
+- Metadata schema/query-plan tests for local-instance lookup and membership
+  replacement.
 - Crash/restart tests around partial batches and first-cohort publication.
 - Hash/ingest equivalence tests preserving MD4, ED2K part hashes, AICH, media
   metadata, long paths, and catalog contents.
