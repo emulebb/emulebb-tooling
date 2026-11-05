@@ -63,12 +63,20 @@ partial-file sharing, ED2K/Kad publication, and upload integrity.
 The `feature/shared-library-domain` Rust branch has granular pushed commits for
 the verified local-content boundary, independent publication, implicit roots,
 completion promotion, crash-safe piece-store retirement, and pattern ignores.
-The clean schema is version 52. Persisted transfers are download-only:
+The clean schema is version 53. Persisted transfers are download-only:
 `source_path_id`, `shared_file_sources`, and the `not_applicable` delivery state
 are gone. A read-only protocol view may still describe a verified local file,
 but that view is rejected by transfer persistence. Transfer deletion preserves
-same-hash verified local content. Offline roots retire membership rows; a
+same-hash verified local content. Completion flags, acquired-hashset flags,
+partial hashsets, and verified ranges are owned by the transfer row and cascade
+on its deletion. Offline roots retire membership rows; a
 successful rescan is required before they can rejoin publication, and the
 health worker retries an incomplete rejoin. Metadata, core, eD2K, and REST
-tests plus scoped lint checks pass. Final local Kad and WebUI validation remains
-before one implementation PR is requested.
+tests plus scoped lint checks pass. WebUI unit, browser, typecheck, and build
+checks pass. An isolated Windows/WSL run with a stock ED2K direct-source link
+confirmed the managed server offer, an active seeder upload, full 1 MiB leecher
+receipt, transfer retirement into the shared library, and the delivered file's
+SHA256. The local network assigns both clients LowID, so server-only discovery
+did not transfer bytes; the direct-source hint supplies a deterministic peer
+address for this upload proof. The implementation branches are ready for a
+single PR after operator review.
