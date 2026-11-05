@@ -86,6 +86,22 @@ but the seeder's publish gate reported `firewalledWithoutBuddyOrUdp` and sent
 zero source publishes. Both clients had ED2K LowID; the Kad UDP firewall check
 cannot use a helper on the same local IP (`emulebb-kad-dht` routing filter), so
 the verified-open-UDP term in the stock publication gate never became true.
-A topology with independently reachable peer IPs or a verified buddy is needed
-for this remaining acceptance proof. Keep the item in progress until that
-proof and final branch review are complete; then request one implementation PR.
+
+A second local diagnostic used the staged Linux client as seeder in WSL and the
+staged Windows client as leecher on distinct IPs. Both clients bootstrapped Kad,
+the server indexed the share, and the leecher accepted a plain eD2K link.
+Neither transferred bytes: the seeder remained LowID and its stock Kad source
+publication gate still reported `firewalledWithoutBuddyOrUdp`. The REST Kad
+summary's `firewallState=open` did not establish the separate verified-open-UDP
+condition required by that gate. A synthetic v6 contact could not bootstrap;
+v9 contacts with obfuscation disabled did bootstrap but did not verify UDP.
+An additional WSL interface could not route to the server or bootstrap its
+helper peer, so that topology was removed from the persisted harness. The WSL
+diagnostic uses an alternate metadata-enabled DrvFs mount for the Linux profile
+key's required `0600` permissions, with profile bytes under the output root.
+
+The remaining proof requires a reachable Kad firewall-check helper on another
+IP, or a verified buddy, plus a completed Kad-discovered transfer and matching
+delivered-file SHA256. Keep the stock publish gate and this item in progress
+until that proof and final branch review are complete; then request one
+implementation PR.
