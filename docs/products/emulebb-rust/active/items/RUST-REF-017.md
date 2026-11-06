@@ -116,6 +116,17 @@ storage, REST, and global checks passed. The local Kad swarm integration test
 again discovered shared-tree sources and completed two transfers after the
 full-scan change.
 
+A fresh domain review found one integrity fault in the verified-content upsert:
+a second path with the same ED2K hash and size but a conflicting AICH identity
+could replace the stored part hashsets while retaining the first path's AICH
+root. The branch now rejects conflicting geometry, AICH root, or hashsets in
+one transaction and leaves the first verified path untouched. The collision
+regression, all 74 metadata tests, all 1,255 eD2K library tests, and scoped
+metadata Clippy pass. The review also noted that a read-only protocol serving
+view is currently synthesized with `Ed2kResumeManifest`. Persistence rejects
+that view, so no local share becomes a download row, but a dedicated serving
+type would make the internal boundary clearer.
+
 Live Kad source discovery remains unproven in the current one-address Windows
 harness. A local two-client run bootstrapped Kad and reached `kadConnected=true`,
 but the seeder's publish gate reported `firewalledWithoutBuddyOrUdp` and sent
