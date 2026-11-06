@@ -136,8 +136,24 @@ helper peer, so that topology was removed from the persisted harness. The WSL
 diagnostic uses an alternate metadata-enabled DrvFs mount for the Linux profile
 key's required `0600` permissions, with profile bytes under the output root.
 
-The remaining proof requires a reachable Kad firewall-check helper on another
-IP, or a verified buddy, plus a completed Kad-discovered transfer and matching
-delivered-file SHA256. Keep the stock publish gate and this item in progress
-until that proof and final branch review are complete; then request one
-implementation PR.
+The persisted WSL diagnostic now records helper eligibility without contact
+addresses and enables narrow, child-only protocol logging. In run
+`rust-local-upload/20261106T005133Z`, the seeder had one eligible v9 helper on
+a distinct IP. Each client sent `OP_FWCHECKUDPREQ`, and each received the other
+client's request over eD2K TCP. Neither completed a UDP firewall-check round;
+the seeder still attempted zero Kad source publishes and the transfer made zero
+progress. This two-peer bootstrap is unsuitable for a stock UDP reachability
+verdict: each helper already has the requester in its Kad routing table.
+`CUpDownClient::ProcessFirewallCheckUDPRequest` sets the reply's error byte for
+an already-known requester, and
+`CKademliaUDPListener::Process_KADEMLIA2_FIREWALLUDP` cancels that result.
+The Rust responder and firewall-state handling implement the same rule. A
+timeout alone cannot distinguish a cancelled reply from a network-dropped
+reply, so this run does not prove UDP reachability. The local Kad swarm
+integration test separately passed source discovery and transfer completion.
+
+The remaining live proof requires a reachable, unbiased Kad firewall-check
+helper on another IP, or a verified buddy, plus a completed Kad-discovered
+transfer and matching delivered-file SHA256. Keep the stock publish gate and
+this item in progress until that proof and final branch review are complete;
+then request one implementation PR.
