@@ -179,7 +179,16 @@ delivered file for host-side SHA256 verification. Both profile archives were
 retained and the successful run reported no fixture, archive, or mount cleanup
 errors. Windows and Linux release builds passed at the tested product commit.
 
-The implementation and scoped acceptance evidence are ready for operator
-review. Keep this item in progress while the pushed granular commits await the
-single implementation PR; the operator explicitly requested stopping before
-PR creation.
+The implementation and scoped acceptance evidence are in review in the single
+[product implementation PR](https://github.com/emulebb/emulebb-rust/pull/237)
+and its [harness companion](https://github.com/emulebb/emulebb-build-tests/pull/96).
+Both retain the granular commits on `feature/shared-library-domain`. Keep this
+item in progress until review and merge complete.
+
+PR preparation aligned hosted CI with immutable companion revisions for the
+breaking beta contract. It also updated the harness body-field inventory from
+the retired exclusions route to `/shared-directories/ignores/defaults/{ruleKey}`.
+All 120 contract parser tests and the complete router/OpenAPI metadata comparison
+passed. The latest focused helper, upload, profile, wire, and server tests passed
+108 tests, with one POSIX-only permission test skipped on Windows; formatting,
+scoped Python lint, and the strict documentation build also passed.
