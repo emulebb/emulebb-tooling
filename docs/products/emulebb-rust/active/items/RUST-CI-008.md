@@ -66,8 +66,10 @@ ignored even though release packaging emits macOS artifacts.
 - Do not require identical case/normalization behavior from filesystems with
   different native rules; require correct capability-aware behavior.
 - Do not make a 100k run mandatory for ordinary pull requests.
-- Product fixes discovered by the matrix remain owned by `RUST-BUG-107`,
-  `RUST-REF-009`, and `RUST-REF-010`.
+- Lossless storage from completed `RUST-BUG-107` is the baseline. Product fixes
+  belong to `RUST-BUG-159` (delivery name budgets), `RUST-BUG-160` (import name
+  matching), `RUST-BUG-161` (filesystem comparisons), `RUST-FEAT-064` (lossless
+  API locators), `RUST-REF-009`, or `RUST-REF-010` as appropriate.
 - Run the full cross-platform matrix after those path, storage-domain, and
   watcher fixes are available; do not use stale red evidence as their proxy.
 
@@ -94,6 +96,54 @@ ignored even though release packaging emits macOS artifacts.
 - Small hosted Windows/Linux/macOS fixture lanes.
 - Retained full 100k evidence on each supported platform where suitable runner
   storage is available.
+
+## Accepted macOS Filesystem Matrix Follow-up (2026-11-06)
+
+This owns approved follow-up 10. Preserve the existing cross-platform fixture
+work instead of opening a second evidence issue. It remains post-beta backlog
+work; this update does not claim that the Windows/WSL import campaign proves
+native macOS behavior or that older hosted fixture tests never passed.
+
+Record native macOS runtime evidence on the architectures for which packages
+are claimed. Exercise APFS case-sensitive and case-insensitive volumes where
+available and report the actual capabilities of each fixture volume. Measure
+representable component and whole-path boundaries in the platform/filesystem's
+units; do not copy a Windows character limit or an ext4 byte limit into APFS
+expectations without evidence.
+
+The matrix must cover:
+
+- Actual native-byte storage, Unicode display, SQLite reopen, and serving of
+  the exact file across restart and rename. Invalid-byte/code-unit cases are
+  tested only where representable, with an explicit unsupported disposition.
+- NFC/NFD and compatibility-equivalent names, case variants, accented/CJK/emoji
+  names, combining sequences, bracketed names, and long directory hierarchies.
+- Capability-gated collision pairs with distinct contents: listing, root
+  consolidation, import matching, collision-safe delivery, and API operations
+  must not alias or overwrite the wrong file.
+- Native name-budget delivery, extension/collision suffix boundaries, and
+  differences between a long path and an oversized single component.
+- Stock/exchange import with path remapping and normalization changes, repeated
+  import, and unchanged-file reconciliation with zero payload reads.
+- Watcher create/modify/rename/delete and a defined fallback for delayed or
+  coalesced FSEvents. RUST-REF-010 owns the production recovery design.
+- Packaged startup, authenticated REST, WebUI, local transfer, and clean
+  shutdown, separately from the fixture-generator's hosted Python checks.
+
+Use synthetic names and payloads, record native length accounting, skip reasons,
+hash/AICH equality, payload bytes, and filesystem case/normalization behavior.
+Owned fixture volumes may use capability probes; operator media trees remain
+read-only. Keep a small hosted smoke and optional full 100K synthetic campaigns;
+no complete real-media rehash is authorized by this backlog item.
+
+- [ ] Each claimed macOS lane has explicit package/runtime and filesystem
+      capability evidence, rather than inheriting a Windows/WSL result.
+- [ ] NFC/NFD/case, name-length, collision, opaque-path API, and import/reuse
+      cases link to their product owner's regressions and record clear results.
+- [ ] Unsupported native names and unavailable volume types are documented
+      capability dispositions; unexpected filesystem failures remain failures.
+- [ ] Delayed/coalesced watcher results have a proved recovery/degradation
+      disposition before the corresponding support claim is made.
 
 ## Evidence
 

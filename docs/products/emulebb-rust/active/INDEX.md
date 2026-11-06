@@ -50,6 +50,8 @@ exception; new Rust items always use the `RUST-*` form.
 | [RUST-BUG-154](items/RUST-BUG-154.md) | Bug | Admit Kad datagrams before learning sender state |
 | [RUST-BUG-155](items/RUST-BUG-155.md) | Bug | Share established peer identity and control state |
 | [RUST-BUG-156](items/RUST-BUG-156.md) | Bug | Give ED2K server settings one authority |
+| [RUST-BUG-159](items/RUST-BUG-159.md) | Bug | Respect destination filename limits during download delivery |
+| [RUST-BUG-161](items/RUST-BUG-161.md) | Bug | Respect filesystem case semantics when consolidating shared roots |
 | [CI-054](items/CI-054.md) | Evidence | Add native Windows Rust/MFC protocol-parity diagnostics campaign |
 | [RUST-FEAT-056](items/RUST-FEAT-056.md) | Feature | Deliver supported Android and Fire OS APKs with device harnesses |
 | [RUST-FEAT-057](items/RUST-FEAT-057.md) | Feature | Publish portable Linux musl builds for x64 and ARM64 |
@@ -62,6 +64,7 @@ exception; new Rust items always use the `RUST-*` form.
 | [RUST-REF-009](items/RUST-REF-009.md) | Refactor | Use native storage domains for cross-platform library scheduling |
 | [RUST-REF-010](items/RUST-REF-010.md) | Refactor | Bound watcher reconciliation I/O for large shared libraries |
 | [RUST-REF-016](items/RUST-REF-016.md) | Refactor | Move blocking SQLite work behind bounded async persistence |
+| [RUST-REF-018](items/RUST-REF-018.md) | Refactor | Keep shared-root filesystem work outside async state locks |
 
 ## Client Gate — Minor
 
@@ -70,6 +73,7 @@ exception; new Rust items always use the `RUST-*` form.
 | [RUST-CI-028](items/RUST-CI-028.md) | Evidence | Make Windows manifest embedding target-aware |
 | [RUST-BUG-136](items/RUST-BUG-136.md) | Bug | Bound transfer deletion marker validation reads |
 | [RUST-BUG-157](items/RUST-BUG-157.md) | Bug | Eliminate unexplained ED2K offer publication stalls |
+| [RUST-BUG-160](items/RUST-BUG-160.md) | Bug | Reuse stock hashes across unambiguous Unicode filename normalization |
 | [RUST-FEAT-025](items/RUST-FEAT-025.md) | Feature | Validate conformant duplicate-block rejection diagnostics |
 | [RUST-FEAT-038](items/RUST-FEAT-038.md) | Feature | Add current-aMule-style endgame source takeover |
 | [RUST-FEAT-039](items/RUST-FEAT-039.md) | Feature | Size ED2K request depth from measured RTT and bandwidth |
@@ -78,8 +82,10 @@ exception; new Rust items always use the `RUST-*` form.
 | [RUST-FEAT-059](items/RUST-FEAT-059.md) | Feature | Support FreeBSD on x64 and ARM64 |
 | [RUST-FEAT-060](items/RUST-FEAT-060.md) | Feature | Support ChromeOS through Android and Crostini lanes |
 | [RUST-FEAT-061](items/RUST-FEAT-061.md) | Feature | Support illumos, NetBSD, and OpenBSD as portable Unix targets |
+| [RUST-FEAT-064](items/RUST-FEAT-064.md) | Feature | Address unusual native paths through lossless API locators |
 | [RUST-REF-007](items/RUST-REF-007.md) | Refactor | Review Rust upload hot-path performance candidates |
 | [RUST-REF-011](items/RUST-REF-011.md) | Refactor | Consolidate duplicated ED2K opcode and capability constants |
+| [RUST-REF-019](items/RUST-REF-019.md) | Refactor | Offload remaining transfer and large-library CPU bursts |
 
 ## Indexer Gate
 

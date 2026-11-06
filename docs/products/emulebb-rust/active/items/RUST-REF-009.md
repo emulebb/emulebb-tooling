@@ -56,6 +56,57 @@ cross-device concurrency.
 - Keep SSD/NVMe concurrency a measured optional policy; do not weaken the HDD
   default merely to improve a synthetic SSD number.
 
+## Accepted Shared-Scheduler Follow-up (2026-11-06)
+
+This owns approved follow-up 5. Keep the existing storage-domain resolver work
+and extend one admission/scheduling service across every hashing entry point.
+This is post-beta backlog work, not a data-preservation blocker for the current
+stock import or an instruction to hash the remaining operator library.
+
+At review commit `43855fba`, background reload groups targets by disk and runs
+one sequential worker per group. The synchronous/offline reload primitive uses
+a separate serial file loop, so independent devices can remain idle. Direct
+`share_local_file`/`ingest_local_file` requests reach blocking hashing without
+that reload job's per-domain gate. A local limit inside one reload is therefore
+not a process-wide guarantee: API ingestion can compete with its payload reads.
+Watcher ingestion joins this service through RUST-REF-010.
+
+Resolve a storage domain once at the root/admission boundary, then submit owned
+hash jobs into bounded per-domain queues with an overall concurrency/queue
+budget. Startup/reload, CLI, API, and watcher callers must acquire the same
+domain permit. Use the existing hash/read implementation as the worker body;
+do not add another MD4/AICH pipeline or parser. Define fair scheduling between
+long library work and short interactive/transfer jobs, with observable queue
+waits and cancellation states.
+
+Keep the physical storage-domain key distinct from the durable native file
+fingerprint. A scheduling-topology refresh must not itself invalidate accepted
+hashes or become evidence of changed payload bytes. `st_dev` is a Unix baseline,
+not proof that two partitions/mounts occupy independent mechanical disks; use
+read-only topology evidence or conservative visible grouping where necessary.
+
+Additional representative sites:
+
+- `crates/emulebb-core/src/shared_directories.rs`: offline
+  `reload_shared_directories`, background `hash_reload_targets`, and reload gate.
+- `crates/emulebb-core/src/shared_file_api.rs`: direct sharing requests.
+- `crates/emulebb-ed2k/src/ed2k_transfer/ingest.rs`: shared worker implementation.
+- `crates/emulebb-core/src/shared_dir_monitor.rs`: watcher admission.
+
+Additional acceptance criteria:
+
+- [ ] Reload plus direct API jobs on the same identified disk never create
+      overlapping payload hash readers merely because callers differ.
+- [ ] CLI and daemon callers use the same queues, with concurrent progress on
+      independently identified disks and bounded process-wide admission.
+- [ ] Unknown/shared/multi-extent topology stays conservative and observable.
+- [ ] Cancellation releases queued jobs promptly and releases running-job permits
+      only when their blocking work actually ends; shutdown has explicit rules.
+- [ ] Fairness, saturation, repeated admission, and restart tests preserve MD4,
+      full available AICH, no-rehash reuse, and one-pass read accounting.
+- [ ] Tests use synthetic resolver seams and bounded cohorts, never the complete
+      real-media library as an implicit benchmark.
+
 ## Scope Constraints
 
 - Preserve exactly one active payload reader per identified mechanical storage
