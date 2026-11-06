@@ -259,4 +259,12 @@ instead of `{ruleKey}`. The normalization regression failed before the fix;
 all 143 contract tests and the complete local REST/OpenAPI campaign then passed
 with graceful teardown (`reports/rust-rest-openapi-ci/20261106T115437Z/report.json`
 below the configured output root). Rust CI now pins harness revision `4edca15b`
-containing that correction. Required CI remains the final review gate.
+containing that correction.
+
+The final hosted matrix passed all 15 checks at product revision `0a06438e`,
+including Linux, Windows, and macOS build/test, strict quality, supply-chain,
+CodeQL, live REST/OpenAPI conformance, and Required CI. The product workflow
+[run 42213867687](https://github.com/emulebb/emulebb-rust/actions/runs/42213867687)
+used the corrected immutable harness pin. Harness PR #96 also passed all 20
+checks at `4edca15b`. The implementation is ready for review; this item remains
+in progress until the companion PRs are reviewed and merged.
