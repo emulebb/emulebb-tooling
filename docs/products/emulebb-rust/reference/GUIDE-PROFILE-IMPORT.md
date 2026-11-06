@@ -105,7 +105,11 @@ Exit statuses:
 | 2 | Import completed but needs attention; valid imported data is retained |
 | 1 | Preflight or execution failure; inspect the diagnostic |
 
-Each dated output directory contains `hashes.sqlite` and `summary.json`.
+Each dated output directory contains `hashes.sqlite`, `summary.json`, and
+`audit-baseline.sqlite`. The baseline holds metadata fingerprints from before
+apply so verification can prove that rejected existing hashes, bindings, and
+recovery trees remained unchanged. It contains no payload data, is separate
+from the portable archive, and is never imported or consulted by Rust.
 The `emulebb.profile-exchange.v2` archive is read-only during Rust apply; it
 retains all stock hash records and available recovery trees, including unmatched
 records. Native schema 58 contains no `imported_` tables. Regenerate an archive
@@ -122,6 +126,10 @@ paths and metadata and binds accepted files to native fingerprints, including
 Windows file IDs, directly in live tables. Conflicting and unmatched records
 stay in the archive for explicit retries. Normal startup, reload, and uploads
 use live tables only. No payload bytes are read to preserve stock hashes.
+Rust also checks that supplied MD4 part hashes reconstruct their ED2K identity
+and supplied AICH part roots reconstruct their master. These consistency checks
+hash metadata only. Database/storage failures are execution failures, distinct
+from safely rejected content conflicts.
 
 Missing or rejected AICH recovery data does not invalidate usable MD4 hashes.
 Full AICH is preserved when it exists in stock; importing cannot manufacture
@@ -130,10 +138,12 @@ the difference between known records and recovery-set coverage; sets may also
 be shared by duplicate contents.
 
 When Rust rejects an optional recovery set, the tool continues MD4 reconciliation
-and returns exit 2. Verification permits only wholly absent sets whose count
-matches the importer's reported rejections. Partial trees, altered imported
-leaves, and unexplained missing sets remain failures. The report records verified
-and unavailable recovery-set counts separately.
+and returns exit 2. Verification permits a wholly absent rejected set or an
+existing complete tree proven unchanged against the baseline. Rejection counts
+must account for these outcomes. Partial trees, altered existing metadata, and
+unexplained missing sets remain failures. The report separates verified imported
+sets, unavailable sets, retained existing trees, and preserved conflicting
+records/bindings. A source conflict cannot excuse a changed live record.
 
 If hashing is pending, review roots, mappings, file modifications, and whether
 stock finished hashing. Do not start the normal client until you accept that
@@ -196,3 +206,9 @@ Completed file hashes are committed during the pass. If the offline process is
 interrupted, rerun the same command with the same profile: completed unchanged
 files are reused, and an interrupted file is hashed again. Keep the client
 stopped while running these offline operations.
+Native content and its successfully cached recovery tree commit atomically.
+Download finalization saves available recovery metadata before publishing
+completion. An optional cache error still permits valid MD4 work to finish;
+the directory-import result reports `missingAichRecoverySets` for accepted live
+contents large enough for recovery that have a master but no saved full tree.
+Missing optional recovery never schedules a payload read by itself.
