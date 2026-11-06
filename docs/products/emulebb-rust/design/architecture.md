@@ -332,13 +332,19 @@ graph TD
   hashsets stream in bounded batches; JSON bulk manifests are unsupported.
   `reconcile-shared-files` runs the same scan and reuse planner offline, reports
   pending hashing, and never starts networking or executes the payload hasher.
-- Native schema 56 retains complete AICH recovery sets by master hash and file
+- Native schema 57 retains complete AICH recovery sets by master hash and file
   size, with packed block hashes and a part root per eD2K part. Imports validate
   the full tree from metadata alone, atomically store complete sets, and enrich
   existing aliases without rebinding native paths. Recovery cache failures
-  remain independent of reusable MD4 content. The existing local ingest and
+  remain independent of reusable MD4 content. Import writes use bounded
+  batches with a savepoint per recovery set; stable alias rows preserve richer
+  hashsets across sparse reimports. One rejected set cannot leave
+  partial leaves or roll back its valid neighbors. The existing local ingest and
   completion verification passes retain their block hashes without a second
-  payload pass. Trusted acquired AICH identities are preserved on disagreement.
+  payload pass. Tree reconstruction and cache persistence run off async workers.
+  MD4 completion is durable before optional recovery-cache writes, so a cache
+  failure cannot rearm payload verification. Trusted acquired AICH identities
+  are preserved on disagreement.
 - Recovery responses use the requested part's leaves and upper-tree part
   roots. Current native file eligibility and fingerprint checks still apply.
   Missing or rejected recovery data returns protocol recovery-unavailable;
