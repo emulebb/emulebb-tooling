@@ -3,7 +3,7 @@ id: RUST-BUG-158
 workflow: github
 github_issue: https://github.com/emulebb/emulebb-rust/issues/238
 title: Reuse trusted stock profile hashes without payload rehashing
-status: IN_PROGRESS
+status: DONE
 priority: Major
 category: bug
 labels: [rust, persistence, sharing, tests]
@@ -37,9 +37,11 @@ matches to target-native fingerprints without reading payload contents.
   including exact imported hashset comparison, process/container recreation,
   and hash-only reimport independent of the manifest's target platform.
 
-Implementation and offline validation are complete; delivery checks remain in
-progress. Product source is `b2758345`; the persisted audit is in
-`emulebb-build-tests` through `d8d06829`.
+Implementation and offline validation are complete. Product source
+`fb4429a1` was delivered in [Rust PR #239](https://github.com/emulebb/emulebb-rust/pull/239),
+preserving both granular commits. The persisted audit was delivered in
+[harness PR #97](https://github.com/emulebb/emulebb-build-tests/pull/97),
+preserving its three granular commits.
 
 | Target | Imported records | Reused paths | Payload bytes read | Files hashed |
 |---|---:|---:|---:|---:|
@@ -59,14 +61,14 @@ by two paths and two intake exclusions across platforms.
 
 Retained receipts below `EMULEBB_WORKSPACE_OUTPUT_ROOT`:
 
-- `reports/stock-hash-import/windows/20261106T135523Z/summary.json`
-- `reports/stock-hash-import/docker/20261106T140547Z/summary.json`
+- `reports/stock-hash-import/windows/20261106T142126Z/summary.json`
+- `reports/stock-hash-import/docker/20261106T142508Z/summary.json`
 - `logs/trusted-stock-rust-tests.log`
-- `logs/builds/20261106T135205Z-build-clients/build-result.json`
-- `logs/builds/20261106T135724Z-package-emulebb-rust/build-result.json`
+- `logs/builds/20261106T141820Z-build-clients/build-result.json`
+- `logs/builds/20261106T142136Z-package-emulebb-rust/build-result.json`
 
 The full Rust workspace tests, focused exporter/import/audit tests, Windows and
 Linux release builds, local DEB/image packaging, and workspace policy validation
 passed. The Docker candidate is
-`local/emulebb-rust:0.1.0-beta.2.nightly.20261106.gb2758345`. The operator's existing
+`local/emulebb-rust:0.1.0-beta.2.nightly.20261106.gfb4429a1`. The operator's existing
 Docker stack profile was not replaced.
