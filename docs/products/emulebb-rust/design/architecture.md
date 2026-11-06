@@ -326,9 +326,27 @@ graph TD
   automatically hashing; offline roots retain their cached records. Missing
   optional AICH data does not invalidate the eD2K cache.
 - `import-emule-profile --hashes-only` imports the portable hash records
-  independently of the manifest's platform and sharing roots.
+  independently of the export's platform and sharing roots. The current
+  interchange format is one SQLite file (`emulebb.profile-exchange.v1`),
+  separate from the native profile schema. Known-file metadata and packed
+  hashsets stream in bounded batches; JSON bulk manifests are unsupported.
   `reconcile-shared-files` runs the same scan and reuse planner offline, reports
   pending hashing, and never starts networking or executes the payload hasher.
+- Native schema 56 retains complete AICH recovery sets by master hash and file
+  size, with packed block hashes and a part root per eD2K part. Imports validate
+  the full tree from metadata alone, atomically store complete sets, and enrich
+  existing aliases without rebinding native paths. Recovery cache failures
+  remain independent of reusable MD4 content. The existing local ingest and
+  completion verification passes retain their block hashes without a second
+  payload pass. Trusted acquired AICH identities are preserved on disagreement.
+- Recovery responses use the requested part's leaves and upper-tree part
+  roots. Current native file eligibility and fingerprint checks still apply.
+  Missing or rejected recovery data returns protocol recovery-unavailable;
+  startup and peer requests never trigger AICH payload hashing. Two admitted
+  reconstruction jobs and a 64 MiB byte-accounted proof cache bound recovery
+  work independently of shared-library size. Duplicate in-flight work returns
+  unavailable while the first response is computed. Cached proofs are keyed by
+  content, never paths, and are reused after subsequent eligibility checks.
 
 ---
 
