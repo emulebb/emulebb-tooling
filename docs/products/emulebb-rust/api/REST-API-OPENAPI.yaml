@@ -1466,6 +1466,10 @@ paths:
       tags: [SharedDirectories]
       summary: Replace configured shared directory roots.
       operationId: replaceSharedDirectories
+      description: >-
+        Roots are recursive. Listed descendants collapse under a listed parent;
+        children already covered by Incoming or category roots are not stored
+        as additional explicit roots. Unrelated siblings remain separate.
       requestBody:
         required: true
         content:
@@ -1496,6 +1500,10 @@ paths:
       tags: [SharedDirectories]
       summary: Add one configured shared directory root.
       operationId: addSharedDirectoryRoot
+      description: >-
+        Roots are recursive. Adding a covered child is a successful no-op;
+        adding a parent consolidates existing explicit children under it.
+        Incoming and category roots retain their mandatory origins.
       requestBody:
         required: true
         content:

@@ -318,6 +318,11 @@ graph TD
   rebuilds the `Ed2kTransferRuntime` from the transfer store, and hydrates the
   `KadLocalStore` from the Kad publish cache (see `EmulebbCore::new_with_network`
   at `crates/emulebb-core/src/lib.rs:353`).
+- Recursive-root consolidation belongs to the core and is shared by stock
+  archive apply, native directory-list import, UI/API additions, and bulk root
+  replacement. Descendants do not become separate explicit roots when their
+  configured parent already covers them. Mandatory Incoming/category origins
+  remain separate from editable explicit-root intent.
 - Stock/MFC export belongs to Python. The portable SQLite archive
   (`emulebb.profile-exchange.v2`) retains known records, matched target paths,
   configured roots, and complete AICH recovery leaves. Rust opens it read-only

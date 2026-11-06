@@ -181,6 +181,11 @@ the existing MD4/AICH pass. Networking is never started. The original list and
 media files are unchanged. A backup filename such as `shareddir.dat.bak_BAK`
 works identically.
 
+The same backend consolidation applies to UI/API additions and bulk updates.
+A child already covered by a recursive parent is not added separately. Adding
+a parent replaces redundant explicit children; unrelated siblings remain.
+Incoming and category roots keep their mandatory internal roles.
+
 Unlike metadata import, a directory list carries no hashes. Its command can
 therefore read substantial payload data when the live profile has no reusable
 hashes. Import a hash archive first to reuse stock knowledge before adding a
