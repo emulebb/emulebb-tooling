@@ -122,49 +122,64 @@ could replace the stored part hashsets while retaining the first path's AICH
 root. The branch now rejects conflicting geometry, AICH root, or hashsets in
 one transaction and leaves the first verified path untouched. The collision
 regression, all 74 metadata tests, all 1,255 eD2K library tests, and scoped
-metadata Clippy pass. The review also noted that a read-only protocol serving
-view is currently synthesized with `Ed2kResumeManifest`. Persistence rejects
-that view, so no local share becomes a download row, but a dedicated serving
-type would make the internal boundary clearer.
+metadata Clippy pass.
 
-Live Kad source discovery remains unproven in the current one-address Windows
-harness. A local two-client run bootstrapped Kad and reached `kadConnected=true`,
-but the seeder's publish gate reported `firewalledWithoutBuddyOrUdp` and sent
-zero source publishes. Both clients had ED2K LowID; the Kad UDP firewall check
-cannot use a helper on the same local IP (`emulebb-kad-dht` routing filter), so
-the verified-open-UDP term in the stock publication gate never became true.
+The serving-type follow-up is implemented as `Ed2kFileServingView`, a read-only
+projection without download delivery, piece state, or retirement fields.
+`Ed2kResumeManifest` is download-only and has no `source_path` or
+`NotApplicable` delivery state. Download serialization rejects retired fields;
+the protocol, upload presentation, shared metadata, and catalog hydration use
+the serving view. Download code no longer branches around synthetic local
+manifests. Upload part counts now use verified ranges, so fully written but
+unverified parts are not reported as obtained. The 463 existing core and 1,255
+existing eD2K unit tests, both new regressions, workspace compilation, scoped
+Clippy, and the Kad discovery/transfer integration test passed.
 
-A second local diagnostic used the staged Linux client as seeder in WSL and the
-staged Windows client as leecher on distinct IPs. Both clients bootstrapped Kad,
-the server indexed the share, and the leecher accepted a plain eD2K link.
-Neither transferred bytes: the seeder remained LowID and its stock Kad source
-publication gate still reported `firewalledWithoutBuddyOrUdp`. The REST Kad
-summary's `firewallState=open` did not establish the separate verified-open-UDP
-condition required by that gate. A synthetic v6 contact could not bootstrap;
-v9 contacts with obfuscation disabled did bootstrap but did not verify UDP.
-An additional WSL interface could not route to the server or bootstrap its
-helper peer, so that topology was removed from the persisted harness. The WSL
-diagnostic uses an alternate metadata-enabled DrvFs mount for the Linux profile
-key's required `0600` permissions, with profile bytes under the output root.
+The manual Kad bootstrap endpoint previously ignored its address and port after
+validation. It now resolves an IPv4 endpoint, sends the requested bootstrap
+exchange, performs the self lookup, and reports failure when no runtime is
+available. A local integration test configures an unavailable startup seed and
+proves that the explicit operation contacts the separately requested endpoint.
+Live contact imports also report the number accepted by the DHT, rather than
+the parsed count; the integration test covers a rejected duplicate-IP contact.
 
-The persisted WSL diagnostic now records helper eligibility without contact
-addresses and enables narrow, child-only protocol logging. In run
-`rust-local-upload/20261106T005133Z`, the seeder had one eligible v9 helper on
-a distinct IP. Each client sent `OP_FWCHECKUDPREQ`, and each received the other
-client's request over eD2K TCP. Neither completed a UDP firewall-check round;
-the seeder still attempted zero Kad source publishes and the transfer made zero
-progress. This two-peer bootstrap is unsuitable for a stock UDP reachability
-verdict: each helper already has the requester in its Kad routing table.
-`CUpDownClient::ProcessFirewallCheckUDPRequest` sets the reply's error byte for
-an already-known requester, and
-`CKademliaUDPListener::Process_KADEMLIA2_FIREWALLUDP` cancels that result.
-The Rust responder and firewall-state handling implement the same rule. A
-timeout alone cannot distinguish a cancelled reply from a network-dropped
-reply, so this run does not prove UDP reachability. The local Kad swarm
-integration test separately passed source discovery and transfer completion.
+The remaining live Kad proof passed in run `20261106T091323Z`. The retained
+report is `soak/rust-local-upload/20261106T091323Z/rust-local-upload-soak-result.json`
+below the configured output root, with SHA256 fingerprint `e7dc723c49f4c8a7`.
+It used product commit `c69da63d` and harness commit `ea834c20`; the staged Linux
+binary SHA256 was
+`a2d81a2cbd46ca9a825365c0d201a230181012fa8a2aee4de74461d4fab723b8`.
 
-The remaining live proof requires a reachable, unbiased Kad firewall-check
-helper on another IP, or a verified buddy, plus a completed Kad-discovered
-transfer and matching delivered-file SHA256. Keep the stock publish gate and
-this item in progress until that proof and final branch review are complete;
-then request one implementation PR.
+The seeder obtained an unbiased verified-open UDP result and passed the stock
+source-publication gate, with one source publication and two acknowledged
+contacts. The leecher disconnected from its eD2K server before accepting a
+plain link without source hints. One Kad search returned the published type-6
+source; the leecher sent `OP_DIRECTCALLBACKREQ` and accepted the ticketed inbound
+callback. All 1,048,576 bytes transferred, the completed file entered the
+verified library, and the download row retired. The exported delivered file's
+SHA256 matched
+`46d3a0d94568dcb37cd04aa69392e41436247cb1ea4d185b4787497c857e435b`.
+
+This proof uses two staged Linux Rust daemons in WSL and a bounded Python Kad
+rendezvous/firewall fixture on the existing Windows virtual interface. The
+fixture carries no file payload and initiates no download. It returns a
+successful firewall verdict only before receiving UDP from the requester;
+subsequent biased requests are cancelled, preserving the stock rule. The local
+seed is stored as an endpoint-only bootstrap setting, allowing the actual
+response to teach its node ID instead of preloading an invented identity.
+The selected network interface and one-ID-per-IP routing rule remain enforced.
+This establishes the local product workflow; public-network and cross-client
+Kad parity require their own evidence.
+
+Fresh isolated profiles use bounded native Linux tmpfs filesystems because
+this host's DrvFS rejects the atomic no-replace rename required by delivery.
+The product retains that filesystem guarantee. The harness preserves storage
+reserve headroom, archives both profiles before unmounting, and exports the
+delivered file for host-side SHA256 verification. Both profile archives were
+retained and the successful run reported no fixture, archive, or mount cleanup
+errors. Windows and Linux release builds passed at the tested product commit.
+
+The implementation and scoped acceptance evidence are ready for operator
+review. Keep this item in progress while the pushed granular commits await the
+single implementation PR; the operator explicitly requested stopping before
+PR creation.
