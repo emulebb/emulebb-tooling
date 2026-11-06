@@ -50,7 +50,6 @@ exception; new Rust items always use the `RUST-*` form.
 | [RUST-BUG-154](items/RUST-BUG-154.md) | Bug | Admit Kad datagrams before learning sender state |
 | [RUST-BUG-155](items/RUST-BUG-155.md) | Bug | Share established peer identity and control state |
 | [RUST-BUG-156](items/RUST-BUG-156.md) | Bug | Give ED2K server settings one authority |
-| [RUST-BUG-158](items/RUST-BUG-158.md) | Bug | Reuse trusted stock profile hashes without payload rehashing |
 | [CI-054](items/CI-054.md) | Evidence | Add native Windows Rust/MFC protocol-parity diagnostics campaign |
 | [RUST-FEAT-056](items/RUST-FEAT-056.md) | Feature | Deliver supported Android and Fire OS APKs with device harnesses |
 | [RUST-FEAT-057](items/RUST-FEAT-057.md) | Feature | Publish portable Linux musl builds for x64 and ARM64 |
