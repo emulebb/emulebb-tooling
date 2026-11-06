@@ -95,8 +95,26 @@ removals refresh the affected hash instead of rebuilding the whole offer set.
 REST path-ordered pages stream candidates into bounded application memory;
 snapshot pages request a bounded hash page. Focused regressions, full metadata,
 core, eD2K, and REST suites, REST contract tests, formatting, and scoped Clippy
-passed across the review commits. The new pagination path has not yet been
-measured against a 100,000-file post-refactor library.
+passed across the review commits. A full root scan now commits memberships
+before rebuilding offers once; refreshing each stale hash before that commit
+made the 1,000-file watcher delete phase exceed its 10-minute limit while the
+old memberships remained active. The corrected full-scan path has deletion and
+replacement regressions, 463 passing core unit tests, and scoped Clippy.
+
+The maintained SSD campaign passed on a fresh schema-54 profile with 100,000
+files, 10,485,760,000 bytes, and 1,000 long paths. Its retained v6 report is
+`rust-shared-library-io-20261105T234508Z-17904.json` under the configured
+output root's `reports/emulebb-rust/shared-library-io/` directory (report
+fingerprint `7f8b3bb46f6456dc`). The initial pass took 750.91 seconds. Watcher
+create, modify, rename, and delete all passed in 56.19, 195.78, 198.61, and
+157.17 seconds respectively; delete restored the 100,000-file catalog without
+hashing. Both restarts exposed the validated 200-file cohort immediately and
+hydrated the full 100,000-share catalog in 158.55 and 153.18 seconds. The
+no-change reload hashed zero files in 41.08 seconds; the 1% mutation hashed
+exactly 1,000 files and reused 99,000 in 79.54 seconds. All phase, watcher,
+storage, REST, and global checks passed. The local Kad swarm integration test
+again discovered shared-tree sources and completed two transfers after the
+full-scan change.
 
 Live Kad source discovery remains unproven in the current one-address Windows
 harness. A local two-client run bootstrapped Kad and reached `kadConnected=true`,
