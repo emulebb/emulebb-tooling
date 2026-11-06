@@ -76,6 +76,8 @@ supports beta operation; it is not a stable-release certification.
   selected category path or configured `incomingDir`.
 - **Sharing:** recursively monitored shared-folder roots. Single-file sharing
   and non-recursive roots are not supported product surfaces.
+  Stock/MFC profile imports preserve and trust known eD2K/AICH hashes;
+  unambiguous file metadata matches are reused without an initial rehash.
 - **Control plane:** the Rust-forward `/api/v1` contract, authenticated HTTP
   operation, and the embedded SPA operations console. The MFC REST contract is
   not a compatibility constraint.

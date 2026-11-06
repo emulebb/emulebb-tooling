@@ -318,6 +318,17 @@ graph TD
   rebuilds the `Ed2kTransferRuntime` from the transfer store, and hydrates the
   `KadLocalStore` from the Kad publish cache (see `EmulebbCore::new_with_network`
   at `crates/emulebb-core/src/lib.rs:353`).
+- Stock/MFC imports trust the exported known-file hashes by default. The
+  normal root scan matches filename, size, and stock timestamp, then binds an
+  unambiguous hashset to the target filesystem's current native fingerprint
+  without reading the payload. Later scans and uploads reuse that association
+  until observed metadata changes. Ambiguous imports are reported without
+  automatically hashing; offline roots retain their cached records. Missing
+  optional AICH data does not invalidate the eD2K cache.
+- `import-emule-profile --hashes-only` imports the portable hash records
+  independently of the manifest's platform and sharing roots.
+  `reconcile-shared-files` runs the same scan and reuse planner offline, reports
+  pending hashing, and never starts networking or executes the payload hasher.
 
 ---
 
