@@ -69,12 +69,68 @@ unbounded work, and make ordering harder to reason about.
 - Surface overload and database unavailability as typed errors or controlled
   backpressure rather than unbounded task creation.
 
+## Accepted Sharing-Path Follow-up (2026-11-06)
+
+This owns approved follow-up 3 from the async-I/O review. It remains in the
+post-beta backlog; the update does not promote it into a blocker for the
+validated stock-import workflow. Main `e3372aba` and the import/root branch at
+`43855fba` were reviewed before recording the following sites.
+
+`shared_file_api.rs` still calls `index.upsert_file` synchronously after
+offloaded ingest and calls `index.replace_shared_directory_roots` while holding
+the async index guard. Ignore-rule list/add/remove/toggle paths also call the
+synchronous metadata layer directly. The async guard does not make the SQLite
+query, connection-mutex wait, busy wait, or durable commit asynchronous.
+
+Route these live operations through the same bounded persistence owner as the
+other runtime callers. Capture owned arguments, release global state/index
+guards before queueing or awaiting storage, and publish the result according to
+the command's required durable-commit semantics. Serialize logical root edits
+or use configuration revisions so removing a guard does not introduce lost
+updates. Do not replace a bounded owner with independent unbounded
+`spawn_blocking` calls at each handler.
+
+Keep SQLite synchronous inside that worker. The current `Arc<Mutex<Connection>>`
+serializes users of each shared connection even with WAL: a five-second SQLite
+busy timeout does not bound time waiting for the Rust connection mutex. Expose
+both queue/connection wait and execution/commit latency. A read-lane or
+connection-pool expansion needs measured justification and explicit snapshot
+consistency; it is not a prerequisite to isolating blocking work.
+
+Whole-file ingest, its local-content/AICH persistence, media extraction, root
+membership updates, and paged catalog reads already use blocking boundaries in
+important paths. Preserve and consolidate that good behavior. Exclusive offline
+imports may keep bounded synchronous transactions because they serve no live
+network/API workload.
+
+RUST-REF-018 owns filesystem probes and root state lock scope. RUST-REF-008 owns
+the compiled ignore-policy cache and eliminating per-file query/compile work;
+its rule edits/invalidation use this persistence boundary. RUST-REF-019 owns
+CPU-only bursts. These items must not introduce competing SQLite actors.
+
+Additional representative sites:
+
+- `crates/emulebb-core/src/shared_file_api.rs`: final index upsert, root
+  replacement, ignore-rule operations, and current cached progress accessor.
+- `crates/emulebb-index/src/lib.rs`: synchronous metadata adapter methods.
+- `crates/emulebb-ed2k/src/ed2k_transfer/ingest.rs`: already-offloaded durable
+  local-content/AICH writes to preserve.
+
+Additional acceptance criteria:
+
+- [ ] Live root edits, post-ingest index updates, and ignore-rule operations use
+      the bounded storage boundary without global async guards across waits.
+- [ ] Injected SQLite mutex contention, busy waits, and slow FULL commits leave
+      unrelated REST requests, peer timers, and cached progress responsive.
+- [ ] Queue saturation and shutdown preserve required commit guarantees and do
+      not silently lose root edits or mark uncommitted content durable.
+
 ## Scope Constraints
 
 - Preserve `synchronous=FULL` where the durability contract requires it; improve
   scheduling and transaction shape rather than weakening correctness.
-- Keep password/secret handling, profile isolation, and SQLCipher behavior
-  unchanged unless separately approved.
+- Keep password/secret handling and profile isolation unchanged; encryption
+  feature work is not part of this scheduling change.
 - Preserve stock eMule wire timing rules and packet behavior.
 - Keep large-library batching performance work in `RUST-REF-008` and category
   deletion atomicity in `RUST-BUG-131`; share one persistence architecture.
@@ -100,5 +156,5 @@ unbounded work, and make ordering harder to reason about.
   operations and queue saturation.
 - Crash/restart tests for commands that promise durable completion.
 - Upload/search/API latency regressions under forced database contention.
-- Existing metadata migrations, SQLCipher, REST, eD2K, Kad, and large-library
-  validation lanes.
+- Current-schema rejection, metadata durability, REST, eD2K, Kad, and
+  large-library validation lanes. Product code gains no migrations or reset path.

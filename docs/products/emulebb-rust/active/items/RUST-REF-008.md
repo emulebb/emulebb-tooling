@@ -145,6 +145,36 @@ remaining large-library I/O cost.
 - Bounded SSD comparison followed by bounded multi-HDD evidence below
   `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
 
+## Accepted Hot-Path Cache Follow-up (2026-11-06)
+
+The approved async-I/O backlog review identified repeated ignore-policy work in
+`shared_file_api.rs::share_native_local_file_with_progress`: each file can call
+`load_shared_file_ignore_policy`, read the custom/default rules from SQLite, and
+compile a new glob set. The bulk scan has a policy snapshot, but that does not
+eliminate this per-file ingest boundary. At 100K files, repeated small queries
+and compilation are amplification even when payload hashing is already one pass.
+
+Own the compiled-policy cache here, with a configuration revision and explicit
+invalidation on every rule change. A job may use an immutable snapshot with a
+defined revision-change/replan policy, or read the current cached policy at
+admission; do not silently freeze rule edits until a long hash campaign ends.
+No per-file SQLite query or glob compilation should be needed on the unchanged
+policy path. Keep the same cache usable by reload, direct API, and watcher
+ingestion instead of adding an independent cache to every caller.
+
+RUST-REF-016 owns the execution boundary for reading/persisting rules and
+publishing invalidation. RUST-REF-019 owns executor placement for large index
+construction/sorting; retain one ownership boundary for query amplification
+and one for CPU scheduling. This is post-beta backlog work and does not require
+another unbounded real-media run.
+
+- [ ] Rule reads/compilations scale with configuration revisions and jobs, not
+      the number of files hashed under an unchanged policy.
+- [ ] A rule edit atomically invalidates the cache and has tested semantics for
+      queued/in-flight work without publishing a stale policy generation.
+- [ ] Synthetic measurements record query count, compile count, commit latency,
+      CPU time, and payload bytes before/after without weakening durability.
+
 ## Notes
 
 The retained SSD baseline is
