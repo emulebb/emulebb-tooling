@@ -211,6 +211,13 @@ use local instances and verified content rather than removed source tables or
 download completion flags. The affected import/download tests passed 72 tests,
 REST conformance passed 28, and soak diagnostics passed 94.
 
+The final bounded review added three regressions: replacing an empty stock cache
+clears old hints while dry-run preserves them; a removed or ineligible root
+cannot satisfy the priority-split guard; and a shared-only library cannot count
+as evidence of download history. The last check uses durable download history
+and active transfers independently of library counts. All 113 focused import
+and diagnostic tests passed (16 import tests and 97 diagnostic tests).
+
 A broader local harness run passed 3,369 tests and reported five environment
 failures: stale canonical-checkout REST contracts, worktree-relative MFC document
 paths, and an unrelated local aMule authority revision mismatch. Hosted harness
