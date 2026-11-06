@@ -223,3 +223,18 @@ failures: stale canonical-checkout REST contracts, worktree-relative MFC documen
 paths, and an unrelated local aMule authority revision mismatch. Hosted harness
 validation uses the pinned canonical companion checkouts; no authority checkout
 or operator profile was changed to conceal those local limitations.
+
+Hosted harness validation subsequently passed all 20 checks at harness commit
+`fd656123`. The next Unix product matrix confirmed the core native-name test,
+then its stronger restart assertion found one remaining lossy catalog projection;
+restart reconstruction and current-file evidence now use the native projection
+too. A macOS restart test exposed a separate ordering fault: synchronous reload
+looked up reused files before admitting their root membership. It now reads the
+authoritative catalog after admission and propagates read errors. A deterministic
+cached-but-unadmitted-file regression failed before the fix and passed afterward;
+all 28 shared-directory unit tests, seven persistence integration tests, and
+scoped Clippy passed on Windows. The restart fixture also drains its first
+instance's queued reload before simulating a new instance. A bounded independent
+review confirmed both corrections. Final Unix matrix validation remains a PR
+gate; the local WSL unit-test preflight lacks inherited workspace/output/target
+paths and was left unchanged.
