@@ -143,12 +143,14 @@ proves that the explicit operation contacts the separately requested endpoint.
 Live contact imports also report the number accepted by the DHT, rather than
 the parsed count; the integration test covers a rejected duplicate-IP contact.
 
-The live Kad proof passed again in run `20261106T095846Z`. The retained
-report is `soak/rust-local-upload/20261106T095846Z/rust-local-upload-soak-result.json`
-below the configured output root, with SHA256 fingerprint `cfe0ddef3ecfc469`.
-It used product commit `f485d1d0` and harness commit `bc1c0d94`; the staged Linux
+The live Kad proof passed again in run `20261106T102831Z`. The retained
+report is `soak/rust-local-upload/20261106T102831Z/rust-local-upload-soak-result.json`
+below the configured output root, with SHA256 fingerprint `e2b7bc3e0c123e6c`.
+It recorded product revision `0927cf18` and harness commit `fd656123`. Both
+staged release binaries were built at production commit `6f50eded`; the only
+subsequent change corrected a Unix test assertion. The staged Linux
 binary SHA256 was
-`f5d4acf4f8f0237cb2e7099e1a288b2d4cdba55d8a6efea302215720c98c6e39`.
+`3cc6b7ed82d3a95b407eb4891da9f93fdf6eff6a884026a209c5410288951cdc`.
 
 The seeder obtained an unbiased verified-open UDP result and passed the stock
 source-publication gate, with one source publication and two acknowledged
