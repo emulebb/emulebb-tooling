@@ -2,8 +2,9 @@
 
 Use this offline tool to retain stock hashes when moving complete shared files
 to emulebb-rust. It imports MD4 hashes, available full AICH recovery trees,
-shared folder roots, and supported lifetime upload statistics. Files stay in
-place. Python owns stock parsing; the Rust executable is unchanged.
+shared folder roots, discovered file paths, and supported lifetime upload statistics. Files stay in
+place. Python owns stock parsing. Rust applies the archive directly to live tables;
+its runtime never consults imported or staging tables.
 
 ## Requirements
 
@@ -12,8 +13,10 @@ place. Python owns stock parsing; the Rust executable is unchanged.
   Python 3.10 additionally needs `python -m pip install "tomli>=2"`.
 - Obtain a Rust executable/image supporting portable SQLite imports and full
   AICH recovery sets. An incompatible older build will fail visibly.
-- Choose a new or empty destination profile. This operator tool does not merge,
-  reset, migrate, or overwrite existing profiles.
+- Choose a fresh or compatible, stopped destination profile. Existing profiles
+  receive an additive merge: compatible missing data is enriched, existing file
+  preferences are retained, and conflicting path/hash bindings are reported.
+  Incompatible schemas require a fresh profile; there is no migration or reset.
 - For Docker, have the image loaded locally and the Docker daemon running.
   Windows uses Docker through the selected WSL distribution. Linux uses a local
   Docker daemon; remote Docker contexts are unsupported because bind paths are
@@ -103,15 +106,22 @@ Exit statuses:
 | 1 | Preflight or execution failure; inspect the diagnostic |
 
 Each dated output directory contains `hashes.sqlite` and `summary.json`.
+The `emulebb.profile-exchange.v2` archive is read-only during Rust apply; it
+retains all stock hash records and available recovery trees, including unmatched
+records. Native schema 58 contains no `imported_` tables. Regenerate an archive
+from stock metadata if it uses the earlier exchange format.
 The summary includes MD4/AICH validation, current path bindings, reused files,
 pending hashing, unavailable fingerprints, conflicts, and recovery coverage.
 `destinationModified` indicates whether profile import was attempted. Preflight
 errors before report creation are printed on the console.
 
-Stock records have no directory paths: initial matching trusts exact filename,
-size, and whole-second modification time. Conflicting matches stay unresolved.
-Accepted files receive native fingerprints, including Windows file IDs. This
-checks metadata and hash preservation without rereading payload contents.
+Stock records have no directory paths. Python discovers actual paths using
+directory metadata and associates unambiguous filename, size, and whole-second
+modification-time matches in `file_paths` in the archive. Rust rechecks those
+paths and metadata and binds accepted files to native fingerprints, including
+Windows file IDs, directly in live tables. Conflicting and unmatched records
+stay in the archive for explicit retries. Normal startup, reload, and uploads
+use live tables only. No payload bytes are read to preserve stock hashes.
 
 Missing or rejected AICH recovery data does not invalidate usable MD4 hashes.
 Full AICH is preserved when it exists in stock; importing cannot manufacture
@@ -130,9 +140,9 @@ stock finished hashing. Do not start the normal client until you accept that
 work: normal startup can hash new or changed files. Inaccessible roots fail
 preflight; files becoming inaccessible during execution are reported.
 
-On failure or a needs-attention result, preserve the report and valid imported
-profile. Retry into another fresh destination after correcting the cause; the
-tool never automatically clears a previous attempt.
+On failure or a needs-attention result, preserve the report, archive, and valid
+imported profile. Correct the cause and explicitly retry/merge; the tool never
+automatically clears a previous attempt.
 
 Importing stock Incoming makes it shared. It does not set Rust's new-download
 destination. Configure that separately. Client identities, credentials, network
@@ -153,4 +163,31 @@ emulebb-rust --profile NEW_PROFILE reconcile-shared-files
 A full archive includes target-platform sharing paths. To import only hashes
 into an already configured, compatible profile, the existing low-level
 `import-emule-profile --hashes-only hashes.sqlite` command preserves its roots.
-That advanced behavior is not exposed as merging in the new operator tool.
+The operator tool also merges into an existing compatible profile; its normal
+job imports both roots and hashes.
+
+## Import a shared-directory list without Python
+
+```text
+emulebb-rust --profile PROFILE import-shared-directories shareddir.dat
+```
+
+This native command accepts UTF-8 and BOM-marked UTF-16 LE/BE lists, validates
+absolute paths, collapses listed descendants, and merges roots. Consolidation
+also removes existing explicit child roots covered by an imported parent;
+mandatory roots remain. It then runs the normal offline library scan: unchanged
+live fingerprints reuse existing hashes; new or changed files are hashed using
+the existing MD4/AICH pass. Networking is never started. The original list and
+media files are unchanged. A backup filename such as `shareddir.dat.bak_BAK`
+works identically.
+
+Unlike metadata import, a directory list carries no hashes. Its command can
+therefore read substantial payload data when the live profile has no reusable
+hashes. Import a hash archive first to reuse stock knowledge before adding a
+broader directory list. Stock directory lists become recursive Rust roots;
+children not shared by stock may consequently become shared by Rust.
+
+Completed file hashes are committed during the pass. If the offline process is
+interrupted, rerun the same command with the same profile: completed unchanged
+files are reused, and an interrupted file is hashed again. Keep the client
+stopped while running these offline operations.

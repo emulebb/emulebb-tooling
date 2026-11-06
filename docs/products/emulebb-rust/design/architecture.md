@@ -318,33 +318,27 @@ graph TD
   rebuilds the `Ed2kTransferRuntime` from the transfer store, and hydrates the
   `KadLocalStore` from the Kad publish cache (see `EmulebbCore::new_with_network`
   at `crates/emulebb-core/src/lib.rs:353`).
-- Stock/MFC imports trust the exported known-file hashes by default. The
-  normal root scan matches filename, size, and stock timestamp, then binds an
-  unambiguous hashset to the target filesystem's current native fingerprint
-  without reading the payload. Later scans and uploads reuse that association
-  until observed metadata changes. Ambiguous imports are reported without
-  automatically hashing; offline roots retain their cached records. Missing
-  optional AICH data does not invalidate the eD2K cache.
-- `import-emule-profile --hashes-only` imports the portable hash records
-  independently of the export's platform and sharing roots. The current
-  interchange format is one SQLite file (`emulebb.profile-exchange.v1`),
-  separate from the native profile schema. Known-file metadata and packed
-  hashsets stream in bounded batches; JSON bulk manifests are unsupported.
-  `reconcile-shared-files` runs the same scan and reuse planner offline, reports
-  pending hashing, and never starts networking or executes the payload hasher.
-- Native schema 57 retains complete AICH recovery sets by master hash and file
-  size, with packed block hashes and a part root per eD2K part. Imports validate
-  the full tree from metadata alone, atomically store complete sets, and enrich
-  existing aliases without rebinding native paths. Recovery cache failures
-  remain independent of reusable MD4 content. Import writes use bounded
-  batches with a savepoint per recovery set; stable alias rows preserve richer
-  hashsets across sparse reimports. One rejected set cannot leave
-  partial leaves or roll back its valid neighbors. The existing local ingest and
-  completion verification passes retain their block hashes without a second
-  payload pass. Tree reconstruction and cache persistence run off async workers.
-  MD4 completion is durable before optional recovery-cache writes, so a cache
-  failure cannot rearm payload verification. Trusted acquired AICH identities
-  are preserved on disagreement.
+- Stock/MFC export belongs to Python. The portable SQLite archive
+  (`emulebb.profile-exchange.v2`) retains known records, matched target paths,
+  configured roots, and complete AICH recovery leaves. Rust opens it read-only
+  and explicitly applies matching records directly into live metadata. There
+  are no native `imported_` tables or startup/reload staging lookups.
+- Explicit apply validates source name/size/mtime against the current file,
+  captures a native fingerprint without payload hashing, and merges bounded
+  batches. Conflicting live path/content bindings are reported without replacing
+  accepted state. Records without matching accessible paths remain exclusively
+  in the archive for an explicit retry. Existing live preferences and richer
+  compatible hashsets survive repeated imports.
+- Native schema 58 retains complete AICH recovery sets by master hash and file
+  size, with packed block hashes and a part root per eD2K part. Only accepted
+  live content receives imported recovery sets. The existing combined MD4/AICH
+  ingest and completion pass retains leaves without another payload read.
+  Optional recovery failures do not undo durable MD4 completion.
+- `reconcile-shared-files` checks live cache reuse offline without executing
+  hashing. `import-shared-directories` decodes a directory text list, collapses
+  listed descendants, merges roots, and runs the existing offline scan/hash
+  pipeline. It never starts networking. Explicit archive import and ordinary
+  runtime access remain separate operations.
 - Recovery responses use the requested part's leaves and upper-tree part
   roots. Current native file eligibility and fingerprint checks still apply.
   Missing or rejected recovery data returns protocol recovery-unavailable;
