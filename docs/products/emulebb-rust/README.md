@@ -39,6 +39,7 @@ non-recursive sharing mode.
 - Forward OpenAPI contract:
   [`api/REST-API-OPENAPI.yaml`](api/REST-API-OPENAPI.yaml)
 - Architecture: [`design/architecture.md`](design/architecture.md)
+- Stock/MFC hash import: [operator guide](reference/GUIDE-PROFILE-IMPORT.md)
 - Forward integrated-suite design:
   [`design/integrated-suite.md`](design/integrated-suite.md)
 - Agent policy: [`reference/AGENT-POLICY.md`](reference/AGENT-POLICY.md)
