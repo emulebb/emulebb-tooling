@@ -293,6 +293,8 @@ graph TD
     store --> prof[profile_store — settings]
     store --> srch[search_store]
     store --> xfer[transfer_store]
+    store --> local[verified local content and root memberships]
+    store --> history[download history]
     store --> kpub[kad_publish_store]
 
     store --> fileidx[FileIndex<br/>emulebb-index]
@@ -308,7 +310,10 @@ graph TD
   incompatible database fails startup and requires an entirely fresh profile;
   product code never migrates, repairs, or resets it.
 - Typed sub-stores: identity (user hash / secure-ident keys), peers, profile
-  settings, searches, transfers, and the Kad publish cache.
+  settings, searches, active downloads, verified local content, shared-root
+  memberships, download history, and the Kad publish cache. Delivered downloads
+  become local content; their transfer rows and internal piece stores are
+  retired after crash-safe cleanup. Download history remains path-independent.
 - On boot the core reads settings via `profile_state::load_core_state`,
   rebuilds the `Ed2kTransferRuntime` from the transfer store, and hydrates the
   `KadLocalStore` from the Kad publish cache (see `EmulebbCore::new_with_network`

@@ -1546,14 +1546,14 @@ paths:
           $ref: "#/components/responses/ErrorResponse"
         default:
           $ref: "#/components/responses/ErrorResponse"
-  /shared-directories/exclusions:
+  /shared-directories/ignores:
     get:
       tags: [SharedDirectories]
-      summary: List exact shared-file exclusions and configurable default ignore rules.
-      operationId: listSharedFileExclusions
+      summary: List custom file-name glob patterns and configurable default ignore rules.
+      operationId: listSharedFileIgnores
       responses:
         "200":
-          $ref: "#/components/responses/SharedFileExclusionsResponse"
+          $ref: "#/components/responses/SharedFileIgnoresResponse"
         "400":
           $ref: "#/components/responses/ErrorResponse"
         "401":
@@ -1568,17 +1568,17 @@ paths:
           $ref: "#/components/responses/ErrorResponse"
     post:
       tags: [SharedDirectories]
-      summary: Exclude one exact file path from sharing.
-      operationId: addSharedFileExclusion
+      summary: Ignore matching file names across shared trees.
+      operationId: addSharedFileIgnorePattern
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/SharedFileExclusionRequest"
+              $ref: "#/components/schemas/SharedFileIgnorePatternRequest"
       responses:
         "200":
-          $ref: "#/components/responses/SharedFileExclusionsResponse"
+          $ref: "#/components/responses/SharedFileIgnoresResponse"
         "400":
           $ref: "#/components/responses/ErrorResponse"
         "401":
@@ -1593,13 +1593,13 @@ paths:
           $ref: "#/components/responses/ErrorResponse"
     delete:
       tags: [SharedDirectories]
-      summary: Remove one exact shared-file exclusion.
-      operationId: removeSharedFileExclusion
+      summary: Remove one custom file-name ignore pattern.
+      operationId: removeSharedFileIgnorePattern
       parameters:
-        - $ref: "#/components/parameters/SharedDirectoryRootPath"
+        - $ref: "#/components/parameters/SharedFileIgnorePattern"
       responses:
         "200":
-          $ref: "#/components/responses/SharedFileExclusionsResponse"
+          $ref: "#/components/responses/SharedFileIgnoresResponse"
         "400":
           $ref: "#/components/responses/ErrorResponse"
         "401":
@@ -1612,7 +1612,7 @@ paths:
           $ref: "#/components/responses/ErrorResponse"
         default:
           $ref: "#/components/responses/ErrorResponse"
-  /shared-directories/exclusions/rules/{ruleKey}:
+  /shared-directories/ignores/defaults/{ruleKey}:
     patch:
       tags: [SharedDirectories]
       summary: Enable or disable one built-in shared-file ignore rule.
@@ -1627,7 +1627,7 @@ paths:
               $ref: "#/components/schemas/SharedFileIgnoreRuleUpdate"
       responses:
         "200":
-          $ref: "#/components/responses/SharedFileExclusionsResponse"
+          $ref: "#/components/responses/SharedFileIgnoresResponse"
         "400":
           $ref: "#/components/responses/ErrorResponse"
         "401":
@@ -3034,6 +3034,15 @@ components:
         minLength: 1
         pattern: '\S'
       description: Shared-directory root path to remove.
+    SharedFileIgnorePattern:
+      name: pattern
+      in: query
+      required: true
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 255
+      description: File-name glob pattern to remove. Paths are not accepted.
     SharedFileIgnoreRuleKey:
       name: ruleKey
       in: path
@@ -3344,15 +3353,15 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/SharedDirectoryListEnvelope"
-    SharedFileExclusionsResponse:
-      description: Shared-file exclusion policy envelope.
+    SharedFileIgnoresResponse:
+      description: Shared-file ignore policy envelope.
       headers:
         X-Contract-Version:
           $ref: "#/components/headers/ContractVersionHeader"
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/SharedFileExclusionsEnvelope"
+            $ref: "#/components/schemas/SharedFileIgnoresEnvelope"
     SharedFileListResponse:
       description: Shared-file collection envelope.
       headers:
@@ -6933,15 +6942,15 @@ components:
               type: string
               minLength: 1
               pattern: '\S'
-    SharedFileExclusionsEnvelope:
+    SharedFileIgnoresEnvelope:
       unevaluatedProperties: false
       allOf:
         - $ref: "#/components/schemas/EnvelopeBase"
         - type: object
           properties:
             data:
-              $ref: "#/components/schemas/SharedFileExclusions"
-    SharedFileExclusions:
+              $ref: "#/components/schemas/SharedFileIgnores"
+    SharedFileIgnores:
       type: object
       additionalProperties: false
       required: [custom, defaults]
@@ -6949,19 +6958,20 @@ components:
         custom:
           type: array
           items:
-            $ref: "#/components/schemas/SharedFileExclusion"
+            $ref: "#/components/schemas/SharedFileIgnorePatternEntry"
         defaults:
           type: array
           items:
             $ref: "#/components/schemas/SharedFileIgnoreRule"
-    SharedFileExclusion:
+    SharedFileIgnorePatternEntry:
       type: object
       additionalProperties: false
-      required: [path]
+      required: [pattern]
       properties:
-        path:
+        pattern:
           type: string
           minLength: 1
+          maxLength: 255
     SharedFileIgnoreRule:
       type: object
       additionalProperties: false
@@ -6978,15 +6988,16 @@ components:
           minLength: 1
         enabled:
           type: boolean
-    SharedFileExclusionRequest:
+    SharedFileIgnorePatternRequest:
       type: object
       additionalProperties: false
-      required: [path]
+      required: [pattern]
       properties:
-        path:
+        pattern:
           type: string
           minLength: 1
-          pattern: '\S'
+          maxLength: 255
+          description: Case-insensitive glob applied to each file name; must contain a wildcard and no path separator.
     SharedFileIgnoreRuleUpdate:
       type: object
       additionalProperties: false
