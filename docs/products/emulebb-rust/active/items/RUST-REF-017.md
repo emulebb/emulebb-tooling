@@ -240,3 +240,14 @@ instance's queued reload before simulating a new instance. A bounded independent
 review confirmed both corrections. Final Unix matrix validation remains a PR
 gate; the local WSL unit-test preflight lacks inherited workspace/output/target
 paths and was left unchanged.
+
+The final Windows failure was reproduced with forward-slash fixture paths:
+the test setup bypassed the API's canonical-root invariant, so removal compared
+different spellings of the same root. The fixture now canonicalizes its root
+and the withdrawal regression explicitly exercises that spelling. All 465 core
+unit tests passed afterward. The macOS native-byte fixture now reports an
+unsupported filesystem only for `EILSEQ`, the observed rejection of invalid
+UTF-8 names on APFS; every other fixture I/O error remains fatal. The actual
+native-name serving assertions still run wherever the filesystem accepts the
+name. These follow-ups change tests only; production source and retained release
+and live evidence are unchanged.
