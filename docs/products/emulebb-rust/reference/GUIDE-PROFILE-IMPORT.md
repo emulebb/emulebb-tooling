@@ -76,7 +76,10 @@ Each `[[path_mappings]]` entry contains:
 | `target` | Directory visible to Rust, inside Docker or on Windows |
 
 On Windows without Docker, mapping `host` and `target` must identify the same
-directory. On Linux, for example, `D:\Shared` can map from host `/srv/shared`
+directory. Windows junction aliases are compared by filesystem identity.
+Profile/report overlap checks resolve both paths, including existing ancestors
+of new destinations, to prevent writing into an aliased shared directory.
+On Linux, for example, `D:\Shared` can map from host `/srv/shared`
 to container `/data/shared`. Matching uses directory boundaries and the longest
 source prefix. The importer removes redundant listed descendants but does not
 invent unlisted parent shares. Rust shares roots recursively; review stock roots
@@ -115,6 +118,12 @@ Full AICH is preserved when it exists in stock; importing cannot manufacture
 missing trees without reading payloads. Missing AICH master hashes are shown by
 the difference between known records and recovery-set coverage; sets may also
 be shared by duplicate contents.
+
+When Rust rejects an optional recovery set, the tool continues MD4 reconciliation
+and returns exit 2. Verification permits only wholly absent sets whose count
+matches the importer's reported rejections. Partial trees, altered imported
+leaves, and unexplained missing sets remain failures. The report records verified
+and unavailable recovery-set counts separately.
 
 If hashing is pending, review roots, mappings, file modifications, and whether
 stock finished hashing. Do not start the normal client until you accept that
