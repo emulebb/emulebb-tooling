@@ -251,3 +251,12 @@ UTF-8 names on APFS; every other fixture I/O error remains fatal. The actual
 native-name serving assertions still run wherever the filesystem accepts the
 name. These follow-ups change tests only; production source and retained release
 and live evidence are unchanged.
+
+Linux, Windows, and macOS build/test jobs subsequently passed at product revision
+`1a35944e`. Their final live REST/OpenAPI job exposed only a harness registry
+mapping that still treated the renamed default-ignore path as a concrete key
+instead of `{ruleKey}`. The normalization regression failed before the fix;
+all 143 contract tests and the complete local REST/OpenAPI campaign then passed
+with graceful teardown (`reports/rust-rest-openapi-ci/20261106T115437Z/report.json`
+below the configured output root). Rust CI now pins harness revision `4edca15b`
+containing that correction. Required CI remains the final review gate.
