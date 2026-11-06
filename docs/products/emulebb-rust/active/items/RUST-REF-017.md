@@ -143,12 +143,12 @@ proves that the explicit operation contacts the separately requested endpoint.
 Live contact imports also report the number accepted by the DHT, rather than
 the parsed count; the integration test covers a rejected duplicate-IP contact.
 
-The remaining live Kad proof passed in run `20261106T091323Z`. The retained
-report is `soak/rust-local-upload/20261106T091323Z/rust-local-upload-soak-result.json`
-below the configured output root, with SHA256 fingerprint `e7dc723c49f4c8a7`.
-It used product commit `c69da63d` and harness commit `ea834c20`; the staged Linux
+The live Kad proof passed again in run `20261106T095846Z`. The retained
+report is `soak/rust-local-upload/20261106T095846Z/rust-local-upload-soak-result.json`
+below the configured output root, with SHA256 fingerprint `cfe0ddef3ecfc469`.
+It used product commit `f485d1d0` and harness commit `bc1c0d94`; the staged Linux
 binary SHA256 was
-`a2d81a2cbd46ca9a825365c0d201a230181012fa8a2aee4de74461d4fab723b8`.
+`f5d4acf4f8f0237cb2e7099e1a288b2d4cdba55d8a6efea302215720c98c6e39`.
 
 The seeder obtained an unbiased verified-open UDP result and passed the stock
 source-publication gate, with one source publication and two acknowledged
@@ -192,3 +192,27 @@ All 120 contract parser tests and the complete router/OpenAPI metadata compariso
 passed. The latest focused helper, upload, profile, wire, and server tests passed
 108 tests, with one POSIX-only permission test skipped on Windows; formatting,
 scoped Python lint, and the strict documentation build also passed.
+
+The first hosted full-matrix review exposed a Unix filename regression: local
+catalog and serving projections recomputed names with lossy Unicode conversion.
+They now use the existing reversible native-name projection consistently across
+catalogs, serving views, history, and reload diagnostics. The Unix regression
+also checks the serving and publication names before and after restart. All 74
+metadata tests, the Windows local-share tests, and scoped Clippy passed; current
+Windows and Linux staged release builds completed with zero warnings.
+
+The full harness review also found SQL seed helpers that still fabricated local
+shares as completed transfers. Those helpers and the fingerprint-upgrade path
+are removed. Stock imports populate only the pathless import cache; the daemon
+owns native-file validation and library membership. Download seed/read helpers
+use transfer-owned flags, hashsets, and verified ranges. Obsolete soak-schema
+upgrade tooling is retired. Local library diagnostics and priority updates now
+use local instances and verified content rather than removed source tables or
+download completion flags. The affected import/download tests passed 72 tests,
+REST conformance passed 28, and soak diagnostics passed 94.
+
+A broader local harness run passed 3,369 tests and reported five environment
+failures: stale canonical-checkout REST contracts, worktree-relative MFC document
+paths, and an unrelated local aMule authority revision mismatch. Hosted harness
+validation uses the pinned canonical companion checkouts; no authority checkout
+or operator profile was changed to conceal those local limitations.
