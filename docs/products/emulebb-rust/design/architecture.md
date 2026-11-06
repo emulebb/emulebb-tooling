@@ -334,11 +334,19 @@ graph TD
   accepted state. Records without matching accessible paths remain exclusively
   in the archive for an explicit retry. Existing live preferences and richer
   compatible hashsets survive repeated imports.
+  Protocol validators check imported part hashes against their advertised
+  ED2K/AICH identities using metadata alone. Typed content conflicts permit
+  individual retries; storage failures propagate. The Python operator keeps
+  an external digest baseline to prove preservation of rejected existing data.
 - Native schema 58 retains complete AICH recovery sets by master hash and file
   size, with packed block hashes and a part root per eD2K part. Only accepted
   live content receives imported recovery sets. The existing combined MD4/AICH
   ingest and completion pass retains leaves without another payload read.
-  Optional recovery failures do not undo durable MD4 completion.
+  Native content and successful recovery caching share one transaction, with
+  optional cache rejection isolated by a savepoint. Download finalization saves
+  recovery before publishing completion. Optional recovery failures still
+  permit MD4 completion; missing live recovery coverage is queryable without
+  payload reads or automatic repair hashing.
 - `reconcile-shared-files` checks live cache reuse offline without executing
   hashing. `import-shared-directories` decodes a directory text list, collapses
   listed descendants, merges roots, and runs the existing offline scan/hash
