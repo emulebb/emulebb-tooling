@@ -5,7 +5,7 @@ product: emulebb-rust
 phase: Phase 1
 github_issue: https://github.com/emulebb/emulebb-rust/issues/235
 title: Separate verified shared files from download transfers
-status: IN_PROGRESS
+status: DONE
 priority: Major
 category: refactor
 labels: [rust, sqlite, sharing, transfers, api]
@@ -181,11 +181,10 @@ delivered file for host-side SHA256 verification. Both profile archives were
 retained and the successful run reported no fixture, archive, or mount cleanup
 errors. Windows and Linux release builds passed at the tested product commit.
 
-The implementation and scoped acceptance evidence are in review in the single
+The implementation and scoped acceptance evidence were delivered in the single
 [product implementation PR](https://github.com/emulebb/emulebb-rust/pull/237)
 and its [harness companion](https://github.com/emulebb/emulebb-build-tests/pull/96).
-Both retain the granular commits on `feature/shared-library-domain`. Keep this
-item in progress until review and merge complete.
+Both preserve the granular commits from `feature/shared-library-domain`.
 
 PR preparation aligned hosted CI with immutable companion revisions for the
 breaking beta contract. It also updated the harness body-field inventory from
@@ -237,8 +236,8 @@ cached-but-unadmitted-file regression failed before the fix and passed afterward
 all 28 shared-directory unit tests, seven persistence integration tests, and
 scoped Clippy passed on Windows. The restart fixture also drains its first
 instance's queued reload before simulating a new instance. A bounded independent
-review confirmed both corrections. Final Unix matrix validation remains a PR
-gate; the local WSL unit-test preflight lacks inherited workspace/output/target
+review confirmed both corrections. Final Unix matrix validation subsequently
+passed; the local WSL unit-test preflight lacks inherited workspace/output/target
 paths and was left unchanged.
 
 The final Windows failure was reproduced with forward-slash fixture paths:
@@ -266,5 +265,13 @@ including Linux, Windows, and macOS build/test, strict quality, supply-chain,
 CodeQL, live REST/OpenAPI conformance, and Required CI. The product workflow
 [run 42213867687](https://github.com/emulebb/emulebb-rust/actions/runs/42213867687)
 used the corrected immutable harness pin. Harness PR #96 also passed all 20
-checks at `4edca15b`. The implementation is ready for review; this item remains
-in progress until the companion PRs are reviewed and merged.
+checks at `4edca15b`.
+
+## Closure
+
+On 2026-11-06, product PR #237 merged with granular commits preserved by rebase
+at `7b295bda`, and harness PR #96 merged at `2cd9739f`. Documentation PR #151
+retains this engineering record and the updated architecture and API contract.
+The owning issue #235 is closed and its Roadmap status is Done. Schema 54 and
+the breaking REST/settings contract require a fresh profile; there is no
+migration or compatibility layer.
