@@ -69,6 +69,7 @@ exception; new Rust items always use the `RUST-*` form.
 | [RUST-REF-010](items/RUST-REF-010.md) | Refactor | Bound watcher reconciliation I/O for large shared libraries |
 | [RUST-REF-016](items/RUST-REF-016.md) | Refactor | Move blocking SQLite work behind bounded async persistence |
 | [RUST-REF-018](items/RUST-REF-018.md) | Refactor | Keep shared-root filesystem work outside async state locks |
+| [RUST-REF-021](items/RUST-REF-021.md) | Refactor | Reduce delivery verification reads without weakening publication authority |
 
 ## Client Gate — Minor
 
@@ -94,6 +95,7 @@ exception; new Rust items always use the `RUST-*` form.
 | [RUST-REF-011](items/RUST-REF-011.md) | Refactor | Consolidate duplicated ED2K opcode and capability constants |
 | [RUST-REF-019](items/RUST-REF-019.md) | Refactor | Offload remaining transfer and large-library CPU bursts |
 | [RUST-REF-020](items/RUST-REF-020.md) | Refactor | Reuse validated incoming AICH recovery proofs within bounded ownership |
+| [RUST-REF-022](items/RUST-REF-022.md) | Refactor | Restrict incomplete download rechecks to verified payload ranges |
 
 ## Indexer Gate
 
