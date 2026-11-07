@@ -5,6 +5,9 @@ on:
       tooling_ref:
         required: true
         type: string
+      repo_kind:
+        required: true
+        type: string
   push:
     branches: ['feature/**', 'fix/**', 'chore/**']
 permissions:
@@ -35,6 +38,6 @@ jobs:
       - run: go run github.com/rhysd/actionlint/cmd/actionlint@914e7df21a07ef503a81201c76d2b11c789d3fca
         working-directory: repo
       - run: python tooling/ci/guard-tracked-files.py --repo-root repo --policy-path repo/manifests/privacy-guard/policy.v1.json
-      - run: python tooling/ci/check-basic-hygiene.py --repo-root repo
+      - run: python tooling/ci/check-basic-hygiene.py --repo-root repo --repo-kind "${{ inputs.repo_kind || 'tooling' }}"
       - run: python -m unittest discover -s ci/tests
         working-directory: tooling
