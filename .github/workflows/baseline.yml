@@ -18,4 +18,5 @@ jobs:
     with:
       policy_path: manifests/privacy-guard/policy.v1.json
       repo_kind: tooling
-      tooling_ref: ci/v8
+      tooling_ref: ${{ github.sha }}
+      extra_commands: python -m unittest discover -s ci/tests

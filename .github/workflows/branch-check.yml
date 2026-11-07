@@ -36,3 +36,5 @@ jobs:
         working-directory: repo
       - run: python tooling/ci/guard-tracked-files.py --repo-root repo --policy-path repo/manifests/privacy-guard/policy.v1.json
       - run: python tooling/ci/check-basic-hygiene.py --repo-root repo
+      - run: python -m unittest discover -s ci/tests
+        working-directory: tooling
