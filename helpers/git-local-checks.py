@@ -24,7 +24,7 @@ def main() -> int:
     if not root.is_absolute() or not (owner / "emule_workspace").is_dir():
         parser.error("EMULEBB_WORKSPACE_ROOT must identify the canonical workspace")
     repo = subprocess.check_output(["git", "rev-parse", "--show-toplevel"], text=True).strip()
-    command = [sys.executable, "-m", "emule_workspace", "local-check", "--repo", repo,
+    command = [sys.executable, "-B", "-m", "emule_workspace", "local-check", "--repo", repo,
                "--stage", args.stage, "--remote", args.remote]
     if args.stage == "push":
         command.append("--push-stdin")
