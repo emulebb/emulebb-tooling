@@ -2,7 +2,12 @@ name: Baseline
 
 on:
   push:
+    branches: [main]
   pull_request:
+
+concurrency:
+  group: baseline-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read

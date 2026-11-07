@@ -38,6 +38,8 @@ jobs:
     name: baseline (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
 
+    timeout-minutes: 30
+
     strategy:
       fail-fast: false
       matrix:
@@ -47,31 +49,31 @@ jobs:
 
     steps:
       - name: Checkout caller repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           path: repo
 
       - name: Checkout emulebb-tooling
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           repository: emulebb/emulebb-tooling
           ref: ${{ inputs.tooling_ref }}
           path: tooling
 
       - name: Set up Python
-        uses: actions/setup-python@v7
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7
         with:
-          python-version: '3.x'
+          python-version: '3.12'
 
       - name: Set up Node
         if: ${{ inputs.node_version != '' && inputs.node_cache_dependency_path == '' }}
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
           node-version: ${{ inputs.node_version }}
 
       - name: Set up Node with npm cache
         if: ${{ inputs.node_version != '' && inputs.node_cache_dependency_path != '' }}
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
           node-version: ${{ inputs.node_version }}
           cache: npm
@@ -83,7 +85,7 @@ jobs:
           python tooling\ci\guard-tracked-files.py
           --repo-root "%CD%\repo"
           --policy-path "%CD%\repo\${{ inputs.policy_path }}"
-          --summary-path "%CD%\repo\.ci\tracked-file-privacy-guard-summary.json"
+          --summary-path "${{ runner.temp }}\emulebb-output\reports\tracked-file-privacy-guard-summary.json"
 
       - name: Run basic hygiene checks
         shell: cmd
@@ -91,7 +93,7 @@ jobs:
           python tooling\ci\check-basic-hygiene.py
           --repo-root "%CD%\repo"
           --repo-kind "${{ inputs.repo_kind }}"
-          --summary-path "%CD%\repo\.ci\basic-hygiene-summary.json"
+          --summary-path "${{ runner.temp }}\emulebb-output\reports\basic-hygiene-summary.json"
 
       - name: Run optional extra step
         if: ${{ inputs.extra_step_script != '' }}

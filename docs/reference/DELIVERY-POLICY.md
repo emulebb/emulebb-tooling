@@ -9,8 +9,11 @@ or pull requests, merges work, cleans delivery state, or creates release tags.
 - Every managed-repo commit represents one coherent outcome. Stage explicit
   paths; never use `git add -A` or `git add .` in a mixed tree, bundle unrelated
   existing edits, or push WIP/debug commits.
-- Routine work targeting a protected default branch uses a short-lived topic
-  branch and pull request. Work targeting an explicitly selected unprotected
+- Routine work targeting a protected default branch uses a workstream topic
+  branch and pull request. A topic branch normally carries one related
+  workstream across sessions for one or two days, with granular commits and
+  one review-ready pull request for the batch. This is a target, not a merge
+  deadline. Work targeting an explicitly selected unprotected
   integration branch stays on that branch. Topic branches use
   `feature/<topic>`, `fix/<topic>`, or `chore/<topic>`. Never use `stale/*` as
   an active target without an explicit historical-comparison request.
@@ -42,13 +45,18 @@ or pull requests, merges work, cleans delivery state, or creates release tags.
   review-ready chunk whose required local validation is green and whose scoped
   implementation is complete. Incomplete work remains incomplete even when
   committed and pushed; do not report it as delivered.
-- Work performed on a non-default branch is not complete until its full
+- A checkpoint is complete when its scoped local validation passes, its
+  granular commits are pushed, and the worktree is clean. Sessions and tasks
+  may end at this checkpoint while the same workstream branch remains active.
+  Report it as a pushed checkpoint, not delivered work. Do not open a pull
+  request or delete the branch merely because a session or coherent slice ends.
+- A batch is delivered only when its full
   delivery lifecycle is finished: commit coherent changes granularly, push the
   branch, open a pull request targeting `main`, resolve required checks and
   reviews, merge the pull request, delete the source branch both remotely and
   locally, fetch with pruning, switch back to `main`, fast-forward it, and
-  verify a clean worktree. Never end completed work on an unpushed branch, an
-  unmerged pull request, or a dangling topic/tracking branch.
+  verify a clean worktree. An explicitly active workstream branch may remain
+  between checkpoints; it is not a dangling or stale branch.
 - Preserve meaningful granular commits when merging. Use a repository-allowed
   rebase or merge-commit method for a multi-commit pull request; do not squash
   it into one commit. Squash is acceptable only when the pull request already
@@ -57,7 +65,8 @@ or pull requests, merges work, cleans delivery state, or creates release tags.
   `gh pr merge <number> --rebase --delete-branch`; never probe or retry that
   repository with `--merge` because merge commits are disabled.
 - Before final handoff, audit open pull requests plus local and remote
-  non-default branches in every touched repository. Merge completed work and
+  non-default branches in every touched repository. Preserve the explicitly
+  active workstream branch. Merge review-ready batches and
   delete branches that are integrated or superseded. Explicitly designated
   historical `stale/*` archives may remain. If required external state makes a
   merge impossible, the work remains incomplete: leave a pull request with the
@@ -78,6 +87,17 @@ or pull requests, merges work, cleans delivery state, or creates release tags.
   failure.
 
 ## Push And Handoff
+
+- Run applicable local checks before commit and push. The shared pre-commit
+  hook runs fast staged-file checks; the shared pre-push hook runs applicable
+  host-platform validation for the outgoing changes through
+  `python -m emule_workspace local-check --repo <path> --stage push`.
+  Run that command early for feedback. Heavy validation requires a clean
+  worktree and uses the workspace lock. Do not bypass hooks, silently skip
+  required tools or failed checks, or repair inherited environment values.
+- GitHub remains the independent gate for other operating systems, hosted
+  security analysis, permissions, and publication. A local pass is not remote
+  proof. Generated local evidence stays below the configured output root.
 
 - Never leave agent-created tracked or untracked files uncommitted when moving
   to another chunk or ending a turn. Finish and commit the chunk, or remove
