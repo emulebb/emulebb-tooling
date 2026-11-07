@@ -44,5 +44,8 @@ needs Rust plus harness/live; routine Rust code does not need MFC or operations.
 - Commit each completed coherent slice separately; include a tracked item id
   when the work belongs to one.
 - Re-run `git status --short --branch` in every touched repo.
+- A clean, validated, pushed checkpoint may end the session on the active
+  workstream branch. Continue that branch for the related one-to-two-day batch;
+  report delivery only after its pull request merges and cleanup finishes.
 - Do not tag releases without separate approval. Refresh a handoff note only
   when ending the session or when explicitly asked.

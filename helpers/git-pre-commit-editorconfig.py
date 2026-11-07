@@ -130,6 +130,10 @@ def main(argv: list[str] | None = None) -> int:
     files = staged_paths(repo_root)
     if not files:
         return 0
+    # WHY: normalization reads working files, so reject partial staging before
+    # it can rewrite unstaged content or validate a different tree from the index.
+    if run_git(repo_root, ["diff", "--quiet", "--"]).returncode != 0:
+        raise RuntimeError("Unstaged tracked edits: stage or save them before commit validation.")
     return_code, output = run_normalizer(repo_root, files)
     if output:
         print(output, end="" if output.endswith("\n") else "\n")

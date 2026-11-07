@@ -179,6 +179,14 @@ sync configure the shared hook and must not overwrite dirty managed work.
   `helpers\source-normalizer.py` for uncertain, generated, or bulk edits.
 - `hooks\pre-commit` is the shared hook; workspace sync configures
   `core.hooksPath`.
+- Shared `hooks\pre-push` runs applicable host-platform checks before upload.
+  Use `python -m emule_workspace local-check --repo <repo-root> --stage push`
+  from the build checkout to run them manually on committed changes. Commit
+  checks require no unstaged tracked edits; push checks require a clean tree.
+  Push non-HEAD refs separately from their checked-out branch. Required tools
+  include Python, Go for workflow lint, and the repository's pinned Rust/Node
+  toolchains; Rust implementation pushes also require cargo-deny and the
+  persisted REST harness dependencies. Missing tools block the operation.
 - Repeatable workspace automation is persisted Python in the owning repo.
   Search existing modules first and extend the closest owner before adding a
   file.
