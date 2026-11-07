@@ -151,7 +151,8 @@ def get_personal_identifiers(repo_root: Path) -> tuple[str, ...]:
     return tuple(normalized)
 
 
-def run_privacy_guard(*, repo_root: Path, policy_path: Path, summary_path: Path | None = None) -> dict[str, Any]:
+def run_privacy_guard(*, repo_root: Path, policy_path: Path, summary_path: Path | None = None,
+                      paths: set[str] | None = None) -> dict[str, Any]:
     """Scans tracked files for local-path or personal-identifier leaks."""
 
     repo_root_path = repo_root.resolve()
@@ -175,6 +176,8 @@ def run_privacy_guard(*, repo_root: Path, policy_path: Path, summary_path: Path 
     excluded_tracked_files: list[str] = []
     path_matches: list[dict[str, str]] = []
     for relative_path in get_tracked_files(repo_root_path):
+        if paths is not None and relative_path not in paths:
+            continue
         if any(re.search(regex, relative_path, flags=re.IGNORECASE) for regex in excluded_path_regexes):
             excluded_tracked_files.append(relative_path)
             continue
