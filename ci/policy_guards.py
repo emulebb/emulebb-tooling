@@ -127,6 +127,11 @@ def get_personal_identifiers(repo_root: Path) -> tuple[str, ...]:
         value = os.environ.get(variable_name)
         if value:
             candidates.append(value)
+    # WHY: hosted service accounts are infrastructure, not personal identities;
+    # treating them as private names rejects ordinary modules ending in runner.
+    # Explicit operator identifiers below still apply even on hosted runners.
+    if os.environ.get("GITHUB_ACTIONS") == "true":
+        candidates = [value for value in candidates if value.lower() not in {"runner", "runneradmin"}]
     for value in re.split(r"[,;]", os.environ.get("TRACKED_FILE_PRIVACY_IDENTIFIERS", "")):
         if value.strip():
             candidates.append(value.strip())
