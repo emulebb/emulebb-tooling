@@ -1,5 +1,6 @@
 """Changed-file privacy checks retain the full-audit default."""
 import json
+import os
 from pathlib import Path
 import sys
 import tempfile
@@ -11,6 +12,14 @@ import policy_guards
 
 
 class PrivacyScopeTests(unittest.TestCase):
+    def test_hosted_account_is_not_personal_but_explicit_rules_remain(self):
+        with patch.dict(os.environ, {"GITHUB_ACTIONS": "true", "HOME": str(Path("fixture-profile") / "runner"), "USER": "runner"}, clear=True):
+            self.assertEqual(policy_guards.get_personal_identifiers(Path(".")), ())
+            with patch.dict(os.environ, {"TRACKED_FILE_PRIVACY_IDENTIFIERS": "runner,operator"}):
+                self.assertEqual(policy_guards.get_personal_identifiers(Path(".")), ("runner", "operator"))
+        with patch.dict(os.environ, {"USER": "runner"}, clear=True):
+            self.assertEqual(policy_guards.get_personal_identifiers(Path(".")), ("runner",))
+
     def test_changed_scope_does_not_weaken_default_full_audit(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
