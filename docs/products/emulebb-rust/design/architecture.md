@@ -309,11 +309,30 @@ graph TD
   connection; `schema.sql` is the exact current development schema. An
   incompatible database fails startup and requires an entirely fresh profile;
   product code never migrates, repairs, or resets it.
+  Schema 67 uses the stable family identifier `emulebb.metadata`, a singleton
+  version marker, strict ordinary tables, and checked Rust numeric mappings.
+  Startup compares SQLite structural descriptors against the current schema
+  before accepting a marked profile. Composite-key hash and association tables
+  use `WITHOUT ROWID`; child foreign keys have supporting indexes.
 - Typed sub-stores: identity (user hash / secure-ident keys), peers, profile
   settings, searches, active downloads, verified local content, shared-root
   memberships, download history, and the Kad publish cache. Delivered downloads
   become local content; their transfer rows and internal piece stores are
   retired after crash-safe cleanup. Download history remains path-independent.
+  Transfer geometry and presentation belong to `transfers`; they do not
+  redefine verified local presentation. Accepted content and completion history
+  reject conflicting sizes, while incomplete downloads can still learn their
+  provisional metadata. Hashes use binary storage, unsigned search bounds use
+  ordered eight-byte values, and lifetime counters saturate at SQLite's signed
+  integer maximum.
+  Search, transfer, and Kad snapshots reconcile changed rows instead of deleting
+  unchanged collections. Root scans withdraw only missing memberships, and
+  observation-only name updates leave FTS entries untouched.
+  Library pages seek a connection-local path projection. A durable evidence
+  revision and a session-verification revision invalidate it transactionally,
+  including changes from other connections. This projection grants no serving
+  authority. Regression fixtures cover 100,000 distinct files and 100,000 aliases
+  of one hash, cursor ordering, and fingerprint/root invalidation.
 - On boot the core reads settings via `profile_state::load_core_state`,
   rebuilds the `Ed2kTransferRuntime` from the transfer store, and hydrates the
   `KadLocalStore` from the Kad publish cache (see `EmulebbCore::new_with_network`
@@ -338,7 +357,7 @@ graph TD
   ED2K/AICH identities using metadata alone. Typed content conflicts permit
   individual retries; storage failures propagate. The Python operator keeps
   an external digest baseline to prove preservation of rejected existing data.
-- Native schema 58 retains complete AICH recovery sets by master hash and file
+- Native metadata retains complete AICH recovery sets by master hash and file
   size, with packed block hashes and a part root per eD2K part. Only accepted
   live content receives imported recovery sets. The existing combined MD4/AICH
   ingest and completion pass retains leaves without another payload read.

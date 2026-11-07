@@ -61,6 +61,19 @@ correctness evidence, not authorization for another complete media-library run.
 
 ## Why This Matters
 
+The schema consolidation implements a bounded portion of this item: indexed
+catalog lookups, a revision-controlled session projection for library pages,
+incremental search/transfer/Kad persistence, membership reconciliation without
+blanket withdrawal, and FTS updates only when indexed text changes. Synthetic
+regressions cover 100,000 distinct files and 100,000 aliases, stable child rows,
+transaction rollback, and invalidation across connections. Strict tables,
+checked numeric mappings, compact composite keys, and complete child-key index
+coverage strengthen the current storage contract.
+
+This does not complete the bounded writer, filesystem scheduling, optional
+media-enrichment, or physical-I/O measurement work below. The schema remains
+current-only; these changes add no end-user upgrade or migration path.
+
 Per-file WAL flushes and repeated metadata scans make a library of many small
 files much slower than its payload size suggests. If the profile database and
 shared library occupy the same mechanical disk, alternating payload reads and
