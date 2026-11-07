@@ -175,6 +175,83 @@ another unbounded real-media run.
 - [ ] Synthetic measurements record query count, compile count, commit latency,
       CPU time, and payload bytes before/after without weakening durability.
 
+## Accepted Combined-Hash and Recovery Persistence Follow-up (2026-11-07)
+
+The AICH/I/O review was revalidated against main `e3372aba` and branch
+`58595576`. Normal local ingest already reads a 184,320-byte buffer once,
+updates MD4, and calculates each SHA-1 leaf from those same bytes. It retains
+packed recovery leaves and part roots; final download verification does the
+same in its existing whole-file pass. These are synchronous buffered readers
+inside blocking workers, awaited by async callers. Native async disk I/O or
+two independent digest streams is not a prerequisite for good HDD throughput.
+
+Preserve that combined reader. Full-part recovery leaves occupy 1,060 bytes
+per 9,728,000 payload bytes, about 0.011 percent before SQLite pages, indexes,
+and WAL. Do not mistake their compact data size for the cost of committing
+them individually across a large library.
+
+The current normal ingest path calls `upsert_verified_local_content`, then
+`store_aich_recovery_set`, then optional media extraction/update. The first
+two storage operations open separate transactions; the worker awaits media
+work before returning to its next file and before its caller finishes catalog
+publication. Bounded profile-exchange import batches are already implemented;
+they do not batch normal local ingestion. Multiple physical-disk workers still
+converge on one metadata connection. Instrument current behavior before
+attributing the historical read/write amplification to a particular query.
+
+Extend the one bounded persistence owner from RUST-REF-016 with file-count,
+byte-count, and elapsed-time batch ceilings. Bound retained path/fingerprint,
+hashset, and recovery allocations, not only item count. Keep interactive reads,
+transfer checkpoints, and first-cohort publication responsive. Publish a new
+entry after its mandatory content/path evidence is durably committed and
+root-admitted; optional enrichment must not delay that transition.
+
+Retain atomicity for each complete recovery set, including aliases with
+enriched part hashes. An invalid/conflicting optional set must roll back only
+that set while retaining mandatory content and accepted neighboring sets.
+SQLite transaction-abort errors may end the containing transaction, not merely
+a savepoint: preserve the `58595576` fix and test both conflict and abort paths.
+Separate storage unavailability from invalid input; never report a failed
+durable commit as a successfully rejected optional record. Any retry must be
+bounded and idempotent without a hidden payload rehash.
+
+The completion path changed after the earlier review: `e0e68ad6` attempts to
+save available computed recovery before publishing completion so a crash does
+not leave a successful cached-tree computation unretained. Optional cache
+failure still permits durable valid MD4 completion. Preserve both invariants;
+do not reinstate the older completion-before-cache crash window as a batching
+optimization. RUST-BUG-165 separately owns trusted digest disagreement, which
+is an integrity conflict rather than an optional-storage failure.
+
+Use the existing small magic sniff to skip irrelevant media parsers and retain
+format-specific safety bounds. Where useful, feed bounded prefix/trailer
+evidence already encountered by the mandatory reader to enrichment instead of
+reopening every file. Account separately for remaining media seeks and bytes.
+Do not turn this into a second metadata parser or force enrichment to wait
+behind an entire library before publishing any result.
+
+Additional acceptance criteria:
+
+- [ ] Cold normal ingest commits bounded groups rather than mandatory and
+      recovery metadata once per file; measurements distinguish commit count,
+      mutex/queue wait, SQL work, WAL bytes, fsync latency, and payload reads.
+- [ ] Optional recovery conflict and transaction-abort injection preserve
+      accepted MD4 content and neighbor sets, with no partial complete-set rows
+      and no false successful commit on storage failure.
+- [ ] Crash injection before/after successful recovery storage and completion
+      preserves the latest recovery-retention ordering and bounded restart work.
+- [ ] Media enrichment is bounded and outside the first-publication critical
+      path; irrelevant formats retain their tiny sniff rather than a 2-MiB read.
+- [ ] Existing import enrichment and sparse-reimport tests retain richer MD4/
+      AICH evidence without payload reads or alias/path rebinding.
+- [ ] A current-head bounded cold/warm/mutation report replaces assumptions
+      drawn from the older 100K baseline and separates logical from physical I/O.
+
+RUST-REF-009 owns shared disk admission; RUST-REF-019 owns CPU placement;
+RUST-REF-021 owns delivery verification reads; RUST-REF-022 owns incomplete
+recheck ranges. Keep one owner for each boundary. No broad operator-library
+campaign or new implementation is authorized by this backlog update.
+
 ## Notes
 
 The retained SSD baseline is
