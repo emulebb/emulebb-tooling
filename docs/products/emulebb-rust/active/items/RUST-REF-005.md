@@ -34,8 +34,10 @@ release defect; resume this as small post-beta maintenance slices.
 
 ## Invariants
 
-- Preserve public Rust paths, REST/OpenAPI behavior, serialization, persistence,
-  and configuration semantics.
+- Prefer behavior-preserving extractions. During beta, change Rust, API,
+  schema, or configuration contracts when a cleaner boundary justifies it;
+  update callers and tests together. Add no legacy readers, compatibility
+  aliases, or migrations.
 - Preserve stock-compatible eD2K/Kad behavior and all VPN fail-closed boundaries.
 - Keep module boundaries responsibility-based; do not split cohesive control flow
   solely to satisfy a mechanical line count.
@@ -55,7 +57,10 @@ release defect; resume this as small post-beta maintenance slices.
 
 ## Acceptance Criteria
 
-- [ ] `emulebb-core/src/lib.rs` is a thin crate root with stable public re-exports.
+- [ ] `emulebb-core/src/lib.rs` focuses on wiring and intentional public re-exports.
+- [ ] State ownership and dependency direction are explicit for extracted
+      lifecycle, transfer, search, and persistence responsibilities. Do not add
+      forwarding layers solely to retain old internal paths.
 - [ ] Inline core tests are grouped by subsystem with unchanged assertions.
 - [ ] Static IPv4 and P2P binding audits cover every relocated boundary.
 - [ ] No repository-local Cargo `target` directory is created.
@@ -64,6 +69,10 @@ release defect; resume this as small post-beta maintenance slices.
       or per-file allowlist rationales.
 - [ ] Substantial tests live in sibling test modules or integration-test trees;
       only focused white-box tests remain inline with production code.
+
+The CI/CD parity workstream leaves these production extractions in this
+backlog item. Address a production change in that workstream only when a
+reproducible current validation failure requires it.
 
 ## Validation
 

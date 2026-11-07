@@ -44,6 +44,22 @@ continue normally until an operator explicitly selects a candidate revision.
   with exact revision, artifact, and packaged-lifecycle metadata, but no Beta 3
   candidate has been selected and certified against RUST-CI-006.
 
+## Known Nightly Input Blocker (2026-11-07)
+
+Nightly run
+[`42356965321`](https://github.com/emulebb/emulebb-rust/actions/runs/42356965321)
+failed while building the multi-architecture image candidate: the pinned
+`lscr.io/linuxserver/baseimage-ubuntu` input returned HTTP 429. This remains a
+CD blocker separate from green Rust branch checks and local validation.
+
+- Retain the exact input and failure evidence. Investigate authenticated pulls
+  or an upstream-owned, digest-equivalent source before changing image authority.
+- Keep candidate failure visible; do not retry unrelated validation failures
+  into green results or promote an older candidate as current proof.
+- Prove the repaired input path with a non-publishing candidate build and its
+  image/security checks. Creating tags, Releases, or updating channels still
+  requires separate operator confirmation.
+
 ## Non-Publishing Rehearsal Evidence (2026-10-22)
 
 Rust PR [#143](https://github.com/emulebb/emulebb-rust/pull/143) added the

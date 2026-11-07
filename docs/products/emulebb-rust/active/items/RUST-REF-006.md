@@ -36,7 +36,7 @@ and the Rust in-tree SSDP/SOAP provider is removed.
 
 - Keep the deprecated `rupnp` backend, its `ssdp-client` dependency, and
   personal Git patches absent.
-- Leave provider selection, fallback, settings migration, and live NAT evidence
+- Leave provider selection, current settings, and live NAT evidence
   to RUST-FEAT-037.
 - Adopt non-poisoning `parking_lot::Mutex` for short synchronous runtime state;
   keep asynchronous locks only where a guard must cross `.await`.
@@ -57,6 +57,16 @@ and the Rust in-tree SSDP/SOAP provider is removed.
 - [ ] Security-sensitive failure paths are explicitly fail-closed.
 - [x] Every unsafe block and unsafe implementation has a concrete safety proof.
 - [ ] Broad lint suppressions are removed or reduced to justified items.
+- [ ] Background tasks have explicit cancellation and shutdown owners, and
+      tests observe task completion instead of relying on fixed sleeps.
+- [ ] Synchronous lock guards do not span `.await`; bounded queues expose
+      backpressure and failure rather than silently dropping required work.
+- [ ] Targeted async and safety lints are adopted with focused fixes and narrow,
+      reasoned exceptions. Avoid blanket pedantic enforcement or broad allows.
+
+These are backlog follow-ups, not prerequisites for the current CI/CD cleanup.
+Beta contracts may change together when necessary; no legacy implementation,
+compatibility alias, or migration is introduced to preserve the prior shape.
 
 ## Validation
 

@@ -108,6 +108,19 @@ receipt, an independent registrar validates its exact evidence and provenance,
 the catalog records only the proven claim, and all changed repositories pass
 their scoped gates.
 
+## Deferred Test-Quality Follow-ups
+
+- Add parser round-trip, malformed-input, and state-transition property tests
+  under the canonical codec or state-machine owner. Preserve fuzz findings as
+  deterministic regression cases instead of depending on a later fuzz run.
+- Use controlled time and explicit task-completion signals for async scenarios.
+  Keep actual socket and OS watcher behavior in bounded integration lanes.
+- Keep failures visible and retain their evidence; automatic reruns do not
+  convert an unexplained failure into a valid proof.
+
+These remain backlog work. The CI/CD parity cleanup does not expand production
+protocol behavior or introduce a second harness or verdict model.
+
 ## Deferred Resume Checkpoint
 
 This item is intentionally open but not in progress. Resume it after the Beta 3
