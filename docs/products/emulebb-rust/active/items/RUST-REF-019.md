@@ -66,6 +66,35 @@ Share resource admission with RUST-REF-009. A large-library hash must not
 starve short transfer verification jobs. Record queue wait, execution duration,
 executor heartbeat latency, peak memory, and payload read bytes.
 
+## Accepted AICH Worker Follow-up (2026-11-07)
+
+Review branch `58595576` still computes block comparisons in
+`salvage.rs::begin_part_salvage` directly after reading a part. It also calls
+ordinary MD4 verification inline in requested-block and salvage completion
+paths. The async function signature and `tokio::fs` read do not offload the
+subsequent digest loop. Whole-file ingest and final rehash already use
+`spawn_blocking`; keep those coarse buffered workers.
+
+Own bounded CPU placement for validated AICH salvage and the trusted dual-hash
+part verification specified by RUST-BUG-165. RUST-BUG-166 must first correlate
+the request and validate cheap proof constraints before expensive work is
+admitted. Move owned buffers into the worker once and return an owned verdict;
+recheck piece/trust generation before changing state. Do not combine this
+executor refactor with an independent cryptographic acceptance policy.
+
+Share CPU admission and storage admission with RUST-REF-009 while keeping their
+budgets distinct. A metadata-only proof reconstruction need not hold a payload
+disk-reader permit. Retain existing responder limits and measure SHA-1 work
+before choosing a larger worker pool or a read/compute pipeline. Cancellation
+of a future does not stop already-running blocking work or release its permit.
+
+- [ ] Invalid or unsolicited answers rejected by RUST-BUG-166 never enter the
+      substantial CPU lane or read payloads.
+- [ ] Full-part MD4/AICH comparison leaves a single-worker executor responsive
+      without an extra read or copy of the complete part buffer.
+- [ ] Root/piece changes during worker execution discard stale results without
+      duplicate corruption attribution or verification promotion.
+
 ## Scope Constraints
 
 - No ED2K/AICH result, piece verification, ICH, or crash-ordering change.
