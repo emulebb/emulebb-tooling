@@ -187,6 +187,12 @@ sync configure the shared hook and must not overwrite dirty managed work.
   include Python, Go for workflow lint, and the repository's pinned Rust/Node
   toolchains; Rust implementation pushes also require cargo-deny and the
   persisted REST harness dependencies. Missing tools block the operation.
+- Rust check definitions live in `emulebb-rust/tools/rust_quality_gate.py`;
+  `ci-toolchain.json`, `requirements-ci.txt`, and `rust-toolchain.toml` own
+  tool pins. Hooks and GitHub dispatch those definitions. Keep complete
+  pre-push validation and required GitHub checks; do not cache prior passes or
+  retry unexplained failures into green results. Source-input differences are
+  recorded explicitly rather than repairing operator checkouts or environment.
 - Repeatable workspace automation is persisted Python in the owning repo.
   Search existing modules first and extend the closest owner before adding a
   file.

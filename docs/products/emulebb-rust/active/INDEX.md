@@ -76,6 +76,7 @@ exception; new Rust items always use the `RUST-*` form.
 | ID | Class | Title |
 |---|---|---|
 | [RUST-CI-028](items/RUST-CI-028.md) | Evidence | Make Windows manifest embedding target-aware |
+| [RUST-CI-032](items/RUST-CI-032.md) | Evidence | Add dependency-aware early Rust checks without weakening pre-push coverage |
 | [RUST-BUG-136](items/RUST-BUG-136.md) | Bug | Bound transfer deletion marker validation reads |
 | [RUST-BUG-157](items/RUST-BUG-157.md) | Bug | Eliminate unexplained ED2K offer publication stalls |
 | [RUST-BUG-160](items/RUST-BUG-160.md) | Bug | Reuse stock hashes across unambiguous Unicode filename normalization |
