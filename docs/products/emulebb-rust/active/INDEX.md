@@ -53,6 +53,8 @@ exception; new Rust items always use the `RUST-*` form.
 | [RUST-BUG-159](items/RUST-BUG-159.md) | Bug | Respect destination filename limits during download delivery |
 | [RUST-BUG-161](items/RUST-BUG-161.md) | Bug | Respect filesystem case semantics when consolidating shared roots |
 | [RUST-BUG-163](items/RUST-BUG-163.md) | Bug | Enforce exclusive process ownership of writable profiles |
+| [RUST-BUG-164](items/RUST-BUG-164.md) | Bug | Preserve AICH trust provenance across hashset acquisition |
+| [RUST-BUG-165](items/RUST-BUG-165.md) | Bug | Require trusted AICH and MD4 agreement during download verification |
 | [CI-054](items/CI-054.md) | Evidence | Add native Windows Rust/MFC protocol-parity diagnostics campaign |
 | [RUST-FEAT-056](items/RUST-FEAT-056.md) | Feature | Deliver supported Android and Fire OS APKs with device harnesses |
 | [RUST-FEAT-057](items/RUST-FEAT-057.md) | Feature | Publish portable Linux musl builds for x64 and ARM64 |
