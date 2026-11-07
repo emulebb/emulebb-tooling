@@ -89,9 +89,11 @@ exception; new Rust items always use the `RUST-*` form.
 | [RUST-FEAT-060](items/RUST-FEAT-060.md) | Feature | Support ChromeOS through Android and Crostini lanes |
 | [RUST-FEAT-061](items/RUST-FEAT-061.md) | Feature | Support illumos, NetBSD, and OpenBSD as portable Unix targets |
 | [RUST-FEAT-064](items/RUST-FEAT-064.md) | Feature | Address unusual native paths through lossless API locators |
+| [RUST-FEAT-065](items/RUST-FEAT-065.md) | Feature | Expose AICH trust integrity and recovery health to operators |
 | [RUST-REF-007](items/RUST-REF-007.md) | Refactor | Review Rust upload hot-path performance candidates |
 | [RUST-REF-011](items/RUST-REF-011.md) | Refactor | Consolidate duplicated ED2K opcode and capability constants |
 | [RUST-REF-019](items/RUST-REF-019.md) | Refactor | Offload remaining transfer and large-library CPU bursts |
+| [RUST-REF-020](items/RUST-REF-020.md) | Refactor | Reuse validated incoming AICH recovery proofs within bounded ownership |
 
 ## Indexer Gate
 
