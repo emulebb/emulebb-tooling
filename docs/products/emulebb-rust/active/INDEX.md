@@ -55,6 +55,7 @@ exception; new Rust items always use the `RUST-*` form.
 | [RUST-BUG-163](items/RUST-BUG-163.md) | Bug | Enforce exclusive process ownership of writable profiles |
 | [RUST-BUG-164](items/RUST-BUG-164.md) | Bug | Preserve AICH trust provenance across hashset acquisition |
 | [RUST-BUG-165](items/RUST-BUG-165.md) | Bug | Require trusted AICH and MD4 agreement during download verification |
+| [RUST-BUG-166](items/RUST-BUG-166.md) | Bug | Admit AICH recovery answers only for matching outstanding requests |
 | [CI-054](items/CI-054.md) | Evidence | Add native Windows Rust/MFC protocol-parity diagnostics campaign |
 | [RUST-FEAT-056](items/RUST-FEAT-056.md) | Feature | Deliver supported Android and Fire OS APKs with device harnesses |
 | [RUST-FEAT-057](items/RUST-FEAT-057.md) | Feature | Publish portable Linux musl builds for x64 and ARM64 |
@@ -78,6 +79,7 @@ exception; new Rust items always use the `RUST-*` form.
 | [RUST-BUG-157](items/RUST-BUG-157.md) | Bug | Eliminate unexplained ED2K offer publication stalls |
 | [RUST-BUG-160](items/RUST-BUG-160.md) | Bug | Reuse stock hashes across unambiguous Unicode filename normalization |
 | [RUST-BUG-162](items/RUST-BUG-162.md) | Bug | Bound profile archive fields before allocating import buffers |
+| [RUST-BUG-167](items/RUST-BUG-167.md) | Bug | Release and retry failed AICH recovery requests across eligible peers |
 | [RUST-FEAT-025](items/RUST-FEAT-025.md) | Feature | Validate conformant duplicate-block rejection diagnostics |
 | [RUST-FEAT-038](items/RUST-FEAT-038.md) | Feature | Add current-aMule-style endgame source takeover |
 | [RUST-FEAT-039](items/RUST-FEAT-039.md) | Feature | Size ED2K request depth from measured RTT and bandwidth |
