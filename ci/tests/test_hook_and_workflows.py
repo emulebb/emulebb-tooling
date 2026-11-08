@@ -11,6 +11,13 @@ SPEC.loader.exec_module(HOOK)
 
 
 class HookAndWorkflowTests(unittest.TestCase):
+    def test_hooks_route_normalization_and_checks_through_workspace_python(self):
+        for name in ("pre-commit", "pre-push"):
+            source = (ROOT / "hooks" / name).read_text(encoding="utf-8")
+            self.assertIn('python_runner="$hook_dir/../helpers/workspace-python.py"', source)
+            self.assertIn('python -B "$python_runner"', source)
+            self.assertNotIn('exec python "$hook_dir/../helpers/git-local-checks.py"', source)
+
     def test_partial_staging_is_rejected_before_normalization(self):
         with patch.object(HOOK, "staged_paths", return_value=["selected.txt"]), patch.object(HOOK, "run_git") as git, patch.object(HOOK, "run_normalizer") as normalize:
             git.return_value.returncode = 1

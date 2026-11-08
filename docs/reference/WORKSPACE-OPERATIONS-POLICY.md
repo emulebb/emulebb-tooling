@@ -51,6 +51,22 @@ sync configure the shared hook and must not overwrite dirty managed work.
 
 ## Environment And Tooling
 
+- Host orchestration and Git hooks use a private workspace CPython environment.
+  The exact stable Python version is owned by `repos/emulebb-build/.python-version`;
+  GitHub host jobs use the same pin. Updates change the pin and dependency lock
+  together rather than resolving a floating `latest` during validation.
+- Run `python -B -m emule_workspace bootstrap-python` from `repos/emulebb-build`
+  to install the reviewed manager, managed interpreter, and locked development
+  dependencies below `EMULEBB_WORKSPACE_OUTPUT_ROOT/tools` and `cache`.
+  An existing Python is only the initial launcher. This operation does not
+  modify system Python, global PATH, file associations, or Windows interpreter
+  registration. Normal workspace CLI operations select the private environment;
+  their Python subprocesses retain that interpreter, including Unix venv links.
+- Dependency authors explicitly use `bootstrap-python --update-lock` after
+  changing the reviewed project requirements. Ordinary setup uses the existing
+  lock and refuses stale environments. `--reinstall` replaces only the managed
+  interpreter and must run from an external bootstrap Python.
+
 - Never override an already-present `EMULEBB_*` variable. Required
   `EMULEBB_WORKSPACE_ROOT` and `EMULEBB_WORKSPACE_OUTPUT_ROOT` are read exactly;
   the latter remains outside the workspace.
