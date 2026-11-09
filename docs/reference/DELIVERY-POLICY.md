@@ -17,12 +17,24 @@ or pull requests, merges work, cleans delivery state, or creates release tags.
   integration branch stays on that branch. Topic branches use
   `feature/<topic>`, `fix/<topic>`, or `chore/<topic>`. Never use `stale/*` as
   an active target without an explicit historical-comparison request.
-- Keep exactly one active work-in-progress topic branch per repository for one
-  operator workstream. Continue every granular checkpoint for that workstream
-  on the same branch until its pull request merges; do not create queued,
-  stacked, replacement, or parallel work-in-progress branches. Cross-repository
-  work should use the same topic name wherever practical so the single logical
-  workstream remains obvious.
+- Parent-coordinated parallel workstreams are the normal delivery model for
+  independent outcomes. Keep exactly one active topic branch per repository
+  per workstream and one assigned worker per checkout. Continue checkpoints on
+  that branch until integration; do not create replacement or duplicate branches
+  for the same outcome. Record any dependency on another unmerged workstream
+  with the parent before branching from it. Cross-repository work should use
+  the same topic name wherever practical.
+- Workers own their assigned edits, validation, commits, pushes, review-ready
+  pull requests, check monitoring, and review fixes. The parent owns scope,
+  file reservations, shared Git administration, cross-repository dependencies,
+  review, merge order, and cleanup. Workers must coordinate before changing
+  reserved files, shared contracts, manifests, schemas, or lockfiles. A worker
+  contribution is ready for parent review; only the parent reports integration
+  and delivery as complete.
+- Use managed isolated checkouts as described in
+  [Parallel Workstreams](GUIDE-PARALLEL-WORKSTREAMS.md). Do not switch another
+  worker's branch, edit its checkout, change shared Git configuration, prune
+  shared worktree records, or independently merge or remove a workstream.
 - Treat the end of every coherent work chunk as a mandatory commit boundary.
   During complex work, also create granular commits at independently
   reviewable, validated intermediate checkpoints; do not accumulate the whole
@@ -32,13 +44,16 @@ or pull requests, merges work, cleans delivery state, or creates release tags.
 
 ## Pull Requests And Completion
 
-- Limit each human author to one open implementation pull request per
-  repository. Before opening a pull request, list that author's open pull
-  requests against the same default branch. Finish or close the existing pull
-  request before opening another. Bot-authored dependency, security, and
-  release pull requests are exempt. A repository may define one
-  maintainer-controlled exception label for deliberately parallel work; record
-  the reason on both pull requests before applying it.
+- Before opening a pull request, list that author's open pull requests against
+  the same default branch. Parent-coordinated workstreams may have independent
+  pull requests in the same repository. Honor the repository's enforced author
+  limit: in `emulebb-rust`, the parent records the coordination reason on every
+  affected pull request and applies the maintainer-controlled
+  `parallel-approved` label to each. This is the supported parallel path, not a
+  CI bypass. Uncoordinated human work remains limited to one open implementation
+  pull request per repository; bot-authored dependency, security, and release
+  pull requests remain exempt. Do not label unrelated pull requests to unblock
+  a worker without coordinating their ownership.
 - Do not open draft pull requests merely to retain work, and do not open a pull
   request for each granular commit. Keep the single work-in-progress branch
   pushed without a pull request until it contains a significant, coherent,
@@ -53,10 +68,14 @@ or pull requests, merges work, cleans delivery state, or creates release tags.
 - A batch is delivered only when its full
   delivery lifecycle is finished: commit coherent changes granularly, push the
   branch, open a pull request targeting `main`, resolve required checks and
-  reviews, merge the pull request, delete the source branch both remotely and
-  locally, fetch with pruning, switch back to `main`, fast-forward it, and
-  verify a clean worktree. An explicitly active workstream branch may remain
-  between checkpoints; it is not a dangling or stale branch.
+  reviews, merge the pull request, and remove integrated delivery state. For a
+  managed worker checkout, the parent verifies the merged result, removes the
+  clean worktree and its integrated branch, and reconciles the registration.
+  Do not switch a shared canonical checkout to finish a worker's lifecycle.
+  For a conventional topic checkout, delete the source branch remotely and
+  locally, fetch with pruning, return to `main`, fast-forward it, and verify a
+  clean worktree. An explicitly active workstream branch may remain between
+  checkpoints; it is not a dangling or stale branch.
 - Preserve meaningful granular commits when merging. Use a repository-allowed
   rebase or merge-commit method for a multi-commit pull request; do not squash
   it into one commit. Squash is acceptable only when the pull request already

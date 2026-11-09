@@ -49,6 +49,36 @@ Python topology in `repos\emulebb-build\emule_workspace` is the source of truth.
 `python -m emule_workspace validate` fails generated-contract drift. Setup and
 sync configure the shared hook and must not overwrite dirty managed work.
 
+## Parent-Coordinated Workstreams
+
+- Independent worker checkouts live below
+  `EMULEBB_WORKSPACE_ROOT\workspaces\agents\<workstream>\<repo>`. Create only
+  the Rust, build, tooling, or build-tests worktrees required by the assignment;
+  canonical `repos` checkouts and generated workspace topology remain stable.
+- `emulebb-build` owns the persisted `workstream` command lifecycle and local
+  registration below `EMULEBB_WORKSPACE_OUTPUT_ROOT\tmp\workstreams`.
+  Registration identifies checkout ownership, branches, base revisions, and
+  linked issues or pull requests. It is orchestration state, not another
+  backlog or authority for issue status.
+- The parent owns worktree creation/removal, shared Git administration, file
+  reservations, and integration. Git history and repository configuration are
+  shared between worktrees even though each has its own index and working tree.
+  Parent and worker responsibilities follow the [Delivery Policy](DELIVERY-POLICY.md).
+- Workstreams select source checkouts explicitly or through their registered
+  checkout identity. Hooks and nested checks must validate the selected source
+  set and record its exact revisions. Refuse a required check that cannot honor
+  the selected source set rather than checking a different canonical checkout.
+- Preserve inherited environment variables, default output paths, and existing
+  no-selector command behavior. Worktrees enable concurrent editing and pull
+  request preparation; heavyweight validation still uses the single workspace
+  lock. The parent schedules shared build output, staged binaries, profiles,
+  ports, packaging, public-network campaigns, and host VPN/routing operations.
+- Refuse conflicting or stale registrations and preserve dirty, unpublished,
+  or incomplete work. Do not force-remove worktrees, rewrite published history,
+  or prune unrelated Git records to repair a workstream.
+
+See [Parallel Workstreams](GUIDE-PARALLEL-WORKSTREAMS.md) for the operator flow.
+
 ## Environment And Tooling
 
 - Host orchestration and Git hooks use a private workspace CPython environment.

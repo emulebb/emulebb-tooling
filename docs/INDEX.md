@@ -97,6 +97,7 @@ workspace and release controls instead of the product manual:
 The routed policy annexes are
 [Workspace Operations](reference/WORKSPACE-OPERATIONS-POLICY.md),
 [Delivery](reference/DELIVERY-POLICY.md),
+[Parallel Workstreams](reference/GUIDE-PARALLEL-WORKSTREAMS.md),
 [Harness And Live](reference/HARNESS-LIVE-POLICY.md),
 [emulebb-rust](products/emulebb-rust/reference/AGENT-POLICY.md), and
 [emulebb-mfc](products/emulebb-mfc/reference/AGENT-POLICY.md).
