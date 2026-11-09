@@ -114,6 +114,20 @@ push, without implicitly downloading guest images. Receipts below
 `runtimeExecution: not-run`; guest boot, APK production and device qualification
 remain open.
 
+The shared guest-boot owner uses native non-root Docker with KVM, no networking,
+and a fresh writable run directory. `probe-rust-android-guest --image min` or
+`--image current` runs it locally where KVM is available; the GitHub adapter
+uses the same owner and harness. This WSL host has no `/dev/kvm`, so software
+installation/version/metadata checks run locally and accelerated boots run on
+GitHub. Emulator preparation now needs only the emulator, the existing shared
+ADB pin and the selected guest image; it no longer prepares compiler inputs.
+Public evidence excludes private AVDs and emulator runtime logs and explicitly
+records `applicationQualification: not-run`.
+
+The operator has no physical test devices available. Android ARM64, Fire OS
+and ChromeOS device qualification remains pending; emulator or compile success
+must not satisfy those acceptance criteria.
+
 ## Networking And Safety Constraints
 
 - Direct routing is the initial supported public-network mode. Mobile carrier
