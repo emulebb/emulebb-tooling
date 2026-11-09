@@ -5,7 +5,7 @@ product: emulebb-rust
 phase: Phase 1
 github_issue: https://github.com/emulebb/emulebb-rust/issues/226
 title: Deliver supported Android and Fire OS APKs with device harnesses
-status: OPEN
+status: IN_PROGRESS
 priority: Major
 category: feature
 labels: [rust, android, fire-os, mobile, packaging, webui, harness, portability]
@@ -29,6 +29,32 @@ restart, clean shutdown, and release provenance.
 The Android product remains the same headless bounded monolith. Android owns a
 minimal application shell and foreground service; it does not introduce a
 second client implementation or a native recreation of the desktop UI.
+
+## Authorized Experimental Nightly Slice (2026-11-09)
+
+The operator selected experimental native daemon bundles for `arm64-v8a` and
+`x86_64` as tonight's Android deliverable. APK/JNI/service/signing and supported
+device qualification remain later work; publishing developer archives does not
+close this APK feature or add a supported Android-platform claim.
+
+Build fresh ELFs with the actual nightly version/channel and immutable source
+identity through the pinned non-root NDK recipe. Publish bounded developer
+archives, manifests, checksums, SPDX and compile/ELF evidence through the
+GitHub-owned nightly pipeline. Do not relabel prior development binaries or
+present compile checks as target test execution. Keep runtime/device execution
+explicitly unqualified, including known completed-file delivery and default-route
+inventory gaps. The existing Windows/Linux/macOS, musl and OCI proof remains
+mandatory; the Beta3 release and long-soak holds remain in effect.
+
+The parent coordinates one workstream with separate Build and Rust checkout
+owners. Full existing local pre-push validation remains required by the
+operator's explicit choice, with one heavy local job at a time. Workspace,
+output and Cargo variables and storage backing remain unchanged.
+
+Acceptance for this slice is new, source-bound published nightly assets for both
+Android ABIs with honest experimental status. Current compile-only CI reports
+and source code for a producer are not publication proof. The full APK and
+device acceptance criteria below remain open.
 
 ## Current State
 

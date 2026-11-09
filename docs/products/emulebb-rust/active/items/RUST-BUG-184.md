@@ -5,7 +5,7 @@ product: emulebb-rust
 phase: Phase 0
 github_issue: https://github.com/emulebb/emulebb-rust/issues/299
 title: Make settings PATCH persistence atomic
-status: OPEN
+status: IN_PROGRESS
 priority: Major
 category: bug
 labels: [rust, audit, settings, sqlite, api]

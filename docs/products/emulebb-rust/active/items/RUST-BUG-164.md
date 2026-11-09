@@ -5,7 +5,7 @@ product: emulebb-rust
 phase: Phase 1
 github_issue: https://github.com/emulebb/emulebb-rust/issues/248
 title: Preserve AICH trust provenance across hashset acquisition
-status: OPEN
+status: IN_PROGRESS
 priority: Major
 category: bug
 labels: [rust, aich, integrity, trust, protocol]

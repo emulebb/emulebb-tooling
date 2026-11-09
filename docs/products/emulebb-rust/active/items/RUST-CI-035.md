@@ -5,7 +5,7 @@ product: emulebb-rust
 phase: Phase 0
 github_issue: https://github.com/emulebb/emulebb-rust/issues/293
 title: Separate mandatory Windows/Linux gates from optional platform outcomes
-status: OPEN
+status: IN_PROGRESS
 priority: Major
 category: ci
 labels: [rust, audit]
