@@ -537,7 +537,7 @@ Source fingerprint (SHA-256): `067757068618b2d75ef9e2dd01e0d8257b94688d052435833
   Lugdunum/server-coordinated rendezvous is a possible LowID reachability direction. It requires an upstream interoperability contract and server support; do not patch the reference server into a private protocol oracle.
 - **security-url-import — Bound authenticated server.met and nodes.dat URL imports**
   Disposition: `new`. Owner: RUST-BUG-176
-  User-import validation only checks text length/control characters, and fetch_url_bytes buffers the entire response. Trusted bootstrap already has HTTPS/redirect/stream-size bounds; reuse or factor the correct shared owner. SSRF destination policy needs an explicit trusted-operator contract, not an arbitrary blanket host ban.
+  Core URL imports collect response.bytes without a byte ceiling; REST already restricts input to HTTP(S). RUST-BUG-176 owns bounded shared body/time/decoding handling, three redirects and pre-contact scheme checks, with HTTPS required at every trusted-bootstrap hop. Preserve authenticated operator LAN/loopback, allowed cross-host redirects and existing proxy behavior. Destination access remains an operator-authorized capability; no SSRF or DNS-rebinding shield is promised.
 - **security-remote-paths — Decide the non-loopback REST filesystem authority contract**
   Disposition: `design`. Owner: Recorded disposition; no new implementation commitment.
   An authenticated remote-directory allow-list could narrow filesystem authority, but its absence is not proven unauthorized access. Review shared/category write semantics and local versus remote administration before adopting aMule's model.
@@ -603,7 +603,7 @@ Source fingerprint (SHA-256): `14689a6e58d1df6cc6858917957cd14343849d7bfcfa92102
 
 - **3.1 — Bound URL-import responses and define destination policy**
   Disposition: `new`. Owner: RUST-BUG-176
-  Current fetch buffers response.bytes without a byte ceiling. Authenticated URL imports have no explicit redirect/destination policy; preserve or explicitly decide trusted LAN use rather than copying a blanket private-address ban.
+  The confirmed defect is unbounded response collection. RUST-BUG-176 reuses format caps with bounded elapsed time, decoding and redirects, and validates each hop's scheme before contact. Authenticated imports retain HTTP/HTTPS, LAN/loopback, allowed cross-host redirects and existing proxies; automatic bootstrap stays HTTPS throughout. No address filtering, DNS pinning, proxy redesign or full SSRF/rebinding protection belongs to this bounded outcome.
 - **3.2 — Disposition deliberate crash-test endpoint exposure**
   Disposition: `design`. Owner: Recorded disposition; no new implementation commitment.
   Authenticated and explicitly confirmed crash testing is an intentional diagnostic operation. The assertion that it has no operational purpose is unsupported; do not remove a published endpoint automatically.
