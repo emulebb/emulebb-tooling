@@ -86,3 +86,26 @@ Review these candidates before implementation:
 - Soak diagnostics compare `payloadReadMs`, `readCacheHits`,
   `readCacheMisses`, `readDiskBytes`, `throttleDelayMs`, and aggregate upload
   rate before and after any implementation.
+
+## Audit Release Placement
+
+This remains parallel follow-up work and does not independently block Beta 3.
+Its existing Client, Indexer, or Arr phase ownership remains unchanged;
+non-gating Beta 3 placement does not bypass the separate whole-phase gates.
+
+## Audit Reconciliation (2026-11-09)
+
+The complete audit collection was reconciled against current source and
+owning issues. The following are retained findings, corrected assumptions,
+or required evidence for this owner; inspection does not replace runtime proof.
+
+- `emulebb-rust-prompt_audit_findings_product_direction_amule_future_parity.md` section scale-proof (existing): The aMule scaling wave is inspiration, not evidence of the same defect in Rust. Existing storage-domain, scan-I/O, async SQLite/filesystem/CPU and upload-performance items own the remaining work.
+- `emulebb-rust-prompt_audit_findings_product_direction_amule_future_parity.md` section A19-obfuscation (existing): RC4 speed changes require measurement under the existing hot-path owner. Obfuscated-server timeout/fallback is a protocol transition to verify through the parity catalog, not an automatic downgrade feature.
+
+### Scoped Follow-up Acceptance
+
+- [ ] Use bounded representative benchmarks and latency evidence.
+- [ ] Reuse existing 100k fixture and cross-platform owners.
+- [ ] Required Beta 3 Windows/Linux evidence is selected under #142; optional platforms remain parallel.
+- [ ] Benchmark before adopting crypto-loop changes.
+- [ ] Prove accepted retry/fallback semantics and avoid weakening required obfuscation.

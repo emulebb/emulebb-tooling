@@ -128,3 +128,34 @@ async lifecycle.
 - Completed on 2026-10-13 in emulebb-rust commits `92688d17`, `6a822d1e`,
   `5225f8f2`, and `50227302`. All 1,032 ED2K tests and 428 core tests pass;
   adjusted strict all-target Clippy also passes.
+
+## Beta 3 Evidence Placement
+
+Retain this item's required Windows/Linux candidate outcome. Other-platform
+qualification proceeds in parallel. A static audit, elapsed process time,
+or an old passing revision does not establish current-candidate readiness.
+
+## Audit Reconciliation (2026-11-09)
+
+The complete audit collection was reconciled against current source and
+owning issues. The following are retained findings, corrected assumptions,
+or required evidence for this owner; inspection does not replace runtime proof.
+
+- `emulebb-rust-prompt_audit_findings_product_direction_amule_future_parity.md` section A5-buddy (existing): Silent-buddy expiry is already #103. Verify that no callback is relayed for an unrelated buddy within the canonical buddy slice; the aMule report alone does not establish that Rust currently cross-relays.
+
+### Scoped Follow-up Acceptance
+
+- [ ] Expire by successfully decoded inbound activity.
+- [ ] Test silent half-open replacement/backoff and rejection of an unrelated buddy's callback.
+
+## Retained Public Issue Context
+
+The following pre-intake context is retained for provenance. The release
+placement and scope stated in this item govern current execution.
+
+> Local spec: docs/products/emulebb-rust/active/items/RUST-BUG-117.md
+
+Priority: Major
+Milestone: rust-v0.1.0-beta.2
+
+Expire a half-open Kad buddy link after 25 minutes without a successfully decoded inbound frame. Outbound ping write success is not peer liveness; cleanup must return through the existing buddy reconnect/backoff authority.

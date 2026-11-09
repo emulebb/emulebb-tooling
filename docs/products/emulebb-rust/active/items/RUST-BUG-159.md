@@ -9,7 +9,7 @@ status: OPEN
 priority: Major
 category: bug
 labels: [rust, delivery, paths, unicode, portability]
-milestone: post-beta-polish
+milestone: rust-v0.1.0-beta.3
 created: 2026-11-06
 source: Operator-approved Rust async I/O and path portability review
 ---
@@ -23,7 +23,7 @@ source: Operator-approved Rust async I/O and path portability review
 Own approved follow-up 6. Materialize downloads under a valid, collision-safe
 destination filename even when the advertised name or a collision suffix
 exceeds the destination's component budget. Preserve the canonical/original
-name separately from the chosen physical leaf. This is post-beta backlog work.
+name separately from the chosen physical leaf. This is Windows/Linux Beta 3 correctness work; other-platform qualification remains parallel.
 
 ## Current Findings
 
@@ -94,3 +94,42 @@ Add allocator unit/property tests and native filesystem delivery tests under
 owned synthetic output roots. Use capability-gated Windows, Linux, and macOS
 limits rather than a universal constant. Coordinate comparison semantics with
 RUST-BUG-161 and retain platform evidence in RUST-CI-008.
+
+## Beta 3 Windows/Linux Placement
+
+Promoted to the Windows/Linux Beta 3 correctness gate on 2026-11-09. Valid collision-safe delivery leaves are required for supported Windows/Linux downloads, including Unicode and suffix budgeting.
+
+Qualify the affected behavior on Windows and Linux, using deterministic
+faults and synthetic filesystem/protocol inputs. Other-platform qualification,
+including macOS/APFS variants, continues in parallel and does not block
+Beta 3. This changes release placement; it does not claim a measured exploit
+or routine corruption, and it does not authorize publication.
+
+## Audit Reconciliation (2026-11-09)
+
+The complete audit collection was reconciled against current source and
+owning issues. The following are retained findings, corrected assumptions,
+or required evidence for this owner; inspection does not replace runtime proof.
+
+- `emulebb-rust-prompt_audit_findings_fuzz-malformed.md` section 3.4 (existing): Attach normalization fuzz/property proof to existing decoder and filename owners. Overlaps search6.1 and testing-harness traversal gap.
+- `emulebb-rust-prompt_audit_findings_search.md` section 6.1 (existing): Physical proximity of helpers is not a vulnerability. Preserve original display names separately from filesystem-safe leaves; add end-to-end traversal/percent-decoding proof instead of sanitizing metadata early.
+- `emulebb-rust-prompt_audit_findings_search.md` section 6.2 (existing): Use existing BUG159; its current spec covers Windows UTF16/Linux byte units, suffixes and collision safety. No arbitrary universal240-character truncation.
+- `emulebb-rust-prompt_audit_findings_search.md` section 6.3 (existing): Extend existing leaf-safety acceptance with explicit terminal-hostile control policy; do not claim platform-invalid characters where OS permits them.
+- `emulebb-rust-prompt_audit_findings_search.md` section 6.4 (design): No new action; retained invariants for BUG159.
+- `emulebb-rust-prompt_audit_findings_testing-harness.md` section decoded-filename-regression (existing): Literal-separator sanitization exists. Add the specific normalization-to-delivery regression for percent-encoded separators; absence of that test alone does not establish traversal. Parent reconciliation: add this delivery-boundary regression to RUST-BUG-159 rather than creating a competing test-only owner.
+
+### Scoped Follow-up Acceptance
+
+- [ ] Malformed entities/percent/encoding inputs stay bounded; every materialization path applies final leaf safety.
+- [ ] Percent-decoded separators cannot escape the selected destination; all output paths use the safe leaf allocator.
+- [ ] Retain destination-native unit accounting, extension/suffix budget and lossless original name.
+- [ ] Synthetic DEL/C1 names have documented safe output behavior without losing original metadata.
+- [ ] Percent-encoded slash/backslash and dot components remain within the intended destination.
+- [ ] Retain collision and native filename rules.
+
+## Retained Public Issue Context
+
+The following pre-intake context is retained for provenance. The release
+placement and scope stated in this item govern current execution.
+
+**Reviewable branch spec:** https://github.com/emulebb/emulebb-tooling/blob/fix/stock-hash-share-tree/docs/products/emulebb-rust/active/items/RUST-BUG-159.md

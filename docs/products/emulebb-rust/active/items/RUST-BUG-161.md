@@ -9,7 +9,7 @@ status: OPEN
 priority: Major
 category: bug
 labels: [rust, sharing, paths, unicode, portability]
-milestone: post-beta-polish
+milestone: rust-v0.1.0-beta.3
 created: 2026-11-06
 source: Operator-approved Rust async I/O and path portability review
 ---
@@ -22,7 +22,7 @@ source: Operator-approved Rust async I/O and path portability review
 
 Own approved follow-up 8. Make root comparison reflect the relevant filesystem
 or directory semantics, preserving distinct configured trees and collapsing
-only proven ancestors/aliases. This is post-beta backlog work.
+only proven ancestors/aliases. This is Windows/Linux Beta 3 correctness work; other-platform qualification remains parallel.
 
 ## Current Findings
 
@@ -92,3 +92,29 @@ directory-case, Linux native, and case-sensitive/case-insensitive APFS fixtures
 where available. Test aliases and NFC/NFD pairs separately from case folding.
 Coordinate root execution with RUST-REF-018, normalized import admission with
 RUST-BUG-160, and cross-platform evidence with RUST-CI-008.
+
+## Beta 3 Windows/Linux Placement
+
+Promoted to the Windows/Linux Beta 3 correctness gate on 2026-11-09. Shared-root reconciliation must preserve distinct Windows case-sensitive directories and Linux roots instead of silently dropping an operator tree.
+
+Qualify the affected behavior on Windows and Linux, using deterministic
+faults and synthetic filesystem/protocol inputs. Other-platform qualification,
+including macOS/APFS variants, continues in parallel and does not block
+Beta 3. This changes release placement; it does not claim a measured exploit
+or routine corruption, and it does not authorize publication.
+
+## Audit Reconciliation (2026-11-09)
+
+The complete audit collection was reconciled against current source and
+owning issues. The following are retained findings, corrected assumptions,
+or required evidence for this owner; inspection does not replace runtime proof.
+
+This owner's release placement follows the parent-approved Windows/Linux
+scope and dependency reconciliation recorded above.
+
+## Retained Public Issue Context
+
+The following pre-intake context is retained for provenance. The release
+placement and scope stated in this item govern current execution.
+
+**Reviewable branch spec:** https://github.com/emulebb/emulebb-tooling/blob/fix/stock-hash-share-tree/docs/products/emulebb-rust/active/items/RUST-BUG-161.md

@@ -9,7 +9,7 @@ status: OPEN
 priority: Major
 category: bug
 labels: [rust, aich, integrity, parity, downloads]
-milestone: post-beta-compatibility
+milestone: rust-v0.1.0-beta.3
 created: 2026-11-07
 source: Operator-approved AICH and physical-drive I/O review
 ---
@@ -119,3 +119,45 @@ jobs before/after. RUST-BUG-164 owns trust; RUST-REF-019 owns executor placement
 RUST-REF-022 owns reducing incomplete-recheck ranges; RUST-FEAT-065 owns visible
 conflict state. No new protocol extension or MFC implementation change belongs
 to this item.
+
+## Beta 3 Windows/Linux Placement
+
+Promoted to the Windows/Linux Beta 3 correctness gate on 2026-11-09. Available independently trusted AICH evidence must agree with mandatory MD4 before supported download completion is claimed.
+
+Qualify the affected behavior on Windows and Linux, using deterministic
+faults and synthetic filesystem/protocol inputs. Other-platform qualification,
+including macOS/APFS variants, continues in parallel and does not block
+Beta 3. This changes release placement; it does not claim a measured exploit
+or routine corruption, and it does not authorize publication.
+
+## Audit Reconciliation (2026-11-09)
+
+The complete audit collection was reconciled against current source and
+owning issues. The following are retained findings, corrected assumptions,
+or required evidence for this owner; inspection does not replace runtime proof.
+
+- `emulebb-rust-prompt_audit_findings_aich-trust.md` section 2 / 4 network-authoritative assertion (existing): Current store_aich_hashset still assigns the acquired root. Saved complete issue bodies distinguish consistency from trusted provenance and define verification/request defects. Reuse those owners; do not treat persistence as automatic authority. Their current disposition is broader public-release readiness, not a newly demonstrated Beta 3 exploit.
+- `emulebb-rust-prompt_audit_findings_testing-harness.md` section aich-regressions (existing): Trailing recovery bytes and equal-weight trust tie behavior should be reconciled with existing AICH admission/provenance/reuse items and the separate AICH audit.
+- `emulebb-rust-prompt_audit_findings_product_direction_amule_future_parity.md` section present-features (not-supported): AICH-over-Kad, AICH/hashsets/ICH, source reask, obfuscation, OfferFiles, firewall/buddy/callback and NAT capabilities already exist. The report's feature inventory does not prove every edge case; retain existing trust and parity owners rather than reimplement the feature.
+- `emulebb-rust-prompt_audit_findings_product_direction_amule_future_parity.md` section A17-integrity-proof (existing): Corrupt-part nonadvertisement and nonserving proofs must compose with existing trusted MD4/AICH verification and upload invalidation. Do not assume the aMule Verify-Local-Data feature is entirely absent.
+
+### Scoped Follow-up Acceptance
+
+- [ ] Implement provenance before enforcing AICH disagreement.
+- [ ] Coordinate answer admission and bounded request lifecycle with the same generations.
+- [ ] Preserve mandatory MD4 completion and imported/operator authority.
+- [ ] Reject noncanonical recovery framing under the owning admission contract.
+- [ ] Equal input evidence yields a deterministic trust result.
+- [ ] Tests preserve request matching and trusted-root authority.
+- [ ] No duplicate feature tickets for present capabilities.
+- [ ] Track concrete unproven transitions or defects through their existing owners.
+- [ ] Prove corrupt ranges are not advertised or served.
+- [ ] Retain durable verification state and trusted digest agreement.
+- [ ] Avoid redundant payload rereads when proof can reuse an authorized pass.
+
+## Retained Public Issue Context
+
+The following pre-intake context is retained for provenance. The release
+placement and scope stated in this item govern current execution.
+
+**Reviewable branch spec:** https://github.com/emulebb/emulebb-tooling/blob/fix/stock-hash-share-tree/docs/products/emulebb-rust/active/items/RUST-BUG-165.md

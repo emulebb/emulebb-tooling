@@ -76,3 +76,26 @@ and WebUI implementation across every operating system.
 - Package and `rc.d` lifecycle smoke under a non-root service account.
 - Local transfer, restart, storage, route/bind, VPN-failure, and NAT campaigns.
 - Existing Rust quality and release matrices.
+
+## Audit Release Placement
+
+This remains parallel follow-up work and does not independently block Beta 3.
+Its existing Client, Indexer, or Arr phase ownership remains unchanged;
+non-gating Beta 3 placement does not bypass the separate whole-phase gates.
+
+## Audit Reconciliation (2026-11-09)
+
+The complete audit collection was reconciled against current source and
+owning issues. The following are retained findings, corrected assumptions,
+or required evidence for this owner; inspection does not replace runtime proof.
+
+- `emulebb-rust-prompt_audit_findings_multi-platform.md` section portable-delivery (existing): The unsupported-platform arm still rejects completed delivery. Android/FreeBSD/other Unix issues already own platform viability. Do not adopt the audit's check-then-rename suggestion: it can race and clobber data.
+- `emulebb-rust-prompt_audit_findings_multi-platform.md` section platform-evidence (existing): Windows/Linux are Beta 3 gates. macOS and extended target qualification continue in parallel, with per-target limitations and no stronger support claim than retained runtime evidence.
+
+### Scoped Follow-up Acceptance
+
+- [ ] Choose a platform primitive preserving no-replace and crash/durability guarantees.
+- [ ] Prove destination collision and concurrent publication without clobbering.
+- [ ] Record unsupported filesystems explicitly rather than silently weakening safety.
+- [ ] Required Windows/Linux proof is recorded under the candidate owner.
+- [ ] Optional target status distinguishes compile, package and runtime evidence.

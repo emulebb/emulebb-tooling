@@ -92,3 +92,36 @@ reducing cancellation waste, head-of-line delay, and unnecessary requests.
 
 The fixed Rust tiers are a useful fallback. This item should evolve the control
 signal without changing on-wire block-range semantics.
+
+## Audit Release Placement
+
+This remains parallel follow-up work and does not independently block Beta 3.
+Its existing Client, Indexer, or Arr phase ownership remains unchanged;
+non-gating Beta 3 placement does not bypass the separate whole-phase gates.
+
+## Audit Reconciliation (2026-11-09)
+
+The complete audit collection was reconciled against current source and
+owning issues. The following are retained findings, corrected assumptions,
+or required evidence for this owner; inspection does not replace runtime proof.
+
+- `PM.md` section parallel-policy (existing): The audit's single-PR posture is superseded by the explicitly authorized parallel-workstream project. Build issue #28 and Tooling PR #156 already own the checkout, hook, lock and delivery-policy changes; preserve them.
+- `emulebb-rust-prompt_audit_findings_dependencies.md` section native-source-docs (existing): The sys crates depend on pinned external C trees and a matching toolchain. No sys README was found. Document the supported dependency roots and provenance checks without copying machine-local paths. Parent reconciliation: source-root documentation is part of the managed-checkout foundation acceptance, tracked by Build issue #28.
+
+### Scoped Follow-up Acceptance
+
+- [ ] Workers have isolated branches/checkouts and independent PR ownership.
+- [ ] Parent coordinates dependencies, merge order and cleanup.
+- [ ] Heavy validation stays serialized.
+- [ ] Both sys packages explain native source ownership, pins and supported overrides.
+- [ ] Managed worktree routing is documented after the parent foundation lands.
+
+## Retained Public Issue Context
+
+The following pre-intake context is retained for provenance. The release
+placement and scope stated in this item govern current execution.
+
+Priority: Minor
+Milestone: post-beta-compatibility
+
+Measure request-to-first-byte RTT per source and combine it with bandwidth in a bounded, hysteretic BDP request-depth controller. Preserve the three-range packet constraint, conservative startup/fallback, and prompt reduction on slowdown or timeout.

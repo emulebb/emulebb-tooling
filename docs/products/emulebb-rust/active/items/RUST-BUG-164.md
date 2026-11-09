@@ -9,7 +9,7 @@ status: OPEN
 priority: Major
 category: bug
 labels: [rust, aich, integrity, trust, protocol]
-milestone: post-beta-compatibility
+milestone: rust-v0.1.0-beta.3
 created: 2026-11-07
 source: Operator-approved AICH and physical-drive I/O review
 ---
@@ -23,9 +23,8 @@ source: Operator-approved AICH and physical-drive I/O review
 Prevent a single peer's internally consistent AICH part hashset from becoming
 salvage-authorizing identity before its master root is independently trusted.
 Record root provenance explicitly and preserve the distinction between local or
-operator-authoritative identity and network consensus. Treat this as a broader
-public-release readiness requirement, not evidence that ordinary beta downloads
-are routinely corrupt. MD4 remains the mandatory eD2K completion backstop.
+operator-authoritative identity and network consensus. Treat this as a Windows/Linux Beta 3 integrity requirement, not evidence that
+ordinary beta downloads are routinely corrupt. MD4 remains the mandatory eD2K completion backstop.
 
 ## Revalidated Findings
 
@@ -126,3 +125,41 @@ otherwise one untrusted peer could turn the stronger check into a denial of
 completion. Coordinate request generations with RUST-BUG-166/RUST-BUG-167 and
 validated proof ownership with RUST-REF-020. No live or unbounded library run is
 authorized by this backlog entry.
+
+## Beta 3 Windows/Linux Placement
+
+Promoted to the Windows/Linux Beta 3 correctness gate on 2026-11-09. An internally consistent peer-supplied tree must not establish trusted content identity by itself.
+
+Qualify the affected behavior on Windows and Linux, using deterministic
+faults and synthetic filesystem/protocol inputs. Other-platform qualification,
+including macOS/APFS variants, continues in parallel and does not block
+Beta 3. This changes release placement; it does not claim a measured exploit
+or routine corruption, and it does not authorize publication.
+
+## Audit Reconciliation (2026-11-09)
+
+The complete audit collection was reconciled against current source and
+owning issues. The following are retained findings, corrected assumptions,
+or required evidence for this owner; inspection does not replace runtime proof.
+
+- `emulebb-rust-prompt_audit_findings_aich-trust.md` section 2 / 4 network-authoritative assertion (existing): Current store_aich_hashset still assigns the acquired root. Saved complete issue bodies distinguish consistency from trusted provenance and define verification/request defects. Reuse those owners; do not treat persistence as automatic authority. Their current disposition is broader public-release readiness, not a newly demonstrated Beta 3 exploit.
+- `emulebb-rust-prompt_audit_findings_aich-trust.md` section 6.1,6.3 / 7.3 (existing): Existing tests cover one vote per subnet; hand-derived mask boundaries and large-file/cross-client proof remain evidence extensions, owned by current AICH and canonical protocol items.
+- `emulebb-rust-prompt_audit_findings_testing-harness.md` section aich-regressions (existing): Trailing recovery bytes and equal-weight trust tie behavior should be reconciled with existing AICH admission/provenance/reuse items and the separate AICH audit.
+
+### Scoped Follow-up Acceptance
+
+- [ ] Implement provenance before enforcing AICH disagreement.
+- [ ] Coordinate answer admission and bounded request lifecycle with the same generations.
+- [ ] Preserve mandatory MD4 completion and imported/operator authority.
+- [ ] Use independent /20 byte-order fixtures and 16/32-bit proof boundaries.
+- [ ] Avoid duplicate evidence tickets or duplicating payload reads.
+- [ ] Reject noncanonical recovery framing under the owning admission contract.
+- [ ] Equal input evidence yields a deterministic trust result.
+- [ ] Tests preserve request matching and trusted-root authority.
+
+## Retained Public Issue Context
+
+The following pre-intake context is retained for provenance. The release
+placement and scope stated in this item govern current execution.
+
+**Reviewable branch spec:** https://github.com/emulebb/emulebb-tooling/blob/fix/stock-hash-share-tree/docs/products/emulebb-rust/active/items/RUST-BUG-164.md

@@ -167,6 +167,21 @@ depends on RUST-CI-006 current-head parity evidence, required hosted CI, complet
 dry-run release assembly, packaged lifecycle checks, and a retained manifest of
 exact revisions and artifact digests.
 
+For Beta 3, only Windows/Linux native x64 and ARM64 packages and the required
+Linux OCI variants are mandatory platform deliverables. macOS, Android/Fire
+OS, ChromeOS, NAS-specific certification, and additional Unix targets continue
+in parallel without blocking this beta increment. Shared safety, integrity,
+privacy, policy, dependency, CodeQL, provenance, and Windows/Linux correctness
+checks remain mandatory. RUST-CI-035 owns the actual workflow aggregation,
+release-assembly, and manifest split; existing enforcement remains in force
+until that change passes review and validation. Optional artifacts may ship
+only with their own successful qualification and explicit manifest entries.
+
+This beta platform selection does not close the broader Client gate or
+authorize Indexer/Arr implementation. The required candidate uses immutable
+source revisions and retained artifact digests; separate operator approval
+is still required to publish.
+
 Candidate selection is explicit and restartable. Normal review and breaking
 beta improvements continue until an immutable candidate revision is selected.
 Any product or contract change after selection invalidates that candidate and

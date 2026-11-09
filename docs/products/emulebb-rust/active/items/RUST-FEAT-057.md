@@ -119,3 +119,32 @@ approved integration and published-artifact criteria are satisfied.
 3. x64 Alpine lifecycle smoke.
 4. ARM64 native lifecycle smoke.
 5. Hosted release matrix and publication assembly integration.
+
+## Audit Release Placement
+
+This remains parallel follow-up work and does not independently block Beta 3.
+Its existing Client, Indexer, or Arr phase ownership remains unchanged;
+non-gating Beta 3 placement does not bypass the separate whole-phase gates.
+
+## Audit Reconciliation (2026-11-09)
+
+The complete audit collection was reconciled against current source and
+owning issues. The following are retained findings, corrected assumptions,
+or required evidence for this owner; inspection does not replace runtime proof.
+
+- `emulebb-rust-prompt_audit_findings_secure-ident.md` section 5 / 7 (existing): Weak stock RSA/SHA1 is an accepted interoperability boundary. Key pinning has a closed owner; native-target build/runtime and cross-client proof have existing owners.
+- `emulebb-rust-prompt_audit_findings_reachability.md` section 2.4 / 4.2-3 (existing): ABI verification and native-target compile/runtime proof belong to existing FFI and platform items. Android is parallel and non-gating for Beta 3; do not replace proven C libraries with a narrower pure-Rust fallback to avoid qualification.
+- `emulebb-rust-prompt_audit_findings_multi-platform.md` section extended-lanes (existing): The audit's no-musl/no-Android-CI claim is stale: both musl architectures and Android compile/ELF lanes now exist. Keep the owning feature issues open for their remaining runtime/package evidence; cross-compilation is not complete platform certification.
+- `emulebb-rust-prompt_audit_findings_multi-platform.md` section platform-evidence (existing): Windows/Linux are Beta 3 gates. macOS and extended target qualification continue in parallel, with per-target limitations and no stronger support claim than retained runtime evidence.
+
+### Scoped Follow-up Acceptance
+
+- [ ] Do not replace on-wire primitives locally.
+- [ ] Retain key pin/restart/credit preservation proof.
+- [ ] Keep Android evidence non-gating for Beta 3.
+- [ ] Mechanical C/Rust layout proof uses exact vendored headers.
+- [ ] Keep musl and Android compile proof distinct from runtime/device NAT proof.
+- [ ] Reuse current lanes and identify missing runtime/device proof only.
+- [ ] Track optional platform failures visibly without gating Beta 3.
+- [ ] Required Windows/Linux proof is recorded under the candidate owner.
+- [ ] Optional target status distinguishes compile, package and runtime evidence.

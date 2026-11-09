@@ -93,3 +93,21 @@ reproducible current validation failure requires it.
 - `cf380fd` replaces permanent lint allows with checked, reasoned expectations;
   two obsolete expectations and one ownership-only dead-code field suppression
   were removed during the review.
+
+## Audit Release Placement
+
+This remains parallel follow-up work and does not independently block Beta 3.
+Its existing Client, Indexer, or Arr phase ownership remains unchanged;
+non-gating Beta 3 placement does not bypass the separate whole-phase gates.
+
+## Audit Reconciliation (2026-11-09)
+
+The complete audit collection was reconciled against current source and
+owning issues. The following are retained findings, corrected assumptions,
+or required evidence for this owner; inspection does not replace runtime proof.
+
+- `emulebb-rust-prompt_audit_findings_code-quality-unsafe.md` section 3.1 (existing): No line-count-only blocking refactor.
+
+### Scoped Follow-up Acceptance
+
+- [ ] Extract independently named responsibilities without behavior drift.

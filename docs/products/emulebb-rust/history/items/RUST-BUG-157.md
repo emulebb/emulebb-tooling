@@ -3,7 +3,7 @@ id: RUST-BUG-157
 workflow: github
 github_issue: https://github.com/emulebb/emulebb-rust/issues/224
 title: Eliminate unexplained ED2K offer publication stalls
-status: OPEN
+status: DONE
 priority: Minor
 category: bug
 labels: [rust, ed2k, protocol, performance, scheduler, tests]
@@ -18,6 +18,50 @@ source: deterministic 100,000-file OFFERFILES v1 scale evidence
 
 # RUST-BUG-157 - Eliminate unexplained ED2K offer publication stalls
 
+## Closure And Verified Evidence (2026-11-09)
+
+- **Final status: DONE.** The authoritative [issue #224](https://github.com/emulebb/emulebb-rust/issues/224)
+  is closed as completed, at 2026-11-09T15:54:50Z.
+- **Validation result: PASSED for the merged implementation and recorded regression/CI gates.**
+  [PR #264](https://github.com/emulebb/emulebb-rust/pull/264) merged at
+  2026-11-09T15:54:49Z, ending at immutable revision
+  `edc59a003fff873e26d2c720bf9ca06f4b640871`. It incorporated the original
+  [PR #259](https://github.com/emulebb/emulebb-rust/pull/259) with its authorship;
+  #259 was closed without an independent merge.
+- Merged commits `4581922449315923490f7da0bcb908846b732c38` and
+  `3a075203a4e3ef24782d558d2e3eb3ae58066e08` anchor negotiated intervals to
+  wire-send time, retain a bounded publication timer independently of background
+  searches, expose wait reasons, and preserve partial plain/obfuscated server
+  frames when timer/select wakeups cancel receive operations.
+- Current source retains deterministic regressions for the send-time anchor,
+  bounded pending-batch wakeup, bounded candidate-refill probe, wait reasons,
+  and negotiated pacing. See
+  `crates/emulebb-ed2k/src/ed2k_server/session.rs:1843`,
+  `session.rs:1888`, `session.rs:1907`, `session.rs:1922`, and
+  `session.rs:1942`; the independent timer is in
+  `crates/emulebb-ed2k/src/ed2k_server/session_driver.rs:429` and the
+  cancellation-safe receive state in `session.rs:1248`.
+- The merged PR records 1,273 focused ED2K tests passing, including six
+  deterministic plain/obfuscated cancellation regressions. Its exact PR-head
+  [Required CI run](https://github.com/emulebb/emulebb-rust/actions/runs/42643011728)
+  and [Required CodeQL run](https://github.com/emulebb/emulebb-rust/actions/runs/42643011710)
+  are successful, including native Windows/Linux x64 and ARM64. These are
+  retained validation records, not a claim that this archival operation reran
+  tests or qualified newly published artifacts.
+
+### Evidence Limits
+
+The 682.422-second / 100,000-file result below is the original reproduction,
+not a post-fix result. This reconciliation found no fresh retained 100,000-file
+campaign proving a new duration, zero long gaps, or server counter parity.
+Do not infer those measurements from passing unit/CI gates. The original
+engineering contract and its unchecked campaign-specific criteria are retained
+below as historical provenance; GitHub's completed decision is authoritative.
+Further scale measurements belong to current candidate qualification and do
+not reopen this completed item.
+
+## Original Engineering Contract
+
 ## Summary
 
 Investigate and eliminate unexplained long idle gaps in the Rust ED2K
@@ -25,7 +69,7 @@ OFFERFILES publication pump. Keep publication close to the server-advertised
 cadence while candidates are ready, without weakening the negotiated minimum
 interval or any packet, connection, or global limit.
 
-## Current State
+## Original Reproduction State
 
 The deterministic 100,000-file OFFERFILES v1 campaign completed successfully:
 the Rust client published every record in 505 batches, the maintained local
@@ -78,7 +122,7 @@ eventually succeeds.
 - Do not weaken packet, connection, global, memory, cancellation, or reconnect
   bounds to improve elapsed time.
 
-## Acceptance Criteria
+## Original Acceptance Criteria (Historical Contract)
 
 - [ ] A controlled-time regression reproduces the idle-pump failure without a
       flaky wall-clock threshold.

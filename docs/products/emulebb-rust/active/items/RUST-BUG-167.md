@@ -20,8 +20,8 @@ source: Operator-approved AICH and physical-drive I/O review
 
 ## Summary and Disposition
 
-Give recovery requests a bounded lifetime, unambiguous response correlation,
-and alternate-source retry after unavailable, invalid, silent, or disconnected
+Consume RUST-BUG-166's bounded request authority and add alternate-source retry
+after unavailable, invalid, silent, or disconnected
 peers. Preserve ordinary whole-part redownload when recovery cannot help.
 This is tolerable temporarily in controlled beta use, but wastes bandwidth and
 disk I/O and remains part of the Client gate.
@@ -62,11 +62,11 @@ and asks the file to choose another capable matching-root source.
 
 ## Intended Shape
 
-Maintain a transfer-owned bounded recovery demand set and one active request
-per part. Permit at most one recovery request on a peer at a time so the
-part-less failure response has an unambiguous owner. Record peer/session,
-file/size/part/master, request generation, dispatch time, and deadline. Share
-that authority with RUST-BUG-166 across inbound/outbound sessions.
+RUST-BUG-166 owns the minimum bounded request record, generation/deadline,
+answer correlation, and cancellation authority for Beta 3. Reuse that owner
+across inbound/outbound sessions; do not create a parallel request registry.
+This item adds a transfer-owned bounded demand set, alternate-source selection,
+retry/backoff fairness, and resumable scheduling above that authority.
 
 Select a source with current AICH capability, a matching advertised master,
 usable reachability, and required part availability according to stock rules.
@@ -113,3 +113,37 @@ across multiple capable sources. Include two simultaneous corrupt parts and
 duplicate sessions. Exercise responder saturation deterministically rather than
 starting a real-media load. RUST-BUG-166 owns admission, RUST-BUG-164 owns root
 trust, RUST-REF-020 owns proof reuse, and RUST-FEAT-065 owns diagnostic exposure.
+
+## Beta 3 Boundary
+
+The minimum request record and invalidation semantics are delivered under
+RUST-BUG-166. This item's broader recovery retry, cooldown, and fair
+alternate-peer scheduling remain parallel non-gating work for Beta 3.
+Existing safety behavior and whole-part redownload remain mandatory.
+
+## Audit Release Placement
+
+This remains parallel follow-up work and does not independently block Beta 3.
+Its existing Client, Indexer, or Arr phase ownership remains unchanged;
+non-gating Beta 3 placement does not bypass the separate whole-phase gates.
+
+## Audit Reconciliation (2026-11-09)
+
+The complete audit collection was reconciled against current source and
+owning issues. The following are retained findings, corrected assumptions,
+or required evidence for this owner; inspection does not replace runtime proof.
+
+- `emulebb-rust-prompt_audit_findings_aich-trust.md` section 2 / 4 network-authoritative assertion (existing): Current store_aich_hashset still assigns the acquired root. Saved complete issue bodies distinguish consistency from trusted provenance and define verification/request defects. Reuse those owners; do not treat persistence as automatic authority. Their current disposition is broader public-release readiness, not a newly demonstrated Beta 3 exploit.
+
+### Scoped Follow-up Acceptance
+
+- [ ] Implement provenance before enforcing AICH disagreement.
+- [ ] Coordinate answer admission and bounded request lifecycle with the same generations.
+- [ ] Preserve mandatory MD4 completion and imported/operator authority.
+
+## Retained Public Issue Context
+
+The following pre-intake context is retained for provenance. The release
+placement and scope stated in this item govern current execution.
+
+**Reviewable branch spec:** https://github.com/emulebb/emulebb-tooling/blob/fix/stock-hash-share-tree/docs/products/emulebb-rust/active/items/RUST-BUG-167.md

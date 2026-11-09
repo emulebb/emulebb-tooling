@@ -271,3 +271,34 @@ The retained SSD baseline is
 `${EMULEBB_WORKSPACE_OUTPUT_ROOT}\reports\emulebb-rust\shared-library-io\rust-shared-library-io-20261003T153209Z-11012.json`.
 The startup-publication overlap report is
 `${EMULEBB_WORKSPACE_OUTPUT_ROOT}\reports\emulebb-rust\shared-library-io\rust-shared-library-lan-startup-20261003T183046Z-16340.json`.
+
+## Audit Release Placement
+
+This remains parallel follow-up work and does not independently block Beta 3.
+Its existing Client, Indexer, or Arr phase ownership remains unchanged;
+non-gating Beta 3 placement does not bypass the separate whole-phase gates.
+
+## Audit Reconciliation (2026-11-09)
+
+The complete audit collection was reconciled against current source and
+owning issues. The following are retained findings, corrected assumptions,
+or required evidence for this owner; inspection does not replace runtime proof.
+
+- `emulebb-rust-prompt_audit_findings_diagnostics-privacy.md` section evidence-gap (existing): Owning harness/current-head evidence must distinguish raw local captures from scrubbed shared artifacts; coordinate with testing-harness report.
+- `emulebb-rust-prompt_audit_findings_media-metadata.md` section 3.2 (existing): Existing REF008 explicitly owns bounded optional enrichment and extra reads. Avoid timeout wrappers that merely abandon a still-running blocking task.
+- `emulebb-rust-prompt_audit_findings_product_direction_amule_future_parity.md` section scale-proof (existing): The aMule scaling wave is inspiration, not evidence of the same defect in Rust. Existing storage-domain, scan-I/O, async SQLite/filesystem/CPU and upload-performance items own the remaining work.
+
+### Scoped Follow-up Acceptance
+
+- [ ] Shared evidence omits operator-private values; raw captures never become public issue attachments by default.
+- [ ] Measure probe bytes/work and make optional enrichment bounded outside first-publication critical path.
+- [ ] Use bounded representative benchmarks and latency evidence.
+- [ ] Reuse existing 100k fixture and cross-platform owners.
+- [ ] Required Beta 3 Windows/Linux evidence is selected under #142; optional platforms remain parallel.
+
+## Retained Public Issue Context
+
+The following pre-intake context is retained for provenance. The release
+placement and scope stated in this item govern current execution.
+
+**Reviewable branch spec:** https://github.com/emulebb/emulebb-tooling/blob/fix/stock-hash-share-tree/docs/products/emulebb-rust/active/items/RUST-REF-008.md

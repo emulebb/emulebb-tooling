@@ -163,3 +163,35 @@ no complete real-media rehash is authorized by this backlog item.
 - The remaining unchecked criteria require the retained cross-platform lifecycle
   campaigns and macOS watcher disposition; this item stays open until that
   evidence exists.
+
+## Audit Release Placement
+
+This remains parallel follow-up work and does not independently block Beta 3.
+Its existing Client, Indexer, or Arr phase ownership remains unchanged;
+non-gating Beta 3 placement does not bypass the separate whole-phase gates.
+
+## Audit Reconciliation (2026-11-09)
+
+The complete audit collection was reconciled against current source and
+owning issues. The following are retained findings, corrected assumptions,
+or required evidence for this owner; inspection does not replace runtime proof.
+
+- `emulebb-rust-prompt_audit_findings_diagnostics-privacy.md` section evidence-gap (existing): Owning harness/current-head evidence must distinguish raw local captures from scrubbed shared artifacts; coordinate with testing-harness report.
+- `emulebb-rust-prompt_audit_findings_multi-platform.md` section platform-evidence (existing): Windows/Linux are Beta 3 gates. macOS and extended target qualification continue in parallel, with per-target limitations and no stronger support claim than retained runtime evidence.
+- `emulebb-rust-prompt_audit_findings_product_direction_amule_future_parity.md` section scale-proof (existing): The aMule scaling wave is inspiration, not evidence of the same defect in Rust. Existing storage-domain, scan-I/O, async SQLite/filesystem/CPU and upload-performance items own the remaining work.
+
+### Scoped Follow-up Acceptance
+
+- [ ] Shared evidence omits operator-private values; raw captures never become public issue attachments by default.
+- [ ] Required Windows/Linux proof is recorded under the candidate owner.
+- [ ] Optional target status distinguishes compile, package and runtime evidence.
+- [ ] Use bounded representative benchmarks and latency evidence.
+- [ ] Reuse existing 100k fixture and cross-platform owners.
+- [ ] Required Beta 3 Windows/Linux evidence is selected under #142; optional platforms remain parallel.
+
+## Retained Public Issue Context
+
+The following pre-intake context is retained for provenance. The release
+placement and scope stated in this item govern current execution.
+
+**Reviewable branch spec:** https://github.com/emulebb/emulebb-tooling/blob/fix/stock-hash-share-tree/docs/products/emulebb-rust/active/items/RUST-CI-008.md

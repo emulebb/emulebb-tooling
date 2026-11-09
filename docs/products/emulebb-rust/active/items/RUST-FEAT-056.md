@@ -204,3 +204,36 @@ must not satisfy those acceptance criteria.
 `repos/emulebb-build-tests` owns the persisted device harness. Coordinate the
 storage boundary with RUST-REF-009 rather than adding an Android-only transfer
 implementation.
+
+## Audit Release Placement
+
+This remains parallel follow-up work and does not independently block Beta 3.
+Its existing Client, Indexer, or Arr phase ownership remains unchanged;
+non-gating Beta 3 placement does not bypass the separate whole-phase gates.
+
+## Audit Reconciliation (2026-11-09)
+
+The complete audit collection was reconciled against current source and
+owning issues. The following are retained findings, corrected assumptions,
+or required evidence for this owner; inspection does not replace runtime proof.
+
+- `emulebb-rust-prompt_audit_findings_secure-ident.md` section 5 / 7 (existing): Weak stock RSA/SHA1 is an accepted interoperability boundary. Key pinning has a closed owner; native-target build/runtime and cross-client proof have existing owners.
+- `emulebb-rust-prompt_audit_findings_reachability.md` section 2.4 / 4.2-3 (existing): ABI verification and native-target compile/runtime proof belong to existing FFI and platform items. Android is parallel and non-gating for Beta 3; do not replace proven C libraries with a narrower pure-Rust fallback to avoid qualification.
+- `emulebb-rust-prompt_audit_findings_multi-platform.md` section portable-delivery (existing): The unsupported-platform arm still rejects completed delivery. Android/FreeBSD/other Unix issues already own platform viability. Do not adopt the audit's check-then-rename suggestion: it can race and clobber data.
+- `emulebb-rust-prompt_audit_findings_multi-platform.md` section android-route-inventory (existing): Android still receives an empty default-route interface inventory. Its existing support item must define supported route discovery or an honest explicit-bind-only contract; Android APK/signing remains on hold.
+- `emulebb-rust-prompt_audit_findings_multi-platform.md` section extended-lanes (existing): The audit's no-musl/no-Android-CI claim is stale: both musl architectures and Android compile/ELF lanes now exist. Keep the owning feature issues open for their remaining runtime/package evidence; cross-compilation is not complete platform certification.
+
+### Scoped Follow-up Acceptance
+
+- [ ] Do not replace on-wire primitives locally.
+- [ ] Retain key pin/restart/credit preservation proof.
+- [ ] Keep Android evidence non-gating for Beta 3.
+- [ ] Mechanical C/Rust layout proof uses exact vendored headers.
+- [ ] Keep musl and Android compile proof distinct from runtime/device NAT proof.
+- [ ] Choose a platform primitive preserving no-replace and crash/durability guarantees.
+- [ ] Prove destination collision and concurrent publication without clobbering.
+- [ ] Record unsupported filesystems explicitly rather than silently weakening safety.
+- [ ] Prove representative device route discovery or document explicit-bind constraints.
+- [ ] Never infer VPN confinement from a missing route inventory.
+- [ ] Reuse current lanes and identify missing runtime/device proof only.
+- [ ] Track optional platform failures visibly without gating Beta 3.
