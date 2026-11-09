@@ -9,6 +9,19 @@ import subprocess
 import sys
 
 
+def validation_environment() -> dict[str, str]:
+    """Clear repository-local hook context before checks invoke Git in other repos."""
+    local_names = subprocess.check_output(["git", "rev-parse", "--local-env-vars"], text=True)
+    environment = os.environ.copy()
+    # WHY: Git exports GIT_DIR and related variables to hooks. Child validation
+    # creates and inspects other repositories; leaking this context can rewrite
+    # the invoking repository's configuration or index despite a different cwd.
+    # Follow githooks' documented `git rev-parse --local-env-vars` guidance.
+    for name in local_names.splitlines():
+        environment.pop(name, None)
+    return environment
+
+
 def main() -> int:
     """Forward hook input without changing inherited operator configuration."""
     parser = argparse.ArgumentParser(description=__doc__)
@@ -28,7 +41,7 @@ def main() -> int:
                "--stage", args.stage, "--remote", args.remote]
     if args.stage == "push":
         command.append("--push-stdin")
-    return subprocess.call(command, cwd=owner)
+    return subprocess.call(command, cwd=owner, env=validation_environment())
 
 
 if __name__ == "__main__":
