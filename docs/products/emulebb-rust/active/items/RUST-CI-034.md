@@ -57,6 +57,19 @@ Three independent review assignments inspected every report and used targeted cu
 
 Run documentation taxonomy, structure, publication, strict site and live GitHub roadmap reconciliation checks. Verify all 31 source filenames are covered exactly once and each newly allocated ID is unique against active/history specs and GitHub.
 
+## Private Diagnostic Bundle Revalidation (2026-11-09)
+
+The seven raw-export privacy findings below were revalidated against the
+intentional authenticated private-bundle contract. The response deliberately
+contains exact credentials and operator evidence; the tests require this.
+There was no existing safe/shareable-export promise to repair. Their final
+disposition is design/nondefect, while stable [RUST-BUG-178](RUST-BUG-178.md)
+owns the actual Beta3 UI defect: a visible private-content warning and explicit
+acknowledgement before capture/download. A full allowlisted shareable summary
+remains a design proposal outside Beta3, with no endpoint implementation
+accepted. All 29 stable new-item IDs and all 212 original finding dispositions
+remain accounted for; this narrows an existing outcome without reallocating it.
+
 ## Audit Disposition Evidence
 
 Reviewed source baseline: Rust `edc59a003fff873e26d2c720bf9ca06f4b640871`. Findings are source-inspected unless an owning item explicitly records runtime evidence. No private operator configuration or raw soak data is reproduced.
@@ -175,23 +188,23 @@ Source fingerprint (SHA-256): `7baf7ff264729a6df7173e4c945baae503182b2b230516c74
 Source fingerprint (SHA-256): `8c9dccdef79b2528edb1c27805ec94ac268a1e85eafece253c8b6c88b19a6162`.
 
 - **3.1 — Sanitize shareable diagnostic exports**
-  Disposition: `new`. Owner: RUST-BUG-178
-  One export-boundary outcome, overlapping rest-api 3.4. Raw operator logs and protocol-oracle evidence may remain full fidelity locally; basenames and truncated hashes are not sufficient anonymization.
+  Disposition: `design`. Owner: Design only; related private-warning owner RUST-BUG-178 / https://github.com/emulebb/emulebb-rust/issues/280
+  Deeper revalidation: this authenticated endpoint deliberately exports exact private operator evidence, including its API key; raw contents are not a defect in that contract. A genuinely shareable allowlisted summary is a design proposal outside Beta3, with no new endpoint accepted. Related RUST-BUG-178 / #280 owns only the missing visible private-content warning and explicit acknowledgement.
 - **3.2 — Exclude operator public-address identity from safe exports**
-  Disposition: `new`. Owner: RUST-BUG-178
-  One export-boundary outcome, overlapping rest-api 3.4. Raw operator logs and protocol-oracle evidence may remain full fidelity locally; basenames and truncated hashes are not sufficient anonymization.
+  Disposition: `design`. Owner: Design only; related private-warning owner RUST-BUG-178 / https://github.com/emulebb/emulebb-rust/issues/280
+  Deeper revalidation: this authenticated endpoint deliberately exports exact private operator evidence, including its API key; raw contents are not a defect in that contract. A genuinely shareable allowlisted summary is a design proposal outside Beta3, with no new endpoint accepted. Related RUST-BUG-178 / #280 owns only the missing visible private-content warning and explicit acknowledgement.
 - **3.3 — Exclude private absolute paths and content names from safe exports**
-  Disposition: `new`. Owner: RUST-BUG-178
-  One export-boundary outcome, overlapping rest-api 3.4. Raw operator logs and protocol-oracle evidence may remain full fidelity locally; basenames and truncated hashes are not sufficient anonymization.
+  Disposition: `design`. Owner: Design only; related private-warning owner RUST-BUG-178 / https://github.com/emulebb/emulebb-rust/issues/280
+  Deeper revalidation: this authenticated endpoint deliberately exports exact private operator evidence, including its API key; raw contents are not a defect in that contract. A genuinely shareable allowlisted summary is a design proposal outside Beta3, with no new endpoint accepted. Related RUST-BUG-178 / #280 owns only the missing visible private-content warning and explicit acknowledgement.
 - **3.4 — Exclude content fingerprints from safe exports**
-  Disposition: `new`. Owner: RUST-BUG-178
-  One export-boundary outcome, overlapping rest-api 3.4. Raw operator logs and protocol-oracle evidence may remain full fidelity locally; basenames and truncated hashes are not sufficient anonymization.
+  Disposition: `design`. Owner: Design only; related private-warning owner RUST-BUG-178 / https://github.com/emulebb/emulebb-rust/issues/280
+  Deeper revalidation: this authenticated endpoint deliberately exports exact private operator evidence, including its API key; raw contents are not a defect in that contract. A genuinely shareable allowlisted summary is a design proposal outside Beta3, with no new endpoint accepted. Related RUST-BUG-178 / #280 owns only the missing visible private-content warning and explicit acknowledgement.
 - **3.5 — Exclude peer endpoints and client identifiers from safe exports**
-  Disposition: `new`. Owner: RUST-BUG-178
-  One export-boundary outcome, overlapping rest-api 3.4. Raw operator logs and protocol-oracle evidence may remain full fidelity locally; basenames and truncated hashes are not sufficient anonymization.
+  Disposition: `design`. Owner: Design only; related private-warning owner RUST-BUG-178 / https://github.com/emulebb/emulebb-rust/issues/280
+  Deeper revalidation: this authenticated endpoint deliberately exports exact private operator evidence, including its API key; raw contents are not a defect in that contract. A genuinely shareable allowlisted summary is a design proposal outside Beta3, with no new endpoint accepted. Related RUST-BUG-178 / #280 owns only the missing visible private-content warning and explicit acknowledgement.
 - **3.6 — Exclude raw packet payloads from safe exports**
-  Disposition: `new`. Owner: RUST-BUG-178
-  One export-boundary outcome, overlapping rest-api 3.4. Raw operator logs and protocol-oracle evidence may remain full fidelity locally; basenames and truncated hashes are not sufficient anonymization.
+  Disposition: `design`. Owner: Design only; related private-warning owner RUST-BUG-178 / https://github.com/emulebb/emulebb-rust/issues/280
+  Deeper revalidation: this authenticated endpoint deliberately exports exact private operator evidence, including its API key; raw contents are not a defect in that contract. A genuinely shareable allowlisted summary is a design proposal outside Beta3, with no new endpoint accepted. Related RUST-BUG-178 / #280 owns only the missing visible private-content warning and explicit acknowledgement.
 - **3.7 — Preserve diagnostic retention and loss visibility**
   Disposition: `design`. Owner: Recorded disposition; no new implementation commitment.
   Rotation, ring bounds and dropped-line visibility are invariants, not additional backlog.
@@ -598,8 +611,8 @@ Source fingerprint (SHA-256): `14689a6e58d1df6cc6858917957cd14343849d7bfcfa92102
   Disposition: `new`. Owner: RUST-BUG-177
   32-byte key validation exists under closed issue36. Failure throttling is optional additional hardening, not an established weak-key exposure. Consolidate with dos-resilience 2.4.
 - **3.4 — Sanitize shareable diagnostic exports**
-  Disposition: `new`. Owner: RUST-BUG-178
-  Duplicate of diagnostics-privacy 3.1-3.6; one owning export item.
+  Disposition: `design`. Owner: Design only; related private-warning owner RUST-BUG-178 / https://github.com/emulebb/emulebb-rust/issues/280
+  Deeper revalidation: this authenticated endpoint deliberately exports exact private operator evidence, including its API key; raw contents are not a defect in that contract. A genuinely shareable allowlisted summary is a design proposal outside Beta3, with no new endpoint accepted. Related RUST-BUG-178 / #280 owns only the missing visible private-content warning and explicit acknowledgement.
 - **3.5 — Keep health probe intentionally minimal**
   Disposition: `design`. Owner: Recorded disposition; no new implementation commitment.
   Unauthenticated health response is deliberate; no new defect item.
