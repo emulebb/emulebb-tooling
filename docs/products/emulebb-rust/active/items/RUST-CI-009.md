@@ -57,10 +57,15 @@ blocker; this sequence does not prove a permanent provider/authentication fix.
 
 The latest verified non-publishing candidate rehearsal,
 [42562013163](https://github.com/emulebb/emulebb-rust/actions/runs/42562013163),
-passed at `80ccc06e5f7dfc295a1c93b3312c2fa7759a4b62`, including both musl
-targets, six native packages/lifecycle lanes, four native Ubuntu/Alpine
-image validations, and assembly. Publication jobs were skipped. It proves
-that revision's rehearsal, not the eventual Beta 3 candidate.
+assembled and verified a candidate built from product source
+`3ddf47ac1847760898d759189ffca90c66de4dca`, under workflow control revision
+`80ccc06e5f7dfc295a1c93b3312c2fa7759a4b62`. Both musl targets, six native
+package/lifecycle lanes, four native Ubuntu/Alpine image validations, and
+assembly passed; publication jobs were skipped. The retained Linux x64 smoke
+manifest records that product `sourceSha` separately from `workflow.workflowSha`,
+with run ID `42562013163` and passed DEB/AppImage results. The Actions run's
+workflow revision is not package provenance. This qualifies that immutable
+source/workflow pair's rehearsal, not the eventual Beta 3 candidate.
 
 Current main `edc59a003fff873e26d2c720bf9ca06f4b640871` has green CI and
 CodeQL but no verified current-head nightly/candidate run. Its CD result
