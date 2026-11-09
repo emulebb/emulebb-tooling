@@ -41,8 +41,8 @@ select a Beta3 candidate, execute candidate certification, dispatch a release
 workflow, publish, tag, or bump a version while this hold applies.
 [Candidate certification (#142)](https://github.com/emulebb/emulebb-rust/issues/142)
 remains a future gated action until the operator explicitly lifts the hold;
-[audit coordination (#268)](https://github.com/emulebb/emulebb-rust/issues/268)
-owns this prioritization reconciliation. The prior Windows/Linux plus required
+[completed audit reconciliation](https://github.com/emulebb/emulebb-tooling/blob/main/docs/products/emulebb-rust/history/items/RUST-CI-034.md)
+records this prioritization decision; owning [issue #268](https://github.com/emulebb/emulebb-rust/issues/268) closes on reviewed documentation PR merge. The prior Windows/Linux plus required
 Linux OCI Beta3 scope remains provisional and documented; this priority change
 does not silently change required checks, platform gates, support promises,
 or the separate Client-to-Indexer-to-Arr phase gates.

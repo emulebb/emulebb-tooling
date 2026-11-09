@@ -5,7 +5,7 @@ product: emulebb-rust
 phase: Phase 0
 github_issue: https://github.com/emulebb/emulebb-rust/issues/268
 title: Reconcile audit findings into the Windows and Linux Beta 3 delivery scope
-status: IN_PROGRESS
+status: DONE
 priority: Major
 category: ci
 labels: [rust, audit]
@@ -17,6 +17,32 @@ source: Operator-authorized audit reconciliation and Windows/Linux Beta 3 priori
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb-rust/issues/268. This local document owns the durable engineering specification and evidence.
 
 # RUST-CI-034 - Reconcile audit findings into the Windows and Linux Beta 3 delivery scope
+
+## Completion And Merge-Contingent Closure (2026-11-09)
+
+**Prepared post-merge disposition: DONE.** The parent confirmed completion of
+the bounded intake acceptance: 31 reports and 212 finding dispositions,
+29 stable new items, 40 existing owning-issue updates, corrected contracts,
+and the operator's workspace/platform priorities and release hold.
+The 28 other new items remain active under their owning issues.
+
+At preparation, [GitHub #268](https://github.com/emulebb/emulebb-rust/issues/268)
+remains OPEN / In Progress. It closes only when the reviewed documentation PR
+merges, or by the parent after that merge. This proposed archive state does not
+close GitHub, prove that the PR was delivered, or authorize a release action.
+GitHub and Project #3 remain workflow authority. Current product direction
+and the release hold live in [RELEASE-SCOPE](../../RELEASE-SCOPE.md); this
+archive retains the completed intake decision and its evidence.
+
+**Scoped validation:** documentation taxonomy, strict Markdown structure,
+local/live roadmap reconciliation, strict MkDocs in the isolated output site,
+and normal privacy/hygiene commit hooks passed during preparation. The final
+archive layout is checked as 81 active items / 177 closed items / 81 active
+index rows. Evidence and exact revision are retained in the parent's readiness
+receipt under the configured output root. The normal pre-push gate and hosted
+PR checks remain required before merge; their results are not preclaimed here.
+No product tests, current-candidate certification, post-fix scale campaign,
+or staged-server runtime qualification is established by this intake closure.
 
 ## Current Operator Hold And Work Priority (2026-11-09)
 
@@ -42,7 +68,7 @@ workflow, publish, tag, or bump a version while this hold applies.
 [Candidate certification (#142)](https://github.com/emulebb/emulebb-rust/issues/142)
 remains a future gated action until the operator explicitly lifts the hold;
 [audit coordination (#268)](https://github.com/emulebb/emulebb-rust/issues/268)
-owns this prioritization reconciliation. The prior Windows/Linux plus required
+records this prioritization reconciliation. The prior Windows/Linux plus required
 Linux OCI Beta3 scope remains provisional and documented; this priority change
 does not silently change required checks, platform gates, support promises,
 or the separate Client-to-Indexer-to-Arr phase gates.
@@ -53,9 +79,9 @@ Revalidate the temporary audit collection, deduplicate against current work, pre
 
 ## Release Placement
 
-Beta 3 blocker for Windows/Linux.
+Completed intake coordination, prepared for closure on reviewed documentation PR merge. The resulting implementation and qualification items retain their own workflow state; Beta3 release remains held.
 
-Priority: Major. Delivery lane: parent-coordination.
+Priority at completion: Major. Delivery lane: parent-coordination.
 
 ## Current Findings
 
@@ -68,12 +94,12 @@ Three independent review assignments inspected every report and used targeted cu
 
 ## Acceptance Criteria
 
-- [ ] Every source report and actionable finding has a recorded owning issue or explicit fixed, unsupported, or design disposition.
-- [ ] New accepted outcomes have stable unused IDs, durable engineering specs, open owning issues and Project #3 status/product/phase/priority.
-- [ ] Existing owners receive the relevant audit evidence without duplicate tickets.
-- [ ] Beta 3 Windows/Linux blockers are distinguished from parallel follow-ups and scope decisions; optional-platform work does not silently expand the release gate.
-- [ ] The candidate certification spec and milestone describe the operator-approved Windows/Linux scope; any required workflow split is tracked explicitly.
-- [ ] Privacy-safe findings and acceptance criteria remain usable after the temporary source folder is removed.
+- [x] Every source report and actionable finding has a recorded owning issue or explicit fixed, unsupported, or design disposition.
+- [x] New accepted outcomes have stable unused IDs, durable engineering specs, open owning issues and Project #3 status/product/phase/priority.
+- [x] Existing owners receive the relevant audit evidence without duplicate tickets.
+- [x] Beta 3 Windows/Linux blockers are distinguished from parallel follow-ups and scope decisions; optional-platform work does not silently expand the release gate.
+- [x] The candidate certification spec and milestone describe the operator-approved Windows/Linux scope; any required workflow split is tracked explicitly.
+- [x] Privacy-safe findings and acceptance criteria remain usable after the temporary source folder is removed.
 
 ## Dependencies And Coordination
 
@@ -92,7 +118,7 @@ The seven raw-export privacy findings below were revalidated against the
 intentional authenticated private-bundle contract. The response deliberately
 contains exact credentials and operator evidence; the tests require this.
 There was no existing safe/shareable-export promise to repair. Their final
-disposition is design/nondefect, while stable [RUST-BUG-178](RUST-BUG-178.md)
+disposition is design/nondefect, while stable [RUST-BUG-178](../../active/items/RUST-BUG-178.md)
 owns the actual Beta3 UI defect: a visible private-content warning and explicit
 acknowledgement before capture/download. A full allowlisted shareable summary
 remains a design proposal outside Beta3, with no endpoint implementation
