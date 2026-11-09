@@ -59,8 +59,11 @@ foreign-key index regression checks, and synthetic large-catalog query-plan
 tests. Preserve those strengths; source inspection does not justify a broad
 schema rewrite or prove production performance.
 
-Settings sections currently commit separately, and non-core sections can
-commit before core validation rejects a PATCH. The one coordinated fix owner
+Settings sections currently commit separately, and direct core API calls can
+persist non-core sections before core validation fails. The HTTP route has
+earlier middleware range validation; the invalid-core example is not an HTTP
+partial-write reproduction. Inject a later storage failure into an otherwise
+valid routed request to establish that path. The one coordinated fix owner
 is [RUST-BUG-184](RUST-BUG-184.md),
 [issue #299](https://github.com/emulebb/emulebb-rust/issues/299), shared with
 RUST-CI-043. Runtime reproduction and failure-injection regressions remain

@@ -20,9 +20,24 @@ source: Operator-directed config/API and database review
 
 ## Problem
 
-A rejected multi-section settings PATCH can already have changed persisted settings. At Rust `edc59a003fff873e26d2c720bf9ca06f4b640871`, `EmulebbCore::update_app_settings` persists non-core sections before calling `update_core_settings`, which validates the core candidate. Each non-core section is also committed separately.
+A multi-section settings update spans separate database transactions. At Rust
+`edc59a003fff873e26d2c720bf9ca06f4b640871`,
+`EmulebbCore::update_app_settings` persists non-core sections before calling
+`update_core_settings`, which validates the core candidate. Each non-core
+section is also committed separately.
 
-Source-traced example: `{"nat":{"enabled":true},"core":{"uploadLimitKiBps":0}}`. The NAT section can commit before the invalid core upload limit is rejected and REST returns BAD_REQUEST. Choose an initial NAT value different from the request when writing the regression. This is source evidence, not a runtime reproduction or a claim that every failure path was tested.
+Direct-core-API source example:
+`{"nat":{"enabled":true},"core":{"uploadLimitKiBps":0}}`. If passed directly
+to `update_app_settings`, NAT can commit before core validation fails. This is
+not an HTTP reproduction: REST middleware validates core ranges before the
+handler and rejects this payload before the update path. Choose a different
+initial NAT value when writing the direct-core regression.
+
+The separate per-section transactions also leave a partial-commit risk if a
+later storage operation fails after an earlier section commits. Reproduce that
+through the actual HTTP router with a valid request and injected later-write
+failure before claiming a REST partial-update witness. No runtime reproduction
+or fault injection was performed by this review.
 
 ## Source evidence
 
@@ -30,11 +45,20 @@ Source-traced example: `{"nat":{"enabled":true},"core":{"uploadLimitKiBps":0}}`.
 - `crates/emulebb-core/src/profile_state.rs`, `persist_app_settings_update` and `persist_settings_section`.
 - `crates/emulebb-settings/src/lib.rs`, core upload-limit validation.
 - `crates/emulebb-rest/src/handlers/app.rs`, PATCH error response.
+- `crates/emulebb-rest/src/route_metadata.rs` and `route_body_metadata.rs`,
+  pre-handler request validation.
+- `crates/emulebb-rest/src/route_body_metadata/validators/core_settings.rs`,
+  core numeric range checks before the handler.
 - Metadata settings replacement currently provides a transaction per section rather than per request.
 
 ## Acceptance criteria
 
-- [ ] Reproduce the rejected-request partial mutation with a synthetic disposable profile; add a regression proving every requested persisted section and live core setting remains unchanged when validation fails.
+- [ ] With a synthetic disposable profile, test direct-core invalid input and
+      the same request through the real HTTP router separately. Both rejected
+      paths must leave requested persisted sections and live settings unchanged.
+- [ ] Use a valid multi-section HTTP PATCH with an injected later DB-write
+      failure to establish the storage-failure path. Prove all requested
+      persisted sections remain unchanged when the operation fails.
 - [ ] Decode and validate the entire effective candidate before writing any section. Keep current setting names, units, defaults, and retired-field errors.
 - [ ] Commit all durable sections from one PATCH in one SQLite transaction through the owning metadata API. An injected failure in a later write must roll back earlier writes.
 - [ ] Publish live settings only after successful durable commit; define and test ordering/concurrency so simultaneous PATCHes do not publish stale snapshots or introduce lost updates.
