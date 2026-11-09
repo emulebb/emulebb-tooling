@@ -28,10 +28,40 @@ and exact build provenance.
 
 ## Current State
 
-- Linux releases target glibc on x64 and ARM64 and package DEB/AppImage assets.
-- The OCI image supports both architectures but is not a native musl artifact.
+- The workstream adds static musl `.tar.zst` packages on x64 and ARM64 alongside
+  the existing glibc DEB/AppImage assets.
+- Ubuntu/glibc and Alpine/musl OCI variants each contain x64 and ARM64 manifests.
+  Local WSL/Docker gates cover both variants; GitHub independently validates
+  each image on the matching native runner CPU.
 - Bundled SQLite and the MiniUPnPc and libpcpnatpmp C sources make this a native
   cross-toolchain lane, not merely an additional Rust target triple.
+
+## Integration Evidence
+
+The 2026-11-09 non-publishing
+[candidate run](https://github.com/emulebb/emulebb-rust/actions/runs/42551615785)
+used source `24f6fd051e3c6cf60b99b99f4a45e97713c03be0` and workflow control
+`3883dc125dc63d58896f302797ddf4189af246ea`. All six desktop package producers
+and their lifecycle smokes, both full native musl package/test lanes, both
+multiarch OCI producers, and all four native image lifecycle/security jobs
+passed. Image evidence includes SPDX inventories and the required fixable
+HIGH/CRITICAL vulnerability gate. Local emulation is not substituted for the
+hosted native ARM64 evidence.
+
+Final assembly in that run failed on an obsolete copy of versioned release
+notes from the tooling checkout. No publication ran. Rust
+[`80ccc06e`](https://github.com/emulebb/emulebb-rust/commit/80ccc06e5f7dfc295a1c93b3312c2fa7759a4b62)
+replaces that copy with a shared source-history document preflight in local
+pre-push, required quality CI and release preparation. It binds the source and
+baseline commits, retains versioned documents before packaging, and consumes
+them before final checksumming. Its full local gate passed, including both
+container variants and Android ABIs. The follow-up
+[candidate run](https://github.com/emulebb/emulebb-rust/actions/runs/42562013163)
+tracks final assembly validation using the fully CI/CodeQL-verified source
+`3ddf47ac1847760898d759189ffca90c66de4dca`.
+
+These are pushed workstream checkpoints. The item remains open until the
+approved integration and published-artifact criteria are satisfied.
 
 ## Intended Shape
 
