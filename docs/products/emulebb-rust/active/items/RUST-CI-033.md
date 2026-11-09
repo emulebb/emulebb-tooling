@@ -6,10 +6,10 @@ phase: Phase 0
 github_issue: https://github.com/emulebb/emulebb-rust/issues/267
 title: Preserve native build scripts in Dependabot fuzz updates
 status: IN_PROGRESS
-priority: Minor
+priority: Major
 category: ci
 labels: [rust, ci, dependencies, fuzz, native]
-milestone: post-beta-polish
+milestone: rust-v0.1.0-beta.3
 created: 2026-11-09
 source: Dependabot fuzz update run 42649427662 and verified offline Cargo reproduction
 ---
@@ -29,6 +29,18 @@ Declare the real build script explicitly in both native sys manifests. Keep
 their existing implementations and native library identities unchanged. This
 fix concerns resolver metadata; it does not replace native build qualification.
 
+## Beta 3 Prerequisite
+
+Restore the blocked fuzz dependency resolver before certifying Beta 3. The
+prerequisite is the scoped manifest fix, its required checks, and a subsequent
+hosted Dependabot update proving resolver recovery. Local reproduction proves
+the failure mechanism and resolver workaround; hosted updater recovery remains
+unverified until that later run supplies evidence.
+
+This prerequisite does not require merging every dependency-version update
+that the recovered updater produces. Those changes retain their own review,
+validation, and release-triage decisions.
+
 ## Scope Constraints
 
 - Preserve both `links` values and production build scripts.
@@ -36,6 +48,7 @@ fix concerns resolver metadata; it does not replace native build qualification.
 - Keep `fuzz` isolated from the release workspace.
 - Preserve inherited operator roots and the canonical Cargo target.
 - Do not treat local resolver success as a passed hosted Dependabot update.
+- Do not gate Beta 3 on all resulting dependency-version updates.
 
 ## Acceptance Criteria
 
