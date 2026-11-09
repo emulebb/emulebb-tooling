@@ -4,7 +4,7 @@ workflow: github
 product: emulebb-rust
 phase: Phase 0
 github_issue: https://github.com/emulebb/emulebb-rust/issues/280
-title: Sanitize shareable diagnostic exports
+title: Warn before creating private diagnostic bundles
 status: OPEN
 priority: Major
 category: bug
@@ -16,33 +16,36 @@ source: Operator-authorized audit reconciliation and Windows/Linux Beta 3 priori
 
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb-rust/issues/280. This local document owns the durable engineering specification and evidence.
 
-# RUST-BUG-178 - Sanitize shareable diagnostic exports
+# RUST-BUG-178 - Warn before creating private diagnostic bundles
 
 ## Summary
 
-Duplicate of diagnostics-privacy 3.1-3.6; one owning export item.
-
-One export-boundary outcome, overlapping rest-api 3.4. Raw operator logs and protocol-oracle evidence may remain full fidelity locally; basenames and truncated hashes are not sufficient anonymization.
+The existing authenticated diagnostic bundle is intentionally private and full fidelity, including the API key and exact sensitive values. The defect is that the WebUI's generic Capture bundle action immediately downloads it without visibly identifying its private contents or requiring explicit acknowledgement. Beta3 scope is warning, clear labeling and acknowledgement only.
 
 ## Release Placement
 
-Beta 3 blocker for Windows/Linux.
+Beta 3 blocker for Windows/Linux: the private warning/acknowledgement only.
 
 Priority: Major. Delivery lane: diagnostics.
 
 ## Current Findings
 
-confirmed-static raw-tail export
+Deeper current-source revalidation confirmed an intentional unsafe/private export contract and tests requiring exact secrets; no shareable-export promise exists. The missing UI warning/acknowledgement is confirmed statically; no browser reproduction or runtime test was run during intake.
 
-confirmed-static examples; no export reproduction
+- `repos/emulebb-rust/webui/src/views.tsx:4117`
+- `repos/emulebb-rust/webui/tests/unit/diagnostics-view.test.tsx:14`
+- `repos/emulebb-rust/crates/emulebb-rest/src/diagnostic_bundle.rs:122`
+- `repos/emulebb-rust/crates/emulebb-rest/src/tests/route_app.rs:235`
+- `repos/emulebb-tooling/docs/products/emulebb-rust/api/REST-API-OPENAPI.yaml:311`
+- `repos/emulebb-tooling/docs/products/emulebb-rust/api/REST-API-OPENAPI.yaml:3658`
 
-- `repos/emulebb-rust/crates/emulebb-rest/src/diagnostic_bundle.rs:769`
-- `repos/emulebb-rust/crates/emulebb-core/src/ed2k_net_drivers.rs:107`
-- `repos/emulebb-rust/crates/emulebb-daemon/src/logging.rs:42`
-- `repos/emulebb-rust/crates/emulebb-core/src/shared_dir_monitor.rs:769`
-- `repos/emulebb-rust/crates/emulebb-core/src/delivery.rs:110`
-- `repos/emulebb-rust/crates/emulebb-ed2k/src/ed2k_tcp/upload_promote.rs:341`
-- `repos/emulebb-rust/crates/emulebb-kad-net/src/wire_dump.rs:1`
+The OpenAPI endpoint is explicitly unsafe and requires API-key authentication; its schema requires sensitiveValues=exact and apiKeyIncluded=true. Existing route tests assert that the API key survives. The UI instead labels the action Capture bundle and immediately starts capture/download without a private-content warning.
+
+## Scope Constraints
+
+- Preserve full-fidelity raw local/operator diagnostics and the authenticated private export. Do not force backend redaction, remove its secret field, or weaken existing bounds.
+- Do not add a shareable-summary endpoint, general-purpose scrubber, logger rewrite, or global correlation scheme under this Beta3 item. A genuinely shareable allowlisted summary is a design proposal outside Beta3.
+- A private bundle must not be labeled safe, sanitized, anonymous, or suitable for public sharing.
 
 ## Audit Provenance
 
@@ -54,17 +57,21 @@ confirmed-static examples; no export reproduction
 - `emulebb-rust-prompt_audit_findings_diagnostics-privacy.md` section 3.5
 - `emulebb-rust-prompt_audit_findings_diagnostics-privacy.md` section 3.6
 
+All seven original redaction proposals are retained as design/nondefect in RUST-CI-034 after deeper contract revalidation. Their related concrete UI warning outcome keeps this existing stable ID and issue.
+
 ## Acceptance Criteria
 
-- [ ] Define a shareable-export contract covering structured fields and free-text messages, including content names, identifiers, endpoints, paths, secrets and packet payloads.
-- [ ] Use opaque correlation tokens or omission rather than reversible truncation; keep raw operator diagnostics distinct.
-- [ ] Synthetic secret/name/path/network fixtures cannot survive safe export; bounded retention and useful fault correlation remain.
+- [ ] Before capture/download, visibly identify the bundle as private and disclose that it contains the API key, paths, content/peer identifiers, and raw logs/diagnostic payloads.
+- [ ] Use an explicit private-bundle action label and require deliberate acknowledgement of the sensitive contents before calling the existing endpoint.
+- [ ] Cancel or dismiss the acknowledgement without invoking the capture endpoint, creating a download, or reporting success.
+- [ ] Retain the authenticated raw endpoint, exact API-key/sensitive-value contract, caller-owned persistence, byte bounds, and existing full-fidelity operator evidence tests.
+- [ ] UI and documentation do not claim sanitization, anonymity, or shareability. A future allowlisted shareable summary remains a design proposal outside Beta3; no new endpoint or backend redaction is required.
 
 ## Dependencies And Coordination
 
-- Parent reserves shared contracts and file ownership before assignment.
-- Use one managed workstream per independently reviewable outcome; required local checks stay serialized.
+- Parent reserves WebUI and diagnostic-contract file ownership before assignment.
+- This UI correction does not depend on a shareable exporter or logger refactoring.
 
 ## Validation
 
-Add a meaningful regression for the affected behavior. Run scoped required checks and Linux/Windows validation appropriate to the change. Record exact source revisions and evidence; do not claim audit inspection as runtime proof.
+Extend webui/tests/unit/diagnostics-view.test.tsx to exercise warning visibility, explicit acknowledgement, capture after acknowledgement, and cancellation without an endpoint call or download. Retain REST raw-bundle contract tests requiring exact secrets. Run scoped UI tests and required Windows/Linux validation through the scheduled workspace owner; inspection is not runtime proof.
