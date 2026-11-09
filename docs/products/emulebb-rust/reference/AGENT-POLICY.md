@@ -40,9 +40,11 @@ Do not load unrelated Rust annexes merely because the repository is active.
 - The bounded-monolith target is one daemon and one SQLite database with
   explicit client, indexer, and compatibility domain boundaries. The future
   autonomous indexer and Arr adapters must not introduce parallel client state.
-- API, configuration, and schema compatibility remain explicitly unstable
-  through all three phases and freeze together only after the Arr gate. An
-  incompatible schema requires an entirely fresh profile.
+- API and database schema compatibility remain explicitly unstable through all
+  three phases and freeze together only after the Arr gate. An incompatible
+  schema requires an entirely fresh profile. Minimal TOML bootstrap settings
+  have a separate stability goal: preserve their keys and semantics by default;
+  use the [Persistence Policy](PERSISTENCE-POLICY.md) for ownership and review.
 - `policy\rust-client.toml`, its omission registry, and its extension registry
   are the machine-readable authority for platform, behavior authority,
   protocol, long-path, reviewed-omission, and intentional-extension policy.

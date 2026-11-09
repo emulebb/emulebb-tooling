@@ -68,9 +68,11 @@ The policy fixes these roles:
   parity or release-certification authority.
 
 The active common diagnostic envelope is `diag_event_v2`. Beta harness,
-diagnostic, API, and configuration contracts may break together when that
-produces the cleaner long-term design. No legacy schema readers, compatibility
-aliases, or parallel verdict paths are retained.
+diagnostic, and API contracts may break together when that produces the
+cleaner long-term design. Minimal TOML bootstrap configuration follows the
+separate stability review in the
+[Persistence Policy](../../reference/PERSISTENCE-POLICY.md). No legacy schema
+readers, compatibility aliases, or parallel verdict paths are retained.
 
 ## Evidence And Coverage Authority
 

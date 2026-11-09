@@ -147,7 +147,9 @@ desktop window model or own automation rules.
   platform gate passes.
 - Arr production work starts only after the Indexer behavior, persistence,
   provenance, disk-pressure, and packaging gate passes.
-- API, config, and schema freeze only after the Arr gate.
+- API and database schema freeze only after the Arr gate. Minimal TOML
+  bootstrap configuration follows the separate stability and ownership rules
+  in the [Persistence Policy](../reference/PERSISTENCE-POLICY.md).
 
 Design exploration must not create dormant production modules, settings, route
 aliases, or schema placeholders before the owning phase opens.

@@ -3,6 +3,29 @@
 This task-routed annex applies only to persisted settings, metadata, database
 schemas, or profile compatibility.
 
+- Keep TOML limited to basic process/profile/service bootstrap configuration.
+  Preserve bootstrap keys and semantics across updates by default; changes need
+  an explicit compatibility review rather than casual renaming. This stability
+  goal is separate from database readability and the post-Arr REST freeze.
+  [RUST-CI-043](../active/items/RUST-CI-043.md) owns the concrete configuration
+  and API consistency review; it does not itself freeze every existing shape.
+- SQLite owns mutable settings and durable product state. Runtime-only sockets,
+  timers, queues, and pending work remain in memory. Downloaded payloads, logs,
+  and retained diagnostics remain files, not alternative settings authorities.
+- `server.met` and `nodes.dat` are read-only compatibility import inputs. The
+  Rust client must not create, refresh, replace, or write them back. Existing
+  `nodes.dat` persistence paths must be removed under
+  [RUST-FEAT-062](../active/items/RUST-FEAT-062.md); the target contract is not
+  a claim that those paths are already fixed. This rule does not rewrite stock
+  MFC or upstream server fixture-generation behavior.
+- Review schema efficiency, naming, and future domain boundaries under
+  [RUST-CI-044](../active/items/RUST-CI-044.md). Configuration stability does not
+  authorize product migrations, aliases, or silent profile repair. A proposal
+  to preserve profiles across incompatible schemas is a separate parent review
+  of the current beta rules below. Existing
+  [RUST-FEAT-063](../active/items/RUST-FEAT-063.md) owns explicit source-version
+  semantic export and fresh-target import; that workflow does not migrate an
+  old database during normal startup and remains unimplemented.
 - During the compatibility-unstable beta phases, every persisted-data change reviews whether
   the checked-in schema remains the clean current model. Evolve it when
   warranted; do not preserve inferior shapes for development profiles.

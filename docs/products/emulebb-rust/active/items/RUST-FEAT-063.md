@@ -122,7 +122,8 @@ The bundle carries the following semantic state where the target version can
 represent it:
 
 - profile settings, including REST bind/authentication values and the existing
-  REST API key, plus configured eD2K and Kad bootstrap values from TOML;
+  REST API key from TOML; configured eD2K and Kad settings belong to the
+  logical SQLite settings domains rather than additional bootstrap TOML keys;
 - eD2K public user hash and secure-ident private key, preserving network
   identity rather than creating a new client identity;
 - categories and their target paths, priorities, and current settings;
