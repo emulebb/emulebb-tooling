@@ -114,12 +114,12 @@ Initial Windows/private CPython 3.15.2 lightweight evidence:
   no real qualification polling or release workflow was launched.
 - Actual aggregate-shell failure injection remains a Linux proof obligation.
   Normal pre-push and hosted checks have not run for this feature.
-- Builder's normal fast commit checks passed at `04e5617`. Rust's normal
-  commit hook passed environment provenance, actionlint and the client policy,
-  then found one stale Android workflow-location assertion in its broader
-  unittest discovery (238 cases, one error and one POSIX-only skip). Correct
-  that consumer test and rerun the normal hook after the scratch hold permits
-  tests; do not bypass it or treat the Rust checkpoint as committed.
+- Builder's normal fast commit checks passed at
+  `04e5617`. Rust's normal commit checks passed at
+  `2ea95e9a0a0a1ebcd38a7228d00feb1cec93039c`: environment provenance,
+  actionlint, client policy, 238 unittest cases (one POSIX-only skip), and
+  rustfmt. The Android consumer regression reads the new optional workflow
+  and retains its ABI, immutable pin and provenance assertions.
 
 The operator's HDD-pressure hold stops further local tests until the approved
 scratch backend is ready. Preserve the checkpoint, required validation and
