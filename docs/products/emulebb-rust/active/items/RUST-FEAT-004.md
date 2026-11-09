@@ -57,8 +57,10 @@ parallel state.
 - No internal media-selection, category-rule, scheduling, post-processing, or
   federation engine; external controllers own those workflows.
 - Compatibility requirements apply only to the documented supported Arr paths.
-- `/api/v1`, configuration, and schema remain beta-unstable until this gate
-  passes; they freeze together afterward.
+- `/api/v1` and database schema remain beta-unstable until this gate passes;
+  they freeze together afterward. Minimal TOML bootstrap configuration follows
+  the separate stability review in the
+  [Persistence Policy](../../reference/PERSISTENCE-POLICY.md).
 
 ## Acceptance Criteria
 
@@ -71,7 +73,7 @@ parallel state.
 - [ ] Unsupported qBittorrent operations fail clearly and never create shadow state.
 - [ ] First-party API, WebUI, Torznab, and qBittorrent views converge on the same
       search, transfer, category, and status state.
-- [ ] The post-Arr API/config/schema freeze has an explicit compatibility and
+- [ ] The post-Arr API/database freeze has an explicit compatibility and
       versioning decision backed by conformance tests.
 
 ## Validation

@@ -229,9 +229,10 @@ so no acceptance checkbox is closed by this rehearsal.
 
 - Do not change `0.1.0-beta.2`, create `0.1.0-beta.3`, move a tag, draft a
   release, publish GHCR content, or close the Beta 3 milestone under this item.
-- Do not introduce a compatibility freeze. API, configuration, and schema may
-  still break before the post-Arr freeze; such a change simply invalidates the
-  current candidate.
+- Do not introduce an API/database compatibility freeze. Those contracts may
+  still break before the post-Arr freeze; such a change invalidates the current
+  candidate. Minimal TOML bootstrap configuration follows the separate
+  stability review in the [Persistence Policy](../../reference/PERSISTENCE-POLICY.md).
 - Do not create ad-hoc PowerShell, inline Python, or alternate launch logic for
   a missing lane. Improve the owning persisted harness in a separate reviewed
   scope first.

@@ -93,9 +93,12 @@ stop gating the actual candidate. Existing required checks remain enforced.
 | [RUST-BUG-176](items/RUST-BUG-176.md) | Bug | Bound URL-import responses and define destination policy |
 | [RUST-BUG-178](items/RUST-BUG-178.md) | Bug | Warn before creating private diagnostic bundles |
 | [RUST-BUG-181](items/RUST-BUG-181.md) | Bug | Bound RIFF media parsing and retain malformed-input regressions |
+| [RUST-BUG-184](items/RUST-BUG-184.md) | Bug | Make settings PATCH persistence atomic |
 | [RUST-CI-006](items/RUST-CI-006.md) | Evidence | Refresh current-head stock parity evidence and reconcile docs |
 | [RUST-CI-009](items/RUST-CI-009.md) | Evidence | Certify a Beta 3 candidate without publishing |
 | [RUST-CI-035](items/RUST-CI-035.md) | Evidence | Separate mandatory Windows/Linux gates from optional platform outcomes |
+| [RUST-CI-043](items/RUST-CI-043.md) | Evidence | Review configuration authority and REST contract coherence |
+| [RUST-CI-044](items/RUST-CI-044.md) | Evidence | Review SQLite schema efficiency and evolution boundaries |
 
 ## Parallel Client Work — Non-gating for Beta 3
 

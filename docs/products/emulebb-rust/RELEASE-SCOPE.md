@@ -127,11 +127,19 @@ logs, diagnostics, and—when their phases ship—index and adapter state.
 
 ### Beta contract policy
 
-The first-party API, configuration, and database schema are deliberately
-unstable through the Client, Indexer, and Arr phases. Breaking changes are
+The first-party API and database schema are deliberately unstable through the
+Client, Indexer, and Arr phases. Breaking changes are
 allowed when they improve the long-term model, but each change must update all
 owned consumers, OpenAPI, examples, validators, and tests together.
 
+- Minimal TOML bootstrap configuration has a separate stability goal. Preserve
+  its keys and semantics by default; mutable settings belong in SQLite.
+  [Persistence Policy](reference/PERSISTENCE-POLICY.md) owns the contract,
+  including read-only `server.met` and `nodes.dat` imports. Configuration/API
+  coherence and schema review are high-priority Beta3 work under
+  [RUST-CI-043](active/items/RUST-CI-043.md) and
+  [RUST-CI-044](active/items/RUST-CI-044.md). Release remains held; these reviews
+  do not authorize migrations or silently change profile compatibility.
 - `/api/v1` remains the versioned beta namespace; its compatibility promise
   begins only at the explicit post-Arr contract freeze.
 - Retired fields and routes are hard errors. Do not alias, remap, ignore, or
@@ -256,8 +264,9 @@ Arr integration begins only after the Indexer gate closes.
 - Keep selection rules, schedules, media management, and post-processing in
   external controllers.
 
-API, configuration, and schema compatibility freeze together only after the
-Arr gate passes.
+API and database schema compatibility freeze together only after the Arr gate
+passes; minimal bootstrap configuration follows the separate stability review
+above.
 
 ## Cross-phase non-goals
 
