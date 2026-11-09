@@ -96,12 +96,41 @@ with run ID `42562013163` and passed DEB/AppImage results. The Actions run's
 workflow revision is not package provenance. This qualifies that immutable
 source/workflow pair's rehearsal, not the eventual Beta 3 candidate.
 
-Current main `edc59a003fff873e26d2c720bf9ca06f4b640871` has green CI and
-CodeQL but no verified current-head nightly/candidate run. Its CD result
-remains unverified. Scheduled Nightly
+At intake, main `edc59a003fff873e26d2c720bf9ca06f4b640871` had green CI and
+CodeQL but no verified current-head CD result. Scheduled Nightly
 [42633861093](https://github.com/emulebb/emulebb-rust/actions/runs/42633861093)
 reported success at older `f4527c2d`, but packaging and source-verification
 jobs were skipped; metadata-only success is not package evidence.
+
+### Published Nightly Evidence (2026-11-09)
+
+Explicit Nightly run
+[42710735208](https://github.com/emulebb/emulebb-rust/actions/runs/42710735208)
+subsequently passed all 29 jobs on that exact Rust source and published
+[the dated nightly](https://github.com/emulebb/emulebb-rust/releases/tag/rust-v0.1.0-beta.2.nightly.20261109.gedc59a00)
+at `2026-11-09T22:56:33Z`. The release is a non-draft prerelease targeting
+`edc59a003fff873e26d2c720bf9ca06f4b640871`, with 73 assets including both musl
+AMD64/ARM64 archives. The full native package, musl, Ubuntu/Alpine image,
+security, assembly, publication and channel jobs passed.
+
+Independent post-publication verification cryptographically validated the
+candidate and both Ubuntu/Alpine OCI attestations against the exact workflow,
+source, run and attempt. All 73 public asset API digests and sizes matched the
+signed subjects and candidate inventory. The verifier independently downloaded
+and hashed 49 small metadata files, checked all 71 global-checksum members,
+and verified six version/channel registry references plus four platform image
+configs against the attested indexes, source, version and variant labels.
+Large archives and container layers were not downloaded or executed again;
+their verification is limited to API digests and signed provenance bindings.
+The local receipt is
+`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/nightly-publication-review/baseline-42710735208-verification-summary.json`.
+
+This is actual nightly delivery evidence, not a selected or certified Beta3
+candidate. The Beta3 release and long-soak holds remain. Android developer
+bundles are absent from this baseline release: RUST-FEAT-056 owns their
+separate nightly integration, fresh source checks and publication proof. The
+original no-current-CD observation above is superseded only for this exact
+source/workflow run; it must not be carried forward to a changed source.
 
 ## Non-Publishing Rehearsal Evidence (2026-10-22)
 
