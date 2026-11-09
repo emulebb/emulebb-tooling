@@ -96,6 +96,7 @@ stop gating the actual candidate. Existing required checks remain enforced.
 | [RUST-BUG-184](items/RUST-BUG-184.md) | Bug | Make settings PATCH persistence atomic |
 | [RUST-CI-006](items/RUST-CI-006.md) | Evidence | Refresh current-head stock parity evidence and reconcile docs |
 | [RUST-CI-009](items/RUST-CI-009.md) | Evidence | Certify a Beta 3 candidate without publishing |
+| [RUST-CI-033](items/RUST-CI-033.md) | Evidence | Preserve native build scripts in Dependabot fuzz updates |
 | [RUST-CI-035](items/RUST-CI-035.md) | Evidence | Separate mandatory Windows/Linux gates from optional platform outcomes |
 | [RUST-CI-043](items/RUST-CI-043.md) | Evidence | Review configuration authority and REST contract coherence |
 | [RUST-CI-044](items/RUST-CI-044.md) | Evidence | Review SQLite schema efficiency and evolution boundaries |
@@ -110,7 +111,6 @@ retain their Major/Minor ranking and GitHub placement.
 | ID | Class | Title |
 |---|---|---|
 | [RUST-CI-032](items/RUST-CI-032.md) | Evidence | Add dependency-aware early Rust checks without weakening pre-push coverage |
-| [RUST-CI-033](items/RUST-CI-033.md) | Evidence | Preserve native build scripts in Dependabot fuzz updates |
 | [RUST-BUG-136](items/RUST-BUG-136.md) | Bug | Bound transfer deletion marker validation reads |
 | [RUST-BUG-160](items/RUST-BUG-160.md) | Bug | Reuse stock hashes across unambiguous Unicode filename normalization |
 | [RUST-BUG-162](items/RUST-BUG-162.md) | Bug | Bound profile archive fields before allocating import buffers |
