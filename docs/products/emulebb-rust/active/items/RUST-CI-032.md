@@ -6,7 +6,7 @@ phase: Phase 0
 github_issue: https://github.com/emulebb/emulebb-rust/issues/258
 title: Add dependency-aware early Rust checks without weakening pre-push coverage
 status: OPEN
-priority: Minor
+priority: Major
 category: ci
 labels: [rust, ci, tests, workflow]
 milestone: post-beta-polish
@@ -17,6 +17,19 @@ source: Operator-approved local and GitHub CI parity follow-up
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb-rust/issues/258. This local document is retained as the durable engineering spec and evidence record.
 
 # RUST-CI-032 - Add dependency-aware early Rust checks without weakening pre-push coverage
+
+## Current Focus (2026-11-09)
+
+The operator prioritizes workspace improvements and multiarchitecture/
+multiplatform development before the broader bugs/issues queue, with Beta3
+release held. This dependency-aware feedback item is now Major because full
+validation latency limits that parallel work. Its post-beta-polish milestone
+is unchanged; this priority change does not introduce a new release gate.
+Keep the complete pre-push/hosted checks and existing workspace lock authority;
+faster partial feedback must not claim complete qualification. GitHub issue
+[#258](https://github.com/emulebb/emulebb-rust/issues/258) and Project #3 own
+execution status. Current qualification may continue; no candidate freeze,
+certification, release dispatch, publication, tag, or version bump is authorized.
 
 ## Summary
 

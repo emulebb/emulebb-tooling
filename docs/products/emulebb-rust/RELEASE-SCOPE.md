@@ -25,6 +25,35 @@ Production implementation of a later phase must not begin while the preceding
 gate is open. Forward design and deterministic fixtures may be prepared only
 when they do not add dormant production paths or distract from the active gate.
 
+## Current Operator Hold And Work Priority (2026-11-09)
+
+**Beta3 release is on hold.** Current work prioritizes backlog clarity and
+workspace improvements for parallel multiarchitecture/multiplatform delivery,
+then bugs/issues. Broader platform development is an active focus independent
+of release promotion. Coordinate through
+[managed workspace work (Build #28)](https://github.com/emulebb/emulebb-build/issues/28),
+[platform workflow separation (#293)](https://github.com/emulebb/emulebb-rust/issues/293),
+and the existing platform owners, including
+[Linux x64/ARM64 (#227)](https://github.com/emulebb/emulebb-rust/issues/227) and
+[Android/Fire OS (#226)](https://github.com/emulebb/emulebb-rust/issues/226).
+GitHub issues and Project #3 retain workflow authority.
+The `focus:workspace-platforms` label identifies the current coordination set;
+it does not alter platform support or release-gate decisions. Dependency-aware
+early validation [#258](https://github.com/emulebb/emulebb-rust/issues/258)
+is now Major to address the feedback bottleneck without reducing complete
+required validation; its milestone is unchanged.
+
+Continue current qualification and permitted development. Do not freeze or
+select a Beta3 candidate, execute candidate certification, dispatch a release
+workflow, publish, tag, or bump a version while this hold applies.
+[Candidate certification (#142)](https://github.com/emulebb/emulebb-rust/issues/142)
+remains a future gated action until the operator explicitly lifts the hold;
+[audit coordination (#268)](https://github.com/emulebb/emulebb-rust/issues/268)
+owns this prioritization reconciliation. The prior Windows/Linux plus required
+Linux OCI Beta3 scope remains provisional and documented; this priority change
+does not silently change required checks, platform gates, support promises,
+or the separate Client-to-Indexer-to-Arr phase gates.
+
 ## Behavior authority
 
 Use this precedence instead of a general promise to reproduce another client:
@@ -53,8 +82,9 @@ gate.
 
 eMuleBB Rust is an active beta led by CI-gated nightly builds from `main`.
 Choose the newest dated nightly prerelease from GitHub Releases. Repeatedly
-tested on live eD2K/Kad networks. Beta 3 is expected after a few more weeks of
-implementation and stabilization. Retained evidence includes the persisted
+tested on live eD2K/Kad networks. Beta3 release remains under the operator
+hold above while multiarchitecture/multiplatform and workspace work take
+priority. Retained evidence includes the persisted
 live-profile campaign recorded by
 [RUST-FEAT-033](https://github.com/emulebb/emulebb-tooling/blob/main/docs/products/emulebb-rust/history/items/RUST-FEAT-033.md) and exact-candidate Windows and
 Linux campaigns from the same work. Current-head reconciliation remains tracked

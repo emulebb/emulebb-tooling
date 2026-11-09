@@ -5,6 +5,35 @@ milestones own workflow state and roadmap placement; each linked Markdown item
 owns the durable engineering spec, constraints, acceptance criteria, and
 retained evidence.
 
+## Current Operator Hold And Work Priority (2026-11-09)
+
+**Beta3 release is on hold.** Current work prioritizes backlog clarity and
+workspace improvements for parallel multiarchitecture/multiplatform delivery,
+then bugs/issues. Broader platform development is an active focus independent
+of release promotion. Coordinate through
+[managed workspace work (Build #28)](https://github.com/emulebb/emulebb-build/issues/28),
+[platform workflow separation (#293)](https://github.com/emulebb/emulebb-rust/issues/293),
+and the existing platform owners, including
+[Linux x64/ARM64 (#227)](https://github.com/emulebb/emulebb-rust/issues/227) and
+[Android/Fire OS (#226)](https://github.com/emulebb/emulebb-rust/issues/226).
+GitHub issues and Project #3 retain workflow authority.
+The `focus:workspace-platforms` label identifies the current coordination set;
+it does not alter platform support or release-gate decisions. Dependency-aware
+early validation [#258](https://github.com/emulebb/emulebb-rust/issues/258)
+is now Major to address the feedback bottleneck without reducing complete
+required validation; its milestone is unchanged.
+
+Continue current qualification and permitted development. Do not freeze or
+select a Beta3 candidate, execute candidate certification, dispatch a release
+workflow, publish, tag, or bump a version while this hold applies.
+[Candidate certification (#142)](https://github.com/emulebb/emulebb-rust/issues/142)
+remains a future gated action until the operator explicitly lifts the hold;
+[audit coordination (#268)](https://github.com/emulebb/emulebb-rust/issues/268)
+owns this prioritization reconciliation. The prior Windows/Linux plus required
+Linux OCI Beta3 scope remains provisional and documented; this priority change
+does not silently change required checks, platform gates, support promises,
+or the separate Client-to-Indexer-to-Arr phase gates.
+
 ## Current Authority
 
 - Product scope and compatibility boundaries: [`RELEASE-SCOPE`](../RELEASE-SCOPE.md)
@@ -71,8 +100,14 @@ stop gating the actual candidate. Existing required checks remain enforced.
 
 ## Parallel Client Work — Non-gating for Beta 3
 
+Dependency-aware early validation is now Major and appears first as a
+workspace/platform feedback priority. Its milestone remains post-beta-polish;
+current work priority does not make it a new Beta3 gate. Other platform owners
+retain their Major/Minor ranking and GitHub placement.
+
 | ID | Class | Title |
 |---|---|---|
+| [RUST-CI-032](items/RUST-CI-032.md) | Evidence | Add dependency-aware early Rust checks without weakening pre-push coverage |
 | [RUST-BUG-136](items/RUST-BUG-136.md) | Bug | Bound transfer deletion marker validation reads |
 | [RUST-BUG-160](items/RUST-BUG-160.md) | Bug | Reuse stock hashes across unambiguous Unicode filename normalization |
 | [RUST-BUG-162](items/RUST-BUG-162.md) | Bug | Bound profile archive fields before allocating import buffers |
@@ -95,7 +130,6 @@ stop gating the actual candidate. Existing required checks remain enforced.
 | [RUST-CI-028](items/RUST-CI-028.md) | Evidence | Make Windows manifest embedding target-aware |
 | [RUST-CI-030](items/RUST-CI-030.md) | Evidence | Verify Rust FFI layouts against vendored C headers |
 | [RUST-CI-031](items/RUST-CI-031.md) | Evidence | Consolidate deterministic eD2K and Kad protocol-parity testing |
-| [RUST-CI-032](items/RUST-CI-032.md) | Evidence | Add dependency-aware early Rust checks without weakening pre-push coverage |
 | [RUST-CI-036](items/RUST-CI-036.md) | Evidence | Add issue and PR evidence templates |
 | [RUST-CI-037](items/RUST-CI-037.md) | Evidence | Produce a read-only issue and release-readiness digest |
 | [RUST-CI-038](items/RUST-CI-038.md) | Evidence | Report bundled SQLite version in build evidence |
