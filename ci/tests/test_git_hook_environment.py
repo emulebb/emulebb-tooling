@@ -74,7 +74,7 @@ class GitHookEnvironmentTests(unittest.TestCase):
             self.assertEqual(data["stdin"], ref_updates)
             self.assertEqual(data["root"], str(source))
             self.assertIn("--push-stdin", data["argv"])
-            self.assertEqual(Path(data["argv"][data["argv"].index("--repo") + 1]), original)
+            self.assertTrue(Path(data["argv"][data["argv"].index("--repo") + 1]).samefile(original))
             self.assertEqual(index.read_bytes(), before_index)
             self.assertEqual((original / ".git" / "config").read_bytes(), before_config)
             self.assertEqual(git("config", "--get", "core.bare"), "false")
