@@ -95,3 +95,54 @@ Full design: [`kad-ed2k-indexer`](../../design/kad-ed2k-indexer.md) and
 
 RUST-FEAT-004 consumes this domain after the Indexer gate closes. It must not
 pull compatibility-specific DTOs or transfer state into the Indexer.
+
+## Audit Release Placement
+
+This remains parallel follow-up work and does not independently block Beta 3.
+Its existing Client, Indexer, or Arr phase ownership remains unchanged;
+non-gating Beta 3 placement does not bypass the separate whole-phase gates.
+
+## Audit Reconciliation (2026-11-09)
+
+The complete audit collection was reconciled against current source and
+owning issues. The following are retained findings, corrected assumptions,
+or required evidence for this owner; inspection does not replace runtime proof.
+
+- `emulebb-rust-prompt_audit_findings_search.md` section 3.5 (existing): Future live/index/hybrid semantics belong to Indexer owner; identical local and wire normalization is not automatically correct. Closed issue198 explicitly avoids offline-library search.
+- `emulebb-rust-prompt_audit_findings_indexer.md` section queue-restart (existing): Snapshot/merge helpers exist without a production persistence/restore call. Track a separately deliverable slice under the existing Indexer owner; do not silently turn default-off Client passive replay into autonomous Indexer production.
+- `emulebb-rust-prompt_audit_findings_indexer.md` section write-fault-latch (existing): Current passive writes log and continue; the future Indexer contract requires persistent fault reporting and discovery isolation. This is an unimplemented future-phase acceptance outcome, not a Beta 3 shipped-Indexer defect.
+- `emulebb-rust-prompt_audit_findings_indexer.md` section global-replay-budget (existing): Current general/source budgets can sum to 84 queries per 600 seconds, while the future design says one global budget. Choose an explicit combined ceiling or a reviewed documented interpretation.
+- `emulebb-rust-prompt_audit_findings_indexer.md` section passive-file-type (existing): Passive indexed rows currently hardcode unknown. Reuse canonical type classification and metadata merge rules, while keeping live search metadata ownership in #29 and autonomous Indexer work behind its phase gate.
+- `emulebb-rust-prompt_audit_findings_product_direction.md` section retention-policy (design): The recommendation for a configurable record/disk ceiling directly conflicts with the explicit no-TTL/no-quota product decision. Track a design review, not an automatic implementation or a current runtime defect.
+- `emulebb-rust-prompt_audit_findings_product_direction.md` section indexer-data-policy (design): Track data-retention, provenance, operator controls and abuse/moderation questions as a future Indexer design outcome. The report's jurisdictional risk is a question for review, not a proven compliance defect.
+- `emulebb-rust-prompt_audit_findings_product_direction.md` section delivery-focus (existing): Existing Client/Indexer/Arr sequencing already owns product focus. Beta increments may ship while the broader Client gate stays open; the user now selects Windows/Linux readiness, with other platform work parallel.
+
+### Scoped Follow-up Acceptance
+
+- [ ] Define query/provenance semantics before Indexer implementation; do not rewrite network folding to match local FTS.
+- [ ] Persist bounded SnoopEntry observations in the single SQLite authority.
+- [ ] Restore deterministic demand/provenance while keeping transient ReplayFeedback ephemeral.
+- [ ] Test restart, duplicate merge and interrupted writes.
+- [ ] Disk/SQLite failure stops new Indexer writes and active discovery.
+- [ ] Transfers, uploads, sharing and client networking continue.
+- [ ] API/WebUI/diagnostics expose the fault; recovery requires a verified write.
+- [ ] One authoritative budget contract covers keyword, note and source traffic.
+- [ ] A deterministic mixed-family test proves the aggregate bound.
+- [ ] Classify available standard metadata or filename-derived types with provenance.
+- [ ] Type-filtered queries remain consistent across origins.
+- [ ] Do not create a second result model.
+- [ ] Compare indefinite retention with disk-pressure isolation, compaction and operator expectations.
+- [ ] Record retain/change decision and policy implications.
+- [ ] Keep production work behind the Indexer gate.
+- [ ] Specify stored fields, retention and deletion/control behavior.
+- [ ] Record owner and decisions before Indexer release claims.
+- [ ] Candidate review uses the explicitly selected Beta 3 scope and immutable evidence.
+- [ ] Later-phase implementation remains behind its gate.
+- [ ] Do not treat all optional/design intake as mandatory Beta 3 implementation.
+
+## Retained Public Issue Context
+
+The following pre-intake context is retained for provenance. The release
+placement and scope stated in this item govern current execution.
+
+Part of the post-0.7.3 suite forward program (Phase 0). Workflow state is tracked here; the spec lives in the linked doc.

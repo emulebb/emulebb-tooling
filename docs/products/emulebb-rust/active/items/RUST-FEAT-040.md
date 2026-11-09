@@ -100,3 +100,36 @@ making informed choices without starting a download.
 
 The external API should remain Rust-native. Compatibility here means preserving
 standard network semantics, not copying the MFC presentation layer.
+
+## Audit Release Placement
+
+This remains parallel follow-up work and does not independently block Beta 3.
+Its existing Client, Indexer, or Arr phase ownership remains unchanged;
+non-gating Beta 3 placement does not bypass the separate whole-phase gates.
+
+## Audit Reconciliation (2026-11-09)
+
+The complete audit collection was reconciled against current source and
+owning issues. The following are retained findings, corrected assumptions,
+or required evidence for this owner; inspection does not replace runtime proof.
+
+- `emulebb-rust-prompt_audit_findings_indexer.md` section passive-file-type (existing): Passive indexed rows currently hardcode unknown. Reuse canonical type classification and metadata merge rules, while keeping live search metadata ownership in #29 and autonomous Indexer work behind its phase gate.
+- `emulebb-rust-prompt_audit_findings_product_direction_amule_future_parity.md` section A2-search-metadata (existing): Standard media tags, type, note/rating and provenance-bearing AICH metadata already belong to RUST-FEAT-040. Verify which decoders/storage/API fields still drop data rather than create a second metadata project.
+
+### Scoped Follow-up Acceptance
+
+- [ ] Classify available standard metadata or filename-derived types with provenance.
+- [ ] Type-filtered queries remain consistent across origins.
+- [ ] Do not create a second result model.
+- [ ] Bound malformed fields and define cross-origin merge rules.
+- [ ] Update decoders, storage, REST and WebUI consistently.
+
+## Retained Public Issue Context
+
+The following pre-intake context is retained for provenance. The release
+placement and scope stated in this item govern current execution.
+
+Priority: Minor
+Milestone: post-beta-compatibility
+
+Carry standard media, type, note/rating, and provenance-bearing AICH metadata from ED2K server/Kad decoders through storage and the Rust-native API. Bound malformed data, define merge rules, and keep API consumers/migrations synchronized.

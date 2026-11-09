@@ -93,3 +93,36 @@ that need a mechanical fail-closed gate.
 - Deliberate mismatch tests proving size, alignment, and offset drift fails.
 - Existing MiniUPnPc, PCP/NAT-PMP, NAT orchestration, and package builds.
 - Dependency-update documentation covering binding/probe regeneration.
+
+## Audit Release Placement
+
+This remains parallel follow-up work and does not independently block Beta 3.
+Its existing Client, Indexer, or Arr phase ownership remains unchanged;
+non-gating Beta 3 placement does not bypass the separate whole-phase gates.
+
+## Audit Reconciliation (2026-11-09)
+
+The complete audit collection was reconciled against current source and
+owning issues. The following are retained findings, corrected assumptions,
+or required evidence for this owner; inspection does not replace runtime proof.
+
+- `emulebb-rust-prompt_audit_findings_reachability.md` section 2.4 / 4.2-3 (existing): ABI verification and native-target compile/runtime proof belong to existing FFI and platform items. Android is parallel and non-gating for Beta 3; do not replace proven C libraries with a narrower pure-Rust fallback to avoid qualification.
+- `emulebb-rust-prompt_audit_findings_code-quality-unsafe.md` section 2.3 (existing): Use exact native-header ABI proof; zero is valid for current C aggregates. A bool field by itself does not make zero invalid.
+- `emulebb-rust-prompt_audit_findings_code-quality-unsafe.md` section 2.4 (design): Unsafe count and SAFETY comments are not soundness proof; keep proof in existing owners.
+- `emulebb-rust-prompt_audit_findings_code-quality-unsafe.md` section evidence-gaps (existing): Closed lint/suppression work does not establish C ABI layout compatibility.
+- `unsafe1.md` section inventory (design): Unsafe counts are not backlog units. Windows/macOS primitives and reference NAT providers remain intentional.
+- `unsafe2.md` section correction-1 (design): Pure-Rust alternatives do not establish equal PCP/NAT-PMP/UPnP behavior. Existing providers remain; ABI and leak-free ownership proof belong to existing items.
+- `LIBPCPNATPMP-CONSUMER-REFACTOR-AUDIT-2026-11-09.md` section native-proof (existing): Adapter work must compose with existing native layout and runtime-safety items. Desktop/musl/Android compile evidence does not alone prove allocator lifecycle correctness; MFC changes require a separate bounded consumer assignment.
+- `emulebb-rust-prompt_audit_findings_product_direction_amule_future_parity.md` section security-native (existing): Native miniupnpc/PCP input hardening belongs to existing runtime-safety and mechanical ABI proof owners. Rust memory safety does not establish the C boundary is safe.
+
+### Scoped Follow-up Acceptance
+
+- [ ] Mechanical C/Rust layout proof uses exact vendored headers.
+- [ ] Keep musl and Android compile proof distinct from runtime/device NAT proof.
+- [ ] Header/layout drift fails mechanically and initialized foreign storage remains ownership-safe.
+- [ ] Windows/Linux candidate ABIs have exact-header layout evidence; other platforms remain non-gating beta follow-up.
+- [ ] Check C/Rust layouts for the exact target and headers.
+- [ ] Prove repeated create/destroy, flow-info release, route rejection and successful mapping.
+- [ ] Keep optional platform proof non-gating for Beta 3 and Android signing on hold.
+- [ ] Bound native response/input assumptions and prove ownership on failures.
+- [ ] Qualify exact C headers/layouts and neutral malformed fixtures.

@@ -87,3 +87,46 @@ compatibility alias, or migration is introduced to preserve the prior shape.
 - `7a22c3f` implements and tests the independent bind-pinned SSDP/SOAP IGD
   fallback without reviving the retired dependency stack; RUST-FEAT-037 later
   supersedes and removes that provider in favor of PCP/NAT-PMP plus MiniUPnPc.
+
+## Audit Release Placement
+
+This remains parallel follow-up work and does not independently block Beta 3.
+Its existing Client, Indexer, or Arr phase ownership remains unchanged;
+non-gating Beta 3 placement does not bypass the separate whole-phase gates.
+
+## Audit Reconciliation (2026-11-09)
+
+The complete audit collection was reconciled against current source and
+owning issues. The following are retained findings, corrected assumptions,
+or required evidence for this owner; inspection does not replace runtime proof.
+
+- `emulebb-rust-prompt_audit_findings_async-lifecycle.md` section 2.1 (existing): Existing REF006 explicitly owns task lifecycle. Prefer owned cancellation/RAII guards and observable completion; do not blindly add catch_unwind to every task.
+- `emulebb-rust-prompt_audit_findings_async-lifecycle.md` section 2.2 (existing): Latent API contract improvement under existing lifecycle owner, not a demonstrated user-triggered crash.
+- `emulebb-rust-prompt_audit_findings_async-lifecycle.md` section 2.3 (design): Drop cannot await; scheduling abort is expected. No synchronous-drop-join fix.
+- `emulebb-rust-prompt_audit_findings_async-lifecycle.md` section 2.4 (existing): Attach caller retry/cancellation proof to existing lifecycle work; unknown means potentially delivered, not automatic retry.
+- `emulebb-rust-prompt_audit_findings_async-lifecycle.md` section evidence-gaps (existing): Use existing safety item for Kad task ownership and blocking-job cancellation evidence, without a new broad soak project.
+- `emulebb-rust-prompt_audit_findings_code-quality-unsafe.md` section 2.4 (design): Unsafe count and SAFETY comments are not soundness proof; keep proof in existing owners.
+- `emulebb-rust-prompt_audit_findings_code-quality-unsafe.md` section 3.3 (existing): Follow-up safety/contract slice under existing owner. Preserve one settings inventory and avoid a second manual mapping.
+- `unsafe1.md` section inventory (design): Unsafe counts are not backlog units. Windows/macOS primitives and reference NAT providers remain intentional.
+- `unsafe1.md` section MoveFileExW (existing): Duplicate implementation can be reviewed under REF006, but no-replace publication must never inherit replacement flags.
+- `unsafe1.md` section route-table (existing): Dedicated zero/multi-row/error/drop tests are meaningful FFI safety evidence; no replacement of windows-sys layouts suggested.
+- `unsafe2.md` section correction-1 (design): Pure-Rust alternatives do not establish equal PCP/NAT-PMP/UPnP behavior. Existing providers remain; ABI and leak-free ownership proof belong to existing items.
+- `unsafe2.md` section recommendation-1 (existing): Same owner and outcome as unsafe1; do not create duplicate tickets.
+- `unsafe2.md` section recommendation-2 (existing): Same owner and outcome as unsafe1; do not create duplicate tickets.
+- `LIBPCPNATPMP-CONSUMER-REFACTOR-AUDIT-2026-11-09.md` section native-proof (existing): Adapter work must compose with existing native layout and runtime-safety items. Desktop/musl/Android compile evidence does not alone prove allocator lifecycle correctness; MFC changes require a separate bounded consumer assignment.
+- `emulebb-rust-prompt_audit_findings_product_direction_amule_future_parity.md` section security-native (existing): Native miniupnpc/PCP input hardening belongs to existing runtime-safety and mechanical ABI proof owners. Rust memory safety does not establish the C boundary is safe.
+
+### Scoped Follow-up Acceptance
+
+- [ ] Shutdown observes promotion/callback task completion and restores permits on error, cancellation and panic where supported.
+- [ ] Consume handle or document/enforce single-join ownership; test the chosen contract.
+- [ ] Cancellation after enqueue cannot produce duplicate retries or false not-sent claims.
+- [ ] Observe task completion with deterministic barriers; do not claim cancellation stops already-running blocking I/O.
+- [ ] Adding a setting cannot silently reach an untested runtime panic; mapping completeness is mechanically checked.
+- [ ] Shared helper, if justified, preserves each caller's replace/no-replace, durability and atomicity contract.
+- [ ] Slice lifetime cannot escape table owner; zero/multi-row and error paths preserve alignment and one free.
+- [ ] Check C/Rust layouts for the exact target and headers.
+- [ ] Prove repeated create/destroy, flow-info release, route rejection and successful mapping.
+- [ ] Keep optional platform proof non-gating for Beta 3 and Android signing on hold.
+- [ ] Bound native response/input assumptions and prove ownership on failures.
+- [ ] Qualify exact C headers/layouts and neutral malformed fixtures.

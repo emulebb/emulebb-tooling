@@ -110,3 +110,32 @@ already received from another source.
 This is a current-aMule behavior improvement rather than a strict stock-wire
 requirement. It should compose with, not substitute for, RUST-BUG-102's final
 whole-file rehash.
+
+## Audit Release Placement
+
+This remains parallel follow-up work and does not independently block Beta 3.
+Its existing Client, Indexer, or Arr phase ownership remains unchanged;
+non-gating Beta 3 placement does not bypass the separate whole-phase gates.
+
+## Audit Reconciliation (2026-11-09)
+
+The complete audit collection was reconciled against current source and
+owning issues. The following are retained findings, corrected assumptions,
+or required evidence for this owner; inspection does not replace runtime proof.
+
+- `emulebb-rust-prompt_audit_findings_product_direction_amule_future_parity.md` section A11-endgame (existing): Bounded endgame takeover already owns cancellation, lease redistribution and first-verified-wins semantics. Add failed-takeover requeue/free-interval coverage to that acceptance, not a duplicate feature.
+
+### Scoped Follow-up Acceptance
+
+- [ ] Cancelled sources become eligible again when takeover fails.
+- [ ] No uncontrolled duplicate traffic or lost reservations.
+
+## Retained Public Issue Context
+
+The following pre-intake context is retained for provenance. The release
+placement and scope stated in this item govern current execution.
+
+Priority: Minor
+Milestone: post-beta-compatibility
+
+Add bounded block-level lease takeover/redistribution for the final download work, with first-verified-wins semantics, correct source attribution, cancellation/restart safety, and no uncontrolled duplicate traffic outside explicit endgame mode.

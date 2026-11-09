@@ -86,3 +86,30 @@ parallel state.
 
 This is a protocol-adapter phase, not permission to make qBittorrent concepts
 the canonical Rust data model.
+
+## Audit Release Placement
+
+This remains parallel follow-up work and does not independently block Beta 3.
+Its existing Client, Indexer, or Arr phase ownership remains unchanged;
+non-gating Beta 3 placement does not bypass the separate whole-phase gates.
+
+## Audit Reconciliation (2026-11-09)
+
+The complete audit collection was reconciled against current source and
+owning issues. The following are retained findings, corrected assumptions,
+or required evidence for this owner; inspection does not replace runtime proof.
+
+- `emulebb-rust-prompt_audit_findings_product_direction.md` section delivery-focus (existing): Existing Client/Indexer/Arr sequencing already owns product focus. Beta increments may ship while the broader Client gate stays open; the user now selects Windows/Linux readiness, with other platform work parallel.
+
+### Scoped Follow-up Acceptance
+
+- [ ] Candidate review uses the explicitly selected Beta 3 scope and immutable evidence.
+- [ ] Later-phase implementation remains behind its gate.
+- [ ] Do not treat all optional/design intake as mandatory Beta 3 implementation.
+
+## Retained Public Issue Context
+
+The following pre-intake context is retained for provenance. The release
+placement and scope stated in this item govern current execution.
+
+Part of the post-0.7.3 suite forward program (Phase 0). Workflow state is tracked here; the spec lives in the linked doc.

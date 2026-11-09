@@ -200,3 +200,46 @@ use typed columns and explicit constraints. It must not store an opaque
 
 This item is a prerequisite for RUST-FEAT-063. Semantic profile carry-forward
 must transport logical Kad contacts and server rows rather than met files.
+
+## Audit Release Placement
+
+This remains parallel follow-up work and does not independently block Beta 3.
+Its existing Client, Indexer, or Arr phase ownership remains unchanged;
+non-gating Beta 3 placement does not bypass the separate whole-phase gates.
+
+## Audit Reconciliation (2026-11-09)
+
+The complete audit collection was reconciled against current source and
+owning issues. The following are retained findings, corrected assumptions,
+or required evidence for this owner; inspection does not replace runtime proof.
+
+- `emulebb-rust-prompt_audit_findings_kad-routing-maint.md` section 4.2 (existing): The built-in fallback still exists. The existing SQLite routing/bootstrap item explicitly preserves built-in seeds and owns bootstrap provenance; scope reconciliation should record this headless operational choice.
+
+### Scoped Follow-up Acceptance
+
+- [ ] Document fallback ordering and seed review/refresh responsibility.
+- [ ] Do not fabricate verified identities or retain import met bytes as durable state.
+
+## Retained Public Issue Context
+
+The following pre-intake context is retained for provenance. The release
+placement and scope stated in this item govern current execution.
+
+Make SQLite the durable authority for accepted Kad routing contacts while keeping the live routing table in memory. Treat both `nodes.dat` and `server.met` strictly as compatibility import formats: parse, validate, merge into logical database rows, and discard the source bytes. Never create, update, or restore either met file as profile state.
+
+Reviewed against product `7b295bda` (schema 54). Kad SQLite snapshot persistence remains open after RUST-REF-017; its library/download boundaries remain intact.
+
+- Add a current-schema SQLite representation for the bounded Kad routing snapshot, including the contact identity, IPv4 endpoint, UDP/TCP ports, Kad version, UDP key and bound public IPv4, verification and HELLO state, firewall observations, routing/probe classification, bootstrap provenance, expiry, and relevant freshness timestamps.
+- Restore accepted contacts from SQLite into the in-memory routing table at startup. Keep sockets, pending RPCs, timers, search state, and other transient work memory-only.
+- Coalesce dirty runtime changes into periodic checkpoints every 15 minutes. Clean intervals write nothing; explicit import and graceful shutdown checkpoint immediately outside the periodic cadence.
+- Merge `nodes.dat` contacts deterministically and deduplicate them. Preserve a stronger existing contact rather than downgrading verification, learned UDP-key state, protocol version, or fresher observations.
+- Keep the authenticated REST/WebUI URL-import surfaces. Do not add a local-file or upload surface in this item.
+- Preserve the existing logical `server.met` behavior: imported servers become SQLite server rows and the payload is discarded.
+- Remove daemon startup/shutdown reliance on profile-local `nodes.dat`, including trusted bootstrap seeding that writes the file. Empty durable state may use parsed trusted or built-in seeds without retaining met bytes.
+- Follow the beta persistence policy: evolve the checked-in current schema directly; do not add migrations, legacy fallback reads, repair, or automatic profile conversion.
+
+- Restart restores the bounded Kad contact snapshot from SQLite without a `nodes.dat` file.
+- Dirty, periodic, shutdown, and immediate-import checkpoint behavior is deterministic and tested.
+- Merge tests prove deduplication and non-downgrade rules for verified and UDP-key metadata.
+- Startup, import, and shutdown tests prove neither `nodes.dat` nor `server.met` is written.
+- Existing authenticated URL imports and Kad/server bootstrap behavior remain functional.

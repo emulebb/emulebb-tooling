@@ -158,3 +158,36 @@ Additional acceptance criteria:
 - Upload/search/API latency regressions under forced database contention.
 - Current-schema rejection, metadata durability, REST, eD2K, Kad, and
   large-library validation lanes. Product code gains no migrations or reset path.
+
+## Audit Release Placement
+
+This remains parallel follow-up work and does not independently block Beta 3.
+Its existing Client, Indexer, or Arr phase ownership remains unchanged;
+non-gating Beta 3 placement does not bypass the separate whole-phase gates.
+
+## Audit Reconciliation (2026-11-09)
+
+The complete audit collection was reconciled against current source and
+owning issues. The following are retained findings, corrected assumptions,
+or required evidence for this owner; inspection does not replace runtime proof.
+
+- `emulebb-rust-prompt_audit_findings_persistence.md` section 2.4 (existing): Do not add speculative pools or independent actors. Existing REF016 owns queue/wait/commit semantics and read-lane justification.
+- `emulebb-rust-prompt_audit_findings_product_direction_amule_future_parity.md` section scale-proof (existing): The aMule scaling wave is inspiration, not evidence of the same defect in Rust. Existing storage-domain, scan-I/O, async SQLite/filesystem/CPU and upload-performance items own the remaining work.
+- `emulebb-rust-prompt_audit_findings_product_direction_amule_future_parity.md` section A3-kad-cache-load (existing): Kad cache hydration calls SQLite synchronously during core construction. Existing async SQLite persistence work is the nearest owner; the review did not measure startup blocking or establish a new release defect.
+
+### Scoped Follow-up Acceptance
+
+- [ ] Preserve FULL durability and measure connection/queue latency; keep one storage owner.
+- [ ] Use bounded representative benchmarks and latency evidence.
+- [ ] Reuse existing 100k fixture and cross-platform owners.
+- [ ] Required Beta 3 Windows/Linux evidence is selected under #142; optional platforms remain parallel.
+- [ ] Measure representative cache startup and executor responsiveness.
+- [ ] Offload substantial work through the bounded persistence owner if required.
+- [ ] Preserve startup consistency and the existing cache model.
+
+## Retained Public Issue Context
+
+The following pre-intake context is retained for provenance. The release
+placement and scope stated in this item govern current execution.
+
+**Reviewable branch spec:** https://github.com/emulebb/emulebb-tooling/blob/fix/stock-hash-share-tree/docs/products/emulebb-rust/active/items/RUST-REF-016.md

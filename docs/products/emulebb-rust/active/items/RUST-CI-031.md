@@ -571,3 +571,99 @@ complete its replacement documentation checks before merge.
 Open the coordinated Rust, build-tests, and tooling pull requests, require all
 protected-main checks at the exact heads, then merge and delete the shared
 workstream branch locally and remotely before selecting the next slice.
+
+## Audit Release Placement
+
+This remains parallel follow-up work and does not independently block Beta 3.
+Its existing Client, Indexer, or Arr phase ownership remains unchanged;
+non-gating Beta 3 placement does not bypass the separate whole-phase gates.
+
+## Audit Reconciliation (2026-11-09)
+
+The complete audit collection was reconciled against current source and
+owning issues. The following are retained findings, corrected assumptions,
+or required evidence for this owner; inspection does not replace runtime proof.
+
+- `emulebb-rust-prompt_audit_findings_protocol_01.md` section 9.3-5 / 10.4 (existing): Hello/tag boundary, Kad framing, and flood exemptions belong to the existing canonical coverage owner. Reference freshness and unused decompiler material do not justify pulling support repos or adding server patches.
+- `emulebb-rust-prompt_audit_findings_server-reply.md` section 6.2-4 (existing): Untraced downstream source filtering and partially reviewed UDP bodies are evidence gaps, not confirmed vulnerabilities.
+- `emulebb-rust-prompt_audit_findings_udp-reask.md` section 2.1 documentation citation (existing): Rust's explanatory memcpy expression is an equivalent reconstruction, not the literal source expression. Clarify the citation during canonical protocol-evidence work without changing wire behavior.
+- `emulebb-rust-prompt_audit_findings_udp-reask.md` section 4.1-4 / 5.3 (existing): Failure-ratio fallback is already implemented with total>3 and failed/total>0.3; remaining transport/obfuscation validation is evidence work rather than implementing a missing timer.
+- `emulebb-rust-prompt_audit_findings_secure-ident.md` section 5 / 7 (existing): Weak stock RSA/SHA1 is an accepted interoperability boundary. Key pinning has a closed owner; native-target build/runtime and cross-client proof have existing owners.
+- `emulebb-rust-prompt_audit_findings_credits-queue.md` section 6.1-3 / 7.3 (existing): Callback entitlement and disconnected promotion are implemented; the missing end-to-end oracle derivation is a canonical evidence gap, not a proven missing zero-score check.
+- `emulebb-rust-prompt_audit_findings_kad-routing-maint.md` section 6 / 7.3 (existing): The report requests optional timer/fill-boundary goldens and acknowledges untraced quality constants. Existing routing maintenance and canonical evidence owners cover this work.
+- `emulebb-rust-prompt_audit_findings_obfuscation.md` section 2.2 (design): Inbound length is one byte and bounded to 255 bytes. Server padding above its preferred cap is already logged. Blindly clamping a read can desynchronize RC4/frame state; no automatic cap change should follow this audit.
+- `emulebb-rust-prompt_audit_findings_obfuscation.md` section 2.3 (existing): A named classification helper remains staged, but production Kad decrypt already falls through to a registered foreign raw-datagram handler. This disproves the blanket unwired-transport premise; correctness needs mixed-key/protocol evidence before rewiring.
+- `emulebb-rust-prompt_audit_findings_obfuscation.md` section 5 (existing): The report inspected constants without proving all server UDP key derivation/state transitions or replaying encrypted exchanges.
+- `emulebb-rust-prompt_audit_findings_aich-trust.md` section 6.1,6.3 / 7.3 (existing): Existing tests cover one vote per subnet; hand-derived mask boundaries and large-file/cross-client proof remain evidence extensions, owned by current AICH and canonical protocol items.
+- `emulebb-rust-prompt_audit_findings_hashset-largefile.md` section 5 (existing): The report did not run a live exchange. Preserve the existing part-count, AICH geometry and bitmap outcomes through canonical boundaries rather than creating a second parity suite.
+- `emulebb-rust-prompt_audit_findings_reachability.md` section 2.5-8 / 4.4 (existing): Generation fences, mapping startup ordering and long-path boundaries are positive confirmations; unresolved timer/cross-client derivations belong to existing evidence work.
+- `emulebb-rust-prompt_audit_findings_dos-resilience.md` section 2.5 (existing): Do not add a second contradictory source cap without tracing admission. Attach bounded-source ownership proof to canonical client-UDP evidence.
+- `emulebb-rust-prompt_audit_findings_fuzz-malformed.md` section 3.2 (existing): Attach bounded fuzz/property target plus deterministic regressions to canonical protocol evidence; overlaps testing-harness report.
+- `emulebb-rust-prompt_audit_findings_fuzz-malformed.md` section 3.3 (existing): Keep stream length/packed/truncation proof in canonical codec owner, not another test ledger.
+- `emulebb-rust-prompt_audit_findings_fuzz-malformed.md` section 3.4 (existing): Attach normalization fuzz/property proof to existing decoder and filename owners. Overlaps search6.1 and testing-harness traversal gap.
+- `emulebb-rust-prompt_audit_findings_search.md` section 3.3 (design): Strict UTF-8 rejection would change wire acceptance. Require stock malformed-string evidence before changing it.
+- `emulebb-rust-prompt_audit_findings_search.md` section 6.1 (existing): Physical proximity of helpers is not a vulnerability. Preserve original display names separately from filesystem-safe leaves; add end-to-end traversal/percent-decoding proof instead of sanitizing metadata early.
+- `emulebb-rust-prompt_audit_findings_testing-harness.md` section kad-catalog-domains (existing): The catalog still lacks independently named bootstrap/three-way-HELLO/maintenance domains. Extend the existing parity-consolidation owner rather than open a second harness program.
+- `emulebb-rust-prompt_audit_findings_testing-harness.md` section wire-goldens (existing): The blanket claim that all records use FNV-only evidence is stale: newer stock records already carry fixtureBase64 and SHA-256 validation. Reconcile remaining FNV records and explicit full-frame golden ownership within CI-031.
+- `emulebb-rust-prompt_audit_findings_testing-harness.md` section crypt-capability-regression (existing): requires_crypt_layer is still hardcoded to zero. Resolve the behavior claim with the protocol audit and stock authority before changing the bit; add the exact capability regression in the canonical parity slice.
+- `emulebb-rust-prompt_audit_findings_product_direction_amule_future_parity.md` section A5-buddy (existing): Silent-buddy expiry is already #103. Verify that no callback is relayed for an unrelated buddy within the canonical buddy slice; the aMule report alone does not establish that Rust currently cross-relays.
+- `emulebb-rust-prompt_audit_findings_product_direction_amule_future_parity.md` section A7-udp-verification (existing): Some firewall responder verification already has a 180-second TTL. Determine which aMule UDP verification state is meant before asserting a missing equivalent; prove the exact corresponding expiry transition.
+- `emulebb-rust-prompt_audit_findings_product_direction_amule_future_parity.md` section A8-direct-callback-publish (existing): The report requests verification of a specific capability combination, not a demonstrated defect. Add it to the existing source-publish parity slice against stock authority.
+- `emulebb-rust-prompt_audit_findings_product_direction_amule_future_parity.md` section A9-tag-layout (existing): UTF-8 decoding support exists. Verify the buddy-hash byte layout and negotiated tag cases with exact packet fixtures rather than infer a bug from an aMule changelog.
+- `emulebb-rust-prompt_audit_findings_product_direction_amule_future_parity.md` section A19-obfuscation (existing): RC4 speed changes require measurement under the existing hot-path owner. Obfuscated-server timeout/fallback is a protocol transition to verify through the parity catalog, not an automatic downgrade feature.
+- `emulebb-rust-prompt_audit_findings_product_direction_amule_future_parity.md` section security-parser-freeze (existing): The applicable Kad freeze and decoder/downloader allocation assertions need concrete regressions under existing bounds/parity owners. The report incorrectly cites RUST-CI-032 as Kad flood work; current #258 owns dependency-aware early checks.
+
+### Scoped Follow-up Acceptance
+
+- [ ] Check existing catalog/test ownership before adding goldens.
+- [ ] Cover only supported boundaries with stock-derived expected bytes and causal receipts.
+- [ ] Trace decoded sources through actual IP/ban/admission owner.
+- [ ] Register only missing source-admission and UDP state variants in existing coverage owner.
+- [ ] Explain equivalence to stock's offset-10 overwrite/copy.
+- [ ] Retain endpoint and untouched-tail goldens.
+- [ ] Retain success/failure/timeout threshold and recovery cases.
+- [ ] Verify mixed clear/encrypted reasks under canonical scenarios.
+- [ ] Do not replace on-wire primitives locally.
+- [ ] Retain key pin/restart/credit preservation proof.
+- [ ] Keep Android evidence non-gating for Beta 3.
+- [ ] Cover disconnected LowID selection, entitlement consumption, and slot pacing.
+- [ ] Use controlled time for recent-rate windows and fairness decisions.
+- [ ] Retain one-hour rearm, sparse-leaf fill boundary and fair due-leaf scheduling proof.
+- [ ] Avoid replacing named causal evidence with raw test counts.
+- [ ] Determine whether stock limits are send-side preferences or receive rejection rules before any change.
+- [ ] If enforcement is justified, reject/drain coherently rather than partially consuming padding.
+- [ ] Exercise Kad NodeID, receiver-key, eD2K encrypted and plaintext datagrams on one socket.
+- [ ] Prove valid families reach their owner once and malformed collisions remain bounded.
+- [ ] Attach supported server UDP and encrypted callback variants to existing deterministic owners.
+- [ ] Use independent /20 byte-order fixtures and 16/32-bit proof boundaries.
+- [ ] Avoid duplicate evidence tickets or duplicating payload reads.
+- [ ] Include exact-part, empty, large-file and unavailable-set variants in canonical evidence.
+- [ ] Preserve stale-writer rejection and mapped-port-before-login ordering.
+- [ ] Attach only missing firewall/timer state evidence to the canonical owner.
+- [ ] Every insertion is admitted through bounded source ownership; churn/removal/restart tests retain the invariant.
+- [ ] Expose an isolated fixed-identity decrypt/classify hook and retain malformed/crash regressions.
+- [ ] Raw framed streams and bounded decompression exercise lengths, truncation and multiple frames.
+- [ ] Malformed entities/percent/encoding inputs stay bounded; every materialization path applies final leaf safety.
+- [ ] Any future decoder change must preserve approved stock wire behavior.
+- [ ] Percent-decoded separators cannot escape the selected destination; all output paths use the safe leaf allocator.
+- [ ] Add bounded catalog IDs and canonical deterministic owners for the three domains.
+- [ ] Register the required causal evidence layers and immutable receipts.
+- [ ] Unproven transitions remain explicitly incomplete.
+- [ ] Inventory remaining digest-only records.
+- [ ] Reference full bytes/framing or document their authoritative golden owner.
+- [ ] Do not replace existing SHA-256 fixtures with weaker summaries.
+- [ ] Verify supported/requested/required combinations against the accepted contract.
+- [ ] A deterministic hello fixture pins the outcome.
+- [ ] Expire by successfully decoded inbound activity.
+- [ ] Test silent half-open replacement/backoff and rejection of an unrelated buddy's callback.
+- [ ] Map the upstream state to the Rust owner.
+- [ ] Test stale and mismatched verification without accepting unrelated packets.
+- [ ] A controlled fixture proves whether and how the source is published.
+- [ ] Record the exact source type and buddy/callback tags.
+- [ ] Cover buddy hash layout, UTF-8 and legacy fallback fixtures.
+- [ ] Malformed tag handling remains bounded.
+- [ ] Benchmark before adopting crypto-loop changes.
+- [ ] Prove accepted retry/fallback semantics and avoid weakening required obfuscation.
+- [ ] Map each reachable freeze/allocation path to its earliest bound.
+- [ ] Test counted vectors, compressed data and block/part limits with finite resources.
+- [ ] Do not use Rust memory safety or a closed body-limit issue as proof against OOM.

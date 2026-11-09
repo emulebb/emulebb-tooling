@@ -92,3 +92,22 @@ state model.
 RUST-FEAT-056 owns the Android artifact and device lifecycle. The supported
 glibc or musl Linux package owns the Crostini daemon. This item owns only the
 ChromeOS integration, support matrix, and device evidence.
+
+## Audit Release Placement
+
+This remains parallel follow-up work and does not independently block Beta 3.
+Its existing Client, Indexer, or Arr phase ownership remains unchanged;
+non-gating Beta 3 placement does not bypass the separate whole-phase gates.
+
+## Audit Reconciliation (2026-11-09)
+
+The complete audit collection was reconciled against current source and
+owning issues. The following are retained findings, corrected assumptions,
+or required evidence for this owner; inspection does not replace runtime proof.
+
+- `emulebb-rust-prompt_audit_findings_multi-platform.md` section platform-evidence (existing): Windows/Linux are Beta 3 gates. macOS and extended target qualification continue in parallel, with per-target limitations and no stronger support claim than retained runtime evidence.
+
+### Scoped Follow-up Acceptance
+
+- [ ] Required Windows/Linux proof is recorded under the candidate owner.
+- [ ] Optional target status distinguishes compile, package and runtime evidence.

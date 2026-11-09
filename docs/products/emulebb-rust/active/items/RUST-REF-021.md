@@ -129,3 +129,30 @@ Extend the persisted shared-library I/O harness with bounded synthetic delivery
 cohorts; no unbounded real-media run is authorized. RUST-BUG-159 owns filename
 allocation and RUST-REF-022 owns partial recheck selection. Keep those scopes
 separate while preserving the same publication and verification authorities.
+
+## Audit Release Placement
+
+This remains parallel follow-up work and does not independently block Beta 3.
+Its existing Client, Indexer, or Arr phase ownership remains unchanged;
+non-gating Beta 3 placement does not bypass the separate whole-phase gates.
+
+## Audit Reconciliation (2026-11-09)
+
+The complete audit collection was reconciled against current source and
+owning issues. The following are retained findings, corrected assumptions,
+or required evidence for this owner; inspection does not replace runtime proof.
+
+- `emulebb-rust-prompt_audit_findings_product_direction_amule_future_parity.md` section A17-integrity-proof (existing): Corrupt-part nonadvertisement and nonserving proofs must compose with existing trusted MD4/AICH verification and upload invalidation. Do not assume the aMule Verify-Local-Data feature is entirely absent.
+
+### Scoped Follow-up Acceptance
+
+- [ ] Prove corrupt ranges are not advertised or served.
+- [ ] Retain durable verification state and trusted digest agreement.
+- [ ] Avoid redundant payload rereads when proof can reuse an authorized pass.
+
+## Retained Public Issue Context
+
+The following pre-intake context is retained for provenance. The release
+placement and scope stated in this item govern current execution.
+
+**Reviewable branch spec:** https://github.com/emulebb/emulebb-tooling/blob/fix/stock-hash-share-tree/docs/products/emulebb-rust/active/items/RUST-REF-021.md

@@ -106,3 +106,30 @@ retained bytes, and final MD4/AICH results. Run corruption attribution tests to
 ensure repeated use never double-debits old senders. RUST-BUG-164/165/166/167
 own trust, integrity, admission, and lifecycle respectively; RUST-FEAT-065 owns
 operator diagnostics. No new live campaign is required for cache correctness.
+
+## Audit Release Placement
+
+This remains parallel follow-up work and does not independently block Beta 3.
+Its existing Client, Indexer, or Arr phase ownership remains unchanged;
+non-gating Beta 3 placement does not bypass the separate whole-phase gates.
+
+## Audit Reconciliation (2026-11-09)
+
+The complete audit collection was reconciled against current source and
+owning issues. The following are retained findings, corrected assumptions,
+or required evidence for this owner; inspection does not replace runtime proof.
+
+- `emulebb-rust-prompt_audit_findings_testing-harness.md` section aich-regressions (existing): Trailing recovery bytes and equal-weight trust tie behavior should be reconciled with existing AICH admission/provenance/reuse items and the separate AICH audit.
+
+### Scoped Follow-up Acceptance
+
+- [ ] Reject noncanonical recovery framing under the owning admission contract.
+- [ ] Equal input evidence yields a deterministic trust result.
+- [ ] Tests preserve request matching and trusted-root authority.
+
+## Retained Public Issue Context
+
+The following pre-intake context is retained for provenance. The release
+placement and scope stated in this item govern current execution.
+
+**Reviewable branch spec:** https://github.com/emulebb/emulebb-tooling/blob/fix/stock-hash-share-tree/docs/products/emulebb-rust/active/items/RUST-REF-020.md
