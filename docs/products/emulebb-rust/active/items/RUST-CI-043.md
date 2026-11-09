@@ -58,11 +58,14 @@ contains a small REST startup block; mutable application settings are stored
 in SQLite. This review must reconcile the existing implementation with the
 target, rather than introduce a second configuration file.
 
-The source-traced rejected-request partial-update path has one implementation
-owner: [RUST-BUG-184](RUST-BUG-184.md),
+The source-traced direct-core update ordering and per-section transaction risk
+have one implementation owner: [RUST-BUG-184](RUST-BUG-184.md),
 [issue #299](https://github.com/emulebb/emulebb-rust/issues/299). Coordinate it
 with RUST-CI-044; do not commission separate API and DB fixes. Runtime proof is
-still required. Review work remains in progress; no behavior change is claimed.
+still required. REST middleware rejects invalid numeric core settings before
+the handler, so the direct-core example is not an HTTP partial-update witness.
+Reproduce accepted-request storage failures through the real router. Review
+work remains in progress; no behavior change is claimed.
 
 The first pass traced 105 settings leaves against the backend surface registry,
 OpenAPI, TypeScript types, and UI controls. Four TypeScript fields and seven
