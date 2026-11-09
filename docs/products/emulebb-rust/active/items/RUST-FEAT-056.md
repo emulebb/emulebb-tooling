@@ -101,6 +101,19 @@ output across builds. Reducing that footprint is follow-up CI hardening; both
 fresh hosted compile jobs passed, so this measurement is not a demonstrated
 runner-capacity blocker. Keep complete checks when changing build profiles.
 
+Build [`1c70c15`](https://github.com/emulebb/emulebb-build/commit/1c70c15403ccc65ea47d0ac065864a8e127b5644)
+adds separately pinned emulator/API-28/current-16KB inputs and the local
+`prepare-rust-android-emulator` software probe. Real WSL Docker execution passed
+as a non-root user with networking disabled, a read-only root, dropped
+capabilities and the exact image content ID. Both installed guest-image
+metadata sets passed API/revision/ABI/variant checks. The probe caught and
+fixed owner-only modes in the old AOSP archive and now uses the intended
+headless emulator mode. Owner changes require the tools-only probe before
+push, without implicitly downloading guest images. Receipts below
+`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/android-emulator` record
+`runtimeExecution: not-run`; guest boot, APK production and device qualification
+remain open.
+
 ## Networking And Safety Constraints
 
 - Direct routing is the initial supported public-network mode. Mobile carrier

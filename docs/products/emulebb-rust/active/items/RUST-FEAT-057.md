@@ -57,8 +57,13 @@ baseline commits, retains versioned documents before packaging, and consumes
 them before final checksumming. Its full local gate passed, including both
 container variants and Android ABIs. The follow-up
 [candidate run](https://github.com/emulebb/emulebb-rust/actions/runs/42562013163)
-tracks final assembly validation using the fully CI/CodeQL-verified source
-`3ddf47ac1847760898d759189ffca90c66de4dca`.
+passed final assembly and strict candidate verification using the fully
+CI/CodeQL-verified source `3ddf47ac1847760898d759189ffca90c66de4dca`. All native
+and container producers, lifecycle tests and security checks passed, and the
+exact candidate was retained. Publication and nightly-channel jobs were
+skipped. Full [CI](https://github.com/emulebb/emulebb-rust/actions/runs/42562016095)
+and [CodeQL](https://github.com/emulebb/emulebb-rust/actions/runs/42562019322)
+also passed at workflow-control commit `80ccc06e`.
 
 These are pushed workstream checkpoints. The item remains open until the
 approved integration and published-artifact criteria are satisfied.
