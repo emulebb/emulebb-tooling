@@ -38,6 +38,8 @@ state model.
   the glibc version required by a hosted GNU build.
 - Neither generic Linux nor Android emulator evidence qualifies a Chromebook.
   ChromeOS ARC and Crostini device evidence remains outstanding.
+- No physical test devices are currently available. Keep representative x64
+  and ARM64 ChromeOS checks pending until real hardware can be selected.
 
 ## Intended Shape
 
