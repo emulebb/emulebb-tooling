@@ -31,8 +31,13 @@ state model.
 - Many Chromebooks can run Android applications, Linux/Crostini, or both, but
   architecture, filesystem exchange, port forwarding, sleep, and background
   behavior differ by device and administrator policy.
-- RUST-FEAT-056 owns the APK; current glibc Linux packages can seed the Crostini
-  lane once the ChromeOS boundary is proven.
+- RUST-FEAT-056 owns the APK. Its two Android Rust compile/ELF lanes now pass
+  locally and on GitHub, but no APK or Android runtime is qualified yet.
+- RUST-FEAT-057 adds native musl archives alongside glibc packages. The portable
+  musl artifact can seed Crostini qualification without assuming the guest has
+  the glibc version required by a hosted GNU build.
+- Neither generic Linux nor Android emulator evidence qualifies a Chromebook.
+  ChromeOS ARC and Crostini device evidence remains outstanding.
 
 ## Intended Shape
 

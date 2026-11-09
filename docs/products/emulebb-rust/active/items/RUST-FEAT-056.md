@@ -33,8 +33,14 @@ second client implementation or a native recreation of the desktop UI.
 ## Current State
 
 - The supported platform contract includes Windows, Linux, and macOS only.
-- Build and release orchestration has no Android target, NDK, Gradle, APK,
-  signing, ADB, or emulator lane.
+- The workstream now has checksum-pinned SDK/NDK, Java, Gradle, ADB and Android
+  CLI inputs, a non-root offline Docker toolchain probe, and Android Rust
+  validation shared by local WSL/Docker and required GitHub CI.
+- `arm64-v8a` and `x86_64` pass canonical Clippy/diagnostics checks, workspace
+  test linking, release executable linking, and ELF CPU/Bionic/16KB audits.
+  These are compile checks; target unit tests have not been executed.
+- APK production, JNI integration, application lifecycle, signing, emulator
+  qualification and physical-device qualification remain unfinished.
 - The daemon exposes its behavior through a reusable library, loopback REST,
   and the browser WebUI, but its lifecycle is currently process/signal based.
 - Android storage, background execution, route selection, socket binding,
@@ -52,7 +58,8 @@ second client implementation or a native recreation of the desktop UI.
 - App-private storage owns runtime metadata and incomplete transfers. Android
   document flows import payloads into the managed shared library and export
   completed files to a user-selected destination.
-- Release APKs support `arm64-v8a`; `x86_64` remains a required emulator lane.
+- One universal release APK contains `arm64-v8a` and `x86_64`. The same signed
+  artifact receives emulator and physical-device qualification.
 - Fire OS support must not depend on Google Play Services.
 
 ## Distribution Boundary
@@ -64,6 +71,35 @@ second client implementation or a native recreation of the desktop UI.
 - Automatic launch at boot and recovery after Android force-stop are out of
   scope; the operating system remains authoritative for those states.
 - No 32-bit Android ABI is required.
+
+## Compile Foundation Evidence
+
+The 2026-11-09 checkpoint is pushed on `chore/local-validation-batches` and has
+not been merged or published. Build orchestration
+[`bb0e542`](https://github.com/emulebb/emulebb-build/commit/bb0e542152da6d58a28ffd69a5b8b6451e7cbcf4)
+owns the reviewed inputs and both local/hosted entrypoints:
+`python -m emule_workspace validate-rust-android` locally and
+`validate-rust-android-ci` on explicit hosted checkouts. Both retain source
+identities and explicitly record `runtimeExecution: not-run`.
+
+Rust [`3ddf47ac`](https://github.com/emulebb/emulebb-rust/commit/3ddf47ac1847760898d759189ffca90c66de4dca)
+passed the full local pre-push gate and
+[required GitHub CI](https://github.com/emulebb/emulebb-rust/actions/runs/42556994416),
+including both Android ABIs on fresh AMD64 runners. Its
+[CodeQL run](https://github.com/emulebb/emulebb-rust/actions/runs/42556997395)
+also passed. Local compile receipts remain below
+`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/rust-android`.
+
+Harness [`e99192f`](https://github.com/emulebb/emulebb-build-tests/commit/e99192f92a0dc12f912fa5aa1bce69851e8d0e5a)
+adds the universal-APK native-payload audit with 12 passing regression tests.
+It checks both ABI payloads, bounded ZIP inventory, 16KB alignment, CRC and
+hashes, and delegates ELF validation to the packaging owner. It has not yet
+audited a produced eMuleBB APK and does not establish signing or runtime proof.
+
+The local Android target directory contains accumulated debug and incremental
+output across builds. Reducing that footprint is follow-up CI hardening; both
+fresh hosted compile jobs passed, so this measurement is not a demonstrated
+runner-capacity blocker. Keep complete checks when changing build profiles.
 
 ## Networking And Safety Constraints
 
