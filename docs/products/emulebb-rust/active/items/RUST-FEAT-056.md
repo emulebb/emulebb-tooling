@@ -111,8 +111,8 @@ fixed owner-only modes in the old AOSP archive and now uses the intended
 headless emulator mode. Owner changes require the tools-only probe before
 push, without implicitly downloading guest images. Receipts below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/android-emulator` record
-`runtimeExecution: not-run`; guest boot, APK production and device qualification
-remain open.
+`runtimeExecution: not-run`; that tool-only check did not boot guests or qualify
+an APK.
 
 The shared guest-boot owner uses native non-root Docker with KVM, no networking,
 and a fresh writable run directory. `probe-rust-android-guest --image min` or
@@ -123,6 +123,17 @@ GitHub. Emulator preparation now needs only the emulator, the existing shared
 ADB pin and the selected guest image; it no longer prepares compiler inputs.
 Public evidence excludes private AVDs and emulator runtime logs and explicitly
 records `applicationQualification: not-run`.
+
+Build [`bea48fd`](https://github.com/emulebb/emulebb-build/commit/bea48fd5a083a45d1c542f66bb00aa3ba7dba5f9)
+and harness [`0b878d7`](https://github.com/emulebb/emulebb-build-tests/commit/0b878d74a90c64b5ae7c538e9753278912aff6fd)
+passed both [hosted KVM guest boots](https://github.com/emulebb/emulebb-build/actions/runs/42575803289):
+stable API 28 with 4096-byte pages and stable API 37 with 16384-byte pages,
+both native x86_64. The minimum guest exposed an unavailable `getconf PAGE_SIZE`
+query; the shared harness now reads the kernel's ELF64 `AT_PAGESZ` entry over
+binary-preserving ADB, without publishing auxiliary-vector process addresses.
+Local evidence includes the complete harness suite plus 36 focused boot/parser
+tests and the offline WSL Docker runtime-tool probe. APK production, signing,
+application lifecycle and release integration remain open.
 
 The operator has no physical test devices available. Android ARM64, Fire OS
 and ChromeOS device qualification remains pending; emulator or compile success
