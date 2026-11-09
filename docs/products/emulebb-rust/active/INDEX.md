@@ -28,8 +28,8 @@ select a Beta3 candidate, execute candidate certification, dispatch a release
 workflow, publish, tag, or bump a version while this hold applies.
 [Candidate certification (#142)](https://github.com/emulebb/emulebb-rust/issues/142)
 remains a future gated action until the operator explicitly lifts the hold;
-[audit coordination (#268)](https://github.com/emulebb/emulebb-rust/issues/268)
-owns this prioritization reconciliation. The prior Windows/Linux plus required
+[completed audit reconciliation](https://github.com/emulebb/emulebb-tooling/blob/main/docs/products/emulebb-rust/history/items/RUST-CI-034.md)
+records this prioritization decision; owning [issue #268](https://github.com/emulebb/emulebb-rust/issues/268) closes on reviewed documentation PR merge. The prior Windows/Linux plus required
 Linux OCI Beta3 scope remains provisional and documented; this priority change
 does not silently change required checks, platform gates, support promises,
 or the separate Client-to-Indexer-to-Arr phase gates.
@@ -95,7 +95,6 @@ stop gating the actual candidate. Existing required checks remain enforced.
 | [RUST-BUG-181](items/RUST-BUG-181.md) | Bug | Bound RIFF media parsing and retain malformed-input regressions |
 | [RUST-CI-006](items/RUST-CI-006.md) | Evidence | Refresh current-head stock parity evidence and reconcile docs |
 | [RUST-CI-009](items/RUST-CI-009.md) | Evidence | Certify a Beta 3 candidate without publishing |
-| [RUST-CI-034](items/RUST-CI-034.md) | Evidence | Reconcile audit findings into the Windows and Linux Beta 3 delivery scope |
 | [RUST-CI-035](items/RUST-CI-035.md) | Evidence | Separate mandatory Windows/Linux gates from optional platform outcomes |
 
 ## Parallel Client Work — Non-gating for Beta 3
