@@ -339,12 +339,16 @@ def test_powershell_version_header(repo_root: Path, repo_kind: str, relative_pat
 
     is_tooling_repo = repo_root.name == "emulebb-tooling" or (repo_root / "ci" / "check-workspace-policy.py").is_file()
     normalized_path = normalize_path(relative_path)
+    # WHY: Pages publishes the retained Windows PowerShell 5.1 installer.
+    # Limit this artifact contract to the admitted Pages roots and top-level file.
+    is_pages_installer = repo_root.name in {"emulebb-pages", "emulebb.github.io"} and normalized_path == "install.ps1"
     expected_version = (
         "5.1"
         if (is_tooling_repo and normalized_path.startswith("scripts/"))
         or is_emulebb_runtime_script(repo_root, repo_kind, relative_path)
         or is_emulebb_automation_example(repo_root, repo_kind, relative_path)
         or is_emulebb_host_network_script(repo_root, repo_kind, relative_path)
+        or is_pages_installer
         else "7.6"
     )
     expected_header = f"#Requires -Version {expected_version}"
