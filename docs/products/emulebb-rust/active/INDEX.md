@@ -105,14 +105,16 @@ stop gating the actual candidate. Existing required checks remain enforced.
 
 Dependency-aware early validation is now Major and appears first as a
 workspace/platform feedback priority. Its milestone remains post-beta-polish;
-current work priority does not make it a new Beta3 gate. Other platform owners
-retain their Major/Minor ranking and GitHub placement.
+current work priority does not make it a new Beta3 gate. Coordinated public
+presence (RUST-CI-046) is also Major, with current-facing README and user/developer
+journeys as its acceptance scope. Other platform owners retain their Major/Minor
+ranking and GitHub placement.
 
 | ID | Class | Title |
 |---|---|---|
 | [RUST-CI-032](items/RUST-CI-032.md) | Evidence | Add dependency-aware early Rust checks without weakening pre-push coverage |
-| [RUST-CI-045](items/RUST-CI-045.md) | Evidence | Make Linux release provisioning bounded and reproducible |
 | [RUST-CI-046](items/RUST-CI-046.md) | Evidence | Complete coordinated public presence and release download guidance |
+| [RUST-CI-045](items/RUST-CI-045.md) | Evidence | Make Linux release provisioning bounded and reproducible |
 | [RUST-CI-047](items/RUST-CI-047.md) | Evidence | Unify application icons, native metadata and build identity |
 | [RUST-BUG-136](items/RUST-BUG-136.md) | Bug | Bound transfer deletion marker validation reads |
 | [RUST-BUG-160](items/RUST-BUG-160.md) | Bug | Reuse stock hashes across unambiguous Unicode filename normalization |
