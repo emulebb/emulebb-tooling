@@ -111,6 +111,7 @@ retain their Major/Minor ranking and GitHub placement.
 | ID | Class | Title |
 |---|---|---|
 | [RUST-CI-032](items/RUST-CI-032.md) | Evidence | Add dependency-aware early Rust checks without weakening pre-push coverage |
+| [RUST-CI-045](items/RUST-CI-045.md) | Evidence | Make Linux release provisioning bounded and reproducible |
 | [RUST-BUG-136](items/RUST-BUG-136.md) | Bug | Bound transfer deletion marker validation reads |
 | [RUST-BUG-160](items/RUST-BUG-160.md) | Bug | Reuse stock hashes across unambiguous Unicode filename normalization |
 | [RUST-BUG-162](items/RUST-BUG-162.md) | Bug | Bound profile archive fields before allocating import buffers |
