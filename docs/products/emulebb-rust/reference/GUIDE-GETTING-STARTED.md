@@ -110,6 +110,35 @@ The stock/MFC importer is a separate read-only source import into the current
 Rust schema. It does not provide cross-version Rust database migration or carry
 unfinished downloads. See [the import guide](GUIDE-PROFILE-IMPORT.md).
 
+## Logging And Listener Troubleshooting
+
+Regular builds log INFO and above to the console, bounded REST buffer and daily
+JSON Lines under `<profile>/logs`. The logger retains the newest eight files;
+file-output failure warns and leaves console/API logging available. `RUST_LOG`
+controls the tracing filter, for example `warn` or `info,emulebb_core=debug`.
+The API buffer retains 2,000 entries and truncates rendered messages at 4 KiB;
+clearing that buffer does not delete retained files.
+
+On Windows, REST socket error 10013 means access denied. It can involve reserved
+ports, exclusive socket ownership or security software. Inspect the REST address
+in the error separately from your P2P interface. For the default port:
+
+```powershell
+netsh interface ipv4 show excludedportrange protocol=tcp
+Get-NetTCPConnection -LocalPort 4711 -ErrorAction SilentlyContinue
+```
+
+Choose an available loopback port if needed. A temporary
+`--rest-bind-addr 127.0.0.1:14711` changes only that run; browse to the matching
+address. To retain it, stop the daemon and update `[rest].bindAddr` in the private
+bootstrap TOML. This does not change eD2K/Kad ports. For ambiguous P2P routing,
+`Get-NetAdapter | Select-Object Name, Status` identifies Windows interface names;
+use the intended name with `--p2p-bind-interface`, then persist through Settings.
+
+The browser console is served at the REST origin root, with history routes such
+as `/transfers` and static `/assets`. Reverse-proxy subpath mounting is not part
+of the current deployment contract. Keep the complete packaged asset directory.
+
 ## Common Problems
 
 | Symptom | First check |
