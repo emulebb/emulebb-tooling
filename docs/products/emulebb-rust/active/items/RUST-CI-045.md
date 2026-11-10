@@ -64,8 +64,11 @@ do not establish that every hosted runner route has recovered.
 A single parent-controlled replacement of the stalled hosted runner is
 separate from deploying the permanent hardening. Attempt 2 retained the same
 source and workflow SHA, completed dependency setup in 11 seconds and retained
-the successful attempt-1 producers. This does not mean the new helper ran or
-that publication has completed.
+the successful attempt-1 producers. All 31 jobs subsequently passed and the
+81-asset prerelease was published. Independent verification matched the signed
+subjects, metadata and OCI identities to source `78f74541`. Large archives were
+not downloaded or executed locally, and Android device/runtime qualification
+remains untested. The recovery did not execute the new provisioning helper.
 
 Keep original and recovery attempts distinct. Earlier producer attempts are
 acceptable only under the existing same-repository, same-run, same-workflow
