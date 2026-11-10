@@ -13,7 +13,7 @@ created: 2026-11-10
 source: Operator-approved public-presence refresh
 ---
 
-> GitHub issue [#305](https://github.com/emulebb/emulebb-rust/issues/305) and Project #3 own workflow state. This item owns the durable specification.
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb-rust/issues/305. GitHub Project #3 owns placement; this document owns the durable specification.
 
 # RUST-CI-046 - Complete coordinated public presence and release download guidance
 
