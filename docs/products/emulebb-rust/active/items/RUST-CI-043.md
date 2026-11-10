@@ -6,7 +6,7 @@ phase: Phase 0
 github_issue: https://github.com/emulebb/emulebb-rust/issues/297
 title: Review configuration authority and REST contract coherence
 status: IN_PROGRESS
-priority: Major
+priority: Critical
 category: ci
 labels: [rust, audit]
 milestone: rust-v0.1.0-beta.3
@@ -20,66 +20,58 @@ source: Operator-directed configuration and persistence architecture review
 
 ## Outcome
 
-Review configuration ownership, key/value semantics, and the first-party REST contract before Beta 3. Produce a source-backed inventory and bounded implementation assignments; this item does not itself implement broad API or persistence changes.
+This is the highest-priority Client review, ahead of normal Client work. Produce a complete source-backed target specification and bounded implementation queue. Authorization is review and specification only; review completion and implementation completion are separate outcomes.
 
 ## Operator direction
 
-- Keep TOML small and stable: only the bootstrap configuration needed to start and locate the profile/services.
+- Keep TOML strictly process/profile/control-service bootstrap: listener, authentication and necessary bootstrap paths. Restart requirements alone do not justify placing a product setting in TOML.
 - SQLite owns mutable product settings and durable client state. Runtime-only sockets, timers, and queues remain in memory; downloaded payloads and diagnostic artifacts remain files.
 - `server.met` and `nodes.dat` are read-only compatibility import inputs. The Rust client must never create, refresh, replace, or write them back.
-- Avoid unnecessary configuration breakage on updates. Review the existing unstable-beta policy explicitly rather than silently adding aliases, migrations, or compatibility branches.
+- Keep generated identity in durable state and implementation constants outside public settings. Use operator-facing domains and mechanical casing: camelCase JSON, snake_case TOML/SQL/Rust and kebab-case URL segments.
+- Preserve the exact-schema/fresh-profile policy and old profiles for explicit rollback. This review does not authorize profile evolution work.
 - Beta 3 publication and candidate certification remain on hold. Workspace and platform delivery continues in parallel.
 
 ## Acceptance criteria
 
-- [ ] Inventory each bootstrap option and mutable setting: owner, storage, key/name, type, unit, default, validation, secret status, precedence, and restart behavior.
-- [ ] Compare current files and behavior with the TOML/bootstrap and SQLite target; identify duplicate authorities and stale docs, including an explicit current-versus-target matrix.
-- [ ] Trace settings through CLI, daemon, repository, REST DTOs, OpenAPI, validators, embedded WebUI, and automation consumers. Review route/resource names, methods, status/error shapes, pagination, nullability, and authentication.
-- [ ] Propose one canonical setting definition/authority per value and clear boundaries for stable bootstrap configuration versus evolving REST and DB contracts.
-- [ ] Define meaningful consistency checks and concrete upgrade examples. Any change to compatibility or fresh-profile policy is a separate, reviewable parent decision.
-- [ ] Route findings to existing issues first; create independent implementation slices only for uncovered work, with file reservations and Windows/Linux plus architecture-sensitive acceptance where relevant.
-- [ ] Reconcile the durable specification and owning product references after review. Do not claim implementation is complete because a review document exists.
+- [ ] Inventory every target setting: domain, canonical name, owner, storage, type, unit, default, validation, secret handling, public visibility and application/restart behavior.
+- [ ] Trace CLI/bootstrap, typed definitions, persistence, runtime consumers, REST, OpenAPI and SPA to each actual authority.
+- [ ] Select and justify the settings representation using validation, atomicity, maintainability and query needs; exclude unrelated database redesign.
+- [ ] Specify one domain-grouped GET/atomic PATCH resource; keep collections, runtime status and actions in dedicated resources.
+- [ ] Define exact routes, payloads, omission/null/reset semantics, errors, authentication, secret exclusion and saved/effective/restart state.
+- [ ] Require complete validation before persistence, one transaction, no runtime change after failed persistence and explicit post-commit application outcomes.
+- [ ] Define fresh-profile, parsing, unknown-field, validation, atomicity, persistence-failure, restart, secret and API/OpenAPI/SPA consistency tests.
+- [ ] Define Windows/Linux TCP/UDP binding, configured-port and advertisement checks using synthetic disposable profiles.
+- [ ] Produce dependency-ordered implementation slices with existing issue ownership, acceptance and file reservations.
+- [ ] Reconcile forward API/design references and submit the target for parent review. No implementation is claimed by this specification.
+
+Target documentation and examples contain no historical values, comparison tables, aliases, semantic mappings, shims or compatibility mechanisms.
+
+## Recommended Listener Defaults
+
+These values belong to the proposed target. This review does not change a running client, current OpenAPI or current user instructions.
+
+| Listener | Target default |
+| --- | --- |
+| REST/WebUI TCP | `127.0.0.1:20017` |
+| P2P TCP | `20019` |
+| P2P UDP | `20020` |
+
+Ports are configurable. Higher numbers provide no security benefit. REST stays authenticated and loopback-bound by default. Specify one coherent P2P UDP owner from receive/send, NAT and advertisement paths; another public UDP listener needs a demonstrated protocol requirement.
 
 ## Existing owners and boundaries
 
 - RUST-BUG-156 / #223 owns duplicate ED2K server settings authority.
 - RUST-FEAT-062 / #233 owns Kad SQLite persistence and the remaining `nodes.dat` write paths; do not duplicate it.
-- RUST-FEAT-063 / #234 owns explicit semantic export and fresh-target import,
-  not automatic database upgrades. Review it before creating continuity work.
+- RUST-BUG-184 / #299 owns atomic settings persistence and ordered runtime publication. Do not commission a second atomicity implementation.
 - The sibling DB-schema review covers physical/logical schema, query efficiency, and evolution. Coordinate shared contract findings through the parent.
 - Scope is Rust client/daemon and its first-party REST/SPA, not rewriting stock MFC or upstream server fixtures.
 
-Priority: Major. Client/Phase 0 review for Beta 3; release remains held.
+Priority: Critical, first Client/Phase 0 review. Beta3 release remains held.
 
-## Initial Source Review
+## Review Evidence Boundary
 
-Reviewed Rust `edc59a003fff873e26d2c720bf9ca06f4b640871`. Bootstrap TOML already
-contains a small REST startup block; mutable application settings are stored
-in SQLite. This review must reconcile the existing implementation with the
-target, rather than introduce a second configuration file.
-
-The source-traced direct-core update ordering and per-section transaction risk
-have one implementation owner: [RUST-BUG-184](RUST-BUG-184.md),
-[issue #299](https://github.com/emulebb/emulebb-rust/issues/299). Coordinate it
-with RUST-CI-044; do not commission separate API and DB fixes. Runtime proof is
-still required. REST middleware rejects invalid numeric core settings before
-the handler, so the direct-core example is not an HTTP partial-update witness.
-Reproduce accepted-request storage failures through the real router. Review
-work remains in progress; no behavior change is claimed.
-
-The first pass traced 105 settings leaves against the backend surface registry,
-OpenAPI, TypeScript types, and UI controls. Four TypeScript fields and seven
-normal/advanced controls have candidate omissions; eleven other settings are
-intentionally not user-facing. Verify the intended user surface before filling
-gaps. Core and ED2K rate/source/connection controls need runtime-owner tracing
-before removing duplicate-looking fields. This is separate from BUG-156's
-already-owned server settings correction.
-
-Top-level TOML rejects unknown fields, while the nested REST bootstrap type
-does not declare the same rejection. Review typo handling and future extension
-semantics explicitly; an ignored key is not a supported compatibility alias.
-
-Generated static inventory and evidence are retained below
-`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/config-api-review/` in `review.md`,
-`settings-inventory.json`, and `settings-inventory.csv`. Static extraction does
-not prove runtime validators, request behavior, or end-to-end API coherence.
+Trace the exact selected source and proposed atomic-settings work independently.
+Static extraction is not executed validation, a profile read or a completed
+implementation. Do not inspect operator profiles or run network/soak work for
+this specification. Meaningful implementation verification uses synthetic
+disposable profiles through the supported harness after parent allocation.
