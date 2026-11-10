@@ -94,24 +94,6 @@ Browser `EventSource` does not provide a custom-header parameter; never solve
 that by moving the secret into the URL. Follow `Last-Event-ID` and `sync.reset`
 semantics: re-baseline through `GET /transfers` after a reset.
 
-## Retired Upload-Queue Fields
-
-Older automation may still submit these removed `ed2k.uploadQueue` fields.
-Update the request shape deliberately; this table is not a database migration
-or alias layer. Unknown old fields are rejected.
-
-| Removed field | Current owner |
-| --- | --- |
-| `baseSlots` | `core.baseUploadSlots` |
-| `elasticPercent` | `core.uploadSlotElasticPercent` |
-| `uploadLimitBytesPerSec` | `core.uploadLimitKiBps` |
-| `elasticUnderfillBytesPerSec` | `core.uploadClientDataRate` |
-| `waitingCapacity` | `core.queueSize` |
-
-The two current rate fields use KiB/s rather than the old bytes/s units. Follow
-the current settings schema and validation; do not reuse numeric values without
-the required unit conversion.
-
 ## Report Problems Safely
 
 Include the exact application version/source, contract version, operation and

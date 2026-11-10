@@ -6,7 +6,7 @@ phase: Phase 0
 github_issue: https://github.com/emulebb/emulebb-rust/issues/305
 title: Complete coordinated public presence and release download guidance
 status: IN_PROGRESS
-priority: Minor
+priority: Major
 category: ci
 labels: []
 milestone: post-beta-polish
@@ -33,8 +33,10 @@ long soak remain on hold; this communication work does not change product gates.
 
 - Tooling owns canonical downloads/platform, getting-started, API-consumer and
   contributor guides, navigation, shared public-presence contract and generators.
-- Rust owns a concise README and contributor entry, plus future grouped release
-  download tables generated from actual candidate inventory.
+- Rust owns a concise, current-facing README with a table of contents, restrained
+  glyphs and clear user/developer routes. Keep release history, import history and
+  retired-field migration narratives out of public entry copy. Future grouped
+  release download tables come from actual candidate inventory.
 - Existing Pages and organization-profile repositories consume the shared
   contract through their existing deployment workflows. Use managed optional
   topology and OUTPUT-only staging; [Build #30](https://github.com/emulebb/emulebb-build/issues/30)
@@ -67,6 +69,9 @@ current-head 100k-file results, VPN leak safety or long-soak reliability.
       monitored sharing and explicit fresh-profile/rollback guidance with source.
 - [ ] Update website, organization profile and Rust README consistently, keeping
       translations, useful inbound anchors and the secondary MFC route.
+- [ ] Keep public entry copy current and forward-looking. Give the Rust README a
+      table of contents and restrained glyphs; omit historical beta, import and
+      retired-upload-field migration stories from entry pages and the API guide.
 - [ ] Integrate approved branding with narrowly scoped policy exceptions and
       verify desktop/mobile layouts, keyboard access and table overflow.
 - [ ] Generate future release-note tables from actual candidate assets, container
