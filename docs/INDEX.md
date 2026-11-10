@@ -6,8 +6,8 @@
     <h2>Active eD2K/Kad beta, led by CI-gated nightlies.</h2>
     <p>
       Choose the newest dated nightly prerelease from GitHub Releases.
-      Tested for months on live eD2K/Kad networks. Beta 3 is expected after a
-      few more weeks of implementation and stabilization.
+      Control the eD2K/Kad daemon from its browser console or REST API.
+      Beta 3 is the next development target, without a release date.
     </p>
     <p>
       The maintained Windows 0.7.x client remains available for diagnostics,
@@ -34,16 +34,17 @@ server; server changes stay minimal, generic, and upstreamable. See the
 - **Current testing:** [choose the newest dated CI-gated nightly build](https://github.com/emulebb/emulebb-rust/releases).
 - **Product scope:** read the [eMuleBB Rust product section](products/emulebb-rust/README.md)
   and [release scope](products/emulebb-rust/RELEASE-SCOPE.md).
-- **First launch:** follow the repository
-  [README](https://github.com/emulebb/emulebb-rust#first-launch) for package,
-  profile, authentication, and browser-console startup.
+- **Use:** choose [downloads and platforms](products/emulebb-rust/reference/GUIDE-DOWNLOADS-PLATFORMS.md),
+  then follow [getting started](products/emulebb-rust/reference/GUIDE-GETTING-STARTED.md).
+- **Develop:** start with [API consumers](products/emulebb-rust/api/GUIDE-API-CONSUMERS.md)
+  or the [contributor journey](products/emulebb-rust/reference/GUIDE-CONTRIBUTING.md).
 - **Roadmap:** follow the [active Rust backlog](products/emulebb-rust/active/INDEX.md)
   and [Beta 3 certification item](products/emulebb-rust/active/items/RUST-CI-009.md).
 
-The beta API, configuration, and persistence schemas remain compatibility-
-unstable. Breaking changes are allowed when all owned Rust surfaces move
-together; this compatibility warning does not change the product's active-beta
-status.
+The beta API and database remain compatibility-unstable; incompatible schemas
+require a fresh profile, keeping the old profile/payloads for explicit rollback.
+Minimal bootstrap TOML has a separate stability goal. See the
+[persistence policy](products/emulebb-rust/reference/PERSISTENCE-POLICY.md).
 
 ## Maintained Windows Client
 

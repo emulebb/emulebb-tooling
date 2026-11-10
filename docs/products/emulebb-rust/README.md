@@ -1,13 +1,33 @@
 # eMuleBB Rust
 
-**Active beta, led by CI-gated nightly builds.** Repeatedly tested on live
-eD2K/Kad networks. Beta 3 is expected after a few more weeks of implementation
-and stabilization.
+eMuleBB Rust is an IPv4 eD2K/Kad client for Windows, Linux and macOS, operated
+through a browser console and REST API. Search the networks, manage transfers
+and share monitored folder trees from one headless daemon.
+
+**Active beta, led by CI-gated nightly builds.** Beta 3 is the next development
+target, without a release date. Its publication hold remains in force.
+
+## Use eMuleBB Rust
+
+- [Downloads and platforms](reference/GUIDE-DOWNLOADS-PLATFORMS.md): choose a
+  native package, container or experimental Android developer artifact and
+  understand requirements, checksums and evidence.
+- [Getting started](reference/GUIDE-GETTING-STARTED.md): first launch, private
+  API-key login, network setup, downloads, sharing and safe update/rollback.
+
+## Develop With eMuleBB Rust
+
+- [API consumers](api/GUIDE-API-CONSUMERS.md): make an authenticated request and
+  follow the canonical OpenAPI contract.
+- [Contributors](reference/GUIDE-CONTRIBUTING.md): find the owning repository,
+  set up managed workspace branches and run supported checks.
 
 Use the [GitHub Releases page](https://github.com/emulebb/emulebb-rust/releases)
 and choose the newest dated nightly prerelease for current public testing.
 Formal beta tags remain immutable release history, not the recommended download
 path.
+
+## Product And Engineering References
 
 eMuleBB Rust, its WebUI, product documentation, and release notes are
 English-only. The organization website may localize its homepage and FAQ, but

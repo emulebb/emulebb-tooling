@@ -1,0 +1,131 @@
+# Getting Started
+
+eMuleBB Rust is a headless IPv4 eD2K/Kad client with a browser console and REST
+API. Start with a [matching nightly package](GUIDE-DOWNLOADS-PLATFORMS.md), verify
+its checksum, and keep the complete extracted layout, including `webui`. No Rust
+toolchain is needed to use the native packages.
+
+## First Launch
+
+On Windows, run `emulebb-rust.exe`; for an extracted Linux native archive, run
+`./emulebb-rust` from its directory. DEB users can run `emulebb-rust`. On macOS,
+launch the copied app. Container and Android users must follow their separate
+[package notes](GUIDE-DOWNLOADS-PLATFORMS.md).
+
+Without `--profile`, the first native launch creates a private default profile
+and prints its generated API key once. Open `http://127.0.0.1:4711/` and enter
+that key. Keep it private. Existing profiles do not generate or print a new key
+on every run; macOS GUI/container users may need the private bootstrap file.
+
+| System | Default profile |
+| --- | --- |
+| Windows | `%LOCALAPPDATA%\emulebb-rust` |
+| Linux | `$XDG_CONFIG_HOME/emulebb-rust`, falling back to `~/.config/emulebb-rust` |
+| macOS | `~/Library/Application Support/emulebb-rust` |
+| Official container | `/config/emulebb-rust` |
+
+An explicit `--profile <directory>` normally requires an existing
+`emulebb-rust-settings.toml`; it is not a way to repair an incompatible database.
+The one-shot [stock/MFC importer](GUIDE-PROFILE-IMPORT.md) has its own explicit
+target-creation behavior.
+
+**Loopback REST does not mean offline P2P.** Startup may fetch trusted discovery
+inputs and start configured networking. Use a deliberately isolated configuration
+and the supported harness when testing offline; a first launch is not that harness.
+
+## Profile And Control-Plane Settings
+
+The minimal bootstrap TOML owns REST binding/authentication and optional asset
+location. This schematic example contains a placeholder, not a working secret:
+
+```toml
+[rest]
+bindAddr = "127.0.0.1:4711"
+apiKey = ""
+```
+
+The blank key above is deliberately invalid: use the generated key or a privately
+generated replacement. Startup rejects
+blank, documented placeholder, whitespace-padded, non-printable and shorter-than-32
+character keys. Generated keys are 32-character random UUID hex. Unix profile and
+bootstrap permissions are private (`0700`/`0600`); permissive existing bootstrap
+files are rejected with a remediation message. Never commit this file.
+
+Mutable client/network settings live in SQLite and are exposed by Settings and
+the [API](../api/GUIDE-API-CONSUMERS.md). Do not add a second set of runtime keys
+to bootstrap TOML. Keep the REST listener on loopback for local use. The daemon
+serves plain HTTP; a remote deployment needs a trusted TLS reverse proxy and
+independent access restrictions. `webui` normally sits beside the executable;
+optional `[rest].webRootDir` resolves relative to the profile when not absolute.
+
+## Connect And Check Reachability
+
+Review **Network**, **Servers** and **Kad** in the console. Check your intended
+P2P interface and incoming/category directories before starting transfers.
+First-run listener defaults are eD2K TCP 4662, Kad UDP 4672 and REST TCP 4711.
+Router/firewall/container mappings must match your chosen settings; High ID is
+not guaranteed behind every NAT, router or VPN.
+
+If route detection is ambiguous, select the intended interface explicitly for
+that run with `--p2p-bind-interface "INTERFACE_NAME"`, then save the network
+setting through the console. Do not bypass an unresolved bind by exposing REST
+or selecting an arbitrary interface. VPN use is optional and does not itself
+establish native leak-safety proof.
+
+Empty enabled discovery lists may trigger trusted bootstrap downloads. Bootstrap
+failure leaves the console available for manual recovery. The policy target is
+read-only `server.met`/`nodes.dat` import, but removal of remaining `nodes.dat`
+write-back is still tracked by [RUST-FEAT-062](../active/items/RUST-FEAT-062.md).
+Do not treat bootstrap file formats as a second mutable-settings authority.
+
+## Search, Download And Share
+
+After connecting, search for a synthetic name such as **Sample File**, inspect
+the result and choose its download action. Watch **Transfers** for sources,
+progress and errors. An empty search alone does not mean installation failed;
+availability, server/Kad state, peers, queues and reachability affect results.
+Only download content you are entitled to access.
+
+Add an intentionally chosen folder under **Shared Directories**, review ignore
+rules, and watch scan/hash progress in **Shared Files**. Each shared root is a
+recursive, monitored tree. There are no single-file sharing-management controls
+or non-recursive mode. Use a dedicated sample directory rather than your home
+directory; review the files it contains before sharing.
+
+## Shutdown, Updates And Rollback
+
+Stop gracefully using the console/API shutdown operation or the process/service's
+normal stop. Preserve the stopped profile, payloads and old binary before an
+update. Inspect the selected nightly's schema warning and source revision.
+
+Minimal TOML bootstrap settings have a stability goal separate from the beta's
+explicitly unstable API/database. An incompatible schema is visibly rejected
+and requires an **entirely fresh profile**. The client does not migrate, reset,
+delete, move or partially repair the old profile. Keep it and its payloads intact
+for explicit rollback with the matching old binary. Do not edit schema markers,
+delete the database, use internal harness migrations or promise automatic
+continuation of unfinished transfers in a new incompatible profile.
+
+The stock/MFC importer is a separate read-only source import into the current
+Rust schema. It does not provide cross-version Rust database migration or carry
+unfinished downloads. See [the import guide](GUIDE-PROFILE-IMPORT.md).
+
+## Common Problems
+
+| Symptom | First check |
+| --- | --- |
+| Executable will not start | CPU/package match and the selected build's host dependencies |
+| Console assets missing | Complete package layout, adjacent `webui`, configured asset root |
+| API returns 401 | Exact private `X-API-Key`; do not substitute Basic/Bearer authentication |
+| REST bind fails | Occupied/reserved port and configured loopback listener, separately from P2P |
+| Default route ambiguous | Explicit intended P2P interface, then persist through Settings |
+| Schema rejected | Preserve the old profile; select an entirely fresh profile for the new binary |
+
+Regular logs are available in the console, bounded API log buffer and retained
+profile log files. Diagnostic bundles are **private operator evidence** and can
+contain the exact API key, paths, identifiers and logs. Do not attach them
+unreviewed to a public issue. Report suspected vulnerabilities through the
+[private security route](https://github.com/emulebb/emulebb-rust/security/advisories/new).
+
+Next: [API consumers](../api/GUIDE-API-CONSUMERS.md),
+[contributors](GUIDE-CONTRIBUTING.md), or [release scope](../RELEASE-SCOPE.md).
