@@ -146,6 +146,44 @@ and integrated. On resume, verify its registration, branch, origin, and Git
 worktree identity before editing. A stale record is a diagnostic, not a cleanup
 instruction.
 
+### Retire One Integrated Companion
+
+When a companion repository is integrated but another repository in the same
+workstream is still active, the parent can retire just the completed checkout.
+Run from the workspace root or the canonical Builder, outside the workstream
+being changed:
+
+```powershell
+python -m emule_workspace workstream remove-repo sample-fix --repo emulebb-build --owner parent-agent
+```
+
+This operation takes the normal heavyweight workspace lock, then the shared
+lifecycle and Git guards. It verifies the assigned owner, exact registered
+checkout, clean tracked/untracked/ignored state, no open pull request, and
+integration into fetched `origin/main` by ancestry or patch equivalence. There
+is no abandonment option. It refuses the last repository; use whole-workstream
+removal when the entire assignment is finished.
+
+Only the selected worktree is removed, without force. Its branch and history,
+the other checkouts, and their registration and coordination fields remain.
+An active companion may retain dirty or unpublished work; this operation does
+not validate or discard that work.
+
+The atomic registration records a retirement transition before Git removal.
+An interrupted transition blocks source selection. Repeat the **same command**,
+with the same repository and owner, from outside the workstream to resume.
+It verifies the retained branch and either the original checkout or its
+completed Git removal before publishing the remaining registration. A changed
+branch, conflicting journal, redirected path, or missing checkout with remaining
+Git administration is refused for parent inspection. Do not hand-edit the
+registration, force removal, or prune records to make a retry pass.
+
+After completion, a retired repository falls back through the existing canonical
+topology. Before the next validation or prepared-image launch, the parent must
+freeze and record the actual canonical source revision now consumed. Retirement
+does not equate the old feature SHA with a rebase-merged SHA or relax an image's
+exact source requirement.
+
 After verifying merged work and remote branch disposition, the parent removes
 the completed workstream:
 
