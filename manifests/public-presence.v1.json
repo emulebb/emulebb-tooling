@@ -91,7 +91,7 @@
       "name": "aMule upstream",
       "url": "https://github.com/amule-org/amule",
       "tracking_ref": "master",
-      "role": "Actively developed upstream client used as the moving interoperability and parity reference."
+      "role": "Actively developed upstream client used for analysis and future interoperability."
     },
     {
       "key": "emule-stock",
