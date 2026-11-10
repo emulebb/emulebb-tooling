@@ -13,7 +13,7 @@ created: 2026-11-10
 source: Operator-approved application identity and packaging polish
 ---
 
-> GitHub issue [#306](https://github.com/emulebb/emulebb-rust/issues/306) and Project #3 own workflow state. This item owns the durable specification.
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb-rust/issues/306. GitHub Project #3 owns placement; this document owns the durable specification.
 
 # RUST-CI-047 - Unify application icons, native metadata and build identity
 
