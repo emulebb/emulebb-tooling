@@ -3,6 +3,11 @@
 `REST-API-OPENAPI.yaml` here is the source of truth for the forward
 emulebb-rust `/api/v1` contract.
 
+Start with the [API-consumer guide](GUIDE-API-CONSUMERS.md) for a private-key
+request, response handling, search and event-stream examples. Download the
+[raw canonical OpenAPI](https://raw.githubusercontent.com/emulebb/emulebb-tooling/main/docs/products/emulebb-rust/api/REST-API-OPENAPI.yaml)
+when configuring tooling; the YAML here remains the owning contract.
+
 This is not a shared emulebb-mfc/Rust superset. The frozen emulebb-mfc contract
 lives separately at
 `EMULEBB_WORKSPACE_ROOT\repos\emulebb-tooling\docs\products\emulebb-mfc\api\REST-API-OPENAPI.yaml`.

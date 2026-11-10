@@ -74,6 +74,10 @@ nav:
       - Roadmap Board (GitHub): https://github.com/orgs/emulebb/projects/3
   - eMuleBB Rust:
       - Product Section: products/emulebb-rust/README.md
+      - Downloads And Platforms: products/emulebb-rust/reference/GUIDE-DOWNLOADS-PLATFORMS.md
+      - Getting Started: products/emulebb-rust/reference/GUIDE-GETTING-STARTED.md
+      - API Consumers: products/emulebb-rust/api/GUIDE-API-CONSUMERS.md
+      - Contributors: products/emulebb-rust/reference/GUIDE-CONTRIBUTING.md
       - Agent Policy: products/emulebb-rust/reference/AGENT-POLICY.md
       - API And UI Policy: products/emulebb-rust/reference/API-UI-POLICY.md
       - Persistence Policy: products/emulebb-rust/reference/PERSISTENCE-POLICY.md

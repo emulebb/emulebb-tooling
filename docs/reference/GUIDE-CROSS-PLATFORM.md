@@ -1,7 +1,14 @@
 # Running eMuleBB On macOS And Linux
 
-This guide explains how to run or use eMuleBB on macOS and Linux. For the normal
-Windows desktop path, start with the [Setup Guide](GUIDE-SETUP.md) instead.
+For the current Rust beta, use the native Windows/Linux/macOS
+[downloads and platforms guide](../products/emulebb-rust/reference/GUIDE-DOWNLOADS-PLATFORMS.md)
+and [first-launch journey](../products/emulebb-rust/reference/GUIDE-GETTING-STARTED.md).
+It includes Linux musl, container and experimental Android distinctions and
+dated proof limits. You do not need a Windows VM for the native Rust packages.
+
+The remaining VM/Wine/remote-Windows options document the maintained MFC
+desktop client. For its normal Windows path, start with the
+[Setup Guide](GUIDE-SETUP.md). Existing maintenance headings are retained.
 
 ## Why The MFC Desktop Client Has No Native macOS Or Linux Build
 
@@ -145,12 +152,11 @@ interoperability only and is never a current parity gate.
 
 ## Native Cross-Platform Future: emulebb-rust
 
-`emulebb-rust` is a separate Rust-native eD2K/Kad client with a headless daemon,
-local indexing, its own `/api/v1` contract, and an embedded SPA WebUI. It is not
-a line-by-line MFC port or a shared-contract backend for retired MFC controller
-forks. Windows, Linux, and macOS CI build artifacts exist, but platform
-runtime and public-network transfer claims require their own proof. It is not
-yet the stable MFC package replacement.
+The historical heading above is retained for inbound links. `emulebb-rust` is
+now an active beta with native Windows/Linux/macOS packages, its own REST API
+and a browser console. It is separate from the maintained MFC client. Follow the
+[platform guide](../products/emulebb-rust/reference/GUIDE-DOWNLOADS-PLATFORMS.md)
+for published packages and dated native smoke versus deeper network evidence.
 
 For the authoritative capability boundary, see the
 [eMuleBB Rust release scope](../products/emulebb-rust/RELEASE-SCOPE.md).

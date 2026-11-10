@@ -9,7 +9,11 @@ for the repeatable end-to-end operating path.
 
 ## Contributor Model
 
-Routine work happens on `main` in the relevant repo. App source edits belong in
+Routine protected-main work uses parent-coordinated topic branches and managed
+isolated checkouts. Start Rust work with the
+[Rust contributor guide](../products/emulebb-rust/reference/GUIDE-CONTRIBUTING.md)
+and follow [Parallel Workstreams](GUIDE-PARALLEL-WORKSTREAMS.md).
+The MFC maintenance app source belongs in
 `EMULEBB_WORKSPACE_ROOT\workspaces\workspace\app\emulebb-main`; the canonical
 `EMULEBB_WORKSPACE_ROOT\repos\emulebb` checkout is the branch-store anchor, not the
 normal edit location.
@@ -92,8 +96,12 @@ need to be published as formatted HTML:
    workflow builds the same MkDocs site from `main` and deploys the HTML to
    GitHub Pages.
 
-Generated MkDocs output belongs under `.local\mkdocs-site` and must not be
-committed.
+Generated MkDocs output belongs below inherited
+`EMULEBB_WORKSPACE_OUTPUT_ROOT`, never in a source `.local` directory. An
+explicit strict-build destination can use
+`python -m mkdocs build --strict --site-dir "$env:EMULEBB_WORKSPACE_OUTPUT_ROOT\reports\docs\site"`
+when the parent has allocated that destination; normal publishing checks own
+their documented output. Do not run competing builds into the same site tree.
 
 ## Docs-Only Checklist
 
