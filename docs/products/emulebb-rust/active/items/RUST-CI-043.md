@@ -68,7 +68,22 @@ Ports are configurable. Higher numbers provide no security benefit. REST stays a
 
 Priority: Critical, first Client/Phase 0 review. Beta3 release remains held.
 
-## Review Evidence Boundary
+## Target Review Deliverables
+
+- [Target specification](../../design/SETTINGS-TARGET.md): ownership, structured
+  domain storage decision, exact proposed GET/atomic PATCH contract, shared UDP
+  ownership, implementation slices and required verification.
+- [Target inventory](../../design/SETTINGS-INVENTORY.json): typed target product
+  controls, private bootstrap, internal policy/state classification and source
+  evidence.
+
+These deliverables are submitted for parent review. Acceptance remains open
+until that review resolves the target decisions; implementation and executed
+qualification are not claimed. Source-only inspection used Rust main
+`15020b7663a6771bc2d6e8282416ea36a7d7c163`, with the proposed atomic-settings
+work considered independently.
+
+## Source Inspection Boundary
 
 Trace the exact selected source and proposed atomic-settings work independently.
 Static extraction is not executed validation, a profile read or a completed
