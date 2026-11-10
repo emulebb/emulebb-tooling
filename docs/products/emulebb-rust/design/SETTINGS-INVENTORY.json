@@ -1,0 +1,1969 @@
+{
+  "schema": "emulebb.settings-target-inventory/1",
+  "status": "PROPOSED_REVIEW_ONLY_NOT_IMPLEMENTED",
+  "ownerIssue": "https://github.com/emulebb/emulebb-rust/issues/297",
+  "reviewSourceRevision": "15020b7663a6771bc2d6e8282416ea36a7d7c163",
+  "defaultStatus": "All values are recommended target defaults; adoption requires parent review and implementation qualification.",
+  "naming": "Canonical names use snake_case; JSON paths differ only by mechanical camelCase. SQL columns and TOML/Rust names use snake_case. No semantic translation is defined.",
+  "commonContract": {
+    "definitionOwner": "emulebb-settings",
+    "persistenceOwner": "emulebb-metadata",
+    "productStorage": "five closed typed domain documents in one SQLite database",
+    "publicSettingsResource": "/api/v1/settings",
+    "snapshotRead": "complete domains plus one revision from one DB snapshot",
+    "validation": "closed typed whole-candidate validation; all JSON integers within exact interoperable range; no coercion",
+    "secretHandling": "credentials and generated private keys excluded from settings DTOs, error values, logs and diagnostics",
+    "omission": "leave saved leaf unchanged",
+    "null": "only nullable leaves clear their override",
+    "reset": "PATCH an explicit inventory default; no magic reset token",
+    "arrays": "replace the complete bounded leaf array",
+    "patchBodyMaximumBytes": 262144,
+    "serializedSnapshotMaximumBytes": 131072,
+    "application": "live fields publish as one logical runtime snapshot after commit; restart fields remain pending until restart"
+  },
+  "processInputs": [
+    {
+      "name": "--profile",
+      "canonicalName": "profile",
+      "owner": "emulebb-daemon::CLI",
+      "storage": "process invocation; not persisted as a product setting",
+      "type": "path",
+      "unit": "none",
+      "default": "platform-default profile directory",
+      "validation": "select one profile before bootstrap loading; validate access without changing another profile",
+      "secret": false,
+      "publicVisibility": "process bootstrap only",
+      "application": "process start"
+    },
+    {
+      "name": "--rest-bind-addr",
+      "canonicalName": "rest_bind_addr",
+      "owner": "emulebb-daemon::CLI",
+      "storage": "process invocation; overrides bootstrap without writing it",
+      "type": "ipv4-socket",
+      "unit": "address and port",
+      "default": null,
+      "validation": "same endpoint validation as rest.bind_addr; absent uses bootstrap/default",
+      "secret": false,
+      "publicVisibility": "process bootstrap only",
+      "application": "process start"
+    }
+  ],
+  "bootstrap": [
+    {
+      "path": "rest.bind_addr",
+      "domain": "rest",
+      "canonicalName": "rest.bind_addr",
+      "type": "ipv4-socket",
+      "unit": "address and port",
+      "default": "127.0.0.1:20017",
+      "validation": {
+        "format": "IPv4 socket address",
+        "portMinimum": 1,
+        "portMaximum": 65535,
+        "nonLoopback": "explicit authenticated operator configuration"
+      },
+      "owner": "emulebb-daemon::RestBootstrapSettings",
+      "storage": "toml",
+      "publicVisibility": "local bootstrap only; outside settings resource",
+      "secret": false,
+      "application": "process restart"
+    },
+    {
+      "path": "rest.api_key",
+      "domain": "rest",
+      "canonicalName": "rest.api_key",
+      "type": "string",
+      "unit": "ASCII bytes",
+      "default": {
+        "generation": "OS CSPRNG, 32 random bytes encoded as 64 hexadecimal characters; fresh bootstrap only"
+      },
+      "validation": {
+        "minimumLength": 32,
+        "maximumLength": 1024,
+        "allowed": "ASCII 0x21..0x7e; exact bytes",
+        "forbiddenCaseInsensitive": ["change-me", "changeme", "replace-me", "replace_with_32_or_more_random_characters"]
+      },
+      "owner": "emulebb-daemon::RestBootstrapSettings",
+      "storage": "private toml",
+      "publicVisibility": "never returned by settings/status/OpenAPI examples/diagnostics",
+      "secret": true,
+      "application": "process restart"
+    },
+    {
+      "path": "rest.web_root_dir",
+      "domain": "rest",
+      "canonicalName": "rest.web_root_dir",
+      "type": "path",
+      "unit": "none",
+      "default": null,
+      "validation": {
+        "nullable": true,
+        "format": "existing readable asset directory",
+        "relativeBase": "profile root",
+        "nullMeaning": "webui beside executable"
+      },
+      "owner": "emulebb-daemon::RestBootstrapSettings",
+      "storage": "toml",
+      "publicVisibility": "local bootstrap only; outside settings resource",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "process restart"
+    }
+  ],
+  "settings": [
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "normal",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "restart",
+      "domain": "network",
+      "path": "network.ed2kEnabled",
+      "canonicalName": "network.ed2k_enabled",
+      "type": "boolean",
+      "unit": "none",
+      "default": true,
+      "validation": {
+        "kind": "boolean"
+      },
+      "runtimeOwner": "emulebb-core::network_api"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "normal",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "restart",
+      "domain": "network",
+      "path": "network.kadEnabled",
+      "canonicalName": "network.kad_enabled",
+      "type": "boolean",
+      "unit": "none",
+      "default": true,
+      "validation": {
+        "kind": "boolean"
+      },
+      "runtimeOwner": "emulebb-core::network_api"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "normal",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "restart",
+      "domain": "network",
+      "path": "network.autoConnect",
+      "canonicalName": "network.auto_connect",
+      "type": "boolean",
+      "unit": "none",
+      "default": true,
+      "validation": {
+        "kind": "boolean"
+      },
+      "runtimeOwner": "emulebb-core::server_list"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "normal",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "restart",
+      "domain": "network",
+      "path": "network.p2p.bindIp",
+      "canonicalName": "network.p2p.bind_ip",
+      "type": "ipv4",
+      "unit": "none",
+      "default": null,
+      "validation": {
+        "kind": "ipv4",
+        "nullable": true,
+        "format": "unicast IPv4; when interface is set the address must belong to it",
+        "nullMeaning": "automatic address on the selected interface or unique default route"
+      },
+      "runtimeOwner": "emulebb-core::network_api"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "normal",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "restart",
+      "domain": "network",
+      "path": "network.p2p.bindInterface",
+      "canonicalName": "network.p2p.bind_interface",
+      "type": "string",
+      "unit": "none",
+      "default": null,
+      "validation": {
+        "kind": "string",
+        "nullable": true,
+        "maxUtf8Bytes": 256,
+        "nonEmpty": true,
+        "nullMeaning": "automatic unique default-route interface"
+      },
+      "runtimeOwner": "emulebb-core::network_api"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "normal",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "restart",
+      "domain": "network",
+      "path": "network.p2p.tcpPort",
+      "canonicalName": "network.p2p.tcp_port",
+      "type": "integer",
+      "unit": "port",
+      "default": 20019,
+      "validation": {
+        "kind": "integer",
+        "minimum": 1,
+        "maximum": 65535
+      },
+      "runtimeOwner": "emulebb-core::network_api"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "normal",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "restart",
+      "domain": "network",
+      "path": "network.p2p.udpPort",
+      "canonicalName": "network.p2p.udp_port",
+      "type": "integer",
+      "unit": "port",
+      "default": 20020,
+      "validation": {
+        "kind": "integer",
+        "minimum": 1,
+        "maximum": 65535
+      },
+      "runtimeOwner": "emulebb-core::network_api"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "normal",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "restart",
+      "domain": "network",
+      "path": "network.nickname",
+      "canonicalName": "network.nickname",
+      "type": "string",
+      "unit": "none",
+      "default": "eMule",
+      "validation": {
+        "kind": "string",
+        "minUtf8Bytes": 1,
+        "maxUtf8Bytes": 128,
+        "forbidden": "NUL and control characters"
+      },
+      "runtimeOwner": "emulebb-core::network_api"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "normal",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "live",
+      "domain": "network",
+      "path": "network.connections.maxConnections",
+      "canonicalName": "network.connections.max_connections",
+      "type": "integer",
+      "unit": "connections",
+      "default": 500,
+      "validation": {
+        "kind": "integer",
+        "minimum": 1,
+        "maximum": 2147483647
+      },
+      "runtimeOwner": "emulebb-core::core_settings"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "advanced",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "live",
+      "domain": "network",
+      "path": "network.connections.maxNewConnectionsPerFiveSeconds",
+      "canonicalName": "network.connections.max_new_connections_per_five_seconds",
+      "type": "integer",
+      "unit": "connections per five seconds",
+      "default": 50,
+      "validation": {
+        "kind": "integer",
+        "minimum": 1,
+        "maximum": 2147483647
+      },
+      "runtimeOwner": "emulebb-core::core_settings"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "advanced",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "restart",
+      "domain": "network",
+      "path": "network.connections.maxHalfOpenConnections",
+      "canonicalName": "network.connections.max_half_open_connections",
+      "type": "integer",
+      "unit": "connections",
+      "default": 50,
+      "validation": {
+        "kind": "integer",
+        "minimum": 1,
+        "maximum": 2147483647
+      },
+      "runtimeOwner": "emulebb-ed2k::Ed2kTransferRuntime"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "advanced",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "restart",
+      "domain": "network",
+      "path": "network.connections.connectTimeoutSeconds",
+      "canonicalName": "network.connections.connect_timeout_seconds",
+      "type": "integer",
+      "unit": "seconds",
+      "default": 30,
+      "validation": {
+        "kind": "integer",
+        "minimum": 1,
+        "maximum": 86400
+      },
+      "runtimeOwner": "emulebb-core::network_api"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "advanced",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "restart",
+      "domain": "network",
+      "path": "network.connections.callbackTimeoutSeconds",
+      "canonicalName": "network.connections.callback_timeout_seconds",
+      "type": "integer",
+      "unit": "seconds",
+      "default": 45,
+      "validation": {
+        "kind": "integer",
+        "minimum": 1,
+        "maximum": 86400
+      },
+      "runtimeOwner": "emulebb-core::network_api"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "normal",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "live",
+      "domain": "network",
+      "path": "network.servers.autoReconnect",
+      "canonicalName": "network.servers.auto_reconnect",
+      "type": "boolean",
+      "unit": "none",
+      "default": true,
+      "validation": {
+        "kind": "boolean"
+      },
+      "runtimeOwner": "emulebb-core::server_list"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "normal",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "live",
+      "domain": "network",
+      "path": "network.servers.safeConnect",
+      "canonicalName": "network.servers.safe_connect",
+      "type": "boolean",
+      "unit": "none",
+      "default": false,
+      "validation": {
+        "kind": "boolean"
+      },
+      "runtimeOwner": "emulebb-core::server_list"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "normal",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "live",
+      "domain": "network",
+      "path": "network.servers.usePriorities",
+      "canonicalName": "network.servers.use_priorities",
+      "type": "boolean",
+      "unit": "none",
+      "default": true,
+      "validation": {
+        "kind": "boolean"
+      },
+      "runtimeOwner": "emulebb-core::server_list"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "normal",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "live",
+      "domain": "network",
+      "path": "network.servers.staticOnly",
+      "canonicalName": "network.servers.static_only",
+      "type": "boolean",
+      "unit": "none",
+      "default": false,
+      "validation": {
+        "kind": "boolean"
+      },
+      "runtimeOwner": "emulebb-core::server_list"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "normal",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "live",
+      "domain": "network",
+      "path": "network.servers.acceptServerListUpdates",
+      "canonicalName": "network.servers.accept_server_list_updates",
+      "type": "boolean",
+      "unit": "none",
+      "default": false,
+      "validation": {
+        "kind": "boolean"
+      },
+      "runtimeOwner": "emulebb-core::server_list"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "advanced",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "restart",
+      "domain": "network",
+      "path": "network.servers.connectTimeoutSeconds",
+      "canonicalName": "network.servers.connect_timeout_seconds",
+      "type": "integer",
+      "unit": "seconds",
+      "default": 25,
+      "validation": {
+        "kind": "integer",
+        "minimum": 1,
+        "maximum": 86400
+      },
+      "runtimeOwner": "emulebb-core::server_list"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "advanced",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "restart",
+      "domain": "network",
+      "path": "network.servers.reconnectIntervalSeconds",
+      "canonicalName": "network.servers.reconnect_interval_seconds",
+      "type": "integer",
+      "unit": "seconds",
+      "default": 30,
+      "validation": {
+        "kind": "integer",
+        "minimum": 1,
+        "maximum": 86400
+      },
+      "runtimeOwner": "emulebb-core::server_list"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "advanced",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "restart",
+      "domain": "network",
+      "path": "network.servers.keepaliveMinutes",
+      "canonicalName": "network.servers.keepalive_minutes",
+      "type": "integer",
+      "unit": "whole minutes",
+      "default": 0,
+      "validation": {
+        "kind": "integer",
+        "minimum": 0,
+        "maximum": 1440
+      },
+      "runtimeOwner": "emulebb-core::server_list",
+      "zeroMeaning": "disabled"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "advanced",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "restart",
+      "domain": "network",
+      "path": "network.servers.sessionRotationSeconds",
+      "canonicalName": "network.servers.session_rotation_seconds",
+      "type": "integer",
+      "unit": "seconds",
+      "default": 0,
+      "validation": {
+        "kind": "integer",
+        "minimum": 0,
+        "maximum": 86400
+      },
+      "runtimeOwner": "emulebb-core::server_list",
+      "zeroMeaning": "disabled"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "advanced",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "live",
+      "domain": "network",
+      "path": "network.servers.deadServerRetries",
+      "canonicalName": "network.servers.dead_server_retries",
+      "type": "integer",
+      "unit": "failed attempts",
+      "default": 1,
+      "validation": {
+        "kind": "integer",
+        "minimum": 1,
+        "maximum": 10
+      },
+      "runtimeOwner": "emulebb-core::server_list"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "advanced",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "live",
+      "domain": "network",
+      "path": "network.hostnameLookup.enabled",
+      "canonicalName": "network.hostname_lookup.enabled",
+      "type": "boolean",
+      "unit": "none",
+      "default": false,
+      "validation": {
+        "kind": "boolean"
+      },
+      "runtimeOwner": "emulebb-core::hostname_lookup"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "advanced",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "live",
+      "domain": "network",
+      "path": "network.hostnameLookup.dnsServers",
+      "canonicalName": "network.hostname_lookup.dns_servers",
+      "type": "array<ipv4-socket>",
+      "unit": "endpoints",
+      "default": [],
+      "validation": {
+        "kind": "array",
+        "maxItems": 8,
+        "unique": true,
+        "item": "unicast IPv4:port, port 1..65535",
+        "emptyMeaning": "no configured resolver; enabling lookup requires a nonempty list"
+      },
+      "runtimeOwner": "emulebb-core::hostname_lookup"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "advanced",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "live",
+      "domain": "network",
+      "path": "network.hostnameLookup.cacheTtlSeconds",
+      "canonicalName": "network.hostname_lookup.cache_ttl_seconds",
+      "type": "integer",
+      "unit": "seconds",
+      "default": 86400,
+      "validation": {
+        "kind": "integer",
+        "minimum": 1,
+        "maximum": 604800
+      },
+      "runtimeOwner": "emulebb-core::hostname_lookup"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "normal",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "restart",
+      "domain": "network",
+      "path": "network.nat.enabled",
+      "canonicalName": "network.nat.enabled",
+      "type": "boolean",
+      "unit": "none",
+      "default": true,
+      "validation": {
+        "kind": "boolean"
+      },
+      "runtimeOwner": "emulebb-ed2k::NatManager"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "advanced",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "restart",
+      "domain": "network",
+      "path": "network.nat.requireInitialMapping",
+      "canonicalName": "network.nat.require_initial_mapping",
+      "type": "boolean",
+      "unit": "none",
+      "default": false,
+      "validation": {
+        "kind": "boolean"
+      },
+      "runtimeOwner": "emulebb-ed2k::NatManager"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "advanced",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "restart",
+      "domain": "network",
+      "path": "network.nat.backendOrder",
+      "canonicalName": "network.nat.backend_order",
+      "type": "array<enum>",
+      "unit": "ordered backends",
+      "default": [
+        "pcpNatpmp",
+        "upnp"
+      ],
+      "validation": {
+        "kind": "array",
+        "minItems": 1,
+        "maxItems": 2,
+        "unique": true,
+        "itemsEnum": [
+          "pcpNatpmp",
+          "upnp"
+        ]
+      },
+      "runtimeOwner": "emulebb-ed2k::NatManager"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "advanced",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "restart",
+      "domain": "network",
+      "path": "network.nat.pcpServerIp",
+      "canonicalName": "network.nat.pcp_server_ip",
+      "type": "ipv4",
+      "unit": "none",
+      "default": null,
+      "validation": {
+        "kind": "ipv4",
+        "nullable": true,
+        "format": "unicast IPv4",
+        "nullMeaning": "gateway discovery"
+      },
+      "runtimeOwner": "emulebb-ed2k::NatManager"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "advanced",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "restart",
+      "domain": "network",
+      "path": "network.nat.igdIp",
+      "canonicalName": "network.nat.igd_ip",
+      "type": "ipv4",
+      "unit": "none",
+      "default": null,
+      "validation": {
+        "kind": "ipv4",
+        "nullable": true,
+        "format": "unicast IPv4",
+        "nullMeaning": "gateway discovery"
+      },
+      "runtimeOwner": "emulebb-ed2k::NatManager"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "advanced",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "restart",
+      "domain": "network",
+      "path": "network.nat.discoveryTimeoutSeconds",
+      "canonicalName": "network.nat.discovery_timeout_seconds",
+      "type": "integer",
+      "unit": "seconds",
+      "default": 5,
+      "validation": {
+        "kind": "integer",
+        "minimum": 1,
+        "maximum": 300
+      },
+      "runtimeOwner": "emulebb-ed2k::NatManager"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "advanced",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "restart",
+      "domain": "network",
+      "path": "network.nat.leaseDurationSeconds",
+      "canonicalName": "network.nat.lease_duration_seconds",
+      "type": "integer",
+      "unit": "seconds",
+      "default": 3600,
+      "validation": {
+        "kind": "integer",
+        "minimum": 1,
+        "maximum": 4294967295
+      },
+      "runtimeOwner": "emulebb-ed2k::NatManager"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "advanced",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "restart",
+      "domain": "network",
+      "path": "network.nat.renewMarginSeconds",
+      "canonicalName": "network.nat.renew_margin_seconds",
+      "type": "integer",
+      "unit": "seconds",
+      "default": 300,
+      "validation": {
+        "kind": "integer",
+        "minimum": 1,
+        "maximum": 4294967295
+      },
+      "runtimeOwner": "emulebb-ed2k::NatManager"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "advanced",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "restart",
+      "domain": "network",
+      "path": "network.nat.externalIpOverride",
+      "canonicalName": "network.nat.external_ip_override",
+      "type": "ipv4",
+      "unit": "none",
+      "default": null,
+      "validation": {
+        "kind": "ipv4",
+        "nullable": true,
+        "format": "unicast IPv4",
+        "nullMeaning": "no operator hint; runtime reachability owns observations"
+      },
+      "runtimeOwner": "emulebb-ed2k::NatManager"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "normal",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "live",
+      "domain": "transfers",
+      "path": "transfers.uploadLimitBytesPerSecond",
+      "canonicalName": "transfers.upload_limit_bytes_per_second",
+      "type": "integer",
+      "unit": "bytes per second",
+      "default": 6348800,
+      "validation": {
+        "kind": "integer",
+        "minimum": 1,
+        "maximum": 9007199254740991
+      },
+      "runtimeOwner": "emulebb-core::core_settings"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "normal",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "live",
+      "domain": "transfers",
+      "path": "transfers.downloadLimitBytesPerSecond",
+      "canonicalName": "transfers.download_limit_bytes_per_second",
+      "type": "integer",
+      "unit": "bytes per second",
+      "default": 12499968,
+      "validation": {
+        "kind": "integer",
+        "minimum": 1,
+        "maximum": 9007199254740991
+      },
+      "runtimeOwner": "emulebb-core::core_settings"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "advanced",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "restart",
+      "domain": "transfers",
+      "path": "transfers.maxConcurrentDownloads",
+      "canonicalName": "transfers.max_concurrent_downloads",
+      "type": "integer",
+      "unit": "active downloads",
+      "default": 500,
+      "validation": {
+        "kind": "integer",
+        "minimum": 1,
+        "maximum": 2147483647
+      },
+      "runtimeOwner": "emulebb-ed2k::Ed2kTransferRuntime"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "advanced",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "live",
+      "domain": "transfers",
+      "path": "transfers.maxSourcesPerFile",
+      "canonicalName": "transfers.max_sources_per_file",
+      "type": "integer",
+      "unit": "sources per file",
+      "default": 600,
+      "validation": {
+        "kind": "integer",
+        "minimum": 1,
+        "maximum": 2147483647
+      },
+      "runtimeOwner": "emulebb-core::core_settings"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "advanced",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "restart",
+      "domain": "transfers",
+      "path": "transfers.maxParallelDownloadPeers",
+      "canonicalName": "transfers.max_parallel_download_peers",
+      "type": "integer",
+      "unit": "peers per file",
+      "default": 2,
+      "validation": {
+        "kind": "integer",
+        "minimum": 1,
+        "maximum": 2147483647
+      },
+      "runtimeOwner": "emulebb-ed2k::Ed2kTransferRuntime"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "advanced",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "live",
+      "domain": "transfers",
+      "path": "transfers.upload.targetClientRateBytesPerSecond",
+      "canonicalName": "transfers.upload.target_client_rate_bytes_per_second",
+      "type": "integer",
+      "unit": "bytes per second",
+      "default": 32768,
+      "validation": {
+        "kind": "integer",
+        "minimum": 1,
+        "maximum": 9007199254740991
+      },
+      "runtimeOwner": "emulebb-core::core_settings"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "normal",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "live",
+      "domain": "transfers",
+      "path": "transfers.upload.baseSlots",
+      "canonicalName": "transfers.upload.base_slots",
+      "type": "integer",
+      "unit": "slots",
+      "default": 12,
+      "validation": {
+        "kind": "integer",
+        "minimum": 1,
+        "maximum": 64
+      },
+      "runtimeOwner": "emulebb-core::core_settings"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "advanced",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "live",
+      "domain": "transfers",
+      "path": "transfers.upload.elasticPercent",
+      "canonicalName": "transfers.upload.elastic_percent",
+      "type": "integer",
+      "unit": "percent",
+      "default": 80,
+      "validation": {
+        "kind": "integer",
+        "minimum": 0,
+        "maximum": 100
+      },
+      "runtimeOwner": "emulebb-core::core_settings"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "advanced",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "live",
+      "domain": "transfers",
+      "path": "transfers.upload.queueCapacity",
+      "canonicalName": "transfers.upload.queue_capacity",
+      "type": "integer",
+      "unit": "waiting peers",
+      "default": 10000,
+      "validation": {
+        "kind": "integer",
+        "minimum": 2000,
+        "maximum": 10000
+      },
+      "runtimeOwner": "emulebb-core::core_settings"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "advanced",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "restart",
+      "domain": "transfers",
+      "path": "transfers.upload.elasticUnderfillSeconds",
+      "canonicalName": "transfers.upload.elastic_underfill_seconds",
+      "type": "integer",
+      "unit": "seconds",
+      "default": 10,
+      "validation": {
+        "kind": "integer",
+        "minimum": 10,
+        "maximum": 86400
+      },
+      "runtimeOwner": "emulebb-ed2k::Ed2kTransferRuntime"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "advanced",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "restart",
+      "domain": "transfers",
+      "path": "transfers.upload.waitingTimeoutSeconds",
+      "canonicalName": "transfers.upload.waiting_timeout_seconds",
+      "type": "integer",
+      "unit": "seconds",
+      "default": 3600,
+      "validation": {
+        "kind": "integer",
+        "minimum": 1,
+        "maximum": 86400
+      },
+      "runtimeOwner": "emulebb-ed2k::Ed2kTransferRuntime"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "advanced",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "restart",
+      "domain": "transfers",
+      "path": "transfers.upload.grantedTimeoutSeconds",
+      "canonicalName": "transfers.upload.granted_timeout_seconds",
+      "type": "integer",
+      "unit": "seconds",
+      "default": 5,
+      "validation": {
+        "kind": "integer",
+        "minimum": 1,
+        "maximum": 86400
+      },
+      "runtimeOwner": "emulebb-ed2k::Ed2kTransferRuntime"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "advanced",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "restart",
+      "domain": "transfers",
+      "path": "transfers.upload.uploadTimeoutSeconds",
+      "canonicalName": "transfers.upload.upload_timeout_seconds",
+      "type": "integer",
+      "unit": "seconds",
+      "default": 30,
+      "validation": {
+        "kind": "integer",
+        "minimum": 1,
+        "maximum": 86400
+      },
+      "runtimeOwner": "emulebb-ed2k::Ed2kTransferRuntime"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "advanced",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "restart",
+      "domain": "transfers",
+      "path": "transfers.upload.sessionTransferPercent",
+      "canonicalName": "transfers.upload.session_transfer_percent",
+      "type": "integer",
+      "unit": "percent of requested file",
+      "default": 90,
+      "validation": {
+        "kind": "integer",
+        "minimum": 0,
+        "maximum": 100
+      },
+      "runtimeOwner": "emulebb-ed2k::Ed2kTransferRuntime",
+      "zeroMeaning": "session byte cap disabled"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "advanced",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "restart",
+      "domain": "transfers",
+      "path": "transfers.upload.sessionTimeLimitSeconds",
+      "canonicalName": "transfers.upload.session_time_limit_seconds",
+      "type": "integer",
+      "unit": "seconds",
+      "default": 7200,
+      "validation": {
+        "kind": "integer",
+        "minimum": 0,
+        "maximum": 86400
+      },
+      "runtimeOwner": "emulebb-ed2k::Ed2kTransferRuntime",
+      "zeroMeaning": "session time cap disabled"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "normal",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "live",
+      "domain": "transfers",
+      "path": "transfers.upload.creditSystemEnabled",
+      "canonicalName": "transfers.upload.credit_system_enabled",
+      "type": "boolean",
+      "unit": "none",
+      "default": true,
+      "validation": {
+        "kind": "boolean"
+      },
+      "runtimeOwner": "emulebb-ed2k::Ed2kTransferRuntime"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "normal",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "restart",
+      "domain": "transfers",
+      "path": "transfers.filenameVoting.enabledForNewDownloads",
+      "canonicalName": "transfers.filename_voting.enabled_for_new_downloads",
+      "type": "boolean",
+      "unit": "none",
+      "default": false,
+      "validation": {
+        "kind": "boolean"
+      },
+      "runtimeOwner": "emulebb-ed2k::Ed2kTransferRuntime"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "advanced",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "restart",
+      "domain": "transfers",
+      "path": "transfers.filenameVoting.minimumVotes",
+      "canonicalName": "transfers.filename_voting.minimum_votes",
+      "type": "integer",
+      "unit": "votes",
+      "default": 0,
+      "validation": {
+        "kind": "integer",
+        "minimum": 0,
+        "maximum": 1000
+      },
+      "runtimeOwner": "emulebb-ed2k::Ed2kTransferRuntime",
+      "zeroMeaning": "no additional absolute vote threshold"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "advanced",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "restart",
+      "domain": "transfers",
+      "path": "transfers.filenameVoting.requiredPercent",
+      "canonicalName": "transfers.filename_voting.required_percent",
+      "type": "integer",
+      "unit": "percent",
+      "default": 51,
+      "validation": {
+        "kind": "integer",
+        "minimum": 1,
+        "maximum": 100
+      },
+      "runtimeOwner": "emulebb-ed2k::Ed2kTransferRuntime"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "normal",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "restart",
+      "domain": "storage",
+      "path": "storage.incomingDirectory",
+      "canonicalName": "storage.incoming_directory",
+      "type": "path",
+      "unit": "none",
+      "default": null,
+      "validation": {
+        "kind": "path",
+        "nullable": true,
+        "format": "local directory path; UTF-8, no NUL; incoming path-class long-path rules",
+        "nullMeaning": "profile-root/incoming"
+      },
+      "runtimeOwner": "emulebb-daemon"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "normal",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "restart",
+      "domain": "storage",
+      "path": "storage.minFreeProfileBytes",
+      "canonicalName": "storage.min_free_profile_bytes",
+      "type": "integer",
+      "unit": "bytes",
+      "default": 1073741824,
+      "validation": {
+        "kind": "integer",
+        "minimum": 1073741824,
+        "maximum": 5497558138880
+      },
+      "runtimeOwner": "emulebb-ed2k::Ed2kTransferRuntime"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "normal",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "restart",
+      "domain": "storage",
+      "path": "storage.minFreeTransferBytes",
+      "canonicalName": "storage.min_free_transfer_bytes",
+      "type": "integer",
+      "unit": "bytes",
+      "default": 5368709120,
+      "validation": {
+        "kind": "integer",
+        "minimum": 5368709120,
+        "maximum": 5497558138880
+      },
+      "runtimeOwner": "emulebb-ed2k::Ed2kTransferRuntime"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "normal",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "restart",
+      "domain": "storage",
+      "path": "storage.minFreeIncomingBytes",
+      "canonicalName": "storage.min_free_incoming_bytes",
+      "type": "integer",
+      "unit": "bytes",
+      "default": 5368709120,
+      "validation": {
+        "kind": "integer",
+        "minimum": 5368709120,
+        "maximum": 5497558138880
+      },
+      "runtimeOwner": "emulebb-ed2k::Ed2kTransferRuntime"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "advanced",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "restart",
+      "domain": "sharing",
+      "path": "sharing.scanOnStartup",
+      "canonicalName": "sharing.scan_on_startup",
+      "type": "boolean",
+      "unit": "none",
+      "default": true,
+      "validation": {
+        "kind": "boolean"
+      },
+      "runtimeOwner": "emulebb-daemon"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "normal",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "restart",
+      "domain": "sharing",
+      "path": "sharing.kadPublishingEnabled",
+      "canonicalName": "sharing.kad_publishing_enabled",
+      "type": "boolean",
+      "unit": "none",
+      "default": true,
+      "validation": {
+        "kind": "boolean"
+      },
+      "runtimeOwner": "emulebb-core::kad_shared_publish"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "normal",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "restart",
+      "domain": "security",
+      "path": "security.obfuscationEnabled",
+      "canonicalName": "security.obfuscation_enabled",
+      "type": "boolean",
+      "unit": "none",
+      "default": true,
+      "validation": {
+        "kind": "boolean"
+      },
+      "runtimeOwner": "emulebb-core::network_api"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "normal",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "restart",
+      "domain": "security",
+      "path": "security.vpnGuard.mode",
+      "canonicalName": "security.vpn_guard.mode",
+      "type": "enum",
+      "unit": "none",
+      "default": "off",
+      "validation": {
+        "kind": "enum",
+        "values": [
+          "off",
+          "block"
+        ]
+      },
+      "runtimeOwner": "emulebb-core::vpn_guard"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "normal",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "restart",
+      "domain": "security",
+      "path": "security.vpnGuard.allowedPublicIpCidrs",
+      "canonicalName": "security.vpn_guard.allowed_public_ip_cidrs",
+      "type": "array<ipv4-cidr>",
+      "unit": "networks",
+      "default": [],
+      "validation": {
+        "kind": "array",
+        "maxItems": 256,
+        "unique": true,
+        "item": "canonical IPv4 CIDR",
+        "emptyMeaning": "interface-binding gate only; no public-address allowlist"
+      },
+      "runtimeOwner": "emulebb-core::vpn_guard"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "normal",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "restart",
+      "domain": "security",
+      "path": "security.ipFilter.enabled",
+      "canonicalName": "security.ip_filter.enabled",
+      "type": "boolean",
+      "unit": "none",
+      "default": false,
+      "validation": {
+        "kind": "boolean"
+      },
+      "runtimeOwner": "emulebb-ed2k::ipfilter"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "normal",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "restart",
+      "domain": "security",
+      "path": "security.ipFilter.level",
+      "canonicalName": "security.ip_filter.level",
+      "type": "integer",
+      "unit": "filter level",
+      "default": 127,
+      "validation": {
+        "kind": "integer",
+        "minimum": 0,
+        "maximum": 4294967295
+      },
+      "runtimeOwner": "emulebb-ed2k::ipfilter"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "normal",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "restart",
+      "domain": "security",
+      "path": "security.tcpErrorFloodDetection.enabled",
+      "canonicalName": "security.tcp_error_flood_detection.enabled",
+      "type": "boolean",
+      "unit": "none",
+      "default": true,
+      "validation": {
+        "kind": "boolean"
+      },
+      "runtimeOwner": "emulebb-ed2k::Ed2kTransferRuntime"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "advanced",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "restart",
+      "domain": "security",
+      "path": "security.tcpErrorFloodDetection.intervalSeconds",
+      "canonicalName": "security.tcp_error_flood_detection.interval_seconds",
+      "type": "integer",
+      "unit": "seconds",
+      "default": 3600,
+      "validation": {
+        "kind": "integer",
+        "minimum": 60,
+        "maximum": 86400
+      },
+      "runtimeOwner": "emulebb-ed2k::Ed2kTransferRuntime"
+    },
+    {
+      "storage": "sqlite.settings_documents",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "advanced",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "restart",
+      "domain": "security",
+      "path": "security.tcpErrorFloodDetection.threshold",
+      "canonicalName": "security.tcp_error_flood_detection.threshold",
+      "type": "integer",
+      "unit": "failures per interval",
+      "default": 10,
+      "validation": {
+        "kind": "integer",
+        "minimum": 1,
+        "maximum": 1000
+      },
+      "runtimeOwner": "emulebb-ed2k::Ed2kTransferRuntime"
+    }
+  ],
+  "crossValidation": [
+    "network.p2p.bindIp must belong to network.p2p.bindInterface when both are non-null; automatic selection must be unambiguous.",
+    "network.connections.maxHalfOpenConnections and transfers.maxParallelDownloadPeers cannot exceed network.connections.maxConnections.",
+    "transfers.upload.baseSlots cannot exceed network.connections.maxConnections.",
+    "All cross-field constraints must hold in both the saved candidate and projected effective snapshot before commit; a live cap cannot invalidate an effective restart-bound prerequisite.",
+    "network.hostnameLookup.enabled requires at least one valid DNS server; disabling lookup permits an empty resolver list.",
+    "network.nat.renewMarginSeconds must be less than network.nat.leaseDurationSeconds.",
+    "network.nat derives its local binding and mapping ports from network.p2p; there is no second mutable binding or public UDP port.",
+    "security.vpnGuard.mode=block requires a confirmed explicit local interface/address; a configured allowlist additionally gates observed public egress.",
+    "Numeric zero is allowed only where the field declares its meaning; it never means reset.",
+    "Path validation never writes or creates a target directory before settings commit; later operational errors are reported separately.",
+    "Settings documents contain no collection entities, generated identity, protocol implementation constants or bootstrap secrets."
+  ],
+  "nonSettingsState": [
+    {
+      "kind": "durable state",
+      "name": "ed2k_user_hash",
+      "type": "protocol-valid 16-byte identity",
+      "owner": "emulebb-metadata identity repository",
+      "storage": "SQLite",
+      "default": "generated once for a fresh profile",
+      "secret": false,
+      "visibility": "not a setting; protocol/status disclosure only"
+    },
+    {
+      "kind": "durable state",
+      "name": "secure_ident_private_key",
+      "type": "protocol-valid private key material",
+      "owner": "emulebb-metadata identity repository",
+      "storage": "SQLite",
+      "default": "generated once for a fresh profile",
+      "secret": true,
+      "visibility": "never public"
+    },
+    {
+      "kind": "durable state",
+      "name": "kad_node_id",
+      "type": "protocol-valid 16-byte identity",
+      "owner": "emulebb-metadata Kad repository",
+      "storage": "SQLite",
+      "default": "generated once for a fresh profile",
+      "secret": false,
+      "visibility": "not a setting; protocol/status disclosure only"
+    },
+    {
+      "kind": "runtime state",
+      "name": "observed_reachability",
+      "type": "verified address/port observations",
+      "owner": "emulebb-ed2k::RuntimeReachabilityWriter",
+      "storage": "memory",
+      "default": "unknown until observed",
+      "secret": false,
+      "visibility": "authenticated network/NAT status"
+    },
+    {
+      "kind": "runtime state",
+      "name": "settings_application_state",
+      "type": "effective snapshot, pending paths and application outcomes",
+      "owner": "emulebb-core settings coordinator",
+      "storage": "memory",
+      "default": "startup application outcome",
+      "secret": false,
+      "visibility": "GET settings metadata; no secret bootstrap fields"
+    }
+  ],
+  "collections": [
+    {
+      "route": "/api/v1/servers",
+      "owner": "server repository",
+      "storage": "SQLite",
+      "contents": "server identities, endpoints, priority/static flags and observations"
+    },
+    {
+      "route": "/api/v1/kad/bootstrap-endpoints",
+      "owner": "Kad repository",
+      "storage": "SQLite",
+      "contents": "explicit bootstrap endpoint collection"
+    },
+    {
+      "route": "/api/v1/shared-directories",
+      "owner": "sharing repository",
+      "storage": "SQLite",
+      "contents": "monitored recursive roots"
+    },
+    {
+      "route": "/api/v1/shared-directories/ignores",
+      "owner": "sharing repository",
+      "storage": "SQLite",
+      "contents": "ignore rules"
+    },
+    {
+      "route": "/api/v1/categories",
+      "owner": "category repository",
+      "storage": "SQLite",
+      "contents": "category paths and metadata"
+    },
+    {
+      "route": "/api/v1/friends",
+      "owner": "friend repository",
+      "storage": "SQLite",
+      "contents": "friend identities"
+    },
+    {
+      "route": "/api/v1/ip-filter/rules",
+      "owner": "filter repository",
+      "storage": "SQLite",
+      "contents": "parsed filter rules; imports are read-only source operations"
+    }
+  ],
+  "internalPolicies": [
+    {
+      "name": "connection_window_seconds",
+      "owner": "emulebb-core::core_settings",
+      "type": "integer",
+      "unit": "seconds",
+      "value": 5,
+      "storage": "code or reviewed policy registry",
+      "publicVisibility": "not a public setting"
+    },
+    {
+      "name": "hostname_lookup_tick_seconds",
+      "owner": "emulebb-core::hostname_lookup",
+      "type": "integer",
+      "unit": "seconds",
+      "value": 30,
+      "storage": "code or reviewed policy registry",
+      "publicVisibility": "not a public setting"
+    },
+    {
+      "name": "hostname_lookup_batch_size",
+      "owner": "emulebb-core::hostname_lookup",
+      "type": "integer",
+      "unit": "addresses",
+      "value": 32,
+      "storage": "code or reviewed policy registry",
+      "publicVisibility": "not a public setting"
+    },
+    {
+      "name": "kad_bootstrap_min_routing_contacts",
+      "owner": "emulebb-core::network_api",
+      "type": "integer",
+      "unit": "contacts",
+      "value": 10,
+      "storage": "code or reviewed policy registry",
+      "publicVisibility": "not a public setting"
+    },
+    {
+      "name": "kad_local_store_enabled",
+      "owner": "emulebb-kad-dht local store",
+      "type": "boolean",
+      "unit": "none",
+      "value": true,
+      "storage": "code or reviewed policy registry",
+      "publicVisibility": "not a public setting"
+    },
+    {
+      "name": "kad_keyword_ttl_seconds",
+      "owner": "emulebb-kad-dht local store",
+      "type": "integer",
+      "unit": "seconds",
+      "value": 86400,
+      "storage": "code or reviewed policy registry",
+      "publicVisibility": "not a public setting"
+    },
+    {
+      "name": "kad_source_ttl_seconds",
+      "owner": "emulebb-kad-dht local store",
+      "type": "integer",
+      "unit": "seconds",
+      "value": 18000,
+      "storage": "code or reviewed policy registry",
+      "publicVisibility": "not a public setting"
+    },
+    {
+      "name": "kad_notes_ttl_seconds",
+      "owner": "emulebb-kad-dht local store",
+      "type": "integer",
+      "unit": "seconds",
+      "value": 86400,
+      "storage": "code or reviewed policy registry",
+      "publicVisibility": "not a public setting"
+    },
+    {
+      "name": "kad_keyword_capacity",
+      "owner": "emulebb-kad-dht local store",
+      "type": "integer",
+      "unit": "entries",
+      "value": 60000,
+      "storage": "code or reviewed policy registry",
+      "publicVisibility": "not a public setting"
+    },
+    {
+      "name": "kad_source_capacity",
+      "owner": "emulebb-kad-dht local store",
+      "type": "integer",
+      "unit": "entries",
+      "value": 100000,
+      "storage": "code or reviewed policy registry",
+      "publicVisibility": "not a public setting"
+    },
+    {
+      "name": "kad_notes_capacity",
+      "owner": "emulebb-kad-dht local store",
+      "type": "integer",
+      "unit": "entries",
+      "value": 60000,
+      "storage": "code or reviewed policy registry",
+      "publicVisibility": "not a public setting"
+    },
+    {
+      "name": "kad_sources_per_file",
+      "owner": "emulebb-kad-dht local store",
+      "type": "integer",
+      "unit": "entries",
+      "value": 1000,
+      "storage": "code or reviewed policy registry",
+      "publicVisibility": "not a public setting"
+    },
+    {
+      "name": "kad_notes_per_file",
+      "owner": "emulebb-kad-dht local store",
+      "type": "integer",
+      "unit": "entries",
+      "value": 150,
+      "storage": "code or reviewed policy registry",
+      "publicVisibility": "not a public setting"
+    },
+    {
+      "name": "kad_republish_interval_seconds",
+      "owner": "emulebb-core Kad publication",
+      "type": "integer",
+      "unit": "seconds",
+      "value": 1800,
+      "storage": "code or reviewed policy registry",
+      "publicVisibility": "not a public setting"
+    },
+    {
+      "name": "kad_publish_contact_fanout",
+      "owner": "emulebb-core Kad publication",
+      "type": "integer",
+      "unit": "contacts",
+      "value": 10,
+      "storage": "code or reviewed policy registry",
+      "publicVisibility": "not a public setting"
+    },
+    {
+      "name": "kad_udp_firewall_check_enabled",
+      "owner": "emulebb-core::network_api",
+      "type": "boolean",
+      "unit": "none",
+      "value": true,
+      "storage": "code or reviewed policy registry",
+      "publicVisibility": "not a public setting"
+    },
+    {
+      "name": "kad_udp_firewall_check_interval_seconds",
+      "owner": "emulebb-core::network_api",
+      "type": "integer",
+      "unit": "seconds",
+      "value": 3600,
+      "storage": "code or reviewed policy registry",
+      "publicVisibility": "not a public setting"
+    },
+    {
+      "name": "kad_tcp_firewall_check_enabled",
+      "owner": "emulebb-core::network_api",
+      "type": "boolean",
+      "unit": "none",
+      "value": true,
+      "storage": "code or reviewed policy registry",
+      "publicVisibility": "not a public setting"
+    },
+    {
+      "name": "kad_tcp_firewall_check_interval_seconds",
+      "owner": "emulebb-core::network_api",
+      "type": "integer",
+      "unit": "seconds",
+      "value": 3600,
+      "storage": "code or reviewed policy registry",
+      "publicVisibility": "not a public setting"
+    },
+    {
+      "name": "kad_buddy_enabled",
+      "owner": "emulebb-core::network_api",
+      "type": "boolean",
+      "unit": "none",
+      "value": true,
+      "storage": "code or reviewed policy registry",
+      "publicVisibility": "not a public setting"
+    },
+    {
+      "name": "kad_routing_maintenance_enabled",
+      "owner": "emulebb-core::network_api",
+      "type": "boolean",
+      "unit": "none",
+      "value": true,
+      "storage": "code or reviewed policy registry",
+      "publicVisibility": "not a public setting"
+    },
+    {
+      "name": "udp_reask_enabled",
+      "owner": "emulebb-ed2k::ed2k_client_udp",
+      "type": "boolean",
+      "unit": "none",
+      "value": true,
+      "storage": "code or reviewed policy registry",
+      "publicVisibility": "not a public setting"
+    },
+    {
+      "name": "keyword_server_attempt_budget",
+      "owner": "emulebb-core search coordinator",
+      "type": "integer",
+      "unit": "attempts",
+      "value": 3,
+      "storage": "code or reviewed policy registry",
+      "publicVisibility": "not a public setting"
+    },
+    {
+      "name": "exact_hash_keyword_server_attempt_budget",
+      "owner": "emulebb-core search coordinator",
+      "type": "integer",
+      "unit": "attempts",
+      "value": 4,
+      "storage": "code or reviewed policy registry",
+      "publicVisibility": "not a public setting"
+    },
+    {
+      "name": "source_server_attempt_budget",
+      "owner": "emulebb-core search coordinator",
+      "type": "integer",
+      "unit": "attempts",
+      "value": 3,
+      "storage": "code or reviewed policy registry",
+      "publicVisibility": "not a public setting"
+    },
+    {
+      "name": "source_identity_advertisement",
+      "owner": "emulebb-ed2k protocol capabilities",
+      "type": "registry contract",
+      "unit": "none",
+      "value": "approved protocol registry",
+      "storage": "code or reviewed policy registry",
+      "publicVisibility": "not a public setting"
+    },
+    {
+      "name": "offerfiles_negotiation",
+      "owner": "emulebb-ed2k protocol capabilities",
+      "type": "registry contract",
+      "unit": "none",
+      "value": "approved extension registry",
+      "storage": "code or reviewed policy registry",
+      "publicVisibility": "not a public setting"
+    }
+  ],
+  "sourceEvidence": [
+    {
+      "area": "bootstrap and CLI",
+      "files": [
+        "crates/emulebb-daemon/src/lib.rs",
+        "crates/emulebb-daemon/src/bin/emulebb-rust.rs",
+        "crates/emulebb-daemon/src/bind_config.rs"
+      ]
+    },
+    {
+      "area": "definitions and public surface",
+      "files": [
+        "crates/emulebb-settings/src/lib.rs",
+        "crates/emulebb-settings/src/surface.rs"
+      ]
+    },
+    {
+      "area": "runtime authority",
+      "files": [
+        "crates/emulebb-core/src/core_settings.rs",
+        "crates/emulebb-core/src/profile_state.rs",
+        "crates/emulebb-core/src/app_api.rs",
+        "crates/emulebb-core/src/network_api.rs",
+        "crates/emulebb-core/src/server_list.rs",
+        "crates/emulebb-core/src/hostname_lookup.rs",
+        "crates/emulebb-core/src/vpn_guard.rs",
+        "crates/emulebb-ed2k/src/ipfilter.rs",
+        "crates/emulebb-ed2k/src/long_path.rs"
+      ]
+    },
+    {
+      "area": "settings persistence",
+      "files": [
+        "crates/emulebb-metadata/src/profile_store.rs"
+      ]
+    },
+    {
+      "area": "REST and SPA",
+      "files": [
+        "crates/emulebb-rest/src/routes.rs",
+        "crates/emulebb-rest/src/handlers/app.rs",
+        "crates/emulebb-rest/src/route_body_metadata/validators.rs",
+        "crates/emulebb-rest/src/diagnostic_bundle.rs",
+        "webui/src/api.ts",
+        "webui/src/views.tsx"
+      ]
+    },
+    {
+      "area": "UDP transport and advertisements",
+      "files": [
+        "crates/emulebb-core/src/network_api.rs",
+        "crates/emulebb-core/src/ed2k_net_drivers.rs",
+        "crates/emulebb-kad-net/src/rpc/receive_loop.rs",
+        "crates/emulebb-kad-net/src/transport.rs",
+        "crates/emulebb-ed2k/src/ed2k_client_udp/dispatch.rs",
+        "crates/emulebb-ed2k/src/ed2k_client_udp/service.rs",
+        "crates/emulebb-ed2k/src/ed2k_tcp/hello.rs",
+        "crates/emulebb-ed2k/src/ed2k_server/udp_runtime.rs"
+      ]
+    }
+  ],
+  "excludedOperationalControls": [
+    "diagnostic search probes",
+    "passive replay harness controls",
+    "NAT backend-library socket and local helper-port tuning"
+  ],
+  "files": {
+    "readOnlyCompatibilityInputs": [
+      "server.met",
+      "nodes.dat"
+    ],
+    "retainedFiles": [
+      "payloads",
+      "logs",
+      "diagnostics"
+    ],
+    "bootstrapFile": "emulebb-rust-settings.toml",
+    "databaseFile": "emulebb-rust-metadata.db"
+  },
+  "implementationStatus": "No runtime, default-port, schema, API or profile changes authorized by this inventory."
+}
