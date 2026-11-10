@@ -74,16 +74,21 @@ observed missing-custom-build-script error. Explicit declarations preserve the
 custom-build target and `links` through metadata and lockfile resolution even
 though the reconstruction still has no script to execute.
 
-Two tests passed, covering eight offline Cargo commands across both packages.
-The actual fuzz manifest also passed:
+The original verification passed two tests, covering eight offline Cargo
+commands across both packages. The actual fuzz manifest also passed:
 
 ```text
 cargo metadata --offline --locked --no-deps --format-version 1 --manifest-path fuzz/Cargo.toml
 ```
 
-Full worker push qualification depends on the checkout support tracked by
+These results are historical evidence from the original fix. Refresh the
+scoped checks and complete normal worker push qualification against the actual
+rebased fix before integration. Unchanged main validation is not evidence for
+this metadata fix.
+
+Selected-checkout validation support is integrated in the workspace mains.
+Parent acceptance and cleanup remain tracked separately by
 [emulebb-build #28](https://github.com/emulebb/emulebb-build/issues/28).
-Unchanged main validation is not repeated as evidence for this metadata fix.
 
 ## References
 
