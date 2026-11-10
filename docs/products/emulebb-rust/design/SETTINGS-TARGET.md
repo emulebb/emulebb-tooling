@@ -62,8 +62,18 @@ or secret-bearing URL parameter.
 The bootstrap is owner-only: Unix profile/file modes `0700`/`0600`, with the
 corresponding owner-restricted Windows access. Reject unsafe existing access
 with actionable diagnostics. Never print an existing key or include it in
-settings, status, error values, logs, shared examples or diagnostic exports.
+settings, status, error values, ordinary structured logs or public examples.
+Fresh-key provisioning may hand the newly generated key to the operator once;
+this explicit provisioning handoff is separate from ordinary structured logs.
+Changing that handoff requires a separately accepted bootstrap UX decision.
 Rotation edits private bootstrap and takes effect on process restart.
+
+The authenticated private diagnostic bundle has its own full-fidelity contract
+under [#280](../active/items/RUST-BUG-178.md), including the exact API key and
+sensitive values. Its warning, private labeling and acknowledgement remain with
+that owner. The settings resource's secret exclusion does not change that
+private export contract or assign backend redaction, a shareable export or a
+logger rewrite to this review.
 
 Bootstrap casing and default adoption require explicit acceptance under the
 bootstrap stability policy. This review changes no file reader or startup
@@ -176,7 +186,6 @@ type SettingsRead = {
   };
   meta: {
     apiVersion: "v1";
-    generatedAt?: string; // native envelope timestamp, when supplied
     settingsRevision: string;
   };
 };
@@ -184,16 +193,28 @@ type SettingsRead = {
 
 Each domain's exact fields, types, nullability and bounds are the inventory's
 paths under that domain. No other domain or leaf is accepted. The revision is
-an opaque decimal string on the wire, avoiding loss of integer precision. GET
-and successful PATCH carry a strong `ETag: "settings-<revision>"`.
-Native responses retain `X-Contract-Version` and use `Cache-Control: no-store`.
+an opaque decimal string on the wire, avoiding loss of integer precision. This
+representation contains no generated timestamp or other per-request field.
+Native responses retain `X-Contract-Version` and use
+`Cache-Control: no-store, no-transform`.
 
-The header must contain exactly one strong settings ETag. Reject weak tags,
-wildcards, lists and malformed revision strings as invalid requests. Revisions
-use canonical positive decimal digits, no leading zero, up to SQLite's signed
-64-bit maximum. The stored serialized complete snapshot is bounded to 128 KiB
-before commit. The larger request bound accommodates escaping of accepted long
-paths; string bounds apply to decoded values, not escaped request bytes.
+GET and successful PATCH emit the complete `SettingsRead` as RFC 8785 canonical
+JSON, UTF-8 without a BOM, extra whitespace or trailing newline. Hash those
+exact response bytes with SHA-256. The strong ETag is the quoted ASCII value
+`"settings-<saved-revision>-<digest>"`, with a 64-character lowercase hexadecimal
+digest. The saved revision in the tag equals `meta.settingsRevision`; it is not
+the full representation validator by itself. Responses use identity encoding
+with no `Content-Encoding`; compression middleware must exclude this resource.
+An additional representation encoding would require its own correct strong
+validator and explicit contract review.
+
+`If-Match` must contain exactly one tag in that format. Reject weak tags,
+wildcards, lists and malformed revision/digest strings as invalid requests.
+Saved revisions use canonical positive decimal digits, no leading zero, up to
+SQLite's signed 64-bit maximum. The stored serialized complete snapshot is
+bounded to 128 KiB before commit. The larger request bound accommodates escaping
+of accepted long paths; string bounds apply to decoded values, not escaped
+request bytes.
 
 `saved` is the complete committed snapshot. `effective` is the runtime's admitted
 settings snapshot: startup-bound leaves retain the captured startup values until
@@ -201,8 +222,17 @@ restart, while live policy leaves publish together. This is not a promise that
 a socket is bound or a peer connected; those outcomes belong to network/status
 resources. Application lists are sorted and contain canonical pointers only.
 GET observes a settings publication barrier so it cannot combine half an update
-with another revision. It does not expose an ambiguous effective-revision scalar
-when the process has a mix of live and startup-bound values.
+with another revision. Capture saved rows/revision, effective values and
+application state under the same ordered publication boundary, then derive
+immutable response bytes and their validator from that capture. Every event
+that changes effective/application data uses that boundary too. The resource
+does not expose an ambiguous effective-revision scalar when the process has a
+mix of live and startup-bound values.
+
+An unchanged representation has identical bytes and ETag on repeated GETs.
+Admission of saved values after restart or an application-state change changes
+the ETag when it changes the representation, even if the saved revision stays
+the same. A restart that changes none of the represented data keeps the ETag.
 
 PATCH uses a closed, recursively partial `SettingsSnapshot` in the body, without
 the response envelope. It requires `If-Match` from a successful GET. For example:
@@ -211,7 +241,7 @@ the response envelope. It requires `If-Match` from a successful GET. For example
 PATCH /api/v1/settings
 Content-Type: application/json
 X-API-Key: <private-key>
-If-Match: "settings-42"
+If-Match: "settings-42-0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
 
 {"network":{"p2p":{"tcpPort":20029,"udpPort":20030}},"sharing":{"scanOnStartup":true}}
 ```
@@ -230,10 +260,14 @@ restart until a successful process restart admits them.
   no magic reset token or settings reset action.
 - Empty bodies, empty supplied objects, duplicate JSON keys and unknown fields
   are rejected at every nesting level.
-  A nonempty, valid patch producing the saved snapshot is a successful no-op:
-  no revision increment, write or runtime notification.
-- Concurrent writers serialize; the revision is checked again inside the write
-  transaction. Stale conditional writes fail rather than silently overwrite.
+  A nonempty, valid patch producing the saved snapshot is a successful no-op
+  only after its full current validator matches: no revision increment, write
+  or runtime notification; unchanged represented state keeps the same ETag.
+- Concurrent writers serialize. Compare the complete current strong validator
+  under the publication/order boundary before any write; check the captured
+  saved revision again inside the write transaction. Either a changed full
+  representation or a failed revision compare-and-set returns 412 without a
+  write. A saved revision alone is insufficient authorization to overwrite.
 
 ## Commit And Application Semantics
 
@@ -255,9 +289,17 @@ commit are operational outcomes, not permission to silently alter durable data.
 An owned settings coordinator orders mutations through commit and runtime
 publication. Cancellation while queued writes nothing. Once accepted for
 completion, dropping the HTTP caller cannot abandon a committed update. Capture
-the validated saved revision; the transaction performs the conditional check
-before any write. A validation, revision or persistence failure changes neither
-saved state nor runtime behavior.
+the current full representation and compare `If-Match` before accepting its
+candidate for a write or a no-op. Keep mutation and effective/application events
+ordered through candidate validation, commit and publication. The transaction
+compares the captured saved revision before any write. No DB/global-state mutex
+is held over awaited validation/driver work. A validation, precondition or
+persistence failure changes neither saved state nor runtime behavior.
+
+A changed effective/application state may cause 412 while the saved revision
+is unchanged. After any 412, GET the complete resource again, reassess the patch
+against its saved/effective/application data and submit its exact returned ETag.
+Do not reconstruct a tag from a revision or blindly retry using a fresh token.
 
 After commit, publish the precomputed live policy as one logical snapshot. Do
 not expose mixed upload, download and connection budgets by independently
@@ -307,7 +349,10 @@ at 64 entries sorted by path/rule, with `truncated` reporting the cap. Paths are
 canonical JSON pointers, or the empty root pointer for an unparseable document;
 an unknown key is reported against its known containing object without echoing
 the supplied name. Rules contain no submitted values.
-`SETTINGS_REVISION_MISMATCH` returns the current saved `settingsRevision`.
+`SETTINGS_PRECONDITION_FAILED` returns the current saved `settingsRevision`.
+That value can equal the caller's saved revision because the full represented
+effective/application data participates in the condition. The error contains no
+replacement validator; a fresh GET supplies the representation and its ETag.
 `PAYLOAD_TOO_LARGE` reports the request `maximumBytes`.
 `SETTINGS_APPLY_FAILED` uses the committed-outcome shape. All remaining codes
 use empty details. Messages are sanitized human text, at most 512 UTF-8 bytes;
@@ -315,13 +360,13 @@ clients branch on code/rules, not message wording.
 
 | HTTP | Code | Outcome |
 | --- | --- | --- |
-| 400 | `SETTINGS_REQUEST_INVALID` | Invalid JSON, unknown key, wrong shape, empty patch or null misuse; no change |
+| 400 | `SETTINGS_REQUEST_INVALID` | Invalid JSON, unknown key, wrong shape, empty patch, null misuse or malformed conditional validator; no change |
 | 401 | `UNAUTHORIZED` | Missing/incorrect authentication; no state disclosure |
-| 412 | `SETTINGS_REVISION_MISMATCH` | Stale `If-Match`; no change |
+| 412 | `SETTINGS_PRECONDITION_FAILED` | Full representation validator or saved-revision compare-and-set failed; no change |
 | 413 | `PAYLOAD_TOO_LARGE` | Request exceeds the bound; no change |
 | 415 | `UNSUPPORTED_MEDIA_TYPE` | Unsupported body encoding; no change |
 | 422 | `SETTINGS_VALIDATION_FAILED` | Field or complete-candidate constraint failed; no change |
-| 428 | `SETTINGS_REVISION_REQUIRED` | Required conditional header absent; no change |
+| 428 | `SETTINGS_PRECONDITION_REQUIRED` | Required full `If-Match` validator absent; no change |
 | 500 | `SETTINGS_PERSISTENCE_FAILED` | Transaction failed/rolled back; runtime unchanged |
 | 500 | `SETTINGS_APPLY_FAILED` | Explicit committed outcome; application state available through GET |
 | 503 | `SETTINGS_UNAVAILABLE` | Bounded executor/order admission unavailable; no write accepted |
@@ -371,7 +416,7 @@ parent allocates code only after accepting the target and reserving files.
 | S2: settings repository and ordered atomic publication | #299, coordinated with #298 | S1 | One conditional transaction, rollback and cancellation guarantees, saved/effective state |
 | S3: server behavior authority | #223 | S1; coordinate S2 core ownership | One connection-plan owner, whole-minute keepalive, correct live/restart state |
 | S4: listener/default and shared UDP integration | #297 | S1/S2; S3 advertisements | Configured binds and advertisements agree on Windows/Linux; no extra public UDP listener |
-| S5: REST/OpenAPI/SPA target | #297 | S1/S2; S3/S4 contract frozen for the slice | One resource, exact errors/ETags, generated schemas/controls and no secret exposure |
+| S5: REST/OpenAPI/SPA target | #297 | S1/S2; S3/S4 contract frozen for the slice | One resource, exact errors/ETags, generated schemas/controls and settings-resource secret exclusion |
 | S6: durable collections and import boundaries | #233 for Kad, #298 settings/state coordination | S1; independent of S5 UI styling | Read-only compatibility inputs; collection state in SQLite; no mutable settings side file |
 | S7: cross-platform qualification and current-doc update | #297 | Accepted implementation slices | Synthetic failure/restart/bind/conformance proof and qualified current instructions |
 
@@ -391,8 +436,8 @@ File reservations are bounded by slice:
   mapping paths; Kad RPC receive and eD2K UDP/HELLO adapters only where required.
   Parent serializes shared `network_api.rs` integration with S3.
 - **S5:** REST settings handler/validator/routes, the canonical OpenAPI settings
-  schemas, diagnostic-bundle secret exclusion, SPA types/forms/client error
-  handling and conformance tests. Derive
+  schemas, SPA types/forms/client error handling and conformance tests. Preserve
+  the separate #280 authenticated raw private-bundle contract and owner. Derive
   leaf metadata from S1; no independent field/default registry.
 - **S6:** existing Kad persistence/import owner. A filter-rule import/DB slice
   needs an explicit implementation assignment under #297/#298 before code;
@@ -419,16 +464,27 @@ opens no operator profile, creates no network runtime and executes no tests.
 - **Atomicity:** accepted routed cross-domain PATCH with injected later SQLite
   failure; independent connection observes no partial update; restart loads the
   complete saved snapshot; failed persistence leaves runtime unchanged.
-- **Concurrency/cancellation:** two conditional writers; stale revision after
-  waiting; queued cancellation; cancellation after commit; read barrier;
-  no-op behavior; no DB/global lock over awaited driver work.
+- **Concurrency/cancellation:** two conditional writers; stale full validator
+  after waiting; DB revision compare-and-set failure; queued cancellation;
+  cancellation after commit; read barrier; precondition checks before a no-op;
+  no DB/global lock over awaited validation/driver work.
+- **Representation validators:** stable canonical bytes/digest for unchanged
+  GETs and no-ops; exact SHA-256/strong-tag syntax; no generated timestamp;
+  effective/application change and restart admission alter the tag without a
+  settings write; unchanged restart retains it; stale tags return 412 even with
+  the same saved revision; recovery refetches and reassesses the whole resource.
+  Identity encoding and no-transform survive response middleware. Reject weak,
+  wildcard, multiple and malformed tags before any mutation.
 - **Application:** live policy snapshot is coherent; restart fields stay pending;
   saved/effective cross-field prerequisites hold before commit;
   post-commit failure reports committed state and exact pending paths; restart
   admits the saved snapshot or exposes a bounded operational startup failure.
-- **Secrets:** API key/private identity excluded from GET, errors, logs,
-  generated schemas/examples, fresh-bootstrap console output and diagnostics.
-  Authentication is mandatory on
+- **Secrets:** API key/private identity excluded from the settings/status
+  resources, their errors, generated public schemas/examples and normal
+  structured logging. Once-only
+  fresh-key provisioning follows the accepted bootstrap handoff. Retain the
+  separate #280 authenticated private-bundle full-fidelity tests and its
+  warning/acknowledgement ownership. Authentication is mandatory on
   the settings resource; no URL/query credential transport.
 - **Windows/Linux sockets:** fresh default-model assertions; actual TCP/UDP
   binds; nondefault configured ports; occupied/invalid bind handling; shared
