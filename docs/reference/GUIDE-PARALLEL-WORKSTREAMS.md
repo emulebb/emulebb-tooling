@@ -84,6 +84,47 @@ staged executable, and output paths. The parent schedules these operations;
 workers must not bypass a busy lock or launch competing runtime campaigns.
 Lightweight commit checks use separate temporary inputs for each invocation.
 
+## Rust And Native Dependencies
+
+A Rust worktree also consumes external C sources: `emulebb-miniupnpc-sys` and
+`emulebb-pcpnatpmp-sys` compile them through `cc`. Assignments must record these
+inputs even when the worker changes only Rust files.
+
+The sys build scripts resolve each native source root in this order:
+
+| Native source | Inherited override | Workspace default |
+| --- | --- | --- |
+| MiniUPnP | `MINIUPNP_ROOT` | `repos/third_party/emulebb-miniupnp` |
+| libpcpnatpmp | `PCPNATPMP_ROOT` | `repos/third_party/emulebb-libpcpnatpmp` |
+
+An inherited override takes precedence. Otherwise, `EMULEBB_WORKSPACE_ROOT`
+must be an existing absolute directory containing the Rust checkout; the
+default paths above are relative to that workspace root. The scripts retain
+a legacy fallback relative to `CARGO_MANIFEST_DIR`, which does not resolve the
+native sources correctly from managed worktrees. Workers must stop and report
+missing or invalid inherited configuration rather than repair it inline.
+The authoritative implementations are the
+[MiniUPnP build script](https://github.com/emulebb/emulebb-rust/blob/main/crates/emulebb-miniupnpc-sys/build.rs)
+and [libpcpnatpmp build script](https://github.com/emulebb/emulebb-rust/blob/main/crates/emulebb-pcpnatpmp-sys/build.rs).
+
+Use the Rust toolchain pin in
+[`rust-toolchain.toml`](https://github.com/emulebb/emulebb-rust/blob/main/rust-toolchain.toml)
+(currently `1.98.1`). For hosted native-source revisions, read `MINIUPNP_REF`
+and `PCPNATPMP_REF` in the Rust
+[CI](https://github.com/emulebb/emulebb-rust/blob/main/.github/workflows/ci.yml),
+[release](https://github.com/emulebb/emulebb-rust/blob/main/.github/workflows/release.yml),
+and [fuzz](https://github.com/emulebb/emulebb-rust/blob/main/.github/workflows/fuzz.yml)
+workflows; keep those pins aligned when coordinating a dependency change.
+Topology materialization baselines are not package source pins. Path overrides
+select directories; the sys build scripts do not enforce their Git revisions.
+
+The Builder's
+[`release.py`](https://github.com/emulebb/emulebb-build/blob/main/emule_workspace/release.py)
+uses the same override-before-workspace-default selection and records both
+native Git commits in package provenance. Compare those recorded revisions
+with the assignment's intended inputs; a correct path alone is not revision
+qualification. Coordinate native-source or pin changes through the parent.
+
 ## Review And Integrate
 
 Workers push validated commits, open complete review-ready pull requests,
