@@ -93,6 +93,7 @@ nav:
       - Running On macOS And Linux: reference/GUIDE-CROSS-PLATFORM.md
       - REST API — Forward OpenAPI: products/emulebb-rust/api/REST-API-OPENAPI.yaml
       - REST API — Notes: products/emulebb-rust/api/README.md
+      - Proposed Settings Target: products/emulebb-rust/design/SETTINGS-TARGET.md
       - Design — Kad/eD2K Indexer: products/emulebb-rust/design/kad-ed2k-indexer.md
       - Source And Issues (GitHub): https://github.com/emulebb/emulebb-rust
   - Product Sections:
