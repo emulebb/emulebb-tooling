@@ -2,7 +2,7 @@
   "schema_version": 1,
   "organization": {
     "name": "eMuleBB",
-    "summary": "eMuleBB Rust is the active eD2K/Kad beta, backed by a maintained Windows client and focused protocol tooling.",
+    "summary": "eMuleBB Rust is an eD2K/Kad client for Windows, Linux and macOS, operated through a browser console and authenticated REST API.",
     "development_posture": "eMuleBB Rust is the active product-development lane. The MFC client remains the stable Windows diagnostic baseline and may receive critical fixes and bounded, low-risk maintenance.",
     "website_url": "https://emulebb.github.io/",
     "docs_url": "https://emulebb.github.io/emulebb-tooling/",
@@ -16,8 +16,8 @@
       "lifecycle_label": "Active beta",
       "published_version": "0.1.0-beta.2",
       "development_target": "Beta 3",
-      "development_eta": "Beta 3 is expected after a few more weeks of implementation and stabilization.",
-      "testing_summary": "Repeatedly tested on live eD2K/Kad networks.",
+      "development_eta": "Beta 3 is the next development target.",
+      "testing_summary": "See the platform guide for package checks, network-validation scope and the limits of the published proof.",
       "nightly_url": "https://github.com/emulebb/emulebb-rust/releases",
       "release_url": "https://github.com/emulebb/emulebb-rust/releases/tag/rust-v0.1.0-beta.2",
       "docs_url": "https://emulebb.github.io/emulebb-tooling/products/emulebb-rust/",
@@ -127,5 +127,75 @@
     "checksum_url": "https://emulebb.github.io/install.ps1.sha256",
     "release_channel_key": "mfc-stable"
   },
-  "historical_bundle_note": "The MFC 0.7.3 release preserves the historical Suite installer and matching aMuTorrent artifact. Suite is a shipped bundle name, not an active cross-client roadmap."
+  "historical_bundle_note": "The MFC 0.7.3 release preserves the historical Suite installer and matching aMuTorrent artifact. Suite is a shipped bundle name, not an active cross-client roadmap.",
+  "reader_routes": {
+    "use": {
+      "label": "Use eMuleBB Rust",
+      "url": "https://emulebb.github.io/emulebb-tooling/products/emulebb-rust/reference/GUIDE-GETTING-STARTED/",
+      "downloads_url": "https://emulebb.github.io/emulebb-tooling/products/emulebb-rust/reference/GUIDE-DOWNLOADS-PLATFORMS/"
+    },
+    "develop": {
+      "label": "Develop with eMuleBB Rust",
+      "url": "https://emulebb.github.io/emulebb-tooling/products/emulebb-rust/reference/GUIDE-CONTRIBUTING/",
+      "api_url": "https://emulebb.github.io/emulebb-tooling/products/emulebb-rust/api/GUIDE-API-CONSUMERS/"
+    }
+  },
+  "branding": {
+    "selection": "proposal-1",
+    "source_sha256": "0c7782ed5bdfb13f551f0f07658bc6ea59eb3c35c9ccf0a3a4e8b0684974223b",
+    "logo_path": "assets/brand/emulebb-logo-256.png",
+    "social_path": "assets/brand/rust-social-preview.png",
+    "social_alt": "eMuleBB Rust: eD2K and Kad with browser control on Windows, Linux and macOS",
+    "readme_logo_url": "https://emulebb.github.io/assets/brand/emulebb-logo-256.png",
+    "assets": [
+      {
+        "path": "assets/brand/emulebb-logo-256.png",
+        "role": "logo",
+        "width": 256,
+        "height": 256,
+        "bytes": 106278,
+        "sha256": "48b08b0d5516ba5e83d713a1a19ed9682a377abd561346fcb39687fc0a70c73f"
+      },
+      {
+        "path": "assets/brand/emulebb-logo-384.png",
+        "role": "logo",
+        "width": 384,
+        "height": 384,
+        "bytes": 238240,
+        "sha256": "884d0edea8edc6a5a0e9c73fe9be988f9b2d6642b9136b5b5a4e2fa6cbe5ffaf"
+      },
+      {
+        "path": "assets/brand/emulebb-logo-512.png",
+        "role": "logo",
+        "width": 512,
+        "height": 512,
+        "bytes": 409923,
+        "sha256": "0f86eb0718ea489aa2fee79060fb768b4192a543508c50f0ce7f685dc731cafa"
+      },
+      {
+        "path": "assets/brand/emulebb-donkey-180.png",
+        "role": "touch-icon",
+        "width": 180,
+        "height": 180,
+        "bytes": 46087,
+        "sha256": "4b269a328482ada12976aa90ca86a7da4b5559c2d225b9e579143f15b46df1ac"
+      },
+      {
+        "path": "assets/brand/emulebb-favicon.ico",
+        "role": "favicon",
+        "width": 256,
+        "height": 256,
+        "bytes": 5707,
+        "sha256": "1b42435d5bfb7fa9d30df0d8c7a23bcc47211223a2097f1585499dd2a1e40fbe"
+      },
+      {
+        "path": "assets/brand/rust-social-preview.png",
+        "role": "social-card",
+        "width": 1280,
+        "height": 640,
+        "bytes": 108889,
+        "sha256": "5fbcdb538a8d571f93f969b5bb7c746e0469d709164fc5a69313eec0a642d7e7"
+      }
+    ]
+  }
 }

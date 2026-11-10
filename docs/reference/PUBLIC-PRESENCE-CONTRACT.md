@@ -14,6 +14,29 @@ channel. `published_version` and `release_url` retain the latest immutable
 formal tag only as archival release metadata; current-facing generators must
 not render them as a baseline, call to action, or recommendation.
 
+## Reader routes and approved identity
+
+Schema 1 retains all existing product, release, repository and installer keys.
+The legacy `development_eta` key contains the next milestone without a date;
+it must not introduce a relative delivery promise. Optional `reader_routes`
+records the equally prominent Use and Develop routes, platform/download guide
+and API-consumer guide. These link to the owning Rust guides rather than
+duplicating their platform requirements or qualification claims.
+
+Optional `branding` identifies the operator-approved proposal-1 Rust donkey
+derivatives by exact public path, role, dimensions, byte count and SHA-256.
+Only the three logo tiles, touch icon, existing favicon path and approved
+`1280x640` social card belong to that allowlist. Preserve supplied image bytes;
+do not derive new artwork during public-surface generation. The site validator
+checks asset identities, local image references and accessible dimensions/alt
+text. Social metadata uses the approved canonical public card URL.
+
+The generated organization profile uses the approved public logo origin or an
+actual immutable merged Pages commit URL. Never invent a future commit pin.
+The parent coordinates authoritative contract, Pages deployment and profile
+integration; a local source reference does not establish live publication.
+Legacy schema-1 contracts without these extensions still validate.
+
 ## Ownership
 
 - `emulebb-tooling` owns the contract, validator, and deterministic organization

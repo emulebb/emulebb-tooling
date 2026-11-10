@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 from pathlib import Path
 from typing import Any
@@ -19,6 +20,69 @@ REQUIRED_REPOSITORY_KEYS = frozenset(
 )
 REQUIRED_PRODUCT_KEYS = frozenset({"emulebb-rust"})
 REQUIRED_REFERENCE_URLS = frozenset({"https://github.com/amule-org/amule", "https://github.com/irwir/eMule"})
+READER_ROUTES = {
+    "use": {"label": "Use eMuleBB Rust",
+            "url": "https://emulebb.github.io/emulebb-tooling/products/emulebb-rust/reference/GUIDE-GETTING-STARTED/",
+            "downloads_url": "https://emulebb.github.io/emulebb-tooling/products/emulebb-rust/reference/GUIDE-DOWNLOADS-PLATFORMS/"},
+    "develop": {"label": "Develop with eMuleBB Rust",
+                "url": "https://emulebb.github.io/emulebb-tooling/products/emulebb-rust/reference/GUIDE-CONTRIBUTING/",
+                "api_url": "https://emulebb.github.io/emulebb-tooling/products/emulebb-rust/api/GUIDE-API-CONSUMERS/"},
+}
+BRAND_ASSETS = {
+    "assets/brand/emulebb-logo-256.png": ("logo", 256, 256),
+    "assets/brand/emulebb-logo-384.png": ("logo", 384, 384),
+    "assets/brand/emulebb-logo-512.png": ("logo", 512, 512),
+    "assets/brand/emulebb-donkey-180.png": ("touch-icon", 180, 180),
+    "assets/brand/emulebb-favicon.ico": ("favicon", 256, 256),
+    "assets/brand/rust-social-preview.png": ("social-card", 1280, 640),
+}
+
+
+def validate_public_extensions(payload: dict[str, Any], errors: list[str]) -> None:
+    """@brief Validate optional schema-1 reader routes and approved Rust branding.
+    @param payload The public-presence authority, including optional extensions.
+    @param errors Existing validation failures to extend; legacy contracts remain valid.
+    """
+    if "reader_routes" in payload and payload["reader_routes"] != READER_ROUTES:
+        errors.append("reader_routes must use the approved equal Use/Develop labels and canonical guide URLs")
+    if "branding" not in payload:
+        return
+    brand = payload["branding"]
+    if not isinstance(brand, dict):
+        errors.append("branding must be an object")
+        return
+    if brand.get("selection") != "proposal-1":
+        errors.append("branding must select the operator-approved proposal-1 assets")
+    for key in ("source_sha256",):
+        if not isinstance(brand.get(key), str) or re.fullmatch(r"[0-9a-f]{64}", brand[key]) is None:
+            errors.append(f"branding.{key} requires a SHA-256 identity")
+    if brand.get("logo_path") != "assets/brand/emulebb-logo-256.png" or brand.get("social_path") != "assets/brand/rust-social-preview.png":
+        errors.append("branding logo/social paths must identify the approved assets")
+    require_text(errors, brand, "social_alt", "branding")
+    logo_url = brand.get("readme_logo_url", "")
+    if (logo_url != "https://emulebb.github.io/assets/brand/emulebb-logo-256.png"
+            and (not isinstance(logo_url, str) or re.fullmatch(
+                r"https://raw\.githubusercontent\.com/emulebb/emulebb\.github\.io/[0-9a-f]{40}/assets/brand/emulebb-logo-256\.png", logo_url) is None)):
+        errors.append("branding.readme_logo_url must use the approved public origin or an actual immutable Pages commit")
+    assets = brand.get("assets", [])
+    if not isinstance(assets, list) or not all(isinstance(asset, dict) for asset in assets):
+        errors.append("branding.assets must be an approved asset array")
+        return
+    if not all(isinstance(asset.get("path"), str) for asset in assets):
+        errors.append("branding asset paths must be strings")
+        return
+    if len(assets) != len(BRAND_ASSETS) or {asset.get("path") for asset in assets} != set(BRAND_ASSETS):
+        errors.append("branding.assets must contain exactly the six approved public derivatives")
+    for asset in assets:
+        path = asset.get("path")
+        if path not in BRAND_ASSETS:
+            continue
+        if (asset.get("role"), asset.get("width"), asset.get("height")) != BRAND_ASSETS[path]:
+            errors.append(f"branding asset role/dimensions differ: {path}")
+        if type(asset.get("bytes")) is not int or not 0 < asset["bytes"] <= 8 * 1024 * 1024:
+            errors.append(f"branding asset requires a bounded byte count: {path}")
+        if not isinstance(asset.get("sha256"), str) or re.fullmatch(r"[0-9a-f]{64}", asset["sha256"]) is None:
+            errors.append(f"branding asset requires a SHA-256 identity: {path}")
 
 
 def load_contract(path: Path) -> dict[str, Any]:
@@ -193,6 +257,7 @@ def validate_contract(payload: dict[str, Any]) -> list[str]:
         errors.append(f"installer.release_channel_key does not resolve: {release_channel_key}")
 
     require_text(errors, payload, "historical_bundle_note", "contract")
+    validate_public_extensions(payload, errors)
     return errors
 
 
@@ -214,63 +279,64 @@ def render_org_profile(payload: dict[str, Any]) -> str:
     organization = payload["organization"]
     repositories = repository_by_key(payload)
     rust_product = product_by_key(payload)["emulebb-rust"]
+    routes = payload.get("reader_routes", READER_ROUTES)
     lines = [
         "<!-- Generated by emulebb-tooling/helpers/public-presence.py. -->",
         "# eMuleBB",
         "",
+    ]
+    if brand := payload.get("branding"):
+        lines.extend([f'<img src="{brand["readme_logo_url"]}" width="160" height="160" alt="eMuleBB Rust pixel donkey identity" />', ""])
+    lines.extend([
         "[![Rust CI](https://github.com/emulebb/emulebb-rust/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/emulebb/emulebb-rust/actions/workflows/ci.yml)",
-        "[![MFC baseline](https://github.com/emulebb/emulebb/actions/workflows/baseline.yml/badge.svg?branch=main)](https://github.com/emulebb/emulebb/actions/workflows/baseline.yml)",
         "[![Docs](https://github.com/emulebb/emulebb-tooling/actions/workflows/docs-site.yml/badge.svg?branch=main)](https://github.com/emulebb/emulebb-tooling/actions/workflows/docs-site.yml)",
+        "",
+        "**Contents:** [Use or develop](#use-or-develop) · [Repositories](#work-across-the-project) · [Support](#keep-in-touch)",
         "",
         organization["summary"],
         "",
-        f"## {rust_product['display_name']}",
+        f"**{rust_product['lifecycle_label']}.** CI-gated nightly builds are the public testing channel. {rust_product['development_eta']}",
         "",
-        f"**{rust_product['lifecycle_label']}.**",
+        "## Use or develop",
+        "",
+        f"| {routes['use']['label']} | {routes['develop']['label']} |",
+        "| --- | --- |",
+        f"| [First launch and daily use]({routes['use']['url']}) | [Contribute to the client]({routes['develop']['url']}) |",
+        f"| [Choose a platform and package]({routes['use']['downloads_url']}) | [Build against the REST API]({routes['develop']['api_url']}) |",
+        "",
+        "- **Browser operation:** search eD2K/Kad, manage transfers and monitor chosen shared folders from the packaged console.",
+        "- **Automation:** use authenticated REST requests and the documented API contract.",
+        "- **Explicit network controls:** review interface settings, connection status and diagnostics.",
+        "- **Identifiable builds:** inspect source-bound package manifests, checksums and provenance.",
         "",
         rust_product["testing_summary"],
         "",
-        rust_product["development_eta"],
-        "",
         f"- [Choose the newest dated nightly build]({rust_product['nightly_url']})",
-        f"- [Read the {rust_product['display_name']} product docs]({rust_product['docs_url']})",
         f"- [Report {rust_product['display_name']} issues]({rust_product['issues_url']})",
         "",
-        "## Client Lanes",
+        "## Work across the project",
         "",
-    ]
-    for channel in payload["release_channels"]:
-        repository = repositories[channel["repository_key"]]
-        lines.extend(
-            [
-                f"- **[{repository['name']}]({repository['url']}) — {channel['label']}.** {channel['description']}",
-            ]
-        )
-        if contributing_url := channel.get("contributing_url"):
-            lines.append(f"  [Contributions are welcome.]({contributing_url})")
-    lines.extend(["", organization["development_posture"], "", "## Repository Status", "", "| Repository | Role |", "| --- | --- |"])
-    for repository in payload["repositories"]:
+        "| Repository | Role |",
+        "| --- | --- |",
+    ])
+    primary = ("emulebb-rust", "emulebb-tooling", "emulebb-build", "emulebb-build-tests")
+    for key in primary:
+        repository = repositories[key]
         lines.append(f"| [`{repository['name']}`]({repository['url']}) | {repository['role']} |")
-    lines.extend(["", "## Compatibility References", "", "| Reference | Role |", "| --- | --- |"])
-    for reference in payload["compatibility_references"]:
-        lines.append(
-            f"| [{reference['name']}]({reference['url']}) (`{reference['tracking_ref']}`) | {reference['role']} |"
-        )
-    lines.extend(
-        [
-            "",
-            "## Releases And Historical Bundles",
-            "",
-            payload["historical_bundle_note"],
-            "",
-            "## Start Here",
-            "",
-        ]
-    )
+    lines.extend(["", "## Maintenance and references", "", organization["development_posture"], ""])
     for channel in payload["release_channels"]:
-        lines.append(f"- [{channel['label']} downloads]({channel['download_url']})")
+        if channel["key"] == "rust-nightly":
+            continue
+        lines.append(f"- [{channel['label']} downloads]({channel['download_url']}): {channel['description']}")
+    lines.extend(["", "<details>", "<summary>Test infrastructure and compatibility references</summary>", ""])
+    for repository in payload["repositories"]:
+        if repository["key"] not in primary:
+            lines.append(f"- [`{repository['name']}`]({repository['url']}): {repository['role']}")
+    for reference in payload["compatibility_references"]:
+        lines.append(f"- [{reference['name']}]({reference['url']}) (`{reference['tracking_ref']}`): {reference['role']}")
     lines.extend(
         [
+            "", "</details>", "", "## Keep in touch", "",
             f"- [Read the public documentation]({organization['docs_url']})",
             f"- [Review the eMuleBB Roadmap]({organization['roadmap_url']})",
             f"- [Open the organization website]({organization['website_url']})",

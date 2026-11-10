@@ -5,13 +5,17 @@ from __future__ import annotations
 
 import argparse
 import datetime as dt
+import hashlib
 import os
+import posixpath
 import re
+import runpy
 import sys
 import xml.etree.ElementTree as ET
 from dataclasses import dataclass
 from html.parser import HTMLParser
 from pathlib import Path
+from urllib.parse import urljoin, urlparse
 
 
 SITE_BASE_URL = "https://emulebb.github.io"
@@ -169,6 +173,7 @@ class ParsedPage(HTMLParser):
         self.alternates: dict[str, str] = {}
         self.og_urls: list[str] = []
         self.images: list[dict[str, str]] = []
+        self.meta_values: dict[str, list[str]] = {}
         self.visible_text: list[str] = []
         self._ignored_text_depth = 0
 
@@ -185,6 +190,9 @@ class ParsedPage(HTMLParser):
         if tag == "img":
             self.images.append(attrs_by_name)
         if tag == "meta":
+            key = attrs_by_name.get("property") or attrs_by_name.get("name")
+            if key:
+                self.meta_values.setdefault(key, []).append(attrs_by_name.get("content", ""))
             if attrs_by_name.get("name") == "robots":
                 self.robots.append(attrs_by_name.get("content", ""))
             if attrs_by_name.get("property") == "og:url":
@@ -329,7 +337,7 @@ def relative_prefix(page: PageSpec) -> str:
     return "../" * len(page.directory.split("/"))
 
 
-def validate_page(pages_root: Path, page: PageSpec, errors: list[str]) -> None:
+def validate_page(pages_root: Path, page: PageSpec, errors: list[str], branding: dict | None = None) -> None:
     """Validate one canonical localized HTML page."""
 
     path = pages_root / page.relative_file
@@ -367,7 +375,7 @@ def validate_page(pages_root: Path, page: PageSpec, errors: list[str]) -> None:
     for href in parsed.hrefs:
         if href.startswith("#"):
             expect(errors, href[1:] in parsed.ids, f"{page.relative_file}: missing anchor target {href}")
-    validate_images(page.relative_file, parsed, errors)
+    validate_images(page.relative_file, parsed, errors, branding)
 
     if not page.directory:
         visible_text = " ".join(parsed.visible_text).lower()
@@ -395,14 +403,46 @@ def validate_page(pages_root: Path, page: PageSpec, errors: list[str]) -> None:
             expect(errors, section_id not in parsed.ids, f"index.html: obsolete section #{section_id} must not exist")
 
 
-def validate_images(relative_file: Path, parsed: ParsedPage, errors: list[str]) -> None:
-    """Keep every public HTML page free of in-page images."""
-
+def validate_images(relative_file: Path, parsed: ParsedPage, errors: list[str], branding: dict | None = None) -> None:
+    """@brief Admit only the approved local identity and exact social metadata.
+    @param relative_file Site-relative page location used for safe URL resolution.
+    @param parsed Parsed HTML metadata; image attributes remain untrusted.
+    @param errors Validation failures to extend.
+    @param branding Validated optional public-presence brand authority.
+    """
+    assets = {asset["path"]: asset for asset in branding["assets"]} if branding else {}
+    if branding:
+        expect(errors, len(parsed.images) == 1, f"{relative_file}: expected one approved identity image")
     for attrs in parsed.images:
-        errors.append(f"{relative_file}: in-page image is not allowed: {attrs.get('src', '')}")
+        source = attrs.get("src", "")
+        uri = urlparse(source)
+        resolved = urlparse(urljoin(SITE_BASE_URL + "/" + relative_file.as_posix(), source))
+        asset = assets.get(resolved.path.lstrip("/"))
+        allowed = (bool(source) and not any((uri.scheme, uri.netloc, uri.query, uri.fragment, uri.params))
+                   and asset is not None and asset["role"] == "logo"
+                   and source in {posixpath.relpath(asset["path"], relative_file.parent.as_posix()), "/" + asset["path"]})
+        expect(errors, allowed, f"{relative_file}: image must use an approved local logo: {source}")
+        if not allowed:
+            continue
+        expect(errors, "alt" in attrs, f"{relative_file}: image requires explicit alt text")
+        expect(errors, attrs.get("width") == str(asset["width"]) and attrs.get("height") == str(asset["height"]),
+               f"{relative_file}: image intrinsic dimensions differ from the approved asset")
+    english_social = relative_file.as_posix() in {"index.html", "faq/index.html", "languages/index.html"}
+    if branding and english_social:
+        social = SITE_BASE_URL + "/" + branding["social_path"]
+        expected = {"og:image": social, "og:image:width": "1280", "og:image:height": "640",
+                    "og:image:type": "image/png", "og:image:alt": branding["social_alt"],
+                    "twitter:card": "summary_large_image", "twitter:image": social,
+                    "twitter:image:alt": branding["social_alt"]}
+        for key, value in expected.items():
+            expect(errors, parsed.meta_values.get(key) == [value], f"{relative_file}: approved {key} metadata mismatch")
+    elif branding:
+        expect(errors, parsed.meta_values.get("twitter:card") == ["summary"], f"{relative_file}: localized metadata must remain evergreen")
+        expect(errors, not any(key in parsed.meta_values for key in ("og:image", "twitter:image")),
+               f"{relative_file}: localized metadata must not inherit the release-status social card")
 
 
-def validate_language_page(pages_root: Path, errors: list[str]) -> None:
+def validate_language_page(pages_root: Path, errors: list[str], branding: dict | None = None) -> None:
     """Validate the indexable language selector page."""
 
     path = pages_root / LANGUAGE_PAGE.relative_file
@@ -425,10 +465,10 @@ def validate_language_page(pages_root: Path, errors: list[str]) -> None:
         expected_href = f"../{page.directory}/" if page.directory else "../"
         expect(errors, expected_href in parsed.hrefs, f"{LANGUAGE_PAGE.relative_file}: missing link to {page.url}")
     expect(errors, not (pages_root / "pt" / "index.html").exists(), "pt/index.html: generic chooser should not exist")
-    validate_images(LANGUAGE_PAGE.relative_file, parsed, errors)
+    validate_images(LANGUAGE_PAGE.relative_file, parsed, errors, branding)
 
 
-def validate_faq_page(pages_root: Path, page: PageSpec, errors: list[str]) -> None:
+def validate_faq_page(pages_root: Path, page: PageSpec, errors: list[str], branding: dict | None = None) -> None:
     """Validate one indexable FAQ page."""
 
     path = pages_root / page.relative_file
@@ -465,7 +505,7 @@ def validate_faq_page(pages_root: Path, page: PageSpec, errors: list[str]) -> No
         parsed.alternates.get("x-default") == ENGLISH_FAQ_PAGE.url,
         f"{page.relative_file}: FAQ x-default alternate URL mismatch",
     )
-    validate_images(page.relative_file, parsed, errors)
+    validate_images(page.relative_file, parsed, errors, branding)
 
 
 def validate_rust_redirect(pages_root: Path, errors: list[str]) -> None:
@@ -547,18 +587,28 @@ def validate_sitemap(pages_root: Path, errors: list[str]) -> None:
     )
 
 
-def validate_prohibited_assets(pages_root: Path, errors: list[str]) -> None:
-    """Keep the favicon as the only published image asset."""
+def validate_prohibited_assets(pages_root: Path, errors: list[str], branding: dict | None = None) -> None:
+    """Validate the exact approved derivatives and reject other raster/art files."""
 
     favicon = pages_root / "assets" / "brand" / "emulebb-favicon.ico"
     expect(errors, favicon.is_file(), "assets/brand/emulebb-favicon.ico: missing favicon")
-    image_suffixes = {".gif", ".jpeg", ".jpg", ".png", ".webp"}
+    assets = {asset["path"]: asset for asset in branding["assets"]} if branding else {}
+    image_suffixes = {".gif", ".jpeg", ".jpg", ".png", ".webp", ".svg", ".avif", ".ico"}
+    allowed = set(assets) if branding else {"assets/brand/emulebb-favicon.ico"}
     unexpected_images = sorted(
         path.relative_to(pages_root)
         for path in (pages_root / "assets").rglob("*")
-        if path.is_file() and path.suffix.lower() in image_suffixes
+        if path.is_file() and path.suffix.lower() in image_suffixes and path.relative_to(pages_root).as_posix() not in allowed
     )
     expect(errors, not unexpected_images, f"assets: unexpected raster images: {unexpected_images}")
+    for relative, asset in assets.items():
+        path = pages_root / relative
+        regular = path.is_file() and not path.is_symlink() and not path.is_junction()
+        expect(errors, regular, f"{relative}: missing regular approved asset")
+        if regular:
+            expect(errors, path.stat().st_size == asset["bytes"], f"{relative}: approved byte count differs")
+            if path.stat().st_size == asset["bytes"]:
+                expect(errors, hashlib.sha256(path.read_bytes()).hexdigest() == asset["sha256"], f"{relative}: approved SHA-256 differs")
     paths = [pages_root / "styles.css", pages_root / "index.html", pages_root / LANGUAGE_PAGE.relative_file]
     paths.extend(pages_root / page.relative_file for page in CANONICAL_PAGES if page.directory)
     paths.extend(pages_root / page.relative_file for page in FAQ_PAGES)
@@ -571,19 +621,37 @@ def validate_prohibited_assets(pages_root: Path, errors: list[str]) -> None:
                 errors.append(f"{relative}:{line_number}: prohibited asset reference")
 
 
-def validate_site(pages_root: Path) -> int:
+def load_branding(contract_path: Path) -> dict | None:
+    """@brief Reuse the owning contract validator before trusting brand paths.
+    @param contract_path Explicit selected Tooling public-presence authority.
+    @return Validated optional branding, or no branding for a legacy contract.
+    """
+    authority = runpy.run_path(str(Path(__file__).with_name("public-presence.py")))
+    payload = authority["load_contract"](contract_path)
+    errors = authority["validate_contract"](payload)
+    if errors:
+        raise ValueError("Invalid public-presence contract: " + "; ".join(errors))
+    return payload.get("branding")
+
+
+def validate_site(pages_root: Path, contract_path: Path | None = None) -> int:
     """Run the static site validation suite."""
 
     errors: list[str] = []
+    try:
+        branding = load_branding(contract_path or Path(__file__).resolve().parents[1] / "manifests/public-presence.v1.json")
+    except (OSError, ValueError) as error:
+        print(f"public-presence contract error: {error}", file=sys.stderr)
+        return 1
     for page in CANONICAL_PAGES:
-        validate_page(pages_root, page, errors)
-    validate_language_page(pages_root, errors)
+        validate_page(pages_root, page, errors, branding)
+    validate_language_page(pages_root, errors, branding)
     for page in FAQ_PAGES:
-        validate_faq_page(pages_root, page, errors)
+        validate_faq_page(pages_root, page, errors, branding)
     validate_rust_redirect(pages_root, errors)
     validate_release_positioning(pages_root, errors)
     validate_sitemap(pages_root, errors)
-    validate_prohibited_assets(pages_root, errors)
+    validate_prohibited_assets(pages_root, errors, branding)
 
     if errors:
         for error in errors:
