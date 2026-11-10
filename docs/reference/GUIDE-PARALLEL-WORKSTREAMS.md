@@ -150,8 +150,7 @@ instruction.
 
 When a companion repository is integrated but another repository in the same
 workstream is still active, the parent can retire just the completed checkout.
-Run from the workspace root or the canonical Builder, outside the workstream
-being changed:
+Run from the canonical Builder, outside the workstream being changed:
 
 ```powershell
 python -m emule_workspace workstream remove-repo sample-fix --repo emulebb-build --owner parent-agent
