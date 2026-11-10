@@ -79,7 +79,7 @@ stop gating the actual candidate. Existing required checks remain enforced.
 
 | ID | Class | Title |
 |---|---|---|
-| [RUST-CI-043](items/RUST-CI-043.md) | Evidence | **Critical:** Review configuration authority and REST contract coherence |
+| [RUST-CI-043](items/RUST-CI-043.md) | Evidence | Review configuration authority and REST contract coherence |
 | [CI-054](items/CI-054.md) | Evidence | Add native Windows Rust/MFC protocol-parity diagnostics campaign |
 | [RUST-BUG-117](items/RUST-BUG-117.md) | Bug | Expire silent Kad buddy links from received activity |
 | [RUST-BUG-128](items/RUST-BUG-128.md) | Bug | Preserve incremental ED2K offer publication |
