@@ -9,6 +9,7 @@ status: IN_PROGRESS
 priority: Minor
 category: ci
 labels: []
+milestone: post-beta-polish
 created: 2026-11-10
 source: Operator-approved public-presence refresh
 ---

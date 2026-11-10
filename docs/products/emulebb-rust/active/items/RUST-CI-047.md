@@ -9,6 +9,7 @@ status: OPEN
 priority: Minor
 category: ci
 labels: []
+milestone: post-beta-polish
 created: 2026-11-10
 source: Operator-approved application identity and packaging polish
 ---
