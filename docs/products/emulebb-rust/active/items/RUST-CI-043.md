@@ -63,6 +63,7 @@ Ports are configurable. Higher numbers provide no security benefit. REST stays a
 - RUST-BUG-156 / #223 owns duplicate ED2K server settings authority.
 - RUST-FEAT-062 / #233 owns Kad SQLite persistence and the remaining `nodes.dat` write paths; do not duplicate it.
 - RUST-BUG-184 / #299 owns atomic settings persistence and ordered runtime publication. Do not commission a second atomicity implementation.
+- RUST-BUG-178 / #280 owns warning and acknowledgement for the authenticated raw private diagnostic bundle. Preserve its exact API-key/full-fidelity contract; settings-resource secret exclusion does not assign export redaction or a logger rewrite here. Once-only fresh-key provisioning is an explicit bootstrap handoff, with any UX change requiring separate acceptance.
 - The sibling DB-schema review covers physical/logical schema, query efficiency, and evolution. Coordinate shared contract findings through the parent.
 - Scope is Rust client/daemon and its first-party REST/SPA, not rewriting stock MFC or upstream server fixtures.
 
