@@ -5,6 +5,11 @@ API. Start with a [matching nightly package](GUIDE-DOWNLOADS-PLATFORMS.md), veri
 its checksum, and keep the complete extracted layout, including `webui`. No Rust
 toolchain is needed to use the native packages.
 
+![eMuleBB Rust WebUI Search view](../../../assets/emulebb-rust/webui-eac9b37a6e20.png){ width="1280" height="720" }
+
+Controlled Windows x64 candidate-package capture from
+[source commit `18f09ef`](https://github.com/emulebb/emulebb-rust/commit/18f09ef201450f722d6a58b252c66498e7fef9aa).
+
 ## First Launch
 
 On Windows, run `emulebb-rust.exe`; for an extracted Linux native archive, run
