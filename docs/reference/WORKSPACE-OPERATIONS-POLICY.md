@@ -235,9 +235,10 @@ See [Parallel Workstreams](GUIDE-PARALLEL-WORKSTREAMS.md) for the operator flow.
   Use `local-check --repo <repo-root> --stage full` for explicit locked full
   validation of all tracked HEAD inputs, including clean main and commits
   already pushed. Exact participating sources must remain clean and unchanged.
-  Registered full product validation fails before staging unless its selected
-  Builder, Rust and Harness support owned runtime bundles. GitHub required
-  checks remain independent daytime merge gates.
+  Registered Rust build/REST validation fails before staging unless its selected
+  Builder, Rust and Harness support owned runtime bundles. The parent verifies
+  applicable GitHub workflow results before merge; Rust also enforces required
+  status contexts as described in the Delivery Policy.
   Push non-HEAD refs separately from their checked-out branch. Required tools
   include Python, Go for workflow lint, and the repository's pinned Rust/Node
   tools used by the selected checks. Full Rust validation additionally requires
@@ -245,8 +246,9 @@ See [Parallel Workstreams](GUIDE-PARALLEL-WORKSTREAMS.md) for the operator flow.
   the operation.
 - Rust check definitions live in `emulebb-rust/tools/rust_quality_gate.py`;
   `ci-toolchain.json`, `requirements-ci.txt`, and `rust-toolchain.toml` own
-  tool pins. Hooks and GitHub dispatch those definitions. Keep complete
-  pre-push validation and required GitHub checks; do not cache prior passes or
+  tool pins. Hooks select fast push checks; `--stage full` selects complete
+  applicable local validation. Preserve the parent-reviewed GitHub merge gates;
+  do not cache prior passes or
   retry unexplained failures into green results. Source-input differences are
   recorded explicitly rather than repairing operator checkouts or environment.
 - Repeatable workspace automation is persisted Python in the owning repo.

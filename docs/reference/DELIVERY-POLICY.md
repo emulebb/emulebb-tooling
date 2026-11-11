@@ -120,14 +120,16 @@ or pull requests, merges work, cleans delivery state, or creates release tags.
   `python -m emule_workspace local-check --repo <path> --stage full`.
   It selects all tracked HEAD inputs, including clean main or already-pushed
   commits, and runs applicable full host/platform checks under the workspace
-  lock. Registered product validation requires the selected sources to support
-  owned runtime staging; a missing prerequisite fails before staging. The
+  lock. Registered Rust build/REST validation requires the selected sources to
+  support owned runtime staging; a missing prerequisite fails before staging. The
   parent schedules full runs. Both push and full evidence require clean,
   unchanged exact source revisions. Do not bypass hooks, reuse an old pass,
   silently skip a failed check, or repair inherited environment values.
-- GitHub required checks are the daytime merge gates for full platform builds,
-  tests and hosted analysis. GitHub also owns
-  permissions and publication. A local pass is not remote
+- The parent verifies applicable GitHub workflows for full platform builds,
+  tests and hosted analysis before merging. Rust additionally enforces its
+  required status contexts in GitHub. Support repositories still require parent
+  review of their workflow results even when branch protection does not enforce
+  them. GitHub also owns permissions and publication. A local pass is not remote
   proof. Generated local evidence stays below the configured output root.
 
 - Never leave agent-created tracked or untracked files uncommitted when moving
