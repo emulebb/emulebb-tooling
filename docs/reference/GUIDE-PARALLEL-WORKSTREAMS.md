@@ -74,6 +74,12 @@ manual validation entrypoint also accepts explicit selection:
 python -m emule_workspace local-check --repo <worker-checkout-root> --stage push --workstream sample-fix
 ```
 
+Hooks use a workstream's registered Builder companion when it has one. Updating
+canonical Builder main does not update that companion: the parent refreshes its
+branch to include the daytime validation policy before the worker expects fast
+push behavior. Keep the selected source identity; do not override it with a
+different Builder or environment binding to change which checks run.
+
 The selected source set must reach nested validators. A successful check of
 another checkout is not evidence for the worker's branch. Push validation
 requires clean participating source state and records exact source paths and
