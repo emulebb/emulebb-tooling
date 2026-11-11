@@ -90,6 +90,9 @@ its immutable workflow pin update precede the Rust consumer PR.
   their existing source, compile/ELF, checksum and inventory validation.
   Android may be skipped only by a non-nightly candidate's existing condition.
 - Selected native packaging/smoke matrices share the validated profile output.
+  YAML step anchors share the package and smoke recipes across the selected
+  and optional jobs. Fixed job-local prefixes retain their distinct artifact
+  namespaces while checkout identities and lifecycle sources share one recipe.
   Optional macOS packaging/smoke uses a separate artifact namespace and cannot
   skip mandatory smoke, OCI verification or assembly. Full assembly still
   requires macOS, and full source qualification also requires the latest exact
@@ -153,7 +156,7 @@ Initial Windows/private CPython 3.15.2 lightweight evidence:
   inventory and rejects reduced nightly assembly. Its normal fast commit
   checks passed. The refreshed Builder synthetic suites await their supported
   serialized runner slot.
-- Rust `8c34475fcfb281e9346ceb6dc92cbcf8166c27b8` passed the normal workflow
+- Rust `f749c50b31593ebd66f3e0749fae8e0d1b732806` passed the normal workflow
   commit checks, including environment provenance, actionlint, client policy,
   256 unittest cases with one POSIX-only aggregate-shell case skipped on
   Windows, and rustfmt. Regression coverage retains Android assembly joins,
