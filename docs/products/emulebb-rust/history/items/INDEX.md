@@ -12,5 +12,6 @@ to locate a closed record.
 
 | Item | Decision | Evidence |
 | --- | --- | --- |
+| [RUST-BUG-185](https://github.com/emulebb/emulebb-tooling/blob/main/docs/products/emulebb-rust/history/items/RUST-BUG-185.md) | DONE with the exact qualified tree merged | [Closed #310](https://github.com/emulebb/emulebb-rust/issues/310), [merged PR #311](https://github.com/emulebb/emulebb-rust/pull/311), postmerge checks in progress |
 | [RUST-BUG-157](https://github.com/emulebb/emulebb-tooling/blob/main/docs/products/emulebb-rust/history/items/RUST-BUG-157.md) | DONE; regression/CI gates PASSED | [Closed #224](https://github.com/emulebb/emulebb-rust/issues/224), [merged PR #264](https://github.com/emulebb/emulebb-rust/pull/264); scale timing not remeasured |
 | [RUST-CI-034](https://github.com/emulebb/emulebb-tooling/blob/main/docs/products/emulebb-rust/history/items/RUST-CI-034.md) | DONE on reviewed documentation PR merge | [#268](https://github.com/emulebb/emulebb-rust/issues/268); 31 reports / 212 dispositions; release held |
