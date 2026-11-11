@@ -69,11 +69,10 @@ Add a meaningful regression for the affected behavior. Run scoped required check
 
 The managed `rust-platform-gates` workstream owns one coordinated outcome
 across Rust workflow/control code, Builder candidate assembly, and this spec.
-The Rust checkout explicitly depends on the parent's unpublished native-source
-foundation at `2bc122715712621cc9378d9dcd20677ec0d52bbb`; the parent must
-integrate that foundation before publishing this feature without duplicate
-commits. Builder integration and its immutable workflow pin update precede
-the Rust consumer PR.
+The current source refresh uses Rust main `a8d6189c`, Builder main `43abac2d`
+and Tooling main `dad45eef` as its bases. Current source-selection repairs and
+the experimental Android nightly graph are retained. Builder integration and
+its immutable workflow pin update precede the Rust consumer PR.
 
 - Required CI keeps Linux GNU and Windows native x64/ARM64, both native musl
   CPUs, REST/OpenAPI, shared quality, workflow lint and supply-chain checks.
@@ -87,6 +86,9 @@ the Rust consumer PR.
   both musl CPUs, both OCI variants/architectures and existing proofs. The
   reduced profile is restricted to unpublished manual candidate code paths;
   nightly, tags and publication reject it.
+- Full nightly assembly retains both experimental Android ABI packages and
+  their existing source, compile/ELF, checksum and inventory validation.
+  Android may be skipped only by a non-nightly candidate's existing condition.
 - Selected native packaging/smoke matrices share the validated profile output.
   Optional macOS packaging/smoke uses a separate artifact namespace and cannot
   skip mandatory smoke, OCI verification or assembly. Full assembly still
@@ -101,6 +103,30 @@ the Rust consumer PR.
   failures and malformed inventories fail immediately. Scheduled nightly
   timeouts retain their exact-source skip reason and later scheduled retry;
   neither old green sources nor old successful attempts are substituted.
+  Each Actions API request uses the remaining deadline, and a result arriving
+  after the deadline cannot qualify the source.
+
+## Merge Readiness And Independent Outcomes
+
+The enforced default-branch contexts are `Single active PR`, `Required CI` and
+`Required CodeQL`, with the existing strict up-to-date rule. The parent checks
+those contexts and their source identities at the actual pull-request HEAD.
+Native Windows/Linux x64 and ARM64 remain in the mandatory graph, together
+with both native musl CPUs and the shared quality, security and REST checks.
+
+The persisted GitHub observer continues reporting every head workflow,
+including pending or failed optional platform work. Its complete-outcome view
+does not replace the enforced-context decision. Optional failures retain their
+own failed checks and summaries. Full nightly and publication eligibility
+still require the optional source qualification and every included artifact's
+own validation.
+
+The prepared-image producer under RUST-CI-045 binds its digest and attestation
+to the exact Builder revision. After the Builder profile changes merge, a new
+producer run must verify that merged source before the prepared-image consumer
+and this release profile consumer select its immutable revision and digest.
+Release guidance/finalization functions and prepared-image provisioning/pins
+remain coordinated workstream ownership boundaries during source integration.
 
 Initial Windows/private CPython 3.15.2 lightweight evidence:
 
@@ -121,7 +147,21 @@ Initial Windows/private CPython 3.15.2 lightweight evidence:
   rustfmt. The Android consumer regression reads the new optional workflow
   and retains its ABI, immutable pin and provenance assertions.
 
-The operator's HDD-pressure hold stops further local tests until the approved
-scratch backend is ready. Preserve the checkpoint, required validation and
-release hold; no native/Docker/live work, push or publication is authorized by
-these lightweight results.
+## Refreshed Source Checkpoint
+
+- Builder `b7a1e4b0044e111efe793361ab8b395a54d8b5f1` preserves Android nightly
+  inventory and rejects reduced nightly assembly. Its normal fast commit
+  checks passed. The refreshed Builder synthetic suites await their supported
+  serialized runner slot.
+- Rust `8c34475fcfb281e9346ceb6dc92cbcf8166c27b8` passed the normal workflow
+  commit checks, including environment provenance, actionlint, client policy,
+  256 unittest cases with one POSIX-only aggregate-shell case skipped on
+  Windows, and rustfmt. Regression coverage retains Android assembly joins,
+  mandatory native ARM64 membership, independent optional failures and bounded
+  source qualification.
+- Normal full local pre-push validation, the Linux aggregate-shell proof and
+  independent hosted qualification remain pending. Full local pre-push checks
+  continue using the workspace validation lock.
+- The Rust release workflow's final Builder pin awaits the actual merged
+  profile API. Current source checkpoints remain unpublished until the
+  coordinated immutable pins and qualification are complete.
