@@ -95,7 +95,6 @@ stop gating the actual candidate. Existing required checks remain enforced.
 | [RUST-BUG-178](items/RUST-BUG-178.md) | Bug | Warn before creating private diagnostic bundles |
 | [RUST-BUG-181](items/RUST-BUG-181.md) | Bug | Bound RIFF media parsing and retain malformed-input regressions |
 | [RUST-BUG-184](items/RUST-BUG-184.md) | Bug | Make settings PATCH persistence atomic |
-| [RUST-BUG-185](items/RUST-BUG-185.md) | Bug | Preserve stopped transfer authority against stale background updates |
 | [RUST-CI-006](items/RUST-CI-006.md) | Evidence | Refresh current-head stock parity evidence and reconcile docs |
 | [RUST-CI-009](items/RUST-CI-009.md) | Evidence | Certify a Beta 3 candidate without publishing |
 | [RUST-CI-033](items/RUST-CI-033.md) | Evidence | Preserve native build scripts in Dependabot fuzz updates |

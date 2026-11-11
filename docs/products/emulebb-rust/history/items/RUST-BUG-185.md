@@ -5,7 +5,7 @@ product: emulebb-rust
 phase: Phase 1
 github_issue: https://github.com/emulebb/emulebb-rust/issues/310
 title: Preserve stopped transfer authority against stale background updates
-status: IN_PROGRESS
+status: DONE
 priority: Major
 category: bug
 labels: [bug, rust]
@@ -22,7 +22,8 @@ source: Stopped-transfer regression found during parent-coordinated AICH qualifi
 
 Keep an operator's persisted stopped state authoritative when a detached
 download-attempt completion publishes an older queued result. This reliability
-fix is a delivery prerequisite for AICH trust work in RUST-BUG-164 / #248.
+fix was integrated through PR #311, satisfying the stopped-state prerequisite
+for AICH trust work in RUST-BUG-164 / #248.
 
 ## Current State
 
@@ -55,8 +56,8 @@ active creation, completed transfers, and intentional resume behavior.
 
 The parent coordinates the reserved core, ED2K metadata, and colocated lifecycle
 test files. Atomic settings shares `lib.rs` through separately reserved wiring.
-AICH shares `metadata.rs` and restacks after this prerequisite merges. Beta3
-publication and the long soak remain on hold.
+AICH shares `metadata.rs` and can restack on the integrated prerequisite under
+parent coordination. Beta3 publication and the long soak remain on hold.
 
 ## Acceptance Criteria
 
@@ -67,7 +68,7 @@ publication and the long soak remain on hold.
       and existing stop/resume coverage.
 - [x] Add deterministic regressions for stale queued publication and stale cache.
 - [x] Complete the normal exact-source Windows/Linux/Android pre-push gate.
-- [ ] Pass hosted exact-head checks and integrate the reviewed fix before AICH.
+- [x] Pass hosted exact-head checks and integrate the reviewed fix before AICH.
 
 ## Validation
 
@@ -88,12 +89,26 @@ Android evidence covers its required compilation and ELF scope.
 
 The ordinary push completed successfully at the exact fix source. Managed WSL
 teardown confirmed EOF and the workspace lock was released. The worktree was
-clean after the push. Hosted checks, review, and integration remain pending.
-Retain the hosted exact-head results and merged source when those gates
-complete. [PR #311](https://github.com/emulebb/emulebb-rust/pull/311)
+clean after the push. All 23 premerge checks passed across three exact-source
+workflows. [Branch checks](https://github.com/emulebb/emulebb-rust/actions/runs/42961860174),
+[CI](https://github.com/emulebb/emulebb-rust/actions/runs/42961993688), and
+[CodeQL](https://github.com/emulebb/emulebb-rust/actions/runs/42961993699)
+
+PR #311 rebase-merged on 2026-11-11 at 05:51:37 UTC as
+`a8d6189cd848fe3b2122710d5a9d59e5f7b8ac44`. The clean canonical main and the
+qualified fix source resolve to the same Git tree,
+`62b2afa7048fd537520c98318a4fc63c3255c755`. Issue #310 closed as completed
+at 05:51:39 UTC and its Project #3 status is Done.
+[PR #311](https://github.com/emulebb/emulebb-rust/pull/311) and
+[issue #310](https://github.com/emulebb/emulebb-rust/issues/310)
+
+Postmerge checks on the merged SHA remain in progress. Retain their final
+conclusions when the official observer completes.
+[CI](https://github.com/emulebb/emulebb-rust/actions/runs/42968485121) and
+[CodeQL](https://github.com/emulebb/emulebb-rust/actions/runs/42968485076)
 
 ## Notes
 
-The parent owns merge order and subsequent AICH restacking. Track AICH trust
-acceptance under its existing owner. [RUST-BUG-164](RUST-BUG-164.md) and
+The parent owns subsequent AICH restacking. Track AICH trust acceptance under
+its existing owner. [RUST-BUG-164](../../active/items/RUST-BUG-164.md) and
 [issue #248](https://github.com/emulebb/emulebb-rust/issues/248)
