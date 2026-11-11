@@ -246,7 +246,15 @@ python -m emule_workspace workstream remove sample-fix --owner parent-agent
 Removal must refuse dirty worktrees, unpublished commits, and unresolved pull
 requests. The normal removal path requires the branch's changes to be integrated.
 An explicitly abandoned assignment can use `--abandoned` after its pull requests
-are closed and its work is published. Removal retains Git branches; the parent
-reviews and removes integrated or superseded local and remote branches separately.
+are closed, including work that was never published. This explicit parent path
+retains each exact checkout head and its reachable history in the canonical
+repository's local `refs/recovery/abandoned/<workstream-id>/<repository-name>`
+reference before any runtime or checkout removal. It verifies the source head
+and recovery reference with Git compare-and-swap; a conflicting recovery reference
+refuses cleanup. Dirty, untracked or ignored files and open or unknown pull-request
+state still refuse removal. Withdrawn code is not pushed by this operation.
+Removal retains Git branches; the parent reviews the recovery refs and removes
+integrated or superseded local and remote branches separately using exact-head
+leases. Ordinary removal and `remove-repo` still refuse unpublished work.
 The parent resolves each blocker explicitly. Do not switch canonical checkouts
 to complete a worker's lifecycle or remove another agent's worktree.
