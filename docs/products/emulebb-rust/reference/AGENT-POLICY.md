@@ -57,10 +57,15 @@ Do not load unrelated Rust annexes merely because the repository is active.
   `CARGO_TARGET_DIR=%EMULEBB_WORKSPACE_OUTPUT_ROOT%\builds\rust\target`.
   WSL compilation uses its separately derived `target-wsl` directory. Never
   create repo-local build or scratch output.
-- The only runnable Windows workspace binary is
+- The Windows operator runtime uses
   `EMULEBB_WORKSPACE_OUTPUT_ROOT\tools\emulebb-rust\bin\emulebb-rust.exe`.
-  Cargo targets are intermediate cache and are not manual, soak, profiling,
-  live-wire, or allow-list executables.
+  Registered validation may use the regular or diagnostics daemon below
+  `EMULEBB_WORKSPACE_OUTPUT_ROOT\tools\workstreams\<id>\emulebb-rust\<target>\bin`
+  after the Builder verifies its registration, source/material identity and
+  ready receipt covering native companions and WebUI bytes. These stages use
+  the existing heavy-validation lock and disposable harness profiles. Manual,
+  persisted-soak and application allow-list paths retain the operator runtime.
+  Cargo target directories remain intermediate caches.
 - Windows long-path support applies only to shared-directory trees, incoming
   delivery, and category output paths. Config, logs, metadata DB, hash-named
   piece stores, and other internal paths remain short-path. Exact classes and
