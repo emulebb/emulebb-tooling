@@ -155,9 +155,10 @@ keep their existing default behavior.
 A ready `stage.json` binds the workstream, selected Rust revision, native source
 materials, producer flavor and all staged bytes. Builders prepare an owned
 pending directory and publish it only after the native files and WebUI are
-complete and source identity still matches. A handled publication failure
-restores the previous ready bundle. Rebuilding a flavor never carries old PDB
-files beside its replacement executable.
+complete and source identity still matches. A failure before ready-directory
+promotion commits restores the previous ready bundle. After promotion commits,
+backup cleanup failure emits a warning and preserves the new ready bytes.
+Rebuilding a flavor never carries old PDB files beside its replacement executable.
 
 The full registered quality gate opts into this stage explicitly. Its persisted
 REST harness verifies the source receipt and bytes before creating a disposable
@@ -165,10 +166,11 @@ profile or launching the fixed daemon name. A missing, stale or changed bundle
 fails admission. The heavyweight lock and profile isolation remain required;
 the operator/manual/soak runtime path does not change.
 
-Only a Builder with activated registered-runtime routing may execute queued
-overnight validation. The queue must verify the selected Builder, Rust and
-Harness capabilities and exact source identities before starting the normal
-full gate. Additive consumer support alone is not activation.
+The parent selects exact registered sources and chooses when to run supported
+build, test and full-validation commands. Working hours guide PM coordination;
+they are not tooling gates. Long local tests may run during the day when useful.
+The parent coordinates the shared validation slot and retains source, receipt
+and cleanup evidence for each run.
 
 The normal parent-owned workstream removal commands retire this generated
 namespace after source and pull-request preflight, under the workspace lock.
