@@ -240,8 +240,9 @@ See [Parallel Workstreams](GUIDE-PARALLEL-WORKSTREAMS.md) for the operator flow.
   checks remain independent daytime merge gates.
   Push non-HEAD refs separately from their checked-out branch. Required tools
   include Python, Go for workflow lint, and the repository's pinned Rust/Node
-  toolchains; Rust implementation pushes also require cargo-deny and the
-  persisted REST harness dependencies. Missing tools block the operation.
+  tools used by the selected checks. Full Rust validation additionally requires
+  cargo-deny and the persisted REST harness dependencies. Missing tools block
+  the operation.
 - Rust check definitions live in `emulebb-rust/tools/rust_quality_gate.py`;
   `ci-toolchain.json`, `requirements-ci.txt`, and `rust-toolchain.toml` own
   tool pins. Hooks and GitHub dispatch those definitions. Keep complete
