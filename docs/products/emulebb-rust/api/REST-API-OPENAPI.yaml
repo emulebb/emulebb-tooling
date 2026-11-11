@@ -3848,6 +3848,14 @@ components:
           type: string
         version:
           type: string
+        channel:
+          type: string
+          description: Compiled distribution channel; local builds default to development.
+          enum: [development, candidate, beta, nightly]
+        sourceRevision:
+          type: string
+          description: Full lowercase source commit, or unknown for an unlabelled local build.
+          pattern: '^(unknown|[0-9a-f]{40})$'
         apiVersion:
           type: string
         build:
