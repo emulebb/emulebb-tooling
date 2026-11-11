@@ -140,6 +140,7 @@ nav:
       - Frozen Surfaces: active/FROZEN-SURFACES.md
   - Developer And Workspace:
       - Workspace Policy: WORKSPACE-POLICY.md
+      - PM Coordination Policy: reference/PM-COORDINATION-POLICY.md
       - Workspace Operations Policy: reference/WORKSPACE-OPERATIONS-POLICY.md
       - Public Presence Contract: reference/PUBLIC-PRESENCE-CONTRACT.md
       - Delivery Policy: reference/DELIVERY-POLICY.md

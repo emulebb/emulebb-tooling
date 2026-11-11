@@ -29,6 +29,9 @@ policy rather than choosing one silently.
   that will be read for current-state decisions or edited.
 - Read the nearest repo-local `AGENTS.md` after this core. Do not sweep
   `repos`, `workspaces`, or dormant products after the focus is known.
+- A parent acting as PM or engineering coordinator also reads the
+  [PM Coordination Policy](reference/PM-COORDINATION-POLICY.md) before assigning
+  work. It owns the coordination mandate, decision boundaries and closure check.
 - Treat historical notes under `docs\history` as provenance, not current
   authority. Revalidate backlog and release documents against current `main`,
   dependency pins, and policy before implementation.
