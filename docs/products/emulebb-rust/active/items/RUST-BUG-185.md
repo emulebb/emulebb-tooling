@@ -66,7 +66,7 @@ publication and the long soak remain on hold.
 - [x] Retain explicit pause, active-create, completed-transfer, intentional resume,
       and existing stop/resume coverage.
 - [x] Add deterministic regressions for stale queued publication and stale cache.
-- [ ] Complete the normal exact-source Windows/Linux/Android pre-push gate.
+- [x] Complete the normal exact-source Windows/Linux/Android pre-push gate.
 - [ ] Pass hosted exact-head checks and integrate the reviewed fix before AICH.
 
 ## Validation
@@ -81,11 +81,16 @@ The ordinary full pre-push qualification is recorded below
 Its full native phase passed in 788.364 seconds, covering policy, Clippy,
 diagnostics, WebUI, fresh debug/release/diagnostics builds, and full workspace
 tests. Observed-egress VPN validation passed in 52.6 seconds and REST/OpenAPI
-validation in 31.6 seconds. Both Linux GNU target scopes also passed.
+validation in 31.6 seconds. Full Linux qualification passed in 5,972.347 seconds,
+including both GNU and both musl targets plus image, security, and smoke checks.
+Android qualification passed for both native ABIs in 922.866 seconds. The
+Android evidence covers its required compilation and ELF scope.
 
-Linux musl and Android qualification remain in progress. The overall pre-push
-outcome, upload, hosted checks, review, and integration remain pending. Retain
-the final exact-source receipt and hosted run links when those gates complete.
+The ordinary push completed successfully at the exact fix source. Managed WSL
+teardown confirmed EOF and the workspace lock was released. The worktree was
+clean after the push. Hosted checks, review, and integration remain pending.
+Retain the hosted exact-head results and merged source when those gates
+complete. [PR #311](https://github.com/emulebb/emulebb-rust/pull/311)
 
 ## Notes
 
