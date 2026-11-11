@@ -158,8 +158,12 @@ Initial Windows/private CPython 3.15.2 lightweight evidence:
 - Builder `6a98fd4fb7c8712476fe4da1789ddd32fc91a341`, based on `8c471fdc`,
   preserves the default full inventory and Android nightly requirements while
   providing explicit reduced unpublished-candidate assembly and format-4
-  profile binding. Its refreshed host suites await the supported serialized
-  runner slot. The provider can be reviewed before the Rust graph changes;
+  profile binding. Supported managed host qualification passed 261 tests with
+  zero failures, errors or skips at
+  `reports/builder-unit/c6e1b54fe5ee`. The selected files cover platform
+  profiles, candidate manifests, release assembly, Android packaging and CLI;
+  one existing `TestTargets` collection warning was reported. No Cargo, WSL or
+  runtime staging ran. The provider can be reviewed before the Rust graph changes;
   existing workflows retain their immutable older Builder pins until updated.
 - Rust `f749c50b31593ebd66f3e0749fae8e0d1b732806` passed the normal workflow
   commit checks, including environment provenance, actionlint, client policy,
