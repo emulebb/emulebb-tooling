@@ -142,6 +142,40 @@ native Git commits in package provenance. Compare those recorded revisions
 with the assignment's intended inputs; a correct path alone is not revision
 qualification. Coordinate native-source or pin changes through the parent.
 
+
+## Registered Rust Runtime Bundles
+
+Registered Rust validation and native build/package commands stage their
+regular daemon, diagnostic executables, native companion files and WebUI under
+`EMULEBB_WORKSPACE_OUTPUT_ROOT/tools/workstreams/<id>/emulebb-rust/<target>`.
+The canonical operator bundle remains under
+`EMULEBB_WORKSPACE_OUTPUT_ROOT/tools/emulebb-rust`. Canonical and hosted commands
+keep their existing default behavior.
+
+A ready `stage.json` binds the workstream, selected Rust revision, native source
+materials, producer flavor and all staged bytes. Builders prepare an owned
+pending directory and publish it only after the native files and WebUI are
+complete and source identity still matches. A handled publication failure
+restores the previous ready bundle. Rebuilding a flavor never carries old PDB
+files beside its replacement executable.
+
+The full registered quality gate opts into this stage explicitly. Its persisted
+REST harness verifies the source receipt and bytes before creating a disposable
+profile or launching the fixed daemon name. A missing, stale or changed bundle
+fails admission. The heavyweight lock and profile isolation remain required;
+the operator/manual/soak runtime path does not change.
+
+Only a Builder with activated registered-runtime routing may execute queued
+overnight validation. The queue must verify the selected Builder, Rust and
+Harness capabilities and exact source identities before starting the normal
+full gate. Additive consumer support alone is not activation.
+
+The normal parent-owned workstream removal commands retire this generated
+namespace after source and pull-request preflight, under the workspace lock.
+Retiring only a non-Rust companion preserves the Rust stage. Cleanup does not
+launch or stop processes, infer process ownership, remove a workspace lock, or
+delete the canonical operator bundle.
+
 ## Review And Integrate
 
 Workers push validated commits, open complete review-ready pull requests,
