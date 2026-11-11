@@ -225,10 +225,19 @@ See [Parallel Workstreams](GUIDE-PARALLEL-WORKSTREAMS.md) for the operator flow.
   `helpers\source-normalizer.py` for uncertain, generated, or bulk edits.
 - `hooks\pre-commit` is the shared hook; workspace sync configures
   `core.hooksPath`.
-- Shared `hooks\pre-push` runs applicable host-platform checks before upload.
+- Shared `hooks\pre-push` runs fast host-only checks before upload.
   Use `python -m emule_workspace local-check --repo <repo-root> --stage push`
   from the build checkout to run them manually on committed changes. Commit
   checks require no unstaged tracked edits; push checks require a clean tree.
+  Push checks use independent scratch and no heavy lock, Cargo compilation,
+  local platform matrix, WSL or runtime staging. Direct Python test files may
+  vary in duration; unmatched owners never expand to an entire Python suite.
+  Use `local-check --repo <repo-root> --stage full` for explicit locked full
+  validation of all tracked HEAD inputs, including clean main and commits
+  already pushed. Exact participating sources must remain clean and unchanged.
+  Registered full product validation fails before staging unless its selected
+  Builder, Rust and Harness support owned runtime bundles. GitHub required
+  checks remain independent daytime merge gates.
   Push non-HEAD refs separately from their checked-out branch. Required tools
   include Python, Go for workflow lint, and the repository's pinned Rust/Node
   toolchains; Rust implementation pushes also require cargo-deny and the

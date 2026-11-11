@@ -79,9 +79,19 @@ another checkout is not evidence for the worker's branch. Push validation
 requires clean participating source state and records exact source paths and
 revisions; source changes during validation invalidate the result.
 
-Heavyweight local checks retain the existing workspace lock, Cargo target,
-staged executable, and output paths. The parent schedules these operations;
-workers must not bypass a busy lock or launch competing runtime campaigns.
+Ordinary commit/push checks run host-only static checks and direct Python test
+owners with independent scratch, without the heavyweight lock. Push does not
+compile Rust, start WSL/platform matrices or stage a runtime, and never falls
+back to an entire Python suite. Required GitHub checks provide the daytime
+platform, test and hosted-analysis merge proof.
+
+The parent schedules explicit full local proof with
+`local-check --repo <worker-checkout-root> --stage full --workstream sample-fix`.
+Full selects all tracked HEAD inputs even after push or on clean main, retains
+the workspace lock and exact clean source fences, and requires owned-runtime
+support before a registered product run can stage anything. Preserve inherited
+Cargo/output roots. Workers must not bypass a busy lock or launch competing
+runtime campaigns.
 Lightweight commit checks use separate temporary inputs for each invocation.
 
 ## Rust And Native Dependencies
