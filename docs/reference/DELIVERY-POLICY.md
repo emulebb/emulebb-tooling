@@ -108,14 +108,26 @@ or pull requests, merges work, cleans delivery state, or creates release tags.
 ## Push And Handoff
 
 - Run applicable local checks before commit and push. The shared pre-commit
-  hook runs fast staged-file checks; the shared pre-push hook runs applicable
-  host-platform validation for the outgoing changes through
+  hook runs fast staged-file checks; the shared pre-push hook runs fast
+  host-only checks for outgoing changes through
   `python -m emule_workspace local-check --repo <path> --stage push`.
-  Run that command early for feedback. Heavy validation requires a clean
-  worktree and uses the workspace lock. Do not bypass hooks, silently skip
-  required tools or failed checks, or repair inherited environment values.
-- GitHub remains the independent gate for other operating systems, hosted
-  security analysis, permissions, and publication. A local pass is not remote
+  These cover privacy, hygiene, applicable policy/format/workflow checks and
+  existing direct Python test owners. File-level Python tests are not a fixed
+  time budget. Push checks never fall back to an entire Python suite or run
+  broad Cargo builds, local platform matrices, WSL, or runtime staging. Commit
+  and push checks use independent scratch without taking the heavy lock.
+- Full local validation is explicit:
+  `python -m emule_workspace local-check --repo <path> --stage full`.
+  It selects all tracked HEAD inputs, including clean main or already-pushed
+  commits, and runs applicable full host/platform checks under the workspace
+  lock. Registered product validation requires the selected sources to support
+  owned runtime staging; a missing prerequisite fails before staging. The
+  parent schedules full runs. Both push and full evidence require clean,
+  unchanged exact source revisions. Do not bypass hooks, reuse an old pass,
+  silently skip a failed check, or repair inherited environment values.
+- GitHub required checks are the daytime merge gates for full platform builds,
+  tests and hosted analysis. GitHub also owns
+  permissions and publication. A local pass is not remote
   proof. Generated local evidence stays below the configured output root.
 
 - Never leave agent-created tracked or untracked files uncommitted when moving
