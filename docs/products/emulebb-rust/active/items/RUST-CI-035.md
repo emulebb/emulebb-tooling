@@ -127,12 +127,13 @@ own failed checks and summaries. Full nightly and publication eligibility
 still require the optional source qualification and every included artifact's
 own validation.
 
-The prepared-image producer under RUST-CI-045 binds its digest and attestation
-to the exact Builder revision. After the Builder profile changes merge, a new
-producer run must verify that merged source before the prepared-image consumer
-and this release profile consumer select its immutable revision and digest.
+The Rust platform-graph consumer needs the actual merged Builder profile API
+pinned by immutable revision for candidate format 4. It uses the normal package
+commands and has no prepared-image dependency. RUST-CI-045 separately binds its
+prepared-image digest and attestation to an exact Builder revision; its producer
+and consumer refresh follow the relevant packaging/provisioning changes.
 Release guidance/finalization functions and prepared-image provisioning/pins
-remain coordinated workstream ownership boundaries during source integration.
+remain separately coordinated workstream ownership boundaries.
 
 Initial Windows/private CPython 3.15.2 lightweight evidence:
 
@@ -178,7 +179,7 @@ Initial Windows/private CPython 3.15.2 lightweight evidence:
   assembly/publication evidence remain pending and are not implied by provider
   unit tests.
 - The Rust release workflow's final Builder pin awaits the actual merged
-  profile API. The prepared-image producer waits for the final selected merged
-  Builder after runtime activation and profile support, avoiding duplicate
-  production jobs. Rust source remains parked until its runtime prerequisite,
-  coordinated immutable pins and qualification are complete.
+  profile API. Rust source can then incorporate the integrated runtime consumer,
+  pin that Builder and qualify through GitHub without waiting for packaging or
+  image production. RUST-CI-045's producer remains separate and waits for its
+  selected packaging/provisioning inputs, avoiding duplicate production jobs.
