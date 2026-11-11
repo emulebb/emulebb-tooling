@@ -69,10 +69,13 @@ Add a meaningful regression for the affected behavior. Run scoped required check
 
 The managed `rust-platform-gates` workstream owns one coordinated outcome
 across Rust workflow/control code, Builder candidate assembly, and this spec.
-The current source refresh uses Rust main `a8d6189c`, Builder main `43abac2d`
-and Tooling main `dad45eef` as its bases. Current source-selection repairs and
-the experimental Android nightly graph are retained. Builder integration and
-its immutable workflow pin update precede the Rust consumer PR.
+The Builder provider is refreshed onto main `8c471fdc` and this spec onto
+Tooling main `56ea89b2`. The parked Rust candidate remains based on
+`a8d6189c`; it must incorporate the integrated registered-runtime consumer
+before its own qualification. Current source-selection repairs and the
+experimental Android nightly graph are retained. Builder integration and its
+immutable workflow pin update precede the Rust platform-graph consumer PR.
+The deployed Rust graph remains unchanged until that consumer integrates.
 
 - Required CI keeps Linux GNU and Windows native x64/ARM64, both native musl
   CPUs, REST/OpenAPI, shared quality, workflow lint and supply-chain checks.
@@ -142,7 +145,7 @@ Initial Windows/private CPython 3.15.2 lightweight evidence:
   terminal failure, timeout and stale-attempt behavior use deterministic mocks;
   no real qualification polling or release workflow was launched.
 - Actual aggregate-shell failure injection remains a Linux proof obligation.
-  Normal pre-push and hosted checks have not run for this feature.
+  Those source checkpoints did not establish hosted feature qualification.
 - Builder's normal fast commit checks passed at
   `04e5617`. Rust's normal commit checks passed at
   `2ea95e9a0a0a1ebcd38a7228d00feb1cec93039c`: environment provenance,
@@ -152,19 +155,26 @@ Initial Windows/private CPython 3.15.2 lightweight evidence:
 
 ## Refreshed Source Checkpoint
 
-- Builder `b7a1e4b0044e111efe793361ab8b395a54d8b5f1` preserves Android nightly
-  inventory and rejects reduced nightly assembly. Its normal fast commit
-  checks passed. The refreshed Builder synthetic suites await their supported
-  serialized runner slot.
+- Builder `6a98fd4fb7c8712476fe4da1789ddd32fc91a341`, based on `8c471fdc`,
+  preserves the default full inventory and Android nightly requirements while
+  providing explicit reduced unpublished-candidate assembly and format-4
+  profile binding. Its refreshed host suites await the supported serialized
+  runner slot. The provider can be reviewed before the Rust graph changes;
+  existing workflows retain their immutable older Builder pins until updated.
 - Rust `f749c50b31593ebd66f3e0749fae8e0d1b732806` passed the normal workflow
   commit checks, including environment provenance, actionlint, client policy,
   256 unittest cases with one POSIX-only aggregate-shell case skipped on
   Windows, and rustfmt. Regression coverage retains Android assembly joins,
   mandatory native ARM64 membership, independent optional failures and bounded
   source qualification.
-- Normal full local pre-push validation, the Linux aggregate-shell proof and
-  independent hosted qualification remain pending. Full local pre-push checks
-  continue using the workspace validation lock.
+- Fast push checks and hosted workflows qualify the provider under the daytime
+  validation policy. Explicit `local-check --stage full` retains the workspace
+  lock; no local broad Cargo/WSL matrix runs for this provider preparation.
+  Rust graph qualification, Linux aggregate-shell proof and real candidate
+  assembly/publication evidence remain pending and are not implied by provider
+  unit tests.
 - The Rust release workflow's final Builder pin awaits the actual merged
-  profile API. Current source checkpoints remain unpublished until the
+  profile API. The prepared-image producer waits for the final selected merged
+  Builder after runtime activation and profile support, avoiding duplicate
+  production jobs. Rust source remains parked until its runtime prerequisite,
   coordinated immutable pins and qualification are complete.
