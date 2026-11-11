@@ -82,8 +82,9 @@ revisions; source changes during validation invalidate the result.
 Ordinary commit/push checks run host-only static checks and direct Python test
 owners with independent scratch, without the heavyweight lock. Push does not
 compile Rust, start WSL/platform matrices or stage a runtime, and never falls
-back to an entire Python suite. Required GitHub checks provide the daytime
-platform, test and hosted-analysis merge proof.
+back to an entire Python suite. The parent verifies applicable GitHub workflows
+before merging; Rust also enforces required status contexts. These provide the
+daytime platform, test and hosted-analysis proof.
 
 The parent schedules explicit full local proof with
 `local-check --repo <worker-checkout-root> --stage full --workstream sample-fix`.
