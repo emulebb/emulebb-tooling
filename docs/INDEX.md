@@ -90,6 +90,7 @@ workspace and release controls instead of the product manual:
 | Role | Start Here |
 |---|---|
 | Contributor or AI agent | [Workspace Policy](WORKSPACE-POLICY.md), then only its task-routed annexes; use the [Agent Checklist](reference/AGENT-CHECKLIST.md) when useful |
+| Parent PM or engineering coordinator | [PM Coordination Policy](reference/PM-COORDINATION-POLICY.md), after the workspace core |
 | Routine developer | [Development Guide](reference/DEVELOPMENT-GUIDE.md) |
 | Backlog owner | [Active Backlog](active/INDEX.md) and [Backlog Process](reference/BACKLOG-PROCESS.md) |
 | Release operator | [0.7.3 Proof Summary](history/releases/0.7.3/RELEASE-0.7.3-PROOF-SUMMARY.md) |
