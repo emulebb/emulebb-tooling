@@ -102,8 +102,8 @@ at 05:51:39 UTC and its Project #3 status is Done.
 [PR #311](https://github.com/emulebb/emulebb-rust/pull/311) and
 [issue #310](https://github.com/emulebb/emulebb-rust/issues/310)
 
-Postmerge checks on the merged SHA remain in progress. Retain their final
-conclusions when the official observer completes.
+Postmerge verification on the exact merged SHA is tracked by these workflows.
+Their linked runs retain the check outcomes.
 [CI](https://github.com/emulebb/emulebb-rust/actions/runs/42968485121) and
 [CodeQL](https://github.com/emulebb/emulebb-rust/actions/runs/42968485076)
 
