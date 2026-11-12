@@ -5,7 +5,7 @@ product: emulebb-rust
 phase: Phase 0
 github_issue: https://github.com/emulebb/emulebb-rust/issues/293
 title: Separate mandatory Windows/Linux gates from optional platform outcomes
-status: IN_PROGRESS
+status: DONE
 priority: Major
 category: ci
 labels: [rust, audit]
@@ -20,15 +20,45 @@ source: Operator-authorized audit reconciliation and Windows/Linux Beta 3 priori
 
 ## Summary
 
-Parent-reserved RUST-CI-035 owns the user-authorized split. CI combines Linux ARM/Windows/macOS in build-test and requires Android; release smoke/images depend on the entire native matrix, and the assembler hardcodes macOS assets. Docs alone cannot implement the new gate.
+Delivered the operator-authorized separation of mandatory Windows/Linux merge
+checks from visible optional platform outcomes, with explicit full versus
+unpublished Windows/Linux candidate profiles. Full nightly and publication
+retain their complete selected inventory and qualification requirements.
+
+## Closure And Evidence
+
+[#293](https://github.com/emulebb/emulebb-rust/issues/293) is closed and Project
+#3 records Done. [Rust PR #314](https://github.com/emulebb/emulebb-rust/pull/314)
+merged on 2026-11-11 as
+`08bfe94bc9edb8f449e67439e9757808de342d54`, consuming the merged Builder profile
+provider at `995d13f350c8342437fdb3122d2a271696ac6e29` from
+[Builder PR #53](https://github.com/emulebb/emulebb-build/pull/53).
+
+The reduced, unpublished `windows-linux` candidate was exercised by
+[run 43206709335](https://github.com/emulebb/emulebb-rust/actions/runs/43206709335)
+at Rust `a099bf45871998a5a7f88e844212fce9fb15eaba`: eight packages, six lifecycle
+platforms, both OCI variants and four native OCI proofs passed; publication was
+skipped. Later [full Nightly 43242135692](https://github.com/emulebb/emulebb-rust/actions/runs/43242135692)
+at `080a5dea70186da31dab958757b5b8c0fd883f82` independently passed all twelve
+payloads and eight lifecycle platforms, then published. Its 81 public assets
+and both OCI graphs were verified against exact source and provenance.
+
+Retained receipts are under
+`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/packaging-identity/prepared-consumer-43206709335`
+and `EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/nightly-publication-review/43242135692`.
+These are distinct source/profile executions; neither substitutes for a future
+Beta 3 candidate. Beta 3 certification, publication approval and long soak
+remain separate held outcomes. Earlier implementation and pending-proof
+statements below are dated premerge provenance, superseded by this closure.
 
 ## Release Placement
 
-Beta 3 blocker for Windows/Linux.
+Delivered Windows/Linux Beta 3 prerequisite; candidate certification remains
+owned by [RUST-CI-009](../../active/items/RUST-CI-009.md).
 
 Priority: Major. Delivery lane: beta3-platform-gates.
 
-## Current Findings
+## Historical Initial Findings
 
 The original workflow needs/matrix and assembler contract were verified
 statically. The isolated implementation below changes workflow definitions;
@@ -49,12 +79,12 @@ no release workflow has been dispatched or candidate certified under this item.
 
 ## Acceptance Criteria
 
-- [ ] Define an explicit mandatory Windows/Linux target and artifact contract; separately identify optional macOS, Android and other platform work.
-- [ ] Separate required-summary and candidate dependency graphs so an optional OS-only failure cannot skip mandatory smoke/assembly.
-- [ ] Keep shared source, workflow lint, quality, supply-chain, CodeQL, REST, integrity and provenance failures mandatory.
-- [ ] Publish independent optional results and failures; do not blanket continue-on-error shared checks.
-- [ ] Update assembler inventory/manifest validation and failure-injection tests for missing optional versus mandatory assets.
-- [ ] Preserve enforced checks until the reviewed workflow change lands; tagging/publication remain separately authorized.
+- [x] Define an explicit mandatory Windows/Linux target and artifact contract; separately identify optional macOS, Android and other platform work.
+- [x] Separate required-summary and candidate dependency graphs so an optional OS-only failure cannot skip mandatory smoke/assembly.
+- [x] Keep shared source, workflow lint, quality, supply-chain, CodeQL, REST, integrity and provenance failures mandatory.
+- [x] Publish independent optional results and failures; do not blanket continue-on-error shared checks.
+- [x] Update assembler inventory/manifest validation and failure-injection tests for missing optional versus mandatory assets.
+- [x] Preserve enforced checks until the reviewed workflow change lands; tagging/publication remain separately authorized.
 
 ## Dependencies And Coordination
 
@@ -65,7 +95,7 @@ no release workflow has been dispatched or candidate certified under this item.
 
 Add a meaningful regression for the affected behavior. Run scoped required checks and Linux/Windows validation appropriate to the change. Record exact source revisions and evidence; do not claim audit inspection as runtime proof.
 
-## Implementation In Progress
+## Historical Implementation Checkpoint
 
 The managed `rust-platform-gates` workstream owns one coordinated outcome
 across Rust workflow/control code, Builder candidate assembly, and this spec.

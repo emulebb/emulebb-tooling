@@ -119,3 +119,21 @@ Tooling Markdown, exclude the packaged Rust `RELEASE-SCOPE.md` and legacy
 The parent integrates authored contributions linearly into one coherent batch
 PR per affected repository. Beta 3 promotion, APK/signing and long soak remain
 held; no source pass transfers to a changed integration head.
+
+### Repeated Inspection And Repair Evidence
+
+Round one independently reviewed the trusted-base classifier and strict
+aggregate accounting. Round two found incomplete full-gate receipt paths and
+an actual inherited `npm_config_call` process-boundary failure. Local full gate
+`68886` failed after 123 seconds while admitting the Playwright command, before
+Linux/Android qualification; it did not pass the full matrix or attempt a
+browser download.
+
+The scoped shared-child-environment repair at Rust `b0c34ee1` passed 39 focused
+tests. A real pinned npm 11.20 offline probe retained the same command arguments:
+the contaminated child failed and the isolated child succeeded. This proves
+that process-boundary repair, not browser, network or product-runtime behavior.
+The separate complete-receipt repair and normal hooks are included in the
+clean/pushed Rust checkpoint
+`288c571c9c391726b589eae42daee021d8de58b6`. Qualification of the final combined
+source through full local and hosted gates remains pending.

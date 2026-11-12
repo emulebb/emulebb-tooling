@@ -66,7 +66,7 @@ is claimed by this refresh; unproven checklist items stay open.
 - SQLite is the authority for mutable settings and durable product state. Keep only basic, stable bootstrap configuration in TOML.
 - `server.met` and `nodes.dat` are read-only compatibility inputs; the Rust client never writes them back. RUST-FEAT-062 / #233 owns the remaining implementation.
 - Runtime-only work stays in memory. Downloaded payloads, logs, diagnostic artifacts, and the database file itself are not additional mutable settings authorities.
-- Avoid breaking configuration on each update. Current exact-schema/fresh-profile beta rules must be reviewed explicitly; do not introduce migrations, repair paths, or aliases without a concrete compatibility decision.
+- Preserve the exact-schema/fresh-profile beta rules. Do not introduce migrations, repair paths, automatic resets, aliases, compatibility shims, fallback keys, remapping or silent ignoring of obsolete configuration.
 - Beta 3 release/certification remains held. Source-only review may run alongside workspace/platform work.
 
 ## Acceptance criteria

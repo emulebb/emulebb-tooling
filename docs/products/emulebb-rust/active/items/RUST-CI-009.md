@@ -319,9 +319,10 @@ candidate, not preserving a stale candidate or weakening the long-term model.
 Only Windows and Linux native x64/ARM64 packages plus the required Linux
 OCI variants gate Beta 3. macOS, Android/Fire OS, ChromeOS, NAS-specific
 certification, and additional Unix qualification continue in parallel.
-RUST-CI-035 owns the actual required-job, release-assembly, and artifact
-graph split; until it lands, existing workflow enforcement remains active.
-Changing prose alone does not turn a failing required job into a pass.
+[RUST-CI-035](https://github.com/emulebb/emulebb-tooling/blob/main/docs/products/emulebb-rust/history/items/RUST-CI-035.md)
+delivered the required-job, release-assembly and artifact graph split. This
+candidate still requires its own exact-source qualification under the enforced
+workflow; the earlier implementation closure does not certify Beta 3.
 
 Keep all shared safety, integrity, privacy, policy, provenance, CodeQL,
 dependency, and Windows/Linux correctness checks. Every published optional
