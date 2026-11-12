@@ -50,8 +50,10 @@ revisions and representation ETags remain separate target work.
 
 The [complete target](../../design/SETTINGS-TARGET.md) and
 [inventory](../../design/SETTINGS-INVENTORY.json) are not accepted for
-implementation. Bootstrap key spelling/default-port decisions still require
-operator acceptance. No current reader, OpenAPI, instructions or defaults are
+implementation. The operator chose to preserve `bindAddr`, `apiKey`,
+`webRootDir` and REST `4711` / P2P TCP `4662` / UDP `4672`. The target and
+inventory record this accepted boundary; other proposed bootstrap/leaf/API
+changes remain unaccepted. No current reader, OpenAPI, instructions or defaults are
 changed by review. The original source-15020b76 inventory below has not thereby
 become a complete current-head runtime qualification.
 
@@ -67,7 +69,7 @@ profile conversion. Unproven acceptance criteria below remain open.
 - Keep TOML strictly process/profile/control-service bootstrap: listener, authentication and necessary bootstrap paths. Restart requirements alone do not justify placing a product setting in TOML.
 - SQLite owns mutable product settings and durable client state. Runtime-only sockets, timers, and queues remain in memory; downloaded payloads and diagnostic artifacts remain files.
 - `server.met` and `nodes.dat` are read-only compatibility import inputs. The Rust client must never create, refresh, replace, or write them back.
-- Keep generated identity in durable state and implementation constants outside public settings. Use operator-facing domains and mechanical casing: camelCase JSON, snake_case TOML/SQL/Rust and kebab-case URL segments.
+- Keep generated identity in durable state and implementation constants outside public settings. Use camelCase JSON, snake_case SQL/Rust and kebab-case URL segments; preserve existing bootstrap TOML spellings rather than rename them for uniformity.
 - Preserve the exact-schema/fresh-profile policy and old profiles for explicit rollback. This review does not authorize profile evolution work.
 - Beta 3 publication and candidate certification remain on hold. Workspace and platform delivery continues in parallel.
 
@@ -86,15 +88,16 @@ profile conversion. Unproven acceptance criteria below remain open.
 
 Target documentation and examples contain no historical values, comparison tables, aliases, semantic mappings, shims or compatibility mechanisms.
 
-## Recommended Listener Defaults
+## Accepted Existing Listener Defaults
 
-These values belong to the proposed target. This review does not change a running client, current OpenAPI or current user instructions.
+The operator accepted preserving these existing defaults. This review changes
+no running client, current OpenAPI or current user instructions.
 
 | Listener | Target default |
 | --- | --- |
-| REST/WebUI TCP | `127.0.0.1:20017` |
-| P2P TCP | `20019` |
-| P2P UDP | `20020` |
+| REST/WebUI TCP | `127.0.0.1:4711` |
+| P2P TCP | `4662` |
+| P2P UDP | `4672` |
 
 Ports are configurable. Higher numbers provide no security benefit. REST stays authenticated and loopback-bound by default. Specify one coherent P2P UDP owner from receive/send, NAT and advertisement paths; another public UDP listener needs a demonstrated protocol requirement.
 
