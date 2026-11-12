@@ -171,6 +171,10 @@ NAS qualification reuses existing OCI images under
 BSD, Android/Fire OS and ChromeOS retain their existing owners and require
 environment-specific evidence before support claims. Android developer daemon
 bundles remain distinct from an APK or device-runtime qualification.
+The operator's Termux launch exposed a JVM-dependent HTTPS verifier panic;
+[#328 / RUST-BUG-186](active/items/RUST-BUG-186.md) owns that native CLI repair
+and its target-runtime evidence. First-launch success remains unqualified until
+verified; this finding does not independently hold the core Client gate.
 
 ### Beta contract policy
 

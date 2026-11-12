@@ -74,6 +74,13 @@ device acceptance criteria below remain open.
 
 ## Current State
 
+- Experimental native daemon archives for both ABIs were published by
+  [nightly run 43242135692](https://github.com/emulebb/emulebb-rust/actions/runs/43242135692).
+  Publication and compile/ELF proof do not establish Android runtime support.
+- A reported Termux launch on a Samsung Galaxy S24+ reached HTTPS discovery and
+  panicked in the JVM-dependent platform verifier. The linked
+  [RUST-BUG-186 / #328](RUST-BUG-186.md) owns the native CLI TLS repair and
+  runtime regression evidence; authenticated REST startup remains unproven.
 - The supported platform contract includes Windows, Linux, and macOS only.
 - The workstream now has checksum-pinned SDK/NDK, Java, Gradle, ADB and Android
   CLI inputs, a non-root offline Docker toolchain probe, and Android Rust
@@ -116,8 +123,8 @@ device acceptance criteria below remain open.
 
 ## Compile Foundation Evidence
 
-The 2026-11-09 checkpoint is pushed on `chore/local-validation-batches` and has
-not been merged or published. Build orchestration
+The 2026-11-09 compile foundation is now part of the merged and published
+experimental native-bundle baseline. Its original Build orchestration
 [`bb0e542`](https://github.com/emulebb/emulebb-build/commit/bb0e542152da6d58a28ffd69a5b8b6451e7cbcf4)
 owns the reviewed inputs and both local/hosted entrypoints:
 `python -m emule_workspace validate-rust-android` locally and
@@ -177,9 +184,11 @@ Local evidence includes the complete harness suite plus 36 focused boot/parser
 tests and the offline WSL Docker runtime-tool probe. APK production, signing,
 application lifecycle and release integration remain open.
 
-The operator has no physical test devices available. Android ARM64, Fire OS
-and ChromeOS device qualification remains pending; emulator or compile success
-must not satisfy those acceptance criteria.
+The operator has reported a Samsung Galaxy S24+ Termux failure; the exact
+Android/Termux versions and artifact hash remain unknown, and no Android device
+was connected to ADB at the 2026-11-12 intake. Android ARM64, Fire OS and ChromeOS
+device qualification remains pending; emulator or compile success must not
+satisfy those acceptance criteria.
 
 ## Networking And Safety Constraints
 

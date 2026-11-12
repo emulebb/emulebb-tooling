@@ -137,6 +137,7 @@ ranking and GitHub placement.
 | [RUST-FEAT-040](items/RUST-FEAT-040.md) | Feature | Carry ED2K and Kad search metadata end to end |
 | [RUST-FEAT-048](items/RUST-FEAT-048.md) | Feature | Use sparse part files without weakening capacity reservations |
 | [RUST-FEAT-056](items/RUST-FEAT-056.md) | Feature | Deliver supported Android and Fire OS APKs with device harnesses |
+| [RUST-BUG-186](items/RUST-BUG-186.md) | Bug | Avoid JVM-dependent TLS verification in Android CLI HTTPS clients |
 | [RUST-FEAT-057](items/RUST-FEAT-057.md) | Feature | Publish portable Linux musl builds for x64 and ARM64 |
 | [RUST-FEAT-058](items/RUST-FEAT-058.md) | Feature | Certify NAS deployments across supported appliance systems |
 | [RUST-FEAT-059](items/RUST-FEAT-059.md) | Feature | Support FreeBSD on x64 and ARM64 |
