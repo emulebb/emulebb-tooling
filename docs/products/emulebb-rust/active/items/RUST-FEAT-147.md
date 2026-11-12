@@ -18,6 +18,35 @@ source: Operator-approved universal-daemon intake and Scoop-first delivery
 
 # RUST-FEAT-147 - Distribute verified Windows daemon packages through Scoop
 
+## Accepted Implementation Boundary
+
+The parent accepted [the currently implemented deployment contract](https://github.com/emulebb/emulebb-rust/issues/324#issuecomment-6830047076)
+at Rust `080a5dea70186da31dab958757b5b8c0fd883f82`, schema 68. Implementation
+starts after #327; this item remains OPEN until its own code and native
+qualification pass. The first deliverable is a reviewable generator/manifest
+and executable lifecycle evidence, not external bucket publication.
+
+- Use explicitly selected immutable inventory and SHA-256 values; the verified
+  [Nightly 43242135692](https://github.com/emulebb/emulebb-rust/actions/runs/43242135692)
+  supplies x64/ARM64 Windows ZIP evidence. Preserve the complete adjacent WebUI,
+  binary identity, SBOM and workflow provenance. Do not track a moving nightly.
+- Keep existing profile selection: `--profile` overrides the Windows default
+  `%LOCALAPPDATA%/emulebb-rust`. Never redirect that default into a versioned
+  Scoop installation, working directory or package-managed `persist` folder.
+- Package scripts add no settings/profile authority, rewrite no bootstrap key
+  or default, and automatically start no daemon or service. The complete
+  #297 target remains unaccepted; its proposed defaults are not prerequisites
+  for packaging the current daemon.
+- Install/update/uninstall do not create, convert, reset or delete operator
+  databases, profiles, secrets or payloads. Compatible updates and explicit
+  rollback preserve matching binary/profile pairs; incompatible startup fails
+  visibly without promising unfinished-transfer carry-forward.
+- Reuse Builder/Harness qualification on disposable profiles. ARM64 runtime
+  acceptance requires real native execution, not a manifest or cross-build.
+
+External bucket hosting/community submission, signing, installers/WinGet,
+service enablement and paid infrastructure remain separate decisions.
+
 ## Outcome And Ownership
 
 Provide the first new package-manager lane for the same universal headless
@@ -33,7 +62,7 @@ This intake records accepted scope, not an implemented Scoop channel.
 - Preserve current profile resolution. Keep mutable profiles, downloaded data
   and secrets outside versioned installation directories; no second settings
   authority or package-specific TOML model is introduced.
-- Use explicitly selected beta versions. Do not silently follow a moving
+- Use explicitly selected immutable release versions. Do not silently follow a moving
   nightly, start networking/services on installation, migrate/reset a database
   or erase state during update/uninstall.
 - Preserve matching old binary/profile pairs for explicit rollback. An
