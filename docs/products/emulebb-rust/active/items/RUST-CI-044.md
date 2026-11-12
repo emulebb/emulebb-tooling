@@ -45,8 +45,11 @@ Progress; current-source inspection is not measured query/latency evidence.
 is merged and closed. Preserve its coordinated transaction and ordered
 post-commit publication. The proposed target settings representation, revision
 and ETag model is additional unaccepted design, not missing atomicity work.
-The complete settings target/inventory and bootstrap key/default changes still
-require bounded review and the pending operator decision.
+The operator accepted clean snake_case bootstrap keys `bind_addr`, `api_key`,
+`web_root_dir` and target REST `20017` / P2P TCP `20019` / UDP `20020`.
+No aliases, compatibility shims, fallback keys, remapping or silent ignoring
+are permitted. The remaining leaf/storage/REST redesign still requires bounded
+review; naming/default acceptance does not claim runtime implementation.
 
 The accepted [155-A friend-persistence slice](https://github.com/emulebb/emulebb-rust/issues/155#issuecomment-6830001541)
 preserves schema 68 and guarantees ordering through commit/cache publication,
@@ -55,7 +58,7 @@ Legacy synchronous paths remain. #233 must later reuse that owner for typed,
 generation-safe Kad snapshots; the parent reserves schema/version/Core/shutdown
 integration. [Scoop's accepted boundary](https://github.com/emulebb/emulebb-rust/issues/324#issuecomment-6830047076)
 uses the current deployment and fresh-profile contract without converting a
-database or adopting unaccepted defaults. No schema or runtime implementation
+database or translating configuration. No schema or runtime implementation
 is claimed by this refresh; unproven checklist items stay open.
 
 ## Operator direction
