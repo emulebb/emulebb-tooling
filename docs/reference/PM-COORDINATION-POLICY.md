@@ -167,6 +167,14 @@ rewrite protected main or release tags. Follow the
    package/nightly proof instead of publishing after every small contribution.
    Retire integrated branches, registrations, checkouts and finished agents.
 
+Prepared native packaging requires an attested image whose producer Build SHA
+matches the actual selected Builder HEAD. Qualify and merge provider changes,
+publish the prepared image from actual Build main, then update the Rust Builder
+pin and immutable image digest together before freezing its final full gate.
+Matching recipe bytes or Git trees do not replace producer identity. Use the
+existing fixed Android guest proof with an explicitly selected full Rust SHA
+to qualify a later consumer without another Builder commit or image cycle.
+
 Independent outcomes that cannot form a coherent batch may retain separate PRs
 under the Delivery Policy. Do not hold a ready safety fix behind unrelated work.
 Distinguish scoped local proof, hosted qualification, merged source and verified
