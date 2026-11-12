@@ -25,6 +25,44 @@ and global async state locks. Introduce bounded persistence ownership that keeps
 the network runtime responsive while preserving crash consistency and explicit
 backpressure.
 
+## Accepted Next Slice: 155-A
+
+The parent accepted [one bounded persistence owner plus friend CRUD](https://github.com/emulebb/emulebb-rust/issues/155#issuecomment-6830001541)
+after source review at Rust `080a5dea70186da31dab958757b5b8c0fd883f82`.
+Implementation starts after change-aware CI #327 and explicit allocation.
+This item remains OPEN, Phase 1, post-beta-polish; contract acceptance is not
+implementation or global completion.
+
+- Compose one fixed worker and typed FIFO for migrated friend operations.
+  Bound admitted slots and owned payload bytes through completion; report
+  saturation/closing explicitly rather than spawning unbounded work. Cloning
+  a handle does not create another owner.
+- Preserve schema 68, WAL/FULL durability, existing SQLite busy behavior,
+  secrets and the OS-backed profile lease. Offline synchronous constructors
+  remain usable without a Tokio runtime. No schema change is part of 155-A.
+- Capture normalized friend input and release global CoreState before
+  admission/wait. Ordering spans durable commit **and** cache publication;
+  caller cancellation cannot release that order or strand committed DB/cache
+  state. Required success follows publication, not enqueue alone.
+- Release the SQLite connection mutex before any cache/CoreState finalizer.
+  Legacy synchronous DB-under-CoreState callers still exist; the new lane must
+  not introduce a lock-order deadlock with them. Migrated-only FIFO does not
+  imply global FIFO or complete removal of blocking persistence.
+- Shutdown closes admission, drains accepted required writes and finalizers,
+  joins the worker before connection/profile-lease release and reports failed
+  drains honestly.
+- Use meaningful saturation, slow-commit/connection-contention, failed-write,
+  same-key concurrency, cancellation and drain/reopen regressions. Measure
+  queue, connection wait and execute/commit behavior; source inspection alone
+  establishes no responsiveness or performance result.
+
+Reserve the metadata executor/exports and composition seam, friend APIs and
+their ordering boundary, daemon drain seam and existing friends REST error
+mapping/tests. The parent serializes shared Core/schema/shutdown edits.
+[#233](RUST-FEAT-062.md) must reuse this owner for its later typed,
+generation-safe Kad snapshots and met-file removal. No production or schema
+implementation is claimed by this accepted slice.
+
 ## Current State
 
 The metadata layer shares a synchronous `rusqlite::Connection` behind
