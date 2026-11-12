@@ -185,7 +185,9 @@ review-ready pull requests, monitor checks, and address review. For a declared
 integration batch, workers instead hand pushed authored commits and scoped
 evidence to the parent without individual PRs. The parent uses a separate
 managed integration branch, reviews and cherry-picks compatible contributions,
-and runs applicable combined validation before opening one batch PR per repo.
+and completes focused checks and source inspection before opening one frozen,
+review-ready batch PR per repo. Hosted checks may run alongside applicable full
+local validation; the PR states pending proof and both remain merge conditions.
 Follow the [PM batching routine](PM-COORDINATION-POLICY.md#batches-and-integration)
 for capacity, contract ownership, final local proof and hosted qualification.
 
