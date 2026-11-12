@@ -31,6 +31,13 @@ or pull requests, merges work, cleans delivery state, or creates release tags.
   reserved files, shared contracts, manifests, schemas, or lockfiles. A worker
   contribution is ready for parent review; only the parent reports integration
   and delivery as complete.
+- For a parent-declared integration batch, workers push validated contribution
+  commits without opening individual PRs. The parent reviews and integrates
+  compatible authored commits into one linear branch and opens one coherent
+  batch PR per affected repository after applicable combined validation. The
+  [PM Coordination Policy](PM-COORDINATION-POLICY.md#batches-and-integration)
+  owns selection, file reservations and scheduling. Other independent
+  workstreams retain their normal worker-owned PR lifecycle.
 - Use managed isolated checkouts as described in
   [Parallel Workstreams](GUIDE-PARALLEL-WORKSTREAMS.md). Do not switch another
   worker's branch, edit its checkout, change shared Git configuration, prune
