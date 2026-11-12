@@ -29,6 +29,11 @@ MFC Project #2 is never reactivated for forward work.
   detail and evidence.
 - Keep acceptance criteria and evidence in the owning item. Delete temporary
   branch plans after reconciliation.
+- For Rust intake, record mandatory core Client versus explicitly optional
+  distribution/environment expansion under the product release scope. Keep the
+  owning phase and current required CI/release checks unchanged. Use existing
+  owners for already accepted outcomes; an unactivated packaging idea belongs
+  in forward direction, not a new umbrella or parked active issue.
 
 ## Close Or Reclassify Work
 

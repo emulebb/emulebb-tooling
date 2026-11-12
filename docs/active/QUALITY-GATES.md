@@ -15,6 +15,13 @@ Release claims require the beta release checklist and product-specific evidence.
 VPN-safe language requires product-specific leak proof; no such property should
 be inferred from bind support alone.
 
+The [Rust Client gate](../products/emulebb-rust/RELEASE-SCOPE.md#client-gate)
+distinguishes mandatory core work from explicitly classified optional
+distribution/environment expansion. This planning boundary changes no required
+status context, full nightly inventory, platform proof or publication check.
+An advertised package or selected nightly target still needs its complete
+applicable qualification; compile-only evidence is not runtime support.
+
 ## Stable maintenance: eMuleBB MFC
 
 MFC changes require the maintained Windows build matrix, native and shared

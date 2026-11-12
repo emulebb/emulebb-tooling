@@ -1,6 +1,6 @@
 # eMuleBB Rust
 
-eMuleBB Rust is an IPv4 eD2K/Kad client for Windows, Linux and macOS, operated
+eMuleBB Rust is one universal headless IPv4 eD2K/Kad daemon for Windows, Linux and macOS, operated
 through a browser console and REST API. Search the networks, manage transfers
 and share monitored folder trees from one headless daemon.
 
@@ -37,7 +37,10 @@ This section is the canonical home for active `emulebb-rust` product docs,
 backlog, design notes, history, release scope, embedded SPA WebUI scope, and
 forward REST contract. The product is an automation-first integrated suite with
 hard-gated Client, Indexer, and Arr phases; production work remains in the
-Client phase until its complete gate closes.
+Client phase until its mandatory core gate closes. Explicit optional
+distribution/environment expansion follows
+[Release Scope](RELEASE-SCOPE.md#client-gate); actual required CI and the full
+selected nightly inventory remain mandatory.
 
 Current beta direction:
 

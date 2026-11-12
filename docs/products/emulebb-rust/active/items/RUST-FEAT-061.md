@@ -8,7 +8,7 @@ title: Support illumos, NetBSD, and OpenBSD as portable Unix targets
 status: OPEN
 priority: Minor
 category: feature
-labels: [rust, illumos, netbsd, openbsd, unix, packaging, portability]
+labels: [rust, illumos, netbsd, openbsd, unix, packaging, portability, distribution-expansion]
 milestone: post-beta-polish
 created: 2026-11-04
 source: operator-approved universal-platform expansion 2026-11-04
@@ -17,6 +17,19 @@ source: operator-approved universal-platform expansion 2026-11-04
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb-rust/issues/231. This local document owns the durable engineering contract.
 
 # RUST-FEAT-061 - Support illumos, NetBSD, and OpenBSD as portable Unix targets
+
+## Distribution Intake Acceptance
+
+This remains optional environment expansion in its existing phase; incomplete
+additional-Unix qualification does not independently block the core Client gate.
+
+- [ ] Retain independent illumos, NetBSD and OpenBSD verdicts, selected CPUs,
+      native dependency, route/bind, storage and lifecycle evidence. Neither a
+      generic Unix build nor another OS's success establishes support.
+- [ ] Reuse one daemon/config/profile/REST model and existing platform owners;
+      activate no additional service, package channel or publication from intake.
+- [ ] Distinguish declared targets from proven minimums and retained execution
+      evidence. Existing required CI/full-nightly checks are unchanged.
 
 ## Summary
 

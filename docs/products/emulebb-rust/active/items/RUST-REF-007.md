@@ -18,6 +18,15 @@ source: Operator upload performance review 2026-07-14
 
 # RUST-REF-007 - Review Rust upload hot-path performance candidates
 
+## Comparative Measurement Acceptance
+
+- [ ] Use a bounded, synthetic, matched upload workload on the same hardware,
+      storage, network and settings with exact Rust/current-stable aMule revisions.
+- [ ] Record useful payload throughput, CPU, allocation/RSS and control-plane
+      latency while preserving queue, compression, credit and throttle semantics.
+- [ ] Route measured repairs here; no duplicate optimization program, blanket
+      speed claim, paid capacity or long soak is activated by distribution intake.
+
 ## Summary
 
 Track upload-side speed and I/O improvements as **to be reviewed** candidates,

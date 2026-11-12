@@ -5,34 +5,17 @@ milestones own workflow state and roadmap placement; each linked Markdown item
 owns the durable engineering spec, constraints, acceptance criteria, and
 retained evidence.
 
-## Current Operator Hold And Work Priority (2026-11-09)
+## Current Operator Hold And Work Priority (2026-11-12)
 
-**Beta3 release is on hold.** Current work prioritizes backlog clarity and
-workspace improvements for parallel multiarchitecture/multiplatform delivery,
-then bugs/issues. Broader platform development is an active focus independent
-of release promotion. Coordinate through
-[managed workspace work (Build #28)](https://github.com/emulebb/emulebb-build/issues/28),
-[platform workflow separation (#293)](https://github.com/emulebb/emulebb-rust/issues/293),
-and the existing platform owners, including
-[Linux x64/ARM64 (#227)](https://github.com/emulebb/emulebb-rust/issues/227) and
-[Android/Fire OS (#226)](https://github.com/emulebb/emulebb-rust/issues/226).
-GitHub issues and Project #3 retain workflow authority.
-The `focus:workspace-platforms` label identifies the current coordination set;
-it does not alter platform support or release-gate decisions. Dependency-aware
-early validation [#258](https://github.com/emulebb/emulebb-rust/issues/258)
-is now Major to address the feedback bottleneck without reducing complete
-required validation; its milestone is unchanged.
-
-Continue current qualification and permitted development. Do not freeze or
-select a Beta3 candidate, execute candidate certification, dispatch a release
-workflow, publish, tag, or bump a version while this hold applies.
-[Candidate certification (#142)](https://github.com/emulebb/emulebb-rust/issues/142)
-remains a future gated action until the operator explicitly lifts the hold;
-[completed audit reconciliation](https://github.com/emulebb/emulebb-tooling/blob/main/docs/products/emulebb-rust/history/items/RUST-CI-034.md)
-records this prioritization decision; owning [issue #268](https://github.com/emulebb/emulebb-rust/issues/268) closes on reviewed documentation PR merge. The prior Windows/Linux plus required
-Linux OCI Beta3 scope remains provisional and documented; this priority change
-does not silently change required checks, platform gates, support promises,
-or the separate Client-to-Indexer-to-Arr phase gates.
+The canonical [Release Scope](../RELEASE-SCOPE.md#current-operator-hold-and-work-priority-2026-11-12)
+owns holds, delivery order and optional expansion boundaries. Balanced
+reliability leads; Scoop is the first accepted new distribution lane; Linux
+services are review-only. The [PM policy](../../../reference/PM-COORDINATION-POLICY.md)
+owns parallel qualification and coordinated merging of the two existing
+preflight/intake PRs, followed by final combined-main/nightly acceptance.
+Beta 3 promotion and APK/signing remain held; separately authorized nightly
+qualification does not lift them. GitHub issues and Project #3 own status,
+priority and phase placement.
 
 ## Current Authority
 
@@ -45,11 +28,12 @@ or the separate Client-to-Indexer-to-Arr phase gates.
 - Closed item records: [`history/items`](../history/items/INDEX.md)
 - GitHub source and issues: <https://github.com/emulebb/emulebb-rust>
 
-The current production phase is Client. Every active client item below,
-including any newly accepted client item, is part of the hard gate that blocks
-Indexer implementation. Indexer then blocks Arr. Priority still orders work
-inside a phase; it does not allow a gated item to remain open when the next
-phase begins.
+The current production phase is Client. Its mandatory core gate blocks Indexer,
+then Indexer blocks Arr. Explicit optional distribution/environment expansion
+retains its owning phase but does not join that phase-advancement gate solely
+by being open. Required CI, the complete selected nightly inventory and
+publication checks remain mandatory. Priority alone never exempts core work;
+[Release Scope](../RELEASE-SCOPE.md#client-gate) owns the exact boundary.
 
 Stock/community eMule owns wire behavior. Maintained eMuleBB MFC owns only
 explicitly identified non-wire operational limits and disk/network I/O
@@ -68,12 +52,13 @@ exception; new Rust items always use the `RUST-*` form.
 ## Beta 3 Release Placement
 
 The following grouping distinguishes the Windows/Linux beta increment from
-parallel work. Every Client item in either grouping still belongs to the
-separate whole-phase Client gate described above. GitHub owns current status,
-priority, and milestone placement; the index is the navigation surface.
+parallel work. Mandatory core Client work remains in the separate phase gate;
+explicit distribution/environment expansion retains its owning phase without
+independently blocking that gate. GitHub owns current status, priority and
+milestone placement; the index is the navigation surface.
 
-RUST-CI-035 must implement the platform workflow split before optional jobs
-stop gating the actual candidate. Existing required checks remain enforced.
+RUST-CI-035 delivered the platform-profile split. The selected workflow's actual
+inventory and required checks remain enforced; this intake changes neither.
 
 ## Windows/Linux Beta 3 Gate
 
@@ -116,6 +101,9 @@ ranking and GitHub placement.
 | [RUST-CI-046](items/RUST-CI-046.md) | Evidence | Complete coordinated public presence and release download guidance |
 | [RUST-CI-045](items/RUST-CI-045.md) | Evidence | Make Linux release provisioning bounded and reproducible |
 | [RUST-CI-047](items/RUST-CI-047.md) | Evidence | Unify application icons, native metadata and build identity |
+| [RUST-CI-048](items/RUST-CI-048.md) | Evidence | Run Clippy and WebUI type checks before platform fanout |
+| [RUST-CI-049](items/RUST-CI-049.md) | Evidence | Review the Linux daemon service and ownership contract |
+| [RUST-FEAT-147](items/RUST-FEAT-147.md) | Feature | Distribute verified Windows daemon packages through Scoop |
 | [RUST-BUG-136](items/RUST-BUG-136.md) | Bug | Bound transfer deletion marker validation reads |
 | [RUST-BUG-160](items/RUST-BUG-160.md) | Bug | Reuse stock hashes across unambiguous Unicode filename normalization |
 | [RUST-BUG-162](items/RUST-BUG-162.md) | Bug | Bound profile archive fields before allocating import buffers |

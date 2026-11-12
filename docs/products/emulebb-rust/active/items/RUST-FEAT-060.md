@@ -8,7 +8,7 @@ title: Support ChromeOS through Android and Crostini lanes
 status: OPEN
 priority: Minor
 category: feature
-labels: [rust, chromeos, android, linux, packaging, portability]
+labels: [rust, chromeos, android, linux, packaging, portability, distribution-expansion]
 milestone: post-beta-polish
 created: 2026-11-04
 source: operator-approved universal-platform expansion 2026-11-04
@@ -17,6 +17,20 @@ source: operator-approved universal-platform expansion 2026-11-04
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb-rust/issues/230. This local document owns the durable engineering contract.
 
 # RUST-FEAT-060 - Support ChromeOS through Android and Crostini lanes
+
+## Distribution Intake Acceptance
+
+This is optional environment expansion with unchanged phase ownership, not an
+independent core Client or Beta 3 gate. APK/signing holds remain in force.
+
+- [ ] Reuse existing GNU/musl and Android owners; do not create another daemon,
+      protocol fork, Chrome extension or product-state authority.
+- [ ] Distinguish Crostini operation from the future Android application lane.
+      Experimental Android CLI bundles do not establish APK/device support.
+- [ ] Qualify real Chromebook architecture/version/policy, storage exchange,
+      ports, sleep/background behavior and lifecycle. Generic Linux/emulator
+      evidence or remote browser control is insufficient; no device purchase is
+      authorized by intake.
 
 ## Summary
 

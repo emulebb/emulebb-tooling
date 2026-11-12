@@ -18,6 +18,17 @@ source: 2026-10-03 large-library I/O and portability review
 
 # RUST-REF-009 - Use native storage domains for cross-platform library scheduling
 
+## Comparative Measurement Acceptance
+
+- [ ] Retain storage-domain ownership while measuring same-device serialization
+      and independent-device parallelism with exact source/hardware/filesystem
+      and cache-state records; do not conflate logical/process I/O with disk I/O.
+- [ ] Use bounded synthetic workloads and existing harness/orchestration. Measure
+      useful throughput, physical I/O and API responsiveness before changes.
+- [ ] Coordinate with large-library batching and the shared persistence owner;
+      intake changes no operator storage backing, environment variable, machine
+      capacity or wire behavior.
+
 ## Summary
 
 Map every shared root to a real storage domain so one sequential hash stream is

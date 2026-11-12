@@ -18,17 +18,27 @@ source: operator-approved universal-platform expansion 2026-11-04
 
 # RUST-FEAT-057 - Publish portable Linux musl builds for x64 and ARM64
 
+## Distribution Intake Acceptance
+
+- [ ] Reuse the existing native-tested static archives and OCI inputs; remaining
+      qualification is not a new generic musl or Docker implementation.
+- [ ] Record selected distro/kernel/CPU, native NAT/route behavior and dependency
+      facts. GNU baseline claims need separate ELF/install evidence for the
+      declared Ubuntu 24.04/Debian 13 targets; static success cannot prove them.
+- [ ] Preserve the current required Linux/musl and full-nightly checks. Retain
+      exact-source lifecycle/security evidence and honest remaining limitations.
+
 ## Summary
 
-Add supported `x86_64-unknown-linux-musl` and
-`aarch64-unknown-linux-musl` release lanes so eMuleBB Rust runs on Alpine and
+Finish qualifying the existing `x86_64-unknown-linux-musl` and
+`aarch64-unknown-linux-musl` release lanes on Alpine and
 minimal Linux systems without a host glibc dependency. Publish portable
 archives containing the daemon, browser WebUI, documentation, checksums, SBOM,
 and exact build provenance.
 
 ## Current State
 
-- The workstream adds static musl `.tar.zst` packages on x64 and ARM64 alongside
+- The workstream already produces static musl `.tar.zst` packages on x64 and ARM64 alongside
   the existing glibc DEB/AppImage assets.
 - Ubuntu/glibc and Alpine/musl OCI variants each contain x64 and ARM64 manifests.
   Local WSL/Docker gates cover both variants; GitHub independently validates
