@@ -5,7 +5,10 @@
 The [target inventory](SETTINGS-INVENTORY.json) defines every proposed public
 setting and bootstrap value, including owner, storage, type, units, defaults,
 validation, sensitivity, visibility and application mode. Parent review must
-accept the target before implementation. Current user guides and OpenAPI remain
+accept the remaining target before implementation. The operator accepted the
+existing bootstrap spellings and default ports below on 2026-11-12; this does
+not accept the complete proposed leaf, storage or REST redesign.
+Current user guides and OpenAPI remain
 the authority for the implemented client.
 
 ## Ownership And Names
@@ -17,9 +20,11 @@ files. Requiring a restart does not make a product setting bootstrap material.
 
 The operator-facing settings domains are `network`, `transfers`, `storage`,
 `sharing` and `security`. Each value has one typed definition, persistence
-owner and runtime consumer. JSON uses camelCase; TOML, SQL columns and Rust use
-snake_case; URL segments use kebab-case. Casing changes are mechanical. The
-target defines one spelling and meaning for each value.
+owner and runtime consumer. JSON uses camelCase; SQL columns and Rust use
+snake_case; URL segments use kebab-case. Preserve the existing bootstrap TOML
+spellings `bindAddr`, `apiKey` and `webRootDir`; they are not renamed for casing
+uniformity and acquire no aliases. The target defines one spelling and meaning
+for each value.
 
 `emulebb-settings` owns typed field definitions, defaults, bounds and cross-field
 validation. `emulebb-metadata` owns settings transactions. Core coordinates
@@ -42,9 +47,9 @@ The only TOML table is `[rest]`, with these keys:
 
 | Key | Target default | Responsibility |
 | --- | --- | --- |
-| `bind_addr` | `127.0.0.1:20017` | Authenticated REST/WebUI listener |
-| `api_key` | Privately generated for a fresh bootstrap | Control authentication |
-| `web_root_dir` | Unset | Optional static-asset location; default is `webui` beside the executable |
+| `bindAddr` | `127.0.0.1:4711` | Authenticated REST/WebUI listener |
+| `apiKey` | Privately generated for a fresh bootstrap | Control authentication |
+| `webRootDir` | Unset | Optional static-asset location; default is `webui` beside the executable |
 
 The process may receive `--rest-bind-addr` for an explicit run-scoped control
 listener selection. Its precedence is CLI, then bootstrap, then fresh-bootstrap
@@ -75,9 +80,13 @@ that owner. The settings resource's secret exclusion does not change that
 private export contract or assign backend redaction, a shareable export or a
 logger rewrite to this review.
 
-Bootstrap casing and default adoption require explicit acceptance under the
-bootstrap stability policy. This review changes no file reader or startup
-behavior. No profile evolution work is included.
+The operator explicitly chose to preserve these bootstrap names and the existing
+REST `4711`, P2P TCP `4662` and UDP `4672` defaults. Other proposed bootstrap
+validation, address-family or key-generation changes are not accepted by that
+decision. Preserve existing `--incoming-dir` and `--p2p-bind-interface` run
+overrides in initial hardening; removing them needs a separate scope decision.
+This review changes no reader or startup behavior and includes no profile
+evolution work.
 
 ## Product Settings And Public Surface
 
@@ -377,7 +386,7 @@ settings change. Internal error causes remain sanitized private diagnostics.
 
 ## One P2P UDP Owner
 
-The target default is P2P TCP `20019` and **one P2P UDP endpoint `20020`**.
+Preserve the default P2P TCP `4662` and **one P2P UDP endpoint `4672`**.
 They are SQLite controls, not TOML keys. The network listener owner initializes
 the shared UDP transport once; Kad RPC and eD2K client UDP use its receive/send
 handles. Disabling Kad routing must not disable eD2K client UDP. With no enabled
@@ -413,7 +422,7 @@ parent allocates code only after accepting the target and reserving files.
 | Slice | Existing owner | Dependency | Acceptance |
 | --- | --- | --- | --- |
 | S1: typed target definitions and closed bootstrap | #297 | Parent target acceptance | Complete defaults/units/validation, unknown-key rejection and secret exclusion |
-| S2: settings repository and ordered atomic publication | #299, coordinated with #298 | S1 | One conditional transaction, rollback and cancellation guarantees, saved/effective state |
+| S2: settings repository and ordered atomic publication | Extend delivered #299; coordinate #155/#298 | S1 and shared persistence owner | One conditional transaction, rollback and cancellation guarantees, saved/effective state |
 | S3: server behavior authority | #223 | S1; coordinate S2 core ownership | One connection-plan owner, whole-minute keepalive, correct live/restart state |
 | S4: listener/default and shared UDP integration | #297 | S1/S2; S3 advertisements | Configured binds and advertisements agree on Windows/Linux; no extra public UDP listener |
 | S5: REST/OpenAPI/SPA target | #297 | S1/S2; S3/S4 contract frozen for the slice | One resource, exact errors/ETags, generated schemas/controls and settings-resource secret exclusion |
@@ -424,11 +433,12 @@ File reservations are bounded by slice:
 
 - **S1:** `emulebb-settings/src/lib.rs` and `surface.rs`; daemon bootstrap/CLI
   types, fresh-bootstrap output and their tests. Keep runtime consumers
-  untouched until their owner is assigned. Bootstrap spelling/default
-  acceptance precedes its reader change.
+  untouched until their owner is assigned. Preserve the accepted bootstrap
+  spelling/defaults; other reader changes require their own acceptance.
 - **S2:** metadata settings repository/schema objects, `core/profile_state.rs`,
   settings methods in `core/app_api.rs`, and atomicity/router tests. Reuse the
-  existing #299 branch/owner; do not create parallel DB and HTTP atomicity fixes.
+  delivered #299 transaction and owned ordered completion; do not create
+  parallel DB/HTTP atomicity fixes or a competing persistence actor.
 - **S3:** server settings consumption and connection-plan functions, coordinated
   portions of `network_api.rs` and their focused tests. Core budget and listener
   reservations remain separate.
@@ -445,9 +455,11 @@ File reservations are bounded by slice:
 - **S7:** persisted harness fixtures/checks, current product guides and examples
   only after the implementation is qualified. Review docs stay target-only.
 
-The proposed atomic-settings source is reviewed separately from the selected
-main source. Its ordered completion and transaction work is a dependency, not
-evidence that the target representation, resource or defaults are implemented.
+Atomic settings #299 is delivered on current main `080a5dea`; preserve its
+ordered completion, transaction, rollback and cancellation guarantees. It is
+not evidence that the target representation, resource, revision or validator
+is implemented. Six proposed live server controls still need the actual runtime
+owner under #223; incoming-directory application remains startup-bound.
 
 ## Required Verification
 
