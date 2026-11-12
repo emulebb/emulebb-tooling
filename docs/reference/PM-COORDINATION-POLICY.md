@@ -54,6 +54,13 @@ merge and publication policies.
    mistake an open stale tracking record for missing code or repeat unchanged
    validation. The completed consolidation is the baseline, not a recurring
    prerequisite for every new branch.
+6. Deliver a clean Beta3 configuration contract: snake_case TOML/SQL/Rust,
+   camelCase JSON and kebab-case URL segments. The accepted bootstrap keys are
+   `bind_addr`, `api_key`, `web_root_dir`, with target REST `20017`, P2P TCP
+   `20019` and UDP `20020`. No aliases, compatibility shims, fallback keys,
+   legacy mappings or silently ignored obsolete fields are permitted. Require
+   negative tests that prove retired shapes fail. Target acceptance does not
+   claim the current runtime already implements it.
 
 These are the approved delivery and intake boundaries. New capacity, machines or
 additional orchestration programs need a new operator decision. Batching and

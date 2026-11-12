@@ -3,8 +3,8 @@
   "status": "PROPOSED_REVIEW_ONLY_NOT_IMPLEMENTED",
   "ownerIssue": "https://github.com/emulebb/emulebb-rust/issues/297",
   "reviewSourceRevision": "15020b7663a6771bc2d6e8282416ea36a7d7c163",
-  "defaultStatus": "Proposed leaf defaults require parent review and implementation qualification; the operator accepted preserving existing bootstrap keys and REST 4711 / P2P TCP 4662 / UDP 4672 on 2026-11-12.",
-  "naming": "Canonical Rust and SQL names use snake_case; JSON uses camelCase and URLs kebab-case. Bootstrap TOML paths preserve bindAddr, apiKey and webRootDir exactly, without aliases or renaming for casing uniformity.",
+  "defaultStatus": "The operator accepted clean snake_case bootstrap keys and target REST 20017 / P2P TCP 20019 / UDP 20020 on 2026-11-12; other proposed leaf defaults still require parent review and implementation qualification.",
+  "naming": "TOML, Rust and SQL names use snake_case; JSON uses camelCase and URL segments kebab-case. Use canonical names directly. No aliases, compatibility shims, fallback keys, remapping or silent ignoring; obsolete shapes are hard errors.",
   "commonContract": {
     "definitionOwner": "emulebb-settings",
     "persistenceOwner": "emulebb-metadata",
@@ -46,7 +46,7 @@
       "type": "ipv4-socket",
       "unit": "address and port",
       "default": null,
-      "validation": "same endpoint validation as rest.bindAddr; absent uses bootstrap/default",
+      "validation": "same endpoint validation as rest.bind_addr; absent uses bootstrap/default",
       "secret": false,
       "publicVisibility": "process bootstrap only",
       "application": "process start"
@@ -54,12 +54,12 @@
   ],
   "bootstrap": [
     {
-      "path": "rest.bindAddr",
+      "path": "rest.bind_addr",
       "domain": "rest",
       "canonicalName": "rest.bind_addr",
       "type": "ipv4-socket",
       "unit": "address and port",
-      "default": "127.0.0.1:4711",
+      "default": "127.0.0.1:20017",
       "validation": {
         "format": "IPv4 socket address",
         "portMinimum": 1,
@@ -73,7 +73,7 @@
       "application": "process restart"
     },
     {
-      "path": "rest.apiKey",
+      "path": "rest.api_key",
       "domain": "rest",
       "canonicalName": "rest.api_key",
       "type": "string",
@@ -94,7 +94,7 @@
       "application": "process restart"
     },
     {
-      "path": "rest.webRootDir",
+      "path": "rest.web_root_dir",
       "domain": "rest",
       "canonicalName": "rest.web_root_dir",
       "type": "path",
@@ -230,7 +230,7 @@
       "canonicalName": "network.p2p.tcp_port",
       "type": "integer",
       "unit": "port",
-      "default": 4662,
+      "default": 20019,
       "validation": {
         "kind": "integer",
         "minimum": 1,
@@ -251,7 +251,7 @@
       "canonicalName": "network.p2p.udp_port",
       "type": "integer",
       "unit": "port",
-      "default": 4672,
+      "default": 20020,
       "validation": {
         "kind": "integer",
         "minimum": 1,

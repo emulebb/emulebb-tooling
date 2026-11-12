@@ -50,9 +50,11 @@ revisions and representation ETags remain separate target work.
 
 The [complete target](../../design/SETTINGS-TARGET.md) and
 [inventory](../../design/SETTINGS-INVENTORY.json) are not accepted for
-implementation. The operator chose to preserve `bindAddr`, `apiKey`,
-`webRootDir` and REST `4711` / P2P TCP `4662` / UDP `4672`. The target and
-inventory record this accepted boundary; other proposed bootstrap/leaf/API
+implementation. The operator chose clean snake_case TOML keys `bind_addr`,
+`api_key`, `web_root_dir` and target REST `20017` / P2P TCP `20019` / UDP `20020`.
+No aliases, compatibility shims, fallback keys, remapping or silent ignoring
+are permitted; obsolete shapes must fail. The target and inventory record
+this accepted boundary; other proposed bootstrap/leaf/API
 changes remain unaccepted. No current reader, OpenAPI, instructions or defaults are
 changed by review. The original source-15020b76 inventory below has not thereby
 become a complete current-head runtime qualification.
@@ -60,7 +62,9 @@ become a complete current-head runtime qualification.
 The accepted [155-A contract](https://github.com/emulebb/emulebb-rust/issues/155#issuecomment-6830001541)
 owns the first bounded friend-persistence slice, not global storage completion.
 [Scoop's current deployment contract](https://github.com/emulebb/emulebb-rust/issues/324#issuecomment-6830047076)
-can proceed after #327 without adopting the unaccepted target defaults.
+can proceed after #327 using the selected immutable daemon's actual contract.
+The accepted clean Beta3 defaults require implementation and qualification;
+package wrappers must not emulate them through mappings or compatibility code.
 Neither acceptance authorizes another settings authority, schema rewrite or
 profile conversion. Unproven acceptance criteria below remain open.
 
@@ -69,7 +73,7 @@ profile conversion. Unproven acceptance criteria below remain open.
 - Keep TOML strictly process/profile/control-service bootstrap: listener, authentication and necessary bootstrap paths. Restart requirements alone do not justify placing a product setting in TOML.
 - SQLite owns mutable product settings and durable client state. Runtime-only sockets, timers, and queues remain in memory; downloaded payloads and diagnostic artifacts remain files.
 - `server.met` and `nodes.dat` are read-only compatibility import inputs. The Rust client must never create, refresh, replace, or write them back.
-- Keep generated identity in durable state and implementation constants outside public settings. Use camelCase JSON, snake_case SQL/Rust and kebab-case URL segments; preserve existing bootstrap TOML spellings rather than rename them for uniformity.
+- Keep generated identity in durable state and implementation constants outside public settings. Use camelCase JSON, snake_case TOML/SQL/Rust and kebab-case URL segments directly. Reject obsolete names; never add aliases, compatibility shims, fallback keys or semantic mappings.
 - Preserve the exact-schema/fresh-profile policy and old profiles for explicit rollback. This review does not authorize profile evolution work.
 - Beta 3 publication and candidate certification remain on hold. Workspace and platform delivery continues in parallel.
 
@@ -82,22 +86,23 @@ profile conversion. Unproven acceptance criteria below remain open.
 - [ ] Define exact routes, payloads, omission/null/reset semantics, errors, authentication, secret exclusion and saved/effective/restart state.
 - [ ] Require complete validation before persistence, one transaction, no runtime change after failed persistence and explicit post-commit application outcomes.
 - [ ] Define fresh-profile, parsing, unknown-field, validation, atomicity, persistence-failure, restart, secret and API/OpenAPI/SPA consistency tests.
+- [ ] Prove canonical naming and target defaults; reject obsolete spellings and unknown fields without aliases, fallback reads, remapping or silent ignoring.
 - [ ] Define Windows/Linux TCP/UDP binding, configured-port and advertisement checks using synthetic disposable profiles.
 - [ ] Produce dependency-ordered implementation slices with existing issue ownership, acceptance and file reservations.
 - [ ] Reconcile forward API/design references and submit the target for parent review. No implementation is claimed by this specification.
 
 Target documentation and examples contain no historical values, comparison tables, aliases, semantic mappings, shims or compatibility mechanisms.
 
-## Accepted Existing Listener Defaults
+## Accepted Target Listener Defaults
 
-The operator accepted preserving these existing defaults. This review changes
+The operator accepted these clean Beta3 target defaults. This review changes
 no running client, current OpenAPI or current user instructions.
 
 | Listener | Target default |
 | --- | --- |
-| REST/WebUI TCP | `127.0.0.1:4711` |
-| P2P TCP | `4662` |
-| P2P UDP | `4672` |
+| REST/WebUI TCP | `127.0.0.1:20017` |
+| P2P TCP | `20019` |
+| P2P UDP | `20020` |
 
 Ports are configurable. Higher numbers provide no security benefit. REST stays authenticated and loopback-bound by default. Specify one coherent P2P UDP owner from receive/send, NAT and advertisement paths; another public UDP listener needs a demonstrated protocol requirement.
 

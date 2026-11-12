@@ -6,7 +6,7 @@ The [target inventory](SETTINGS-INVENTORY.json) defines every proposed public
 setting and bootstrap value, including owner, storage, type, units, defaults,
 validation, sensitivity, visibility and application mode. Parent review must
 accept the remaining target before implementation. The operator accepted the
-existing bootstrap spellings and default ports below on 2026-11-12; this does
+clean bootstrap naming and target default ports below on 2026-11-12; this does
 not accept the complete proposed leaf, storage or REST redesign.
 Current user guides and OpenAPI remain
 the authority for the implemented client.
@@ -20,11 +20,11 @@ files. Requiring a restart does not make a product setting bootstrap material.
 
 The operator-facing settings domains are `network`, `transfers`, `storage`,
 `sharing` and `security`. Each value has one typed definition, persistence
-owner and runtime consumer. JSON uses camelCase; SQL columns and Rust use
-snake_case; URL segments use kebab-case. Preserve the existing bootstrap TOML
-spellings `bindAddr`, `apiKey` and `webRootDir`; they are not renamed for casing
-uniformity and acquire no aliases. The target defines one spelling and meaning
-for each value.
+owner and runtime consumer. JSON uses camelCase; TOML, SQL columns and Rust use
+snake_case; URL segments use kebab-case. Apply these conventions directly.
+There are no aliases, compatibility shims, fallback keys, semantic remapping or
+silently ignored obsolete fields. Retired shapes are hard errors. The target
+defines one spelling and meaning for each value.
 
 `emulebb-settings` owns typed field definitions, defaults, bounds and cross-field
 validation. `emulebb-metadata` owns settings transactions. Core coordinates
@@ -47,9 +47,9 @@ The only TOML table is `[rest]`, with these keys:
 
 | Key | Target default | Responsibility |
 | --- | --- | --- |
-| `bindAddr` | `127.0.0.1:4711` | Authenticated REST/WebUI listener |
-| `apiKey` | Privately generated for a fresh bootstrap | Control authentication |
-| `webRootDir` | Unset | Optional static-asset location; default is `webui` beside the executable |
+| `bind_addr` | `127.0.0.1:20017` | Authenticated REST/WebUI listener |
+| `api_key` | Privately generated for a fresh bootstrap | Control authentication |
+| `web_root_dir` | Unset | Optional static-asset location; default is `webui` beside the executable |
 
 The process may receive `--rest-bind-addr` for an explicit run-scoped control
 listener selection. Its precedence is CLI, then bootstrap, then fresh-bootstrap
@@ -80,10 +80,12 @@ that owner. The settings resource's secret exclusion does not change that
 private export contract or assign backend redaction, a shareable export or a
 logger rewrite to this review.
 
-The operator explicitly chose to preserve these bootstrap names and the existing
-REST `4711`, P2P TCP `4662` and UDP `4672` defaults. Other proposed bootstrap
-validation, address-family or key-generation changes are not accepted by that
-decision. Preserve existing `--incoming-dir` and `--p2p-bind-interface` run
+The operator explicitly chose this clean Beta3 bootstrap contract and target
+REST `20017`, P2P TCP `20019` and UDP `20020` defaults. Use only canonical keys;
+reject obsolete spellings without aliases, shims, fallback reads, remapping or
+silent ignoring. Other proposed bootstrap validation, address-family or
+key-generation changes are not accepted by this naming/default decision.
+Preserve existing `--incoming-dir` and `--p2p-bind-interface` run
 overrides in initial hardening; removing them needs a separate scope decision.
 This review changes no reader or startup behavior and includes no profile
 evolution work.
@@ -386,7 +388,7 @@ settings change. Internal error causes remain sanitized private diagnostics.
 
 ## One P2P UDP Owner
 
-Preserve the default P2P TCP `4662` and **one P2P UDP endpoint `4672`**.
+The accepted target default is P2P TCP `20019` and **one P2P UDP endpoint `20020`**.
 They are SQLite controls, not TOML keys. The network listener owner initializes
 the shared UDP transport once; Kad RPC and eD2K client UDP use its receive/send
 handles. Disabling Kad routing must not disable eD2K client UDP. With no enabled
