@@ -128,8 +128,9 @@ rewrite protected main or release tags. Follow the
    integration branch, preserving authorship and contribution traceability.
    Use cherry-picks where appropriate; Rust's rebase-only policy precludes
    local merge commits in its proposed history. Reject unrelated additions.
-4. Complete implementation, focused integration checks, normal hooks and source
-   inspection, then freeze the combined clean tip and exact companion revisions.
+4. Accept implementation and source inspection after focused integration checks
+   and normal hooks have passed, then freeze the combined clean tip and exact
+   companion revisions.
    No known unresolved failure may be hidden by calling the batch review-ready.
 5. Open one review-ready batch PR per affected repository so hosted platform
    qualification can run alongside the remaining applicable full local gate.

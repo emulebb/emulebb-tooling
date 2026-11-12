@@ -64,8 +64,8 @@ or pull requests, merges work, cleans delivery state, or creates release tags.
 - Do not open draft pull requests merely to retain work, and do not open a pull
   request for each granular commit. Keep the single work-in-progress branch
   pushed without a pull request until it contains a significant, coherent,
-  review-ready chunk whose scoped implementation, focused local checks, normal
-  hooks and source inspection are complete. The parent may open this frozen
+  review-ready chunk whose implementation and source inspection are accepted
+  and whose focused local checks and normal hooks have passed. The parent may open this frozen
   review-ready PR while its applicable full local matrix continues, allowing
   hosted checks to run concurrently. State pending local proof explicitly;
   retain every applicable full local and hosted check as a merge condition on
