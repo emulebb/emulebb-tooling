@@ -5,7 +5,7 @@ product: emulebb-rust
 phase: Phase 0
 github_issue: https://github.com/emulebb/emulebb-rust/issues/278
 title: Bound URL-import responses and define destination policy
-status: OPEN
+status: IN_PROGRESS
 priority: Major
 category: bug
 labels: [rust, audit]
@@ -32,19 +32,23 @@ ceilings: 4 MiB for `server.met` and 2 MiB for `nodes.dat`.
 
 ## Release Placement
 
-Major; assigned to the Windows/Linux Beta 3 readiness backlog. All Beta 3
-release actions are on operator hold. Workspace, multiarchitecture, and
-multiplatform improvements take priority; bug implementation follows that work.
-This specification correction does not authorize bug implementation, candidate
-execution, workflow dispatch, tagging, version changes, or publication.
+Major; assigned to the Windows/Linux Beta 3 readiness backlog. The parent
+allocated the bounded-discovery implementation in parallel with portable
+packaging, with TLS #328 as a recorded unmerged dependency. Admit this extra
+slice to that integration batch only if its review and applicable proof are
+ready before the final source freeze; otherwise retain its pushed checkpoint
+for the next batch. It must not hold the portable nightly. Beta 3 promotion,
+APK/signing and long soak remain held; no workflow dispatch or publication is
+authorized by this item.
 
 Delivery lane: control-plane.
 
 ## Current Findings
 
-Confirmed by static inspection of Rust source
-`edc59a003fff873e26d2c720bf9ca06f4b640871`; no exploit, runtime, or new
-validation result is claimed.
+Revalidated by static inspection of Rust TLS checkpoint
+`56f765d0d81fffa2ac191de7587c40edcc516f66`, preserving the original finding at
+`edc59a003fff873e26d2c720bf9ca06f4b640871`. No exploit or runtime validation
+result is claimed by inspection.
 
 - Core imports share an unbounded body fetch with a 30-second request timeout.
 - REST already rejects non-HTTP(S) input schemes. Core text validation does not
@@ -156,6 +160,23 @@ not required for this bounded defect.
   section security-url-import.
 
 ## Remaining Evidence And Coordination
+
+The current implementation branch introduces `discovery_fetch.rs` as the
+shared policy/body owner, consumed by the original import and bootstrap
+builders. It preserves the TLS trust owner, proxies, user agents and format
+limits. Request errors discard their URLs and import failure logs no longer
+echo credentials or queries. The collector checks each actual chunk before
+extension and uses bounded exact reservation rather than trusting declared
+lengths or geometrically growing beyond the document ceiling. No manifest,
+dependency, storage actor, schema or nodes-persistence redesign is included.
+
+Deterministic synthetic tests cover body framing/limits, raw encoded responses,
+slow headers/body/redirect deadlines, three-hop accounting, relative/cross-host
+and proxy compatibility, HTTPS downgrade rejection before an HTTP sentinel is
+contacted, sanitized errors and rejected-document state preservation. Shared
+HTTP/TLS fixtures are test-only; all six existing TLS test names remain intact.
+These new Rust tests still require parent-serialized execution and exact-source
+qualification; their presence is not a runtime pass or completed acceptance.
 
 The finite byte limits are inherited from trusted bootstrap; representative
 operator imports have not been measured here. No runtime exploit or compatibility
