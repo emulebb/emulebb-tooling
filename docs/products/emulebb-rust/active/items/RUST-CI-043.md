@@ -44,6 +44,27 @@ experimental qualification limits. This is an allocated implementation slice,
 not proof of integration, package runtime success or completion of this review;
 the remaining settings/revision/ETag proposal stays separately unaccepted.
 
+### Generated Runtime Refresh Ownership
+
+Executable-directory profiles are operator data even when created beside a
+workspace-staged daemon. Registered runtime replacement and retirement must
+prove the existing bundle's file inventory and directory ownership before any
+destructive operation, independently of the current source revision. A valid
+older generated bundle remains replaceable; missing/corrupt receipts, changed
+members, unknown files and unknown directories require refusal and preservation.
+Late backup cleanup removes only proven members and preserves/reports newly
+appearing data rather than recursively deleting the directory. No profile is
+moved, converted, reset or adopted as generated output.
+
+The canonical operator stage currently has no ownership receipt. Its clean-build
+path therefore refuses a nonempty runtime directory; ordinary non-clean/fresh
+staging still replaces named generated artifacts. Operator refresh and persisted
+launches use the existing harness with an explicit profile outside generated
+runtime namespaces. Future Scoop launchers retain the same explicit stable
+profile boundary described in [RUST-FEAT-147](RUST-FEAT-147.md). This guard is an
+allocated #297 contribution; integration and final applicable gates remain
+parent-owned and are not claimed by this specification update.
+
 - [ ] Define one daemon/WebUI deployment contract for portable, package-manager
       and future supervised installs: profile/key/data ownership, installation-
       relative WebUI lookup, permissions, listeners, logs and clean shutdown.
