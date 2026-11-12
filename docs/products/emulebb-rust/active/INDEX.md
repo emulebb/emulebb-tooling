@@ -85,7 +85,6 @@ inventory and required checks remain enforced; this intake changes neither.
 | [RUST-CI-006](items/RUST-CI-006.md) | Evidence | Refresh current-head stock parity evidence and reconcile docs |
 | [RUST-CI-009](items/RUST-CI-009.md) | Evidence | Certify a Beta 3 candidate without publishing |
 | [RUST-CI-033](items/RUST-CI-033.md) | Evidence | Preserve native build scripts in Dependabot fuzz updates |
-| [RUST-CI-035](items/RUST-CI-035.md) | Evidence | Separate mandatory Windows/Linux gates from optional platform outcomes |
 | [RUST-CI-044](items/RUST-CI-044.md) | Evidence | Review SQLite schema efficiency and evolution boundaries |
 
 ## Parallel Client Work — Non-gating for Beta 3

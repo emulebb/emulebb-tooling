@@ -33,9 +33,11 @@ payload.
 
 ## Current State
 
-Reviewed against product revision `7b295bda` after RUST-REF-017 merged. The
-current schema is 54, with verified library content independent of downloads.
-Kad snapshot persistence remains open work in this item.
+Reviewed against product revision
+`080a5dea70186da31dab958757b5b8c0fd883f82`, whose exact current schema is 68.
+Verified library content is independent of downloads; Kad snapshot persistence
+remains open work in this item. The earlier review at `7b295bda` and schema 54
+is historical provenance, not the current schema contract.
 
 - `server.met` URL import parses servers and merges them into the SQLite server
   repository. There is no canonical profile-local `server.met`.
