@@ -25,6 +25,30 @@ non-mutatingly correlated before admission, but banned, flooded, spoofed, or
 stock-port-53-rejected traffic must not teach routing identity, version, or
 verify-key metadata and must not consume a pending request.
 
+## Implemented Source And Remaining Proof
+
+The source fix already landed in
+[PR #225](https://github.com/emulebb/emulebb-rust/pull/225), including commit
+`1bd026784ca52e90246c12f939d5477846abbf9d`, and is present in reviewed main
+`080a5dea70186da31dab958757b5b8c0fd883f82`. Do not allocate another receive-loop
+implementation solely because this tracking item remains open.
+
+Current `emulebb-kad-net/src/rpc/receive_loop.rs` checks correlation without
+consuming it, performs ban/flood admission before learning identity/version/key
+metadata, and rejects source port 53 for absent or effective-zero verify keys,
+including `Some(0)`. Existing `rpc/tests/admission.rs` covers flood-rejected
+metadata, banned responses retaining pending state, spoofed replies followed by
+a legitimate reply, and a nonzero encrypted source-port-53 positive control.
+The receive-loop helper also has a zero-key boundary regression.
+
+This is source reconciliation, not a newly executed campaign. The accepted
+specific mixed Rust/MFC Kad campaign receipt for `kad.ingress.admission` and
+`kad.ingress.port53-verify-key` has not been confirmed. General CI, packaged
+local transfers and PR #225's eD2K server-search/OFFERFILES evidence do not
+substitute for that Kad slice. Keep the issue In Progress and its acceptance
+open until the parent locates and accepts existing evidence or allocates the
+remaining bounded proof through the existing protocol harness owner.
+
 ## Slice Binding
 
 - Catalog IDs: `kad.ingress.admission` and
