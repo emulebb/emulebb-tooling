@@ -18,6 +18,17 @@ source: operator-approved profile continuity design 2026-11-05
 
 # RUST-FEAT-063 - Carry semantic profile state into a fresh current-schema profile
 
+## Distribution Intake Acceptance
+
+- [ ] Specify first install, compatible update, incompatible-profile refusal,
+      uninstall/reinstall and explicit matching binary/profile rollback for
+      package-manager consumers, including [Scoop](RUST-FEAT-147.md).
+- [ ] Preserve old profile/binary pairs and operator payloads. Packaging must not
+      copy/convert an incompatible database, reset state or promise cross-schema
+      transfer continuation. Unattended moving-nightly updates remain unapproved.
+- [ ] Keep semantic export/import implementation under this owner. Safe package
+      preparation can proceed before it ships using accepted fresh-profile rules.
+
 ## Summary
 
 Provide an explicit semantic export/import workflow that carries important
@@ -32,17 +43,15 @@ startup must never perform automatic conversion.
 
 ## Current Baseline
 
-RUST-REF-017 merged at product revision `7b295bda` with schema 54. Verified
-content, native local-file instances, configured roots, and root membership
-have separate ownership from active downloads. A current-session filesystem
-check gates library eligibility after restart. This item must preserve those
-boundaries when defining its semantic bundle.
+At intake main `a2414638`, the current schema is 68. Verified content, native
+local-file instances, configured roots and root membership remain separate from
+active downloads. A current-session filesystem check gates library eligibility
+after restart. Preserve those boundaries when defining the semantic bundle;
+re-read the actual current schema before implementation.
 
-The export/import commands remain future work. The earlier ad-hoc schema-44 to
-schema-45 Python importer was retired during this reconciliation; it provides
-no current-schema import path. Establish the first supported bundle with the
-new implementation. Existing beta databases still require an entirely fresh
-profile, with no retroactive database reader or migration added by this item.
+The export/import commands remain future work. Establish the first supported
+bundle with the new implementation. Incompatible beta databases still require
+an entirely fresh profile, with no retroactive database reader or migration.
 
 ## User Workflow
 

@@ -18,6 +18,17 @@ source: Operator-directed configuration and persistence architecture review
 
 # RUST-CI-044 - Review SQLite schema efficiency and evolution boundaries
 
+## Distribution Intake Acceptance
+
+- [ ] Reconcile actual current schema/owner facts before making update claims;
+      intake main `a2414638` uses schema 68. Packaging cannot convert a database.
+- [ ] Keep one SQLite authority, minimal stable TOML, readonly met imports and
+      existing fresh-profile refusal. Retain matching binary/profile rollback
+      without aliases, repair, automatic reset or partial index reconstruction.
+- [ ] Package/channel/service consumers use this contract. Scheduling stays with
+      [#155](RUST-REF-016.md), Kad persistence with [#233](RUST-FEAT-062.md),
+      and semantic continuity with [#234](RUST-FEAT-063.md); add no rival owner.
+
 ## Outcome
 
 Review the Rust SQLite schema for efficiency, clear ownership and naming, safe evolution, and the bounded-monolith Client/Indexer/Arr direction before Beta 3. Produce evidence-backed decisions and independent implementation slices; no speculative schema rewrite.

@@ -8,7 +8,7 @@ title: Certify NAS deployments across supported appliance systems
 status: OPEN
 priority: Major
 category: feature
-labels: [rust, nas, containers, docker, packaging, portability]
+labels: [rust, nas, containers, docker, packaging, portability, distribution-expansion]
 milestone: post-beta-polish
 created: 2026-11-04
 source: operator-approved universal-platform expansion 2026-11-04
@@ -17,6 +17,20 @@ source: operator-approved universal-platform expansion 2026-11-04
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb-rust/issues/228. This local document owns the durable engineering contract.
 
 # RUST-FEAT-058 - Certify NAS deployments across supported appliance systems
+
+## Distribution Intake Acceptance
+
+This is explicitly optional environment expansion. Keep its owning phase and
+applicable qualification; it does not independently block the mandatory core
+Client gate or become a new Beta 3 gate.
+
+- [ ] Reuse immutable Ubuntu/Alpine OCI digests and one deployment model; qualify
+      appliance/version/CPU combinations individually, without generic NAS claims.
+- [ ] Prove user/group permissions, profile/key/data mounts, health, networking,
+      transfer/sharing, restart, stopped-profile backup and compatible rollback.
+- [ ] Keep direct and Docker-over-Gluetun evidence distinct. Generic container
+      smoke is not appliance certification or fail-closed VPN proof; no SPK/QPKG
+      or new hardware purchase is required by this intake.
 
 ## Summary
 

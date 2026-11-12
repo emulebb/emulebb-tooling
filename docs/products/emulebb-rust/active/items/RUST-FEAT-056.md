@@ -8,7 +8,7 @@ title: Deliver supported Android and Fire OS APKs with device harnesses
 status: IN_PROGRESS
 priority: Major
 category: feature
-labels: [rust, android, fire-os, mobile, packaging, webui, harness, portability]
+labels: [rust, android, fire-os, mobile, packaging, webui, harness, portability, distribution-expansion]
 milestone: post-beta-polish
 created: 2026-11-04
 source: operator-approved universal-platform expansion 2026-11-04
@@ -17,6 +17,21 @@ source: operator-approved universal-platform expansion 2026-11-04
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb-rust/issues/226. This local document owns the durable engineering contract.
 
 # RUST-FEAT-056 - Deliver supported Android and Fire OS APKs with device harnesses
+
+## Distribution Intake Acceptance
+
+This is explicitly optional environment expansion with its existing phase;
+unfinished APK/device work does not independently hold the core Client gate.
+Every selected nightly Android compile/ELF check remains mandatory.
+
+- [ ] Keep experimental native daemon bundles distinct from APK/JNI/foreground-
+      service/signing implementation, which remains on hold.
+- [ ] Bind both ABI archives, manifests, tool inputs and ELF/compile proofs to
+      the actual accepted nightly/source. Never relabel binaries or claim target
+      execution from cross-compilation or linked-but-unexecuted tests.
+- [ ] Require device/emulator lifecycle, storage, networking and default-route
+      evidence before any Android/Fire OS runtime support claim. Remote browser
+      control of another host proves no local daemon/device support.
 
 ## Summary
 
@@ -30,10 +45,10 @@ The Android product remains the same headless bounded monolith. Android owns a
 minimal application shell and foreground service; it does not introduce a
 second client implementation or a native recreation of the desktop UI.
 
-## Authorized Experimental Nightly Slice (2026-11-09)
+## Authorized Experimental Nightly Slice
 
 The operator selected experimental native daemon bundles for `arm64-v8a` and
-`x86_64` as tonight's Android deliverable. APK/JNI/service/signing and supported
+`x86_64` as the Android nightly deliverable. APK/JNI/service/signing and supported
 device qualification remain later work; publishing developer archives does not
 close this APK feature or add a supported Android-platform claim.
 
@@ -47,9 +62,10 @@ inventory gaps. The existing Windows/Linux/macOS, musl and OCI proof remains
 mandatory; the Beta3 release and long-soak holds remain in effect.
 
 The parent coordinates one workstream with separate Build and Rust checkout
-owners. Full existing local pre-push validation remains required by the
-operator's explicit choice, with one heavy local job at a time. Workspace,
-output and Cargo variables and storage backing remain unchanged.
+owners. Run complete applicable hooks and hosted qualification under the current
+[Delivery Policy](../../../../reference/DELIVERY-POLICY.md); explicit heavy
+local proof remains serialized through the shared lock. Preserve inherited
+workspace/output/Cargo state rather than restoring obsolete storage assumptions.
 
 Acceptance for this slice is new, source-bound published nightly assets for both
 Android ABIs with honest experimental status. Current compile-only CI reports

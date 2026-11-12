@@ -6,7 +6,7 @@ phases that may follow it, the compatibility authority for each kind of
 behavior, and the gate that prevents later phases from diluting unfinished
 client work.
 
-`emulebb-rust` is an **automation-first, headless IPv4 eD2K/Kad client** for
+`emulebb-rust` is one **universal, automation-first, headless IPv4 eD2K/Kad daemon** for
 reliable search, download, upload, and sharing. It is operated through a
 Rust-native REST API and embedded browser operations console. The product is
 optimized for broadband operation and large libraries through Rust-native
@@ -25,34 +25,30 @@ Production implementation of a later phase must not begin while the preceding
 gate is open. Forward design and deterministic fixtures may be prepared only
 when they do not add dormant production paths or distract from the active gate.
 
-## Current Operator Hold And Work Priority (2026-11-09)
+## Current Operator Hold And Work Priority (2026-11-12)
 
-**Beta3 release is on hold.** Current work prioritizes backlog clarity and
-workspace improvements for parallel multiarchitecture/multiplatform delivery,
-then bugs/issues. Broader platform development is an active focus independent
-of release promotion. Coordinate through
-[managed workspace work (Build #28)](https://github.com/emulebb/emulebb-build/issues/28),
-[platform workflow separation (#293)](https://github.com/emulebb/emulebb-rust/issues/293),
-and the existing platform owners, including
-[Linux x64/ARM64 (#227)](https://github.com/emulebb/emulebb-rust/issues/227) and
-[Android/Fire OS (#226)](https://github.com/emulebb/emulebb-rust/issues/226).
-GitHub issues and Project #3 retain workflow authority.
-The `focus:workspace-platforms` label identifies the current coordination set;
-it does not alter platform support or release-gate decisions. Dependency-aware
-early validation [#258](https://github.com/emulebb/emulebb-rust/issues/258)
-is now Major to address the feedback bottleneck without reducing complete
-required validation; its milestone is unchanged.
+**Beta 3 promotion and APK/signing remain on hold.** Final combined-main and
+nightly qualification completes the consolidation checkpoint. The next product
+wave leads with balanced reliability, including the shared bounded-persistence
+contract under [#155](active/items/RUST-REF-016.md). Existing configuration,
+schema and client-correctness owners retain their responsibilities.
 
-Continue current qualification and permitted development. Do not freeze or
-select a Beta3 candidate, execute candidate certification, dispatch a release
-workflow, publish, tag, or bump a version while this hold applies.
-[Candidate certification (#142)](https://github.com/emulebb/emulebb-rust/issues/142)
-remains a future gated action until the operator explicitly lifts the hold;
-[completed audit reconciliation](https://github.com/emulebb/emulebb-tooling/blob/main/docs/products/emulebb-rust/history/items/RUST-CI-034.md)
-records this prioritization decision; owning [issue #268](https://github.com/emulebb/emulebb-rust/issues/268) closes on reviewed documentation PR merge. The prior Windows/Linux plus required
-Linux OCI Beta3 scope remains provisional and documented; this priority change
-does not silently change required checks, platform gates, support promises,
-or the separate Client-to-Indexer-to-Arr phase gates.
+[Scoop (#324)](active/items/RUST-FEAT-147.md) is the first accepted new
+distribution lane. [Linux services (#325)](active/items/RUST-CI-049.md) are
+deferred to a bounded design review; there is no authorization to implement or
+enable a service. The [PM policy](../../reference/PM-COORDINATION-POLICY.md)
+owns closeout of the two existing preflight/intake PRs: review and full hosted
+qualification run in parallel now, the parent coordinates normal-gated merges,
+then freezes the final combined main for one full nightly and public-byte proof.
+No Scoop, storage implementation or additional product lane starts before that
+checkpoint; there is no intermediate-nightly requirement before these PRs.
+
+The hold prohibits Beta 3 candidate selection/certification and promotion;
+[#142](active/items/RUST-CI-009.md) remains held. Separately authorized
+unpublished packaging candidates and CI-gated nightly prereleases may proceed
+through their actual gates. Intake does not authorize a new release tag,
+external package channel, community submission, signing, hosting or spending.
+GitHub issues and Project #3 own status, priority and phase placement.
 
 ## Behavior authority
 
@@ -125,6 +121,49 @@ The embedded WebUI is an operations console, not a recreation of the MFC GUI.
 It covers health, configuration, network state, searches, transfers, sharing,
 logs, diagnostics, and—when their phases ship—index and adapter state.
 
+### Universal deployment and distribution
+
+Native and OCI delivery consume one daemon, adjacent WebUI, authenticated
+control contract and profile-ownership model. Keep writable profiles, payloads
+and secrets outside versioned application installations. A package manager or
+service wrapper must not become another settings authority or API bridge.
+[#297](active/items/RUST-CI-043.md) owns that shared deployment/configuration
+contract; [#298](active/items/RUST-CI-044.md) owns database boundaries.
+
+Ubuntu 24.04 and Debian 13, each on x64 and ARM64, are the initial declared
+Linux qualification targets. These are targets, not completed four-way install
+or minimum-OS evidence. Derive actual ELF/libc and native-library requirements
+from the selected package bytes, then qualify installation and lifecycle on
+each claimed release. Existing inconsistent libc declarations do not establish
+an older supported baseline; do not infer Debian 12 or Ubuntu 22.04 support.
+
+Scoop is the first new package-manager lane under
+[#324](active/items/RUST-FEAT-147.md), consuming immutable verified Windows ZIPs.
+Use explicitly selected beta versions, preserve complete WebUI payloads and
+leave profile/data ownership unchanged. Package updates must not migrate or
+reset a database, erase state, promise cross-schema resume, or silently follow
+a moving nightly. Preserve matching old binary/profile pairs for explicit
+rollback. Uninstall preserves operator state. Semantic continuity stays with
+[#234](active/items/RUST-FEAT-063.md); unfinished continuity is not permission
+to add a package-script conversion path.
+
+Linux-service implementation is deferred. The bounded
+[#325 review](active/items/RUST-CI-049.md) must recommend user versus system
+service, identity, profile/key/data ownership, listeners, logs, clean shutdown,
+profile-lock reuse and explicit enablement before implementation is considered.
+It does not block later Scoop delivery and authorizes no unit installation or automatic start.
+
+APT, RPM and Homebrew remain candidate outcomes rather than active delivery
+issues. APT needs an accepted ownership/signing/update proposal; RPM needs its
+own selected distro matrix; Homebrew needs an accepted package and launchd
+model. AUR and Nix are unactivated pending demand and maintenance capacity.
+None authorizes hosting, paid infrastructure, signing or community submission.
+NAS qualification reuses existing OCI images under
+[#228](active/items/RUST-FEAT-058.md), not a new generic Docker implementation.
+BSD, Android/Fire OS and ChromeOS retain their existing owners and require
+environment-specific evidence before support claims. Android developer daemon
+bundles remain distinct from an APK or device-runtime qualification.
+
 ### Beta contract policy
 
 The first-party API and database schema are deliberately unstable through the
@@ -178,8 +217,8 @@ downgrade, malformed-input, and 100,000-file scale evidence.
 
 The Indexer phase cannot begin until all of the following are true:
 
-- every active non-suite Rust item is closed or explicitly removed from the
-  product; any newly opened client item joins this gate;
+- every active mandatory core Client item is closed or explicitly removed from
+  the product; newly accepted core Client work joins this gate;
 - current-head stock eMule/current-aMule/Rust parity evidence is reconciled with
   the registries and current documentation;
 - there are no unresolved critical safety, data-integrity, privacy, or stock-
@@ -192,9 +231,22 @@ The Indexer phase cannot begin until all of the following are true:
   transfer, and shut down cleanly on Windows, Linux, and macOS x64/ARM64; and
 - deep bounded public-network campaigns pass on Windows x64 and Linux x64.
 
-Because every newly accepted client item joins the gate, issue triage must
-reject speculative or low-value work rather than using priority alone to defer
-it silently.
+Optional distribution channels and additional environment qualification are
+explicit expansion scope outside this phase-advancement gate. Their existing
+Client phase ownership is retained; an owning issue and the
+`distribution-expansion` classification record the boundary. The current
+expansion owners are NAS, FreeBSD/other Unix, Android/Fire OS, ChromeOS, Scoop
+and the Linux-service design review. APT, RPM and Homebrew are candidates,
+not activated implementation issues; AUR and Nix remain unactivated ideas.
+
+This classification cannot exempt a core safety, integrity, privacy or wire
+defect, remove a currently required CI check, or skip a platform selected by a
+release workflow. Full nightly qualification continues to require its complete
+current platform inventory, including macOS and experimental Android compile/
+ELF evidence. Issue priority alone never changes either gate.
+
+Reject speculative or low-value work rather than creating ownerless expansion
+items or silently deferring mandatory core work.
 
 ### Beta increment gate
 
@@ -210,10 +262,11 @@ Linux OCI variants are mandatory platform deliverables. macOS, Android/Fire
 OS, ChromeOS, NAS-specific certification, and additional Unix targets continue
 in parallel without blocking this beta increment. Shared safety, integrity,
 privacy, policy, dependency, CodeQL, provenance, and Windows/Linux correctness
-checks remain mandatory. RUST-CI-035 owns the actual workflow aggregation,
-release-assembly, and manifest split; existing enforcement remains in force
-until that change passes review and validation. Optional artifacts may ship
-only with their own successful qualification and explicit manifest entries.
+checks remain mandatory. RUST-CI-035 delivered the workflow aggregation,
+release-assembly and manifest profile split; the selected workflow's actual
+enforcement remains in force. Full nightly still selects its complete inventory.
+Optional artifacts ship only with their own successful qualification and
+explicit manifest entries.
 
 This beta platform selection does not close the broader Client gate or
 authorize Indexer/Arr implementation. The required candidate uses immutable

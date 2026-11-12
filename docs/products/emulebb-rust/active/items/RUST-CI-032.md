@@ -18,25 +18,26 @@ source: Operator-approved local and GitHub CI parity follow-up
 
 # RUST-CI-032 - Add dependency-aware early Rust checks without weakening pre-push coverage
 
-## Current Focus (2026-11-09)
+## Current Developer-Feedback Scope
 
-The operator prioritizes workspace improvements and multiarchitecture/
-multiplatform development before the broader bugs/issues queue, with Beta3
-release held. This dependency-aware feedback item is now Major because full
-validation latency limits that parallel work. Its post-beta-polish milestone
-is unchanged; this priority change does not introduce a new release gate.
-Keep the complete pre-push/hosted checks and existing workspace lock authority;
-faster partial feedback must not claim complete qualification. GitHub issue
-[#258](https://github.com/emulebb/emulebb-rust/issues/258) and Project #3 own
-execution status. Current qualification may continue; no candidate freeze,
-certification, release dispatch, publication, tag, or version bump is authorized.
+This item owns dependency-aware selective developer checks, not the hosted
+Clippy/WebUI preflight now owned by [#323 / RUST-CI-048](RUST-CI-048.md).
+Keep both outcomes and their evidence distinct. Major priority and the existing
+milestone remain owned by GitHub; neither item silently weakens qualification.
+
+Preserve complete applicable hooks, explicit full-local validation and required
+hosted checks under the [Delivery Policy](../../../../reference/DELIVERY-POLICY.md).
+Partial developer feedback cannot claim a full pass. The parent coordinates
+integration batches; this item creates no scheduler, queue, cache/capacity
+program or additional machine. Beta 3 promotion and APK/signing remain held;
+separate nightly authorization follows the current PM mandate.
 
 ## Summary
 
-Add faster developer feedback before the complete pre-push gate. Reuse the
+Add faster developer feedback before complete applicable qualification. Reuse the
 canonical Rust check definitions and Cargo's dependency metadata to select
 changed workspace crates and their dependants. This is follow-up backlog work;
-the current CI/CD cleanup keeps complete applicable pre-push validation.
+current delivery keeps complete applicable pre-push and hosted validation.
 
 ## Acceptance Criteria
 
@@ -46,7 +47,7 @@ the current CI/CD cleanup keeps complete applicable pre-push validation.
       and uncertain change ownership expand to the full relevant validation set.
 - [ ] Package selection has regression coverage for cross-crate changes and
       dependency changes; unknown inputs cannot silently omit checks.
-- [ ] Full pre-push and required GitHub coverage remains intact, including
+- [ ] Complete applicable pre-push and required GitHub coverage remains intact, including
       doctests, diagnostics, observed-egress tests, UI, and REST conformance.
 - [ ] Reports distinguish partial developer feedback from complete validation.
       No prior-pass receipts or automatic retries hide failures.

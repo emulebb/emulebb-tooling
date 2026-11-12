@@ -26,9 +26,12 @@ Do not load unrelated Rust annexes merely because the repository is active.
 - CI-gated nightlies from `main` are the current beta testing lane. Published
   beta tags remain immutable release evidence; do not rewrite their tags or
   artifacts, and do not promote stale tags as the current download path.
-- The product is an automation-first integrated suite delivered through hard-
-  gated Client, Indexer, and Arr phases. Production work stays in the Client
-  phase until every active client item, including newly accepted items, closes.
+- One universal headless eD2K/Kad daemon is delivered through hard-gated Client,
+  Indexer and Arr phases. Production stays in Client until the mandatory core
+  gate in [Release Scope](../RELEASE-SCOPE.md#client-gate) closes. Explicitly
+  classified distribution/environment expansion does not block that phase
+  transition solely by remaining open; its phase ownership and every actual
+  required CI/full-nightly check remain intact.
 - The Rust headless daemon and embedded SPA operations console are the active
   client and UI. A native desktop UI or recreation of the MFC GUI is outside
   scope.

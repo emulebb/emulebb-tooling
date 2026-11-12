@@ -18,6 +18,16 @@ source: 100k SSD campaign, interrupted multi-HDD campaign, and 2026-10-03 I/O re
 
 # RUST-REF-008 - Reduce large-library metadata and scan I/O amplification
 
+## Comparative Measurement Acceptance
+
+- [ ] Compare cold/warm 100,000-file ingestion and bounded watcher mutation with
+      matched current-stable aMule/Rust inputs on the same storage/settings.
+- [ ] Record elapsed time, logical versus physical I/O, commit/query counts,
+      peak/steady RSS, API latency percentiles and correctness/restart outcomes.
+- [ ] Preserve shared MD4/AICH reads and existing persisted harness ownership.
+      Measurements select bounded repairs here; historical throughput does not
+      establish overall superiority or authorize an unbounded real-media scan.
+
 ## Summary
 
 Reduce the database, catalog, and filesystem-metadata amplification that now

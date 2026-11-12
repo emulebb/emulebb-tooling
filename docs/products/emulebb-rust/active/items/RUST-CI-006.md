@@ -18,6 +18,17 @@ source: Stock compatibility review and retained parity evidence audit
 
 # RUST-CI-006 - Refresh current-head stock parity evidence and reconcile docs
 
+## Distribution Intake Acceptance
+
+- [ ] Reconcile README, downloads, release scope and machine-readable platform
+      claims with exact-source evidence. Distinguish compile, native smoke,
+      public-network, appliance and minimum-OS proof; archive format is no proof.
+- [ ] Use current stable aMule for explicitly scoped comparative evidence while
+      preserving the separately frozen parity authorities and stock wire rules.
+      Do not claim overall security/performance superiority without measurement.
+- [ ] Keep mandatory core parity closure distinct from the optional expansion
+      boundary in [Release Scope](../../RELEASE-SCOPE.md#client-gate).
+
 ## Summary
 
 After the compatibility findings in this review are dispositioned, run one

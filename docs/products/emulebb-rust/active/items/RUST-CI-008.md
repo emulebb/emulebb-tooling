@@ -18,6 +18,16 @@ source: 2026-10-03 large-library I/O and portability review
 
 # RUST-CI-008 - Prove Unicode and long-path large-library behavior across platforms
 
+## Distribution Intake Acceptance
+
+- [ ] Treat Ubuntu 24.04/Debian 13 x64/ARM64 as declared qualification targets;
+      record actual native install/path/lifecycle results before support claims.
+- [ ] Establish actual ELF/libc/native-library requirements from selected bytes.
+      Resolve inconsistent minimum declarations rather than promising an older
+      distro from a CI host, generic Unix build or static musl success.
+- [ ] Preserve required Windows/Linux/macOS library/path proof and distinguish
+      NAS/BSD/Android/ChromeOS environment evidence owned by their expansion items.
+
 ## Summary
 
 Extend the existing Python shared-library harness with deterministic Unicode,

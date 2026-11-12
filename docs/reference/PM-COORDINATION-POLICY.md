@@ -14,7 +14,8 @@ active worker and validation run.
 
 The [Product Direction](../active/PRODUCT-DIRECTION.md) and
 [Rust Release Scope](../products/emulebb-rust/RELEASE-SCOPE.md) own product scope.
-The delivery target is a stable, efficient, long-running eD2K/Kad client capable
+The delivery target is one universal, stable, efficient, long-running headless
+eD2K/Kad daemon capable
 of sharing 100,000+ files, with coherent configuration, REST and database design.
 Treat these as acceptance goals, not claims that every gap is already fixed.
 Linux and Windows lead; other platforms advance in parallel under the actual
@@ -22,15 +23,35 @@ merge and publication policies.
 
 ## Current Operator Mandate
 
-1. Finish consolidation of all existing development lanes and Dependabot updates
-   using the current required gates. Reach clean, qualified canonical mains with
-   no dangling topic branches, pull requests, worker checkouts or worker agents.
-   Preserve explicitly withdrawn or superseded work as recovery history.
-2. Only after that checkpoint, add a fast Clippy/type-check preflight before the
-   full platform matrix, reusing existing gate commands. Coordinate compatible
-   changes into batches for final integration testing as a PM responsibility.
+1. Finish only the two existing hosted
+   [preflight #323](https://github.com/emulebb/emulebb-rust/issues/323) and
+   universal-daemon documentation-intake lanes. Open their reviewable PRs and
+   run full applicable hosted qualification in parallel now. The parent reviews
+   and coordinates normal-gated merges; canonical sources change only through
+   those accepted merges. No existing pass transfers to a changed head.
+2. After both lanes integrate, freeze the final combined mains and accepted
+   support pins, qualify the actual merge revisions, then run one authorized
+   full nightly and verify its public assets/channels/provenance. There is no
+   intermediate nightly authorization for the preceding `a2414638` checkpoint.
+   Finish with clean canonical mains and no dangling PRs, topic refs, managed
+   checkouts or worker agents. Preserve deliberate recovery history.
+3. Lead the next product wave with balanced reliability and the shared
+   [#155](https://github.com/emulebb/emulebb-rust/issues/155)/
+   [#233](https://github.com/emulebb/emulebb-rust/issues/233) storage contract.
+   Their implementation waits for this closeout checkpoint and ownership/
+   contract review; scoping authorizes no schema edits or competing actors.
+4. [Scoop #324](https://github.com/emulebb/emulebb-rust/issues/324) is the first
+   accepted new distribution lane, after its deployment/update contract is
+   accepted after closeout. No Scoop implementation or additional lane starts
+   before that checkpoint. [Linux services #325](https://github.com/emulebb/emulebb-rust/issues/325)
+   are a bounded review only, with implementation deferred. Optional expansion
+   classification follows Release Scope and preserves actual required gates.
+5. Coordinate compatible changes into batches for final integration testing as
+   a PM responsibility. Keep developer dependency-aware checks under
+   [#258](https://github.com/emulebb/emulebb-rust/issues/258) distinct from
+   hosted preflight #323; neither replaces complete applicable qualification.
 
-This is the approved performance follow-up scope. New capacity, machines or
+These are the approved delivery and intake boundaries. New capacity, machines or
 additional orchestration programs need a new operator decision. Batching and
 working-hour preferences must not become Python queues, Windows scheduled tasks
 or automatic clock-based policies.
@@ -39,6 +60,11 @@ Beta 3 promotion and APK/signing remain on hold. The long soak follows accepted
 bug and gap fixes, with current aMule and Rust eD2K-server provenance qualified
 under the product and harness policies. Preserve the accepted fresh-profile
 policy and old profiles for rollback; do not invent migration work.
+Separately authorized CI-gated nightly publication does not lift those holds.
+APT/RPM/Homebrew remain candidates, AUR/Nix remain unactivated, and no channel
+hosting, signing, paid infrastructure or community publication is authorized by
+the intake. Ubuntu 24.04/Debian 13 x64/ARM64 remain qualification targets until
+their actual package dependencies and native results are recorded.
 
 For this consolidation only, the operator approved parent-coordinated rebases of
 published worker and Dependabot PR branches. Preserve exact recovery refs,
@@ -81,8 +107,11 @@ proof rather than repeating that extra proof after every small source edit.
 Batching does not waive repository-required checks or permit borrowing a pass
 from another head. Keep each PR's actual gates and cross-repository prerequisites
 explicit. Distinguish scoped local proof, hosted qualification, merge and actual
-published-artifact verification. Do not start a new feature wave while the
-consolidation checkpoint is incomplete.
+published-artifact verification. Qualify the two existing closeout PRs in
+parallel, coordinate their merges, then prove the final combined revision.
+Do not start another product implementation wave before the checkpoint closes.
+Time-of-day preferences guide this
+coordination; they never create tooling schedules or test queues.
 
 ## Status And Closure
 

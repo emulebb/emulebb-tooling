@@ -141,8 +141,10 @@ desktop window model or own automation rules.
 
 ## Gate rules
 
-- Client production work has priority until every active client item, including
-  newly accepted items, closes or is explicitly removed from the product.
+- Mandatory core Client production work has priority until its accepted gate
+  closes. Explicit optional distribution/environment expansion follows the
+  [Release Scope classification](../RELEASE-SCOPE.md#client-gate), retaining
+  phase ownership and every actual required CI/full-nightly check.
 - Indexer production work starts only after the complete Client evidence and
   platform gate passes.
 - Arr production work starts only after the Indexer behavior, persistence,

@@ -18,6 +18,17 @@ source: Operator-approved Rust async I/O and path portability review
 
 # RUST-REF-019 - Offload remaining transfer and large-library CPU bursts
 
+## Comparative Measurement Acceptance
+
+- [ ] Measure part verification and 100K-library build/sort bursts with bounded
+      inputs, exact revisions and matched hardware/settings; include useful
+      throughput, CPU/RSS and REST/peer-timer latency percentiles.
+- [ ] Preserve transfer correctness and resume while evaluating bounded CPU
+      admission. A current-stable aMule comparison is evidence, not wire authority
+      or an automatic claim that Rust is faster or safer.
+- [ ] Share persistence ownership with [#155](RUST-REF-016.md); no competing
+      SQLite actor, new scheduler, hardware program or long soak is activated.
+
 ## Summary
 
 Own approved follow-up 4. Keep substantial part verification and large-library

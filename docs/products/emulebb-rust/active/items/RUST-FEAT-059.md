@@ -8,7 +8,7 @@ title: Support FreeBSD on x64 and ARM64
 status: OPEN
 priority: Minor
 category: feature
-labels: [rust, freebsd, bsd, packaging, portability, arm64]
+labels: [rust, freebsd, bsd, packaging, portability, arm64, distribution-expansion]
 milestone: post-beta-polish
 created: 2026-11-04
 source: operator-approved universal-platform expansion 2026-11-04
@@ -17,6 +17,20 @@ source: operator-approved universal-platform expansion 2026-11-04
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb-rust/issues/229. This local document owns the durable engineering contract.
 
 # RUST-FEAT-059 - Support FreeBSD on x64 and ARM64
+
+## Distribution Intake Acceptance
+
+This remains optional environment expansion in its existing phase, outside the
+mandatory core Client gate. This intake activates no BSD implementation.
+
+- [ ] Require native per-CPU build/runtime, routes, filesystem and lifecycle
+      evidence; Unix source compatibility and Linux musl archives prove no BSD
+      support or jail/appliance certification.
+- [ ] Preserve one daemon, SQLite/profile and REST/WebUI contract. Existing
+      FreeBSD service/package scope needs its own accepted implementation and
+      evidence; Linux-service review is not a blanket service authorization.
+- [ ] Link declared versus tested OS/minimum/dependency facts and explicit
+      update/uninstall/rollback behavior before any support claim.
 
 ## Summary
 

@@ -18,6 +18,17 @@ source: Operator-directed configuration and persistence architecture review
 
 # RUST-CI-043 - Review configuration authority and REST contract coherence
 
+## Distribution Intake Acceptance
+
+- [ ] Define one daemon/WebUI deployment contract for portable, package-manager
+      and future supervised installs: profile/key/data ownership, installation-
+      relative WebUI lookup, permissions, listeners, logs and clean shutdown.
+- [ ] Keep basic stable bootstrap TOML distinct from mutable SQLite state;
+      package/service wrappers add no settings authority or replacement API bridge.
+- [ ] Review install/update/uninstall and explicit enablement with
+      [Scoop](RUST-FEAT-147.md) and the [service review](RUST-CI-049.md). Do not
+      change defaults, start networking or implement a service through intake.
+
 ## Outcome
 
 This is the highest-priority Client review, ahead of normal Client work. Produce a complete source-backed target specification and bounded implementation queue. Authorization is review and specification only; review completion and implementation completion are separate outcomes.
