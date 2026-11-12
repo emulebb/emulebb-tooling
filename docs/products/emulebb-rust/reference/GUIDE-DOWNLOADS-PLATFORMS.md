@@ -29,7 +29,10 @@ Keep `webui` beside `emulebb-rust.exe`, then run the executable. The hosted runn
 version is not an established oldest supported Windows version.
 
 **Linux DEB:** install the matching file through the host package manager, for
-example `sudo apt install ./<downloaded-file>.deb`, then run `emulebb-rust`.
+example `sudo apt install ./<downloaded-file>.deb`. Use its desktop launcher,
+or run `emulebb-rust --profile "$HOME/.config/emulebb-rust"` for an explicit
+writable CLI profile. The daemon itself defaults to its executable directory
+and never silently falls back from a read-only installation.
 The dated nightly below declares `libc6 (>= 2.38)`, `libgcc-s1 (>= 4.2)` and
 `ca-certificates`. Inspect the chosen build's package dependencies; these are not
 a promise that every Debian/Ubuntu release can run it.
@@ -74,7 +77,7 @@ and `/data` mounts, configure `PUID`/`PGID` as appropriate for their ownership,
 and keep persistent state when replacing the container. The s6 image places the
 implicit profile at `/config/emulebb-rust` and completed downloads at `/data/ed2k`.
 
-For local control, bind host REST port 4711 to loopback. The daemon speaks plain
+For local control, bind host REST port 20017 to loopback. The daemon speaks plain
 HTTP; remote TLS belongs at a trusted reverse proxy. Restrict access and keep the
 API key private. P2P TCP/UDP routing and reachability need their own deliberate
 container/network configuration; opening REST does not open P2P ports.

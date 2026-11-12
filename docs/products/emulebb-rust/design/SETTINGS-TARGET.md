@@ -39,7 +39,13 @@ configuration reader.
 ## Bootstrap
 
 The profile locator selects one profile before its private bootstrap is read.
-An explicit `--profile` wins over the platform-default profile location. The
+An explicit `--profile` wins over the executable-directory default on every
+platform. Without it, resolve `current_exe().parent()`, never the shell working
+directory or a home/XDG/Local AppData fallback. Relative explicit paths resolve
+from the shell working directory; missing selected directories/bootstrap files
+are created, while existing files and database preferences are preserved.
+Read-only selection fails visibly. Desktop/container launchers may pass a
+documented explicit writable profile; this does not change the daemon default. The
 bootstrap file is `emulebb-rust-settings.toml`; the database filename is the
 fixed profile-local `emulebb-rust-metadata.db`, not a product setting.
 
@@ -48,7 +54,7 @@ The only TOML table is `[rest]`, with these keys:
 | Key | Target default | Responsibility |
 | --- | --- | --- |
 | `bind_addr` | `127.0.0.1:20017` | Authenticated REST/WebUI listener |
-| `api_key` | Privately generated for a fresh bootstrap | Control authentication |
+| `api_key` | `change_me_123change_me_123change_me_123` | Shared local starter key; replace before external exposure |
 | `web_root_dir` | Unset | Optional static-asset location; default is `webui` beside the executable |
 
 The process may receive `--rest-bind-addr` for an explicit run-scoped control
@@ -61,16 +67,20 @@ Both the top-level bootstrap and nested table reject unknown keys and invalid
 types. Paths resolve once against the profile when relative; validation is
 non-mutating. The key uses exact printable non-whitespace ASCII bytes, length
 32..1024, and rejects the inventory's case-insensitive placeholder list. Fresh
-generation uses 32 bytes from the OS CSPRNG encoded as hexadecimal. There is no secret-bearing CLI flag
+initialization copies the same canonical ready template shipped in packages;
+its public starter key has 36 ASCII characters and meets the retained 32-byte
+minimum. The operator explicitly selected this startup UX; existing bootstrap
+files and database preferences are never overwritten. There is no secret-bearing CLI flag
 or secret-bearing URL parameter.
 
 The bootstrap is owner-only: Unix profile/file modes `0700`/`0600`, with the
 corresponding owner-restricted Windows access. Reject unsafe existing access
 with actionable diagnostics. Never print an existing key or include it in
 settings, status, error values, ordinary structured logs or public examples.
-Fresh-key provisioning may hand the newly generated key to the operator once;
+Fresh-profile provisioning may display the newly initialized starter key once;
 this explicit provisioning handoff is separate from ordinary structured logs.
-Changing that handoff requires a separately accepted bootstrap UX decision.
+The public starter value may appear in package instructions; actual operator
+replacement secrets must not appear in ordinary logs or public examples.
 Rotation edits private bootstrap and takes effect on process restart.
 
 The authenticated private diagnostic bundle has its own full-fidelity contract

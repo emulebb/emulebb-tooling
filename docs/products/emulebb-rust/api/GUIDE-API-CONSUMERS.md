@@ -94,6 +94,21 @@ Browser `EventSource` does not provide a custom-header parameter; never solve
 that by moving the secret into the URL. Follow `Last-Event-ID` and `sync.reset`
 semantics: re-baseline through `GET /transfers` after a reset.
 
+## Discovery URL Import Contract
+
+Authenticated `server.met` and `nodes.dat` URL imports retain HTTP/HTTPS,
+explicit LAN/loopback destinations, ordinary proxies and permitted cross-host
+redirects. The bounded-fetch contract under
+[#278](https://github.com/emulebb/emulebb-rust/issues/278) limits actual response
+bodies to 4 MiB and 2 MiB respectively, with one 30-second elapsed budget and
+at most three redirects. Every next URL must pass its scheme policy before
+contact. Automatic trusted bootstrap uses the same owner with HTTPS-only hops
+and a 10-second budget. Responses remain raw; no decompression is introduced.
+
+Rejected fetches and malformed documents must leave prior imported state
+intact. This is a resource/scheme contract, not an SSRF or DNS-rebinding shield.
+The owning item records implementation and exact-source qualification status.
+
 ## Report Problems Safely
 
 Include the exact application version/source, contract version, operation and

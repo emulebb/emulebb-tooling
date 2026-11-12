@@ -30,9 +30,11 @@ and executable lifecycle evidence, not external bucket publication.
   [Nightly 43242135692](https://github.com/emulebb/emulebb-rust/actions/runs/43242135692)
   supplies x64/ARM64 Windows ZIP evidence. Preserve the complete adjacent WebUI,
   binary identity, SBOM and workflow provenance. Do not track a moving nightly.
-- Keep existing profile selection: `--profile` overrides the Windows default
-  `%LOCALAPPDATA%/emulebb-rust`. Never redirect that default into a versioned
-  Scoop installation, working directory or package-managed `persist` folder.
+- The latest [#297 bootstrap contract](RUST-CI-043.md) selects the executable
+  directory by default, superseding the source-080a platform default above.
+  Scoop's future launcher must use an explicit stable writable `--profile`
+  outside its versioned installation; installation/update must not become the
+  authority for operator state or add a package-managed `persist` mapping.
 - Package scripts add no settings/profile authority, rewrite no bootstrap key
   or default, and automatically start no daemon or service. The complete
   #297 target remains unaccepted; its proposed defaults are not prerequisites

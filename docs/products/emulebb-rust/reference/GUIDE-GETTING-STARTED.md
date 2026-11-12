@@ -17,22 +17,39 @@ On Windows, run `emulebb-rust.exe`; for an extracted Linux native archive, run
 launch the copied app. Container and Android users must follow their separate
 [package notes](GUIDE-DOWNLOADS-PLATFORMS.md).
 
-Without `--profile`, the first native launch creates a private default profile
-and prints its generated API key once. Open `http://127.0.0.1:4711/` and enter
-that key. Keep it private. Existing profiles do not generate or print a new key
-on every run; macOS GUI/container users may need the private bootstrap file.
+The ready-package bootstrap contract is being implemented under
+[#297](https://github.com/emulebb/emulebb-rust/issues/297); use the README shipped
+with your selected package for its exact qualified behavior.
 
-| System | Default profile |
+Without `--profile`, the daemon uses the **directory containing its executable**
+on every platform, independently of the shell working directory. A missing
+bootstrap is created from the canonical packaged template. There is no home,
+XDG or Local AppData fallback; an unwritable executable directory fails visibly.
+Open `http://127.0.0.1:20017/` and enter
+`change_me_123change_me_123change_me_123`. This is a shared starter key: replace
+it before exposing the API outside this computer. Existing profiles are never
+overwritten by startup. Use `--profile <writable-directory>` to override the
+profile; missing directories/configuration are created. Relative arguments
+resolve from the shell working directory. `--profile .` equals the default only
+when the shell working directory is the executable directory.
+
+| Launch mode | Profile selection |
 | --- | --- |
-| Windows | `%LOCALAPPDATA%\emulebb-rust` |
-| Linux | `$XDG_CONFIG_HOME/emulebb-rust`, falling back to `~/.config/emulebb-rust` |
-| macOS | `~/Library/Application Support/emulebb-rust` |
-| Official container | `/config/emulebb-rust` |
+| Direct daemon, every platform | Directory containing the executable |
+| Explicit `--profile <directory>` | Selected directory; relative to shell working directory |
+| Linux desktop launcher | Explicit `$XDG_CONFIG_HOME/emulebb-rust` or `~/.config/emulebb-rust` |
+| macOS app launcher | Explicit `~/Library/Application Support/emulebb-rust` |
+| Official container | Explicit `/config/emulebb-rust` |
 
-An explicit `--profile <directory>` normally requires an existing
-`emulebb-rust-settings.toml`; it is not a way to repair an incompatible database.
-The one-shot [stock/MFC importer](GUIDE-PROFILE-IMPORT.md) has its own explicit
-target-creation behavior.
+Installed CLI binaries may live in read-only directories; pass a writable
+`--profile` instead of running them with elevated permissions. A profile
+override does not repair an incompatible database.
+The one-shot [stock/MFC importer](GUIDE-PROFILE-IMPORT.md) retains its explicit
+manifest-validation workflow.
+
+For portable updates, preserve your selected TOML/database and replace program
+files deliberately. Raw archive extraction follows the extractor's overwrite
+choice; it is not configuration merging or profile management.
 
 **Loopback REST does not mean offline P2P.** Startup may fetch trusted discovery
 inputs and start configured networking. Use a deliberately isolated configuration
@@ -41,18 +58,18 @@ and the supported harness when testing offline; a first launch is not that harne
 ## Profile And Control-Plane Settings
 
 The minimal bootstrap TOML owns REST binding/authentication and optional asset
-location. This schematic example contains a placeholder, not a working secret:
+location. The canonical ready configuration is:
 
 ```toml
 [rest]
-bindAddr = "127.0.0.1:4711"
-apiKey = ""
+bind_addr = "127.0.0.1:20017"
+api_key = "change_me_123change_me_123change_me_123"
 ```
 
-The blank key above is deliberately invalid: use the generated key or a privately
-generated replacement. Startup rejects
+Replace the shared starter key with a private value before external exposure.
+Startup rejects
 blank, documented placeholder, whitespace-padded, non-printable and shorter-than-32
-character keys. Generated keys are 32-character random UUID hex. Unix profile and
+character keys. The ready starter key has 36 ASCII characters. Unix profile and
 bootstrap permissions are private (`0700`/`0600`); permissive existing bootstrap
 files are rejected with a remediation message. Never commit this file.
 
@@ -61,13 +78,13 @@ the [API](../api/GUIDE-API-CONSUMERS.md). Do not add a second set of runtime key
 to bootstrap TOML. Keep the REST listener on loopback for local use. The daemon
 serves plain HTTP; a remote deployment needs a trusted TLS reverse proxy and
 independent access restrictions. `webui` normally sits beside the executable;
-optional `[rest].webRootDir` resolves relative to the profile when not absolute.
+optional `[rest].web_root_dir` resolves relative to the profile when not absolute.
 
 ## Connect And Check Reachability
 
 Review **Network**, **Servers** and **Kad** in the console. Check your intended
 P2P interface and incoming/category directories before starting transfers.
-First-run listener defaults are eD2K TCP 4662, Kad UDP 4672 and REST TCP 4711.
+First-run listener defaults are eD2K TCP 20019, Kad UDP 20020 and REST TCP 20017.
 Router/firewall/container mappings must match your chosen settings; High ID is
 not guaranteed behind every NAT, router or VPN.
 
@@ -130,12 +147,12 @@ in the error separately from your P2P interface. For the default port:
 
 ```powershell
 netsh interface ipv4 show excludedportrange protocol=tcp
-Get-NetTCPConnection -LocalPort 4711 -ErrorAction SilentlyContinue
+Get-NetTCPConnection -LocalPort 20017 -ErrorAction SilentlyContinue
 ```
 
 Choose an available loopback port if needed. A temporary
 `--rest-bind-addr 127.0.0.1:14711` changes only that run; browse to the matching
-address. To retain it, stop the daemon and update `[rest].bindAddr` in the private
+address. To retain it, stop the daemon and update `[rest].bind_addr` in the private
 bootstrap TOML. This does not change eD2K/Kad ports. For ambiguous P2P routing,
 `Get-NetAdapter | Select-Object Name, Status` identifies Windows interface names;
 use the intended name with `--p2p-bind-interface`, then persist through Settings.

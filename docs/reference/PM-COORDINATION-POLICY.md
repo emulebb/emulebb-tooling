@@ -61,6 +61,21 @@ merge and publication policies.
    legacy mappings or silently ignored obsolete fields are permitted. Require
    negative tests that prove retired shapes fail. Target acceptance does not
    claim the current runtime already implements it.
+   The accepted ready-package bootstrap and first-fresh-profile key is
+   `change_me_123change_me_123change_me_123` (36 ASCII characters); retain the
+   32-byte minimum and normal authentication. Keep its listener on loopback
+   and explain that this shared starter key must change before external API
+   exposure. Packages share the canonical TOML; preserve existing user files
+   and database preferences. Record actual package proof before claiming
+   unpack-and-run delivery.
+   The operator's latest profile rule is the executable directory on every
+   platform (`current_exe().parent()`), never shell CWD or a hidden user-profile
+   fallback. Explicit `--profile` overrides it and may create a fresh selected
+   profile; relative arguments use shell CWD. Read-only paths fail visibly.
+   Installed desktop/container launchers may supply documented explicit writable
+   profiles, while direct daemon semantics remain uniform. Keep isolated
+   launch proof in owned output; never let default-profile tests write into
+   source or shared Cargo artifact directories.
 
 These are the approved delivery and intake boundaries. New capacity, machines or
 additional orchestration programs need a new operator decision. Batching and
@@ -151,6 +166,14 @@ rewrite protected main or release tags. Follow the
    planned publication checkpoint, select a stable combined tip for the extra
    package/nightly proof instead of publishing after every small contribution.
    Retire integrated branches, registrations, checkouts and finished agents.
+
+Prepared native packaging requires an attested image whose producer Build SHA
+matches the actual selected Builder HEAD. Qualify and merge provider changes,
+publish the prepared image from actual Build main, then update the Rust Builder
+pin and immutable image digest together before freezing its final full gate.
+Matching recipe bytes or Git trees do not replace producer identity. Use the
+existing fixed Android guest proof with an explicitly selected full Rust SHA
+to qualify a later consumer without another Builder commit or image cycle.
 
 Independent outcomes that cannot form a coherent batch may retain separate PRs
 under the Delivery Policy. Do not hold a ready safety fix behind unrelated work.
