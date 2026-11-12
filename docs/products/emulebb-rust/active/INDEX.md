@@ -90,15 +90,17 @@ inventory and required checks remain enforced; this intake changes neither.
 
 ## Parallel Client Work — Non-gating for Beta 3
 
-Dependency-aware early validation is now Major and appears first as a
-workspace/platform feedback priority. Its milestone remains post-beta-polish;
-current work priority does not make it a new Beta3 gate. Coordinated public
+The Major change-aware hosted CI outcome leads the current delivery-feedback
+batch. Developer dependency-aware checks remain a distinct Major owner with
+their existing post-beta-polish milestone; neither priority creates a new
+Beta3 gate. Coordinated public
 presence (RUST-CI-046) is also Major, with current-facing README and user/developer
 journeys as its acceptance scope. Other platform owners retain their Major/Minor
 ranking and GitHub placement.
 
 | ID | Class | Title |
 |---|---|---|
+| [RUST-CI-050](items/RUST-CI-050.md) | Evidence | Give genuine documentation changes a trusted short CI path |
 | [RUST-CI-032](items/RUST-CI-032.md) | Evidence | Add dependency-aware early Rust checks without weakening pre-push coverage |
 | [RUST-CI-046](items/RUST-CI-046.md) | Evidence | Complete coordinated public presence and release download guidance |
 | [RUST-CI-049](items/RUST-CI-049.md) | Evidence | Review the Linux daemon service and ownership contract |
