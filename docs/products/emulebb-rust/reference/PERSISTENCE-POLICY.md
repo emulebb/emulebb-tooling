@@ -4,9 +4,13 @@ This task-routed annex applies only to persisted settings, metadata, database
 schemas, or profile compatibility.
 
 - Keep TOML limited to basic process/profile/service bootstrap configuration.
-  Preserve bootstrap keys and semantics across updates by default; changes need
-  an explicit compatibility review rather than casual renaming. This stability
-  goal is separate from database readability and the post-Arr REST freeze.
+  The accepted clean Beta3 target uses snake_case `bind_addr`, `api_key` and
+  `web_root_dir`, with REST `20017`, P2P TCP `20019` and UDP `20020`. Adopt that
+  contract directly, then preserve its keys and semantics across updates by
+  default; future changes need explicit contract review. Never add aliases,
+  compatibility shims, fallback reads, remapping or silently ignored obsolete
+  fields. Retired shapes are hard errors. This stability goal is separate from
+  database readability and the post-Arr REST freeze.
   [RUST-CI-043](../active/items/RUST-CI-043.md) owns the concrete configuration
   and API consistency review; it does not itself freeze every existing shape.
 - SQLite owns mutable settings and durable product state. Runtime-only sockets,

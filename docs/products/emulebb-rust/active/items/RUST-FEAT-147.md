@@ -62,6 +62,10 @@ This intake records accepted scope, not an implemented Scoop channel.
 - Preserve current profile resolution. Keep mutable profiles, downloaded data
   and secrets outside versioned installation directories; no second settings
   authority or package-specific TOML model is introduced.
+- Follow the selected daemon's canonical configuration contract. The accepted
+  Beta3 target uses snake_case bootstrap keys and ports `20017`/`20019`/`20020`;
+  install scripts must never emulate it with aliases, compatibility shims,
+  fallback keys or rewrites of operator configuration.
 - Use explicitly selected immutable release versions. Do not silently follow a moving
   nightly, start networking/services on installation, migrate/reset a database
   or erase state during update/uninstall.
