@@ -33,6 +33,35 @@ source: Operator-directed configuration and persistence architecture review
 
 This is the highest-priority Client review, ahead of normal Client work. Produce a complete source-backed target specification and bounded implementation queue. Authorization is review and specification only; review completion and implementation completion are separate outcomes.
 
+## Parent Review Refresh (2026-11-12)
+
+The parent [refreshed shared boundaries](https://github.com/emulebb/emulebb-rust/issues/297#issuecomment-6830059979)
+against Rust `080a5dea70186da31dab958757b5b8c0fd883f82`, current schema 68:
+one daemon/SQLite authority, minimal stable bootstrap TOML, mutable settings and
+durable state in SQLite, transient work in memory and payloads/logs as files.
+Read-only met import is the target; #233 still owns removing existing
+`nodes.dat` persistence. This review remains In Progress.
+
+Atomic settings [#299](https://github.com/emulebb/emulebb-rust/pull/316) is
+merged and closed. Preserve its qualified transaction and owned ordered
+commit/publication guarantees; the original partial-write finding is not a
+current unfixed defect without a new reproduction. Proposed domain documents,
+revisions and representation ETags remain separate target work.
+
+The [complete target](../../design/SETTINGS-TARGET.md) and
+[inventory](../../design/SETTINGS-INVENTORY.json) are not accepted for
+implementation. Bootstrap key spelling/default-port decisions still require
+operator acceptance. No current reader, OpenAPI, instructions or defaults are
+changed by review. The original source-15020b76 inventory below has not thereby
+become a complete current-head runtime qualification.
+
+The accepted [155-A contract](https://github.com/emulebb/emulebb-rust/issues/155#issuecomment-6830001541)
+owns the first bounded friend-persistence slice, not global storage completion.
+[Scoop's current deployment contract](https://github.com/emulebb/emulebb-rust/issues/324#issuecomment-6830047076)
+can proceed after #327 without adopting the unaccepted target defaults.
+Neither acceptance authorizes another settings authority, schema rewrite or
+profile conversion. Unproven acceptance criteria below remain open.
+
 ## Operator direction
 
 - Keep TOML strictly process/profile/control-service bootstrap: listener, authentication and necessary bootstrap paths. Restart requirements alone do not justify placing a product setting in TOML.
@@ -73,7 +102,7 @@ Ports are configurable. Higher numbers provide no security benefit. REST stays a
 
 - RUST-BUG-156 / #223 owns duplicate ED2K server settings authority.
 - RUST-FEAT-062 / #233 owns Kad SQLite persistence and the remaining `nodes.dat` write paths; do not duplicate it.
-- RUST-BUG-184 / #299 owns atomic settings persistence and ordered runtime publication. Do not commission a second atomicity implementation.
+- RUST-BUG-184 / #299 delivered atomic settings persistence and ordered runtime publication. Preserve it; do not commission a second atomicity implementation.
 - RUST-BUG-178 / #280 owns warning and acknowledgement for the authenticated raw private diagnostic bundle. Preserve its exact API-key/full-fidelity contract; settings-resource secret exclusion does not assign export redaction or a logger rewrite here. Once-only fresh-key provisioning is an explicit bootstrap handoff, with any UX change requiring separate acceptance.
 - The sibling DB-schema review covers physical/logical schema, query efficiency, and evolution. Coordinate shared contract findings through the parent.
 - Scope is Rust client/daemon and its first-party REST/SPA, not rewriting stock MFC or upstream server fixtures.
@@ -91,9 +120,10 @@ Priority: Critical, first Client/Phase 0 review. Beta3 release remains held.
 
 These deliverables are submitted for parent review. Acceptance remains open
 until that review resolves the target decisions; implementation and executed
-qualification are not claimed. Source-only inspection used Rust main
-`15020b7663a6771bc2d6e8282416ea36a7d7c163`, with the proposed atomic-settings
-work considered independently.
+qualification are not claimed. The original source-only inventory used Rust
+`15020b7663a6771bc2d6e8282416ea36a7d7c163`. The refresh above records current
+shared boundaries and the separately delivered atomic-settings implementation,
+without accepting or regenerating every proposed target value.
 
 ## Source Inspection Boundary
 

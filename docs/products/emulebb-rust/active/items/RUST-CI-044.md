@@ -33,6 +33,31 @@ source: Operator-directed configuration and persistence architecture review
 
 Review the Rust SQLite schema for efficiency, clear ownership and naming, safe evolution, and the bounded-monolith Client/Indexer/Arr direction before Beta 3. Produce evidence-backed decisions and independent implementation slices; no speculative schema rewrite.
 
+## Parent Review Refresh (2026-11-12)
+
+The parent [refreshed the review](https://github.com/emulebb/emulebb-rust/issues/298#issuecomment-6830060765)
+against Rust `080a5dea70186da31dab958757b5b8c0fd883f82`, schema 68. Accepted
+shared boundaries retain one SQLite authority, stable minimal TOML, WAL/FULL
+durability and the exact-schema/fresh-profile rule. The review remains In
+Progress; current-source inspection is not measured query/latency evidence.
+
+[#299's atomic settings fix](https://github.com/emulebb/emulebb-rust/pull/316)
+is merged and closed. Preserve its coordinated transaction and ordered
+post-commit publication. The proposed target settings representation, revision
+and ETag model is additional unaccepted design, not missing atomicity work.
+The complete settings target/inventory and bootstrap key/default changes still
+require bounded review and the pending operator decision.
+
+The accepted [155-A friend-persistence slice](https://github.com/emulebb/emulebb-rust/issues/155#issuecomment-6830001541)
+preserves schema 68 and guarantees ordering through commit/cache publication,
+including cancellation, without holding the SQLite mutex across a finalizer.
+Legacy synchronous paths remain. #233 must later reuse that owner for typed,
+generation-safe Kad snapshots; the parent reserves schema/version/Core/shutdown
+integration. [Scoop's accepted boundary](https://github.com/emulebb/emulebb-rust/issues/324#issuecomment-6830047076)
+uses the current deployment and fresh-profile contract without converting a
+database or adopting unaccepted defaults. No schema or runtime implementation
+is claimed by this refresh; unproven checklist items stay open.
+
 ## Operator direction
 
 - SQLite is the authority for mutable settings and durable product state. Keep only basic, stable bootstrap configuration in TOML.
@@ -62,7 +87,7 @@ binary. Evaluate that continuity design before proposing another mechanism.
 
 Priority: Major. Client/Phase 0 review for Beta 3; release remains held.
 
-## Initial Source Review
+## Initial Source Review (Historical)
 
 Reviewed Rust `edc59a003fff873e26d2c720bf9ca06f4b640871`, current schema 67.
 The existing model already uses strict tables, checked numeric mappings,
@@ -70,15 +95,17 @@ foreign-key index regression checks, and synthetic large-catalog query-plan
 tests. Preserve those strengths; source inspection does not justify a broad
 schema rewrite or prove production performance.
 
-Settings sections currently commit separately, and direct core API calls can
-persist non-core sections before core validation fails. The HTTP route has
-earlier middleware range validation; the invalid-core example is not an HTTP
-partial-write reproduction. Inject a later storage failure into an otherwise
-valid routed request to establish that path. The one coordinated fix owner
-is [RUST-BUG-184](https://github.com/emulebb/emulebb-tooling/blob/main/docs/products/emulebb-rust/history/items/RUST-BUG-184.md),
-[issue #299](https://github.com/emulebb/emulebb-rust/issues/299), shared with
-RUST-CI-043. Runtime reproduction and failure-injection regressions remain
-pending. No profile data was inspected and no migration was performed.
+At that historical source, sections committed separately and direct core API
+calls could persist non-core sections before core validation failed. Earlier
+HTTP middleware validation meant the invalid-core example was not an HTTP
+partial-write reproduction. The coordinated
+[RUST-BUG-184](https://github.com/emulebb/emulebb-tooling/blob/main/docs/products/emulebb-rust/history/items/RUST-BUG-184.md)
+fix subsequently supplied real-router later-write failure/rollback regressions
+and atomic commit/publication; it is merged and
+[#299 is closed](https://github.com/emulebb/emulebb-rust/issues/299).
+Artificial post-commit runtime-refresh failure injection remains a distinct
+accepted follow-up, not completed runtime evidence. The old finding must not
+commission a duplicate fix. No operator profile was inspected or migrated.
 
 Other findings retain their existing owners: RUST-REF-016 / #155 for bounded
 persistence execution, RUST-BUG-163 / #247 for profile process ownership,
