@@ -170,6 +170,29 @@ public artifacts in every delivery claim.
   held work. Update Project #3 when execution is accepted rather than treating
   a proposal as an already-running assignment.
 
+## Inspection And Refactoring Rounds
+
+Every nontrivial implementation batch receives at least two distinct inspection
+rounds before final acceptance. First inspect correctness, contracts and failure
+behavior. Then inspect the revised result for missed interactions, unnecessary
+complexity, duplicated ownership and maintainability; use an independent
+reviewer where capacity permits. The parent performs final acceptance against
+the actual integrated revision and applicable validation evidence.
+
+Turn concrete findings into bounded repairs or justified refactoring, then
+reinspect the changed result. Continue beyond two rounds while material findings
+remain. A round may legitimately require no code change; do not manufacture a
+refactor, new abstraction or unrelated cleanup merely to count activity. Keep
+current naming contracts and hard rejection of retired shapes intact.
+
+Preserve frozen inputs during an active gate. Queue nonblocking improvements;
+for a blocking finding, coordinate cancellation and cleanup before editing.
+After a repair, run the relevant focused checks and refresh applicable final
+proof on the revised source set. Repeating an unchanged heavy matrix solely to
+count inspection rounds adds no evidence. Record substantive findings, their
+disposition and exact revisions in the owning issue/specification, not another
+progress ledger.
+
 ## Status And Closure
 
 Status updates identify the owner, branch/head or PR, local machine versus
