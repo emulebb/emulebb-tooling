@@ -64,9 +64,14 @@ or pull requests, merges work, cleans delivery state, or creates release tags.
 - Do not open draft pull requests merely to retain work, and do not open a pull
   request for each granular commit. Keep the single work-in-progress branch
   pushed without a pull request until it contains a significant, coherent,
-  review-ready chunk whose required local validation is green and whose scoped
-  implementation is complete. Incomplete work remains incomplete even when
-  committed and pushed; do not report it as delivered.
+  review-ready chunk whose scoped implementation, focused local checks, normal
+  hooks and source inspection are complete. The parent may open this frozen
+  review-ready PR while its applicable full local matrix continues, allowing
+  hosted checks to run concurrently. State pending local proof explicitly;
+  retain every applicable full local and hosted check as a merge condition on
+  the final selected sources. Do not open a PR to hide an unresolved known
+  failure or incomplete implementation, and do not report qualification as
+  delivery.
 - A checkpoint is complete when its scoped local validation passes, its
   granular commits are pushed, and the worktree is clean. Sessions and tasks
   may end at this checkpoint while the same workstream branch remains active.

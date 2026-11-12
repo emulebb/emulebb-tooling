@@ -128,15 +128,19 @@ rewrite protected main or release tags. Follow the
    integration branch, preserving authorship and contribution traceability.
    Use cherry-picks where appropriate; Rust's rebase-only policy precludes
    local merge commits in its proposed history. Reject unrelated additions.
-4. Run focused integration checks, then one applicable full local validation on
-   the frozen combined clean tip through the existing Builder and heavy lock.
-   Docs-only policy edits use their documented lighter checks. Record exact
-   selected companion revisions; independent workers do not each repeat this
-   expensive final integration gate.
-5. Open one review-ready batch PR per affected repository. Qualify providers
-   before consumers and reconcile accepted pins before final consumer proof.
-   Required hosted checks apply to the actual final PR head and current base;
-   batching never borrows passes or suppresses required contexts.
+4. Complete implementation, focused integration checks, normal hooks and source
+   inspection, then freeze the combined clean tip and exact companion revisions.
+   No known unresolved failure may be hidden by calling the batch review-ready.
+5. Open one review-ready batch PR per affected repository so hosted platform
+   qualification can run alongside the remaining applicable full local gate.
+   State pending local proof explicitly in the PR. Run full local validation
+   through the existing Builder and heavy lock; docs-only edits retain their
+   documented lighter checks. Independent workers do not each repeat this final
+   integration proof. This is PM coordination, not a queue or new automation.
+   Merge only after all applicable local and hosted checks pass on the final
+   selected sources. Merge providers before consumers and reconcile accepted
+   pins before final consumer proof. Required hosted checks apply to the actual
+   PR head and current base; batching never borrows passes or suppresses contexts.
 6. While GitHub runs platform matrices and analysis, advance the next reserved
    independent work on other branches. Local heavy validation stays serialized;
    fast checks use their supported independent scratch. The parent may schedule
