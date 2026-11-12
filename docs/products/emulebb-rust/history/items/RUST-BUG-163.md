@@ -5,7 +5,7 @@ product: emulebb-rust
 phase: Phase 1
 github_issue: https://github.com/emulebb/emulebb-rust/issues/247
 title: Enforce exclusive process ownership of writable profiles
-status: OPEN
+status: DONE
 priority: Major
 category: bug
 labels: [rust, persistence, profiles, robustness]
@@ -17,6 +17,26 @@ source: Operator-approved stock profile import branch review, finding 7
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb-rust/issues/247. This local document owns the durable engineering specification and evidence.
 
 # RUST-BUG-163 - Enforce exclusive process ownership of writable profiles
+
+## Closure And Evidence
+
+[PR #317](https://github.com/emulebb/emulebb-rust/pull/317) merged as
+`d2d591d212267f055ea9e35775045bc4900e6462` and closed
+[#247](https://github.com/emulebb/emulebb-rust/issues/247). The OS-backed lease
+is acquired before mutable loading, retained by cloned metadata handles and
+bound to physical profile I/O. The PR records deterministic ownership, alias,
+fresh-profile race, process-death and denied-write preservation regressions.
+
+The published [Nightly 43242135692](https://github.com/emulebb/emulebb-rust/actions/runs/43242135692)
+at Rust `080a5dea70186da31dab958757b5b8c0fd883f82` independently passed the
+Windows/Linux packaged ownership checks: all three offline contenders were
+rejected while the daemon owned the profile, bootstrap/settings/roots stayed
+unchanged, and reconciliation succeeded after shutdown. Same-binary/profile
+partial restart and deterministic transfer also passed. This evidence does not
+claim a public-network soak or every filesystem scenario below.
+
+The remaining sections retain the original engineering contract and findings;
+their original unchecked criteria are not an active implementation queue.
 
 ## Summary
 

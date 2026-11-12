@@ -21,7 +21,7 @@ source: Operator-approved local and GitHub CI parity follow-up
 ## Current Developer-Feedback Scope
 
 This item owns dependency-aware selective developer checks, not the hosted
-Clippy/WebUI preflight now owned by [#323 / RUST-CI-048](RUST-CI-048.md).
+Clippy/WebUI preflight delivered under [#323 / RUST-CI-048](https://github.com/emulebb/emulebb-tooling/blob/main/docs/products/emulebb-rust/history/items/RUST-CI-048.md).
 Keep both outcomes and their evidence distinct. Major priority and the existing
 milestone remain owned by GitHub; neither item silently weakens qualification.
 

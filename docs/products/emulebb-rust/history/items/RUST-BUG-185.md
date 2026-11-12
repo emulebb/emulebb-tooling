@@ -110,5 +110,5 @@ Their linked runs retain the check outcomes.
 ## Notes
 
 The parent owns subsequent AICH restacking. Track AICH trust acceptance under
-its existing owner. [RUST-BUG-164](../../active/items/RUST-BUG-164.md) and
+its existing owner. [RUST-BUG-164](RUST-BUG-164.md) and
 [issue #248](https://github.com/emulebb/emulebb-rust/issues/248)
