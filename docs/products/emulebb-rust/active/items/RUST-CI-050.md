@@ -58,12 +58,16 @@ execution failure fails classification rather than granting a short path.
 - Main pushes classify the complete event `before` to tested `after` range,
   with source identity and ancestry proved. An unavailable/uncertain range
   cannot qualify.
-- PRs verify the main base, same-repository event/head/origin identities and
-  the actual ordered two-parent merge commit. Distinguish tested merge SHA
-  from PR head SHA. Never inspect only the latest authored commit.
+- PRs verify the main base repository, event repository, checkout origin and
+  checked-out tested SHA, plus the actual ordered base/head parents of the
+  merge commit. Distinguish tested merge SHA from PR head SHA; a fork head is
+  not required to share the base repository name. Never inspect only the latest
+  authored commit.
 - Preserve complete NUL-safe path/status and before/after modes, including
   both sides of renames and all changed paths. Do not interpolate filenames
-  into shell commands or permit a dirty/foreign tested tree.
+  into shell commands. Workflows start from fresh immutable checkouts; the
+  classifier checks HEAD identity and Git objects, not working-tree dirtiness.
+  Subsequent source admission retains its own clean-source checks.
 
 The receipt schema is `emulebb.ci-change-scope/1`: `repository`, `event`,
 `baseSha`, `headSha`, `testedSha`, `classifierBlob`, `scope` (`docs` or `full`),
