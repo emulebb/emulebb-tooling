@@ -23,33 +23,37 @@ merge and publication policies.
 
 ## Current Operator Mandate
 
-1. Finish only the two existing hosted
-   [preflight #323](https://github.com/emulebb/emulebb-rust/issues/323) and
-   universal-daemon documentation-intake lanes. Open their reviewable PRs and
-   run full applicable hosted qualification in parallel now. The parent reviews
-   and coordinates normal-gated merges; canonical sources change only through
-   those accepted merges. No existing pass transfers to a changed head.
-2. After both lanes integrate, freeze the final combined mains and accepted
-   support pins, qualify the actual merge revisions, then run one authorized
-   full nightly and verify its public assets/channels/provenance. There is no
-   intermediate nightly authorization for the preceding `a2414638` checkpoint.
-   Finish with clean canonical mains and no dangling PRs, topic refs, managed
-   checkouts or worker agents. Preserve deliberate recovery history.
-3. Lead the next product wave with balanced reliability and the shared
+1. Make parent-coordinated parallel branches and small integration batches the
+   normal delivery routine. Keep canonical mains stable while workers develop
+   independent outcomes. Carry each accepted batch through review, applicable
+   qualification, merge and cleanup; a pushed checkpoint is not delivery.
+2. Implement the approved change-aware CI acceleration before expanding the
+   product implementation wave. Genuine docs-only changes get a short path;
+   source, workflow, dependency, package-input and uncertain changes retain full
+   qualification. Required aggregates always report. Classification must use
+   trusted base code and the complete tested change range, fail safely to full
+   checks, and retain exact source evidence. Scheduled/manual security and full
+   nightlies retain their complete coverage. Keep developer checks under
+   [#258](https://github.com/emulebb/emulebb-rust/issues/258) distinct from
+   delivered hosted preflight [#323](https://github.com/emulebb/emulebb-rust/issues/323).
+3. Lead the product wave with balanced reliability and the shared
    [#155](https://github.com/emulebb/emulebb-rust/issues/155)/
    [#233](https://github.com/emulebb/emulebb-rust/issues/233) storage contract.
-   Their implementation waits for this closeout checkpoint and ownership/
-   contract review; scoping authorizes no schema edits or competing actors.
+   Accept ownership, bounded queue, durability, cancellation and shutdown
+   contracts before implementation. Coordinate configuration/REST
+   [#297](https://github.com/emulebb/emulebb-rust/issues/297) and schema
+   [#298](https://github.com/emulebb/emulebb-rust/issues/298) reviews with that
+   owner; scoping authorizes no schema edits or competing persistence actors.
 4. [Scoop #324](https://github.com/emulebb/emulebb-rust/issues/324) is the first
    accepted new distribution lane, after its deployment/update contract is
-   accepted after closeout. No Scoop implementation or additional lane starts
-   before that checkpoint. [Linux services #325](https://github.com/emulebb/emulebb-rust/issues/325)
+   accepted. [Linux services #325](https://github.com/emulebb/emulebb-rust/issues/325)
    are a bounded review only, with implementation deferred. Optional expansion
    classification follows Release Scope and preserves actual required gates.
-5. Coordinate compatible changes into batches for final integration testing as
-   a PM responsibility. Keep developer dependency-aware checks under
-   [#258](https://github.com/emulebb/emulebb-rust/issues/258) distinct from
-   hosted preflight #323; neither replaces complete applicable qualification.
+5. Reconcile delivered work with its owning issue, Project #3 placement, local
+   item and retained evidence before allocating another implementation. Do not
+   mistake an open stale tracking record for missing code or repeat unchanged
+   validation. The completed consolidation is the baseline, not a recurring
+   prerequisite for every new branch.
 
 These are the approved delivery and intake boundaries. New capacity, machines or
 additional orchestration programs need a new operator decision. Batching and
@@ -66,10 +70,12 @@ hosting, signing, paid infrastructure or community publication is authorized by
 the intake. Ubuntu 24.04/Debian 13 x64/ARM64 remain qualification targets until
 their actual package dependencies and native results are recorded.
 
-For this consolidation only, the operator approved parent-coordinated rebases of
-published worker and Dependabot PR branches. Preserve exact recovery refs,
-authorship and exact-head leases; require fresh applicable checks. This does not
-authorize rewriting protected main or release tags. Follow the
+For the approved integration-batching routine, the operator approved
+parent-coordinated rebases of published integration branches when main advances.
+Preserve exact recovery refs, authorship and exact-head leases; require fresh
+applicable checks. Earlier consolidation approval for worker and Dependabot
+rewrites is not a blanket authorization for future unrelated rewrites. Never
+rewrite protected main or release tags. Follow the
 [Delivery Policy](DELIVERY-POLICY.md) for all other Git rules.
 
 ## Coordination Mode
@@ -78,6 +84,10 @@ authorize rewriting protected main or release tags. Follow the
   checkout, an owning issue, reserved files, acceptance criteria and a concrete
   next deliverable. Use the managed
   [workstream lifecycle](GUIDE-PARALLEL-WORKSTREAMS.md).
+- Bound work in progress by actual worker and validation capacity. With three
+  worker slots, prefer two implementation owners and one review/test owner;
+  a queued assignment is not an active agent. Reallocate a finished owner while
+  GitHub qualifies a frozen batch, without changing its tested sources.
 - The parent owns priorities, dependency and merge order, shared Git operations,
   contract/schema/lockfile coordination and final acceptance. Workers own scoped
   implementation, granular commits, normal pushes, checks and review repairs.
@@ -99,19 +109,59 @@ authorize rewriting protected main or release tags. Follow the
 
 ## Batches And Integration
 
-Choose batches from dependency, file ownership and risk before expensive final
-qualification. Preserve individual authored commits and review evidence. Prefer
-a stable combined source tip for additional integration, package and nightly
-proof rather than repeating that extra proof after every small source edit.
+1. Select two or three compatible contributions with one coherent acceptance
+   outcome. Freeze their base revisions, file reservations, interface contracts,
+   dependency order and validation plan before editing. Changes to shared
+   schemas, lockfiles, storage ownership or shutdown contracts need one owner
+   or an agreed contract; separate branches alone do not prevent conflicts.
+2. Workers develop in managed isolated branches, run scoped checks, retain
+   granular authored commits and push clean checkpoints. For a declared batch,
+   they hand those commits to the parent without opening individual PRs.
+3. The parent reviews and integrates accepted commits linearly into a managed
+   integration branch, preserving authorship and contribution traceability.
+   Use cherry-picks where appropriate; Rust's rebase-only policy precludes
+   local merge commits in its proposed history. Reject unrelated additions.
+4. Run focused integration checks, then one applicable full local validation on
+   the frozen combined clean tip through the existing Builder and heavy lock.
+   Docs-only policy edits use their documented lighter checks. Record exact
+   selected companion revisions; independent workers do not each repeat this
+   expensive final integration gate.
+5. Open one review-ready batch PR per affected repository. Qualify providers
+   before consumers and reconcile accepted pins before final consumer proof.
+   Required hosted checks apply to the actual final PR head and current base;
+   batching never borrows passes or suppresses required contexts.
+6. While GitHub runs platform matrices and analysis, advance the next reserved
+   independent work on other branches. Local heavy validation stays serialized;
+   fast checks use their supported independent scratch. The parent may schedule
+   useful long local tests during the day. Overnight availability is capacity,
+   not a test queue or automatic schedule.
+7. Merge in dependency order and verify the resulting main revisions. At a
+   planned publication checkpoint, select a stable combined tip for the extra
+   package/nightly proof instead of publishing after every small contribution.
+   Retire integrated branches, registrations, checkouts and finished agents.
 
-Batching does not waive repository-required checks or permit borrowing a pass
-from another head. Keep each PR's actual gates and cross-repository prerequisites
-explicit. Distinguish scoped local proof, hosted qualification, merge and actual
-published-artifact verification. Qualify the two existing closeout PRs in
-parallel, coordinate their merges, then prove the final combined revision.
-Do not start another product implementation wave before the checkpoint closes.
-Time-of-day preferences guide this
-coordination; they never create tooling schedules or test queues.
+Independent outcomes that cannot form a coherent batch may retain separate PRs
+under the Delivery Policy. Do not hold a ready safety fix behind unrelated work.
+Distinguish scoped local proof, hosted qualification, merged source and verified
+public artifacts in every delivery claim.
+
+## Backlog Selection
+
+- First reconcile current source and retained evidence with the owning issue;
+  close or archive delivered specifications through the normal lifecycle.
+- Rank confirmed security, data-loss, privacy and wire-correctness defects
+  first. Then prioritize long-running reliability, bounded resource use and
+  100,000-file scalability, configuration/API/schema coherence, and delivery
+  improvements with measurable feedback savings. New confirmed critical defects
+  can interrupt the planned wave.
+- Use existing owning items rather than umbrella duplicates. Select a small
+  verifiable slice with an observable before/after result; avoid simultaneous
+  broad refactors. Core Client outcomes lead optional distribution expansion.
+- Each proposed wave has three to six outcomes, explicit implementation versus
+  review scope, branch/file ownership, acceptance proof and merge order. Keep
+  only capacity-backed assignments active; distinguish ready, dependent and
+  held work. Update Project #3 when execution is accepted rather than treating
+  a proposal as an already-running assignment.
 
 ## Status And Closure
 

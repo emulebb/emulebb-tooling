@@ -180,8 +180,16 @@ delete the canonical operator bundle.
 
 ## Review And Integrate
 
-Workers push validated commits, open complete review-ready pull requests,
-monitor checks, and address review. The parent verifies the result and merges
+For independent PR delivery, workers push validated commits, open complete
+review-ready pull requests, monitor checks, and address review. For a declared
+integration batch, workers instead hand pushed authored commits and scoped
+evidence to the parent without individual PRs. The parent uses a separate
+managed integration branch, reviews and cherry-picks compatible contributions,
+and runs applicable combined validation before opening one batch PR per repo.
+Follow the [PM batching routine](PM-COORDINATION-POLICY.md#batches-and-integration)
+for capacity, contract ownership, final local proof and hosted qualification.
+
+The parent verifies the result and merges
 in dependency order. Preserve required CI and CodeQL. For parallel Rust pull
 requests by the same author, the parent records the reason on every affected
 pull request and applies `parallel-approved` to each before expecting the
