@@ -20,6 +20,26 @@ source: Operator-directed configuration and persistence architecture review
 
 ## Distribution Intake Acceptance
 
+### Accepted Ready Bootstrap Slice
+
+The operator authorized one canonical ready bootstrap for every release
+package and first-fresh-profile initialization:
+`emulebb-rust-settings.toml`, `[rest].bind_addr = "127.0.0.1:20017"` and
+`api_key = "change_me_123change_me_123change_me_123"`. The repeated starter key
+has 36 ASCII characters; retain the existing 32-byte minimum and normal API
+authentication. It is a public starter value, not a privately generated secret;
+replace it before external API exposure. TOML uses only snake_case keys and
+rejects obsolete/unknown shapes. A fresh database seeds TCP `20019` and UDP
+`20020` even when its bootstrap was supplied by the package, without replacing
+existing database preferences or user bootstrap files.
+
+Packages retain the complete adjacent WebUI and a mode-0600 ready TOML; writable
+portable directories support `--profile .`. Installed/read-only packages use
+their writable platform profile. Android developer bundles retain their
+experimental qualification limits. This is an allocated implementation slice,
+not proof of integration, package runtime success or completion of this review;
+the remaining settings/revision/ETag proposal stays separately unaccepted.
+
 - [ ] Define one daemon/WebUI deployment contract for portable, package-manager
       and future supervised installs: profile/key/data ownership, installation-
       relative WebUI lookup, permissions, listeners, logs and clean shutdown.

@@ -74,7 +74,7 @@ and `/data` mounts, configure `PUID`/`PGID` as appropriate for their ownership,
 and keep persistent state when replacing the container. The s6 image places the
 implicit profile at `/config/emulebb-rust` and completed downloads at `/data/ed2k`.
 
-For local control, bind host REST port 4711 to loopback. The daemon speaks plain
+For local control, bind host REST port 20017 to loopback. The daemon speaks plain
 HTTP; remote TLS belongs at a trusted reverse proxy. Restrict access and keep the
 API key private. P2P TCP/UDP routing and reachability need their own deliberate
 container/network configuration; opening REST does not open P2P ports.

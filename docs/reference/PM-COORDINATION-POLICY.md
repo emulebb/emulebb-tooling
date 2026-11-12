@@ -61,6 +61,13 @@ merge and publication policies.
    legacy mappings or silently ignored obsolete fields are permitted. Require
    negative tests that prove retired shapes fail. Target acceptance does not
    claim the current runtime already implements it.
+   The accepted ready-package bootstrap and first-fresh-profile key is
+   `change_me_123change_me_123change_me_123` (36 ASCII characters); retain the
+   32-byte minimum and normal authentication. Keep its listener on loopback
+   and explain that this shared starter key must change before external API
+   exposure. Packages share the canonical TOML; preserve existing user files
+   and database preferences. Record actual package proof before claiming
+   unpack-and-run delivery.
 
 These are the approved delivery and intake boundaries. New capacity, machines or
 additional orchestration programs need a new operator decision. Batching and
