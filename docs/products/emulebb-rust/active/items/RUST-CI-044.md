@@ -75,7 +75,7 @@ persist non-core sections before core validation fails. The HTTP route has
 earlier middleware range validation; the invalid-core example is not an HTTP
 partial-write reproduction. Inject a later storage failure into an otherwise
 valid routed request to establish that path. The one coordinated fix owner
-is [RUST-BUG-184](RUST-BUG-184.md),
+is [RUST-BUG-184](https://github.com/emulebb/emulebb-tooling/blob/main/docs/products/emulebb-rust/history/items/RUST-BUG-184.md),
 [issue #299](https://github.com/emulebb/emulebb-rust/issues/299), shared with
 RUST-CI-043. Runtime reproduction and failure-injection regressions remain
 pending. No profile data was inspected and no migration was performed.

@@ -11,8 +11,12 @@ The canonical [Release Scope](../RELEASE-SCOPE.md#current-operator-hold-and-work
 owns holds, delivery order and optional expansion boundaries. Balanced
 reliability leads; Scoop is the first accepted new distribution lane; Linux
 services are review-only. The [PM policy](../../../reference/PM-COORDINATION-POLICY.md)
-owns parallel qualification and coordinated merging of the two existing
-preflight/intake PRs, followed by final combined-main/nightly acceptance.
+owns the standing parallel-branch and integration-batch routine. The previous
+consolidation completed with verified public
+[Nightly 43242135692](https://github.com/emulebb/emulebb-rust/actions/runs/43242135692).
+The approved change-aware CI work under
+[#327](https://github.com/emulebb/emulebb-rust/issues/327) leads the next batch;
+reconcile delivered evidence before allocating another implementation.
 Beta 3 promotion and APK/signing remain held; separately authorized nightly
 qualification does not lift them. GitHub issues and Project #3 own status,
 priority and phase placement.
@@ -73,13 +77,11 @@ inventory and required checks remain enforced; this intake changes neither.
 | [RUST-BUG-156](items/RUST-BUG-156.md) | Bug | Give ED2K server settings one authority |
 | [RUST-BUG-159](items/RUST-BUG-159.md) | Bug | Respect destination filename limits during download delivery |
 | [RUST-BUG-161](items/RUST-BUG-161.md) | Bug | Respect filesystem case semantics when consolidating shared roots |
-| [RUST-BUG-164](items/RUST-BUG-164.md) | Bug | Preserve AICH trust provenance across hashset acquisition |
 | [RUST-BUG-165](items/RUST-BUG-165.md) | Bug | Require trusted AICH and MD4 agreement during download verification |
 | [RUST-BUG-166](items/RUST-BUG-166.md) | Bug | Admit AICH recovery answers only for matching outstanding requests |
 | [RUST-BUG-176](items/RUST-BUG-176.md) | Bug | Bound URL-import responses and define destination policy |
 | [RUST-BUG-178](items/RUST-BUG-178.md) | Bug | Warn before creating private diagnostic bundles |
 | [RUST-BUG-181](items/RUST-BUG-181.md) | Bug | Bound RIFF media parsing and retain malformed-input regressions |
-| [RUST-BUG-184](items/RUST-BUG-184.md) | Bug | Make settings PATCH persistence atomic |
 | [RUST-CI-006](items/RUST-CI-006.md) | Evidence | Refresh current-head stock parity evidence and reconcile docs |
 | [RUST-CI-009](items/RUST-CI-009.md) | Evidence | Certify a Beta 3 candidate without publishing |
 | [RUST-CI-033](items/RUST-CI-033.md) | Evidence | Preserve native build scripts in Dependabot fuzz updates |
@@ -99,15 +101,11 @@ ranking and GitHub placement.
 |---|---|---|
 | [RUST-CI-032](items/RUST-CI-032.md) | Evidence | Add dependency-aware early Rust checks without weakening pre-push coverage |
 | [RUST-CI-046](items/RUST-CI-046.md) | Evidence | Complete coordinated public presence and release download guidance |
-| [RUST-CI-045](items/RUST-CI-045.md) | Evidence | Make Linux release provisioning bounded and reproducible |
-| [RUST-CI-047](items/RUST-CI-047.md) | Evidence | Unify application icons, native metadata and build identity |
-| [RUST-CI-048](items/RUST-CI-048.md) | Evidence | Run Clippy and WebUI type checks before platform fanout |
 | [RUST-CI-049](items/RUST-CI-049.md) | Evidence | Review the Linux daemon service and ownership contract |
 | [RUST-FEAT-147](items/RUST-FEAT-147.md) | Feature | Distribute verified Windows daemon packages through Scoop |
 | [RUST-BUG-136](items/RUST-BUG-136.md) | Bug | Bound transfer deletion marker validation reads |
 | [RUST-BUG-160](items/RUST-BUG-160.md) | Bug | Reuse stock hashes across unambiguous Unicode filename normalization |
 | [RUST-BUG-162](items/RUST-BUG-162.md) | Bug | Bound profile archive fields before allocating import buffers |
-| [RUST-BUG-163](items/RUST-BUG-163.md) | Bug | Enforce exclusive process ownership of writable profiles |
 | [RUST-BUG-167](items/RUST-BUG-167.md) | Bug | Release and retry failed AICH recovery requests across eligible peers |
 | [RUST-BUG-168](items/RUST-BUG-168.md) | Bug | Enforce the stock incoming secure-ident public-key size limit |
 | [RUST-BUG-169](items/RUST-BUG-169.md) | Bug | Honor negotiated secure-ident V2 support and LowID challenge addressing |
@@ -168,7 +166,9 @@ ranking and GitHub placement.
 
 ## Indexer Gate
 
-Production implementation remains blocked by every open Client item.
+Production implementation remains blocked by the mandatory core Client gate
+defined in Release Scope. Explicit optional expansion keeps its owning phase
+without independently blocking that gate.
 
 | ID | Class | Title |
 |---|---|---|

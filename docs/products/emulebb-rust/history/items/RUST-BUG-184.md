@@ -5,7 +5,7 @@ product: emulebb-rust
 phase: Phase 0
 github_issue: https://github.com/emulebb/emulebb-rust/issues/299
 title: Make settings PATCH persistence atomic
-status: IN_PROGRESS
+status: DONE
 priority: Major
 category: bug
 labels: [rust, audit, settings, sqlite, api]
@@ -17,6 +17,28 @@ source: Operator-directed config/API and database review
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb-rust/issues/299. This local document owns the durable engineering specification and evidence.
 
 # RUST-BUG-184 - Make settings PATCH persistence atomic
+
+## Closure And Evidence
+
+[PR #316](https://github.com/emulebb/emulebb-rust/pull/316) merged as
+`32305dabe90b59abad642c6c3ae1687dc53b27ae` and closed
+[#299](https://github.com/emulebb/emulebb-rust/issues/299). Mixed requests
+validate the whole candidate and commit affected sections in one serialized
+transaction before publication. Concurrent partial updates retain omitted
+fields; admitted updates finish publication despite caller cancellation.
+
+The accepted PR records real-router later-write rollback, direct-core
+validation, independent-connection, cancellation, concurrency and restart
+regressions. A committed update's later runtime-refresh error is classified
+separately; artificial injection of that post-commit refresh failure remains an
+accepted follow-up, not completed runtime evidence. No TOML keys, DTOs or
+migration path were introduced.
+
+The fix is included in qualified main and published
+[Nightly 43242135692](https://github.com/emulebb/emulebb-rust/actions/runs/43242135692)
+at `080a5dea70186da31dab958757b5b8c0fd883f82`. The earlier findings and
+checklist below preserve the original contract; configuration/schema reviews
+must reuse this implementation rather than commission another atomicity fix.
 
 ## Problem
 

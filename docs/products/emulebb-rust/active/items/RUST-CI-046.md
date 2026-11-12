@@ -45,7 +45,7 @@ long soak remain on hold; this communication work does not change product gates.
   artwork unchanged, readable small icons, safe social-card margins and accessible
   contrast. Do not claim a GitHub social image is uploaded until verified.
 - Native resources, package icons and application build identity belong to
-  [RUST-CI-047](RUST-CI-047.md), not this content change.
+  [RUST-CI-047](https://github.com/emulebb/emulebb-tooling/blob/main/docs/products/emulebb-rust/history/items/RUST-CI-047.md), not this content change.
 
 ## Evidence Boundaries
 

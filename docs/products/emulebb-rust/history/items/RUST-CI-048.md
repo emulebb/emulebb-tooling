@@ -5,7 +5,7 @@ product: emulebb-rust
 phase: Phase 0
 github_issue: https://github.com/emulebb/emulebb-rust/issues/323
 title: Run Clippy and WebUI type checks before platform fanout
-status: IN_PROGRESS
+status: DONE
 priority: Major
 category: ci
 labels: [rust]
@@ -18,13 +18,30 @@ source: Operator-approved hosted preflight and PM integration batching
 
 # RUST-CI-048 - Run Clippy and WebUI type checks before platform fanout
 
+## Closure And Evidence
+
+[PR #326](https://github.com/emulebb/emulebb-rust/pull/326) merged as
+`080a5dea70186da31dab958757b5b8c0fd883f82`. The parent closed
+[#323](https://github.com/emulebb/emulebb-rust/issues/323#issuecomment-6829949478)
+after actual-main [CI 43230067399](https://github.com/emulebb/emulebb-rust/actions/runs/43230067399)
+and the separately source-gated, published
+[Nightly 43242135692](https://github.com/emulebb/emulebb-rust/actions/runs/43242135692)
+passed. Typecheck and existing all-targets Clippy run before primary native/musl
+fanout; full coverage and exact-source admission remain in force.
+
+The scoped 102-second preflight measurement below remains one observation,
+not a guaranteed cold-build duration. Developer-selective checks stay with
+#258; the next trusted change-aware hosted short path belongs to #327. Neither
+is claimed delivered by this item. The original contract below is historical;
+the current standing coordination policy governs later batches.
+
 ## Outcome And Ownership
 
 Run existing Clippy and WebUI type checks once before expensive primary
 Windows/Linux/musl fanout. The assigned Rust workflow worker owns implementation;
 the parent owns integration batches and acceptance. Developer-selective,
 dependency-aware checks remain separately owned by
-[#258 / RUST-CI-032](RUST-CI-032.md).
+[#258 / RUST-CI-032](../../active/items/RUST-CI-032.md).
 
 ## Required Behavior
 

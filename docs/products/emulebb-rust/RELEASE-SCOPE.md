@@ -27,21 +27,29 @@ when they do not add dormant production paths or distract from the active gate.
 
 ## Current Operator Hold And Work Priority (2026-11-12)
 
-**Beta 3 promotion and APK/signing remain on hold.** Final combined-main and
-nightly qualification completes the consolidation checkpoint. The next product
-wave leads with balanced reliability, including the shared bounded-persistence
-contract under [#155](active/items/RUST-REF-016.md). Existing configuration,
-schema and client-correctness owners retain their responsibilities.
+**Beta 3 promotion and APK/signing remain on hold.** The combined-main
+consolidation checkpoint completed with qualified Rust
+`080a5dea70186da31dab958757b5b8c0fd883f82` and independently verified public
+[Nightly 43242135692](https://github.com/emulebb/emulebb-rust/actions/runs/43242135692).
+The approved change-aware CI acceleration under
+[#327](https://github.com/emulebb/emulebb-rust/issues/327) precedes the next
+product implementation wave. Balanced reliability leads that wave, including
+the shared bounded-persistence contract under [#155](active/items/RUST-REF-016.md).
+Existing configuration, schema and client-correctness owners retain their
+responsibilities; the checkpoint is evidence, not a recurring precondition for
+every new branch.
 
 [Scoop (#324)](active/items/RUST-FEAT-147.md) is the first accepted new
 distribution lane. [Linux services (#325)](active/items/RUST-CI-049.md) are
 deferred to a bounded design review; there is no authorization to implement or
 enable a service. The [PM policy](../../reference/PM-COORDINATION-POLICY.md)
-owns closeout of the two existing preflight/intake PRs: review and full hosted
-qualification run in parallel now, the parent coordinates normal-gated merges,
-then freezes the final combined main for one full nightly and public-byte proof.
-No Scoop, storage implementation or additional product lane starts before that
-checkpoint; there is no intermediate-nightly requirement before these PRs.
+owns the standing routine: reserve independent branch outcomes, integrate
+compatible authored commits into small batches, qualify the actual combined
+tip, merge in dependency order and retire finished delivery state. A selected
+publication checkpoint receives complete source-bound nightly/public-byte
+proof. Batching changes neither required checks nor the operator holds, and
+does not require publication after every contribution. Storage and Scoop
+implementation still require their accepted contracts and parent allocation.
 
 The hold prohibits Beta 3 candidate selection/certification and promotion;
 [#142](active/items/RUST-CI-009.md) remains held. Separately authorized

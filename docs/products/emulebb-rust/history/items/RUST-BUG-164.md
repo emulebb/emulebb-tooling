@@ -5,7 +5,7 @@ product: emulebb-rust
 phase: Phase 1
 github_issue: https://github.com/emulebb/emulebb-rust/issues/248
 title: Preserve AICH trust provenance across hashset acquisition
-status: IN_PROGRESS
+status: DONE
 priority: Major
 category: bug
 labels: [rust, aich, integrity, trust, protocol]
@@ -17,6 +17,27 @@ source: Operator-approved AICH and physical-drive I/O review
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb-rust/issues/248. This local document owns the durable engineering specification and evidence.
 
 # RUST-BUG-164 - Preserve AICH trust provenance across hashset acquisition
+
+## Closure And Evidence
+
+[PR #315](https://github.com/emulebb/emulebb-rust/pull/315) merged as
+`f4e184468d4a5ec1a1669be76cf5be951a699ff1` and closed
+[#248](https://github.com/emulebb/emulebb-rust/issues/248). Accepted authority
+is persisted separately from a peer's proposal; corroboration or explicit
+local/operator authority is required before activation. Authority-generation
+fences cover pending answers and background publication, including admitted
+decisions whose callers cancel.
+
+The PR records targeted corroboration/conflict, deletion, publication-race and
+loopback late-answer regressions. Those are causality tests, not complete
+interoperability evidence. The fix is included in the source-qualified and
+published [Nightly 43242135692](https://github.com/emulebb/emulebb-rust/actions/runs/43242135692)
+at `080a5dea70186da31dab958757b5b8c0fd883f82`; no older local receipt is
+relabeled as execution on that revision. Schema 68 retains the fresh-profile
+policy and separate old-profile rollback; no migration was added.
+
+The original contract and audit provenance below remain historical evidence,
+not an active implementation queue or a claim that adjacent AICH owners closed.
 
 ## Summary and Disposition
 

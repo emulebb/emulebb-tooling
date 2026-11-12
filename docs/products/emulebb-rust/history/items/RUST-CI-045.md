@@ -5,11 +5,11 @@ product: emulebb-rust
 phase: Phase 0
 github_issue: https://github.com/emulebb/emulebb-rust/issues/302
 title: Make Linux release provisioning bounded and reproducible
-status: IN_PROGRESS
+status: DONE
 priority: Major
 category: ci
 labels: [rust, ci]
-milestone: rust-v0.1.0-beta.3
+milestone: ""
 created: 2026-11-10
 source: Nightly APT provisioning stall and operator-approved CI infrastructure work
 ---
@@ -17,6 +17,30 @@ source: Nightly APT provisioning stall and operator-approved CI infrastructure w
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb-rust/issues/302. This document owns the durable specification and evidence boundaries.
 
 # RUST-CI-045 - Make Linux release provisioning bounded and reproducible
+
+## Closure And Evidence
+
+The parent closed [#302](https://github.com/emulebb/emulebb-rust/issues/302#issuecomment-6829946635)
+after the actual prepared producer and final consumer passed. Builder
+`7a713aef251e4066890e898c031140ead4c0c500` produced the verified image
+`ghcr.io/emulebb/emulebb-build-ci/ubuntu-rust@sha256:c90563f122dc08fae678936347df486a092ed799b1a915cc86d363da9aa6deee`
+in [producer 43190149335](https://github.com/emulebb/emulebb-build/actions/runs/43190149335).
+Both native CPU probes exercised the real non-root AppImage assembly/extraction
+path; signed receipts and anonymous registry reads were verified before
+consumer activation. The source/image pair is inseparable evidence.
+
+[Rust PR #322](https://github.com/emulebb/emulebb-rust/pull/322) integrated the
+consumer. Published [Nightly 43242135692](https://github.com/emulebb/emulebb-rust/actions/runs/43242135692)
+at `080a5dea70186da31dab958757b5b8c0fd883f82` passed actual prepared GNU
+DEB/AppImage packaging on x64 and ARM64, all selected lifecycle/OCI checks and
+publication, without a retry. The independent public-byte review verified all
+81 assets and both OCI graphs with the exact source/material pins. This is not
+a byte-for-byte reproducibility claim or Android device qualification.
+
+Final receipts remain under
+`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/nightly-publication-review/43242135692`.
+The failure and recovery discussion below is retained provenance, not the
+current consumer state; earlier failed images/candidates are not relabeled.
 
 ## Problem
 
