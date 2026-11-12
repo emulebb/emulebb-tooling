@@ -34,8 +34,12 @@ rejects obsolete/unknown shapes. A fresh database seeds TCP `20019` and UDP
 existing database preferences or user bootstrap files.
 
 Packages retain the complete adjacent WebUI and a mode-0600 ready TOML; writable
-portable directories support `--profile .`. Installed/read-only packages use
-their writable platform profile. Android developer bundles retain their
+portable directories use the executable directory by default on every platform;
+`--profile .` is equivalent only when shell CWD equals that directory. Any
+explicit profile can be created fresh, but malformed settings and schema/lease
+errors remain hard failures. There are no home/XDG/Local AppData fallbacks.
+Installed desktop/container launchers pass documented explicit writable profile
+paths; direct read-only selection fails. Android developer bundles retain their
 experimental qualification limits. This is an allocated implementation slice,
 not proof of integration, package runtime success or completion of this review;
 the remaining settings/revision/ETag proposal stays separately unaccepted.

@@ -21,25 +21,35 @@ The ready-package bootstrap contract is being implemented under
 [#297](https://github.com/emulebb/emulebb-rust/issues/297); use the README shipped
 with your selected package for its exact qualified behavior.
 
-Without `--profile`, the first native launch creates a private default profile
-from the canonical packaged template. Open `http://127.0.0.1:20017/` and enter
+Without `--profile`, the daemon uses the **directory containing its executable**
+on every platform, independently of the shell working directory. A missing
+bootstrap is created from the canonical packaged template. There is no home,
+XDG or Local AppData fallback; an unwritable executable directory fails visibly.
+Open `http://127.0.0.1:20017/` and enter
 `change_me_123change_me_123change_me_123`. This is a shared starter key: replace
 it before exposing the API outside this computer. Existing profiles are never
-overwritten. For a writable portable archive directory, run
-`./emulebb-rust --profile .` (`.\emulebb-rust.exe --profile .` on Windows) to use
-its ready `emulebb-rust-settings.toml` and keep the database there.
+overwritten by startup. Use `--profile <writable-directory>` to override the
+profile; missing directories/configuration are created. Relative arguments
+resolve from the shell working directory. `--profile .` equals the default only
+when the shell working directory is the executable directory.
 
-| System | Default profile |
+| Launch mode | Profile selection |
 | --- | --- |
-| Windows | `%LOCALAPPDATA%\emulebb-rust` |
-| Linux | `$XDG_CONFIG_HOME/emulebb-rust`, falling back to `~/.config/emulebb-rust` |
-| macOS | `~/Library/Application Support/emulebb-rust` |
-| Official container | `/config/emulebb-rust` |
+| Direct daemon, every platform | Directory containing the executable |
+| Explicit `--profile <directory>` | Selected directory; relative to shell working directory |
+| Linux desktop launcher | Explicit `$XDG_CONFIG_HOME/emulebb-rust` or `~/.config/emulebb-rust` |
+| macOS app launcher | Explicit `~/Library/Application Support/emulebb-rust` |
+| Official container | Explicit `/config/emulebb-rust` |
 
-An explicit `--profile <directory>` normally requires an existing
-`emulebb-rust-settings.toml`; it is not a way to repair an incompatible database.
-The one-shot [stock/MFC importer](GUIDE-PROFILE-IMPORT.md) has its own explicit
-target-creation behavior.
+Installed CLI binaries may live in read-only directories; pass a writable
+`--profile` instead of running them with elevated permissions. A profile
+override does not repair an incompatible database.
+The one-shot [stock/MFC importer](GUIDE-PROFILE-IMPORT.md) retains its explicit
+manifest-validation workflow.
+
+For portable updates, preserve your selected TOML/database and replace program
+files deliberately. Raw archive extraction follows the extractor's overwrite
+choice; it is not configuration merging or profile management.
 
 **Loopback REST does not mean offline P2P.** Startup may fetch trusted discovery
 inputs and start configured networking. Use a deliberately isolated configuration

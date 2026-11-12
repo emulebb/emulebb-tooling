@@ -39,7 +39,13 @@ configuration reader.
 ## Bootstrap
 
 The profile locator selects one profile before its private bootstrap is read.
-An explicit `--profile` wins over the platform-default profile location. The
+An explicit `--profile` wins over the executable-directory default on every
+platform. Without it, resolve `current_exe().parent()`, never the shell working
+directory or a home/XDG/Local AppData fallback. Relative explicit paths resolve
+from the shell working directory; missing selected directories/bootstrap files
+are created, while existing files and database preferences are preserved.
+Read-only selection fails visibly. Desktop/container launchers may pass a
+documented explicit writable profile; this does not change the daemon default. The
 bootstrap file is `emulebb-rust-settings.toml`; the database filename is the
 fixed profile-local `emulebb-rust-metadata.db`, not a product setting.
 

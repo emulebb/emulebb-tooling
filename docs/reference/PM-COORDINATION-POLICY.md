@@ -68,6 +68,14 @@ merge and publication policies.
    exposure. Packages share the canonical TOML; preserve existing user files
    and database preferences. Record actual package proof before claiming
    unpack-and-run delivery.
+   The operator's latest profile rule is the executable directory on every
+   platform (`current_exe().parent()`), never shell CWD or a hidden user-profile
+   fallback. Explicit `--profile` overrides it and may create a fresh selected
+   profile; relative arguments use shell CWD. Read-only paths fail visibly.
+   Installed desktop/container launchers may supply documented explicit writable
+   profiles, while direct daemon semantics remain uniform. Keep isolated
+   launch proof in owned output; never let default-profile tests write into
+   source or shared Cargo artifact directories.
 
 These are the approved delivery and intake boundaries. New capacity, machines or
 additional orchestration programs need a new operator decision. Batching and
