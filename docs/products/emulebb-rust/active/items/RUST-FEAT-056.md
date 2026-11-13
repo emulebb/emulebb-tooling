@@ -234,11 +234,16 @@ force-stop and Task Manager Stop. API 37 adds local-network denial/grant/
 revocation; earlier versions verify absence of that prompt. Restricted battery
 mode must never be presented as qualified continuous or boot operation.
 
-Release signing material is retained under
-`EMULEBB_WORKSPACE_OUTPUT_ROOT/tools/signing/android`; workspace cleanup excludes
-this operator-owned directory. Preserve its encrypted keystore, private
+Release signing material is retained in the operator's normal application-data
+directory: `%LOCALAPPDATA%/eMuleBB/signing/android` on Windows, or
+`~/.local/share/emulebb/signing/android` on Linux. It is outside workspace
+cleanup ownership. Preserve its encrypted keystore, private
 credentials and public identity together in an operator-controlled backup.
 GitHub secrets are not a substitute for retaining the update signing identity.
+The operator authorized generation and GitHub secret configuration on
+2026-11-13; the retained signing identity has been generated and all four
+Android signing secrets are configured. Directory ACL customization is not a
+prerequisite; use ordinary per-user storage and the encrypted keystore.
 
 ## Compile Foundation Evidence
 
