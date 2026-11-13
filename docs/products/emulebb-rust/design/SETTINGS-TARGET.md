@@ -68,7 +68,7 @@ types. Paths resolve once against the profile when relative; validation is
 non-mutating. The key uses exact printable non-whitespace ASCII bytes, length
 32..1024, and rejects the inventory's case-insensitive placeholder list. Fresh
 initialization copies the same canonical ready template shipped in packages;
-its public starter key has 36 ASCII characters and meets the retained 32-byte
+its public starter key has 39 ASCII characters and meets the retained 32-byte
 minimum. The operator explicitly selected this startup UX; existing bootstrap
 files and database preferences are never overwritten. There is no secret-bearing CLI flag
 or secret-bearing URL parameter.

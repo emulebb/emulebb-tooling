@@ -69,7 +69,7 @@ api_key = "change_me_123change_me_123change_me_123"
 Replace the shared starter key with a private value before external exposure.
 Startup rejects
 blank, documented placeholder, whitespace-padded, non-printable and shorter-than-32
-character keys. The ready starter key has 36 ASCII characters. Unix profile and
+character keys. The ready starter key has 39 ASCII characters. Unix profile and
 bootstrap permissions are private (`0700`/`0600`); permissive existing bootstrap
 files are rejected with a remediation message. Never commit this file.
 
