@@ -90,10 +90,18 @@ is an advanced deployment reference, not a requirement or general VPN-safety pro
 developer builds targeting API 28+ with 16KB-compatible ELF alignment. Follow the
 bundled developer README/launcher for controlled ADB work.
 
-These are **not APKs, app-store installations or a supported Android app**.
-Compilation/test linking and ELF audit are recorded; device runtime and test
-execution are **NOT RUN**. Completed-file delivery, default-route discovery,
-transfers and VPN behavior remain unqualified. APK/JNI/signing work is separate.
+These remain **experimental native CLI developer bundles**. Compilation/test
+linking and ELF audit cover the selected archive; its compile/ELF report does not
+claim runtime execution. Separately, an API 37/x86_64/16 KiB KVM emulator
+[run](https://github.com/emulebb/emulebb-build/actions/runs/43369243640)
+using a source-built release-mode daemon on the development channel from
+[Rust source `6429b952`](https://github.com/emulebb/emulebb-rust/commit/6429b952eac6f19ee9bf084d3a84d5649dfba0c2)
+verified six TLS cases, fresh EXE-directory profile creation from a different
+working directory, authenticated REST startup and graceful shutdown.
+
+Published Android archive execution, physical devices, ARM runtime, APK/JNI,
+WebUI, completed-file delivery, transfers and VPN behavior remain unqualified.
+APK signing and app-store installation are separate work.
 
 ## What Each Supporting File Does
 

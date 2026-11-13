@@ -27,13 +27,14 @@ when they do not add dormant production paths or distract from the active gate.
 
 ## Current Operator Hold And Work Priority (2026-11-12)
 
-**Beta 3 promotion and APK/signing remain on hold.** The combined-main
-consolidation checkpoint completed with qualified Rust
-`080a5dea70186da31dab958757b5b8c0fd883f82` and independently verified public
-[Nightly 43242135692](https://github.com/emulebb/emulebb-rust/actions/runs/43242135692).
-The approved change-aware CI acceleration under
-[#327](https://github.com/emulebb/emulebb-rust/issues/327) precedes the next
-product implementation wave. Balanced reliability leads that wave, including
+**Beta 3 promotion and APK/signing remain on hold.** The client-fix and delivery
+batch in [PR #329](https://github.com/emulebb/emulebb-rust/pull/329) is published
+as the accepted [nightly from source `6429b952`](https://github.com/emulebb/emulebb-rust/releases/tag/rust-v0.1.0-beta.2.nightly.20261113.g6429b952).
+Its complete public-byte, provenance and OCI inventory passed verification.
+The later README-only [PR #330](https://github.com/emulebb/emulebb-rust/pull/330)
+also proved trusted documentation-only CI on both its real PR and actual main
+push `bc0f319d`; it did not produce new binaries. Balanced reliability leads
+the next product implementation wave, including
 the shared bounded-persistence contract under [#155](active/items/RUST-REF-016.md).
 Existing configuration, schema and client-correctness owners retain their
 responsibilities; the checkpoint is evidence, not a recurring precondition for
@@ -171,10 +172,14 @@ NAS qualification reuses existing OCI images under
 BSD, Android/Fire OS and ChromeOS retain their existing owners and require
 environment-specific evidence before support claims. Android developer daemon
 bundles remain distinct from an APK or device-runtime qualification.
-The operator's Termux launch exposed a JVM-dependent HTTPS verifier panic;
-[#328 / RUST-BUG-186](active/items/RUST-BUG-186.md) owns that native CLI repair
-and its target-runtime evidence. First-launch success remains unqualified until
-verified; this finding does not independently hold the core Client gate.
+The operator's Termux launch exposed a JVM-dependent HTTPS verifier panic.
+The [native CLI repair and evidence](https://github.com/emulebb/emulebb-tooling/blob/main/docs/products/emulebb-rust/history/items/RUST-BUG-186.md)
+now include accepted source-built API 37/x86_64/16 KiB emulator TLS and
+authenticated first-launch proof. This does not qualify published Android
+archive execution, physical/ARM runtime, APK/JNI, transfer or VPN behavior.
+The physical S24+ retest and separate Android unavailable/degraded-network
+execution remain unproved under open #226; optional environment expansion does
+not independently hold the core Client gate.
 
 ### Beta contract policy
 

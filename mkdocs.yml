@@ -182,6 +182,7 @@ not_in_nav: |
   /products/emulebb-rust/history/items/**
 
 exclude_docs: |
+  RESUME.md
   products/emulebb-rust/history/items/*
   !products/emulebb-rust/history/items/INDEX.md
 
