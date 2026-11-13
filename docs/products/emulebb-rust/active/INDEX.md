@@ -7,7 +7,7 @@ retained evidence.
 
 ## Current Operator Hold And Work Priority (2026-11-12)
 
-The canonical [Release Scope](../RELEASE-SCOPE.md#current-operator-hold-and-work-priority-2026-11-12)
+The canonical [Release Scope](../RELEASE-SCOPE.md#current-operator-hold-and-work-priority-2026-11-13)
 owns holds, delivery order and optional expansion boundaries. Balanced
 reliability leads; Scoop is the first accepted new distribution lane; Linux
 services are review-only. The [PM policy](../../../reference/PM-COORDINATION-POLICY.md)
