@@ -119,9 +119,14 @@ device acceptance criteria below remain open.
   test linking, release executable linking, and ELF CPU/Bionic/16KB audits.
   These archive-specific receipts are compile checks; the separate x86_64
   emulator proof above executed only the six selected TLS cases.
-- APK production, JNI integration, application lifecycle, signing, full
-  application emulator qualification and physical-device qualification remain
-  unfinished; the bounded native CLI startup proof above does not complete them.
+- The Android shell and JNI implementation are committed on the active branch.
+  Actual Kotlin compilation against the pinned SDK 37.2 and Android Gradle
+  plugin 9.5.1 passed for Rust source `567c253b`; the compiler dependency graph
+  exactly matched the reviewed SHA-256 verification metadata. The scoped receipt
+  is below `EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/android-apk/3724169c771f4d1d9d684d2d92bb6cb2/`.
+  APK assembly, signing execution, full application emulator qualification and
+  physical-device qualification remain open. Neither Kotlin compilation nor
+  the bounded native CLI startup proof completes those steps.
 - The daemon exposes its behavior through a reusable library, loopback REST,
   and the browser WebUI. Its `run_hosted` entrypoint accepts application-owned
   readiness and shutdown without installing process signal handlers.
@@ -146,6 +151,11 @@ device acceptance criteria below remain open.
   bootstrap settings and a visible API key with Copy and Regenerate controls.
   TOML edits require a stopped service and use Rust's authoritative parser.
   Generate a random first-run key; never pass it in browser URLs or logs.
+- Register browsable `ed2k://` file links with Android. Validate a bounded link
+  through the canonical Rust parser, retain at most one pending link, and open
+  the WebUI with its transfer form prefilled. Receiving a link must not start
+  the service or queue a transfer. Preserve the handoff through authentication;
+  require explicit Add confirmation and support cancellation and repeat intents.
 - A persistent notification exposes running state and a clean stop action.
 - A dedicated foreground-service process owns the Rust runtime. Use
   `specialUse` with an explicit continuous eD2K/Kad peer-hosting subtype;
@@ -233,6 +243,15 @@ exemption and actual idle-state assertions; boot resume on/off; explicit Stop,
 force-stop and Task Manager Stop. API 37 adds local-network denial/grant/
 revocation; earlier versions verify absence of that prompt. Restricted battery
 mode must never be presented as qualified continuous or boot operation.
+
+The operator authorized physical-phone testing over Wi-Fi on 2026-11-13.
+Use an explicitly selected, authenticated ADB connection and preserve the
+operator's ADB server and existing application data. Fresh-emulator reset,
+uninstall, reboot and permission-revocation scenarios are not the physical-phone
+smoke. Admit the installed artifact before use and confine transfer fixtures to
+owned synthetic files; account for the daemon's implicit sharing of its incoming
+directory before the first service start. Phone execution on one Android API
+does not substitute for the full API 34-37 matrix or the 24-hour campaign.
 
 Release signing material is retained in the operator's normal application-data
 directory: `%LOCALAPPDATA%/eMuleBB/signing/android` on Windows, or
