@@ -120,25 +120,43 @@ device acceptance criteria below remain open.
   These archive-specific receipts are compile checks; the separate x86_64
   emulator proof above executed only the six selected TLS cases.
 - The Android shell and JNI implementation are committed on the active branch.
-  Actual Kotlin compilation against the pinned SDK 37.2 and Android Gradle
-  plugin 9.5.1 passed for Rust source `567c253b`; the compiler dependency graph
-  exactly matched the reviewed SHA-256 verification metadata. The scoped receipt
-  is below `EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/android-apk/3724169c771f4d1d9d684d2d92bb6cb2/`.
-  Subsequent Rust source `09bbc2d1` and Build source `c107a6b` produced a universal
-  production-signed APK with strict dependency verification, release Kotlin/lint,
-  both JNI ABI builds, ELF/export/dependency audits, certificate verification,
-  16 KiB ZIP alignment, SDK/ABI inventory, SPDX and checksums. Its local receipt
-  is below `EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/android-apk/e96170ea802a4712bf33b85179449f3d/`.
-  The exact APK passed a physical API 36 ARM64 smoke with 4096-byte pages:
-  authenticated source-bound startup, bundled WebUI serving, real CPU/RSS
-  sampling, bounded foreground observation, normal UI Stop, listener closure
-  and cleared foreground-service state. The operator-approved Incoming/Shared
-  paths were applied through canonical settings with a real service restart,
-  preserving prior roots and moving or deleting no existing files. The receipt
-  is below `EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/android-apk-device/phone-config-20261113-1411/`.
-  This proof covers source `09bbc2d1`; later APK source still requires its own
-  qualification. Real transfer/delivery, full API 34-37 qualification, endurance
-  and GitHub publication remain open.
+  [Nightly 43509368144](https://github.com/emulebb/emulebb-rust/actions/runs/43509368144)
+  produced the universal production-signed APK for Rust source
+  `257cf6fe4e44a9446f56ed8c80cbacb9ab9c293c`, version
+  `0.1.0-beta.2.nightly.20261113.g257cf6fe`, code `216767888`.
+  Production passed strict Gradle verification, release Kotlin/lint, both JNI
+  ABI builds, ELF/export/dependency audits, certificate verification, 16 KiB ZIP
+  alignment, SDK/ABI inventory, SPDX and checksums. The APK SHA-256 is
+  `0c2a532f3036a1fba444af473697c92cb6e1b7ec585255f796c7a26a063920bc`;
+  its certificate SHA-256 is
+  `9edc742d7230a714a0149c20eb2afb235b8ad5237166090f10e7ac69e2bb359f`.
+  This is an Actions candidate artifact, not a published release: all four
+  API 34-37 application-qualification jobs failed and publication remained gated.
+- The exact GitHub-built APK passed all 12 physical-device cases on API 36,
+  ARM64, 4096-byte pages. A guarded update preserved the existing profile and
+  bootstrap preferences without reset or migration. Execution proved visible
+  version/insets, authenticated source-bound readiness, bundled WebUI serving,
+  CPU/RSS sampling, persistent Incoming/Shared settings, a real 256 KiB P2P
+  transfer, collision-safe final delivery, and restart/catalog/completion-history
+  preservation with duplicate rejection. The standard Android diagnostics
+  chooser was verified and dismissed without selecting a recipient. Normal Stop
+  closed the listener and cleared foreground-service state; the phone was left
+  stopped. Owned transfer fixtures were removed and prior settings preserved.
+  The receipt is
+  `EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/android-apk-device/phone-github-257-ready-20261113214752/physical-device.json`,
+  SHA-256 `2b99f799df194f046ad60a2e09c816fef12e711e3d58b39409d3a7b53ba77ee9`.
+  The peer used matching GitHub-built ARM64 source. Traffic was same-device P2P;
+  this proves neither a Wi-Fi/NAT data plane nor endurance. The foreground
+  observation was 30 seconds; the 24-hour campaign remains open.
+- A fresh, initially empty Gradle home exposed four missing strict dependency
+  metadata entries that warm-cache checks had hidden. The independently
+  verified Maven Central hashes were added without weakening verification.
+  A second empty-home production Kotlin/inventory/lint run passed; its receipt
+  is `EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/android-apk/88ab941af5974a62b6574c8f233fe1fc/build.json`,
+  SHA-256 `bd012b2b44609b7239b2a226e18b6a32e4d23f8b1de3aeb58567b4ef5c54c98f`.
+  Source-bound CI, CodeQL and optional-platform checks all passed for `257cf6fe`.
+  Emulator failures remain under investigation; failure evidence retention is
+  being repaired without relaxing application or existing native release gates.
 - The daemon exposes its behavior through a reusable library, loopback REST,
   and the browser WebUI. Its `run_hosted` entrypoint accepts application-owned
   readiness and shutdown without installing process signal handlers.
