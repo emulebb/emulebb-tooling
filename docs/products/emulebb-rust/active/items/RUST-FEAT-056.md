@@ -124,9 +124,15 @@ device acceptance criteria below remain open.
   plugin 9.5.1 passed for Rust source `567c253b`; the compiler dependency graph
   exactly matched the reviewed SHA-256 verification metadata. The scoped receipt
   is below `EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/android-apk/3724169c771f4d1d9d684d2d92bb6cb2/`.
-  APK assembly, signing execution, full application emulator qualification and
-  physical-device qualification remain open. Neither Kotlin compilation nor
-  the bounded native CLI startup proof completes those steps.
+  Subsequent Rust source `09bbc2d1` and Build source `c107a6b` produced a universal
+  production-signed APK with strict dependency verification, release Kotlin/lint,
+  both JNI ABI builds, ELF/export/dependency audits, certificate verification,
+  16 KiB ZIP alignment, SDK/ABI inventory, SPDX and checksums. Its local receipt
+  is below `EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/android-apk/e96170ea802a4712bf33b85179449f3d/`.
+  The exact APK was installed and admitted on a physical API 36 ARM64 device
+  with 4096-byte pages. Foreground lifecycle, transfer, resource sampling,
+  full API 34-37 qualification and GitHub publication remain separate proof;
+  installation and compile checks do not complete them.
 - The daemon exposes its behavior through a reusable library, loopback REST,
   and the browser WebUI. Its `run_hosted` entrypoint accepts application-owned
   readiness and shutdown without installing process signal handlers.
@@ -151,6 +157,13 @@ device acceptance criteria below remain open.
   bootstrap settings and a visible API key with Copy and Regenerate controls.
   TOML edits require a stopped service and use Rust's authoritative parser.
   Generate a random first-run key; never pass it in browser URLs or logs.
+- Respect status-bar, display-cutout and navigation insets so the version and
+  controls remain visible on modern edge-to-edge Android displays. Provide
+  user-initiated Share diagnostics through Android's share sheet, including
+  bounded recent logs and app/service/platform metadata. Exclude private
+  configuration and credentials; scrub private operational identifiers or omit
+  records that cannot be safely projected. Share only temporary read-only
+  access to the generated support archive.
 - Register browsable `ed2k://` file links with Android. Validate a bounded link
   through the canonical Rust parser, retain at most one pending link, and open
   the WebUI with its transfer form prefilled. Receiving a link must not start
@@ -163,7 +176,11 @@ device acceptance criteria below remain open.
   of the shell/browser lifecycle. Repeated Start cannot create duplicate runtimes.
 - Private app storage owns metadata, TOML, credentials and logs. App-specific
   external storage owns incomplete payloads by default; completed delivery
-  defaults to an eMuleBB directory under shared Downloads. The user grants
+  defaults to `Download/eMuleBB/Incoming` under shared internal storage. Create
+  the adjacent visible `Download/eMuleBB/Shared` folder as the initial explicit
+  shared root; incoming remains implicitly shared. Seed these defaults in the
+  canonical database only for a fresh profile, preserving later WebUI edits
+  and removals across restarts. Show the actual paths to users. The user grants
   all-files access, then uses ordinary filesystem paths through the WebUI.
   Do not add document-provider adapters or import/export copy workflows.
 - Guide notification, all-files and battery-optimization permissions explicitly.
@@ -188,6 +205,11 @@ device acceptance criteria below remain open.
   require separate decisions.
 - The operator explicitly selected `MANAGE_EXTERNAL_STORAGE` for the lean
   direct-path shell, superseding the original picker/import/export boundary.
+- The operator resumed completion of Android packaging and additive GitHub
+  release integration on 2026-11-13, including visible Incoming/Shared defaults,
+  insets and support sharing. Keep the current branch, granular commits and
+  pushes; no pull request is authorized yet. Qualify branch candidates through
+  existing dispatchable CI and unpublished nightly execution before publication.
 - Optional resume after unlock on reboot is authorized; recovery after Android
   force-stop is not. The operating system remains authoritative.
 - Add the universal signed APK to existing nightly qualification/publication
