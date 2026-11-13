@@ -150,7 +150,9 @@ device acceptance criteria below remain open.
 - A minimal Kotlin application owns one foreground service and invokes the Rust
   daemon through a narrow JNI library boundary.
 - The service supplies app-owned profile, database, log, transfer, and WebUI
-  paths and exposes the authenticated listener on loopback by default.
+  paths and defaults the authenticated listener to `0.0.0.0:20017`, matching
+  every other product platform and package. Browser connections on the same
+  device use loopback; the wildcard is a listen address.
 - The packaged SPA remains the complete operations surface, opened in the
   system browser. There is no WebView or parallel native transfer/settings UI.
 - The shell provides Start/Stop, actual lifecycle status, Open WebUI, REST

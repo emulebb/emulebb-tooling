@@ -63,9 +63,10 @@ merge and publication policies.
    claim the current runtime already implements it.
    The accepted ready-package bootstrap and first-fresh-profile key is
    `change_me_123change_me_123change_me_123` (39 ASCII characters); retain the
-   32-byte minimum and normal authentication. Keep its listener on loopback
-   and explain that this shared starter key must change before external API
-   exposure. Packages share the canonical TOML; preserve existing user files
+   32-byte minimum and normal authentication. The operator selected
+   `0.0.0.0:20017` as the listener default across the product, Android and
+   packages on 2026-11-13, without an exposure warning or compatibility path.
+   Packages share the canonical TOML; preserve existing user files
    and database preferences. Record actual package proof before claiming
    unpack-and-run delivery.
    The operator's latest profile rule is the executable directory on every

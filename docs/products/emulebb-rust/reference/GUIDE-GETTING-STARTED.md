@@ -52,7 +52,7 @@ For portable updates, preserve your selected TOML/database and replace program
 files deliberately. Raw archive extraction follows the extractor's overwrite
 choice; it is not configuration merging or profile management.
 
-**Loopback REST does not mean offline P2P.** Startup may fetch trusted discovery
+**REST binding does not select offline P2P.** Startup may fetch trusted discovery
 inputs and start configured networking. Use a deliberately isolated configuration
 and the supported harness when testing offline; a first launch is not that harness.
 
@@ -63,11 +63,10 @@ location. The canonical ready configuration is:
 
 ```toml
 [rest]
-bind_addr = "127.0.0.1:20017"
+bind_addr = "0.0.0.0:20017"
 api_key = "change_me_123change_me_123change_me_123"
 ```
 
-Replace the shared starter key with a private value before external exposure.
 Startup rejects
 blank, documented placeholder, whitespace-padded, non-printable and shorter-than-32
 character keys. The ready starter key has 39 ASCII characters. Unix profile and
@@ -76,9 +75,9 @@ files are rejected with a remediation message. Never commit this file.
 
 Mutable client/network settings live in SQLite and are exposed by Settings and
 the [API](../api/GUIDE-API-CONSUMERS.md). Do not add a second set of runtime keys
-to bootstrap TOML. Keep the REST listener on loopback for local use. The daemon
-serves plain HTTP; a remote deployment needs a trusted TLS reverse proxy and
-independent access restrictions. `webui` normally sits beside the executable;
+to bootstrap TOML. The default listener accepts connections on every IPv4
+interface. Open `http://127.0.0.1:20017` locally or use the host's address from
+another device. The daemon serves authenticated plain HTTP. `webui` normally sits beside the executable;
 optional `[rest].web_root_dir` resolves relative to the profile when not absolute.
 
 ## Connect And Check Reachability
