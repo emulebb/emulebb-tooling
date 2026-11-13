@@ -26,7 +26,7 @@ The operator authorized one canonical ready bootstrap for every release
 package and first-fresh-profile initialization:
 `emulebb-rust-settings.toml`, `[rest].bind_addr = "127.0.0.1:20017"` and
 `api_key = "change_me_123change_me_123change_me_123"`. The repeated starter key
-has 36 ASCII characters; retain the existing 32-byte minimum and normal API
+has 39 ASCII characters; retain the existing 32-byte minimum and normal API
 authentication. It is a public starter value, not a privately generated secret;
 replace it before external API exposure. TOML uses only snake_case keys and
 rejects obsolete/unknown shapes. A fresh database seeds TCP `20019` and UDP

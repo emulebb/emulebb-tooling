@@ -5,7 +5,7 @@ product: emulebb-rust
 phase: Phase 0
 github_issue: https://github.com/emulebb/emulebb-rust/issues/327
 title: Give genuine documentation changes a trusted short CI path
-status: IN_PROGRESS
+status: DONE
 priority: Major
 category: ci
 labels: [rust, audit]
@@ -18,6 +18,58 @@ source: Operator-approved change-aware hosted CI and parent integration batching
 
 # RUST-CI-050 - Give genuine documentation changes a trusted short CI path
 
+## Closure And Evidence
+
+[PR #329](https://github.com/emulebb/emulebb-rust/pull/329) integrated the
+classifier and its consumers. The selected local tip
+`b73e16e7497766b6ad5f75a19b28b03aa18d9d79` passed full local qualification in
+`reports/local-check/emulebb-rust/20261113T024809Z-2fadee68/results.json`.
+Its 30 checks across four hosted workflows also passed; the retained receipt is
+`reports/ci-scope/qualification-b73e16e7/hosted-acceptance.json`.
+The parent verified that merged actual-main
+`6429b952eac6f19ee9bf084d3a84d5649dfba0c2` has the identical tree. Actual-main
+[CI](https://github.com/emulebb/emulebb-rust/actions/runs/43369209303),
+[CodeQL](https://github.com/emulebb/emulebb-rust/actions/runs/43369209301) and
+[optional-platform checks](https://github.com/emulebb/emulebb-rust/actions/runs/43369209289)
+passed with full coverage. This first deployment selected full because its
+trusted base lacked the helper; it did not use the new head to exempt itself.
+
+The subsequent genuine README-only [PR #330](https://github.com/emulebb/emulebb-rust/pull/330)
+passed at head `f22daf58374126a58608cfc87bf6189638300ef4`, with actual tested
+merge `b936accd3cda103915ab59d420e04e43695eafd5` and base `6429b952`.
+Its trusted-base classifier blob was
+`4eb5667d9ef0d772efa68251d1a06cbccd25bd84`, SHA-256
+`bebc6064f0ab840134831a0f501ff191e532d12fe7332452eed3ce0b94dc287e`.
+[CI](https://github.com/emulebb/emulebb-rust/actions/runs/43372468032),
+[CodeQL](https://github.com/emulebb/emulebb-rust/actions/runs/43372467997) and
+[optional-platform checks](https://github.com/emulebb/emulebb-rust/actions/runs/43372467893)
+retained 13 successful jobs and exactly eight deliberate heavy skips, with all
+three aggregates green. The accepted receipt is
+`reports/ci-change-scope/pr330-f22daf58/acceptance.json`. The three source
+workflows completed over a measured 146-second interval; the actual lightweight
+docs step took 10 seconds. This is one observation, not a performance promise.
+
+PR #330 merged at `2026-11-13T06:51:33Z`; actual main became
+`bc0f319d1841e94e7a2b0f0d5428d318065b679c`, with only the regular root README
+changed from `6429b952`. Its complete push range selected `docs` through the
+same immutable classifier blob and hash above.
+[CI](https://github.com/emulebb/emulebb-rust/actions/runs/43381619962),
+[CodeQL](https://github.com/emulebb/emulebb-rust/actions/runs/43381619991) and
+[optional-platform checks](https://github.com/emulebb/emulebb-rust/actions/runs/43381619961)
+passed with 12 successful jobs and exactly eight deliberate heavy skips.
+The accepted push receipt is
+`reports/ci-change-scope/main-bc0f319d/acceptance.json`: 91 seconds across the
+three workflows, including an 11-second actual lightweight docs step.
+Both the real PR and actual merged-main push therefore prove the path; source
+fixtures or an implementation merge alone did not close it.
+
+The parent also accepted the complete public-byte and cryptographic inventory
+of [nightly 43375379055](https://github.com/emulebb/emulebb-rust/actions/runs/43375379055),
+retained in `reports/nightly-publication-review/43375379055/final-acceptance.json`.
+Published binaries remain from `6429b952`, not the later README-only `bc0f319d`.
+Issue #327 is closed. This change does not weaken the full nightly or local
+pre-push gates.
+
 ## Outcome And Ownership
 
 Avoid expensive Rust platform fanout only for proven, narrowly eligible prose
@@ -27,7 +79,7 @@ qualification. Required aggregates always report and cannot turn an unknown
 or accidental skip into success.
 
 The delivered [#323 preflight](https://github.com/emulebb/emulebb-tooling/blob/main/docs/products/emulebb-rust/history/items/RUST-CI-048.md)
-remains in full primary validation. [#258](RUST-CI-032.md) separately owns
+remains in full primary validation. [#258](../../active/items/RUST-CI-032.md) separately owns
 developer-selective checks. This item changes neither pre-push coverage nor
 the full nightly/publication inventory, and creates no scheduler or test queue.
 
@@ -100,20 +152,20 @@ Tooling Markdown, exclude the packaged Rust `RELEASE-SCOPE.md` and legacy
 
 ## Acceptance And Current Evidence
 
-- [x] A source contribution is clean/pushed at Rust
+- [x] The original source contribution was clean/pushed at Rust
   `12c0db5dde7c6a61a040e5ff56755d5756cdee68`; 134 scoped tests, real-Git/actual
-  Bash fixtures, pinned actionlint and normal hooks passed. This is a worker
-  checkpoint, not merged or hosted delivery.
-- [ ] Review and qualify the parent's exact integrated tip through applicable
+  Bash fixtures, pinned actionlint and normal hooks passed. That historical
+  worker checkpoint is separate from the integrated/main delivery above.
+- [x] Review and qualify the parent's exact integrated tip through applicable
   full local and hosted checks; first deployment must select full because the
   trusted base lacks the helper.
-- [ ] Prove a subsequent genuine README-only change uses the trusted helper,
+- [x] Prove a subsequent genuine README-only change uses the trusted helper,
   retains all required aggregate contexts and accepts only deliberate heavy
   skips after real lightweight validation.
-- [ ] Retain regression coverage for event/base/head/merge identity, complete
+- [x] Retain regression coverage for event/base/head/merge identity, complete
   multi-commit ranges, strict TOML types, modes/renames/binary changes, helper
   tampering/failure, and aggregate failure/skip rejection.
-- [ ] Record actual hosted timing and source-bound receipts. No fixed speed
+- [x] Record actual hosted timing and source-bound receipts. No fixed speed
   guarantee follows from source inspection or local fixture success.
 
 The parent integrates authored contributions linearly into one coherent batch
@@ -135,5 +187,6 @@ the contaminated child failed and the isolated child succeeded. This proves
 that process-boundary repair, not browser, network or product-runtime behavior.
 The separate complete-receipt repair and normal hooks are included in the
 clean/pushed Rust checkpoint
-`288c571c9c391726b589eae42daee021d8de58b6`. Qualification of the final combined
-source through full local and hosted gates remains pending.
+`288c571c9c391726b589eae42daee021d8de58b6`. The final combined-source local and
+hosted qualification is recorded above; the later actual merged-main README
+proof is separately retained and accepted there.

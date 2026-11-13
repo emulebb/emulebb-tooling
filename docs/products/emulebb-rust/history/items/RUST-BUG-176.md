@@ -5,7 +5,7 @@ product: emulebb-rust
 phase: Phase 0
 github_issue: https://github.com/emulebb/emulebb-rust/issues/278
 title: Bound URL-import responses and define destination policy
-status: IN_PROGRESS
+status: DONE
 priority: Major
 category: bug
 labels: [rust, audit]
@@ -21,8 +21,8 @@ source: Operator-authorized audit reconciliation and Windows/Linux Beta 3 priori
 ## Summary
 
 Bound discovery downloads before collecting complete bodies or changing imported
-state. The confirmed defect is resource handling: the core URL-import fetcher
-uses `response.bytes()` without a byte ceiling. This outcome covers memory,
+state. The original defect was resource handling: the core URL-import fetcher
+used `response.bytes()` without a byte ceiling. This outcome covers memory,
 elapsed time, decoding behavior, redirect count, and validation of each URL's
 scheme before contact.
 
@@ -30,20 +30,38 @@ Use one small shared discovery-fetch owner for authenticated `server.met` and
 `nodes.dat` imports and first-run trusted bootstrap. Reuse the existing format
 ceilings: 4 MiB for `server.met` and 2 MiB for `nodes.dat`.
 
+## Closure And Evidence
+
+[PR #329](https://github.com/emulebb/emulebb-rust/pull/329) integrated the
+bounded shared fetcher and its consumers. Its exact qualified local tip
+`b73e16e7497766b6ad5f75a19b28b03aa18d9d79` has the same tree as merged Rust
+`6429b952eac6f19ee9bf084d3a84d5649dfba0c2`. Full local Windows/Linux,
+REST/OpenAPI and both Android ABI checks passed in
+`reports/local-check/emulebb-rust/20261113T024809Z-2fadee68/results.json`.
+Actual-main [CI](https://github.com/emulebb/emulebb-rust/actions/runs/43369209303),
+[CodeQL](https://github.com/emulebb/emulebb-rust/actions/runs/43369209301) and
+[optional-platform checks](https://github.com/emulebb/emulebb-rust/actions/runs/43369209289)
+passed. These source identities remain distinct even though their trees match.
+
+The parent accepted the [published nightly](https://github.com/emulebb/emulebb-rust/releases/tag/rust-v0.1.0-beta.2.nightly.20261113.g6429b952)
+from source `6429b952`, produced by
+[run 43375379055](https://github.com/emulebb/emulebb-rust/actions/runs/43375379055).
+The retained public-byte and cryptographic receipt is
+`reports/nightly-publication-review/43375379055/final-acceptance.json`.
+Issue #278 is closed.
+The implementation preserves the explicit operator destination contract below;
+it does not establish an SSRF or DNS-rebinding shield.
+
 ## Release Placement
 
-Major; assigned to the Windows/Linux Beta 3 readiness backlog. The parent
-allocated the bounded-discovery implementation in parallel with portable
-packaging, with TLS #328 as a recorded unmerged dependency. Admit this extra
-slice to that integration batch only if its review and applicable proof are
-ready before the final source freeze; otherwise retain its pushed checkpoint
-for the next batch. It must not hold the portable nightly. Beta 3 promotion,
-APK/signing and long soak remain held; no workflow dispatch or publication is
-authorized by this item.
+Major; the Windows/Linux Beta 3 readiness slice was integrated with the portable
+packaging and TLS repair in the same reviewed batch. Beta 3 promotion,
+APK/signing and long soak remain held; this record does not authorize a new
+workflow dispatch or publication.
 
 Delivery lane: control-plane.
 
-## Current Findings
+## Original Findings
 
 Revalidated by static inspection of Rust TLS checkpoint
 `56f765d0d81fffa2ac191de7587c40edcc516f66`, preserving the original finding at
@@ -91,28 +109,28 @@ operator-compatibility costs made explicit.
 
 ## Acceptance Criteria
 
-- [ ] Both operator import paths and trusted bootstrap reuse a bounded
+- [x] Both operator import paths and trusted bootstrap reuse a bounded
       discovery-fetch implementation with format-specific 4 MiB / 2 MiB caps.
-- [ ] Actual received bytes are counted before extending the accumulated body,
+- [x] Actual received bytes are counted before extending the accumulated body,
       independently of missing or misleading Content-Length. Do not allocate a
       full response or reserve from an untrusted declared length.
-- [ ] One finite elapsed-time budget covers the whole fetch, including redirects
+- [x] One finite elapsed-time budget covers the whole fetch, including redirects
       and body reads; retain 30 seconds for operator import and 10 seconds for
       trusted bootstrap unless evidence justifies a documented adjustment.
-- [ ] Every redirect target passes the applicable scheme check before contact;
+- [x] Every redirect target passes the applicable scheme check before contact;
       chains and loops cannot exceed three hops. Trusted bootstrap never sends
       a request to an HTTP intermediate hop.
-- [ ] Decoding cannot bypass the byte ceiling. Preserve the currently supported
+- [x] Decoding cannot bypass the byte ceiling. Preserve the currently supported
       identity/raw-body path without adding decompression. If supported
       decoding is retained, bound decoded output independently and prove it.
-- [ ] Explicit authenticated LAN/loopback imports, allowed cross-host redirects,
+- [x] Explicit authenticated LAN/loopback imports, allowed cross-host redirects,
       and existing proxy behavior remain supported without environment changes.
-- [ ] Oversized, timed-out, malformed, unsupported-scheme, and excess-redirect
+- [x] Oversized, timed-out, malformed, unsupported-scheme, and excess-redirect
       inputs fail visibly before their rejected document changes existing
       imported state. Keep errors bounded and do not retain secret URL parts.
-- [ ] Deterministic local regressions prove the resource, scheme, compatibility,
+- [x] Deterministic local regressions prove the resource, scheme, compatibility,
       and state-preservation behavior on Windows/Linux.
-- [ ] Required scoped checks pass at the selected source revisions. No claim of
+- [x] Required scoped checks pass at the selected source revisions. No claim of
       full SSRF/rebinding protection is made.
 
 ## Implementation Boundary
@@ -159,9 +177,9 @@ not required for this bounded defect.
 - `emulebb-rust-prompt_audit_findings_product_direction_amule_future_parity.md`
   section security-url-import.
 
-## Remaining Evidence And Coordination
+## Implementation And Validation
 
-The current implementation branch introduces `discovery_fetch.rs` as the
+The integrated implementation uses `discovery_fetch.rs` as the
 shared policy/body owner, consumed by the original import and bootstrap
 builders. It preserves the TLS trust owner, proxies, user agents and format
 limits. Request errors discard their URLs and import failure logs no longer
@@ -175,13 +193,15 @@ slow headers/body/redirect deadlines, three-hop accounting, relative/cross-host
 and proxy compatibility, HTTPS downgrade rejection before an HTTP sentinel is
 contacted, sanitized errors and rejected-document state preservation. Shared
 HTTP/TLS fixtures are test-only; all six existing TLS test names remain intact.
-These new Rust tests still require parent-serialized execution and exact-source
-qualification; their presence is not a runtime pass or completed acceptance.
+The scoped Core package proof passed 533 tests at worker `19508d8c`; the final
+combined-source full gate above then executed the selected Windows/Linux tests.
+The unsupported-redirect regression also proves unresolved 3xx responses are
+rejected explicitly when reqwest does not invoke its redirect callback.
 
 The finite byte limits are inherited from trusted bootstrap; representative
-operator imports have not been measured here. No runtime exploit or compatibility
-test was run. Confirm the actual pinned reqwest decoding and timeout semantics
-during implementation. Broader destination restrictions remain a separate
-design question rather than an unproven release-security claim.
+public operator imports have not been measured here. Synthetic compatibility,
+timeout and state-preservation fixtures ran under exact-source qualification;
+there was no public exploit campaign. Broader destination restrictions remain
+a separate design question rather than an unproven release-security claim.
 
 Parent reserves shared files and the managed workstream before implementation.

@@ -62,7 +62,7 @@ merge and publication policies.
    negative tests that prove retired shapes fail. Target acceptance does not
    claim the current runtime already implements it.
    The accepted ready-package bootstrap and first-fresh-profile key is
-   `change_me_123change_me_123change_me_123` (36 ASCII characters); retain the
+   `change_me_123change_me_123change_me_123` (39 ASCII characters); retain the
    32-byte minimum and normal authentication. Keep its listener on loopback
    and explain that this shared starter key must change before external API
    exposure. Packages share the canonical TOML; preserve existing user files

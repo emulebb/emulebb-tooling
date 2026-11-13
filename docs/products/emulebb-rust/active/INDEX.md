@@ -11,12 +11,13 @@ The canonical [Release Scope](../RELEASE-SCOPE.md#current-operator-hold-and-work
 owns holds, delivery order and optional expansion boundaries. Balanced
 reliability leads; Scoop is the first accepted new distribution lane; Linux
 services are review-only. The [PM policy](../../../reference/PM-COORDINATION-POLICY.md)
-owns the standing parallel-branch and integration-batch routine. The previous
-consolidation completed with verified public
-[Nightly 43242135692](https://github.com/emulebb/emulebb-rust/actions/runs/43242135692).
-The approved change-aware CI work under
-[#327](https://github.com/emulebb/emulebb-rust/issues/327) leads the next batch;
-reconcile delivered evidence before allocating another implementation.
+owns the standing parallel-branch and integration-batch routine. The client-fix
+batch in [PR #329](https://github.com/emulebb/emulebb-rust/pull/329) is published
+as the accepted [nightly from source `6429b952`](https://github.com/emulebb/emulebb-rust/releases/tag/rust-v0.1.0-beta.2.nightly.20261113.g6429b952).
+The later README-only [PR #330](https://github.com/emulebb/emulebb-rust/pull/330)
+proved the trusted short path on its real PR and actual main push `bc0f319d`;
+the published binary source remains `6429b952`.
+The [closed-items index](../history/items/INDEX.md) owns their durable records.
 Beta 3 promotion and APK/signing remain held; separately authorized nightly
 qualification does not lift them. GitHub issues and Project #3 own status,
 priority and phase placement.
@@ -79,7 +80,6 @@ inventory and required checks remain enforced; this intake changes neither.
 | [RUST-BUG-161](items/RUST-BUG-161.md) | Bug | Respect filesystem case semantics when consolidating shared roots |
 | [RUST-BUG-165](items/RUST-BUG-165.md) | Bug | Require trusted AICH and MD4 agreement during download verification |
 | [RUST-BUG-166](items/RUST-BUG-166.md) | Bug | Admit AICH recovery answers only for matching outstanding requests |
-| [RUST-BUG-176](items/RUST-BUG-176.md) | Bug | Bound URL-import responses and define destination policy |
 | [RUST-BUG-178](items/RUST-BUG-178.md) | Bug | Warn before creating private diagnostic bundles |
 | [RUST-BUG-181](items/RUST-BUG-181.md) | Bug | Bound RIFF media parsing and retain malformed-input regressions |
 | [RUST-CI-006](items/RUST-CI-006.md) | Evidence | Refresh current-head stock parity evidence and reconcile docs |
@@ -89,8 +89,8 @@ inventory and required checks remain enforced; this intake changes neither.
 
 ## Parallel Client Work — Non-gating for Beta 3
 
-The Major change-aware hosted CI outcome leads the current delivery-feedback
-batch. Developer dependency-aware checks remain a distinct Major owner with
+Trusted change-aware hosted CI is delivered. Developer dependency-aware checks
+remain a distinct Major owner with
 their existing post-beta-polish milestone; neither priority creates a new
 Beta3 gate. Coordinated public
 presence (RUST-CI-046) is also Major, with current-facing README and user/developer
@@ -99,7 +99,6 @@ ranking and GitHub placement.
 
 | ID | Class | Title |
 |---|---|---|
-| [RUST-CI-050](items/RUST-CI-050.md) | Evidence | Give genuine documentation changes a trusted short CI path |
 | [RUST-CI-032](items/RUST-CI-032.md) | Evidence | Add dependency-aware early Rust checks without weakening pre-push coverage |
 | [RUST-CI-046](items/RUST-CI-046.md) | Evidence | Complete coordinated public presence and release download guidance |
 | [RUST-CI-049](items/RUST-CI-049.md) | Evidence | Review the Linux daemon service and ownership contract |
@@ -108,7 +107,6 @@ ranking and GitHub placement.
 | [RUST-BUG-160](items/RUST-BUG-160.md) | Bug | Reuse stock hashes across unambiguous Unicode filename normalization |
 | [RUST-BUG-162](items/RUST-BUG-162.md) | Bug | Bound profile archive fields before allocating import buffers |
 | [RUST-BUG-167](items/RUST-BUG-167.md) | Bug | Release and retry failed AICH recovery requests across eligible peers |
-| [RUST-BUG-168](items/RUST-BUG-168.md) | Bug | Enforce the stock incoming secure-ident public-key size limit |
 | [RUST-BUG-169](items/RUST-BUG-169.md) | Bug | Honor negotiated secure-ident V2 support and LowID challenge addressing |
 | [RUST-BUG-170](items/RUST-BUG-170.md) | Bug | Restore the compatible-client branch of old-client upload scoring |
 | [RUST-BUG-171](items/RUST-BUG-171.md) | Bug | Reject degenerate server Diffie-Hellman public values |
@@ -137,7 +135,6 @@ ranking and GitHub placement.
 | [RUST-FEAT-040](items/RUST-FEAT-040.md) | Feature | Carry ED2K and Kad search metadata end to end |
 | [RUST-FEAT-048](items/RUST-FEAT-048.md) | Feature | Use sparse part files without weakening capacity reservations |
 | [RUST-FEAT-056](items/RUST-FEAT-056.md) | Feature | Deliver supported Android and Fire OS APKs with device harnesses |
-| [RUST-BUG-186](items/RUST-BUG-186.md) | Bug | Avoid JVM-dependent TLS verification in Android CLI HTTPS clients |
 | [RUST-FEAT-057](items/RUST-FEAT-057.md) | Feature | Publish portable Linux musl builds for x64 and ARM64 |
 | [RUST-FEAT-058](items/RUST-FEAT-058.md) | Feature | Certify NAS deployments across supported appliance systems |
 | [RUST-FEAT-059](items/RUST-FEAT-059.md) | Feature | Support FreeBSD on x64 and ARM64 |

@@ -77,23 +77,33 @@ device acceptance criteria below remain open.
 - Experimental native daemon archives for both ABIs were published by
   [nightly run 43242135692](https://github.com/emulebb/emulebb-rust/actions/runs/43242135692).
   Publication and compile/ELF proof do not establish Android runtime support.
-- A reported Termux launch on a Samsung Galaxy S24+ reached HTTPS discovery and
-  panicked in the JVM-dependent platform verifier. The linked
-  [RUST-BUG-186 / #328](RUST-BUG-186.md) owns the native CLI TLS repair and
-  runtime regression evidence; authenticated REST startup remains unproven.
+- The reported Samsung Galaxy S24+ Termux launch exposed a JVM-dependent TLS
+  panic. The [bounded native CLI repair](https://github.com/emulebb/emulebb-tooling/blob/main/docs/products/emulebb-rust/history/items/RUST-BUG-186.md)
+  now has accepted [actual-source emulator evidence](https://github.com/emulebb/emulebb-build/actions/runs/43369243640):
+  API 37/x86_64/16 KiB, source-built release-mode daemon on the development
+  channel, six TLS cases, fresh EXE-directory profile, authenticated REST and
+  graceful shutdown. This does not execute a published Android archive.
+  The physical S24+ retest and separate Android unavailable/degraded-network
+  execution are explicitly unproved and remain with this open owner under the
+  operator's choice to use GitHub emulators for now. Six TLS cases are not a
+  separate unavailable-network run.
 - The supported platform contract includes Windows, Linux, and macOS only.
 - The workstream now has checksum-pinned SDK/NDK, Java, Gradle, ADB and Android
   CLI inputs, a non-root offline Docker toolchain probe, and Android Rust
   validation shared by local WSL/Docker and required GitHub CI.
 - `arm64-v8a` and `x86_64` pass canonical Clippy/diagnostics checks, workspace
   test linking, release executable linking, and ELF CPU/Bionic/16KB audits.
-  These are compile checks; target unit tests have not been executed.
-- APK production, JNI integration, application lifecycle, signing, emulator
-  qualification and physical-device qualification remain unfinished.
+  These archive-specific receipts are compile checks; the separate x86_64
+  emulator proof above executed only the six selected TLS cases.
+- APK production, JNI integration, application lifecycle, signing, full
+  application emulator qualification and physical-device qualification remain
+  unfinished; the bounded native CLI startup proof above does not complete them.
 - The daemon exposes its behavior through a reusable library, loopback REST,
   and the browser WebUI, but its lifecycle is currently process/signal based.
-- Android storage, background execution, route selection, socket binding,
-  multicast, NAT, and VPN behavior have not been runtime-proven.
+- The selected API 37/x86_64 guest proved the conservative route hint and
+  authenticated loopback REST startup. Representative-device routing, P2P
+  socket/VPN confinement, storage, background execution, multicast and NAT
+  behavior remain unqualified.
 
 ## Intended Shape
 
@@ -271,7 +281,7 @@ or required evidence for this owner; inspection does not replace runtime proof.
 - `emulebb-rust-prompt_audit_findings_secure-ident.md` section 5 / 7 (existing): Weak stock RSA/SHA1 is an accepted interoperability boundary. Key pinning has a closed owner; native-target build/runtime and cross-client proof have existing owners.
 - `emulebb-rust-prompt_audit_findings_reachability.md` section 2.4 / 4.2-3 (existing): ABI verification and native-target compile/runtime proof belong to existing FFI and platform items. Android is parallel and non-gating for Beta 3; do not replace proven C libraries with a narrower pure-Rust fallback to avoid qualification.
 - `emulebb-rust-prompt_audit_findings_multi-platform.md` section portable-delivery (existing): The unsupported-platform arm still rejects completed delivery. Android/FreeBSD/other Unix issues already own platform viability. Do not adopt the audit's check-then-rename suggestion: it can race and clobber data.
-- `emulebb-rust-prompt_audit_findings_multi-platform.md` section android-route-inventory (existing): Android still receives an empty default-route interface inventory. Its existing support item must define supported route discovery or an honest explicit-bind-only contract; Android APK/signing remains on hold.
+- `emulebb-rust-prompt_audit_findings_multi-platform.md` section android-route-inventory (existing): The original intake found an empty Android default-route inventory. PR #329 repaired it with a conservative Android-only kernel route hint, covered by the narrow guest startup proof above. Representative-device/network acceptance stays open here; Android APK/signing remains on hold.
 - `emulebb-rust-prompt_audit_findings_multi-platform.md` section extended-lanes (existing): The audit's no-musl/no-Android-CI claim is stale: both musl architectures and Android compile/ELF lanes now exist. Keep the owning feature issues open for their remaining runtime/package evidence; cross-compilation is not complete platform certification.
 
 ### Scoped Follow-up Acceptance

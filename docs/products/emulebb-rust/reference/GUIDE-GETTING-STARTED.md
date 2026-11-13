@@ -17,9 +17,10 @@ On Windows, run `emulebb-rust.exe`; for an extracted Linux native archive, run
 launch the copied app. Container and Android users must follow their separate
 [package notes](GUIDE-DOWNLOADS-PLATFORMS.md).
 
-The ready-package bootstrap contract is being implemented under
-[#297](https://github.com/emulebb/emulebb-rust/issues/297); use the README shipped
-with your selected package for its exact qualified behavior.
+Current nightly packages provide the ready bootstrap described below. Use the
+README shipped with your selected package for its exact qualified behavior. The
+broader [settings review](https://github.com/emulebb/emulebb-rust/issues/297) remains
+open.
 
 Without `--profile`, the daemon uses the **directory containing its executable**
 on every platform, independently of the shell working directory. A missing
@@ -69,7 +70,7 @@ api_key = "change_me_123change_me_123change_me_123"
 Replace the shared starter key with a private value before external exposure.
 Startup rejects
 blank, documented placeholder, whitespace-padded, non-printable and shorter-than-32
-character keys. The ready starter key has 36 ASCII characters. Unix profile and
+character keys. The ready starter key has 39 ASCII characters. Unix profile and
 bootstrap permissions are private (`0700`/`0600`); permissive existing bootstrap
 files are rejected with a remediation message. Never commit this file.
 
