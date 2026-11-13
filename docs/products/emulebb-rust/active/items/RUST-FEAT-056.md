@@ -186,6 +186,60 @@ device acceptance criteria below remain open.
   debug-key fallback. Initial APKs remain experimental pending device proof.
 - No 32-bit Android ABI is required.
 
+## Android 14-17 Permission Contract
+
+The operator requested an explicit permission review for every supported
+version. The APK targets API 37 and runs on APIs 34, 35, 36 and 37. This source
+review is not emulator or physical-device execution evidence.
+
+- All four versions declare normal `INTERNET`, `ACCESS_NETWORK_STATE`,
+  `FOREGROUND_SERVICE`, `FOREGROUND_SERVICE_SPECIAL_USE`, `WAKE_LOCK` and
+  `RECEIVE_BOOT_COMPLETED` permissions for the actual socket, service and boot APIs.
+- All four request `POST_NOTIFICATIONS`. Denial does not prevent a foreground
+  service, but the shell must show reduced notification visibility. See
+  [Android notification permission](https://developer.android.com/develop/ui/views/notifications/notification-permission).
+- All four require the user-granted `MANAGE_EXTERNAL_STORAGE` special access
+  before starting native shared-path operations. Denial blocks Start and
+  revocation stops active operation without deleting data. See
+  [all-files access](https://developer.android.com/training/data-storage/manage-all-files).
+- All four declare `REQUEST_IGNORE_BATTERY_OPTIMIZATIONS` and guide the user
+  through the separate exemption setting. Exemption is recommended, not a
+  prerequisite to starting. Show `ActivityManager.isBackgroundRestricted()`
+  independently: unrestricted battery use and Doze exemption are different
+  controls. See [background optimization](https://developer.android.com/topic/performance/background-optimization)
+  and [Doze](https://developer.android.com/training/monitoring-device-state/doze-standby).
+- Runtime API 37 additionally requires `ACCESS_LOCAL_NETWORK` before Start,
+  including native TCP/UDP and SSDP operations. Monitor revocation. APIs 34-36
+  must not request that newer runtime permission. See
+  [local network permission](https://developer.android.com/privacy-and-security/local-network-permission).
+- No legacy storage/media, location, Bluetooth, nearby-Wi-Fi, overlay, exact
+  alarm, package enumeration or APK installation permission is needed by the
+  current implementation. Active MiniUPnP M-SEARCH receives unicast replies;
+  the current PCP/NAT-PMP paths use directed gateway traffic. There is no
+  passive multicast group subscription requiring a Wi-Fi multicast lock.
+- Android 15 data-sync timeouts do not classify the selected special-use
+  service. Android 16 job quotas apply to scheduling APIs, not the hosted Tokio
+  runtime, which does not use those APIs. See
+  [foreground service changes](https://developer.android.com/develop/background-work/services/fgs/changes).
+- Task Manager Stop kills the application without lifecycle callbacks. Own
+  daemon process exit history must prevent treating explicit user termination
+  as an ordinary recoverable crash; stale exits preceding a later explicit
+  Start must not disable that new session. See
+  [user-initiated service stopping](https://developer.android.com/develop/background-work/services/fgs/handle-user-stopping).
+
+Qualification covers each API 34-37 separately: notification denial/grant/
+revocation; all-files denial/grant/running revocation; Doze with and without
+exemption and actual idle-state assertions; boot resume on/off; explicit Stop,
+force-stop and Task Manager Stop. API 37 adds local-network denial/grant/
+revocation; earlier versions verify absence of that prompt. Restricted battery
+mode must never be presented as qualified continuous or boot operation.
+
+Release signing material is retained under
+`EMULEBB_WORKSPACE_OUTPUT_ROOT/tools/signing/android`; workspace cleanup excludes
+this operator-owned directory. Preserve its encrypted keystore, private
+credentials and public identity together in an operator-controlled backup.
+GitHub secrets are not a substitute for retaining the update signing identity.
+
 ## Compile Foundation Evidence
 
 The 2026-11-09 compile foundation is now part of the merged and published
