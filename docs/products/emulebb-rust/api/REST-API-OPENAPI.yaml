@@ -5180,11 +5180,13 @@ components:
     RuntimeDiagnostics:
       type: object
       additionalProperties: false
-      required: [processId, knownFileCount, sharedFileCount, sharedHashingCount, sharedDirectoryReloadProgress, ed2kPublish, kadPublish, transferEvents, downloadFileCount, activeUploads, waitingUploads, geolocation]
+      required: [processId, processResources, knownFileCount, sharedFileCount, sharedHashingCount, sharedDirectoryReloadProgress, ed2kPublish, kadPublish, transferEvents, downloadFileCount, activeUploads, waitingUploads, geolocation]
       properties:
         processId:
           type: integer
           minimum: 0
+        processResources:
+          $ref: "#/components/schemas/ProcessResources"
         knownFileCount:
           type: integer
           minimum: 0
@@ -5219,6 +5221,35 @@ components:
           oneOf:
             - $ref: "#/components/schemas/GeolocationRuntimeDiagnostics"
             - type: "null"
+    ProcessResources:
+      type: object
+      additionalProperties: false
+      description: >-
+        Current daemon process metrics, sampled on demand and shared across
+        diagnostics, status, snapshot and diagnostic bundles for at least one
+        second. OS reads run outside the async executor. Unavailable counters
+        are null, never fabricated zeroes. No host-wide process scan is used.
+      required: [sampledAtMs, residentMemoryBytes, cpuUsagePercent, cpuSampleIntervalMs]
+      properties:
+        sampledAtMs:
+          type: [integer, "null"]
+          description: Unix time in milliseconds when the OS counters were sampled.
+        residentMemoryBytes:
+          type: [integer, "null"]
+          minimum: 0
+          description: Current resident memory (RSS or Windows working set), in bytes; not peak or virtual memory.
+        cpuUsagePercent:
+          type: [number, "null"]
+          minimum: 0
+          description: >-
+            Process user plus kernel CPU time divided by monotonic elapsed time.
+            100 percent means one fully occupied core; values can exceed 100 on
+            multicore systems. Null until two successful CPU samples at least
+            one second apart, or if a counter is unavailable or regresses.
+        cpuSampleIntervalMs:
+          type: [integer, "null"]
+          minimum: 1000
+          description: Actual CPU averaging interval, or null when CPU usage is unavailable.
     DiagnosticWriterHealth:
       type: object
       additionalProperties: false
