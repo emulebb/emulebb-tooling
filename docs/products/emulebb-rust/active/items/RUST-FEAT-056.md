@@ -57,8 +57,8 @@ identity through the pinned non-root NDK recipe. Publish bounded developer
 archives, manifests, checksums, SPDX and compile/ELF evidence through the
 GitHub-owned nightly pipeline. Do not relabel prior development binaries or
 present compile checks as target test execution. Keep runtime/device execution
-explicitly unqualified, including known completed-file delivery and default-route
-inventory gaps. The existing Windows/Linux/macOS, musl and OCI proof remains
+explicitly unqualified, including completed-file delivery and default-route
+inventory on representative devices. The existing Windows/Linux/macOS, musl and OCI proof remains
 mandatory; the Beta3 release and long-soak holds remain in effect.
 
 The parent coordinates one workstream with separate Build and Rust checkout
@@ -74,6 +74,27 @@ device acceptance criteria below remain open.
 
 ## Current State
 
+- The Android completed-file move accidentally selected the unsupported-target
+  stub because Android has a distinct Rust `target_os` from Linux. The
+  [source repair](https://github.com/emulebb/emulebb-rust/commit/5774d9ea)
+  uses the existing rustix atomic no-replace rename on both Linux and Android,
+  preserving collision handling, native file identity and durability barriers.
+  There is no check-then-rename or overwrite fallback.
+- [Process resource diagnostics](https://github.com/emulebb/emulebb-rust/commit/f5b18975)
+  expose daemon resident memory and interval CPU usage through diagnostics,
+  status, snapshot and diagnostic bundles, with readable WebUI cards. Native
+  counters avoid Android's restricted global process inventory, honor runtime
+  page sizes including 16 KiB, and run outside the async executor. CPU 100%
+  means one occupied core; unavailable counters are null and displayed as n/a.
+  The [OpenAPI contract](../../api/REST-API-OPENAPI.yaml) owns the field semantics.
+- The 2026-11-13 source checkpoint passed 1,307 Windows transfer tests, 150 REST
+  tests, 35 WebUI unit tests, 17 browser tests, WebUI type/build checks and both
+  Android ABI Clippy, diagnostics, workspace test-link, release-link and ELF
+  checks. Android evidence is retained under
+  `EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/rust-android/dd5439c6d32841fe9685328ecacc1ed1/validation.json`
+  and records `runtimeExecution: not-run`. These local checks do not execute
+  file delivery or resource sampling on Android, qualify a device, or verify a
+  newly published archive. Device/emulator storage and runtime proof remain open.
 - Experimental native daemon archives for both ABIs were published by
   [nightly run 43242135692](https://github.com/emulebb/emulebb-rust/actions/runs/43242135692).
   Publication and compile/ELF proof do not establish Android runtime support.
