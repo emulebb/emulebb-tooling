@@ -25,9 +25,14 @@ Production implementation of a later phase must not begin while the preceding
 gate is open. Forward design and deterministic fixtures may be prepared only
 when they do not add dormant production paths or distract from the active gate.
 
-## Current Operator Hold And Work Priority (2026-11-12)
+## Current Operator Hold And Work Priority (2026-11-13)
 
-**Beta 3 promotion and APK/signing remain on hold.** The client-fix and delivery
+**Beta 3 promotion remains on hold.** The operator separately authorized the
+lean Android APK, JNI, continuous foreground service and signing work under
+[RUST-FEAT-056](active/items/RUST-FEAT-056.md), including additive APK publication
+through existing nightlies. Initial APKs remain experimental pending actual
+device qualification; Play Store publication is outside scope.
+The client-fix and delivery
 batch in [PR #329](https://github.com/emulebb/emulebb-rust/pull/329) is published
 as the accepted [nightly from source `6429b952`](https://github.com/emulebb/emulebb-rust/releases/tag/rust-v0.1.0-beta.2.nightly.20261113.g6429b952).
 Its complete public-byte, provenance and OCI inventory passed verification.

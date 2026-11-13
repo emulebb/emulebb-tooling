@@ -82,14 +82,18 @@ additional orchestration programs need a new operator decision. Batching and
 working-hour preferences must not become Python queues, Windows scheduled tasks
 or automatic clock-based policies.
 
-Beta 3 promotion and APK/signing remain on hold. The long soak follows accepted
+Beta 3 promotion remains on hold. On 2026-11-13 the operator separately
+authorized lean Android APK/JNI/service/signing implementation and additive
+nightly publication under [RUST-FEAT-056](../products/emulebb-rust/active/items/RUST-FEAT-056.md).
+This does not claim device qualification or authorize a Play Store release.
+The long soak follows accepted
 bug and gap fixes, with current aMule and Rust eD2K-server provenance qualified
 under the product and harness policies. Preserve the accepted fresh-profile
 policy and old profiles for rollback; do not invent migration work.
-Separately authorized CI-gated nightly publication does not lift those holds.
+Separately authorized CI-gated nightly publication does not lift the Beta 3 hold.
 APT/RPM/Homebrew remain candidates, AUR/Nix remain unactivated, and no channel
-hosting, signing, paid infrastructure or community publication is authorized by
-the intake. Ubuntu 24.04/Debian 13 x64/ARM64 remain qualification targets until
+hosting, unrelated signing, paid infrastructure or community publication is
+authorized by the intake. Ubuntu 24.04/Debian 13 x64/ARM64 remain qualification targets until
 their actual package dependencies and native results are recorded.
 
 For the approved integration-batching routine, the operator approved
