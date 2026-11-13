@@ -129,10 +129,16 @@ device acceptance criteria below remain open.
   both JNI ABI builds, ELF/export/dependency audits, certificate verification,
   16 KiB ZIP alignment, SDK/ABI inventory, SPDX and checksums. Its local receipt
   is below `EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/android-apk/e96170ea802a4712bf33b85179449f3d/`.
-  The exact APK was installed and admitted on a physical API 36 ARM64 device
-  with 4096-byte pages. Foreground lifecycle, transfer, resource sampling,
-  full API 34-37 qualification and GitHub publication remain separate proof;
-  installation and compile checks do not complete them.
+  The exact APK passed a physical API 36 ARM64 smoke with 4096-byte pages:
+  authenticated source-bound startup, bundled WebUI serving, real CPU/RSS
+  sampling, bounded foreground observation, normal UI Stop, listener closure
+  and cleared foreground-service state. The operator-approved Incoming/Shared
+  paths were applied through canonical settings with a real service restart,
+  preserving prior roots and moving or deleting no existing files. The receipt
+  is below `EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/android-apk-device/phone-config-20261113-1411/`.
+  This proof covers source `09bbc2d1`; later APK source still requires its own
+  qualification. Real transfer/delivery, full API 34-37 qualification, endurance
+  and GitHub publication remain open.
 - The daemon exposes its behavior through a reusable library, loopback REST,
   and the browser WebUI. Its `run_hosted` entrypoint accepts application-owned
   readiness and shutdown without installing process signal handlers.
