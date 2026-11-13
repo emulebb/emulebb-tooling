@@ -24,8 +24,8 @@ This is explicitly optional environment expansion with its existing phase;
 unfinished APK/device work does not independently hold the core Client gate.
 Every selected nightly Android compile/ELF check remains mandatory.
 
-- [ ] Keep experimental native daemon bundles distinct from APK/JNI/foreground-
-      service/signing implementation, which remains on hold.
+- [ ] Keep experimental native daemon bundles distinct from the separately
+      authorized APK/JNI/foreground-service/signing implementation.
 - [ ] Bind both ABI archives, manifests, tool inputs and ELF/compile proofs to
       the actual accepted nightly/source. Never relabel binaries or claim target
       execution from cross-compilation or linked-but-unexecuted tests.
@@ -48,8 +48,8 @@ second client implementation or a native recreation of the desktop UI.
 ## Authorized Experimental Nightly Slice
 
 The operator selected experimental native daemon bundles for `arm64-v8a` and
-`x86_64` as the Android nightly deliverable. APK/JNI/service/signing and supported
-device qualification remain later work; publishing developer archives does not
+`x86_64` as the initial Android nightly deliverable. The operator subsequently
+authorized APK/JNI/service/signing implementation on 2026-11-13; publishing developer archives does not
 close this APK feature or add a supported Android-platform claim.
 
 Build fresh ELFs with the actual nightly version/channel and immutable source
@@ -74,6 +74,9 @@ device acceptance criteria below remain open.
 
 ## Current State
 
+- The 2026-11-13 operator authorization lifts the APK/signing hold for this
+  workstream and selects the lean Android shell contract below. Implementation,
+  package qualification and publication remain separate acceptance steps.
 - The Android completed-file move accidentally selected the unsupported-target
   stub because Android has a distinct Rust `target_os` from Linux. The
   [source repair](https://github.com/emulebb/emulebb-rust/commit/5774d9ea)
@@ -120,7 +123,8 @@ device acceptance criteria below remain open.
   application emulator qualification and physical-device qualification remain
   unfinished; the bounded native CLI startup proof above does not complete them.
 - The daemon exposes its behavior through a reusable library, loopback REST,
-  and the browser WebUI, but its lifecycle is currently process/signal based.
+  and the browser WebUI. Its `run_hosted` entrypoint accepts application-owned
+  readiness and shutdown without installing process signal handlers.
 - The selected API 37/x86_64 guest proved the conservative route hint and
   authenticated loopback REST startup. Representative-device routing, P2P
   socket/VPN confinement, storage, background execution, multicast and NAT
@@ -128,16 +132,41 @@ device acceptance criteria below remain open.
 
 ## Intended Shape
 
+- Kotlin application sources live in `emulebb-rust/android/`; native lifecycle
+  integration lives in the same Rust repository. There is no separate app repo.
+- Minimum Android version is 14 (API 34), targeting the pinned current stable
+  SDK. Existing native CLI bundle compatibility and gates remain intact.
 - A minimal Kotlin application owns one foreground service and invokes the Rust
   daemon through a narrow JNI library boundary.
 - The service supplies app-owned profile, database, log, transfer, and WebUI
   paths and exposes the authenticated listener on loopback by default.
-- The packaged SPA remains the complete operations surface, opened in a WebView
-  or system browser without parallel Android transfer or settings state.
+- The packaged SPA remains the complete operations surface, opened in the
+  system browser. There is no WebView or parallel native transfer/settings UI.
+- The shell provides Start/Stop, actual lifecycle status, Open WebUI, REST
+  bootstrap settings and a visible API key with Copy and Regenerate controls.
+  TOML edits require a stopped service and use Rust's authoritative parser.
+  Generate a random first-run key; never pass it in browser URLs or logs.
 - A persistent notification exposes running state and a clean stop action.
-- App-private storage owns runtime metadata and incomplete transfers. Android
-  document flows import payloads into the managed shared library and export
-  completed files to a user-selected destination.
+- A dedicated foreground-service process owns the Rust runtime. Use
+  `specialUse` with an explicit continuous eD2K/Kad peer-hosting subtype;
+  starting, readiness, shutdown and failure remain observable independently
+  of the shell/browser lifecycle. Repeated Start cannot create duplicate runtimes.
+- Private app storage owns metadata, TOML, credentials and logs. App-specific
+  external storage owns incomplete payloads by default; completed delivery
+  defaults to an eMuleBB directory under shared Downloads. The user grants
+  all-files access, then uses ordinary filesystem paths through the WebUI.
+  Do not add document-provider adapters or import/export copy workflows.
+- Guide notification, all-files and battery-optimization permissions explicitly.
+  All-files access is required to start. Denied notification visibility or
+  battery exemption remains visible without preventing startup. Hold a partial
+  wake lock while continuous service operation is enabled and release it on
+  every stop/failure path. Permission revocation must preserve existing data.
+- An off-by-default boot-resume setting resumes a previously enabled service
+  after unlock. Explicit Stop, including REST shutdown, clears desired-running
+  state. Force-stop remains authoritative; recover ordinary system termination
+  with bounded backoff and expose persistent startup failures.
+- Android private preferences own only desired service intent and boot-resume
+  policy; TOML/SQLite remain the existing daemon configuration authorities.
 - One universal release APK contains `arm64-v8a` and `x86_64`. The same signed
   artifact receives emulator and physical-device qualification.
 - Fire OS support must not depend on Google Play Services.
@@ -147,9 +176,14 @@ device acceptance criteria below remain open.
 - The initial supported distribution is a signed APK published with GitHub
   release assets. Google Play, Amazon Appstore, and Android App Bundle delivery
   require separate decisions.
-- The application must not require unrestricted `MANAGE_EXTERNAL_STORAGE`.
-- Automatic launch at boot and recovery after Android force-stop are out of
-  scope; the operating system remains authoritative for those states.
+- The operator explicitly selected `MANAGE_EXTERNAL_STORAGE` for the lean
+  direct-path shell, superseding the original picker/import/export boundary.
+- Optional resume after unlock on reboot is authorized; recovery after Android
+  force-stop is not. The operating system remains authoritative.
+- Add the universal signed APK to existing nightly qualification/publication
+  without weakening existing gates. A dedicated long-lived APK signing key
+  comes from GitHub secrets; missing signing input fails publication without
+  debug-key fallback. Initial APKs remain experimental pending device proof.
 - No 32-bit Android ABI is required.
 
 ## Compile Foundation Evidence
@@ -247,8 +281,12 @@ satisfy those acceptance criteria.
       process termination leave SQLite and transfer state recoverable.
 - [ ] Backgrounding the UI does not stop an active transfer while the service
       remains authorized to run.
-- [ ] Document import and completed-file export preserve exact size and SHA-256,
-      and interruption, low-space, revoked-access, and collision paths recover.
+- [ ] Direct shared-storage delivery and sharing preserve exact size and SHA-256;
+      interruption, low-space, revoked-access, and collision paths recover.
+- [ ] Optional boot resume, explicit Stop, REST shutdown and force-stop preserve
+      the selected service intent and never create duplicate daemon ownership.
+- [ ] A physical ARM64 screen-off run exceeding 24 hours proves the continuous
+      service claim, including Doze and network transitions.
 - [ ] An emulator smoke proves install, REST/OpenAPI, WebUI assets, SQLite,
       local transfer, restart/resume, and shutdown.
 - [ ] An ARM64 physical-device smoke proves the same lifecycle against a local
@@ -275,7 +313,7 @@ satisfy those acceptance criteria.
 1. NDK compile-and-launch spike using an ADB-controlled standalone daemon.
 2. Deterministic emulator harness and two-peer local transfer.
 3. Foreground-service APK with JNI lifecycle and bundled WebUI.
-4. Managed storage import/export and interruption recovery.
+4. Shared-storage permissions, direct delivery and interruption recovery.
 5. Android and Fire OS physical-device evidence.
 6. Signed release integration and supported-platform policy update.
 
@@ -302,7 +340,7 @@ or required evidence for this owner; inspection does not replace runtime proof.
 - `emulebb-rust-prompt_audit_findings_secure-ident.md` section 5 / 7 (existing): Weak stock RSA/SHA1 is an accepted interoperability boundary. Key pinning has a closed owner; native-target build/runtime and cross-client proof have existing owners.
 - `emulebb-rust-prompt_audit_findings_reachability.md` section 2.4 / 4.2-3 (existing): ABI verification and native-target compile/runtime proof belong to existing FFI and platform items. Android is parallel and non-gating for Beta 3; do not replace proven C libraries with a narrower pure-Rust fallback to avoid qualification.
 - `emulebb-rust-prompt_audit_findings_multi-platform.md` section portable-delivery (existing): The unsupported-platform arm still rejects completed delivery. Android/FreeBSD/other Unix issues already own platform viability. Do not adopt the audit's check-then-rename suggestion: it can race and clobber data.
-- `emulebb-rust-prompt_audit_findings_multi-platform.md` section android-route-inventory (existing): The original intake found an empty Android default-route inventory. PR #329 repaired it with a conservative Android-only kernel route hint, covered by the narrow guest startup proof above. Representative-device/network acceptance stays open here; Android APK/signing remains on hold.
+- `emulebb-rust-prompt_audit_findings_multi-platform.md` section android-route-inventory (existing): The original intake found an empty Android default-route inventory. PR #329 repaired it with a conservative Android-only kernel route hint, covered by the narrow guest startup proof above. Representative-device/network acceptance stays open here; APK/signing implementation is separately authorized above.
 - `emulebb-rust-prompt_audit_findings_multi-platform.md` section extended-lanes (existing): The audit's no-musl/no-Android-CI claim is stale: both musl architectures and Android compile/ELF lanes now exist. Keep the owning feature issues open for their remaining runtime/package evidence; cross-compilation is not complete platform certification.
 
 ### Scoped Follow-up Acceptance
