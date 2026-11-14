@@ -476,28 +476,33 @@ explicit owned-session stop operation and bounded monitoring storage.
 
 ### Latest API 31 Phone Smoke
 
-A signed local APK built from Rust source
-`e8bfbc69d095130b2d332f1f98698c427519e349` passed 13 physical-device cases on
-an ARM64 phone running API 31 (Android 12) and Linux 4.14. The cases covered
-normal installation and all-files grant, source and signing certificate, visible
-theme and version, fresh-profile defaults, authenticated REST, served assets and
-rendered WebUI, process CPU/RAM sampling, bounded foreground-service stop, and
-dismissing the standard diagnostic chooser. The receipt is
-`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/android-apk-device/phone-api31-e8-own-settings-row-20261114/physical-device.json`,
-SHA-256 `8729207802137f9030d91ae90b73899aabf3e23ebf8b1ac479322d7479aa3f1b`.
-This is bounded local-APK evidence, not release or broad Android qualification.
+A signed local APK (`versionCode` 44) built from Rust source
+`20a07429bf41ec58649725bc56e58b0e7855839f` passed 13 fresh physical-device
+smoke cases on an ARM64 phone running API 31 (Android 12) with Linux 4.14.186.
+The cases covered permissions, themes/version, fresh defaults, authenticated
+REST and rendered WebUI, CPU/RAM diagnostics, graceful service stop and the
+diagnostic share chooser.
+Both `arm64-v8a` and `x86_64` APK payloads were built. The tested APK signing
+certificate SHA-256 is
+`9edc742d7230a714a0149c20eb2afb235b8ad5237166090f10e7ac69e2bb359f`.
+The receipt is
+`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/android-apk-device/phone-api31-route20-fresh-20261114/physical-device.json`,
+SHA-256 `199a05cc30487b618ec7f419757fe16f8a9ba99e0e5688b51110f3801a3c9742`.
+This is bounded local-APK evidence, not hosted full-matrix, release, or broad
+Android qualification.
 
-Public-library sharing was not run. Public-start preparation failed during Kad
-initialization (HTTP 400). Source inspection found that `SO_BINDTOIFINDEX` is
-unavailable in upstream Linux 4.14, the phone kernel; the observed receipt does
-not establish a direct runtime errno for the strict-pin path. This motivates
-removing unnecessary pinning for automatic direct routing. A separate Nightly
-run 43626570706 was cancelled before publication; there is no release from this
-evidence. Keep automatic local IPv4 selection with OS routing classified as
-proposed/in progress until the Rust change is implemented and validated.
-Explicit IP, interface and VPN Guard choices must remain strict pins that fail
-when unsupported. Do not claim strict binding on older Android kernels. The APK
-minimum remains API 31; both experimental native archives retain their API 28
+The tested automatic direct-routing repair applies only when the original IP
+and interface are unset and VPN Guard is off. It selects a detected local IPv4
+address and lets the operating system route traffic with that source address.
+Explicit IP, interface and VPN Guard choices remain strict and do not fall
+back. A public-network campaign on this source is currently running: 221 real
+input files were copied and hash-verified, and all 218 eligible contents were
+cataloged and marked published after
+successful `OFFERFILES` sends, and HighID, Kad connection and Kad source ACK
+were observed. No peer upload has yet been observed. This ongoing campaign is
+not a 24-hour proof. Full hosted source matrix and release qualification remain
+pending; boot resume after device reboot is deferred, with manual Start as the
+current workflow. Both experimental native archives retain their API 28
 compile floor.
 
 ## Distribution Boundary
