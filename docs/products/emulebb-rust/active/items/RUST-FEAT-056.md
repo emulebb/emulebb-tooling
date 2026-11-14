@@ -56,9 +56,9 @@ Build fresh ELFs with the actual nightly version/channel and immutable source
 identity through the pinned non-root NDK recipe. Publish bounded developer
 archives, manifests, checksums, SPDX and compile/ELF evidence through the
 GitHub-owned nightly pipeline. Do not relabel prior development binaries or
-present compile checks as target test execution. Keep runtime/device execution
-explicitly unqualified, including completed-file delivery and default-route
-inventory on representative devices. The existing Windows/Linux/macOS, musl and OCI proof remains
+present compile checks as target test execution. Keep archive compile receipts
+distinct from the bounded APK/device evidence below; Termux execution and
+representative-device routing remain unqualified. The existing Windows/Linux/macOS, musl and OCI proof remains
 mandatory; the Beta3 release and long-soak holds remain in effect.
 
 The parent coordinates one workstream with separate Build and Rust checkout
@@ -121,6 +121,26 @@ synchronously, with focus restoration checked from controls, links and body.
 
 ## Current State
 
+- The operator deferred automatic boot resume on 2026-11-14. Current source
+  [`42bffd971c77cd856e361c00e3a318c85304a859`](https://github.com/emulebb/emulebb-rust/commit/42bffd971c77cd856e361c00e3a318c85304a859)
+  requires manual Start after reboot and removes the boot receiver, permission
+  and resume setting. Continuous foreground-service operation, wake lock,
+  explicit Stop and ordinary process recovery remain in scope. Builder
+  `ce89ba75c722b49f29791fe8be1d75728c147289` passed release Kotlin, strict runtime
+  inventory and lint for that source. Receipt:
+  `EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/android-apk/1796a7ee388f4937a725c14ce3e72a3e/build.json`,
+  SHA-256 `cb00784f8f5e3e8bd6e487b6e3b71a8baadfcf070f54471480e1b5443a90f011`.
+  This is not APK runtime qualification. Exact-source
+  [CI](https://github.com/emulebb/emulebb-rust/actions/runs/43590182009),
+  [CodeQL](https://github.com/emulebb/emulebb-rust/actions/runs/43590184379) and
+  [optional-platform checks](https://github.com/emulebb/emulebb-rust/actions/runs/43590187024)
+  are pending at this checkpoint; the next full candidate remains unpublished.
+- The prior `54a5f22042a2131ba6706cc4a7f3206ff30b4a4f` source passed its CI,
+  CodeQL and optional-platform prerequisites. Its
+  [nightly candidate 43583500231](https://github.com/emulebb/emulebb-rust/actions/runs/43583500231)
+  produced the signed APK and both native archives, but failed all four APK
+  runtime qualification jobs; no release was published. Phone evidence for
+  these exact APK bytes below does not qualify the later manual-start source.
 - The 2026-11-13 operator authorization lifts the APK/signing hold for this
   workstream and selects the lean Android shell contract below. Implementation,
   package qualification and publication remain separate acceptance steps.
@@ -144,7 +164,7 @@ synchronously, with focus restoration checked from controls, links and body.
   `EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/rust-android/dd5439c6d32841fe9685328ecacc1ed1/validation.json`
   and records `runtimeExecution: not-run`. These local checks do not execute
   file delivery or resource sampling on Android, qualify a device, or verify a
-  newly published archive. Device/emulator storage and runtime proof remain open.
+  newly published archive. Later bounded phone evidence is recorded below.
 - Experimental native daemon archives for both ABIs were published by
   [nightly run 43242135692](https://github.com/emulebb/emulebb-rust/actions/runs/43242135692).
   Publication and compile/ELF proof do not establish Android runtime support.
@@ -154,7 +174,7 @@ synchronously, with focus restoration checked from controls, links and body.
   API 37/x86_64/16 KiB, source-built release-mode daemon on the development
   channel, six TLS cases, fresh EXE-directory profile, authenticated REST and
   graceful shutdown. This does not execute a published Android archive.
-  The physical S24+ retest and separate Android unavailable/degraded-network
+  The physical S24+ Termux retest and separate Android unavailable/degraded-network
   execution are explicitly unproved and remain with this open owner under the
   operator's choice to use GitHub emulators for now. Six TLS cases are not a
   separate unavailable-network run.
@@ -179,22 +199,32 @@ synchronously, with focus restoration checked from controls, links and body.
   `9edc742d7230a714a0149c20eb2afb235b8ad5237166090f10e7ac69e2bb359f`.
   This is an Actions candidate artifact, not a published release: all four
   API 34-37 application-qualification jobs failed and publication remained gated.
-- The exact GitHub-built APK passed all 12 physical-device cases on API 36,
-  ARM64, 4096-byte pages. A guarded update preserved the existing profile and
-  bootstrap preferences without reset or migration. Execution proved visible
+- The exact GitHub-built `54a5f220` APK passed all 13 physical-device cases on
+  API 36, ARM64, 4096-byte pages. Its APK SHA-256 is
+  `1c5587f886e546770473d652f1ed46d59189e907021875c548e38c971fcc2a3e`.
+  Execution proved visible
   version/insets, authenticated source-bound readiness, bundled WebUI serving,
-  CPU/RSS sampling, persistent Incoming/Shared settings, a real 256 KiB P2P
+  rendered browser content, CPU/RSS sampling, fresh Incoming/Shared defaults,
+  a real 256 KiB P2P
   transfer, collision-safe final delivery, and restart/catalog/completion-history
   preservation with duplicate rejection. The standard Android diagnostics
   chooser was verified and dismissed without selecting a recipient. Normal Stop
   closed the listener and cleared foreground-service state; the phone was left
   stopped. Owned transfer fixtures were removed and prior settings preserved.
   The receipt is
-  `EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/android-apk-device/phone-github-257-ready-20261113214752/physical-device.json`,
-  SHA-256 `2b99f799df194f046ad60a2e09c816fef12e711e3d58b39409d3a7b53ba77ee9`.
+  `EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/android-apk-device/phone-github-54a5-transfer-20261114105915/physical-device.json`,
+  SHA-256 `b3111f3f24b35d47e97e57649b8d4dcaac02fe7e0fdfc7ac17783824c51fb1f8`.
   The peer used matching GitHub-built ARM64 source. Traffic was same-device P2P;
   this proves neither a Wi-Fi/NAT data plane nor endurance. The foreground
   observation was 30 seconds; the 24-hour campaign remains open.
+- A separate 11-case physical-device smoke of the same signed APK passed
+  Android system day/night theme switching and readable native controls/system
+  bars. Receipt:
+  `EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/android-apk-device/phone-github-54a5-theme-20261114105137/physical-device.json`,
+  SHA-256 `4fd796f40d22df1f901994d02e3c5512091df45f1d3f977b1f12fdcfe295aa08`.
+  The diagnostic driver was selected independently of the original APK producer
+  harness; these bounded foreground proofs do not establish Termux UID/runtime,
+  Fire OS, full API 34-37 lifecycle or continuous-operation qualification.
 - A fresh, initially empty Gradle home exposed four missing strict dependency
   metadata entries that warm-cache checks had hidden. The independently
   verified Maven Central hashes were added without weakening verification.
@@ -258,14 +288,14 @@ synchronously, with focus restoration checked from controls, links and body.
   the driver now invalidates only its owned UUID dump before each inspection.
   Regression cases cover zero-exit/no-write, partial-write, failed invalidation
   and fresh-success behavior. This is a demonstrated driver defect, not proof
-  that it caused every earlier emulator failure. Reboot investigation and final
-  APK qualification/publication remain open.
+  that it caused every earlier emulator failure. Boot resume is now deferred;
+  final manual-start APK qualification/publication remain open.
 - The daemon exposes its behavior through a reusable library, loopback REST,
   and the browser WebUI. Its `run_hosted` entrypoint accepts application-owned
   readiness and shutdown without installing process signal handlers.
 - The selected API 37/x86_64 guest proved the conservative route hint and
   authenticated loopback REST startup. Representative-device routing, P2P
-  socket/VPN confinement, storage, background execution, multicast and NAT
+  socket/VPN confinement, broader storage recovery, background execution, multicast and NAT
   behavior remain unqualified.
 
 ## Intended Shape
@@ -280,8 +310,9 @@ synchronously, with focus restoration checked from controls, links and body.
   Android theme resources, including matching system-bar icon contrast. It has
   no separate appearance preference. Native widgets, system insets and
   `FLAG_SECURE` remain in effect. Release Kotlin compilation and lint, including
-  both resource variants, passed on `c99074ae`; the later combined source changes
-  only WebUI code/tests and workflow provider pins.
+  both resource variants, passed on the current manual-start source above.
+  The earlier `54a5f220` signed APK additionally passed the bounded physical
+  day/night theme smoke recorded above.
 - The service supplies app-owned profile, database, log, transfer, and WebUI
   paths and defaults the authenticated listener to `0.0.0.0:20017`, matching
   every other product platform and package. Browser connections on the same
@@ -323,12 +354,13 @@ synchronously, with focus restoration checked from controls, links and body.
   battery exemption remains visible without preventing startup. Hold a partial
   wake lock while continuous service operation is enabled and release it on
   every stop/failure path. Permission revocation must preserve existing data.
-- An off-by-default boot-resume setting resumes a previously enabled service
-  after unlock. Explicit Stop, including REST shutdown, clears desired-running
+- Start is an explicit user action; after reboot the user opens the app and
+  presses Start again. Automatic boot resume is deferred. Explicit Stop,
+  including REST shutdown, clears desired-running
   state. Force-stop remains authoritative; recover ordinary system termination
   with bounded backoff and expose persistent startup failures.
-- Android private preferences own only desired service intent and boot-resume
-  policy; TOML/SQLite remain the existing daemon configuration authorities.
+- Android private preferences own only desired service intent and bounded
+  recovery state; TOML/SQLite remain the existing daemon configuration authorities.
 - One universal release APK contains `arm64-v8a` and `x86_64`. The same signed
   artifact receives emulator and physical-device qualification.
 - Fire OS support must not depend on Google Play Services.
@@ -345,8 +377,14 @@ synchronously, with focus restoration checked from controls, links and body.
   insets and support sharing. Keep the current branch, granular commits and
   pushes; no pull request is authorized yet. Qualify branch candidates through
   existing dispatchable CI and unpublished nightly execution before publication.
-- Optional resume after unlock on reboot is authorized; recovery after Android
-  force-stop is not. The operating system remains authoritative.
+- Automatic resume after unlock on reboot is deferred by the 2026-11-14
+  operator decision. Manual Start is the selected release behavior; recovery
+  after Android force-stop is not authorized. The operating system remains authoritative.
+- Keep both native `arm64-v8a` and `x86_64` tar/zstd archives as public nightly
+  assets alongside the universal APK, with manifests, SPDX and honest compile/ELF
+  evidence. The [download guide](../../reference/GUIDE-DOWNLOADS-PLATFORMS.md#android-apk-or-native-shell)
+  owns APK and experimental Termux user instructions. No new packaging format or
+  Termux testing framework is required by this distribution addition.
 - Add the universal signed APK to existing nightly qualification/publication
   without weakening existing gates. A dedicated long-lived APK signing key
   comes from GitHub secrets; missing signing input fails publication without
@@ -360,8 +398,9 @@ version. The APK targets API 37 and runs on APIs 34, 35, 36 and 37. This source
 review is not emulator or physical-device execution evidence.
 
 - All four versions declare normal `INTERNET`, `ACCESS_NETWORK_STATE`,
-  `FOREGROUND_SERVICE`, `FOREGROUND_SERVICE_SPECIAL_USE`, `WAKE_LOCK` and
-  `RECEIVE_BOOT_COMPLETED` permissions for the actual socket, service and boot APIs.
+  `FOREGROUND_SERVICE`, `FOREGROUND_SERVICE_SPECIAL_USE` and `WAKE_LOCK`
+  permissions for the actual socket and service APIs. The manual-start APK has
+  no boot receiver or `RECEIVE_BOOT_COMPLETED` permission.
 - All four request `POST_NOTIFICATIONS`. Denial does not prevent a foreground
   service, but the shell must show reduced notification visibility. See
   [Android notification permission](https://developer.android.com/develop/ui/views/notifications/notification-permission).
@@ -394,12 +433,16 @@ review is not emulator or physical-device execution evidence.
   Start must not disable that new session. See
   [user-initiated service stopping](https://developer.android.com/develop/background-work/services/fgs/handle-user-stopping).
 
-Qualification covers each API 34-37 separately: notification denial/grant/
-revocation; all-files denial/grant/running revocation; Doze with and without
-exemption and actual idle-state assertions; boot resume on/off; explicit Stop,
-force-stop and Task Manager Stop. API 37 adds local-network denial/grant/
-revocation; earlier versions verify absence of that prompt. Restricted battery
-mode must never be presented as qualified continuous or boot operation.
+The intended qualification contract covers each API 34-37 separately:
+notification denial/grant/revocation; all-files denial/grant/running revocation;
+Doze with and without exemption and actual idle-state assertions; manual Start;
+explicit Stop, force-stop and Task Manager Stop. API 37 adds local-network
+denial/grant/revocation; earlier versions verify absence of that prompt. These
+are required coverage targets, not a statement that every case has passed.
+The current mandatory harness selects manual Start, clean Stop, Home/background
+continuity and measured Doze continuity; it contains no reboot scenario.
+Restricted battery mode must never be presented as qualified continuous
+operation. Boot-resume qualification is deferred with that feature.
 
 The operator authorized physical-phone testing over Wi-Fi on 2026-11-13.
 Use an explicitly selected, authenticated ADB connection and preserve the
@@ -518,7 +561,7 @@ satisfy those acceptance criteria.
       remains authorized to run.
 - [ ] Direct shared-storage delivery and sharing preserve exact size and SHA-256;
       interruption, low-space, revoked-access, and collision paths recover.
-- [ ] Optional boot resume, explicit Stop, REST shutdown and force-stop preserve
+- [ ] Manual Start, explicit Stop, REST shutdown and force-stop preserve
       the selected service intent and never create duplicate daemon ownership.
 - [ ] A physical ARM64 screen-off run exceeding 24 hours proves the continuous
       service claim, including Doze and network transitions.
@@ -532,6 +575,11 @@ satisfy those acceptance criteria.
       transfer behavior pass without Google Play Services.
 - [ ] Existing Windows, Linux, macOS, container, quality, and supply-chain gates
       remain green.
+
+Automatic boot resume is deferred, including its optional setting, receiver,
+permission and resume-on/off qualification. Revisit it only as a separately
+selected follow-up; it is not an acceptance condition for the manual-start APK.
+The physical 24-hour, Fire OS and remaining runtime criteria above stay open.
 
 ## Validation
 

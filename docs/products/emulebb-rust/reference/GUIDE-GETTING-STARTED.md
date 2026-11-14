@@ -12,12 +12,15 @@ Controlled Windows x64 candidate-package capture from
 
 ## First Launch
 
-On Windows, run `emulebb-rust.exe`; for an extracted Linux native archive, run
-`./emulebb-rust` from its directory. DEB users can run `emulebb-rust`. On macOS,
-launch the copied app. Container and Android users must follow their separate
-[package notes](GUIDE-DOWNLOADS-PLATFORMS.md).
+Use the [platform download and run guide](GUIDE-DOWNLOADS-PLATFORMS.md) to select
+and launch the matching Windows ZIP, Linux DEB/AppImage/musl archive, macOS app,
+Ubuntu/Alpine container, or Android alternative. Installed CLI paths require an
+explicit writable profile. The Android 14+ APK requires an explicit Start and
+storage access; its shell supplies the generated API key and Open WebUI action.
+Experimental Termux users keep the complete native archive under private
+`$HOME` and use its `run-developer.sh` launcher.
 
-Current nightly packages provide the ready bootstrap described below. Use the
+Native nightly packages provide the ready bootstrap described below. Use the
 README shipped with your selected package for its exact qualified behavior. The
 broader [settings review](https://github.com/emulebb/emulebb-rust/issues/297) remains
 open.
@@ -27,8 +30,8 @@ on every platform, independently of the shell working directory. A missing
 bootstrap is created from the canonical packaged template. There is no home,
 XDG or Local AppData fallback; an unwritable executable directory fails visibly.
 Open `http://127.0.0.1:20017/` and enter
-`change_me_123change_me_123change_me_123`. This is a shared starter key: replace
-it before exposing the API outside this computer. Existing profiles are never
+`change_me_123change_me_123change_me_123`. Choose your own key in the private
+`emulebb-rust-settings.toml` bootstrap for your deployment. Existing profiles are never
 overwritten by startup. Use `--profile <writable-directory>` to override the
 profile; missing directories/configuration are created. Relative arguments
 resolve from the shell working directory. `--profile .` equals the default only
@@ -38,9 +41,11 @@ when the shell working directory is the executable directory.
 | --- | --- |
 | Direct daemon, every platform | Directory containing the executable |
 | Explicit `--profile <directory>` | Selected directory; relative to shell working directory |
-| Linux desktop launcher | Explicit `$XDG_CONFIG_HOME/emulebb-rust` or `~/.config/emulebb-rust` |
+| Linux desktop launcher / AppImage | Explicit `$XDG_CONFIG_HOME/emulebb-rust` or `~/.config/emulebb-rust` |
 | macOS app launcher | Explicit `~/Library/Application Support/emulebb-rust` |
 | Official container | Explicit `/config/emulebb-rust` |
+| Android APK | App-owned private profile; controlled by the foreground service |
+| Android native archive / Termux | Directory containing the executable, or explicit `--profile` |
 
 Installed CLI binaries may live in read-only directories; pass a writable
 `--profile` instead of running them with elevated permissions. A profile
@@ -90,8 +95,8 @@ not guaranteed behind every NAT, router or VPN.
 
 If route detection is ambiguous, select the intended interface explicitly for
 that run with `--p2p-bind-interface "INTERFACE_NAME"`, then save the network
-setting through the console. Do not bypass an unresolved bind by exposing REST
-or selecting an arbitrary interface. VPN use is optional and does not itself
+setting through the console. Resolve an ambiguous P2P bind before starting
+transfers. VPN use is optional and does not itself
 establish native leak-safety proof.
 
 Empty enabled discovery lists may trigger trusted bootstrap downloads. Bootstrap

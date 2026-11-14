@@ -24,36 +24,119 @@ which can differ from the computer displaying its browser console.
 | Linux, static musl | x64 / ARM64 | `-linux-amd64-musl.tar.zst` / `-linux-arm64-musl.tar.zst` |
 | macOS | Intel / Apple Silicon | `-macos-x64.dmg` / `-macos-arm64.dmg` |
 
-**Windows:** extract the complete ZIP into a writable application directory.
-Keep `webui` beside `emulebb-rust.exe`, then run the executable. The hosted runner
-version is not an established oldest supported Windows version.
+After launch, open `http://127.0.0.1:20017/` on the daemon host and enter the
+packaged starter key `change_me_123change_me_123change_me_123`. The listener
+defaults to `0.0.0.0:20017`. The private `emulebb-rust-settings.toml` in the
+selected profile owns bootstrap authentication; the
+[first-launch guide](GUIDE-GETTING-STARTED.md#profile-and-control-plane-settings)
+owns the common configuration and client workflow. The APK generates its own
+key instead. Verify checksums using the [supporting-file instructions](#what-each-supporting-file-does)
+before installing or launching any package.
 
-**Linux DEB:** install the matching file through the host package manager, for
-example `sudo apt install ./<downloaded-file>.deb`. Use its desktop launcher,
-or run `emulebb-rust --profile "$HOME/.config/emulebb-rust"` for an explicit
-writable CLI profile. The daemon itself defaults to its executable directory
-and never silently falls back from a read-only installation.
+## Windows x64 And ARM64
+
+Choose `-windows-x64.zip` for Intel/AMD x64 or `-windows-arm64.zip` for native
+Windows ARM64. Extract the complete ZIP into a writable application directory.
+Keep `webui` and the packaged runtime files beside `emulebb-rust.exe`, then
+double-click the executable or run this in that directory:
+
+```powershell
+.\emulebb-rust.exe
+```
+
+The default profile and `emulebb-rust-settings.toml` are beside the executable.
+For a separate writable profile, run
+`.\emulebb-rust.exe --profile <profile-directory>`. Open the browser console as
+described above. Keep the daemon process running while using the client; use
+WebUI shutdown or Ctrl+C in its console to stop gracefully. The ZIP does not
+install a Windows service. The hosted runner version is not an established
+oldest supported Windows version.
+
+## Linux
+
+Choose the matching native CPU package. `uname -m` normally reports `x86_64`
+for x64 (`amd64`) or `aarch64` for ARM64. The variants below share the same daemon
+and WebUI; choose according to the host's package and library requirements.
+
+### Debian/Ubuntu DEB
+
+Choose `-linux-amd64.deb` or `-linux-arm64.deb` and install the downloaded file
+through the host package manager. Replace `<downloaded-file>` below:
+
+```sh
+sudo apt install ./<downloaded-file>.deb
+emulebb-rust --profile "$HOME/.config/emulebb-rust"
+```
+
+The CLI command explicitly chooses a writable profile because the installed
+binary lives under `/usr/lib/emulebb-rust`. Its bootstrap is
+`$HOME/.config/emulebb-rust/emulebb-rust-settings.toml`. Alternatively, use the
+desktop launcher, which chooses `$XDG_CONFIG_HOME/emulebb-rust` when set, or
+`~/.config/emulebb-rust`, and opens the browser console. The daemon has no
+implicit home-directory fallback when called directly.
+
 The dated nightly below declares `libc6 (>= 2.38)`, `libgcc-s1 (>= 4.2)` and
-`ca-certificates`. Inspect the chosen build's package dependencies; these are not
-a promise that every Debian/Ubuntu release can run it.
+`ca-certificates`. Inspect the chosen build's dependencies; these are not a
+promise that every Debian/Ubuntu release can run it.
 
-**Linux AppImage:** mark the matching file executable and run it. This packages
-the GNU daemon; it is not libc-independent. Host kernel, library and AppImage
-runtime/FUSE compatibility still matter. An exact oldest distribution or FUSE
-requirement has not been established here.
+### Portable GNU AppImage
 
-**Linux musl:** use a tar/zstd-capable extractor, enter the extracted
-`emulebb-rust` directory and run `./emulebb-rust`, keeping adjacent `webui` files.
-A compatible CPU/kernel and system CA certificates are still needed. No exact
-oldest kernel or minimum RAM/storage guarantee is established. A Linux musl
-binary is not an Android binary.
+Choose `-linux-x86_64.AppImage` or `-linux-aarch64.AppImage`. Mark the downloaded
+file executable, then launch it; replace `<downloaded-file>` below:
 
-**macOS:** open the matching DMG and copy the app to a writable installation
-location. The app is unsigned and not notarized; follow the normal macOS
-Privacy & Security approval flow. Launching the app starts the daemon/browser
-console; quitting stops it. The package declares macOS 12.0, while the retained
-native smoke below ran on macOS 15. Treat those as different facts. GUI users
-can recover the API key from their private profile bootstrap file.
+```sh
+chmod +x ./<downloaded-file>.AppImage
+./<downloaded-file>.AppImage
+```
+
+Its launcher opens the browser and selects `$XDG_CONFIG_HOME/emulebb-rust` or
+`~/.config/emulebb-rust` for the profile and bootstrap. Pass
+`--profile <profile-directory>` to select another writable location. This
+packages the GNU daemon; host kernel, libraries and AppImage runtime/FUSE
+compatibility still matter. An exact oldest distribution or FUSE requirement
+has not been established here.
+
+### Static musl Archive
+
+Choose `-linux-amd64-musl.tar.zst` or `-linux-arm64-musl.tar.zst`. Use a
+tar/zstd-capable extractor and preserve the complete layout. For example:
+
+```sh
+tar --zstd -xf ./<downloaded-file>.tar.zst
+cd emulebb-rust
+./emulebb-rust
+```
+
+Keep adjacent `webui` files. The writable extracted executable directory is the
+default profile, including `emulebb-rust-settings.toml`; pass an explicit
+`--profile <profile-directory>` to change it. A compatible CPU/kernel and system
+CA certificates are still needed. No exact oldest kernel or minimum RAM/storage
+guarantee is established. A Linux musl binary is not an Android binary.
+
+For each Linux variant, keep the daemon or launcher process running and open
+the console at `http://127.0.0.1:20017/`. Stop through WebUI shutdown or Ctrl+C
+when launched from a terminal. These packages do not install a system service.
+The DEB/AppImage browser opener uses port 20017; if you override the REST port,
+open the matching URL manually.
+
+## macOS Intel And Apple Silicon
+
+Choose `-macos-x64.dmg` for Intel or `-macos-arm64.dmg` for Apple Silicon. Open
+the DMG, copy **eMuleBB Rust.app** to Applications or another installation
+location, and launch the copied app. The app is unsigned and not notarized;
+follow the normal macOS Privacy & Security approval flow.
+
+The launcher starts the daemon and browser console and selects
+`~/Library/Application Support/emulebb-rust` for its writable profile. Its
+`emulebb-rust-settings.toml` contains the API key. The app can therefore run from
+an installation location that is not writable. Quit the app or use WebUI
+shutdown to stop the daemon. The launcher opens port 20017; open the matching
+browser URL manually if you choose another REST port.
+
+Directly running `Contents/MacOS/emulebb-rust` instead uses the executable
+directory unless `--profile` is supplied; use an explicit writable profile for
+that CLI mode. The package declares macOS 12.0, while the retained native smoke
+below ran on macOS 15. Treat those as different facts.
 
 ## Containers
 
@@ -74,40 +157,184 @@ release attachment is publication evidence, not a runnable container archive.
 
 A container engine must support the selected CPU. Provide writable `/config`
 and `/data` mounts, configure `PUID`/`PGID` as appropriate for their ownership,
-and keep persistent state when replacing the container. The s6 image places the
-implicit profile at `/config/emulebb-rust` and completed downloads at `/data/ed2k`.
+and keep persistent state when replacing the container. The s6 launcher selects
+the profile at `/config/emulebb-rust` and completed downloads at `/data/ed2k`.
 
-For local control, bind host REST port 20017 to loopback. The daemon speaks plain
-HTTP; remote TLS belongs at a trusted reverse proxy. Restrict access and keep the
-API key private. P2P TCP/UDP routing and reachability need their own deliberate
-container/network configuration; opening REST does not open P2P ports.
-The [optional Gluetun example](https://github.com/emulebb/emulebb-rust/blob/main/packaging/docker/compose.gluetun.example.yaml)
-is an advanced deployment reference, not a requirement or general VPN-safety proof.
+For example, in a Linux shell replace `VERSION_FROM_RELEASE` with a published
+version and choose `ubuntu` or `alpine`. Set PUID/PGID to the intended volume
+owner; Docker chooses the native CPU from the image's multiarchitecture index.
 
-## Experimental Android Developer Bundles
+```sh
+version='VERSION_FROM_RELEASE'
+variant='ubuntu'
+docker run --detach --name emulebb-rust \
+  -e PUID="$(id -u)" -e PGID="$(id -g)" \
+  -p 20017:20017/tcp -p 20019:20019/tcp -p 20020:20020/udp \
+  -v emulebb-config:/config -v emulebb-data:/data \
+  "ghcr.io/emulebb/emulebb-rust:${version}-${variant}"
+```
 
-`-android-arm64-v8a.tar.zst` and `-android-x86_64.tar.zst` contain native CLI
-developer builds targeting API 28+ with 16KB-compatible ELF alignment. Follow the
-bundled developer README/launcher for controlled ADB work.
+Open `http://127.0.0.1:20017/` on the container host and enter the starter key
+or your configured key from
+`/config/emulebb-rust/emulebb-rust-settings.toml`. Both variants run the daemon
+under s6 in the background, explicitly selecting `0.0.0.0:20017`, the profile
+above and `/data/ed2k` for incoming files. Those launch arguments take precedence
+over the corresponding persisted settings. Stop with `docker stop emulebb-rust`;
+restart with `docker start emulebb-rust`. Preserve both volumes when replacing
+the image and select restart policy through your container engine if desired.
 
-These remain **experimental native CLI developer bundles**. Compilation/test
-linking and ELF audit cover the selected archive; its compile/ELF report does not
-claim runtime execution. Separately, an API 37/x86_64/16 KiB KVM emulator
-[run](https://github.com/emulebb/emulebb-build/actions/runs/43369243640)
-using a source-built release-mode daemon on the development channel from
-[Rust source `6429b952`](https://github.com/emulebb/emulebb-rust/commit/6429b952eac6f19ee9bf084d3a84d5649dfba0c2)
-verified six TLS cases, fresh EXE-directory profile creation from a different
-working directory, authenticated REST startup and graceful shutdown.
+The daemon serves plain HTTP; remote TLS belongs at a reverse proxy. P2P TCP/UDP
+routing and reachability need deliberate host/router configuration in addition
+to the port mappings. The
+[optional Gluetun example](https://github.com/emulebb/emulebb-rust/blob/main/packaging/docker/compose.gluetun.example.yaml)
+is an advanced deployment reference with its own pinned image version. Select
+an actual published version for a new deployment; the example does not establish
+general VPN-safety proof.
 
-Published Android archive execution, physical devices, ARM runtime, APK/JNI,
-WebUI, completed-file delivery, transfers and VPN behavior remain unqualified.
-APK signing and app-store installation are separate work.
+## Android: APK Or Native Shell
+
+The nightly release contract keeps all three alternatives below. The native
+archives remain public release assets alongside the signed APK; they are not
+limited to developer artifacts in Actions. APK candidates currently await the
+full runtime qualification and publication gate, so use only assets actually
+present in the selected published release. The failed
+[candidate run 43583500231](https://github.com/emulebb/emulebb-rust/actions/runs/43583500231)
+did not publish an APK release.
+
+| Alternative | CPU | Filename suffix |
+| --- | --- | --- |
+| Android application, Android 14+ | ARM64 and x86_64 in one APK | `-android-universal.apk` |
+| Experimental native shell, including Termux | ARM64 / aarch64 | `-android-arm64-v8a.tar.zst` |
+| Experimental native shell, including Termux | x86_64 / amd64 | `-android-x86_64.tar.zst` |
+
+The native binaries target API 28+ (Android 9+) with 16 KiB-compatible ELF
+alignment. That binary floor does not establish runtime support on every Android
+version. The APK minimum is API 34 (Android 14); its API 34-37 qualification is
+separate from native archive compilation. A Linux musl archive cannot substitute
+for either Android archive. Fire OS, Termux runtime and 24-hour continuous
+operation remain unqualified; see [the owning feature](../active/items/RUST-FEAT-056.md).
+
+### Android Application
+
+Verify the APK checksum from the same release, then open the APK and allow
+installation from that download source when Android asks. Open eMuleBB and:
+
+1. Select **Grant all-files access** and enable the Android special access.
+   Start requires it. On Android API 37, also select **Allow local network**;
+   Android 14-16 do not require that newer prompt.
+2. Select **Allow notifications** for the running-service notification and its
+   Stop action. Select **Allow continuous background operation** for the Doze
+   exemption, then review **App battery settings** and allow unrestricted
+   operation. Notifications and battery exemption are recommended; their denial
+   is shown in the shell and does not itself block Start.
+3. Review the displayed folders, press **Start**, and wait for **Running**.
+   A fresh profile uses `Download/eMuleBB/Incoming` for completed files and
+   `Download/eMuleBB/Shared` as its additional shared folder. Incoming files are
+   shared automatically. Incomplete files stay in app-managed storage. Change
+   folders in WebUI Settings and Sharing; later starts preserve those choices.
+4. Select **Copy API key**, then **Open WebUI** and enter that key. The APK
+   generates its own first-run key. Its listener defaults to
+   `0.0.0.0:20017`; the same phone's browser opens `http://127.0.0.1:20017/`.
+   Client settings, search, sharing and transfers belong to this browser console.
+
+The native shell follows Android's system light/dark setting. The browser
+console separately offers **System**, **Light** and **Dark** appearance.
+
+After Start, a dedicated foreground service and partial wake lock keep the
+daemon running independently of the shell and browser. This consumes battery
+and network traffic; Android and device battery policies still control process
+survival. Use the app's **Stop**, the notification's Stop action, or WebUI
+shutdown to stop cleanly. After reboot, open the app and press Start again.
+Automatic boot resume is deferred; there is no reboot-resume setting.
+
+### Termux Native Shell
+
+This is an experimental advanced-shell alternative, without the APK's native
+service controls. Install Termux using its
+[official installation instructions](https://github.com/termux/termux-app#installation).
+Match the archive to the CPU running Termux: `uname -m` normally reports
+`aarch64` for `arm64-v8a`, or `x86_64` for `x86_64`. No Rust compiler, root,
+proot or Linux distribution is required.
+
+Replace `VERSION_FROM_RELEASE` with the exact selected release version, and
+choose one ABI below. Run these commands inside Termux:
+
+```sh
+pkg install curl coreutils tar zstd
+version='VERSION_FROM_RELEASE'
+abi='arm64-v8a' # Use x86_64 for an x86_64 Termux environment.
+mkdir -p "$HOME/emulebb-native"
+cd "$HOME/emulebb-native"
+asset="emulebb-rust-v${version}-android-${abi}.tar.zst"
+base="https://github.com/emulebb/emulebb-rust/releases/download/rust-v${version}"
+curl --fail --location --remote-name "$base/$asset"
+curl --fail --location --remote-name "$base/SHA256SUMS"
+sha256sum --check --ignore-missing SHA256SUMS
+```
+
+Continue only when the exact archive reports `OK`. Extract into a fresh
+directory for a new installation; preserve an existing stopped profile before
+replacing program files.
+
+```sh
+tar --zstd -xf "$asset"
+cd emulebb-rust
+termux-wake-lock
+./run-developer.sh
+```
+
+The tar contains an `emulebb-rust` directory with the executable, launcher,
+bootstrap TOML, `webui`, licenses and SBOM. Keep them together and use the
+launcher: it sets the library path for any bundled runtime dependencies. Without
+`--profile`, profile state goes beside the executable, independently of the
+shell's working directory. An explicit `--profile` selects a writable profile;
+relative paths resolve from the shell working directory. Keep executables,
+profile, database and secrets under Termux's private `$HOME`, with the archive's
+private directory and bootstrap permissions intact.
+
+Open `http://127.0.0.1:20017/` in the phone browser. The bundled bootstrap uses
+`0.0.0.0:20017` and the ready key
+`change_me_123change_me_123change_me_123`; see
+[control-plane settings](GUIDE-GETTING-STARTED.md#profile-and-control-plane-settings)
+to choose your own key. The adjacent `webui` supplies the console.
+
+Shared Android storage, including `~/storage/shared`, is mounted `noexec` and
+does not preserve the private profile permissions. Do not extract the program
+there. For optional completed-file or shared folders, run `termux-setup-storage`,
+grant the requested Android storage access, and create dedicated directories:
+
+```sh
+termux-setup-storage
+mkdir -p "$HOME/storage/shared/Download/eMuleBB/Incoming"
+mkdir -p "$HOME/storage/shared/Download/eMuleBB/Shared"
+realpath "$HOME/storage/shared/Download/eMuleBB/Incoming"
+realpath "$HOME/storage/shared/Download/eMuleBB/Shared"
+```
+
+Paste the printed absolute paths into WebUI Settings and Sharing. The daemon
+does not expand shell `$HOME` or `~` in WebUI fields. Granting storage access
+does not move a profile or automatically configure these folders. Review the
+contents before sharing; the incoming directory is shared automatically.
+
+Keep the Termux session running and allow unrestricted battery use in Android's
+Termux app settings. `termux-wake-lock` prevents CPU sleep while held; it does not
+guarantee process survival or network availability. Stop gracefully with
+**Ctrl+C** and wait for the daemon to exit, then run `termux-wake-unlock`.
+Android 12+ can still kill Termux child processes; see the official
+[Termux process notice](https://github.com/termux/termux-app#termux-application)
+and [execution/storage restrictions](https://github.com/termux/termux-packages/wiki/Termux-execution-environment).
+
+Archive `*-compile-elf.json` evidence covers compilation, test linking and ELF
+inspection. It does not claim target test execution, Termux UID/runtime
+qualification or a 24-hour soak. Separate APK/ADB phone transfer and rendered
+WebUI proofs do not qualify execution inside Termux.
 
 ## What Each Supporting File Does
 
 | Asset family | Purpose |
 | --- | --- |
 | ZIP, DEB, AppImage, DMG, musl tar/zstd | Runnable native packages |
+| Android universal APK | Signed Android application candidate/release |
 | Android tar/zstd | Experimental CLI developer packages |
 | `SHA256SUMS` | Compare downloaded bytes before launch |
 | `*.manifest.json` | Package version/source/CPU, payload hashes or OCI publication metadata |
@@ -153,4 +380,4 @@ objects; it did not locally execute the large packages or pull image layers.
 Later main revisions need their own publication evidence. Deep public-network
 evidence is concentrated on Windows/Linux x64. None of this proves current-head
 100k-file performance, long-soak reliability, universal minimum-OS support or
-Android device operation.
+universal Android device operation or Termux runtime support.

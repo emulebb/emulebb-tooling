@@ -180,11 +180,17 @@ bundles remain distinct from an APK or device-runtime qualification.
 The operator's Termux launch exposed a JVM-dependent HTTPS verifier panic.
 The [native CLI repair and evidence](https://github.com/emulebb/emulebb-tooling/blob/main/docs/products/emulebb-rust/history/items/RUST-BUG-186.md)
 now include accepted source-built API 37/x86_64/16 KiB emulator TLS and
-authenticated first-launch proof. This does not qualify published Android
-archive execution, physical/ARM runtime, APK/JNI, transfer or VPN behavior.
-The physical S24+ retest and separate Android unavailable/degraded-network
-execution remain unproved under open #226; optional environment expansion does
-not independently hold the core Client gate.
+authenticated first-launch proof. Separately,
+[RUST-FEAT-056](active/items/RUST-FEAT-056.md#current-state) records bounded
+API 36/ARM64 physical execution of the source `54a5f220` signed APK: rendered
+WebUI, local transfer/collision/restart and system day/night theme checks. That
+candidate failed the full APK runtime matrix and was not published. The later
+manual-start source `42bffd97` passed Kotlin/lint and awaits hosted source
+qualification; automatic boot resume is deferred. Android/Fire OS support,
+the full API matrix, particular untested hardware, Termux UID/runtime,
+unavailable/degraded-network execution, VPN behavior and the 24-hour soak remain
+open under that owner. Optional environment expansion does not independently
+hold the core Client gate.
 
 ### Beta contract policy
 
