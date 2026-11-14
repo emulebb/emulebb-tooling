@@ -101,6 +101,17 @@ mobile WebKit smoke. Retain synthetic light/dark screenshots below the configure
 output root. Use the existing supported WebUI owner for unit, type, production
 build and browser checks, followed by fresh combined-source release qualification.
 
+Local qualification of `27d9b15ed913800fc488f5c6fa3bbe0a5310c7cf` passed 51
+WebUI unit tests, 32 Chromium/WebKit browser tests, TypeScript and the production
+build. All 14 views were checked at 320, 390, 768 and 1280 px. Phone-width checks also
+measure readable folder/hashing path columns, local scrolling and reachable row
+actions; page overflow alone did not catch the original collapsed path columns.
+The selected Builder passed 83 scoped tests, retained below
+`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/builder-unit/1d13026f37ab/`.
+Synthetic reference PNGs are retained below
+`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/webui-mobile/27d9b15e/`. These are mocked
+browser proofs, not physical-phone execution or APK publication evidence.
+
 ## Current State
 
 - The 2026-11-13 operator authorization lifts the APK/signing hold for this
@@ -258,6 +269,12 @@ build and browser checks, followed by fresh combined-source release qualificatio
   SDK. Existing native CLI bundle compatibility and gates remain intact.
 - A minimal Kotlin application owns one foreground service and invokes the Rust
   daemon through a narrow JNI library boundary.
+- The native shell follows the device's light/dark setting through qualified
+  Android theme resources, including matching system-bar icon contrast. It has
+  no separate appearance preference. Native widgets, system insets and
+  `FLAG_SECURE` remain in effect. Release Kotlin compilation and lint, including
+  both resource variants, passed on `c99074ae`; the later combined source changes
+  only WebUI CSS/tests and workflow provider pins.
 - The service supplies app-owned profile, database, log, transfer, and WebUI
   paths and defaults the authenticated listener to `0.0.0.0:20017`, matching
   every other product platform and package. Browser connections on the same
