@@ -185,8 +185,11 @@ authenticated first-launch proof. Separately,
 API 36/ARM64 physical execution of the source `54a5f220` signed APK: rendered
 WebUI, local transfer/collision/restart and system day/night theme checks. That
 candidate failed the full APK runtime matrix and was not published. The later
-manual-start source `42bffd97` passed Kotlin/lint and awaits hosted source
-qualification; automatic boot resume is deferred. Android/Fire OS support,
+manual-start source `42bffd97` passed source checks and bounded physical tests
+but failed full nightly qualification. The operator subsequently expanded the
+APK target to Android 12+ with safe shared-storage collision delivery, while
+retaining both native Android archives. That expanded candidate still requires
+fresh-source APK/device and publication proof; automatic boot resume is deferred. Android/Fire OS support,
 the full API matrix, particular untested hardware, Termux UID/runtime,
 unavailable/degraded-network execution, VPN behavior and the 24-hour soak remain
 open under that owner. Optional environment expansion does not independently

@@ -15,7 +15,7 @@ Controlled Windows x64 candidate-package capture from
 Use the [platform download and run guide](GUIDE-DOWNLOADS-PLATFORMS.md) to select
 and launch the matching Windows ZIP, Linux DEB/AppImage/musl archive, macOS app,
 Ubuntu/Alpine container, or Android alternative. Installed CLI paths require an
-explicit writable profile. The Android 14+ APK requires an explicit Start and
+explicit writable profile. The Android 12+ APK candidate requires an explicit Start and
 storage access; its shell supplies the generated API key and Open WebUI action.
 Experimental Termux users keep the complete native archive under private
 `$HOME` and use its `run-developer.sh` launcher.

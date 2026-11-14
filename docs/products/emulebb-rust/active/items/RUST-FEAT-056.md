@@ -156,9 +156,11 @@ synchronously, with focus restoration checked from controls, links and body.
   and [Android 15](https://android.googlesource.com/platform/packages/providers/MediaProvider/+/refs/heads/android15-release/jni/FuseDaemon.cpp#1346);
   [Android 16](https://android.googlesource.com/platform/packages/providers/MediaProvider/+/refs/heads/android16-release/jni/FuseDaemon.cpp#1386)
   permits `RENAME_NOREPLACE`. Timeout increases cannot repair that limitation.
-  The operator's decision between an Android 16+ APK minimum and a different
-  storage/export design remains pending. Neither the supported range nor the
-  no-overwrite guarantee has been weakened. Both native archives remain in scope.
+  The operator explicitly expanded storage implementation rather than raising
+  the minimum version, then selected Android 12+ on 2026-11-14. The delivery
+  contract below preserves atomic rename where supported and adds an exclusive
+  copy path for filesystems that reject atomic no-replace rename. Both native
+  archives remain required public assets alongside the APK.
 - The API 36/37 screen-off failure was separately identified as successful
   `dumpsys power` output exceeding the harness's 65,536-byte bound. Harness
   `0cd8b6bcc7f3ec2298b86dc27fe33c60ab5887db` filters the dump on-device into a
@@ -180,8 +182,9 @@ synchronously, with focus restoration checked from controls, links and body.
   Harness `b522c218b4a93ee842b99b68471664a700700ebc` repairs that parser,
   with 235 passing lifecycle tests and no skips; its
   [targeted API 37 replay](https://github.com/emulebb/emulebb-rust/actions/runs/43607199382)
-  remains pending. None of these bounded proofs establishes 24-hour endurance
-  or qualifies publication.
+  subsequently failed while locating Start in the file-link case, before the
+  power check. That navigation failure is being investigated separately. None
+  of these bounded proofs establishes 24-hour endurance or qualifies publication.
 - The exact GitHub-built manual-start `42bffd97` APK passed two bounded
   12-case physical-device campaigns on API 36, ARM64, 4096-byte pages. Its
   APK SHA-256 is
@@ -368,8 +371,11 @@ synchronously, with focus restoration checked from controls, links and body.
 
 - Kotlin application sources live in `emulebb-rust/android/`; native lifecycle
   integration lives in the same Rust repository. There is no separate app repo.
-- Minimum Android version is 14 (API 34), targeting the pinned current stable
-  SDK. Existing native CLI bundle compatibility and gates remain intact.
+- The accepted APK minimum is Android 12 (API 31), targeting API 37. Qualify
+  APIs 31, 32, 33, 34, 35, 36 and 37 separately, including Android 12L/API 32.
+  This is the expanded delivery target; the older candidate proofs above do
+  not establish execution on the newly selected APIs. Native CLI archives keep
+  their separate API 28 compile floor and experimental runtime status.
 - A minimal Kotlin application owns one foreground service and invokes the Rust
   daemon through a narrow JNI library boundary.
 - The native shell follows the device's light/dark setting through qualified
@@ -402,8 +408,9 @@ synchronously, with focus restoration checked from controls, links and body.
   the service or queue a transfer. Preserve the handoff through authentication;
   require explicit Add confirmation and support cancellation and repeat intents.
 - A persistent notification exposes running state and a clean stop action.
-- A dedicated foreground-service process owns the Rust runtime. Use
-  `specialUse` with an explicit continuous eD2K/Kad peer-hosting subtype;
+- A dedicated foreground-service process owns the Rust runtime. On API 34+ use
+  `specialUse` with an explicit continuous eD2K/Kad peer-hosting subtype; use
+  the supported foreground-service invocation on APIs 31-33 without that type.
   starting, readiness, shutdown and failure remain observable independently
   of the shell/browser lifecycle. Repeated Start cannot create duplicate runtimes.
 - Private app storage owns metadata, TOML, credentials and logs. App-specific
@@ -431,6 +438,41 @@ synchronously, with focus restoration checked from controls, links and body.
   artifact receives emulator and physical-device qualification.
 - Fire OS support must not depend on Google Play Services.
 
+### Collision-safe Shared-storage Delivery
+
+The operator expanded this delivery slice on 2026-11-14 to retain Android 12+
+and the visible Incoming folder. Keep the existing atomic no-replace rename
+on filesystems that support it. Check the destination name first, then let the
+atomic operation resolve any race. Try the original name, `_01` through `_99`,
+then `_001` through `_999`, widening the number group again when exhausted.
+Insert the suffix before the extension, for example `abc_01.mp3`.
+
+Only a typed unsupported result from the rename itself selects exclusive-copy
+publication. Persist a sharing exclusion before creating the final candidate
+with `create_new`/`O_EXCL`; an existing occupant causes the next candidate to be
+tried. Copy through the exclusively created handle, verify the complete size
+and hash, and sync the file and parent directory before committing publication.
+Never replace or truncate another file, and retain the original download until
+completion. A sync failure after a successful rename must not select this path.
+
+An exclusive copy can be visible to other file managers while incomplete.
+Scans, directory monitoring, direct sharing and metadata admission must keep it
+out of the shared catalog. Interrupted or ambiguous outputs stay preserved and
+excluded across daemon restarts and transfer deletion; retries choose another
+name. Normalize parent-path aliases before applying exclusions. This is a
+current-schema storage change, requiring a fresh beta profile, without migration
+or automatic profile reset.
+
+The operator also supplied an approved 221-file, 1,301,166,929-byte library for
+copying into owned test locations and explicitly authorized public-network
+serving while other work continues. Preserve the source and unrelated device
+data. Retain exact inventory, private paths and filenames only in local output
+evidence. Monitor copied/verified files, hashing, catalog publication, network
+publication, upload requests and actual served bytes as separate observations.
+Absent public demand is `not-observed`, not a successful serving claim. Keep
+the foreground service running after a normal observation interval, with an
+explicit owned-session stop operation and bounded monitoring storage.
+
 ## Distribution Boundary
 
 - The initial supported distribution is a signed APK published with GitHub
@@ -457,31 +499,34 @@ synchronously, with focus restoration checked from controls, links and body.
   debug-key fallback. Initial APKs remain experimental pending device proof.
 - No 32-bit Android ABI is required.
 
-## Android 14-17 Permission Contract
+## Android 12-17 Permission Contract
 
 The operator requested an explicit permission review for every supported
-version. The APK targets API 37 and runs on APIs 34, 35, 36 and 37. This source
+version. The accepted APK target is API 37 with a minimum of API 31. This source
 review is not emulator or physical-device execution evidence.
 
-- All four versions declare normal `INTERNET`, `ACCESS_NETWORK_STATE`,
-  `FOREGROUND_SERVICE`, `FOREGROUND_SERVICE_SPECIAL_USE` and `WAKE_LOCK`
-  permissions for the actual socket and service APIs. The manual-start APK has
+- All seven versions use normal `INTERNET`, `ACCESS_NETWORK_STATE`,
+  `FOREGROUND_SERVICE` and `WAKE_LOCK` permissions for the actual socket and
+  service APIs. The special-use service type/permission applies on API 34+.
+  The manual-start APK has
   no boot receiver or `RECEIVE_BOOT_COMPLETED` permission.
-- All four request `POST_NOTIFICATIONS`. Denial does not prevent a foreground
+- APIs 33-37 request `POST_NOTIFICATIONS`; APIs 31-32 use Android's application
+  notification settings without requesting that nonexistent runtime permission.
+  Denial does not prevent a foreground
   service, but the shell must show reduced notification visibility. See
   [Android notification permission](https://developer.android.com/develop/ui/views/notifications/notification-permission).
-- All four require the user-granted `MANAGE_EXTERNAL_STORAGE` special access
+- All seven require the user-granted `MANAGE_EXTERNAL_STORAGE` special access
   before starting native shared-path operations. Denial blocks Start and
   revocation stops active operation without deleting data. See
   [all-files access](https://developer.android.com/training/data-storage/manage-all-files).
-- All four declare `REQUEST_IGNORE_BATTERY_OPTIMIZATIONS` and guide the user
+- All seven declare `REQUEST_IGNORE_BATTERY_OPTIMIZATIONS` and guide the user
   through the separate exemption setting. Exemption is recommended, not a
   prerequisite to starting. Show `ActivityManager.isBackgroundRestricted()`
   independently: unrestricted battery use and Doze exemption are different
   controls. See [background optimization](https://developer.android.com/topic/performance/background-optimization)
   and [Doze](https://developer.android.com/training/monitoring-device-state/doze-standby).
 - Runtime API 37 additionally requires `ACCESS_LOCAL_NETWORK` before Start,
-  including native TCP/UDP and SSDP operations. Monitor revocation. APIs 34-36
+  including native TCP/UDP and SSDP operations. Monitor revocation. APIs 31-36
   must not request that newer runtime permission. See
   [local network permission](https://developer.android.com/privacy-and-security/local-network-permission).
 - No legacy storage/media, location, Bluetooth, nearby-Wi-Fi, overlay, exact
@@ -493,16 +538,17 @@ review is not emulator or physical-device execution evidence.
   service. Android 16 job quotas apply to scheduling APIs, not the hosted Tokio
   runtime, which does not use those APIs. See
   [foreground service changes](https://developer.android.com/develop/background-work/services/fgs/changes).
-- Task Manager Stop kills the application without lifecycle callbacks. Own
+- Android 13+ Task Manager Stop kills the application without lifecycle callbacks. Own
   daemon process exit history must prevent treating explicit user termination
   as an ordinary recoverable crash; stale exits preceding a later explicit
   Start must not disable that new session. See
   [user-initiated service stopping](https://developer.android.com/develop/background-work/services/fgs/handle-user-stopping).
 
-The intended qualification contract covers each API 34-37 separately:
-notification denial/grant/revocation; all-files denial/grant/running revocation;
+The intended qualification contract covers each API 31-37 separately:
+notification denial/grant/revocation on API 33+; all-files denial/grant/running revocation;
 Doze with and without exemption and actual idle-state assertions; manual Start;
-explicit Stop, force-stop and Task Manager Stop. API 37 adds local-network
+explicit Stop and force-stop everywhere, plus Task Manager Stop on API 33+.
+API 37 adds local-network
 denial/grant/revocation; earlier versions verify absence of that prompt. These
 are required coverage targets, not a statement that every case has passed.
 The current mandatory harness selects manual Start, clean Stop, Home/background
@@ -512,12 +558,13 @@ operation. Boot-resume qualification is deferred with that feature.
 
 The operator authorized physical-phone testing over Wi-Fi on 2026-11-13.
 Use an explicitly selected, authenticated ADB connection and preserve the
-operator's ADB server and existing application data. Fresh-emulator reset,
-uninstall, reboot and permission-revocation scenarios are not the physical-phone
-smoke. Admit the installed artifact before use and confine transfer fixtures to
+operator's ADB server and unrelated application data. The operator separately
+authorized resetting this app's owned test profile; use the persisted driver's
+artifact/ownership admission before any reset. Reboot and global device resets
+are not implicit physical-smoke operations. Confine transfer fixtures to
 owned synthetic files; account for the daemon's implicit sharing of its incoming
 directory before the first service start. Phone execution on one Android API
-does not substitute for the full API 34-37 matrix or the 24-hour campaign.
+does not substitute for the full API 31-37 matrix or the 24-hour campaign.
 
 Release signing material is retained in the operator's normal application-data
 directory: `%LOCALAPPDATA%/eMuleBB/signing/android` on Windows, or

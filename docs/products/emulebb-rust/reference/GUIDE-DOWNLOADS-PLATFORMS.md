@@ -203,14 +203,15 @@ did not publish an APK release.
 
 | Alternative | CPU | Filename suffix |
 | --- | --- | --- |
-| Android application, Android 14+ | ARM64 and x86_64 in one APK | `-android-universal.apk` |
+| Android application candidate, Android 12+ | ARM64 and x86_64 in one APK | `-android-universal.apk` |
 | Experimental native shell, including Termux | ARM64 / aarch64 | `-android-arm64-v8a.tar.zst` |
 | Experimental native shell, including Termux | x86_64 / amd64 | `-android-x86_64.tar.zst` |
 
 The native binaries target API 28+ (Android 9+) with 16 KiB-compatible ELF
 alignment. That binary floor does not establish runtime support on every Android
-version. The APK minimum is API 34 (Android 14); its API 34-37 qualification is
-separate from native archive compilation. A Linux musl archive cannot substitute
+version. The new APK candidate minimum is API 31 (Android 12); its API 31-37
+runtime qualification, including Android 12L, is separate from native archive
+compilation and remains pending publication. A Linux musl archive cannot substitute
 for either Android archive. Fire OS, Termux runtime and 24-hour continuous
 operation remain unqualified; see [the owning feature](../active/items/RUST-FEAT-056.md).
 
@@ -221,9 +222,10 @@ installation from that download source when Android asks. Open eMuleBB and:
 
 1. Select **Grant all-files access** and enable the Android special access.
    Start requires it. On Android API 37, also select **Allow local network**;
-   Android 14-16 do not require that newer prompt.
+   Android 12-16 do not require that newer prompt.
 2. Select **Allow notifications** for the running-service notification and its
-   Stop action. Select **Allow continuous background operation** for the Doze
+   Stop action. Android 12/12L opens app notification settings; Android 13+
+   requests the notification permission. Select **Allow continuous background operation** for the Doze
    exemption, then review **App battery settings** and allow unrestricted
    operation. Notifications and battery exemption are recommended; their denial
    is shown in the shell and does not itself block Start.
@@ -246,6 +248,20 @@ and network traffic; Android and device battery policies still control process
 survival. Use the app's **Stop**, the notification's Stop action, or WebUI
 shutdown to stop cleanly. After reboot, open the app and press Start again.
 Automatic boot resume is deferred; there is no reboot-resume setting.
+
+Completed-file name collisions preserve the existing file. For example,
+`abc.mp3` becomes `abc_01.mp3`, up to `_99`, then `_001` through `_999` and
+wider groups when necessary. Atomic rename is used where supported. On other
+filesystems, the daemon exclusively creates a free candidate and copies into
+it; that filename can appear in a file manager before copying finishes, but
+eMuleBB does not share it until verification and durable completion succeed.
+An interrupted copy may remain as an unshared partial; the original download
+is retained and retry uses another free name.
+
+The storage repair changes this beta's database schema. An older profile fails
+with a fresh-profile instruction; no migration or automatic reset is performed.
+Preserve any required data before clearing an old APK test profile. Native
+shell users can select a new writable directory with `--profile`.
 
 ### Termux Native Shell
 
