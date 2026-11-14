@@ -1,5 +1,7 @@
 """The public contract keeps branding bounded and the two reader routes equal."""
 import copy
+from html import unescape
+from html.parser import HTMLParser
 import importlib.util
 import json
 from pathlib import Path
@@ -43,7 +45,9 @@ class PublicPresenceTests(unittest.TestCase):
     def test_generated_profile_is_deterministic_and_keeps_maintenance_secondary(self):
         rendered = presence.render_org_profile(self.contract)
         self.assertEqual(rendered, presence.render_org_profile(copy.deepcopy(self.contract)))
-        self.assertIn("| Use eMuleBB Rust | Develop with eMuleBB Rust |", rendered)
+        for route in self.contract["reader_routes"].values():
+            self.assertIn(f'<strong>{route["label"]}</strong></a>', rendered)
+            self.assertIn(f'<h3>{route["label"]}</h3>', rendered)
         self.assertIn('width="160" height="160" alt="eMuleBB Rust pixel donkey identity"', rendered)
         self.assertNotIn("few more weeks", rendered)
         for retired_story in ("historical", "migration", "beta.2", "uploadqueuemigration"):
@@ -52,5 +56,40 @@ class PublicPresenceTests(unittest.TestCase):
         self.assertLess(rendered.index("## Work across the project"), rendered.index("## Maintenance and references"))
         for repository in self.contract["repositories"]:
             self.assertIn(repository["url"], rendered)
+            self.assertIn(repository["role"], unescape(rendered))
         for reference in self.contract["compatibility_references"]:
             self.assertIn(reference["url"], rendered)
+
+    def test_cards_keep_only_approved_identity_and_build_status_images(self):
+        class Images(HTMLParser):
+            def __init__(self):
+                super().__init__()
+                self.sources = []
+
+            def handle_starttag(self, tag, attrs):
+                if tag == "img":
+                    self.sources.append(dict(attrs)["src"])
+
+        rendered = presence.render_org_profile(self.contract)
+        images = Images()
+        images.feed(rendered)
+        self.assertEqual(images.sources, [
+            self.contract["branding"]["readme_logo_url"],
+            "https://github.com/emulebb/emulebb-rust/actions/workflows/ci.yml/badge.svg?branch=main",
+            "https://github.com/emulebb/emulebb-tooling/actions/workflows/docs-site.yml/badge.svg?branch=main",
+        ])
+        self.assertNotIn("<style", rendered)
+        self.assertNotIn("<script", rendered)
+        legacy = copy.deepcopy(self.contract)
+        legacy.pop("branding")
+        legacy.pop("reader_routes")
+        self.assertIn("Use eMuleBB Rust", presence.render_org_profile(legacy))
+        self.assertNotIn("pixel donkey", presence.render_org_profile(legacy))
+
+    def test_contract_text_is_escaped_inside_html(self):
+        self.contract["organization"]["summary"] = 'Search <sample> & "share"'
+        self.contract["repositories"][0]["role"] = "Rust <client> & console"
+        rendered = presence.render_org_profile(self.contract)
+        self.assertIn("Search &lt;sample&gt; &amp; &quot;share&quot;", rendered)
+        self.assertIn("Rust &lt;client&gt; &amp; console", rendered)
+        self.assertNotIn("<sample>", rendered)
