@@ -34,7 +34,7 @@ BRAND_ASSETS = {
     "assets/brand/emulebb-logo-384.png": ("logo", 384, 384),
     "assets/brand/emulebb-logo-512.png": ("logo", 512, 512),
     "assets/brand/emulebb-donkey-180.png": ("touch-icon", 180, 180),
-    "assets/brand/emulebb-favicon.ico": ("favicon", 256, 256),
+    "assets/brand/emulebb-favicon.ico": ("favicon", 48, 48),
     "assets/brand/rust-social-preview.png": ("social-card", 1280, 640),
 }
 
@@ -52,8 +52,12 @@ def validate_public_extensions(payload: dict[str, Any], errors: list[str]) -> No
     if not isinstance(brand, dict):
         errors.append("branding must be an object")
         return
-    if brand.get("selection") != "proposal-1":
-        errors.append("branding must select the operator-approved proposal-1 assets")
+    if brand.get("selection") != "proposal-5":
+        errors.append("branding must select the operator-approved proposal-5 assets")
+    if brand.get("source_manifest_path") != "manifests/branding/proposal-5-source.json":
+        errors.append("branding source inventory must identify the supplied proposal-5 manifest")
+    if brand.get("application_manifest_url") != "https://raw.githubusercontent.com/emulebb/emulebb-rust/main/resources/branding.json":
+        errors.append("branding application inventory must use the canonical public Rust source")
     for key in ("source_sha256",):
         if not isinstance(brand.get(key), str) or re.fullmatch(r"[0-9a-f]{64}", brand[key]) is None:
             errors.append(f"branding.{key} requires a SHA-256 identity")

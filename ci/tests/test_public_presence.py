@@ -1,5 +1,6 @@
 """The public contract keeps branding bounded and the two reader routes equal."""
 import copy
+import hashlib
 from html import unescape
 from html.parser import HTMLParser
 import importlib.util
@@ -28,6 +29,9 @@ class PublicPresenceTests(unittest.TestCase):
 
     def test_unrelated_urls_assets_and_incomplete_brand_metadata_are_rejected(self):
         changes = (
+            lambda value: value["branding"].update(selection="proposal-1"),
+            lambda value: value["branding"].update(source_manifest_path="../private.json"),
+            lambda value: value["branding"].update(application_manifest_url="https://example.invalid/branding.json"),
             lambda value: value["reader_routes"]["use"].update(url="https://example.invalid/"),
             lambda value: value["branding"].update(readme_logo_url="https://example.invalid/logo.png"),
             lambda value: value["branding"].update(logo_path="../private.png"),
@@ -41,6 +45,20 @@ class PublicPresenceTests(unittest.TestCase):
                 modified = copy.deepcopy(self.contract)
                 change(modified)
                 self.assertTrue(presence.validate_contract(modified))
+
+    def test_public_derivatives_match_the_retained_supplied_inventory(self):
+        brand = self.contract["branding"]
+        data = (ROOT / brand["source_manifest_path"]).read_bytes()
+        self.assertEqual(hashlib.sha256(data).hexdigest(), brand["source_sha256"])
+        source = json.loads(data)
+        self.assertEqual(source["proposal"], brand["selection"])
+        identities = {asset["name"]: (asset["bytes"], asset["sha256"]) for asset in source["files"]}
+        names = {"logo": lambda asset: f'logo-tile-{asset["width"]}.png',
+                 "touch-icon": lambda asset: "donkey-180.png",
+                 "favicon": lambda asset: "favicon.ico",
+                 "social-card": lambda asset: "rust-social-preview.png"}
+        for asset in brand["assets"]:
+            self.assertEqual((asset["bytes"], asset["sha256"]), identities[names[asset["role"]](asset)])
 
     def test_generated_profile_is_deterministic_and_keeps_maintenance_secondary(self):
         rendered = presence.render_org_profile(self.contract)

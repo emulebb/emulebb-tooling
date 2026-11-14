@@ -1,0 +1,181 @@
+{
+    "proposal":  "proposal-5",
+    "status":  "PROPOSAL",
+    "reference":  "../proposal-1",
+    "method":  "Code-drawn 2x2 solid square blocks; three-color proposal-4 palette; integer coordinates; binary alpha; no interpolation or antialiasing",
+    "palette":  [
+                    "#164867",
+                    "#087EAC",
+                    "#29ADBE"
+                ],
+    "smallIcons":  [
+                       {
+                           "size":  16,
+                           "opaqueColors":  3,
+                           "binaryAlpha":  true
+                       },
+                       {
+                           "size":  24,
+                           "opaqueColors":  3,
+                           "binaryAlpha":  true
+                       },
+                       {
+                           "size":  32,
+                           "opaqueColors":  3,
+                           "binaryAlpha":  true
+                       },
+                       {
+                           "size":  48,
+                           "opaqueColors":  3,
+                           "binaryAlpha":  true
+                       }
+                   ],
+    "icoValidation":  [
+                          {
+                              "file":  "favicon.ico",
+                              "frames":  [
+                                             16,
+                                             32,
+                                             48
+                                         ],
+                              "exactSmallPngPayloads":  true,
+                              "largerFramesUnchanged":  true
+                          },
+                          {
+                              "file":  "application.ico",
+                              "frames":  [
+                                             16,
+                                             24,
+                                             32,
+                                             48,
+                                             64,
+                                             128,
+                                             256
+                                         ],
+                              "exactSmallPngPayloads":  true,
+                              "largerFramesUnchanged":  true
+                          }
+                      ],
+    "byteIdenticalCopies":  [
+                                "donkey-128.png",
+                                "donkey-180.png",
+                                "donkey-192.png",
+                                "donkey-256.png",
+                                "donkey-512.png",
+                                "donkey-64.png",
+                                "donkey-mark-master.png",
+                                "logo-tile-256.png",
+                                "logo-tile-384.png",
+                                "logo-tile-512.png",
+                                "rust-social-preview.png"
+                            ],
+    "originalProposalUnchanged":  true,
+    "repositoryAssetsChanged":  false,
+    "files":  [
+                  {
+                      "name":  "application.ico",
+                      "bytes":  119762,
+                      "sha256":  "7603b7ef9bfa7f75ebdc0afc83aef317385e04a3559e5bd368c8025e5dd8360a"
+                  },
+                  {
+                      "name":  "design-notes.txt",
+                      "bytes":  1274,
+                      "sha256":  "51c7901dca9b199c2e21981da915efc4f5b10ceed931f1c755042a6d8310697c"
+                  },
+                  {
+                      "name":  "donkey-128.png",
+                      "bytes":  26053,
+                      "sha256":  "7d6df0fbf48993c1c677f4c75e488079c017f608373b08b9e750e91311663eab"
+                  },
+                  {
+                      "name":  "donkey-180.png",
+                      "bytes":  46087,
+                      "sha256":  "4b269a328482ada12976aa90ca86a7da4b5559c2d225b9e579143f15b46df1ac"
+                  },
+                  {
+                      "name":  "donkey-192.png",
+                      "bytes":  51758,
+                      "sha256":  "7b18c7a5e76f3b0396d61883e076acf14ba6470d2ffc3a0968bb940c8656a01d"
+                  },
+                  {
+                      "name":  "donkey-256.png",
+                      "bytes":  84445,
+                      "sha256":  "7f26b62bac49daa0e52c362cfa2cd777c4a6990d3bcdaf3a63f4d88153967b2b"
+                  },
+                  {
+                      "name":  "donkey-512.png",
+                      "bytes":  282308,
+                      "sha256":  "e79dc7628376307cdb646d09b6966e75ef3716e720ba3cdee3814c2e3a67ae25"
+                  },
+                  {
+                      "name":  "donkey-64.png",
+                      "bytes":  7944,
+                      "sha256":  "a95e1c89f0a0b2866cca714b652e5dae4ffabb4614144d352b8cb79fb8a9f5f8"
+                  },
+                  {
+                      "name":  "donkey-mark-master.png",
+                      "bytes":  731593,
+                      "sha256":  "f0c1d296f39bf953b69a60e82f2d8e0f3f80efc6fb920d9c4eccd2022b10e805"
+                  },
+                  {
+                      "name":  "export-icons.ps1",
+                      "bytes":  8162,
+                      "sha256":  "b905055bbc79515c9edfd9dec4153ed2047e0652b599625c82f102e33a26f961"
+                  },
+                  {
+                      "name":  "favicon.ico",
+                      "bytes":  992,
+                      "sha256":  "58144a359a6bc5def936047e42605d058be7c7f1b21dd2f27ac9643bb723c79a"
+                  },
+                  {
+                      "name":  "icon-16.png",
+                      "bytes":  216,
+                      "sha256":  "851b8eb75f0081eb0cb69d95d5ec90e43d9a0747e8fd1fe799853639b9ad0e1a"
+                  },
+                  {
+                      "name":  "icon-24.png",
+                      "bytes":  264,
+                      "sha256":  "5304b784fcd2242278efcf10f3715b892c6a502a26569f1bbe4f07bb37146f64"
+                  },
+                  {
+                      "name":  "icon-32.png",
+                      "bytes":  308,
+                      "sha256":  "b3ce51a35147830a93d3b200666b7fd844e0f117e172273edf3049904e4d1f5e"
+                  },
+                  {
+                      "name":  "icon-48.png",
+                      "bytes":  414,
+                      "sha256":  "3f89fab34d0c7e6aced8c06f7cc91f7f605295ec823a1a7f2a7baf336d8121af"
+                  },
+                  {
+                      "name":  "icon-preview.png",
+                      "bytes":  52398,
+                      "sha256":  "8c314a383e3f06e1b503b69ff791819c8a8a5684a9aa021e81ae3bd74d636cd3"
+                  },
+                  {
+                      "name":  "logo-tile-256.png",
+                      "bytes":  106278,
+                      "sha256":  "48b08b0d5516ba5e83d713a1a19ed9682a377abd561346fcb39687fc0a70c73f"
+                  },
+                  {
+                      "name":  "logo-tile-384.png",
+                      "bytes":  238240,
+                      "sha256":  "884d0edea8edc6a5a0e9c73fe9be988f9b2d6642b9136b5b5a4e2fa6cbe5ffaf"
+                  },
+                  {
+                      "name":  "logo-tile-512.png",
+                      "bytes":  409923,
+                      "sha256":  "0f86eb0718ea489aa2fee79060fb768b4192a543508c50f0ce7f685dc731cafa"
+                  },
+                  {
+                      "name":  "pixel-mark-enlarged-512.png",
+                      "bytes":  4714,
+                      "sha256":  "53c2747a76b17dda919e401a668f1d3ec6a57e41c4610d1e27dc2796d93bc705"
+                  },
+                  {
+                      "name":  "rust-social-preview.png",
+                      "bytes":  108889,
+                      "sha256":  "5fbcdb538a8d571f93f969b5bb7c746e0469d709164fc5a69313eec0a642d7e7"
+                  }
+              ]
+}
