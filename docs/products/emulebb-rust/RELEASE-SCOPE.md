@@ -25,9 +25,14 @@ Production implementation of a later phase must not begin while the preceding
 gate is open. Forward design and deterministic fixtures may be prepared only
 when they do not add dormant production paths or distract from the active gate.
 
-## Current Operator Hold And Work Priority (2026-11-12)
+## Current Operator Hold And Work Priority (2026-11-13)
 
-**Beta 3 promotion and APK/signing remain on hold.** The client-fix and delivery
+**Beta 3 promotion remains on hold.** The operator separately authorized the
+lean Android APK, JNI, continuous foreground service and signing work under
+[RUST-FEAT-056](active/items/RUST-FEAT-056.md), including additive APK publication
+through existing nightlies. Initial APKs remain experimental pending actual
+device qualification; Play Store publication is outside scope.
+The client-fix and delivery
 batch in [PR #329](https://github.com/emulebb/emulebb-rust/pull/329) is published
 as the accepted [nightly from source `6429b952`](https://github.com/emulebb/emulebb-rust/releases/tag/rust-v0.1.0-beta.2.nightly.20261113.g6429b952).
 Its complete public-byte, provenance and OCI inventory passed verification.
@@ -175,11 +180,20 @@ bundles remain distinct from an APK or device-runtime qualification.
 The operator's Termux launch exposed a JVM-dependent HTTPS verifier panic.
 The [native CLI repair and evidence](https://github.com/emulebb/emulebb-tooling/blob/main/docs/products/emulebb-rust/history/items/RUST-BUG-186.md)
 now include accepted source-built API 37/x86_64/16 KiB emulator TLS and
-authenticated first-launch proof. This does not qualify published Android
-archive execution, physical/ARM runtime, APK/JNI, transfer or VPN behavior.
-The physical S24+ retest and separate Android unavailable/degraded-network
-execution remain unproved under open #226; optional environment expansion does
-not independently hold the core Client gate.
+authenticated first-launch proof. Separately,
+[RUST-FEAT-056](active/items/RUST-FEAT-056.md#current-state) records bounded
+API 36/ARM64 physical execution of the source `54a5f220` signed APK: rendered
+WebUI, local transfer/collision/restart and system day/night theme checks. That
+candidate failed the full APK runtime matrix and was not published. The later
+manual-start source `42bffd97` passed source checks and bounded physical tests
+but failed full nightly qualification. The operator subsequently expanded the
+APK target to Android 12+ with safe shared-storage collision delivery, while
+retaining both native Android archives. That expanded candidate still requires
+fresh-source APK/device and publication proof; automatic boot resume is deferred. Android/Fire OS support,
+the full API matrix, particular untested hardware, Termux UID/runtime,
+unavailable/degraded-network execution, VPN behavior and the 24-hour soak remain
+open under that owner. Optional environment expansion does not independently
+hold the core Client gate.
 
 ### Beta contract policy
 

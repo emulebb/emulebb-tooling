@@ -141,8 +141,8 @@
     }
   },
   "branding": {
-    "selection": "proposal-1",
-    "source_sha256": "0c7782ed5bdfb13f551f0f07658bc6ea59eb3c35c9ccf0a3a4e8b0684974223b",
+    "selection": "proposal-5",
+    "source_sha256": "2473a87ae2c76ffcf1110d73477c9e3739060d50412c2199624a617c3fcd947d",
     "logo_path": "assets/brand/emulebb-logo-256.png",
     "social_path": "assets/brand/rust-social-preview.png",
     "social_alt": "eMuleBB Rust: eD2K and Kad with browser control on Windows, Linux and macOS",
@@ -183,10 +183,10 @@
       {
         "path": "assets/brand/emulebb-favicon.ico",
         "role": "favicon",
-        "width": 256,
-        "height": 256,
-        "bytes": 5707,
-        "sha256": "1b42435d5bfb7fa9d30df0d8c7a23bcc47211223a2097f1585499dd2a1e40fbe"
+        "width": 48,
+        "height": 48,
+        "bytes": 992,
+        "sha256": "58144a359a6bc5def936047e42605d058be7c7f1b21dd2f27ac9643bb723c79a"
       },
       {
         "path": "assets/brand/rust-social-preview.png",
@@ -196,6 +196,8 @@
         "bytes": 108889,
         "sha256": "5fbcdb538a8d571f93f969b5bb7c746e0469d709164fc5a69313eec0a642d7e7"
       }
-    ]
+    ],
+    "source_manifest_path": "manifests/branding/proposal-5-source.json",
+    "application_manifest_url": "https://raw.githubusercontent.com/emulebb/emulebb-rust/main/resources/branding.json"
   }
 }

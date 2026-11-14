@@ -21,8 +21,8 @@ controllers, or the embedded SPA WebUI.
 - The embedded SPA is an operations console. Do not grow a desktop-GUI mirror
   or an internal automation-rule engine; external controllers own selection,
   scheduling, and post-processing.
-- The supported listener default is loopback-only. Explicit non-loopback
-  configuration remains authenticated; every first-party and compatibility
+- The supported listener default is `0.0.0.0:20017` on every product platform
+  and package. Explicit listener settings remain authoritative. Every first-party and compatibility
   route family requires authentication and bounded request handling appropriate
   to that protocol.
 - Do not bump `apiVersion` or REST `contractVersion` without a deliberate

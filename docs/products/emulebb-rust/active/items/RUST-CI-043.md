@@ -24,11 +24,10 @@ source: Operator-directed configuration and persistence architecture review
 
 The operator authorized one canonical ready bootstrap for every release
 package and first-fresh-profile initialization:
-`emulebb-rust-settings.toml`, `[rest].bind_addr = "127.0.0.1:20017"` and
+`emulebb-rust-settings.toml`, `[rest].bind_addr = "0.0.0.0:20017"` and
 `api_key = "change_me_123change_me_123change_me_123"`. The repeated starter key
 has 39 ASCII characters; retain the existing 32-byte minimum and normal API
-authentication. It is a public starter value, not a privately generated secret;
-replace it before external API exposure. TOML uses only snake_case keys and
+authentication. The starter value is shared by ready packages. TOML uses only snake_case keys and
 rejects obsolete/unknown shapes. A fresh database seeds TCP `20019` and UDP
 `20020` even when its bootstrap was supplied by the package, without replacing
 existing database preferences or user bootstrap files.
@@ -149,7 +148,7 @@ no running client, current OpenAPI or current user instructions.
 | P2P TCP | `20019` |
 | P2P UDP | `20020` |
 
-Ports are configurable. Higher numbers provide no security benefit. REST stays authenticated and loopback-bound by default. Specify one coherent P2P UDP owner from receive/send, NAT and advertisement paths; another public UDP listener needs a demonstrated protocol requirement.
+Ports are configurable. Higher numbers provide no security benefit. REST stays authenticated and binds `0.0.0.0:20017` by default. Specify one coherent P2P UDP owner from receive/send, NAT and advertisement paths; another public UDP listener needs a demonstrated protocol requirement.
 
 ## Existing owners and boundaries
 

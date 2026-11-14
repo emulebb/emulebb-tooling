@@ -63,9 +63,10 @@ merge and publication policies.
    claim the current runtime already implements it.
    The accepted ready-package bootstrap and first-fresh-profile key is
    `change_me_123change_me_123change_me_123` (39 ASCII characters); retain the
-   32-byte minimum and normal authentication. Keep its listener on loopback
-   and explain that this shared starter key must change before external API
-   exposure. Packages share the canonical TOML; preserve existing user files
+   32-byte minimum and normal authentication. The operator selected
+   `0.0.0.0:20017` as the listener default across the product, Android and
+   packages on 2026-11-13, without an exposure warning or compatibility path.
+   Packages share the canonical TOML; preserve existing user files
    and database preferences. Record actual package proof before claiming
    unpack-and-run delivery.
    The operator's latest profile rule is the executable directory on every
@@ -82,14 +83,18 @@ additional orchestration programs need a new operator decision. Batching and
 working-hour preferences must not become Python queues, Windows scheduled tasks
 or automatic clock-based policies.
 
-Beta 3 promotion and APK/signing remain on hold. The long soak follows accepted
+Beta 3 promotion remains on hold. On 2026-11-13 the operator separately
+authorized lean Android APK/JNI/service/signing implementation and additive
+nightly publication under [RUST-FEAT-056](../products/emulebb-rust/active/items/RUST-FEAT-056.md).
+This does not claim device qualification or authorize a Play Store release.
+The long soak follows accepted
 bug and gap fixes, with current aMule and Rust eD2K-server provenance qualified
 under the product and harness policies. Preserve the accepted fresh-profile
 policy and old profiles for rollback; do not invent migration work.
-Separately authorized CI-gated nightly publication does not lift those holds.
+Separately authorized CI-gated nightly publication does not lift the Beta 3 hold.
 APT/RPM/Homebrew remain candidates, AUR/Nix remain unactivated, and no channel
-hosting, signing, paid infrastructure or community publication is authorized by
-the intake. Ubuntu 24.04/Debian 13 x64/ARM64 remain qualification targets until
+hosting, unrelated signing, paid infrastructure or community publication is
+authorized by the intake. Ubuntu 24.04/Debian 13 x64/ARM64 remain qualification targets until
 their actual package dependencies and native results are recorded.
 
 For the approved integration-batching routine, the operator approved
@@ -110,6 +115,19 @@ rewrite protected main or release tags. Follow the
   worker slots, prefer two implementation owners and one review/test owner;
   a queued assignment is not an active agent. Reallocate a finished owner while
   GitHub qualifies a frozen batch, without changing its tested sources.
+- Select each worker's model and reasoning effort for its actual task. Use
+  stronger coding or review models for consequential ownership, concurrency and
+  data-loss boundaries; use economical settings for bounded wiring, checks and
+  documentation. Retain active owners when a handoff would waste context or
+  disrupt validation. Model choice is a PM responsibility, not a blanket
+  highest-effort setting.
+- Manage tokens and outputs deliberately. Prefer focused task context over a
+  full-history fork when it supplies the needed contracts; assign reserved
+  files, acceptance criteria and a bounded next deliverable. Request concise
+  findings, commit IDs and evidence paths instead of transcripts. Batch targeted
+  reads, reuse valid proof and compact observers, and avoid repeated unchanged
+  tests or unnecessary output. Preserve independent review where the risk
+  warrants it.
 - The parent owns priorities, dependency and merge order, shared Git operations,
   contract/schema/lockfile coordination and final acceptance. Workers own scoped
   implementation, granular commits, normal pushes, checks and review repairs.

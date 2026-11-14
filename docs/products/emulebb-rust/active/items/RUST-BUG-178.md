@@ -20,11 +20,18 @@ source: Operator-authorized audit reconciliation and Windows/Linux Beta 3 priori
 
 ## Summary
 
-The existing authenticated diagnostic bundle is intentionally private and full fidelity, including the API key and exact sensitive values. The defect is that the WebUI's generic Capture bundle action immediately downloads it without visibly identifying its private contents or requiring explicit acknowledgement. Beta3 scope is warning, clear labeling and acknowledgement only.
+The existing authenticated diagnostic bundle is intentionally private and full
+fidelity, including the API key and exact sensitive values. On 2026-11-14 the
+operator selected direct diagnostic and shutdown buttons, with no typed phrases
+or confirmation dialogs. That decision supersedes this item's earlier
+warning/acknowledgement proposal. Preserve the private export contract and make
+the direct capture action correctly map its request and raw JSON response.
 
 ## Release Placement
 
-Beta 3 blocker for Windows/Linux: the private warning/acknowledgement only.
+The earlier warning/acknowledgement flow is no longer an approved Beta 3 blocker.
+The operator-selected direct action and correct contract mapping belong to the
+current Android/mobile WebUI delivery chunk under RUST-FEAT-056.
 
 Priority: Major. Delivery lane: diagnostics.
 
@@ -39,7 +46,13 @@ Deeper current-source revalidation confirmed an intentional unsafe/private expor
 - `repos/emulebb-tooling/docs/products/emulebb-rust/api/REST-API-OPENAPI.yaml:311`
 - `repos/emulebb-tooling/docs/products/emulebb-rust/api/REST-API-OPENAPI.yaml:3658`
 
-The OpenAPI endpoint is explicitly unsafe and requires API-key authentication; its schema requires sensitiveValues=exact and apiKeyIncluded=true. Existing route tests assert that the API key survives. The UI instead labels the action Capture bundle and immediately starts capture/download without a private-content warning.
+The OpenAPI endpoint requires API-key authentication; its schema requires
+sensitiveValues=exact and apiKeyIncluded=true. Existing route tests assert that
+the API key survives. Source revalidation found two concrete mapping defects:
+capture omits the required bounded `maxBytes` request field, and the generic
+client unwraps `data` although this endpoint returns raw bundle JSON. Mocked
+envelopes concealed both defects. Correct those mappings without changing the
+backend contract or adding a confirmation flow.
 
 ## Scope Constraints
 
@@ -61,9 +74,9 @@ All seven original redaction proposals are retained as design/nondefect in RUST-
 
 ## Acceptance Criteria
 
-- [ ] Before capture/download, visibly identify the bundle as private and disclose that it contains the API key, paths, content/peer identifiers, and raw logs/diagnostic payloads.
-- [ ] Use an explicit private-bundle action label and require deliberate acknowledgement of the sensitive contents before calling the existing endpoint.
-- [ ] Cancel or dismiss the acknowledgement without invoking the capture endpoint, creating a download, or reporting success.
+- [ ] A direct capture button calls the authenticated endpoint without typed phrases or a confirmation dialog.
+- [ ] Supply the required bounded `maxBytes` field and decode the actual raw bundle response rather than an invented envelope.
+- [ ] Realistic mocked-response regressions verify the request, download and failure behavior without collecting operator data.
 - [ ] Retain the authenticated raw endpoint, exact API-key/sensitive-value contract, caller-owned persistence, byte bounds, and existing full-fidelity operator evidence tests.
 - [ ] UI and documentation do not claim sanitization, anonymity, or shareability. A future allowlisted shareable summary remains a design proposal outside Beta3; no new endpoint or backend redaction is required.
 
@@ -74,4 +87,8 @@ All seven original redaction proposals are retained as design/nondefect in RUST-
 
 ## Validation
 
-Extend webui/tests/unit/diagnostics-view.test.tsx to exercise warning visibility, explicit acknowledgement, capture after acknowledgement, and cancellation without an endpoint call or download. Retain REST raw-bundle contract tests requiring exact secrets. Run scoped UI tests and required Windows/Linux validation through the scheduled workspace owner; inspection is not runtime proof.
+Extend webui/tests/unit/diagnostics-view.test.tsx to exercise direct capture,
+source-correct request fields, raw response decoding and controlled failures.
+Retain REST raw-bundle contract tests requiring exact secrets. Run scoped UI
+tests and required validation through the existing workspace owner; inspection
+is not runtime proof.
