@@ -193,10 +193,11 @@ general VPN-safety proof.
 
 ## Android: APK Or Native Shell
 
-The nightly release contract keeps all three alternatives below. The native
-archives remain public release assets alongside the signed APK; they are not
-limited to developer artifacts in Actions. APK candidates currently await the
-full runtime qualification and publication gate, so use only assets actually
+The nightly release contract keeps all three alternatives below. Both Android
+native archives are public release assets alongside the signed APK; they are
+not limited to developer artifacts in Actions. The APK has passed a bounded
+physical-device smoke as a local build, but the full hosted source matrix and
+release qualification/publication remain pending. Use only assets actually
 present in the selected published release. The failed
 [candidate run 43583500231](https://github.com/emulebb/emulebb-rust/actions/runs/43583500231)
 did not publish an APK release.
@@ -211,8 +212,9 @@ The native binaries target API 28+ (Android 9+) with 16 KiB-compatible ELF
 alignment. That binary floor does not establish runtime support on every Android
 version. The new APK candidate minimum is API 31 (Android 12); its API 31-37
 runtime qualification, including Android 12L, is separate from native archive
-compilation. A bounded API 31 ARM64 phone smoke has passed for one signed local
-APK, but the complete qualification and release publication remain pending. A
+compilation. A fresh 13-case API 31 ARM64 phone smoke has passed for the signed
+local APK built from Rust source `20a07429`; the complete qualification and
+release publication remain pending. A
 Linux musl archive cannot substitute for either Android archive. Fire OS, Termux
 runtime and 24-hour continuous operation remain unqualified; see
 [the owning feature](../active/items/RUST-FEAT-056.md).
@@ -248,9 +250,9 @@ The intended default profile leaves the IP unset, interface empty and VPN Guard
 disabled/off for automatic direct routing: the daemon selects a detected local
 IPv4 address and lets the operating system route traffic with that source
 address. Explicit IP, interface or VPN Guard choices remain strict bindings and
-fail when unsupported. This routing change is in progress; older Android kernel
-binding support and full Android qualification remain unproved. A bounded API
-31 phone smoke passed for one signed local APK; see the
+fail when unsupported. The automatic direct-route repair has passed this
+API 31 device smoke; older Android kernel binding support and full Android
+qualification remain unproved. See the
 [evidence record](../active/items/RUST-FEAT-056.md#latest-api-31-phone-smoke).
 
 After Start, a dedicated foreground service and partial wake lock keep the
