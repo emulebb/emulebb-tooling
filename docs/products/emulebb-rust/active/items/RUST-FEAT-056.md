@@ -142,10 +142,33 @@ synchronously, with focus restoration checked from controls, links and body.
   first and local transfer on rerun. API 36 repeatedly failed an ADB operation
   during screen-off/Doze; API 37 passed transfer and
   file-link confirmation on the rerun, then failed screen-off/Doze. These
-  receipts do not yet distinguish product defects from test-driver failures.
+  initial receipts did not distinguish product defects from test-driver failures.
   Isolated diagnostic replays use the original APK, independently pinned
   diagnostic executors and sanitized typed failures; their results cannot
   satisfy publication qualification.
+- Failure-only transfer observations now identify the API 34/35 blocker.
+  [API 34 replay](https://github.com/emulebb/emulebb-rust/actions/runs/43603479912)
+  and [API 35 replay](https://github.com/emulebb/emulebb-rust/actions/runs/43603483056)
+  both reported 262,144 of 262,144 bytes downloaded, state `completing`, no
+  delivered path and `atomic-no-replace-unsupported`. AOSP's shared-storage
+  FUSE implementation rejects nonzero rename flags on
+  [Android 14](https://android.googlesource.com/platform/packages/providers/MediaProvider/+/refs/heads/android14-release/jni/FuseDaemon.cpp#1299)
+  and [Android 15](https://android.googlesource.com/platform/packages/providers/MediaProvider/+/refs/heads/android15-release/jni/FuseDaemon.cpp#1346);
+  [Android 16](https://android.googlesource.com/platform/packages/providers/MediaProvider/+/refs/heads/android16-release/jni/FuseDaemon.cpp#1386)
+  permits `RENAME_NOREPLACE`. Timeout increases cannot repair that limitation.
+  The operator's decision between an Android 16+ APK minimum and a different
+  storage/export design remains pending. Neither the supported range nor the
+  no-overwrite guarantee has been weakened. Both native archives remain in scope.
+- The API 36/37 screen-off failure was separately identified as successful
+  `dumpsys power` output exceeding the harness's 65,536-byte bound. Harness
+  `0cd8b6bcc7f3ec2298b86dc27fe33c60ab5887db` filters the dump on-device into a
+  closed wakefulness result, preserving command errors, the output/time bounds,
+  Home/activity-closed proof, actual deep idle and repeated authentication.
+  The focused lifecycle suite passed 230 tests without skips, including real
+  shell filter execution. It also includes the reviewed bounded state-wait
+  repair for transiently absent UI controls. Repaired API 36/37 diagnostic
+  execution remains pending; these source and unit checks are not publication
+  qualification.
 - The exact GitHub-built manual-start `42bffd97` APK passed two bounded
   12-case physical-device campaigns on API 36, ARM64, 4096-byte pages. Its
   APK SHA-256 is
