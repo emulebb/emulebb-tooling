@@ -72,6 +72,35 @@ Android ABIs with honest experimental status. Current compile-only CI reports
 and source code for a producer are not publication proof. The full APK and
 device acceptance criteria below remain open.
 
+### Mobile WebUI Addition
+
+On 2026-11-14 the operator added the supplied mobile WebUI and dark-mode plan to
+this delivery chunk. Keep the existing 14 views, Tabler components and desktop
+layout. Below 640 px, collapse the existing navigation into an accessible Menu;
+fit controls at 320 px and retain wide semantic tables inside labeled local
+scrolling wrappers. Do not add dependencies, a second navigation tree or cards
+replacing table columns.
+
+Add System / Light / Dark appearance with Tabler's root theme attribute, applying
+the resolved appearance before rendering. Persist the browser preference under
+`emulebb.webui.theme` independently of authentication; storage failures retain an
+in-memory selection. Validate live device-theme changes and readable controls.
+
+Diagnostics capture, crash testing and shutdown use direct buttons without
+typed phrases or confirmation dialogs. Keep authentication and required API
+request fields; mocked tests must not crash or stop an operator daemon. Validate
+displayed values and action payloads against actual response contracts, including
+the private raw diagnostic bundle. Do not describe that bundle as sanitized or
+safe for public sharing. This supersedes the earlier acknowledgement proposal in
+[RUST-BUG-178](RUST-BUG-178.md).
+
+Acceptance includes realistic mocked data for all views at phone, tablet and
+desktop widths; theme persistence and unavailable storage; keyboard/menu/focus
+behavior; forms, row actions and local table scrolling; Chromium coverage and a
+mobile WebKit smoke. Retain synthetic light/dark screenshots below the configured
+output root. Use the existing supported WebUI owner for unit, type, production
+build and browser checks, followed by fresh combined-source release qualification.
+
 ## Current State
 
 - The 2026-11-13 operator authorization lifts the APK/signing hold for this
