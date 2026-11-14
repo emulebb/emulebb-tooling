@@ -176,11 +176,16 @@ device acceptance criteria below remain open.
   the primary user unlocked, the package not stopped, storage access and
   notification grants present, and the Doze whitelist retained. The daemon
   service was absent and every post-reboot REST attempt failed to connect.
-  These observations do not yet distinguish receiver delivery, stored recovery
-  intent, or startup rejection. The API 36 receipt is retained below
-  `EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/android-apk-diagnostic/43537520613/`,
-  SHA-256 `83ca071011ee1265fffba3d9d587a7c466ed3ef5bf397f5ce9af9ca987dfc580`.
-  No product boot defect has been established from the timeout alone.
+  A subsequent observation also resolved the installed boot receiver and, only
+  after recording the failed automatic startup, opened the normal application
+  without pressing Start. The bound service reported `Failed` with boot resume
+  still enabled. The exact error remains unclassified; these facts do not prove
+  receiver delivery or identify the startup failure. The successful explicit
+  Start and authenticated readiness immediately before reboot durably removed
+  the earlier permission-test error. The API 36 receipt is retained below
+  `EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/android-apk-diagnostic/43542517877/`,
+  SHA-256 `220073b326dc921da74373c182fedbba3dc5b289e5c8d69060688e4e7cf9e518`.
+  No product root cause has been established from the timeout alone.
 - The existing Nightly workflow now has an optional read-only diagnostic replay
   mode. It independently admits a completed official producer run's successful
   signed APK and matching peer artifacts, original source-owned provider pins,
@@ -448,7 +453,7 @@ satisfy those acceptance criteria.
 - [ ] Canonical orchestration produces the signed APK, bundled WebUI, manifest,
       checksums, SBOM, and provenance below the workspace output root.
 - [ ] The foreground service starts one Rust runtime with an app-private
-      profile and an authenticated loopback WebUI.
+      profile and an authenticated WebUI listening on `0.0.0.0:20017` by default.
 - [ ] Notification stop, REST shutdown, application stop, restart, and ordinary
       process termination leave SQLite and transfer state recoverable.
 - [ ] Backgrounding the UI does not stop an active transfer while the service
