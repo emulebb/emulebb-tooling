@@ -134,7 +134,37 @@ synchronously, with focus restoration checked from controls, links and body.
   [CI](https://github.com/emulebb/emulebb-rust/actions/runs/43590182009),
   [CodeQL](https://github.com/emulebb/emulebb-rust/actions/runs/43590184379) and
   [optional-platform checks](https://github.com/emulebb/emulebb-rust/actions/runs/43590187024)
-  are pending at this checkpoint; the next full candidate remains unpublished.
+  passed. Its [nightly candidate 43593021660](https://github.com/emulebb/emulebb-rust/actions/runs/43593021660)
+  produced the signed universal APK and both native archives, but remains
+  unpublished. One failed-job rerun resolved the unrelated Linux ARM64 package
+  admission failure. APK qualification still failed on all four guests:
+  API 34 repeatedly failed during local transfer; API 35 failed initial startup
+  first and local transfer on rerun. API 36 repeatedly failed an ADB operation
+  during screen-off/Doze; API 37 passed transfer and
+  file-link confirmation on the rerun, then failed screen-off/Doze. These
+  receipts do not yet distinguish product defects from test-driver failures.
+  Isolated diagnostic replays use the original APK, independently pinned
+  diagnostic executors and sanitized typed failures; their results cannot
+  satisfy publication qualification.
+- The exact GitHub-built manual-start `42bffd97` APK passed two bounded
+  12-case physical-device campaigns on API 36, ARM64, 4096-byte pages. Its
+  APK SHA-256 is
+  `7da937988aedf6fce35863f164e57c89964dae5f5adabb6ce2fcf796dfb9e714`.
+  Fresh installation proved Incoming/Shared defaults, visible version/insets,
+  authenticated source-bound readiness, system day/night switching with the
+  original theme restored, resource diagnostics and the diagnostics chooser
+  without selecting a recipient. Receipt:
+  `EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/android-apk-device/phone-github-42b-fresh-20261114122844/physical-device.json`,
+  SHA-256 `d42b6067199d1a11e9f97859ab512f7f186728864ddc26dc7a8971ae8811b96f`.
+  The second campaign proved rendered WebUI content, a real 256 KiB transfer
+  against the same-source ARM64 peer, collision-preserving final delivery,
+  and completion history/shared catalog across restart with duplicate rejection.
+  Receipt:
+  `EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/android-apk-device/phone-github-42b-transfer-20261114123417/physical-device.json`,
+  SHA-256 `bbb53126e29687b1660b7076bf50a4a725b2863ba572767fb10db4cf2eb6c975`.
+  Owned peer endpoints and fixtures were cleaned up; the app was left stopped.
+  This same-device P2P proof does not establish Wi-Fi/NAT data-plane behavior,
+  Termux execution, Fire OS, emulator qualification or 24-hour endurance.
 - The prior `54a5f22042a2131ba6706cc4a7f3206ff30b4a4f` source passed its CI,
   CodeQL and optional-platform prerequisites. Its
   [nightly candidate 43583500231](https://github.com/emulebb/emulebb-rust/actions/runs/43583500231)
