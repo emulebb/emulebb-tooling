@@ -465,13 +465,40 @@ or automatic profile reset.
 
 The operator also supplied an approved 221-file, 1,301,166,929-byte library for
 copying into owned test locations and explicitly authorized public-network
-serving while other work continues. Preserve the source and unrelated device
-data. Retain exact inventory, private paths and filenames only in local output
-evidence. Monitor copied/verified files, hashing, catalog publication, network
+serving while other work continues. The approved library has not yet been copied
+or served. Preserve the source and unrelated device data. Retain exact inventory,
+private paths and filenames only in local output evidence. Monitor
+copied/verified files, hashing, catalog publication, network
 publication, upload requests and actual served bytes as separate observations.
 Absent public demand is `not-observed`, not a successful serving claim. Keep
 the foreground service running after a normal observation interval, with an
 explicit owned-session stop operation and bounded monitoring storage.
+
+### Latest API 31 Phone Smoke
+
+A signed local APK built from Rust source
+`e8bfbc69d095130b2d332f1f98698c427519e349` passed 13 physical-device cases on
+an ARM64 phone running API 31 (Android 12) and Linux 4.14. The cases covered
+normal installation and all-files grant, source and signing certificate, visible
+theme and version, fresh-profile defaults, authenticated REST, served assets and
+rendered WebUI, process CPU/RAM sampling, bounded foreground-service stop, and
+dismissing the standard diagnostic chooser. The receipt is
+`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/android-apk-device/phone-api31-e8-own-settings-row-20261114/physical-device.json`,
+SHA-256 `8729207802137f9030d91ae90b73899aabf3e23ebf8b1ac479322d7479aa3f1b`.
+This is bounded local-APK evidence, not release or broad Android qualification.
+
+Public-library sharing was not run. Public-start preparation failed during Kad
+initialization (HTTP 400). Source inspection found that `SO_BINDTOIFINDEX` is
+unavailable in upstream Linux 4.14, the phone kernel; the observed receipt does
+not establish a direct runtime errno for the strict-pin path. This motivates
+removing unnecessary pinning for automatic direct routing. A separate Nightly
+run 43626570706 was cancelled before publication; there is no release from this
+evidence. Keep automatic local IPv4 selection with OS routing classified as
+proposed/in progress until the Rust change is implemented and validated.
+Explicit IP, interface and VPN Guard choices must remain strict pins that fail
+when unsupported. Do not claim strict binding on older Android kernels. The APK
+minimum remains API 31; both experimental native archives retain their API 28
+compile floor.
 
 ## Distribution Boundary
 

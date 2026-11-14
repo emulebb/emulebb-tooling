@@ -211,9 +211,11 @@ The native binaries target API 28+ (Android 9+) with 16 KiB-compatible ELF
 alignment. That binary floor does not establish runtime support on every Android
 version. The new APK candidate minimum is API 31 (Android 12); its API 31-37
 runtime qualification, including Android 12L, is separate from native archive
-compilation and remains pending publication. A Linux musl archive cannot substitute
-for either Android archive. Fire OS, Termux runtime and 24-hour continuous
-operation remain unqualified; see [the owning feature](../active/items/RUST-FEAT-056.md).
+compilation. A bounded API 31 ARM64 phone smoke has passed for one signed local
+APK, but the complete qualification and release publication remain pending. A
+Linux musl archive cannot substitute for either Android archive. Fire OS, Termux
+runtime and 24-hour continuous operation remain unqualified; see
+[the owning feature](../active/items/RUST-FEAT-056.md).
 
 ### Android Application
 
@@ -241,6 +243,15 @@ installation from that download source when Android asks. Open eMuleBB and:
 
 The native shell follows Android's system light/dark setting. The browser
 console separately offers **System**, **Light** and **Dark** appearance.
+
+The intended default profile leaves the IP unset, interface empty and VPN Guard
+disabled/off for automatic direct routing: the daemon selects a detected local
+IPv4 address and lets the operating system route traffic with that source
+address. Explicit IP, interface or VPN Guard choices remain strict bindings and
+fail when unsupported. This routing change is in progress; older Android kernel
+binding support and full Android qualification remain unproved. A bounded API
+31 phone smoke passed for one signed local APK; see the
+[evidence record](../active/items/RUST-FEAT-056.md#latest-api-31-phone-smoke).
 
 After Start, a dedicated foreground service and partial wake lock keep the
 daemon running independently of the shell and browser. This consumes battery
