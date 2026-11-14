@@ -155,8 +155,54 @@ device acceptance criteria below remain open.
   is `EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/android-apk/88ab941af5974a62b6574c8f233fe1fc/build.json`,
   SHA-256 `bd012b2b44609b7239b2a226e18b6a32e4d23f8b1de3aeb58567b4ef5c54c98f`.
   Source-bound CI, CodeQL and optional-platform checks all passed for `257cf6fe`.
-  Emulator failures remain under investigation; failure evidence retention is
-  being repaired without relaxing application or existing native release gates.
+- The later [candidate run 43524927475](https://github.com/emulebb/emulebb-rust/actions/runs/43524927475)
+  passed exact-source CI, CodeQL and optional-platform prerequisites for
+  `170e3005a7c0f985f72fd579cf7c2ba18eb21ed2`, then passed native packaging,
+  packaged lifecycle and container-image gates. Its production APK is version
+  `0.1.0-beta.2.nightly.20261113.g170e3005`, code `216774585`, SHA-256
+  `8fb078f326c281667c44c6a85158ea4da8e319da521cfeedce27e6689b4f6d98`.
+  The manifest SHA-256 is
+  `6e7bb7a67539943e9ae0f190af0ba00fadb730ef9dd3395830c380bd82e46f72`.
+  An independent byte audit passed both JNI libraries, 16 KiB ELF/ZIP alignment,
+  packaged notices and SPDX binding. The review is retained below
+  `EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/android-apk-release/43524927475/static-review/`.
+  All four application-qualification jobs failed; no APK release was published.
+  Only release workflow source changed between this candidate and the exact
+  phone-tested `257cf6fe` build. This establishes unchanged product source,
+  not physical execution of the later APK bytes.
+- Actual API 35 and 36 diagnostic replays passed fresh setup, authenticated
+  readiness, bundled WebUI, clean Stop, notification-denied startup and all-files
+  denial/revocation, then failed enabled reboot authentication. Both observed
+  the primary user unlocked, the package not stopped, storage access and
+  notification grants present, and the Doze whitelist retained. The daemon
+  service was absent and every post-reboot REST attempt failed to connect.
+  These observations do not yet distinguish receiver delivery, stored recovery
+  intent, or startup rejection. The API 36 receipt is retained below
+  `EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/android-apk-diagnostic/43537520613/`,
+  SHA-256 `83ca071011ee1265fffba3d9d587a7c466ed3ef5bf397f5ce9af9ca987dfc580`.
+  No product boot defect has been established from the timeout alone.
+- The existing Nightly workflow now has an optional read-only diagnostic replay
+  mode. It independently admits a completed official producer run's successful
+  signed APK and matching peer artifacts, original source-owned provider pins,
+  whole-artifact digests, caller-selected manifest hash, version and signer.
+  It records original producer authority separately from the current diagnostic
+  executor. Any diagnostic input closes the normal publication path; incomplete
+  inputs or `publish=true` fail before checkout. Diagnostics use a separate
+  concurrency group and read-only Actions/content permissions, with no signing
+  secret. Their receipts have `scope: apk-diagnostic-replay` and
+  `publicationEligible: false`; they cannot qualify a release. Normal source,
+  same-run artifact, native and full API 34-37 publication gates remain required.
+  Retained failures contain only source-owned stages/codes and bounded closed
+  navigation, permission, service and post-failure UI facts, never raw UI,
+  configuration, keys, guest logs or private AVD data.
+- [Harness repair `763fb610`](https://github.com/emulebb/emulebb-build-tests/commit/763fb610)
+  prevents stale UI hierarchies from authorizing taps. AOSP's dump command can
+  return success after a null-root or idle failure without replacing its output;
+  the driver now invalidates only its owned UUID dump before each inspection.
+  Regression cases cover zero-exit/no-write, partial-write, failed invalidation
+  and fresh-success behavior. This is a demonstrated driver defect, not proof
+  that it caused every earlier emulator failure. Reboot investigation and final
+  APK qualification/publication remain open.
 - The daemon exposes its behavior through a reusable library, loopback REST,
   and the browser WebUI. Its `run_hosted` entrypoint accepts application-owned
   readiness and shutdown without installing process signal handlers.
