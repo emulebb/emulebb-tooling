@@ -115,6 +115,19 @@ rewrite protected main or release tags. Follow the
   worker slots, prefer two implementation owners and one review/test owner;
   a queued assignment is not an active agent. Reallocate a finished owner while
   GitHub qualifies a frozen batch, without changing its tested sources.
+- Select each worker's model and reasoning effort for its actual task. Use
+  stronger coding or review models for consequential ownership, concurrency and
+  data-loss boundaries; use economical settings for bounded wiring, checks and
+  documentation. Retain active owners when a handoff would waste context or
+  disrupt validation. Model choice is a PM responsibility, not a blanket
+  highest-effort setting.
+- Manage tokens and outputs deliberately. Prefer focused task context over a
+  full-history fork when it supplies the needed contracts; assign reserved
+  files, acceptance criteria and a bounded next deliverable. Request concise
+  findings, commit IDs and evidence paths instead of transcripts. Batch targeted
+  reads, reuse valid proof and compact observers, and avoid repeated unchanged
+  tests or unnecessary output. Preserve independent review where the risk
+  warrants it.
 - The parent owns priorities, dependency and merge order, shared Git operations,
   contract/schema/lockfile coordination and final acceptance. Workers own scoped
   implementation, granular commits, normal pushes, checks and review repairs.
