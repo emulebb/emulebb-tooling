@@ -166,9 +166,22 @@ synchronously, with focus restoration checked from controls, links and body.
   Home/activity-closed proof, actual deep idle and repeated authentication.
   The focused lifecycle suite passed 230 tests without skips, including real
   shell filter execution. It also includes the reviewed bounded state-wait
-  repair for transiently absent UI controls. Repaired API 36/37 diagnostic
-  execution remains pending; these source and unit checks are not publication
-  qualification.
+  repair for transiently absent UI controls.
+  [API 36 replay](https://github.com/emulebb/emulebb-rust/actions/runs/43604043307)
+  passed all 15 cases against the original signed APK: the activity was closed,
+  deep-idle/screen-off observation lasted 60.067 seconds, and three authenticated
+  samples passed. Its curated receipt is
+  `EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/github-actions/43604043307/diagnostic/bcfd4a24789546e19bf20b473e178770/validation.json`,
+  SHA-256 `b6d95a654b1b7d37d4e8f352bc69e1da305fa95e09f5bd133a9cc153d3cab000`.
+  The receipt explicitly remains `scope: apk-diagnostic-replay`,
+  `applicationQualification: not-run` and `publicationEligible: false`.
+  API 37 then exposed a source-format mismatch: its unindented numeric
+  power-group fields must not count as the two-space global wakefulness field.
+  Harness `b522c218b4a93ee842b99b68471664a700700ebc` repairs that parser,
+  with 235 passing lifecycle tests and no skips; its
+  [targeted API 37 replay](https://github.com/emulebb/emulebb-rust/actions/runs/43607199382)
+  remains pending. None of these bounded proofs establishes 24-hour endurance
+  or qualifies publication.
 - The exact GitHub-built manual-start `42bffd97` APK passed two bounded
   12-case physical-device campaigns on API 36, ARM64, 4096-byte pages. Its
   APK SHA-256 is
