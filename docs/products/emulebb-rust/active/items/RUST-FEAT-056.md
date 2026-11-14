@@ -101,7 +101,7 @@ mobile WebKit smoke. Retain synthetic light/dark screenshots below the configure
 output root. Use the existing supported WebUI owner for unit, type, production
 build and browser checks, followed by fresh combined-source release qualification.
 
-Local qualification of `27d9b15ed913800fc488f5c6fa3bbe0a5310c7cf` passed 51
+Local qualification of `54a5f22042a2131ba6706cc4a7f3206ff30b4a4f` passed 52
 WebUI unit tests, 32 Chromium/WebKit browser tests, TypeScript and the production
 build. All 14 views were checked at 320, 390, 768 and 1280 px. Phone-width checks also
 measure readable folder/hashing path columns, local scrolling and reachable row
@@ -109,8 +109,15 @@ actions; page overflow alone did not catch the original collapsed path columns.
 The selected Builder passed 83 scoped tests, retained below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/builder-unit/1d13026f37ab/`.
 Synthetic reference PNGs are retained below
-`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/webui-mobile/27d9b15e/`. These are mocked
+`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/webui-mobile/54a5f220/`. These are mocked
 browser proofs, not physical-phone execution or APK publication evidence.
+
+Hosted Linux qualification exposed two regressions missed by the initial local
+pass: deferred Preact unmount cleanup accessed a disposed global window, and
+Escape dismissal could miss focused controls. The shared table listener now
+captures its owning window; suite teardown and its regression flush passive
+effects with `act`. The menu installs an owning-document capture listener
+synchronously, with focus restoration checked from controls, links and body.
 
 ## Current State
 
@@ -274,7 +281,7 @@ browser proofs, not physical-phone execution or APK publication evidence.
   no separate appearance preference. Native widgets, system insets and
   `FLAG_SECURE` remain in effect. Release Kotlin compilation and lint, including
   both resource variants, passed on `c99074ae`; the later combined source changes
-  only WebUI CSS/tests and workflow provider pins.
+  only WebUI code/tests and workflow provider pins.
 - The service supplies app-owned profile, database, log, transfer, and WebUI
   paths and defaults the authenticated listener to `0.0.0.0:20017`, matching
   every other product platform and package. Browser connections on the same
