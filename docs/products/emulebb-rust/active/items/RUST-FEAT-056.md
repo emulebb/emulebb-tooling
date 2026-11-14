@@ -170,7 +170,7 @@ device acceptance criteria below remain open.
   Only release workflow source changed between this candidate and the exact
   phone-tested `257cf6fe` build. This establishes unchanged product source,
   not physical execution of the later APK bytes.
-- Actual API 35 and 36 diagnostic replays passed fresh setup, authenticated
+- Actual API 35-37 diagnostic replays passed fresh setup, authenticated
   readiness, bundled WebUI, clean Stop, notification-denied startup and all-files
   denial/revocation, then failed enabled reboot authentication. Both observed
   the primary user unlocked, the package not stopped, storage access and
@@ -179,13 +179,18 @@ device acceptance criteria below remain open.
   A subsequent observation also resolved the installed boot receiver and, only
   after recording the failed automatic startup, opened the normal application
   without pressing Start. The bound service reported `Failed` with boot resume
-  still enabled. The exact error remains unclassified; these facts do not prove
-  receiver delivery or identify the startup failure. The successful explicit
+  still enabled. The source-owned error category is
+  `network-default-route-missing` on all three versions: default IPv4 route
+  selection failed during automatic startup. The successful explicit
   Start and authenticated readiness immediately before reboot durably removed
   the earlier permission-test error. The API 36 receipt is retained below
-  `EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/android-apk-diagnostic/43542517877/`,
-  SHA-256 `220073b326dc921da74373c182fedbba3dc5b289e5c8d69060688e4e7cf9e518`.
-  No product root cause has been established from the timeout alone.
+  `EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/android-apk-diagnostic/43546179420/`,
+  SHA-256 `96002982c4acb23e70d8411ca47a97656425ce262d7c07d6afdd3a7343418bdb`.
+  API 37 also passed its local-network denial/revocation case before this boot
+  failure. API 34 instead reached `Failed` during initial startup, before
+  authenticated readiness; its exact error was not observed, so the same cause
+  is not established there. These are failed qualification receipts, not release
+  or continuous-operation proof.
 - The existing Nightly workflow now has an optional read-only diagnostic replay
   mode. It independently admits a completed official producer run's successful
   signed APK and matching peer artifacts, original source-owned provider pins,
