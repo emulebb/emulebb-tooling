@@ -121,7 +121,30 @@ synchronously, with focus restoration checked from controls, links and body.
 
 ## Current State
 
-- PR [#333](https://github.com/emulebb/emulebb-rust/pull/333) merged to Rust `main` at `23e685b87bb76db21489c9b1cc725dd0da4241c1`. Its final PR head passed the complete local Windows/Linux/Android compile-and-ELF gate and hosted source checks. Fresh merged-source checks and publication remain pending at this documentation checkpoint. Historical candidate [43645535102](https://github.com/emulebb/emulebb-rust/actions/runs/43645535102) built the signed APK and both native archives; all seven API 31–37 APK jobs reached an obsolete fixture-cleanup filename after delivery verification. Accepted Harness PR #111 corrected that cleanup contract. All seven diagnostic replays passed, but their receipts are publication-ineligible. The earlier four-guest failure in run 43593021660 remains historical evidence below. None of these candidate receipts establishes publication of the merged source; newly built artifacts and eligible runtime proofs must pass in its publish-enabled nightly.
+- PR [#333](https://github.com/emulebb/emulebb-rust/pull/333) merged to Rust `main` at source `23e685b87bb76db21489c9b1cc725dd0da4241c1`. Published nightly [`0.1.0-beta.2.nightly.20261115.g23e685b8`](https://github.com/emulebb/emulebb-rust/releases/tag/rust-v0.1.0-beta.2.nightly.20261115.g23e685b8) went public at 03:02:52 UTC on 2026-11-15. Run [43666596381](https://github.com/emulebb/emulebb-rust/actions/runs/43666596381) published 85 assets with the release marked non-draft. Its producer identities are Builder `43515795e85beceeb73b1bbbd77e5ab167ef13b6`, Harness `281ccbcdf9f4c9960c5efda4705df966418b6bb2`, Tooling `f88a8ce608bc75a619aea6909f54a9cdecdddb6e`, and tool image ID prefix `c94812`.
+
+  All seven normal Android API 31–37 APK runtime jobs passed on x86_64 KVM
+  emulators. The same APK, manifest and source passed 13, 13, 15, 15, 15, 15
+  and 16 cases respectively, including local transfer and file links. API 31–36
+  used 4096-byte pages; API 37 used 16384-byte pages. Screen-off observations
+  were bounded and do not establish 24-hour endurance. All six native package
+  lifecycle checks and native image checks for musl, Ubuntu and Alpine passed.
+  The aggregate Android APK lifecycle evidence SHA-256 is
+  `cf4e53654139b21acfd19c46d8d87013bcaebbd9f5cf1d60845138135f39bdff`.
+
+  The universal APK is versionCode `216871926`, minimum API 31, target API 37,
+  with ARM64 and x86_64 payloads. Its SHA-256 is
+  `7437540651dd54f30e9c3210c2b75f146e52c8c4d180e47d0c8b2dcb13b3750d`; the
+  manifest SHA-256 is
+  `36919479a73655b99ceddbc021c7c3666223a505fa70172a49493257db933123`, and
+  the signer certificate SHA-256 is
+  `9edc742d7230a714a0149c20eb2afb235b8ad5237166090f10e7ac69e2bb359f`.
+  Published native archive SHA-256 values: `android-arm64-v8a.tar.zst`,
+  `cc4639b024e353564a97a2969bc77e79543b4514da5eebb72304ceabd942dabc`;
+  `android-x86_64.tar.zst`,
+  `c0f9f435b5ababc689f1029a947a161ab870758b007bedb6095b56744fd36c75`.
+  A separate TLS repair execution is auxiliary evidence and does not replace
+  the producer identities above.
 - The operator deferred automatic boot resume on 2026-11-14. Current source
   [`42bffd971c77cd856e361c00e3a318c85304a859`](https://github.com/emulebb/emulebb-rust/commit/42bffd971c77cd856e361c00e3a318c85304a859)
   requires manual Start after reboot and removes the boot receiver, permission
@@ -471,8 +494,13 @@ public-network campaign ended as failed after 74 minutes and 140 observations.
 It recorded zero public peer requests and zero public peer bytes. A generic
 `RuntimeError` was not classified, and the harness stop was confirmed. Do not
 describe the library as uncopied or the campaign as ongoing, and do not claim
-that eligible entries were served. Exact private inventory, filenames, paths
-and user-media hashes remain only in local output evidence.
+that eligible entries were served. Later observer fixes merged in Harness PR
+[#113](https://github.com/emulebb/emulebb-build-tests/pull/113) at
+`17438846c1a62fa8228c821071cc79e7cf56145b`; all four main workflows passed and
+the mapping/closed-failure-phase repairs were unit-tested. This improves future
+observability but does not retroactively classify that error or establish a
+public upload. Exact private inventory, filenames, paths and user-media hashes
+remain only in local output evidence.
 
 ### Latest API 31 Phone Smoke
 

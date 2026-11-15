@@ -193,14 +193,15 @@ general VPN-safety proof.
 
 ## Android: APK Or Native Shell
 
-The nightly release contract includes all three alternatives below: the
-signed Android 12+ APK and both native archives. Download the matching asset
-from the selected nightly release and follow its instructions. The APK starts
-its foreground service manually, including after reboot; it does not resume
-automatically at boot. Use the native archives only as experimental developer
-bundles. Their API 28 compile target and ELF checks do not establish Termux or
-Fire OS runtime support. See the [Android feature record](../active/items/RUST-FEAT-056.md)
-for qualification evidence and remaining work.
+The nightly release publishes all three alternatives below: a signed Android
+12+ APK and the two native archives. Download the APK for the Android app, or
+choose the archive matching a native Android shell's CPU. The published APK
+passed emulator qualification on Android API 31–37. Follow the app instructions
+below to install it and start its foreground service manually, including after
+reboot. Use the native archives only as experimental developer bundles. Their
+API 28 compile target and ELF checks do not establish Termux or Fire OS runtime
+support. The current emulator evidence and remaining limits are tracked in the
+[Android feature record](../active/items/RUST-FEAT-056.md).
 
 | Alternative | CPU | Filename suffix |
 | --- | --- | --- |
