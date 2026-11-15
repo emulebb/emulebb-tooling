@@ -18,6 +18,18 @@ source: Operator-directed configuration and persistence architecture review
 
 # RUST-CI-044 - Review SQLite schema efficiency and evolution boundaries
 
+## Accepted Foundation Round One (2026-11-15)
+
+The operator authorized implementation of the consolidated
+[Public Foundation](../../design/PUBLIC-FOUNDATION.md). That specification
+supersedes conflicting proposal-only common contracts and acceptance rules in
+older review notes below. Existing delivered evidence remains historical proof,
+not qualification of this new target. Coordinate with the current persistence
+owner; use the existing Python harness. One persistent branch per involved
+repo, granular commits and tested pushes; no PR, merge or publication until
+the operator returns and reviews. Leaf inventory cleanup and actual validation
+remain work, not claims of completion.
+
 ## Distribution Intake Acceptance
 
 - [ ] Reconcile actual current schema/owner facts before making update claims;

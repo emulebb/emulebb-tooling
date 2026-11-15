@@ -6,9 +6,10 @@ controllers, or the embedded SPA WebUI.
 - The forward `/api/v1` contract under `docs\products\emulebb-rust\api` is
   authoritative. The frozen MFC REST contract is not a forward-compatibility
   constraint.
-- `/api/v1` is explicitly unstable through the Client, Indexer, and Arr phases.
-  Its compatibility promise begins only at the deliberate post-Arr contract
-  freeze; do not preserve an inferior beta shape merely because it shipped.
+- The accepted [Public Foundation](../design/PUBLIC-FOUNDATION.md) owns the
+  round-one native contract and its coordinated REST/OpenAPI/SPA redesign.
+  Implement future consumers later against that foundation; do not postpone
+  contract design until Arr or preserve superseded beta shapes.
 - Route or DTO changes evolve daemon code, OpenAPI, validators, embedded SPA
   models, and tests together. Do not add speculative aliases or legacy shapes.
 - Organize the first-party contract around durable system/settings, network,

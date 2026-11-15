@@ -18,6 +18,18 @@ source: Operator-directed configuration and persistence architecture review
 
 # RUST-CI-043 - Review configuration authority and REST contract coherence
 
+## Accepted Foundation Round One (2026-11-15)
+
+The operator authorized implementation of the consolidated
+[Public Foundation](../../design/PUBLIC-FOUNDATION.md). That specification
+supersedes conflicting proposal-only common contracts and acceptance rules in
+older review notes below. Existing delivered evidence remains historical proof,
+not qualification of this new target. Coordinate with the current persistence
+owner; use the existing Python harness. One persistent branch per involved
+repo, granular commits and tested pushes; no PR, merge or publication until
+the operator returns and reviews. Leaf inventory cleanup and actual validation
+remain work, not claims of completion.
+
 ## Distribution Intake Acceptance
 
 ### Accepted Ready Bootstrap Slice
@@ -28,7 +40,7 @@ package and first-fresh-profile initialization:
 `api_key = "change_me_123change_me_123change_me_123"`. The repeated starter key
 has 39 ASCII characters; retain the existing 32-byte minimum and normal API
 authentication. The starter value is shared by ready packages. TOML uses only snake_case keys and
-rejects obsolete/unknown shapes. A fresh database seeds TCP `20019` and UDP
+validates its current shape. A fresh database seeds TCP `20019` and UDP
 `20020` even when its bootstrap was supplied by the package, without replacing
 existing database preferences or user bootstrap files.
 
@@ -97,7 +109,7 @@ The [complete target](../../design/SETTINGS-TARGET.md) and
 implementation. The operator chose clean snake_case TOML keys `bind_addr`,
 `api_key`, `web_root_dir` and target REST `20017` / P2P TCP `20019` / UDP `20020`.
 No aliases, compatibility shims, fallback keys, remapping or silent ignoring
-are permitted; obsolete shapes must fail. The target and inventory record
+are permitted; validate only the current contract. The target and inventory record
 this accepted boundary; other proposed bootstrap/leaf/API
 changes remain unaccepted. No current reader, OpenAPI, instructions or defaults are
 changed by review. The original source-15020b76 inventory below has not thereby
@@ -117,7 +129,7 @@ profile conversion. Unproven acceptance criteria below remain open.
 - Keep TOML strictly process/profile/control-service bootstrap: listener, authentication and necessary bootstrap paths. Restart requirements alone do not justify placing a product setting in TOML.
 - SQLite owns mutable product settings and durable client state. Runtime-only sockets, timers, and queues remain in memory; downloaded payloads and diagnostic artifacts remain files.
 - `server.met` and `nodes.dat` are read-only compatibility import inputs. The Rust client must never create, refresh, replace, or write them back.
-- Keep generated identity in durable state and implementation constants outside public settings. Use camelCase JSON, snake_case TOML/SQL/Rust and kebab-case URL segments directly. Reject obsolete names; never add aliases, compatibility shims, fallback keys or semantic mappings.
+- Keep generated identity in durable state and implementation constants outside public settings. Use camelCase JSON, snake_case TOML/SQL/Rust and kebab-case URL segments directly. Use canonical names without aliases, compatibility shims, fallback keys, remapping or retired-input handling/tests.
 - Preserve the exact-schema/fresh-profile policy and old profiles for explicit rollback. This review does not authorize profile evolution work.
 - Beta 3 publication and candidate certification remain on hold. Workspace and platform delivery continues in parallel.
 
@@ -130,7 +142,7 @@ profile conversion. Unproven acceptance criteria below remain open.
 - [ ] Define exact routes, payloads, omission/null/reset semantics, errors, authentication, secret exclusion and saved/effective/restart state.
 - [ ] Require complete validation before persistence, one transaction, no runtime change after failed persistence and explicit post-commit application outcomes.
 - [ ] Define fresh-profile, parsing, unknown-field, validation, atomicity, persistence-failure, restart, secret and API/OpenAPI/SPA consistency tests.
-- [ ] Prove canonical naming and target defaults; reject obsolete spellings and unknown fields without aliases, fallback reads, remapping or silent ignoring.
+- [ ] Prove canonical naming and target defaults; validate the current contract without aliases, remapping or tests preserving removed names.
 - [ ] Define Windows/Linux TCP/UDP binding, configured-port and advertisement checks using synthetic disposable profiles.
 - [ ] Produce dependency-ordered implementation slices with existing issue ownership, acceptance and file reservations.
 - [ ] Reconcile forward API/design references and submit the target for parent review. No implementation is claimed by this specification.

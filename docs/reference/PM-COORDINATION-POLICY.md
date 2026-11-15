@@ -23,6 +23,16 @@ merge and publication policies.
 
 ## Current Operator Mandate
 
+For the accepted emulebb-rust [public-foundation round one](../products/emulebb-rust/design/PUBLIC-FOUNDATION.md),
+the operator has authorized implementation and the following scoped mandate
+supersedes the normal parallel-branch and PR/merge routine below: one persistent
+`feature/public-foundation-round-1` branch per involved repo, sequential writes
+and granular commits, canonical mains intact, existing Python harness reuse,
+and a tested pushed checkpoint. No draft PR, PR, merge or publication until the
+operator returns and reviews. The parent may use parallel read-only reviews;
+shared schema and validation have one coordinated owner. Preserve active
+branches for iterative review. Scope changes return to the operator.
+
 1. Make parent-coordinated parallel branches and small integration batches the
    normal delivery routine. Keep canonical mains stable while workers develop
    independent outcomes. Carry each accepted batch through review, applicable
@@ -43,7 +53,8 @@ merge and publication policies.
    contracts before implementation. Coordinate configuration/REST
    [#297](https://github.com/emulebb/emulebb-rust/issues/297) and schema
    [#298](https://github.com/emulebb/emulebb-rust/issues/298) reviews with that
-   owner; scoping authorizes no schema edits or competing persistence actors.
+   owner. The accepted foundation authorizes coordinated schema implementation,
+   not competing persistence actors.
 4. [Scoop #324](https://github.com/emulebb/emulebb-rust/issues/324) is the first
    accepted new distribution lane, after its deployment/update contract is
    accepted. [Linux services #325](https://github.com/emulebb/emulebb-rust/issues/325)
@@ -58,9 +69,10 @@ merge and publication policies.
    camelCase JSON and kebab-case URL segments. The accepted bootstrap keys are
    `bind_addr`, `api_key`, `web_root_dir`, with target REST `20017`, P2P TCP
    `20019` and UDP `20020`. No aliases, compatibility shims, fallback keys,
-   legacy mappings or silently ignored obsolete fields are permitted. Require
-   negative tests that prove retired shapes fail. Target acceptance does not
-   claim the current runtime already implements it.
+   legacy mappings are permitted. Remove superseded shapes outright, without
+   retired-input handling or negative tests preserving removed names. Current
+   contract validation remains. Target acceptance does not claim current
+   implementation or qualification.
    The accepted ready-package bootstrap and first-fresh-profile key is
    `change_me_123change_me_123change_me_123` (39 ASCII characters); retain the
    32-byte minimum and normal authentication. The operator selected
@@ -229,7 +241,7 @@ Turn concrete findings into bounded repairs or justified refactoring, then
 reinspect the changed result. Continue beyond two rounds while material findings
 remain. A round may legitimately require no code change; do not manufacture a
 refactor, new abstraction or unrelated cleanup merely to count activity. Keep
-current naming contracts and hard rejection of retired shapes intact.
+current naming contracts intact, without retired-input handling or tests.
 
 Preserve frozen inputs during an active gate. Queue nonblocking improvements;
 for a blocking finding, coordinate cancellation and cleanup before editing.

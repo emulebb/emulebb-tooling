@@ -1,28 +1,28 @@
 {
   "schema": "emulebb.settings-target-inventory/1",
-  "status": "PROPOSED_REVIEW_ONLY_NOT_IMPLEMENTED",
+  "status": "ACCEPTED_COMMON_CONTRACT_CANDIDATE_LEAVES_NOT_YET_QUALIFIED",
   "ownerIssue": "https://github.com/emulebb/emulebb-rust/issues/297",
   "reviewSourceRevision": "15020b7663a6771bc2d6e8282416ea36a7d7c163",
-  "defaultStatus": "The operator accepted clean snake_case bootstrap keys and target REST 20017 / P2P TCP 20019 / UDP 20020 on 2026-11-12; other proposed leaf defaults still require parent review and implementation qualification.",
-  "naming": "TOML, Rust and SQL names use snake_case; JSON uses camelCase and URL segments kebab-case. Use canonical names directly. No aliases, compatibility shims, fallback keys, remapping or silent ignoring; obsolete shapes are hard errors.",
+  "defaultStatus": "2026-11-15 public foundation common contract accepted; leaf defaults, bounds and supported-control selection remain subject to typed implementation review and qualification.",
+  "naming": "TOML/Rust/SQL snake_case, JSON camelCase, URL kebab-case. Current-contract validation only; no aliases, compatibility shims, fallback keys, remapping, retired-input handling or removed-name tests.",
   "commonContract": {
     "definitionOwner": "emulebb-settings",
     "persistenceOwner": "emulebb-metadata",
-    "productStorage": "five closed typed domain documents in one SQLite database",
+    "productStorage": "complete typed settings with explicit default/custom markers in one SQLite database",
     "publicSettingsResource": "/api/v1/settings",
     "snapshotRead": "complete domains plus one revision from one DB snapshot",
-    "validation": "closed typed whole-candidate validation; all JSON integers within exact interoperable range; no coercion",
+    "validation": "typed whole-candidate validation with documented integer ranges; JSON numbers may exceed JavaScript exact-integer precision; no silent clamping",
     "secretHandling": "credentials and generated private keys excluded from settings/status DTOs, error values, public examples and normal structured logs; once-only fresh-key provisioning is an explicit bootstrap handoff",
     "privateDiagnosticContract": "#280 owns authenticated raw full-fidelity private export including its exact API key/sensitive-value fields and warning/acknowledgement; settings-resource exclusion assigns no export redaction or logger rewrite",
-    "representationValidator": "strong quoted settings-<saved-revision>-<64-lowercase-hex-SHA256>; digest of exact RFC 8785 canonical UTF-8 identity-encoded full SettingsRead; no generated timestamp",
-    "conditionalWrite": "compare full current validator under the publication/order boundary before a write or no-op, then saved-revision CAS in the SQLite transaction; changed effective/application data can cause 412 with the same saved revision",
+    "conditionalWrite": "expected saved revision checked under coordinated publication/transaction ownership; runtime-only application changes do not require full-representation ETag CAS",
     "omission": "leave saved leaf unchanged",
     "null": "only nullable leaves clear their override",
-    "reset": "PATCH an explicit inventory default; no magic reset token",
+    "reset": "mark leaf default; startup resolves directly from running release defaults without historical comparison",
     "arrays": "replace the complete bounded leaf array",
     "patchBodyMaximumBytes": 262144,
     "serializedSnapshotMaximumBytes": 131072,
-    "application": "live fields publish as one logical runtime snapshot after commit; restart fields remain pending until restart"
+    "application": "saved desired values remain authoritative on apply failure; expose effective values, failures and restart-pending fields",
+    "defaultState": "set equal to current default marks default; other values custom; complete settings with markers"
   },
   "processInputs": [
     {
@@ -32,21 +32,8 @@
       "storage": "process invocation; not persisted as a product setting",
       "type": "path",
       "unit": "none",
-      "default": "platform-default profile directory",
+      "default": "current_exe().parent(); offline settings/import commands require explicit --profile",
       "validation": "select one profile before bootstrap loading; validate access without changing another profile",
-      "secret": false,
-      "publicVisibility": "process bootstrap only",
-      "application": "process start"
-    },
-    {
-      "name": "--rest-bind-addr",
-      "canonicalName": "rest_bind_addr",
-      "owner": "emulebb-daemon::CLI",
-      "storage": "process invocation; overrides bootstrap without writing it",
-      "type": "ipv4-socket",
-      "unit": "address and port",
-      "default": null,
-      "validation": "same endpoint validation as rest.bind_addr; absent uses bootstrap/default",
       "secret": false,
       "publicVisibility": "process bootstrap only",
       "application": "process start"
@@ -59,7 +46,7 @@
       "canonicalName": "rest.bind_addr",
       "type": "ipv4-socket",
       "unit": "address and port",
-      "default": "127.0.0.1:20017",
+      "default": "0.0.0.0:20017",
       "validation": {
         "format": "IPv4 socket address",
         "portMinimum": 1,
@@ -78,14 +65,10 @@
       "canonicalName": "rest.api_key",
       "type": "string",
       "unit": "ASCII bytes",
-      "default": {
-        "generation": "OS CSPRNG, 32 random bytes encoded as 64 hexadecimal characters; fresh bootstrap only"
-      },
+      "default": "change_me_123change_me_123change_me_123",
       "validation": {
         "minimumLength": 32,
-        "maximumLength": 1024,
-        "allowed": "ASCII 0x21..0x7e; exact bytes",
-        "forbiddenCaseInsensitive": ["change-me", "changeme", "replace-me", "replace_with_32_or_more_random_characters"]
+        "reviewStatus": "preserve existing accepted key semantics; no new secret-generation or placeholder-policy proposal"
       },
       "owner": "emulebb-daemon::RestBootstrapSettings",
       "storage": "private toml",
@@ -1968,5 +1951,18 @@
     "bootstrapFile": "emulebb-rust-settings.toml",
     "databaseFile": "emulebb-rust-metadata.db"
   },
-  "implementationStatus": "No runtime, default-port, schema, API or profile changes authorized by this inventory."
+  "implementationStatus": "Implementation authorized by PUBLIC-FOUNDATION; this candidate leaf inventory does not claim implementation or qualification.",
+  "authoritativeSpecification": "PUBLIC-FOUNDATION.md",
+  "offlineSettings": {
+    "operations": [
+      "get KEY",
+      "set KEY VALUE",
+      "reset KEY"
+    ],
+    "profile": "explicit --profile; exclusive stopped-profile lease",
+    "write": "one key, whole-candidate validation and atomic save; advances revision without caller CAS",
+    "getOutput": "resolved value only; diagnostics stderr",
+    "storage": "SQLite application settings only"
+  },
+  "candidateLeafStatus": "All settings entries remain candidate leaves; reconcile selection, names, bounds and defaults with PUBLIC-FOUNDATION and typed implementation before acceptance."
 }

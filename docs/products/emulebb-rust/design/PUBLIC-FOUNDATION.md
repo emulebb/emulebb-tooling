@@ -61,9 +61,13 @@ documentation describes only implemented structure.
 - Use compact internal keys, explicit foreign keys, constraints, transactions
   and indexed access paths. All startup, recovery and shutdown paths also need
   bounded work; list pagination alone is insufficient.
-- Allocated public job/category/root/search/result IDs are immutable,
-  never-reused decimal strings. Content is publicly addressed by its eD2K hash;
-  immutable tag names are tag IDs. SQLite may use internal integer keys.
+- Application-allocated public IDs, including jobs, categories, roots, servers,
+  searches and results, are immutable never-reused decimal strings. Content is
+  publicly addressed by its eD2K hash; immutable tag names are tag IDs. Natural
+  protocol identities remain distinct fields. SQLite may use internal keys.
+  Upload/queue resource IDs identify live instances only: their catalog must
+  define the process-epoch/lifetime boundary, expiry and restart behavior without
+  reusing a prior ID or requiring durable per-connection history.
 - Persisted and public calendar timestamps are Unix seconds. Runtime scheduling
   uses monotonic clocks and whatever finer precision it requires. Revisions,
   not timestamps, order changes and detect conflicts.
@@ -197,7 +201,7 @@ never toggle, with bounded per-hash bulk outcomes. External schedulers own
 rotation; no built-in scheduling/rule engine.
 
 Add flat many-to-many hash-level tags, independent of download categories.
-Tag names are their immutable public IDs, case-insensitively unique, 1–64 ASCII
+Tag names are their immutable public IDs, case-insensitively unique, 1-64 ASCII
 letters/digits/hyphens, starting with a letter or digit. No whitespace, dots,
 underscores or rewriting. No rename operation: create a new tag and explicitly
 change assignments. Deleting a tag removes its assignments, not content. Root,
@@ -251,7 +255,7 @@ At first start, choose optional category temp storage or global fallback and
 retain that location for the job. At delivery start resolve the current category
 destination or global incoming, then persist the selected attempt destination
 for recovery/retries. Completed files stay put. Preserve the existing `_01`,
-`_02`, … collision rule and report the actual delivered path; never overwrite an
+`_02`, ... collision rule and report the actual delivered path; never overwrite an
 unrelated collision. Preserve the existing durable delivery recovery boundaries.
 
 Removal requests explicitly state whether data is deleted. Keep-data removal is
@@ -267,8 +271,10 @@ now, advertise only implemented capabilities; autonomous index/hybrid execution
 and index projections/APIs are later implementation.
 
 Separate search metadata, paginated result summaries and provenance. Give
-results stable claim identities; preserve different known size claims for a
-hash rather than collapsing them. Remote claims never overwrite local verified
+results stable claim identities based on hash plus size; preserve different
+known size claims rather than collapsing them by hash. Unknown size is a separate
+unresolved null-size claim, never a fabricated zero or automatic merge of
+contradictory sizes. Remote claims never overwrite local verified
 facts. Provenance includes meaningful origin, source/method, freshness and
 validation evidence. A complete-source observation does not prove local bytes.
 
@@ -353,8 +359,10 @@ calling canonical services without loopback HTTP, duplicate credentials, shadow
 jobs/categories, a second database or transfer engine. Design for official
 unmodified Qui and Prowlarr, Sonarr, Radarr and Lidarr. Qualify exact official
 API-key-capable releases before claiming interoperability; development-branch
-support is not release proof. Reuse the existing secret with the authentication
-required by each route family. No cookie-login system for older consumers.
+support is not release proof. Future Qui/Arr qBittorrent routes use the existing
+`api_key` via `Authorization: Bearer`; native routes keep their own specified
+authentication transport with the same secret. No cookie-login system for older
+consumers.
 
 Qui/qBittorrent sync uses incremental `rid` polling with bounded shared history;
 full updates are only for initial/reset/stale state. Project one latest retained

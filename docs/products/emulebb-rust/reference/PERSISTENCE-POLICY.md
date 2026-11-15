@@ -7,12 +7,11 @@ schemas, or profile compatibility.
   The accepted clean Beta3 target uses snake_case `bind_addr`, `api_key` and
   `web_root_dir`, with REST `20017`, P2P TCP `20019` and UDP `20020`. Adopt that
   contract directly, then preserve its keys and semantics across updates by
-  default; future changes need explicit contract review. Never add aliases,
-  compatibility shims, fallback reads, remapping or silently ignored obsolete
-  fields. Retired shapes are hard errors. This stability goal is separate from
-  database readability and the post-Arr REST freeze.
-  [RUST-CI-043](../active/items/RUST-CI-043.md) owns the concrete configuration
-  and API consistency review; it does not itself freeze every existing shape.
+  default; future changes need explicit contract review. The accepted
+  [Public Foundation](../design/PUBLIC-FOUNDATION.md) coordinates DB/settings/
+  CLI/REST stabilization now. No shims, aliases, remapping, retired-input
+  handling or tests preserving removed names. Validate the current model.
+  [RUST-CI-043](../active/items/RUST-CI-043.md) owns configuration/API delivery.
 - SQLite owns mutable settings and durable product state. Runtime-only sockets,
   timers, queues, and pending work remain in memory. Downloaded payloads, logs,
   and retained diagnostics remain files, not alternative settings authorities.
@@ -30,9 +29,10 @@ schemas, or profile compatibility.
   [RUST-FEAT-063](../active/items/RUST-FEAT-063.md) owns explicit source-version
   semantic export and fresh-target import; that workflow does not migrate an
   old database during normal startup and remains unimplemented.
-- During the compatibility-unstable beta phases, every persisted-data change reviews whether
-  the checked-in schema remains the clean current model. Evolve it when
-  warranted; do not preserve inferior shapes for development profiles.
+- Round one implements a coordinated fresh-profile schema. Review every
+  persisted-data change against the accepted foundation and exact current
+  model. Future automatic upgrades are an objective, not implemented machinery
+  or enforcement in this round.
 - Product code requires the current schema exactly. It must not contain legacy
   branches, fallback reads, migrations, repair, profile-reset logic, or silent
   compatibility behavior.

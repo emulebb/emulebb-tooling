@@ -210,10 +210,11 @@ owned consumers, OpenAPI, examples, validators, and tests together.
   [RUST-CI-043](active/items/RUST-CI-043.md) and
   [RUST-CI-044](active/items/RUST-CI-044.md). Release remains held; these reviews
   do not authorize migrations or silently change profile compatibility.
-- `/api/v1` remains the versioned beta namespace; its compatibility promise
-  begins only at the explicit post-Arr contract freeze.
-- Retired fields and routes are hard errors. Do not alias, remap, ignore, or
-  bridge obsolete beta shapes.
+- `/api/v1` remains the native namespace. The accepted
+  [Public Foundation](design/PUBLIC-FOUNDATION.md) coordinates fresh-profile
+  DB/settings/CLI/REST implementation now, designing future consumers before
+  their implementation. No shims, aliases, remapping or retired-input
+  handling/tests; validate the current model.
 - Product code accepts only the exact current SQLite schema. Any incompatible
   schema change fails startup and requires a completely fresh profile. There
   is no end-user migration, reset, repair, or partial index rebuild path.
@@ -348,9 +349,10 @@ Arr integration begins only after the Indexer gate closes.
 - Keep selection rules, schedules, media management, and post-processing in
   external controllers.
 
-API and database schema compatibility freeze together only after the Arr gate
-passes; minimal bootstrap configuration follows the separate stability review
-above.
+The accepted [Public Foundation](design/PUBLIC-FOUNDATION.md) supersedes the
+proposal to defer coherent API/database design until the Arr gate. Automatic
+upgrade machinery remains deferred; this round uses fresh profiles. Adapter
+implementation and its actual qualification still obey their phase gates.
 
 ## Cross-phase non-goals
 
