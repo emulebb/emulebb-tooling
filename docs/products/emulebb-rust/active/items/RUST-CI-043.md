@@ -18,6 +18,23 @@ source: Operator-directed configuration and persistence architecture review
 
 # RUST-CI-043 - Review configuration authority and REST contract coherence
 
+## Accepted automatic Docker setup completion
+
+The operator requires automatic recovery/completion after interrupted fresh
+container setup. The [master deployment contract](../../design/PUBLIC-FOUNDATION.md#docker-and-deployment)
+owns private same-filesystem staging, a durable ownership journal before stage
+creation, canonical per-key service under one lease, parent installation lock,
+closed/synced database state, strict atomic no-replace publication and parent
+sync. An existing final profile is never replayed or overwritten, including after
+an interrupted publication. Unsupported atomic publication fails visibly and
+retains owned work for automatic retry; no unsafe move fallback qualifies.
+
+A package-private helper and typed actual-listener health receipt are planned;
+there are no additional public daemon commands/flags or environment overrides.
+Extend the existing Python package/container owners for every failure cut and
+both image variants. This acceptance allocates implementation/proof, not a claim
+that current Docker setup or either package variant has passed it.
+
 ## Registered current-contract checkpoint (2026-11-15)
 
 The [#155 registered conformance/peer checkpoint](RUST-REF-016.md#registered-conformance-and-local-peer-checkpoint-2026-11-15)

@@ -413,32 +413,79 @@ finalization, then drain/join the owner before connection/profile-lease release.
 ### Docker and deployment
 
 Use separate `/config/emulebb-rust` profile, `/data/incoming` delivered files and
-`/data/temp` partial storage. Automatically save storage paths through canonical
-offline settings operations only when provisioning a genuinely fresh profile.
-Make interrupted first-run provisioning recoverable and fail visibly if setup
-cannot finish. Never overwrite an existing profile or reapply settings at every
-restart. The running daemon receives only `--profile`.
+`/data/temp` partial storage. The operator requires **automatic completion of
+interrupted first-run setup**. Provision only a genuinely fresh profile; never
+replay setup into an existing final profile or overwrite subsequent user edits.
+This is an accepted allocation target, not current package/runtime proof.
 
-Configure P2P interfaces through saved settings; remove product override
-environment bridges. Health checks follow the actual configured listener, not
-a hardcoded port. Update launchers, Compose/VPN examples, both container variants,
-package smoke tests and harness callers. Keep legitimate harness scenario inputs
-that choose routes/interfaces and apply them through canonical profile setup;
-do not confuse them with daemon runtime overrides.
+The planned package-private initializer uses these boundaries:
+
+1. Acquire a parent installation lock. Persist and sync an ownership journal
+   identifying the intended private stage and final destination before creating
+   that stage. Unknown ownership must not authorize cleanup or replay.
+2. Create private fresh staging on the same filesystem as the final profile.
+   Run the canonical offline per-key settings service under one profile lease;
+   do not spawn competing writers, bypass validation or add package-specific SQL.
+   Interrupted setup automatically resumes from its durable owned state. Resolve
+   persisted profile-relative data against the final profile namespace, never
+   serialize staging absolute paths into product settings or root metadata.
+3. Close owned database handles and sync completed stage data before publication.
+   Publish using a strict same-filesystem **atomic no-replace** operation, then
+   sync the parent directory. If another final profile wins a race, treat it as
+   existing user state; never replace or replay settings into it.
+4. Resume interrupted owned work automatically at the next launch. If the strict
+   atomic operation is unsupported or durability cannot be established, fail
+   visibly and retain the owned stage/journal for retry. Never substitute a
+   check-then-move, copy or overwrite fallback. Once final publication exists,
+   subsequent launches preserve it even if interruption left a journal behind.
+
+Reuse the pinned `rustix::fs::renameat_with` / `RenameFlags::NOREPLACE` primitive
+already used in `emulebb-ed2k`'s `ed2k_transfer/fs_durability.rs`. GNU/BusyBox
+`mv` behavior with unsafe fallback is not qualification of strict publication.
+The package-private helper adds no public daemon commands, flags or environment
+settings bridge. The daemon itself runs with only `--profile`.
+
+Configure P2P interfaces through saved settings. A planned typed ephemeral
+receipt from the actual bound listener supplies the health-check endpoint; it
+is runtime output, not another configuration authority or a hand-written TOML
+parser. Missing/stale receipt handling must fail health checks honestly. Update
+launchers, Compose/VPN examples, both container variants, package smoke tests and
+harness callers. Preserve legitimate harness route/interface scenario inputs
+and apply them through canonical profile setup.
+
+Reuse the existing package/container Python tests for failure cuts before
+ownership/stage creation, between per-key commits, before/after atomic rename
+and at parent-directory sync. Include automatic resume, final-profile user edits,
+concurrent publication, unsupported no-replace behavior and proof that no staging
+absolute path leaks into published state. Both Ubuntu and Alpine variants need
+actual proof; none is claimed by this design.
 
 ## Ordered implementation and acceptance
 
 | Phase | Required outcome |
 | --- | --- |
 | 1. Contract baseline | Reconcile policy and this specification, typed settings catalog, exact route/schema inventories, error/lifecycle contracts and query/index designs. Refresh source ownership, fixtures and baseline measurements. |
-| 2. Persistence/domain services | Shared 155-A owner and friend integration, then coordinated fresh-schema cut, durable jobs/history, content/location/tag/policy/statistics, categories, recovery, independent search claims and Kad persistence. Replace unbounded startup/list/recovery collection paths. |
+| 2. Persistence/domain services | Complete the shared-owner/Kad prerequisites, then the vertical cuts 2a-2d below. Keep remaining statistics/search-claim work with its existing owners and replace unbounded startup/list/recovery paths. |
+| 2a. Categories | Immutable allocated IDs, case-insensitive unique names, nullable temp/destination paths and nullable job assignment; deletion clears assignments without renumbering. Cut affected REST/OpenAPI/UI/fixture consumers together. |
+| 2b. Durable job identity | Never-reused job IDs, distinct protocol hash, nullable known size, one nonterminal job per hash and retained terminal/history records. Make every child, delivery/recovery reference and cleanup authority refer to its actual job. Couple with 2c wherever separate commits would permit unsafe multiple attempts. |
+| 2c. Job storage and execution | Establish a job-specific piece/storage namespace, first-start fixed temp placement and fixed delivery-attempt destination before enabling multiple historical/re-download attempts. A hash-based old-attempt cleanup must never reach a new job's data. Include scheduling/restart/recovery and directly affected consumers. |
+| 2d. Library policy and indexed reads | Durable hash sharing/upload policy, immutable tags, locations and verification caches plus incremental indexed library queries. Cover all accepted filters/sorts, stable keyset traversal and 100k behavior with the relevant live statistics owner. A full projection rebuild or output-only limit is not bounded-read evidence. |
 | 3. Settings/CLI/provisioning | Default/custom resolution, revisions and application status, offline get/set/reset, fresh-only Docker setup and canonical harness profile preparation. |
 | 4. REST/OpenAPI/WebUI | Routes, DTOs, validators, OpenAPI and consumers together; bounded action/query paths, substring/statistic sorting, shared change tracking and paginated active-view UI. |
 | 5. Integrated checkpoint | Package/harness repair, failure/recovery and combined-scale qualification, independent review/repairs, clean granular commits and pushes. Stop for operator review, no PR. |
 
-Each slice includes its directly affected consumers and scoped checks. Avoid
-temporary compatibility adapters. The parent resolves routine technical choices;
-material product/scope changes return to the operator.
+These are ordered vertical allocations, not claims of completed implementation.
+Keep 2b/2c in one coordinated cut where necessary: never expose a temporary
+hash-based re-download path before job-specific storage and cleanup are safe.
+Statistics accounting, independent search claims and canonical settings remain
+their existing owned later pieces, not implicitly complete after 2d. Preserve
+current settings ownership until the direct canonical 59-field cut; do not add
+transitional old/new field maps or parallel setting authorities.
+
+Every vertical slice includes its directly affected REST/OpenAPI/UI/fixture
+consumers and focused checks. Avoid temporary compatibility adapters. The parent
+resolves routine technical choices; material product/scope changes return to the
+operator.
 
 ### Harness ownership
 
