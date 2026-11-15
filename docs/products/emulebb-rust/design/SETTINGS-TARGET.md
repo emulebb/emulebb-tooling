@@ -52,33 +52,168 @@ Installed launchers may supply explicit writable profiles. Keep the fixed
 profile-local bootstrap and database filenames. Do not add product environment
 overrides or duplicate authorities.
 
-## Default/custom state and settings writes
+## Accepted settings representation
 
-Persist the complete chosen structure with default/custom markers. A
-default-marked leaf resolves directly from the running release at startup;
-a custom leaf retains its saved value. No historical-default comparison or
-intent tracking. Setting a value equal to the current default marks default;
-reset explicitly marks default. Startup resolution needs no caller revision.
+This is the accepted engineering target for the next implementation slice, not
+a claim that current schema 71, REST or CLI already implements it. Store one
+complete typed `SavedSettings` document and its revision in a singleton row:
 
-REST reads expose one coherent capture of saved settings/default markers,
-resolved effective values, saved revision and application status. A write
-requires the saved revision read by the caller, validates the entire candidate
-and commits all changes atomically. Use checked revision arithmetic. Omitted
-leaves stay unchanged; nullable values obey their typed meaning. There is no
-full-representation ETag/digest CAS requirement. Runtime application changes
-alone do not create a competing saved-settings validator.
+```sql
+CREATE TABLE app_settings (
+    id INTEGER PRIMARY KEY CHECK (id = 1),
+    revision INTEGER NOT NULL CHECK (revision >= 1),
+    document_json TEXT NOT NULL CHECK (
+        json_valid(document_json)
+        AND json_type(document_json) = 'object'
+        AND length(CAST(document_json AS BLOB)) <= 131072
+    )
+) STRICT;
+```
 
-Preserve the coordinated transaction/publication owner already implemented;
-do not commission a second atomicity actor. After a valid save, a live apply
-failure retains desired settings and reports failed fields and effective values.
-Restart-bound leaves remain explicitly pending. Broader hot reconfiguration
-is outside scope. Invalid candidates and revision conflicts save nothing.
+All five groups and all 59 leaves are present. Each leaf has the same typed
+`{mode, value}` representation:
 
-The final exact document/marker encoding, field schemas and response/status
-combinations must be recorded with the implementation inventory/OpenAPI before
-the coordinated cut. The 59-leaf catalog below now records the accepted engineering target.
-Source-backed defaults and newly selected defaults are distinguished explicitly;
-current code does not yet centrally enforce every target bound.
+```typescript
+type SavedValue<T> = { mode: "default" | "custom"; value: T };
+```
+
+The value type comes from that leaf's one authoritative definition. This is a
+bounded typed settings document, not an untyped key/value/EAV store. Generate
+value, saved and partial-update types plus field metadata/validation from the
+same definitions; do not hand-maintain three independent 59-field catalogs.
+Reuse existing nullable-update helpers where they express presence correctly.
+
+### Default resolution
+
+At startup, replace default-marked values in memory from the running typed
+defaults before validating the resolved whole candidate. The stored value of a
+default-marked leaf is not authoritative. There is no previous-default comparison,
+intent tracking, per-field repair or caller revision check. Startup resolution
+alone does not write the row or advance its revision.
+
+A custom leaf retains its saved value, even when a later release's default now
+happens to equal it. Equality classification happens only during an explicit
+set: a set equal to the current default becomes default; otherwise it becomes
+custom. Reset always selects default. Untouched leaves keep their modes.
+A custom null is allowed only for a nullable leaf and, under the equality rule,
+only while the current default differs from null. Required leaves reject null.
+
+Future changes to compiled defaults must review valid custom/default cross-field
+combinations. Never silently clamp a custom value or discard it to make a new
+default fit. The compiled default document itself must meet whole-candidate and
+serialized-representation limits.
+
+### Coherent read and typed PATCH
+
+GET returns one coherent capture of resolved saved settings/default markers,
+admitted effective values, revision and application status. Use this data shape
+inside the normal native envelope:
+
+```typescript
+type SettingsReadData = {
+  saved: SavedSettings;       // five complete groups, all 59 tagged leaves
+  effective: SettingsValues; // five complete groups, plain typed values
+  application: {
+    pendingRestart: SettingKey[];
+    failed: SettingApplyFailure[];
+  };
+};
+type SettingApplyFailure = {
+  key: SettingKey;
+  code: string;
+  message: string;
+  truncated: boolean;
+};
+type SettingsPatch = {
+  expectedRevision: string;
+  set?: SettingsPartial;
+  reset?: SettingKey[];
+};
+```
+
+`meta.settingsRevision` and `expectedRevision` are exact positive decimal
+strings, no leading zero, within SQLite's signed 64-bit range. They are opaque
+CAS tokens, not timestamps or counters clients should increment. The normal
+native `meta` fields remain present. There is no full-representation ETag/digest
+CAS requirement: runtime-only application changes do not create a second saved
+settings validator.
+
+`SettingsPartial` is a recursively partial version of the same five typed value
+groups. It must distinguish an omitted nullable leaf from an explicit null.
+`SettingKey` uses canonical dotted keys from the compiled 59-field catalog.
+Reject unknown current keys, duplicate reset keys, an overlap between set/reset,
+and a syntactically empty operation. Empty nested objects do not count as an
+operation. Replacing a supplied bounded array replaces that whole leaf.
+
+This is an exact target PATCH example, not a current-runtime command:
+
+```http
+PATCH /api/v1/settings
+Content-Type: application/json
+X-API-Key: <private-key>
+
+{
+  "expectedRevision": "42",
+  "set": {
+    "security": {
+      "ipFilter": {
+        "enabled": true,
+        "filePath": "filters/ipfilter.dat"
+      }
+    },
+    "transfers": { "maxConcurrentDownloads": 8 }
+  },
+  "reset": ["storage.incomingDirectory"]
+}
+```
+
+The explicit 8 becomes default because it equals the current job-cap default.
+Reset selects the current incoming default. Validate the entire resolved
+candidate, including cross-field rules, before committing any of these edits.
+Offline syntactic validation must not require the target interface or filesystem
+to exist on the preparation machine; runtime availability is checked on apply.
+
+### Revision, persistence and publication
+
+One write transaction checks the expected saved revision and updates the document
+and its checked next revision together. Use the shared bounded persistence owner
+for runtime commands and retain required commit/publication work after caller
+cancellation. Do not add another atomicity actor or per-request blocking lane.
+
+Every successful explicit nonempty REST write and offline set/reset advances the
+checked revision, even when the resulting value/mode is unchanged. A set equal
+to an already-selected default is still a valid explicit operation. Startup
+resolution alone never advances. Failed CAS, validation or database commit leaves
+the document/revision unchanged. Exhaustion fails explicitly without wrapping.
+Missing/malformed expected revision is invalid input; stale revision is a conflict.
+An uncertain worker/commit outcome remains explicitly unknown until recovered;
+do not translate uncertainty into a claim that the write rolled back.
+
+After a valid commit, saved desired values remain authoritative even if live
+application fails. Return coherent saved/effective/application status; report
+failed fields rather than pretending the save rolled back. Restart-bound leaves
+stay pending until restart. Capture the read under the same ordered publication
+boundary so it cannot combine revisions or half-published live settings. Broad
+service hot-reconfiguration is outside scope.
+
+### Size and application-status bounds
+
+- Request body: 256 KiB (262,144 bytes).
+- Serialized resolved saved document: 128 KiB (131,072 UTF-8 bytes), checked
+  before SQL. This is a whole-candidate constraint, not a promise that every
+  individually valid leaf combination fits.
+- Coherent read representation: 512 KiB (524,288 bytes), including compiled
+  defaults/effective values and bounded application status.
+- At most one failure entry per supported leaf; each message is bounded to 512
+  UTF-8 bytes without splitting a code point, with explicit `truncated` state.
+  Keys/codes use the bounded current catalog. Do not echo unbounded exceptions.
+
+The typed `DocumentTooLarge` outcome maps to HTTP 413. Prove exact serialized
+UTF-8 boundaries including JSON escaping, not just decoded character counts.
+Do not silently truncate setting values or add arbitrary per-path limits that
+regress accepted long-path support. Serialization and validation complete before
+the first SQL write. The 59-leaf catalog below is an accepted target; current
+code does not yet centrally enforce every target bound or application mode.
 
 ## REST, CLI and collections
 

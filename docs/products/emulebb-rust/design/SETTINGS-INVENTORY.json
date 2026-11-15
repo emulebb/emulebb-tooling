@@ -8,21 +8,59 @@
   "commonContract": {
     "definitionOwner": "emulebb-settings",
     "persistenceOwner": "emulebb-metadata",
-    "productStorage": "complete typed settings with explicit default/custom markers in one SQLite database",
+    "productStorage": "one singleton app_settings row: positive checked revision and complete typed SavedSettings JSON document with all five groups and 59 mode/value leaves",
     "publicSettingsResource": "/api/v1/settings",
-    "snapshotRead": "complete domains plus one revision from one DB snapshot",
+    "snapshotRead": "coherent resolved saved/default markers, plain admitted effective values, application pendingRestart/failed and exact decimal-string meta.settingsRevision under one publication boundary",
     "validation": "typed whole-candidate validation with documented integer ranges; JSON numbers may exceed JavaScript exact-integer precision; no silent clamping",
     "secretHandling": "credentials and generated private keys excluded from settings/status DTOs, error values, public examples and normal structured logs; once-only fresh-key provisioning is an explicit bootstrap handoff",
     "privateDiagnosticContract": "#280 owns authenticated raw full-fidelity private export including its exact API key/sensitive-value fields and warning/acknowledgement; settings-resource exclusion assigns no export redaction or logger rewrite",
-    "conditionalWrite": "expected saved revision checked under coordinated publication/transaction ownership; runtime-only application changes do not require full-representation ETag CAS",
-    "omission": "leave saved leaf unchanged",
-    "null": "only nullable leaves clear their override",
-    "reset": "mark leaf default; startup resolves directly from running release defaults without historical comparison",
+    "conditionalWrite": "PATCH expectedRevision plus recursively partial typed set and canonical-key reset; one transaction CASes saved revision and checked advancement; no representation-digest CAS",
+    "omission": "unchanged leaf and mode; nullable partial DTO presence is distinct from null",
+    "null": "only nullable leaves accept explicit null; set equal to current default (including null) selects default, otherwise custom",
+    "reset": "mark leaf default and resolve current running default; no historical comparison",
     "arrays": "replace the complete bounded leaf array",
     "patchBodyMaximumBytes": 262144,
-    "serializedSnapshotMaximumBytes": 131072,
+    "serializedSnapshotMaximumBytes": 524288,
     "application": "saved desired values remain authoritative on apply failure; expose effective values, failures and restart-pending fields",
-    "defaultState": "set equal to current default marks default; other values custom; complete settings with markers"
+    "defaultState": "each complete leaf has mode/value; default uses running typed default; untouched custom remains custom even if a new release default equals it; equality classification only on explicit set",
+    "savedRepresentation": {
+      "table": "app_settings",
+      "singletonKey": 1,
+      "columns": {
+        "revision": "positive signed 64-bit SQLite integer",
+        "document_json": "complete typed SavedSettings JSON object"
+      },
+      "leaf": {
+        "mode": "default|custom",
+        "value": "the authoritative leaf type"
+      },
+      "startup": "replace default-marked values in memory from running typed defaults before whole-candidate validation; no old-default comparison and no startup revision advance"
+    },
+    "patchShape": {
+      "expectedRevision": "required positive decimal string, no leading zero, maximum 9223372036854775807",
+      "set": "optional SettingsPartial of the same five plain-value typed groups",
+      "reset": "optional array of canonical dotted SettingKey values",
+      "invalid": "unknown current key, duplicate reset, set/reset overlap, empty operation including empty nested objects"
+    },
+    "revisionAdvancement": "every successful explicit nonempty REST write or offline set/reset advances, even if resulting value/mode is unchanged; startup resolution alone never advances; failed CAS/validation/DB commit changes neither document nor revision; exhaustion never wraps",
+    "serializedSavedDocumentMaximumBytes": 131072,
+    "sizeConstraint": "saved 128KiB is a whole-candidate serialized UTF-8 limit, not a guarantee every individually valid leaf combination fits; validate before SQL and test escaping/byte boundaries; typed DocumentTooLarge maps HTTP 413; no silent truncation or arbitrary new per-path cap",
+    "applicationStatusBounds": {
+      "maximumFailures": 59,
+      "failureFields": [
+        "key",
+        "code",
+        "message",
+        "truncated"
+      ],
+      "failureMessageMaximumUtf8Bytes": 512,
+      "truncation": "explicit flag; never split UTF-8 code point",
+      "exceptions": "no raw unbounded exception echo",
+      "scope": "read snapshot includes saved/effective/compiled defaults and bounded status"
+    },
+    "definitionGeneration": "one typed definition source derives value/saved/partial DTOs, metadata and validation; reuse existing nullable helpers, no independent 59-field maps",
+    "defaultEvolution": "review valid custom/default cross-field combinations for future compiled-default changes; no automatic clamping or custom-value discard",
+    "commitUncertainty": "an uncertain worker/commit outcome is explicitly unknown until recovered; never report uncertainty as proven rollback"
   },
   "processInputs": [
     {
