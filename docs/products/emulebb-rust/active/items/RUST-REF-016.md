@@ -18,13 +18,37 @@ source: 2026-10-23 Rust async and portability audit
 
 # RUST-REF-016 - Move blocking SQLite work behind bounded async persistence
 
+## Scoped friend-owner checkpoint (2026-11-15)
+
+Rust `ea0f9653` implements ordered friend mutations through the allocated owner,
+including the direct and delegated REST friend frontdoors. Its scope is converted
+friend writes and their commit/cache-publication boundary, not global FIFO or
+conversion of every SQLite path. GET reads the cached friend view and reports
+an unavailable state after an unresolved owner fault. Kad runtime commands and
+canonical settings integration still need to reuse this owner.
+
+The parent recorded 509 Core checks, 155 REST checks and 3 integration checks
+passed. Earlier metadata 108 proof belongs to the separate schema 71 repository
+checkpoint; it is not new friend-runtime evidence. Selected-artifact OpenAPI
+validation passed 130 existing Python checks, retained at
+`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/current-openapi-ea0f9653-9f7040ed/junit.xml`.
+The frozen pushed source set was Rust `ea0f9653`, tests `fcf6dbb3`, tooling
+`9f7040ed` and Builder `e93fca5`.
+
+The diagnostics runtime build completed in 225 seconds with zero warnings,
+with its log under
+`EMULEBB_WORKSPACE_OUTPUT_ROOT/logs/builds/20261115T203327Z-build-clients`.
+Compilation is not a runtime contention campaign. Actual upload progress under
+SQLite contention, combined-scale proof and full-scope qualification remain
+pending. No PR/merge/publication is authorized before operator review.
+
 ## Allocated foundation owner: 155-A (2026-11-15)
 
 The parent has explicitly allocated the accepted 155-A owner and friend-CRUD
 slice under [public-foundation round one](../../design/PUBLIC-FOUNDATION.md).
-This contract is accepted before implementation; no production worker or global
-async-persistence completion is claimed. The current selected Rust source is
-`82181294`, fresh schema 71. The slice adds no schema change, new CLI option,
+The contract was accepted before implementation; the scoped checkpoint above
+records current implementation evidence without claiming global completion.
+The allocation baseline was Rust `82181294`, fresh schema 71. The slice adds no schema change, new CLI option,
 environment input or public tuning knob. Earlier schema 68 acceptance is a
 historical review baseline, not a downgrade instruction. Keep WAL/FULL durability,
 profile ownership, typed current-model validation and existing busy behavior.
@@ -154,8 +178,8 @@ to Rust `main` at `0840e9005fd2ab28e9cbe262054dd692262e5698`. Its exact
 pre-merge source passed all six stages in the full local owner check
 (`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/local-check/emulebb-rust/20261115T075009Z-41880a82`),
 including Windows, Linux and Android; all 30 hosted checks and four workflows
-passed. The broader bounded persistence owner and friend-CRUD slice remain
-unimplemented.
+passed. The broader bounded persistence conversion remains incomplete; the newer
+scoped friend-owner checkpoint above records the implemented 155-A slice.
 
 Review confirmed a separate remaining secure-ident boundary: the flush gate
 ends before the subsequent `pin_verified_secure_ident`, and additions do not

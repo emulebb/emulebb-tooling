@@ -18,6 +18,16 @@ source: Operator-directed configuration and persistence architecture review
 
 # RUST-CI-044 - Review SQLite schema efficiency and evolution boundaries
 
+## Shared friend-owner dependency checkpoint (2026-11-15)
+
+The [#155 scoped friend-owner checkpoint](RUST-REF-016.md#scoped-friend-owner-checkpoint-2026-11-15)
+records implementation at Rust `ea0f9653`, focused Core/REST/integration proof
+and selected-artifact OpenAPI validation. Historical discovery notes below
+predate that worker implementation. This does not claim runtime Kad persistence,
+the canonical settings/CLI redesign, all-SQL async conversion, actual upload
+contention behavior or combined-scale qualification. Continue through the same
+owner rather than add another persistence lane.
+
 ## Typed metadata checkpoint (2026-11-15)
 
 The [#233 typed metadata checkpoint](RUST-FEAT-062.md#typed-metadata-checkpoint-2026-11-15)
@@ -27,7 +37,7 @@ column ownership is reviewed; this does not prove runtime Kad wiring, the
 settings/public-contract redesign, bounded async ownership or combined scale.
 Historical schema 68/69 review evidence below is not a downgrade instruction.
 
-## Foundation discovery checkpoint (2026-11-15)
+## Historical foundation discovery checkpoint (2026-11-15)
 
 Round-one branch evidence: Rust `70e595a2`, build-tests `d14d5871` and
 specification/policy baseline tooling `77b30a82`. These are pushed checkpoints,

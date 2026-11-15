@@ -61,7 +61,8 @@ documentation describes only implemented structure.
   [155-A owner contract](../active/items/RUST-REF-016.md#allocated-foundation-owner-155-a-2026-11-15)
   owns bounded FIFO admission through commit/publication and explicit drain/join.
   Friend CRUD integrates first; runtime Kad/settings work reuses it later.
-  Contract allocation is not a claim that this worker is implemented.
+  The owning item's scoped friend checkpoint records implemented paths and
+  evidence; neither allocation nor that slice claims all persistence is async.
 - Use compact internal keys, explicit foreign keys, constraints, transactions
   and indexed access paths. All startup, recovery and shutdown paths also need
   bounded work; list pagination alone is insufficient.
@@ -401,7 +402,13 @@ fallback has been confirmed. Reachability/header checks do not replace parsing.
 If all sources fail, keep the daemon/REST operational and retry unfinished
 initialization at the next launch, not in a background retry loop. Persist
 initialization separately from list contents; deliberate empty/disabled lists
-are not silently repopulated.
+are not silently repopulated. For initialized-empty Kad contacts, suppress hidden
+built-in/public fallback seeds; explicit operator-configured bootstrap endpoints
+remain usable as distinct operator input.
+
+Capture and admit the final Kad snapshot before cancellation or network teardown
+timeout can discard its source runtime. Complete accepted persistence and
+finalization, then drain/join the owner before connection/profile-lease release.
 
 ### Docker and deployment
 

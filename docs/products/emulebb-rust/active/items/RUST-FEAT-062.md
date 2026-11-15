@@ -18,6 +18,16 @@ source: operator-approved profile continuity design 2026-11-05
 
 # RUST-FEAT-062 - Persist Kad routing state in SQLite and keep met files import-only
 
+## Shared friend-owner dependency checkpoint (2026-11-15)
+
+The [#155 scoped friend-owner checkpoint](RUST-REF-016.md#scoped-friend-owner-checkpoint-2026-11-15)
+records implementation at Rust `ea0f9653`, focused Core/REST/integration proof
+and selected-artifact OpenAPI validation. Historical discovery notes below
+predate that worker implementation. This does not claim runtime Kad persistence,
+the canonical settings/CLI redesign, all-SQL async conversion, actual upload
+contention behavior or combined-scale qualification. Continue through the same
+owner rather than add another persistence lane.
+
 ## Typed metadata checkpoint (2026-11-15)
 
 Rust `c14433d5` adds typed Kad routing snapshot persistence; `82181294` makes
@@ -37,7 +47,7 @@ qualification remain pending. Runtime wiring waits for the shared
 [#155-A owner](RUST-REF-016.md#allocated-foundation-owner-155-a-2026-11-15);
 no competing actor or per-request blocking-task lane is authorized.
 
-## Foundation discovery checkpoint (2026-11-15)
+## Historical foundation discovery checkpoint (2026-11-15)
 
 Round-one branch evidence: Rust `70e595a2`, build-tests `d14d5871` and
 specification/policy baseline tooling `77b30a82`. These are pushed checkpoints,
@@ -79,7 +89,7 @@ shutdown persistence paths. It also formalizes the existing `server.met`
 behavior, which already imports server rows into SQLite without retaining the
 payload.
 
-## Current State
+## Historical review baseline (2026-11-12)
 
 Reviewed against product revision
 `080a5dea70186da31dab958757b5b8c0fd883f82`, whose exact current schema is 68.
@@ -114,8 +124,10 @@ is historical provenance, not the current schema contract.
 - Keep open sockets, pending RPCs, searches, lookup queues, timers, retry
   scheduling, publish state, and other transient work in memory only.
 - Restore usable, non-expired contacts from SQLite before Kad bootstrap begins.
-  Configured bootstrap endpoints and built-in fallback seeds remain available
-  when the durable set is empty or insufficient.
+  An initialized-empty collection must suppress hidden built-in/public fallback
+  seeds and automatic repopulation. Explicit operator-configured bootstrap
+  endpoints remain usable as distinct operator input. An unfinished fresh
+  provider initialization follows the master's next-launch retry rule.
 - Represent a bootstrap endpoint whose node identity is not yet learned as
   logical bootstrap data rather than fabricating a routing-table identity.
 
@@ -147,7 +159,10 @@ use typed columns and explicit constraints. It must not store an opaque
 - Coalesce dirty changes into periodic checkpoints every 15 minutes. A clean
   interval does no SQLite write. Explicit import and graceful shutdown are
   immediate checkpoints outside that periodic cadence.
-- Checkpoint on graceful shutdown before the networking runtime is discarded.
+- Capture and admit the final snapshot before cancellation or the network
+  teardown timeout can discard its source runtime. Then complete accepted
+  persistence/finalization and drain/join before connection/profile-lease release.
+  Never rely on a snapshot request made after teardown has already canceled Kad.
 - A successful explicit `nodes.dat` import commits its normalized logical
   contacts immediately, even if Kad is stopped. If Kad is running, merge the
   same normalized records into the live routing table.
