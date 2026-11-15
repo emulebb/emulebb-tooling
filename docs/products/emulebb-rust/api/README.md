@@ -48,9 +48,12 @@ first-party adapters can gate on the contract without parsing the body first.
 Adapter surfaces (`/api/v2` qBit-compat, Torznab) must not broaden or weaken the
 native route shape.
 
-## Settings Review Target
+## Accepted foundation target
 
-The [settings target specification](../design/SETTINGS-TARGET.md) is a proposed
-forward design owned by RUST-CI-043 / #297. It is submitted for parent review;
-its routes, defaults and schemas are not implemented by this document. The
-canonical OpenAPI and current guides remain unchanged until implementation.
+The operator accepted the [public-foundation specification](../design/PUBLIC-FOUNDATION.md)
+and its [59-field settings target](../design/SETTINGS-TARGET.md). These are the
+round-one implementation target under RUST-CI-043 / #297 and RUST-CI-044 / #298,
+not claims that all new routes, schemas or settings already exist. Update this
+canonical OpenAPI alongside each implemented slice. Current operational guides
+continue to describe implemented behavior; the accepted target must not be
+exposed as a fake runtime stage.

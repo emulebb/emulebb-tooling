@@ -1057,10 +1057,23 @@ paths:
           $ref: "#/components/responses/MethodNotAllowedResponse"
         "409":
           $ref: "#/components/responses/ErrorResponse"
+        "413":
+          $ref: "#/components/responses/ErrorResponse"
+          description: >-
+            PERSISTENCE_TOO_LARGE: owned persistence work exceeds the admission
+            payload budget and is refused before the owner copies it.
         "500":
           $ref: "#/components/responses/ErrorResponse"
+          description: PERSISTENCE_FAILED reports a storage failure.
         "503":
           $ref: "#/components/responses/ErrorResponse"
+          description: >-
+            PERSISTENCE_BUSY or PERSISTENCE_CLOSING rejects admission while the
+            owner is saturated or closing. PERSISTENCE_UNAVAILABLE reports a
+            worker failure or uncertain commit outcome; do not assume unchanged
+            state. PERSISTENCE_COMMITTED with details.committed=true means the
+            durable mutation and cache publication completed despite a worker
+            fault. Re-read current state before retrying an uncertain outcome.
         default:
           $ref: "#/components/responses/ErrorResponse"
   /transfers/{hash}/sources/{clientId}/operations/remove-friend:
@@ -1084,10 +1097,23 @@ paths:
           $ref: "#/components/responses/MethodNotAllowedResponse"
         "409":
           $ref: "#/components/responses/ErrorResponse"
+        "413":
+          $ref: "#/components/responses/ErrorResponse"
+          description: >-
+            PERSISTENCE_TOO_LARGE: owned persistence work exceeds the admission
+            payload budget and is refused before the owner copies it.
         "500":
           $ref: "#/components/responses/ErrorResponse"
+          description: PERSISTENCE_FAILED reports a storage failure.
         "503":
           $ref: "#/components/responses/ErrorResponse"
+          description: >-
+            PERSISTENCE_BUSY or PERSISTENCE_CLOSING rejects admission while the
+            owner is saturated or closing. PERSISTENCE_UNAVAILABLE reports a
+            worker failure or uncertain commit outcome; do not assume unchanged
+            state. PERSISTENCE_COMMITTED with details.committed=true means the
+            durable mutation and cache publication completed despite a worker
+            fault. Re-read current state before retrying an uncertain outcome.
         default:
           $ref: "#/components/responses/ErrorResponse"
   /transfers/{hash}/sources/{clientId}/operations/remove:
@@ -1794,10 +1820,23 @@ paths:
           $ref: "#/components/responses/MethodNotAllowedResponse"
         "409":
           $ref: "#/components/responses/ErrorResponse"
+        "413":
+          $ref: "#/components/responses/ErrorResponse"
+          description: >-
+            PERSISTENCE_TOO_LARGE: owned persistence work exceeds the admission
+            payload budget and is refused before the owner copies it.
         "500":
           $ref: "#/components/responses/ErrorResponse"
+          description: PERSISTENCE_FAILED reports a storage failure.
         "503":
           $ref: "#/components/responses/ErrorResponse"
+          description: >-
+            PERSISTENCE_BUSY or PERSISTENCE_CLOSING rejects admission while the
+            owner is saturated or closing. PERSISTENCE_UNAVAILABLE reports a
+            worker failure or uncertain commit outcome; do not assume unchanged
+            state. PERSISTENCE_COMMITTED with details.committed=true means the
+            durable mutation and cache publication completed despite a worker
+            fault. Re-read current state before retrying an uncertain outcome.
         default:
           $ref: "#/components/responses/ErrorResponse"
   /uploads/{clientId}/operations/remove-friend:
@@ -1820,10 +1859,23 @@ paths:
           $ref: "#/components/responses/MethodNotAllowedResponse"
         "409":
           $ref: "#/components/responses/ErrorResponse"
+        "413":
+          $ref: "#/components/responses/ErrorResponse"
+          description: >-
+            PERSISTENCE_TOO_LARGE: owned persistence work exceeds the admission
+            payload budget and is refused before the owner copies it.
         "500":
           $ref: "#/components/responses/ErrorResponse"
+          description: PERSISTENCE_FAILED reports a storage failure.
         "503":
           $ref: "#/components/responses/ErrorResponse"
+          description: >-
+            PERSISTENCE_BUSY or PERSISTENCE_CLOSING rejects admission while the
+            owner is saturated or closing. PERSISTENCE_UNAVAILABLE reports a
+            worker failure or uncertain commit outcome; do not assume unchanged
+            state. PERSISTENCE_COMMITTED with details.committed=true means the
+            durable mutation and cache publication completed despite a worker
+            fault. Re-read current state before retrying an uncertain outcome.
         default:
           $ref: "#/components/responses/ErrorResponse"
   /uploads/{clientId}/operations/ban:
@@ -2004,10 +2056,23 @@ paths:
           $ref: "#/components/responses/MethodNotAllowedResponse"
         "409":
           $ref: "#/components/responses/ErrorResponse"
+        "413":
+          $ref: "#/components/responses/ErrorResponse"
+          description: >-
+            PERSISTENCE_TOO_LARGE: owned persistence work exceeds the admission
+            payload budget and is refused before the owner copies it.
         "500":
           $ref: "#/components/responses/ErrorResponse"
+          description: PERSISTENCE_FAILED reports a storage failure.
         "503":
           $ref: "#/components/responses/ErrorResponse"
+          description: >-
+            PERSISTENCE_BUSY or PERSISTENCE_CLOSING rejects admission while the
+            owner is saturated or closing. PERSISTENCE_UNAVAILABLE reports a
+            worker failure or uncertain commit outcome; do not assume unchanged
+            state. PERSISTENCE_COMMITTED with details.committed=true means the
+            durable mutation and cache publication completed despite a worker
+            fault. Re-read current state before retrying an uncertain outcome.
         default:
           $ref: "#/components/responses/ErrorResponse"
   /upload-queue/{clientId}/operations/remove-friend:
@@ -2030,10 +2095,23 @@ paths:
           $ref: "#/components/responses/MethodNotAllowedResponse"
         "409":
           $ref: "#/components/responses/ErrorResponse"
+        "413":
+          $ref: "#/components/responses/ErrorResponse"
+          description: >-
+            PERSISTENCE_TOO_LARGE: owned persistence work exceeds the admission
+            payload budget and is refused before the owner copies it.
         "500":
           $ref: "#/components/responses/ErrorResponse"
+          description: PERSISTENCE_FAILED reports a storage failure.
         "503":
           $ref: "#/components/responses/ErrorResponse"
+          description: >-
+            PERSISTENCE_BUSY or PERSISTENCE_CLOSING rejects admission while the
+            owner is saturated or closing. PERSISTENCE_UNAVAILABLE reports a
+            worker failure or uncertain commit outcome; do not assume unchanged
+            state. PERSISTENCE_COMMITTED with details.committed=true means the
+            durable mutation and cache publication completed despite a worker
+            fault. Re-read current state before retrying an uncertain outcome.
         default:
           $ref: "#/components/responses/ErrorResponse"
   /upload-queue/{clientId}/operations/ban:
@@ -2699,6 +2777,9 @@ paths:
           $ref: "#/components/responses/ErrorResponse"
         "503":
           $ref: "#/components/responses/ErrorResponse"
+          description: >-
+            PERSISTENCE_UNAVAILABLE: the friend read could not be completed by
+            the persistence owner. Retry after availability is restored.
         default:
           $ref: "#/components/responses/ErrorResponse"
     post:
@@ -2724,10 +2805,23 @@ paths:
           $ref: "#/components/responses/MethodNotAllowedResponse"
         "409":
           $ref: "#/components/responses/ErrorResponse"
+        "413":
+          $ref: "#/components/responses/ErrorResponse"
+          description: >-
+            PERSISTENCE_TOO_LARGE: owned persistence work exceeds the admission
+            payload budget and is refused before the owner copies it.
         "500":
           $ref: "#/components/responses/ErrorResponse"
+          description: PERSISTENCE_FAILED reports a storage failure.
         "503":
           $ref: "#/components/responses/ErrorResponse"
+          description: >-
+            PERSISTENCE_BUSY or PERSISTENCE_CLOSING rejects admission while the
+            owner is saturated or closing. PERSISTENCE_UNAVAILABLE reports a
+            worker failure or uncertain commit outcome; do not assume unchanged
+            state. PERSISTENCE_COMMITTED with details.committed=true means the
+            durable mutation and cache publication completed despite a worker
+            fault. Re-read current state before retrying an uncertain outcome.
         default:
           $ref: "#/components/responses/ErrorResponse"
   /friends/{userHash}:
@@ -2750,10 +2844,23 @@ paths:
           $ref: "#/components/responses/MethodNotAllowedResponse"
         "409":
           $ref: "#/components/responses/ErrorResponse"
+        "413":
+          $ref: "#/components/responses/ErrorResponse"
+          description: >-
+            PERSISTENCE_TOO_LARGE: owned persistence work exceeds the admission
+            payload budget and is refused before the owner copies it.
         "500":
           $ref: "#/components/responses/ErrorResponse"
+          description: PERSISTENCE_FAILED reports a storage failure.
         "503":
           $ref: "#/components/responses/ErrorResponse"
+          description: >-
+            PERSISTENCE_BUSY or PERSISTENCE_CLOSING rejects admission while the
+            owner is saturated or closing. PERSISTENCE_UNAVAILABLE reports a
+            worker failure or uncertain commit outcome; do not assume unchanged
+            state. PERSISTENCE_COMMITTED with details.committed=true means the
+            durable mutation and cache publication completed despite a worker
+            fault. Re-read current state before retrying an uncertain outcome.
         default:
           $ref: "#/components/responses/ErrorResponse"
   /ip-filter:
@@ -3753,6 +3860,19 @@ components:
           type: object
           additionalProperties: false
           required: [code, message, details]
+          allOf:
+            - if:
+                required: [code]
+                properties:
+                  code:
+                    const: PERSISTENCE_COMMITTED
+              then:
+                properties:
+                  details:
+                    required: [committed]
+                    properties:
+                      committed:
+                        const: true
           properties:
             code:
               type: string
@@ -3767,6 +3887,12 @@ components:
                 - SERVICE_BUSY
                 - EMULE_UNAVAILABLE
                 - EMULE_ERROR
+                - PERSISTENCE_BUSY
+                - PERSISTENCE_CLOSING
+                - PERSISTENCE_TOO_LARGE
+                - PERSISTENCE_FAILED
+                - PERSISTENCE_UNAVAILABLE
+                - PERSISTENCE_COMMITTED
             message:
               type: string
               description: Human-readable error summary.
@@ -3781,6 +3907,14 @@ components:
                 "1..1000"}).
               additionalProperties: true
               properties:
+                committed:
+                  type: boolean
+                  description: >-
+                    Required and true for PERSISTENCE_COMMITTED, otherwise
+                    optional. True with that code means the durable mutation and its
+                    cache publication completed despite a worker fault. An
+                    error HTTP status does not mean that state is unchanged;
+                    absence of this marker does not prove that commit failed.
                 field:
                   type: string
                   description: Name of the request parameter that failed validation.
