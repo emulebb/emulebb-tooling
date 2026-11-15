@@ -157,10 +157,18 @@ Qualification must cover PATCH/GET/SQLite/reopen persistence, unchanged
 saved/live state after a rejected mixed update, retained profile/metadata clone
 exclusion, duplicate-descriptor and constructor-error release, and controlled
 Unix child non-unlock. Windows proof does not establish the Unix child case.
-Preserve the atomic persistence
-and ordered runtime publication delivered by #299. The parent owns combined
-inspection, full local/hosted qualification and merge; implementation branches
-alone do not establish delivery. See the [allocation](https://github.com/emulebb/emulebb-rust/issues/297#issuecomment-6887481479).
+Preserve the atomic persistence and ordered runtime publication delivered by
+#299. See the [allocation](https://github.com/emulebb/emulebb-rust/issues/297#issuecomment-6887481479).
+
+PR [#334](https://github.com/emulebb/emulebb-rust/pull/334) delivered the
+allocated boolean validation, strict NAT null handling and typed profile-lease
+guard; it merged at `e735319bbd7b72cbd21dac6ef172d318b3543947`. PR
+[#335](https://github.com/emulebb/emulebb-rust/pull/335) made fixture setup a
+process-isolated copy without hardlinks and merged to Rust `main` at
+`0840e9005fd2ab28e9cbe262054dd692262e5698`. The full local owner check passed
+all six stages, including Windows, Linux and Android, and all 30 hosted checks
+and four workflows passed. A fresh CI run on current `main` was still running
+when this evidence was recorded; no result is inferred for that run.
 
 This slice repairs the existing contract. It does not accept the broader
 settings/revision/ETag proposal or authorize schema, default, bootstrap or

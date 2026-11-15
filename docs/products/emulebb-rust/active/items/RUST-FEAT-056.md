@@ -119,6 +119,13 @@ captures its owning window; suite teardown and its regression flush passive
 effects with `act`. The menu installs an owning-document capture listener
 synchronously, with focus restoration checked from controls, links and body.
 
+PR [#335](https://github.com/emulebb/emulebb-rust/pull/335) merged the mobile
+overflow and keyboard-focus fixes to Rust `main` at
+`0840e9005fd2ab28e9cbe262054dd692262e5698`. The 52 WebUI unit tests and 32
+browser tests passed across the supported widths and Chromium/WebKit engines.
+This WebUI update did not produce a new APK or nightly; the published APK and
+its producer/evidence remain the PR #333 release recorded below.
+
 ## Current State
 
 - PR [#333](https://github.com/emulebb/emulebb-rust/pull/333) merged to Rust `main` at source `23e685b87bb76db21489c9b1cc725dd0da4241c1`. Published nightly [`0.1.0-beta.2.nightly.20261115.g23e685b8`](https://github.com/emulebb/emulebb-rust/releases/tag/rust-v0.1.0-beta.2.nightly.20261115.g23e685b8) went public at 03:02:52 UTC on 2026-11-15. Run [43666596381](https://github.com/emulebb/emulebb-rust/actions/runs/43666596381) published 85 assets with the release marked non-draft. Its producer identities are Builder `43515795e85beceeb73b1bbbd77e5ab167ef13b6`, Harness `281ccbcdf9f4c9960c5efda4705df966418b6bb2`, Tooling `f88a8ce608bc75a619aea6909f54a9cdecdddb6e`, and tool image ID prefix `c94812`.

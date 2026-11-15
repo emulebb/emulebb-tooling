@@ -162,6 +162,17 @@ including macOS/APFS variants, continues in parallel and does not block
 Beta 3. This changes release placement; it does not claim a measured exploit
 or routine corruption, and it does not authorize publication.
 
+### Delivered Proof-Before-Payload Slice
+
+PR [#335](https://github.com/emulebb/emulebb-rust/pull/335) merged to Rust
+`main` at `0840e9005fd2ab28e9cbe262054dd692262e5698`. It validates recovery
+proofs before payload I/O. The exact pre-merge source `c6b9ceff0590b222fe5c5cc23df8622c229809d1`
+passed all six stages in the full local owner check
+(`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/local-check/emulebb-rust/20261115T075009Z-41880a82`),
+including Windows, Linux and Android; all 30 hosted checks and four workflows
+passed. This closes the allocated proof-before-payload-I/O contribution. The
+request registry and answer correlation remain open under #250.
+
 ## Audit Reconciliation (2026-11-09)
 
 The complete audit collection was reconciled against current source and
