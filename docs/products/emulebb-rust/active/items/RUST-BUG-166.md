@@ -5,7 +5,7 @@ product: emulebb-rust
 phase: Phase 1
 github_issue: https://github.com/emulebb/emulebb-rust/issues/250
 title: Admit AICH recovery answers only for matching outstanding requests
-status: OPEN
+status: IN_PROGRESS
 priority: Major
 category: bug
 labels: [rust, aich, protocol, integrity, io]
@@ -26,6 +26,28 @@ Use one request authority shared by outbound download and inbound established
 sessions. Treat the missing admission boundary as a Windows/Linux Beta 3 integrity
 requirement. The review established source-level defects, not a
 measured exploit or evidence that all beta transfers fail.
+
+## Allocated Proof-Before-I/O Slice
+
+The parent allocated a bounded first contribution on 2026-11-15 against Rust
+`23e685b87bb76db21489c9b1cc725dd0da4241c1`. Preserve the existing manifest
+lock and cheap part/root/piece checks, then validate the recovery proof before
+opening or reading payload. Successful validator output already supplies the
+block hashes needed by the existing salvage path.
+
+A per-runtime test-only read-attempt counter must show zero payload access for
+rejected proofs with intact transfer payloads. Assert unchanged manifest bitmap,
+piece state and corruption attribution. Preserve valid one-read salvage, sender
+accounting and mandatory MD4 verification. Keep valid-proof storage failures as
+errors; when both proof and payload are invalid, proof validation fails first.
+
+This contribution changes no parser framing, dependencies, schema, request
+registry, deadline, generation or lifecycle architecture. In particular, it does
+not establish canonical trailing-byte rejection or the solicited-answer boundary.
+Request correlation, unsolicited valid proofs, stale-answer fencing and
+concurrent lifecycle admission remain open under this item. Source inspection
+and static hooks are not executed Rust qualification; scoped tests, two
+inspection rounds and the applicable full local/hosted gates remain required.
 
 ## Revalidated Findings
 
