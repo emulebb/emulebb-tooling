@@ -212,10 +212,12 @@ support. The current emulator evidence and remaining limits are tracked in the
 The native binaries target API 28+ (Android 9+) with 16 KiB-compatible ELF
 alignment. This is a compile target, not a runtime guarantee for Termux or Fire
 OS. The Android 12+ APK starts its foreground service manually, including after
-reboot; automatic boot-resume is not provided. A separate 13-case API 31 ARM64
-phone smoke passed for the signed local APK built from Rust source `20a07429`;
-that bounded result does not establish broad Android qualification. Fire OS,
-Termux runtime and 24-hour continuous operation remain unqualified. See
+reboot; automatic boot-resume is not provided. Separately, an earlier 13-case
+API 31 ARM64 physical-phone smoke used a signed local APK built from Rust source
+`20a07429`. It is historical evidence for those exact bytes, separate from the
+published APK and the API 31–37 x86_64 emulator qualification above; it does not
+establish broader physical-device qualification. Fire OS, Termux runtime and
+24-hour continuous operation remain unqualified. See
 [the owning feature](../active/items/RUST-FEAT-056.md).
 
 ### Android Application

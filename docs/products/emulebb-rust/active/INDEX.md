@@ -5,21 +5,23 @@ milestones own workflow state and roadmap placement; each linked Markdown item
 owns the durable engineering spec, constraints, acceptance criteria, and
 retained evidence.
 
-## Current Operator Hold And Work Priority (2026-11-12)
+## Current Operator Hold And Work Priority (2026-11-15)
 
 The canonical [Release Scope](../RELEASE-SCOPE.md#current-operator-hold-and-work-priority-2026-11-13)
 owns holds, delivery order and optional expansion boundaries. Balanced
 reliability leads; Scoop is the first accepted new distribution lane; Linux
 services are review-only. The [PM policy](../../../reference/PM-COORDINATION-POLICY.md)
-owns the standing parallel-branch and integration-batch routine. The client-fix
-batch in [PR #329](https://github.com/emulebb/emulebb-rust/pull/329) is published
-as the accepted [nightly from source `6429b952`](https://github.com/emulebb/emulebb-rust/releases/tag/rust-v0.1.0-beta.2.nightly.20261113.g6429b952).
-The later README-only [PR #330](https://github.com/emulebb/emulebb-rust/pull/330)
-proved the trusted short path on its real PR and actual main push `bc0f319d`;
-the published binary source remains `6429b952`.
-The [closed-items index](../history/items/INDEX.md) owns their durable records.
-Beta 3 promotion and APK/signing remain held; separately authorized nightly
-qualification does not lift them. GitHub issues and Project #3 own status,
+owns the standing parallel-branch and integration-batch routine. The signed
+Android 12+ APK and both experimental native Android archives are already
+published in [nightly `0.1.0-beta.2.nightly.20261115.g23e685b8`, from source
+`23e685b87bb76db21489c9b1cc725dd0da4241c1`](https://github.com/emulebb/emulebb-rust/releases/tag/rust-v0.1.0-beta.2.nightly.20261115.g23e685b8).
+The release and its source-bound Android evidence are recorded under the
+existing `RUST-FEAT-056` item. This publication does not lift the
+Beta 3 promotion hold or expand Android support beyond the evidence recorded
+there. The [closed-items index](../history/items/INDEX.md) owns durable records.
+Balanced reliability leads; Scoop remains the first accepted new distribution
+lane; Linux services are review-only. Keep existing bootstrap and writable
+profile ownership rules unchanged. GitHub issues and Project #3 own status,
 priority and phase placement.
 
 ## Current Authority
