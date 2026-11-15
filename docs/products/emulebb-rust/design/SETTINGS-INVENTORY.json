@@ -16,7 +16,7 @@
     "privateDiagnosticContract": "#280 owns authenticated raw full-fidelity private export including its exact API key/sensitive-value fields and warning/acknowledgement; settings-resource exclusion assigns no export redaction or logger rewrite",
     "conditionalWrite": "PATCH expectedRevision plus recursively partial typed set and canonical-key reset; one transaction CASes saved revision and checked advancement; no representation-digest CAS",
     "omission": "unchanged leaf and mode; nullable partial DTO presence is distinct from null",
-    "null": "only nullable leaves accept explicit null; set equal to current default (including null) selects default, otherwise custom",
+    "null": "only nullable leaves accept explicit null; on explicit set, null equal to current default selects default, otherwise custom; an untouched custom null stays custom even if a future release default becomes null",
     "reset": "mark leaf default and resolve current running default; no historical comparison",
     "arrays": "replace the complete bounded leaf array",
     "patchBodyMaximumBytes": 262144,
@@ -56,7 +56,7 @@
       "failureMessageMaximumUtf8Bytes": 512,
       "truncation": "explicit flag; never split UTF-8 code point",
       "exceptions": "no raw unbounded exception echo",
-      "scope": "read snapshot includes saved/effective/compiled defaults and bounded status"
+      "scope": "read snapshot contains resolved default-marked saved values, admitted effective values and bounded application status; surface default metadata is separate"
     },
     "definitionGeneration": "one typed definition source derives value/saved/partial DTOs, metadata and validation; reuse existing nullable helpers, no independent 59-field maps",
     "defaultEvolution": "review valid custom/default cross-field combinations for future compiled-default changes; no automatic clamping or custom-value discard",

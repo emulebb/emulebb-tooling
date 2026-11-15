@@ -95,8 +95,10 @@ A custom leaf retains its saved value, even when a later release's default now
 happens to equal it. Equality classification happens only during an explicit
 set: a set equal to the current default becomes default; otherwise it becomes
 custom. Reset always selects default. Untouched leaves keep their modes.
-A custom null is allowed only for a nullable leaf and, under the equality rule,
-only while the current default differs from null. Required leaves reject null.
+An explicit set of null is valid only for a nullable leaf: it selects default
+when the current default is null, otherwise custom. An already-custom null
+remains custom if a future release default becomes null, like every other
+untouched custom value. Required leaves reject null.
 
 Future changes to compiled defaults must review valid custom/default cross-field
 combinations. Never silently clamp a custom value or discard it to make a new
@@ -202,8 +204,9 @@ service hot-reconfiguration is outside scope.
 - Serialized resolved saved document: 128 KiB (131,072 UTF-8 bytes), checked
   before SQL. This is a whole-candidate constraint, not a promise that every
   individually valid leaf combination fits.
-- Coherent read representation: 512 KiB (524,288 bytes), including compiled
-  defaults/effective values and bounded application status.
+- Coherent read representation: 512 KiB (524,288 bytes), including resolved
+  default-marked saved values, admitted effective values and bounded application
+  status. Default metadata exposed by the settings surface is separate.
 - At most one failure entry per supported leaf; each message is bounded to 512
   UTF-8 bytes without splitting a code point, with explicit `truncated` state.
   Keys/codes use the bounded current catalog. Do not echo unbounded exceptions.
