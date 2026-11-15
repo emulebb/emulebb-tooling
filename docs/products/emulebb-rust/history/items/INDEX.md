@@ -12,6 +12,7 @@ to locate a closed record.
 
 | Item | Decision | Evidence |
 | --- | --- | --- |
+| [RUST-BUG-136](RUST-BUG-136.md) | DONE; fixed-size deletion authority reads with restart/retry coverage | [#162](https://github.com/emulebb/emulebb-rust/issues/162), [PR #335](https://github.com/emulebb/emulebb-rust/pull/335) |
 | [RUST-BUG-168](https://github.com/emulebb/emulebb-tooling/blob/main/docs/products/emulebb-rust/history/items/RUST-BUG-168.md) | DONE; stock secure-ident size bound | [#269](https://github.com/emulebb/emulebb-rust/issues/269), [PR #329](https://github.com/emulebb/emulebb-rust/pull/329) |
 | [RUST-BUG-176](https://github.com/emulebb/emulebb-tooling/blob/main/docs/products/emulebb-rust/history/items/RUST-BUG-176.md) | DONE; bounded discovery fetch | [#278](https://github.com/emulebb/emulebb-rust/issues/278), [PR #329](https://github.com/emulebb/emulebb-rust/pull/329) |
 | [RUST-BUG-186](https://github.com/emulebb/emulebb-tooling/blob/main/docs/products/emulebb-rust/history/items/RUST-BUG-186.md) | DONE; bounded native Android TLS/startup, explicit follow-ups stay with #226 | [#328](https://github.com/emulebb/emulebb-rust/issues/328), [Android proof](https://github.com/emulebb/emulebb-build/actions/runs/43369243640) |

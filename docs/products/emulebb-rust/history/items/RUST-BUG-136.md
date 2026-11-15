@@ -5,7 +5,7 @@ product: emulebb-rust
 phase: Phase 1
 github_issue: https://github.com/emulebb/emulebb-rust/issues/162
 title: Bound transfer deletion marker validation reads
-status: OPEN
+status: DONE
 priority: Minor
 category: bug
 labels: [rust, filesystem, deletion, safety, resource-bounds, persistence]
@@ -71,12 +71,12 @@ purpose is to defend destructive filesystem operations.
 
 ## Acceptance Criteria
 
-- [ ] Marker validation performs a constant-memory read bounded to 17 bytes.
-- [ ] Exactly 16 matching UUID bytes authorize the marker check.
-- [ ] Missing, short, oversized, mismatched, symlinked, and non-regular markers
+- [x] Marker validation performs a constant-memory read bounded to 17 bytes.
+- [x] Exactly 16 matching UUID bytes authorize the marker check.
+- [x] Missing, short, oversized, mismatched, symlinked, and non-regular markers
       all reject deletion.
-- [ ] Directory identity is checked in addition to marker content.
-- [ ] Startup and maintenance retry paths surface or retain failed deletion
+- [x] Directory identity is checked in addition to marker content.
+- [x] Startup and maintenance retry paths surface or retain failed deletion
       intent without deleting an unauthorised path.
 
 ## Validation
@@ -97,6 +97,12 @@ payload, marker, and pending deletion intent to survive rejection. Restoring the
 exact 16-byte UUID must then permit cleanup and finalization. Existing missing
 marker and changed directory identity tests remain in place.
 
-Rust test execution is pending the parent-scheduled validation slot. Static
-checks and normal commit/push hooks qualify the source checkpoint only; this
-item remains open until runtime validation and integration are complete.
+Delivered by [PR #335](https://github.com/emulebb/emulebb-rust/pull/335), merged
+on 2026-11-15 at Rust `0840e9005fd2ab28e9cbe262054dd692262e5698`.
+The final pre-merge source `c6b9ceff0590b222fe5c5cc23df8622c229809d1`
+passed the full Windows, Linux and Android local gate and all hosted checks.
+The local report is retained under
+`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/local-check/emulebb-rust/20261115T075009Z-41880a82`.
+Android local checks compile and link both ABIs; they do not establish Android
+runtime execution. Native hosted jobs execute their applicable runtime tests.
+Issue #162 is closed and its Project #3 placement is Done.

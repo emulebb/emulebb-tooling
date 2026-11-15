@@ -19,9 +19,8 @@ The release and its source-bound Android evidence are recorded under the
 existing `RUST-FEAT-056` item. This publication does not lift the
 Beta 3 promotion hold or expand Android support beyond the evidence recorded
 there. The [closed-items index](../history/items/INDEX.md) owns durable records.
-Balanced reliability leads; Scoop remains the first accepted new distribution
-lane; Linux services are review-only. Keep existing bootstrap and writable
-profile ownership rules unchanged. GitHub issues and Project #3 own status,
+Keep existing bootstrap and writable profile ownership rules unchanged.
+GitHub issues and Project #3 own status,
 priority and phase placement.
 
 ## Current Authority
@@ -105,7 +104,6 @@ ranking and GitHub placement.
 | [RUST-CI-046](items/RUST-CI-046.md) | Evidence | Complete coordinated public presence and release download guidance |
 | [RUST-CI-049](items/RUST-CI-049.md) | Evidence | Review the Linux daemon service and ownership contract |
 | [RUST-FEAT-147](items/RUST-FEAT-147.md) | Feature | Distribute verified Windows daemon packages through Scoop |
-| [RUST-BUG-136](items/RUST-BUG-136.md) | Bug | Bound transfer deletion marker validation reads |
 | [RUST-BUG-160](items/RUST-BUG-160.md) | Bug | Reuse stock hashes across unambiguous Unicode filename normalization |
 | [RUST-BUG-162](items/RUST-BUG-162.md) | Bug | Bound profile archive fields before allocating import buffers |
 | [RUST-BUG-167](items/RUST-BUG-167.md) | Bug | Release and retry failed AICH recovery requests across eligible peers |

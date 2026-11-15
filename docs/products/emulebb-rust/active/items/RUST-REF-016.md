@@ -42,8 +42,14 @@ below records the 155-A review baseline, not a schema downgrade instruction.
 Required regression proof covers a real SQLite abort with durable rows
 unchanged and parked credit retained, additions merged without overwrite or
 overflow, exactly-once retry and reopen, plus existing secure-ident wipe tests.
-Rust execution and combined qualification remain pending parent scheduling.
-The broader bounded persistence owner and friend-CRUD slice remain unimplemented.
+The failed-settlement parked-credit restore and exactly-once SQL retry were
+delivered in PR [#335](https://github.com/emulebb/emulebb-rust/pull/335), merged
+to Rust `main` at `0840e9005fd2ab28e9cbe262054dd692262e5698`. Its exact
+pre-merge source passed all six stages in the full local owner check
+(`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/local-check/emulebb-rust/20261115T075009Z-41880a82`),
+including Windows, Linux and Android; all 30 hosted checks and four workflows
+passed. The broader bounded persistence owner and friend-CRUD slice remain
+unimplemented.
 
 Review confirmed a separate remaining secure-ident boundary: the flush gate
 ends before the subsequent `pin_verified_secure_ident`, and additions do not
