@@ -193,14 +193,14 @@ general VPN-safety proof.
 
 ## Android: APK Or Native Shell
 
-The nightly release contract keeps all three alternatives below. Both Android
-native archives are public release assets alongside the signed APK; they are
-not limited to developer artifacts in Actions. The APK has passed a bounded
-physical-device smoke as a local build, but the full hosted source matrix and
-release qualification/publication remain pending. Use only assets actually
-present in the selected published release. The failed
-[candidate run 43583500231](https://github.com/emulebb/emulebb-rust/actions/runs/43583500231)
-did not publish an APK release.
+The nightly release contract includes all three alternatives below: the
+signed Android 12+ APK and both native archives. Download the matching asset
+from the selected nightly release and follow its instructions. The APK starts
+its foreground service manually, including after reboot; it does not resume
+automatically at boot. Use the native archives only as experimental developer
+bundles. Their API 28 compile target and ELF checks do not establish Termux or
+Fire OS runtime support. See the [Android feature record](../active/items/RUST-FEAT-056.md)
+for qualification evidence and remaining work.
 
 | Alternative | CPU | Filename suffix |
 | --- | --- | --- |
@@ -209,14 +209,12 @@ did not publish an APK release.
 | Experimental native shell, including Termux | x86_64 / amd64 | `-android-x86_64.tar.zst` |
 
 The native binaries target API 28+ (Android 9+) with 16 KiB-compatible ELF
-alignment. That binary floor does not establish runtime support on every Android
-version. The new APK candidate minimum is API 31 (Android 12); its API 31-37
-runtime qualification, including Android 12L, is separate from native archive
-compilation. A fresh 13-case API 31 ARM64 phone smoke has passed for the signed
-local APK built from Rust source `20a07429`; the complete qualification and
-release publication remain pending. A
-Linux musl archive cannot substitute for either Android archive. Fire OS, Termux
-runtime and 24-hour continuous operation remain unqualified; see
+alignment. This is a compile target, not a runtime guarantee for Termux or Fire
+OS. The Android 12+ APK starts its foreground service manually, including after
+reboot; automatic boot-resume is not provided. A separate 13-case API 31 ARM64
+phone smoke passed for the signed local APK built from Rust source `20a07429`;
+that bounded result does not establish broad Android qualification. Fire OS,
+Termux runtime and 24-hour continuous operation remain unqualified. See
 [the owning feature](../active/items/RUST-FEAT-056.md).
 
 ### Android Application

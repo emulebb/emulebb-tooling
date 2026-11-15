@@ -121,6 +121,7 @@ synchronously, with focus restoration checked from controls, links and body.
 
 ## Current State
 
+- PR [#333](https://github.com/emulebb/emulebb-rust/pull/333) merged to Rust `main` at `23e685b87bb76db21489c9b1cc725dd0da4241c1`; its final source selects collision-safe Android fixture cleanup across CI workflows. At this documentation checkpoint, exact-source CI was queued and CodeQL and optional-platform checks were in progress; no completion is claimed for those runs. The recorded local Android cross-compilation and ELF receipts remain compile evidence, not Android runtime qualification. This merged source identity is not itself an Android release or publication receipt. The latest documented APK candidate produced the signed APK and both native archives, but its four APK qualification jobs failed; it remains unpublished. Do not treat candidate artifacts as release assets or claim a published APK until a later qualifying nightly is verified.
 - The operator deferred automatic boot resume on 2026-11-14. Current source
   [`42bffd971c77cd856e361c00e3a318c85304a859`](https://github.com/emulebb/emulebb-rust/commit/42bffd971c77cd856e361c00e3a318c85304a859)
   requires manual Start after reboot and removes the boot receiver, permission
@@ -463,16 +464,15 @@ name. Normalize parent-path aliases before applying exclusions. This is a
 current-schema storage change, requiring a fresh beta profile, without migration
 or automatic profile reset.
 
-The operator also supplied an approved 221-file, 1,301,166,929-byte library for
-copying into owned test locations and explicitly authorized public-network
-serving while other work continues. The approved library has not yet been copied
-or served. Preserve the source and unrelated device data. Retain exact inventory,
-private paths and filenames only in local output evidence. Monitor
-copied/verified files, hashing, catalog publication, network
-publication, upload requests and actual served bytes as separate observations.
-Absent public demand is `not-observed`, not a successful serving claim. Keep
-the foreground service running after a normal observation interval, with an
-explicit owned-session stop operation and bounded monitoring storage.
+The approved campaign library was copied into the owned test location: 221
+original files across 19 directories, totaling 1,301,166,929 bytes. Three files
+were excluded by normal intake rules; 218 eligible shared entries remained. The
+public-network campaign ended as failed after 74 minutes and 140 observations.
+It recorded zero public peer requests and zero public peer bytes. A generic
+`RuntimeError` was not classified, and the harness stop was confirmed. Do not
+describe the library as uncopied or the campaign as ongoing, and do not claim
+that eligible entries were served. Exact private inventory, filenames, paths
+and user-media hashes remain only in local output evidence.
 
 ### Latest API 31 Phone Smoke
 
@@ -495,15 +495,11 @@ The tested automatic direct-routing repair applies only when the original IP
 and interface are unset and VPN Guard is off. It selects a detected local IPv4
 address and lets the operating system route traffic with that source address.
 Explicit IP, interface and VPN Guard choices remain strict and do not fall
-back. A public-network campaign on this source is currently running: 221 real
-input files were copied and hash-verified, and all 218 eligible contents were
-cataloged and marked published after
-successful `OFFERFILES` sends, and HighID, Kad connection and Kad source ACK
-were observed. No peer upload has yet been observed. This ongoing campaign is
-not a 24-hour proof. Full hosted source matrix and release qualification remain
-pending; boot resume after device reboot is deferred, with manual Start as the
-current workflow. Both experimental native archives retain their API 28
-compile floor.
+back. The public-network campaign result is recorded above; it produced no
+observed public peer requests or bytes and does not establish successful public
+serving or 24-hour endurance. Manual Start after reboot remains the accepted
+workflow. Both experimental native archives retain their API 28 compile target,
+which does not qualify Termux or Fire OS runtime.
 
 ## Distribution Boundary
 
@@ -588,15 +584,14 @@ continuity and measured Doze continuity; it contains no reboot scenario.
 Restricted battery mode must never be presented as qualified continuous
 operation. Boot-resume qualification is deferred with that feature.
 
-The operator authorized physical-phone testing over Wi-Fi on 2026-11-13.
-Use an explicitly selected, authenticated ADB connection and preserve the
-operator's ADB server and unrelated application data. The operator separately
-authorized resetting this app's owned test profile; use the persisted driver's
-artifact/ownership admission before any reset. Reboot and global device resets
-are not implicit physical-smoke operations. Confine transfer fixtures to
-owned synthetic files; account for the daemon's implicit sharing of its incoming
-directory before the first service start. Phone execution on one Android API
-does not substitute for the full API 31-37 matrix or the 24-hour campaign.
+Earlier in this workstream, the operator authorized physical-phone testing
+over Wi-Fi and limited resets to the app-owned test profile. Those historical
+authorizations do not schedule another phone run. The current operator testing
+preference is to use emulators for all future Android execution tests; this is a
+workstream preference, not a product support limitation. Preserve the operator's
+ADB server and unrelated application data in historical evidence. Confine test
+fixtures to owned synthetic files. Phone results on one Android API do not
+substitute for the full API 31-37 matrix or 24-hour endurance evidence.
 
 Release signing material is retained in the operator's normal application-data
 directory: `%LOCALAPPDATA%/eMuleBB/signing/android` on Windows, or
