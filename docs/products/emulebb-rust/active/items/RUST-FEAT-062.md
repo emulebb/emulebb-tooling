@@ -18,6 +18,16 @@ source: operator-approved profile continuity design 2026-11-05
 
 # RUST-FEAT-062 - Persist Kad routing state in SQLite and keep met files import-only
 
+## Typed DHT boundary and shared-owner proof (2026-11-15)
+
+Rust `45ca468b` adds typed DHT routing capture/restore and learned-key boundary
+handling. The selected typed-boundary test sets passed 90, 59 and 141 checks.
+This commit does not change SQL or wire the runtime persistence lifecycle.
+The [#155 local peer/current-contract campaign](RUST-REF-016.md#registered-conformance-and-local-peer-checkpoint-2026-11-15)
+records the subsequent ordinary-request/drain repair and passing rerun at
+`b509524f`. Actual upload-byte progress under SQL contention and runtime Kad
+checkpoint delivery are still pending; retain the same shared owner.
+
 ## Shared friend-owner dependency checkpoint (2026-11-15)
 
 The [#155 scoped friend-owner checkpoint](RUST-REF-016.md#scoped-friend-owner-checkpoint-2026-11-15)
@@ -31,7 +41,7 @@ owner rather than add another persistence lane.
 ## Typed metadata checkpoint (2026-11-15)
 
 Rust `c14433d5` adds typed Kad routing snapshot persistence; `82181294` makes
-SQL column ownership explicit. The current fresh schema is71. These commits
+SQL column ownership explicit. The current fresh schema is 71. These commits
 are pushed on the round-one branch, not merged delivery. Snapshot replacement,
 validation and initialization status use coordinated metadata transactions;
 no opaque source-file or serialized contact blob is the stored authority.
@@ -39,7 +49,7 @@ no opaque source-file or serialized contact blob is the stored authority.
 Focused metadata proof: 108 unit plus 3 integration checks passed. The existing
 Python selection against an actual fresh schema 71 from the selected Rust
 sources passed 80 with one POSIX-only skip; retained XML is
-`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/public-foundation-round-1/schema 71-python.xml`.
+`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/public-foundation-round-1/schema71-python.xml`.
 The selected companion heads are Rust `82181294`, tests `d14d5871` and tooling
 `9a2d3deb`. This adds metadata repository capability only. Runtime Kad snapshot
 admission/checkpointing, source-file removal, settings/REST work and full-scope
@@ -171,6 +181,39 @@ use typed columns and explicit constraints. It must not store an opaque
 - A periodic write failure is visible in diagnostics and leaves the snapshot
   dirty for a bounded retry. A shutdown write failure is reported but must not
   resurrect a met-file fallback.
+
+### Generation and compact key projection
+
+This accepted integration contract remains pending implementation. Keep routing
+mutation generation, coarse learned-key generation and the database CAS revision
+as separate concepts. A database revision is not the dirty signal, and a coarse
+key-cache change alone is not proof that persisted routing evidence changed.
+
+At the 15-minute checkpoint boundary, derive an exact, stably ordered compact
+projection of durable key/binding evidence for the accepted routing contacts.
+Compare relevant identities, endpoint/key and bound-address values, not a digest,
+count or unrelated peer-cache activity. A non-routing key-cache change whose
+projection is unchanged must not create a database checkpoint. Route changes or
+changed relevant key evidence require a coherent bounded full snapshot.
+
+Fence capture against routing/key-generation and binding changes; never publish
+or acknowledge a stale mixture. Only acknowledge the captured generation and
+projection after successful persistence for that runtime generation. Concurrent
+new mutations remain dirty. A delayed snapshot must not overwrite a newer
+explicit import or replacement runtime; retain database revision CAS as the
+independent durability guard. Generation exhaustion must not silently wrap.
+
+Reserve and measure projection, snapshot and conversion costs under the shared
+bounded-owner contract before cloning. Use the actual routing table as membership
+authority; do not introduce a second long-lived shadow-membership registry or
+another persistence worker. The comparison projection is a bounded derived
+checkpoint aid, not a competing routing authority.
+
+Required proof includes no-write clean intervals and irrelevant-key changes,
+relevant learned-key/binding changes, route membership changes, mutation during
+capture, delayed old-runtime completion and revision conflicts. Preserve final
+snapshot admission before cancellation/teardown and final drain before lease
+release. These are acceptance requirements, not current-runtime claims.
 
 ### Import and merge rules
 

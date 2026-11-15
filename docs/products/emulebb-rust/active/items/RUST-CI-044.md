@@ -18,6 +18,18 @@ source: Operator-directed configuration and persistence architecture review
 
 # RUST-CI-044 - Review SQLite schema efficiency and evolution boundaries
 
+## Registered current-contract checkpoint (2026-11-15)
+
+The [#155 registered conformance/peer checkpoint](RUST-REF-016.md#registered-conformance-and-local-peer-checkpoint-2026-11-15)
+retains the first failed campaign, its runtime drain repair and passing rerun at
+Rust `b509524f` / tests `a96b5859` / tooling `26492515` / Builder `e93fca5`.
+The rerun covered 83/105 current main operations, 43 expected errors and 22 explicit
+unsafe skips, plus SSE and 6/6 delegated friend mutations with failure/retry and
+clean-process/database proof. These are current-contract results, not
+qualification of the unimplemented 59-field settings/CLI or full library/job
+foundation. Upload progress under database contention and broad scale/platform
+proof remain pending.
+
 ## Shared friend-owner dependency checkpoint (2026-11-15)
 
 The [#155 scoped friend-owner checkpoint](RUST-REF-016.md#scoped-friend-owner-checkpoint-2026-11-15)

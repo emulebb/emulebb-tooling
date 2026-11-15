@@ -18,6 +18,41 @@ source: 2026-10-23 Rust async and portability audit
 
 # RUST-REF-016 - Move blocking SQLite work behind bounded async persistence
 
+## Registered conformance and local peer checkpoint (2026-11-15)
+
+The first registered campaign at Rust `45ca468b` **failed**. Its retained report
+is `EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/rust-rest-openapi-ci/20261115T205632Z/report.json`.
+The main conformance phase exercised 83 of 105 operations with 43 expected errors,
+22 unsafe skips and no failed routes; the separate SSE check passed. The local
+peer phase proved all 6 required friend-mutation frontdoors and retry behavior,
+but two peers exited nonzero during teardown. The campaign correctly remained
+failed instead of treating successful HTTP assertions as complete acceptance.
+
+The defect was ordinary handled SQLite request failures being retained as a
+sticky owner-drain failure. Rust `b509524f` separates completed request errors
+from worker/uncertain-commit faults without weakening the harness. The focused
+Core selection passed 510 checks and all selected integrations. The registered
+regular runtime was rebuilt in 187 seconds with zero warnings; its build log is
+`EMULEBB_WORKSPACE_OUTPUT_ROOT/logs/builds/20261115T210559Z-build-clients`.
+
+The rerun **passed**, with exact frozen companions Rust `b509524f`, tests
+`a96b5859`, tooling `26492515` and Builder `e93fca5`. Retained report:
+`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/rust-rest-openapi-ci/20261115T210858Z/report.json`.
+It exercised 83 of 105 main operations, including 43 expected-error responses;
+22 unsafe operations remained explicitly skipped, no route failed, and SSE
+passed. The local loopback-only peer phase covered 6/6 active-upload, waiting-
+queue and download-source add/remove-friend frontdoors: injected failures
+returned HTTP 500 `PERSISTENCE_FAILED`, cache and reopened database stayed
+unchanged, and subsequent add/remove retries succeeded. All three databases
+reopened with integrity `ok`, fault triggers were removed and every owned
+process exited zero. The original failed evidence remains retained.
+
+Logs include bounded forced-download-task-abort warnings during teardown; they
+are not claims of leaked processes. This proof does not establish upload-byte
+progress under SQLite contention, a full platform matrix, combined 100k scale,
+365-day endurance or complete Kad/settings delivery. No PR/merge/publication is
+authorized before operator review.
+
 ## Scoped friend-owner checkpoint (2026-11-15)
 
 Rust `ea0f9653` implements ordered friend mutations through the allocated owner,
