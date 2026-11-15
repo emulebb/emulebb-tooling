@@ -57,7 +57,11 @@ documentation describes only implemented structure.
 
 - One daemon, one SQLite database and coordinated persistence ownership. Reuse
   existing repository, profile-lease and storage infrastructure; no competing
-  persistence actor or adapter-owned shadow state.
+  persistence actor or adapter-owned shadow state. The allocated
+  [155-A owner contract](../active/items/RUST-REF-016.md#allocated-foundation-owner-155-a-2026-11-15)
+  owns bounded FIFO admission through commit/publication and explicit drain/join.
+  Friend CRUD integrates first; runtime Kad/settings work reuses it later.
+  Contract allocation is not a claim that this worker is implemented.
 - Use compact internal keys, explicit foreign keys, constraints, transactions
   and indexed access paths. All startup, recovery and shutdown paths also need
   bounded work; list pagination alone is insufficient.
@@ -420,7 +424,7 @@ do not confuse them with daemon runtime overrides.
 | Phase | Required outcome |
 | --- | --- |
 | 1. Contract baseline | Reconcile policy and this specification, typed settings catalog, exact route/schema inventories, error/lifecycle contracts and query/index designs. Refresh source ownership, fixtures and baseline measurements. |
-| 2. Persistence/domain services | Coordinated fresh-schema cut, durable jobs/history, content/location/tag/policy/statistics, categories, recovery, independent search claims and Kad persistence. Replace unbounded startup/list/recovery collection paths. |
+| 2. Persistence/domain services | Shared 155-A owner and friend integration, then coordinated fresh-schema cut, durable jobs/history, content/location/tag/policy/statistics, categories, recovery, independent search claims and Kad persistence. Replace unbounded startup/list/recovery collection paths. |
 | 3. Settings/CLI/provisioning | Default/custom resolution, revisions and application status, offline get/set/reset, fresh-only Docker setup and canonical harness profile preparation. |
 | 4. REST/OpenAPI/WebUI | Routes, DTOs, validators, OpenAPI and consumers together; bounded action/query paths, substring/statistic sorting, shared change tracking and paginated active-view UI. |
 | 5. Integrated checkpoint | Package/harness repair, failure/recovery and combined-scale qualification, independent review/repairs, clean granular commits and pushes. Stop for operator review, no PR. |

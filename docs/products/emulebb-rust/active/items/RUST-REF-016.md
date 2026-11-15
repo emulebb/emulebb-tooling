@@ -18,6 +18,112 @@ source: 2026-10-23 Rust async and portability audit
 
 # RUST-REF-016 - Move blocking SQLite work behind bounded async persistence
 
+## Allocated foundation owner: 155-A (2026-11-15)
+
+The parent has explicitly allocated the accepted 155-A owner and friend-CRUD
+slice under [public-foundation round one](../../design/PUBLIC-FOUNDATION.md).
+This contract is accepted before implementation; no production worker or global
+async-persistence completion is claimed. The current selected Rust source is
+`82181294`, fresh schema 71. The slice adds no schema change, new CLI option,
+environment input or public tuning knob. Earlier schema 68 acceptance is a
+historical review baseline, not a downgrade instruction. Keep WAL/FULL durability,
+profile ownership, typed current-model validation and existing busy behavior.
+
+### One owner and composition
+
+Compose one shared profile/runtime persistence owner with one fixed blocking
+SQLite worker and one tracked asynchronous coordinator. Cloneable handles share
+that owner; they never create workers, queues or coordinators per request or
+clone. Commands are a closed typed FIFO. Friend CRUD is the first canonical
+integration; later Kad, settings and other converted paths reuse the same owner.
+Do not create a rival actor, per-request spawn-blocking lane or unbounded task
+fan-out. FIFO and responsiveness claims cover converted paths only; synchronous
+unconverted paths still exist and must not be described as globally fixed.
+
+Offline synchronous metadata constructors continue to work without a Tokio
+runtime. Runtime composition explicitly starts and owns the coordinator/worker;
+there is no hidden runtime requirement during schema/profile construction.
+The ownership graph must contain no strong Core-to-Owner-to-Core cycle and no
+Store-to-Owner-to-Store cycle. Finalization retains only the necessary independent
+cache/state handles or typed completion data, not a strong Core back-reference.
+
+### Admission and resource accounting
+
+Use conservative internal limits of **64 admitted operations** and **8 MiB
+(8,388,608 bytes) of admitted owned payload**. These are implementation limits,
+not user settings. Eight MiB is chosen to accommodate a full bounded 12,000-
+contact routing snapshot plus temporary conversion costs; tests must measure the
+actual representation cost rather than assume source-wire size equals owned
+memory. Changing this engineering budget requires measured review, not a second
+public authority.
+
+Admission is nonblocking: reserve both operation and byte quotas before cloning
+or materializing owner-held request data. Account for owned backing storage,
+variable-length fields, bounded replies and temporary conversion allocations.
+Use checked sizing arithmetic and a conservative documented cost model; do not
+admit a zero-cost command that later allocates an unbounded result. Converted
+reads need bounded query/results or an explicit pre-allocation size decision.
+Do not silently truncate data. Document allocator overhead separately instead
+of claiming that total process RSS equals the payload quota.
+
+Retain the operation and byte permits through required SQL completion, outcome
+handling and cache publication, including required finalizers. A queue slot is
+not released merely when dequeued or committed. Request cancellation must not
+turn a bounded queue into unbounded detached tasks or release retained payload
+while a worker/finalizer still owns it. Saturation, closing and oversized work
+are explicit typed outcomes; no invisible waiting queue or admission bypass.
+
+### Ordering, cancellation and shutdown
+
+The close/admit boundary is atomic: after close wins no new operation is
+accepted; work accepted before close remains owned and drains. Capture normalized
+friend intent without holding global CoreState across admission, SQL wait or
+publication. Ordering spans durable commit and the matching cache publication;
+a later command cannot observe or publish half of its predecessor's result.
+Caller cancellation before admission changes nothing. After admission, required
+work and finalizers survive caller abort and complete under the tracked owner.
+A successful completion is reported after the required publication, not merely
+after enqueue or SQL commit.
+
+Release the SQLite connection mutex before any CoreState/cache finalizer. Never
+hold that mutex while acquiring CoreState: remaining synchronous callers can
+otherwise invert the lock order. Keep commit/publication ownership explicit;
+SQL failures do not publish uncommitted cache state. Errors after a successful
+commit must retain the fact of commit and cannot pretend the write rolled back.
+
+Shutdown explicitly closes admission, drains accepted required operations and
+finalizers, joins the fixed worker and tracked coordinator, then releases the
+connection/profile lease. Drain failure is reported honestly. No owner lifetime
+may rely on a dropped caller's future, a transient runtime handle or an Arc cycle.
+The parent serializes the shared Core, schema and daemon-drain composition seams.
+
+Expose Busy/Closing as retryable native HTTP 503 outcomes when the phase-four REST
+mapping is implemented. This owner slice first establishes typed errors and
+required completion semantics; it is not permission to change unrelated status
+contracts or weaken accepted durability. Oversized work must fail explicitly
+before copying and be distinguishable from transient saturation.
+
+### Required acceptance before reuse
+
+Use the existing Rust/Python test owners and supported orchestration. Prove:
+
+- exact slot/byte reservation and checked sizing, refusal before clone, full
+  contact-snapshot representation cost and temporary-conversion allowance;
+- slow connection acquisition/commit with unrelated runtime progress, FIFO
+  ordering through publication and no SQL/CoreState lock inversion;
+- saturation and atomic close/admit interleavings;
+- caller abort after admission or commit without abandoned finalizers, prematurely released
+  permits, lost writes or unbounded tasks;
+- failed writes and same-key friend mutations without cache/durable divergence;
+- explicit close/drain/join, reopen and profile-lease release ordering;
+- one owner across clones, no retention cycle, and offline constructors without
+  an async runtime.
+
+Record focused evidence and exact source revisions in this item. Two inspection
+rounds and applicable integration gates remain required. Runtime Kad checkpoint
+wiring must wait for this owner; no separate temporary worker is authorized.
+
+
 ## Summary
 
 Remove synchronous SQLite waits and durable flushes from Tokio worker threads
@@ -59,19 +165,20 @@ gap. A separate coherent bind/add linearization repair needs deterministic
 interleaving proof. The analogous absolute-seed path currently has only test
 callers; this review establishes no production race for that path.
 
-## Accepted Next Slice: 155-A
+## Historical accepted 155-A review (2026-11-12)
 
 The parent accepted [one bounded persistence owner plus friend CRUD](https://github.com/emulebb/emulebb-rust/issues/155#issuecomment-6830001541)
 after source review at Rust `080a5dea70186da31dab958757b5b8c0fd883f82`.
-Implementation starts after change-aware CI #327 and explicit allocation.
-This item remains OPEN, Phase 1, post-beta-polish; contract acceptance is not
-implementation or global completion.
+The allocation above now authorizes implementation under the round-one mandate.
+This older review remains evidence; contract acceptance is not implementation
+or global completion.
 
 - Compose one fixed worker and typed FIFO for migrated friend operations.
   Bound admitted slots and owned payload bytes through completion; report
   saturation/closing explicitly rather than spawning unbounded work. Cloning
   a handle does not create another owner.
-- Preserve schema 68, WAL/FULL durability, existing SQLite busy behavior,
+- At this historical review the baseline was schema 68. The current allocation
+  preserves actual schema 71, WAL/FULL durability, existing SQLite busy behavior,
   secrets and the OS-backed profile lease. Offline synchronous constructors
   remain usable without a Tokio runtime. No schema change is part of 155-A.
 - Capture normalized friend input and release global CoreState before

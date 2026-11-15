@@ -26,10 +26,10 @@ are pushed on the round-one branch, not merged delivery. Snapshot replacement,
 validation and initialization status use coordinated metadata transactions;
 no opaque source-file or serialized contact blob is the stored authority.
 
-Focused metadata proof:108 unit plus3 integration checks passed. The existing
-Python selection against an actual fresh schema71 from the selected Rust
-sources passed80 with one POSIX-only skip; retained XML is
-`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/public-foundation-round-1/schema71-python.xml`.
+Focused metadata proof: 108 unit plus 3 integration checks passed. The existing
+Python selection against an actual fresh schema 71 from the selected Rust
+sources passed 80 with one POSIX-only skip; retained XML is
+`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/public-foundation-round-1/schema 71-python.xml`.
 The selected companion heads are Rust `82181294`, tests `d14d5871` and tooling
 `9a2d3deb`. This adds metadata repository capability only. Runtime Kad snapshot
 admission/checkpointing, source-file removal, settings/REST work and full-scope
