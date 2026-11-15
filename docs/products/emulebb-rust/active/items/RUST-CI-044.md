@@ -18,6 +18,15 @@ source: Operator-directed configuration and persistence architecture review
 
 # RUST-CI-044 - Review SQLite schema efficiency and evolution boundaries
 
+## Typed metadata checkpoint (2026-11-15)
+
+The [#233 typed metadata checkpoint](RUST-FEAT-062.md#typed-metadata-checkpoint-2026-11-15)
+records Rust `c14433d5` / `82181294`, fresh schema71,108 metadata unit plus3
+integration passes and the existing Python80-pass/one-skip receipt. Explicit
+column ownership is reviewed; this does not prove runtime Kad wiring, the
+settings/public-contract redesign, bounded async ownership or combined scale.
+Historical schema68/69 review evidence below is not a downgrade instruction.
+
 ## Foundation discovery checkpoint (2026-11-15)
 
 Round-one branch evidence: Rust `70e595a2`, build-tests `d14d5871` and

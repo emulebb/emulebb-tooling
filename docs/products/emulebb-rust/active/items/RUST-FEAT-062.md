@@ -18,6 +18,25 @@ source: operator-approved profile continuity design 2026-11-05
 
 # RUST-FEAT-062 - Persist Kad routing state in SQLite and keep met files import-only
 
+## Typed metadata checkpoint (2026-11-15)
+
+Rust `c14433d5` adds typed Kad routing snapshot persistence; `82181294` makes
+SQL column ownership explicit. The current fresh schema is71. These commits
+are pushed on the round-one branch, not merged delivery. Snapshot replacement,
+validation and initialization status use coordinated metadata transactions;
+no opaque source-file or serialized contact blob is the stored authority.
+
+Focused metadata proof:108 unit plus3 integration checks passed. The existing
+Python selection against an actual fresh schema71 from the selected Rust
+sources passed80 with one POSIX-only skip; retained XML is
+`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/public-foundation-round-1/schema71-python.xml`.
+The selected companion heads are Rust `82181294`, tests `d14d5871` and tooling
+`9a2d3deb`. This adds metadata repository capability only. Runtime Kad snapshot
+admission/checkpointing, source-file removal, settings/REST work and full-scope
+qualification remain pending. Runtime wiring waits for the shared
+[#155-A owner](RUST-REF-016.md#allocated-foundation-owner-155-a-2026-11-15);
+no competing actor or per-request blocking-task lane is authorized.
+
 ## Foundation discovery checkpoint (2026-11-15)
 
 Round-one branch evidence: Rust `70e595a2`, build-tests `d14d5871` and
