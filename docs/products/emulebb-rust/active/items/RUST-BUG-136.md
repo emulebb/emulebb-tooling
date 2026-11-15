@@ -28,10 +28,11 @@ arbitrary regular file to end before authorizing deletion.
 
 Transfer deletion creates a no-follow regular marker and writes
 `Uuid::as_bytes()`, exactly 16 bytes. Authority validation later reopens the
-marker without following links but calls `read_to_end` into an unconstrained
-`Vec` before comparing it with the UUID. Filesystem corruption or a local actor
-can therefore turn an authority check into an allocation proportional to marker
-size.
+marker without following links. Validation now limits reads on that same opened
+regular-file handle to 17 bytes and copies into a fixed stack buffer. It requires
+exactly 16 matching UUID bytes; the extra byte detects oversized content without
+allocating according to marker size. Stable directory identity and existing
+failure diagnostics remain unchanged.
 
 ## Why This Matters
 
@@ -84,3 +85,18 @@ purpose is to defend destructive filesystem operations.
   files.
 - Existing symlink/reparse-point and directory replacement adversity tests.
 - Restart and maintenance retry coverage for rejected deletion intents.
+
+## Implementation Checkpoint
+
+The bounded read changes no schema, marker format, dependencies, or recovery
+policy; metadata remains at schema 69. Added runtime regression coverage checks
+empty, 15-byte, mismatched 16-byte, 17-byte, 32-byte, and 64 MiB markers in both
+the original transfer directory and its deletion tombstone. Each case restarts
+the runtime and repeats recovery, requiring the directory identity, internal
+payload, marker, and pending deletion intent to survive rejection. Restoring the
+exact 16-byte UUID must then permit cleanup and finalization. Existing missing
+marker and changed directory identity tests remain in place.
+
+Rust test execution is pending the parent-scheduled validation slot. Static
+checks and normal commit/push hooks qualify the source checkpoint only; this
+item remains open until runtime validation and integration are complete.
