@@ -137,6 +137,28 @@ profile conversion. Unproven acceptance criteria below remain open.
 
 Target documentation and examples contain no historical values, comparison tables, aliases, semantic mappings, shims or compatibility mechanisms.
 
+## Accepted Existing-Contract PATCH Repairs
+
+The parent allocated two bounded repairs on 2026-11-15, based on Rust
+`23e685b87bb76db21489c9b1cc725dd0da4241c1`:
+
+- Standalone `useServerPriorities` and `autoConnectStaticOnly` updates must
+  count as nonempty settings changes, accept both boolean values, preserve
+  omitted settings and retain their existing restart semantics.
+- NAT `enabled` and `requireInitialMapping` accept booleans only. Explicit
+  null or another JSON type must fail validation even alongside a valid
+  sibling; legitimately nullable NAT addresses and paths remain clearable.
+
+Qualification must cover PATCH/GET/SQLite/reopen persistence and unchanged
+saved/live state after a rejected mixed update. Preserve the atomic persistence
+and ordered runtime publication delivered by #299. The parent owns combined
+inspection, full local/hosted qualification and merge; implementation branches
+alone do not establish delivery. See the [allocation](https://github.com/emulebb/emulebb-rust/issues/297#issuecomment-6887481479).
+
+This slice repairs the existing contract. It does not accept the broader
+settings/revision/ETag proposal or authorize schema, default, bootstrap or
+persistence-owner changes.
+
 ## Accepted Target Listener Defaults
 
 The operator accepted these clean Beta3 target defaults. This review changes
@@ -144,7 +166,7 @@ no running client, current OpenAPI or current user instructions.
 
 | Listener | Target default |
 | --- | --- |
-| REST/WebUI TCP | `127.0.0.1:20017` |
+| REST/WebUI TCP | `0.0.0.0:20017` |
 | P2P TCP | `20019` |
 | P2P UDP | `20020` |
 
