@@ -137,9 +137,9 @@ profile conversion. Unproven acceptance criteria below remain open.
 
 Target documentation and examples contain no historical values, comparison tables, aliases, semantic mappings, shims or compatibility mechanisms.
 
-## Accepted Existing-Contract PATCH Repairs
+## Accepted Existing-Contract Repairs
 
-The parent allocated two bounded repairs on 2026-11-15, based on Rust
+The parent allocated bounded settings and ownership repairs on 2026-11-15, based on Rust
 `23e685b87bb76db21489c9b1cc725dd0da4241c1`:
 
 - Standalone `useServerPriorities` and `autoConnectStaticOnly` updates must
@@ -148,9 +148,16 @@ The parent allocated two bounded repairs on 2026-11-15, based on Rust
 - NAT `enabled` and `requireInitialMapping` accept booleans only. Explicit
   null or another JSON type must fail validation even alongside a valid
   sibling; legitimately nullable NAT addresses and paths remain clearable.
+- Profile ownership ends when its final logical owner drops, after metadata
+  connection teardown. A shared typed guard must release its already-owned
+  descriptor without waiting for a subprocess's transient inherited descriptor.
+  An inherited child must not explicitly unlock its parent's lease.
 
-Qualification must cover PATCH/GET/SQLite/reopen persistence and unchanged
-saved/live state after a rejected mixed update. Preserve the atomic persistence
+Qualification must cover PATCH/GET/SQLite/reopen persistence, unchanged
+saved/live state after a rejected mixed update, retained profile/metadata clone
+exclusion, duplicate-descriptor and constructor-error release, and controlled
+Unix child non-unlock. Windows proof does not establish the Unix child case.
+Preserve the atomic persistence
 and ordered runtime publication delivered by #299. The parent owns combined
 inspection, full local/hosted qualification and merge; implementation branches
 alone do not establish delivery. See the [allocation](https://github.com/emulebb/emulebb-rust/issues/297#issuecomment-6887481479).
