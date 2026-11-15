@@ -25,6 +25,34 @@ and global async state locks. Introduce bounded persistence ownership that keeps
 the network runtime responsive while preserving crash consistency and explicit
 backpressure.
 
+## Allocated Safety Slice: Peer-Credit Settlement
+
+The parent allocated the bounded `peer-credit-settlement` workstream after
+source review at Rust `23e685b87bb76db21489c9b1cc725dd0da4241c1`.
+Failed single-peer settlement currently removes parked deltas before fallible
+SQL without restoring them. Restore by saturating merge under the existing
+flush gate, retain additions parked during SQL, and propagate the original
+error. Reuse the batch-flush restoration rule.
+
+Preserve current schema 69, WAL/FULL durability, storage ownership, secure-ident
+anti-theft behavior and existing ordering. No persistence actor, queue, shutdown
+or Kad snapshot change belongs to this repair. The earlier schema-68 reference
+below records the 155-A review baseline, not a schema downgrade instruction.
+
+Required regression proof covers a real SQLite abort with durable rows
+unchanged and parked credit retained, additions merged without overwrite or
+overflow, exactly-once retry and reopen, plus existing secure-ident wipe tests.
+Rust execution and combined qualification remain pending parent scheduling.
+The broader bounded persistence owner and friend-CRUD slice remain unimplemented.
+
+Review confirmed a separate remaining secure-ident boundary: the flush gate
+ends before the subsequent `pin_verified_secure_ident`, and additions do not
+take that gate. Concurrent pre-bind deltas can therefore flush after the first
+bind wipes unsecured credit. The settlement restore does not fix this ordering
+gap. A separate coherent bind/add linearization repair needs deterministic
+interleaving proof. The analogous absolute-seed path currently has only test
+callers; this review establishes no production race for that path.
+
 ## Accepted Next Slice: 155-A
 
 The parent accepted [one bounded persistence owner plus friend CRUD](https://github.com/emulebb/emulebb-rust/issues/155#issuecomment-6830001541)
