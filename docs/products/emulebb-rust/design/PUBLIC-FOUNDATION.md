@@ -94,7 +94,9 @@ SQLite exclusively owns mutable application settings, organized by purpose:
 network, transfers, storage, sharing and security. Curate supported controls;
 remove duplicate controls and unsupported implementation tuning. Every supported
 key needs one typed definition of its units, bounds, cross-field constraints,
-default, owner, platform applicability and application mode. Derive consumers
+default, owner, platform applicability and application mode. The accepted 59-leaf
+engineering catalog is in SETTINGS-TARGET/SETTINGS-INVENTORY; implementation and
+qualification remain pending. Derive consumers
 and metadata from that owner instead of maintaining independent defaults.
 
 Each saved setting has default/custom state. At startup a default-marked value
@@ -118,6 +120,10 @@ roots and IP-filter paths resolve against the selected profile. Absolute paths
 and supported Windows UNC paths are used directly. No `~`, shell-variable or
 environment-variable expansion. Expose resolved paths where callers need them.
 Paths refer to the daemon filesystem, including container namespaces.
+
+The canonical storage keys are `storage.incomingDirectory` and
+`storage.tempDirectory`, defaulting to profile-relative `incoming` and `temp`;
+`security.ipFilter.filePath` retains the external filter source.
 
 CLI profile/import-source arguments remain relative to the caller's working
 directory. Explicit relative TOML `web_root_dir` is profile-relative; its omitted
@@ -234,7 +240,10 @@ Use only start/stop. Stop preserves the job and partial data; sharing remains
 independent. Preserve intent across restart and resume eligible work gradually.
 New jobs start by default with an explicit stopped-on-add option. Bound active
 work using `maxConcurrentDownloads` with a built-in bounded exploration buffer.
-Connection and source caps have separate meanings. Queued/history rows do not
+The accepted engineering default is 8 active jobs with a built-in exploration
+buffer 2. The global connection cap remains 500; lowering job admission drains
+existing work rather than silently stopping jobs. Connection and source caps
+have separate meanings. Queued/history rows do not
 each require live workers, timers or source machinery.
 
 An active duplicate add returns its existing job unchanged, including category,

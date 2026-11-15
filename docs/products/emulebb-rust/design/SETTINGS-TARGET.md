@@ -1,12 +1,12 @@
 # Configuration and settings target
 
-**Accepted common contract; detailed leaf inventory still requires implementation review.**
+**Accepted round-one target: 59 leaves; implementation and qualification pending.**
 The operator accepted the [Public Foundation](PUBLIC-FOUNDATION.md) on
 2026-11-15. That is the master scope and behavior specification under
 [RUST-CI-043 / #297](../active/items/RUST-CI-043.md). This document owns the
-settings-specific detail. Acceptance of the common contract does not blindly
-accept all candidate leaves in [SETTINGS-INVENTORY.json](SETTINGS-INVENTORY.json)
-or claim implementation. Regenerate/check the final inventory from typed
+settings-specific detail. The PM accepted the source-reviewed 59-leaf engineering catalog in
+[SETTINGS-INVENTORY.json](SETTINGS-INVENTORY.json). This does not claim
+implementation. Regenerate/check the final inventory from typed
 settings definitions once implemented; do not create another runtime reader.
 
 ## Ownership and supported surface
@@ -76,8 +76,9 @@ is outside scope. Invalid candidates and revision conflicts save nothing.
 
 The final exact document/marker encoding, field schemas and response/status
 combinations must be recorded with the implementation inventory/OpenAPI before
-the coordinated cut. Candidate defaults and bounds are not automatically
-accepted simply because they appeared in the prior review inventory.
+the coordinated cut. The 59-leaf catalog below now records the accepted engineering target.
+Source-backed defaults and newly selected defaults are distinguished explicitly;
+current code does not yet centrally enforce every target bound.
 
 ## REST, CLI and collections
 
@@ -125,6 +126,97 @@ recover interrupted provisioning and preserve initialized profiles. Subsequent
 launches pass only `--profile`. Saved settings own P2P interfaces and health
 checks follow the configured listener. Existing Python harness owners prepare
 new fixtures; no ad-hoc setup or parallel testing framework.
+
+## Accepted leaf catalog
+
+The machine-readable inventory owns exact types, bounds, defaults, application
+modes and source evidence for these 59 leaves. Source review is at Rust
+`70e595a2`; field consumers are inspected in the existing settings, daemon, core
+and ED2K modules. Source defaults do not prove every current runtime wire is
+correct. In particular, the existing connection coordinator cap is not an
+active-job cap, and configured half-open limits must reach the admitted runtime.
+
+The new job cap defaults to 8 with a built-in discovery-only exploration buffer 2.
+The connection cap stays 500. Lowering the job cap drains admissions without
+silently stopping current jobs. `storage.incomingDirectory` defaults to
+profile-relative `incoming`; `storage.tempDirectory` to profile-relative `temp`.
+They are selected for jobs under the master first-start/delivery rules.
+
+`live` means the identified parameter owner admits it without restart;
+`restart` means saved desired changes stay pending until restart. Do not label
+server-plan or listener settings live without wiring and tests. Disk floors and
+hostname enabled/resolvers already have rereading consumers. IP-filter explicit
+reload rereads its admitted source file; changing its configured source remains
+restart-bound in this round.
+
+Bounds marked engineering target in the inventory must become central validation;
+several current source fields have only integer types/runtime clamps. Defaults
+and existing enforced floor/core/keepalive/flood bounds are source-backed. This
+catalog is not a claim that current code implements all bounds or application
+modes. Native counters remain JSON numbers; the settings catalog does not adopt
+a blanket JavaScript-safe-integer limit.
+
+| Key | Rust type | Default | Bounds/shape | Apply |
+| --- | --- | --- | --- | --- |
+| `network.ed2kEnabled` | `bool` | `true` | boolean | restart |
+| `network.kadEnabled` | `bool` | `true` | boolean | restart |
+| `network.autoConnect` | `bool` | `true` | boolean | restart |
+| `network.p2p.bindIp` | `Option<Ipv4Addr>` | `null` | unicast IPv4; nullable | restart |
+| `network.p2p.bindInterface` | `Option<String>` | `null` | nonempty UTF-8;256 bytes max; nullable | restart |
+| `network.p2p.tcpPort` | `u16` | `20019` | 1..65535 | restart |
+| `network.p2p.udpPort` | `u16` | `20020` | 1..65535 | restart |
+| `network.nickname` | `String` | `"eMule"` | nonempty UTF-8;128 bytes max | restart |
+| `network.connections.maxConnections` | `u32` | `500` | 1..2147483647 | live |
+| `network.connections.maxNewConnectionsPerFiveSeconds` | `u32` | `50` | 1..2147483647 | live |
+| `network.connections.maxHalfOpenConnections` | `u32` | `50` | 1..2147483647 | restart |
+| `network.connections.connectTimeoutSeconds` | `u64` | `30` | 1..86400 | restart |
+| `network.connections.callbackTimeoutSeconds` | `u64` | `45` | 1..86400 | restart |
+| `network.servers.autoReconnect` | `bool` | `true` | boolean | restart |
+| `network.servers.safeConnect` | `bool` | `false` | boolean | restart |
+| `network.servers.usePriorities` | `bool` | `true` | boolean | restart |
+| `network.servers.staticOnly` | `bool` | `false` | boolean | restart |
+| `network.servers.acceptServerListUpdates` | `bool` | `false` | boolean | restart |
+| `network.servers.connectTimeoutSeconds` | `u64` | `25` | 1..86400 | restart |
+| `network.servers.reconnectIntervalSeconds` | `u64` | `30` | 1..86400 | restart |
+| `network.servers.keepaliveMinutes` | `u64` | `0` | 0..1440 | restart |
+| `network.servers.sessionRotationSeconds` | `u64` | `0` | 0..86400 | restart |
+| `network.servers.deadServerRetries` | `u64` | `1` | 1..10 | restart |
+| `network.hostnameLookup.enabled` | `bool` | `false` | boolean | live |
+| `network.hostnameLookup.dnsServers` | `Vec<typed item>` | `[]` | bounded typed array;8 max | live |
+| `network.nat.enabled` | `bool` | `true` | boolean | restart |
+| `network.nat.requireInitialMapping` | `bool` | `false` | boolean | restart |
+| `network.nat.backendOrder` | `Vec<NatBackend>` | `["pcp-natpmp","upnp"]` | bounded typed array;2 max | restart |
+| `network.nat.pcpServerIp` | `Option<Ipv4Addr>` | `null` | unicast IPv4; nullable | restart |
+| `network.nat.igdIp` | `Option<Ipv4Addr>` | `null` | unicast IPv4; nullable | restart |
+| `network.nat.externalIpOverride` | `Option<Ipv4Addr>` | `null` | unicast IPv4; nullable | restart |
+| `transfers.uploadLimitBytesPerSecond` | `u64` | `6348800` | 1..4398046509056 | live |
+| `transfers.downloadLimitBytesPerSecond` | `u64` | `12499968` | 1..4398046509056 | live |
+| `transfers.maxConcurrentDownloads` | `u32` | `8` | 1..2147483647 | live |
+| `transfers.maxSourcesPerFile` | `u32` | `600` | 1..2147483647 | live |
+| `transfers.maxParallelDownloadPeers` | `u32` | `2` | 1..2147483647 | restart |
+| `transfers.upload.targetClientRateBytesPerSecond` | `u64` | `32768` | 1..4398046510080 | live |
+| `transfers.upload.baseSlots` | `u32` | `12` | 1..64 | live |
+| `transfers.upload.elasticPercent` | `u32` | `80` | 0..100 | live |
+| `transfers.upload.queueCapacity` | `u32` | `10000` | 2000..10000 | live |
+| `transfers.upload.sessionTransferPercent` | `u32` | `90` | 0..100 | restart |
+| `transfers.upload.sessionTimeLimitSeconds` | `u64` | `7200` | 0..86400 | restart |
+| `transfers.upload.creditSystemEnabled` | `bool` | `true` | boolean | live |
+| `storage.incomingDirectory` | `PathBuf` | `"incoming"` | profile-relative or absolute; no expansion | restart |
+| `storage.tempDirectory` | `PathBuf` | `"temp"` | profile-relative or absolute; no expansion | restart |
+| `storage.minFreeProfileBytes` | `u64` | `1073741824` | 1073741824..5497558138880 | live |
+| `storage.minFreeTempBytes` | `u64` | `5368709120` | 5368709120..5497558138880 | live |
+| `storage.minFreeIncomingBytes` | `u64` | `5368709120` | 5368709120..5497558138880 | live |
+| `sharing.scanOnStartup` | `bool` | `true` | boolean | restart |
+| `sharing.kadPublishingEnabled` | `bool` | `true` | boolean | restart |
+| `security.obfuscationEnabled` | `bool` | `true` | boolean | restart |
+| `security.vpnGuard.mode` | `closed enum` | `"off"` | off / block | restart |
+| `security.vpnGuard.allowedPublicIpCidrs` | `Vec<Ipv4Net>` | `[]` | bounded typed array;256 max | restart |
+| `security.ipFilter.enabled` | `bool` | `false` | boolean | restart |
+| `security.ipFilter.filePath` | `Option<PathBuf>` | `null` | profile-relative or absolute; no expansion; nullable | restart |
+| `security.ipFilter.level` | `u32` | `127` | 0..4294967295 | restart |
+| `security.tcpErrorFloodDetection.enabled` | `bool` | `true` | boolean | restart |
+| `security.tcpErrorFloodDetection.intervalSeconds` | `u32` | `3600` | 60..86400 step60 | restart |
+| `security.tcpErrorFloodDetection.threshold` | `u32` | `10` | 1..1000 | restart |
 
 ## Qualification boundary
 
