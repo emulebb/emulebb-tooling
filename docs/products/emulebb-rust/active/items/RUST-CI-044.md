@@ -18,6 +18,35 @@ source: Operator-directed configuration and persistence architecture review
 
 # RUST-CI-044 - Review SQLite schema efficiency and evolution boundaries
 
+## Foundation discovery checkpoint (2026-11-15)
+
+Round-one branch evidence: Rust `70e595a2`, build-tests `d14d5871` and
+specification/policy baseline tooling `77b30a82`. These are pushed checkpoints,
+not merged delivery; no PR is authorized before the operator returns.
+
+The first scoped implementation adds independent durable discovery-initialization
+state and atomic server-list initialization. Automatic server import accepts the
+first validated nonempty fallback, preserves explicit empty/disabled operator
+state, and does not overwrite a list changed while a fetch was in flight. The
+existing Python harness uses selected-workstream fixtures and transactional
+explicit server inputs, preserving deterministic public-bootstrap isolation.
+
+Focused evidence recorded by the parent: metadata 104 unit plus 3 integration
+checks; daemon 108 unit plus 15 integration checks with one ignored helper;
+Python 80 passed with one POSIX-only skip. Two review rounds resulted in
+operator-race and explicit-fixture repairs. Normal push checks passed with
+output-root-relative receipts:
+
+- `reports/local-check/emulebb-rust/20261115T185408Z-f63dbe33`
+- `reports/local-check/emulebb-build-tests/20261115T185216Z-90fd5f42`
+
+This does not qualify the full public foundation. Kad file persistence removal,
+the coordinated settings/REST redesign, library/download/search changes and
+combined-scale proof remain pending. The accepted #155-A bounded persistence
+worker is still unimplemented and is a prerequisite for runtime Kad checkpoint
+wiring; reuse that owner rather than introduce a competing actor. Bootstrap
+state alone is not a claim that runtime Kad persistence is complete.
+
 ## Accepted Foundation Round One (2026-11-15)
 
 The operator authorized implementation of the consolidated
