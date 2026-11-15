@@ -121,6 +121,30 @@ synchronously, with focus restoration checked from controls, links and body.
 
 ## Current State
 
+- PR [#333](https://github.com/emulebb/emulebb-rust/pull/333) merged to Rust `main` at source `23e685b87bb76db21489c9b1cc725dd0da4241c1`. Published nightly [`0.1.0-beta.2.nightly.20261115.g23e685b8`](https://github.com/emulebb/emulebb-rust/releases/tag/rust-v0.1.0-beta.2.nightly.20261115.g23e685b8) went public at 03:02:52 UTC on 2026-11-15. Run [43666596381](https://github.com/emulebb/emulebb-rust/actions/runs/43666596381) published 85 assets with the release marked non-draft. Its producer identities are Builder `43515795e85beceeb73b1bbbd77e5ab167ef13b6`, Harness `281ccbcdf9f4c9960c5efda4705df966418b6bb2`, Tooling `f88a8ce608bc75a619aea6909f54a9cdecdddb6e`, and tool image ID prefix `c94812`.
+
+  All seven normal Android API 31–37 APK runtime jobs passed on x86_64 KVM
+  emulators. The same APK, manifest and source passed 13, 13, 15, 15, 15, 15
+  and 16 cases respectively, including local transfer and file links. API 31–36
+  used 4096-byte pages; API 37 used 16384-byte pages. Screen-off observations
+  were bounded and do not establish 24-hour endurance. All six native package
+  lifecycle checks and native image checks for musl, Ubuntu and Alpine passed.
+  The aggregate Android APK lifecycle evidence SHA-256 is
+  `cf4e53654139b21acfd19c46d8d87013bcaebbd9f5cf1d60845138135f39bdff`.
+
+  The universal APK is versionCode `216871926`, minimum API 31, target API 37,
+  with ARM64 and x86_64 payloads. Its SHA-256 is
+  `7437540651dd54f30e9c3210c2b75f146e52c8c4d180e47d0c8b2dcb13b3750d`; the
+  manifest SHA-256 is
+  `36919479a73655b99ceddbc021c7c3666223a505fa70172a49493257db933123`, and
+  the signer certificate SHA-256 is
+  `9edc742d7230a714a0149c20eb2afb235b8ad5237166090f10e7ac69e2bb359f`.
+  Published native archive SHA-256 values: `android-arm64-v8a.tar.zst`,
+  `cc4639b024e353564a97a2969bc77e79543b4514da5eebb72304ceabd942dabc`;
+  `android-x86_64.tar.zst`,
+  `c0f9f435b5ababc689f1029a947a161ab870758b007bedb6095b56744fd36c75`.
+  A separate TLS repair execution is auxiliary evidence and does not replace
+  the producer identities above.
 - The operator deferred automatic boot resume on 2026-11-14. Current source
   [`42bffd971c77cd856e361c00e3a318c85304a859`](https://github.com/emulebb/emulebb-rust/commit/42bffd971c77cd856e361c00e3a318c85304a859)
   requires manual Start after reboot and removes the boot receiver, permission
@@ -463,16 +487,20 @@ name. Normalize parent-path aliases before applying exclusions. This is a
 current-schema storage change, requiring a fresh beta profile, without migration
 or automatic profile reset.
 
-The operator also supplied an approved 221-file, 1,301,166,929-byte library for
-copying into owned test locations and explicitly authorized public-network
-serving while other work continues. The approved library has not yet been copied
-or served. Preserve the source and unrelated device data. Retain exact inventory,
-private paths and filenames only in local output evidence. Monitor
-copied/verified files, hashing, catalog publication, network
-publication, upload requests and actual served bytes as separate observations.
-Absent public demand is `not-observed`, not a successful serving claim. Keep
-the foreground service running after a normal observation interval, with an
-explicit owned-session stop operation and bounded monitoring storage.
+The approved campaign library was copied into the owned test location: 221
+original files across 19 directories, totaling 1,301,166,929 bytes. Three files
+were excluded by normal intake rules; 218 eligible shared entries remained. The
+public-network campaign ended as failed after 74 minutes and 140 observations.
+It recorded zero public peer requests and zero public peer bytes. A generic
+`RuntimeError` was not classified, and the harness stop was confirmed. Do not
+describe the library as uncopied or the campaign as ongoing, and do not claim
+that eligible entries were served. Later observer fixes merged in Harness PR
+[#113](https://github.com/emulebb/emulebb-build-tests/pull/113) at
+`17438846c1a62fa8228c821071cc79e7cf56145b`; all four main workflows passed and
+the mapping/closed-failure-phase repairs were unit-tested. This improves future
+observability but does not retroactively classify that error or establish a
+public upload. Exact private inventory, filenames, paths and user-media hashes
+remain only in local output evidence.
 
 ### Latest API 31 Phone Smoke
 
@@ -495,15 +523,11 @@ The tested automatic direct-routing repair applies only when the original IP
 and interface are unset and VPN Guard is off. It selects a detected local IPv4
 address and lets the operating system route traffic with that source address.
 Explicit IP, interface and VPN Guard choices remain strict and do not fall
-back. A public-network campaign on this source is currently running: 221 real
-input files were copied and hash-verified, and all 218 eligible contents were
-cataloged and marked published after
-successful `OFFERFILES` sends, and HighID, Kad connection and Kad source ACK
-were observed. No peer upload has yet been observed. This ongoing campaign is
-not a 24-hour proof. Full hosted source matrix and release qualification remain
-pending; boot resume after device reboot is deferred, with manual Start as the
-current workflow. Both experimental native archives retain their API 28
-compile floor.
+back. The public-network campaign result is recorded above; it produced no
+observed public peer requests or bytes and does not establish successful public
+serving or 24-hour endurance. Manual Start after reboot remains the accepted
+workflow. Both experimental native archives retain their API 28 compile target,
+which does not qualify Termux or Fire OS runtime.
 
 ## Distribution Boundary
 
@@ -588,15 +612,14 @@ continuity and measured Doze continuity; it contains no reboot scenario.
 Restricted battery mode must never be presented as qualified continuous
 operation. Boot-resume qualification is deferred with that feature.
 
-The operator authorized physical-phone testing over Wi-Fi on 2026-11-13.
-Use an explicitly selected, authenticated ADB connection and preserve the
-operator's ADB server and unrelated application data. The operator separately
-authorized resetting this app's owned test profile; use the persisted driver's
-artifact/ownership admission before any reset. Reboot and global device resets
-are not implicit physical-smoke operations. Confine transfer fixtures to
-owned synthetic files; account for the daemon's implicit sharing of its incoming
-directory before the first service start. Phone execution on one Android API
-does not substitute for the full API 31-37 matrix or the 24-hour campaign.
+Earlier in this workstream, the operator authorized physical-phone testing
+over Wi-Fi and limited resets to the app-owned test profile. Those historical
+authorizations do not schedule another phone run. The current operator testing
+preference is to use emulators for all future Android execution tests; this is a
+workstream preference, not a product support limitation. Preserve the operator's
+ADB server and unrelated application data in historical evidence. Confine test
+fixtures to owned synthetic files. Phone results on one Android API do not
+substitute for the full API 31-37 matrix or 24-hour endurance evidence.
 
 Release signing material is retained in the operator's normal application-data
 directory: `%LOCALAPPDATA%/eMuleBB/signing/android` on Windows, or
