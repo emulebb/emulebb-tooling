@@ -178,8 +178,11 @@ publication. Ordering spans durable commit and the matching authoritative cache
 publication; a later command cannot observe or publish half of its predecessor's
 result. The planned category continuation below separates bounded filesystem
 publication from this immediate SQL/cache order without stalling unrelated domains.
-Caller cancellation before admission changes nothing. After admission, required
-work and finalizers survive caller abort and complete under the tracked owner.
+Caller cancellation before admission changes nothing. After admission, the
+operation owner retains SQL completion, cache publication and required follow-up
+handoff independently of request disconnect/cancellation. Required work and
+finalizers survive caller abort under that same tracked owner, which participates
+in terminal drain. Success cannot precede acceptance of a required handoff.
 A successful completion is reported after the required publication, not merely
 after enqueue or SQL commit.
 
@@ -188,6 +191,19 @@ hold that mutex while acquiring CoreState: remaining synchronous callers can
 otherwise invert the lock order. Keep commit/publication ownership explicit;
 SQL failures do not publish uncommitted cache state. Errors after a successful
 commit must retain the fact of commit and cannot pretend the write rolled back.
+Known-committed handoff failure is an explicit outcome, not successful completion
+or a claim of rollback. Reuse existing owners, finalizers and reservations rather
+than per-endpoint actors/tasks. Request disconnect does not invoke explicit
+business cancellation such as stopping or removing a download.
+
+Audit settings application, download create/delete/delivery, asynchronous
+imports and other mutation lifecycles as their existing phases implement them.
+Do not declare unreviewed paths safe or faulty, broaden the current checkpoint,
+or create a separate inventory/status ledger for this rule. Extend the existing
+Rust/Python owners for cancellation before SQL, after commit and during
+publication/handoff; concurrent or cancelled drains; SQL fault/retry and
+saturation. Tests must check retained intent and required completion, not only
+whether the disconnected caller receives a result.
 
 Shutdown explicitly closes admission, drains accepted required operations and
 finalizers, joins the fixed worker and tracked coordinator, then releases the
@@ -240,6 +256,9 @@ detached-scan checks. This precedes the latest cancellation-handoff refinement;
 the related handoff gap remains open. Full-acceptance rounds 1-3 retain,
 respectively, an import compilation failure, one invalid-name fixture failure,
 and two actual detached-scan failures. None is a final successful acceptance run.
+Current internal review has also queued sealed-arm success-gap,
+concurrent join-handle drain-waker and control-to-join-handle strong-back-reference
+repairs; these are not yet implemented. Phase 2a remains unqualified.
 
 Monitor async stop/join, retained root-I/O/root-SQL slots and cancellation fixes
 exist as implemented drafts awaiting passing proof. Root-admission sealing,

@@ -63,6 +63,14 @@ documentation describes only implemented structure.
   Friend CRUD integrates first; runtime Kad/settings work reuses it later.
   The owning item's scoped friend checkpoint records implemented paths and
   evidence; neither allocation nor that slice claims all persistence is async.
+- After admission, the operation owner retains SQL completion, cache publication
+  and required follow-up handoff despite request disconnect/cancellation. Never
+  report success before the required handoff is accepted; report known-committed
+  handoff failures honestly and drain through that same owner at shutdown.
+  Reuse existing finalizers/reservations, not per-endpoint actors or tasks.
+  Apply and audit this rule as each mutation phase is implemented; request
+  disconnect is distinct from explicit business cancellation. Unreviewed paths
+  are neither certified safe nor presumed faulty.
 - Use compact internal keys, explicit foreign keys, constraints, transactions
   and indexed access paths. All startup, recovery and shutdown paths also need
   bounded work; list pagination alone is insufficient.
