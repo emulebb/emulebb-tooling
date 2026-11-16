@@ -60,6 +60,27 @@ neither failed jobs nor queued/history rows require retained Core workers or
 full manifests. These additions are allocated, not implemented by the provider
 checkpoints below.
 
+### Verified internal payload provider checkpoint (2026-11-16)
+
+Rust `7f0d25aa` adds a compact verified internal-payload source independently of
+local/root copies, without changing schema 78. Pages examine at most 256 indexed
+visible IDs within the existing byte allowance and advance over ineligible rows.
+Admission rechecks the captured generation, complete snapshot, retirement and
+both actual native exclusion identities in a short transaction; filesystem
+probing belongs to the runtime outside SQLite. Explicit name changes remain
+available after payload verification until a fixed delivery attempt or terminal
+completion prevents them.
+
+The supported Metadata gate passed **180 unit tests and 3 ownership tests**,
+with no warnings or ignored tests. Independent review accepted all seven frozen
+source hashes. Regressions cover secondary-only identity overlap, unrelated
+volumes and a shared borrowed UUID decoder that rejects oversized NUL suffixes
+before allocation in both payload and current-job readers. Evidence is under
+`reports/download-job-payload-metadata-round-3` (`rust-unit.log`, `sources.json`);
+the initial fixture failure remains retained in round 1. Runtime publication,
+filesystem races, representation lifetimes and the complete engine remain
+unqualified by this provider checkpoint.
+
 ### Removed-job cleanup provider checkpoint (2026-11-16)
 
 Rust `3ff50afa` advances the fresh schema to 78. Compact removed-job snapshots
