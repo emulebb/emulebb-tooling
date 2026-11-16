@@ -18,6 +18,34 @@ source: 2026-10-23 Rust async and portability audit
 
 # RUST-REF-016 - Move blocking SQLite work behind bounded async persistence
 
+## Download-engine behavioral feedback (2026-11-16)
+
+The ninth supported ED2K package run compiled the test target without warnings
+and executed 1,370 unit tests: **983 passed, 387 failed, zero ignored**. Retained
+log: `EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/download-job-ed2k-diagnostic-round-9/rust-unit.log`.
+Of the failures, 385 report the same catalog-page-size mismatch, one rejects
+incompatible native identity evidence in a fixture, and one has an incorrect
+maximum-geometry count. This is the first behavioral feedback for this coupled
+job-runtime conversion, not an accepted engine checkpoint. No full application,
+platform or combined scale qualification follows from it.
+
+Repair catalog callers through bounded keyset pages into the existing indexed
+projection, preserving publication fences and partial/hint precedence. Do not
+raise the provider cap or rebuild full intermediate vectors. Byte-capped pages
+can be shorter than their requested row count: merge using returned frontiers,
+advance over rejected stale candidates and prove exhaustion with empty input.
+Full-projection lifetime/accounting remains part of the unqualified runtime work.
+
+The fixture review retained current protocol, source-isolation, corruption and
+independent-copy assertions. Its exact 59-path receipt is under
+`reports/download-job-fixture-conversion-review/sources.json`; the seven-file
+before/after comparison is under `reports/download-job-seven-fixture-review`.
+Two substantive obligations remain open: wire content-only Delivered recovery
+through dedicated verification/ownership-refresh publication, and add a current
+staged-attempt/removal/journal test for the intersection no longer covered by the
+retired hidden-row fixture. Generic checkpoints must not regain ownership, and
+removed jobs must not be resurrected by stale delivery callbacks.
+
 ## Owned-ingest checkpoint (2026-11-16)
 
 The clean bundle Rust `be881243`, tests `c1ad2912`, tooling `d73eca60` and
