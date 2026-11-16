@@ -785,9 +785,10 @@ hydration/AICH workspaces exceeds the shared 8-MiB allowance. These are arithmet
 lower bounds, not allocator measurements. Exact-source inspection receipt:
 `reports/download-job-resident-hydration-round-1/source-receipt.json`.
 The [foundation specification](../../design/PUBLIC-FOUNDATION.md) owns the
-resident budget decision: target 64 MiB for at most ten selected jobs, with a
+resident budget decision: target 64 MiB for sixteen active downloads and two
+preparation slots, with a
 fixed cap up to 128 MiB authorized only when measured worst-case validation
-justifies it to support ten selected downloads and safe updates. The separate
+justifies it to support that concurrency and safe updates. The separate
 8-MiB transient budget is unchanged. No runtime automatic expansion, new saved
 setting, pool or actor is introduced; this does not bound total daemon RSS.
 Evicted backing remains charged until its final reader drops. Implementation

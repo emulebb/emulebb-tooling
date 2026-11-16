@@ -970,7 +970,7 @@
       "path": "transfers.maxConcurrentDownloads",
       "type": "integer",
       "unit": "active downloads",
-      "default": 8,
+      "default": 16,
       "validation": {
         "kind": "integer",
         "minimum": 1,

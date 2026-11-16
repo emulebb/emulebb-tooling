@@ -280,7 +280,8 @@ and ED2K modules. Source defaults do not prove every current runtime wire is
 correct. In particular, the existing connection coordinator cap is not an
 active-job cap, and configured half-open limits must reach the admitted runtime.
 
-The new job cap defaults to 8 with a built-in discovery-only exploration buffer 2.
+The new job cap defaults to 16 active downloads with 2 built-in discovery-only
+preparation slots.
 The connection cap stays 500. Lowering the job cap drains admissions without
 silently stopping current jobs. `storage.incomingDirectory` defaults to
 profile-relative `incoming`; `storage.tempDirectory` to profile-relative `temp`.

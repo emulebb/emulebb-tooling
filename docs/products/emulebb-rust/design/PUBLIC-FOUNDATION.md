@@ -276,16 +276,16 @@ durable journal. Cleanup failure never restarts downloading, recopies a complete
 output or regresses historical completion.
 New jobs start by default with an explicit stopped-on-add option. Bound active
 work using `maxConcurrentDownloads` with a built-in bounded exploration buffer.
-The accepted engineering default is 8 active jobs with a built-in exploration
-buffer 2. The global connection cap remains 500; lowering job admission drains
+The accepted engineering default and qualification target is **16 active
+downloads plus 2 preparation slots** (discovery-only exploration). The global connection cap remains 500; lowering job admission drains
 existing work rather than silently stopping jobs. Connection and source caps
 have separate meanings. Queued/history rows do not
 each require live workers, timers or source machinery.
 
-The internal resident cache targets **64 MiB with at most ten selected jobs**.
+The internal resident cache targets **64 MiB for sixteen active jobs plus two preparation slots**.
 Concurrency takes precedence: the operator authorizes a fixed cap up to **128 MiB**
 only if measured worst-case validation demonstrates that the higher cap is needed
-for ten selected downloads and safe updates. Retain 64 MiB unless that evidence
+for sixteen active downloads, preparation, and safe updates. Retain 64 MiB unless that evidence
 justifies an increase; record the selected fixed cap and evidence together. This
 is not runtime automatic expansion. The existing **8 MiB transient-work budget**
 remains separate, under the same owner. Resident backing remains charged until
