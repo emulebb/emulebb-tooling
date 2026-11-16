@@ -694,6 +694,20 @@ Require actual held-I/O cancellation/drain tests, query plans and parent/path
 replacement races. The existing full catalog rebuild remains separate bounded
 projection work; this conversion does not qualify it or total process RSS.
 
+Connect logical removal to actual output cleanup through the job-native runtime
+entry points `cleanup_removed_download_job(id)` and
+`recover_removed_download_jobs_page(after, limit)`, using the existing retained
+registry and shared cleanup-cap-one allowance. Compose internal retirement and
+output reclamation inside one admitted attempt, rather than recursively taking
+the public cleanup admission again. Capture compact token, delete intent,
+recorded output ownership/path/fingerprint, delivery attempt, tombstone and
+reservation authority before I/O. Tombstone phase advancement returns its actual
+committed snapshot; successful, missing or safely preserved foreign objects
+require explicit snapshot-checked settlement. Otherwise a helper can report
+completion while stale journal authority still prevents final job removal.
+Extend the existing delivery/reopen tests against this real path; no test-only
+cleanup or synthetic job ownership may substitute for it.
+
 ## Summary
 
 Remove synchronous SQLite waits and durable flushes from Tokio worker threads

@@ -118,6 +118,16 @@ delivery fixtures to real job tokens, preserving restart/removal/ownership
 assertions. Retained I/O ownership and bounded result lifetime remain separate
 unfinished production work.
 
+The first bounded fixture conversion reduced the next complete diagnostic to
+873 library-test errors, with the production library still compiling and one
+unchanged warning. No engine test ran. Retained log:
+`reports/download-job-ed2k-diagnostic-round-5/rust-unit.log`. Independent source
+review found no concrete defect in that three-file token/storage fixture slice;
+source review is not behavioral qualification. Porting the delivery fixtures
+also exposed the missing owned output-cleanup/recovery connection allocated in
+[RUST-REF-016](RUST-REF-016.md#remaining-retained-runtime-implementation-order).
+Those tests remain visible while the actual production path is supplied.
+
 ### Callback and retirement provider checkpoint (2026-11-16)
 
 Rust `e4076237` advances the fresh schema to 76. Callback and ingest publication
