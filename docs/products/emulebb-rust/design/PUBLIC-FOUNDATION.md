@@ -462,7 +462,10 @@ exact totals are later optional work. `GET /downloads/{id}` returns the selected
 job, including actual `delivery.path` and ownership. Sources and comments use
 separate paginated `/downloads/{id}/sources` and `/downloads/{id}/comments`
 resources. No top-level list/detail hydrates all source history, and no list
-path may materialize the whole collection.
+path may materialize the whole collection. A source exposes at most 16 recent
+filename observations, newest first, with `reportedFileNamesHasMore` whenever
+older or oversized observations are omitted. The page byte budget also applies
+to this nested window; do not silently rewrite observed names.
 
 Use one bounded action endpoint per download operation:
 

@@ -40,7 +40,7 @@ tags:
   - name: Network
   - name: Nat
   - name: Categories
-  - name: Transfers
+  - name: Downloads
   - name: SharedFiles
   - name: SharedDirectories
   - name: Uploads
@@ -106,9 +106,10 @@ paths:
       summary: Stream live daemon events.
       description: |
         Server-Sent Events stream for live controller updates. The current stream
-        emits transfer add/update/remove payloads and `sync.reset` events when a
-        subscriber has lagged or reconnects with `Last-Event-ID`; clients must
-        re-baseline through `GET /transfers` after any `sync.reset`.
+        emits lightweight `download.changed`/`download.removed` job-ID notifications
+        and `sync.reset` when a subscriber lags or reconnects with `Last-Event-ID`.
+        Refresh bounded active download pages/detail and snapshot counts after reset;
+        do not reconstruct all historical jobs or retain per-client snapshots.
       operationId: getEvents
       parameters:
         - $ref: "#/components/parameters/LastEventId"
@@ -136,12 +137,12 @@ paths:
       tags: [App]
       summary: Return live event-stream diagnostics.
       description: >
-        Returns the current transfer-event stream counters and cursor state
+        Returns the current download-event stream counters and cursor state
         without opening the long-lived Server-Sent Events stream.
       operationId: getEventStatus
       responses:
         "200":
-          $ref: "#/components/responses/TransferEventDiagnosticsResponse"
+          $ref: "#/components/responses/DownloadEventDiagnosticsResponse"
         "400":
           $ref: "#/components/responses/ErrorResponse"
         "401":
@@ -727,634 +728,594 @@ paths:
           $ref: "#/components/responses/ErrorResponse"
         default:
           $ref: "#/components/responses/ErrorResponse"
-  /transfers:
+  /downloads:
     get:
-      tags: [Transfers]
-      summary: List incomplete and completed download transfers.
-      operationId: listTransfers
+      tags:
+      - Downloads
+      summary: List a bounded page of download jobs.
+      operationId: listDownloads
+      description: Thin summaries in descending numeric job-ID order. Cursors are opaque and bound to the selection. Traversal
+        is live, not a retained snapshot. No exact total is returned; a byte bound may yield fewer rows than limit.
       parameters:
-        - $ref: "#/components/parameters/TransferStateFilter"
-        - $ref: "#/components/parameters/TransferCategoryFilter"
-        - $ref: "#/components/parameters/Offset"
-        - $ref: "#/components/parameters/Limit"
+      - $ref: '#/components/parameters/DownloadView'
+      - $ref: '#/components/parameters/DownloadCategory'
+      - $ref: '#/components/parameters/DownloadCursor'
+      - $ref: '#/components/parameters/DownloadLimit'
       responses:
-        "200":
-          $ref: "#/components/responses/TransferListResponse"
-        "400":
-          $ref: "#/components/responses/ErrorResponse"
-        "401":
-          $ref: "#/components/responses/ErrorResponse"
-        "404":
-          $ref: "#/components/responses/ErrorResponse"
-        "405":
-          $ref: "#/components/responses/MethodNotAllowedResponse"
-        "409":
-          $ref: "#/components/responses/ErrorResponse"
-        "500":
-          $ref: "#/components/responses/ErrorResponse"
-        "503":
-          $ref: "#/components/responses/ErrorResponse"
+        '200':
+          $ref: '#/components/responses/DownloadPageResponse'
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/ErrorResponse'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowedResponse'
+        '500':
+          $ref: '#/components/responses/ErrorResponse'
+        '503':
+          $ref: '#/components/responses/ErrorResponse'
         default:
-          $ref: "#/components/responses/ErrorResponse"
+          $ref: '#/components/responses/ErrorResponse'
     post:
-      tags: [Transfers]
-      summary: Add one or more ED2K links to downloads.
-      operationId: createTransfers
+      tags:
+      - Downloads
+      summary: Create one download job or return its active duplicate.
+      operationId: createDownload
+      description: A new job returns 201. An unremoved unfinished duplicate returns 200 unchanged, including its name, size
+        claim, category and intent. Conflicting known sizes return 409. redownload never creates parallel active work; present
+        or unavailable local content requires explicit choice. Confirmed absence permits a new attempt while preserving history.
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/TransferCreateRequest"
+              $ref: '#/components/schemas/DownloadCreateRequest'
       responses:
-        "200":
-          $ref: "#/components/responses/BulkOperationResponse"
-        "400":
-          $ref: "#/components/responses/ErrorResponse"
-        "401":
-          $ref: "#/components/responses/ErrorResponse"
-        "404":
-          $ref: "#/components/responses/ErrorResponse"
-        "405":
-          $ref: "#/components/responses/MethodNotAllowedResponse"
-        "409":
-          $ref: "#/components/responses/ErrorResponse"
-        "500":
-          $ref: "#/components/responses/ErrorResponse"
-        "503":
-          $ref: "#/components/responses/ErrorResponse"
+        '200':
+          $ref: '#/components/responses/DownloadResponse'
+        '201':
+          $ref: '#/components/responses/DownloadResponse'
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/ErrorResponse'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowedResponse'
+        '409':
+          $ref: '#/components/responses/ErrorResponse'
+        '413':
+          $ref: '#/components/responses/ErrorResponse'
+        '500':
+          $ref: '#/components/responses/ErrorResponse'
+        '503':
+          $ref: '#/components/responses/ErrorResponse'
         default:
-          $ref: "#/components/responses/ErrorResponse"
-  /transfers/operations/clear-completed:
-    post:
-      tags: [Transfers]
-      summary: Clear completed transfers from the transfer list.
-      operationId: clearCompletedTransfers
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ClearCompletedTransfersRequest"
-      responses:
-        "200":
-          $ref: "#/components/responses/OkResponse"
-        "400":
-          $ref: "#/components/responses/ErrorResponse"
-        "401":
-          $ref: "#/components/responses/ErrorResponse"
-        "404":
-          $ref: "#/components/responses/ErrorResponse"
-        "405":
-          $ref: "#/components/responses/MethodNotAllowedResponse"
-        "409":
-          $ref: "#/components/responses/ErrorResponse"
-        "500":
-          $ref: "#/components/responses/ErrorResponse"
-        "503":
-          $ref: "#/components/responses/ErrorResponse"
-        default:
-          $ref: "#/components/responses/ErrorResponse"
-  /transfers/{hash}:
+          $ref: '#/components/responses/ErrorResponse'
+  /downloads/{id}:
     parameters:
-      - $ref: "#/components/parameters/FileHash"
+    - $ref: '#/components/parameters/DownloadId'
     get:
-      tags: [Transfers]
-      summary: Return one transfer row.
-      operationId: getTransfer
+      tags:
+      - Downloads
+      summary: Return one download job without hydrating source or comment history.
+      operationId: getDownload
       responses:
-        "200":
-          $ref: "#/components/responses/TransferResponse"
-        "400":
-          $ref: "#/components/responses/ErrorResponse"
-        "401":
-          $ref: "#/components/responses/ErrorResponse"
-        "404":
-          $ref: "#/components/responses/ErrorResponse"
-        "405":
-          $ref: "#/components/responses/MethodNotAllowedResponse"
-        "409":
-          $ref: "#/components/responses/ErrorResponse"
-        "500":
-          $ref: "#/components/responses/ErrorResponse"
-        "503":
-          $ref: "#/components/responses/ErrorResponse"
+        '200':
+          $ref: '#/components/responses/DownloadResponse'
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/ErrorResponse'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowedResponse'
+        '409':
+          $ref: '#/components/responses/ErrorResponse'
+        '500':
+          $ref: '#/components/responses/ErrorResponse'
+        '503':
+          $ref: '#/components/responses/ErrorResponse'
         default:
-          $ref: "#/components/responses/ErrorResponse"
+          $ref: '#/components/responses/ErrorResponse'
     patch:
-      tags: [Transfers]
-      summary: Update mutable transfer properties.
-      operationId: patchTransfer
+      tags:
+      - Downloads
+      summary: Update a download name, category or unknown size.
+      operationId: patchDownload
+      description: Omission retains a field. Null category clears assignment without moving files. Name changes require an unfinished
+        job before a fixed active delivery attempt; otherwise 409. Size may change only from unknown to known; equal known size
+        is unchanged and a contradiction is 409. Historical completion never regresses when output disappears.
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/TransferPatch"
+              $ref: '#/components/schemas/DownloadPatch'
       responses:
-        "200":
-          $ref: "#/components/responses/TransferResponse"
-        "400":
-          $ref: "#/components/responses/ErrorResponse"
-        "401":
-          $ref: "#/components/responses/ErrorResponse"
-        "404":
-          $ref: "#/components/responses/ErrorResponse"
-        "405":
-          $ref: "#/components/responses/MethodNotAllowedResponse"
-        "409":
-          $ref: "#/components/responses/ErrorResponse"
-        "500":
-          $ref: "#/components/responses/ErrorResponse"
-        "503":
-          $ref: "#/components/responses/ErrorResponse"
+        '200':
+          $ref: '#/components/responses/DownloadResponse'
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/ErrorResponse'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowedResponse'
+        '409':
+          $ref: '#/components/responses/ErrorResponse'
+        '413':
+          $ref: '#/components/responses/ErrorResponse'
+        '500':
+          $ref: '#/components/responses/ErrorResponse'
+        '503':
+          $ref: '#/components/responses/ErrorResponse'
         default:
-          $ref: "#/components/responses/ErrorResponse"
-    delete:
-      tags: [Transfers]
-      summary: Remove a completed transfer row without deleting or unsharing the completed file.
-      description: >
-        Removes a completed transfer from the native transfer list without
-        deleting the completed file or changing its shared-file registration.
-        Incomplete transfers cannot preserve their partial .part state when cancelled; use
-        `DELETE /transfers/{hash}/files?confirm=true` to cancel an incomplete
-        transfer and delete its local part data.
-      operationId: deleteTransfer
+          $ref: '#/components/responses/ErrorResponse'
+  /downloads/start:
+    post:
+      tags:
+      - Downloads
+      summary: Start an explicit batch of download jobs.
+      operationId: startDownloads
+      description: Every admitted batch returns 207, including all-failed batches. Results preserve request order; per-job failure
+        does not roll back other successes. After admission the existing operation owner completes every item despite caller
+        disconnect. Malformed whole requests return 400; shared-capacity refusal before admission returns 503 without modifying
+        any job.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DownloadActionRequest'
       responses:
-        "200":
-          $ref: "#/components/responses/BulkOperationResponse"
-        "400":
-          $ref: "#/components/responses/ErrorResponse"
-        "401":
-          $ref: "#/components/responses/ErrorResponse"
-        "404":
-          $ref: "#/components/responses/ErrorResponse"
-        "405":
-          $ref: "#/components/responses/MethodNotAllowedResponse"
-        "409":
-          $ref: "#/components/responses/ErrorResponse"
-        "500":
-          $ref: "#/components/responses/ErrorResponse"
-        "503":
-          $ref: "#/components/responses/ErrorResponse"
+        '207':
+          $ref: '#/components/responses/DownloadBatchResponse'
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/ErrorResponse'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowedResponse'
+        '413':
+          $ref: '#/components/responses/ErrorResponse'
+        '503':
+          $ref: '#/components/responses/ErrorResponse'
         default:
-          $ref: "#/components/responses/ErrorResponse"
-  /transfers/{hash}/files:
+          $ref: '#/components/responses/ErrorResponse'
+  /downloads/stop:
+    post:
+      tags:
+      - Downloads
+      summary: Stop an explicit batch of download jobs.
+      operationId: stopDownloads
+      description: Every admitted batch returns 207, including all-failed batches. Results preserve request order; per-job failure
+        does not roll back other successes. After admission the existing operation owner completes every item despite caller
+        disconnect. Malformed whole requests return 400; shared-capacity refusal before admission returns 503 without modifying
+        any job.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DownloadActionRequest'
+      responses:
+        '207':
+          $ref: '#/components/responses/DownloadBatchResponse'
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/ErrorResponse'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowedResponse'
+        '413':
+          $ref: '#/components/responses/ErrorResponse'
+        '503':
+          $ref: '#/components/responses/ErrorResponse'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+  /downloads/verify:
+    post:
+      tags:
+      - Downloads
+      summary: Verify an explicit batch of download jobs.
+      operationId: verifyDownloads
+      description: Every admitted batch returns 207, including all-failed batches. Results preserve request order; per-job failure
+        does not roll back other successes. After admission the existing operation owner completes every item despite caller
+        disconnect. Malformed whole requests return 400; shared-capacity refusal before admission returns 503 without modifying
+        any job.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DownloadActionRequest'
+      responses:
+        '207':
+          $ref: '#/components/responses/DownloadBatchResponse'
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/ErrorResponse'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowedResponse'
+        '413':
+          $ref: '#/components/responses/ErrorResponse'
+        '503':
+          $ref: '#/components/responses/ErrorResponse'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+  /downloads/remove:
+    post:
+      tags:
+      - Downloads
+      summary: Remove an explicit batch of download jobs.
+      operationId: removeDownloads
+      description: Every admitted batch returns 207, including all-failed batches. Results preserve request order; per-job failure
+        does not roll back other successes. After admission the existing operation owner completes every item despite caller
+        disconnect. Malformed whole requests return 400; shared-capacity refusal before admission returns 503 without modifying
+        any job. deleteData is required. Keep-data removal is supported only for completed delivered jobs; bytes alone never
+        grant destructive authority.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DownloadRemoveRequest'
+      responses:
+        '207':
+          $ref: '#/components/responses/DownloadBatchResponse'
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/ErrorResponse'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowedResponse'
+        '413':
+          $ref: '#/components/responses/ErrorResponse'
+        '503':
+          $ref: '#/components/responses/ErrorResponse'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+  /downloads/{id}/details:
     parameters:
-      - $ref: "#/components/parameters/FileHash"
-    delete:
-      tags: [Transfers]
-      summary: Delete one transfer and its local data.
-      description: >
-        Cancels/removes the transfer and deletes the local completed file or
-        incomplete .part data. This route is the REST v1 replacement for the
-        pre-RC body-required destructive transfer delete payload.
-      operationId: deleteTransferFiles
+    - $ref: '#/components/parameters/DownloadId'
+    get:
+      tags:
+      - Downloads
+      summary: Return a bounded page of job details.
+      operationId: getDownloadDetails
+      description: This page belongs to the requested immutable job ID. No lookup may substitute a newer same-hash job. Detail
+        pages contain part state only; sources and comments are separately paginated.
       parameters:
-        - $ref: "#/components/parameters/Confirm"
+      - $ref: '#/components/parameters/DownloadCursor'
+      - $ref: '#/components/parameters/DownloadLimit'
       responses:
-        "200":
-          $ref: "#/components/responses/BulkOperationResponse"
-        "400":
-          $ref: "#/components/responses/ErrorResponse"
-        "401":
-          $ref: "#/components/responses/ErrorResponse"
-        "404":
-          $ref: "#/components/responses/ErrorResponse"
-        "405":
-          $ref: "#/components/responses/MethodNotAllowedResponse"
-        "409":
-          $ref: "#/components/responses/ErrorResponse"
-        "500":
-          $ref: "#/components/responses/ErrorResponse"
-        "503":
-          $ref: "#/components/responses/ErrorResponse"
+        '200':
+          $ref: '#/components/responses/DownloadDetailsResponse'
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/ErrorResponse'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowedResponse'
+        '409':
+          $ref: '#/components/responses/ErrorResponse'
+        '500':
+          $ref: '#/components/responses/ErrorResponse'
+        '503':
+          $ref: '#/components/responses/ErrorResponse'
         default:
-          $ref: "#/components/responses/ErrorResponse"
-  /transfers/{hash}/details:
+          $ref: '#/components/responses/ErrorResponse'
+  /downloads/{id}/comments:
     parameters:
-      - $ref: "#/components/parameters/FileHash"
+    - $ref: '#/components/parameters/DownloadId'
     get:
-      tags: [Transfers]
-      summary: Return detailed part and source state for one transfer.
-      operationId: getTransferDetails
+      tags:
+      - Downloads
+      summary: Return a bounded page of job comments.
+      operationId: listDownloadComments
+      description: Bounded job-scoped cursor traversal; no complete source/comment history is hydrated before slicing.
+      parameters:
+      - $ref: '#/components/parameters/DownloadCursor'
+      - $ref: '#/components/parameters/DownloadLimit'
       responses:
-        "200":
-          $ref: "#/components/responses/TransferDetailsResponse"
-        "400":
-          $ref: "#/components/responses/ErrorResponse"
-        "401":
-          $ref: "#/components/responses/ErrorResponse"
-        "404":
-          $ref: "#/components/responses/ErrorResponse"
-        "405":
-          $ref: "#/components/responses/MethodNotAllowedResponse"
-        "409":
-          $ref: "#/components/responses/ErrorResponse"
-        "500":
-          $ref: "#/components/responses/ErrorResponse"
-        "503":
-          $ref: "#/components/responses/ErrorResponse"
+        '200':
+          $ref: '#/components/responses/DownloadCommentPageResponse'
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/ErrorResponse'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowedResponse'
+        '409':
+          $ref: '#/components/responses/ErrorResponse'
+        '500':
+          $ref: '#/components/responses/ErrorResponse'
+        '503':
+          $ref: '#/components/responses/ErrorResponse'
         default:
-          $ref: "#/components/responses/ErrorResponse"
-  /transfers/{hash}/comments:
+          $ref: '#/components/responses/ErrorResponse'
+  /downloads/{id}/sources:
     parameters:
-      - $ref: "#/components/parameters/FileHash"
+    - $ref: '#/components/parameters/DownloadId'
     get:
-      tags: [Transfers]
-      summary: Return known comments for one transfer.
-      operationId: listTransferComments
+      tags:
+      - Downloads
+      summary: Return a bounded page of job sources.
+      operationId: listDownloadSources
+      description: Bounded job-scoped cursor traversal; no complete source/comment history is hydrated before slicing.
+      parameters:
+      - $ref: '#/components/parameters/DownloadCursor'
+      - $ref: '#/components/parameters/DownloadLimit'
       responses:
-        "200":
-          $ref: "#/components/responses/CommentListResponse"
-        "400":
-          $ref: "#/components/responses/ErrorResponse"
-        "401":
-          $ref: "#/components/responses/ErrorResponse"
-        "404":
-          $ref: "#/components/responses/ErrorResponse"
-        "405":
-          $ref: "#/components/responses/MethodNotAllowedResponse"
-        "409":
-          $ref: "#/components/responses/ErrorResponse"
-        "500":
-          $ref: "#/components/responses/ErrorResponse"
-        "503":
-          $ref: "#/components/responses/ErrorResponse"
+        '200':
+          $ref: '#/components/responses/DownloadSourcePageResponse'
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/ErrorResponse'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowedResponse'
+        '409':
+          $ref: '#/components/responses/ErrorResponse'
+        '500':
+          $ref: '#/components/responses/ErrorResponse'
+        '503':
+          $ref: '#/components/responses/ErrorResponse'
         default:
-          $ref: "#/components/responses/ErrorResponse"
-  /transfers/{hash}/sources:
+          $ref: '#/components/responses/ErrorResponse'
+  /downloads/{id}/sources/{clientId}:
     parameters:
-      - $ref: "#/components/parameters/FileHash"
+    - $ref: '#/components/parameters/DownloadId'
+    - $ref: '#/components/parameters/ClientId'
     get:
-      tags: [Transfers]
-      summary: Return known sources for one transfer.
-      operationId: listTransferSources
+      tags:
+      - Downloads
+      summary: Return one source associated with this job.
+      operationId: getDownloadSource
       responses:
-        "200":
-          $ref: "#/components/responses/TransferSourceListResponse"
-        "400":
-          $ref: "#/components/responses/ErrorResponse"
-        "401":
-          $ref: "#/components/responses/ErrorResponse"
-        "404":
-          $ref: "#/components/responses/ErrorResponse"
-        "405":
-          $ref: "#/components/responses/MethodNotAllowedResponse"
-        "409":
-          $ref: "#/components/responses/ErrorResponse"
-        "500":
-          $ref: "#/components/responses/ErrorResponse"
-        "503":
-          $ref: "#/components/responses/ErrorResponse"
+        '200':
+          $ref: '#/components/responses/DownloadSourceResponse'
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/ErrorResponse'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowedResponse'
+        '409':
+          $ref: '#/components/responses/ErrorResponse'
+        '500':
+          $ref: '#/components/responses/ErrorResponse'
+        '503':
+          $ref: '#/components/responses/ErrorResponse'
         default:
-          $ref: "#/components/responses/ErrorResponse"
-  /transfers/{hash}/sources/{clientId}:
+          $ref: '#/components/responses/ErrorResponse'
+  /downloads/{id}/sources/{clientId}/operations/browse:
     parameters:
-      - $ref: "#/components/parameters/FileHash"
-      - $ref: "#/components/parameters/ClientId"
-    get:
-      tags: [Transfers]
-      summary: Return one transfer source.
-      operationId: getTransferSource
-      responses:
-        "200":
-          $ref: "#/components/responses/TransferSourceResponse"
-        "400":
-          $ref: "#/components/responses/ErrorResponse"
-        "401":
-          $ref: "#/components/responses/ErrorResponse"
-        "404":
-          $ref: "#/components/responses/ErrorResponse"
-        "405":
-          $ref: "#/components/responses/MethodNotAllowedResponse"
-        "409":
-          $ref: "#/components/responses/ErrorResponse"
-        "500":
-          $ref: "#/components/responses/ErrorResponse"
-        "503":
-          $ref: "#/components/responses/ErrorResponse"
-        default:
-          $ref: "#/components/responses/ErrorResponse"
-  /transfers/{hash}/sources/{clientId}/operations/browse:
-    parameters:
-      - $ref: "#/components/parameters/FileHash"
-      - $ref: "#/components/parameters/ClientId"
+    - $ref: '#/components/parameters/DownloadId'
+    - $ref: '#/components/parameters/ClientId'
     post:
-      tags: [Transfers]
-      summary: Request source browsing for one transfer source.
-      operationId: browseTransferSource
+      tags:
+      - Downloads
+      summary: Request source browsing for one download job source.
+      operationId: browseDownloadSource
       responses:
-        "200":
-          $ref: "#/components/responses/TransferSourceBrowseResponse"
-        "400":
-          $ref: "#/components/responses/ErrorResponse"
-        "401":
-          $ref: "#/components/responses/ErrorResponse"
-        "404":
-          $ref: "#/components/responses/ErrorResponse"
-        "405":
-          $ref: "#/components/responses/MethodNotAllowedResponse"
-        "409":
-          $ref: "#/components/responses/ErrorResponse"
-        "500":
-          $ref: "#/components/responses/ErrorResponse"
-        "503":
-          $ref: "#/components/responses/ErrorResponse"
+        '200':
+          $ref: '#/components/responses/DownloadSourceBrowseResponse'
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/ErrorResponse'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowedResponse'
+        '409':
+          $ref: '#/components/responses/ErrorResponse'
+        '500':
+          $ref: '#/components/responses/ErrorResponse'
+        '503':
+          $ref: '#/components/responses/ErrorResponse'
         default:
-          $ref: "#/components/responses/ErrorResponse"
-  /transfers/{hash}/sources/{clientId}/operations/add-friend:
+          $ref: '#/components/responses/ErrorResponse'
+  /downloads/{id}/sources/{clientId}/operations/add-friend:
     parameters:
-      - $ref: "#/components/parameters/FileHash"
-      - $ref: "#/components/parameters/ClientId"
+    - $ref: '#/components/parameters/DownloadId'
+    - $ref: '#/components/parameters/ClientId'
     post:
-      tags: [Transfers]
-      summary: Add one transfer source as a friend.
-      operationId: addTransferSourceFriend
+      tags:
+      - Downloads
+      summary: Add one download job source as a friend.
+      operationId: addDownloadSourceFriend
       responses:
-        "200":
-          $ref: "#/components/responses/FriendResponse"
-        "400":
-          $ref: "#/components/responses/ErrorResponse"
-        "401":
-          $ref: "#/components/responses/ErrorResponse"
-        "404":
-          $ref: "#/components/responses/ErrorResponse"
-        "405":
-          $ref: "#/components/responses/MethodNotAllowedResponse"
-        "409":
-          $ref: "#/components/responses/ErrorResponse"
-        "413":
-          $ref: "#/components/responses/ErrorResponse"
-          description: >-
-            PERSISTENCE_TOO_LARGE: owned persistence work exceeds the admission
-            payload budget and is refused before the owner copies it.
-        "500":
-          $ref: "#/components/responses/ErrorResponse"
+        '200':
+          $ref: '#/components/responses/FriendResponse'
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/ErrorResponse'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowedResponse'
+        '409':
+          $ref: '#/components/responses/ErrorResponse'
+        '413':
+          $ref: '#/components/responses/ErrorResponse'
+          description: 'PERSISTENCE_TOO_LARGE: owned persistence work exceeds the admission payload budget and is refused before
+            the owner copies it.'
+        '500':
+          $ref: '#/components/responses/ErrorResponse'
           description: PERSISTENCE_FAILED reports a storage failure.
-        "503":
-          $ref: "#/components/responses/ErrorResponse"
-          description: >-
-            PERSISTENCE_BUSY or PERSISTENCE_CLOSING rejects admission while the
-            owner is saturated or closing. PERSISTENCE_UNAVAILABLE reports a
-            worker failure or uncertain commit outcome; do not assume unchanged
-            state. PERSISTENCE_COMMITTED with details.committed=true means the
-            durable mutation and cache publication completed despite a worker
-            fault. Re-read current state before retrying an uncertain outcome.
+        '503':
+          $ref: '#/components/responses/ErrorResponse'
+          description: PERSISTENCE_BUSY or PERSISTENCE_CLOSING rejects admission while the owner is saturated or closing. PERSISTENCE_UNAVAILABLE
+            reports a worker failure or uncertain commit outcome; do not assume unchanged state. PERSISTENCE_COMMITTED with
+            details.committed=true means the durable mutation and cache publication completed despite a worker fault. Re-read
+            current state before retrying an uncertain outcome.
         default:
-          $ref: "#/components/responses/ErrorResponse"
-  /transfers/{hash}/sources/{clientId}/operations/remove-friend:
+          $ref: '#/components/responses/ErrorResponse'
+  /downloads/{id}/sources/{clientId}/operations/remove-friend:
     parameters:
-      - $ref: "#/components/parameters/FileHash"
-      - $ref: "#/components/parameters/ClientId"
+    - $ref: '#/components/parameters/DownloadId'
+    - $ref: '#/components/parameters/ClientId'
     post:
-      tags: [Transfers]
-      summary: Remove one transfer source from friends.
-      operationId: removeTransferSourceFriend
+      tags:
+      - Downloads
+      summary: Remove one download job source from friends.
+      operationId: removeDownloadSourceFriend
       responses:
-        "200":
-          $ref: "#/components/responses/OkResponse"
-        "400":
-          $ref: "#/components/responses/ErrorResponse"
-        "401":
-          $ref: "#/components/responses/ErrorResponse"
-        "404":
-          $ref: "#/components/responses/ErrorResponse"
-        "405":
-          $ref: "#/components/responses/MethodNotAllowedResponse"
-        "409":
-          $ref: "#/components/responses/ErrorResponse"
-        "413":
-          $ref: "#/components/responses/ErrorResponse"
-          description: >-
-            PERSISTENCE_TOO_LARGE: owned persistence work exceeds the admission
-            payload budget and is refused before the owner copies it.
-        "500":
-          $ref: "#/components/responses/ErrorResponse"
+        '200':
+          $ref: '#/components/responses/OkResponse'
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/ErrorResponse'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowedResponse'
+        '409':
+          $ref: '#/components/responses/ErrorResponse'
+        '413':
+          $ref: '#/components/responses/ErrorResponse'
+          description: 'PERSISTENCE_TOO_LARGE: owned persistence work exceeds the admission payload budget and is refused before
+            the owner copies it.'
+        '500':
+          $ref: '#/components/responses/ErrorResponse'
           description: PERSISTENCE_FAILED reports a storage failure.
-        "503":
-          $ref: "#/components/responses/ErrorResponse"
-          description: >-
-            PERSISTENCE_BUSY or PERSISTENCE_CLOSING rejects admission while the
-            owner is saturated or closing. PERSISTENCE_UNAVAILABLE reports a
-            worker failure or uncertain commit outcome; do not assume unchanged
-            state. PERSISTENCE_COMMITTED with details.committed=true means the
-            durable mutation and cache publication completed despite a worker
-            fault. Re-read current state before retrying an uncertain outcome.
+        '503':
+          $ref: '#/components/responses/ErrorResponse'
+          description: PERSISTENCE_BUSY or PERSISTENCE_CLOSING rejects admission while the owner is saturated or closing. PERSISTENCE_UNAVAILABLE
+            reports a worker failure or uncertain commit outcome; do not assume unchanged state. PERSISTENCE_COMMITTED with
+            details.committed=true means the durable mutation and cache publication completed despite a worker fault. Re-read
+            current state before retrying an uncertain outcome.
         default:
-          $ref: "#/components/responses/ErrorResponse"
-  /transfers/{hash}/sources/{clientId}/operations/remove:
+          $ref: '#/components/responses/ErrorResponse'
+  /downloads/{id}/sources/{clientId}/operations/remove:
     parameters:
-      - $ref: "#/components/parameters/FileHash"
-      - $ref: "#/components/parameters/ClientId"
+    - $ref: '#/components/parameters/DownloadId'
+    - $ref: '#/components/parameters/ClientId'
     post:
-      tags: [Transfers]
-      summary: Remove one transfer source from the transfer.
-      operationId: removeTransferSource
+      tags:
+      - Downloads
+      summary: Remove one download job source from the download job.
+      operationId: removeDownloadSource
       responses:
-        "200":
-          $ref: "#/components/responses/OkResponse"
-        "400":
-          $ref: "#/components/responses/ErrorResponse"
-        "401":
-          $ref: "#/components/responses/ErrorResponse"
-        "404":
-          $ref: "#/components/responses/ErrorResponse"
-        "405":
-          $ref: "#/components/responses/MethodNotAllowedResponse"
-        "409":
-          $ref: "#/components/responses/ErrorResponse"
-        "500":
-          $ref: "#/components/responses/ErrorResponse"
-        "503":
-          $ref: "#/components/responses/ErrorResponse"
+        '200':
+          $ref: '#/components/responses/OkResponse'
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/ErrorResponse'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowedResponse'
+        '409':
+          $ref: '#/components/responses/ErrorResponse'
+        '500':
+          $ref: '#/components/responses/ErrorResponse'
+        '503':
+          $ref: '#/components/responses/ErrorResponse'
         default:
-          $ref: "#/components/responses/ErrorResponse"
-  /transfers/{hash}/sources/{clientId}/operations/ban:
+          $ref: '#/components/responses/ErrorResponse'
+  /downloads/{id}/sources/{clientId}/operations/ban:
     parameters:
-      - $ref: "#/components/parameters/FileHash"
-      - $ref: "#/components/parameters/ClientId"
+    - $ref: '#/components/parameters/DownloadId'
+    - $ref: '#/components/parameters/ClientId'
     post:
-      tags: [Transfers]
-      summary: Ban one transfer source.
-      operationId: banTransferSource
+      tags:
+      - Downloads
+      summary: Ban one download job source.
+      operationId: banDownloadSource
       responses:
-        "200":
-          $ref: "#/components/responses/PeerBanResponse"
-        "400":
-          $ref: "#/components/responses/ErrorResponse"
-        "401":
-          $ref: "#/components/responses/ErrorResponse"
-        "404":
-          $ref: "#/components/responses/ErrorResponse"
-        "405":
-          $ref: "#/components/responses/MethodNotAllowedResponse"
-        "409":
-          $ref: "#/components/responses/ErrorResponse"
-        "500":
-          $ref: "#/components/responses/ErrorResponse"
-        "503":
-          $ref: "#/components/responses/ErrorResponse"
+        '200':
+          $ref: '#/components/responses/PeerBanResponse'
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/ErrorResponse'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowedResponse'
+        '409':
+          $ref: '#/components/responses/ErrorResponse'
+        '500':
+          $ref: '#/components/responses/ErrorResponse'
+        '503':
+          $ref: '#/components/responses/ErrorResponse'
         default:
-          $ref: "#/components/responses/ErrorResponse"
-  /transfers/{hash}/sources/{clientId}/operations/unban:
+          $ref: '#/components/responses/ErrorResponse'
+  /downloads/{id}/sources/{clientId}/operations/unban:
     parameters:
-      - $ref: "#/components/parameters/FileHash"
-      - $ref: "#/components/parameters/ClientId"
+    - $ref: '#/components/parameters/DownloadId'
+    - $ref: '#/components/parameters/ClientId'
     post:
-      tags: [Transfers]
-      summary: Unban one transfer source.
-      operationId: unbanTransferSource
+      tags:
+      - Downloads
+      summary: Unban one download job source.
+      operationId: unbanDownloadSource
       responses:
-        "200":
-          $ref: "#/components/responses/PeerBanResponse"
-        "400":
-          $ref: "#/components/responses/ErrorResponse"
-        "401":
-          $ref: "#/components/responses/ErrorResponse"
-        "404":
-          $ref: "#/components/responses/ErrorResponse"
-        "405":
-          $ref: "#/components/responses/MethodNotAllowedResponse"
-        "409":
-          $ref: "#/components/responses/ErrorResponse"
-        "500":
-          $ref: "#/components/responses/ErrorResponse"
-        "503":
-          $ref: "#/components/responses/ErrorResponse"
+        '200':
+          $ref: '#/components/responses/PeerBanResponse'
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/ErrorResponse'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowedResponse'
+        '409':
+          $ref: '#/components/responses/ErrorResponse'
+        '500':
+          $ref: '#/components/responses/ErrorResponse'
+        '503':
+          $ref: '#/components/responses/ErrorResponse'
         default:
-          $ref: "#/components/responses/ErrorResponse"
-  /transfers/{hash}/sources/{clientId}/operations/release-slot:
+          $ref: '#/components/responses/ErrorResponse'
+  /downloads/{id}/sources/{clientId}/operations/release-slot:
     parameters:
-      - $ref: "#/components/parameters/FileHash"
-      - $ref: "#/components/parameters/ClientId"
+    - $ref: '#/components/parameters/DownloadId'
+    - $ref: '#/components/parameters/ClientId'
     post:
-      tags: [Transfers]
+      tags:
+      - Downloads
       summary: Release this peer's active upload slot when it also holds one.
-      operationId: releaseTransferSourceUploadSlot
+      operationId: releaseDownloadSourceUploadSlot
       responses:
-        "200":
-          $ref: "#/components/responses/OkResponse"
-        "400":
-          $ref: "#/components/responses/ErrorResponse"
-        "401":
-          $ref: "#/components/responses/ErrorResponse"
-        "404":
-          $ref: "#/components/responses/ErrorResponse"
-        "405":
-          $ref: "#/components/responses/MethodNotAllowedResponse"
-        "409":
-          $ref: "#/components/responses/ErrorResponse"
-        "500":
-          $ref: "#/components/responses/ErrorResponse"
-        "503":
-          $ref: "#/components/responses/ErrorResponse"
+        '200':
+          $ref: '#/components/responses/OkResponse'
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/ErrorResponse'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowedResponse'
+        '409':
+          $ref: '#/components/responses/ErrorResponse'
+        '500':
+          $ref: '#/components/responses/ErrorResponse'
+        '503':
+          $ref: '#/components/responses/ErrorResponse'
         default:
-          $ref: "#/components/responses/ErrorResponse"
-  /transfers/{hash}/operations/pause:
-    parameters:
-      - $ref: "#/components/parameters/FileHash"
-    post:
-      tags: [Transfers]
-      summary: Pause one transfer.
-      operationId: pauseTransfer
-      responses:
-        "200":
-          $ref: "#/components/responses/BulkOperationResponse"
-        "400":
-          $ref: "#/components/responses/ErrorResponse"
-        "401":
-          $ref: "#/components/responses/ErrorResponse"
-        "404":
-          $ref: "#/components/responses/ErrorResponse"
-        "405":
-          $ref: "#/components/responses/MethodNotAllowedResponse"
-        "409":
-          $ref: "#/components/responses/ErrorResponse"
-        "500":
-          $ref: "#/components/responses/ErrorResponse"
-        "503":
-          $ref: "#/components/responses/ErrorResponse"
-        default:
-          $ref: "#/components/responses/ErrorResponse"
-  /transfers/{hash}/operations/resume:
-    parameters:
-      - $ref: "#/components/parameters/FileHash"
-    post:
-      tags: [Transfers]
-      summary: Resume one transfer.
-      operationId: resumeTransfer
-      responses:
-        "200":
-          $ref: "#/components/responses/BulkOperationResponse"
-        "400":
-          $ref: "#/components/responses/ErrorResponse"
-        "401":
-          $ref: "#/components/responses/ErrorResponse"
-        "404":
-          $ref: "#/components/responses/ErrorResponse"
-        "405":
-          $ref: "#/components/responses/MethodNotAllowedResponse"
-        "409":
-          $ref: "#/components/responses/ErrorResponse"
-        "500":
-          $ref: "#/components/responses/ErrorResponse"
-        "503":
-          $ref: "#/components/responses/ErrorResponse"
-        default:
-          $ref: "#/components/responses/ErrorResponse"
-  /transfers/{hash}/operations/stop:
-    parameters:
-      - $ref: "#/components/parameters/FileHash"
-    post:
-      tags: [Transfers]
-      summary: Stop one transfer.
-      operationId: stopTransfer
-      responses:
-        "200":
-          $ref: "#/components/responses/BulkOperationResponse"
-        "400":
-          $ref: "#/components/responses/ErrorResponse"
-        "401":
-          $ref: "#/components/responses/ErrorResponse"
-        "404":
-          $ref: "#/components/responses/ErrorResponse"
-        "405":
-          $ref: "#/components/responses/MethodNotAllowedResponse"
-        "409":
-          $ref: "#/components/responses/ErrorResponse"
-        "500":
-          $ref: "#/components/responses/ErrorResponse"
-        "503":
-          $ref: "#/components/responses/ErrorResponse"
-        default:
-          $ref: "#/components/responses/ErrorResponse"
-  /transfers/{hash}/operations/recheck:
-    parameters:
-      - $ref: "#/components/parameters/FileHash"
-    post:
-      tags: [Transfers]
-      summary: Request a file recheck.
-      operationId: recheckTransfer
-      responses:
-        "200":
-          $ref: "#/components/responses/OkAcceptedResponse"
-        "400":
-          $ref: "#/components/responses/ErrorResponse"
-        "401":
-          $ref: "#/components/responses/ErrorResponse"
-        "404":
-          $ref: "#/components/responses/ErrorResponse"
-        "405":
-          $ref: "#/components/responses/MethodNotAllowedResponse"
-        "409":
-          $ref: "#/components/responses/ErrorResponse"
-        "500":
-          $ref: "#/components/responses/ErrorResponse"
-        "503":
-          $ref: "#/components/responses/ErrorResponse"
-        default:
-          $ref: "#/components/responses/ErrorResponse"
+          $ref: '#/components/responses/ErrorResponse'
   /shared-files:
     get:
       tags: [SharedFiles]
@@ -2837,10 +2798,11 @@ paths:
           $ref: "#/components/responses/ErrorResponse"
   /searches/{searchId}/results/{hash}/operations/download:
     parameters:
-      - $ref: "#/components/parameters/SearchId"
-      - $ref: "#/components/parameters/FileHash"
+    - $ref: '#/components/parameters/SearchId'
+    - $ref: '#/components/parameters/FileHash'
     post:
-      tags: [Searches]
+      tags:
+      - Searches
       summary: Add one search result to downloads.
       operationId: downloadSearchResult
       requestBody:
@@ -2848,26 +2810,28 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/SearchResultDownloadRequest"
+              $ref: '#/components/schemas/SearchResultDownloadRequest'
       responses:
-        "200":
-          $ref: "#/components/responses/SearchResultDownloadResponse"
-        "400":
-          $ref: "#/components/responses/ErrorResponse"
-        "401":
-          $ref: "#/components/responses/ErrorResponse"
-        "404":
-          $ref: "#/components/responses/ErrorResponse"
-        "405":
-          $ref: "#/components/responses/MethodNotAllowedResponse"
-        "409":
-          $ref: "#/components/responses/ErrorResponse"
-        "500":
-          $ref: "#/components/responses/ErrorResponse"
-        "503":
-          $ref: "#/components/responses/ErrorResponse"
+        '200':
+          $ref: '#/components/responses/DownloadResponse'
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/ErrorResponse'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowedResponse'
+        '409':
+          $ref: '#/components/responses/ErrorResponse'
+        '500':
+          $ref: '#/components/responses/ErrorResponse'
+        '503':
+          $ref: '#/components/responses/ErrorResponse'
         default:
-          $ref: "#/components/responses/ErrorResponse"
+          $ref: '#/components/responses/ErrorResponse'
+        '201':
+          $ref: '#/components/responses/DownloadResponse'
   /friends:
     get:
       tags: [Friends]
@@ -3188,7 +3152,7 @@ components:
         SSE resume cursor from a previous stream. The current daemon does not
         replay historical events; when this header is present, the stream starts
         with a `sync.reset` event carrying the supplied cursor in `lastEventId`
-        so clients can re-baseline through `GET /transfers`.
+        so clients can re-baseline through bounded `GET /downloads` pages.
       schema:
         type: string
         minLength: 1
@@ -3222,19 +3186,6 @@ components:
       schema:
         type: string
         enum: [asc, desc]
-    TransferStateFilter:
-      name: state
-      in: query
-      required: false
-      schema:
-        $ref: "#/components/schemas/TransferState"
-    TransferCategoryFilter:
-      name: category
-      in: query
-      required: false
-      description: Restrict to this category. Omission selects all transfers.
-      schema:
-        $ref: "#/components/schemas/CategoryName"
     SearchId:
       name: searchId
       in: path
@@ -3283,6 +3234,50 @@ components:
       schema:
         type: string
         pattern: "^[0-9a-f]{32}$"
+    DownloadId:
+      name: id
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/DownloadId'
+    DownloadView:
+      name: view
+      in: query
+      required: false
+      description: Historical completion selects the view, independently of transient verification or delivery observations.
+      schema:
+        type: string
+        enum:
+        - unfinished
+        - completed
+        - all
+        default: unfinished
+    DownloadCategory:
+      name: category
+      in: query
+      required: false
+      description: ASCII case-insensitive category name. Omission selects all categories.
+      schema:
+        $ref: '#/components/schemas/CategoryName'
+    DownloadCursor:
+      name: cursor
+      in: query
+      required: false
+      description: Opaque bounded cursor for this resource and selection; do not parse or reuse with different filters.
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 1024
+    DownloadLimit:
+      name: limit
+      in: query
+      required: false
+      description: Maximum rows, also subject to the independent response byte bound.
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 200
+        default: 100
   responses:
     AppResponse:
       description: Application envelope.
@@ -3312,7 +3307,7 @@ components:
           schema:
             $ref: "#/components/schemas/CapabilityDiscoveryEnvelope"
     EventStreamResponse:
-      description: Server-Sent Events stream. Each `data:` line is a TransferEvent JSON object.
+      description: Server-Sent Events stream. Each `data:` line is a DownloadEvent JSON object carrying a job ID or reset, never a full job row.
       headers:
         X-Contract-Version:
           $ref: "#/components/headers/ContractVersionHeader"
@@ -3330,15 +3325,15 @@ components:
         text/event-stream:
           schema:
             type: string
-    TransferEventDiagnosticsResponse:
-      description: Transfer event-stream diagnostics envelope.
+    DownloadEventDiagnosticsResponse:
+      description: Download event-stream diagnostics envelope.
       headers:
         X-Contract-Version:
           $ref: "#/components/headers/ContractVersionHeader"
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/TransferEventDiagnosticsEnvelope"
+            $ref: "#/components/schemas/DownloadEventDiagnosticsEnvelope"
     CategoryListResponse:
       description: Category collection envelope.
       headers:
@@ -3525,15 +3520,6 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/SearchEnvelope"
-    SearchResultDownloadResponse:
-      description: Search-result download operation envelope.
-      headers:
-        X-Contract-Version:
-          $ref: "#/components/headers/ContractVersionHeader"
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/SearchResultDownloadEnvelope"
     SearchListResponse:
       description: Search-session collection envelope.
       headers:
@@ -3669,60 +3655,6 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/RuntimeDiagnosticsEnvelope"
-    TransferDetailsResponse:
-      description: Transfer detail envelope.
-      headers:
-        X-Contract-Version:
-          $ref: "#/components/headers/ContractVersionHeader"
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/TransferDetailsEnvelope"
-    TransferListResponse:
-      description: Transfer collection envelope.
-      headers:
-        X-Contract-Version:
-          $ref: "#/components/headers/ContractVersionHeader"
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/TransferListEnvelope"
-    TransferResponse:
-      description: Transfer envelope.
-      headers:
-        X-Contract-Version:
-          $ref: "#/components/headers/ContractVersionHeader"
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/TransferEnvelope"
-    TransferSourceBrowseResponse:
-      description: Transfer-source browse operation envelope.
-      headers:
-        X-Contract-Version:
-          $ref: "#/components/headers/ContractVersionHeader"
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/TransferSourceBrowseEnvelope"
-    TransferSourceListResponse:
-      description: Transfer-source collection envelope.
-      headers:
-        X-Contract-Version:
-          $ref: "#/components/headers/ContractVersionHeader"
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/TransferSourceListEnvelope"
-    TransferSourceResponse:
-      description: Transfer-source envelope.
-      headers:
-        X-Contract-Version:
-          $ref: "#/components/headers/ContractVersionHeader"
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/TransferSourceEnvelope"
     UploadListResponse:
       description: Upload collection envelope.
       headers:
@@ -3777,6 +3709,78 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/UrlImportEnvelope"
+    DownloadResponse:
+      description: Download envelope.
+      headers:
+        X-Contract-Version:
+          $ref: '#/components/headers/ContractVersionHeader'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DownloadEnvelope'
+    DownloadPageResponse:
+      description: DownloadPage envelope.
+      headers:
+        X-Contract-Version:
+          $ref: '#/components/headers/ContractVersionHeader'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DownloadPageEnvelope'
+    DownloadBatchResponse:
+      description: DownloadBatch envelope.
+      headers:
+        X-Contract-Version:
+          $ref: '#/components/headers/ContractVersionHeader'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DownloadBatchEnvelope'
+    DownloadDetailsResponse:
+      description: DownloadDetails envelope.
+      headers:
+        X-Contract-Version:
+          $ref: '#/components/headers/ContractVersionHeader'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DownloadDetailsEnvelope'
+    DownloadSourcePageResponse:
+      description: DownloadSourcePage envelope.
+      headers:
+        X-Contract-Version:
+          $ref: '#/components/headers/ContractVersionHeader'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DownloadSourcePageEnvelope'
+    DownloadSourceResponse:
+      description: DownloadSource envelope.
+      headers:
+        X-Contract-Version:
+          $ref: '#/components/headers/ContractVersionHeader'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DownloadSourceEnvelope'
+    DownloadSourceBrowseResponse:
+      description: DownloadSourceBrowse envelope.
+      headers:
+        X-Contract-Version:
+          $ref: '#/components/headers/ContractVersionHeader'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DownloadSourceBrowseEnvelope'
+    DownloadCommentPageResponse:
+      description: DownloadCommentPage envelope.
+      headers:
+        X-Contract-Version:
+          $ref: '#/components/headers/ContractVersionHeader'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DownloadCommentPageEnvelope'
   schemas:
     EnvelopeMeta:
       type: object
@@ -4039,7 +4043,7 @@ components:
                     Present when `code` is `DOWNLOAD_CONFLICT`. Retry only when
                     every entry sets `redownloadAllowed=true`, and only after
                     deliberate user confirmation, by sending
-                    `knownFilePolicy=redownload`.
+                    `redownload=true`.
                   type: array
                   minItems: 1
                   items:
@@ -5200,14 +5204,14 @@ components:
           properties:
             data:
               $ref: "#/components/schemas/RuntimeDiagnostics"
-    TransferEventDiagnosticsEnvelope:
+    DownloadEventDiagnosticsEnvelope:
       unevaluatedProperties: false
       allOf:
         - $ref: "#/components/schemas/EnvelopeBase"
         - type: object
           properties:
             data:
-              $ref: "#/components/schemas/TransferEventRuntimeDiagnostics"
+              $ref: "#/components/schemas/DownloadEventRuntimeDiagnostics"
     Status:
       type: object
       additionalProperties: false
@@ -5454,7 +5458,7 @@ components:
           type: object
           additionalProperties: true
         transferEvents:
-          $ref: "#/components/schemas/TransferEventRuntimeDiagnostics"
+          $ref: "#/components/schemas/DownloadEventRuntimeDiagnostics"
         downloadFileCount:
           type: integer
           minimum: 0
@@ -5656,7 +5660,7 @@ components:
           minimum: 0
         initializationFailure:
           type: [string, "null"]
-    TransferEventRuntimeDiagnostics:
+    DownloadEventRuntimeDiagnostics:
       type: object
       additionalProperties: false
       required: [enabled, stream, channelCapacity, queuedEventCount, subscriberCount, latestEventId, nextEventId, resumeBehavior]
@@ -5818,56 +5822,54 @@ components:
     SnapshotEnvelope:
       unevaluatedProperties: false
       allOf:
-        - $ref: "#/components/schemas/EnvelopeBase"
-        - type: object
-          properties:
-            data:
-              type: object
-              additionalProperties: false
-              required:
-                - app
-                - status
-                - transfers
-                - sharedFiles
-                - uploads
-                - uploadQueue
-                - servers
-                - kad
-                - network
-                - logs
-              properties:
-                app:
-                  $ref: "#/components/schemas/App"
-                status:
-                  $ref: "#/components/schemas/Status"
-                transfers:
-                  type: array
-                  items:
-                    $ref: "#/components/schemas/Transfer"
-                sharedFiles:
-                  type: array
-                  items:
-                    $ref: "#/components/schemas/SharedFile"
-                uploads:
-                  type: array
-                  items:
-                    $ref: "#/components/schemas/Upload"
-                uploadQueue:
-                  type: array
-                  items:
-                    $ref: "#/components/schemas/UploadQueueEntry"
-                servers:
-                  type: array
-                  items:
-                    $ref: "#/components/schemas/Server"
-                kad:
-                  $ref: "#/components/schemas/Kad"
-                network:
-                  $ref: "#/components/schemas/NetworkStatus"
-                logs:
-                  type: array
-                  items:
-                    $ref: "#/components/schemas/LogEntry"
+      - $ref: '#/components/schemas/EnvelopeBase'
+      - type: object
+        properties:
+          data:
+            type: object
+            additionalProperties: false
+            required:
+            - app
+            - status
+            - downloads
+            - sharedFiles
+            - uploads
+            - uploadQueue
+            - servers
+            - kad
+            - network
+            - logs
+            properties:
+              app:
+                $ref: '#/components/schemas/App'
+              status:
+                $ref: '#/components/schemas/Status'
+              downloads:
+                $ref: '#/components/schemas/DownloadCounts'
+              sharedFiles:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SharedFile'
+              uploads:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Upload'
+              uploadQueue:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UploadQueueEntry'
+              servers:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Server'
+              kad:
+                $ref: '#/components/schemas/Kad'
+              network:
+                $ref: '#/components/schemas/NetworkStatus'
+              logs:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LogEntry'
     CategoryEnvelope:
       unevaluatedProperties: false
       allOf:
@@ -5969,241 +5971,6 @@ components:
           description: Omission retains the path; null clears the category override.
         comment:
           type: string
-    TransferListEnvelope:
-      unevaluatedProperties: false
-      allOf:
-        - $ref: "#/components/schemas/EnvelopeBase"
-        - type: object
-          properties:
-            data:
-              type: object
-              unevaluatedProperties: false
-              required: [items]
-              properties:
-                items:
-                  type: array
-                  items:
-                    $ref: "#/components/schemas/Transfer"
-              allOf:
-                - $ref: "#/components/schemas/Pagination"
-    TransferEnvelope:
-      unevaluatedProperties: false
-      allOf:
-        - $ref: "#/components/schemas/EnvelopeBase"
-        - type: object
-          properties:
-            data:
-              $ref: "#/components/schemas/Transfer"
-    TransferEvent:
-      oneOf:
-        - $ref: "#/components/schemas/TransferAddedEvent"
-        - $ref: "#/components/schemas/TransferUpdatedEvent"
-        - $ref: "#/components/schemas/TransferRemovedEvent"
-        - $ref: "#/components/schemas/TransferSyncResetEvent"
-      discriminator:
-        propertyName: type
-        mapping:
-          transfer.added: "#/components/schemas/TransferAddedEvent"
-          transfer.updated: "#/components/schemas/TransferUpdatedEvent"
-          transfer.removed: "#/components/schemas/TransferRemovedEvent"
-          sync.reset: "#/components/schemas/TransferSyncResetEvent"
-    TransferAddedEvent:
-      type: object
-      additionalProperties: false
-      required: [id, type, transfer]
-      properties:
-        id:
-          type: integer
-          minimum: 1
-        type:
-          type: string
-          enum: [transfer.added]
-        transfer:
-          $ref: "#/components/schemas/Transfer"
-    TransferUpdatedEvent:
-      type: object
-      additionalProperties: false
-      required: [id, type, transfer]
-      properties:
-        id:
-          type: integer
-          minimum: 1
-        type:
-          type: string
-          enum: [transfer.updated]
-        transfer:
-          $ref: "#/components/schemas/Transfer"
-    TransferRemovedEvent:
-      type: object
-      additionalProperties: false
-      required: [id, type, hash]
-      properties:
-        id:
-          type: integer
-          minimum: 1
-        type:
-          type: string
-          enum: [transfer.removed]
-        hash:
-          type: string
-          pattern: "^[0-9a-f]{32}$"
-    TransferSyncResetEvent:
-      type: object
-      additionalProperties: false
-      required: [id, type, reason]
-      properties:
-        id:
-          type: integer
-          minimum: 1
-        type:
-          type: string
-          enum: [sync.reset]
-        reason:
-          type: string
-          enum: [lagged, last-event-id]
-        missed:
-          type: integer
-          minimum: 1
-        lastEventId:
-          type: string
-    Transfer:
-      type: object
-      additionalProperties: false
-      required: [hash, displayName, nameConsensus, sizeBytes, state, category]
-      properties:
-        hash:
-          type: string
-        displayName:
-          type: string
-        nameConsensus:
-          $ref: "#/components/schemas/TransferNameConsensus"
-        path:
-          type: string
-          description: User-facing file path; Windows verbatim long-path prefixes are not exposed.
-          minLength: 1
-        deliveredPath:
-          type:
-            - string
-            - "null"
-          description: User-facing delivered file path; Windows verbatim long-path prefixes are not exposed.
-        deliveryError:
-          type: string
-          description: Last finished-file delivery failure while the transfer remains in completing state.
-        inIncoming:
-          type: boolean
-        sizeBytes:
-          type: integer
-          minimum: 0
-        completedBytes:
-          type: integer
-          minimum: 0
-        state:
-          $ref: "#/components/schemas/TransferState"
-        priority:
-          $ref: "#/components/schemas/TransferPriority"
-        category:
-          $ref: "#/components/schemas/NullableCategory"
-        progress:
-          type: number
-          minimum: 0
-          maximum: 1
-        sources:
-          type: integer
-          minimum: 0
-        sourcesTransferring:
-          type: integer
-          minimum: 0
-        autoPriority:
-          type: boolean
-        eta:
-          type:
-            - integer
-            - "null"
-        addedAt:
-          type:
-            - integer
-            - "null"
-        completedAt:
-          type:
-            - integer
-            - "null"
-        partsTotal:
-          type: integer
-          minimum: 0
-        partsObtained:
-          type: integer
-          minimum: 0
-        partsProgressText:
-          type: string
-        partsAvailable:
-          type: integer
-          minimum: 0
-        stopped:
-          type: boolean
-        fakeFile:
-          $ref: "#/components/schemas/FakeFileAnalysis"
-        downloadSpeedKiBps:
-          type: number
-          minimum: 0
-        uploadSpeedKiBps:
-          type: number
-          minimum: 0
-        ed2kLink:
-          type: string
-    TransferNameConsensus:
-      type: object
-      additionalProperties: false
-      required: [selectedName, pinned, followMajority, observationCount, candidates]
-      properties:
-        selectedName:
-          type: string
-        pinned:
-          type: boolean
-        followMajority:
-          type: boolean
-        observationCount:
-          type: integer
-          minimum: 0
-        candidates:
-          type: array
-          items:
-            $ref: "#/components/schemas/TransferNameCandidate"
-    TransferNameCandidate:
-      type: object
-      additionalProperties: false
-      required: [normalizedName, votes, rawNames]
-      properties:
-        normalizedName:
-          type: string
-        votes:
-          type: integer
-          minimum: 0
-        rawNames:
-          type: array
-          items:
-            type: string
-    TransferFileNameObservation:
-      type: object
-      additionalProperties: false
-      required: [rawName, normalizedName, origin, serverEndpoint, observedAt]
-      properties:
-        rawName:
-          type: string
-        normalizedName:
-          type: string
-        origin:
-          type: string
-        serverEndpoint:
-          type: [string, "null"]
-        observedAt:
-          type: string
-          format: date-time
-    TransferState:
-      type: string
-      enum: [downloading, paused, queued, checking, completing, completed, error, missingfiles]
-    TransferPriority:
-      type: string
-      enum: [auto, verylow, low, normal, high, veryhigh]
     FakeFileAnalysis:
       type: object
       additionalProperties: false
@@ -6358,221 +6125,6 @@ components:
     SharedFilePriority:
       type: string
       enum: [auto, not-published, verylow, low, normal, high, release]
-    TransferCreateRequest:
-      type: object
-      additionalProperties: false
-      oneOf:
-        - required: [link]
-          not:
-            required: [links]
-        - required: [links]
-          not:
-            required: [link]
-      properties:
-        link:
-          type: string
-          minLength: 1
-          maxLength: 2048
-          pattern: '^[eE][dD]2[kK]://[^\s\x00-\x1F\x7F-\x9F]+$'
-        links:
-          type: array
-          minItems: 1
-          maxItems: 100
-          items:
-            type: string
-            minLength: 1
-            maxLength: 2048
-            pattern: '^[eE][dD]2[kK]://[^\s\x00-\x1F\x7F-\x9F]+$'
-        category:
-          $ref: "#/components/schemas/NullableCategory"
-          default: null
-        paused:
-          type: boolean
-        knownFilePolicy:
-          $ref: "#/components/schemas/KnownFilePolicy"
-    TransferPatch:
-      type: object
-      additionalProperties: false
-      oneOf:
-        - required: [priority]
-          not:
-            anyOf:
-              - required: [displayName]
-              - required: [category]
-        - required: [displayName]
-          not:
-            anyOf:
-              - required: [priority]
-              - required: [category]
-        - required: [category]
-          not:
-            anyOf:
-              - required: [priority]
-              - required: [displayName]
-      properties:
-        displayName:
-          type: string
-          minLength: 1
-          pattern: '^(?=.*\S)[^<>:"/\\|?*\x00-\x1F\x7F-\x9F]*$'
-        priority:
-          $ref: "#/components/schemas/TransferPriority"
-        category:
-          $ref: "#/components/schemas/NullableCategory"
-          description: Omission retains the assignment; null clears it.
-    TransferDetailsEnvelope:
-      unevaluatedProperties: false
-      allOf:
-        - $ref: "#/components/schemas/EnvelopeBase"
-        - type: object
-          properties:
-            data:
-              type: object
-              additionalProperties: false
-              required: [transfer, parts, sources]
-              properties:
-                transfer:
-                  $ref: "#/components/schemas/Transfer"
-                parts:
-                  type: array
-                  items:
-                    $ref: "#/components/schemas/TransferPart"
-                sources:
-                  type: array
-                  items:
-                    $ref: "#/components/schemas/TransferSource"
-    TransferPart:
-      type: object
-      additionalProperties: false
-      required: [index, start, end, size, completedBytes, gapBytes, complete, requested, corrupted, availableSources]
-      properties:
-        index:
-          type: integer
-          minimum: 0
-        start:
-          type: integer
-          minimum: 0
-        end:
-          type: integer
-          minimum: 0
-        size:
-          type: integer
-          minimum: 0
-        completedBytes:
-          type: integer
-          minimum: 0
-        gapBytes:
-          type: integer
-          minimum: 0
-        complete:
-          type: boolean
-        requested:
-          type: boolean
-        corrupted:
-          type: boolean
-        availableSources:
-          type: integer
-          minimum: 0
-    TransferSourceListEnvelope:
-      unevaluatedProperties: false
-      allOf:
-        - $ref: "#/components/schemas/EnvelopeBase"
-        - type: object
-          properties:
-            data:
-              type: object
-              additionalProperties: false
-              required: [items]
-              properties:
-                items:
-                  type: array
-                  items:
-                    $ref: "#/components/schemas/TransferSource"
-    TransferSourceEnvelope:
-      unevaluatedProperties: false
-      allOf:
-        - $ref: "#/components/schemas/EnvelopeBase"
-        - type: object
-          properties:
-            data:
-              $ref: "#/components/schemas/TransferSource"
-    TransferSourceBrowseEnvelope:
-      unevaluatedProperties: false
-      allOf:
-        - $ref: "#/components/schemas/EnvelopeBase"
-        - type: object
-          properties:
-            data:
-              $ref: "#/components/schemas/TransferSourceBrowseResult"
-    TransferSourceBrowseResult:
-      type: object
-      additionalProperties: false
-      required: [ok, alreadyPending, searchId]
-      properties:
-        ok:
-          type: boolean
-          const: true
-        alreadyPending:
-          type: boolean
-        searchId:
-          type: string
-    TransferSource:
-      type: object
-      additionalProperties: false
-      required: [clientId, userName, userHash, address, port, downloadState, clientSoftware, reportedFileNames, downloadSpeedKiBps, availableParts, partCount, serverIp, serverPort, lowId, queueRank, viewSharedFiles, sharedFilesRequestPending]
-      properties:
-        clientId:
-          type: string
-        userName:
-          type: string
-        userHash:
-          type: [string, "null"]
-        address:
-          type: string
-        port:
-          type: integer
-          minimum: 0
-          maximum: 65535
-        downloadState:
-          type: string
-          enum: [downloading, onqueue, connected, connecting, waitcallback, waitcallbackkad, reqhashset, noneededparts, toomanyconns, toomanyconnskad, lowtolowip, banned, error, none, remotequeuefull, remembered, unknown]
-        clientSoftware:
-          type: string
-        reportedFileNames:
-          type: array
-          items:
-            $ref: "#/components/schemas/TransferFileNameObservation"
-        downloadSpeedKiBps:
-          type: number
-          minimum: 0
-        availableParts:
-          type: integer
-          minimum: 0
-        partCount:
-          type: integer
-          minimum: 0
-        serverIp:
-          type: string
-        serverPort:
-          type: integer
-          minimum: 0
-          maximum: 65535
-        lowId:
-          type: boolean
-        queueRank:
-          type: integer
-          minimum: 0
-        viewSharedFiles:
-          type: boolean
-        sharedFilesRequestPending:
-          type: boolean
-    ClearCompletedTransfersRequest:
-      type: object
-      additionalProperties: false
-      required: [confirmClearCompleted]
-      properties:
-        confirmClearCompleted:
-          type: boolean
-          enum: [true]
     ClearLogsRequest:
       type: object
       additionalProperties: false
@@ -8131,7 +7683,21 @@ components:
         candidates:
           type: array
           items:
-            $ref: "#/components/schemas/TransferNameCandidate"
+            $ref: "#/components/schemas/SearchResultNameCandidate"
+    SearchResultNameCandidate:
+      type: object
+      additionalProperties: false
+      required: [normalizedName, votes, rawNames]
+      properties:
+        normalizedName:
+          type: string
+        votes:
+          type: integer
+          minimum: 0
+        rawNames:
+          type: array
+          items:
+            type: string
     SearchResultMedia:
       type: object
       additionalProperties: false
@@ -8200,104 +7766,82 @@ components:
     SearchResultDownloadRequest:
       type: object
       additionalProperties: false
+      required: []
       properties:
         category:
-          $ref: "#/components/schemas/NullableCategory"
+          $ref: '#/components/schemas/NullableCategory'
           default: null
-        paused:
+        intent:
+          $ref: '#/components/schemas/DownloadIntent'
+          default: started
+        redownload:
           type: boolean
-        knownFilePolicy:
-          $ref: "#/components/schemas/KnownFilePolicy"
-    KnownFilePolicy:
-      type: string
-      enum: [reject, redownload]
-      default: reject
-      description: >-
-        Duplicate-download handling. `reject` returns a structured 409 conflict
-        before any transfer or source mutation. `redownload` deliberately
-        replaces only current-local or historical completion evidence; active
-        transfers, identity mismatches, and duplicate hashes within one request
-        remain conflicts.
+          default: false
     DownloadConflictEvidence:
       type: object
       additionalProperties: false
       required:
-        - hash
-        - kind
-        - requestedName
-        - requestedSizeBytes
-        - recordedName
-        - recordedSizeBytes
-        - transferState
-        - currentPaths
-        - firstCompletedAtMs
-        - lastCompletedAtMs
-        - redownloadAllowed
+      - hash
+      - kind
+      - requestedName
+      - requestedSizeBytes
+      - recordedSizeBytes
+      - redownloadAllowed
       properties:
+        jobId:
+          oneOf:
+          - $ref: '#/components/schemas/DownloadId'
+          - type: 'null'
         hash:
           type: string
-          pattern: '^[0-9A-Fa-f]{32}$'
+          pattern: ^[0-9a-f]{32}$
+          minLength: 32
+          maxLength: 32
         kind:
           type: string
           enum:
-            - activeTransfer
-            - presentLocalFile
-            - previouslyCompleted
-            - identityMismatch
-            - requestDuplicate
+          - sizeMismatch
+          - presentLocalFile
+          - unavailableLocalFile
         requestedName:
           type: string
         requestedSizeBytes:
-          type: integer
-          format: int64
+          type:
+          - integer
+          - 'null'
           minimum: 0
+          maximum: 18446744073709551615
         recordedName:
-          type: string
+          type:
+          - string
+          - 'null'
         recordedSizeBytes:
-          type: integer
-          format: int64
+          type:
+          - integer
+          - 'null'
           minimum: 0
-        transferState:
+          maximum: 18446744073709551615
+        state:
+          oneOf:
+          - $ref: '#/components/schemas/DownloadState'
+          - type: 'null'
+        path:
           type:
-            - string
-            - "null"
-          enum: [downloading, completing, null]
-        currentPaths:
-          type: array
-          items:
-            type: string
-        firstCompletedAtMs:
+          - string
+          - 'null'
+          description: One bounded evidence location, not an all-copy path manifest.
+        firstCompletedAt:
           type:
-            - integer
-            - "null"
-          format: int64
-        lastCompletedAtMs:
+          - integer
+          - 'null'
+          minimum: 0
+        lastCompletedAt:
           type:
-            - integer
-            - "null"
-          format: int64
+          - integer
+          - 'null'
+          minimum: 0
         redownloadAllowed:
           type: boolean
-    SearchResultDownloadEnvelope:
-      unevaluatedProperties: false
-      allOf:
-        - $ref: "#/components/schemas/EnvelopeBase"
-        - type: object
-          properties:
-            data:
-              $ref: "#/components/schemas/SearchResultDownloadResult"
-    SearchResultDownloadResult:
-      type: object
-      additionalProperties: false
-      required: [ok, searchId, hash]
-      properties:
-        ok:
-          type: boolean
-          const: true
-        searchId:
-          type: string
-        hash:
-          type: string
     FriendListEnvelope:
       unevaluatedProperties: false
       allOf:
@@ -8427,3 +7971,762 @@ components:
           type: string
         error:
           type: string
+    DownloadId:
+      type: string
+      minLength: 1
+      maxLength: 19
+      pattern: ^[1-9][0-9]{0,18}(?![\s\S])
+      description: Immutable never-reused job ID, canonical positive decimal in 1..9223372036854775807. The parser enforces the
+        numeric bound. Content hash is a separate identity.
+      example: '1'
+    DownloadState:
+      type: string
+      enum:
+      - queued
+      - waiting-metadata
+      - downloading
+      - stopping
+      - stopped
+      - verifying
+      - delivering
+      - completed
+      - removing
+      - failed
+      description: Observed execution state, separate from desired intent and retained terminal completion.
+    DownloadIntent:
+      type: string
+      enum:
+      - started
+      - stopped
+    DownloadMeta:
+      type: object
+      additionalProperties: false
+      required:
+      - apiVersion
+      properties:
+        apiVersion:
+          type: string
+    DownloadPageMeta:
+      type: object
+      additionalProperties: false
+      required:
+      - apiVersion
+      - nextCursor
+      - hasMore
+      properties:
+        apiVersion:
+          type: string
+        nextCursor:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 1024
+        hasMore:
+          type: boolean
+      allOf:
+      - if:
+          properties:
+            hasMore:
+              const: false
+        then:
+          properties:
+            nextCursor:
+              type: 'null'
+        else:
+          properties:
+            nextCursor:
+              type: string
+    DownloadSummary:
+      type: object
+      additionalProperties: false
+      required:
+      - id
+      - hash
+      - name
+      - category
+      - sizeBytes
+      - progress
+      - intent
+      - state
+      - createdAt
+      - updatedAt
+      - completedAt
+      properties:
+        id:
+          $ref: '#/components/schemas/DownloadId'
+        hash:
+          type: string
+          pattern: ^[0-9a-f]{32}$
+          minLength: 32
+          maxLength: 32
+        name:
+          type: string
+          minLength: 1
+        category:
+          $ref: '#/components/schemas/NullableCategory'
+        sizeBytes:
+          type:
+          - integer
+          - 'null'
+          minimum: 0
+          maximum: 18446744073709551615
+        progress:
+          type:
+          - number
+          - 'null'
+          minimum: 0
+          maximum: 1
+        intent:
+          $ref: '#/components/schemas/DownloadIntent'
+        state:
+          $ref: '#/components/schemas/DownloadState'
+        createdAt:
+          type: integer
+          minimum: 0
+        updatedAt:
+          type: integer
+          minimum: 0
+        completedAt:
+          type:
+          - integer
+          - 'null'
+          minimum: 0
+    DownloadDelivery:
+      type: object
+      additionalProperties: false
+      required:
+      - path
+      - state
+      - ownership
+      properties:
+        path:
+          type:
+          - string
+          - 'null'
+          description: Actual selected delivery path, not an internal piece-store path; no Windows verbatim prefix.
+        state:
+          type: string
+          enum:
+          - pending
+          - delivered
+        ownership:
+          type: string
+          enum:
+          - none
+          - owned
+          - unowned
+    Download:
+      type: object
+      additionalProperties: false
+      required:
+      - id
+      - hash
+      - name
+      - category
+      - sizeBytes
+      - progress
+      - intent
+      - state
+      - createdAt
+      - updatedAt
+      - completedAt
+      - payloadVerified
+      - delivery
+      properties:
+        id:
+          $ref: '#/components/schemas/DownloadId'
+        hash:
+          type: string
+          pattern: ^[0-9a-f]{32}$
+          minLength: 32
+          maxLength: 32
+        name:
+          type: string
+          minLength: 1
+        category:
+          $ref: '#/components/schemas/NullableCategory'
+        sizeBytes:
+          type:
+          - integer
+          - 'null'
+          minimum: 0
+          maximum: 18446744073709551615
+        progress:
+          type:
+          - number
+          - 'null'
+          minimum: 0
+          maximum: 1
+        intent:
+          $ref: '#/components/schemas/DownloadIntent'
+        state:
+          $ref: '#/components/schemas/DownloadState'
+        createdAt:
+          type: integer
+          minimum: 0
+        updatedAt:
+          type: integer
+          minimum: 0
+        completedAt:
+          type:
+          - integer
+          - 'null'
+          minimum: 0
+        payloadVerified:
+          type: boolean
+        delivery:
+          oneOf:
+          - $ref: '#/components/schemas/DownloadDelivery'
+          - type: 'null'
+          description: Null until delivery is known/fixed. No internal fingerprint, storage UUID or execution generation is exposed.
+    DownloadCounts:
+      type: object
+      additionalProperties: false
+      required:
+      - unfinished
+      - completed
+      properties:
+        unfinished:
+          type: integer
+          minimum: 0
+        completed:
+          type: integer
+          minimum: 0
+      description: Fixed counts of unremoved jobs by retained terminal completion, obtained without hydrating job history.
+    Ed2kLinkDownloadSource:
+      type: object
+      additionalProperties: false
+      required:
+      - type
+      - link
+      properties:
+        type:
+          const: ed2k-link
+        link:
+          type: string
+          minLength: 1
+          maxLength: 2048
+          pattern: ^[eE][dD]2[kK]://[^\s\x00-\x1F\x7F-\x9F]+(?![\s\S])
+    ContentDownloadSource:
+      type: object
+      additionalProperties: false
+      required:
+      - type
+      - hash
+      - name
+      properties:
+        type:
+          const: content
+        hash:
+          type: string
+          pattern: ^[0-9A-Fa-f]{32}$
+          minLength: 32
+          maxLength: 32
+        name:
+          type: string
+          minLength: 1
+          pattern: \S
+        sizeBytes:
+          type:
+          - integer
+          - 'null'
+          minimum: 0
+          maximum: 18446744073709551615
+    DownloadSourceInput:
+      oneOf:
+      - $ref: '#/components/schemas/Ed2kLinkDownloadSource'
+      - $ref: '#/components/schemas/ContentDownloadSource'
+      discriminator:
+        propertyName: type
+        mapping:
+          ed2k-link: '#/components/schemas/Ed2kLinkDownloadSource'
+          content: '#/components/schemas/ContentDownloadSource'
+    DownloadCreateRequest:
+      type: object
+      additionalProperties: false
+      required:
+      - source
+      properties:
+        source:
+          $ref: '#/components/schemas/DownloadSourceInput'
+        category:
+          $ref: '#/components/schemas/NullableCategory'
+          default: null
+        intent:
+          $ref: '#/components/schemas/DownloadIntent'
+          default: started
+        redownload:
+          type: boolean
+          default: false
+    DownloadPatch:
+      type: object
+      additionalProperties: false
+      required: []
+      properties:
+        name:
+          type: string
+          minLength: 1
+          pattern: \S
+        category:
+          $ref: '#/components/schemas/NullableCategory'
+        sizeBytes:
+          type: integer
+          minimum: 0
+          maximum: 18446744073709551615
+      minProperties: 1
+    DownloadIds:
+      type: array
+      minItems: 1
+      maxItems: 100
+      uniqueItems: true
+      items:
+        $ref: '#/components/schemas/DownloadId'
+    DownloadActionRequest:
+      type: object
+      additionalProperties: false
+      required:
+      - ids
+      properties:
+        ids:
+          $ref: '#/components/schemas/DownloadIds'
+    DownloadRemoveRequest:
+      type: object
+      additionalProperties: false
+      required:
+      - ids
+      - deleteData
+      properties:
+        ids:
+          $ref: '#/components/schemas/DownloadIds'
+        deleteData:
+          type: boolean
+    DownloadBatchItem:
+      type: object
+      additionalProperties: false
+      required:
+      - id
+      - status
+      - httpStatus
+      properties:
+        id:
+          $ref: '#/components/schemas/DownloadId'
+        status:
+          type: string
+          enum:
+          - accepted
+          - unchanged
+          - failed
+        httpStatus:
+          type: integer
+          minimum: 200
+          maximum: 599
+        error:
+          $ref: '#/components/schemas/ErrorEnvelope/properties/error'
+      allOf:
+      - if:
+          properties:
+            status:
+              const: failed
+        then:
+          required:
+          - error
+          properties:
+            httpStatus:
+              minimum: 400
+        else:
+          not:
+            required:
+            - error
+          properties:
+            httpStatus:
+              enum:
+              - 200
+              - 202
+      - if:
+          properties:
+            status:
+              const: unchanged
+        then:
+          properties:
+            httpStatus:
+              const: 200
+    DownloadEnvelope:
+      type: object
+      additionalProperties: false
+      required:
+      - data
+      - meta
+      properties:
+        data:
+          $ref: '#/components/schemas/Download'
+        meta:
+          $ref: '#/components/schemas/DownloadMeta'
+    DownloadPageEnvelope:
+      type: object
+      additionalProperties: false
+      required:
+      - data
+      - meta
+      properties:
+        data:
+          type: array
+          maxItems: 200
+          items:
+            $ref: '#/components/schemas/DownloadSummary'
+        meta:
+          $ref: '#/components/schemas/DownloadPageMeta'
+    DownloadBatchEnvelope:
+      type: object
+      additionalProperties: false
+      required:
+      - data
+      - meta
+      properties:
+        data:
+          type: array
+          minItems: 1
+          maxItems: 100
+          items:
+            $ref: '#/components/schemas/DownloadBatchItem'
+        meta:
+          $ref: '#/components/schemas/DownloadMeta'
+    DownloadPart:
+      type: object
+      additionalProperties: false
+      required:
+      - index
+      - start
+      - end
+      - size
+      - completedBytes
+      - gapBytes
+      - complete
+      - requested
+      - corrupted
+      - availableSources
+      properties:
+        index:
+          type: integer
+          minimum: 0
+        start:
+          type: integer
+          minimum: 0
+        end:
+          type: integer
+          minimum: 0
+        size:
+          type: integer
+          minimum: 0
+        completedBytes:
+          type: integer
+          minimum: 0
+        gapBytes:
+          type: integer
+          minimum: 0
+        complete:
+          type: boolean
+        requested:
+          type: boolean
+        corrupted:
+          type: boolean
+        availableSources:
+          type: integer
+          minimum: 0
+    DownloadDetailsEnvelope:
+      type: object
+      additionalProperties: false
+      required:
+      - data
+      - meta
+      properties:
+        data:
+          type: object
+          additionalProperties: false
+          required:
+          - download
+          - parts
+          properties:
+            download:
+              $ref: '#/components/schemas/Download'
+            parts:
+              type: array
+              maxItems: 200
+              items:
+                $ref: '#/components/schemas/DownloadPart'
+        meta:
+          $ref: '#/components/schemas/DownloadPageMeta'
+    DownloadSource:
+      type: object
+      additionalProperties: false
+      required:
+      - clientId
+      - userName
+      - userHash
+      - address
+      - port
+      - downloadState
+      - clientSoftware
+      - reportedFileNames
+      - reportedFileNamesHasMore
+      - downloadSpeedKiBps
+      - availableParts
+      - partCount
+      - serverIp
+      - serverPort
+      - lowId
+      - queueRank
+      - viewSharedFiles
+      - sharedFilesRequestPending
+      properties:
+        clientId:
+          type: string
+        userName:
+          type: string
+        userHash:
+          type:
+          - string
+          - 'null'
+        address:
+          type: string
+        port:
+          type: integer
+          minimum: 0
+          maximum: 65535
+        downloadState:
+          type: string
+          enum:
+          - downloading
+          - onqueue
+          - connected
+          - connecting
+          - waitcallback
+          - waitcallbackkad
+          - reqhashset
+          - noneededparts
+          - toomanyconns
+          - toomanyconnskad
+          - lowtolowip
+          - banned
+          - error
+          - none
+          - remotequeuefull
+          - remembered
+          - unknown
+        clientSoftware:
+          type: string
+        reportedFileNames:
+          type: array
+          maxItems: 16
+          description: >-
+            Latest observations first, ordered by observedAt and an internal
+            stable tie-breaker. The same bounded window is used in source list
+            and detail. The projection/page byte budget may reduce the window;
+            older observations and raw names exceeding the 65,536-byte
+            projection bound are omitted rather than silently rewritten.
+          items:
+            $ref: '#/components/schemas/DownloadFileNameObservation'
+        reportedFileNamesHasMore:
+          type: boolean
+          description: >-
+            True whenever observations are omitted from this latest window,
+            including omissions required by the projection/page byte budget.
+            No total count or complete-history guarantee is implied.
+        downloadSpeedKiBps:
+          type: number
+          minimum: 0
+        availableParts:
+          type: integer
+          minimum: 0
+        partCount:
+          type: integer
+          minimum: 0
+        serverIp:
+          type: string
+        serverPort:
+          type: integer
+          minimum: 0
+          maximum: 65535
+        lowId:
+          type: boolean
+        queueRank:
+          type: integer
+          minimum: 0
+        viewSharedFiles:
+          type: boolean
+        sharedFilesRequestPending:
+          type: boolean
+    DownloadFileNameObservation:
+      type: object
+      additionalProperties: false
+      required:
+      - rawName
+      - normalizedName
+      - origin
+      - serverEndpoint
+      - observedAt
+      properties:
+        rawName:
+          type: string
+          maxLength: 65536
+        normalizedName:
+          type: string
+          maxLength: 4096
+        origin:
+          type: string
+        serverEndpoint:
+          type:
+          - string
+          - 'null'
+        observedAt:
+          type: integer
+          minimum: 0
+    DownloadSourcePageEnvelope:
+      type: object
+      additionalProperties: false
+      required:
+      - data
+      - meta
+      properties:
+        data:
+          type: array
+          maxItems: 200
+          items:
+            $ref: '#/components/schemas/DownloadSource'
+        meta:
+          $ref: '#/components/schemas/DownloadPageMeta'
+    DownloadSourceEnvelope:
+      type: object
+      additionalProperties: false
+      required:
+      - data
+      - meta
+      properties:
+        data:
+          $ref: '#/components/schemas/DownloadSource'
+        meta:
+          $ref: '#/components/schemas/DownloadMeta'
+    DownloadSourceBrowseResult:
+      type: object
+      additionalProperties: false
+      required:
+      - ok
+      - alreadyPending
+      - searchId
+      properties:
+        ok:
+          type: boolean
+          const: true
+        alreadyPending:
+          type: boolean
+        searchId:
+          type: string
+    DownloadSourceBrowseEnvelope:
+      type: object
+      additionalProperties: false
+      required:
+      - data
+      - meta
+      properties:
+        data:
+          $ref: '#/components/schemas/DownloadSourceBrowseResult'
+        meta:
+          $ref: '#/components/schemas/DownloadMeta'
+    DownloadComment:
+      type: object
+      additionalProperties: false
+      properties:
+        source:
+          type: string
+        userName:
+          type:
+          - string
+          - 'null'
+        fileName:
+          type: string
+        rating:
+          type: integer
+        comment:
+          type: string
+    DownloadCommentPageEnvelope:
+      type: object
+      additionalProperties: false
+      required:
+      - data
+      - meta
+      properties:
+        data:
+          type: array
+          maxItems: 200
+          items:
+            $ref: '#/components/schemas/DownloadComment'
+        meta:
+          $ref: '#/components/schemas/DownloadPageMeta'
+    DownloadChangedEvent:
+      type: object
+      additionalProperties: false
+      required:
+      - id
+      - type
+      - downloadId
+      properties:
+        id:
+          type: integer
+          minimum: 1
+        type:
+          type: string
+          const: download.changed
+        downloadId:
+          $ref: '#/components/schemas/DownloadId'
+    DownloadRemovedEvent:
+      type: object
+      additionalProperties: false
+      required:
+      - id
+      - type
+      - downloadId
+      properties:
+        id:
+          type: integer
+          minimum: 1
+        type:
+          type: string
+          const: download.removed
+        downloadId:
+          $ref: '#/components/schemas/DownloadId'
+    DownloadSyncResetEvent:
+      type: object
+      additionalProperties: false
+      required:
+      - id
+      - type
+      - reason
+      properties:
+        id:
+          type: integer
+          minimum: 1
+        type:
+          type: string
+          enum:
+          - sync.reset
+        reason:
+          type: string
+          enum:
+          - lagged
+          - last-event-id
+        missed:
+          type: integer
+          minimum: 1
+        lastEventId:
+          type: string
+    DownloadEvent:
+      oneOf:
+      - $ref: '#/components/schemas/DownloadChangedEvent'
+      - $ref: '#/components/schemas/DownloadRemovedEvent'
+      - $ref: '#/components/schemas/DownloadSyncResetEvent'
+      discriminator:
+        propertyName: type
+        mapping:
+          download.changed: '#/components/schemas/DownloadChangedEvent'
+          download.removed: '#/components/schemas/DownloadRemovedEvent'
+          sync.reset: '#/components/schemas/DownloadSyncResetEvent'
