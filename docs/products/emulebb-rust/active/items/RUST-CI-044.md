@@ -50,6 +50,28 @@ claim conflicts, callback generations, latest-pointer removal, journal guards,
 crash/reopen and bounded early/late traversal. Internal timestamp columns retain
 explicit `*_at_s` units; public names follow the master.
 
+### Physical storage provider checkpoint (2026-11-16)
+
+Rust `cf6c010b` extends the fresh provider to schema 75: persist the actual
+UUID-qualified storage path and marker before allocation, establish immutable
+directory identity before payload writes, and keep sharing-exclusion evidence
+separate from deletion authority. Windows exclusions retain both actual API
+identity observations without deriving one from the other. One shared SQL
+predicate covers complete-copy eligibility and ingest publication; normal
+catalog revision invalidation keeps cached library visibility coherent.
+
+The supported metadata gate passed **154 unit tests and 3 ownership tests**, zero
+warnings, after the large-catalog fixture and two missed reader predicates were
+repaired. The final independent review accepted those repairs. Evidence and the
+21-source SHA manifest are under
+`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/download-job-storage-metadata-round-4`
+(`rust-unit.log`, `sources.json`); the parent verified committed source hashes.
+Existing full-library reservation scanning/filesystem work under SQLite and the
+library projection's full SQL rebuild remain unqualified. Exact-token AICH and
+ingest callback conversion and runtime/cache safety fencing remain the next
+coupled work. **The application consumers remain unconverted and unqualified**;
+this is not Windows probe execution or Android delivery-fix proof.
+
 ### Metadata provider checkpoint (2026-11-16)
 
 Rust `a8a39f89` commits the schema-74 metadata provider after three independent

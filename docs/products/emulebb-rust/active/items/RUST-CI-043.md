@@ -72,6 +72,14 @@ These are target specification and harness providers, not live conformance or
 full-application build proof. ED2K/Core/REST/WebUI and remaining campaign callers
 still require their coordinated implementation and qualification.
 
+Tests `98a7a5d3` ports the existing REST campaign's download/category and friend
+source callers to returned job IDs, 207 item outcomes, paged lists and persisted
+physical storage evidence. Its existing unit owner passed **22 tests** under
+`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/native-download-campaign-unit-round-2`
+(`pytest.log`, `junit.xml`). First start selects an explicit category temp root;
+this is unit qualification of the campaign, not execution against the pending
+Rust producer.
+
 ## Allocated category contract cut (phase 2a)
 
 The [master category contract](../../design/PUBLIC-FOUNDATION.md#downloads-and-categories)
