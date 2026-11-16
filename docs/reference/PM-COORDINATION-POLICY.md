@@ -127,6 +127,11 @@ rewrite protected main or release tags. Follow the
 - Available worker slots are capacity, not a target. Keep no standing observers
   or permanent reviewers and create no additional PM layer. Use the managed
   [workstream lifecycle](GUIDE-PARALLEL-WORKSTREAMS.md) when delegation is useful.
+- The parent defaults to **medium runtime reasoning effort**. Escalate only for
+  a bounded consequential problem and return to medium afterward. Policy prose
+  does not change the runtime setting: distinguish the actual dispatched turn
+  from saved defaults. Use an exposed supported control when available;
+  otherwise give the exact user action needed and do not claim it was changed.
 - Choose the least expensive capable model and lowest sufficient reasoning
   effort: routine work defaults to low, ordinary implementation to medium.
   Reserve stronger models and high effort for demonstrated complexity or
@@ -141,17 +146,29 @@ rewrite protected main or release tags. Follow the
   condition. Reserve shared files and contracts before parallel edits. Prefer
   focused briefs to full-history inheritance and give enough context for
   autonomous execution and scoped repairs.
+- Give expensive specialists one concrete question or deliverable and an
+  explicit stop condition. Do not let design/review work drift into general
+  implementation, monitoring or permanent consultation. Reassess model and
+  effort whenever the assignment changes; consequential implementation may
+  justify a specialist, routine continuation does not.
 - Workers finish their assignments and required checks, reporting a blocker
   when necessary or one concise completion report with findings, revisions,
   evidence and unresolved risks. Finish completed workers promptly; reactivate
-  only for a concrete assignment that benefits from retained context.
+  only for a specific missing result, actionable finding or changed requirement.
+  Collect related findings and consolidate repairs into one assignment rather
+  than sending them piecemeal. Retain a worker only when its context directly
+  helps the next bounded step. For a substantial change of assignment, start
+  fresh if old context is mostly baggage; provide a concise handoff of
+  decisions, paths, revisions and remaining work.
 - Communicate with workers only when a blocker, dependency, contract, finding
   or completed result changes their next action. Consolidate related direction;
   omit acknowledgments, receipt confirmations, unchanged status requests and
   repeated summaries. Keep useful user-facing progress updates.
-- Prefer completion notifications, supported blocking waits and required
-  persisted monitors. Never poll unchanged agents, CI or logs through repeated
-  model turns. When blocked, advance useful independent work or wait.
+- Prefer completion notifications or the longest supported wait compatible with
+  required responsiveness, plus persisted monitors where required. Eliminate
+  one-minute wait loops: do not wake merely to wait again, restate status or
+  inspect unchanged activity. A timeout alone never justifies messaging a
+  worker. When blocked, advance useful independent work or wait.
 - Reuse established contracts and valid evidence. The parent checks results
   against acceptance criteria instead of repeating the worker's investigation.
   Independent review has a bounded scope and addresses a concrete risk.
@@ -163,10 +180,11 @@ rewrite protected main or release tags. Follow the
   input changes, failures or unresolved material concerns. Repair until
   acceptance criteria are met, without unrelated improvements or activity-only
   review cycles. Workers do not duplicate final integration checks.
-- At natural checkpoints, use available usage evidence to investigate
-  conspicuous repetition or runaway workers. Distinguish cached input, uncached
-  input, output and reasoning; raw token totals are not actual cost. Do not
-  create a recurring quota-monitoring conversation.
+- At natural milestones only, use existing counters when available to examine
+  repeated model turns, coordination/wait loops, oversized context and expensive
+  agents doing routine work. Distinguish cached input, uncached input, output and
+  reasoning; raw token totals are not actual cost. Create no observer agent,
+  recurring monitoring loop or reporting system to enforce efficiency.
 - The parent owns priorities, dependency and merge order, shared Git operations,
   contract/schema/lockfile coordination and final acceptance. Workers own scoped
   implementation, granular commits, normal pushes, checks and review repairs.
@@ -305,3 +323,10 @@ GitHub Project #3 and owning issues remain backlog/status authority. This page
 owns the PM mandate, not a duplicate progress ledger. Update the mandate when the
 operator changes it, and refresh actual issue, PR, source and runtime state before
 resuming work; historical handoffs do not override current evidence.
+
+When reporting policy persistence, distinguish instructions adopted in the
+current session, committed on a feature branch, and available through canonical
+startup policy. An unmerged policy does not make future sessions inherit it.
+State the remaining integration step plainly and follow the existing review,
+PR/merge and main-write authorization boundaries; persistence is not permission
+to bypass them.
