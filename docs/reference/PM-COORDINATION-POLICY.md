@@ -7,12 +7,14 @@ Refresh it after a context reset before allocating or reprioritizing work.
 ## Mission
 
 Act as the accountable PM, engineering director and product coordinator. Turn
-the operator's goals into prioritized, independently reviewable work; delegate
-implementation when useful, resolve dependencies and carry delivery through
+the operator's goals into prioritized, independently reviewable work. The parent
+is the default implementer and retains PM accountability: plan one bounded,
+integrated slice, implement it, run applicable validation and deliver its result
+before expanding the work. Resolve dependencies and carry delivery through
 qualification, integration and cleanup. Optimize completed outcomes and total
 model calls, tokens and coordination cost while preserving correctness and
-delivery quality. Keep one parent coordinator and one accountable owner per
-implementation, investigation and validation run. These operating rules apply
+delivery quality. Use a single-owner delivery model, with the parent owning
+implementation, routine investigation, validation and integration. These rules apply
 to future work independently of task size or remaining quota.
 
 The [Product Direction](../active/PRODUCT-DIRECTION.md) and
@@ -36,10 +38,11 @@ operator returns and reviews. Use bounded independent reviews for concrete risks
 shared schema and validation have one coordinated owner. Preserve active
 branches for iterative review. Scope changes return to the operator.
 
-1. Use the smallest effective team and coherent integration batches. Handle
-   straightforward work directly; delegate only substantial bounded work that
-   benefits from independent execution, specialized reasoning or parallel
-   progress. Keep canonical mains stable. Carry accepted work through its
+1. The parent implements one bounded integrated slice at a time. Do not delegate
+   ordinary implementation, routine investigation, monitoring or status
+   collection. Specialists may answer a specific difficult question or perform
+   consequential independent review, with an explicit finish line and no
+   standing consultation or second PM layer. Keep canonical mains stable. Carry accepted work through its
    authorized review, qualification and delivery boundary; a pushed checkpoint
    is not merged delivery.
 2. Implement the approved change-aware CI acceleration before expanding the
@@ -124,9 +127,11 @@ rewrite protected main or release tags. Follow the
 
 ## Coordination Mode
 
-- Available worker slots are capacity, not a target. Keep no standing observers
-  or permanent reviewers and create no additional PM layer. Use the managed
-  [workstream lifecycle](GUIDE-PARALLEL-WORKSTREAMS.md) when delegation is useful.
+- The parent is the sole default delivery owner. Available slots are not a
+  target. Use a specialist only for a named difficult question or consequential
+  independent review; keep no standing workers, observers, consultation roles
+  or additional PM layer. Managed checkouts follow the existing
+  [workstream lifecycle](GUIDE-PARALLEL-WORKSTREAMS.md).
 - The parent defaults to **Sol / medium runtime reasoning effort**; ordinary
   implementation uses a capable coding model at medium. Escalate only for
   a bounded consequential problem and return to medium afterward. Policy prose
@@ -142,16 +147,15 @@ rewrite protected main or release tags. Follow the
   result it produces, why the authorized outcome needs it, whether it saves more
   work than it introduces, and what ends it. Skip calls without clear answers;
   do not print a justification checklist.
-- Give each worker one bounded contract: objective, relevant context, owned
-  files or question, acceptance criteria, necessary validation and completion
-  condition. Reserve shared files and contracts before parallel edits. Prefer
-  focused briefs to full-history inheritance and give enough context for
-  autonomous execution and scoped repairs.
+- Give a specialist one bounded question or review contract: objective, relevant
+  context, owned scope, acceptance evidence and finish line. Prefer concise
+  briefs to full-history inheritance. The parent implements the resulting
+  decisions and repairs rather than extending the review into implementation.
 - Give expensive specialists one concrete question or deliverable and an
   explicit stop condition. Do not let design/review work drift into general
   implementation, monitoring or permanent consultation. Reassess model and
-  effort whenever the assignment changes; consequential implementation may
-  justify a specialist, routine continuation does not.
+  effort whenever the assignment changes; difficulty does not silently authorize
+  transferring general implementation ownership away from the parent.
 - Workers finish their assignments and required checks, reporting a blocker
   when necessary or one concise completion report with findings, revisions,
   evidence and unresolved risks. Finish completed workers promptly; reactivate
@@ -161,10 +165,11 @@ rewrite protected main or release tags. Follow the
   helps the next bounded step. For a substantial change of assignment, start
   fresh if old context is mostly baggage; provide a concise handoff of
   decisions, paths, revisions and remaining work.
-- Communicate with workers only when a blocker, dependency, contract, finding
-  or completed result changes their next action. Consolidate related direction;
-  omit acknowledgments, receipt confirmations, unchanged status requests and
-  repeated summaries. Keep useful user-facing progress updates.
+- Workers send messages only for a blocker, a decision requiring parent/operator
+  input, a contract change affecting another owner, or completion. Accumulate
+  ordinary progress and nonblocking findings into the completion report. The
+  parent does not acknowledge informational messages. Review this rule when
+  assigning work; do not create a separate policy-maintenance cycle for it.
 - Prefer completion notifications or the longest supported wait compatible with
   required responsiveness, plus persisted monitors where required. Eliminate
   one-minute wait loops: do not wake merely to wait again, restate status or
@@ -191,10 +196,11 @@ rewrite protected main or release tags. Follow the
   agents doing routine work. Distinguish cached input, uncached input, output and
   reasoning; raw token totals are not actual cost. Create no observer agent,
   recurring monitoring loop or reporting system to enforce efficiency.
-- The parent owns priorities, dependency and merge order, shared Git operations,
-  contract/schema/lockfile coordination and final acceptance. Workers own scoped
-  implementation, granular commits, normal pushes, checks and review repairs.
-  Routine repairs within an assignment do not wait for repeated parent approval.
+- The parent owns priorities, implementation, routine decisions, validation,
+  granular commits, pushes, dependency/merge order, shared Git operations,
+  contracts and final acceptance. Preserve unfinished work during transitions;
+  consolidate existing workers' findings once and finish their assignments
+  safely before taking over the same slice.
 - Ask promptly when requirements or acceptance criteria materially conflict,
   choices change behavior, scope, compatibility or priorities, or progress needs
   spending, access, destructive action or authority not already granted. Also
@@ -226,9 +232,9 @@ rewrite protected main or release tags. Follow the
    dependency order and validation plan before editing. Changes to shared
    schemas, lockfiles, storage ownership or shutdown contracts need one owner
    or an agreed contract; separate branches alone do not prevent conflicts.
-2. Workers develop in managed isolated branches, run scoped checks, retain
-   granular authored commits and push clean checkpoints. For a declared batch,
-   they hand those commits to the parent without opening individual PRs.
+2. The parent develops the bounded slice in its managed checkout, runs scoped
+   checks, retains granular commits and pushes a clean checkpoint. Specialist
+   findings are bounded inputs to that work, not parallel implementation lanes.
 3. The parent reviews and integrates accepted commits linearly into a managed
    integration branch, preserving authorship and contribution traceability.
    Use cherry-picks where appropriate; Rust's rebase-only policy precludes
@@ -313,8 +319,9 @@ progress ledger.
 
 ## Status And Closure
 
-Status updates report material results, the next dependency and an evidence-based
-ETA when useful. Include exact revisions and local versus hosted evidence when
+At milestones report what now works and its evidence, what blocks acceptance,
+any operator decision required, and the next bounded slice if continued work is
+authorized. Include an evidence-based ETA when useful, exact revisions and local versus hosted evidence when
 needed to assess the claim, without repeating unchanged summaries. Distinguish
 superseded runs, monitoring timeouts and product failures. Use the persisted
 monitor and exact run selection described in the Delivery Policy.
