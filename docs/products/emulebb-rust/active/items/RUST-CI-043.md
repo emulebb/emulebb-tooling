@@ -58,6 +58,25 @@ labels are not identity. This producer observation and its actual combined
 campaign remain unimplemented/unqualified by the harness consumer changes;
 add no product table, polling race or independent diagnostic actor for them.
 
+The current Core diagnostic remains red: 110 library and 180 test-target compiler
+errors (overlapping targets), with no Core tests executed. Evidence:
+`reports/download-job-core-consumer-round-1` and `round-3`. Rust `ed9bfb1d`
+provides retained descending-query/count reads and existing-owner logical
+admit/start/claim/failure commands; the ED2K gate passed 1,397 tests. Its peer
+report carries actual decoded hello identity rather than discovery hints. Core
+emitter/callsite work is preserved separately until its full consumer compiles;
+the producer observation is not yet qualified by a cross-client run.
+
+Native creation still needs bounded availability admission before using the new
+persistence command. Existing `download_evidence` collects all copies and treats
+inaccessible storage as absent, while the shared-copy selector excludes offline
+roots. Replace that path with bounded retained probes that distinguish present,
+confirmed absent and unavailable/unknown; retain root/current-record admission
+fences and never infer absence from permissions, missing roots or exhausted work
+budgets. This prerequisite is not a compatibility wrapper or proof that the
+native creation contract currently works. Complete-source evidence is retained
+under `reports/download-job-core-consumer-round-3`.
+
 Accepted action batches always use 207 and concrete per-item outcomes in request
 order, even when every item fails. Admission must transfer all bounded work to
 the existing owner before the request can be abandoned; no request-owned loop,
