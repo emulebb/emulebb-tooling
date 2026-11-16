@@ -322,17 +322,20 @@ owns bounded admission, leases and serving revalidation, alongside the
 
 The local-eligibility finalizer registry tracks existing blocking
 SQL/publication units through caller abort and shutdown. Its separate limit is
-4 admitted units/8 MiB retained payload, reserved before clone/spawn, in addition
-to the Core owner's 64 slots/8 MiB and separately bounded eligibility reads.
+4 admitted units/8 MiB ordinary retained payload, reserved before clone/spawn,
+in addition to the Core owner's 64 slots/8 MiB and bounded eligibility reads.
 It introduces no persistence actor; seal/join its actual work after the final
 Kad/network stage and before profile-lease release, as ordered below. This increases
 the combined payload allowance; it is neither the Core's 8 MiB limit nor RSS.
-One separately accounted prepared-verification job preserves existing 256-GiB
-support; its proposed 64-MiB ceiling is conditional on explicit capacity and
-geometry bounds, not a certified current-code limit. Its lease follows actual
-hashing/results through SQL/publication after caller abort. The category
-checkpoint provides scoped monitor/root/reload lifecycle evidence; prepared-
-ingest and broader hash/scan allocation bounds remain planned. Root SQL jobs
+One separately accounted prepared-ingest job preserves existing 256-GiB support.
+Its 64-MiB representation lease includes a 4-MiB publication workspace and checked
+path/text costs, follows actual hashing/results through SQL/publication after
+caller abort, and takes one registry slot with zero ordinary bytes. The registry's
+combined charged allowance is 72 MiB; Core's 8 MiB and read workspace are
+additional.
+Parser/SQL allocator costs and RSS are excluded. The category checkpoint provides
+scoped monitor/root/reload lifecycle evidence; broader hash/scan and complete
+parser/ingest allocation qualification remain open. Root SQL jobs
 must settle before profile release. This does not complete phase 2a or round one;
 these plans add no public limit or actor.
 Reuse one retained coalesced reload worker: an admitted root command's token

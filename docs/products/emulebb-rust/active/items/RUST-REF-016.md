@@ -18,6 +18,41 @@ source: 2026-10-23 Rust async and portability audit
 
 # RUST-REF-016 - Move blocking SQLite work behind bounded async persistence
 
+## Owned-ingest checkpoint (2026-11-16)
+
+The clean bundle Rust `be881243`, tests `c1ad2912`, tooling `d73eca60` and
+Builder `e93fca5` passed the native Windows/host full supported Rust suite:
+2,938 passed, zero failed, one ignored subprocess helper, 56 suites and zero
+warnings. This is not platform-matrix qualification. Receipt:
+`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/owned-ingest-rust-acceptance-round-1/rust-unit.log`.
+Focused gates passed with zero warnings: metadata 126 unit plus 3 ownership,
+ED2K 1,350 unit and Core 561 unit plus all Core integrations. Retained logs:
+
+- `EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/owned-ingest-metadata-round-2/rust-unit.log`.
+- `EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/owned-ingest-ed2k-round-2/rust-unit.log`.
+- `EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/owned-ingest-core-round-1/rust-unit.log`.
+
+One existing tracked `JoinSet` blocking unit owns hashing/media preparation,
+conditional SQL and old/new-hash publication through requester cancellation.
+Core index metadata and explicit-root memberships commit in the same transaction;
+the narrow progress observer retains no Core. One prepared job takes one of the
+registry's four slots and zero ordinary 8-MiB bytes. Its separate 64-MiB
+representation lease includes a 4-MiB publication workspace and checked path/text
+costs. The registry's combined charged representation allowance is at most
+72 MiB; the Core owner's 8 MiB and bounded read workspace are additional.
+Parser allocations, SQL allocator costs and RSS are excluded, so this is not
+a complete 64-MiB ingest-memory claim.
+
+Coverage includes the existing 256-GiB cap enforced before allocation and a
+Windows sparse-file regression; fallback with real rollback and a binding race
+from another connection; cancellation during preparation/after commit and drain;
+old/new copies, live partial state and short root-epoch retry without rehashing.
+Delivery/journals remain outside this owned-ingest proof. Pinned Symphonia
+options do not establish parser allocation bounds, and broader scan/resource
+qualification remains open. Windows staged build and REST campaign are pending;
+the earlier category runtime bundle does not qualify this later source. Neither
+phase 2a nor round one is complete.
+
 ## Prepared-ingest provider checkpoint (2026-11-16)
 
 The five-file allocation-provider slice is qualified by focused checks: exact-
@@ -36,8 +71,9 @@ At the existing 256-GiB geometry, the conditional representation capacities are
 32,284,688 bytes during hashing and 36,055,288 during conversion. These are
 provider payload-capacity calculations, not an actual 256-GiB read, full-ingest
 allocation bound, media-parser bound or RSS result. The total prepared-job
-64-MiB ceiling and end-to-end cancellation/publication integration remain
-outstanding under the common ownership rule. Pinned Symphonia options do not
+64-MiB allowance and cancellation/publication integration were pending at this
+provider checkpoint; the subsequent owned-ingest checkpoint above records their
+scoped implementation and tests. Pinned Symphonia options do not
 establish a parser allocation bound; qualification remains open without feature
 removal. This is a provider checkpoint, not complete ingest or round-one proof.
 
@@ -91,8 +127,9 @@ the earlier full suite to a later source head.
 The sealed-arm failure, concurrent drain wake-up and separate control/join-handle
 review repairs are implemented and tested. A real Core Kad fixture proved the
 snapshot row and revision before a held reload-execution gate was released;
-this is not proof against blocked slow filesystem I/O. Prepared-ingest 64-MiB
-accounting and broader hash/scan allocation bounds remain planned. Broader jobs,
+this is not proof against blocked slow filesystem I/O. At this runtime bundle,
+prepared-ingest accounting remained planned; the later owned-ingest checkpoint
+above records its scoped progress. Broader hash/scan bounds and jobs,
 settings, CLI, REST redesign and combined-scale work remain outstanding. No
 100k runtime, 365-day or full-platform qualification, complete-goal claim, PR or
 merge follows. An ensuing evidence-only tooling head is not this tested bundle.
@@ -294,14 +331,22 @@ they are not fixed or qualified by the prepared-provider/category checkpoints:
   cancellation, Core view and publication, needs retained completion ownership.
 - `metadata.rs::update_shared_file_metadata`: SQL through catalog/upload-queue
   publication has the same ownership gap.
-- `ingest.rs`: verified-content/media SQL and
-  `core/delivery.rs::register_delivered_local_content` through path admission and
-  retirement require one retained completion boundary.
+- Owned ingest now covers its verified-content/media SQL and publication. The
+  subsequent `core/delivery.rs` call to
+  `metadata.rs::register_delivered_local_content`, then path admission and
+  retirement, still needs retained completion ownership.
 - `metadata.rs::remove_completed_transfer_row`: request-retirement SQL, catalog
   publication, finish SQL and cache eviction need tracked completion together.
 - `app_api.rs::update_app_settings` already uses an owned task that survives
   requester abort. The gap is shutdown: `friend_api.rs::drain_persistence` does
   not track/seal that task, rather than ordinary request cancellation.
+- Pre-existing phase-2d monitor gaps: `auto_share` registers its map entry before
+  awaited admission, so failed admission plus the same fingerprint can suppress
+  retry. `auto_unshare` removes its entry before awaited withdrawal, losing retry
+  intent on failure/cancellation. Reuse canonical path lookup, tracked withdrawal
+  and conditional map removal/reconciliation; a delayed Remove must fingerprint/
+  compare-and-set guard a newer recreated path. Full reload/overflow reconciliation
+  can repair state; watcher restart alone is not proof. Add no Core capture.
 
 Route repairs through the existing `LocalMutationRegistry`, per-hash manifest
 owners, settings rewrite and existing delivery/retirement journals as appropriate.
@@ -372,9 +417,9 @@ registered checkpoint above records their subsequent implementation and tests.
 Monitor async stop/join, retained root-I/O/root-SQL slots, cancellation fixes,
 root-admission sealing and owned explicit-root compare-and-set/multiple-root
 continuation were still draft at this local checkpoint. The registered result
-above supersedes that pending lifecycle verdict. The conditional prepared-
-verification 64-MiB design below remains planned, not implemented; no broad
-ingest conversion or scale proof follows.
+above supersedes that pending lifecycle verdict. Prepared verification was still
+planned at this local checkpoint; the owned-ingest checkpoint records its later
+scoped implementation, without broad scan or scale qualification.
 
 The coalesced reload handoff and terminal ordering use the following contract.
 Reuse the existing reload worker with one retained task slot.
@@ -463,11 +508,12 @@ reserved read actor. Combine complete-file eligibility with independent live
 partial-source authority rather than treating one as a substitute for the other.
 
 At allocation no existing ED2K mutation tracker supplied the local-eligibility
-lifetime boundary. The working-draft small finalizer registry tracks existing
+lifetime boundary. The small finalizer registry tracks existing
 blocking local-eligibility SQL and synchronous-publication units using an owned
-`JoinSet::spawn_blocking`. Bound it to **4 admitted units and 8 MiB retained
-payload**, reserving before clone/spawn. It has no queue, dispatcher, new actor
-or per-request async task, and continues to use the same database mutex.
+`JoinSet::spawn_blocking`. Bound it to **4 admitted units and 8 MiB ordinary
+retained payload**, reserving before clone/spawn. The single prepared-ingest job
+shares those slots with its separately charged allowance below. It has no queue,
+dispatcher, new actor or per-request async task, and uses the same database mutex.
 This separate allowance is additional to the Core owner's 64 slots/8 MiB and
 the separately bounded read workspace; the combined payload allowance increases
 and must not be reported as the Core's 8 MiB limit or a process RSS bound.
@@ -485,26 +531,30 @@ release. Saturation is transient busy; internal required work
 must retry without losing its intent. This tracks existing
 blocking calls, not a second persistence service or new test framework.
 
-Prepared verification uses **one separately accounted job**, rather than
-temporary leaf staging, to preserve existing 256-GiB support without forcing
-large AICH data into the local finalizer's 8-MiB allowance. A proposed **64-MiB
-prepared ceiling is conditional**, not a certified bound for current code.
+Prepared verification uses **one separately accounted 64-MiB representation
+lease**, including its 4-MiB publication workspace and checked path/text costs.
+It takes one of the four local-registry slots and zero ordinary 8-MiB bytes:
+the registry's combined charged representation allowance is at most 72 MiB.
+Core's 8 MiB and bounded read workspace remain additional. Preserve existing
+256-GiB support; parser/SQL allocator costs and RSS are outside this allowance.
 The provider checkpoint above establishes exact-capacity packed leaves and
 streaming stored-identity/alias handling for its scoped representation.
-Explicit geometry, retained-text and complete pipeline allocation bounds still
-precede any total-job ceiling claim. Maximum geometry is 28,257 parts and
-1,497,588 leaves, or 29,951,760 packed leaf bytes. Conditional provider payload
-capacities are 32,284,688 hashing bytes and 36,055,288 conversion bytes; neither
+Complete parser/pipeline allocation qualification remains open. Maximum geometry
+is 28,257 parts and 1,497,588 leaves, or 29,951,760 packed leaf bytes. Conditional
+provider payload capacities are 32,284,688 hashing bytes and 36,055,288
+conversion bytes; neither
 is a complete ingest/media/publication or process-memory bound.
 
-The prepared job's real lease must follow the actual hashing closure and its
-result into tracked SQL/cache publication even when the caller cancels. Narrow
-the current full-Core progress observer to the required progress authority.
-The existing local-finalizer publication workspace remains separately charged;
-do not describe their combined allowance as the Core's 8 MiB or total RSS.
+The prepared job's real lease follows the actual hashing closure and its
+result through tracked SQL/cache publication even when the caller cancels. The
+progress observer retains only its required progress authority, not Core.
+Its publication workspace is included in the prepared allowance, not charged
+again as ordinary registry bytes; other local mutations retain their own charges.
+Do not describe these allowances as the Core's 8 MiB or total RSS.
 Immutable registration must not silently rebind paths or mutate the transfer's
 AICH cache authority. These changes add no public setting, queue, actor or
-file-size limit, and remain incomplete/unqualified.
+file-size limit. Broader ingestion/scan resource and runtime qualification
+remains open.
 
 Preserve the existing direct `TcpStream::write_all` path. Encode at most the
 existing 200 server items into an owned bounded packet, then perform a final
