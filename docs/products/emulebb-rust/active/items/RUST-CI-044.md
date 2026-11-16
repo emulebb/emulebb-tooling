@@ -50,15 +50,34 @@ claim conflicts, callback generations, latest-pointer removal, journal guards,
 crash/reopen and bounded early/late traversal. Internal timestamp columns retain
 explicit `*_at_s` units; public names follow the master.
 
-Before the Core consumer cut, add the remaining provider obligations found in
-the scoped review: bounded durable failure code/message/time for the operator's
-manual-start storage-failure policy; a checked checkpointed-byte aggregate
+Before the Core consumer cut, finish the remaining obligations found in
+the scoped review: wire the qualified durable storage-failure provider into
+runtime capture and public detail; add a checked checkpointed-byte aggregate
 updated atomically with piece progress; and descending ID keysets with the
 required view/category indexes and fixed counts. Terminal progress remains one
 after piece retirement. Startup admits only the bounded active/exploration set;
 neither failed jobs nor queued/history rows require retained Core workers or
 full manifests. These additions are allocated, not implemented by the provider
 checkpoints below.
+
+### Durable storage-failure provider checkpoint (2026-11-16)
+
+Rust `ad6b4764` advances the fresh schema to 79. A bounded failure code, message
+and Unix-second timestamp persist independently of desired intent. Capturing a
+current unfinished failure advances the execution generation; stale, removed
+and terminal callbacks cannot replace it. Stop preserves the fault, while an
+admitted explicit start atomically clears it for a new generation. Both runnable
+and pending-delivery startup selectors exclude failed jobs; duplicate admission
+still returns the actual unchanged unfinished job. Compact decoding borrows
+SQLite text before allocating the final bounded diagnostic.
+
+Managed Builder `e93fca5` passed **186 Metadata unit tests, 3 ownership tests and
+1,394 ED2K tests**. Seven frozen source hashes were verified by the parent.
+Evidence: `reports/download-job-storage-failure-round-1` (terminal logs,
+`source-freeze.json`, source-cache receipts and exact patch). Earlier failed
+fixture/provenance evidence is retained; the authoritative final runs use the
+managed Builder. This qualifies the provider only: runtime fault capture and
+Core/REST integration remain pending. No profile migration is implemented.
 
 ### Verified internal payload provider checkpoint (2026-11-16)
 
