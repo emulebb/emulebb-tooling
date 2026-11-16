@@ -18,10 +18,50 @@ source: operator-approved profile continuity design 2026-11-05
 
 # RUST-FEAT-062 - Persist Kad routing state in SQLite and keep met files import-only
 
+## Registered Kad runtime checkpoint (2026-11-16)
+
+The supported registered REST CI campaign **passed** with graceful teardown at
+the exact source bundle below. The regular supported client build completed in
+200 seconds with zero warnings; its receipt is
+`EMULEBB_WORKSPACE_OUTPUT_ROOT/logs/builds/20261116T001836Z-build-clients/build-result.json`.
+The ready runtime receipt is
+`EMULEBB_WORKSPACE_OUTPUT_ROOT/tools/workstreams/public-foundation-round-1/emulebb-rust/x86_64-pc-windows-msvc/stage.json`.
+The retained campaign report is
+`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/rust-rest-openapi-ci/20261116T002313Z/report.json`.
+
+- Rust: `d5c2cfbefd00cb2407acf598d61953deb179bb6c`.
+- Tests: `0531be836b919cca9ab1938d8209fb48dcc0fb63`.
+- Tooling: `eac34a72512d592a5f70545fa4cb7721a0775574`.
+- Builder: `e93fca5abc195cc203ba28d0d935db500f056334`.
+
+Main conformance exercised 83 of 105 operations: 40 successful responses and
+43 expected errors, with 22 explicit unsafe skips, no failed routes and a passing
+SSE check. The loopback friend phase proved all six delegated mutation frontdoors:
+real SQLite faults returned HTTP 500 `PERSISTENCE_FAILED`, cache and durable
+state remained unchanged, and retries succeeded. Its three closed databases
+passed `quick_check`; owned fault triggers were removed.
+
+The new loopback Kad phase injected a real routing-revision SQLite trigger fault
+into node import. HTTP 500 `PERSISTENCE_FAILED` left routing and cache unchanged;
+retry imported the unique actual peer, which produced one real routing reply.
+After graceful close and database reopen, a restart with the same profile
+preserved the Kad identity and contacts. Protocol wire identity and REST display
+identity were compared using their respective representations. No profile
+cache file was written. This Kad phase records reopen/restart assertions, not
+a database `quick_check` result; the friend integrity result does not extend it.
+All owned daemons ended gracefully.
+
+These results qualify this exact staged contract and scoped runtime lifecycle.
+An ensuing evidence-only tooling commit is not the tested runtime's source head.
+They do not establish sustained upload-byte progress under SQL contention,
+100k runtime or combined-job performance, a full platform matrix, 365-day
+endurance, or the remaining settings/CLI and public-foundation implementation.
+
 ## Runtime coupling local-suite checkpoint (2026-11-16)
 
-The final coupled **uncommitted working material** is green in the supported
-local Rust suite. This is accepted local-suite evidence, not an exact committed
+Before the registered checkpoint above, the final coupled **uncommitted working
+material** was green in the supported local Rust suite. This is accepted
+local-suite evidence, not an exact committed
 source or newly staged runtime qualification. `test rust-unit --workstream
 public-foundation-round-1` exited zero; retained log:
 `EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/kad-sqlite-rust-acceptance-round-4/rust-unit.log`.
@@ -60,11 +100,11 @@ it has no completed test verdict. Repairs include:
 
 The [#155 accounting scope](RUST-REF-016.md#admission-and-resource-accounting)
 is retained product-payload capacity, not measured total RSS. The existing REST
-CI campaign and test owner have been extended for real Kad HTTP 500 fault/retry,
+CI campaign and test owner were extended for real Kad HTTP 500 fault/retry,
 clean reopen and loopback restart, including the corrected protocol-versus-REST
-node-ID comparison. **That registered runtime phase remains unrun.** The staged
-`b509524f` friend campaign below remains older evidence. Exact clean committed
-sources, a matching runtime receipt and the new campaign are still required.
+node-ID comparison. That phase was unrun at this local-suite checkpoint; the
+registered checkpoint above now records the exact committed-stage qualification.
+The staged `b509524f` friend campaign below remains older evidence.
 No 100k runtime campaign, combined 100k jobs, full platform matrix or 365-day
 qualification is claimed.
 
@@ -88,8 +128,9 @@ checkpoint below is dated evidence, not the current fresh-schema declaration.
 Parent-recorded focused proof: 112 metadata unit plus 3 integration checks and
 517 Core checks plus selected integrations passed; the selected Python suite
 passed 72 with one POSIX-only skip against the actual fresh selected schema 72.
-This is storage/owner proof. Production DHT identity binding and runtime
-restore/import/checkpoint wiring are in progress and not qualified by it.
+This is storage/owner proof. At this checkpoint production DHT identity binding
+and runtime restore/import/checkpoint wiring were in progress and not qualified
+by it; the registered checkpoint above records the subsequent runtime proof.
 The passing local peer campaign at `b509524f` exercised the earlier staged
 runtime; it is not proof for the new schema 72 lifecycle. Keep runtime wiring on
 the same owner and retain admission-before-copy, generation and drain contracts.
@@ -101,8 +142,9 @@ handling. The selected typed-boundary test sets passed 90, 59 and 141 checks.
 This commit does not change SQL or wire the runtime persistence lifecycle.
 The [#155 local peer/current-contract campaign](RUST-REF-016.md#registered-conformance-and-local-peer-checkpoint-2026-11-15)
 records the subsequent ordinary-request/drain repair and passing rerun at
-`b509524f`. Actual upload-byte progress under SQL contention and runtime Kad
-checkpoint delivery are still pending; retain the same shared owner.
+`b509524f`. At that checkpoint runtime Kad delivery remained pending; the
+registered checkpoint above records its later scoped proof. Actual upload-byte
+progress under SQL contention remains pending; retain the same shared owner.
 
 ## Shared friend-owner dependency checkpoint (2026-11-15)
 

@@ -18,15 +18,22 @@ source: Operator-directed configuration and persistence architecture review
 
 # RUST-CI-043 - Review configuration authority and REST contract coherence
 
-## Coupled local-suite evidence (2026-11-16)
+## Registered runtime and local-suite evidence (2026-11-16)
+
+The [#233 registered runtime checkpoint](RUST-FEAT-062.md#registered-kad-runtime-checkpoint-2026-11-16)
+records the passing supported build and REST CI campaign for the exact Rust
+`d5c2cfbe` / tests `0531be83` / tooling `eac34a72` / Builder `e93fca5` bundle.
+It qualifies current conformance/SSE, six delegated friend fault/retry frontdoors
+and real Kad SQLite fault/retry, graceful reopen and same-profile restart.
+The report records graceful termination of all owned daemons; friend-only
+`quick_check` evidence is distinct from Kad reopen/restart assertions.
 
 The [#233 local-suite checkpoint](RUST-FEAT-062.md#runtime-coupling-local-suite-checkpoint-2026-11-16)
 records green final uncommitted working material: full supported Rust-unit suite,
 eight existing Python owners and WebUI unit/browser/typecheck/build checks,
-after retained fixture/lifetime and shutdown-failure repairs. This does not
-replace exact clean committed-source staging and the still-unrun registered
-Kad fault/restart campaign. The prepared 100k library fixture remains preparation,
-not runtime or combined 100k-job qualification. The canonical settings/CLI and
+after retained fixture/lifetime and shutdown-failure repairs. Those local suites
+preceded the exact committed-stage campaign above. The prepared 100k library
+fixture remains preparation, not runtime or combined 100k-job qualification. The canonical settings/CLI and
 other public-foundation pieces remain their existing implementation scope.
 
 ## Accepted automatic Docker setup completion

@@ -18,22 +18,36 @@ source: 2026-10-23 Rust async and portability audit
 
 # RUST-REF-016 - Move blocking SQLite work behind bounded async persistence
 
+## Registered shared-owner runtime checkpoint (2026-11-16)
+
+The [#233 registered runtime checkpoint](RUST-FEAT-062.md#registered-kad-runtime-checkpoint-2026-11-16)
+records the exact staged Rust `d5c2cfbe` / tests `0531be83` / tooling `eac34a72` /
+Builder `e93fca5` bundle, supported build receipt and passing REST CI report.
+It covers main conformance/SSE, all six delegated friend fault/retry frontdoors,
+and real Kad import SQLite fault/retry followed by graceful reopen and same-profile
+restart with stable identity and contacts. All owned daemons ended gracefully.
+The three friend databases passed `quick_check`; the Kad phase records distinct
+reopen/restart assertions and does not record that integrity check.
+This is scoped shared-owner runtime proof, not global all-SQL conversion,
+measured RSS, sustained upload progress or full-foundation qualification.
+
 ## Typed Kad owner extension checkpoint (2026-11-15)
 
 The [#233 schema 72 checkpoint](RUST-FEAT-062.md#schema-72-and-typed-owner-checkpoint-2026-11-15)
 records `b08709a1` typed load/initialize byte leases and `ca5e6993` durable generated
 Kad identity, with focused metadata/Core/Python proof. These extend the existing
-owner rather than introduce a new lane. Production DHT binding and the full
-runtime checkpoint lifecycle remain in progress. The registered local peer proof
-below remains attributed to its exact older staged source `b509524f`; no later
+owner rather than introduce a new lane. At this storage checkpoint production
+DHT binding and the runtime lifecycle were still in progress. The registered
+local peer proof below remains attributed to its exact older staged source
+`b509524f`; no later
 schema/runtime qualification or global all-SQL conversion is implied.
 
 The [Kad local-suite checkpoint](RUST-FEAT-062.md#runtime-coupling-local-suite-checkpoint-2026-11-16)
 records final green uncommitted-material Rust/Python/WebUI suites and the
 resource, startup-handoff and daemon SQL-failure cleanup/drain repairs. Earlier
-failed/interrupted rounds remain retained. This is local-suite evidence, not
-exact clean committed/staged-runtime acceptance: the new real Kad fault/restart
-phase is still pending. Keep that gate and do not claim global async conversion,
+failed/interrupted rounds remain retained. Those suites were local working-material
+evidence; the registered checkpoint above now supplies exact staged acceptance
+for the new Kad fault/restart phase. Do not claim global async conversion,
 measured RSS, sustained upload progress or full-scope delivery from these counts.
 
 ## Registered conformance and local peer checkpoint (2026-11-15)

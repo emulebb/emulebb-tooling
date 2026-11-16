@@ -18,23 +18,31 @@ source: Operator-directed configuration and persistence architecture review
 
 # RUST-CI-044 - Review SQLite schema efficiency and evolution boundaries
 
-## Coupled local-suite evidence (2026-11-16)
+## Registered runtime and local-suite evidence (2026-11-16)
+
+The [#233 registered runtime checkpoint](RUST-FEAT-062.md#registered-kad-runtime-checkpoint-2026-11-16)
+records the passing supported build and REST CI campaign for the exact Rust
+`d5c2cfbe` / tests `0531be83` / tooling `eac34a72` / Builder `e93fca5` bundle.
+It qualifies current conformance/SSE, six delegated friend fault/retry frontdoors
+and real Kad SQLite fault/retry, graceful reopen and same-profile restart.
+The report records graceful termination of all owned daemons; friend-only
+`quick_check` evidence is distinct from Kad reopen/restart assertions.
 
 The [#233 local-suite checkpoint](RUST-FEAT-062.md#runtime-coupling-local-suite-checkpoint-2026-11-16)
 records green final uncommitted working material: full supported Rust-unit suite,
 eight existing Python owners and WebUI unit/browser/typecheck/build checks,
-after retained fixture/lifetime and shutdown-failure repairs. This does not
-replace exact clean committed-source staging and the still-unrun registered
-Kad fault/restart campaign. The prepared 100k library fixture remains preparation,
-not runtime or combined 100k-job qualification. The canonical settings/CLI and
+after retained fixture/lifetime and shutdown-failure repairs. Those local suites
+preceded the exact committed-stage campaign above. The prepared 100k library
+fixture remains preparation, not runtime or combined 100k-job qualification. The canonical settings/CLI and
 other public-foundation pieces remain their existing implementation scope.
 
 ## Schema and fixture preparation checkpoint (2026-11-15)
 
 The [#233 schema 72 checkpoint](RUST-FEAT-062.md#schema-72-and-typed-owner-checkpoint-2026-11-15)
 records current fresh schema 72 at Rust `ca5e6993`, typed owner byte leases,
-durable generated Kad identity and focused storage/Core/Python proof. Runtime
-DHT binding and persistence are in progress; dated schema 71 evidence is retained
+durable generated Kad identity and focused storage/Core/Python proof. At that
+checkpoint runtime DHT binding and persistence were in progress; the registered
+runtime proof above is subsequent. Dated schema 71 evidence is retained
 without claiming it qualifies schema 72.
 
 The existing shared-library harness fixture is **prepared, not runtime-qualified**:
