@@ -18,6 +18,29 @@ source: 2026-10-23 Rust async and portability audit
 
 # RUST-REF-016 - Move blocking SQLite work behind bounded async persistence
 
+## Prepared-ingest provider checkpoint (2026-11-16)
+
+The five-file allocation-provider slice is qualified by focused checks: exact-
+capacity packed leaves, moved root buffers, flat hash decoding, streaming stored-
+identity comparisons and streaming alias IDs. Public APIs, SQL and fallback
+semantics are unchanged. Metadata passed 123 unit plus 3 ownership checks with
+zero warnings, retained at
+`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/prepared-ingest-metadata-round-1/rust-unit.log`.
+ED2K passed 1,340 units with zero warnings, retained at
+`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/prepared-ingest-ed2k-round-1/rust-unit.log`.
+Independent Terra review found no material defect. The maximum-geometry fixture
+is not an exact part multiple: the terminal empty-MD4 branch is unchanged and
+is not newly proved by this fixture.
+
+At the existing 256-GiB geometry, the conditional representation capacities are
+32,284,688 bytes during hashing and 36,055,288 during conversion. These are
+provider payload-capacity calculations, not an actual 256-GiB read, full-ingest
+allocation bound, media-parser bound or RSS result. The total prepared-job
+64-MiB ceiling and end-to-end cancellation/publication integration remain
+outstanding under the common ownership rule. Pinned Symphonia options do not
+establish a parser allocation bound; qualification remains open without feature
+removal. This is a provider checkpoint, not complete ingest or round-one proof.
+
 ## Registered category checkpoint (2026-11-16)
 
 The supported registered campaign **passed** for this exact staged source bundle:
@@ -261,6 +284,33 @@ publication/handoff; concurrent or cancelled drains; SQL fault/retry and
 saturation. Tests must check retained intent and required completion, not only
 whether the disconnected caller receives a result.
 
+#### Confirmed follow-up ownership gaps (2026-11-16)
+
+The independent Terra cancellation audit confirmed these pending boundaries;
+they are not fixed or qualified by the prepared-provider/category checkpoints:
+
+- `store.rs::store_manifest_unlocked`: SQL through manifest/checkpoint cache,
+  followed by `core/transfer_state_api.rs::set_transfer_control_state` attempt
+  cancellation, Core view and publication, needs retained completion ownership.
+- `metadata.rs::update_shared_file_metadata`: SQL through catalog/upload-queue
+  publication has the same ownership gap.
+- `ingest.rs`: verified-content/media SQL and
+  `core/delivery.rs::register_delivered_local_content` through path admission and
+  retirement require one retained completion boundary.
+- `metadata.rs::remove_completed_transfer_row`: request-retirement SQL, catalog
+  publication, finish SQL and cache eviction need tracked completion together.
+- `app_api.rs::update_app_settings` already uses an owned task that survives
+  requester abort. The gap is shutdown: `friend_api.rs::drain_persistence` does
+  not track/seal that task, rather than ordinary request cancellation.
+
+Route repairs through the existing `LocalMutationRegistry`, per-hash manifest
+owners, settings rewrite and existing delivery/retirement journals as appropriate.
+Journal recovery alone is not proof of same-process completion after caller
+abort. Reuse existing ED2K tests and Core `transfer_lifecycle`, `deliver_runtime`
+and settings test owners with gates after SQL and at publication/handoff,
+requester abort, cancelled/concurrent drains and reopen. These follow-ups remain
+unimplemented; add no generic actor or per-endpoint task framework.
+
 Shutdown explicitly closes admission, drains accepted required operations and
 finalizers, joins the fixed worker and tracked coordinator, then releases the
 connection/profile lease. Drain failure is reported honestly. No owner lifetime
@@ -439,12 +489,13 @@ Prepared verification uses **one separately accounted job**, rather than
 temporary leaf staging, to preserve existing 256-GiB support without forcing
 large AICH data into the local finalizer's 8-MiB allowance. A proposed **64-MiB
 prepared ceiling is conditional**, not a certified bound for current code.
-Explicitly bound capacities, geometry and retained text, stream comparisons
-against stored identity instead of retaining duplicate vectors, and remove
-unbounded alias-ID collection before claiming that ceiling. Maximum geometry is
-28,257 parts and 1,497,588 leaves, or 29,951,760 packed leaf bytes. The reviewed
-current lifetime is approximately 40.4 MB before paths/publication, assuming
-exact capacities; this estimate is not a measured or enforced peak.
+The provider checkpoint above establishes exact-capacity packed leaves and
+streaming stored-identity/alias handling for its scoped representation.
+Explicit geometry, retained-text and complete pipeline allocation bounds still
+precede any total-job ceiling claim. Maximum geometry is 28,257 parts and
+1,497,588 leaves, or 29,951,760 packed leaf bytes. Conditional provider payload
+capacities are 32,284,688 hashing bytes and 36,055,288 conversion bytes; neither
+is a complete ingest/media/publication or process-memory bound.
 
 The prepared job's real lease must follow the actual hashing closure and its
 result into tracked SQL/cache publication even when the caller cancels. Narrow
