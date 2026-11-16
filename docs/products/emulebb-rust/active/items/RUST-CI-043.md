@@ -26,7 +26,8 @@ resources, canonical `name`, seconds-based timestamps, constrained PATCH,
 compact cursor pages and the four exact action paths are one coordinated
 producer/consumer change. Keep other resource redesign in phase four. The
 master owns the public field/status vocabulary; do not introduce a second DTO
-catalog here or freeze API YAML against the incomplete producer.
+catalog here or claim the target YAML is a qualified implemented contract while
+the producer remains incomplete.
 The immediate consumer cut also replaces snapshot download rows with fixed
 counts and SSE row payloads with job-ID change/removal notifications, using the
 existing stream/reset mechanism. Sources/comments remain separate bounded pages;
@@ -53,6 +54,23 @@ byte-bounded cursor pages, mixed and all-failed batches, saturation, and caller
 abort around SQL/publication/handoff and concurrent drains. Couple routes,
 typed DTOs, OpenAPI, UI and fixtures in the later producer/consumer pass; none
 of this allocation is implemented-contract or runtime qualification evidence.
+
+## Native download contract provider checkpoint (2026-11-16)
+
+Tooling `f6f0ed8f` specifies the target 19 download operations and bounded source
+filename windows. Tests `c66bb508` extends the existing schema/conformance owners
+and reads operation metadata through the existing YAML loader. The supported
+three-owner gate passed **271 tests**, with only
+`test_selected_rust_route_contract_matches_selected_openapi` deselected for this
+provider-only run; that producer-coupled check remains active and required after
+the Rust REST cut. Evidence is under
+`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/native-download-contract-harness-round-2`
+(`pytest.log`, `junit.xml`). Strict documentation publication checks also passed
+under `reports/native-download-openapi-docs-round-2/docs-publish.log`.
+
+These are target specification and harness providers, not live conformance or
+full-application build proof. ED2K/Core/REST/WebUI and remaining campaign callers
+still require their coordinated implementation and qualification.
 
 ## Allocated category contract cut (phase 2a)
 
