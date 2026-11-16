@@ -77,6 +77,19 @@ the feature checkpoint is pushed. Actual blocked-OS-I/O cancellation,
 broader diagnostic-result and resident lifetimes, complete catalog accounting,
 Core/REST integration and combined 100k qualification remain unfinished.
 
+Rust `1921823d` retains compact job-read backing through worker reaping, caller
+consumption and owned native-path projections using the existing capacity
+control. JSON encoding counts output without allocating, admits simultaneous
+input/output backing, then writes into fixed-size storage; sixfold escaping and
+stateful serializer growth cannot silently exceed admission. The supported gate
+passed **1,394 tests**, zero failures/ignored tests, under
+`reports/download-job-read-leases-round-2` (`rust-unit.log`,
+`source-receipt.json`). Parent inspection found and repaired the initial uncapped
+encoder; the prior 1,388-test run is retained in round 1. The commit hook then
+required rustfmt's closure-block formatting in source-hint tests; normal hooks
+passed after that formatter-only repair. Full execution hydration, resident pins
+and other broad memory/storage obligations remain outside this compact-read cut.
+
 Repair catalog callers through bounded keyset pages into the existing indexed
 projection, preserving publication fences and partial/hint precedence. Do not
 raise the provider cap or rebuild full intermediate vectors. Byte-capped pages
