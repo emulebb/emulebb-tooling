@@ -779,17 +779,17 @@ That checkpoint does not qualify these runtime ownership boundaries:
 
 These are allocated implementation boundaries, not executed proof. The proposed
 6-MiB hydration charge still needs maximum supported geometry/capacity evidence.
-At Rust `1921823d`, the selected-resident implementation is held for an operator
-budget decision. At 28,257 parts, current acquired MD4/AICH character backing
+At Rust `1921823d`, inspection found that at 28,257 parts, current MD4/AICH character backing
 alone needs 20,345,040 bytes for ten residents; even one resident plus existing
 hydration/AICH workspaces exceeds the shared 8-MiB allowance. These are arithmetic
-lower bounds, not allocator measurements. No separate resident allowance is
-currently accepted. Exact-source inspection receipt:
+lower bounds, not allocator measurements. Exact-source inspection receipt:
 `reports/download-job-resident-hydration-round-1/source-receipt.json`.
-The parent requested a choice between a separately capped 64-MiB resident cache
-with at most ten jobs and shared-budget byte-pressure reductions in effective
-concurrency with coordinated representation/workspace changes. Neither option
-is implemented; the sources remain clean and no hydration gate ran.
+The operator accepted a separate **64-MiB resident cache capped at ten jobs**,
+alongside the existing **8-MiB transient-work budget**, within the same owner.
+This adds no saved setting, pool or actor and does not bound total daemon RSS.
+Evicted backing remains charged until its final reader drops. The decision
+unblocks the next hydration slice, but implementation and qualification remain
+pending; no hydration gate ran for that accepted budget.
 Require actual held-I/O cancellation/drain tests, query plans and parent/path
 replacement races. The existing full catalog rebuild remains separate bounded
 projection work; this conversion does not qualify it or total process RSS.
