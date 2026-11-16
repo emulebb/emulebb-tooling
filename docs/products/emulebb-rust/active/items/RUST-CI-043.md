@@ -18,6 +18,42 @@ source: Operator-directed configuration and persistence architecture review
 
 # RUST-CI-043 - Review configuration authority and REST contract coherence
 
+## Allocated native download cut (phases 2b/2c)
+
+Implement the accepted [native download contract](../../design/PUBLIC-FOUNDATION.md#native-rest-openapi-and-webui)
+directly with the job/storage cut. Source-discriminated creation, job-keyed
+resources, canonical `name`, seconds-based timestamps, constrained PATCH,
+compact cursor pages and the four exact action paths are one coordinated
+producer/consumer change. Keep other resource redesign in phase four. The
+master owns the public field/status vocabulary; do not introduce a second DTO
+catalog here or freeze API YAML against the incomplete producer.
+The immediate consumer cut also replaces snapshot download rows with fixed
+counts and SSE row payloads with job-ID change/removal notifications, using the
+existing stream/reset mechanism. Sources/comments remain separate bounded pages;
+other snapshot resources stay outside this cut. The [metadata provider checkpoint](RUST-CI-044.md#metadata-provider-checkpoint-2026-11-16)
+does not yet make ED2K/Core/API consumers or the full application build-ready.
+
+Creation uses the existing eD2K parser with its AICH/source hints. Active duplicate
+admission preserves the existing job; a new explicit attempt receives a new job
+ID. Historical completion and verified content facts remain authoritative even
+if local output disappears. Observed state is separate from desired intent;
+name PATCH cannot rename completed jobs or an active fixed delivery attempt.
+Heavy detail exposes actual delivery path/ownership separately from job name.
+
+Accepted action batches always use 207 and concrete per-item outcomes in request
+order, even when every item fails. Admission must transfer all bounded work to
+the existing owner before the request can be abandoned; no request-owned loop,
+per-endpoint actor or all-or-nothing rollback. Keep standard error objects and
+existing envelope metadata/contract-version headers. Distinguish malformed
+request refusal from shared-capacity refusal before any job mutation.
+
+Extend existing Rust/Python and WebUI owners for create/duplicate/redownload and
+size conflicts, PATCH invariants, completion after output loss, early/late
+byte-bounded cursor pages, mixed and all-failed batches, saturation, and caller
+abort around SQL/publication/handoff and concurrent drains. Couple routes,
+typed DTOs, OpenAPI, UI and fixtures in the later producer/consumer pass; none
+of this allocation is implemented-contract or runtime qualification evidence.
+
 ## Allocated category contract cut (phase 2a)
 
 The [master category contract](../../design/PUBLIC-FOUNDATION.md#downloads-and-categories)

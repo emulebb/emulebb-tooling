@@ -18,6 +18,65 @@ source: Operator-directed configuration and persistence architecture review
 
 # RUST-CI-044 - Review SQLite schema efficiency and evolution boundaries
 
+## Allocated download-job storage cut (phases 2b/2c)
+
+Implement [durable downloads](../../design/PUBLIC-FOUNDATION.md#downloads-and-categories)
+as `download_jobs` with `download_job_*` children. Allocate positive never-reused
+i64 job IDs; keep protocol hash distinct and preserve compact terminal history
+until explicit removal. Enforce one unremoved unfinished job per hash with an
+indexed constraint. Accepted canonical content size and per-job expected-size
+claim are independently nullable: initialize the job at admission when suitable,
+then fill unknown size or fence contradictions against independent verification.
+Never rewrite claims on reads or sacrifice verified content authority.
+
+Use a nullable latest-job foreign key, cleared/changed coherently with removal;
+do not derive a replacement from `MAX` or resurrect older attempts. Preserve
+known content facts after the last job disappears. A `JobToken` generation
+fences live callbacks to their actual job; a delayed callback must not mutate
+a newer same-hash job or its storage. Every child/recovery reference is job-keyed.
+Journal references use `RESTRICT` and independently fence unsafe cleanup; hiding
+or removing a job cannot discard outstanding journal authority.
+
+Fix temp storage at first start and destination for each delivery attempt, with
+job-specific storage before multiple attempts become reachable. Preserve the
+common verification/ownership and retirement-cache repair in phases 2b/2c.
+No new start-blocking storage-capability policy is accepted; unsupported cleanup
+remains safely pending while its common capability design is reviewed.
+
+Use indexed compact, byte-bounded list pages with numeric ID ordering and
+separate heavy detail; prove query/allocation bounds without materializing all
+jobs. Reuse existing metadata/job/delivery and Python fixtures for uniqueness,
+claim conflicts, callback generations, latest-pointer removal, journal guards,
+crash/reopen and bounded early/late traversal. Internal timestamp columns retain
+explicit `*_at_s` units; public names follow the master.
+
+### Metadata provider checkpoint (2026-11-16)
+
+Rust `a8a39f89` commits the schema-74 metadata provider after three independent
+Terra review rounds accepted the repairs. The supported metadata gate passed
+148 units plus 3 ownership checks with zero warnings; retained log:
+`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/download-job-metadata-round-3/rust-unit.log`.
+The exact 21-source SHA manifest is
+`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/download-job-metadata-frozen-material/sources.json`.
+Earlier failed gate logs remain retained; they are not the current verdict.
+
+The provider adds `download_jobs` and job-keyed piece/hash/range/source/name
+children, explicit latest-job ownership, nullable accepted/expected sizes and
+unfinished-job uniqueness. It provides generation-fenced `JobToken` updates,
+job-bound delivery/retirement journals with `RESTRICT`, independent output
+exclusions, and token-plus-captured-snapshot recovery settlement. Compact
+provider page requests accept limits 1-256 and stop at a charged 2-MiB allowance.
+They validate 65,536-byte text/native-path bounds before hydration. These are internal
+representation limits, not the public list limit or measured process RSS.
+
+ED2K, Core and API consumers are still unconverted: **the full application is
+not build-ready** at this checkpoint. Inherited output reservation still scans
+full library aliases and performs filesystem work under SQLite; that resource/
+lock boundary is unqualified and belongs to the next coupled runtime cut.
+Recovery callers must hold exclusive job lifecycle ownership and capture the
+token/journal snapshot before filesystem I/O. This is provider-only evidence,
+not full Rust, runtime, platform or Android delivery-fix qualification.
+
 ## Allocated category storage cut (phase 2a)
 
 Implement the [master category contract](../../design/PUBLIC-FOUNDATION.md#downloads-and-categories)

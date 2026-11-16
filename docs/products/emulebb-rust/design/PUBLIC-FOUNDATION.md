@@ -250,7 +250,8 @@ IP filtering stays file-backed with one configured source and explicit reload.
 
 ## Downloads and categories
 
-Downloads have independent durable job IDs and only one active job per hash.
+Downloads have independent durable job IDs and only one unremoved unfinished
+job per hash.
 Keep compact completed jobs until explicit removal, separate piece/source cleanup
 from terminal history, and retain prior-download knowledge independently of job
 removal. No download-priority control, including category defaults.
@@ -273,6 +274,15 @@ copies on unavailable storage require explicit choice. Re-download gets a new
 job ID and preserves prior history. Explicitly renamed unfinished jobs retain
 their chosen filename; keep observed alternatives separately. Future majority
 naming is outside scope and must respect explicit names.
+
+Historical completion never regresses or automatically downloads again when
+output disappears. Execution, verification, delivery and terminal completion
+remain separately observable. Public `sizeBytes` is the persisted job expected/
+learned total: admission may initialize an absent claim from accepted canonical
+content, while independent verification fills an unknown total or fences an
+incompatible claim. Verified content keeps its authority; reads never silently
+rewrite job claims. The [2b/2c storage allocation](../active/items/RUST-CI-044.md#allocated-download-job-storage-cut-phases-2b2c)
+owns job children, callback generations and durable cleanup references.
 
 Category names are their immutable public IDs. SQLite retains a positive
 `AUTOINCREMENT` i64 key and nullable category foreign keys internally. The resource
@@ -423,6 +433,37 @@ Use correct HTTP status codes with `data`/`meta` success wrappers and structured
 creation/acceptance/no-content and error status/body combinations exactly in
 OpenAPI. Keep error codes stable and details typed where useful.
 
+The accepted 2b/2c download cut uses `POST /downloads` with `source` equal to
+`{type: "ed2k-link", link}` or `{type: "content", hash, name, sizeBytes?}`.
+Content size is optional nullable u64; reuse the server-side eD2K parser,
+including AICH/source hints. Optional fields default to `category:null`,
+`intent:started` and `redownload:false`. A new job returns 201; an active
+duplicate returns 200 unchanged, while conflicting known sizes return 409.
+Redownload never duplicates active work. Present or unavailable local content
+requires explicit choice; confirmed absence can be downloaded normally.
+
+Download resources use positive decimal i64-string `id`, separate 32-hex `hash`,
+canonical user-visible filename `name`, nullable `sizeBytes`/`progress`, desired
+`intent` (`started`/`stopped`) and observed execution `state`: `queued`,
+`waiting-metadata`, `downloading`, `stopping`, `stopped`, `verifying`, `delivering`,
+`completed`, `removing`, `failed`. A draining owned operation need not falsely
+report stopped. Use `createdAt`, `updatedAt` and nullable `completedAt` in Unix
+seconds. `PATCH /downloads/{id}` edits name/category or unknown-to-known size.
+Name changes require an unfinished job before an active fixed delivery attempt;
+otherwise return 409. Category changes are metadata and never move files.
+Equal known size is a no-op; a contradictory known size returns 409. Intent is
+controlled through the action endpoints.
+
+`GET /downloads` returns a thin `data` array with `meta.nextCursor` and
+`meta.hasMore`, default limit 100 and maximum 200, in fixed newest numeric-ID
+order. Use bounded opaque cursors and `view=unfinished` by default, with
+`completed`/`all` and category filtering. Pages are compact and byte-bounded;
+exact totals are later optional work. `GET /downloads/{id}` returns the selected
+job, including actual `delivery.path` and ownership. Sources and comments use
+separate paginated `/downloads/{id}/sources` and `/downloads/{id}/comments`
+resources. No top-level list/detail hydrates all source history, and no list
+path may materialize the whole collection.
+
 Use one bounded action endpoint per download operation:
 
 ```text
@@ -432,10 +473,17 @@ POST /downloads/verify
 POST /downloads/remove
 ```
 
-Explicit ID lists, including one-element lists for single jobs, return per-job
-outcomes. One failure does not roll back unrelated successes. Ordinary resource
-attributes use updates, reads use GET. Native bulk operations initially accept
-bounded explicit selections; no all-matching asynchronous selection framework.
+Action bodies contain 1-100 distinct IDs, including one-element lists for single
+jobs; remove also requires `deleteData`. Every accepted batch returns HTTP 207
+with a `data` array in request order: `{id, status, httpStatus, error?}`. Item
+`status` is `accepted`, `unchanged` or `failed`, with a concrete HTTP outcome
+such as 200/202/404/409/503. Failed items require the standard
+`error:{code,message,details}`; accepted/unchanged items omit it. Malformed
+whole requests return 400; shared-capacity refusal before admission returns 503
+without modifying jobs. Once admitted, the existing owner completes every item
+despite caller disconnect. Per-job failures do not roll back unrelated successes
+or lose later items in a request-owned loop. Native bulk operations initially
+accept bounded explicit selections; no all-matching asynchronous framework.
 
 Use live indexed keyset cursors, stable tie-breakers and optional exact totals.
 Document weak traversal consistency under concurrent changes; do not retain
@@ -449,6 +497,10 @@ download view unfinished with explicit Completed/All. Fetch for the active view.
 Keep lightweight native SSE change/reset notifications, coalesce refreshes and
 use polling as fallback rather than redundant broad snapshot polling. Snapshot
 is a bounded dashboard summary; its underlying work must also be bounded.
+Its download portion is `downloads:{unfinished,completed}`, counting unremoved
+jobs by historical completion without embedding job rows. Existing-stream
+`download.changed`/`download.removed` events carry `downloadId`, not full rows
+or hash identity. `sync.reset` sends clients back to bounded current pages.
 
 Design shared bounded in-memory canonical change tracking for future qBittorrent
 incremental polling: changed identities, removals, revisions and restart/reset
