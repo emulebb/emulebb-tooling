@@ -313,8 +313,8 @@ The working-draft local-eligibility finalizer registry tracks existing blocking
 SQL/publication units through caller abort and shutdown. Its separate limit is
 4 admitted units/8 MiB retained payload, reserved before clone/spawn, in addition
 to the Core owner's 64 slots/8 MiB and separately bounded eligibility reads.
-It introduces no persistence actor; seal/join its actual work before profile
-lease release and coordinate it before the final Kad checkpoint. This increases
+It introduces no persistence actor; seal/join its actual work after the final
+Kad/network stage and before profile-lease release, as ordered below. This increases
 the combined payload allowance; it is neither the Core's 8 MiB limit nor RSS.
 One separately accounted prepared-verification job preserves existing 256-GiB
 support; its proposed 64-MiB ceiling is conditional on explicit capacity and
@@ -325,6 +325,9 @@ awaiting passing lifecycle proof; root-admission sealing and explicit-root
 compare-and-set/multiple-root continuation remain drafts.
 Root SQL jobs must settle before profile release. Whole phase 2a remains
 incomplete/unqualified; these plans add no public limit or actor.
+Reuse one retained coalesced reload worker: an admitted root command's token
+preserves successful SQL/cache scan intent across caller cancellation. Scans
+must not restart a stopped monitor; the narrowed handoff remains draft/uncompiled.
 
 At first start, choose optional category temp storage or global fallback and
 retain that location for the job. At delivery start resolve the current category
@@ -467,9 +470,14 @@ are not silently repopulated. For initialized-empty Kad contacts, suppress hidde
 built-in/public fallback seeds; explicit operator-configured bootstrap endpoints
 remain usable as distinct operator input.
 
-Capture and admit the final Kad snapshot before cancellation or network teardown
-timeout can discard its source runtime. Complete accepted persistence and
-finalization, then drain/join the owner before connection/profile-lease release.
+Begin shutdown, seal reload/regular admission and stop/join the monitor, then
+call the final Kad checkpoint directly before bounded network cleanup can
+discard its DHT runtime. Outside that cleanup timeout, drain the persistence
+owner, join the reload worker without abort, seal/drain local finalizers, then
+drain root SQL and eligibility reads before connection/profile-lease release.
+Attempt every stage even after a failure; the [#155 lifecycle contract](../active/items/RUST-REF-016.md#planned-category-publication-continuation-phase-2a)
+owns retained tokens, cooperative stop and error reporting. This latest sequence
+is draft/uncompiled, not final phase-2a qualification.
 
 ### Docker and deployment
 

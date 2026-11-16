@@ -235,6 +235,11 @@ Round 8 compiled with zero warnings and reached 550 passed plus one
 verified-parent fixture failure; five delivery regressions were fixed, but
 integrations did not run. Retained log:
 `EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/category-foundation-core-round-8/rust-unit.log`.
+Core round 9 subsequently passed 555 units and all Core integrations, including
+detached-scan checks. This precedes the latest cancellation-handoff refinement;
+the related handoff gap remains open. Full-acceptance rounds 1-3 retain,
+respectively, an import compilation failure, one invalid-name fixture failure,
+and two actual detached-scan failures. None is a final successful acceptance run.
 
 Monitor async stop/join, retained root-I/O/root-SQL slots and cancellation fixes
 exist as implemented drafts awaiting passing proof. Root-admission sealing,
@@ -244,6 +249,27 @@ storage-error mapping remain pending. These results are not an exact committed/
 staged acceptance bundle. The conditional prepared-verification 64-MiB design
 below remains planned, not implemented. Whole phase 2a remains incomplete and
 unqualified; no broad ingest conversion or scale proof follows.
+
+The newest coalesced reload handoff and terminal ordering below remain
+draft/uncompiled. Reuse the existing reload worker with one retained task slot.
+Its narrow control holds only pending state, reservation count, seal state and
+`Notify`, without a Core or join handle. Reserve a `RootCommand` token in
+`submit_reserved`'s `make_command`, after the existing owner quota is acquired;
+the command holds only that token. Successful SQL plus authoritative cache
+publication arms the accepted scan intent before the mutation receipt; failed
+compare-and-set or rollback drops it. Caller cancellation cannot lose the
+accepted handoff. The worker waits while reservations remain and exits when
+idle; permit only one immediately-exiting predecessor handoff. Add no actor,
+queue or per-request task, and never let a scan rearm a stopped monitor.
+
+Terminal order is: begin shutdown; seal reload and regular admission; stop/join
+the monitor; call the final Kad checkpoint directly; perform bounded network
+cleanup. Final Kad reads DHT state only and need not wait for local finalizers.
+After that stage and outside the network timeout, drain the persistence owner
+so accepted root-command tokens resolve; join the retained reload task in place
+without abort, using cooperative stop; seal/drain the local registry; drain root
+SQL work; drain eligibility reads. Attempt every stage and retain errors before
+releasing the connection/profile lease. Scan/hash allocation bounds remain planned.
 
 Keep category SQL and immediate authoritative category/assignment caches ordered
 through the existing worker/coordinator. Retain each admitted category receipt
@@ -328,8 +354,8 @@ preserving live partial state, uncheckpointed progress and independent complete
 copies. Caller abort loses the response only; the admitted unit completes.
 Reap completed handles; atomically seal admission and join outside the registry
 lock. Retain panic and known-committed publication failures for honest drain
-reporting. Drain before profile-lease release and coordinate completion before
-the final Kad checkpoint. Saturation is transient busy; internal required work
+reporting. Drain in the post-final-Kad sequence above before profile-lease
+release. Saturation is transient busy; internal required work
 must retry without losing its intent. This is planned tracking of existing
 blocking calls, not a second persistence service or new test framework.
 

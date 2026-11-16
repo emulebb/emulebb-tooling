@@ -287,9 +287,15 @@ use typed columns and explicit constraints. It must not store an opaque
 - Coalesce dirty changes into periodic checkpoints every 15 minutes. A clean
   interval does no SQLite write. Explicit import and graceful shutdown are
   immediate checkpoints outside that periodic cadence.
-- Capture and admit the final snapshot before cancellation or the network
-  teardown timeout can discard its source runtime. Then complete accepted
-  persistence/finalization and drain/join before connection/profile-lease release.
+- After shutdown begins, seal reload/regular admission and stop/join the monitor,
+  then call the final DHT checkpoint directly before Kad cancellation or the
+  bounded network-cleanup timeout can discard its source runtime. Local
+  eligibility finalizers do not precede this DHT-only capture. Outside the
+  network timeout, follow the [#155 terminal sequence](RUST-REF-016.md#planned-category-publication-continuation-phase-2a):
+  owner drain resolves accepted root tokens, then cooperative reload join,
+  local-registry seal/drain, root-SQL drain and eligibility-read drain, attempting
+  every stage before connection/profile-lease release. This latest sequence is
+  draft/uncompiled, not a new runtime qualification.
   Never rely on a snapshot request made after teardown has already canceled Kad.
 - A successful explicit `nodes.dat` import commits its normalized logical
   contacts immediately, even if Kad is stopped. If Kad is running, merge the
@@ -330,7 +336,7 @@ checkpoint aid, not a competing routing authority.
 Required proof includes no-write clean intervals and irrelevant-key changes,
 relevant learned-key/binding changes, route membership changes, mutation during
 capture, delayed old-runtime completion and revision conflicts. Preserve final
-snapshot admission before cancellation/teardown and final drain before lease
+snapshot admission before Kad cancellation/teardown and final drain before lease
 release. These are acceptance requirements, not current-runtime claims.
 
 ### Import and merge rules
