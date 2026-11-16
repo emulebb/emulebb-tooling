@@ -55,6 +55,20 @@ than blocked OS I/O; actual held-I/O, projection/result lifetimes and the remain
 storage obligations below are still unqualified. Core/REST and full application
 readiness do not follow from this test pass.
 
+Round 23 closes that mutation publication gap and passes **1,383 engine tests**
+with zero failures, ignored tests or warnings (44.61 seconds). Local copies,
+verified internal payloads and partial pieces now share coherent publication
+across path mutations, finalizers, atomic ingest and category replacement.
+The existing registry keeps four units/eight MiB and three filesystem-eligible
+units/two MiB; phase transitions drop large buffers and guards before waiting,
+and actual lease release wakes capacity waiters independently of task joining.
+Payload-result charges follow consumer ownership. The parent verified all 107
+pending engine hashes against `reports/download-job-ed2k-behavior-round-23`
+(`sources.json`, `rust-unit.log`). Targeted independent phase/lease review is
+pending before the component commit. Actual blocked-OS-I/O cancellation,
+broader diagnostic-result and resident lifetimes, complete catalog accounting,
+Core/REST integration and combined 100k qualification remain unfinished.
+
 Repair catalog callers through bounded keyset pages into the existing indexed
 projection, preserving publication fences and partial/hint precedence. Do not
 raise the provider cap or rebuild full intermediate vectors. Byte-capped pages
