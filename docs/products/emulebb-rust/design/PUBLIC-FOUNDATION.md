@@ -349,6 +349,22 @@ for recovery/retries. Completed files stay put. Preserve the existing `_01`,
 `_02`, ... collision rule and report the actual delivered path; never overwrite an
 unrelated collision. Preserve the existing durable delivery recovery boundaries.
 
+Delivery verification is distinct from destructive ownership. A stable freshly
+hash-matching recorded output can remain Delivered + Unowned with a refreshed
+verification fingerprint conditional on the same job/path. Bytes alone never
+grant deletion/overwrite authority. Materialization, promotion, retry and
+restart must agree; pending storage cleanup must not recopy successful delivery.
+Publish committed retirement/journal state coherently so cleanup remains
+retryable in the same process and after reopen.
+
+Use common capability/authority-preserving cleanup through exact job storage
+and journals when atomic directory rename is unsupported. Preserve foreign
+replacements, markers, symlinks and collisions; if safety cannot be proved,
+leave cleanup pending without unchecked rename or recursive deletion. This
+delivery/job-storage repair belongs to phases 2b/2c; the owning
+[#155 analysis and acceptance](../active/items/RUST-REF-016.md#allocated-deliveryjob-storage-repair-phases-2b2c)
+records its evidence and unimplemented status.
+
 Removal requests explicitly state whether data is deleted. Keep-data removal is
 supported only for completed delivered jobs. An incomplete job can remain
 stopped or be removed with partial data; do not create orphan-partial ownership
@@ -554,8 +570,8 @@ actual proof; none is claimed by this design.
 | 1. Contract baseline | Reconcile policy and this specification, typed settings catalog, exact route/schema inventories, error/lifecycle contracts and query/index designs. Refresh source ownership, fixtures and baseline measurements. |
 | 2. Persistence/domain services | Complete the shared-owner/Kad prerequisites, then the vertical cuts 2a-2d below. Keep remaining statistics/search-claim work with its existing owners and replace unbounded startup/list/recovery paths. |
 | 2a. Categories | Immutable public name IDs, internal allocated SQL keys, nullable temp/destination paths and nullable name-based job assignment; deletion clears matching assignments. Cut affected REST/OpenAPI/UI/fixture consumers together. |
-| 2b. Durable job identity | Never-reused job IDs, distinct protocol hash, nullable known size, one nonterminal job per hash and retained terminal/history records. Make every child, delivery/recovery reference and cleanup authority refer to its actual job. Couple with 2c wherever separate commits would permit unsafe multiple attempts. |
-| 2c. Job storage and execution | Establish a job-specific piece/storage namespace, first-start fixed temp placement and fixed delivery-attempt destination before enabling multiple historical/re-download attempts. A hash-based old-attempt cleanup must never reach a new job's data. Include scheduling/restart/recovery and directly affected consumers. |
+| 2b. Durable job identity | Never-reused job IDs, distinct protocol hash, nullable known size, one nonterminal job per hash and retained terminal/history records. Make every child, delivery/recovery reference and cleanup authority refer to its actual job. Separate verified delivery from destructive ownership and publish retirement/journal state coherently. Couple with 2c wherever separate commits would permit unsafe multiple attempts. |
+| 2c. Job storage and execution | Establish a job-specific piece/storage namespace, first-start fixed temp placement and fixed delivery-attempt destination before enabling multiple historical/re-download attempts. A hash-based old-attempt cleanup must never reach a new job's data. Preserve freshly verified matching delivery across fingerprint drift without duplicates and provide safe retryable cleanup when atomic directory rename is unsupported. Include scheduling/restart/recovery and directly affected consumers. |
 | 2d. Library policy and indexed reads | Durable hash sharing/upload policy, immutable tags, locations and verification caches plus incremental indexed library queries. Cover all accepted filters/sorts, stable keyset traversal and 100k behavior with the relevant live statistics owner. A full projection rebuild or output-only limit is not bounded-read evidence. |
 | 3. Settings/CLI/provisioning | Default/custom resolution, revisions and application status, offline get/set/reset, fresh-only Docker setup and canonical harness profile preparation. |
 | 4. REST/OpenAPI/WebUI | Routes, DTOs, validators, OpenAPI and consumers together; bounded action/query paths, substring/statistic sorting, shared change tracking and paginated active-view UI. |

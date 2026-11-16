@@ -49,9 +49,24 @@ from another connection; cancellation during preparation/after commit and drain;
 old/new copies, live partial state and short root-epoch retry without rehashing.
 Delivery/journals remain outside this owned-ingest proof. Pinned Symphonia
 options do not establish parser allocation bounds, and broader scan/resource
-qualification remains open. Windows staged build and REST campaign are pending;
-the earlier category runtime bundle does not qualify this later source. Neither
+qualification remains open. The native Windows/host suite above is not
+Android-device qualification. Neither
 phase 2a nor round one is complete.
+
+The subsequent regular Windows runtime build passed in 188 seconds with zero
+warnings; receipt:
+`EMULEBB_WORKSPACE_OUTPUT_ROOT/logs/builds/20261116T094710Z-build-clients/build-result.json`.
+The registered campaign passed for Rust `be881243`, tests `c1ad2912`, tooling
+`611d756a` and Builder `e93fca5`; report:
+`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/rust-rest-openapi-ci/20261116T095105Z/report.json`.
+It exercised 83/105 main operations: 40 successes, 43 expected errors, 22 explicit
+unsafe skips and a passing SSE check. The six-route friend phase passed. Kad
+proved actual SQL HTTP 500 failure with unchanged state, retry, reopen and same-profile restart
+with stable identity/contacts. The category phase passed, including unique-
+complete-hash withdrawal, independent-copy preservation and unchanged fixture
+bytes. Overall teardown was graceful. This qualifies this scoped Windows
+runtime bundle, not all 105 operations, Android device behavior, delivery repair,
+combined scale or the entire foundation.
 
 ## Prepared-ingest provider checkpoint (2026-11-16)
 
@@ -590,6 +605,54 @@ Record focused evidence and exact source revisions in this item. Two inspection
 rounds and applicable integration gates remain required. Runtime Kad checkpoint
 wiring must wait for this owner; no separate temporary worker is authorized.
 
+
+## Allocated delivery/job-storage repair (phases 2b/2c)
+
+The operator's unchanged `2026-11-15-android-duplicate-download-delivery-bug.md`
+report is retained in the requested operator audit folder. It records repeated
+completed copies and unsupported atomic directory cleanup on Android; the
+installed build differs from reviewed source `be881243`. Fingerprint drift's
+device cause remains unknown. File close, playback and media-indexer activity
+are not established causes. This repair is authorized within the common
+job-storage/delivery/journal phases and is **not fixed** by the ingest checkpoint.
+No device installation, profile reset/migration or Android-specific bypass is
+authorized by this allocation.
+
+Source inspection at `be881243` confirms `deliver.rs` finds matching bytes but
+resets an owned delivery to Pending and recopies after fingerprint drift;
+`metadata.rs::register_delivered_local_content` separately refuses the prior
+fingerprint. Separate verification from destructive ownership: a stable freshly
+hash-matching recorded output may remain Delivered + Unowned, refreshing its
+verification fingerprint conditionally on the same job/path. Matching bytes
+never grant delete/overwrite authority. Materialization, promotion, retry and
+restart must change coherently; pending cleanup must not recopy a successful
+delivery. Deliberately revise the existing byte-identical replacement regression
+to require verified unowned delivery without duplicate copying or destructive
+authority.
+
+`fs_durability` classifies `EINVAL`, `ENOSYS` and `EOPNOTSUPP` as
+`AtomicMoveUnsupported`; current internal cleanup cannot progress without
+directory rename.
+Provide common capability/authority-preserving cleanup through exact job storage
+and existing journals, preserving foreign replacements, markers, symlinks and
+collisions. If safety cannot be proved, retain pending cleanup; never substitute
+an unchecked rename or recursive deletion.
+
+`metadata.rs::remove_completed_transfer_row` commits retirement/journal state
+but changes only a local manifest clone before cleanup. Failed cleanup can leave
+the cache stale, making a later refusal to enter retirement a plausible cause
+of the observed error; deterministic reproduction is still required. Publish
+committed retirement coherently and retain same-process retry ownership through
+pending cleanup and reopen, without triggering delivery again.
+
+Extend existing Rust delivery/retirement owners and the Python platform harness
+for baseline/verification diagnostics distinguishing device/inode, size, mtime
+and ctime at capture/verification; metadata drift, byte-identical replacement
+and actual mutation; unsupported rename; same-process retry, reopen and crash
+cuts; job/path compare-and-set races; and genuine foreign ownership, markers,
+symlinks and collision protection. Distinguish observed filesystem drift from an inferred
+device trigger. This allocation preserves the fresh-profile/no-shim scope and
+adds no device/runtime qualification claim.
 
 ## Summary
 
