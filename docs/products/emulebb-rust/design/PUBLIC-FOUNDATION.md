@@ -291,7 +291,11 @@ is not runtime automatic expansion. The existing **8 MiB transient-work budget**
 remains separate, under the same owner. Resident backing remains charged until
 its last reader releases it, including after eviction. These are internal
 subsystem caps, not new saved settings, a second worker pool or a total daemon
-RAM limit. The budget decision is not evidence that hydration is qualified.
+RAM limit. Maximum-geometry retained-backing validation selected a fixed
+**128 MiB** cap: eighteen entries plus four admitted replacement credits require
+120,696,504 bytes on the measured Windows target. This is component capacity
+evidence, not end-to-end concurrency, total RSS or hydration acceptance; the
+owning [runtime item](../active/items/RUST-REF-016.md) records its limits.
 
 An active duplicate add returns its existing job unchanged, including category,
 destination and intent. Size is optional; conflicting known sizes remain errors.
