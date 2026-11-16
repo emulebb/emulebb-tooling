@@ -70,8 +70,10 @@ with one shared native-path allocation whose existing-capacity lease follows
 reservation, scheduled queue, consumer and requeue through acknowledgment.
 The maximum-path held-capacity regression passes; the complete gate passes
 **1,384 tests**, zero failures, ignored tests or warnings. Evidence and 107-source
-receipt: `reports/download-job-ed2k-behavior-round-24`. Final reinspection is
-limited to that repair. Actual blocked-OS-I/O cancellation,
+receipt: `reports/download-job-ed2k-behavior-round-24`. Final reinspection accepted
+that repair and its three matching source hashes. Rust `c23896ee` commits the
+107-source coupled job-native engine cut; normal commit/push hooks passed and
+the feature checkpoint is pushed. Actual blocked-OS-I/O cancellation,
 broader diagnostic-result and resident lifetimes, complete catalog accounting,
 Core/REST integration and combined 100k qualification remain unfinished.
 
