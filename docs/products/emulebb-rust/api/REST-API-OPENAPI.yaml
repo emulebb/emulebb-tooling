@@ -2213,10 +2213,28 @@ paths:
           $ref: "#/components/responses/MethodNotAllowedResponse"
         "409":
           $ref: "#/components/responses/ErrorResponse"
+        "413":
+          $ref: "#/components/responses/ErrorResponse"
+          description: >-
+            PERSISTENCE_TOO_LARGE reports work exceeding the bounded
+            persistence payload admission limit.
         "500":
           $ref: "#/components/responses/ErrorResponse"
+          description: >-
+            PERSISTENCE_FAILED reports a storage failure. Other documented
+            import or runtime failures retain their current error codes.
         "503":
           $ref: "#/components/responses/ErrorResponse"
+          description: >-
+            PERSISTENCE_BUSY or PERSISTENCE_CLOSING refuses the corresponding
+            persistence admission. PERSISTENCE_UNAVAILABLE reports worker or
+            uncertain-commit failure; do not assume the entire request left
+            state unchanged. PERSISTENCE_COMMITTED requires
+            details.committed=true for a recovered durable/publication outcome.
+            The server record may already be saved before an optional
+            connect=true action reaches this persistence boundary. Connection
+            failure does not roll back server creation; absence of a committed
+            marker does not prove unchanged state. Re-read before retrying.
         default:
           $ref: "#/components/responses/ErrorResponse"
   /servers/operations/connect:
@@ -2237,10 +2255,25 @@ paths:
           $ref: "#/components/responses/MethodNotAllowedResponse"
         "409":
           $ref: "#/components/responses/ErrorResponse"
+        "413":
+          $ref: "#/components/responses/ErrorResponse"
+          description: >-
+            PERSISTENCE_TOO_LARGE reports work exceeding the bounded
+            persistence payload admission limit.
         "500":
           $ref: "#/components/responses/ErrorResponse"
+          description: >-
+            PERSISTENCE_FAILED reports a storage failure. Other documented
+            import or runtime failures retain their current error codes.
         "503":
           $ref: "#/components/responses/ErrorResponse"
+          description: >-
+            PERSISTENCE_BUSY or PERSISTENCE_CLOSING refuses the corresponding
+            persistence admission. PERSISTENCE_UNAVAILABLE reports worker or
+            uncertain-commit failure; do not assume the entire request left
+            state unchanged. PERSISTENCE_COMMITTED requires
+            details.committed=true for a recovered durable/publication outcome.
+            Re-read current state before retrying an uncertain outcome.
         default:
           $ref: "#/components/responses/ErrorResponse"
   /servers/operations/disconnect:
@@ -2395,10 +2428,25 @@ paths:
           $ref: "#/components/responses/MethodNotAllowedResponse"
         "409":
           $ref: "#/components/responses/ErrorResponse"
+        "413":
+          $ref: "#/components/responses/ErrorResponse"
+          description: >-
+            PERSISTENCE_TOO_LARGE reports work exceeding the bounded
+            persistence payload admission limit.
         "500":
           $ref: "#/components/responses/ErrorResponse"
+          description: >-
+            PERSISTENCE_FAILED reports a storage failure. Other documented
+            import or runtime failures retain their current error codes.
         "503":
           $ref: "#/components/responses/ErrorResponse"
+          description: >-
+            PERSISTENCE_BUSY or PERSISTENCE_CLOSING refuses the corresponding
+            persistence admission. PERSISTENCE_UNAVAILABLE reports worker or
+            uncertain-commit failure; do not assume the entire request left
+            state unchanged. PERSISTENCE_COMMITTED requires
+            details.committed=true for a recovered durable/publication outcome.
+            Re-read current state before retrying an uncertain outcome.
         default:
           $ref: "#/components/responses/ErrorResponse"
   /kad:
@@ -2450,12 +2498,16 @@ paths:
           $ref: "#/components/responses/ErrorResponse"
         "503":
           $ref: "#/components/responses/ErrorResponse"
+          description: >-
+            PERSISTENCE_UNAVAILABLE: the owner cannot establish a coherent
+            routing view after an uncertain commit. Do not assume the durable
+            state is unchanged or return a stale node list.
         default:
           $ref: "#/components/responses/ErrorResponse"
   /kad/operations/import-nodes-url:
     post:
       tags: [Kad]
-      summary: Import or update nodes.dat from a URL.
+      summary: Validate URL-provided Kad contacts and import them into SQLite.
       operationId: createKadNodesUrlImport
       requestBody:
         required: true
@@ -2476,10 +2528,25 @@ paths:
           $ref: "#/components/responses/MethodNotAllowedResponse"
         "409":
           $ref: "#/components/responses/ErrorResponse"
+        "413":
+          $ref: "#/components/responses/ErrorResponse"
+          description: >-
+            PERSISTENCE_TOO_LARGE reports work exceeding the bounded
+            persistence payload admission limit.
         "500":
           $ref: "#/components/responses/ErrorResponse"
+          description: >-
+            PERSISTENCE_FAILED reports a storage failure. Other documented
+            import or runtime failures retain their current error codes.
         "503":
           $ref: "#/components/responses/ErrorResponse"
+          description: >-
+            PERSISTENCE_BUSY or PERSISTENCE_CLOSING refuses the corresponding
+            persistence admission. PERSISTENCE_UNAVAILABLE reports worker or
+            uncertain-commit failure; do not assume the entire request left
+            state unchanged. PERSISTENCE_COMMITTED requires
+            details.committed=true for a recovered durable/publication outcome.
+            Re-read current state before retrying an uncertain outcome.
         default:
           $ref: "#/components/responses/ErrorResponse"
   /kad/operations/start:
@@ -2524,10 +2591,23 @@ paths:
           $ref: "#/components/responses/MethodNotAllowedResponse"
         "409":
           $ref: "#/components/responses/ErrorResponse"
+        "413":
+          $ref: "#/components/responses/ErrorResponse"
+          description: >-
+            PERSISTENCE_TOO_LARGE reports work exceeding the bounded
+            persistence payload admission limit.
         "500":
           $ref: "#/components/responses/ErrorResponse"
+          description: PERSISTENCE_FAILED reports checkpoint storage failure.
         "503":
           $ref: "#/components/responses/ErrorResponse"
+          description: >-
+            PERSISTENCE_BUSY or PERSISTENCE_CLOSING refuses checkpoint
+            admission. PERSISTENCE_UNAVAILABLE reports worker or uncertain-commit
+            failure; do not assume the entire request left state unchanged.
+            PERSISTENCE_COMMITTED requires details.committed=true for a
+            recovered durable/publication outcome. Re-read current state before
+            retrying an uncertain outcome.
         default:
           $ref: "#/components/responses/ErrorResponse"
   /kad/operations/bootstrap:

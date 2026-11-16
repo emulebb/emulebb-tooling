@@ -99,11 +99,14 @@ setting through the console. Resolve an ambiguous P2P bind before starting
 transfers. VPN use is optional and does not itself
 establish native leak-safety proof.
 
-Empty enabled discovery lists may trigger trusted bootstrap downloads. Bootstrap
-failure leaves the console available for manual recovery. The policy target is
-read-only `server.met`/`nodes.dat` import, but removal of remaining `nodes.dat`
-write-back is still tracked by [RUST-FEAT-062](../active/items/RUST-FEAT-062.md).
-Do not treat bootstrap file formats as a second mutable-settings authority.
+Fresh discovery initialization is tracked in SQLite independently of list
+contents. Failed initialization leaves the console available and retries at the
+next launch. An explicitly initialized empty list stays empty; Kad does not
+silently use hidden fallback seeds, while explicit operator bootstrap endpoints
+remain available. Validated `server.met`/`nodes.dat` input records are imported
+into SQLite; those source files are not written as profile state. Runtime
+persistence qualification remains tracked by
+[RUST-FEAT-062](../active/items/RUST-FEAT-062.md).
 
 ## Search, Download And Share
 

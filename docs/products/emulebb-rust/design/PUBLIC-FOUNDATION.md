@@ -426,6 +426,11 @@ The planned package-private initializer uses these boundaries:
 2. Create private fresh staging on the same filesystem as the final profile.
    Run the canonical offline per-key settings service under one profile lease;
    do not spawn competing writers, bypass validation or add package-specific SQL.
+   Under that lease the private helper inspects typed default/custom markers and
+   applies a packaged path only to a default-marked leaf through the same setter.
+   Preserve every custom leaf, including operator edits inside private staging.
+   Resume can skip already committed steps without comparing previous values,
+   guessing defaults or changing public CLI get's resolved-value-only output.
    Interrupted setup automatically resumes from its durable owned state. Resolve
    persisted profile-relative data against the final profile namespace, never
    serialize staging absolute paths into product settings or root metadata.

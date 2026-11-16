@@ -18,6 +18,33 @@ source: Operator-directed configuration and persistence architecture review
 
 # RUST-CI-044 - Review SQLite schema efficiency and evolution boundaries
 
+## Coupled local-suite evidence (2026-11-16)
+
+The [#233 local-suite checkpoint](RUST-FEAT-062.md#runtime-coupling-local-suite-checkpoint-2026-11-16)
+records green final uncommitted working material: full supported Rust-unit suite,
+eight existing Python owners and WebUI unit/browser/typecheck/build checks,
+after retained fixture/lifetime and shutdown-failure repairs. This does not
+replace exact clean committed-source staging and the still-unrun registered
+Kad fault/restart campaign. The prepared 100k library fixture remains preparation,
+not runtime or combined 100k-job qualification. The canonical settings/CLI and
+other public-foundation pieces remain their existing implementation scope.
+
+## Schema and fixture preparation checkpoint (2026-11-15)
+
+The [#233 schema 72 checkpoint](RUST-FEAT-062.md#schema-72-and-typed-owner-checkpoint-2026-11-15)
+records current fresh schema 72 at Rust `ca5e6993`, typed owner byte leases,
+durable generated Kad identity and focused storage/Core/Python proof. Runtime
+DHT binding and persistence are in progress; dated schema 71 evidence is retained
+without claiming it qualifies schema 72.
+
+The existing shared-library harness fixture is **prepared, not runtime-qualified**:
+100,000 files, 10,485,760,000 bytes, 1,000 long paths and 16 Unicode entries, with
+zero missing/unexpected entries. Its case-alias cohort was skipped on native
+NTFS. Source admission evidence is retained at
+`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/workstreams/public-foundation-round-1/shared-library-io-admission/348c9e65554443fa84856cf30d097645/sources.json`.
+That receipt records prepare provenance, not daemon query/ingest performance.
+No combined 100,000-job profile, full platform matrix or 365-day claim follows.
+
 ## Registered current-contract checkpoint (2026-11-15)
 
 The [#155 registered conformance/peer checkpoint](RUST-REF-016.md#registered-conformance-and-local-peer-checkpoint-2026-11-15)

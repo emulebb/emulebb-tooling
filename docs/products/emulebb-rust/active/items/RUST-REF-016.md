@@ -18,6 +18,24 @@ source: 2026-10-23 Rust async and portability audit
 
 # RUST-REF-016 - Move blocking SQLite work behind bounded async persistence
 
+## Typed Kad owner extension checkpoint (2026-11-15)
+
+The [#233 schema 72 checkpoint](RUST-FEAT-062.md#schema-72-and-typed-owner-checkpoint-2026-11-15)
+records `b08709a1` typed load/initialize byte leases and `ca5e6993` durable generated
+Kad identity, with focused metadata/Core/Python proof. These extend the existing
+owner rather than introduce a new lane. Production DHT binding and the full
+runtime checkpoint lifecycle remain in progress. The registered local peer proof
+below remains attributed to its exact older staged source `b509524f`; no later
+schema/runtime qualification or global all-SQL conversion is implied.
+
+The [Kad local-suite checkpoint](RUST-FEAT-062.md#runtime-coupling-local-suite-checkpoint-2026-11-16)
+records final green uncommitted-material Rust/Python/WebUI suites and the
+resource, startup-handoff and daemon SQL-failure cleanup/drain repairs. Earlier
+failed/interrupted rounds remain retained. This is local-suite evidence, not
+exact clean committed/staged-runtime acceptance: the new real Kad fault/restart
+phase is still pending. Keep that gate and do not claim global async conversion,
+measured RSS, sustained upload progress or full-scope delivery from these counts.
+
 ## Registered conformance and local peer checkpoint (2026-11-15)
 
 The first registered campaign at Rust `45ca468b` **failed**. Its retained report
@@ -122,8 +140,13 @@ variable-length fields, bounded replies and temporary conversion allocations.
 Use checked sizing arithmetic and a conservative documented cost model; do not
 admit a zero-cost command that later allocates an unbounded result. Converted
 reads need bounded query/results or an explicit pre-allocation size decision.
-Do not silently truncate data. Document allocator overhead separately instead
-of claiming that total process RSS equals the payload quota.
+Do not silently truncate data. The 8 MiB limit bounds retained product-payload
+capacity, including the charged owner-held buffers/conversions; it is not a
+measured RSS bound. Transport/TLS memory, rejected oversized transport frames,
+SQLite internals, allocator bookkeeping and thread stacks are excluded. Keep
+those costs explicit and measure them separately; do not report total process
+memory as bounded to 8 MiB. Retain quota through the actual worker allocation
+peak, not only through request handoff.
 
 Retain the operation and byte permits through required SQL completion, outcome
 handling and cache publication, including required finalizers. A queue slot is

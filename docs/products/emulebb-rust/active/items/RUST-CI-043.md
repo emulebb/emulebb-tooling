@@ -18,6 +18,17 @@ source: Operator-directed configuration and persistence architecture review
 
 # RUST-CI-043 - Review configuration authority and REST contract coherence
 
+## Coupled local-suite evidence (2026-11-16)
+
+The [#233 local-suite checkpoint](RUST-FEAT-062.md#runtime-coupling-local-suite-checkpoint-2026-11-16)
+records green final uncommitted working material: full supported Rust-unit suite,
+eight existing Python owners and WebUI unit/browser/typecheck/build checks,
+after retained fixture/lifetime and shutdown-failure repairs. This does not
+replace exact clean committed-source staging and the still-unrun registered
+Kad fault/restart campaign. The prepared 100k library fixture remains preparation,
+not runtime or combined 100k-job qualification. The canonical settings/CLI and
+other public-foundation pieces remain their existing implementation scope.
+
 ## Accepted automatic Docker setup completion
 
 The operator requires automatic recovery/completion after interrupted fresh
@@ -25,7 +36,10 @@ container setup. The [master deployment contract](../../design/PUBLIC-FOUNDATION
 owns private same-filesystem staging, a durable ownership journal before stage
 creation, canonical per-key service under one lease, parent installation lock,
 closed/synced database state, strict atomic no-replace publication and parent
-sync. An existing final profile is never replayed or overwritten, including after
+sync. The private helper reads typed markers internally and sets packaged paths
+only for default-marked leaves through that same service; custom values,
+including staged operator edits, are preserved. No previous-default comparison,
+value guessing, new public flag or second SQL authority is introduced. An existing final profile is never replayed or overwritten, including after
 an interrupted publication. Unsupported atomic publication fails visibly and
 retains owned work for automatic retry; no unsafe move fallback qualifies.
 
