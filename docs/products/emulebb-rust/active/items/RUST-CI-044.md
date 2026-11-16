@@ -60,6 +60,29 @@ neither failed jobs nor queued/history rows require retained Core workers or
 full manifests. These additions are allocated, not implemented by the provider
 checkpoints below.
 
+### Removed-job cleanup provider checkpoint (2026-11-16)
+
+Rust `3ff50afa` advances the fresh schema to 78. Compact removed-job snapshots
+and finalization retain the current execution generation, retirement state and
+independent journal/exclusion fences. Tombstone advancement returns its actual
+committed snapshot, and exact prepared/moved settlement covers successful,
+missing and safely preserved foreign objects. Removed-job paging and exclusion
+origin checks have dedicated indexes; the 100,000-row regression proves indexed
+seeks and correct sparse keyset results without a temporary sort or scan.
+
+The supported Metadata gate passed **172 unit tests and 3 ownership tests**,
+zero warnings, and frozen independent reinspection accepted the provider. The
+six-source hash manifest and full log are retained under
+`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/download-job-cleanup-metadata-round-1`
+(`sources.json`, `rust-unit.log`). This is query/provider proof, not a combined
+100k-library/job runtime measurement or slow-filesystem cancellation proof.
+
+The complete sixth ED2K diagnostic compiled the library without warnings but
+still reported 578 unit-test compiler diagnostics; no engine test executed.
+Log: `reports/download-job-ed2k-diagnostic-round-6/rust-unit.log`. The new retained
+cleanup orchestration and delivery fixtures remain unqualified work in progress;
+the provider checkpoint does not establish full application build readiness.
+
 ### Typed mutation and execution-stream provider checkpoint (2026-11-16)
 
 Rust `5895b8c6` advances the fresh schema to 77 and supplies captured-token
