@@ -60,6 +60,31 @@ neither failed jobs nor queued/history rows require retained Core workers or
 full manifests. These additions are allocated, not implemented by the provider
 checkpoints below.
 
+### Typed mutation and execution-stream provider checkpoint (2026-11-16)
+
+Rust `5895b8c6` advances the fresh schema to 77 and supplies captured-token
+progress, peer/name observation, MD4 and AICH deltas without replaying full
+manifests. Chosen job names change only through explicit mutation; source
+observations do not rename a job. Delivery phase advancement returns its actual
+committed journal snapshot for subsequent fenced filesystem work.
+
+Selected execution streaming excludes source/name history, checks acquired
+hashset geometry and contiguous ordinals, and validates canonical verified
+piece ranges. Activation and streaming share the existing protocol count rules,
+including small files and exact MD4 part multiples. A late stream failure never
+returns the caller's partially built private representation.
+
+The supported Metadata gate passed **170 unit tests and 3 ownership tests**,
+zero warnings, after the chosen-name fixture and hash-stream repairs.
+Independent review accepted the revised provider. The parent verified all 14
+source hashes against
+`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/download-job-typed-metadata-round-2`
+(`rust-unit.log`, `sources.json`); the earlier failing gate remains under
+`download-job-typed-metadata-round-1`. This proves the provider only: current
+ED2K/Core/REST integration remains incomplete, read-result/resident lifetime
+accounting is still unqualified, and no Android or combined scale proof is
+claimed.
+
 ### Initial runtime compiler feedback (2026-11-16)
 
 The schema-77/runtime work in progress is not qualified. The first supported
