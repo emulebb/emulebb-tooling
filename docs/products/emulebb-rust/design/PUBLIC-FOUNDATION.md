@@ -258,6 +258,15 @@ removal. No download-priority control, including category defaults.
 
 Use only start/stop. Stop preserves the job and partial data; sharing remains
 independent. Preserve intent across restart and resume eligible work gradually.
+An unfinished download's storage failure requires explicit `start`, including
+full-disk and unavailable-temp-volume failures. Persist a bounded failure code,
+message and failure timestamp, expose the reason in detail, and retain the
+failed condition across restart. An admitted explicit start clears that failure
+for a new fenced attempt; refusal before admission changes nothing. Normal
+network/source retries remain automatic and are not whole-job storage failures.
+Internal cleanup after completion or removal retries automatically through its
+durable journal. Cleanup failure never restarts downloading, recopies a completed
+output or regresses historical completion.
 New jobs start by default with an explicit stopped-on-add option. Bound active
 work using `maxConcurrentDownloads` with a built-in bounded exploration buffer.
 The accepted engineering default is 8 active jobs with a built-in exploration
