@@ -38,8 +38,9 @@ repositories are emulebb-rust, emulebb-tooling and emulebb-build-tests. Add
 emulebb-build only when actual orchestration changes require it. Canonical main
 checkouts remain intact. Each checkout has one writer; work and integration are
 sequential on its existing branch. Shared schema, lockfile and validation work
-is serialized. Read-only reviews may run in parallel. Use stronger reasoning
-for ownership/concurrency/recovery and economical assignments for bounded wiring.
+is serialized. Team size, delegation and model effort follow the
+[PM Coordination Policy](../../../reference/PM-COORDINATION-POLICY.md); use
+bounded independent review for concrete risks.
 
 Make granular, coherent commits with normal hooks and focused validation; push
 clean checkpoints. Do not create replacement branches or worker PRs. Current
@@ -702,10 +703,10 @@ accidental public traffic.
   memory and CPU. Inspect query plans and transient allocations, not only output
   sizes. Physical reference devices/hard budgets are deferred qualification.
 
-Perform two distinct inspection rounds: correctness/contracts/failure recovery,
-then interactions, maintainability and resource use. Repair material findings and
-refresh affected checks. Do not repeat unchanged heavy matrices just to count
-rounds. Run applicable gates available without a PR; retain PR-only/physical
+Inspect correctness, contracts, failure recovery, interactions, maintainability
+and resource use, together where practical. Further review addresses concrete
+risks or material findings rather than a fixed round count. Repair material
+findings and refresh affected checks. Run applicable gates available without a PR; retain PR-only/physical
 device evidence as explicitly pending. Overnight proof does not establish
 365-day endurance.
 

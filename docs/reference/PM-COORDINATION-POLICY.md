@@ -8,9 +8,12 @@ Refresh it after a context reset before allocating or reprioritizing work.
 
 Act as the accountable PM, engineering director and product coordinator. Turn
 the operator's goals into prioritized, independently reviewable work; delegate
-implementation, resolve dependencies and carry delivery through qualification,
-integration and cleanup. Keep one parent coordinator and a clear owner for every
-active worker and validation run.
+implementation when useful, resolve dependencies and carry delivery through
+qualification, integration and cleanup. Optimize completed outcomes and total
+model calls, tokens and coordination cost while preserving correctness and
+delivery quality. Keep one parent coordinator and one accountable owner per
+implementation, investigation and validation run. These operating rules apply
+to future work independently of task size or remaining quota.
 
 The [Product Direction](../active/PRODUCT-DIRECTION.md) and
 [Rust Release Scope](../products/emulebb-rust/RELEASE-SCOPE.md) own product scope.
@@ -25,18 +28,20 @@ merge and publication policies.
 
 For the accepted emulebb-rust [public-foundation round one](../products/emulebb-rust/design/PUBLIC-FOUNDATION.md),
 the operator has authorized implementation and the following scoped mandate
-supersedes the normal parallel-branch and PR/merge routine below: one persistent
+supersedes the normal PR/merge routine below: one persistent
 `feature/public-foundation-round-1` branch per involved repo, sequential writes
 and granular commits, canonical mains intact, existing Python harness reuse,
 and a tested pushed checkpoint. No draft PR, PR, merge or publication until the
-operator returns and reviews. The parent may use parallel read-only reviews;
+operator returns and reviews. Use bounded independent reviews for concrete risks;
 shared schema and validation have one coordinated owner. Preserve active
 branches for iterative review. Scope changes return to the operator.
 
-1. Make parent-coordinated parallel branches and small integration batches the
-   normal delivery routine. Keep canonical mains stable while workers develop
-   independent outcomes. Carry each accepted batch through review, applicable
-   qualification, merge and cleanup; a pushed checkpoint is not delivery.
+1. Use the smallest effective team and coherent integration batches. Handle
+   straightforward work directly; delegate only substantial bounded work that
+   benefits from independent execution, specialized reasoning or parallel
+   progress. Keep canonical mains stable. Carry accepted work through its
+   authorized review, qualification and delivery boundary; a pushed checkpoint
+   is not merged delivery.
 2. Implement the approved change-aware CI acceleration before expanding the
    product implementation wave. Genuine docs-only changes get a short path;
    source, workflow, dependency, package-input and uncertain changes retain full
@@ -119,27 +124,49 @@ rewrite protected main or release tags. Follow the
 
 ## Coordination Mode
 
-- Parallel work is standard for independent outcomes. Assign one worker per
-  checkout, an owning issue, reserved files, acceptance criteria and a concrete
-  next deliverable. Use the managed
-  [workstream lifecycle](GUIDE-PARALLEL-WORKSTREAMS.md).
-- Bound work in progress by actual worker and validation capacity. With three
-  worker slots, prefer two implementation owners and one review/test owner;
-  a queued assignment is not an active agent. Reallocate a finished owner while
-  GitHub qualifies a frozen batch, without changing its tested sources.
-- Select each worker's model and reasoning effort for its actual task. Use
-  stronger coding or review models for consequential ownership, concurrency and
-  data-loss boundaries; use economical settings for bounded wiring, checks and
-  documentation. Retain active owners when a handoff would waste context or
-  disrupt validation. Model choice is a PM responsibility, not a blanket
-  highest-effort setting.
-- Manage tokens and outputs deliberately. Prefer focused task context over a
-  full-history fork when it supplies the needed contracts; assign reserved
-  files, acceptance criteria and a bounded next deliverable. Request concise
-  findings, commit IDs and evidence paths instead of transcripts. Batch targeted
-  reads, reuse valid proof and compact observers, and avoid repeated unchanged
-  tests or unnecessary output. Preserve independent review where the risk
-  warrants it.
+- Available worker slots are capacity, not a target. Keep no standing observers
+  or permanent reviewers and create no additional PM layer. Use the managed
+  [workstream lifecycle](GUIDE-PARALLEL-WORKSTREAMS.md) when delegation is useful.
+- Choose the least expensive capable model and lowest sufficient reasoning
+  effort: routine work defaults to low, ordinary implementation to medium.
+  Reserve stronger models and high effort for demonstrated complexity or
+  consequential correctness risks. Escalate when evidence warrants it rather
+  than spending repeated failed attempts on an inadequate choice.
+- Before each spawn, follow-up or extra review, decide internally what concrete
+  result it produces, why the authorized outcome needs it, whether it saves more
+  work than it introduces, and what ends it. Skip calls without clear answers;
+  do not print a justification checklist.
+- Give each worker one bounded contract: objective, relevant context, owned
+  files or question, acceptance criteria, necessary validation and completion
+  condition. Reserve shared files and contracts before parallel edits. Prefer
+  focused briefs to full-history inheritance and give enough context for
+  autonomous execution and scoped repairs.
+- Workers finish their assignments and required checks, reporting a blocker
+  when necessary or one concise completion report with findings, revisions,
+  evidence and unresolved risks. Finish completed workers promptly; reactivate
+  only for a concrete assignment that benefits from retained context.
+- Communicate with workers only when a blocker, dependency, contract, finding
+  or completed result changes their next action. Consolidate related direction;
+  omit acknowledgments, receipt confirmations, unchanged status requests and
+  repeated summaries. Keep useful user-facing progress updates.
+- Prefer completion notifications, supported blocking waits and required
+  persisted monitors. Never poll unchanged agents, CI or logs through repeated
+  model turns. When blocked, advance useful independent work or wait.
+- Reuse established contracts and valid evidence. The parent checks results
+  against acceptance criteria instead of repeating the worker's investigation.
+  Independent review has a bounded scope and addresses a concrete risk.
+- Search narrowly, batch independent reads and bound excerpts and tool output.
+  Avoid broad sweeps, raw log dumps, repeated unchanged policy reads and
+  forwarded transcripts. Retain concise decisions and evidence in existing
+  authorities so resumed work does not repeat discovery.
+- Run required validation at the appropriate scope; repeat only after relevant
+  input changes, failures or unresolved material concerns. Repair until
+  acceptance criteria are met, without unrelated improvements or activity-only
+  review cycles. Workers do not duplicate final integration checks.
+- At natural checkpoints, use available usage evidence to investigate
+  conspicuous repetition or runaway workers. Distinguish cached input, uncached
+  input, output and reasoning; raw token totals are not actual cost. Do not
+  create a recurring quota-monitoring conversation.
 - The parent owns priorities, dependency and merge order, shared Git operations,
   contract/schema/lockfile coordination and final acceptance. Workers own scoped
   implementation, granular commits, normal pushes, checks and review repairs.
@@ -155,13 +182,14 @@ rewrite protected main or release tags. Follow the
   Preferred development hours of roughly 06:00 to midnight guide the PM; longer
   local tests are permitted whenever needed. Overnight availability is capacity,
   not an automatic machine schedule.
-- Keep all worker and monitoring tasks under the existing parent. Do not create
-  another master task. An agent waiting on GitHub still needs an explicit owner
-  and next action; finish it once its assignment and monitoring handoff are done.
+- Stop when the authorized outcome is complete. Report required evidence and
+  material limitations; do not invent another audit or follow-up to occupy
+  agents. Continue a backlog only under an actual ongoing mandate. Keep all
+  worker and monitoring tasks under the existing parent and no second ledger.
 
 ## Batches And Integration
 
-1. Select two or three compatible contributions with one coherent acceptance
+1. Select only the contributions needed for one coherent acceptance
    outcome. Freeze their base revisions, file reservations, interface contracts,
    dependency order and validation plan before editing. Changes to shared
    schemas, lockfiles, storage ownership or shutdown contracts need one owner
@@ -187,8 +215,9 @@ rewrite protected main or release tags. Follow the
    selected sources. Merge providers before consumers and reconcile accepted
    pins before final consumer proof. Required hosted checks apply to the actual
    PR head and current base; batching never borrows passes or suppresses contexts.
-6. While GitHub runs platform matrices and analysis, advance the next reserved
-   independent work on other branches. Local heavy validation stays serialized;
+6. While GitHub runs platform matrices and analysis, advance reserved independent
+   work only when useful to the authorized outcome; otherwise wait through the
+   supported monitor. Local heavy validation stays serialized;
    fast checks use their supported independent scratch. The parent may schedule
    useful long local tests during the day. Overnight availability is capacity,
    not a test queue or automatic schedule.
@@ -222,7 +251,7 @@ public artifacts in every delivery claim.
 - Use existing owning items rather than umbrella duplicates. Select a small
   verifiable slice with an observable before/after result; avoid simultaneous
   broad refactors. Core Client outcomes lead optional distribution expansion.
-- Each proposed wave has three to six outcomes, explicit implementation versus
+- Each proposed wave has only the necessary outcomes, explicit implementation versus
   review scope, branch/file ownership, acceptance proof and merge order. Keep
   only capacity-backed assignments active; distinguish ready, dependent and
   held work. Update Project #3 when execution is accepted rather than treating
@@ -230,18 +259,17 @@ public artifacts in every delivery claim.
 
 ## Inspection And Refactoring Rounds
 
-Every nontrivial implementation batch receives at least two distinct inspection
-rounds before final acceptance. First inspect correctness, contracts and failure
-behavior. Then inspect the revised result for missed interactions, unnecessary
-complexity, duplicated ownership and maintainability; use an independent
-reviewer where capacity permits. The parent performs final acceptance against
-the actual integrated revision and applicable validation evidence.
+Inspect nontrivial changes for correctness, contracts, failure recovery,
+interactions, maintainability and resource use. These concerns may be covered in
+one inspection; no fixed number of rounds or independent reviewer is required
+merely because capacity is available. Use bounded independent review for a
+concrete risk or an explicit required gate. The parent accepts the actual
+integrated revision against its criteria and validation evidence.
 
-Turn concrete findings into bounded repairs or justified refactoring, then
-reinspect the changed result. Continue beyond two rounds while material findings
-remain. A round may legitimately require no code change; do not manufacture a
-refactor, new abstraction or unrelated cleanup merely to count activity. Keep
-current naming contracts intact, without retired-input handling or tests.
+Turn material findings into bounded repairs and recheck the affected result.
+Do not manufacture findings, refactors, abstractions or unrelated cleanup to
+count activity. Preserve product-specific required gates and current naming
+contracts, without retired-input handling or tests.
 
 Preserve frozen inputs during an active gate. Queue nonblocking improvements;
 for a blocking finding, coordinate cancellation and cleanup before editing.
@@ -253,11 +281,11 @@ progress ledger.
 
 ## Status And Closure
 
-Status updates identify the owner, branch/head or PR, local machine versus
-GitHub run, actual running or queued stage, observed results, next dependency and
-an evidence-based ETA range. Diagnose cancelled superseded runs, monitoring
-timeouts and product failures separately. Use the persisted observer and exact
-run selection described in the Delivery Policy.
+Status updates report material results, the next dependency and an evidence-based
+ETA when useful. Include exact revisions and local versus hosted evidence when
+needed to assess the claim, without repeating unchanged summaries. Distinguish
+superseded runs, monitoring timeouts and product failures. Use the persisted
+monitor and exact run selection described in the Delivery Policy.
 
 Before declaring consolidation complete, the parent verifies:
 

@@ -17,8 +17,9 @@ or pull requests, merges work, cleans delivery state, or creates release tags.
   integration branch stays on that branch. Topic branches use
   `feature/<topic>`, `fix/<topic>`, or `chore/<topic>`. Never use `stale/*` as
   an active target without an explicit historical-comparison request.
-- Parent-coordinated parallel workstreams are the normal delivery model for
-  independent outcomes. Keep exactly one active topic branch per repository
+- Choose direct execution or bounded delegation under the
+  [PM Coordination Policy](PM-COORDINATION-POLICY.md); parallelism is optional
+  capacity, not a delivery target. Keep exactly one active topic branch per repository
   per workstream and one assigned worker per checkout. Continue checkpoints on
   that branch until integration; do not create replacement or duplicate branches
   for the same outcome. Record any dependency on another unmerged workstream
