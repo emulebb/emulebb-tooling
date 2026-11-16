@@ -58,7 +58,7 @@ labels are not identity. This producer observation and its actual combined
 campaign remain unimplemented/unqualified by the harness consumer changes;
 add no product table, polling race or independent diagnostic actor for them.
 
-The current Core diagnostic remains red: 110 library and 180 test-target compiler
+The last measured Core diagnostic was red: 110 library and 180 test-target compiler
 errors (overlapping targets), with no Core tests executed. Evidence:
 `reports/download-job-core-consumer-round-1` and `round-3`. Rust `ed9bfb1d`
 provides retained descending-query/count reads and existing-owner logical
@@ -67,15 +67,28 @@ report carries actual decoded hello identity rather than discovery hints. Core
 emitter/callsite work is preserved separately until its full consumer compiles;
 the producer observation is not yet qualified by a cross-client run.
 
-Native creation still needs bounded availability admission before using the new
-persistence command. Existing `download_evidence` collects all copies and treats
-inaccessible storage as absent, while the shared-copy selector excludes offline
-roots. Replace that path with bounded retained probes that distinguish present,
-confirmed absent and unavailable/unknown; retain root/current-record admission
-fences and never infer absence from permissions, missing roots or exhausted work
-budgets. This prerequisite is not a compatibility wrapper or proof that the
-native creation contract currently works. Complete-source evidence is retained
-under `reports/download-job-core-consumer-round-3`.
+Rust `f6d73045` replaces availability's manifest/full-copy lookup with bounded
+indexed candidates including offline roots and retained delivered-output facts.
+Retained native probes distinguish present, confirmed leaf absence and unknown
+storage; permission failures, missing roots, changed fingerprints and exhausted
+work budgets require explicit choice. Active duplicates remain unchanged, while
+size/AICH conflicts retain independent authority. Creation checks the captured
+metadata/root cut inside its transaction. The operation shares one 64-seek,
+8-MiB cumulative decode budget across freshness passes and uses the existing
+2-MiB filesystem allowance; it does not introduce another worker pool.
+
+The parent completed the handoff by refreshing absence before admission and
+refusing capacity/content/metadata/SQLite writer contention instead of waiting
+with physical evidence. The normal SQLite busy timeout is restored on every
+exit. Windows native-path expectations and physical-only reappearance,
+capacity contention and database contention regressions are covered. Final
+managed gates passed **205 Metadata units plus 3 ownership tests and 1,406
+ED2K tests**, zero failures, ignored tests or warnings. All 15 frozen hashes
+matched. Evidence: `reports/download-job-availability-round-5` (logs and
+`source-freeze.json`); earlier failures remain in rounds 1 and 4. Normal hooks
+passed. This qualifies native engine admission, not the unconverted Core/REST
+creation contract or whole-runtime scale. The separate Core consumer edits
+remain preserved for the next slice.
 
 Accepted action batches always use 207 and concrete per-item outcomes in request
 order, even when every item fails. Admission must transfer all bounded work to
