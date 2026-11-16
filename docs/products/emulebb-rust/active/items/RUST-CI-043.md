@@ -111,6 +111,32 @@ passed **307 tests** under
 (`pytest.log`, `junit.xml`). MFC transfer calls remain unchanged. These are unit
 and caller-provider checks, not an executed native package or peer campaign.
 
+## Settings/CLI dependency order (phase 3)
+
+The master supplies the consequential product decisions for this cut. Begin
+with the existing `emulebb-settings` typed definitions and surface catalog:
+make the accepted 59 leaves/five groups the shared owner of defaults,
+validation, scalar parsing and application metadata. The Core-only 13-leaf
+catalog is partial groundwork, not another authority. Follow with the Metadata
+profile store's complete default/custom markers and one durable revision;
+resolve default-marked values at load without SQL writes. REST CAS and offline
+per-key writes share whole-candidate validation and one transaction.
+
+After that service exists, add offline `settings get/set/reset` directly under
+the existing profile lease, without loading the bootstrap TOML or starting the
+daemon. Extend the daemon's existing separate-process ownership tests for lease
+conflicts and stdout/path behavior. Switch runtime, REST and WebUI consumers
+together, preserving the existing tracked save/commit/publication owner and
+reporting saved/effective/application state. Then remove the runtime CLI
+overrides and update their actual callers and diagnostics directly.
+
+Docker provisioning follows the same service and default markers; its current
+service runner still supplies the runtime overrides. Reuse the existing
+package/runtime harness owners to test interruption recovery, preservation of
+edits, final-profile-relative paths and unsupported no-replace publication.
+Do not add package SQL, a second settings writer or a new runner. This ordering
+is a source-reviewed allocation, not implemented or executed qualification.
+
 ## Allocated category contract cut (phase 2a)
 
 The [master category contract](../../design/PUBLIC-FOUNDATION.md#downloads-and-categories)

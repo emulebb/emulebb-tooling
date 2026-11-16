@@ -60,6 +60,28 @@ neither failed jobs nor queued/history rows require retained Core workers or
 full manifests. These additions are allocated, not implemented by the provider
 checkpoints below.
 
+### Initial runtime compiler feedback (2026-11-16)
+
+The schema-77/runtime work in progress is not qualified. The first supported
+`emulebb-ed2k` package gate stopped at 14 Metadata integer-conversion errors.
+After replacing those reads with the existing checked SQLite conversion helper,
+the second gate compiled the Metadata library and reached ED2K: 64 library
+errors and 1,033 library-test errors, with two warnings in each target. Most
+diagnostics concern consumers and fixtures still using removed hash-keyed
+signatures; restore neither compatibility methods nor obsolete fixtures to
+make this transition green. The library and test counts overlap and are not
+distinct defect counts. No runtime test executed.
+
+The terminal failure logs are retained under
+`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/download-job-ed2k-diagnostic-round-1`
+and `download-job-ed2k-diagnostic-round-2` (`rust-unit.log`). Repair the actual
+job-token consumers and retained payload/delivery ownership before the next
+acceptance gate. Independent inspection also confirmed that current read
+results can outlive the registry's byte charge: selected hydration must enter
+the existing bounded resident cache directly, while diagnostic representations
+retain their accounting lease through consumption/serialization. The current
+implementation does not yet establish that lifetime bound.
+
 ### Callback and retirement provider checkpoint (2026-11-16)
 
 Rust `e4076237` advances the fresh schema to 76. Callback and ingest publication
