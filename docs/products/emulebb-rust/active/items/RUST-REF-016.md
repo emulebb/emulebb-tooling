@@ -794,26 +794,39 @@ setting, pool or actor is introduced; this does not bound total daemon RSS.
 Evicted backing remains charged until its final reader drops. Implementation
 and qualification remain pending; the accepted budget alone is not gate proof.
 Resident conversion remains uncommitted over Rust `f6d73045`. The retained
-round-seven ED2K gate passed **1,413 tests**, with no failures, ignored tests or
+round-nine ED2K gate passed **1,416 tests**, with no failures, ignored tests or
 warnings. Source receipt and terminal log:
-`reports/download-job-resident-hydration-round-7/{source-freeze.json,rust-unit.log}`.
+`reports/download-job-resident-hydration-round-9/{source-freeze.json,rust-unit.log}`.
 The maximum-geometry fixture measured 5,307,260 retained bytes per entry;
 eighteen entries require 95,530,680 bytes, or 120,696,504 bytes including four
 6-MiB replacement reservations from the existing mutation slots. Round six
 passed 1,412 tests and failed the new 64-MiB capacity assertion, justifying the
-operator-authorized fixed **128-MiB** cap. Round seven retains all eighteen
-entries and old reader pins while publishing four replacements, checks release
-accounting, and passes the capacity regression. This measures backing capacities,
-not allocator metadata or total daemon RSS.
+operator-authorized fixed **128-MiB** cap. The passing capacity regression retains
+all eighteen entries and old reader pins while publishing four replacements.
+This measures backing capacities, not allocator metadata or total daemon RSS.
 
-Reads now retain immutable pins; resident bytes and job slots survive cache
-eviction and release through the existing admission wake control. MD4,
-peer/name and delivery-evidence callbacks reserve replacement credit before SQL.
-The slice is **not accepted yet**: hot appends still use editable snapshots,
-other cache publishers still admit after SQL, final hydration publication needs
-its current-observation fence, and the Core scheduler has not implemented or
-qualified sixteen active downloads plus two preparation slots. The full goal,
-actual held-I/O cancellation, and combined scale qualification remain open.
+Reads retain immutable pins; resident bytes and job slots survive cache eviction
+and release through the existing admission wake control. MD4, peer/name,
+delivery-evidence, AICH, content-metadata and ingest callbacks admit replacement
+credit before SQL. Joint transient/resident admission avoids self-generated
+retry wakes on rejection. AICH retires proposal geometry and transfers its
+existing credit to publication instead of waiting with two full representations.
+Routine contiguous incomplete appends publish one piece delta and dirty state
+under the same lock boundary; their SQL acknowledgment compares selected pieces
+without rewriting reader-pinned cache backing. Regressions cover unpinned
+allocation reuse, immutable older readers, rejection before payload mutation,
+and dirty acknowledgment after receipt/drain cancellation. Round eight's two
+failed fixtures were corrected for prepublished progress and lazy payload
+creation; round nine passes with exact pre-SQL progress validation and retained
+cancellation assertions.
+
+The slice is **not accepted yet**: hydration publication needs its
+current-observation fence, category mutation needs precommit resident admission,
+protocol sessions still retain old pins across appends, structural edits still
+use full working snapshots, and actual held-I/O ownership remains unqualified.
+The Core scheduler has not implemented or qualified sixteen active downloads
+plus two preparation slots. Core/REST and combined-scale qualification remain
+open; no end-to-end concurrency or total-RSS claim follows from these unit tests.
 
 Require actual held-I/O cancellation/drain tests, query plans and parent/path
 replacement races. The existing full catalog rebuild remains separate bounded
