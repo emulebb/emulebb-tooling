@@ -52,13 +52,29 @@ explicit `*_at_s` units; public names follow the master.
 
 Before the Core consumer cut, finish the remaining obligations found in
 the scoped review: wire the qualified durable storage-failure provider into
-runtime capture and public detail; add a checked checkpointed-byte aggregate
-updated atomically with piece progress; and descending ID keysets with the
+runtime capture and public detail; expose the qualified checkpointed-byte
+aggregate through runtime progress; and add descending ID keysets with the
 required view/category indexes and fixed counts. Terminal progress remains one
 after piece retirement. Startup admits only the bounded active/exploration set;
 neither failed jobs nor queued/history rows require retained Core workers or
 full manifests. These additions are allocated, not implemented by the provider
 checkpoints below.
+
+### Checkpointed progress provider checkpoint (2026-11-16)
+
+Rust `80aeec49` advances the fresh schema to 80. SQLite trigger deltas maintain
+checkpointed bytes atomically across piece insertion, update, deletion and
+retirement, with overflow checks before integer addition and known-size bounds.
+Snapshot reconciliation applies decreases before increases. Compact reads use
+the job counter without child queries. This counts persisted, potentially
+unverified bytes; unknown totals produce null progress and terminal completion
+remains one after internal piece retirement.
+
+Managed gates passed **191 Metadata unit tests, 3 ownership tests and 1,394
+ED2K tests**. Nine source hashes matched the frozen receipt. Evidence:
+`reports/download-job-progress-aggregate-round-1` (logs, patch and
+`source-freeze.json`). Normal commit/push hooks passed. Runtime/REST progress
+projection and combined scale remain unqualified.
 
 ### Durable storage-failure provider checkpoint (2026-11-16)
 
