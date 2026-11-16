@@ -282,12 +282,16 @@ existing work rather than silently stopping jobs. Connection and source caps
 have separate meanings. Queued/history rows do not
 each require live workers, timers or source machinery.
 
-The accepted internal resident-cache budget is **64 MiB with at most ten selected
-jobs**, separate from the existing **8 MiB transient-work budget**, under the same
-owner. Resident backing remains charged until its last reader releases it,
-including after eviction. These are internal subsystem caps, not new saved
-settings, a second worker pool or a total daemon RAM limit. The resident budget
-is an accepted implementation target, not evidence that hydration is qualified.
+The internal resident cache targets **64 MiB with at most ten selected jobs**.
+Concurrency takes precedence: the operator authorizes a fixed cap up to **128 MiB**
+only if measured worst-case validation demonstrates that the higher cap is needed
+for ten selected downloads and safe updates. Retain 64 MiB unless that evidence
+justifies an increase; record the selected fixed cap and evidence together. This
+is not runtime automatic expansion. The existing **8 MiB transient-work budget**
+remains separate, under the same owner. Resident backing remains charged until
+its last reader releases it, including after eviction. These are internal
+subsystem caps, not new saved settings, a second worker pool or a total daemon
+RAM limit. The budget decision is not evidence that hydration is qualified.
 
 An active duplicate add returns its existing job unchanged, including category,
 destination and intent. Size is optional; conflicting known sizes remain errors.

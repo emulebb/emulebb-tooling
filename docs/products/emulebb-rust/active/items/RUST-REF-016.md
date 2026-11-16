@@ -784,12 +784,14 @@ alone needs 20,345,040 bytes for ten residents; even one resident plus existing
 hydration/AICH workspaces exceeds the shared 8-MiB allowance. These are arithmetic
 lower bounds, not allocator measurements. Exact-source inspection receipt:
 `reports/download-job-resident-hydration-round-1/source-receipt.json`.
-The operator accepted a separate **64-MiB resident cache capped at ten jobs**,
-alongside the existing **8-MiB transient-work budget**, within the same owner.
-This adds no saved setting, pool or actor and does not bound total daemon RSS.
-Evicted backing remains charged until its final reader drops. The decision
-unblocks the next hydration slice, but implementation and qualification remain
-pending; no hydration gate ran for that accepted budget.
+The [foundation specification](../../design/PUBLIC-FOUNDATION.md) owns the
+resident budget decision: target 64 MiB for at most ten selected jobs, with a
+fixed cap up to 128 MiB authorized only when measured worst-case validation
+justifies it to support ten selected downloads and safe updates. The separate
+8-MiB transient budget is unchanged. No runtime automatic expansion, new saved
+setting, pool or actor is introduced; this does not bound total daemon RSS.
+Evicted backing remains charged until its final reader drops. Implementation
+and qualification remain pending; the accepted budget alone is not gate proof.
 Require actual held-I/O cancellation/drain tests, query plans and parent/path
 replacement races. The existing full catalog rebuild remains separate bounded
 projection work; this conversion does not qualify it or total process RSS.
