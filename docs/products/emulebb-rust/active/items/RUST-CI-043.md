@@ -111,6 +111,25 @@ passed **307 tests** under
 (`pytest.log`, `junit.xml`). MFC transfer calls remain unchanged. These are unit
 and caller-provider checks, not an executed native package or peer campaign.
 
+Tests `2b90b369` ports the existing WebUI and Android peer proofs to captured
+download IDs, native pages/actions and retained completed jobs. The shared
+request helper can require an exact success status; these action callers require
+HTTP 207 as well as successful per-item outcomes. Cleanup authority requires an
+actual 201 creation receipt with a validated canonical ID, hash and size;
+unchanged duplicates or malformed receipts never authorize job removal. Android
+completion still requires exact path/bytes across restart and accepts verified
+Owned or Unowned output without granting destructive ownership.
+
+The supported three-owner gate passed **153 tests** after the early fixture,
+path-mismatch and cleanup-authority repairs; independent reinspection accepted
+the latter. Final evidence is under
+`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/native-download-webui-android-unit-round-3`
+(`pytest.log`, `junit.xml`). The first two failed logs remain retained; round one
+also had a post-freeze mock edit and cannot establish frozen-source acceptance.
+This six-file commit remains local with the other Tests consumers until actual
+producer parity permits the normal push. No browser, daemon, ADB or device
+campaign was executed by these unit checks.
+
 ## Settings/CLI dependency order (phase 3)
 
 The master supplies the consequential product decisions for this cut. Begin
