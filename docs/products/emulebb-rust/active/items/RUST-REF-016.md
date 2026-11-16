@@ -794,9 +794,10 @@ setting, pool or actor is introduced; this does not bound total daemon RSS.
 Evicted backing remains charged until its final reader drops. Implementation
 and qualification remain pending; the accepted budget alone is not gate proof.
 Resident conversion remains uncommitted over Rust `f6d73045`. The retained
-round-nine ED2K gate passed **1,416 tests**, with no failures, ignored tests or
-warnings. Source receipt and terminal log:
-`reports/download-job-resident-hydration-round-9/{source-freeze.json,rust-unit.log}`.
+round-ten gates passed **210 metadata checks** (207 units and 3 ownership tests)
+and **1,418 ED2K tests**, with no failures, ignored tests or warnings. Source
+receipt and terminal logs:
+`reports/download-job-resident-hydration-round-10/{source-freeze.json,metadata.log,ed2k.log}`.
 The maximum-geometry fixture measured 5,307,260 retained bytes per entry;
 eighteen entries require 95,530,680 bytes, or 120,696,504 bytes including four
 6-MiB replacement reservations from the existing mutation slots. Round six
@@ -820,8 +821,16 @@ failed fixtures were corrected for prepublished progress and lazy payload
 creation; round nine passes with exact pre-SQL progress validation and retained
 cancellation assertions.
 
-The slice is **not accepted yet**: hydration publication needs its
-current-observation fence, category mutation needs precommit resident admission,
+Hydration now separates diagnostic reads from selected activation. Before
+inserting private streamed geometry, the existing owner holds category/content
+and cache guards and validates the database observation and active generation
+under a short SQLite writer fence. An already present dirty resident wins.
+Regressions prove refusal after committed metadata changes, external writer
+exclusion through publication, and preservation of newer cache-only progress.
+The conservative observation can force retries after unrelated database writes;
+its behavior under continuous indexing remains part of scale qualification.
+
+The slice is **not accepted yet**: category mutation needs precommit resident admission,
 protocol sessions still retain old pins across appends, structural edits still
 use full working snapshots, and actual held-I/O ownership remains unqualified.
 The Core scheduler has not implemented or qualified sixteen active downloads
