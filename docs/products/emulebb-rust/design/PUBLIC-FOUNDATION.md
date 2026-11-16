@@ -165,6 +165,12 @@ emulebb-rust --profile PATH settings set KEY VALUE
 emulebb-rust --profile PATH settings reset KEY
 ```
 
+For list-valued settings, `VALUE` is one inline JSON array, for example
+`settings set network.nat.backendOrder '["pcp-natpmp","upnp"]'`.
+Ordinary values remain plain text parsed according to the key's canonical type.
+Shell quoting must deliver the list as one argument. Each command still writes
+one key; use the standard JSON parser for list values, not a separate list grammar.
+
 Offline settings/import operations require explicit `--profile`. Settings
 commands manage SQLite application keys only, not TOML. Require the daemon
 stopped and acquire the existing exclusive profile lease. A single-key write

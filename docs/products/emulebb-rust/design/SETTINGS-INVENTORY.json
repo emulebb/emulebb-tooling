@@ -2134,6 +2134,11 @@
       "reset KEY"
     ],
     "profile": "explicit --profile; exclusive stopped-profile lease",
+    "valueInput": {
+      "ordinary": "plain text parsed according to the canonical key type",
+      "list": "one inline JSON array VALUE argument, parsed with the standard JSON parser",
+      "scope": "one key per command; no JSON input file or bulk settings operation"
+    },
     "write": "one key, whole-candidate validation and atomic save; advances revision without caller CAS",
     "getOutput": "resolved value only; diagnostics stderr",
     "storage": "SQLite application settings only"
