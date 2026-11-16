@@ -48,6 +48,16 @@ per-endpoint actor or all-or-nothing rollback. Keep standard error objects and
 existing envelope metadata/contract-version headers. Distinguish malformed
 request refusal from shared-capacity refusal before any job mutation.
 
+The Core input facade must replace the current split link validators/parser
+with one bounded protocol parser: honor the declared scheme casing, UTF-8 and
+percent-decoded names, AICH/source hints, and an explicitly documented byte
+limit. Resolve the current raw-space and UTF-8/UTF-16/character-limit differences
+before producer qualification. Align known-size validation with positive job
+sizes, SQLite's representable range and the current 256-GiB execution limit;
+unknown remains null. Bound names without silently rewriting an explicit name.
+Producer metadata must declare the exact finite success-code set for every
+public method/path, rather than keeping per-route multi-status exceptions.
+
 Extend existing Rust/Python and WebUI owners for create/duplicate/redownload and
 size conflicts, PATCH invariants, completion after output loss, early/late
 byte-bounded cursor pages, mixed and all-failed batches, saturation, and caller

@@ -50,6 +50,16 @@ claim conflicts, callback generations, latest-pointer removal, journal guards,
 crash/reopen and bounded early/late traversal. Internal timestamp columns retain
 explicit `*_at_s` units; public names follow the master.
 
+Before the Core consumer cut, add the remaining provider obligations found in
+the scoped review: bounded durable failure code/message/time for the operator's
+manual-start storage-failure policy; a checked checkpointed-byte aggregate
+updated atomically with piece progress; and descending ID keysets with the
+required view/category indexes and fixed counts. Terminal progress remains one
+after piece retirement. Startup admits only the bounded active/exploration set;
+neither failed jobs nor queued/history rows require retained Core workers or
+full manifests. These additions are allocated, not implemented by the provider
+checkpoints below.
+
 ### Callback and retirement provider checkpoint (2026-11-16)
 
 Rust `e4076237` advances the fresh schema to 76. Callback and ingest publication
