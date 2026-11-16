@@ -50,6 +50,23 @@ claim conflicts, callback generations, latest-pointer removal, journal guards,
 crash/reopen and bounded early/late traversal. Internal timestamp columns retain
 explicit `*_at_s` units; public names follow the master.
 
+### Callback and retirement provider checkpoint (2026-11-16)
+
+Rust `e4076237` advances the fresh schema to 76. Callback and ingest publication
+use captured job tokens, including the real rollback fallback. Completion and
+both removal modes share one internal-retirement journal with a fixed persisted
+source/target snapshot. Delivered verification may refresh Unowned evidence
+without regressing completion; stale checkpoints cannot restore destructive
+ownership in either SQL or their returned manifest.
+
+The final supported metadata gate passed **160 unit tests and 3 ownership
+tests**, zero warnings. Independent review accepted the stale-authority repair.
+The parent verified all 13 source hashes against
+`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/download-job-callback-metadata-round-5`
+(`rust-unit.log`, `sources.json`). Earlier constraint, compilation and fixture
+failures remain retained. ED2K/Core/REST consumers, physical cleanup and the
+Android delivery fix remain unqualified; this is another provider checkpoint.
+
 ### Physical storage provider checkpoint (2026-11-16)
 
 Rust `cf6c010b` extends the fresh provider to schema 75: persist the actual

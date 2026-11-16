@@ -91,6 +91,16 @@ the still-unconverted producer comparison deselected, under
 `reports/native-download-contract-harness-round-3`. The Tests commits remain
 local until producer parity permits their normal push.
 
+Tests `7fb5dd8f` updates the existing package smoke to job IDs, retained terminal
+completion and verified inclusive part geometry; its unit owner passed 74 tests.
+Tests `f8afd082` ports the existing local Rust peer helper and deterministic
+mixed-client caller, including their bilateral diagnostics, and accepts verified
+Unowned delivery without granting deletion authority. Five existing unit owners
+passed **307 tests** under
+`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/native-download-local-ed2k-unit-round-1`
+(`pytest.log`, `junit.xml`). MFC transfer calls remain unchanged. These are unit
+and caller-provider checks, not an executed native package or peer campaign.
+
 ## Allocated category contract cut (phase 2a)
 
 The [master category contract](../../design/PUBLIC-FOUNDATION.md#downloads-and-categories)
