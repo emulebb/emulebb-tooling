@@ -793,11 +793,14 @@ justifies it to support that concurrency and safe updates. The separate
 setting, pool or actor is introduced; this does not bound total daemon RSS.
 Evicted backing remains charged until its final reader drops. Implementation
 and qualification remain pending; the accepted budget alone is not gate proof.
-Resident conversion remains uncommitted over Rust `f6d73045`. The retained
-round-ten gates passed **210 metadata checks** (207 units and 3 ownership tests)
-and **1,418 ED2K tests**, with no failures, ignored tests or warnings. Source
-receipt and terminal logs:
-`reports/download-job-resident-hydration-round-10/{source-freeze.json,metadata.log,ed2k.log}`.
+Resident groundwork is committed at Rust `615ae950`. The retained evidence is
+**210 metadata checks** (207 units and 3 ownership tests, round ten) and
+**1,421 ED2K tests** (round eleven), with no failures, ignored tests or warnings.
+Source receipt and logs:
+`reports/download-job-resident-hydration-round-11/{source-freeze.json,ed2k.log}`;
+metadata proof remains in `reports/download-job-resident-hydration-round-10/metadata.log`
+with unchanged provider bytes. The normal commit hook passed after formatter-only
+repairs to two files; the receipt distinguishes tested and formatted hashes.
 The maximum-geometry fixture measured 5,307,260 retained bytes per entry;
 eighteen entries require 95,530,680 bytes, or 120,696,504 bytes including four
 6-MiB replacement reservations from the existing mutation slots. Round six
@@ -830,7 +833,16 @@ exclusion through publication, and preservation of newer cache-only progress.
 The conservative observation can force retries after unrelated database writes;
 its behavior under continuous indexing remains part of scale qualification.
 
-The slice is **not accepted yet**: category mutation needs precommit resident admission,
+Category publication now has a prepared native plan that retains the category
+fence and reserves every affected execution before SQL. The blocking DB owner
+publishes synchronously with admitted credit before replying; the async owner
+can retain the same fence through Core state publication. Native tests prove
+publication after SQL/observer cancellation under memory pressure, precommit
+refusal without SQL changes, fence lifetime and multi-member removal while old
+readers stay immutable. The four-file Core category consumer integration is
+preserved separately and remains unqualified until the Core consumer pass.
+
+The full resident/retained-I/O scope is **not accepted yet**:
 protocol sessions still retain old pins across appends, structural edits still
 use full working snapshots, and actual held-I/O ownership remains unqualified.
 The Core scheduler has not implemented or qualified sixteen active downloads
