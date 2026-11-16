@@ -957,10 +957,9 @@ paths:
       description: Every admitted batch returns 207, including all-failed batches. Results preserve request order; per-job failure
         does not roll back other successes. After admission the existing operation owner completes every item despite caller
         disconnect. Malformed whole requests return 400; shared-capacity refusal before admission returns 503 without modifying
-        any job. deleteData is required. False preserves completed outputs but retires daemon-owned internal pieces;
-        keep-data removal is supported only for completed delivered jobs. True additionally requests deletion of the exact
-        output only with proven job ownership. Independent and unowned copies are preserved; bytes alone never grant
-        destructive authority.
+        any job. deleteData is required for unfinished and completed jobs. Both modes retire daemon-owned internal pieces.
+        False preserves completed outputs. True additionally requests deletion of the exact output only with proven job
+        ownership. Independent and unowned copies are preserved; bytes alone never grant destructive authority.
       requestBody:
         required: true
         content:

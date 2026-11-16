@@ -375,14 +375,12 @@ delivery/job-storage repair belongs to phases 2b/2c; the owning
 [#155 analysis and acceptance](../active/items/RUST-REF-016.md#allocated-deliveryjob-storage-repair-phases-2b2c)
 records its evidence and unimplemented status.
 
-Removal requests explicitly state whether data is deleted. Keep-data removal is
-supported only for completed delivered jobs: `deleteData:false` preserves
-completed outputs but retires daemon-owned internal pieces. `deleteData:true`
-additionally requests deletion of the exact output only with proven job
-ownership; independent and unowned copies are preserved. Stop retains the job
-and resumable internal pieces. An incomplete job can remain
-stopped or be removed with partial data; do not create orphan-partial ownership
-and recovery features in this round.
+Removal of an unfinished or completed job requires an explicit `deleteData`.
+Both modes retire daemon-owned internal pieces. `deleteData:false` preserves
+completed outputs; `deleteData:true` additionally requests deletion of the exact
+output only with proven job ownership. Independent and unowned copies are
+preserved. Stop retains the job and resumable internal pieces; removal does not
+create orphan-partial ownership and recovery features in this round.
 
 ## Search and knowledge foundation
 
