@@ -24,13 +24,13 @@ servers:
       host:
         default: 127.0.0.1
       port:
-        default: "4711"
+        default: "20017"
   - url: https://{host}:{port}/api/v1
     variables:
       host:
         default: 127.0.0.1
       port:
-        default: "4711"
+        default: "20017"
 security:
   - ApiKeyAuth: []
 tags:
@@ -573,6 +573,7 @@ paths:
     get:
       tags: [Categories]
       summary: List download categories.
+      description: Returns stored categories only; All is a transfer filter, not a category resource.
       operationId: listCategories
       responses:
         "200":
@@ -596,6 +597,15 @@ paths:
     post:
       tags: [Categories]
       summary: Create a download category.
+      description: >-
+        Creates a category whose immutable name is its public ID. Names follow
+        the ASCII tag-name grammar, preserving spelling without trimming or
+        rewriting; uniqueness is ASCII case-insensitive. Omitted paths
+        default to null and omitted comment defaults to an empty string.
+        Planned category publication semantics: HTTP 503 PERSISTENCE_COMMITTED
+        with details.committed=true guarantees durable mutation and coherent
+        authoritative category/assignment caches, while required downstream
+        sharing publication may have failed. Runtime qualification is pending.
       operationId: createCategory
       requestBody:
         required: true
@@ -615,16 +625,23 @@ paths:
         "405":
           $ref: "#/components/responses/MethodNotAllowedResponse"
         "409":
-          $ref: "#/components/responses/ErrorResponse"
+          description: The category name already exists under ASCII case-insensitive matching; error code CATEGORY_NAME_CONFLICT.
+          headers:
+            X-Contract-Version:
+              $ref: "#/components/headers/ContractVersionHeader"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorEnvelope"
         "500":
           $ref: "#/components/responses/ErrorResponse"
         "503":
           $ref: "#/components/responses/ErrorResponse"
         default:
           $ref: "#/components/responses/ErrorResponse"
-  /categories/{categoryId}:
+  /categories/{categoryName}:
     parameters:
-      - $ref: "#/components/parameters/CategoryId"
+      - $ref: "#/components/parameters/CategoryName"
     get:
       tags: [Categories]
       summary: Return one download category.
@@ -650,7 +667,13 @@ paths:
           $ref: "#/components/responses/ErrorResponse"
     patch:
       tags: [Categories]
-      summary: Update one download category.
+      summary: Update category paths and comment.
+      description: >-
+        Omitted fields retain their values; explicit null clears a path. The
+        category name never changes. Planned publication semantics use HTTP 503
+        PERSISTENCE_COMMITTED with details.committed=true for durable mutation
+        with coherent authoritative caches but failed downstream sharing
+        publication. Runtime qualification is pending.
       operationId: patchCategory
       requestBody:
         required: true
@@ -669,8 +692,6 @@ paths:
           $ref: "#/components/responses/ErrorResponse"
         "405":
           $ref: "#/components/responses/MethodNotAllowedResponse"
-        "409":
-          $ref: "#/components/responses/ErrorResponse"
         "500":
           $ref: "#/components/responses/ErrorResponse"
         "503":
@@ -680,6 +701,13 @@ paths:
     delete:
       tags: [Categories]
       summary: Delete one download category.
+      description: >-
+        Clears only matching transfer category assignments. Surviving category
+        names are unchanged; files are neither moved nor deleted.
+        Planned publication semantics use HTTP 503 PERSISTENCE_COMMITTED with
+        details.committed=true for durable mutation with coherent authoritative
+        caches but failed downstream sharing publication. Runtime qualification
+        is pending.
       operationId: deleteCategory
       responses:
         "200":
@@ -707,7 +735,7 @@ paths:
       operationId: listTransfers
       parameters:
         - $ref: "#/components/parameters/TransferStateFilter"
-        - $ref: "#/components/parameters/TransferCategoryIdFilter"
+        - $ref: "#/components/parameters/TransferCategoryFilter"
         - $ref: "#/components/parameters/Offset"
         - $ref: "#/components/parameters/Limit"
       responses:
@@ -1468,6 +1496,12 @@ paths:
     get:
       tags: [SharedDirectories]
       summary: List configured shared directory roots.
+      description: >-
+        Returns cached configuration and last observed health from the existing
+        monitor or explicit scans, without a fresh filesystem probe per request.
+        Accessibility is an observation, not instantaneous filesystem truth;
+        new unverified roots report false. The monitor's two-second interval is
+        not a freshness guarantee.
       operationId: listSharedDirectories
       responses:
         "200":
@@ -3061,14 +3095,13 @@ components:
         const: "2.0.0"
         example: "2.0.0"
   parameters:
-    CategoryId:
-      name: categoryId
+    CategoryName:
+      name: categoryName
       in: path
       required: true
       schema:
-        type: integer
-        minimum: 0
-        maximum: 4294967295
+        $ref: "#/components/schemas/CategoryName"
+      description: Immutable public name; lookup is ASCII case-insensitive and returns saved spelling.
     Confirm:
       name: confirm
       in: query
@@ -3196,14 +3229,13 @@ components:
       required: false
       schema:
         $ref: "#/components/schemas/TransferState"
-    TransferCategoryIdFilter:
-      name: categoryId
+    TransferCategoryFilter:
+      name: category
       in: query
       required: false
+      description: Restrict to this category. Omission selects all transfers.
       schema:
-        type: integer
-        minimum: 0
-        maximum: 4294967295
+        $ref: "#/components/schemas/CategoryName"
     SearchId:
       name: searchId
       in: path
@@ -3964,6 +3996,7 @@ components:
                 - NOT_FOUND
                 - INVALID_STATE
                 - DOWNLOAD_CONFLICT
+                - CATEGORY_NAME_CONFLICT
                 - SERVICE_BUSY
                 - EMULE_UNAVAILABLE
                 - EMULE_ERROR
@@ -3991,8 +4024,9 @@ components:
                   type: boolean
                   description: >-
                     Required and true for PERSISTENCE_COMMITTED, otherwise
-                    optional. True with that code means the durable mutation and its
-                    cache publication completed despite a worker fault. An
+                    optional. True with that code guarantees the durable
+                    mutation committed. It does not guarantee every required
+                    downstream sharing publication succeeded. An
                     error HTTP status does not mean that state is unchanged;
                     absence of this marker does not prove that commit failed.
                 field:
@@ -5860,90 +5894,82 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/Category"
+    CategoryName:
+      type: string
+      minLength: 1
+      maxLength: 64
+      pattern: '^[A-Za-z0-9][A-Za-z0-9-]{0,63}(?![\s\S])'
+      description: >-
+        Immutable public category name. Spelling is preserved without trimming
+        or rewriting; lookup and uniqueness are ASCII case-insensitive.
+      example: "sample-category"
+    NullableCategory:
+      oneOf:
+        - $ref: "#/components/schemas/CategoryName"
+        - type: "null"
+      description: Saved category-name spelling, or null for uncategorized.
     Category:
       type: object
       additionalProperties: false
-      required: [id, name]
+      required: [name, tempDir, destinationDir, comment]
       properties:
-        id:
-          type: integer
-          minimum: 0
-          maximum: 4294967295
         name:
-          type: string
-        path:
+          $ref: "#/components/schemas/CategoryName"
+        tempDir:
+          type:
+            - string
+            - "null"
+        destinationDir:
           type:
             - string
             - "null"
         comment:
           type: string
-        color:
-          type:
-            - integer
-            - "null"
-          minimum: 0
-          maximum: 16777215
-        priority:
-          type: integer
-          minimum: 0
-          maximum: 4294967295
-    CategoryPriorityInput:
-      oneOf:
-        - type: string
-          enum: [verylow, low, normal, high, veryhigh]
-        - type: integer
-          minimum: 0
-          maximum: 4294967295
     CategoryCreateRequest:
       type: object
       additionalProperties: false
       required: [name]
       properties:
         name:
-          type: string
-          minLength: 1
-          pattern: '\S'
-        path:
+          $ref: "#/components/schemas/CategoryName"
+        tempDir:
           type:
             - string
             - "null"
           minLength: 1
           pattern: '\S'
+          default: null
+        destinationDir:
+          type:
+            - string
+            - "null"
+          minLength: 1
+          pattern: '\S'
+          default: null
         comment:
           type: string
-        color:
-          type:
-            - integer
-            - "null"
-          minimum: 0
-          maximum: 16777215
-        priority:
-          $ref: "#/components/schemas/CategoryPriorityInput"
+          default: ""
     CategoryPatch:
       type: object
       additionalProperties: false
       minProperties: 1
       properties:
-        name:
-          type: string
-          minLength: 1
-          pattern: '\S'
-        path:
+        tempDir:
           type:
             - string
             - "null"
           minLength: 1
           pattern: '\S'
+          description: Omission retains the path; null clears the category override.
+        destinationDir:
+          type:
+            - string
+            - "null"
+          minLength: 1
+          pattern: '\S'
+          description: Omission retains the path; null clears the category override.
         comment:
           type: string
-        color:
-          type:
-            - integer
-            - "null"
-          minimum: 0
-          maximum: 16777215
-        priority:
-          $ref: "#/components/schemas/CategoryPriorityInput"
     TransferListEnvelope:
       unevaluatedProperties: false
       allOf:
@@ -6044,7 +6070,7 @@ components:
     Transfer:
       type: object
       additionalProperties: false
-      required: [hash, displayName, nameConsensus, sizeBytes, state]
+      required: [hash, displayName, nameConsensus, sizeBytes, state, category]
       properties:
         hash:
           type: string
@@ -6076,12 +6102,8 @@ components:
           $ref: "#/components/schemas/TransferState"
         priority:
           $ref: "#/components/schemas/TransferPriority"
-        categoryId:
-          type: integer
-          minimum: 0
-          maximum: 4294967295
-        categoryName:
-          type: string
+        category:
+          $ref: "#/components/schemas/NullableCategory"
         progress:
           type: number
           minimum: 0
@@ -6347,8 +6369,6 @@ components:
         - required: [links]
           not:
             required: [link]
-      not:
-        required: [categoryId, categoryName]
       properties:
         link:
           type: string
@@ -6364,14 +6384,9 @@ components:
             minLength: 1
             maxLength: 2048
             pattern: '^[eE][dD]2[kK]://[^\s\x00-\x1F\x7F-\x9F]+$'
-        categoryId:
-          type: integer
-          minimum: 0
-          maximum: 4294967295
-        categoryName:
-          type: string
-          minLength: 1
-          pattern: '\S'
+        category:
+          $ref: "#/components/schemas/NullableCategory"
+          default: null
         paused:
           type: boolean
         knownFilePolicy:
@@ -6384,26 +6399,17 @@ components:
           not:
             anyOf:
               - required: [displayName]
-              - required: [categoryId]
-              - required: [categoryName]
+              - required: [category]
         - required: [displayName]
           not:
             anyOf:
               - required: [priority]
-              - required: [categoryId]
-              - required: [categoryName]
-        - required: [categoryId]
+              - required: [category]
+        - required: [category]
           not:
             anyOf:
               - required: [priority]
               - required: [displayName]
-              - required: [categoryName]
-        - required: [categoryName]
-          not:
-            anyOf:
-              - required: [priority]
-              - required: [displayName]
-              - required: [categoryId]
       properties:
         displayName:
           type: string
@@ -6411,14 +6417,9 @@ components:
           pattern: '^(?=.*\S)[^<>:"/\\|?*\x00-\x1F\x7F-\x9F]*$'
         priority:
           $ref: "#/components/schemas/TransferPriority"
-        categoryId:
-          type: integer
-          minimum: 0
-          maximum: 4294967295
-        categoryName:
-          type: string
-          minLength: 1
-          pattern: '\S'
+        category:
+          $ref: "#/components/schemas/NullableCategory"
+          description: Omission retains the assignment; null clears it.
     TransferDetailsEnvelope:
       unevaluatedProperties: false
       allOf:
@@ -7169,6 +7170,7 @@ components:
           type: boolean
         accessible:
           type: boolean
+          description: Last observed accessibility; false until verified, without a fresh probe on GET.
     SharedDirectoryReplaceRequest:
       type: object
       additionalProperties: false
@@ -8199,17 +8201,10 @@ components:
     SearchResultDownloadRequest:
       type: object
       additionalProperties: false
-      not:
-        required: [categoryId, categoryName]
       properties:
-        categoryId:
-          type: integer
-          minimum: 0
-          maximum: 4294967295
-        categoryName:
-          type: string
-          minLength: 1
-          pattern: '\S'
+        category:
+          $ref: "#/components/schemas/NullableCategory"
+          default: null
         paused:
           type: boolean
         knownFilePolicy:

@@ -18,6 +18,47 @@ source: Operator-directed configuration and persistence architecture review
 
 # RUST-CI-043 - Review configuration authority and REST contract coherence
 
+## Allocated category contract cut (phase 2a)
+
+The [master category contract](../../design/PUBLIC-FOUNDATION.md#downloads-and-categories)
+owns the current category slice: immutable names as public IDs,
+`tempDir`/`destinationDir` nullable overrides, editable comment, nullable
+transfer assignment, and deletion that clears only matching references without
+filesystem changes or ID renumbering. Existing category routes and name
+selectors remain; the embedded WebUI, DTOs, OpenAPI and existing Python owners
+must change together. Duplicate case-insensitive names on creation return HTTP 409
+`CATEGORY_NAME_CONFLICT`, invalid fields 400 and missing category IDs 404;
+persistence faults use the shared native mapping. Transfer queries omit
+`category` for All; this slice does not add an uncategorized-only selector.
+
+The operator selected the same name rules as tags: 1-64 ASCII letters/digits/
+hyphens, starting with a letter or digit, without trimming or rewriting;
+uniqueness uses SQLite `NOCASE` and cached ASCII case-insensitive matching.
+Names are immutable; create a new category and reassign explicitly. PATCH edits
+only paths/comment. Category resources expose only their
+four documented fields, with `/categories/{categoryName}` addressing and a
+single nullable `category` name on download inputs/resources. Lookup is ASCII
+case-insensitive and returns saved spelling. Numeric SQL keys remain internal;
+transfer-level priority removal remains in the later job cut.
+These are allocated contract changes, not new runtime qualification. The
+registered proof below covers its exact earlier tooling contract `eac34a72`.
+The [#155 current draft feedback](RUST-REF-016.md#current-draft-feedback-2026-11-16)
+records current name-contract consumer passes and retains failed/interrupted
+Core lifecycle rounds. Monitor/root-work lifetime fixes are implemented drafts
+awaiting proof; whole phase 2a remains
+incomplete and unqualified, with the prepared-verification budget still planned.
+
+## Allocated phase-four Rust contract-gate cleanup
+
+The existing `emulebb-build-tests/tests/python/test_emulebb_rust_rest_contract.py`
+still requires Rust to preserve the frozen MFC route surface and uses parity
+exception registries. Refactor that Rust gate against the authoritative current
+Rust OpenAPI and DTOs, reusing its existing route/schema conformance helpers.
+Remove the MFC route-preservation requirement and stale parity/retired-shape
+registries from the Rust gate; do not change the actual MFC owner or tests.
+This is allocated phase-four work, not implemented cleanup or authorization for
+a new harness framework.
+
 ## Registered runtime and local-suite evidence (2026-11-16)
 
 The [#233 registered runtime checkpoint](RUST-FEAT-062.md#registered-kad-runtime-checkpoint-2026-11-16)

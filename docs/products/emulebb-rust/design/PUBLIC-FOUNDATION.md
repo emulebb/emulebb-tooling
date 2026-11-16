@@ -66,9 +66,10 @@ documentation describes only implemented structure.
 - Use compact internal keys, explicit foreign keys, constraints, transactions
   and indexed access paths. All startup, recovery and shutdown paths also need
   bounded work; list pagination alone is insufficient.
-- Application-allocated public IDs, including jobs, categories, roots, servers,
+- Application-allocated public IDs, including jobs, roots, servers,
   searches and results, are immutable never-reused decimal strings. Content is
-  publicly addressed by its eD2K hash; immutable tag names are tag IDs. Natural
+  publicly addressed by its eD2K hash; immutable tag and category names are their
+  public IDs. Natural
   protocol identities remain distinct fields. SQLite may use internal keys.
   Upload/queue resource IDs identify live instances only: their catalog must
   define the process-epoch/lifetime boundary, expiry and restart behavior without
@@ -189,6 +190,11 @@ root removes eligibility through it, not knowledge. After a category destination
 changes, the old path stays shared only if another current root covers it.
 Moving a file outside configured roots does not authorize searching arbitrary
 folders for it.
+Shared-directory GET returns cached configuration and last observed health,
+updated by the existing two-second monitor or explicit scans. New unverified
+roots are conservatively inaccessible; reads do not probe the filesystem or
+promise instantaneous truth. Physical root mutations/health work uses retained
+blocking I/O.
 
 Library rows represent one content hash, with local locations exposed separately
 and paginated. Default to present content; provide Shared, Unavailable and All
@@ -260,10 +266,65 @@ job ID and preserves prior history. Explicitly renamed unfinished jobs retain
 their chosen filename; keep observed alternatives separately. Future majority
 naming is outside scope and must respect explicit names.
 
-Categories have stable immutable allocated IDs, renameable case-insensitive
-unique names and nullable uncategorized assignment. All is a filter, not a stored
-category. Deleting a category clears job assignments without moving/deleting
-files. Category changes do not implicitly change tags.
+Category names are their immutable public IDs. SQLite retains a positive
+`AUTOINCREMENT` i64 key and nullable category foreign keys internally. The resource
+is `{name, tempDir, destinationDir, comment}`: both paths are nullable strings
+and comment is an editable string. Category names use the same rules as tag
+names: 1-64 ASCII letters/digits/hyphens, starting with a letter or digit. Preserve
+spelling; no whitespace, dots, underscores, trimming or rewriting. Names are
+immutable: create a new category and reassign explicitly. Uniqueness is ASCII
+case-insensitive through a SQLite `NOCASE` unique name constraint; cached matching uses
+`eq_ignore_ascii_case`.
+Duplicate case-insensitive names on creation return HTTP 409 with stable error
+code `CATEGORY_NAME_CONFLICT`; invalid fields return 400 and missing IDs 404.
+
+Creation requires a valid name; omitted paths default to null and
+omitted comment to the empty string. PATCH omission retains a field, explicit
+null clears only a path; PATCH edits paths and comment. All is a collection
+filter, not a stored category; no synthetic category zero exists. Assignment is
+nullable. Deleting a category clears only matching job references, without
+renumbering categories or moving/deleting files. Category changes do not
+implicitly change tags.
+Address a category at `/categories/{categoryName}` using ASCII case-insensitive
+lookup that returns the saved spelling. Download add/PATCH/search-download inputs
+and download resources use one `category` field containing the canonical name
+or null for uncategorized. An omitted add selector defaults to uncategorized;
+an omitted PATCH selector retains the assignment. Transfer filtering uses
+`category`, with omission selecting All.
+
+Phase 2a also requires bounded category sharing publication: order SQL and
+immediate authoritative caches, then retain the mutation receipt through a
+tracked continuation in the existing sharing/health owner. A large filesystem
+scan must not block unrelated friend/Kad persistence or hold locks across I/O.
+Use indexed membership traversal, retain the eligibility safety fence until
+publication succeeds, and report known-committed publication failures honestly
+while preserving final Kad checkpoint/drain. Bounded eligibility reads use the
+existing store outside ordinary persistence admission, with separately bounded
+workspace/concurrency and tracked profile lifetime. For direct socket writes,
+check the root epoch and admit an owned packet of at most the existing 200 server
+items under a short lock, then release it before I/O. Earlier root changes
+invalidate/retry; a later change may let that one in-flight packet finish, while
+each subsequent batch rechecks. This remains a partially checked working draft,
+incomplete and unqualified; [#155-A](../active/items/RUST-REF-016.md#planned-category-publication-continuation-phase-2a)
+owns bounded admission, leases and serving revalidation, alongside the
+[#233 shutdown contract](../active/items/RUST-FEAT-062.md).
+
+The working-draft local-eligibility finalizer registry tracks existing blocking
+SQL/publication units through caller abort and shutdown. Its separate limit is
+4 admitted units/8 MiB retained payload, reserved before clone/spawn, in addition
+to the Core owner's 64 slots/8 MiB and separately bounded eligibility reads.
+It introduces no persistence actor; seal/join its actual work before profile
+lease release and coordinate it before the final Kad checkpoint. This increases
+the combined payload allowance; it is neither the Core's 8 MiB limit nor RSS.
+One separately accounted prepared-verification job preserves existing 256-GiB
+support; its proposed 64-MiB ceiling is conditional on explicit capacity and
+geometry bounds, not a certified current-code limit. Its lease follows actual
+hashing/results through SQL/publication after caller abort. Monitor stop/join,
+retained root-I/O/root-SQL slots and cancellation fixes are implemented drafts
+awaiting passing lifecycle proof; root-admission sealing and explicit-root
+compare-and-set/multiple-root continuation remain drafts.
+Root SQL jobs must settle before profile release. Whole phase 2a remains
+incomplete/unqualified; these plans add no public limit or actor.
 
 At first start, choose optional category temp storage or global fallback and
 retain that location for the job. At delivery start resolve the current category
@@ -471,7 +532,7 @@ actual proof; none is claimed by this design.
 | --- | --- |
 | 1. Contract baseline | Reconcile policy and this specification, typed settings catalog, exact route/schema inventories, error/lifecycle contracts and query/index designs. Refresh source ownership, fixtures and baseline measurements. |
 | 2. Persistence/domain services | Complete the shared-owner/Kad prerequisites, then the vertical cuts 2a-2d below. Keep remaining statistics/search-claim work with its existing owners and replace unbounded startup/list/recovery paths. |
-| 2a. Categories | Immutable allocated IDs, case-insensitive unique names, nullable temp/destination paths and nullable job assignment; deletion clears assignments without renumbering. Cut affected REST/OpenAPI/UI/fixture consumers together. |
+| 2a. Categories | Immutable public name IDs, internal allocated SQL keys, nullable temp/destination paths and nullable name-based job assignment; deletion clears matching assignments. Cut affected REST/OpenAPI/UI/fixture consumers together. |
 | 2b. Durable job identity | Never-reused job IDs, distinct protocol hash, nullable known size, one nonterminal job per hash and retained terminal/history records. Make every child, delivery/recovery reference and cleanup authority refer to its actual job. Couple with 2c wherever separate commits would permit unsafe multiple attempts. |
 | 2c. Job storage and execution | Establish a job-specific piece/storage namespace, first-start fixed temp placement and fixed delivery-attempt destination before enabling multiple historical/re-download attempts. A hash-based old-attempt cleanup must never reach a new job's data. Include scheduling/restart/recovery and directly affected consumers. |
 | 2d. Library policy and indexed reads | Durable hash sharing/upload policy, immutable tags, locations and verification caches plus incremental indexed library queries. Cover all accepted filters/sorts, stable keyset traversal and 100k behavior with the relevant live statistics owner. A full projection rebuild or output-only limit is not bounded-read evidence. |

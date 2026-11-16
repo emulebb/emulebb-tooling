@@ -174,8 +174,10 @@ are explicit typed outcomes; no invisible waiting queue or admission bypass.
 The close/admit boundary is atomic: after close wins no new operation is
 accepted; work accepted before close remains owned and drains. Capture normalized
 friend intent without holding global CoreState across admission, SQL wait or
-publication. Ordering spans durable commit and the matching cache publication;
-a later command cannot observe or publish half of its predecessor's result.
+publication. Ordering spans durable commit and the matching authoritative cache
+publication; a later command cannot observe or publish half of its predecessor's
+result. The planned category continuation below separates bounded filesystem
+publication from this immediate SQL/cache order without stalling unrelated domains.
 Caller cancellation before admission changes nothing. After admission, required
 work and finalizers survive caller abort and complete under the tracked owner.
 A successful completion is reported after the required publication, not merely
@@ -198,6 +200,172 @@ mapping is implemented. This owner slice first establishes typed errors and
 required completion semantics; it is not permission to change unrelated status
 contracts or weaken accepted durability. Oversized work must fail explicitly
 before copying and be distinguishable from transient saturation.
+
+### Planned category publication continuation (phase 2a)
+
+This parent-approved dependency refinement is a **partially checked working
+draft; incomplete and unqualified**. The obligations below remain planned
+contract, not a claim of completed implementation, measured memory or 100k
+qualification. Earlier focused passes and the original friend/Kad proof above
+do not establish final acceptance of this category continuation.
+
+#### Current draft feedback (2026-11-16)
+
+The settled public contract uses immutable ASCII category names as IDs,
+name-addressed category routes and one nullable `category` download field,
+with numeric SQL keys internal. Parent-recorded focused checks on working
+material passed: metadata round 7 had 120 unit plus 3 ownership checks; ED2K
+round 4 had 1,339 unit checks, including observed-root exact paths, old-location
+tombstones, independent copies, unchanged last-scan state and stale-epoch
+rollback. WebUI round 4 passed 53 unit and 32 Playwright checks, typecheck and
+production build, retained at
+`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/category-foundation-webui-round-4/webui.log`.
+Current-contract/campaign-unit Python round 4 passed 140, retained at
+`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/category-foundation-python-round-4/junit.xml`.
+Static round 2 passed 129 before the later documentation-only OpenAPI port-literal
+correction; that is not a final selected-contract verdict.
+
+Earlier Core round 4 passed 540 units plus all Core integrations. Subsequent
+lifecycle rounds 5 and 6 failed root-SQL fixture assertions, with round 6 at
+546 passed and one aggregate-root/explicit-origin accessor failure. Round 7
+was interrupted after six failures and a real test-only deadlock; retain its
+incomplete failure log at
+`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/category-foundation-core-round-7/rust-unit.log`.
+Round 8 compiled with zero warnings and reached 550 passed plus one
+verified-parent fixture failure; five delivery regressions were fixed, but
+integrations did not run. Retained log:
+`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/category-foundation-core-round-8/rust-unit.log`.
+
+Monitor async stop/join, retained root-I/O/root-SQL slots and cancellation fixes
+exist as implemented drafts awaiting passing proof. Root-admission sealing,
+owned explicit-root compare-and-set and multiple-root continuation are drafted;
+dedicated cancellation, compare-and-set and terminal late-I/O checks plus REST
+storage-error mapping remain pending. These results are not an exact committed/
+staged acceptance bundle. The conditional prepared-verification 64-MiB design
+below remains planned, not implemented. Whole phase 2a remains incomplete and
+unqualified; no broad ingest conversion or scale proof follows.
+
+Keep category SQL and immediate authoritative category/assignment caches ordered
+through the existing worker/coordinator. Retain each admitted category receipt
+until its required publication succeeds or returns an explicit failure. Permit
+one active tracked category continuation, with later category work in an
+admitted, slot-bounded parked FIFO. Unrelated friend/Kad domains may proceed
+subject to normal shared admission; no global metadata FIFO may wait behind a
+100k filesystem scan. The existing sharing/health owner performs bounded
+filesystem slices off the SQL worker. Add no persistence actor, detached task
+per request, unbounded continuation queue or lock held across filesystem work.
+Keep coordinator-to-health ownership weak (a `Weak` sender). Monitor stop/join
+and cancellation-safe fixed slots for Core-owning async handles are implemented
+drafts with acceptance still pending. Track actual late filesystem probes and
+snapshots separately from root SQL jobs retaining `MetadataStore`; those SQL
+jobs must settle before profile release. A single tracked actual late probe
+suffices. No broad Core extraction or new strong coordinator/health retention
+cycle is required by this refinement.
+
+Shared-directory GET is a lightweight cached configuration/last-observed-health
+read. The existing monitor's two-second interval and explicit scans update those
+observations; they are not a freshness deadline or instantaneous filesystem
+truth. New unverified roots report `accessible=false`. Do not initiate a physical
+probe per GET; root mutations or health work requiring filesystem access use
+the retained blocking-I/O boundary. This adds no DTO/freshness field or setting.
+
+Missing/stopped sharing ownership or shutdown interruption yields a distinct
+internal known-committed publication failure (`CommittedPublicationFailed`),
+not unknown commit or global authoritative-cache corruption. Keep the eligibility
+safety fence active and the immediate authoritative category/assignment caches
+coherent. Retain the fact of durable commit; unrelated admission, the final Kad
+checkpoint and owner drain stay available. The planned mapping is HTTP 503
+`PERSISTENCE_COMMITTED` with `details.committed=true`: durable commit is known,
+but downstream sharing publication is not guaranteed. The category caller must not receive
+success before required publication. Caller abort does not detach or abandon
+the continuation. Public error mapping must preserve these distinctions.
+
+Late category-health filesystem work retains its actual byte lease until its
+buffers are dropped, including after the initiating continuation stops waiting.
+Core baseline payload, final Kad reservation and that late-I/O payload share the
+Core owner's 8 MiB product-payload budget; prove their checked combined bound and actual
+residual capacity. Do not release quota while blocking work still owns memory
+or describe this budget as process RSS.
+
+The minimal indexed prerequisite extends existing `shared_file_memberships`
+with derived `known_file_id`. Its composite `(path_id, known_file_id)` foreign
+key references `local_file_instances`' matching unique key with `ON UPDATE`
+and `ON DELETE CASCADE`; a covering `(root_id, known_file_id, path_id)` index
+supports grouped keyset traversal. This remains derived membership, not a new
+index authority or table. Enumerate removed memberships too, process each
+affected content once, and bound each query/allocation rather than materialize
+the full library or all-copy manifests/source lists.
+
+Bound complete/partial copy selection independently and preserve their separate
+serving eligibility. An active-hash watch prevents unrelated content changes
+from starving progress. A root eligibility epoch covers every root/accessibility
+writer. Actual cached ranked server-offer batches and Kad/direct complete-file
+serving must revalidate eligibility while category publication is pending or
+failed; unchanged cached offers are not sufficient. Independent partial sources
+must remain usable where their own policy permits.
+
+Run bounded indexed eligibility reads through the existing `MetadataStore`
+outside ordinary persistence admission. Use an explicit separate bounded read
+workspace/concurrency limit and track the store/profile-lease lifetime; add no
+reserved read actor. Combine complete-file eligibility with independent live
+partial-source authority rather than treating one as a substitute for the other.
+
+At allocation no existing ED2K mutation tracker supplied the local-eligibility
+lifetime boundary. The working-draft small finalizer registry tracks existing
+blocking local-eligibility SQL and synchronous-publication units using an owned
+`JoinSet::spawn_blocking`. Bound it to **4 admitted units and 8 MiB retained
+payload**, reserving before clone/spawn. It has no queue, dispatcher, new actor
+or per-request async task, and continues to use the same database mutex.
+This separate allowance is additional to the Core owner's 64 slots/8 MiB and
+the separately bounded read workspace; the combined payload allowance increases
+and must not be reported as the Core's 8 MiB limit or a process RSS bound.
+
+The actual blocking unit owns bounded input, the existing owned per-hash guards
+and stripe guard, payload lease, SQL/cache handles and response sender. Perform
+fallible projection work before commit in the same transaction, release the DB
+connection, then finish bounded synchronous cache/catalog publication while
+preserving live partial state, uncheckpointed progress and independent complete
+copies. Caller abort loses the response only; the admitted unit completes.
+Reap completed handles; atomically seal admission and join outside the registry
+lock. Retain panic and known-committed publication failures for honest drain
+reporting. Drain before profile-lease release and coordinate completion before
+the final Kad checkpoint. Saturation is transient busy; internal required work
+must retry without losing its intent. This is planned tracking of existing
+blocking calls, not a second persistence service or new test framework.
+
+Prepared verification uses **one separately accounted job**, rather than
+temporary leaf staging, to preserve existing 256-GiB support without forcing
+large AICH data into the local finalizer's 8-MiB allowance. A proposed **64-MiB
+prepared ceiling is conditional**, not a certified bound for current code.
+Explicitly bound capacities, geometry and retained text, stream comparisons
+against stored identity instead of retaining duplicate vectors, and remove
+unbounded alias-ID collection before claiming that ceiling. Maximum geometry is
+28,257 parts and 1,497,588 leaves, or 29,951,760 packed leaf bytes. The reviewed
+current lifetime is approximately 40.4 MB before paths/publication, assuming
+exact capacities; this estimate is not a measured or enforced peak.
+
+The prepared job's real lease must follow the actual hashing closure and its
+result into tracked SQL/cache publication even when the caller cancels. Narrow
+the current full-Core progress observer to the required progress authority.
+The existing local-finalizer publication workspace remains separately charged;
+do not describe their combined allowance as the Core's 8 MiB or total RSS.
+Immutable registration must not silently rebind paths or mutate the transfer's
+AICH cache authority. These changes add no public setting, queue, actor or
+file-size limit, and remain incomplete/unqualified.
+
+Preserve the existing direct `TcpStream::write_all` path. Encode at most the
+existing 200 server items into an owned bounded packet, then perform a final
+eligibility epoch check and admit that packet under the short publication/root
+lock. Release the lock before socket I/O. A root change before admission
+invalidates the packet and requires retry; a root change after admission may
+allow that one already in-flight bounded packet to finish. Every subsequent
+batch must recheck eligibility. Add no writer actor/channel or lock spanning
+the write. These packet and read boundaries remain planned and unqualified.
+
+Reuse existing Rust/Python owners to prove same-category order, unrelated
+friend/Kad progress, receipt/cancellation/shutdown outcomes, removed-membership
+coverage, bounded first/late keyset pages and allocation peaks, and eligibility
+at real offer/serving frontdoors. No such new acceptance proof is claimed here.
 
 ### Required acceptance before reuse
 

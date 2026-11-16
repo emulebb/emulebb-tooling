@@ -18,6 +18,29 @@ source: Operator-directed configuration and persistence architecture review
 
 # RUST-CI-044 - Review SQLite schema efficiency and evolution boundaries
 
+## Allocated category storage cut (phase 2a)
+
+Implement the [master category contract](../../design/PUBLIC-FOUNDATION.md#downloads-and-categories)
+directly on fresh profiles: internal positive SQLite `AUTOINCREMENT` i64 keys,
+immutable and never reused; immutable public ASCII name with a SQLite `NOCASE` unique
+constraint; nullable temp/destination paths and editable comment. Assignment is
+nullable. Deletion clears only matching references atomically, without
+renumbering IDs or filesystem changes. Validate surviving IDs and references
+through the existing Python metadata and REST owners.
+
+Names use the operator-selected tag grammar: 1-64 ASCII letters/digits/hyphens,
+starting with a letter or digit, with no whitespace, dots, underscores, trimming
+or rewriting. Names are public IDs; create a new category and reassign explicitly.
+URL and download assignments use names; numeric category foreign keys remain internal.
+This allocation does not implement new job
+identity, storage namespaces or repeated attempts; those remain later vertical
+cuts. The earlier registered runtime evidence below does not qualify this
+pending schema/API change.
+The [#155 current draft feedback](RUST-REF-016.md#current-draft-feedback-2026-11-16)
+records metadata/ED2K and name-contract consumer passes while retaining failed/
+interrupted Core lifecycle checks and pending root-work proof. Whole phase 2a remains incomplete/unqualified;
+the conditional 64-MiB prepared-verification design is not implemented.
+
 ## Registered runtime and local-suite evidence (2026-11-16)
 
 The [#233 registered runtime checkpoint](RUST-FEAT-062.md#registered-kad-runtime-checkpoint-2026-11-16)
