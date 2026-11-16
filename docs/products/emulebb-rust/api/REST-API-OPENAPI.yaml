@@ -895,7 +895,7 @@ paths:
       description: Every admitted batch returns 207, including all-failed batches. Results preserve request order; per-job failure
         does not roll back other successes. After admission the existing operation owner completes every item despite caller
         disconnect. Malformed whole requests return 400; shared-capacity refusal before admission returns 503 without modifying
-        any job.
+        any job. Stop preserves the job and resumable internal pieces.
       requestBody:
         required: true
         content:
@@ -957,8 +957,10 @@ paths:
       description: Every admitted batch returns 207, including all-failed batches. Results preserve request order; per-job failure
         does not roll back other successes. After admission the existing operation owner completes every item despite caller
         disconnect. Malformed whole requests return 400; shared-capacity refusal before admission returns 503 without modifying
-        any job. deleteData is required. Keep-data removal is supported only for completed delivered jobs; bytes alone never
-        grant destructive authority.
+        any job. deleteData is required. False preserves completed outputs but retires daemon-owned internal pieces;
+        keep-data removal is supported only for completed delivered jobs. True additionally requests deletion of the exact
+        output only with proven job ownership. Independent and unowned copies are preserved; bytes alone never grant
+        destructive authority.
       requestBody:
         required: true
         content:
@@ -8301,6 +8303,11 @@ components:
           $ref: '#/components/schemas/DownloadIds'
         deleteData:
           type: boolean
+          description: >-
+            False keeps completed outputs while retiring internal pieces. True
+            additionally requests exact owned-output deletion, never deletion
+            of independent or unowned copies. Stop, not remove, preserves a job
+            and its resumable pieces.
     DownloadBatchItem:
       type: object
       additionalProperties: false
@@ -8412,20 +8419,25 @@ components:
         start:
           type: integer
           minimum: 0
+          description: Zero-based inclusive start byte offset.
         end:
           type: integer
           minimum: 0
+          description: Zero-based inclusive end byte offset.
         size:
           type: integer
           minimum: 0
+          description: Byte size of this inclusive interval, equal to end - start + 1.
         completedBytes:
           type: integer
           minimum: 0
+          description: Bytes present; this count alone does not establish successful verification.
         gapBytes:
           type: integer
           minimum: 0
         complete:
           type: boolean
+          description: True only after successful part verification; completedBytes equal to size or zero gapBytes is insufficient.
         requested:
           type: boolean
         corrupted:
@@ -8469,7 +8481,7 @@ components:
       - clientSoftware
       - reportedFileNames
       - reportedFileNamesHasMore
-      - downloadSpeedKiBps
+      - downloadRateBytesPerSecond
       - availableParts
       - partCount
       - serverIp
@@ -8532,9 +8544,10 @@ components:
             True whenever observations are omitted from this latest window,
             including omissions required by the projection/page byte budget.
             No total count or complete-history guarantee is implied.
-        downloadSpeedKiBps:
-          type: number
+        downloadRateBytesPerSecond:
+          type: integer
           minimum: 0
+          maximum: 18446744073709551615
         availableParts:
           type: integer
           minimum: 0

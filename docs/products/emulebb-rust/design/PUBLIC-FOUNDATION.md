@@ -376,7 +376,11 @@ delivery/job-storage repair belongs to phases 2b/2c; the owning
 records its evidence and unimplemented status.
 
 Removal requests explicitly state whether data is deleted. Keep-data removal is
-supported only for completed delivered jobs. An incomplete job can remain
+supported only for completed delivered jobs: `deleteData:false` preserves
+completed outputs but retires daemon-owned internal pieces. `deleteData:true`
+additionally requests deletion of the exact output only with proven job
+ownership; independent and unowned copies are preserved. Stop retains the job
+and resumable internal pieces. An incomplete job can remain
 stopped or be removed with partial data; do not create orphan-partial ownership
 and recovery features in this round.
 
@@ -466,6 +470,9 @@ path may materialize the whole collection. A source exposes at most 16 recent
 filename observations, newest first, with `reportedFileNamesHasMore` whenever
 older or oversized observations are omitted. The page byte budget also applies
 to this nested window; do not silently rewrite observed names.
+Part details are independently paginated. Their `start`/`end` are zero-based
+inclusive byte offsets and `size = end - start + 1`. `DownloadPart.complete`
+means successful part verification, independently of byte presence or zero gaps.
 
 Use one bounded action endpoint per download operation:
 
