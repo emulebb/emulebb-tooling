@@ -34,12 +34,15 @@ or rewriting. Names are public IDs; create a new category and reassign explicitl
 URL and download assignments use names; numeric category foreign keys remain internal.
 This allocation does not implement new job
 identity, storage namespaces or repeated attempts; those remain later vertical
-cuts. The earlier registered runtime evidence below does not qualify this
-pending schema/API change.
-The [#155 current draft feedback](RUST-REF-016.md#current-draft-feedback-2026-11-16)
-records metadata/ED2K and name-contract consumer passes while retaining failed/
-interrupted Core lifecycle checks and pending root-work proof. Whole phase 2a remains incomplete/unqualified;
-the conditional 64-MiB prepared-verification design is not implemented.
+cuts. The [#155 registered category checkpoint](RUST-REF-016.md#registered-category-checkpoint-2026-11-16)
+records the exact staged bundle, full-suite source-material receipt and passing
+category runtime proof, including nullable assignments, deletion/name reuse
+without relinking, restart, unique-hash withdrawal, independent-copy preservation
+and unchanged fixture bytes. Earlier failed/interrupted evidence remains retained;
+friend-only database `quick_check` results do not become Kad integrity claims.
+The conditional 64-MiB prepared-verification and broader hash/scan bounds remain
+planned. No combined-scale, platform, endurance or full-foundation completion
+claim follows; earlier runtime evidence below is attributed to its older bundle.
 
 ## Registered runtime and local-suite evidence (2026-11-16)
 

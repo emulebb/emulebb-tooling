@@ -18,6 +18,62 @@ source: 2026-10-23 Rust async and portability audit
 
 # RUST-REF-016 - Move blocking SQLite work behind bounded async persistence
 
+## Registered category checkpoint (2026-11-16)
+
+The supported registered campaign **passed** for this exact staged source bundle:
+
+- Rust: `22573afd8cc4d8d8850e537d91f030be2eb5fbd0`.
+- Tests: `c1ad2912e0a9717958e3592f99f7c0e2ff54dfeb`.
+- Tooling: `5be25fc44d4faf7bbd5313070fb67c992d0b1233`.
+- Builder: `e93fca5abc195cc203ba28d0d935db500f056334`.
+
+Regular Windows runtime rebuild: 182 seconds, zero warnings, receipt
+`EMULEBB_WORKSPACE_OUTPUT_ROOT/logs/builds/20261116T074842Z-build-clients/build-result.json`.
+Passing report:
+`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/rust-rest-openapi-ci/20261116T075302Z/report.json`.
+Main conformance covered 83/105 operations, 40 successes, 43 expected errors and
+22 explicit unsafe skips, with SSE passing. Friend fault/retry covered all six
+delegated frontdoors returning HTTP 500 `PERSISTENCE_FAILED`, with unchanged
+cache/database on failure and three reopened
+database `quick_check` results of `ok`. Kad exercised real SQL HTTP 500 failure
+with unchanged state, retry, graceful reopen/restart and stable identity/contacts,
+including one actual routing reply; no Kad `quick_check` result is claimed.
+
+The new category phase proved the name grammar, case-insensitive lookup,
+immutable public name identity, nullable assignments, deletion, and same-name
+recreation without relinking cleared assignments, including restart. Removing
+the category destination withdrew its unique complete hash while retaining an
+independent complete copy; all fixture bytes remained unchanged. All owned
+daemons ended gracefully. These results qualify this staged category contract
+and scoped lifecycle, not the entirety of phase 2a or round one.
+
+The original campaign failure is retained at
+`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/rust-rest-openapi-ci/20261116T073121Z/report.json`.
+It exposed three private bootstrap phase values and four stale live-consumer
+probes in the main phase; subsequent phases did not run. The direct correction
+uses the five public coarse phase literals and a producer regression. Core round
+10 then passed 560 units plus all Core integrations with zero warnings; Python
+round 6 passed 46 live-conformance/CI-owner checks. Earlier current-contract
+140 checks and UI 53 unit/32 Playwright/typecheck/build evidence remain unchanged.
+
+Full supported Rust acceptance round 6 passed 2,921, zero failed, one ignored
+subprocess helper and zero warnings on the preceding working material. Its
+104 recorded source-file hashes matched the five granular Rust commits ending at
+`eb5b551251f10c9b985ad648bf16345b2b7a4726`; receipt:
+`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/category-foundation-rust-acceptance-round-6/committed-source-material.json`.
+That full-suite result precedes the phase correction; the later focused checks
+and exact staged campaign above qualify that correction without attributing
+the earlier full suite to a later source head.
+
+The sealed-arm failure, concurrent drain wake-up and separate control/join-handle
+review repairs are implemented and tested. A real Core Kad fixture proved the
+snapshot row and revision before a held reload-execution gate was released;
+this is not proof against blocked slow filesystem I/O. Prepared-ingest 64-MiB
+accounting and broader hash/scan allocation bounds remain planned. Broader jobs,
+settings, CLI, REST redesign and combined-scale work remain outstanding. No
+100k runtime, 365-day or full-platform qualification, complete-goal claim, PR or
+merge follows. An ensuing evidence-only tooling head is not this tested bundle.
+
 ## Registered shared-owner runtime checkpoint (2026-11-16)
 
 The [#233 registered runtime checkpoint](RUST-FEAT-062.md#registered-kad-runtime-checkpoint-2026-11-16)
@@ -219,13 +275,16 @@ before copying and be distinguishable from transient saturation.
 
 ### Planned category publication continuation (phase 2a)
 
-This parent-approved dependency refinement is a **partially checked working
-draft; incomplete and unqualified**. The obligations below remain planned
-contract, not a claim of completed implementation, measured memory or 100k
-qualification. Earlier focused passes and the original friend/Kad proof above
-do not establish final acceptance of this category continuation.
+This parent-approved allocation now has the scoped registered category proof
+above. The contract below also retains outstanding prepared/hash/scan resource
+obligations; it is not a claim of complete phase-2a implementation, measured RSS
+or 100k qualification. Earlier friend/Kad evidence remains attributed to its
+own source bundle.
 
 #### Current draft feedback (2026-11-16)
+
+These retained local-draft observations precede the registered checkpoint above;
+their failure and repair history is not the latest acceptance verdict.
 
 The settled public contract uses immutable ASCII category names as IDs,
 name-addressed category routes and one nullable `category` download field,
@@ -256,21 +315,19 @@ detached-scan checks. This precedes the latest cancellation-handoff refinement;
 the related handoff gap remains open. Full-acceptance rounds 1-3 retain,
 respectively, an import compilation failure, one invalid-name fixture failure,
 and two actual detached-scan failures. None is a final successful acceptance run.
-Current internal review has also queued sealed-arm success-gap,
-concurrent join-handle drain-waker and control-to-join-handle strong-back-reference
-repairs; these are not yet implemented. Phase 2a remains unqualified.
+That internal review queued sealed-arm success-gap, concurrent join-handle
+drain-waker and control-to-join-handle strong-back-reference repairs; the
+registered checkpoint above records their subsequent implementation and tests.
 
-Monitor async stop/join, retained root-I/O/root-SQL slots and cancellation fixes
-exist as implemented drafts awaiting passing proof. Root-admission sealing,
-owned explicit-root compare-and-set and multiple-root continuation are drafted;
-dedicated cancellation, compare-and-set and terminal late-I/O checks plus REST
-storage-error mapping remain pending. These results are not an exact committed/
-staged acceptance bundle. The conditional prepared-verification 64-MiB design
-below remains planned, not implemented. Whole phase 2a remains incomplete and
-unqualified; no broad ingest conversion or scale proof follows.
+Monitor async stop/join, retained root-I/O/root-SQL slots, cancellation fixes,
+root-admission sealing and owned explicit-root compare-and-set/multiple-root
+continuation were still draft at this local checkpoint. The registered result
+above supersedes that pending lifecycle verdict. The conditional prepared-
+verification 64-MiB design below remains planned, not implemented; no broad
+ingest conversion or scale proof follows.
 
-The newest coalesced reload handoff and terminal ordering below remain
-draft/uncompiled. Reuse the existing reload worker with one retained task slot.
+The coalesced reload handoff and terminal ordering use the following contract.
+Reuse the existing reload worker with one retained task slot.
 Its narrow control holds only pending state, reservation count, seal state and
 `Notify`, without a Core or join handle. Reserve a `RootCommand` token in
 `submit_reserved`'s `make_command`, after the existing owner quota is acquired;
@@ -300,8 +357,8 @@ subject to normal shared admission; no global metadata FIFO may wait behind a
 filesystem slices off the SQL worker. Add no persistence actor, detached task
 per request, unbounded continuation queue or lock held across filesystem work.
 Keep coordinator-to-health ownership weak (a `Weak` sender). Monitor stop/join
-and cancellation-safe fixed slots for Core-owning async handles are implemented
-drafts with acceptance still pending. Track actual late filesystem probes and
+and cancellation-safe fixed slots for Core-owning async handles have scoped
+checkpoint evidence above. Track actual late filesystem probes and
 snapshots separately from root SQL jobs retaining `MetadataStore`; those SQL
 jobs must settle before profile release. A single tracked actual late probe
 suffices. No broad Core extraction or new strong coordinator/health retention
@@ -375,7 +432,7 @@ Reap completed handles; atomically seal admission and join outside the registry
 lock. Retain panic and known-committed publication failures for honest drain
 reporting. Drain in the post-final-Kad sequence above before profile-lease
 release. Saturation is transient busy; internal required work
-must retry without losing its intent. This is planned tracking of existing
+must retry without losing its intent. This tracks existing
 blocking calls, not a second persistence service or new test framework.
 
 Prepared verification uses **one separately accounted job**, rather than

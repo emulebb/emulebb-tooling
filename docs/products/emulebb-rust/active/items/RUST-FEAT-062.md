@@ -18,6 +18,13 @@ source: operator-approved profile continuity design 2026-11-05
 
 # RUST-FEAT-062 - Persist Kad routing state in SQLite and keep met files import-only
 
+The [#155 registered category checkpoint](RUST-REF-016.md#registered-category-checkpoint-2026-11-16)
+records the subsequent exact `22573afd` staged bundle and repeat passing real Kad
+SQL fault/retry/reopen/restart proof, plus the root/reload shutdown interaction.
+Its Core fixture checks persisted snapshot/revision before releasing a held
+reload-execution gate; that is not blocked slow-filesystem proof. The older
+registered checkpoints below retain their own exact source attribution.
+
 ## Registered Kad runtime checkpoint (2026-11-16)
 
 The supported registered REST CI campaign **passed** with graceful teardown at
@@ -294,8 +301,8 @@ use typed columns and explicit constraints. It must not store an opaque
   network timeout, follow the [#155 terminal sequence](RUST-REF-016.md#planned-category-publication-continuation-phase-2a):
   owner drain resolves accepted root tokens, then cooperative reload join,
   local-registry seal/drain, root-SQL drain and eligibility-read drain, attempting
-  every stage before connection/profile-lease release. This latest sequence is
-  draft/uncompiled, not a new runtime qualification.
+  every stage before connection/profile-lease release. The #155 checkpoint
+  records scoped implementation proof and its remaining resource-test limits.
   Never rely on a snapshot request made after teardown has already canceled Kad.
 - A successful explicit `nodes.dat` import commits its normalized logical
   contacts immediately, even if Kad is stopped. If Kad is running, merge the

@@ -602,10 +602,10 @@ paths:
         the ASCII tag-name grammar, preserving spelling without trimming or
         rewriting; uniqueness is ASCII case-insensitive. Omitted paths
         default to null and omitted comment defaults to an empty string.
-        Planned category publication semantics: HTTP 503 PERSISTENCE_COMMITTED
+        HTTP 503 PERSISTENCE_COMMITTED
         with details.committed=true guarantees durable mutation and coherent
         authoritative category/assignment caches, while required downstream
-        sharing publication may have failed. Runtime qualification is pending.
+        sharing publication may have failed.
       operationId: createCategory
       requestBody:
         required: true
@@ -670,10 +670,10 @@ paths:
       summary: Update category paths and comment.
       description: >-
         Omitted fields retain their values; explicit null clears a path. The
-        category name never changes. Planned publication semantics use HTTP 503
-        PERSISTENCE_COMMITTED with details.committed=true for durable mutation
+        category name never changes. HTTP 503
+        PERSISTENCE_COMMITTED with details.committed=true reports a durable mutation
         with coherent authoritative caches but failed downstream sharing
-        publication. Runtime qualification is pending.
+        publication.
       operationId: patchCategory
       requestBody:
         required: true
@@ -704,10 +704,9 @@ paths:
       description: >-
         Clears only matching transfer category assignments. Surviving category
         names are unchanged; files are neither moved nor deleted.
-        Planned publication semantics use HTTP 503 PERSISTENCE_COMMITTED with
-        details.committed=true for durable mutation with coherent authoritative
-        caches but failed downstream sharing publication. Runtime qualification
-        is pending.
+        HTTP 503 PERSISTENCE_COMMITTED with
+        details.committed=true reports a durable mutation with coherent authoritative
+        caches but failed downstream sharing publication.
       operationId: deleteCategory
       responses:
         "200":

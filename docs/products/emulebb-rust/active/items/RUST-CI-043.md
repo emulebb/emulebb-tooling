@@ -40,13 +40,15 @@ four documented fields, with `/categories/{categoryName}` addressing and a
 single nullable `category` name on download inputs/resources. Lookup is ASCII
 case-insensitive and returns saved spelling. Numeric SQL keys remain internal;
 transfer-level priority removal remains in the later job cut.
-These are allocated contract changes, not new runtime qualification. The
-registered proof below covers its exact earlier tooling contract `eac34a72`.
-The [#155 current draft feedback](RUST-REF-016.md#current-draft-feedback-2026-11-16)
-records current name-contract consumer passes and retains failed/interrupted
-Core lifecycle rounds. Monitor/root-work lifetime fixes are implemented drafts
-awaiting proof; whole phase 2a remains
-incomplete and unqualified, with the prepared-verification budget still planned.
+The [#155 registered category checkpoint](RUST-REF-016.md#registered-category-checkpoint-2026-11-16)
+records the exact Rust `22573afd` / tests `c1ad2912` / tooling `5be25fc4` /
+Builder `e93fca5` staged bundle and passing real campaign: main 83/105 operations,
+SSE, friend/Kad fault-retry/restart checks and the new category lifecycle/sharing
+phase. All owned daemons ended gracefully. The first failed runtime report and
+its direct public-phase/live-consumer repairs remain recorded there. Earlier
+`eac34a72` contract evidence below remains historical. Prepared-ingest/hash/scan
+resource bounds and broader jobs/settings/CLI/REST work remain outstanding;
+neither this checkpoint nor earlier focused passes complete the overall scope.
 
 ## Allocated phase-four Rust contract-gate cleanup
 

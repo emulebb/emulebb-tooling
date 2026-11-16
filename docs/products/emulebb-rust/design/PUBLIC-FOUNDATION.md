@@ -293,6 +293,8 @@ filter, not a stored category; no synthetic category zero exists. Assignment is
 nullable. Deleting a category clears only matching job references, without
 renumbering categories or moving/deleting files. Category changes do not
 implicitly change tags.
+Recreating a deleted name creates a new internal category and does not relink
+assignments cleared by the earlier deletion.
 Address a category at `/categories/{categoryName}` using ASCII case-insensitive
 lookup that returns the saved spelling. Download add/PATCH/search-download inputs
 and download resources use one `category` field containing the canonical name
@@ -312,12 +314,13 @@ workspace/concurrency and tracked profile lifetime. For direct socket writes,
 check the root epoch and admit an owned packet of at most the existing 200 server
 items under a short lock, then release it before I/O. Earlier root changes
 invalidate/retry; a later change may let that one in-flight packet finish, while
-each subsequent batch rechecks. This remains a partially checked working draft,
-incomplete and unqualified; [#155-A](../active/items/RUST-REF-016.md#planned-category-publication-continuation-phase-2a)
+each subsequent batch rechecks. The [scoped category checkpoint](../active/items/RUST-REF-016.md#registered-category-checkpoint-2026-11-16)
+records exact-source contract/lifecycle proof; remaining resource obligations
+are not qualified by it. [#155-A](../active/items/RUST-REF-016.md#planned-category-publication-continuation-phase-2a)
 owns bounded admission, leases and serving revalidation, alongside the
 [#233 shutdown contract](../active/items/RUST-FEAT-062.md).
 
-The working-draft local-eligibility finalizer registry tracks existing blocking
+The local-eligibility finalizer registry tracks existing blocking
 SQL/publication units through caller abort and shutdown. Its separate limit is
 4 admitted units/8 MiB retained payload, reserved before clone/spawn, in addition
 to the Core owner's 64 slots/8 MiB and separately bounded eligibility reads.
@@ -327,15 +330,14 @@ the combined payload allowance; it is neither the Core's 8 MiB limit nor RSS.
 One separately accounted prepared-verification job preserves existing 256-GiB
 support; its proposed 64-MiB ceiling is conditional on explicit capacity and
 geometry bounds, not a certified current-code limit. Its lease follows actual
-hashing/results through SQL/publication after caller abort. Monitor stop/join,
-retained root-I/O/root-SQL slots and cancellation fixes are implemented drafts
-awaiting passing lifecycle proof; root-admission sealing and explicit-root
-compare-and-set/multiple-root continuation remain drafts.
-Root SQL jobs must settle before profile release. Whole phase 2a remains
-incomplete/unqualified; these plans add no public limit or actor.
+hashing/results through SQL/publication after caller abort. The category
+checkpoint provides scoped monitor/root/reload lifecycle evidence; prepared-
+ingest and broader hash/scan allocation bounds remain planned. Root SQL jobs
+must settle before profile release. This does not complete phase 2a or round one;
+these plans add no public limit or actor.
 Reuse one retained coalesced reload worker: an admitted root command's token
 preserves successful SQL/cache scan intent across caller cancellation. Scans
-must not restart a stopped monitor; the narrowed handoff remains draft/uncompiled.
+must not restart a stopped monitor.
 
 At first start, choose optional category temp storage or global fallback and
 retain that location for the job. At delivery start resolve the current category
@@ -484,8 +486,8 @@ discard its DHT runtime. Outside that cleanup timeout, drain the persistence
 owner, join the reload worker without abort, seal/drain local finalizers, then
 drain root SQL and eligibility reads before connection/profile-lease release.
 Attempt every stage even after a failure; the [#155 lifecycle contract](../active/items/RUST-REF-016.md#planned-category-publication-continuation-phase-2a)
-owns retained tokens, cooperative stop and error reporting. This latest sequence
-is draft/uncompiled, not final phase-2a qualification.
+owns retained tokens, cooperative stop, error reporting and the limits of the
+scoped checkpoint evidence; this does not imply full phase-2a qualification.
 
 ### Docker and deployment
 
