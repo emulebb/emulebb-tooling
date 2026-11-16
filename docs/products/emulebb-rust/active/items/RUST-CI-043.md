@@ -80,6 +80,17 @@ physical storage evidence. Its existing unit owner passed **22 tests** under
 this is unit qualification of the campaign, not execution against the pending
 Rust producer.
 
+The normal Tests push hook subsequently ran the producer comparison and failed
+that check with 293 other tests passing; retained evidence is
+`reports/local-check/emulebb-build-tests/20261116T123825Z-a223100d/02.log`.
+The test remains required. Checker provider `e7b7ad0c` also removes two incorrect
+generic assumptions: validate each declared success status rather than requiring
+exactly one, and require 404 for named resource paths rather than collections or
+batch actions. The four-owner provider gate then passed **294 tests**, with only
+the still-unconverted producer comparison deselected, under
+`reports/native-download-contract-harness-round-3`. The Tests commits remain
+local until producer parity permits their normal push.
+
 ## Allocated category contract cut (phase 2a)
 
 The [master category contract](../../design/PUBLIC-FOUNDATION.md#downloads-and-categories)
