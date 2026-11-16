@@ -107,6 +107,17 @@ the existing bounded resident cache directly, while diagnostic representations
 retain their accounting lease through consumption/serialization. The current
 implementation does not yet establish that lifetime bound.
 
+After the next production-consumer repairs, the complete fourth diagnostic run
+compiled the ED2K library with one unused-import warning. Its unit-test target
+still failed to compile with 1,031 fixture diagnostics; no engine test executed.
+Evidence is under `reports/download-job-ed2k-diagnostic-round-4/rust-unit.log`.
+Round three's output capture stopped early and its shell status is not a test
+verdict; no matching Builder/Cargo process remained before the fourth run.
+The next sequential Rust writer is converting existing admission, storage and
+delivery fixtures to real job tokens, preserving restart/removal/ownership
+assertions. Retained I/O ownership and bounded result lifetime remain separate
+unfinished production work.
+
 ### Callback and retirement provider checkpoint (2026-11-16)
 
 Rust `e4076237` advances the fresh schema to 76. Callback and ingest publication

@@ -156,6 +156,18 @@ edits, final-profile-relative paths and unsupported no-replace publication.
 Do not add package SQL, a second settings writer or a new runner. This ordering
 is a source-reviewed allocation, not implemented or executed qualification.
 
+The shared harness preparation owner is
+`emule_test_harness/rust_client.py::write_rust_profile`; replace its direct saved
+settings writes with the selected binary's canonical offline service. Separate
+settings SQL callers in the existing REST CI and upload-soak scenarios must use
+that same service. Keep fresh current-schema construction and genuine server/
+Kad fixtures distinct from settings writes. Current Rust transfer/name fixture
+helpers in `rust_metadata.py` must become job-native rather than opening or
+converting another schema. Preserve actual MFC import inputs and their limited
+scope. Harness interface/address options are orchestration inputs, not daemon
+overrides to delete indiscriminately; Docker process-text assertions, package
+help checks and Android error expectations need direct current-contract updates.
+
 ## Allocated category contract cut (phase 2a)
 
 The [master category contract](../../design/PUBLIC-FOUNDATION.md#downloads-and-categories)
@@ -188,16 +200,25 @@ its direct public-phase/live-consumer repairs remain recorded there. Earlier
 resource bounds and broader jobs/settings/CLI/REST work remain outstanding;
 neither this checkpoint nor earlier focused passes complete the overall scope.
 
-## Allocated phase-four Rust contract-gate cleanup
+## Native Rust contract-gate consolidation
 
-The existing `emulebb-build-tests/tests/python/test_emulebb_rust_rest_contract.py`
-still requires Rust to preserve the frozen MFC route surface and uses parity
-exception registries. Refactor that Rust gate against the authoritative current
-Rust OpenAPI and DTOs, reusing its existing route/schema conformance helpers.
-Remove the MFC route-preservation requirement and stale parity/retired-shape
-registries from the Rust gate; do not change the actual MFC owner or tests.
-This is allocated phase-four work, not implemented cleanup or authorization for
-a new harness framework.
+Tests `66e51fef` removes the duplicate MFC-derived Rust route gate, exception
+registries and global source-text field assertions. Existing overnight and
+release-campaign callers now invoke the required selected-source owner
+`test_rust_openapi_routes.py::test_selected_rust_route_contract_matches_selected_openapi`
+directly. Actual MFC behavior and its tests are unchanged. Independent review
+accepted the consolidation; the supported two-owner unit gate passed **36 tests**
+under `EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/native-rest-gate-consolidation-unit-round-1`
+(`pytest.log`, `junit.xml`). The actual producer check remains required and
+unqualified while REST conversion is pending; no skip or exception hides it.
+
+The removed Deserialize source scan was a static heuristic. The selected gate
+compares actual route/body/response metadata with OpenAPI, not real serde
+acceptance or serialization. Phase-four acceptance must extend the existing
+`rust_rest_conformance.py` and `rust-rest-openapi-ci.py` owners to exercise valid
+request variants and documented optional fields through the actual router,
+including `deny_unknown_fields`, and validate response DTOs on the wire.
+Static metadata agreement does not satisfy those runtime obligations.
 
 ## Registered runtime and local-suite evidence (2026-11-16)
 
