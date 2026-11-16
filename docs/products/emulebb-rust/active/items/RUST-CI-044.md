@@ -53,12 +53,30 @@ explicit `*_at_s` units; public names follow the master.
 Before the Core consumer cut, finish the remaining obligations found in
 the scoped review: wire the qualified durable storage-failure provider into
 runtime capture and public detail; expose the qualified checkpointed-byte
-aggregate through runtime progress; and add descending ID keysets with the
-required view/category indexes and fixed counts. Terminal progress remains one
+aggregate through runtime progress; and wire the qualified descending ID keysets,
+view/category indexes and fixed counts into native queries. Terminal progress remains one
 after piece retirement. Startup admits only the bounded active/exploration set;
 neither failed jobs nor queued/history rows require retained Core workers or
 full manifests. These additions are allocated, not implemented by the provider
 checkpoints below.
+
+### Native download query provider checkpoint (2026-11-16)
+
+Rust `53e070af` advances the fresh schema to 81. Typed unfinished/completed/all
+views use descending numeric-ID keysets, optional resolved category IDs, limits
+1-200 and compact byte-bounded pages. Lookahead establishes continuation without
+allocating another DTO. Pages are live: higher-ID insertions wait for a fresh
+traversal; completion/category/removal changes may alter lower matching rows.
+Dedicated partial indexes cover each global/category view. Fixed global counts
+use lifecycle-maintained persistence counters and one singleton-row read.
+
+Managed gates passed **198 Metadata unit tests, 3 ownership tests and 1,394
+ED2K tests**. Eight frozen hashes were verified. The 100k synthetic fixture proves
+first/late indexed seeks without temporary sorts and constant-size count reads,
+not combined daemon/library scale. Evidence:
+`reports/download-job-query-pages-round-1` (logs, patch, `source-freeze.json`).
+Normal hooks passed; native Core/REST integration and opaque API cursors remain
+separate consumer work.
 
 ### Checkpointed progress provider checkpoint (2026-11-16)
 
