@@ -64,8 +64,14 @@ units/two MiB; phase transitions drop large buffers and guards before waiting,
 and actual lease release wakes capacity waiters independently of task joining.
 Payload-result charges follow consumer ownership. The parent verified all 107
 pending engine hashes against `reports/download-job-ed2k-behavior-round-23`
-(`sources.json`, `rust-unit.log`). Targeted independent phase/lease review is
-pending before the component commit. Actual blocked-OS-I/O cancellation,
+(`sources.json`, `rust-unit.log`). Targeted review found retained native-path
+backing could exceed the reduced phase charge. Round 24 repairs that finding
+with one shared native-path allocation whose existing-capacity lease follows
+reservation, scheduled queue, consumer and requeue through acknowledgment.
+The maximum-path held-capacity regression passes; the complete gate passes
+**1,384 tests**, zero failures, ignored tests or warnings. Evidence and 107-source
+receipt: `reports/download-job-ed2k-behavior-round-24`. Final reinspection is
+limited to that repair. Actual blocked-OS-I/O cancellation,
 broader diagnostic-result and resident lifetimes, complete catalog accounting,
 Core/REST integration and combined 100k qualification remain unfinished.
 

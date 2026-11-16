@@ -127,7 +127,8 @@ rewrite protected main or release tags. Follow the
 - Available worker slots are capacity, not a target. Keep no standing observers
   or permanent reviewers and create no additional PM layer. Use the managed
   [workstream lifecycle](GUIDE-PARALLEL-WORKSTREAMS.md) when delegation is useful.
-- The parent defaults to **medium runtime reasoning effort**. Escalate only for
+- The parent defaults to **Sol / medium runtime reasoning effort**; ordinary
+  implementation uses a capable coding model at medium. Escalate only for
   a bounded consequential problem and return to medium afterward. Policy prose
   does not change the runtime setting: distinguish the actual dispatched turn
   from saved defaults. Use an exposed supported control when available;
@@ -180,6 +181,11 @@ rewrite protected main or release tags. Follow the
   input changes, failures or unresolved material concerns. Repair until
   acceptance criteria are met, without unrelated improvements or activity-only
   review cycles. Workers do not duplicate final integration checks.
+- After two unsuccessful repair/validation attempts at the same problem, stop
+  repeating the approach. Summarize what failed and choose a materially
+  different method, narrower investigation or suitable model. Escalate when
+  progress needs an operator decision, missing information, additional authority
+  or unacceptable tradeoffs. Never weaken acceptance criteria to hide failure.
 - At natural milestones only, use existing counters when available to examine
   repeated model turns, coordination/wait loops, oversized context and expensive
   agents doing routine work. Distinguish cached input, uncached input, output and
@@ -189,9 +195,17 @@ rewrite protected main or release tags. Follow the
   contract/schema/lockfile coordination and final acceptance. Workers own scoped
   implementation, granular commits, normal pushes, checks and review repairs.
   Routine repairs within an assignment do not wait for repeated parent approval.
-- Ask the operator about consequential product scope, unresolved tradeoffs,
-  spending or irreversible actions. Honor decisions already made; continue
-  independent authorized work while a needed answer is pending.
+- Ask promptly when requirements or acceptance criteria materially conflict,
+  choices change behavior, scope, compatibility or priorities, or progress needs
+  spending, access, destructive action or authority not already granted. Also
+  ask when consequential options lack a clear winner or one focused question
+  would beat further autonomous investigation on cost or usefulness. Decide
+  routine implementation and already settled/authorized matters directly.
+- Make escalation concise: blocker, essential evidence, recommended option,
+  meaningful alternative and exact decision needed. Bundle related questions
+  and prefer a short choice. Continue independent authorized work while waiting;
+  if everything depends on the answer, wait without speculative work. Silence
+  is not approval.
 - Keep source revisions clean and frozen during selected validation. Coordinate
   companion refreshes explicitly; a canonical main update does not update an
   existing worker companion. Preserve inherited operator environment state.
