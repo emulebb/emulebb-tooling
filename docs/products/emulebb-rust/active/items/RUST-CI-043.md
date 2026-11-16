@@ -41,6 +41,23 @@ if local output disappears. Observed state is separate from desired intent;
 name PATCH cannot rename completed jobs or an active fixed delivery attempt.
 Heavy detail exposes actual delivery path/ownership separately from job name.
 
+The Core job cut also needs an actual observed source-identity diagnostic for
+the existing cross-client proof. Terminal retirement deliberately deletes job
+source children, so postcompletion verification cannot require those rows or
+invent replacements. Reuse the current-run diagnostic collector and emit a
+`sched/source_identity` observation after the peer hash is known, carrying
+`keys.downloadId`, `keys.fileHash`, `keys.peer` and `keys.peerHash` from the
+captured job/session. Keep process/run attribution and actual endpoint/hash
+checks. Missing identity data is evidence-incomplete, not proof.
+
+The existing cross-client runner must require its diagnostics capability before
+launch for this full source proof. Nonretired coherent source rows remain a
+separate valid evidence source; verified-content/hashset facts are reported
+separately from job rows and do not establish peer identity. Content display
+labels are not identity. This producer observation and its actual combined
+campaign remain unimplemented/unqualified by the harness consumer changes;
+add no product table, polling race or independent diagnostic actor for them.
+
 Accepted action batches always use 207 and concrete per-item outcomes in request
 order, even when every item fails. Admission must transfer all bounded work to
 the existing owner before the request can be abandoned; no request-owned loop,

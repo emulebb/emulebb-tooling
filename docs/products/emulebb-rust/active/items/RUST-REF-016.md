@@ -29,6 +29,18 @@ maximum-geometry count. This is the first behavioral feedback for this coupled
 job-runtime conversion, not an accepted engine checkpoint. No full application,
 platform or combined scale qualification follows from it.
 
+The subsequent complete runs improved to **1,346 passed / 26 failed** (round
+10), **1,359 passed / 14 failed** (round 11), and **1,371 passed / 2 failed**
+(round 12); all had zero ignored tests and no warnings. Logs remain under
+`reports/download-job-ed2k-behavior-round-10`,
+`reports/download-job-ed2k-behavior-round-11` and
+`reports/download-job-ed2k-behavior-round-12`.
+The existing maximum-geometry stream fixture now passes its unchanged 6-MiB
+representation assertion; resident admission, result lifetimes and total RSS
+are not established by that fixture. Round 12 still exposes the real missing
+completed-job payload catalog source and a name guard that confuses payload
+verification with terminal job completion. Both remain required repairs.
+
 Repair catalog callers through bounded keyset pages into the existing indexed
 projection, preserving publication fences and partial/hint precedence. Do not
 raise the provider cap or rebuild full intermediate vectors. Byte-capped pages
