@@ -654,6 +654,46 @@ symlinks and collision protection. Distinguish observed filesystem drift from an
 device trigger. This allocation preserves the fresh-profile/no-shim scope and
 adds no device/runtime qualification claim.
 
+### Remaining retained-runtime implementation order
+
+The Metadata provider is qualified separately in
+[RUST-CI-044](RUST-CI-044.md#typed-mutation-and-execution-stream-provider-checkpoint-2026-11-16).
+That checkpoint does not qualify these runtime ownership boundaries:
+
+1. Keep the existing registry's byte charge alive for the actual returned
+   representation, not merely until its task is reaped. Diagnostic receipts
+   retain that charge through consumption/serialization, including temporary
+   conversion buffers. Selected execution hydration instead builds privately,
+   validates the complete stream and current token, then moves into an admitted
+   bounded resident. Eviction cannot release resident capacity while readers
+   still own its allocation. Do not introduce another pool, queue or actor.
+2. Retain bounded payload writes and streaming part verification through the
+   existing registry, with the captured token and storage authority through
+   checkpoint/cache publication. Stop may invalidate logical execution before
+   old filesystem work finishes; restarting that same storage must wait for its
+   admitted writers. Unrelated jobs do not wait on that filesystem guard.
+3. Retain final rehash and delivery as existing long-filesystem units, using the
+   existing prepared representation allowance and cleanup sublimit. Replace the
+   remaining whole-manifest delivery checkpoint with a typed transaction that
+   checks the captured committed journal snapshot. Preserve per-piece dirty
+   acknowledgement, post-commit authority reconciliation and Delivered state
+   through verification drift and cleanup retries.
+4. Persist output reservation barriers under the existing eligibility fence,
+   then process bounded candidate pages and filesystem probes outside SQLite.
+   Existing indexes support lexical `(platform, file_name_search_key, id)` and
+   native identity `(identity, size_bytes, path_id)` keysets. Read actual primary
+   and secondary identity branches separately and deduplicate only the bounded
+   current page. Condition each withdrawal on captured job/reservation/path/
+   content/fingerprint/root state, bind actual paired identity after exclusive
+   creation, and finish required withdrawals before writing bytes. Interruption
+   leaves durable pending authority rather than permission to copy again.
+
+These are allocated implementation boundaries, not executed proof. The proposed
+6-MiB hydration charge still needs maximum supported geometry/capacity evidence.
+Require actual held-I/O cancellation/drain tests, query plans and parent/path
+replacement races. The existing full catalog rebuild remains separate bounded
+projection work; this conversion does not qualify it or total process RSS.
+
 ## Summary
 
 Remove synchronous SQLite waits and durable flushes from Tokio worker threads
