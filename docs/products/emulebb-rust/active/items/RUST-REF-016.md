@@ -118,6 +118,19 @@ adaptive target. WebUI and Python REST producer evidence must be refreshed after
 their consumers are converted; no whole-application or 512-MiB acceptance is
 claimed. Sustained soak is follow-up under the master specification.
 
+The coupled REST consumer conversion is currently uncommitted. Its first
+behavioral run compiled and passed 144 of 147 REST tests (zero ignored), including
+all six replacement download-contract tests. Evidence is under
+`reports/download-rest-round-3/{rest.log,source-freeze.json}`. Two failures were
+remaining fixture assumptions for the current creation body/status and diagnostic
+page limit; those fixtures are updated but not yet revalidated. The third exposes
+missing creation notifications: canonical ID-only download SSE/change tracking
+must be wired before acceptance. Snapshot now reads fixed persisted download
+counters, and diagnostic capture uses an indexed bounded download page. OpenAPI,
+SPA and Python caller conversion and the remaining Core consumer cleanup are
+still open. This run is diagnostic evidence, not a qualified REST/application
+checkpoint.
+
 ## Download-engine behavioral feedback (2026-11-16)
 
 The ninth supported ED2K package run compiled the test target without warnings
