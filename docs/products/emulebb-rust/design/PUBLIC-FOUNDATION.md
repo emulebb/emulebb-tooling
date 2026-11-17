@@ -915,11 +915,17 @@ Inspect correctness, contracts, failure recovery, interactions, maintainability
 and resource use, together where practical. Further review addresses concrete
 risks or material findings rather than a fixed round count. Repair material
 findings and refresh affected checks. Run applicable gates available without a PR; retain PR-only/physical
-device evidence as explicitly pending. Overnight proof does not establish
-365-day endurance.
+device evidence as explicitly pending.
 
-The goal remains active until the agreed checkpoint is actually achieved or a
-real blocker requires operator input. Preserve evidence, branch heads and exact
+### Deferred follow-up
+
+A sustained mixed-workload soak is follow-up work, not a prerequisite for this
+delivery checkpoint. No soak duration is set for this round. Reuse the existing
+Python harness and monitoring when that follow-up is scheduled. Current scoped
+tests do not establish year-long endurance; report the evidence at its actual
+scope without delaying functional delivery for a long-running campaign.
+
+Preserve evidence, branch heads and exact
 companion revisions for iterative review. Report completed phases, pending work,
-failed/unavailable gates and risks honestly. Do not substitute elapsed overnight
-time, a launched process or a pushed partial implementation for acceptance.
+failed/unavailable gates and risks honestly. A launched process or pushed partial
+implementation does not establish the required acceptance checks.
