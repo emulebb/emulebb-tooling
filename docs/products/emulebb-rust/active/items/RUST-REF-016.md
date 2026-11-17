@@ -922,17 +922,38 @@ has an ordered completion receipt, and event handlers remain owned by their
 consumer across disconnect. A storage-preparation failure persists an explicit-
 start fault without replacing a foreign filesystem object.
 
+Quiesced selection release now checkpoints only its job, transfers the exact
+I/O guard into admitted native fencing/cache publication, and preserves started
+intent and the fixed storage allocation. Tests cover partial-data reselection
+and cancellation between SQL and cache publication without releasing that I/O
+guard early. The scheduler yields after a completed network round with thirty
+seconds of no received payload; it never times out in-flight I/O to rotate a
+slot. The full Core package passes with this initial rotation policy.
+
 Exact frozen-source evidence is retained under
-`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/download-bounded-scheduler-round-3/`.
-The complete Core package passed: 569 unit tests and all integration targets,
-including seven Kad swarm tests and actual download delivery. Native 1,429 tests
-and metadata 213 unit plus three ownership tests passed on the unchanged provider
-sources under `reports/download-selection-retirement-round-1/`. These are local
-draft integration results, not a pushed checkpoint. Fourteen existing Core
-warnings remain for removal with the remaining consumer refactor. Queue
-fairness, preparation beyond unknown-size metadata discovery, final settings
+`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/download-selection-release-round-3/`.
+The complete Core package passed: 570 unit tests and all integration targets,
+including seven Kad swarm tests and actual download delivery. Native 1,431 tests
+and metadata 214 unit plus three ownership tests passed on the provider sources
+under `reports/download-selection-release-round-2/`. These are local draft Core
+integration results, not a pushed Core checkpoint. The category deletion fixture
+now admits a download directly instead of starting an unrelated detached library
+reload; native backpressure remains unchanged. Fourteen Core warnings remain for
+removal with the remaining consumer refactor. Fairness under load, preparation
+beyond unknown-size metadata discovery, final settings
 binding, actual sixteen-plus-two load, held-I/O cancellation/drain, REST and
 combined-scale qualification remain open. No total-RSS claim follows.
+
+The stop path has a confirmed remaining defect: native logical stop drops dirty
+manifest/bitmap state after advancing its generation, so previously acknowledged
+cache-only partial progress can be forgotten. A crash-loss allowance does not
+justify loss on an explicit stop. Before accepting download controls, flush
+append writes before publishing dirty progress, then save the bounded dirty
+delta and stop fence in one transaction under the existing admitted owner.
+Logical stop must remain independent of a later held I/O operation. Reuse the
+transaction-local progress validator rather than nesting native admissions;
+prove prefix/bitmap survival across stop and restart, rollback, and late-writer
+fencing. This finding does not invalidate the narrower quiesced-release tests.
 
 Require actual held-I/O cancellation/drain tests, query plans and parent/path
 replacement races. The existing full catalog rebuild remains separate bounded
