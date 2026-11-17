@@ -96,14 +96,18 @@ documentation describes only implemented structure.
   Require operator intervention; do not build a restricted diagnostic operating
   mode or automatic database repair. Ordinary request/storage failures keep their
   scoped handling and are not automatically classified as fatal consistency faults.
-- Application-allocated public IDs, including jobs, roots, servers,
+- Durable application-allocated public IDs, including jobs, roots, servers,
   searches and results, are immutable never-reused decimal strings. Content is
   publicly addressed by its eD2K hash; immutable tag and category names are their
   public IDs. Natural
   protocol identities remain distinct fields. SQLite may use internal keys.
-  Upload/queue resource IDs identify live instances only: their catalog must
-  define the process-epoch/lifetime boundary, expiry and restart behavior without
-  reusing a prior ID or requiring durable per-connection history.
+  Live upload and upload-queue entries use opaque UUID strings. Retain an ID
+  while its entry survives, including ordinary reasks and transitions between
+  waiting/granted/uploading. Removal or process restart ends that lifetime;
+  subsequent entries receive fresh IDs. IDs are independent of protocol peer
+  identity, credit identity and changing queue rank. Maintain no durable
+  per-connection history or database ID allocation for these ephemeral entries;
+  credits and lifetime accounting retain their separate persistence rules.
 - Persisted and public calendar timestamps are Unix seconds. Runtime scheduling
   uses monotonic clocks and whatever finer precision it requires. Revisions,
   not timestamps, order changes and detect conflicts.
@@ -248,6 +252,10 @@ and paginated. Default to present content; provide Shared, Unavailable and All
 Known visibility filters. Use flat lists, not folder browsing/tree navigation.
 Filename search is case-insensitive substring matching, minimum three
 characters, without query language, regex or additional word-search modes.
+Match the stored display name only; names of other copies remain visible in the
+paginated locations resource. Support multiple locations for serving and
+availability without adding duplicate discovery, naming reconciliation or
+deduplication features. Users manage duplicates with external tools.
 
 ### Sharing policy and tags
 
@@ -256,8 +264,12 @@ completed local copies. It is independent of download start/stop and upload
 priority. Disabling is a publication/request-admission policy: skip future
 publications and reject new upload requests, including requests on existing
 connections. Requests accepted before disable may finish, including multiple
-blocks covered by an accepted request. Publish the
-committed flag through the existing policy owner and check it at normal request
+blocks covered by an accepted payload request. A waiting queue entry is not an
+accepted payload request and conveys no entitlement to a later data grant.
+Recheck eligibility during ordinary slot selection and new block-request
+admission, skipping/removing ineligible waiters through normal queue processing
+without an immediate queue sweep. Publish the committed flag through the
+existing policy owner and check it at normal request
 admission. Retain upload priority for re-enable. Remote cached advertisements
 may outlive disable, but new requests must still be refused. Do not bypass the
 policy by serving another completed copy/path.
@@ -268,6 +280,13 @@ enabled. Persist the flag even with no copies. REST sets true/false explicitly,
 never toggle, with bounded per-hash bulk outcomes. Last successfully ordered
 write wins; there is no per-hash revision mechanism. External schedulers own
 rotation; no built-in scheduling/rule engine.
+
+Retain the MFC-style upload ranking/credits, base-slot and elasticity controls,
+and session-rotation behavior. Foundation work covers their canonical settings
+wiring, persistence, bounded REST/WebUI visibility, resource accounting and
+sharing/statistics interactions. Do not expand this round into an automatic
+upload-controller or queue-algorithm redesign. Preserve protocol interactions
+and qualify directly affected behavior through the existing harness.
 
 Add flat many-to-many hash-level tags, independent of download categories.
 Tag names are their immutable public IDs, case-insensitively unique, 1-64 ASCII
