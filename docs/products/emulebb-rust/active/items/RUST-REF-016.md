@@ -20,10 +20,13 @@ source: 2026-10-23 Rust async and portability audit
 
 ## Current download provider
 
-Rust `fb5d4c37` on the existing foundation branch provides:
+Rust `56c61916` on the existing foundation branch provides:
 
 - Atomic new-job admission with initial source/name evidence, unchanged active
   duplicates, and no eager piece-map or storage allocation.
+  The existing bounded Core owner retains admission, category resolution and
+  scheduler notification after caller disconnect. Shared owner refusal occurs
+  before durable creation; duplicate responses project stored fields.
 - Idempotent native start/stop with job/generation fences and fixed storage.
 - A bounded Core owner for start/stop/remove batches. Shared refusal changes no
   jobs; admitted work completes all request-order items after caller disconnect,
@@ -59,6 +62,13 @@ consumer cleanup; metadata/native produced none. Evidence below
 `metadata.log`, `ed2k.log`, `core.log`, and `source-freeze.json`.
 Normal commit hooks passed. The separate unchanged schema/writer fixture gate
 passed 31 Python tests under `reports/download-comments-round-1/python-metadata.log`.
+The subsequent creation-owner gate passed **585 Core unit tests plus all enabled
+integration suites**, with no failures or ignored tests and the same remaining
+consumer warnings. Exact inputs and log are retained under
+`reports/download-create-owner-round-1/{source-freeze.json,core.log}`. Its two
+regressions exercise caller cancellation after SQL and shared admission refusal.
+Normal commit hooks passed for `56c61916`; metadata/native inputs were unchanged,
+so their valid gates were reused.
 
 The comment regressions cover sparse evidence among 100,000 source rows with
 query-plan proof, rating-only rows, generation fencing, retained native charges,
