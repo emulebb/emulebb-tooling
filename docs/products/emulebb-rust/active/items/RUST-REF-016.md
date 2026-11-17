@@ -20,7 +20,7 @@ source: 2026-10-23 Rust async and portability audit
 
 ## Current download provider
 
-Rust `3fdb15e0` on the existing foundation branch provides:
+Rust `53321cf3` on the existing foundation branch provides:
 
 - Atomic new-job admission with initial source/name evidence, unchanged active
   duplicates, and no eager piece-map or storage allocation.
@@ -36,25 +36,35 @@ Rust `3fdb15e0` on the existing foundation branch provides:
   Comment pages seek this index directly, load neither source-name windows nor
   execution geometry, and preserve continuation across metadata and Core byte
   limits. Generation checks reject stale callbacks/reads.
+- Compact detail with recorded delivery path/ownership and bounded storage
+  failure information. Reads neither probe files nor grant ownership.
+- Part pages derive only the requested expected-geometry window and seek its
+  checkpoint rows through the existing primary key. Queued jobs do not hydrate
+  execution, full byte presence does not imply verification, and retired
+  internal data exposes no synthetic piece inventory. Creation/list/detail share
+  one canonical summary projection.
 
-Supported gates passed **218 metadata unit plus 3 ownership tests**,
-**1,433 ED2K tests**, and **575 Core unit tests plus its integration suites**.
+Supported gates passed **222 metadata unit plus 3 ownership tests**,
+**1,434 ED2K tests**, and **578 Core unit tests plus its integration suites**.
 No tests failed or were ignored. Core retains fourteen warnings for the remaining
 consumer cleanup; metadata/native produced none. Evidence below
-`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/download-comments-round-1/`:
-`metadata.log`, `ed2k.log`, `core.log`, `source-freeze.json`, and
-`source-freeze-after-fixture.json`. The second receipt changes only the Core
-fixture to observe peers while started before stopping for reads; metadata and
-native qualification inputs are unchanged. Normal commit hooks passed.
+`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/download-browse-round-3/`:
+`metadata.log`, `ed2k.log`, `core.log`, and `source-freeze.json`.
+Normal commit hooks passed. The separate unchanged schema/writer fixture gate
+passed 31 Python tests under `reports/download-comments-round-1/python-metadata.log`.
 
 The comment regressions cover sparse evidence among 100,000 source rows with
 query-plan proof, rating-only rows, generation fencing, retained native charges,
 and metadata/Core byte-boundary continuation without dropped rows or hydration.
+Browse regressions add maximum supported file geometry without manifest-cache
+population, inclusive tail offsets, presence versus verification, recorded
+unowned delivery, removed/unknown jobs, and bounded failure projection without
+automatic recovery or timestamp conversion.
 Core owner disconnect/capacity evidence is retained separately under
 `reports/download-control-owner-round-1/core.log`.
 
 These commits are local and await the coherent REST/application checkpoint
-before push. Canonical REST/OpenAPI and caller integration, PATCH/verify/part
+before push. Canonical REST/OpenAPI and caller integration, PATCH/verify
 providers, the accepted adaptive scarcity/endgame scheduler, final settings/CLI
 and Docker wiring, actual held-I/O/resource qualification and combined-scale
 checks remain open. The existing fixed live cohort does not qualify the

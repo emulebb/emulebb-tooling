@@ -667,8 +667,12 @@ filename observations, newest first, with `reportedFileNamesHasMore` whenever
 older or oversized observations are omitted. The page byte budget also applies
 to this nested window; do not silently rewrite observed names.
 Part details are independently paginated. Their `start`/`end` are zero-based
-inclusive byte offsets and `size = end - start + 1`. `DownloadPart.complete`
+inclusive byte offsets and `sizeBytes = end - start + 1`. `DownloadPart.complete`
 means successful part verification, independently of byte presence or zero gaps.
+`presentBytes` reports checkpointed internal byte presence. Derive only the
+requested geometry window for known-size queued jobs; unknown geometry and
+retired internal piece data return an empty part collection. Do not hydrate an
+execution or probe the completed output merely to browse parts.
 
 Use one bounded action endpoint per download operation:
 
