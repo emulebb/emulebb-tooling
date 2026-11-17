@@ -1528,6 +1528,48 @@ cover normal waiter selection. Runtime mutation, REST/OpenAPI/WebUI exposure,
 restart/wire proof and combined scale qualification remain open. The previously
 staged daemon and native campaign remain attributed to Rust `47ee4f50`.
 
+## Live sharing mutation and source-bound upload grants
+
+Rust `aadd529a` extends the existing retained content-mutation owner with explicit
+hash sharing writes. The owner reserves its existing workspace before admission,
+commits under the content/stripe fence, publishes current eligibility and demand,
+and retains admitted work after caller disconnect. Unknown hashes remain unknown;
+unchanged writes are reported explicitly. A committed publication failure retains
+the existing visible fault handling. Upload priority remains independent.
+
+Complete publication selection, bounded local/internal hydration, reingestion and
+manifest reobservation honor the persisted flag. Partial exchange remains eligible.
+Clean admission checks the indexed live catalog; incomplete ownership/metadata
+queries remain separate from payload admission. Materialized complete Kad/server
+candidates cannot be admitted using a partial's eligibility. Ordinary waiter
+selection borrows the current catalog without blocking or copying it; disabling
+sharing performs no immediate queue sweep.
+
+The listener acquires a source-bound verified reader for each granted payload
+request. Existing complete readers may finish an already accepted request but
+cannot authorize another one. When only a partial is eligible, a cached complete
+reader is discarded and the exact partial job is opened instead of another
+complete path. Physical fingerprints and payload snapshot equality remain intact.
+No schema, setting, cache or persistence actor was added.
+
+Supported gates passed **1,447 eD2K tests**, **598 Core unit plus 35 enabled
+integration tests**, and **234 metadata unit plus three profile-ownership tests**,
+with zero compiler warnings. New regressions prove disable/re-enable with retained
+priority, idempotence and unknown hashes, accepted-reader continuity, cached-reader
+refusal, cancellation-safe commit/publication/drain, restart/hydration, complete
+copy plus independent partial, reingestion/progress, and normal waiter selection.
+Existing callback, metadata, partial-offer and reader-cache tests also pass. Queue
+algorithm fixtures now explicitly supply their synthetic catalog membership;
+protocol-serving regressions use verified bytes. Evidence and exact source hashes:
+`reports/library-sharing-runtime-round-1/{ed2k-3.log,core.log,metadata.log,source-freeze.json}`.
+Normal commit checks passed under
+`reports/local-check/emulebb-rust/20261117T204728Z-cdc7b83f/`.
+
+The bounded Core bulk command and public REST/OpenAPI/WebUI sharing setter remain
+open, followed by the existing native campaign and combined scale qualification.
+The staged daemon and previous native tag campaign still belong to Rust `47ee4f50`;
+these package gates do not claim a new staged campaign or complete foundation.
+
 ## Acceptance Criteria
 
 - [ ] No synchronous SQLite operation runs on a Tokio worker thread while

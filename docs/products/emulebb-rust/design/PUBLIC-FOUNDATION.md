@@ -264,8 +264,11 @@ completed local copies. It is independent of download start/stop and upload
 priority. Disabling is a publication/request-admission policy: skip future
 publications and reject new upload requests, including requests on existing
 connections. Requests accepted before disable may finish, including multiple
-blocks covered by an accepted payload request. A waiting queue entry is not an
-accepted payload request and conveys no entitlement to a later data grant.
+blocks covered by an accepted payload request. Payload acceptance is the granted,
+source-bound verified-reader admission under the current policy and mutation
+fence. Receiving a packet or holding a queue slot alone conveys no entitlement
+to another payload request. A waiting queue entry is not an accepted payload
+request and conveys no entitlement to a later data grant.
 Recheck eligibility during ordinary slot selection and new block-request
 admission, skipping/removing ineligible waiters through normal queue processing
 without an immediate queue sweep. Publish the committed flag through the
