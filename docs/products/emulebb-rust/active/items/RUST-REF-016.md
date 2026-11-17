@@ -1572,10 +1572,38 @@ stale catalog entries cannot promote a waiter. Normal reconciliation alone does
 not close the queue. The updated eD2K gate passed **1,447 tests** under
 `reports/library-sharing-fault-round-1/ed2k.log`.
 
-The bounded Core bulk command and public REST/OpenAPI/WebUI sharing setter remain
-open, followed by the existing native campaign and combined scale qualification.
+The public REST/OpenAPI/WebUI sharing setter remains open, followed by the existing
+native campaign and combined scale qualification. The Core bulk command is
+qualified below.
 The staged daemon and previous native tag campaign still belong to Rust `47ee4f50`;
 these package gates do not claim a new staged campaign or complete foundation.
+
+## Bounded sharing command qualification
+
+Rust `d54cc252` connects explicit sharing batches to the existing profile owner
+and retained native mutation path. The complete selection is validated before
+admission: 1-100 distinct canonical hashes and an explicit enabled value. The
+existing 64-slot/8-MiB owner reserves request backing and the common 64-KiB result
+workspace before cloning inputs. Admitted batches finish every hash in request
+order after caller disconnect, including later items after a known SQL failure.
+Results distinguish changed, unchanged, missing and typed persistence failures;
+committed publication failure and unknown outcomes retain their existing meaning.
+The common retained library reply and hash validation also serve tags, with no
+second worker, actor, mutation path or settings authority.
+
+Supported gates passed **603 Core unit plus all 35 enabled integrations** and
+**152 REST unit plus three integrations**, with zero compiler warnings. New
+regressions prove retained result charge through projection/serialization,
+ordered mixed outcomes and no implicit content creation, disconnect-independent
+completion, pre-mutation shared-slot refusal, invalid selection refusal and
+continuation after a per-item SQL failure. Evidence and exact source hashes:
+`reports/library-sharing-owner-round-1/{core.log,rest.log,source-freeze.json}`.
+Normal commit checks passed under
+`reports/local-check/emulebb-rust/20261117T210730Z-e8108ab6/`.
+
+This is the backend command checkpoint. REST/OpenAPI exposure and the existing
+native campaign remain next; WebUI library controls and scale qualification
+remain open. The staged daemon is still attributed to Rust `47ee4f50`.
 
 ## Acceptance Criteria
 
