@@ -20,7 +20,7 @@ source: 2026-10-23 Rust async and portability audit
 
 ## Current download provider
 
-Rust `56c61916` on the existing foundation branch provides:
+Rust `894f7788` on the existing foundation branch provides:
 
 - Atomic new-job admission with initial source/name evidence, unchanged active
   duplicates, and no eager piece-map or storage allocation.
@@ -53,6 +53,15 @@ Rust `56c61916` on the existing foundation branch provides:
   Size discovery replans preparation without starting stopped jobs or allocating
   storage. Invalid combinations, delivery-fixed names, and admission refusal
   leave all requested fields unchanged.
+- A native completed-output verification provider, separate from partial-piece
+  rechecking. It streams the recorded output even after internal retirement,
+  forces a fresh hash, reports missing/damaged output, and neither searches other
+  copies nor changes history, ownership or intent. Unsupported stable identity
+  evidence remains an error. Core/bulk verification wiring is still open.
+- Native job-control receipts follow captured-input and temporary-workspace
+  release. Returned data retains its separate charge, so an immediate subsequent
+  command cannot race a completed command's workspace. A deterministic regression
+  checks capture lifetime, retained-result charge and immediate capacity reuse.
 
 Supported gates passed **227 metadata unit plus 3 ownership tests**,
 **1,436 ED2K tests**, and **583 Core unit tests plus its integration suites**.
@@ -69,6 +78,16 @@ consumer warnings. Exact inputs and log are retained under
 regressions exercise caller cancellation after SQL and shared admission refusal.
 Normal commit hooks passed for `56c61916`; metadata/native inputs were unchanged,
 so their valid gates were reused.
+The current native/Core gate passed **1,439 ED2K tests and 585 Core unit tests plus
+all enabled integration suites**, with no failed or ignored tests. Evidence and
+exact source hashes are under `reports/completed-verification-round-3/`
+(`ed2k.log`, `core.log`, `source-freeze.json`). Core's remaining consumer warnings
+are unchanged. Metadata was untouched, so its gate above remains applicable.
+Normal hooks passed for the separate receipt-order fix `729d8bb3` and output
+verification provider `894f7788`; the combined validated source was restored and
+hash-checked between these granular commits. Verification regressions cover
+retired pieces, same-size corruption with restored modification time, missing
+output across restart, unrelated good copies, and stale/unfinished-job refusal.
 
 The comment regressions cover sparse evidence among 100,000 source rows with
 query-plan proof, rating-only rows, generation fencing, retained native charges,
