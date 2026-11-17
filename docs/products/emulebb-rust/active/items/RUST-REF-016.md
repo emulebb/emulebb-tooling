@@ -1642,6 +1642,41 @@ tag retention and unchanged fixture bytes also passed. The report retains all
 WebUI library controls, incremental indexed library reads and combined scale
 qualification remain open; this does not close the full foundation scope.
 
+## Incremental physical library index checkpoint (2026-11-17)
+
+Rust commits `c70dbaaa` and `825df4c8` replace revision-wide physical catalog
+rebuilding with incremental per-content reconciliation under schema 86. The
+SQLite change index retains one latest revision per affected content identity,
+including deletion tombstones, rather than accumulating events. Connections
+track their own durable position and pending session verification changes;
+another connection cannot consume their notifications. Root, copy, path and
+delivery-exclusion changes update affected content. Tags, sharing policy and
+statistics are read from their owners without rebuilding physical membership. Unchanged
+verification fingerprints enqueue no work.
+
+The existing 100k catalog fixture now protects unrelated projection rows against
+deletes during one-content changes, exercises session withdrawal/restoration and
+second-connection path changes, verifies policy/tag and unchanged-evidence writes
+do not rebuild membership, and requires an indexed revision seek. Existing alias,
+root withdrawal, sharing-policy and eligibility assertions remain active.
+
+Scoped checks passed: metadata **234 unit + 3 profile-ownership tests**, Core
+**603 unit + 35 integration tests**, and eD2K **1,447 tests**. The final
+unchanged-evidence guard was followed by the complete metadata suite and normal
+branch checks. Logs: `reports/library-incremental-index-round-1/`.
+The regular daemon/WebUI build passed with **zero warnings**:
+`logs/builds/20261117T220712Z-build-clients/build-result.json`.
+The existing native REST/OpenAPI harness passed with graceful teardown against
+exact Rust revision `825df4c8280be007dc45b005e52c77d27ea5adcc`:
+`reports/rust-rest-openapi-ci/20261117T221004Z/report.json`.
+Normal Rust commit/push hooks passed; both commits are pushed on the existing
+foundation branch, without a PR or merge.
+
+This qualifies the physical index maintenance slice. Canonical library visibility
+views, display-name-only search, locations, statistic sorts and WebUI controls
+remain open, as do the remaining settings/CLI/Docker work and combined resource
+qualification. This is not full library-read or foundation acceptance.
+
 ## Acceptance Criteria
 
 - [ ] No synchronous SQLite operation runs on a Tokio worker thread while
