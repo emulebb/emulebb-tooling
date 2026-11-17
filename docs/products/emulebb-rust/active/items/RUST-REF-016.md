@@ -136,8 +136,8 @@ bounded lag recovery, epoch rollover and HTTP identity-only create/remove frames
 Normal hooks passed for Core commit `937c3cac`; the held REST/SPA work was restored
 and hash-checked against the same validated combined source.
 
-The coupled REST consumer conversion remains uncommitted pending Python callers,
-staged endpoint conformance and remaining Core consumer cleanup. Snapshot uses fixed persisted
+The coupled REST consumer conversion remains uncommitted pending the remaining
+Rust operator callers and Core consumer cleanup. Snapshot uses fixed persisted
 download counters; diagnostic capture uses an indexed bounded download page.
 Source browsing currently checks peer capability without performing a browse;
 the operator decision to remove that operation or return HTTP 501 remains pending.
@@ -190,8 +190,31 @@ from the existing opened-file helper. Its normal hooks passed, and held source
 restoration was hash-verified. The Core and UI suites remain valid because these
 daemon-only changes did not alter their inputs.
 
-The coherent application checkpoint remains open: Python REST producers,
-remaining Core consumer cleanup and staged endpoint validation are pending. Mocked browser success does not qualify those lanes or
+The registered release daemon and WebUI bundle built successfully through the
+existing Builder owner. The selected-source live REST/OpenAPI campaign passed
+with graceful teardown: **79 safe HTTP routes** plus the populated peer-control,
+Kad persistence and category/restart phases. The category phase additionally
+validated populated download detail, a nonempty checkpointed part page,
+source/comment pages and real cursor continuation against the selected OpenAPI
+document. Its allocated UUID storage identity survived restart, deleted categories
+cleared assignments, and independent complete files remained byte-identical.
+This does not claim coverage of every unsafe route in the generic probe budget.
+
+Evidence: `reports/rust-rest-openapi-ci/20261117T170453Z/report.json` and
+`reports/download-staged-contract-round-1/{build.log,campaign-populated-pages.log,harness-source-freeze.json}`.
+The existing conformance, response-helper and campaign unit suites passed
+**31, 4 and 22 tests**, respectively. Harness commits `611012f0` and `a1ddd98e`
+passed normal hooks; held campaign source was restored and hash-verified before
+its separate commit. The current diagnostics schema uses `downloadEvents`.
+
+The category fixture reuses the proven loopback profile helper and starts the
+bounded scheduler before proving allocation. It requires native download PATCH
+204 replies, and retains durable job facts on failure. Existing persistence and
+file-preservation assertions remain in force.
+
+The coherent application checkpoint remains open: remaining Rust operator/VPN/
+soak callers and Core consumer cleanup are pending. Adapting those callers does
+not bring sustained soak execution back into this delivery round. Mocked browser success does not qualify those lanes or
 512-MiB/combined-scale operation. Source browsing still awaits the operator's
 remove-versus-501 decision. No PR or merge is authorized.
 

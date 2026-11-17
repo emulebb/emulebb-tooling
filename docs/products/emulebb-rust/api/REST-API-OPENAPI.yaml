@@ -5405,7 +5405,7 @@ components:
     RuntimeDiagnostics:
       type: object
       additionalProperties: false
-      required: [processId, processResources, knownFileCount, sharedFileCount, sharedHashingCount, sharedDirectoryReloadProgress, ed2kPublish, kadPublish, transferEvents, downloadFileCount, activeUploads, waitingUploads, geolocation]
+      required: [processId, processResources, knownFileCount, sharedFileCount, sharedHashingCount, sharedDirectoryReloadProgress, ed2kPublish, kadPublish, downloadEvents, downloadFileCount, activeUploads, waitingUploads, geolocation]
       properties:
         processId:
           type: integer
@@ -5431,7 +5431,7 @@ components:
         kadPublish:
           type: object
           additionalProperties: true
-        transferEvents:
+        downloadEvents:
           $ref: "#/components/schemas/DownloadEventRuntimeDiagnostics"
         downloadFileCount:
           type: integer
