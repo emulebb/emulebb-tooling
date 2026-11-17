@@ -322,6 +322,17 @@ current committed download slice, not every route against populated state or
 the complete foundation. Prior Core/REST and unchanged WebUI test evidence
 remains as recorded above.
 
+The Rust download checkpoint is pushed through `5c689f76`; the harness is
+pushed through `a21722cc`, on their existing foundation feature branches. The
+required harness push gate exposed three Android listener fixture expectations
+for an unsupported API error code. The fixture-only correction uses current
+`INVALID_ARGUMENT`; all **81 Android tests** passed. The complete required
+affected-file push suite then passed **1,205 tests**, with one POSIX-only skip
+and four unselected native tests. Evidence:
+`reports/local-check/emulebb-build-tests/20261117T184932Z-4454ede5/02.log`.
+Rust push checks passed under
+`reports/local-check/emulebb-rust/20261117T184408Z-c329caeb/`.
+
 The full foundation checkpoint remains open. Sustained soak execution is
 follow-up work. The current build, loopback campaign and focused gates do not
 establish 512-MiB/combined-scale acceptance or the remaining settings, library
