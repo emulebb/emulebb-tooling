@@ -1565,6 +1565,13 @@ protocol-serving regressions use verified bytes. Evidence and exact source hashe
 Normal commit checks passed under
 `reports/local-check/emulebb-rust/20261117T204728Z-cdc7b83f/`.
 
+Rust `4216e94a` also closes waiter admission after a committed publication fault.
+The real root-epoch fence is held odd until the bounded publisher returns its
+committed failure; the regression confirms the durable flag is disabled while
+stale catalog entries cannot promote a waiter. Normal reconciliation alone does
+not close the queue. The updated eD2K gate passed **1,447 tests** under
+`reports/library-sharing-fault-round-1/ed2k.log`.
+
 The bounded Core bulk command and public REST/OpenAPI/WebUI sharing setter remain
 open, followed by the existing native campaign and combined scale qualification.
 The staged daemon and previous native tag campaign still belong to Rust `47ee4f50`;
