@@ -1572,9 +1572,8 @@ stale catalog entries cannot promote a waiter. Normal reconciliation alone does
 not close the queue. The updated eD2K gate passed **1,447 tests** under
 `reports/library-sharing-fault-round-1/ed2k.log`.
 
-The public REST/OpenAPI/WebUI sharing setter remains open, followed by the existing
-native campaign and combined scale qualification. The Core bulk command is
-qualified below.
+The later Core and REST/native checkpoints below extend this runtime proof.
+WebUI library controls and combined scale qualification remain open.
 The staged daemon and previous native tag campaign still belong to Rust `47ee4f50`;
 these package gates do not claim a new staged campaign or complete foundation.
 
@@ -1601,9 +1600,47 @@ continuation after a per-item SQL failure. Evidence and exact source hashes:
 Normal commit checks passed under
 `reports/local-check/emulebb-rust/20261117T210730Z-e8108ab6/`.
 
-This is the backend command checkpoint. REST/OpenAPI exposure and the existing
-native campaign remain next; WebUI library controls and scale qualification
-remain open. The staged daemon is still attributed to Rust `47ee4f50`.
+This backend command proof is supplemented by the REST/native checkpoint below.
+WebUI library controls and scale qualification remain open.
+
+## Sharing REST and native wire qualification
+
+Rust `73aa76ef` exposes `POST /library/files/sharing` with the qualified bulk
+command. The response is HTTP 207 with ordered hash outcomes; input validation
+and global admission errors happen before mutation. Sharing and tag actions use
+one typed hash-outcome transport shape. Whole-request and per-item persistence
+errors share their status, code and commit details through the existing mapper.
+OpenAPI specifies the current boolean, common hash selection and fixed outcome
+shapes without another mutation path or configuration authority.
+
+The supported REST package gate passed **156 unit plus three integration tests**,
+with zero compiler warnings. The normal affected-file push gate passed **349
+Python tests**, including the current route/schema, response conformance,
+observer/codec, shared smoke and campaign checks. Exact retained evidence:
+`reports/library-sharing-rest-round-1/{rest.log,conformance.log,peer-wire.log}`
+and `reports/local-check/emulebb-build-tests/20261117T214313Z-196d522e/02.log`.
+
+The regular daemon and WebUI release build passed with zero warnings under
+`logs/builds/20261117T213213Z-build-clients/build-result.json`. Harness `35e5b75a`
+reuses the existing transport and HELLO encoder with explicit peer framing,
+including valid eMule protocol packets. The existing restart campaign passed
+with graceful teardown, **83 generic probes and zero failed routes**, SSE,
+populated downloads, category storage/sharing, tags, friend peers and Kad.
+
+The actual HTTP-to-wire proof keeps an established peer connection and cached
+complete reader across disable/re-enable while two copies remain eligible. The
+new disabled request receives an explicit no-file response; re-enable returns
+the exact expected bytes. The same profile reopens with the flag still disabled,
+refuses a new peer, then serves correct bytes after explicit re-enable. Mixed
+ordered outcomes, idempotence, unavailable-content policy, unknown-hash absence,
+tag retention and unchanged fixture bytes also passed. The report retains all
+**28 wire frames** and each qualified sharing assertion:
+`reports/rust-rest-openapi-ci/20261117T214032Z/report.json`,
+`categoryPersistencePhase.librarySharing`. Its exact binary source is
+`73aa76ef9f9cee73817b58b0954eded1928cb0b1`.
+
+WebUI library controls, incremental indexed library reads and combined scale
+qualification remain open; this does not close the full foundation scope.
 
 ## Acceptance Criteria
 
