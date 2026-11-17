@@ -276,6 +276,21 @@ passed, including current creation/start sequencing, stalled candidates,
 privacy, substituted-job refusal, failed start items and completion semantics.
 Normal hooks passed for both commits. No public download or soak was launched.
 
+Harness `51ee6e36` qualifies the existing local-client integration scenario
+against the verified registered runtime bundle, using the selected Rust OpenAPI
+and its existing conformance loader. Category names and current job IDs replace
+the removed download surface. The scenario proves separate parts/source/comment
+pages, atomic metadata PATCH 204, same-job restart persistence, explicit
+start/stop receipts and removal while preserving library files. It reuses
+`LocalKadPeer` for a real local bootstrap exchange; discovery is explicitly
+initialized locally and no Cargo launch fallback remains in this scenario.
+The **native integration passed**, and its **two fast tests passed**. Evidence
+is retained under `reports/local-client-foundation-round-6/`: JUnit result,
+daemon log/profile and stage descriptor with the exact harness SHA-256. The
+retained hash matches the committed source. Normal hooks passed. The separate
+native server-bind scenario was not run; this is not combined-scale or RSS
+qualification.
+
 The coherent application checkpoint remains open: the other Rust operator/VPN/
 soak callers and Core consumer cleanup are pending. Adapting those callers does
 not bring sustained soak execution back into this delivery round. Mocked browser success does not qualify those lanes or
