@@ -981,22 +981,22 @@ paths:
           $ref: '#/components/responses/ErrorResponse'
         default:
           $ref: '#/components/responses/ErrorResponse'
-  /downloads/{id}/details:
+  /downloads/{id}/parts:
     parameters:
     - $ref: '#/components/parameters/DownloadId'
     get:
       tags:
       - Downloads
-      summary: Return a bounded page of job details.
-      operationId: getDownloadDetails
-      description: This page belongs to the requested immutable job ID. No lookup may substitute a newer same-hash job. Detail
-        pages contain part state only; sources and comments are separately paginated.
+      summary: Return a bounded page of download parts.
+      operationId: listDownloadParts
+      description: This page belongs to the requested immutable job ID. No lookup may substitute a newer same-hash job. Part
+        pages contain checkpointed part state only; sources and comments are separately paginated.
       parameters:
       - $ref: '#/components/parameters/DownloadCursor'
       - $ref: '#/components/parameters/DownloadLimit'
       responses:
         '200':
-          $ref: '#/components/responses/DownloadDetailsResponse'
+          $ref: '#/components/responses/DownloadPartsResponse'
         '400':
           $ref: '#/components/responses/ErrorResponse'
         '401':
@@ -1273,34 +1273,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/PeerBanResponse'
-        '400':
-          $ref: '#/components/responses/ErrorResponse'
-        '401':
-          $ref: '#/components/responses/ErrorResponse'
-        '404':
-          $ref: '#/components/responses/ErrorResponse'
-        '405':
-          $ref: '#/components/responses/MethodNotAllowedResponse'
-        '409':
-          $ref: '#/components/responses/ErrorResponse'
-        '500':
-          $ref: '#/components/responses/ErrorResponse'
-        '503':
-          $ref: '#/components/responses/ErrorResponse'
-        default:
-          $ref: '#/components/responses/ErrorResponse'
-  /downloads/{id}/sources/{clientId}/operations/release-slot:
-    parameters:
-    - $ref: '#/components/parameters/DownloadId'
-    - $ref: '#/components/parameters/ClientId'
-    post:
-      tags:
-      - Downloads
-      summary: Release this peer's active upload slot when it also holds one.
-      operationId: releaseDownloadSourceUploadSlot
-      responses:
-        '200':
-          $ref: '#/components/responses/OkResponse'
         '400':
           $ref: '#/components/responses/ErrorResponse'
         '401':
@@ -3151,9 +3123,10 @@ components:
       required: false
       description: |
         SSE resume cursor from a previous stream. The current daemon does not
-        replay historical events; when this header is present, the stream starts
-        with a `sync.reset` event carrying the supplied cursor in `lastEventId`
-        so clients can re-baseline through bounded `GET /downloads` pages.
+        replay historical events. Every stream starts with `sync.reset`:
+        reason `initial` without this header, or `reconnect` with it. The opaque
+        SSE ID is epoch:revision; its presence never promises replay. Clients
+        refresh their bounded active view after reset. The header is not echoed.
       schema:
         type: string
         minLength: 1
@@ -3737,7 +3710,7 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/DownloadBatchEnvelope'
-    DownloadDetailsResponse:
+    DownloadPartsResponse:
       description: DownloadDetails envelope.
       headers:
         X-Contract-Version:
@@ -3745,7 +3718,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/DownloadDetailsEnvelope'
+            $ref: '#/components/schemas/DownloadPartsEnvelope'
     DownloadSourcePageResponse:
       description: DownloadSourcePage envelope.
       headers:
@@ -5664,13 +5637,16 @@ components:
     DownloadEventRuntimeDiagnostics:
       type: object
       additionalProperties: false
-      required: [enabled, stream, channelCapacity, queuedEventCount, subscriberCount, latestEventId, nextEventId, resumeBehavior]
+      required: [enabled, stream, epoch, channelCapacity, queuedEventCount, subscriberCount, latestEventId, nextEventId, resumeBehavior]
       properties:
         enabled:
           type: boolean
         stream:
           type: string
           enum: [sse]
+        epoch:
+          type: string
+          format: uuid
         channelCapacity:
           type: integer
           minimum: 0
@@ -8444,27 +8420,16 @@ components:
         availableSources:
           type: integer
           minimum: 0
-    DownloadDetailsEnvelope:
+    DownloadPartsEnvelope:
       type: object
       additionalProperties: false
-      required:
-      - data
-      - meta
+      required: [data, meta]
       properties:
         data:
-          type: object
-          additionalProperties: false
-          required:
-          - download
-          - parts
-          properties:
-            download:
-              $ref: '#/components/schemas/Download'
-            parts:
-              type: array
-              maxItems: 200
-              items:
-                $ref: '#/components/schemas/DownloadPart'
+          type: array
+          maxItems: 200
+          items:
+            $ref: '#/components/schemas/DownloadPart'
         meta:
           $ref: '#/components/schemas/DownloadPageMeta'
     DownloadSource:
@@ -8679,12 +8644,16 @@ components:
       additionalProperties: false
       required:
       - id
+      - epoch
       - type
       - downloadId
       properties:
         id:
           type: integer
           minimum: 1
+        epoch:
+          type: string
+          format: uuid
         type:
           type: string
           const: download.changed
@@ -8695,12 +8664,16 @@ components:
       additionalProperties: false
       required:
       - id
+      - epoch
       - type
       - downloadId
       properties:
         id:
           type: integer
           minimum: 1
+        epoch:
+          type: string
+          format: uuid
         type:
           type: string
           const: download.removed
@@ -8711,12 +8684,16 @@ components:
       additionalProperties: false
       required:
       - id
+      - epoch
       - type
       - reason
       properties:
         id:
           type: integer
-          minimum: 1
+          minimum: 0
+        epoch:
+          type: string
+          format: uuid
         type:
           type: string
           enum:
@@ -8725,12 +8702,12 @@ components:
           type: string
           enum:
           - lagged
-          - last-event-id
+          - initial
+          - reconnect
+          - epoch-changed
         missed:
           type: integer
           minimum: 1
-        lastEventId:
-          type: string
     DownloadEvent:
       oneOf:
       - $ref: '#/components/schemas/DownloadChangedEvent'

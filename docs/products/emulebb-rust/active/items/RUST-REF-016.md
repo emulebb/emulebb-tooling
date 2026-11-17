@@ -143,6 +143,19 @@ Source browsing currently checks peer capability without performing a browse;
 the operator decision to remove that operation or return HTTP 501 remains pending.
 No complete application, client or combined-scale acceptance is claimed.
 
+## Download OpenAPI alignment (2026-11-17)
+
+The contract now describes the implemented independent `/downloads/{id}/parts`
+array page, epoch-bearing identity notifications, initial/reconnect/lag/epoch reset
+reasons, and epoch diagnostics. The source-browse decision remains pending;
+this checkpoint does not qualify the WebUI or the complete application cut.
+
+The existing Python route/schema suite passed **114 tests**, including actual
+selected-source route parity and the new event/parts payload cases. The response
+schema helper suite passed **4 tests**. The existing source reader now recognizes
+shared Rust body allowlists and inline evidence-page query allowlists without
+changing their runtime validation. The documentation publish gate passed.
+
 ## Download-engine behavioral feedback (2026-11-16)
 
 The ninth supported ED2K package run compiled the test target without warnings
