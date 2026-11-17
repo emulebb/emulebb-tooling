@@ -1503,6 +1503,31 @@ are also under `reports/library-tags-rest-round-1/`.
 Sharing enforcement, the bounded library browser, WebUI tags and combined scale
 qualification remain open.
 
+## Complete-file sharing admission foundation
+
+Rust `5f871b55` applies the persisted hash sharing flag to the existing bounded
+complete-copy eligibility batch. Independent verified internal download payloads
+obey the same flag before physical probing can qualify them as a complete
+source. Verified partial offers remain independent. This adds no schema version,
+cache, thread or settings surface. Physical catalog/copy readers and internal
+payload fingerprints remain unchanged: disabling sharing must not revoke an
+already accepted physical snapshot or conceal content from library browsing.
+
+Supported gates passed **234 metadata unit plus three profile-ownership tests**
+and **1,442 eD2K unit tests**, with zero compiler warnings. Extended regressions
+cover all-copy refusal/re-enable, retained physical catalog and copy metadata,
+verified partial offers under a disabled flag, and internal-payload admission
+without changing the captured physical snapshot. Evidence is retained below
+`reports/library-sharing-admission-round-1/{metadata-2.log,ed2k-2.log}`.
+
+This is the SQL/physical eligibility foundation, not complete live enforcement.
+The normal clean-catalog admission shortcut still relies on its policy owner;
+flag writes must use the existing content/stripe publication fence, update the
+live catalog and publication demand, preserve accepted payload requests, and
+cover normal waiter selection. Runtime mutation, REST/OpenAPI/WebUI exposure,
+restart/wire proof and combined scale qualification remain open. The previously
+staged daemon and native campaign remain attributed to Rust `47ee4f50`.
+
 ## Acceptance Criteria
 
 - [ ] No synchronous SQLite operation runs on a Tokio worker thread while
