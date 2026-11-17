@@ -196,7 +196,17 @@ application fails. Return coherent saved/effective/application status; report
 failed fields rather than pretending the save rolled back. Restart-bound leaves
 stay pending until restart. Capture the read under the same ordered publication
 boundary so it cannot combine revisions or half-published live settings. Broad
-service hot-reconfiguration is outside scope.
+service hot-reconfiguration is outside scope. Keep live application only where
+straightforward; daemon restart is an acceptable way to apply configuration.
+Do not add hidden configuration-application retry loops. An explicit settings
+update or daemon restart retries application, with failures reported until then.
+Ordinary protocol reconnection and download cleanup retry rules remain separate.
+
+Return a bounded collection of independently detectable validation issues in
+one response, each with a canonical setting path, stable code and readable
+message; dependent checks require valid inputs. Any validation failure saves
+nothing. Do not force repeated requests merely to discover the next independent
+invalid field.
 
 ### Size and application-status bounds
 

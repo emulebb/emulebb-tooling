@@ -14,6 +14,9 @@ Deliver a coherent database, application-settings, CLI, REST/OpenAPI and WebUI
 foundation for one universal, lightweight eD2K/Kad daemon. Design for year-long
 sessions, 100,000+ library contents and download jobs, and future Arr,
 Qui/qBittorrent and autonomous-indexer capabilities.
+Year-long operation means sustained correctness and bounded resource growth.
+Operator-initiated restarts are acceptable, including for configuration changes;
+restartless reconfiguration is not a requirement.
 
 Start with fresh profiles. Do not implement migrations, compatibility shims,
 aliases, old-schema readers, remapping, retired-name lists, special rejection
@@ -122,11 +125,17 @@ Record a complete settings structure, including the default markers, rather
 than ambiguous sparse overrides.
 
 REST writes require the current settings revision and validate the whole
-candidate atomically. Conflict or validation failure saves nothing. Keep saved
+candidate atomically. Conflict or validation failure saves nothing. Keep
+validation responses bounded and report all independently detectable field
+issues together, with canonical setting paths, stable codes and readable
+messages. Run dependent checks only when their inputs are valid. Keep saved
 desired values if live application subsequently fails; expose effective values,
 failed fields and restart-pending fields. Do not claim a failed change applied.
-Keep established live application; broad service hot-reconfiguration is outside
-scope. Successful saved changes advance the revision.
+Keep straightforward live application; classify changes requiring complex
+reconfiguration as restart-bound. No hidden configuration-application retry
+loop: failures remain explicit, and retry is through an explicit settings update
+or daemon restart. Broad service hot-reconfiguration is outside scope.
+Successful saved changes advance the revision.
 
 ### Path rules
 
@@ -221,10 +230,15 @@ characters, without query language, regex or additional word-search modes.
 
 The persistent sharing enabled/disabled flag is **hash-level**, affecting all
 completed local copies. It is independent of download start/stop and upload
-priority. Disabled completed content is not advertised, actively uploaded or
-served to direct requests. Retain upload priority for re-enable. Remote cached
-advertisements may outlive disable, but requests must still be refused. Do not
-bypass the policy by serving another completed copy/path.
+priority. Disabling is a publication/request-admission policy: skip future
+publications and reject new upload requests, including requests on existing
+connections. Requests accepted before disable may finish, including multiple
+blocks covered by an accepted request. Do not add a stop-at-next-block-boundary
+mechanism, active-session sweep or forced connection teardown. Publish the
+committed flag through the existing policy owner and check it at normal request
+admission. Retain upload priority for re-enable. Remote cached advertisements
+may outlive disable, but new requests must still be refused. Do not bypass the
+policy by serving another completed copy/path.
 
 Verified partial-piece exchange while downloading remains separate and enabled;
 the flag controls complete library content. Previously unseen content starts
@@ -274,6 +288,11 @@ network/source retries remain automatic and are not whole-job storage failures.
 Internal cleanup after completion or removal retries automatically through its
 durable journal. Cleanup failure never restarts downloading, recopies a completed
 output or regresses historical completion.
+After an abrupt crash, recovery may re-download a small recent uncheckpointed
+payload tail. Preserve consistent saved settings and start/stop intent, validate
+checkpointed progress before reuse, never report incomplete data as verified,
+and preserve completed outputs without repeating delivery. Do not require a
+durable filesystem sync for every received block.
 New jobs start by default with an explicit stopped-on-add option. The normal
 workload is **10 to 1,000 incomplete downloads with 100,000+ completed records**.
 Mass additions and 100,000 retained jobs remain scale/qualification cases; they
@@ -787,6 +806,10 @@ isolated from public bootstrap; replacing source-file sentinels must not cause
 accidental public traffic.
 
 ### Required proof
+
+This round has no response-time acceptance threshold. Record timings as
+diagnostics; prioritize functional correctness, recovery, stability and bounded
+resources while retaining the required checks below.
 
 - Default/custom startup resolution with changed running defaults, equal-value
   and reset behavior, revision conflicts, atomic candidate failure, committed
