@@ -279,8 +279,13 @@ policy by serving another completed copy/path.
 
 Verified partial-piece exchange while downloading remains separate and enabled;
 the flag controls complete library content. Previously unseen content starts
-enabled. Persist the flag even with no copies. REST sets true/false explicitly,
-never toggle, with bounded per-hash bulk outcomes. Last successfully ordered
+enabled. Persist the flag even with no copies. `POST /library/files/sharing`
+accepts `{enabled, hashes}` with an explicit boolean and 1-100 distinct known
+hashes. Return HTTP 207 with ordered per-hash outcomes; an unknown hash is a
+per-item 404 and is never created implicitly. Shared refusal returns 503 before
+mutation; committed publication failures retain `committed:true` in their item
+error details. REST sets true/false explicitly, never toggle, with bounded
+per-hash bulk outcomes. Last successfully ordered
 write wins; there is no per-hash revision mechanism. External schedulers own
 rotation; no built-in scheduling/rule engine.
 

@@ -864,6 +864,40 @@ paths:
       description: Default limit 100, maximum 200. Cursors are opaque and scoped to this collection; file
         cursors also bind the hash. Live traversal may miss concurrent changes and does not retain a client
         snapshot. Names retain their saved spelling. A deleted boundary name does not invalidate continuation.
+  /library/files/sharing:
+    post:
+      tags:
+      - Library
+      summary: Set complete-library sharing for explicit hashes.
+      operationId: setLibrarySharing
+      description: Set an explicit boolean for 1-100 distinct known hashes, affecting all complete copies.
+        Partial exchange remains independent. No content is created implicitly. Shared admission refusal
+        returns 503 before changes; admitted work finishes after caller disconnect. Ordered per-hash outcomes
+        preserve successful items and report persistence or committed publication failures explicitly. Accepted
+        payload requests may finish; queue membership alone grants no later payload entitlement.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LibrarySharingRequest'
+      responses:
+        '207':
+          $ref: '#/components/responses/LibrarySharingBatchResponse'
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/ErrorResponse'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowedResponse'
+        '413':
+          $ref: '#/components/responses/ErrorResponse'
+        '500':
+          $ref: '#/components/responses/ErrorResponse'
+        '503':
+          $ref: '#/components/responses/ErrorResponse'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
   /library/files/tags/add:
     post:
       tags:
@@ -3484,6 +3518,15 @@ components:
         maximum: 200
         default: 100
   responses:
+    LibrarySharingBatchResponse:
+      description: Ordered per-hash sharing results. Committed failures state committed:true.
+      headers:
+        X-Contract-Version:
+          $ref: '#/components/headers/ContractVersionHeader'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/LibrarySharingBatchEnvelope'
     NoContentResponse:
       description: Operation completed; the response has no body.
       headers:
@@ -4032,6 +4075,136 @@ components:
           schema:
             $ref: '#/components/schemas/DownloadCommentPageEnvelope'
   schemas:
+    LibraryHashSelection:
+      type: array
+      minItems: 1
+      maxItems: 100
+      uniqueItems: true
+      items:
+        type: string
+        pattern: ^[0-9a-f]{32}$
+    LibrarySharingRequest:
+      type: object
+      additionalProperties: false
+      required:
+      - enabled
+      - hashes
+      properties:
+        enabled:
+          type: boolean
+        hashes:
+          $ref: '#/components/schemas/LibraryHashSelection'
+    LibrarySharingBatchItem:
+      type: object
+      additionalProperties: false
+      required:
+      - hash
+      - status
+      - httpStatus
+      properties:
+        hash:
+          type: string
+          pattern: ^[0-9a-f]{32}$
+        status:
+          type: string
+          enum:
+          - accepted
+          - unchanged
+          - failed
+        httpStatus:
+          type: integer
+          enum:
+          - 200
+          - 404
+          - 413
+          - 500
+          - 503
+        error:
+          $ref: '#/components/schemas/ErrorEnvelope/properties/error'
+      allOf:
+      - if:
+          properties:
+            status:
+              const: failed
+        then:
+          required:
+          - error
+          properties:
+            httpStatus:
+              enum:
+              - 404
+              - 413
+              - 500
+              - 503
+        else:
+          not:
+            required:
+            - error
+          properties:
+            httpStatus:
+              const: 200
+      - if:
+          properties:
+            httpStatus:
+              const: 404
+        then:
+          properties:
+            error:
+              properties:
+                code:
+                  enum:
+                  - NOT_FOUND
+      - if:
+          properties:
+            httpStatus:
+              const: 413
+        then:
+          properties:
+            error:
+              properties:
+                code:
+                  enum:
+                  - PERSISTENCE_TOO_LARGE
+      - if:
+          properties:
+            httpStatus:
+              const: 500
+        then:
+          properties:
+            error:
+              properties:
+                code:
+                  enum:
+                  - PERSISTENCE_FAILED
+      - if:
+          properties:
+            httpStatus:
+              const: 503
+        then:
+          properties:
+            error:
+              properties:
+                code:
+                  enum:
+                  - PERSISTENCE_BUSY
+                  - PERSISTENCE_CLOSING
+                  - PERSISTENCE_COMMITTED
+                  - PERSISTENCE_UNAVAILABLE
+    LibrarySharingBatchEnvelope:
+      type: object
+      additionalProperties: false
+      required:
+      - data
+      - meta
+      properties:
+        data:
+          type: array
+          minItems: 1
+          maxItems: 100
+          items:
+            $ref: '#/components/schemas/LibrarySharingBatchItem'
+        meta:
+          $ref: '#/components/schemas/EnvelopeMeta'
     LibraryTagName:
       type: string
       minLength: 1
@@ -4063,13 +4236,7 @@ components:
         tag:
           $ref: '#/components/schemas/LibraryTagName'
         hashes:
-          type: array
-          minItems: 1
-          maxItems: 100
-          uniqueItems: true
-          items:
-            type: string
-            pattern: ^[0-9a-f]{32}$
+          $ref: '#/components/schemas/LibraryHashSelection'
     LibraryTagBatchItem:
       type: object
       additionalProperties: false
