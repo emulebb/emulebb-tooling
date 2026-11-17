@@ -672,6 +672,16 @@ despite caller disconnect. Per-job failures do not roll back unrelated successes
 or lose later items in a request-owned loop. Native bulk operations initially
 accept bounded explicit selections; no all-matching asynchronous framework.
 
+Verification preserves start/stop intent and initiates no network downloading.
+Check retained partial data for unfinished jobs and the recorded output file
+for completed jobs. A stopped job remains stopped; a started unfinished job
+returns to normal scheduling after verification, subject to its existing failure
+and admission conditions. Verification does not clear an unfinished job's
+storage-failure requirement for explicit start. Missing/damaged completed output
+is reported separately from historical completion and never reopens the job;
+re-download remains explicit. Do not search other library copies for replacement
+data or introduce automatic relocation/repair behavior.
+
 Use live indexed keyset cursors, stable tie-breakers and optional exact totals.
 Document weak traversal consistency under concurrent changes; do not retain
 per-client collection snapshots. Never clone/filter/sort a full durable
