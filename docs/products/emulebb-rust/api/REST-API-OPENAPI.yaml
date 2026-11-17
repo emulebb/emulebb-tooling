@@ -34,6 +34,7 @@ servers:
 security:
   - ApiKeyAuth: []
 tags:
+  - name: Library
   - name: App
   - name: Diagnostics
   - name: Stats
@@ -728,6 +729,211 @@ paths:
           $ref: "#/components/responses/ErrorResponse"
         default:
           $ref: "#/components/responses/ErrorResponse"
+  /library/tags:
+    get:
+      tags:
+      - Library
+      summary: List tags by ASCII case-insensitive name.
+      operationId: listLibraryTags
+      responses:
+        '200':
+          $ref: '#/components/responses/LibraryTagPageResponse'
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/ErrorResponse'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowedResponse'
+        '500':
+          $ref: '#/components/responses/ErrorResponse'
+        '503':
+          $ref: '#/components/responses/ErrorResponse'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+      parameters:
+      - $ref: '#/components/parameters/LibraryTagCursor'
+      - $ref: '#/components/parameters/LibraryTagLimit'
+      description: Default limit 100, maximum 200. Cursors are opaque and scoped to this collection; file
+        cursors also bind the hash. Live traversal may miss concurrent changes and does not retain a client
+        snapshot. Names retain their saved spelling. A deleted boundary name does not invalidate continuation.
+    post:
+      tags:
+      - Library
+      summary: Create an immutable tag name.
+      operationId: createLibraryTag
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LibraryTagCreateRequest'
+      responses:
+        '201':
+          $ref: '#/components/responses/LibraryTagCreatedResponse'
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/ErrorResponse'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowedResponse'
+        '409':
+          $ref: '#/components/responses/ErrorResponse'
+        '413':
+          $ref: '#/components/responses/ErrorResponse'
+        '500':
+          $ref: '#/components/responses/ErrorResponse'
+        '503':
+          $ref: '#/components/responses/ErrorResponse'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+  /library/tags/{tagName}:
+    parameters:
+    - $ref: '#/components/parameters/LibraryTagName'
+    get:
+      tags:
+      - Library
+      summary: Read a tag by its immutable name.
+      operationId: getLibraryTag
+      responses:
+        '200':
+          $ref: '#/components/responses/LibraryTagResponse'
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/ErrorResponse'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowedResponse'
+        '500':
+          $ref: '#/components/responses/ErrorResponse'
+        '503':
+          $ref: '#/components/responses/ErrorResponse'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+    delete:
+      tags:
+      - Library
+      summary: Delete a tag and its assignments, preserving content.
+      operationId: deleteLibraryTag
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContentResponse'
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/ErrorResponse'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowedResponse'
+        '500':
+          $ref: '#/components/responses/ErrorResponse'
+        '503':
+          $ref: '#/components/responses/ErrorResponse'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+  /library/files/{hash}/tags:
+    parameters:
+    - $ref: '#/components/parameters/FileHash'
+    get:
+      tags:
+      - Library
+      summary: List assigned tags for known content, including unavailable files.
+      operationId: listLibraryFileTags
+      responses:
+        '200':
+          $ref: '#/components/responses/LibraryTagPageResponse'
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/ErrorResponse'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowedResponse'
+        '500':
+          $ref: '#/components/responses/ErrorResponse'
+        '503':
+          $ref: '#/components/responses/ErrorResponse'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+      parameters:
+      - $ref: '#/components/parameters/LibraryTagCursor'
+      - $ref: '#/components/parameters/LibraryTagLimit'
+      description: Default limit 100, maximum 200. Cursors are opaque and scoped to this collection; file
+        cursors also bind the hash. Live traversal may miss concurrent changes and does not retain a client
+        snapshot. Names retain their saved spelling. A deleted boundary name does not invalidate continuation.
+  /library/files/tags/add:
+    post:
+      tags:
+      - Library
+      summary: Assign one existing tag to explicit known hashes.
+      operationId: addLibraryFileTags
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LibraryTagAssignmentRequest'
+      responses:
+        '207':
+          $ref: '#/components/responses/LibraryTagBatchResponse'
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/ErrorResponse'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowedResponse'
+        '413':
+          $ref: '#/components/responses/ErrorResponse'
+        '500':
+          $ref: '#/components/responses/ErrorResponse'
+        '503':
+          $ref: '#/components/responses/ErrorResponse'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+      description: One to 100 distinct hashes; a single hash uses this same action. No content or tag is
+        created implicitly. A missing tag returns 404 before mutation. Admitted work completes after caller
+        disconnect. Every admitted batch returns ordered per-hash outcomes; a failed item does not undo
+        other successes or skip later hashes. Shared admission refusal returns 503 before changes.
+  /library/files/tags/remove:
+    post:
+      tags:
+      - Library
+      summary: Remove one existing tag from explicit known hashes.
+      operationId: removeLibraryFileTags
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LibraryTagAssignmentRequest'
+      responses:
+        '207':
+          $ref: '#/components/responses/LibraryTagBatchResponse'
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/ErrorResponse'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowedResponse'
+        '413':
+          $ref: '#/components/responses/ErrorResponse'
+        '500':
+          $ref: '#/components/responses/ErrorResponse'
+        '503':
+          $ref: '#/components/responses/ErrorResponse'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+      description: One to 100 distinct hashes; a single hash uses this same action. No content or tag is
+        created implicitly. A missing tag returns 404 before mutation. Admitted work completes after caller
+        disconnect. Every admitted batch returns ordered per-hash outcomes; a failed item does not undo
+        other successes or skip later hashes. Shared admission refusal returns 503 before changes.
   /downloads:
     get:
       tags:
@@ -835,8 +1041,8 @@ paths:
             schema:
               $ref: '#/components/schemas/DownloadPatch'
       responses:
-        '200':
-          $ref: '#/components/responses/DownloadResponse'
+        '204':
+          $ref: '#/components/responses/NoContentResponse'
         '400':
           $ref: '#/components/responses/ErrorResponse'
         '401':
@@ -3031,6 +3237,31 @@ components:
         const: "2.0.0"
         example: "2.0.0"
   parameters:
+    LibraryTagName:
+      name: tagName
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/LibraryTagName'
+      description: Immutable public name. Lookup is ASCII case-insensitive; returned spelling is preserved.
+    LibraryTagCursor:
+      name: cursor
+      in: query
+      required: false
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 512
+      description: Opaque collection-scoped live continuation; do not interpret.
+    LibraryTagLimit:
+      name: limit
+      in: query
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 200
+        default: 100
     CategoryName:
       name: categoryName
       in: path
@@ -3241,7 +3472,7 @@ components:
       schema:
         type: string
         minLength: 1
-        maxLength: 1024
+        maxLength: 512
     DownloadLimit:
       name: limit
       in: query
@@ -3253,6 +3484,51 @@ components:
         maximum: 200
         default: 100
   responses:
+    NoContentResponse:
+      description: Operation completed; the response has no body.
+      headers:
+        X-Contract-Version:
+          $ref: '#/components/headers/ContractVersionHeader'
+    LibraryTagResponse:
+      description: LibraryTagResponse
+      headers:
+        X-Contract-Version:
+          $ref: '#/components/headers/ContractVersionHeader'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/LibraryTagEnvelope'
+    LibraryTagCreatedResponse:
+      description: LibraryTagCreatedResponse
+      headers:
+        X-Contract-Version:
+          $ref: '#/components/headers/ContractVersionHeader'
+        Location:
+          description: Canonical tag resource URI using saved spelling.
+          schema:
+            type: string
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/LibraryTagEnvelope'
+    LibraryTagPageResponse:
+      description: LibraryTagPageResponse
+      headers:
+        X-Contract-Version:
+          $ref: '#/components/headers/ContractVersionHeader'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/LibraryTagPageEnvelope'
+    LibraryTagBatchResponse:
+      description: LibraryTagBatchResponse
+      headers:
+        X-Contract-Version:
+          $ref: '#/components/headers/ContractVersionHeader'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/LibraryTagBatchEnvelope'
     AppResponse:
       description: Application envelope.
       headers:
@@ -3756,6 +4032,164 @@ components:
           schema:
             $ref: '#/components/schemas/DownloadCommentPageEnvelope'
   schemas:
+    LibraryTagName:
+      type: string
+      minLength: 1
+      maxLength: 64
+      pattern: ^[A-Za-z0-9][A-Za-z0-9-]{0,63}$
+    LibraryTag:
+      type: object
+      additionalProperties: false
+      required:
+      - name
+      properties:
+        name:
+          $ref: '#/components/schemas/LibraryTagName'
+    LibraryTagCreateRequest:
+      type: object
+      additionalProperties: false
+      required:
+      - name
+      properties:
+        name:
+          $ref: '#/components/schemas/LibraryTagName'
+    LibraryTagAssignmentRequest:
+      type: object
+      additionalProperties: false
+      required:
+      - tag
+      - hashes
+      properties:
+        tag:
+          $ref: '#/components/schemas/LibraryTagName'
+        hashes:
+          type: array
+          minItems: 1
+          maxItems: 100
+          uniqueItems: true
+          items:
+            type: string
+            pattern: ^[0-9a-f]{32}$
+    LibraryTagBatchItem:
+      type: object
+      additionalProperties: false
+      required:
+      - hash
+      - status
+      - httpStatus
+      properties:
+        hash:
+          type: string
+          pattern: ^[0-9a-f]{32}$
+        status:
+          type: string
+          enum:
+          - accepted
+          - unchanged
+          - failed
+        httpStatus:
+          type: integer
+          enum:
+          - 200
+          - 404
+          - 500
+        error:
+          $ref: '#/components/schemas/ErrorEnvelope/properties/error'
+      allOf:
+      - if:
+          properties:
+            status:
+              const: failed
+        then:
+          required:
+          - error
+          properties:
+            httpStatus:
+              enum:
+              - 404
+              - 500
+        else:
+          not:
+            required:
+            - error
+          properties:
+            httpStatus:
+              const: 200
+    CursorPageMeta:
+      type: object
+      additionalProperties: false
+      required:
+      - apiVersion
+      - nextCursor
+      - hasMore
+      properties:
+        apiVersion:
+          type: string
+        nextCursor:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 512
+        hasMore:
+          type: boolean
+      allOf:
+      - if:
+          properties:
+            hasMore:
+              const: false
+        then:
+          properties:
+            nextCursor:
+              type: 'null'
+      - if:
+          properties:
+            hasMore:
+              const: true
+        then:
+          properties:
+            nextCursor:
+              type: string
+    LibraryTagEnvelope:
+      type: object
+      additionalProperties: false
+      required:
+      - data
+      - meta
+      properties:
+        data:
+          $ref: '#/components/schemas/LibraryTag'
+        meta:
+          $ref: '#/components/schemas/EnvelopeMeta'
+    LibraryTagPageEnvelope:
+      type: object
+      additionalProperties: false
+      required:
+      - data
+      - meta
+      properties:
+        data:
+          type: array
+          maxItems: 200
+          items:
+            $ref: '#/components/schemas/LibraryTag'
+        meta:
+          $ref: '#/components/schemas/CursorPageMeta'
+    LibraryTagBatchEnvelope:
+      type: object
+      additionalProperties: false
+      required:
+      - data
+      - meta
+      properties:
+        data:
+          type: array
+          minItems: 1
+          maxItems: 100
+          items:
+            $ref: '#/components/schemas/LibraryTagBatchItem'
+        meta:
+          $ref: '#/components/schemas/EnvelopeMeta'
     EnvelopeMeta:
       type: object
       additionalProperties: false
@@ -3974,6 +4408,7 @@ components:
                 - INVALID_STATE
                 - DOWNLOAD_CONFLICT
                 - CATEGORY_NAME_CONFLICT
+                - TAG_NAME_CONFLICT
                 - SERVICE_BUSY
                 - EMULE_UNAVAILABLE
                 - EMULE_ERROR
@@ -7998,7 +8433,7 @@ components:
           - string
           - 'null'
           minLength: 1
-          maxLength: 1024
+          maxLength: 512
         hasMore:
           type: boolean
       allOf:

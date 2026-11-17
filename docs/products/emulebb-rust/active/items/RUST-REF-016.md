@@ -1473,6 +1473,28 @@ Additional acceptance criteria:
 - Keep large-library batching performance work in `RUST-REF-008` and category
   deletion atomicity in `RUST-BUG-131`; share one persistence architecture.
 
+## Tag REST contract qualification
+
+The phase 2d REST slice exposes immutable name resources, bounded global and
+per-hash tag pages, and bulk-only assignment actions. Requests name one existing
+tag and 1-100 distinct hashes; HTTP 207 preserves request order and reports each
+hash independently. Creation returns 201 with Location, deletion returns an
+empty 204, and assigning tags never creates content or tags implicitly. The
+existing persistence owner and retained result charge remain authoritative.
+
+The supported REST gate passed **152 unit and 3 integration tests**, with no
+compiler warnings. The existing Python route/schema/response/conformance/smoke
+suites passed **319 tests**. Evidence is retained below
+`reports/library-tags-rest-round-1/{rest-2.log,python-3.log}`. OpenAPI now declares
+the existing download PATCH 204 and the implemented 512-character cursor bound;
+the shared conformance runner checks that 204 responses have empty wire bodies.
+The existing category restart campaign has been extended to exercise all seven
+tag operations, unavailable-content retention, restart persistence, ordered mixed
+outcomes, idempotent removal and deletion of assignments. That native campaign
+must run against a newly built bundle before this slice has runtime proof.
+Sharing enforcement, the bounded library browser, WebUI tags and combined scale
+qualification remain open.
+
 ## Acceptance Criteria
 
 - [ ] No synchronous SQLite operation runs on a Tokio worker thread while
