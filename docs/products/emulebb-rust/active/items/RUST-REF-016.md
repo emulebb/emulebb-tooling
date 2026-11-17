@@ -1644,15 +1644,17 @@ qualification remain open; this does not close the full foundation scope.
 
 ## Incremental physical library index checkpoint (2026-11-17)
 
-Rust commits `c70dbaaa` and `825df4c8` replace revision-wide physical catalog
-rebuilding with incremental per-content reconciliation under schema 86. The
+The physical catalog uses incremental per-content reconciliation under
+schema 86. The
 SQLite change index retains one latest revision per affected content identity,
 including deletion tombstones, rather than accumulating events. Connections
 track their own durable position and pending session verification changes;
 another connection cannot consume their notifications. Root, copy, path and
 delivery-exclusion changes update affected content. Tags, sharing policy and
 statistics are read from their owners without rebuilding physical membership. Unchanged
-verification fingerprints enqueue no work.
+verification fingerprints enqueue no work, including repeated observations
+through the normal path-admission writer. Admission still reports success for
+matching evidence without replacing the session row.
 
 The existing 100k catalog fixture now protects unrelated projection rows against
 deletes during one-content changes, exercises session withdrawal/restoration and
@@ -1669,11 +1671,35 @@ The regular daemon/WebUI build passed with **zero warnings**:
 The existing native REST/OpenAPI harness passed with graceful teardown against
 exact Rust revision `825df4c8280be007dc45b005e52c77d27ea5adcc`:
 `reports/rust-rest-openapi-ci/20261117T221004Z/report.json`.
-Normal Rust commit/push hooks passed; both commits are pushed on the existing
-foundation branch, without a PR or merge.
+The native report covers that exact revision; it does not qualify subsequent
+source changes. Normal Rust commit/push hooks passed. All scoped commits remain
+on the existing foundation branch, without a PR or merge.
+
+The current metadata checkpoint is Rust `e56a9a94`, including the admission
+writer fix `4a987b63`. `library_locations` returns retained path observations
+using content/path keyset seeks, at most 200 rows and a caller-reserved allowance
+capped at 1 MiB. Lengths are checked before native-path decoding. A byte-limited
+page resumes before the first omitted path. Reads expose cached verification,
+root and exclusion facts without filesystem probes or granting serving authority.
+Unknown and remote-observation-only hashes differ from verified library content
+that has no remaining copies. Root withdrawal and identity exclusion retain
+location knowledge.
+
+The existing 100k fixture proves late-copy seeks and indexed path membership/root
+lookups with multiple configured roots, without temporary sorting. Dedicated
+checks cover row/byte limits, resumption, oversized native paths, process-local
+verification, copyless content, passive observations and inaccessible/disabled
+roots. The existing paired-identity exclusion fixture checks retained excluded
+locations. The complete metadata suite passed **238 unit + 3 ownership tests**;
+eD2K passed **1,447 tests** after both changes. Evidence:
+`reports/library-location-reads-round-1/{metadata.log,ed2k.log}` and
+`reports/library-incremental-index-round-1/verification-writer.log`.
+The new locations reader is not yet exposed through REST. The Present-view
+boundary (current roots versus verified copies outside them) awaits the operator;
+locations deliberately expose separate facts so that decision is not guessed.
 
 This qualifies the physical index maintenance slice. Canonical library visibility
-views, display-name-only search, locations, statistic sorts and WebUI controls
+views, display-name-only search, public locations, statistic sorts and WebUI controls
 remain open, as do the remaining settings/CLI/Docker work and combined resource
 qualification. This is not full library-read or foundation acceptance.
 
