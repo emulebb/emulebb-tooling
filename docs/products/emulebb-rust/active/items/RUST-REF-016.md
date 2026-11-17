@@ -958,12 +958,13 @@ stop while a later job I/O guard is held, rejection of late publication/handles,
 and rollback of both progress and intent when the stop update fails. These
 guard/gate tests do not establish actual held-OS-I/O qualification.
 
-The regressions also exposed a separate remaining DB/API defect: the persisted
-header counter sums contiguous prefixes and misses sparse bitmap bytes. The
-native counter is corrected; [RUST-CI-044](RUST-CI-044.md) owns the persisted
-aggregate correction before public progress is accepted. The stop tests retain
-exact bitmap and total byte-presence assertions instead of treating a prefix
-counter as total presence.
+The separate persisted sparse-progress defect is corrected in local schema-83
+provider `98f37249`: distinct prefix/presence scalars now maintain the job total
+transactionally. [RUST-CI-044](RUST-CI-044.md) records the scoped native, metadata,
+Core and existing Python-fixture evidence. Stop/restart tests now require the
+persisted total to include sparse blocks as well as exact bitmap restoration.
+The new provider and Core integration remain local pending the REST/application
+consumer cut.
 
 Require actual held-I/O cancellation/drain tests, query plans and parent/path
 replacement races. The existing full catalog rebuild remains separate bounded

@@ -60,16 +60,26 @@ neither failed jobs nor queued/history rows require retained Core workers or
 full manifests. These additions are allocated, not implemented by the provider
 checkpoints below.
 
-Current stop/restart regressions confirm that `checkpointed_bytes` sums each
-piece's contiguous prefix and omits noncontiguous bitmap blocks. Native progress
-is corrected in the stop-owner integration, but the DB header and download
-summary still underreport those blocks. Before accepting the public download
-surface, distinguish prefix offsets from total present bytes, persist the
-derived per-piece presence and maintain the job aggregate transactionally.
-Keep summary reads scalar and indexed; do not parse every bitmap or scan piece
-history on each list request. Extend the existing aggregate/rollback/query-plan
-tests and current Python fixtures. This is a coordinated fresh-schema change,
-with no migration, alias or old-row reconstruction path.
+Local Rust commit `98f37249` advances the fresh schema to **83** and fixes sparse
+progress accounting. `download_job_pieces.prefix_bytes` is the contiguous offset;
+`present_bytes` includes noncontiguous blocks and short tails. Native conversion
+derives presence with the existing bitmap codec. Bounds and snapshot validation
+keep presence consistent with prefixes and payload geometry; checked triggers
+maintain the job's `checkpointed_bytes` total through deltas, reconciliation,
+rollback and retirement. Summary reads remain scalar and indexed, with no
+bitmap parsing or piece-history scan. There is no migration, alias or old-row
+reconstruction path.
+
+Evidence under `EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/download-present-bytes-round-3/`
+records 1,433 native tests, the complete Core package (570 units and all
+integrations), and 31 existing Python metadata tests passing. Metadata 216 unit
+plus three ownership tests passed under the sibling `download-present-bytes-round-2/`.
+The expanded aggregate regression covers sparse blocks, same-total bitmap
+changes, prefix catch-up without double counting, short tails and rollback.
+Harness commit `d1f596b4` updates the existing current-schema writer and asserts
+both piece counters and the parent total. Rust and harness commits remain local
+until the REST/application consumer cut is validated; these component results
+do not qualify the unfinished full public surface or combined scale.
 
 ### Native download query provider checkpoint (2026-11-16)
 
