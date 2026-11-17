@@ -90,6 +90,12 @@ documentation describes only implemented structure.
 - Use compact internal keys, explicit foreign keys, constraints, transactions
   and indexed access paths. All startup, recovery and shutdown paths also need
   bounded work; list pagination alone is insufficient.
+- A serious database consistency fault, including an uncertain commit outcome
+  or untrusted integrity, stops new work, attempts safe shutdown without claiming
+  a clean checkpoint, and exits with a clear fatal error and nonzero status.
+  Require operator intervention; do not build a restricted diagnostic operating
+  mode or automatic database repair. Ordinary request/storage failures keep their
+  scoped handling and are not automatically classified as fatal consistency faults.
 - Application-allocated public IDs, including jobs, roots, servers,
   searches and results, are immutable never-reused decimal strings. Content is
   publicly addressed by its eD2K hash; immutable tag and category names are their
@@ -156,6 +162,11 @@ roots and IP-filter paths resolve against the selected profile. Absolute paths
 and supported Windows UNC paths are used directly. No `~`, shell-variable or
 environment-variable expansion. Expose resolved paths where callers need them.
 Paths refer to the daemon filesystem, including container namespaces.
+The active profile and SQLite database require local storage. Temporary payload
+data, library roots and completed destinations may use non-local storage where
+the required filesystem operations can be performed safely. Use existing
+filesystem primitives and explicit failures, without distributed locking or a
+universal filesystem-recovery subsystem.
 
 The canonical storage keys are `storage.incomingDirectory` and
 `storage.tempDirectory`, defaulting to profile-relative `incoming` and `temp`;
@@ -245,8 +256,7 @@ completed local copies. It is independent of download start/stop and upload
 priority. Disabling is a publication/request-admission policy: skip future
 publications and reject new upload requests, including requests on existing
 connections. Requests accepted before disable may finish, including multiple
-blocks covered by an accepted request. Do not add a stop-at-next-block-boundary
-mechanism, active-session sweep or forced connection teardown. Publish the
+blocks covered by an accepted request. Publish the
 committed flag through the existing policy owner and check it at normal request
 admission. Retain upload priority for re-enable. Remote cached advertisements
 may outlive disable, but new requests must still be refused. Do not bypass the
@@ -255,7 +265,8 @@ policy by serving another completed copy/path.
 Verified partial-piece exchange while downloading remains separate and enabled;
 the flag controls complete library content. Previously unseen content starts
 enabled. Persist the flag even with no copies. REST sets true/false explicitly,
-never toggle, with bounded per-hash bulk outcomes. External schedulers own
+never toggle, with bounded per-hash bulk outcomes. Last successfully ordered
+write wins; there is no per-hash revision mechanism. External schedulers own
 rotation; no built-in scheduling/rule engine.
 
 Add flat many-to-many hash-level tags, independent of download categories.
@@ -272,6 +283,10 @@ and accepted upload-session counts, plus last-request and last-actual-upload
 timestamps. All copies contribute to one hash's counters. Session counters reset
 on process start. Lifetime totals persist across root/file/policy changes.
 Application totals are consistent with the documented accounting scope.
+Count upload requests for known hashes even when sharing policy refuses them,
+so the counter measures observed demand. Accepted-session and sent-byte counters
+measure admitted service and actual transmission separately. Requests for unknown
+hashes do not create library records.
 
 Checkpoint accumulating lifetime counters in batches and flush on clean shutdown.
 A crash may lose the uncheckpointed statistics window. Do not require permanent
@@ -297,6 +312,12 @@ message and failure timestamp, expose the reason in detail, and retain the
 failed condition across restart. An admitted explicit start clears that failure
 for a new fenced attempt; refusal before admission changes nothing. Normal
 network/source retries remain automatic and are not whole-job storage failures.
+An unavailable delivery destination follows the same explicit-start rule for
+unfinished execution. Preserve usable verified payload and reuse it where
+straightforward. An unrecoverable partial download may require explicit removal
+and re-download; this round does not promise recovery of every filesystem
+failure or introduce a complex repair framework. Never report invalid data as
+complete or modify unrelated files to obtain recovery.
 Internal cleanup after completion or removal retries automatically through its
 durable journal. Cleanup failure never restarts downloading, recopies a completed
 output or regresses historical completion.
@@ -532,6 +553,9 @@ completed outputs; `deleteData:true` additionally requests deletion of the exact
 output only with proven job ownership. Independent and unowned copies are
 preserved. Stop retains the job and resumable internal pieces; removal does not
 create orphan-partial ownership and recovery features in this round.
+Removing a completed job with `deleteData:false` leaves its output in the library
+under the existing hash-level sharing policy, preserves prior-download knowledge,
+and does not implicitly disable sharing.
 
 ## Search and knowledge foundation
 
