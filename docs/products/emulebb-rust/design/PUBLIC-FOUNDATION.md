@@ -295,6 +295,12 @@ underscores or rewriting. No rename operation: create a new tag and explicitly
 change assignments. Deleting a tag removes its assignments, not content. Root,
 filename, availability, sharing-state and tag filters support external subsets.
 
+Tag assignments use only bounded bulk actions: `POST /library/files/tags/add`
+and `POST /library/files/tags/remove`, with `{tag, hashes}`. Each request names
+one existing tag and 1-100 distinct explicit hashes; a single hash uses the same
+path. Return ordered per-hash outcomes using the native bulk response pattern.
+Do not add parallel per-file assignment routes or create tags/content implicitly.
+
 ### Statistics
 
 Per hash expose real current-process and lifetime uploaded bytes, upload requests

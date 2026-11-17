@@ -36,7 +36,7 @@ Rust `cb35ecac` on the existing foundation branch provides:
 - Thin source pages with at most sixteen recent reported names, explicit omission
   flags, a shared 512-KiB name allowance inside the 1-MiB page budget, and indexed
   exact source lookup. Live source scalars do not clone peer part bitmaps.
-- Fresh schema 84 with a partial comment/rating index on source job/row ID.
+- Fresh schema 85 with a partial comment/rating index on source job/row ID.
   Comment pages seek this index directly, load neither source-name windows nor
   execution geometry, and preserve continuation across metadata and Core byte
   limits. Generation checks reject stale callbacks/reads.
@@ -332,6 +332,28 @@ and four unselected native tests. Evidence:
 `reports/local-check/emulebb-build-tests/20261117T184932Z-4454ede5/02.log`.
 Rust push checks passed under
 `reports/local-check/emulebb-rust/20261117T184408Z-c329caeb/`.
+
+### Library policy persistence baseline
+
+Rust `13cffee3` starts phase 2d with fresh schema **85**. Known hashes own the
+default-enabled sharing flag; immutable case-insensitive tag names have internal
+SQL keys and indexed many-to-many known-file associations. Explicit writes never
+create content/tags implicitly, deletion cascades assignments only, and tag pages
+retain at most 200 rows. Policy and associations survive copyless knowledge,
+reobservation and reopening. Revision changes roll back with failed writes.
+
+Supported gates passed **234 metadata unit plus three ownership tests**,
+**593 Core unit plus all 35 enabled integrations**, and **31 existing Python
+metadata helper tests**. Rust produced zero warnings. Logs and exact product
+source hashes are retained under `reports/library-policy-metadata-round-2/`.
+Normal commit hooks passed. These are persistence/provider results; protocol
+request admission, publication filtering, REST/OpenAPI/WebUI and large-library
+query qualification are still pending. The previous staged daemon/campaign
+remains attributed to schema 84 and its exact recorded commit.
+
+The operator selected bulk-only tag assignment actions; the authoritative
+foundation specification records the accepted endpoints and explicit selection
+bounds. No parallel per-file write surface or implicit tag creation is planned.
 
 The full foundation checkpoint remains open. Sustained soak execution is
 follow-up work. The current build, loopback campaign and focused gates do not
