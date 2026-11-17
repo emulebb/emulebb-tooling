@@ -143,6 +143,26 @@ Source browsing currently checks peer capability without performing a browse;
 the operator decision to remove that operation or return HTTP 501 remains pending.
 No complete application, client or combined-scale acceptance is claimed.
 
+## WebUI download-event integration (2026-11-17)
+
+The held consumer work now uses the scalar download notification variants and
+`downloadEvents` diagnostics, with matching `downloads.sse` capability names.
+The browser retains the exact SSE cursor supplied by the server rather than
+rebuilding it from a JavaScript numeric revision. The unit regression includes a
+revision above the safe integer range. Existing refresh coalescing is retained.
+
+The supported WebUI lane passed **53 unit tests**, **32 browser tests**, TypeScript
+checks and the production build. The affected REST lane passed **148 unit and
+3 integration tests**. Exact held sources and logs are retained below the output
+root at `reports/download-webui-events-round-1/{source-freeze.json,webui.log,rest.log}`.
+The source hashes were verified after both lanes. Initial-reset fixtures use
+revision zero and do not manufacture a published bus event.
+
+This remains held work awaiting the coherent application cut: download forms,
+job-ID selection/actions and bounded list pages still need conversion. Mocked
+browser success is not proof that those unfinished production consumers work.
+No PR or merge is authorized.
+
 ## Download OpenAPI alignment (2026-11-17)
 
 The contract now describes the implemented independent `/downloads/{id}/parts`
