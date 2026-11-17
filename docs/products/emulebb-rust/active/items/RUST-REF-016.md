@@ -912,7 +912,7 @@ REST publication remains outside that scoped result.
 The full resident/retained-I/O scope is **not accepted yet**:
 protocol sessions still retain old pins across appends, structural edits still
 use full working snapshots, and actual held-I/O ownership remains unqualified.
-The uncommitted Core integration now implements one SQLite-driven scheduler,
+The Core integration in local commit `78d127be` implements one SQLite-driven scheduler,
 sixteen active slots and two metadata-preparation slots. Admission precedes
 spawning; queued rows own neither workers nor timers. One retry clock drives
 the selected cohort, and protocol callbacks wake their existing owner. Each
