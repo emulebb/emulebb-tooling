@@ -3,7 +3,7 @@
   "status": "ACCEPTED_ROUND_ONE_TARGET_NOT_IMPLEMENTED",
   "ownerIssue": "https://github.com/emulebb/emulebb-rust/issues/297",
   "reviewSourceRevision": "70e595a2",
-  "defaultStatus": "PM accepted 59 public leaves on 2026-11-15; source-backed defaults except explicit new job cap 8 and tempDirectory=temp. This is the implementation target, not runtime qualification.",
+  "defaultStatus": "PM accepted 59 public leaves on 2026-11-15; source-backed defaults except explicit adaptive concurrency default null and tempDirectory=temp. This is the implementation target, not runtime qualification.",
   "naming": "TOML/Rust/SQL snake_case, JSON camelCase, URL kebab-case. Current-contract validation only; no aliases, compatibility shims, fallback keys, remapping, retired-input handling or removed-name tests.",
   "commonContract": {
     "definitionOwner": "emulebb-settings",
@@ -969,18 +969,20 @@
       "domain": "transfers",
       "path": "transfers.maxConcurrentDownloads",
       "type": "integer",
-      "unit": "active downloads",
-      "default": 16,
+      "unit": "ordinary active-download ceiling; fixed 25% rare-opportunity burst allowed",
+      "default": null,
       "validation": {
         "kind": "integer",
+        "nullable": true,
+        "nullMeaning": "automatic adaptive concurrency",
         "minimum": 1,
         "maximum": 2147483647
       },
-      "runtimeOwner": "emulebb-ed2k::Ed2kTransferRuntime",
+      "runtimeOwner": "emulebb-core download admission scheduler",
       "acceptance": "accepted round-one target; not yet implemented or qualified",
       "definitionSource": "crates/emulebb-settings/src/lib.rs",
-      "boundsEvidence": "new operator-purpose job cap, distinct from global connection cap; minimum1 maximum2147483647",
-      "rustType": "u32",
+      "boundsEvidence": "operator accepted automatic null or positive ordinary ceiling, distinct from global connection cap; fixed 25% rare-opportunity burst rounded up, resource constrained; integer minimum1 maximum2147483647",
+      "rustType": "Option<u32>",
       "consumerSource": "new bounded job-admission scheduler"
     },
     {
@@ -1628,7 +1630,7 @@
     "security.vpnGuard.mode=block requires an explicit interface or bind IP, with current runtime fail-closed checks; CIDR list may be empty for interface-only gating.",
     "security.ipFilter.enabled requires a non-null nonempty filePath; validate syntax offline and filesystem availability when applying. Do not silently admit enabled-but-unfiltered state.",
     "Relative paths resolve against profile; no environment/tilde expansion. Apply platform path classes.",
-    "Lowering maxConcurrentDownloads drains admissions; do not silently stop current jobs. Built-in discovery-only exploration buffer 2 is not a setting."
+    "maxConcurrentDownloads null selects adaptive automatic concurrency. A positive integer is the ordinary ceiling with a fixed non-configurable 25% rare-opportunity burst rounded up, always within resource budgets. Lowering the ceiling drains admissions; do not silently stop current jobs. Initial two-slot preparation allowance is not a setting."
   ],
   "nonSettingsState": [
     {

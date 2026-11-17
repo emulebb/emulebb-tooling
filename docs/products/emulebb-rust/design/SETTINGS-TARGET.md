@@ -169,8 +169,8 @@ X-API-Key: <private-key>
 }
 ```
 
-The explicit 8 becomes default because it equals the current job-cap default.
-Reset selects the current incoming default. Validate the entire resolved
+The explicit 8 is custom because the current concurrency default is `null`
+(automatic). Reset selects the current incoming default. Validate the entire resolved
 candidate, including cross-field rules, before committing any of these edits.
 Offline syntactic validation must not require the target interface or filesystem
 to exist on the preparation machine; runtime availability is checked on apply.
@@ -280,9 +280,14 @@ and ED2K modules. Source defaults do not prove every current runtime wire is
 correct. In particular, the existing connection coordinator cap is not an
 active-job cap, and configured half-open limits must reach the admitted runtime.
 
-The new job cap defaults to 16 active downloads with 2 built-in discovery-only
-preparation slots.
-The connection cap stays 500. Lowering the job cap drains admissions without
+`transfers.maxConcurrentDownloads` defaults to `null` for adaptive automatic
+concurrency. A positive integer sets the ordinary ceiling with a fixed,
+non-configurable 25% rare-opportunity burst allowance rounded up, always subject
+to resource budgets. Sixteen active plus two preparation slots is an initial
+qualification baseline, not a permanent count ceiling. The
+[foundation scheduling contract](PUBLIC-FOUNDATION.md#resource-admission-and-discovery)
+owns admission, scarcity and endgame behavior; no extra memory/burst setting is
+introduced. The connection cap stays 500. Lowering the ordinary ceiling drains admissions without
 silently stopping current jobs. `storage.incomingDirectory` defaults to
 profile-relative `incoming`; `storage.tempDirectory` to profile-relative `temp`.
 They are selected for jobs under the master first-start/delivery rules.
@@ -336,7 +341,7 @@ a blanket JavaScript-safe-integer limit.
 | `network.nat.externalIpOverride` | `Option<Ipv4Addr>` | `null` | unicast IPv4; nullable | restart |
 | `transfers.uploadLimitBytesPerSecond` | `u64` | `6348800` | 1..4398046509056 | live |
 | `transfers.downloadLimitBytesPerSecond` | `u64` | `12499968` | 1..4398046509056 | live |
-| `transfers.maxConcurrentDownloads` | `u32` | `8` | 1..2147483647 | live |
+| `transfers.maxConcurrentDownloads` | `Option<u32>` | `null` | null=auto; 1..2147483647 | live |
 | `transfers.maxSourcesPerFile` | `u32` | `600` | 1..2147483647 | live |
 | `transfers.maxParallelDownloadPeers` | `u32` | `2` | 1..2147483647 | restart |
 | `transfers.upload.targetClientRateBytesPerSecond` | `u64` | `32768` | 1..4398046510080 | live |

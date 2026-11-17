@@ -290,8 +290,9 @@ slots** is the initial engineering/qualification baseline, not a permanent
 product count ceiling. Replace the implementation's fixed eighteen-resident
 restriction when delivering this policy.
 
-Keep the setting name `maxConcurrentDownloads`. In automatic mode the scheduler
-chooses the ordinary concurrency target; a configured positive value supplies
+Keep the setting name `maxConcurrentDownloads`, nullable with default `null`
+for automatic adaptive concurrency. In automatic mode the scheduler chooses
+the ordinary concurrency target; a configured positive integer supplies
 the user's ordinary ceiling, subject to resource admission. Document that an
 explicit ceiling permits a fixed **25% rare-opportunity burst, rounded up**:
 for N ordinary downloads, at most N + ceil(N / 4) may be active under this
@@ -317,6 +318,13 @@ and slow peers to avoid switching churn; an elapsed clock alone must not cancel
 in-flight storage work. Under memory pressure alone, stop new admission, evict
 unused cache, and let existing executions drain at safe release points rather
 than proactively stopping them. Recover admission gradually to avoid oscillation.
+Insufficient free space detected by preflight before payload work is resource
+waiting with automatic reconsideration, not an execution storage failure.
+Actual execution storage failures still require explicit start. A preflight
+check does not guarantee that a later storage operation will succeed.
+Bulk library scanning/hashing uses spare capacity and throttles under contention
+to protect payload transfers, especially rare-part acquisition and endgame,
+while keeping networking and REST responsive.
 
 The resident manifest cache retains a **64 MiB soft target and an initial
 128 MiB hard ceiling**, with update/checkpoint headroom reserved before admitting
@@ -358,8 +366,21 @@ bounded duplicate requests to different peers for outstanding blocks delaying
 endgame completion; accept the first valid response and cancel redundant
 requests. Bound redundant request/byte work under the same resource controls.
 
-Expose waiting for useful sources versus waiting for resources through REST and
-the WebUI, keeping coarse download state separate from its waiting reason.
+Expose a closed, nullable `waitingReason` through REST and the WebUI, separate
+from coarse lifecycle state. A queued job has exactly one of three fixed codes:
+`network` when networking cannot operate, `sources` when networking can operate
+but no reachable source is currently confirmed to offer useful missing data,
+or `resources` when useful work awaits scheduler admission/capacity, including
+preflight storage headroom. Network absence includes unusable interfaces,
+VPN policy blocking connectivity, and disabled networking. Disconnected sources
+and discovery/retry backoff fall under `sources`; queue ordering, memory,
+connections, I/O capacity and rare-opportunity displacement fall under
+`resources`. Outside queued state the reason is `null`; stopped, metadata
+waiting, storage failure, verifying and delivering retain their own lifecycle
+semantics. These codes are not an extensible string set. Adding/changing a code
+requires an explicit public-contract decision. Enforce state/reason combinations
+in OpenAPI, backend checks and client types; detail belongs in network/failure
+information and the resource summary, not new scheduler-specific reason codes.
 Include one lightweight resource summary: active/preparing/waiting counts,
 configured concurrency mode/value, current adaptive target, burst activity,
 and resident-memory usage/budget. Coalesce updates rather than emitting per-block
@@ -772,6 +793,11 @@ accidental public traffic.
   but failed application, restart-pending reporting and offline lease races.
 - Creation/re-download races, nullable metadata, immutable IDs, no historical
   resurrection, start/stop intent, bounded active work and retained history.
+- Adaptive admission and fixed burst semantics, rare-part capture, endgame
+  duplication/cancellation, shortest-remaining ordinary admission, useful-source
+  discovery without per-waiting-job workers, safe yielding, pressure recovery,
+  preflight disk waiting versus execution failure, and scan/download contention.
+  Prove the closed lifecycle/reason contract and bounded resource summary.
 - Crash/restart at delivery phases, fixed selected temp/attempt destination,
   collisions and safe retries without unrelated overwrite/deletion.
 - Root overlap/removal/offline/reappearance, trustworthy cache reuse versus
@@ -788,7 +814,14 @@ accidental public traffic.
   jobs**, mixed completed/queued/stopped and bounded active work. Measure startup,
   first/late pages, substring search, every statistic sort, mutations, shutdown,
   memory and CPU. Inspect query plans and transient allocations, not only output
-  sizes. Physical reference devices/hard budgets are deferred qualification.
+  sizes. Qualify normal operation under an enforced **512 MiB total container
+  memory limit and 1 CPU**, with 100,000+ retained records and a realistic
+  incomplete queue spanning the accepted 10-to-1,000 workload. Measure the whole
+  daemon, including startup and background activity, not just resident manifests.
+  Concurrency adapts; this target does not promise sixteen simultaneous payload
+  executions. Qualify higher-capacity operation separately. Physical reference
+  devices remain distinct pending evidence; no idle-only or component-budget
+  result proves the constrained-container gate.
 
 Inspect correctness, contracts, failure recovery, interactions, maintainability
 and resource use, together where practical. Further review addresses concrete
