@@ -905,15 +905,34 @@ publishes synchronously with admitted credit before replying; the async owner
 can retain the same fence through Core state publication. Native tests prove
 publication after SQL/observer cancellation under memory pressure, precommit
 refusal without SQL changes, fence lifetime and multi-member removal while old
-readers stay immutable. The four-file Core category consumer integration is
-preserved separately and remains unqualified until the Core consumer pass.
+readers stay immutable. The owned Core category consumer integration now passes
+the complete Core package, including category deletion and restart persistence;
+REST publication remains outside that scoped result.
 
 The full resident/retained-I/O scope is **not accepted yet**:
 protocol sessions still retain old pins across appends, structural edits still
 use full working snapshots, and actual held-I/O ownership remains unqualified.
-The Core scheduler has not implemented or qualified sixteen active downloads
-plus two preparation slots. Core/REST and combined-scale qualification remain
-open; no end-to-end concurrency or total-RSS claim follows from these unit tests.
+The uncommitted Core integration now implements one SQLite-driven scheduler,
+sixteen active slots and two metadata-preparation slots. Admission precedes
+spawning; queued rows own neither workers nor timers. One retry clock drives
+the selected cohort, and protocol callbacks wake their existing owner. Each
+selection receives a fresh native execution generation; explicit healthy start
+remains idempotent. Metadata preparation allocates no backing. UDP retirement
+has an ordered completion receipt, and event handlers remain owned by their
+consumer across disconnect. A storage-preparation failure persists an explicit-
+start fault without replacing a foreign filesystem object.
+
+Exact frozen-source evidence is retained under
+`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/download-bounded-scheduler-round-3/`.
+The complete Core package passed: 569 unit tests and all integration targets,
+including seven Kad swarm tests and actual download delivery. Native 1,429 tests
+and metadata 213 unit plus three ownership tests passed on the unchanged provider
+sources under `reports/download-selection-retirement-round-1/`. These are local
+draft integration results, not a pushed checkpoint. Fourteen existing Core
+warnings remain for removal with the remaining consumer refactor. Queue
+fairness, preparation beyond unknown-size metadata discovery, final settings
+binding, actual sixteen-plus-two load, held-I/O cancellation/drain, REST and
+combined-scale qualification remain open. No total-RSS claim follows.
 
 Require actual held-I/O cancellation/drain tests, query plans and parent/path
 replacement races. The existing full catalog rebuild remains separate bounded
