@@ -244,6 +244,13 @@ requires operator action. The helper, OpenVPN and Gluetun suites passed
 **8, 5 and 8 tests**, respectively. Normal commit hooks passed for both slices.
 These are local caller tests; no public-network or VPN campaign was launched.
 
+Harness `5ad74924` converts direct-smoke creation, probes and completion to
+captured jobs and recorded output paths; all **21 tests** passed. Harness
+`9a12d230` converts the Rust side of bilateral reask proofs, while preserving
+the active MFC API. Source absence walks bounded cursor pages and checks the
+captured job identity first; all **40 tests** passed. Normal hooks passed for
+both commits. No public-network or bilateral live campaign was executed.
+
 The coherent application checkpoint remains open: the other Rust operator/VPN/
 soak callers and Core consumer cleanup are pending. Adapting those callers does
 not bring sustained soak execution back into this delivery round. Mocked browser success does not qualify those lanes or
