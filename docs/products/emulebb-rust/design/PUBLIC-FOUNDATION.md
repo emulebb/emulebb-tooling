@@ -318,8 +318,12 @@ on process start. Lifetime totals persist across root/file/policy changes.
 Application totals are consistent with the documented accounting scope.
 Count upload requests for known hashes even when sharing policy refuses them,
 so the counter measures observed demand. Accepted-session and sent-byte counters
-measure admitted service and actual transmission separately. Requests for unknown
-hashes do not create library records.
+measure admitted service and actual transmission separately. Count an accepted
+upload stint when its first verified payload is ready for transmission. Repeated
+request packets and sharing-policy toggles do not create another stint. Releasing
+or recycling a slot, or switching its requested hash, ends the stint; a later
+admitted payload starts another. Requests for unknown hashes do not create
+library records.
 
 Checkpoint accumulating lifetime counters in batches and flush on clean shutdown.
 A crash may lose the uncheckpointed statistics window. Do not require permanent

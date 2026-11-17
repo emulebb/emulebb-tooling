@@ -1703,6 +1703,45 @@ views, display-name-only search, public locations, statistic sorts and WebUI con
 remain open, as do the remaining settings/CLI/Docker work and combined resource
 qualification. This is not full library-read or foundation acceptance.
 
+## Accepted upload accounting checkpoint
+
+Rust `43290d07` counts one accepted upload stint when its first verified payload
+is ready, using the existing upload-work lease. Repeated packets share the
+acceptance marker; slot recycling or a file-hash switch starts a fresh stint.
+A queue grant, empty/rejected range or failed verified read does not itself count
+as accepted service. Queue scoring, promotion and protocol replies are unchanged.
+
+Accepted-session events join file-byte and peer-credit deltas in the existing
+batch transaction and release flush. Ordinary checkpoint failure rolls back the
+whole batch and restores its deltas, including additions arriving before retry.
+There is no separate accepted-session SQL write on the serving path and no new
+worker, user setting or database shape. Schema remains 86.
+
+Metadata **238 unit + 3 ownership tests**, Core **603 unit + 35 integration
+tests**, and eD2K **1,449 tests** passed. Checks include concurrent request guards,
+repeated packets, release/re-admission, slot recycling, injected batch failure,
+byte/credit preservation, retry without double-counting and profile reopen.
+The existing Python campaign suite passed **22 tests**, including its normal
+push gate. Logs: `reports/library-upload-acceptance-round-1/`.
+
+The regular daemon/WebUI build passed with **zero warnings**:
+`logs/builds/20261117T224718Z-build-clients/build-result.json`.
+Harness commit `f332884a` extends the existing local peer scenario. The exact
+Rust revision `43290d0774c6406776337d4bf55cdd517d579f95` passed native
+REST/OpenAPI validation with graceful teardown:
+`reports/rust-rest-openapi-ci/20261117T225020Z/report.json`.
+Its `categoryPersistencePhase.uploadAccounting` proves **six requests and two
+accepted stints**, including repeated successful packets, refused demand,
+re-enable within one active stint, release flushing and a fresh post-restart
+session. Existing sharing, category, tag, download, friend and Kad checks passed.
+Both source commits are pushed on the existing feature branches; no PR or merge.
+
+This closes accepted-stint attribution and batch retention. Raw-request batching,
+last-actual-upload timestamps, process-session statistics independent of catalog
+rebuilds, indexed statistic sorting and the full canonical library read surface
+remain open. The most recent staged/native-qualified binary is now `43290d07`;
+prior source-bound reports remain evidence for their stated revisions only.
+
 ## Acceptance Criteria
 
 - [ ] No synchronous SQLite operation runs on a Tokio worker thread while
