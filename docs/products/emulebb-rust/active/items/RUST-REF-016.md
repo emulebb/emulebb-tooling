@@ -20,7 +20,7 @@ source: 2026-10-23 Rust async and portability audit
 
 ## Current download provider
 
-Rust `894f7788` on the existing foundation branch provides:
+Rust `d55ec249` on the existing foundation branch provides:
 
 - Atomic new-job admission with initial source/name evidence, unchanged active
   duplicates, and no eager piece-map or storage allocation.
@@ -28,10 +28,11 @@ Rust `894f7788` on the existing foundation branch provides:
   scheduler notification after caller disconnect. Shared owner refusal occurs
   before durable creation; duplicate responses project stored fields.
 - Idempotent native start/stop with job/generation fences and fixed storage.
-- A bounded Core owner for start/stop/remove batches. Shared refusal changes no
+- A bounded Core owner for start/stop/verify/remove batches. Shared refusal changes no
   jobs; admitted work completes all request-order items after caller disconnect,
   including execution cancellation/wake-up. Results retain their byte charge
-  until released. Core owner commit: `59c54619`.
+  until released. Long verification batches remain quota-bound and profile-owned
+  while unrelated commands continue; owner close drains their actual tasks.
 - Thin source pages with at most sixteen recent reported names, explicit omission
   flags, a shared 512-KiB name allowance inside the 1-MiB page budget, and indexed
   exact source lookup. Live source scalars do not clone peer part bitmaps.
@@ -57,37 +58,46 @@ Rust `894f7788` on the existing foundation branch provides:
   rechecking. It streams the recorded output even after internal retirement,
   forces a fresh hash, reports missing/damaged output, and neither searches other
   copies nor changes history, ownership or intent. Unsupported stable identity
-  evidence remains an error. Core/bulk verification wiring is still open.
+  evidence remains an error.
+- Core verification reserves at most two rechecks, excludes scheduler selection,
+  cancels/drains the previous execution, and rereads its resulting generation.
+  Partial checks reopen only proven existing storage without allocation or
+  adoption. Started/stopped intent and storage-failure markers are preserved;
+  missing/damaged completed output is reported without reopening history.
+  Both successful and failed partial checks release the exact quiesced view,
+  including stopped/faulted jobs whose generation need not advance.
 - Native job-control receipts follow captured-input and temporary-workspace
   release. Returned data retains its separate charge, so an immediate subsequent
   command cannot race a completed command's workspace. A deterministic regression
   checks capture lifetime, retained-result charge and immediate capacity reuse.
 
-Supported gates passed **227 metadata unit plus 3 ownership tests**,
-**1,436 ED2K tests**, and **583 Core unit tests plus its integration suites**.
-No tests failed or were ignored. Core retains fourteen warnings for the remaining
-consumer cleanup; metadata/native produced none. Evidence below
-`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/download-patch-round-1/`:
-`metadata.log`, `ed2k.log`, `core.log`, and `source-freeze.json`.
-Normal commit hooks passed. The separate unchanged schema/writer fixture gate
-passed 31 Python tests under `reports/download-comments-round-1/python-metadata.log`.
-The subsequent creation-owner gate passed **585 Core unit tests plus all enabled
-integration suites**, with no failures or ignored tests and the same remaining
-consumer warnings. Exact inputs and log are retained under
-`reports/download-create-owner-round-1/{source-freeze.json,core.log}`. Its two
-regressions exercise caller cancellation after SQL and shared admission refusal.
-Normal commit hooks passed for `56c61916`; metadata/native inputs were unchanged,
-so their valid gates were reused.
-The current native/Core gate passed **1,439 ED2K tests and 585 Core unit tests plus
-all enabled integration suites**, with no failed or ignored tests. Evidence and
-exact source hashes are under `reports/completed-verification-round-3/`
-(`ed2k.log`, `core.log`, `source-freeze.json`). Core's remaining consumer warnings
-are unchanged. Metadata was untouched, so its gate above remains applicable.
-Normal hooks passed for the separate receipt-order fix `729d8bb3` and output
-verification provider `894f7788`; the combined validated source was restored and
-hash-checked between these granular commits. Verification regressions cover
-retired pieces, same-size corruption with restored modification time, missing
-output across restart, unrelated good copies, and stale/unfinished-job refusal.
+Supported gates passed **1,441 ED2K tests and 592 Core unit tests plus all enabled
+integration suites**, with no failed or ignored tests. Exact inputs and logs are
+under `EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/download-verify-core-round-5/`
+(`ed2k.log`, `core.log`, `source-freeze.json`). Native produced no warnings; Core
+retains fourteen warnings for the remaining consumer cleanup. Normal hooks
+passed for the separate native storage/view-lifetime commit `b5bb160f` and Core
+verification commit `d55ec249`. Their combined validated source was restored and
+hash-checked between commits.
+
+Unchanged metadata/schema gates remain valid: **227 metadata unit plus 3 ownership
+tests** under `reports/download-patch-round-1/metadata.log`, and **31 Python
+schema/writer tests** under `reports/download-comments-round-1/python-metadata.log`.
+Creation-owner cancellation/refusal evidence is retained under
+`reports/download-create-owner-round-1/core.log`. Completed-output regressions
+under `reports/completed-verification-round-3/` cover retired pieces, same-size
+corruption with restored modification time, missing output across restart,
+unrelated good copies, and stale/unfinished-job refusal.
+
+Current verification regressions cover scheduler exclusion and actual execution
+retirement, cancellation/capacity refusal, continued unrelated commands after
+caller abort, ordered mixed outcomes, real stopped and failed-storage payloads,
+completed-output failure/history separation, and a 20-job batch larger than the
+resident cohort. Native checks also prove that verification cannot allocate or
+adopt unknown storage and that releasing stopped/faulted views preserves their
+durable state. A bounded independent read-only review found no actionable
+ownership/draining/lock-order defect; actual runtime tests provide the evidence
+above.
 
 The comment regressions cover sparse evidence among 100,000 source rows with
 query-plan proof, rating-only rows, generation fencing, retained native charges,
@@ -100,8 +110,8 @@ Core owner disconnect/capacity evidence is retained separately under
 `reports/download-control-owner-round-1/core.log`.
 
 These commits are local and await the coherent REST/application checkpoint
-before push. Canonical REST/OpenAPI and caller integration, verification
-providers, the accepted adaptive scarcity/endgame scheduler, final settings/CLI
+before push. Canonical REST/OpenAPI and caller integration, the accepted adaptive
+scarcity/endgame scheduler, final settings/CLI
 and Docker wiring, actual held-I/O/resource qualification and combined-scale
 checks remain open. The existing fixed live cohort does not qualify the
 adaptive target. WebUI and Python REST producer evidence must be refreshed after
