@@ -20,7 +20,7 @@ source: 2026-10-23 Rust async and portability audit
 
 ## Current download provider
 
-Rust `937c3cac` on the existing foundation branch provides:
+Rust `cb35ecac` on the existing foundation branch provides:
 
 - Atomic new-job admission with initial source/name evidence, unchanged active
   duplicates, and no eager piece-map or storage allocation.
@@ -121,8 +121,8 @@ before push. Canonical REST/OpenAPI and caller integration, the accepted adaptiv
 scarcity/endgame scheduler, final settings/CLI
 and Docker wiring, actual held-I/O/resource qualification and combined-scale
 checks remain open. The existing fixed live cohort does not qualify the
-adaptive target. WebUI and Python REST producer evidence must be refreshed after
-their consumers are converted; no whole-application or 512-MiB acceptance is
+adaptive target. Python REST producer evidence must be refreshed after
+its consumers are converted; no whole-application or 512-MiB acceptance is
 claimed. Sustained soak is follow-up under the master specification.
 
 The current counter/notification integration passed **595 Core unit tests plus
@@ -136,45 +136,64 @@ bounded lag recovery, epoch rollover and HTTP identity-only create/remove frames
 Normal hooks passed for Core commit `937c3cac`; the held REST/SPA work was restored
 and hash-checked against the same validated combined source.
 
-The coupled REST consumer conversion remains uncommitted pending OpenAPI, SPA,
-Python callers and remaining Core consumer cleanup. Snapshot uses fixed persisted
+The coupled REST consumer conversion remains uncommitted pending Python callers,
+staged endpoint conformance and remaining Core consumer cleanup. Snapshot uses fixed persisted
 download counters; diagnostic capture uses an indexed bounded download page.
 Source browsing currently checks peer capability without performing a browse;
 the operator decision to remove that operation or return HTTP 501 remains pending.
 No complete application, client or combined-scale acceptance is claimed.
 
-## WebUI download-event integration (2026-11-17)
+## Current WebUI and OpenAPI integration (2026-11-17)
 
-The held consumer work now uses the scalar download notification variants and
-`downloadEvents` diagnostics, with matching `downloads.sse` capability names.
-The browser retains the exact SSE cursor supplied by the server rather than
-rebuilding it from a JavaScript numeric revision. The unit regression includes a
-revision above the safe integer range. Existing refresh coalescing is retained.
+The held UI reads one current download page (100 rows), with server-side
+unfinished/completed/all and category filters, cursor-preserving refresh and
+page replacement. Selection and actions use immutable job IDs. Details,
+sources, parts and comments use separate bounded resources; no whole history
+is hydrated. Root previews request twelve jobs, while global counts come from
+the fixed persisted snapshot counters rather than preview length.
 
-The supported WebUI lane passed **53 unit tests**, **32 browser tests**, TypeScript
-checks and the production build. The affected REST lane passed **148 unit and
-3 integration tests**. Exact held sources and logs are retained below the output
-root at `reports/download-webui-events-round-1/{source-freeze.json,webui.log,rest.log}`.
-The source hashes were verified after both lanes. Initial-reset fixtures use
-revision zero and do not manufacture a published bus event.
+Creation submits one tagged source per link and confirms only explicit
+`LOCAL_CONTENT_CHOICE_REQUIRED` responses before requesting redownload. Actions
+use start/stop/verify/remove batches, with required removal data choice and
+failed 207 items surfaced to the user. The existing unit and stateful browser
+suites now produce the current requests. Regressions cover page replacement,
+retained cursors after refresh, distinct same-hash job selection and late detail
+responses. No adapter or indexer implementation is included.
 
-This remains held work awaiting the coherent application cut: download forms,
-job-ID selection/actions and bounded list pages still need conversion. Mocked
-browser success is not proof that those unfinished production consumers work.
-No PR or merge is authorized.
+The event consumer uses scalar identity notifications and `downloadEvents`
+diagnostics with `downloads.sse` capability names. It retains the exact opaque
+SSE cursor, including revisions above JavaScript's safe integer range. Refresh
+coalescing is retained; initial reset fixtures use revision zero.
 
-## Download OpenAPI alignment (2026-11-17)
+The supported WebUI lane passed **56 unit tests**, **32 browser tests**, TypeScript
+checks and the production build. Core passed **595 unit tests and all enabled
+integrations**; REST passed **148 unit and 3 integration tests**. Exact combined
+sources and logs are retained below the output root at
+`reports/download-webui-pages-round-3/{source-freeze.json,webui.log,core.log,rest.log}`.
+Hashes were verified after validation and after restoring the held consumer work
+around Core commit `cb35ecac`. Its normal hooks passed. The local Kad caller now
+retries only typed transient capacity refusal within the existing deadline;
+other errors fail immediately and both creations must still be new jobs.
 
-The contract now describes the implemented independent `/downloads/{id}/parts`
-array page, epoch-bearing identity notifications, initial/reconnect/lag/epoch reset
-reasons, and epoch diagnostics. The source-browse decision remains pending;
-this checkpoint does not qualify the WebUI or the complete application cut.
+OpenAPI now describes the independent parts array using `sizeBytes` and
+checkpointed `presentBytes`, concrete verification/delivery details and nullable
+storage failure details. The existing Python route/schema suite passed
+**115 tests**, including nonempty part and detail payloads; the unchanged response
+helper suite previously passed **4 tests**. The source reader handles shared Rust
+allowlists without changing runtime validation.
 
-The existing Python route/schema suite passed **114 tests**, including actual
-selected-source route parity and the new event/parts payload cases. The response
-schema helper suite passed **4 tests**. The existing source reader now recognizes
-shared Rust body allowlists and inline evidence-page query allowlists without
-changing their runtime validation. The documentation publish gate passed.
+The daemon package also passed **108 unit and 15 executed integration tests**;
+its declared subprocess fixture is skipped as a standalone test and invoked by
+its ownership parents. Log: `reports/download-webui-pages-round-3/daemon.log`.
+Commit `beb532dd` fixes runtime construction and imports native identity evidence
+from the existing opened-file helper. Its normal hooks passed, and held source
+restoration was hash-verified. The Core and UI suites remain valid because these
+daemon-only changes did not alter their inputs.
+
+The coherent application checkpoint remains open: Python REST producers,
+remaining Core consumer cleanup and staged endpoint validation are pending. Mocked browser success does not qualify those lanes or
+512-MiB/combined-scale operation. Source browsing still awaits the operator's
+remove-versus-501 decision. No PR or merge is authorized.
 
 ## Download-engine behavioral feedback (2026-11-16)
 

@@ -8110,6 +8110,7 @@ components:
       - completedAt
       - payloadVerified
       - delivery
+      - failure
       properties:
         id:
           $ref: '#/components/schemas/DownloadId'
@@ -8157,6 +8158,22 @@ components:
           - $ref: '#/components/schemas/DownloadDelivery'
           - type: 'null'
           description: Null until delivery is known/fixed. No internal fingerprint, storage UUID or execution generation is exposed.
+        failure:
+          oneOf:
+          - $ref: '#/components/schemas/DownloadFailure'
+          - type: 'null'
+    DownloadFailure:
+      type: object
+      additionalProperties: false
+      required: [code, message, failedAt]
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        failedAt:
+          type: integer
+          minimum: 0
     DownloadCounts:
       type: object
       additionalProperties: false
@@ -8376,17 +8393,7 @@ components:
     DownloadPart:
       type: object
       additionalProperties: false
-      required:
-      - index
-      - start
-      - end
-      - size
-      - completedBytes
-      - gapBytes
-      - complete
-      - requested
-      - corrupted
-      - availableSources
+      required: [index, start, end, sizeBytes, presentBytes, complete, corrupted]
       properties:
         index:
           type: integer
@@ -8399,27 +8406,19 @@ components:
           type: integer
           minimum: 0
           description: Zero-based inclusive end byte offset.
-        size:
+        sizeBytes:
           type: integer
           minimum: 0
           description: Byte size of this inclusive interval, equal to end - start + 1.
-        completedBytes:
+        presentBytes:
           type: integer
           minimum: 0
-          description: Bytes present; this count alone does not establish successful verification.
-        gapBytes:
-          type: integer
-          minimum: 0
+          description: Checkpointed internal byte presence; this alone does not establish successful verification.
         complete:
           type: boolean
-          description: True only after successful part verification; completedBytes equal to size or zero gapBytes is insufficient.
-        requested:
-          type: boolean
+          description: True only after successful part verification, independently of byte presence.
         corrupted:
           type: boolean
-        availableSources:
-          type: integer
-          minimum: 0
     DownloadPartsEnvelope:
       type: object
       additionalProperties: false
