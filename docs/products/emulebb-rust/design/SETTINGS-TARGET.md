@@ -28,6 +28,9 @@ Names specify units such as BytesPerSecond and Seconds. Closed current types
 receive normal validation, without shims, aliases, remapping, retired-input
 lists or tests preserving removed names. Curate actual operator controls;
 implementation tuning, generated identities and private keys are not settings.
+Unknown keys/fields use ordinary current-schema errors, with no removed-name
+recognition. Document the accepted settings surface only; remove superseded
+shapes/examples instead of preserving comparison or historical guidance.
 Download priority and category priority defaults are absent.
 
 ## Bootstrap and profile

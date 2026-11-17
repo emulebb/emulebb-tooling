@@ -22,10 +22,23 @@ Start with fresh profiles. Do not implement migrations, compatibility shims,
 aliases, old-schema readers, remapping, retired-name lists, special rejection
 paths or tests preserving removed inputs. Remove superseded active code,
 configuration, fixtures and documentation. Validate the current contract normally.
+Current parsers know only supported commands, fields and settings keys; unknown
+input receives their ordinary validation error. Do not recognize removed names
+to provide a tailored error or preserve removed-input test cases.
+Maintained product documentation and specifications describe the current
+foundation only. Remove obsolete examples, superseded inventories, comparison
+tables and explanations of removed behavior rather than archiving or documenting
+them again. Git is the history. Retain current acceptance/evidence references
+without turning the specification into an implementation-history narrative.
+
+SQLite is an internal implementation boundary, not a public SQL contract.
+External integrations use REST; direct database access is unsupported. Internal
+components, approved offline commands and the existing test harness use the
+canonical database services under their established ownership/lease rules.
+
 The future objective is adoption of new versions without breaking settings,
 library data or public contracts; automatic-upgrade machinery and its enforcement
-are not implemented in this round. This foundation replaces the earlier proposal
-to postpone coherent contract design until after Arr implementation.
+are not implemented in this round.
 
 The authorized stopping point is a tested, pushed review checkpoint. **No draft
 PR, PR, merge, main-branch write, release or publication until the operator returns
@@ -46,9 +59,8 @@ is serialized. Team size, delegation and model effort follow the
 bounded independent review for concrete risks.
 
 Make granular, coherent commits with normal hooks and focused validation; push
-clean checkpoints. Do not create replacement branches or worker PRs. Current
-baseline source identities are Rust `0840e900`, tooling `40f1a544`, build-tests
-`17438846`; refresh and record actual selected revisions before validation.
+clean checkpoints. Do not create replacement branches or worker PRs. Record
+actual selected revisions with validation evidence in the owning items.
 
 ## Contract authority and representation
 
