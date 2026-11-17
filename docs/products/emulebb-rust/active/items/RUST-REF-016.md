@@ -306,13 +306,27 @@ REST/WebUI work was restored and its complete recorded hashes checked after the
 separate Core commit. No source-bound release bundle was rebuilt in this slice;
 the earlier staged live proof remains attributed to its exact older inputs.
 
-The coherent application checkpoint remains open: REST/WebUI integration is
-still held on the foundation branch. The identified Rust operator callers and
-Core dead-consumer cleanup are qualified above. Sustained soak execution remains
-follow-up work. Neither these focused gates nor the earlier source-bound staged
-run establish 512-MiB/combined-scale acceptance or full-foundation delivery.
-Source browsing still awaits the operator's remove-versus-501 decision. No PR or
-merge is authorized.
+Rust `5af2e531` commits the durable download REST resources, opaque bounded
+pages, job-ID controls, ID-only events and directly coupled validators/DTOs.
+Rust `5c689f76` commits the WebUI job-ID consumers, bounded active-view pages
+and independent evidence collections. Both normal commit hooks passed; their
+source hashes match the previously qualified REST/WebUI inputs. The Rust
+worktree is clean.
+
+The supported registered bundle build passed with **zero warnings**; evidence:
+`logs/builds/20261117T183841Z-build-clients/build-result.json` and
+`reports/download-committed-baseline-round-1/build.log`. The rebuilt committed
+source then passed the loopback REST/OpenAPI campaign with graceful teardown:
+`reports/rust-rest-openapi-ci/20261117T184140Z/report.json`. This qualifies the
+current committed download slice, not every route against populated state or
+the complete foundation. Prior Core/REST and unchanged WebUI test evidence
+remains as recorded above.
+
+The full foundation checkpoint remains open. Sustained soak execution is
+follow-up work. The current build, loopback campaign and focused gates do not
+establish 512-MiB/combined-scale acceptance or the remaining settings, library
+and scheduling work. Source browsing still awaits the operator's
+remove-versus-501 decision. No PR or merge is authorized.
 
 ## Download-engine behavioral feedback (2026-11-16)
 
