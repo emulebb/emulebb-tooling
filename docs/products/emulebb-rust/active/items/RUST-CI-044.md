@@ -18,6 +18,18 @@ source: Operator-directed configuration and persistence architecture review
 
 # RUST-CI-044 - Review SQLite schema efficiency and evolution boundaries
 
+## Current comment-read index
+
+Fresh schema 84 includes `download_job_sources_comments_idx` on `(job_id,id)`
+for rows with nonempty comments or positive ratings. Comment paging applies the
+job/generation/removal fence, seeks this index and returns a byte-bounded page
+with an explicit continuation flag. It does not load source-name windows or
+hydrate execution geometry. Sparse 100,000-source query-plan and byte-boundary
+proof is recorded in the
+[current provider evidence](RUST-REF-016.md#current-download-provider).
+This scoped index proof does not establish the full schema/settings/REST or
+whole-daemon resource acceptance.
+
 ## Allocated download-job storage cut (phases 2b/2c)
 
 Implement [durable downloads](../../design/PUBLIC-FOUNDATION.md#downloads-and-categories)

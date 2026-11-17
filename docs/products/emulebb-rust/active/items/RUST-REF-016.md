@@ -18,71 +18,49 @@ source: 2026-10-23 Rust async and portability audit
 
 # RUST-REF-016 - Move blocking SQLite work behind bounded async persistence
 
-## Atomic creation checkpoint (2026-11-17)
+## Current download provider
 
-Rust `775276fc` is pushed on the existing foundation branch. Native admission
-commits bounded initial sources and diagnostic names with a new job in one SQL
-transaction, including stopped jobs. Duplicates remain unchanged. The admitted
-owner finishes after caller disconnect; retained initial input remains charged
-through the availability filesystem phase without increasing either work budget.
-Supported gates passed **212 metadata unit plus 3 ownership tests** and
-**1,426 ED2K tests**, with zero failures, ignored tests or warnings. Coverage
-includes child-write rollback, stopped-job seeds, duplicate immutability, stale
-network callback refusal and disconnected native callers. Evidence:
-`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/download-creation-atomic-round-1/`
-contains `metadata.log`, `ed2k.log` and `source-freeze.json`. Normal native
-commit/push hooks passed.
+Rust `3fdb15e0` on the existing foundation branch provides:
 
-The 42-file integration is preserved separately. Canonical Core creation now
-uses the single-source request and lazy durable admission, but remains unqualified;
-Core tests have not run. REST producer/caller conversion, live search AICH-vote
-replay at selection, job controls/startup/scheduler and the previously recorded
-held-I/O and combined 100k/RSS qualification remain unfinished. This native
-checkpoint does not establish whole-application readiness or 16+2 scheduling.
+- Atomic new-job admission with initial source/name evidence, unchanged active
+  duplicates, and no eager piece-map or storage allocation.
+- Idempotent native start/stop with job/generation fences and fixed storage.
+- A bounded Core owner for start/stop/remove batches. Shared refusal changes no
+  jobs; admitted work completes all request-order items after caller disconnect,
+  including execution cancellation/wake-up. Results retain their byte charge
+  until released. Core owner commit: `59c54619`.
+- Thin source pages with at most sixteen recent reported names, explicit omission
+  flags, a shared 512-KiB name allowance inside the 1-MiB page budget, and indexed
+  exact source lookup. Live source scalars do not clone peer part bitmaps.
+- Fresh schema 84 with a partial comment/rating index on source job/row ID.
+  Comment pages seek this index directly, load neither source-name windows nor
+  execution geometry, and preserve continuation across metadata and Core byte
+  limits. Generation checks reject stale callbacks/reads.
 
-## Bounded source-read checkpoint (2026-11-17)
+Supported gates passed **218 metadata unit plus 3 ownership tests**,
+**1,433 ED2K tests**, and **575 Core unit tests plus its integration suites**.
+No tests failed or were ignored. Core retains fourteen warnings for the remaining
+consumer cleanup; metadata/native produced none. Evidence below
+`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/download-comments-round-1/`:
+`metadata.log`, `ed2k.log`, `core.log`, `source-freeze.json`, and
+`source-freeze-after-fixture.json`. The second receipt changes only the Core
+fixture to observe peers while started before stopping for reads; metadata and
+native qualification inputs are unchanged. Normal commit hooks passed.
 
-Rust `e11c6d9b` is pushed on the foundation feature branch. Fresh schema 82
-indexes eligible delivery work and identity-scoped recent source names. Source
-pages retain at most 16 latest observations per source, use explicit omission
-flags and share a 512-KiB name allowance inside the existing 1-MiB source-page
-budget. Exact identity lookup uses the same projection. A borrowed native live
-stats API exposes rate/count/software without cloning peer part bitmaps.
+The comment regressions cover sparse evidence among 100,000 source rows with
+query-plan proof, rating-only rows, generation fencing, retained native charges,
+and metadata/Core byte-boundary continuation without dropped rows or hydration.
+Core owner disconnect/capacity evidence is retained separately under
+`reports/download-control-owner-round-1/core.log`.
 
-Supported gates passed **211 metadata unit plus 3 ownership tests** and
-**1,426 ED2K tests**, with zero failures, ignored tests or warnings. The WebUI
-consumer work passed **53 unit and 32 browser tests**, type checking and the
-production build. Evidence: `EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/` followed by
-`download-job-source-projection-round-1/{metadata.log,ed2k.log,webui.log,core.log,source-freeze.json}`.
-Normal native commit/push hooks passed. The combined Core gate still reported
-70 library and 107 test-target compilation errors; no Core tests executed.
-Local repairs after that diagnostic remain unqualified. The 40-file Core,
-REST, daemon and WebUI integration is preserved separately and is not part of
-the native checkpoint. Remaining work includes canonical create/control/startup
-and scheduler consumers, REST producer/cursor parity, efficient comment-only
-traversal, held-I/O lifetime proof and combined 100k/RSS qualification.
-
-## Native control checkpoint (2026-11-17)
-
-Rust `2d51ef87` is pushed on `feature/public-foundation-round-1`. A repeated
-start of an allocated, healthy started job preserves its record and generation;
-repeated stop is unchanged. A first start, stopped-job restart or explicit
-storage-failure retry retains the selected allocation and issues a new fenced
-generation. Unchanged native starts do not republish or evict selected backing.
-Consumer read projections reserve simultaneous output before conversion, and
-verification overlays copy only the bounded resident cohort's tokens.
-
-The supported Windows gates passed **208 metadata unit tests plus 3 ownership
-tests** and **1,425 ED2K tests**, with zero failures, ignored tests or warnings.
-Evidence is under `EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/`:
-`download-job-control-idempotence-round-1/metadata.log` and
-`download-job-control-idempotence-round-2/{ed2k.log,source-freeze.json}`.
-The source receipt records the six committed native files and verified
-restoration of all 28 unfinished Core files. Normal commit/push hooks passed.
-Core still requires its coordinated reader/control replacement and fresh
-compilation/behavior qualification. This checkpoint does not establish REST,
-16-active-plus-2-preparation scheduling, held-I/O ownership, total RSS or the
-combined 100k-library/100k-job workload.
+These commits are local and await the coherent REST/application checkpoint
+before push. Canonical REST/OpenAPI and caller integration, PATCH/verify/part
+providers, the accepted adaptive scarcity/endgame scheduler, final settings/CLI
+and Docker wiring, actual held-I/O/resource qualification and combined-scale
+checks remain open. The existing fixed live cohort does not qualify the
+adaptive target. WebUI and Python REST producer evidence must be refreshed after
+their consumers are converted; no whole-application or 512-MiB acceptance is
+claimed. Sustained soak is follow-up under the master specification.
 
 ## Download-engine behavioral feedback (2026-11-16)
 
