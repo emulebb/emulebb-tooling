@@ -291,11 +291,28 @@ retained hash matches the committed source. Normal hooks passed. The separate
 native server-bind scenario was not run; this is not combined-scale or RSS
 qualification.
 
-The coherent application checkpoint remains open: the other Rust operator/VPN/
-soak callers and Core consumer cleanup are pending. Adapting those callers does
-not bring sustained soak execution back into this delivery round. Mocked browser success does not qualify those lanes or
-512-MiB/combined-scale operation. Source browsing still awaits the operator's
-remove-versus-501 decision. No PR or merge is authorized.
+Rust `dda78579` removes unused Core hydration fields, cancellation/default-state
+helpers, the single-category-assignment command path, and transfer PATCH/details
+DTO builders. Category omission/null tests use `DownloadUpdate`; the verified
+data lifecycle test now reads the current paged parts provider. The removed
+parts-view tests belonged to the removed DTO; current metadata part-page tests
+retain the presence-versus-verification invariant.
+
+Supported gates passed **593 Core unit plus all 35 enabled integrations**, and
+**148 REST unit plus three integration tests**, with zero warnings. Exact source
+hashes and logs are retained under `reports/core-consumer-cleanup-round-2/`
+(`source-freeze.json`, `core.log`, `rest.log`). Normal hooks passed. The held
+REST/WebUI work was restored and its complete recorded hashes checked after the
+separate Core commit. No source-bound release bundle was rebuilt in this slice;
+the earlier staged live proof remains attributed to its exact older inputs.
+
+The coherent application checkpoint remains open: REST/WebUI integration is
+still held on the foundation branch. The identified Rust operator callers and
+Core dead-consumer cleanup are qualified above. Sustained soak execution remains
+follow-up work. Neither these focused gates nor the earlier source-bound staged
+run establish 512-MiB/combined-scale acceptance or full-foundation delivery.
+Source browsing still awaits the operator's remove-versus-501 decision. No PR or
+merge is authorized.
 
 ## Download-engine behavioral feedback (2026-11-16)
 
