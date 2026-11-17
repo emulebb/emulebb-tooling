@@ -850,13 +850,17 @@ alone needs 20,345,040 bytes for ten residents; even one resident plus existing
 hydration/AICH workspaces exceeds the shared 8-MiB allowance. These are arithmetic
 lower bounds, not allocator measurements. Exact-source inspection receipt:
 `reports/download-job-resident-hydration-round-1/source-receipt.json`.
-The [foundation specification](../../design/PUBLIC-FOUNDATION.md) owns the
-resident budget decision: target 64 MiB for sixteen active downloads and two
-preparation slots, with a
-fixed cap up to 128 MiB authorized only when measured worst-case validation
-justifies it to support that concurrency and safe updates. The separate
-8-MiB transient budget is unchanged. No runtime automatic expansion, new saved
-setting, pool or actor is introduced; this does not bound total daemon RSS.
+The [foundation specification](../../design/PUBLIC-FOUNDATION.md#resource-admission-and-discovery)
+owns current admission and resident-budget policy: adaptive automatic concurrency,
+an optional `maxConcurrentDownloads` ordinary ceiling with a fixed 25% rare-
+opportunity burst, a 64-MiB soft resident target, and an initial 128-MiB hard
+resident ceiling. Sixteen active plus two preparation slots is a qualification
+baseline, not a permanent product count limit. The separate 8-MiB native
+transient budget is unchanged. No automatic growth beyond the resident ceiling,
+new saved memory setting, pool or actor is introduced; this does not bound total
+daemon RSS. The accepted scarcity, completion, endgame and observability policy
+is specified there; the fixed-cohort implementation and its existing tests do
+not yet deliver or qualify that policy.
 Evicted backing remains charged until its final reader drops. Implementation
 and qualification remain pending; the accepted budget alone is not gate proof.
 Resident groundwork is committed at Rust `615ae950`. The retained evidence is

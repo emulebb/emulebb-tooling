@@ -274,28 +274,96 @@ network/source retries remain automatic and are not whole-job storage failures.
 Internal cleanup after completion or removal retries automatically through its
 durable journal. Cleanup failure never restarts downloading, recopies a completed
 output or regresses historical completion.
-New jobs start by default with an explicit stopped-on-add option. Bound active
-work using `maxConcurrentDownloads` with a built-in bounded exploration buffer.
-The accepted engineering default and qualification target is **16 active
-downloads plus 2 preparation slots** (discovery-only exploration). The global connection cap remains 500; lowering job admission drains
-existing work rather than silently stopping jobs. Connection and source caps
-have separate meanings. Queued/history rows do not
-each require live workers, timers or source machinery.
+New jobs start by default with an explicit stopped-on-add option. The normal
+workload is **10 to 1,000 incomplete downloads with 100,000+ completed records**.
+Mass additions and 100,000 retained jobs remain scale/qualification cases; they
+must not force one live worker, timer or piece map per job. Completed history
+does not participate in source discovery or payload admission.
 
-The internal resident cache targets **64 MiB for sixteen active jobs plus two preparation slots**.
-Concurrency takes precedence: the operator authorizes a fixed cap up to **128 MiB**
-only if measured worst-case validation demonstrates that the higher cap is needed
-for sixteen active downloads, preparation, and safe updates. Retain 64 MiB unless that evidence
-justifies an increase; record the selected fixed cap and evidence together. This
-is not runtime automatic expansion. The existing **8 MiB transient-work budget**
-remains separate, under the same owner. Resident backing remains charged until
-its last reader releases it, including after eviction. These are internal
-subsystem caps, not new saved settings, a second worker pool or a total daemon
-RAM limit. Maximum-geometry retained-backing validation selected a fixed
-**128 MiB** cap: eighteen entries plus four admitted replacement credits require
-120,696,504 bytes on the measured Windows target. This is component capacity
-evidence, not end-to-end concurrency, total RSS or hydration acceptance; the
-owning [runtime item](../active/items/RUST-REF-016.md) records its limits.
+### Resource admission and discovery
+
+Default concurrency is **automatic and adaptive**. Derive admission from charged
+working-state memory, available system memory/pressure, and bounded connection
+and I/O capacity. Respect applicable container limits; available-memory estimates
+alone do not authorize allocations. **16 active downloads plus 2 preparation
+slots** is the initial engineering/qualification baseline, not a permanent
+product count ceiling. Replace the implementation's fixed eighteen-resident
+restriction when delivering this policy.
+
+Keep the setting name `maxConcurrentDownloads`. In automatic mode the scheduler
+chooses the ordinary concurrency target; a configured positive value supplies
+the user's ordinary ceiling, subject to resource admission. Document that an
+explicit ceiling permits a fixed **25% rare-opportunity burst, rounded up**:
+for N ordinary downloads, at most N + ceil(N / 4) may be active under this
+setting. Burst tolerance is not configurable in this round. Bursts never
+override resource budgets, and ordinary work waits while above its target.
+The global connection cap remains separately meaningful, currently 500.
+Lowering admission drains existing work rather than silently stopping jobs.
+
+A started job need not be a live payload execution. Waiting jobs use bounded,
+shared discovery through server/Kad requests and short peer preparation probes;
+the initial preparation allowance serves known-size jobs as well as metadata
+discovery. Read small SQLite batches, cap outstanding requests and request rate,
+persist validated observations, release probe resources, and rotate through
+waiting jobs with retry backoff. Do not hydrate full execution manifests merely
+to discover sources or inspect useful part availability. Do not add per-waiting-
+job tasks or timers. Discovery buffers and networking require separate bounded
+accounting; the resident manifest ceiling is not their allowance.
+
+A ready job has a reachable source reporting a part it still needs. A payload
+execution with no useful sources checkpoints and releases its slot/resident
+backing safely, returning to waiting. Use a grace period for connection setup
+and slow peers to avoid switching churn; an elapsed clock alone must not cancel
+in-flight storage work. Under memory pressure alone, stop new admission, evict
+unused cache, and let existing executions drain at safe release points rather
+than proactively stopping them. Recover admission gradually to avoid oscillation.
+
+The resident manifest cache retains a **64 MiB soft target and an initial
+128 MiB hard ceiling**, with update/checkpoint headroom reserved before admitting
+more payload work. This ceiling does not grow automatically on larger systems
+in this round. It covers per-part state/bitmaps, MD4/AICH hash lists, manifest
+metadata, reader-pinned older versions, and admitted replacement backing;
+payload bytes remain on disk. The existing **8 MiB native transient-work
+budget** remains separate. Charge resident backing until its last reader
+releases it, including after eviction. These are internal subsystem budgets,
+not new saved memory settings, a second worker pool or a total daemon RAM limit.
+Maximum-geometry retained-backing validation selected 128 MiB: eighteen entries
+plus four admitted replacement credits require 120,696,504 bytes on the measured
+Windows target. This is component evidence, not full adaptive concurrency,
+total RSS or end-to-end acceptance; the owning
+[runtime item](../active/items/RUST-REF-016.md) records remaining qualification.
+
+### Scarcity, completion and endgame
+
+Prioritize opportunities for **missing parts available from only one currently
+known reachable source**. This is observed part scarcity, not the file's total
+source count; an unknown count does not prove rarity. Admit a rare opportunity
+as a resource-safe burst where possible. Otherwise yield an ordinary download
+at a safe checkpoint, choosing the one with least recent useful payload
+progress while protecting endgame work. Do not treat pending cancellation or
+eviction as memory already released. If every active job is acquiring rare
+parts or in endgame, burst only if resources permit; otherwise wait.
+
+After capturing a rare part, a progressing download keeps its slot until it
+stalls or completes, subject to later rare-opportunity displacement of ordinary
+work. Rare opportunities always take precedence: do not add an aging rule that
+guarantees ordinary downloads a protected turn during sustained rare demand.
+For ordinary admission choose **fewest remaining bytes first**, with rotating
+creation order for ties. This ranking does not itself interrupt progressing
+downloads and introduces no public download-priority control.
+
+Within a file, prefer scarce missing parts. Among equally scarce candidates,
+finish an already-started part so it can be verified and shared sooner. Permit
+bounded duplicate requests to different peers for outstanding blocks delaying
+endgame completion; accept the first valid response and cancel redundant
+requests. Bound redundant request/byte work under the same resource controls.
+
+Expose waiting for useful sources versus waiting for resources through REST and
+the WebUI, keeping coarse download state separate from its waiting reason.
+Include one lightweight resource summary: active/preparing/waiting counts,
+configured concurrency mode/value, current adaptive target, burst activity,
+and resident-memory usage/budget. Coalesce updates rather than emitting per-block
+events or fetching all jobs. Do not expose internal scheduling scores.
 
 An active duplicate add returns its existing job unchanged, including category,
 destination and intent. Size is optional; conflicting known sizes remain errors.
