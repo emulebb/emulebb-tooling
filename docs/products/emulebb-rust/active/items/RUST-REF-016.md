@@ -20,7 +20,7 @@ source: 2026-10-23 Rust async and portability audit
 
 ## Current download provider
 
-Rust `d55ec249` on the existing foundation branch provides:
+Rust `937c3cac` on the existing foundation branch provides:
 
 - Atomic new-job admission with initial source/name evidence, unchanged active
   duplicates, and no eager piece-map or storage allocation.
@@ -70,6 +70,13 @@ Rust `d55ec249` on the existing foundation branch provides:
   release. Returned data retains its separate charge, so an immediate subsequent
   command cannot race a completed command's workspace. A deterministic regression
   checks capture lifetime, retained-result charge and immediate capacity reuse.
+- Fixed persisted download dashboard counters and bounded ID-only notifications.
+  Creation, PATCH and controls publish within their admitted owners, including
+  after caller cancellation. Subscription/baseline capture is serialized with
+  publication; reconnect/lag resets use a new receiver and coherent epoch/revision.
+  The 1,024-entry broadcast retains no job rows, and sequence rollover changes
+  epoch before numbering restarts. The master specification defines the wire
+  contract and client refresh behavior.
 
 Supported gates passed **1,441 ED2K tests and 592 Core unit tests plus all enabled
 integration suites**, with no failed or ignored tests. Exact inputs and logs are
@@ -118,18 +125,23 @@ adaptive target. WebUI and Python REST producer evidence must be refreshed after
 their consumers are converted; no whole-application or 512-MiB acceptance is
 claimed. Sustained soak is follow-up under the master specification.
 
-The coupled REST consumer conversion is currently uncommitted. Its first
-behavioral run compiled and passed 144 of 147 REST tests (zero ignored), including
-all six replacement download-contract tests. Evidence is under
-`reports/download-rest-round-3/{rest.log,source-freeze.json}`. Two failures were
-remaining fixture assumptions for the current creation body/status and diagnostic
-page limit; those fixtures are updated but not yet revalidated. The third exposes
-missing creation notifications: canonical ID-only download SSE/change tracking
-must be wired before acceptance. Snapshot now reads fixed persisted download
-counters, and diagnostic capture uses an indexed bounded download page. OpenAPI,
-SPA and Python caller conversion and the remaining Core consumer cleanup are
-still open. This run is diagnostic evidence, not a qualified REST/application
-checkpoint.
+The current counter/notification integration passed **595 Core unit tests plus
+all enabled integration suites** and **148 REST unit plus 3 integration tests**,
+with zero failures or ignored tests. Evidence and exact source hashes are under
+`reports/download-events-round-2/{core.log,rest.log,source-freeze.json}`. Core's
+fourteen remaining consumer-cleanup warnings are unchanged; REST produced none.
+Cancellation regressions now verify notification publication as well as durable
+and cache publication. Further checks cover subscription/publication races,
+bounded lag recovery, epoch rollover and HTTP identity-only create/remove frames.
+Normal hooks passed for Core commit `937c3cac`; the held REST/SPA work was restored
+and hash-checked against the same validated combined source.
+
+The coupled REST consumer conversion remains uncommitted pending OpenAPI, SPA,
+Python callers and remaining Core consumer cleanup. Snapshot uses fixed persisted
+download counters; diagnostic capture uses an indexed bounded download page.
+Source browsing currently checks peer capability without performing a browse;
+the operator decision to remove that operation or return HTTP 501 remains pending.
+No complete application, client or combined-scale acceptance is claimed.
 
 ## Download-engine behavioral feedback (2026-11-16)
 

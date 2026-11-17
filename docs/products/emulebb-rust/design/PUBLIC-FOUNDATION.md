@@ -722,6 +722,18 @@ jobs by historical completion without embedding job rows. Existing-stream
 `download.changed`/`download.removed` events carry `downloadId`, not full rows
 or hash identity. `sync.reset` sends clients back to bounded current pages.
 
+Native SSE IDs are opaque `epoch:revision` tokens. Event bodies carry that
+epoch, numeric revision `id`, and `downloadId` for change/removal notifications.
+Subscribe and capture the reset baseline under the same publication lock.
+Initial connections and reconnects reset to that baseline; replay is not promised.
+On lag, replace the receiver before sending reset so buffered older events cannot
+follow it. Retain at most 1,024 scalar identity notifications, never job rows.
+Revision exhaustion changes epoch and emits reset before numbering restarts.
+Reset reasons are `initial`, `reconnect`, `lagged`, and `epoch-changed`; only lag
+includes a `missed` count. Publish explicit mutations within their admitted owners,
+including after caller cancellation. Clients coalesce invalidations into bounded
+page refreshes rather than constructing a full collection from event payloads.
+
 Design shared bounded in-memory canonical change tracking for future qBittorrent
 incremental polling: changed identities, removals, revisions and restart/reset
 boundaries. No per-client snapshots or durable event journal. Initial, stale or
