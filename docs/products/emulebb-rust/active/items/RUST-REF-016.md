@@ -212,7 +212,26 @@ bounded scheduler before proving allocation. It requires native download PATCH
 204 replies, and retains durable job facts on failure. Existing persistence and
 file-preservation assertions remain in force.
 
-The coherent application checkpoint remains open: remaining Rust operator/VPN/
+The next operator-caller slice is committed as Harness `9d22b10c` and
+`c16686f4`. Consumer restart evidence retains the rendered workflow's job ID,
+checks its hash, and reads fixed global counts rather than enumerating history.
+The handoff proof uses the current Stopped control. The local upload helper uses
+single-source creation, explicit start batches and the captured job detail;
+its `--start-stopped` option has no aliases. Completion requires retained
+terminal state, payload verification and delivery state, with exact output size
+and SHA-256 when requested. A library hash resource is read directly.
+
+Shared part accounting streams pages of at most 200 rows and retains scalar
+cursors/totals, separating bytes present from verified bytes. It refuses repeated
+parts and same-hash job substitution. Retired internal pieces do not erase the
+durable payload-verification fact or fabricate internal byte presence. Existing
+consumer, WebUI-proof, shared-client and upload-helper unit suites passed
+**17, 46, 31 and 21 tests**, respectively; both commits passed normal hooks.
+These are caller/unit results, not a new live upload, memory-scale or sustained
+soak qualification. The earlier source-bound staged REST result remains valid
+for its unchanged product inputs.
+
+The coherent application checkpoint remains open: the other Rust operator/VPN/
 soak callers and Core consumer cleanup are pending. Adapting those callers does
 not bring sustained soak execution back into this delivery round. Mocked browser success does not qualify those lanes or
 512-MiB/combined-scale operation. Source browsing still awaits the operator's
