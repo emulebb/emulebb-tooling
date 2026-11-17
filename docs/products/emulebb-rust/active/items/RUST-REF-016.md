@@ -251,6 +251,15 @@ the active MFC API. Source absence walks bounded cursor pages and checks the
 captured job identity first; all **40 tests** passed. Normal hooks passed for
 both commits. No public-network or bilateral live campaign was executed.
 
+Harness `3eeb4156` aligns soak-control SQLite diagnostics with the current
+schema. It removes candidate table/column fallbacks, reads fixed persisted job
+counts and current source/hash tables, and gathers counters inside one read-only
+transaction. Existing source coverage diagnostics now use the durable job
+counters too. All **108 soak-control tests** passed, including a database built
+from the selected canonical Rust schema whose bytes remain unchanged by the
+read. Normal hooks passed. This qualifies diagnostic queries, not the remaining
+public-search/download callers or a sustained soak.
+
 The coherent application checkpoint remains open: the other Rust operator/VPN/
 soak callers and Core consumer cleanup are pending. Adapting those callers does
 not bring sustained soak execution back into this delivery round. Mocked browser success does not qualify those lanes or
