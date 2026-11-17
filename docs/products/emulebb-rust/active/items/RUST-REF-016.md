@@ -18,6 +18,28 @@ source: 2026-10-23 Rust async and portability audit
 
 # RUST-REF-016 - Move blocking SQLite work behind bounded async persistence
 
+## Bounded source-read checkpoint (2026-11-17)
+
+Rust `e11c6d9b` is pushed on the foundation feature branch. Fresh schema 82
+indexes eligible delivery work and identity-scoped recent source names. Source
+pages retain at most 16 latest observations per source, use explicit omission
+flags and share a 512-KiB name allowance inside the existing 1-MiB source-page
+budget. Exact identity lookup uses the same projection. A borrowed native live
+stats API exposes rate/count/software without cloning peer part bitmaps.
+
+Supported gates passed **211 metadata unit plus 3 ownership tests** and
+**1,426 ED2K tests**, with zero failures, ignored tests or warnings. The WebUI
+consumer work passed **53 unit and 32 browser tests**, type checking and the
+production build. Evidence: `EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/` followed by
+`download-job-source-projection-round-1/{metadata.log,ed2k.log,webui.log,core.log,source-freeze.json}`.
+Normal native commit/push hooks passed. The combined Core gate still reported
+70 library and 107 test-target compilation errors; no Core tests executed.
+Local repairs after that diagnostic remain unqualified. The 40-file Core,
+REST, daemon and WebUI integration is preserved separately and is not part of
+the native checkpoint. Remaining work includes canonical create/control/startup
+and scheduler consumers, REST producer/cursor parity, efficient comment-only
+traversal, held-I/O lifetime proof and combined 100k/RSS qualification.
+
 ## Native control checkpoint (2026-11-17)
 
 Rust `2d51ef87` is pushed on `feature/public-foundation-round-1`. A repeated
