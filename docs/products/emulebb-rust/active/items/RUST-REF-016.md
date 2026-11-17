@@ -20,7 +20,7 @@ source: 2026-10-23 Rust async and portability audit
 
 ## Current download provider
 
-Rust `53321cf3` on the existing foundation branch provides:
+Rust `fb5d4c37` on the existing foundation branch provides:
 
 - Atomic new-job admission with initial source/name evidence, unchanged active
   duplicates, and no eager piece-map or storage allocation.
@@ -43,12 +43,19 @@ Rust `53321cf3` on the existing foundation branch provides:
   execution, full byte presence does not imply verification, and retired
   internal data exposes no synthetic piece inventory. Creation/list/detail share
   one canonical summary projection.
+- Atomic name/category/unknown-to-known-size updates in one SQLite transaction.
+  Native reader-pinned cache replacements reserve memory before commit; the
+  existing Core owner retains publication through caller cancellation. Stale
+  progress refreshes authoritative presentation instead of restoring old names.
+  Size discovery replans preparation without starting stopped jobs or allocating
+  storage. Invalid combinations, delivery-fixed names, and admission refusal
+  leave all requested fields unchanged.
 
-Supported gates passed **222 metadata unit plus 3 ownership tests**,
-**1,434 ED2K tests**, and **578 Core unit tests plus its integration suites**.
+Supported gates passed **227 metadata unit plus 3 ownership tests**,
+**1,436 ED2K tests**, and **583 Core unit tests plus its integration suites**.
 No tests failed or were ignored. Core retains fourteen warnings for the remaining
 consumer cleanup; metadata/native produced none. Evidence below
-`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/download-browse-round-3/`:
+`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/download-patch-round-1/`:
 `metadata.log`, `ed2k.log`, `core.log`, and `source-freeze.json`.
 Normal commit hooks passed. The separate unchanged schema/writer fixture gate
 passed 31 Python tests under `reports/download-comments-round-1/python-metadata.log`.
@@ -64,7 +71,7 @@ Core owner disconnect/capacity evidence is retained separately under
 `reports/download-control-owner-round-1/core.log`.
 
 These commits are local and await the coherent REST/application checkpoint
-before push. Canonical REST/OpenAPI and caller integration, PATCH/verify
+before push. Canonical REST/OpenAPI and caller integration, verification
 providers, the accepted adaptive scarcity/endgame scheduler, final settings/CLI
 and Docker wiring, actual held-I/O/resource qualification and combined-scale
 checks remain open. The existing fixed live cohort does not qualify the
