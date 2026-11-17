@@ -18,6 +18,28 @@ source: 2026-10-23 Rust async and portability audit
 
 # RUST-REF-016 - Move blocking SQLite work behind bounded async persistence
 
+## Atomic creation checkpoint (2026-11-17)
+
+Rust `775276fc` is pushed on the existing foundation branch. Native admission
+commits bounded initial sources and diagnostic names with a new job in one SQL
+transaction, including stopped jobs. Duplicates remain unchanged. The admitted
+owner finishes after caller disconnect; retained initial input remains charged
+through the availability filesystem phase without increasing either work budget.
+Supported gates passed **212 metadata unit plus 3 ownership tests** and
+**1,426 ED2K tests**, with zero failures, ignored tests or warnings. Coverage
+includes child-write rollback, stopped-job seeds, duplicate immutability, stale
+network callback refusal and disconnected native callers. Evidence:
+`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/download-creation-atomic-round-1/`
+contains `metadata.log`, `ed2k.log` and `source-freeze.json`. Normal native
+commit/push hooks passed.
+
+The 42-file integration is preserved separately. Canonical Core creation now
+uses the single-source request and lazy durable admission, but remains unqualified;
+Core tests have not run. REST producer/caller conversion, live search AICH-vote
+replay at selection, job controls/startup/scheduler and the previously recorded
+held-I/O and combined 100k/RSS qualification remain unfinished. This native
+checkpoint does not establish whole-application readiness or 16+2 scheduling.
+
 ## Bounded source-read checkpoint (2026-11-17)
 
 Rust `e11c6d9b` is pushed on the foundation feature branch. Fresh schema 82

@@ -474,6 +474,10 @@ including AICH/source hints. Optional fields default to `category:null`,
 duplicate returns 200 unchanged, while conflicting known sizes return 409.
 Redownload never duplicates active work. Present or unavailable local content
 requires explicit choice; confirmed absence can be downloaded normally.
+Initial source hints and filename observations commit atomically with a new
+job, including stopped jobs. Active duplicates do not merge that initial peer
+state. After native admission the owner completes the transaction despite caller
+disconnect; creation does not allocate or hydrate execution storage.
 
 Download resources use positive decimal i64-string `id`, separate 32-hex `hash`,
 canonical user-visible filename `name`, nullable `sizeBytes`/`progress`, desired
