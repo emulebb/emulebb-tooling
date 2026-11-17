@@ -1475,7 +1475,7 @@ Additional acceptance criteria:
 
 ## Tag REST contract qualification
 
-The phase 2d REST slice exposes immutable name resources, bounded global and
+Rust `47ee4f50` exposes immutable name resources, bounded global and
 per-hash tag pages, and bulk-only assignment actions. Requests name one existing
 tag and 1-100 distinct hashes; HTTP 207 preserves request order and reports each
 hash independently. Creation returns 201 with Location, deletion returns an
@@ -1488,10 +1488,18 @@ suites passed **319 tests**. Evidence is retained below
 `reports/library-tags-rest-round-1/{rest-2.log,python-3.log}`. OpenAPI now declares
 the existing download PATCH 204 and the implemented 512-character cursor bound;
 the shared conformance runner checks that 204 responses have empty wire bodies.
-The existing category restart campaign has been extended to exercise all seven
-tag operations, unavailable-content retention, restart persistence, ordered mixed
-outcomes, idempotent removal and deletion of assignments. That native campaign
-must run against a newly built bundle before this slice has runtime proof.
+Harness `88764e74` extends the existing category restart campaign to exercise all
+seven tag operations, unavailable-content retention, restart persistence, ordered
+mixed outcomes, idempotent removal and deletion of assignments. The fresh regular
+daemon and WebUI release build passed with zero warnings under
+`logs/builds/20261117T195936Z-build-clients/build-result.json`. The source-bound
+local campaign passed with graceful teardown: **83 generic route probes, zero
+failed routes**, SSE, populated downloads, category storage/sharing, all seven
+tag operations, real friend peers and Kad persistence. Its exact source revision
+is `47ee4f5070f02323e37843c6ff3efd2dc11458f1`; retained runtime evidence is
+`reports/rust-rest-openapi-ci/20261117T200236Z/report.json`, including the
+`categoryPersistencePhase.libraryTags` assertions. Build/campaign console logs
+are also under `reports/library-tags-rest-round-1/`.
 Sharing enforcement, the bounded library browser, WebUI tags and combined scale
 qualification remain open.
 
