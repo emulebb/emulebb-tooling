@@ -52,13 +52,24 @@ explicit `*_at_s` units; public names follow the master.
 
 Before the Core consumer cut, finish the remaining obligations found in
 the scoped review: wire the qualified durable storage-failure provider into
-runtime capture and public detail; expose the qualified checkpointed-byte
-aggregate through runtime progress; and wire the qualified descending ID keysets,
+runtime capture and public detail; correct and expose persisted present-byte
+aggregates through runtime progress; and wire the qualified descending ID keysets,
 view/category indexes and fixed counts into native queries. Terminal progress remains one
 after piece retirement. Startup admits only the bounded active/exploration set;
 neither failed jobs nor queued/history rows require retained Core workers or
 full manifests. These additions are allocated, not implemented by the provider
 checkpoints below.
+
+Current stop/restart regressions confirm that `checkpointed_bytes` sums each
+piece's contiguous prefix and omits noncontiguous bitmap blocks. Native progress
+is corrected in the stop-owner integration, but the DB header and download
+summary still underreport those blocks. Before accepting the public download
+surface, distinguish prefix offsets from total present bytes, persist the
+derived per-piece presence and maintain the job aggregate transactionally.
+Keep summary reads scalar and indexed; do not parse every bitmap or scan piece
+history on each list request. Extend the existing aggregate/rollback/query-plan
+tests and current Python fixtures. This is a coordinated fresh-schema change,
+with no migration, alias or old-row reconstruction path.
 
 ### Native download query provider checkpoint (2026-11-16)
 

@@ -931,11 +931,13 @@ seconds of no received payload; it never times out in-flight I/O to rotate a
 slot. The full Core package passes with this initial rotation policy.
 
 Exact frozen-source evidence is retained under
-`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/download-selection-release-round-3/`.
+`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/download-stop-progress-round-4/`.
 The complete Core package passed: 570 unit tests and all integration targets,
-including seven Kad swarm tests and actual download delivery. Native 1,431 tests
-and metadata 214 unit plus three ownership tests passed on the provider sources
-under `reports/download-selection-release-round-2/`. These are local draft Core
+including seven Kad swarm tests and actual download delivery. Native 1,433 tests
+and metadata 215 unit plus three ownership tests passed. The rollback fixture's
+test-only fault predicate was subsequently revised to avoid schema teardown;
+metadata 215 plus three passed again under `reports/download-stop-progress-round-5/`.
+Native/Core production inputs are unchanged by that fixture revision. These are local draft Core
 integration results, not a pushed Core checkpoint. The category deletion fixture
 now admits a download directly instead of starting an unrelated detached library
 reload; native backpressure remains unchanged. Fourteen Core warnings remain for
@@ -944,16 +946,24 @@ beyond unknown-size metadata discovery, final settings
 binding, actual sixteen-plus-two load, held-I/O cancellation/drain, REST and
 combined-scale qualification remain open. No total-RSS claim follows.
 
-The stop path has a confirmed remaining defect: native logical stop drops dirty
-manifest/bitmap state after advancing its generation, so previously acknowledged
-cache-only partial progress can be forgotten. A crash-loss allowance does not
-justify loss on an explicit stop. Before accepting download controls, flush
-append writes before publishing dirty progress, then save the bounded dirty
-delta and stop fence in one transaction under the existing admitted owner.
-Logical stop must remain independent of a later held I/O operation. Reuse the
-transaction-local progress validator rather than nesting native admissions;
-prove prefix/bitmap survival across stop and restart, rollback, and late-writer
-fencing. This finding does not invalidate the narrower quiesced-release tests.
+The acknowledged-progress stop defect is repaired in this frozen integration:
+prefix appends flush before dirty publication; bitmap writes already did so.
+The existing stop owner captures the exact bounded dirty delta and saves it
+with the generation fence in one transaction through the shared progress
+validator. Cache and dirty publication now share stop's content fence, and late
+persisted acknowledgments cannot recreate stopped bookkeeping. Native progress
+counts sparse bitmap bytes as well as prefixes. Tests prove exact prefix and
+bitmap restoration after stop/restart, physical payload preservation, logical
+stop while a later job I/O guard is held, rejection of late publication/handles,
+and rollback of both progress and intent when the stop update fails. These
+guard/gate tests do not establish actual held-OS-I/O qualification.
+
+The regressions also exposed a separate remaining DB/API defect: the persisted
+header counter sums contiguous prefixes and misses sparse bitmap bytes. The
+native counter is corrected; [RUST-CI-044](RUST-CI-044.md) owns the persisted
+aggregate correction before public progress is accepted. The stop tests retain
+exact bitmap and total byte-presence assertions instead of treating a prefix
+counter as total presence.
 
 Require actual held-I/O cancellation/drain tests, query plans and parent/path
 replacement races. The existing full catalog rebuild remains separate bounded
