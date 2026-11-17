@@ -18,6 +18,28 @@ source: 2026-10-23 Rust async and portability audit
 
 # RUST-REF-016 - Move blocking SQLite work behind bounded async persistence
 
+## Native control checkpoint (2026-11-17)
+
+Rust `2d51ef87` is pushed on `feature/public-foundation-round-1`. A repeated
+start of an allocated, healthy started job preserves its record and generation;
+repeated stop is unchanged. A first start, stopped-job restart or explicit
+storage-failure retry retains the selected allocation and issues a new fenced
+generation. Unchanged native starts do not republish or evict selected backing.
+Consumer read projections reserve simultaneous output before conversion, and
+verification overlays copy only the bounded resident cohort's tokens.
+
+The supported Windows gates passed **208 metadata unit tests plus 3 ownership
+tests** and **1,425 ED2K tests**, with zero failures, ignored tests or warnings.
+Evidence is under `EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/`:
+`download-job-control-idempotence-round-1/metadata.log` and
+`download-job-control-idempotence-round-2/{ed2k.log,source-freeze.json}`.
+The source receipt records the six committed native files and verified
+restoration of all 28 unfinished Core files. Normal commit/push hooks passed.
+Core still requires its coordinated reader/control replacement and fresh
+compilation/behavior qualification. This checkpoint does not establish REST,
+16-active-plus-2-preparation scheduling, held-I/O ownership, total RSS or the
+combined 100k-library/100k-job workload.
+
 ## Download-engine behavioral feedback (2026-11-16)
 
 The ninth supported ED2K package run compiled the test target without warnings
