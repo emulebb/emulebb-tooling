@@ -1675,7 +1675,7 @@ The native report covers that exact revision; it does not qualify subsequent
 source changes. Normal Rust commit/push hooks passed. All scoped commits remain
 on the existing foundation branch, without a PR or merge.
 
-The current metadata checkpoint is Rust `e56a9a94`, including the admission
+The location-read checkpoint is Rust `e56a9a94`, including the admission
 writer fix `4a987b63`. `library_locations` returns retained path observations
 using content/path keyset seeks, at most 200 rows and a caller-reserved allowance
 capped at 1 MiB. Lengths are checked before native-path decoding. A byte-limited
@@ -1703,44 +1703,55 @@ views, display-name-only search, public locations, statistic sorts and WebUI con
 remain open, as do the remaining settings/CLI/Docker work and combined resource
 qualification. This is not full library-read or foundation acceptance.
 
-## Accepted upload accounting checkpoint
+## Upload accounting and timestamp checkpoint
 
-Rust `43290d07` counts one accepted upload stint when its first verified payload
-is ready, using the existing upload-work lease. Repeated packets share the
-acceptance marker; slot recycling or a file-hash switch starts a fresh stint.
-A queue grant, empty/rejected range or failed verified read does not itself count
-as accepted service. Queue scoring, promotion and protocol replies are unchanged.
+Current Rust revision `e53c07c2` counts one accepted upload stint when its first
+verified payload is ready, using the existing upload-work lease. Repeated
+packets share the acceptance marker; slot recycling or a file-hash switch starts
+a fresh stint. Queue grants, empty/rejected ranges and failed verified reads do
+not themselves count as accepted service. Accepted-session events join file-byte
+and peer-credit deltas in the existing batch transaction and release flush.
+Ordinary checkpoint failure rolls back the batch and restores its deltas,
+including additions arriving before retry.
 
-Accepted-session events join file-byte and peer-credit deltas in the existing
-batch transaction and release flush. Ordinary checkpoint failure rolls back the
-whole batch and restores its deltas, including additions arriving before retry.
-There is no separate accepted-session SQL write on the serving path and no new
-worker, user setting or database shape. Schema remains 86.
+Fresh-profile schema **87** stores `last_upload_requested_at_s` and
+`last_uploaded_at_s` as nullable Unix-second values. An absent event stays null;
+an explicit epoch-zero event stays zero. A refused known-hash request records
+demand without advancing actual-upload time. Positive transmitted payload-byte
+events carry their capture time through the existing ledger, retaining the latest
+time across coalescing, failure and retry. Metadata validation rejects negative
+times and an actual-upload time without a byte event. Existing consumers,
+publication calculations, MFC import models, corpus fixtures and Python metadata
+helpers use the coordinated current shape. The profile-import exchange exports
+`lastUploadRequestedAtSeconds`; its parsed MFC timestamp remains in seconds.
 
-Metadata **238 unit + 3 ownership tests**, Core **603 unit + 35 integration
-tests**, and eD2K **1,449 tests** passed. Checks include concurrent request guards,
-repeated packets, release/re-admission, slot recycling, injected batch failure,
-byte/credit preservation, retry without double-counting and profile reopen.
-The existing Python campaign suite passed **22 tests**, including its normal
-push gate. Logs: `reports/library-upload-acceptance-round-1/`.
+Scoped validation passed: metadata **239 unit + 3 ownership tests**, daemon
+**123 tests** (its isolated ownership-child fixture is deliberately invoked by
+parent tests), Core **603 unit + 35 integration tests**, and eD2K **1,449 tests**.
+The selected Python suites passed **81 tests**, including the normal push gate.
+Logs: `reports/library-upload-timestamps-round-1/`. Checks cover null/zero,
+ordering, invalid events, transaction rollback, retry/reopen, publication
+consumers, import/export units and the existing 100k metadata fixtures.
 
 The regular daemon/WebUI build passed with **zero warnings**:
-`logs/builds/20261117T224718Z-build-clients/build-result.json`.
-Harness commit `f332884a` extends the existing local peer scenario. The exact
-Rust revision `43290d0774c6406776337d4bf55cdd517d579f95` passed native
-REST/OpenAPI validation with graceful teardown:
-`reports/rust-rest-openapi-ci/20261117T225020Z/report.json`.
-Its `categoryPersistencePhase.uploadAccounting` proves **six requests and two
-accepted stints**, including repeated successful packets, refused demand,
-re-enable within one active stint, release flushing and a fresh post-restart
-session. Existing sharing, category, tag, download, friend and Kad checks passed.
-Both source commits are pushed on the existing feature branches; no PR or merge.
+`logs/builds/20261117T231722Z-build-clients/build-result.json`.
+Harness commit `1aaa5322` extends the existing native peer scenario. Exact Rust
+revision `e53c07c290cc0c5cba47b338f21f4bd76514bee5` passed native REST/OpenAPI
+validation with graceful teardown:
+`reports/rust-rest-openapi-ci/20261117T232041Z/report.json`.
+`categoryPersistencePhase.uploadAccounting` proves **six requests and two
+accepted stints**; `uploadTimestamps` proves null initial times, Unix-second
+request/upload values, persistence across restart and unchanged last actual
+upload time during a refused request. Existing sharing, category, tag, download,
+friend and Kad checks passed. Source commits are pushed on the existing feature
+branches, without a PR or merge. This is the latest staged/native-qualified
+revision; prior reports cover their explicitly recorded source revisions.
 
-This closes accepted-stint attribution and batch retention. Raw-request batching,
-last-actual-upload timestamps, process-session statistics independent of catalog
-rebuilds, indexed statistic sorting and the full canonical library read surface
-remain open. The most recent staged/native-qualified binary is now `43290d07`;
-prior source-bound reports remain evidence for their stated revisions only.
+This closes accepted-stint attribution, its batch retention and the upload-event
+timestamp shape. Raw-request batching, process-session statistics independent of
+catalog rebuilds, indexed statistic sorting and the canonical library REST/UI
+surface remain open. Other persisted/public timestamp domains still need their
+coordinated foundation cut, and combined resource qualification remains open.
 
 ## Acceptance Criteria
 

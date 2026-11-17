@@ -313,7 +313,8 @@ Do not add parallel per-file assignment routes or create tags/content implicitly
 
 Per hash expose real current-process and lifetime uploaded bytes, upload requests
 and accepted upload-session counts, plus last-request and last-actual-upload
-timestamps. All copies contribute to one hash's counters. Session counters reset
+timestamps. Unobserved event timestamps are null; epoch zero is a valid observed
+timestamp. All copies contribute to one hash's counters. Session counters reset
 on process start. Lifetime totals persist across root/file/policy changes.
 Application totals are consistent with the documented accounting scope.
 Count upload requests for known hashes even when sharing policy refuses them,
