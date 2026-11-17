@@ -351,6 +351,24 @@ request admission, publication filtering, REST/OpenAPI/WebUI and large-library
 query qualification are still pending. The previous staged daemon/campaign
 remains attributed to schema 84 and its exact recorded commit.
 
+Rust `8013b41e` wires tag creation/read/delete, bounded global/per-file tag
+pages and explicit assignment batches through the existing profile coordinator
+and blocking SQL worker. It adds no thread, second actor or full tag catalog
+cache. Validation precedes admission; shared-capacity refusal precedes mutation.
+A conservative 64-KiB response reservation remains charged through projection
+and serialization, within the existing 8-MiB profile-owner budget. Admitted
+batches complete after caller disconnect; per-item SQL constraint failures do
+not skip later hashes. Public tag projections expose names, not SQL IDs.
+
+The supported Core gate passed **598 unit plus all 35 enabled integration
+tests**, with zero warnings. New regressions cover retained response charge,
+pre-mutation queue refusal, complete work after disconnect, ordered mixed
+outcomes and invalid-selection refusal without implicit creation. Exact source
+hashes and logs are under `reports/library-tags-owner-round-1/`. Normal commit
+hooks passed. REST/OpenAPI/WebUI exposure and sharing-flag protocol enforcement
+remain pending; this provider gate does not qualify fatal I/O/commit ambiguity
+or 100k/resource behavior.
+
 The operator selected bulk-only tag assignment actions; the authoritative
 foundation specification records the accepted endpoints and explicit selection
 bounds. No parallel per-file write surface or implicit tag creation is planned.
