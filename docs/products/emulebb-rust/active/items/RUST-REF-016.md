@@ -231,6 +231,19 @@ These are caller/unit results, not a new live upload, memory-scale or sustained
 soak qualification. The earlier source-bound staged REST result remains valid
 for its unchanged product inputs.
 
+Harness `e36f2732` converts the wire campaign to captured job IDs, fixed global
+counts and bounded source-count lower bounds. Payload verification and delivery
+are distinct from piece presence; source growth does not prove source-exchange
+packets. The wire suite passed **16 tests**; the shared Rust-client suite passed
+**47 tests with one platform-specific skip**.
+
+Harness `17915ec1` converts both VPN smoke callers and their existing common
+completion helper. The proof follows the captured job ID and verifies only its
+recorded output path, retaining final-rehash log requirements. A failed job
+requires operator action. The helper, OpenVPN and Gluetun suites passed
+**8, 5 and 8 tests**, respectively. Normal commit hooks passed for both slices.
+These are local caller tests; no public-network or VPN campaign was launched.
+
 The coherent application checkpoint remains open: the other Rust operator/VPN/
 soak callers and Core consumer cleanup are pending. Adapting those callers does
 not bring sustained soak execution back into this delivery round. Mocked browser success does not qualify those lanes or
