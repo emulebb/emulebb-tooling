@@ -260,6 +260,22 @@ from the selected canonical Rust schema whose bytes remain unchanged by the
 read. Normal hooks passed. This qualifies diagnostic queries, not the remaining
 public-search/download callers or a sustained soak.
 
+Harness `5b391fde` replaces history-scanning download diagnostics with
+`public-download-debug-summary --download-id ID`: one exact job read and one
+source window (at most 200), with lower-bound count labeling. The shared ID
+validator is reused. **114 soak-control and 31 shared-client tests** passed.
+
+Harness `14e079a4` converts the public search-to-download proof to current
+`displayName`/`sizeBytes` results, stopped content-job creation, captured job IDs
+and explicit start batches. It requires successful per-item receipts, streams
+part totals, and samples bounded source windows. Presence, part verification,
+whole-payload verification and delivery remain distinct. Completed internal
+piece retirement preserves the payload fact; the proof checks the recorded
+output size. Failed jobs require operator action. All **119 soak-control tests**
+passed, including current creation/start sequencing, stalled candidates,
+privacy, substituted-job refusal, failed start items and completion semantics.
+Normal hooks passed for both commits. No public download or soak was launched.
+
 The coherent application checkpoint remains open: the other Rust operator/VPN/
 soak callers and Core consumer cleanup are pending. Adapting those callers does
 not bring sustained soak execution back into this delivery round. Mocked browser success does not qualify those lanes or
