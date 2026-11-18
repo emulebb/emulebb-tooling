@@ -832,6 +832,12 @@ mixed transports. Current slice checks pass **282 metadata**, **655 core** and
 `reports/settings-request-round-1/search-availability-{metadata,core,rest}.log`.
 Rust checkpoint `561d6c03` also passes **175 selected Python tests** using the
 existing harness (`search-availability-python.log` in that report directory).
+The daemon/WebUI build passes with zero warnings:
+`logs/builds/20261118T113447Z-build-clients/build-result.json`.
+The native REST/OpenAPI campaign passes with graceful teardown on Rust
+`561d6c03`, Harness `65b1944e` and Tooling `59185f20`:
+`reports/rust-rest-openapi-ci/20261118T113748Z/report.json`.
+
 
 The remaining search cut includes per-field summary reducers,
 eliminating bulk startup/history hydration, wiring paged browsing through owned
