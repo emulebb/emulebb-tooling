@@ -1799,9 +1799,9 @@ resource qualification remain open. The Present and All Known membership
 decisions are pending in the authoritative foundation specification. The next
 independent accounting slice is raw-request batching through the existing owner.
 
-## Batched demand and shutdown qualification
+## Upload demand ownership and checkpoint qualification
 
-Rust `2e5f077c` builds on `75e027f3` to capture request counts and last-request
+Rust `1123c6db` captures request counts and last-request
 times in the existing credit/file ledger. Registered hashes need no SQLite call
 on request capture. Requests, bytes, accepted stints and peer credits checkpoint
 in one transaction; failure rolls the transaction back and restores all deltas,
@@ -1809,10 +1809,17 @@ including requests arriving before retry. Counters saturate within SQLite's
 integer range, and nullable request times retain epoch zero and maximum event
 time. No persistent schema change, settings, or additional accounting worker.
 
-Cold hashes use a read-only indexed snapshot on the blocking pool before their
-events can join the ledger. Unknown demand creates no metadata or accounting
-record. Passive-only demand coalesces while dirty without permanently allocating
-client session state. Selected physical-library rows merge committed scalar
+Cold hashes use a read-only indexed snapshot and capture in one admitted command
+under the existing local-mutation registry. Its fixed 4 KiB temporary-work charge
+fits the existing four-command/8 MiB owner; no filesystem admission is required.
+Admission precedes capability clones and task spawning. The tracked command
+captures counters and publication notification even after the peer drops its
+receipt; a cancelled drain waiter does not release its charge or task ownership.
+Closing/saturated admission captures nothing. Waiting for capacity holds only a
+fixed hash and timestamp, with no SQL retry. Final drain joins admitted commands
+before the accounting checkpoint. Unknown demand creates no metadata or
+accounting record. Passive-only demand coalesces while dirty without permanently
+allocating client session state. Selected physical-library rows merge committed scalar
 totals with the process owner, so current reads do not wait for a checkpoint or
 hydrate the full serving catalog. This does not yet implement canonical library
 statistic sorting.
@@ -1825,34 +1832,37 @@ teardown, before profile release. This covers refused-only demand without an
 upload session to release. Required checkpoint failure returns an error and
 retains failed deltas rather than silently claiming durable shutdown.
 
-Scoped checks passed: metadata **239 unit + 3 ownership tests**, Core **603 unit and
-35 integration tests**, eD2K **1,455 tests**, and the selected existing Python
-suite **22 tests**. Logs are under `reports/library-request-batching-round-1/`;
-the final repair uses `ed2k-shutdown.log`, `core-shutdown.log` and
-`python-shutdown.log`. Tests cover capture while a SQLite writer and catalog
-reader are held, transaction rollback across peer/file accounting, request
-retention and exactly-once retry, saturation, optional times and single-flight
-reservation release. Normal commit/push gates also passed.
+Scoped checks passed: eD2K **1,457 tests** and the selected existing Python suite
+**22 tests**, under `reports/library-cold-demand-round-1/`. New tests hold the
+actual command at its scheduling gate, cancel its real request caller and first
+drain waiter, then prove retained charge, closed admission, joined capture,
+notification and durable checkpoint. Saturated admission and unknown-hash
+noncreation are also covered. Existing tests cover capture while a SQLite writer
+and catalog reader are held, transaction rollback across peer/file accounting,
+exactly-once retry, optional times and single-flight reservation release.
+Metadata and Core sources are unchanged in this slice; prior **239 metadata unit
+and 3 ownership tests** and **603 Core unit + 35 integration tests** remain valid
+under `reports/library-request-batching-round-1/`. The regular build and native
+campaign below cover the final integration. Normal commit/push gates passed.
 
 The final regular daemon/WebUI build passed with **zero warnings**:
-`logs/builds/20261118T010547Z-build-clients/build-result.json`.
-Harness `f670c4b3` extends the existing Python peer scenario; its native
+`logs/builds/20261118T012126Z-build-clients/build-result.json`.
+Harness `80b66028` extends the existing Python peer scenario; its native
 REST/OpenAPI campaign passed on exact Rust
-`2e5f077ca224c33caddf91daeee30159d45f7132`, with graceful teardown:
-`reports/rust-rest-openapi-ci/20261118T010849Z/report.json`.
+`1123c6db375857cf190112ccaa46bd177a9fe623`, with graceful teardown:
+`reports/rust-rest-openapi-ci/20261118T012424Z/report.json`.
 `categoryPersistencePhase.uploadAccounting` proves **seven requests and two
 accepted stints**, current in-session REST totals, policy refusal without extra
-acceptance, and refused-only demand surviving clean shutdown/reopen. Existing
+acceptance, refused-only demand surviving clean shutdown/reopen, and demand for
+a retained hash without any copy under a current shared root. The unavailable
+hash gains neither accepted-service counts nor payload authority. Existing
 timestamp, sharing, category, tag, download, friend and Kad checks passed.
 Rust and harness commits are pushed on their existing feature branches. No PR
 or merge was created.
 
-This qualifies registered demand capture, batch retention, live scalar reads
-and the final checkpoint; it does not close this owner or the foundation goal.
-Cold classification still awaits a per-connection blocking task, so cancellation
-before its result is captured needs a retained-owner and drain proof. Address
-that bounded gap using the existing local-mutation/read ownership machinery,
-without adding a separate actor. Canonical library views and indexed live-stat
+This qualifies admitted cold-demand retention as well as registered capture,
+batch retention, live scalar reads and the final checkpoint; it does not close
+this owner or the foundation goal. Canonical library views and indexed live-stat
 sorting, the operator's library membership decisions, remaining settings/CLI/
 Docker work and combined resource qualification remain open. Sustained soak
 remains explicitly deferred follow-up.
