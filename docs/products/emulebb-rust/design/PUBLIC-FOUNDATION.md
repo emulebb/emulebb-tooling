@@ -1472,9 +1472,30 @@ sampled peak private memory is 420,933,632 bytes (about 401.4 MiB). The campaign
 takes 1,671.882 seconds. These are Windows measurements with metadata-only
 download history, not enforced container memory/CPU limits or simultaneous
 payload-transfer qualification. No latency SLO or relaxed timeout was used.
-Populated-root replacement, the enforced 512 MiB/one-CPU container, remaining
-library query/sort qualification and the unfinished public-foundation cuts
+The enforced 512 MiB/one-CPU container, remaining library query/sort
+qualification and the unfinished public-foundation cuts
 retain their scope. A sustained soak remains deferred below.
+
+### Populated-root update replay (2026-11-18)
+
+The focused replay passes on Rust `9316bc39` and Harness `eb3c975e`:
+`reports/workstreams/public-foundation-round-1/shared-library-io/rust-shared-library-io-20261118T224537Z-4724.json`.
+It copies the preceding successful campaign's database into a new owned profile
+and preserves the matching physical fixture generation. The warm baseline
+reuses all 100,000 files without reading payload bytes. After bounded download
+traversal, replacing the populated root set with the same canonical root
+succeeds in 0.022 seconds. All four watcher actions converge, 100,000 retained
+download rows and public counts remain correct, REST/watcher errors are zero,
+and REST shutdown exits zero. Total replay duration is 564.116 seconds.
+
+The earlier unchanged-root timeout is not reproduced on these revisions;
+no additional root-update behavior change is justified by this evidence.
+The harness now requires this unchanged-root update in both campaign modes.
+This replay qualifies that operation and the watcher lifecycle, not removal or
+replacement with a different populated root, initial hashing, a fresh full
+campaign on these revisions, payload-download concurrency or enforced container
+limits. Build evidence has zero warnings:
+`logs/builds/20261118T224149Z-build-clients/build-result.json`.
 
 ### Deferred follow-up
 
