@@ -1744,14 +1744,60 @@ accepted stints**; `uploadTimestamps` proves null initial times, Unix-second
 request/upload values, persistence across restart and unchanged last actual
 upload time during a refused request. Existing sharing, category, tag, download,
 friend and Kad checks passed. Source commits are pushed on the existing feature
-branches, without a PR or merge. This is the latest staged/native-qualified
-revision; prior reports cover their explicitly recorded source revisions.
+branches, without a PR or merge. This report covers its explicitly recorded
+source revision; the subsequent process-accounting checkpoint is below.
 
 This closes accepted-stint attribution, its batch retention and the upload-event
 timestamp shape. Raw-request batching, process-session statistics independent of
 catalog rebuilds, indexed statistic sorting and the canonical library REST/UI
-surface remain open. Other persisted/public timestamp domains still need their
-coordinated foundation cut, and combined resource qualification remains open.
+surface remain open at that revision. Other persisted/public timestamp domains
+still need their coordinated foundation cut, and combined resource qualification
+remains open.
+
+## Process-owned file statistics checkpoint
+
+Rust `47c01eaa` retains per-hash session statistics in the existing accounting
+ledger, independently of serving catalog membership. Clearing, replacing or
+rebuilding a serving projection does not reset session totals or reconstruct
+them from incoming projection data. Checkpoints drain dirty deltas without
+draining process statistics. A new runtime starts session counters at zero and
+merges committed lifetime facts. No database shape or settings were added.
+
+Byte and accepted-stint events update the owner before a nonblocking catalog
+projection attempt. Raw demand retains a known client's process request count
+even if its SQL write fails; successful writes do not count the request twice.
+The existing request statement now returns committed lifetime facts and bounded
+client classification in one indexed statement, fully stepping its RETURNING
+rows before exposing success. Passive-only and unknown demand do not allocate
+permanent client session records. Request timestamps retain nullable Unix
+seconds, including explicit epoch zero, through projection replacement.
+
+Scoped checks passed: metadata **239 unit + 3 ownership tests**, Core **603 unit
++ 35 integration tests**, and eD2K **1,454 tests**. Evidence is under
+`reports/library-session-accounting-round-1/`. The Core check precedes the final
+private request-error capture and statement-completion changes; the final eD2K,
+metadata, normal branch checks and regular build cover those changes. Tests
+include catalog removal/rebuild, checkpoint/restart boundaries, held catalog
+read locks, rejected request writes and epoch-zero preservation. Existing
+admission/ingest fixtures now capture real events instead of injecting session
+statistics into serving entries; their behavioral assertions remain intact.
+
+The regular daemon/WebUI build passed with **zero warnings**:
+`logs/builds/20261118T003547Z-build-clients/build-result.json`.
+The existing Python native REST/OpenAPI campaign passed on exact revision
+`47c01eaa` with graceful teardown:
+`reports/rust-rest-openapi-ci/20261118T003846Z/report.json`.
+It retains the real-peer request/stint, timestamp/restart, sharing and other
+existing contract checks. No new launcher or replacement harness was added.
+Rust is committed and pushed on the existing feature branch; no PR or merge.
+
+This closes process counter ownership across serving-cache changes, not the
+entire accounting contract. Raw requests still perform synchronous SQL and are
+not checkpoint-batched; failed request persistence is not restored by this
+slice. Indexed statistic sorts, canonical library REST/WebUI and combined
+resource qualification remain open. The Present and All Known membership
+decisions are pending in the authoritative foundation specification. The next
+independent accounting slice is raw-request batching through the existing owner.
 
 ## Acceptance Criteria
 

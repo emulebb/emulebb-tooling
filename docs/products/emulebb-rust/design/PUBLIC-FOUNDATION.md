@@ -257,6 +257,18 @@ paginated locations resource. Support multiple locations for serving and
 availability without adding duplicate discovery, naming reconciliation or
 deduplication features. Users manage duplicates with external tools.
 
+Two library-view boundaries await the operator before the canonical list/detail
+surface is implemented:
+
+- Present: verified copies under currently configured accessible roots, or also
+  verified copies outside those roots. Current-root-only is the recommendation;
+  removing a root still retains content knowledge.
+- All Known and hash detail: all client-owned hashes (accepted downloads and
+  verified/imported content), or only content ever verified complete. The first
+  is the recommendation; remote-only observations remain outside the library.
+
+These recommendations are pending decisions, not accepted public behavior.
+
 ### Sharing policy and tags
 
 The persistent sharing enabled/disabled flag is **hash-level**, affecting all
