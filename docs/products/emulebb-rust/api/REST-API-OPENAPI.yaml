@@ -2897,7 +2897,11 @@ paths:
           $ref: "#/components/responses/ErrorResponse"
     post:
       tags: [Searches]
-      summary: Start a search.
+      summary: Start a live network search.
+      description: >-
+        The session starts empty and collects only results observed through its
+        network search. Matching local or passive-index entries are not preloaded.
+        Index and hybrid execution are separate future capabilities.
       operationId: createSearch
       requestBody:
         required: true

@@ -614,6 +614,10 @@ as the stable default and separate network-backend selection. Design all modes
 now, advertise only implemented capabilities; autonomous index/hybrid execution
 and index projections/APIs are later implementation.
 
+Live sessions start empty and collect only their network observations. Do not
+preload matching local or passive-index entries, synthesize observations for
+lookups, or alter retained live results when passive-index settings change.
+
 Separate search metadata, paginated result summaries and provenance. Give
 results stable claim identities based on hash plus size; preserve different
 known size claims rather than collapsing them by hash. Unknown size is a separate
@@ -673,34 +677,48 @@ interruption. Global UDP and Kad use the same ingress. Network handoff channels
 are bounded at 16 items. SQL batches accept at most 128 events and 256 KiB of
 conservative charge, with 64 KiB per event. Provenance keyset pages return at most
 100 variants and 256 KiB. Admission capacity waits retry only an unadmitted Busy
-outcome; uncertain commit faults ingress. Admitted work finishes after caller
-disconnect. Final completion settles status/integrity votes without replaying
+outcome; uncertain commit faults ingress. The admitted request owns both SQL and
+session publication through completion after caller disconnect. Publication
+payloads are charged before cloning. Final completion settles status/integrity votes without replaying
 results. Terminal sessions reject new membership/progress while their late raw
 observations can enrich the independent corpus.
 Forwarding drains until the decoder closes its channel even when cancellation
 settles the request first. Queued requests hold weak channel handles; executing
 decoders upgrade them, so disconnected queued requests cannot strand a drain.
 
-Rust `6baabe7e` implements storage; `0e944e0d` integrates ingestion and `2334e5f0`
-closes the cancellation drain gap. Checks pass **261 metadata**, **643 core**,
-**1,458 eD2K** and **174 existing Python harness**
-tests. New coverage includes null/zero/conflicting/full unsigned sizes,
-repetition/variant aggregation, rollback, reopen, byte-bounded keysets, caller
-disconnect, 750 forwarded occurrences after request settlement through small bounded
-channels, queued cancellation channel closure, raw AICH
-conversion, session filters, frozen terminal membership and session deletion.
-Evidence: `reports/settings-request-round-1/content-observations-*.log`.
+Current Rust `3d702720` and Harness `46c8e509` implement independent ingestion,
+owned postcommit publication and network-only live sessions. The shared-owner
+publication regression pauses after SQL, drops the caller and proves exactly one
+session publication and one corpus occurrence. Live-search tests cover both
+passive-index settings and actual network ingestion followed by checkpoint,
+restart and download. REST paging/download fixtures use recorded server
+observations. The existing Python native campaign seeds a matching index entry
+with passive replay enabled and proves an empty live result set without a
+fabricated network claim. It also retains the full-width session-ID proof.
+
+Current behavior checks pass **643 core**, **160 REST** and **174 selected Python
+harness** tests; the affected 24 campaign tests were rerun after the fixture
+setting update, including listener-port preservation. Unchanged metadata and
+eD2K evidence remains **261** and **1,458** tests. Evidence:
+`reports/settings-request-round-1/search-publication-core.log`,
+`reports/settings-request-round-1/live-search-{core,rest,python,python-repair}.log`
+and the retained `content-observations-*.log` checks. REST fixtures reuse the
+workspace metadata crate as a test-only dependency.
 The zero-warning daemon/WebUI build is recorded at
-`logs/builds/20261118T063735Z-build-clients/build-result.json`.
+`logs/builds/20261118T072931Z-build-clients/build-result.json`.
 The native REST campaign passes with graceful teardown on exact Rust
-`2334e5f09e8ec86e640440212933f4df4d8bc85a`:
-`reports/rust-rest-openapi-ci/20261118T064046Z/report.json`.
+`3d7027202a3e602d01716ab6e705cdfbabb4129d`:
+`reports/rust-rest-openapi-ci/20261118T074312Z/report.json`.
+One preceding campaign timed out in Kad restart checks after successful import,
+rollback and retry; the unchanged rerun passed. That failed evidence is retained
+at `reports/rust-rest-openapi-ci/20261118T073923Z/report.json`. No timeout or
+acceptance threshold was relaxed.
 
 This does not complete the search cut. Session membership still needs global
 claim/observation references, nullable-size public projections and claim-ID
 actions. Kad's upstream unknown-size admission, bounded session/history reads,
-canonical separate REST/OpenAPI/WebUI resources and shared-owner session
-lifecycle/snapshot replacement remain open. This evidence does not qualify the
+canonical separate REST/OpenAPI/WebUI resources, shared-owner session
+create/status/delete/clear and snapshot replacement remain open. This evidence does not qualify the
 combined-scale or total-memory gates. Settings/runtime, library and remaining
 foundation allocations retain their existing acceptance gates.
 
