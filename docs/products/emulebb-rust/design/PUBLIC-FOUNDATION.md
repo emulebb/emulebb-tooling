@@ -930,6 +930,15 @@ The observation-resource slice passes **165 REST**, **209 selected Python**,
 Evidence is in `reports/settings-request-round-1/search-observation-route-{rest,python,webui}.log`.
 Core/metadata are unchanged from the owned-read checkpoint above; its valid
 read-bound, restart and scale-index evidence is reused.
+Rust `b93bcfee` builds daemon/WebUI with zero warnings:
+`logs/builds/20261118T123848Z-build-clients/build-result.json`.
+Native REST/OpenAPI qualification passes with graceful teardown on that revision,
+Harness `0d00a002` and Tooling `574e12c8`:
+`reports/rust-rest-openapi-ci/20261118T124605Z/report.json`.
+Its baseline exercises 84 routes; intentionally skipped routes remain explicit.
+The nested `categoryPersistencePhase.searchObservations` proof passes two pages,
+two rows and session-local occurrence accounting against the real daemon/schema.
+
 
 
 The remaining search cut includes
