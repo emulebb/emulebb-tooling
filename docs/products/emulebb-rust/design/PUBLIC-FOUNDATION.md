@@ -748,6 +748,15 @@ publication and diagnostics no longer inspect cached results for those facts.
 The point probe must use no full scan and fewer than 100 SQLite VM steps even
 with 100,000 conflicting-size claims for one hash or an absent session/hash.
 
+Runtime search records contain only execution metadata and progress. Result
+summaries and observation histories are never retained there. Ingestion prepares
+only the incoming packet's fields/votes; SQL combines them with persisted state.
+After commit, publication updates activity metadata. Terminal transitions remove
+runtime records, while SQLite retains the session for browsing and downloads.
+Startup interrupts collecting sessions durably and starts with an empty runtime
+map. The bulk metadata hydration API and full-history data types are removed;
+all consumers and fixtures use canonical point reads or bounded pages.
+
 ### Delivery and remaining acceptance
 
 Storage tests cover first/late pages, all twelve sorts in both directions,
@@ -789,11 +798,13 @@ The daemon/WebUI build passed with zero warnings on Rust `07e2b8ef`
 qualification with Harness `45892855` passed 86 routes, retained search browsing
 and canonical diagnostic capture
 (`reports/rust-rest-openapi-ci/20261118T144212Z/report.json`); teardown was graceful.
-Remaining work includes removing bulk startup hydration and runtime
-result/observation caches; completing stop/linked-search lifecycle; and running combined library/job memory
+Remaining work includes completing stop/linked-search lifecycle and running
+combined library/job memory
 qualification. Query-scale evidence alone does not qualify app-wide resident
 memory or the complete 100k-library/job operating model. Settings/runtime,
 CLI/Docker, library and remaining foundation gates retain their scope below.
+Combined memory qualification must also bound aggregate live Kad AICH trust-vote
+retention; the per-result vote cap alone does not cap all retained sessions.
 
 ## Native REST, OpenAPI and WebUI
 
