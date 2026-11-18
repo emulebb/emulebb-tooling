@@ -1346,6 +1346,36 @@ unqualified. The enforced 512 MiB/one-CPU container and physical-device gates
 also remain open. The next bounded slice is the watcher/read/teardown failure
 and correct reload accounting, reusing this campaign and fixture.
 
+Rust `88111e7e` removes the library-wide joins from unfiltered collection totals:
+the refreshed physical catalog is already the eligible-content set. Filtered
+counts retain their predicates. The existing 100k regression checks the actual
+count statement uses fewer than 20 SQLite VM steps, with no full row scan or
+sort; all 298 metadata tests pass. No public response or schema changes.
+The daemon/WebUI build passes with zero warnings
+(`logs/builds/20261118T194203Z-build-clients/build-result.json`), and native
+REST/OpenAPI conformance passes with graceful teardown
+(`reports/rust-rest-openapi-ci/20261118T194502Z/report.json`).
+
+Harness `e67076cf` retains a completed reload observation separately from final
+worker quiescence; 51 focused tests pass. The second combined campaign still
+**fails qualification**:
+`reports/workstreams/public-foundation-round-1/shared-library-io/rust-shared-library-io-20261118T194817Z-14056.json`.
+Its full download traversal passes again, but the same watcher-time library
+request times out and shutdown requires forced cleanup. The count optimization
+does not resolve that failure. Initial progress accounting also remains
+unproven: polling can miss the completed reload before a subsequent run resets
+its counters. Preserving an observation when available is insufficient for
+reliable completion evidence. Keep the strict failed verdicts.
+
+After these two combined failures, do not repeat the full initial hash pass as
+the next investigation. Reproduce watcher overlap against an explicitly
+validated harness-owned library baseline and identify the blocking owner with
+focused diagnostics; extend the existing campaign rather than creating another
+runner. Completion accounting needs reliable evidence from the completed run.
+No new latency SLO is adopted: the request timeout is a procedural guard, and
+loosening it alone is not a repair or qualification. The goal and all remaining
+container, restart, recovery and public-foundation gates remain unchanged.
+
 ### Deferred follow-up
 
 A sustained mixed-workload soak is follow-up work, not a prerequisite for this
