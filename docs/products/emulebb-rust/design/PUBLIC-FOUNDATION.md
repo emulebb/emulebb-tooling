@@ -668,7 +668,7 @@ non-reuse after deletion.
 
 ### Claim-backed search membership checkpoint
 
-Fresh schema **95** stores permanent `content_claims` keyed by ED2K hash plus
+Fresh schema **96** stores permanent `content_claims` keyed by ED2K hash plus
 nullable unsigned size, with never-reused positive identities. Unknown size,
 known zero and conflicting known sizes remain distinct. Remote evidence creates
 no accepted library identity. Independent `content_claim_observations` retain
@@ -753,7 +753,7 @@ occurrence accounting and independently accumulated long summary fields are
 covered. This is storage-page evidence; app-wide startup/list behavior and the
 combined library/job resident-memory gate are not yet qualified.
 
-Schema 95 includes `search_name_reporters` keyed by session, claim, normalized name
+Schema 96 includes `search_name_reporters` keyed by session, claim, normalized name
 and reporter identity, plus materialized `search_name_totals`. Known endpoints
 share one vote across transport origins; unknown reporters count once per origin.
 Repeats and changed metadata preserve that cardinality. Totals retain a whole
@@ -839,7 +839,38 @@ The native REST/OpenAPI campaign passes with graceful teardown on Rust
 `reports/rust-rest-openapi-ci/20261118T113748Z/report.json`.
 
 
-The remaining search cut includes per-field summary reducers,
+Schema 96 also stores `search_field_quality`, one whole winning quality tuple
+per populated presentation field. A bounded batch carries fresh presentation
+observations independently of raw provenance and filename votes. Each nonempty
+field competes independently by useful-name flag, reported sources, complete
+sources and rating; immutable claim size makes size knowledge constant. Equal
+quality prefers the smaller binary text/blob or numeric value. The source ID
+and port compete and commit as one pair. Rating retains its maximum; completeness
+retains any complete report. Missing/empty fields never erase prior winners.
+Values remain in `search_results`; the quality table does not duplicate them.
+
+Raw facts, membership, quality tuples, selected fields, filename votes and
+availability commit together. The bounded receipt contains the whole committed
+summary, and Core reserves its memory before handoff and publishes it after SQL.
+Presentation input has independent item, per-observation and batch-byte bounds.
+The summary reader applies the same row-byte bound used for paged browsing.
+
+Field regressions cover independently populated fields, whole-tuple comparisons,
+arrival-independent ties, atomic source pairs, AICH/numeric selection, monotonic
+rating/completeness, rollback of values/quality/raw facts, cascade deletion and
+invalid/oversized admission before writes. Core also proves that a prior artist
+and a later codec survive with cached result history cleared between packets.
+Core still retains observations for current browsing and other pending paths;
+this reducer does not establish whole-ingress or combined-scale memory limits.
+
+Rust checkpoint `28b02343` passes **287 metadata**, **656 core**, **162 REST**
+and **175 selected Python tests**, without compiler warnings. Evidence is in
+`reports/settings-request-round-1/search-fields-{metadata,core,rest,python}.log`.
+The Python checks reuse the existing metadata, OpenAPI-route and native-campaign
+harness suite; no parallel test framework or launch path is introduced.
+
+
+The remaining search cut includes
 eliminating bulk startup/history hydration, wiring paged browsing through owned
 reads and canonical separate REST/OpenAPI/WebUI resources, and snapshot replacement.
 Combined-scale and total
