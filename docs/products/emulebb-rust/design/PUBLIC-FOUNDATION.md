@@ -812,8 +812,16 @@ Remaining work includes completing stop/linked-search lifecycle and running
 combined library/job memory qualification. Query-scale evidence alone does not qualify app-wide resident
 memory or the complete 100k-library/job operating model. Settings/runtime,
 CLI/Docker, library and remaining foundation gates retain their scope below.
-Combined memory qualification must also bound aggregate live Kad AICH trust-vote
-retention; the per-result vote cap alone does not cap all retained sessions.
+Live Kad AICH seeding evidence uses a process-local FIFO cache capped at 512
+result entries and a conservative 4 MiB accounting budget. Accounting includes
+both key copies, vote/node overhead and 64 KiB reserved for bounded FIFO capacity
+and collection heads. Empty evidence is not retained. Replacement and explicit
+session removal release charges; eviction discards the oldest cached entries.
+Download selection still examines at most four retained sessions and 64 distinct
+actual responders for one hash. Cache eviction affects optional live seeding;
+retained search knowledge and download integrity verification remain authoritative.
+There is no saved cache setting. Combined memory qualification must measure this
+cache alongside active downloads and the other resident state.
 
 ## Native REST, OpenAPI and WebUI
 
