@@ -1565,6 +1565,27 @@ Upload-list indexing, thin list shape and bounded keyset traversal remain open;
 UUID identity alone does not qualify those reads. No schema, settings or CLI
 changes are introduced by this checkpoint.
 
+### Global tag WebUI checkpoint (2026-11-19)
+
+Rust `277e9819` adds global library-tag management under Sharing through the
+existing `/library/tags` resources. It retains one 100-row cursor page, replaces
+rows during traversal and supports explicit refresh, creation and confirmed
+deletion. Names remain immutable and use the same case-insensitive identity and
+ASCII validation rules as categories. A successful mutation refreshes only the
+tag resource and returns to its first page; failed writes retain the proposed
+name and current page. Late responses from a replaced client cannot overwrite
+the current page. There is no new polling loop or accumulated row cache.
+
+The component reuses shared cursor controls and public-name validation rather
+than introducing another paging or naming implementation. All 66 WebUI unit
+tests and 32 browser tests pass, including six tag lifecycle/pagination tests:
+`reports/settings-request-round-1/library-tags-webui.log`.
+The staged daemon/WebUI build has zero warnings:
+`logs/builds/20261118T235447Z-build-clients/build-result.json`.
+Backend API, DB, settings and CLI are unchanged. File-tag assignment controls
+remain part of the library-browser cut; this checkpoint qualifies global tag
+management only.
+
 ### Deferred follow-up
 
 A sustained mixed-workload soak is follow-up work, not a prerequisite for this
