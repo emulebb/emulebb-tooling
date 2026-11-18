@@ -708,7 +708,12 @@ transaction rollback, cross-claim foreign keys, local/global counts, full-width
 unsigned sizes and terminal-session evidence. Owner tests cover caller abort,
 capacity refusal without replay and distinct unknown/zero/conflicting claims.
 
-This checkpoint still requires the daemon build and native REST campaign.
+The daemon/WebUI build passes with zero warnings:
+`logs/builds/20261118T085143Z-build-clients/build-result.json`.
+The native REST/OpenAPI campaign passes with graceful teardown on Rust
+`a0ad5334`, using Harness `340f6723` and the Tooling contract at `947e5bcc`:
+`reports/rust-rest-openapi-ci/20261118T085441Z/report.json`.
+
 The remaining search cut includes bounded session/history/provenance reads,
 canonical separate REST/OpenAPI/WebUI resources, shared-owner session
 create/status/delete/clear and snapshot replacement. Combined-scale and total
