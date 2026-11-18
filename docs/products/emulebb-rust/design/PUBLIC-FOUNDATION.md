@@ -700,7 +700,10 @@ Scoped checks pass **263 metadata**, **645 core**, **161 REST**, **147 Kad**,
 **56 WebUI unit** and **32 browser** tests, including the WebUI production build.
 The selected Python run passed 266 tests and exposed one shared-parameter
 component requirement; after correction all 119 tests in the affected OpenAPI
-module pass. Evidence is under `reports/settings-request-round-1/`:
+module pass. Final harness validation also covers rustfmt’s compact allowlist
+form and claim-ID live-wire fixtures: **136 affected Python tests** pass on
+Harness `65b1944e`, recorded in `search-membership-python-formatted.log`.
+Evidence is under `reports/settings-request-round-1/`:
 `search-membership-{metadata,core,rest,kad,webui,python,python-repair}.log`.
 The strengthened REST flow selects between same-hash conflicting sizes and
 asserts that download admission retains the selected size. Metadata tests cover
