@@ -8284,6 +8284,7 @@ components:
         selectedName:
           type: string
         observationCount:
+          description: Number of retained presentation observations, independent of reporter/name votes.
           type: integer
           minimum: 0
         candidates:
@@ -8298,8 +8299,9 @@ components:
         normalizedName:
           type: string
         votes:
+          description: Distinct reporters for this normalized filename. Packet repeats and changing metadata do not add votes; unknown reporters count once per origin.
           type: integer
-          minimum: 0
+          minimum: 1
         rawNames:
           type: array
           items:
