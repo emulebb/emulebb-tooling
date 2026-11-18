@@ -634,9 +634,34 @@ stopped/completed sessions freeze membership; late responses may enrich the
 independent corpus. Mark running sessions interrupted after restart; callers
 explicitly issue a new linked search instead of silently replaying it.
 
+### Observation reporter checkpoint
+
+Search and download filename observations use `reporterEndpoint` in JSON and
+`reporter_endpoint` in Rust/SQL. This identifies the captured reporting endpoint;
+advertised download-peer identity remains separate. Unknown reporting endpoints
+are null. Kad keyword results retain the actual queried contact's IPv4 UDP
+address through conversion, persistence and REST projection, including results
+without AICH metadata. AICH corroboration retains its reporter-IP/version rules.
+
+Fresh schema **90**, Rust `cea5f034`, Harness `97bf7e60` and the OpenAPI contract
+in Tooling `3a24dd0e` implement this cut, including the first-party UI. Focused
+checks passed **256 metadata**, **147 Kad**, **1,457 eD2K**, **639 core** and **160
+REST** tests; **56 UI unit**, **32 Playwright**, type/build gates and **150 Python**
+checks also passed. Evidence: `reports/settings-request-round-1/reporter-*.log`.
+Tests cover reporter retention without AICH metadata, distinct UDP reporters,
+separation from download peers, persisted filename provenance and UI evidence.
+The regular daemon/WebUI build passed with zero warnings:
+`logs/builds/20261118T051215Z-build-clients/build-result.json`.
+The native campaign passed on exact Rust
+`cea5f03443604e72238b97dbf0c40254c8456dcc`, with graceful teardown:
+`reports/rust-rest-openapi-ci/20261118T051527Z/report.json`.
+It qualifies schema/API integration and retains the search-ID and listener
+proofs; it does not complete independent claim storage, observation aggregation,
+bounded search reads or combined-scale qualification.
+
 ### Search session identity checkpoint
 
-Fresh schema **89** uses the positive `search_sessions.id` AUTOINCREMENT primary
+The current fresh schema uses the positive `search_sessions.id` AUTOINCREMENT primary
 key as the public session identity, rendered as an exact decimal string. SQL
 owns allocation; creation does not accept a caller-selected ID. Queue admission
 precedes allocation, and cache/queue publication follows the committed initial

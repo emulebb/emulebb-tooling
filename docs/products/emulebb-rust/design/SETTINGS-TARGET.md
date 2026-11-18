@@ -57,7 +57,7 @@ overrides or duplicate authorities.
 
 ## Accepted settings representation
 
-Fresh schema 89 implements the typed singleton document below. Offline settings
+Fresh schema 90 implements the typed singleton document below. Offline settings
 commands use it; runtime consumers and REST have not switched yet. Store one
 complete typed `SavedSettings` document and its revision in a singleton row:
 
