@@ -639,9 +639,12 @@ freeze membership and summaries while late packets can enrich permanent facts.
 Retain history and knowledge without automatic expiry. Stop ends collection and
 preserves results; explicit deletion/clear discards session membership while
 retaining permanent knowledge. Restart durably records collecting sessions as
-interrupted errors; callers explicitly create a new linked search rather than
-silently replaying network work. The stop action and linked-search contract
-remain part of the pending lifecycle/cache cut.
+interrupted errors; callers explicitly create a new linked search. Linked
+creation uses ordinary `POST /searches` with optional `parentSearchId` and normal
+creation criteria. The WebUI may prefill earlier criteria for editing; the
+backend uses the parent solely as provenance. The new ID owns independent
+network collection and results. Stop and the linked-creation field remain
+pending lifecycle implementation.
 
 ### Durable reducers and ownership
 
@@ -822,6 +825,15 @@ actual responders for one hash. Cache eviction affects optional live seeding;
 retained search knowledge and download integrity verification remain authoritative.
 There is no saved cache setting. Combined memory qualification must measure this
 cache alongside active downloads and the other resident state.
+The bounded-cache cut passes **664 Core tests** without compilation warnings,
+including 100,000 insertions, maximum vote payloads, FIFO eviction, replacement,
+removal/clear accounting, responder deduplication and corroborated-AICH download
+seeding (`reports/settings-request-round-1/search-aich-cache-core.log`). The
+daemon/WebUI build passed with zero warnings on Rust `8d0bafdc`
+(`logs/builds/20261118T152320Z-build-clients/build-result.json`); native
+qualification passed 86 routes with graceful teardown
+(`reports/rust-rest-openapi-ci/20261118T152617Z/report.json`). Accounting limits
+alone do not establish full-daemon resident-memory qualification.
 
 ## Native REST, OpenAPI and WebUI
 
