@@ -618,6 +618,13 @@ Live sessions start empty and collect only their network observations. Do not
 preload matching local or passive-index entries, synthesize observations for
 lookups, or alter retained live results when passive-index settings change.
 
+Keep the fixed twelve global result sorts: display name, size, sources,
+complete sources, rating, file type, artist, album, title, length, bitrate and
+codec. Sources descending is the default. Every sort needs an indexed live
+keyset path and claim-ID tie-breaker; sorting a complete collection or only the
+current page is not acceptable. This operator decision is settled; indexed sort
+integration remains in the current REST/cache cut.
+
 Separate search metadata, paginated result summaries and provenance. Give
 results stable claim identities based on hash plus size; preserve different
 known size claims rather than collapsing them by hash. Unknown size is a separate
@@ -900,6 +907,30 @@ Python metadata-harness tests**, without compiler warnings. Evidence is in
 `reports/settings-request-round-1/search-owned-reads-{metadata,core,python}.log`.
 REST/WebUI sources are unchanged in this dependency slice; their previous native
 campaign evidence remains attached to checkpoint `28b02343` above.
+
+`GET /searches/{searchId}/results/{resultId}/observations` now reads raw
+session-local provenance independently through the owner. Its fixed ascending
+observation-ID order uses collection-scoped opaque cursors, default limit 100,
+maximum 200 and the existing 256 KiB page bound. IDs are exact decimal strings;
+first/last seen are Unix seconds. Unknown reported values remain null, including
+counts and media values; zero stays distinct. Membership counts/times belong to
+the selected session, not the permanent corpus. Missing membership returns 404;
+closed/busy admission uses the common persistence error mapping. OpenAPI defines
+this separate page. Removal of embedded evidence from result summaries remains
+part of the pending result-page cut.
+
+The WebUI opens a single selected result inspector on demand. It retains only
+one 50-row observation page, replaces rows when paging, and offers First/Next
+and explicit retry. It does not accumulate observation pages or fetch evidence
+for every row. Native conformance extends the existing metadata fixture helpers
+and campaign launch/validation path, including a first observation whose global
+count is three but whose selected-session count is one.
+The observation-resource slice passes **165 REST**, **176 selected Python**,
+**58 WebUI unit** and **32 browser tests**, plus the UI production build.
+Evidence is in `reports/settings-request-round-1/search-observation-route-{rest,python,webui}.log`.
+Core/metadata are unchanged from the owned-read checkpoint above; its valid
+read-bound, restart and scale-index evidence is reused.
+
 
 The remaining search cut includes
 eliminating bulk startup/history hydration, wiring paged browsing through owned

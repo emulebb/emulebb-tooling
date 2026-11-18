@@ -3262,6 +3262,40 @@ paths:
           $ref: "#/components/responses/ErrorResponse"
         default:
           $ref: "#/components/responses/ErrorResponse"
+  /searches/{searchId}/results/{resultId}/observations:
+    parameters:
+    - $ref: '#/components/parameters/SearchId'
+    - $ref: '#/components/parameters/SearchResultId'
+    get:
+      tags:
+      - Searches
+      summary: Page raw observations for one search result.
+      description: Ascending observation-ID keyset traversal, independently bounded
+        to 1..200 rows and 256 KiB of charged backing per page. Membership and occurrence
+        times/counts are frozen for terminal sessions. Unknown reported values remain
+        null. Cursors are scoped to the session and result; traversal is weakly consistent
+        under collection changes.
+      operationId: listSearchResultObservations
+      parameters:
+      - $ref: '#/components/parameters/SearchPageLimit'
+      - $ref: '#/components/parameters/SearchObservationCursor'
+      responses:
+        '200':
+          $ref: '#/components/responses/SearchObservationPageResponse'
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/ErrorResponse'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowedResponse'
+        '500':
+          $ref: '#/components/responses/ErrorResponse'
+        '503':
+          $ref: '#/components/responses/ErrorResponse'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
 components:
   securitySchemes:
     ApiKeyAuth:
@@ -3430,6 +3464,24 @@ components:
       schema:
         type: string
         enum: [asc, desc]
+    SearchPageLimit:
+      name: limit
+      in: query
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 200
+        default: 100
+    SearchObservationCursor:
+      name: cursor
+      in: query
+      required: false
+      description: Opaque continuation scoped to this session and result.
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 512
     SearchResultId:
       name: resultId
       in: path
@@ -3822,6 +3874,15 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/SearchEnvelope"
+    SearchObservationPageResponse:
+      description: Bounded session-local observation page.
+      headers:
+        X-Contract-Version:
+          $ref: '#/components/headers/ContractVersionHeader'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/SearchObservationPageEnvelope'
     SearchListResponse:
       description: Search-session collection envelope.
       headers:
@@ -8036,6 +8097,172 @@ components:
           properties:
             data:
               $ref: "#/components/schemas/Search"
+    ContentObservationId:
+      type: string
+      minLength: 1
+      maxLength: 19
+      pattern: ^[1-9][0-9]{0,18}(?![\s\S])
+      description: Exact canonical positive decimal observation identity in 1..9223372036854775807.
+    SearchObservation:
+      type: object
+      additionalProperties: false
+      required:
+      - id
+      - origin
+      - reporterEndpoint
+      - rawName
+      - normalizedName
+      - sizeBytes
+      - sources
+      - completeSources
+      - sourceClientId
+      - sourceClientPort
+      - fileType
+      - media
+      - rating
+      - aichHash
+      - complete
+      - directory
+      - firstSeenAt
+      - lastSeenAt
+      - observationCount
+      properties:
+        id:
+          $ref: '#/components/schemas/ContentObservationId'
+        origin:
+          type: string
+          enum:
+          - server
+          - global
+          - kad
+        reporterEndpoint:
+          type:
+          - string
+          - 'null'
+        rawName:
+          type:
+          - string
+          - 'null'
+        normalizedName:
+          type:
+          - string
+          - 'null'
+        sizeBytes:
+          type:
+          - integer
+          - 'null'
+          minimum: 0
+          maximum: 18446744073709551615
+        sources:
+          type:
+          - integer
+          - 'null'
+          minimum: 0
+          maximum: 4294967295
+        completeSources:
+          type:
+          - integer
+          - 'null'
+          minimum: 0
+          maximum: 4294967295
+        sourceClientId:
+          type:
+          - integer
+          - 'null'
+          minimum: 0
+          maximum: 4294967295
+        sourceClientPort:
+          type:
+          - integer
+          - 'null'
+          minimum: 0
+          maximum: 65535
+        fileType:
+          type:
+          - string
+          - 'null'
+        media:
+          type: object
+          additionalProperties: false
+          required:
+          - artist
+          - album
+          - title
+          - lengthSeconds
+          - bitrateKbps
+          - codec
+          properties:
+            artist:
+              type:
+              - string
+              - 'null'
+            album:
+              type:
+              - string
+              - 'null'
+            title:
+              type:
+              - string
+              - 'null'
+            lengthSeconds:
+              type:
+              - integer
+              - 'null'
+              minimum: 0
+              maximum: 4294967295
+            bitrateKbps:
+              type:
+              - integer
+              - 'null'
+              minimum: 0
+              maximum: 4294967295
+            codec:
+              type:
+              - string
+              - 'null'
+        rating:
+          type:
+          - integer
+          - 'null'
+          minimum: 0
+          maximum: 5
+        aichHash:
+          type:
+          - string
+          - 'null'
+          pattern: ^[A-Z2-7]{32}$
+        complete:
+          type:
+          - boolean
+          - 'null'
+        directory:
+          type:
+          - string
+          - 'null'
+        firstSeenAt:
+          type: integer
+          minimum: 0
+        lastSeenAt:
+          type: integer
+          minimum: 0
+        observationCount:
+          type: integer
+          minimum: 1
+          maximum: 9223372036854775807
+    SearchObservationPageEnvelope:
+      type: object
+      additionalProperties: false
+      required:
+      - data
+      - meta
+      properties:
+        data:
+          type: array
+          maxItems: 200
+          items:
+            $ref: '#/components/schemas/SearchObservation'
+        meta:
+          $ref: '#/components/schemas/CursorPageMeta'
     ContentClaimId:
       type: string
       minLength: 1
