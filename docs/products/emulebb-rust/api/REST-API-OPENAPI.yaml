@@ -3844,14 +3844,14 @@ components:
           schema:
             $ref: "#/components/schemas/ErrorEnvelope"
     DiagnosticBundleResponse:
-      description: Inline bounded diagnostic bundle envelope.
+      description: Inline bounded diagnostic bundle.
       headers:
         X-Contract-Version:
           $ref: "#/components/headers/ContractVersionHeader"
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/DiagnosticBundleEnvelope"
+            $ref: "#/components/schemas/DiagnosticBundle"
     FriendListResponse:
       description: Friend collection envelope.
       headers:
@@ -4592,38 +4592,30 @@ components:
           const: true
         banned:
           type: boolean
-    DiagnosticBundleEnvelope:
-      unevaluatedProperties: false
-      allOf:
-        - $ref: "#/components/schemas/EnvelopeBase"
-        - type: object
-          properties:
-            data:
-              $ref: "#/components/schemas/DiagnosticBundle"
     DiagnosticBundle:
       type: object
       additionalProperties: false
       required:
-        - schema
-        - capturedAt
-        - app
-        - status
-        - runtimeDiagnostics
-        - settings
-        - settingsProvenance
-        - recentLogs
-        - diagnosticHealth
-        - diagnosticArtifacts
-        - limits
-        - summary
+      - schema
+      - capturedAt
+      - app
+      - status
+      - settings
+      - settingsProvenance
+      - recentLogs
+      - diagnosticHealth
+      - diagnosticArtifacts
+      - limits
+      - summary
+      - operationalSnapshots
+      - budget
       properties:
         schema:
           type: string
-          description: >-
-            Diagnostic bundle contract version. Version 4 is returned inline,
-            contains only bounded unified diag_event_v2 artifacts, and excludes
-            legacy side-file dumps.
-          const: emulebb.diagnostic-bundle.v4
+          const: emulebb.diagnostic-bundle.v7
+          description: Inline bounded diagnostic capture. Search snapshots contain canonical session metadata
+            and materialized result summaries from bounded SQLite pages. Raw observation history is read through
+            its resource.
         capturedAt:
           type: string
           format: date-time
@@ -4633,16 +4625,17 @@ components:
         status:
           type: object
           additionalProperties: true
-        runtimeDiagnostics:
-          type: object
-          additionalProperties: true
         settings:
           type: object
           additionalProperties: true
         settingsProvenance:
           type: object
           additionalProperties: false
-          required: [source, apiKeyIncluded, sensitiveValues, apiKey]
+          required:
+          - source
+          - apiKeyIncluded
+          - sensitiveValues
+          - apiKey
           properties:
             source:
               type: string
@@ -4656,20 +4649,19 @@ components:
             apiKey:
               type: string
         recentLogs:
-          type: array
-          items:
-            type: object
-            additionalProperties: true
+          $ref: '#/components/schemas/DiagnosticSnapshotCollection'
         diagnosticHealth:
           type: object
           additionalProperties: false
-          required: [writerIssues]
+          required:
+          - writerIssues
           properties:
             writerIssues:
               type: array
               items:
                 type: object
-                required: [code]
+                required:
+                - code
                 additionalProperties: true
                 properties:
                   code:
@@ -4677,7 +4669,10 @@ components:
         diagnosticArtifacts:
           type: object
           additionalProperties: false
-          required: [logDirectory, families, directoryScanTruncated]
+          required:
+          - logDirectory
+          - families
+          - directoryScanTruncated
           properties:
             logDirectory:
               type: object
@@ -4693,11 +4688,19 @@ components:
           type: object
           additionalProperties: false
           required:
-            - recentLogRecords
-            - artifactFamilies
-            - directoryEntriesScanned
-            - tailBytesPerArtifact
-            - tailRecordsPerArtifact
+          - recentLogRecords
+          - artifactFamilies
+          - directoryEntriesScanned
+          - tailBytesPerArtifact
+          - tailRecordsPerArtifact
+          - serverSnapshots
+          - sharedFileSnapshots
+          - searchSnapshots
+          - searchResultsPerSnapshot
+          - searchSnapshotBytes
+          - downloadSnapshots
+          - uploadSnapshots
+          - uploadQueueSnapshots
           properties:
             recentLogRecords:
               type: integer
@@ -4707,17 +4710,44 @@ components:
               minimum: 0
             directoryEntriesScanned:
               type: integer
-              minimum: 1
+              minimum: 0
             tailBytesPerArtifact:
               type: integer
-              minimum: 1
+              minimum: 0
             tailRecordsPerArtifact:
               type: integer
-              minimum: 1
+              minimum: 0
+            serverSnapshots:
+              type: integer
+              minimum: 0
+            sharedFileSnapshots:
+              type: integer
+              minimum: 0
+            searchSnapshots:
+              type: integer
+              minimum: 0
+            searchResultsPerSnapshot:
+              type: integer
+              minimum: 0
+            searchSnapshotBytes:
+              type: integer
+              minimum: 0
+            downloadSnapshots:
+              type: integer
+              minimum: 0
+            uploadSnapshots:
+              type: integer
+              minimum: 0
+            uploadQueueSnapshots:
+              type: integer
+              minimum: 0
         summary:
           type: object
           additionalProperties: false
-          required: [artifactFileCount, missingArtifactFamilies, issueCount]
+          required:
+          - artifactFileCount
+          - missingArtifactFamilies
+          - issueCount
           properties:
             artifactFileCount:
               type: integer
@@ -4731,6 +4761,158 @@ components:
               type: integer
               format: int64
               minimum: 0
+        operationalSnapshots:
+          type: object
+          additionalProperties: false
+          required:
+          - servers
+          - sharedFiles
+          - searches
+          - downloads
+          - uploads
+          - uploadQueue
+          properties:
+            servers:
+              $ref: '#/components/schemas/DiagnosticSnapshotCollection'
+            sharedFiles:
+              $ref: '#/components/schemas/DiagnosticSnapshotCollection'
+            searches:
+              type: object
+              additionalProperties: false
+              required:
+              - total
+              - included
+              - hasMore
+              - omittedForBudget
+              - limit
+              - items
+              properties:
+                total:
+                  type: 'null'
+                included:
+                  type: integer
+                  minimum: 0
+                hasMore:
+                  type: boolean
+                omittedForBudget:
+                  type: integer
+                  minimum: 0
+                limit:
+                  type: integer
+                  const: 64
+                items:
+                  type: array
+                  maxItems: 64
+                  items:
+                    $ref: '#/components/schemas/DiagnosticSearchSnapshot'
+            downloads:
+              $ref: '#/components/schemas/DiagnosticSnapshotCollection'
+            uploads:
+              $ref: '#/components/schemas/DiagnosticSnapshotCollection'
+            uploadQueue:
+              $ref: '#/components/schemas/DiagnosticSnapshotCollection'
+        budget:
+          type: object
+          additionalProperties: false
+          required:
+          - maxBytes
+          - encodedBytes
+          - truncated
+          - truncatedSections
+          properties:
+            maxBytes:
+              type: integer
+              minimum: 65536
+            encodedBytes:
+              type: integer
+              minimum: 0
+            truncated:
+              type: boolean
+            truncatedSections:
+              type: array
+              items:
+                type: string
+    DiagnosticSnapshotCollection:
+      type: object
+      additionalProperties: false
+      required:
+      - total
+      - included
+      - omittedForBudget
+      - limit
+      - items
+      properties:
+        total:
+          type:
+          - integer
+          - 'null'
+          minimum: 0
+        included:
+          type: integer
+          minimum: 0
+        omittedAfterLimit:
+          type: integer
+          minimum: 0
+        omittedBeforeLimit:
+          type: integer
+          minimum: 0
+        omittedForBudget:
+          type: integer
+          minimum: 0
+        limit:
+          type: integer
+          minimum: 0
+        hasMore:
+          type: boolean
+        items:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+    DiagnosticSearchSnapshot:
+      type: object
+      additionalProperties: false
+      required:
+      - session
+      - results
+      properties:
+        session:
+          $ref: '#/components/schemas/SearchSession'
+        results:
+          type: object
+          additionalProperties: false
+          required:
+          - total
+          - included
+          - omittedAfterLimit
+          - omittedForBudget
+          - hasMore
+          - limit
+          - items
+          properties:
+            total:
+              type: integer
+              minimum: 0
+            included:
+              type: integer
+              minimum: 0
+            omittedAfterLimit:
+              type: integer
+              minimum: 0
+            omittedForBudget:
+              type: integer
+              minimum: 0
+            hasMore:
+              type: boolean
+            limit:
+              type: integer
+              const: 128
+            items:
+              type: array
+              maxItems: 128
+              items:
+                $ref: '#/components/schemas/SearchResult'
+
     ErrorEnvelope:
       type: object
       additionalProperties: false

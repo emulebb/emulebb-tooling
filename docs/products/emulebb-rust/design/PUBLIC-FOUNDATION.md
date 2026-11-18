@@ -730,6 +730,16 @@ exact ID strings. First/Next replaces rows rather than accumulating caches.
 Evidence loads on demand with explicit retry. Client validation and fixtures
 adopt the same OpenAPI contract.
 
+Diagnostic capture reads one newest-first metadata page (at most 64 sessions),
+then at most 128 source-descending summaries per selected session. It reuses the
+canonical session and result builders, never hydrates observations, and caps the
+retained search-item JSON at the smaller of 1 MiB and the requested bundle budget.
+Result omissions and continuation are explicit; the session collection has no
+exact global total. The inline bundle contract is `emulebb.diagnostic-bundle.v7`;
+search items contain `session` metadata and a bounded `results` collection. The
+Python diagnostic collector consumes that same contract. Existing final bundle
+encoding applies its exact overall byte cap afterward.
+
 ### Delivery and remaining acceptance
 
 Storage tests cover first/late pages, all twelve sorts in both directions,
@@ -755,7 +765,7 @@ network-only live results and full-width search identities. Evidence is
 This qualifies the sorted-resource checkpoint, not the pending cache removal or
 combined library/job scale qualification.
 Remaining work includes removing bulk startup hydration, runtime result/observation
-caches, cache-based Kad completion probes and full-history diagnostic capture;
+caches and cache-based Kad completion probes;
 completing stop/linked-search lifecycle; and running combined library/job memory
 qualification. Query-scale evidence alone does not qualify app-wide resident
 memory or the complete 100k-library/job operating model. Settings/runtime,
