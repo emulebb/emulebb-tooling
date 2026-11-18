@@ -925,7 +925,7 @@ and explicit retry. It does not accumulate observation pages or fetch evidence
 for every row. Native conformance extends the existing metadata fixture helpers
 and campaign launch/validation path, including a first observation whose global
 count is three but whose selected-session count is one.
-The observation-resource slice passes **165 REST**, **176 selected Python**,
+The observation-resource slice passes **165 REST**, **209 selected Python**,
 **58 WebUI unit** and **32 browser tests**, plus the UI production build.
 Evidence is in `reports/settings-request-round-1/search-observation-route-{rest,python,webui}.log`.
 Core/metadata are unchanged from the owned-read checkpoint above; its valid
