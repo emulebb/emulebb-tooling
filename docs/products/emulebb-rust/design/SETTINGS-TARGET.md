@@ -465,6 +465,16 @@ after invalid writes, explicit profile selection, running-profile refusal,
 field diagnostics and explicit default-resolution recovery. Harness changes
 are in `98fdf9c4`.
 
+Rust `7dca2f03` then separates offline access from runtime loading: commands
+acquire the existing profile lease and open/initialize canonical metadata
+directly. They neither parse nor create control-service TOML. This keeps explicit
+settings recovery available when runtime startup is invalid. The daemon suite
+passed **125 tests**, including two new regressions for fresh metadata-only
+initialization and settings edits with malformed bootstrap TOML:
+`reports/settings-request-round-1/daemon-offline-isolation.log`.
+Normal commit/push gates passed. The build/native evidence above predates this
+small isolation change; final integrated qualification must use the final cut.
+
 The canonical document is not yet the daemon's active settings authority.
 Runtime admission/effective state, ordered persistence publication, native
 REST/OpenAPI, WebUI, Docker provisioning and runtime-argument removal still
