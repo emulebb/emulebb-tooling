@@ -668,7 +668,7 @@ non-reuse after deletion.
 
 ### Claim-backed search membership checkpoint
 
-Fresh schema **96** stores permanent `content_claims` keyed by ED2K hash plus
+Fresh schema **97** stores permanent `content_claims` keyed by ED2K hash plus
 nullable unsigned size, with never-reused positive identities. Unknown size,
 known zero and conflicting known sizes remain distinct. Remote evidence creates
 no accepted library identity. Independent `content_claim_observations` retain
@@ -753,7 +753,7 @@ occurrence accounting and independently accumulated long summary fields are
 covered. This is storage-page evidence; app-wide startup/list behavior and the
 combined library/job resident-memory gate are not yet qualified.
 
-Schema 96 includes `search_name_reporters` keyed by session, claim, normalized name
+Schema 97 includes `search_name_reporters` keyed by session, claim, normalized name
 and reporter identity, plus materialized `search_name_totals`. Known endpoints
 share one vote across transport origins; unknown reporters count once per origin.
 Repeats and changed metadata preserve that cardinality. Totals retain a whole
@@ -839,7 +839,7 @@ The native REST/OpenAPI campaign passes with graceful teardown on Rust
 `reports/rust-rest-openapi-ci/20261118T113748Z/report.json`.
 
 
-Schema 96 also stores `search_field_quality`, one whole winning quality tuple
+Schema 97 also stores `search_field_quality`, one whole winning quality tuple
 per populated presentation field. A bounded batch carries fresh presentation
 observations independently of raw provenance and filename votes. Each nonempty
 field competes independently by useful-name flag, reported sources, complete
@@ -875,6 +875,31 @@ The native REST/OpenAPI campaign passes with graceful teardown on Rust
 `reports/rust-rest-openapi-ci/20261118T115635Z/report.json`.
 
 
+
+The shared SQL worker now owns header pages/lookups, result pages/lookups,
+provenance pages and selected download seeds through one bounded read command.
+Public Core entry points retain the existing owner byte lease until caller
+release. Header/provenance replies reserve 256 KiB, selected summaries/seeds
+512 KiB and result pages 1 MiB, within the existing 8 MiB shared work budget.
+Invalid identities/cursors/page limits fail before admission. Ordinary read
+failures release their charge without faulting the writer or replaying work.
+Core regressions check each read kind, missing membership, retained charges,
+shared-capacity refusal, closed admission, and explicit success after a read fault.
+
+Schema 97 indexes collecting sessions separately. Core startup atomically marks
+queued/running sessions `error` with `interrupted-by-restart` in SQLite before
+loading state. Terminal history and evidence remain unchanged. Repeated startup
+is a no-op for settled sessions, clock rollback cannot decrease updated time,
+and a failed interruption statement rolls back the entire set. The production
+UPDATE against 100,000 terminal sessions and one collecting session uses no full
+scan or sort and fewer than 1,000 SQLite VM steps. Startup still hydrates history
+until the pending REST/cache integration is cut; this is index/transaction proof.
+
+Rust checkpoint `8aa4e7d6` passes **289 metadata**, **659 Core** and **31 existing
+Python metadata-harness tests**, without compiler warnings. Evidence is in
+`reports/settings-request-round-1/search-owned-reads-{metadata,core,python}.log`.
+REST/WebUI sources are unchanged in this dependency slice; their previous native
+campaign evidence remains attached to checkpoint `28b02343` above.
 
 The remaining search cut includes
 eliminating bulk startup/history hydration, wiring paged browsing through owned
