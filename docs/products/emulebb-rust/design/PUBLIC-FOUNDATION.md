@@ -684,7 +684,7 @@ patterns; do not manufacture hidden retries or copy full runtime configurations.
 
 ### Indexed browsing and native contract
 
-Schema 98 maintains result cardinality transactionally and indexes collecting
+Schema 99 maintains result cardinality transactionally and indexes collecting
 sessions for startup interruption. Header pages seek newest session ID first.
 Keep all twelve global result sorts: displayName, sizeBytes, sources,
 completeSources, rating, fileType, artist, album, title, lengthSeconds,
@@ -740,6 +740,14 @@ search items contain `session` metadata and a bounded `results` collection. The
 Python diagnostic collector consumes that same contract. Existing final bundle
 encoding applies its exact overall byte cap afterward.
 
+Kad completion resolves only incoming vote hashes through the indexed
+`(session_id, ed2k_hash)` result projection. Its copied hash and size sort key
+share a composite foreign key to the permanent claim. Header transitions return
+persisted result cardinality and accepted vote hashes from the same transaction;
+publication and diagnostics no longer inspect cached results for those facts.
+The point probe must use no full scan and fewer than 100 SQLite VM steps even
+with 100,000 conflicting-size claims for one hash or an absent session/hash.
+
 ### Delivery and remaining acceptance
 
 Storage tests cover first/late pages, all twelve sorts in both directions,
@@ -774,7 +782,7 @@ qualification with Harness `2418cead` passed 86 routes and validated the inline
 bundle against OpenAPI, including equality with canonical session/result reads
 (`reports/rust-rest-openapi-ci/20261118T142253Z/report.json`); teardown was graceful.
 Remaining work includes removing bulk startup hydration, runtime result/observation
-caches and cache-based Kad completion probes;
+caches;
 completing stop/linked-search lifecycle; and running combined library/job memory
 qualification. Query-scale evidence alone does not qualify app-wide resident
 memory or the complete 100k-library/job operating model. Settings/runtime,
