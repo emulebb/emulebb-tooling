@@ -1136,17 +1136,25 @@ concurrent publication, unsupported no-replace behavior and proof that no stagin
 absolute path leaks into published state. Both Ubuntu and Alpine variants need
 actual proof; none is claimed by this design.
 
-The listener/health slice is implemented in Rust `075ea97a` and Harness
-`bab926fc`. Scoped checks passed **127 daemon**, **159 REST** and **55 Python**
-tests, plus Bash syntax validation and normal commit/push gates. Logs:
-`reports/settings-request-round-1/listener-{daemon,rest,python}.log`.
+The listener/health slice is qualified on Rust `3fb53b64` and Harness
+`b23dcdbb`. `[rest].bind_addr` in the profile bootstrap TOML is the listener's
+configuration authority. The Docker service uses that configuration, including
+the canonical fresh-profile wildcard default, and bind-error guidance points to
+the same TOML key. Python launchers already prepare this file and launch with
+profile selection. Current LAN-input rules remain covered without preserving
+retired-name lists or checks. This is the listener cut, not completion of the
+remaining runtime-input/settings/provisioning work.
+
+Scoped checks passed **127 daemon** and **147 selected Python tests**. Daemon
+evidence is `reports/settings-request-round-1/toml-rest-listener-daemon.log`.
 The regular daemon/WebUI build passed with zero warnings:
-`logs/builds/20261118T035145Z-build-clients/build-result.json`.
+`logs/builds/20261118T183015Z-build-clients/build-result.json`.
 The native campaign passed on exact Rust
-`075ea97a1df3d04520d295788b10a562c6c6d75a` with graceful teardown:
-`reports/rust-rest-openapi-ci/20261118T035534Z/report.json`.
+`3fb53b6467f21fa24812fb3e431411f3f518bc49` with graceful teardown:
+`reports/rust-rest-openapi-ci/20261118T183316Z/report.json`.
 Its `listenerReceiptPhase` proves the configured nondefault port, matching live
-instance and removal on shutdown; its settings CLI phase also passes. The
+instance and removal on shutdown; its settings CLI and 100k retained-job phases
+also pass, with 87 native routes exercised and zero failures. The
 existing Docker image smoke now exercises missing/malformed/stale receipts with
 the real packaged helper when run. Python mocks prove that smoke rejects false
 positives and cleans up; they do not prove actual image execution. Actual
