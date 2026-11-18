@@ -1507,8 +1507,8 @@ than allocating a snapshot vector for every session. List and detail use the
 same snapshot builder and ordering; absent clients and wrong-queue lookups
 return no entry. Management actions that read upload detail also use this path.
 Selection still scans the in-memory queue and computes the selected waiter's
-rank; this is bounded intermediate allocation, not constant-time lookup or a
-completed upload-list pagination/UUID contract cut.
+rank; this is bounded intermediate allocation, not constant-time lookup or
+completed upload-list pagination.
 
 Validation passes all 1,458 transfer and 668 core tests. Evidence:
 `reports/settings-request-round-1/upload-detail-ed2k.log` and
@@ -1518,6 +1518,38 @@ The daemon/WebUI build has zero warnings
 REST/OpenAPI conformance passes with graceful teardown:
 `reports/rust-rest-openapi-ci/20261118T230723Z/report.json`.
 No DB, settings, CLI or public response shape changes in this slice.
+
+### Live upload UUID contract checkpoint (2026-11-19)
+
+Rust `aec534d0` implements lifetime UUID identity for upload entries; `b0e9c61d`
+updates missing-resource test fixtures. A UUID is allocated only when a queue
+entry is created. Reasks, peer rekeys and waiting/granted/uploading transitions
+retain the entry's UUID. Removal ends that lifetime, and readmission allocates
+a fresh UUID. The queue stores the compact UUID value in memory, with no
+database allocation or connection history. Detail and management actions select
+that identity before hydrating a file view. Protocol peer identity and credits
+remain separate.
+
+Native upload responses expose `id`; `/uploads/{id}` and `/upload-queue/{id}`
+use lowercase hyphenated UUIDs. The embedded WebUI, OpenAPI path/response schemas,
+native conformance fixtures and affected Android/reask harness callers use the
+same contract. Harness `caaf4520` binds concrete UUID fixture paths, including
+round-trip template verification. The populated native friend-control proof
+passes all six required active-upload, waiting-upload and download-source routes,
+including durable/cache failure consistency and successful retries.
+
+Validation passes 1,458 transfer, 668 core and 169 REST tests; 119 static OpenAPI,
+132 Android, 72 other affected caller and four fixture-path Python tests;
+60 WebUI unit and 32 browser tests; and strict documentation checks. Evidence
+is retained under `reports/settings-request-round-1/upload-id-*.log`.
+The daemon/WebUI build has zero warnings
+(`logs/builds/20261118T233227Z-build-clients/build-result.json`). Native
+conformance passes all 87 safe routes with graceful teardown:
+`reports/rust-rest-openapi-ci/20261118T233725Z/report.json`.
+
+Upload-list indexing, thin list shape and bounded keyset traversal remain open;
+UUID identity alone does not qualify those reads. No schema, settings or CLI
+changes are introduced by this checkpoint.
 
 ### Deferred follow-up
 
