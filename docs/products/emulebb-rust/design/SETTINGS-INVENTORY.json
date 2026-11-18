@@ -2127,7 +2127,7 @@
     "bootstrapFile": "emulebb-rust-settings.toml",
     "databaseFile": "emulebb-rust-metadata.db"
   },
-  "implementationStatus": "Rust 783292b0 includes the 59-leaf typed model and fresh schema 88 singleton storage with exact revision/CAS, read-only default resolution, complete candidate validation and typed commit uncertainty. Runtime admission/publication, REST/OpenAPI, CLI, WebUI, Docker and canonical Python profile initialization remain pending. This inventory retains the accepted pre-cut source review; it is not a runtime reader.",
+  "implementationStatus": "Rust 99b9a76e includes the 59-leaf typed model, fresh schema 88 singleton storage, exact revision/CAS, read-only default resolution, candidate validation, typed commit uncertainty and exclusive single-key offline settings commands. Typed PATCH/keyed helpers and explicit recovery after default resolution are implemented; the native CLI phase passes with Harness 98fdf9c4. Runtime admission/publication, REST/OpenAPI, WebUI, Docker, runtime-argument removal and canonical Python profile initialization remain pending. This inventory retains the accepted pre-cut source review; it is not a runtime reader.",
   "authoritativeSpecification": "PUBLIC-FOUNDATION.md",
   "offlineSettings": {
     "operations": [

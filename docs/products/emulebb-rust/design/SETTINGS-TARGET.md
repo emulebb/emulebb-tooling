@@ -57,8 +57,8 @@ overrides or duplicate authorities.
 
 ## Accepted settings representation
 
-Fresh schema 88 implements the typed singleton document below. Runtime consumers,
-REST and CLI have not switched to it yet. Store one
+Fresh schema 88 implements the typed singleton document below. Offline settings
+commands use it; runtime consumers and REST have not switched yet. Store one
 complete typed `SavedSettings` document and its revision in a singleton row:
 
 ```sql
@@ -250,7 +250,9 @@ For a list-valued key, `VALUE` is one inline JSON array, for example
 `settings set network.nat.backendOrder '["pcp-natpmp","upnp"]'`.
 Ordinary values use plain text and the canonical key's type. Shell quoting
 delivers the whole list as one argument. This remains a one-key operation;
-reuse the standard JSON parser for list values.
+reuse the standard JSON parser for list values. The literal `null` selects null
+for nullable keys; string values otherwise remain literal plain text. Successful
+set/reset commands print nothing to stdout.
 
 They manage SQLite settings only, require the daemon stopped and use the existing
 exclusive profile lease. Get prints only the resolved value; diagnostics go to
@@ -434,14 +436,49 @@ The existing native REST/OpenAPI campaign passed on exact Rust
 `783292b06ee696055b16efed41c71ccf96c9fdb1`, with graceful teardown:
 `reports/rust-rest-openapi-ci/20261118T020742Z/report.json`.
 
+Rust `40ddcfba` and `99b9a76e` implement the single-key offline commands above,
+using the existing exclusive profile lease and canonical singleton writer.
+Canonical key dispatch, leaf serialization/copy/comparison and typed partial
+updates derive from the same declaration. The typed `SettingsPatch` request and
+allocation-free serialized-size accounting are ready for REST integration;
+transport must still bound the original request bytes separately.
+
+Validation diagnostics identify canonical keys and stable issue codes without
+echoing input values. Explicit edits decode the complete typed saved document
+before resolving and validating the edited candidate. This permits an explicit
+set/reset to restore a valid combination after compiled defaults change. Normal
+reads still resolve and validate without rewriting; malformed or missing typed
+documents remain errors. There is no automatic repair or default comparison.
+
+Final scoped checks passed **42 settings tests**, **249 metadata unit plus 3
+ownership tests**, and **22 Python tests**. Evidence:
+`reports/settings-request-round-1/{settings-final,metadata-final,python-final}.log`.
+The daemon suite passed 123 tests before the final diagnostic/recovery repair;
+the final regular build and native campaign integrate that repair. The build
+passed with zero warnings:
+`logs/builds/20261118T031134Z-build-clients/build-result.json`.
+The native campaign passed on Rust
+`99b9a76e6ad57a310b4419c08451150ee1b26d85`, with graceful teardown:
+`reports/rust-rest-openapi-ci/20261118T032020Z/report.json`.
+Its `settingsCliPhase` proves single-key output, inline lists, unchanged records
+after invalid writes, explicit profile selection, running-profile refusal,
+field diagnostics and explicit default-resolution recovery. Harness changes
+are in `98fdf9c4`.
+
 The canonical document is not yet the daemon's active settings authority.
 Runtime admission/effective state, ordered persistence publication, native
-REST/OpenAPI, offline CLI parsing, WebUI and Docker provisioning still require
-their coordinated cut. The native campaign proves current daemon flows on the
-new schema, not the future settings endpoint. Python profile creation must also
-adopt canonical initialization when those readers switch; raw DDL fixtures do
-not currently create a typed settings document. The broader foundation goal
-remains open and no PR or merge was created.
+REST/OpenAPI, WebUI, Docker provisioning and runtime-argument removal still
+require their coordinated cut. Python profile creation must adopt canonical
+initialization when those readers switch; raw DDL fixtures do not currently
+create a typed settings document. The native campaign proves current daemon
+flows and the new offline commands, not the future settings endpoint.
+
+One operator decision remains pending before runtime publication is finalized:
+when a valid saved update's live values cannot safely apply alongside the
+currently effective restart-bound values, defer the whole update to restart
+and report pending restart, or retain effective values and report application
+failures until an explicit retry/restart. Neither choice is adopted yet.
+The broader foundation goal remains open and no PR or merge was created.
 
 ## Qualification boundary
 
