@@ -125,7 +125,7 @@ type SettingsReadData = {
 };
 type SettingApplyFailure = {
   key: SettingKey;
-  code: string;
+  code: "applyFailed";
   message: string;
   truncated: boolean;
 };
@@ -503,6 +503,23 @@ require their coordinated cut. Python profile creation must adopt canonical
 initialization when those readers switch; raw DDL fixtures do not currently
 create a typed settings document. The native campaign proves current daemon
 flows and the new offline commands, not the future settings endpoint.
+
+The typed settings owner now also provides `SettingsReadData`,
+`SettingsApplicationStatus` and `SettingApplyFailure`, with generated schema
+components from the same 59-key declaration. The read constructor resolves
+default-marked saved values, validates saved and effective candidates
+independently, and checks the exact 512 KiB serialized data limit. It never
+infers effective values from saved settings. Application lists admit each key
+at most once per list; failures use the fixed `applyFailed` code and copy at
+most 512 UTF-8 message bytes with accurate truncation state. Revision remains
+in the containing envelope's `meta.settingsRevision`.
+
+The settings package passes **52 tests**, including exact-limit JSON escaping,
+UTF-8 message boundaries, duplicate status keys and agreement between schemas
+and serialized read data. Validation command:
+`python -m emule_workspace test rust-unit --workstream public-foundation-round-1 --package emulebb-settings`.
+This is read-model preparation; it does not complete runtime admission,
+publication or endpoint integration.
 
 One operator decision remains pending before runtime publication is finalized:
 when a valid saved update's live values cannot safely apply alongside the
