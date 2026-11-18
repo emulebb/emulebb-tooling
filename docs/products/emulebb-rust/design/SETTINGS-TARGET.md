@@ -475,6 +475,23 @@ initialization and settings edits with malformed bootstrap TOML:
 Normal commit/push gates passed. The build/native evidence above predates this
 small isolation change; final integrated qualification must use the final cut.
 
+Rust `9a96a8ba` adds `product::settings_schemas()`: named OpenAPI 3.1 components
+for complete values, saved mode/value leaves, recursively partial edits, PATCH,
+canonical keys and revision strings. Group shape derives from the same typed
+declaration, and list bounds share the runtime rule owner. Partial schemas have
+neither required groups nor schema defaults, preserving omission. Nullable
+leaves explicitly admit null; complete documents and all object shapes remain
+closed. UTF-8 and serialized-byte bounds use explicit schema extensions rather
+than claiming Unicode character counts are bytes. Revision numeric-string
+range, address semantics and whole-candidate dependencies still require typed
+validation; the schema descriptions identify these constraints.
+All **46 settings tests** passed, including actual serde-shape agreement across
+the 59 keys, saved wrappers, omission/null, typed enums and multibyte bounds:
+`reports/settings-request-round-1/settings-schema.log`.
+Normal commit/push gates passed. These components are not yet consumed by the
+published OpenAPI, settings surface endpoint or WebUI; that integration remains
+part of the coordinated cut below.
+
 The canonical document is not yet the daemon's active settings authority.
 Runtime admission/effective state, ordered persistence publication, native
 REST/OpenAPI, WebUI, Docker provisioning and runtime-argument removal still
