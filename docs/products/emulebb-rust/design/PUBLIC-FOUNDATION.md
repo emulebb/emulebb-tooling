@@ -1303,6 +1303,49 @@ the enforced 512 MiB/one-CPU container and physical-device gates remain open.
 The fixed-work counter lookup is qualified; no response-time guarantee is set.
 Canonical runtime settings and the other foundation cuts retain their scope.
 
+### Combined physical-library and retained-job baseline (2026-11-18)
+
+Harness `6b9cb34d` extends the existing shared-library I/O campaign with the same
+100,000-job fixture, full download-page traversal and process measurements across
+four planned daemon lifetimes. Snapshot checks use the current metadata schema
+rather than an invented partial test schema. Harness `df0364a1` reads public job
+counts from the existing snapshot resource. Its affected suite passes 50 tests;
+the preceding combined harness changes pass 113 selected tests.
+
+Builder `f6f8c48` locks the required process-sampling dependency and the existing
+browser harness version in managed Python. Dependency-input fingerprints isolate
+workstream environments from canonical Git-hook environments. The scoped runtime
+suite passes 39 tests, with evidence under
+`reports/builder-unit/5f3f39c4a4a0`. This tooling behavior is on the feature branch;
+it is not yet integrated into the canonical startup policy.
+
+The Windows combined-profile attempt on Rust `3fb53b64` **failed qualification**.
+Its evidence is
+`reports/workstreams/public-foundation-round-1/shared-library-io/rust-shared-library-io-20261118T191708Z-8064.json`.
+The existing physical fixture contains 100,000 files and 10,485,760,000 bytes.
+The post-scan database has 100,000 active memberships and verified contents,
+1,000 long-path sources, 200,000 known contents, no scan failures and no invalid
+active hash-integrity rows. The 100,000 download jobs retain the expected mix.
+All download views traverse completely: 500 all-job pages, 495 completed-job
+pages and five unfinished-job pages, with matching hashes and view membership.
+
+Two findings prevent acceptance. A pending follow-up reload reuses all files and
+replaces the first scan's progress counters before the harness evaluates them;
+initial scan accounting needs evidence tied to the correct reload. During the
+watcher-create check, `GET /shared-files?limit=1` exceeds its procedural request
+timeout. Emergency shutdown then requires the forced fallback. Preserve the
+failure evidence and investigate the blocked read and teardown; increasing a
+timeout alone does not establish correct bounded work or safe shutdown.
+
+The observed lifetime peak working set is 362,397,696 bytes (about 345.6 MiB),
+sampled peak private memory is 410,181,632 bytes (about 391.2 MiB), and cumulative
+process CPU is 541.656 seconds over the failed 945.913-second campaign. These
+are partial Windows measurements, not enforced container memory or CPU limits.
+Watcher lifecycle, clean restarts and the full combined campaign remain
+unqualified. The enforced 512 MiB/one-CPU container and physical-device gates
+also remain open. The next bounded slice is the watcher/read/teardown failure
+and correct reload accounting, reusing this campaign and fixture.
+
 ### Deferred follow-up
 
 A sustained mixed-workload soak is follow-up work, not a prerequisite for this

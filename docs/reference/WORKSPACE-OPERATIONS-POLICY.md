@@ -92,6 +92,9 @@ See [Parallel Workstreams](GUIDE-PARALLEL-WORKSTREAMS.md) for the operator flow.
   modify system Python, global PATH, file associations, or Windows interpreter
   registration. Normal workspace CLI operations select the private environment;
   their Python subprocesses retain that interpreter, including Unix venv links.
+  Managed environments also separate reviewed dependency inputs so a workstream
+  lock update cannot replace the canonical hook runtime. The development lock
+  includes the process sampler and browser harness dependencies.
 - Dependency authors explicitly use `bootstrap-python --update-lock` after
   changing the reviewed project requirements. Ordinary setup uses the existing
   lock and refuses stale environments. `--reinstall` replaces only the managed
