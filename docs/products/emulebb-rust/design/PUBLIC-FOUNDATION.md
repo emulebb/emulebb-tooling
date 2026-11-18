@@ -696,7 +696,7 @@ hash/size claim; unknown size admits a job waiting for metadata. Kad preserves
 named results without a reported size. WebUI rows/actions use claim IDs and
 present unknown size separately from a known empty file.
 
-Scoped checks pass **263 metadata**, **645 core**, **161 REST**, **147 Kad**,
+Scoped checks pass **263 metadata**, **647 core**, **162 REST**, **147 Kad**,
 **56 WebUI unit** and **32 browser** tests, including the WebUI production build.
 The selected Python run passed 266 tests and exposed one shared-parameter
 component requirement; after correction all 119 tests in the affected OpenAPI
@@ -711,15 +711,27 @@ transaction rollback, cross-claim foreign keys, local/global counts, full-width
 unsigned sizes and terminal-session evidence. Owner tests cover caller abort,
 capacity refusal without replay and distinct unknown/zero/conflicting claims.
 
+Search delete/clear now use the shared owner and existing blocking SQL worker.
+The admitted command owns cancellation, queue cleanup and cache publication
+through caller disconnect. Removal shares ordering with raw observation ingress;
+a late observation enriches the corpus without restoring removed membership.
+The coordinator retains state -> queue locking with create/retry. SQL failure
+returns before cache/cancellation publication. Removal handlers reuse the shared
+persistence mapping, including HTTP 503 for busy/closing admission.
+
+Rust `9c1ae65c` adds regressions for caller abort after SQL, late ingress,
+permanent corpus retention, selective cancellation and preserved state when
+admission is closed. Scoped evidence:
+`reports/settings-request-round-1/search-removal-{core,rest}.log`.
 The daemon/WebUI build passes with zero warnings:
-`logs/builds/20261118T085143Z-build-clients/build-result.json`.
+`logs/builds/20261118T091314Z-build-clients/build-result.json`.
 The native REST/OpenAPI campaign passes with graceful teardown on Rust
-`a0ad5334`, using Harness `340f6723` and the Tooling contract at `947e5bcc`:
-`reports/rust-rest-openapi-ci/20261118T085441Z/report.json`.
+`9c1ae65c`, using Harness `65b1944e` and the Tooling contract at `4bacf021`:
+`reports/rust-rest-openapi-ci/20261118T091608Z/report.json`.
 
 The remaining search cut includes bounded session/history/provenance reads,
 canonical separate REST/OpenAPI/WebUI resources, shared-owner session
-create/status/delete/clear and snapshot replacement. Combined-scale and total
+create/status and snapshot replacement. Combined-scale and total
 memory qualification remain open. Settings/runtime, CLI/Docker, library and
 remaining foundation allocations retain their existing acceptance gates.
 
