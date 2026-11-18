@@ -996,6 +996,12 @@ per-client collection snapshots. Never clone/filter/sort a full durable
 collection before slicing a response. Runtime queues need bounded query/index
 structures too. Separate thin list summaries from expensive details/evidence.
 
+Upload-list browsing order awaits an operator decision: fixed entry-admission
+order with live scheduler rank in detail is recommended for simple indexed
+paging; the alternative retains global live-rank ordering in list pages.
+Neither option changes upload scheduling, ranking or credit rules. Do not cut
+the list contract until that decision is settled.
+
 The WebUI is an operations console using bounded pages, not continuous scrolling
 or unbounded accumulated row caches. Use server-side search/filter/sort, default
 download view unfinished with explicit Completed/All. Fetch for the active view.
@@ -1477,6 +1483,14 @@ payload-transfer qualification. No latency SLO or relaxed timeout was used.
 The enforced 512 MiB/one-CPU container, remaining library query/sort
 qualification and the unfinished public-foundation cuts
 retain their scope. A sustained soak remains deferred below.
+
+The supported `linux-containers --workstream public-foundation-round-1
+--wsl-distro Ubuntu` preflight passes on 2026-11-19. WSL Docker reports AMD64
+and ARM64 support and successfully executes the ARM64 probe. Evidence:
+`reports/linux-containers/preflight.json` and
+`reports/settings-request-round-1/container-preflight.log`.
+This establishes the available container lane, not workload qualification or
+enforcement of the 512 MiB/one-CPU limits.
 
 ### Populated-root update replay (2026-11-18)
 
