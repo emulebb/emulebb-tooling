@@ -746,7 +746,14 @@ The sorted-resource cut passes **293 metadata**, **660 Core**, **166 REST**,
 **207 selected Python**, **58 WebUI unit** and **32 browser tests**, plus the UI
 production build. Rust test compilation has no warnings. Evidence is in
 `reports/settings-request-round-1/search-sorted-pages-{metadata,core,rest,python,webui}.log`.
-Daemon build and native campaign qualification are the remaining checkpoint gates.
+The daemon and embedded WebUI build passed with zero warnings on Rust
+`a00d9508`; evidence is `logs/builds/20261118T140114Z-build-clients/build-result.json`.
+The native campaign passed on that executable with Harness `2aba4fc8`: **86
+routes exercised, no failures**, seeded metadata/result/observation reads,
+network-only live results and full-width search identities. Evidence is
+`reports/rust-rest-openapi-ci/20261118T140557Z/report.json`; teardown was graceful.
+This qualifies the sorted-resource checkpoint, not the pending cache removal or
+combined library/job scale qualification.
 Remaining work includes removing bulk startup hydration, runtime result/observation
 caches, cache-based Kad completion probes and full-history diagnostic capture;
 completing stop/linked-search lifecycle; and running combined library/job memory
