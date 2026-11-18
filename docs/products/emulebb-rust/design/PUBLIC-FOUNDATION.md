@@ -781,9 +781,16 @@ The daemon/WebUI build passed with zero warnings on Rust `e1c4ced6`
 qualification with Harness `2418cead` passed 86 routes and validated the inline
 bundle against OpenAPI, including equality with canonical session/result reads
 (`reports/rust-rest-openapi-ci/20261118T142253Z/report.json`); teardown was graceful.
-Remaining work includes removing bulk startup hydration, runtime result/observation
-caches;
-completing stop/linked-search lifecycle; and running combined library/job memory
+The indexed completion cut passes **294 Metadata**, **660 Core**, **167 REST**
+and **207 selected Python** tests, with no Rust compilation warnings. Evidence
+is `reports/settings-request-round-1/search-membership-{metadata,core,rest,python}.log`.
+The daemon/WebUI build passed with zero warnings on Rust `07e2b8ef`
+(`logs/builds/20261118T143915Z-build-clients/build-result.json`). Native
+qualification with Harness `45892855` passed 86 routes, retained search browsing
+and canonical diagnostic capture
+(`reports/rust-rest-openapi-ci/20261118T144212Z/report.json`); teardown was graceful.
+Remaining work includes removing bulk startup hydration and runtime
+result/observation caches; completing stop/linked-search lifecycle; and running combined library/job memory
 qualification. Query-scale evidence alone does not qualify app-wide resident
 memory or the complete 100k-library/job operating model. Settings/runtime,
 CLI/Docker, library and remaining foundation gates retain their scope below.
