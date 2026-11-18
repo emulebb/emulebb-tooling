@@ -639,57 +639,70 @@ explicitly issue a new linked search instead of silently replaying it.
 Search and download filename observations use `reporterEndpoint` in JSON and
 `reporter_endpoint` in Rust/SQL. This identifies the captured reporting endpoint;
 advertised download-peer identity remains separate. Unknown reporting endpoints
-are null. Kad keyword results retain the actual queried contact's IPv4 UDP
-address through conversion, persistence and REST projection, including results
-without AICH metadata. AICH corroboration retains its reporter-IP/version rules.
-
-Fresh schema **90**, Rust `cea5f034`, Harness `97bf7e60` and the OpenAPI contract
-in Tooling `3a24dd0e` implement this cut, including the first-party UI. Focused
-checks passed **256 metadata**, **147 Kad**, **1,457 eD2K**, **639 core** and **160
-REST** tests; **56 UI unit**, **32 Playwright**, type/build gates and **150 Python**
-checks also passed. Evidence: `reports/settings-request-round-1/reporter-*.log`.
-Tests cover reporter retention without AICH metadata, distinct UDP reporters,
-separation from download peers, persisted filename provenance and UI evidence.
-The regular daemon/WebUI build passed with zero warnings:
-`logs/builds/20261118T051215Z-build-clients/build-result.json`.
-The native campaign passed on exact Rust
-`cea5f03443604e72238b97dbf0c40254c8456dcc`, with graceful teardown:
-`reports/rust-rest-openapi-ci/20261118T051527Z/report.json`.
-It qualifies schema/API integration and retains the search-ID and listener
-proofs; it does not complete independent claim storage, observation aggregation,
-bounded search reads or combined-scale qualification.
+are null. Kad results retain the queried contact's IPv4 UDP endpoint, including
+results without AICH metadata. AICH corroboration retains reporter-IP/version
+rules. The independent corpus decodes server AICH's wire Base32 representation
+into the typed 20-byte root.
 
 ### Search session identity checkpoint
 
-The current fresh schema uses the positive `search_sessions.id` AUTOINCREMENT primary
-key as the public session identity, rendered as an exact decimal string. SQL
-owns allocation; creation does not accept a caller-selected ID. Queue admission
-precedes allocation, and cache/queue publication follows the committed initial
-record and results. Updates require an existing session, so late persistence
-cannot recreate a deleted one. Deleting or clearing sessions does not reset the
-allocator. ID exhaustion fails without wrapping. OpenAPI paths, summaries,
-details and result references share the same `SearchId` schema.
+The positive `search_sessions.id` AUTOINCREMENT primary key is the public session
+identity, rendered as an exact decimal string. SQL owns allocation; creation
+accepts no caller-selected ID. Queue admission precedes allocation and
+publication follows commit. Updates require an existing session. Deletion and
+clear do not reset allocation; exhaustion fails without wrapping. OpenAPI paths,
+summaries, details and result references share `SearchId`. The current native
+campaign proves exact IDs above JavaScript's safe-integer range, retrieval and
+non-reuse after deletion.
 
-Rust `cb8a52e2`, Harness `c2af329e` and the OpenAPI contract in Tooling
-`a9578eea` implement this cut. Scoped checks passed **253 metadata unit plus 3
-ownership**, **638 core** and **160 REST** tests. Python metadata/OpenAPI checks
-passed 150 tests; final route/native-contract checks passed 143 tests. Evidence:
-`reports/settings-request-round-1/search-id-{metadata,core,rest,python,contract-final}.log`.
-The regular daemon/WebUI build passed with zero warnings:
-`logs/builds/20261118T043038Z-build-clients/build-result.json`.
-The native campaign passed on exact Rust
-`cb8a52e203924e00b70e3548c6a99ff6c142734c`, with graceful teardown:
-`reports/rust-rest-openapi-ci/20261118T043350Z/report.json`.
-Its `friendPeerPhase.searchIdentityPhase` proves exact HTTP string identities
-above JavaScript's safe-integer range, retrieval and non-reuse after deletion.
-Metadata tests additionally prove reopen/clear, concurrent connections, rollback,
-full i64 bounds and refusal to resurrect a deleted ID. The test-only `tempfile`
-dependency reuses the workspace's existing pinned version.
+### Independent claim ingestion checkpoint
 
-This qualifies session identity, not the complete search foundation. Independent
-claims/observations, nullable contradictory size claims, terminal membership,
-bounded search/history reads and coordinated asynchronous search persistence
-remain required work. The larger foundation and combined-scale gates stay open.
+Fresh schema **91** stores permanent `content_claims` keyed by ED2K hash plus
+nullable unsigned size, with never-reused positive identities. Unknown size,
+known zero and conflicting known sizes remain distinct. Remote evidence creates
+no accepted library identity. Independent `content_claim_observations` retain
+typed metadata variants by origin and reporting endpoint, with first/last-seen
+Unix seconds and a saturating positive occurrence count. SHA-256 fingerprints
+use the canonical typed metadata representation; timestamps and counts are not
+variant identity. Unknown reporters aggregate explicitly as null.
+
+The shared profile persistence owner ingests raw decoded occurrences before
+session filtering or presentation aggregation. Connected-server pages emit
+before terminal completion, preserving already decoded evidence across later
+interruption. Global UDP and Kad use the same ingress. Network handoff channels
+are bounded at 16 items. SQL batches accept at most 128 events and 256 KiB of
+conservative charge, with 64 KiB per event. Provenance keyset pages return at most
+100 variants and 256 KiB. Admission capacity waits retry only an unadmitted Busy
+outcome; uncertain commit faults ingress. Admitted work finishes after caller
+disconnect. Final completion settles status/integrity votes without replaying
+results. Terminal sessions reject new membership/progress while their late raw
+observations can enrich the independent corpus.
+Forwarding drains until the decoder closes its channel even when cancellation
+settles the request first. Queued requests hold weak channel handles; executing
+decoders upgrade them, so disconnected queued requests cannot strand a drain.
+
+Rust `6baabe7e` implements storage; `0e944e0d` integrates ingestion and `2334e5f0`
+closes the cancellation drain gap. Checks pass **261 metadata**, **643 core**,
+**1,458 eD2K** and **174 existing Python harness**
+tests. New coverage includes null/zero/conflicting/full unsigned sizes,
+repetition/variant aggregation, rollback, reopen, byte-bounded keysets, caller
+disconnect, 750 forwarded occurrences after request settlement through small bounded
+channels, queued cancellation channel closure, raw AICH
+conversion, session filters, frozen terminal membership and session deletion.
+Evidence: `reports/settings-request-round-1/content-observations-*.log`.
+The zero-warning daemon/WebUI build is recorded at
+`logs/builds/20261118T063735Z-build-clients/build-result.json`.
+The native REST campaign passes with graceful teardown on exact Rust
+`2334e5f09e8ec86e640440212933f4df4d8bc85a`:
+`reports/rust-rest-openapi-ci/20261118T064046Z/report.json`.
+
+This does not complete the search cut. Session membership still needs global
+claim/observation references, nullable-size public projections and claim-ID
+actions. Kad's upstream unknown-size admission, bounded session/history reads,
+canonical separate REST/OpenAPI/WebUI resources and shared-owner session
+lifecycle/snapshot replacement remain open. This evidence does not qualify the
+combined-scale or total-memory gates. Settings/runtime, library and remaining
+foundation allocations retain their existing acceptance gates.
 
 ## Native REST, OpenAPI and WebUI
 
