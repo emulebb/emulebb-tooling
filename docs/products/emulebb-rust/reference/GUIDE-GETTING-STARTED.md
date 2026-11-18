@@ -158,10 +158,10 @@ netsh interface ipv4 show excludedportrange protocol=tcp
 Get-NetTCPConnection -LocalPort 20017 -ErrorAction SilentlyContinue
 ```
 
-Choose an available loopback port if needed. A temporary
-`--rest-bind-addr 127.0.0.1:14711` changes only that run; browse to the matching
-address. To retain it, stop the daemon and update `[rest].bind_addr` in the private
-bootstrap TOML. This does not change eD2K/Kad ports. For ambiguous P2P routing,
+Choose an available loopback port if needed. Stop the daemon and set
+`bind_addr = "127.0.0.1:14711"` under `[rest]` in the private bootstrap TOML.
+Restart the daemon and browse to that address. This does not change eD2K/Kad
+ports. For ambiguous P2P routing,
 `Get-NetAdapter | Select-Object Name, Status` identifies Windows interface names;
 use the intended name with `--p2p-bind-interface`, then persist through Settings.
 

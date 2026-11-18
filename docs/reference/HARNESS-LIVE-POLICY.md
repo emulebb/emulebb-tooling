@@ -150,8 +150,8 @@ separate. Never fall back silently from VPN to direct.
   call helpers that add application allow-list entries, excluded ranges, or
   other provider settings. Its local control planes use loopback while P2P
   remains bound through `BindInterface` with VPN Guard Block.
-- `--lan-bind-addr` is the only harness name for that LAN concept. Do not
-  reintroduce `--bind-addr`, `--rest-bind-addr`, or `--web-bind-addr`.
+- `--lan-bind-addr` is the harness LAN input. Prepare control listener endpoints
+  through persisted profile configuration.
 - Use `192.0.2.x` for documented LAN examples and `127.0.0.1` for canonical
   loopback examples. Use `localhost` only for explicit DNS, URL parsing, UNC,
   or compatibility cases.
