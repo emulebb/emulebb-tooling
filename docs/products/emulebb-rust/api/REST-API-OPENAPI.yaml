@@ -3430,9 +3430,7 @@ components:
       in: path
       required: true
       schema:
-        type: integer
-        minimum: 0
-        maximum: 4294967295
+        $ref: "#/components/schemas/SearchId"
     ServerId:
       name: serverId
       in: path
@@ -7995,7 +7993,7 @@ components:
       required: [id, query, requestedMethod, resolvedMethod, type, criteria, status, statusReason, progress, resultCount]
       properties:
         id:
-          type: string
+          $ref: "#/components/schemas/SearchId"
         query:
           type: string
         requestedMethod:
@@ -8027,13 +8025,20 @@ components:
           properties:
             data:
               $ref: "#/components/schemas/Search"
+    SearchId:
+      type: string
+      minLength: 1
+      maxLength: 19
+      pattern: ^[1-9][0-9]{0,18}(?![\s\S])
+      description: Immutable never-reused search session ID, canonical positive decimal in 1..9223372036854775807. The parser enforces the numeric bound.
+      example: '1'
     Search:
       type: object
       unevaluatedProperties: false
       required: [id, query, requestedMethod, resolvedMethod, type, criteria, status, statusReason, progress, items]
       properties:
         id:
-          type: string
+          $ref: "#/components/schemas/SearchId"
         query:
           type: string
         requestedMethod:
@@ -8205,7 +8210,7 @@ components:
         - observations
       properties:
         searchId:
-          type: string
+          $ref: "#/components/schemas/SearchId"
         type:
           type: string
           enum: ["", arc, audio, iso, image, pro, video, doc, emulecollection]
@@ -9198,7 +9203,7 @@ components:
         alreadyPending:
           type: boolean
         searchId:
-          type: string
+          $ref: "#/components/schemas/SearchId"
     DownloadSourceBrowseEnvelope:
       type: object
       additionalProperties: false
