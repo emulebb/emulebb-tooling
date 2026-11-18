@@ -135,8 +135,8 @@ network, transfers, storage, sharing and security. Curate supported controls;
 remove duplicate controls and unsupported implementation tuning. Every supported
 key needs one typed definition of its units, bounds, cross-field constraints,
 default, owner, platform applicability and application mode. The accepted 59-leaf
-engineering catalog is in SETTINGS-TARGET/SETTINGS-INVENTORY; implementation and
-qualification remain pending. Derive consumers
+engineering catalog is in SETTINGS-TARGET/SETTINGS-INVENTORY. Coordinated
+consumer integration and qualification remain pending. Derive consumers
 and metadata from that owner instead of maintaining independent defaults.
 
 Each saved setting has default/custom state. At startup a default-marked value

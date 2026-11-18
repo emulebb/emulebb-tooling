@@ -2127,7 +2127,7 @@
     "bootstrapFile": "emulebb-rust-settings.toml",
     "databaseFile": "emulebb-rust-metadata.db"
   },
-  "implementationStatus": "Rust 5460706c implements the 59-leaf typed model, default/custom resolution, whole-candidate edits, bounds and generated metadata in emulebb-settings/src/product/catalog.rs. SQLite/runtime/REST/OpenAPI/CLI/WebUI/Docker integration and qualification remain pending. This inventory retains the accepted pre-cut source review; it is not a runtime reader.",
+  "implementationStatus": "Rust 783292b0 includes the 59-leaf typed model and fresh schema 88 singleton storage with exact revision/CAS, read-only default resolution, complete candidate validation and typed commit uncertainty. Runtime admission/publication, REST/OpenAPI, CLI, WebUI, Docker and canonical Python profile initialization remain pending. This inventory retains the accepted pre-cut source review; it is not a runtime reader.",
   "authoritativeSpecification": "PUBLIC-FOUNDATION.md",
   "offlineSettings": {
     "operations": [
