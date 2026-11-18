@@ -637,7 +637,7 @@ filename. Repeated packets and changing source/complete-source counts never add
 votes for the same reporter/name pair. Known reporters use their captured
 canonical endpoint; an unknown reporter contributes at most one vote per origin.
 Raw metadata variants and occurrence counts remain independent provenance.
-Implementation of this rule remains part of the durable bounded aggregation cut.
+This rule is implemented transactionally in the current filename-voting cut.
 
 Retain search history and knowledge without automatic expiry. No required
 search-delete endpoint. Stop ends collection while preserving results. Terminal
@@ -668,7 +668,7 @@ non-reuse after deletion.
 
 ### Claim-backed search membership checkpoint
 
-Fresh schema **93** stores permanent `content_claims` keyed by ED2K hash plus
+Fresh schema **94** stores permanent `content_claims` keyed by ED2K hash plus
 nullable unsigned size, with never-reused positive identities. Unknown size,
 known zero and conflicting known sizes remain distinct. Remote evidence creates
 no accepted library identity. Independent `content_claim_observations` retain
@@ -753,8 +753,39 @@ occurrence accounting and independently accumulated long summary fields are
 covered. This is storage-page evidence; app-wide startup/list behavior and the
 combined library/job resident-memory gate are not yet qualified.
 
-Current checks pass **270 metadata**, **652 core** and **162 REST** tests with no
-compiler warnings. New page/seed evidence is in
+Schema 94 adds `search_name_reporters` keyed by session, claim, normalized name
+and reporter identity, plus materialized `search_name_totals`. Known endpoints
+share one vote across transport origins; unknown reporters count once per origin.
+Repeats and changed metadata preserve that cardinality. Totals retain a whole
+best-quality tuple (useful-name flag, reported sources, complete sources, rating),
+not independent component maxima. Immutable claim size makes size knowledge
+constant within each comparison. Ties resolve by binary normalized-name order.
+The winner index orders count, quality and name, avoiding a tally/history scan.
+
+Ingress supplies bounded, filtered presentation votes separately from raw facts.
+Projection fields have no caller-selected name. Raw observations, membership,
+reporter votes, totals and the selected name commit atomically; the publication
+receipt carries the database-selected name to the owner for cache publication.
+The first packet also uses normalized display naming while preserving raw names.
+Removed/terminal sessions skip presentation preparation and retain late raw facts
+without recreating membership. REST name-candidate votes follow the same reporter
+rule; presentation observation counts remain independent of vote counts.
+
+Regressions prove that two independent reporters beat one reporter with twenty
+metadata changes; known-endpoint transport deduplication; origin-scoped unknown
+reporters; tuple-quality and deterministic ties; session/size-claim isolation;
+terminal freeze; rollback followed by an explicit successful operation; and late
+raw ingestion independent of removed-session presentation. The exact winner
+SELECT on 100,000 names performs no full scan or temporary sort and fewer than
+200 SQLite VM steps. This proves the SQL reducer bound; other Core reducers still
+retain observations and require their remaining cut before whole-ingress or
+resident-memory qualification.
+
+Current checks pass **276 metadata**, **654 core** and **162 REST** tests with no
+compiler warnings. Voting evidence is in
+`reports/settings-request-round-1/search-name-votes-{metadata,core,rest}.log`.
+The selected Python contract/profile suite passes **175 tests**, recorded in
+`search-name-votes-python.log` in that directory. Earlier page/seed evidence is retained. New page/seed evidence is in
 `reports/settings-request-round-1/search-pages-{metadata,core,rest}.log`.
 Lifecycle evidence remains in `reports/settings-request-round-1/search-lifecycle-{core,rest}.log`.
 Regressions cover postcommit caller abort for creation, running, completion,
@@ -769,16 +800,15 @@ production build. These are retained in `search-membership-*.log` under the same
 report directory. Harness `65b1944e` passed **275 relevant Python tests** in its
 push gate: `reports/local-check/emulebb-build-tests/20261118T090024Z-badcbf37/02.log`.
 That includes formatted allowlist extraction, claim-ID live-wire fixtures and
-selected OpenAPI contract conformance. The contract and UI source are unchanged
-by this lifecycle slice.
+selected OpenAPI contract conformance. The UI source is unchanged by this voting slice.
 
 The final daemon/WebUI build passes with zero warnings:
-`logs/builds/20261118T102011Z-build-clients/build-result.json`.
+`logs/builds/20261118T110623Z-build-clients/build-result.json`.
 The native REST/OpenAPI campaign passes with graceful teardown on Rust
-`b4048615`, using Harness `65b1944e` and the Tooling contract at `e2cc9acb`:
-`reports/rust-rest-openapi-ci/20261118T102308Z/report.json`.
+`7b225241`, using Harness `65b1944e` and the Tooling contract at `7b6870e4`:
+`reports/rust-rest-openapi-ci/20261118T110915Z/report.json`.
 
-The remaining search cut includes durable bounded reporter/name aggregation,
+The remaining search cut includes durable availability and per-field summary reducers,
 eliminating bulk startup/history hydration, wiring paged browsing through owned
 reads and canonical separate REST/OpenAPI/WebUI resources, and snapshot replacement.
 Combined-scale and total
