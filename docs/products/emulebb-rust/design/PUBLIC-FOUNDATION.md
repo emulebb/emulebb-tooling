@@ -1397,17 +1397,45 @@ The build has zero warnings
 REST/OpenAPI conformance passes with graceful teardown
 (`reports/rust-rest-openapi-ci/20261118T203919Z/report.json`).
 
-The repaired replay **still fails qualification**:
-`reports/workstreams/public-foundation-round-1/shared-library-io/rust-shared-library-io-20261118T203107Z-12236.json`.
-Its baseline storage checks pass, but the watcher-time collection read still
-times out and emergency cleanup requires force. The invalidation repair is not
-the sole cause of that failure. The next bounded investigation is transaction-
-stage diagnostics identifying the connection owner during the timeout, using
-replay instead of another full initial hash pass. Completion accounting also
-needs reliable evidence from the completed run. No latency SLO is adopted:
-request timeouts are procedural guards, and loosening them alone is not a
-repair or qualification. All remaining foundation and qualification gates keep
-their scope.
+Transaction-stage diagnostics identified the additional connection contention:
+a 101,000-path root transaction held the connection for about 17 seconds; the
+library read resumed and refreshed/counting completed in milliseconds after
+acquisition. Rust `f67545b2` reuses prepared statements in the root batch and
+shared delivery-exclusion checks, preserving every identity/fingerprint check.
+Measured root batches fell to approximately six seconds without changing the
+request timeout. Its watcher replay passed all four mutations and retained-job
+checks, but still needed forced cleanup while a catalog rebuild was running:
+`reports/workstreams/public-foundation-round-1/shared-library-io/rust-shared-library-io-20261118T210906Z-16844.json`.
+
+Rust `fff62fce` makes background offer-catalog rebuilding observe shutdown
+between bounded pages, join its blocking worker and discard an incomplete
+candidate without publishing it. Durable membership transactions still finish;
+foreground reload publication remains required. The regression verifies that
+cancellation leaves the active catalog generation unchanged and a subsequent
+foreground rebuild succeeds. Validation passes **298 metadata, 668 core,
+1,458 transfer and 58 harness tests**. Relevant logs are
+`reports/settings-request-round-1/root-batch-metadata.log`,
+`reports/settings-request-round-1/catalog-cancellation-core.log` and
+`reports/settings-request-round-1/catalog-cancellation-ed2k.log`.
+
+The focused watcher replay now **passes** on Rust `fff62fce` and Harness
+`8287894c`:
+`reports/workstreams/public-foundation-round-1/shared-library-io/rust-shared-library-io-20261118T213354Z-17328.json`.
+It proves create/modify/rename/delete convergence, preserved 100,000-job rows and
+public counts, zero REST/watcher errors and REST shutdown with exit code zero.
+Replay is explicitly bounded to this lifecycle and cleanup; it excludes initial
+payload hashing, the full restart/mutation campaign and enforced container
+limits. The measured lifetime peak working set is 408,838,144 bytes (about
+390 MiB), not a total-memory container qualification. Build evidence has zero
+warnings (`logs/builds/20261118T213022Z-build-clients/build-result.json`);
+native REST/OpenAPI conformance passes with graceful teardown
+(`reports/rust-rest-openapi-ci/20261118T214356Z/report.json`).
+
+The next scale slice needs reliable first-scan completion evidence followed by
+the full combined campaign. Populated-root replacement, full library restart,
+the enforced 512 MiB/one-CPU container and the remaining public-foundation cuts
+are still open. No latency SLO is adopted, and no timeout or acceptance gate was
+weakened to obtain the passing watcher result.
 
 ### Deferred follow-up
 
