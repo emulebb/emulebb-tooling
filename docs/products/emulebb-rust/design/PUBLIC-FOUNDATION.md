@@ -659,68 +659,61 @@ summaries, details and result references share `SearchId`. The current native
 campaign proves exact IDs above JavaScript's safe-integer range, retrieval and
 non-reuse after deletion.
 
-### Independent claim ingestion checkpoint
+### Claim-backed search membership checkpoint
 
-Fresh schema **91** stores permanent `content_claims` keyed by ED2K hash plus
+Fresh schema **92** stores permanent `content_claims` keyed by ED2K hash plus
 nullable unsigned size, with never-reused positive identities. Unknown size,
 known zero and conflicting known sizes remain distinct. Remote evidence creates
 no accepted library identity. Independent `content_claim_observations` retain
 typed metadata variants by origin and reporting endpoint, with first/last-seen
 Unix seconds and a saturating positive occurrence count. SHA-256 fingerprints
-use the canonical typed metadata representation; timestamps and counts are not
-variant identity. Unknown reporters aggregate explicitly as null.
+use canonical typed metadata; timestamps and counts are not variant identity.
+Unknown reporters aggregate explicitly as null.
 
-The shared profile persistence owner ingests raw decoded occurrences before
-session filtering or presentation aggregation. Connected-server pages emit
-before terminal completion, preserving already decoded evidence across later
-interruption. Global UDP and Kad use the same ingress. Network handoff channels
-are bounded at 16 items. SQL batches accept at most 128 events and 256 KiB of
-conservative charge, with 64 KiB per event. Provenance keyset pages return at most
-100 variants and 256 KiB. Admission capacity waits retry only an unadmitted Busy
-outcome; uncertain commit faults ingress. The admitted request owns both SQL and
-session publication through completion after caller disconnect. Publication
-payloads are charged before cloning. Final completion settles status/integrity votes without replaying
-results. Terminal sessions reject new membership/progress while their late raw
-observations can enrich the independent corpus.
-Forwarding drains until the decoder closes its channel even when cancellation
-settles the request first. Queued requests hold weak channel handles; executing
-decoders upgrade them, so disconnected queued requests cannot strand a drain.
+`search_results` identifies membership by `(session_id, claim_id)` and stores its
+presentation summary. `search_result_observations` references the permanent
+observation through a composite claim/observation foreign key and retains
+session-local first/last-seen seconds and occurrence counts. Deleting membership
+retains independent claims and evidence. Header updates contain no result
+snapshot and cannot replay observations. Search-header timestamps use explicit
+`_s` columns.
 
-Current Rust `3d702720` and Harness `46c8e509` implement independent ingestion,
-owned postcommit publication and network-only live sessions. The shared-owner
-publication regression pauses after SQL, drops the caller and proves exactly one
-session publication and one corpus occurrence. Live-search tests cover both
-passive-index settings and actual network ingestion followed by checkpoint,
-restart and download. REST paging/download fixtures use recorded server
-observations. The existing Python native campaign seeds a matching index entry
-with passive replay enabled and proves an empty live result set without a
-fabricated network claim. It also retains the full-width session-ID proof.
+The shared profile persistence owner ingests decoded occurrences before session
+filtering. Corpus facts and accepted membership commit in one SQL transaction;
+terminal/deleted sessions can enrich the corpus without changing membership.
+The admitted request owns SQL and postcommit publication after caller disconnect.
+Publication payloads and aggregation copies reserve byte capacity before cloning.
+Only refusal before handoff waits for admission capacity; refusal while preparing
+an admitted projection returns Busy once without SQL or hidden replay. Uncertain
+commit faults ingress. Network forwarding drains decoded occurrences through
+bounded channels even when cancellation settles the request first.
 
-Current behavior checks pass **643 core**, **160 REST** and **174 selected Python
-harness** tests; the affected 24 campaign tests were rerun after the fixture
-setting update, including listener-port preservation. Unchanged metadata and
-eD2K evidence remains **261** and **1,458** tests. Evidence:
-`reports/settings-request-round-1/search-publication-core.log`,
-`reports/settings-request-round-1/live-search-{core,rest,python,python-repair}.log`
-and the retained `content-observations-*.log` checks. REST fixtures reuse the
-workspace metadata crate as a test-only dependency.
-The zero-warning daemon/WebUI build is recorded at
-`logs/builds/20261118T072931Z-build-clients/build-result.json`.
-The native REST campaign passes with graceful teardown on exact Rust
-`3d7027202a3e602d01716ab6e705cdfbabb4129d`:
-`reports/rust-rest-openapi-ci/20261118T074312Z/report.json`.
-One preceding campaign timed out in Kad restart checks after successful import,
-rollback and retry; the unchanged rerun passed. That failed evidence is retained
-at `reports/rust-rest-openapi-ci/20261118T073923Z/report.json`. No timeout or
-acceptance threshold was relaxed.
+Live sessions contain network results only. Passive-index lookup does not
+preload results or manufacture corpus claims. The public summary exposes the
+permanent claim `id` as a positive decimal i64 string. Download admission uses
+`POST /searches/{searchId}/results/{resultId}/download`. It selects the exact
+hash/size claim; unknown size admits a job waiting for metadata. Kad preserves
+named results without a reported size. WebUI rows/actions use claim IDs and
+present unknown size separately from a known empty file.
 
-This does not complete the search cut. Session membership still needs global
-claim/observation references, nullable-size public projections and claim-ID
-actions. Kad's upstream unknown-size admission, bounded session/history reads,
+Scoped checks pass **263 metadata**, **645 core**, **161 REST**, **147 Kad**,
+**56 WebUI unit** and **32 browser** tests, including the WebUI production build.
+The selected Python run passed 266 tests and exposed one shared-parameter
+component requirement; after correction all 119 tests in the affected OpenAPI
+module pass. Evidence is under `reports/settings-request-round-1/`:
+`search-membership-{metadata,core,rest,kad,webui,python,python-repair}.log`.
+The strengthened REST flow selects between same-hash conflicting sizes and
+asserts that download admission retains the selected size. Metadata tests cover
+transaction rollback, cross-claim foreign keys, local/global counts, full-width
+unsigned sizes and terminal-session evidence. Owner tests cover caller abort,
+capacity refusal without replay and distinct unknown/zero/conflicting claims.
+
+This checkpoint still requires the daemon build and native REST campaign.
+The remaining search cut includes bounded session/history/provenance reads,
 canonical separate REST/OpenAPI/WebUI resources, shared-owner session
-create/status/delete/clear and snapshot replacement remain open. This evidence does not qualify the
-combined-scale or total-memory gates. Settings/runtime, library and remaining
-foundation allocations retain their existing acceptance gates.
+create/status/delete/clear and snapshot replacement. Combined-scale and total
+memory qualification remain open. Settings/runtime, CLI/Docker, library and
+remaining foundation allocations retain their existing acceptance gates.
 
 ## Native REST, OpenAPI and WebUI
 

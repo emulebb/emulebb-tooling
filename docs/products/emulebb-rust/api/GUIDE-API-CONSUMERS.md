@@ -80,10 +80,11 @@ curl --fail-with-body \
 
 `automatic` resolves from current network state; offline searches are rejected
 as not connected. Read the returned search ID and documented result model.
-Download an actual result through
-`POST /searches/{searchId}/results/{hash}/operations/download`, or use the
-documented `TransferCreateRequest` eD2K-link form. Do not manufacture a transfer
-request from a displayed result object.
+Select the result’s permanent `id`, then download that exact hash/size claim
+through `POST /searches/{searchId}/results/{resultId}/download`. A null
+`sizeBytes` admits a download waiting for metadata; zero is a known empty file.
+For direct admission, use `POST /downloads` with the documented
+`DownloadCreateRequest` source.
 
 Shared-folder management uses `/shared-directories` and its documented root and
 ignore operations. Roots are recursively scanned and monitored. Settings use

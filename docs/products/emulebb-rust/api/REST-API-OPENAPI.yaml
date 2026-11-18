@@ -3013,14 +3013,15 @@ paths:
           $ref: "#/components/responses/ErrorResponse"
         default:
           $ref: "#/components/responses/ErrorResponse"
-  /searches/{searchId}/results/{hash}/operations/download:
+  /searches/{searchId}/results/{resultId}/download:
     parameters:
     - $ref: '#/components/parameters/SearchId'
-    - $ref: '#/components/parameters/FileHash'
+    - $ref: '#/components/parameters/SearchResultId'
     post:
       tags:
       - Searches
-      summary: Add one search result to downloads.
+      summary: Add one session result claim to downloads.
+      description: Selects the permanent hash/size claim by ID. Unknown size creates a download waiting for metadata.
       operationId: downloadSearchResult
       requestBody:
         required: false
@@ -3429,6 +3430,12 @@ components:
       schema:
         type: string
         enum: [asc, desc]
+    SearchResultId:
+      name: resultId
+      in: path
+      required: true
+      schema:
+        $ref: "#/components/schemas/ContentClaimId"
     SearchId:
       name: searchId
       in: path
@@ -8029,6 +8036,13 @@ components:
           properties:
             data:
               $ref: "#/components/schemas/Search"
+    ContentClaimId:
+      type: string
+      minLength: 1
+      maxLength: 19
+      pattern: ^[1-9][0-9]{0,18}(?![\s\S])
+      description: Immutable never-reused hash/size claim ID, canonical positive decimal in 1..9223372036854775807. The parser enforces the numeric bound.
+      example: '1'
     SearchId:
       type: string
       minLength: 1
@@ -8196,6 +8210,7 @@ components:
       type: object
       additionalProperties: false
       required:
+        - id
         - searchId
         - type
         - hash
@@ -8213,6 +8228,8 @@ components:
         - aichHash
         - observations
       properties:
+        id:
+          $ref: "#/components/schemas/ContentClaimId"
         searchId:
           $ref: "#/components/schemas/SearchId"
         type:
@@ -8225,7 +8242,8 @@ components:
         nameConsensus:
           $ref: "#/components/schemas/SearchNameConsensus"
         sizeBytes:
-          type: integer
+          type: [integer, "null"]
+          description: Reported size; null means unknown, distinct from a known empty file.
           minimum: 0
         sources:
           type: integer
@@ -8320,7 +8338,8 @@ components:
         normalizedName:
           type: string
         sizeBytes:
-          type: integer
+          type: [integer, "null"]
+          description: Reported size; null means unknown, distinct from a known empty file.
           minimum: 0
         sources:
           type: integer
