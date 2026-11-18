@@ -1497,6 +1497,26 @@ campaign on these revisions, payload-download concurrency or enforced container
 limits. Build evidence has zero warnings:
 `logs/builds/20261118T224149Z-build-clients/build-result.json`.
 
+### Upload detail read checkpoint (2026-11-19)
+
+Rust `23ac0696` selects the requested active or waiting upload before hydrating
+its serving view. The queue iterator retains only the selected snapshot rather
+than allocating a snapshot vector for every session. List and detail use the
+same snapshot builder and ordering; absent clients and wrong-queue lookups
+return no entry. Management actions that read upload detail also use this path.
+Selection still scans the in-memory queue and computes the selected waiter's
+rank; this is bounded intermediate allocation, not constant-time lookup or a
+completed upload-list pagination/UUID contract cut.
+
+Validation passes all 1,458 transfer and 668 core tests. Evidence:
+`reports/settings-request-round-1/upload-detail-ed2k.log` and
+`reports/settings-request-round-1/upload-detail-core.log`.
+The daemon/WebUI build has zero warnings
+(`logs/builds/20261118T230427Z-build-clients/build-result.json`). Native
+REST/OpenAPI conformance passes with graceful teardown:
+`reports/rust-rest-openapi-ci/20261118T230723Z/report.json`.
+No DB, settings, CLI or public response shape changes in this slice.
+
 ### Deferred follow-up
 
 A sustained mixed-workload soak is follow-up work, not a prerequisite for this
