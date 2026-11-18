@@ -668,7 +668,7 @@ non-reuse after deletion.
 
 ### Claim-backed search membership checkpoint
 
-Fresh schema **94** stores permanent `content_claims` keyed by ED2K hash plus
+Fresh schema **95** stores permanent `content_claims` keyed by ED2K hash plus
 nullable unsigned size, with never-reused positive identities. Unknown size,
 known zero and conflicting known sizes remain distinct. Remote evidence creates
 no accepted library identity. Independent `content_claim_observations` retain
@@ -753,7 +753,7 @@ occurrence accounting and independently accumulated long summary fields are
 covered. This is storage-page evidence; app-wide startup/list behavior and the
 combined library/job resident-memory gate are not yet qualified.
 
-Schema 94 adds `search_name_reporters` keyed by session, claim, normalized name
+Schema 95 includes `search_name_reporters` keyed by session, claim, normalized name
 and reporter identity, plus materialized `search_name_totals`. Known endpoints
 share one vote across transport origins; unknown reporters count once per origin.
 Repeats and changed metadata preserve that cardinality. Totals retain a whole
@@ -763,9 +763,10 @@ constant within each comparison. Ties resolve by binary normalized-name order.
 The winner index orders count, quality and name, avoiding a tally/history scan.
 
 Ingress supplies bounded, filtered presentation votes separately from raw facts.
-Projection fields have no caller-selected name. Raw observations, membership,
+Projection fields have no caller-selected name or availability counts. Raw observations, membership,
 reporter votes, totals and the selected name commit atomically; the publication
-receipt carries the database-selected name to the owner for cache publication.
+receipt carries the database-selected name and availability counts to the owner
+for cache publication.
 The first packet also uses normalized display naming while preserving raw names.
 Removed/terminal sessions skip presentation preparation and retain late raw facts
 without recreating membership. REST name-candidate votes follow the same reporter
@@ -781,7 +782,7 @@ SELECT on 100,000 names performs no full scan or temporary sort and fewer than
 retain observations and require their remaining cut before whole-ingress or
 resident-memory qualification.
 
-Current checks pass **276 metadata**, **654 core** and **162 REST** tests with no
+The filename-consensus checkpoint passed **276 metadata**, **654 core** and **162 REST** tests with no
 compiler warnings. Voting evidence is in
 `reports/settings-request-round-1/search-name-votes-{metadata,core,rest}.log`.
 The selected Python contract/profile suite passes **175 tests**, recorded in
@@ -808,7 +809,31 @@ The native REST/OpenAPI campaign passes with graceful teardown on Rust
 `7b225241`, using Harness `65b1944e` and the Tooling contract at `7b6870e4`:
 `reports/rust-rest-openapi-ci/20261118T110915Z/report.json`.
 
-The remaining search cut includes durable availability and per-field summary reducers,
+Availability is reduced transactionally from the bounded raw event batch.
+`search_ed2k_reporter_maxima` retains independent source/complete-source maxima
+per session, claim and canonical reporter. Known endpoints deduplicate server
+and global transports; unknown reporters use one bucket per origin. Positive
+reporter deltas increment independent saturated eD2K totals. Kad retains its
+strongest estimate independently. Stored generated columns expose the maximum
+of the eD2K subtotal and Kad estimate for each count. No observation-history scan
+or reporter-wide SUM is needed. A leading Kad estimate cannot erase eD2K progress.
+The receipt publishes these committed counts to Core. Missing and explicit-zero
+raw counts remain distinct provenance. Session removal cascades reporter state;
+terminal sessions keep raw facts without changing their frozen presentation.
+
+Availability regressions cover repeated/lower reports, transport and unknown
+reporter deduplication, independent source/complete-source totals, eD2K overtaking
+Kad, u32 saturation, absent/zero provenance, transaction rollback and explicit
+retry, session/size-claim isolation, terminal freeze and cascade deletion. The
+production reporter lookup against 100,000 rows uses no full scan or sort and
+fewer than 100 SQLite VM steps. Core checks committed/cached agreement across
+mixed transports. Current slice checks pass **282 metadata**, **655 core** and
+**162 REST** tests without compiler warnings; evidence is in
+`reports/settings-request-round-1/search-availability-{metadata,core,rest}.log`.
+Rust checkpoint `561d6c03` also passes **175 selected Python tests** using the
+existing harness (`search-availability-python.log` in that report directory).
+
+The remaining search cut includes per-field summary reducers,
 eliminating bulk startup/history hydration, wiring paged browsing through owned
 reads and canonical separate REST/OpenAPI/WebUI resources, and snapshot replacement.
 Combined-scale and total
