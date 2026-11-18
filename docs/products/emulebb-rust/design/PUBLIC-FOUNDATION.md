@@ -798,9 +798,18 @@ The daemon/WebUI build passed with zero warnings on Rust `07e2b8ef`
 qualification with Harness `45892855` passed 86 routes, retained search browsing
 and canonical diagnostic capture
 (`reports/rust-rest-openapi-ci/20261118T144212Z/report.json`); teardown was graceful.
+The active-only runtime cut passes **294 Metadata**, **661 Core** and **167 REST**
+tests without compilation warnings. It includes startup with 100,000 retained
+sessions, durable interruption, an empty runtime map after paging, terminal
+eviction, disconnect publication, restart/download selection and canonical
+diagnostic capture. Evidence is
+`reports/settings-request-round-1/search-runtime-{metadata,core,rest}.log`.
+The daemon/WebUI build passed with zero warnings on Rust `3cc0bf93`
+(`logs/builds/20261118T150810Z-build-clients/build-result.json`). The unchanged
+Python harness qualified 86 native routes and retained search/diagnostic reads
+(`reports/rust-rest-openapi-ci/20261118T151111Z/report.json`); teardown was graceful.
 Remaining work includes completing stop/linked-search lifecycle and running
-combined library/job memory
-qualification. Query-scale evidence alone does not qualify app-wide resident
+combined library/job memory qualification. Query-scale evidence alone does not qualify app-wide resident
 memory or the complete 100k-library/job operating model. Settings/runtime,
 CLI/Docker, library and remaining foundation gates retain their scope below.
 Combined memory qualification must also bound aggregate live Kad AICH trust-vote
