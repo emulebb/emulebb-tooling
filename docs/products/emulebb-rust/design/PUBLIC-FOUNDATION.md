@@ -808,6 +808,19 @@ The daemon/WebUI build passed with zero warnings on Rust `e1c4ced6`
 qualification with Harness `2418cead` passed 86 routes and validated the inline
 bundle against OpenAPI, including equality with canonical session/result reads
 (`reports/rust-rest-openapi-ci/20261118T142253Z/report.json`); teardown was graceful.
+The WebUI diagnostic consumer is aligned with the published `v7` bundle in Rust
+`0d5b0a42`. Its real REST client accepts the raw artifact, and the browser test
+checks downloaded JSON content rather than only the filename. Harness
+`c5ee9980` adds a current-contract consistency check comparing the producer and
+WebUI identifiers with OpenAPI, preventing matching stale client fixtures from
+concealing drift. **60 WebUI unit, 32 browser and 119 OpenAPI harness tests**
+pass, including type checking and the production WebUI build. UI evidence is
+`reports/settings-request-round-1/diagnostic-v7-webui.log`; the packaged
+daemon/WebUI build has zero warnings:
+`logs/builds/20261118T181705Z-build-clients/build-result.json`.
+Backend code is unchanged by this client cut; existing native bundle
+qualification remains the producer evidence, not a claim of a new live-browser
+backend campaign.
 The indexed completion cut passes **294 Metadata**, **660 Core**, **167 REST**
 and **207 selected Python** tests, with no Rust compilation warnings. Evidence
 is `reports/settings-request-round-1/search-membership-{metadata,core,rest,python}.log`.
