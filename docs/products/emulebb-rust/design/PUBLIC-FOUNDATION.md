@@ -634,6 +634,38 @@ stopped/completed sessions freeze membership; late responses may enrich the
 independent corpus. Mark running sessions interrupted after restart; callers
 explicitly issue a new linked search instead of silently replaying it.
 
+### Search session identity checkpoint
+
+Fresh schema **89** uses the positive `search_sessions.id` AUTOINCREMENT primary
+key as the public session identity, rendered as an exact decimal string. SQL
+owns allocation; creation does not accept a caller-selected ID. Queue admission
+precedes allocation, and cache/queue publication follows the committed initial
+record and results. Updates require an existing session, so late persistence
+cannot recreate a deleted one. Deleting or clearing sessions does not reset the
+allocator. ID exhaustion fails without wrapping. OpenAPI paths, summaries,
+details and result references share the same `SearchId` schema.
+
+Rust `cb8a52e2`, Harness `c2af329e` and the OpenAPI contract in Tooling
+`a9578eea` implement this cut. Scoped checks passed **253 metadata unit plus 3
+ownership**, **638 core** and **160 REST** tests. Python metadata/OpenAPI checks
+passed 150 tests; final route/native-contract checks passed 143 tests. Evidence:
+`reports/settings-request-round-1/search-id-{metadata,core,rest,python,contract-final}.log`.
+The regular daemon/WebUI build passed with zero warnings:
+`logs/builds/20261118T043038Z-build-clients/build-result.json`.
+The native campaign passed on exact Rust
+`cb8a52e203924e00b70e3548c6a99ff6c142734c`, with graceful teardown:
+`reports/rust-rest-openapi-ci/20261118T043350Z/report.json`.
+Its `friendPeerPhase.searchIdentityPhase` proves exact HTTP string identities
+above JavaScript's safe-integer range, retrieval and non-reuse after deletion.
+Metadata tests additionally prove reopen/clear, concurrent connections, rollback,
+full i64 bounds and refusal to resurrect a deleted ID. The test-only `tempfile`
+dependency reuses the workspace's existing pinned version.
+
+This qualifies session identity, not the complete search foundation. Independent
+claims/observations, nullable contradictory size claims, terminal membership,
+bounded search/history reads and coordinated asynchronous search persistence
+remain required work. The larger foundation and combined-scale gates stay open.
+
 ## Native REST, OpenAPI and WebUI
 
 Use `/api/v1` with these domain resources:
