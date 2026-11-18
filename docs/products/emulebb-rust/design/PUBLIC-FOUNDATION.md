@@ -764,6 +764,15 @@ network-only live results and full-width search identities. Evidence is
 `reports/rust-rest-openapi-ci/20261118T140557Z/report.json`; teardown was graceful.
 This qualifies the sorted-resource checkpoint, not the pending cache removal or
 combined library/job scale qualification.
+The bounded diagnostic cut passes **167 REST** and **292 selected Python**
+tests, including the persisted 260-result/128-summary capture and aggregate
+item-byte budget checks. Evidence is
+`reports/settings-request-round-1/search-diagnostic-{rest,python}.log`.
+The daemon/WebUI build passed with zero warnings on Rust `e1c4ced6`
+(`logs/builds/20261118T141959Z-build-clients/build-result.json`). Native
+qualification with Harness `2418cead` passed 86 routes and validated the inline
+bundle against OpenAPI, including equality with canonical session/result reads
+(`reports/rust-rest-openapi-ci/20261118T142253Z/report.json`); teardown was graceful.
 Remaining work includes removing bulk startup hydration, runtime result/observation
 caches and cache-based Kad completion probes;
 completing stop/linked-search lifecycle; and running combined library/job memory
