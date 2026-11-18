@@ -1,6 +1,6 @@
 # Configuration and settings target
 
-**Accepted round-one target: 59 leaves; implementation and qualification pending.**
+**Accepted round-one target: 59 leaves; typed model implemented, runtime integration pending.**
 The operator accepted the [Public Foundation](PUBLIC-FOUNDATION.md) on
 2026-11-15. That is the master scope and behavior specification under
 [RUST-CI-043 / #297](../active/items/RUST-CI-043.md). This document owns the
@@ -57,8 +57,8 @@ overrides or duplicate authorities.
 
 ## Accepted settings representation
 
-This is the accepted engineering target for the next implementation slice, not
-a claim that current schema 71, REST or CLI already implements it. Store one
+The typed document model below is implemented; SQLite, REST and CLI have not
+switched to it yet. The database shape remains the accepted integration target. Store one
 complete typed `SavedSettings` document and its revision in a singleton row:
 
 ```sql
@@ -380,6 +380,35 @@ a blanket JavaScript-safe-integer limit.
 | `security.tcpErrorFloodDetection.enabled` | `bool` | `true` | boolean | restart |
 | `security.tcpErrorFloodDetection.intervalSeconds` | `u32` | `3600` | 60..86400 step60 | restart |
 | `security.tcpErrorFloodDetection.threshold` | `u32` | `10` | 1..1000 | restart |
+
+## Typed model implementation boundary
+
+Rust `5460706c` implements the canonical declaration in
+`crates/emulebb-settings/src/product/catalog.rs`. One macro derives complete
+typed values, saved mode/value leaves, recursively partial edits, defaults,
+field metadata and canonical key dispatch. The model resolves default-marked
+values before validation, preserves custom intent (including null), classifies
+only explicit sets against current defaults, and applies edits to a private
+whole candidate. Independent range/dependency issues are collected by canonical
+key. List, address, CIDR, UTF-8 and exact serialized-document bounds are enforced
+by this model without filesystem probes or value truncation.
+
+Managed `emulebb-settings` validation passed **36 tests**, including eleven
+new contract tests: complete 59-leaf shape/default metadata, default changes,
+custom null, omission, whole-array replacement, atomic candidate failure,
+independent validation, reset conflicts, required saved fields and the exact
+128 KiB boundary with UTF-8/JSON escaping. Evidence:
+`reports/settings-model-round-1/settings.log`. Normal commit/push gates passed.
+The existing pinned `ipnet` dependency supplies typed IPv4 CIDRs with serde;
+no dependency version was upgraded.
+
+This model is not yet the daemon's active settings authority. SQLite singleton
+storage and CAS, runtime admission/effective state, native REST/OpenAPI, offline
+CLI parsing, WebUI and Docker provisioning still require their coordinated cut.
+No settings endpoint, CLI option or database schema was switched in this slice.
+The latest staged/native-qualified daemon remains Rust `1123c6db`; this
+model-only slice used scoped validation and did not repeat the native campaign.
+The broader foundation goal remains open and no PR or merge was created.
 
 ## Qualification boundary
 

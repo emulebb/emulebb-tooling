@@ -1,6 +1,6 @@
 {
   "schema": "emulebb.settings-target-inventory/1",
-  "status": "ACCEPTED_ROUND_ONE_TARGET_NOT_IMPLEMENTED",
+  "status": "ACCEPTED_ROUND_ONE_TARGET_RUNTIME_INTEGRATION_PENDING",
   "ownerIssue": "https://github.com/emulebb/emulebb-rust/issues/297",
   "reviewSourceRevision": "70e595a2",
   "defaultStatus": "PM accepted 59 public leaves on 2026-11-15; source-backed defaults except explicit adaptive concurrency default null and tempDirectory=temp. This is the implementation target, not runtime qualification.",
@@ -2127,7 +2127,7 @@
     "bootstrapFile": "emulebb-rust-settings.toml",
     "databaseFile": "emulebb-rust-metadata.db"
   },
-  "implementationStatus": "Scope authorized by PUBLIC-FOUNDATION. Current application settings still need coordinated typed/runtime/REST/CLI replacement and qualification.",
+  "implementationStatus": "Rust 5460706c implements the 59-leaf typed model, default/custom resolution, whole-candidate edits, bounds and generated metadata in emulebb-settings/src/product/catalog.rs. SQLite/runtime/REST/OpenAPI/CLI/WebUI/Docker integration and qualification remain pending. This inventory retains the accepted pre-cut source review; it is not a runtime reader.",
   "authoritativeSpecification": "PUBLIC-FOUNDATION.md",
   "offlineSettings": {
     "operations": [
