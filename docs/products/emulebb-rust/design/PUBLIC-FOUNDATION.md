@@ -1298,8 +1298,9 @@ and 100,000 retained downloads. Unit logs include
 `reports/settings-request-round-1/fixed-dashboard-counts-{metadata,core,rest,ed2k}.log`.
 
 This is retained-job correctness evidence. Physical-library contents are not
-seeded by this fixture; combined library/job workload, CPU/memory measurement,
-the enforced 512 MiB/one-CPU container and physical-device gates remain open.
+seeded by this fixture. The combined checkpoint below supplies separate
+physical-library and resource evidence; this fixture alone cannot qualify the
+enforced 512 MiB/one-CPU container or physical-device gates.
 The fixed-work counter lookup is qualified; no response-time guarantee is set.
 Canonical runtime settings and the other foundation cuts retain their scope.
 
@@ -1341,8 +1342,8 @@ The observed lifetime peak working set is 362,397,696 bytes (about 345.6 MiB),
 sampled peak private memory is 410,181,632 bytes (about 391.2 MiB), and cumulative
 process CPU is 541.656 seconds over the failed 945.913-second campaign. These
 are partial Windows measurements, not enforced container memory or CPU limits.
-Watcher lifecycle, clean restarts and the full combined campaign remain
-unqualified. The enforced 512 MiB/one-CPU container and physical-device gates
+That attempt did not qualify watcher lifecycle, clean restarts or the full
+combined campaign. The enforced 512 MiB/one-CPU container and physical-device gates
 also remain open. The next bounded slice is the watcher/read/teardown failure
 and correct reload accounting, reusing this campaign and fixture.
 
@@ -1431,11 +1432,49 @@ warnings (`logs/builds/20261118T213022Z-build-clients/build-result.json`);
 native REST/OpenAPI conformance passes with graceful teardown
 (`reports/rust-rest-openapi-ci/20261118T214356Z/report.json`).
 
-The next scale slice needs reliable first-scan completion evidence followed by
-the full combined campaign. Populated-root replacement, full library restart,
-the enforced 512 MiB/one-CPU container and the remaining public-foundation cuts
-are still open. No latency SLO is adopted, and no timeout or acceptance gate was
-weakened to obtain the passing watcher result.
+### Full combined Windows campaign (2026-11-18)
+
+The existing full I/O campaign **passes** on Rust `0833fb58` and Harness
+`3c3af739`, using a fresh profile with 100,000 physical library files and
+100,000 retained download jobs:
+`reports/workstreams/public-foundation-round-1/shared-library-io/rust-shared-library-io-20261118T215835Z-19680.json`.
+All three scan phases, all four watcher actions and all global checks pass.
+The download fixture remains 99,000 completed jobs, 900 stopped jobs and
+100 started jobs throughout four daemon lifetimes. All/completed/unfinished
+traversal verifies 100,000/99,000/1,000 rows across 500/495/5 bounded pages.
+Both complete-library restart checks reach 100,000 validated shares. All four
+shutdown receipts record REST shutdown and exit code zero; there are zero REST
+or watcher errors.
+
+Rust now emits path-free numeric completion facts atomically with the completed
+reload state. The harness streams the first matching event after each phase's
+log offset and separately waits for worker quiescence. This removes reliance on
+polling a transient completed state. Stale and partially written records are
+excluded; invalid counters fail verification. The retained events prove:
+
+| Phase | Hashed | Reused | Payload bytes read |
+| --- | ---: | ---: | ---: |
+| Initial | 100,000 | 0 | 10,485,760,000 |
+| Unchanged reload | 0 | 100,000 | 0 |
+| One-percent mutation | 1,000 | 99,000 | 104,857,600 |
+
+The daemon/WebUI build has zero warnings
+(`logs/builds/20261118T215441Z-build-clients/build-result.json`).
+Harness `ffa668b2` additionally makes all four graceful-zero-exit receipts an
+explicit full-campaign acceptance gate; the existing passing run's four receipts
+satisfy it. Its focused suite passes 68 tests, including rejection of forced,
+missing, nonzero and malformed exit receipts. That gate change does not alter
+the daemon or scenario inputs; the recorded campaign source identity remains
+`3c3af739`.
+
+Measured peak lifetime working set is 408,326,144 bytes (about 389.4 MiB);
+sampled peak private memory is 420,933,632 bytes (about 401.4 MiB). The campaign
+takes 1,671.882 seconds. These are Windows measurements with metadata-only
+download history, not enforced container memory/CPU limits or simultaneous
+payload-transfer qualification. No latency SLO or relaxed timeout was used.
+Populated-root replacement, the enforced 512 MiB/one-CPU container, remaining
+library query/sort qualification and the unfinished public-foundation cuts
+retain their scope. A sustained soak remains deferred below.
 
 ### Deferred follow-up
 
