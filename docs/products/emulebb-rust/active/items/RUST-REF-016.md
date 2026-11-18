@@ -1772,8 +1772,8 @@ rows before exposing success. Passive-only and unknown demand do not allocate
 permanent client session records. Request timestamps retain nullable Unix
 seconds, including explicit epoch zero, through projection replacement.
 
-Scoped checks passed: metadata **239 unit + 3 ownership tests**, Core **603 unit
-+ 35 integration tests**, and eD2K **1,454 tests**. Evidence is under
+Scoped checks passed: metadata **239 unit + 3 ownership tests**, Core **603 unit and
+35 integration tests**, and eD2K **1,454 tests**. Evidence is under
 `reports/library-session-accounting-round-1/`. The Core check precedes the final
 private request-error capture and statement-completion changes; the final eD2K,
 metadata, normal branch checks and regular build cover those changes. Tests
@@ -1798,6 +1798,64 @@ slice. Indexed statistic sorts, canonical library REST/WebUI and combined
 resource qualification remain open. The Present and All Known membership
 decisions are pending in the authoritative foundation specification. The next
 independent accounting slice is raw-request batching through the existing owner.
+
+## Batched demand and shutdown qualification
+
+Rust `2e5f077c` builds on `75e027f3` to capture request counts and last-request
+times in the existing credit/file ledger. Registered hashes need no SQLite call
+on request capture. Requests, bytes, accepted stints and peer credits checkpoint
+in one transaction; failure rolls the transaction back and restores all deltas,
+including requests arriving before retry. Counters saturate within SQLite's
+integer range, and nullable request times retain epoch zero and maximum event
+time. No persistent schema change, settings, or additional accounting worker.
+
+Cold hashes use a read-only indexed snapshot on the blocking pool before their
+events can join the ledger. Unknown demand creates no metadata or accounting
+record. Passive-only demand coalesces while dirty without permanently allocating
+client session state. Selected physical-library rows merge committed scalar
+totals with the process owner, so current reads do not wait for a checkpoint or
+hydrate the full serving catalog. This does not yet implement canonical library
+statistic sorting.
+
+One reservation covers the scheduled and executing background flush. Concurrent
+producers cannot enqueue duplicate flush tasks; dropping queued work releases
+the reservation. Session release remains a best-effort flush. Final persistence
+drain additionally attempts a required accounting checkpoint after network
+teardown, before profile release. This covers refused-only demand without an
+upload session to release. Required checkpoint failure returns an error and
+retains failed deltas rather than silently claiming durable shutdown.
+
+Scoped checks passed: metadata **239 unit + 3 ownership tests**, Core **603 unit and
+35 integration tests**, eD2K **1,455 tests**, and the selected existing Python
+suite **22 tests**. Logs are under `reports/library-request-batching-round-1/`;
+the final repair uses `ed2k-shutdown.log`, `core-shutdown.log` and
+`python-shutdown.log`. Tests cover capture while a SQLite writer and catalog
+reader are held, transaction rollback across peer/file accounting, request
+retention and exactly-once retry, saturation, optional times and single-flight
+reservation release. Normal commit/push gates also passed.
+
+The final regular daemon/WebUI build passed with **zero warnings**:
+`logs/builds/20261118T010547Z-build-clients/build-result.json`.
+Harness `f670c4b3` extends the existing Python peer scenario; its native
+REST/OpenAPI campaign passed on exact Rust
+`2e5f077ca224c33caddf91daeee30159d45f7132`, with graceful teardown:
+`reports/rust-rest-openapi-ci/20261118T010849Z/report.json`.
+`categoryPersistencePhase.uploadAccounting` proves **seven requests and two
+accepted stints**, current in-session REST totals, policy refusal without extra
+acceptance, and refused-only demand surviving clean shutdown/reopen. Existing
+timestamp, sharing, category, tag, download, friend and Kad checks passed.
+Rust and harness commits are pushed on their existing feature branches. No PR
+or merge was created.
+
+This qualifies registered demand capture, batch retention, live scalar reads
+and the final checkpoint; it does not close this owner or the foundation goal.
+Cold classification still awaits a per-connection blocking task, so cancellation
+before its result is captured needs a retained-owner and drain proof. Address
+that bounded gap using the existing local-mutation/read ownership machinery,
+without adding a separate actor. Canonical library views and indexed live-stat
+sorting, the operator's library membership decisions, remaining settings/CLI/
+Docker work and combined resource qualification remain open. Sustained soak
+remains explicitly deferred follow-up.
 
 ## Acceptance Criteria
 
