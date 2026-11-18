@@ -868,6 +868,12 @@ and **175 selected Python tests**, without compiler warnings. Evidence is in
 `reports/settings-request-round-1/search-fields-{metadata,core,rest,python}.log`.
 The Python checks reuse the existing metadata, OpenAPI-route and native-campaign
 harness suite; no parallel test framework or launch path is introduced.
+The daemon/WebUI build passes with zero warnings:
+`logs/builds/20261118T115333Z-build-clients/build-result.json`.
+The native REST/OpenAPI campaign passes with graceful teardown on Rust
+`28b02343`, Harness `65b1944e` and Tooling `89733d33`:
+`reports/rust-rest-openapi-ci/20261118T115635Z/report.json`.
+
 
 
 The remaining search cut includes
