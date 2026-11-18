@@ -69,7 +69,7 @@ does not expose private application state.
 ## Explore Without Guessing DTOs
 
 Start with authenticated GETs to `/api/v1/app`, `/status`, `/network` and
-`/transfers` under the same API prefix. After network connection, a search can use:
+`/downloads` under the same API prefix. After network connection, a search can use:
 
 ```bash
 curl --fail-with-body \
@@ -78,9 +78,21 @@ curl --fail-with-body \
   http://127.0.0.1:4711/api/v1/searches
 ```
 
-`automatic` resolves from current network state; offline searches are rejected
-as not connected. Read the returned search ID and documented result model.
-Select the result’s permanent `id`, then download that exact hash/size claim
+Creation returns HTTP 201, session metadata and its `Location`. Live sessions
+start empty; configured searches can queue while their backend connects.
+`automatic` selects the backend from current network state. Read session metadata
+with `GET /searches/{searchId}` and cursor-paged summaries with
+`GET /searches/{searchId}/results`. Results default to sources descending; all
+twelve documented sorts support both directions with claim ID as tie-breaker.
+Use the returned opaque cursor with the same session/sort/direction. Pages are
+limited to 1..200 rows and a byte budget, so `hasMore` controls continuation.
+
+Select a summary with `GET /searches/{searchId}/results/{resultId}`. Raw provenance
+has its own `/observations` cursor page, preserving unknown values as null and
+session-local occurrence counts. Metadata timestamps are Unix seconds. Traversal
+is weakly consistent while a live session changes; retained terminal membership
+and summaries are frozen. No client-side full-history sort or per-client snapshot
+is needed. Select the result’s permanent `id`, then download that exact hash/size claim
 through `POST /searches/{searchId}/results/{resultId}/download`. A null
 `sizeBytes` admits a download waiting for metadata; zero is a known empty file.
 For direct admission, use `POST /downloads` with the documented

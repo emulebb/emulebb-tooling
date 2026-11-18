@@ -2873,34 +2873,38 @@ paths:
           $ref: "#/components/responses/ErrorResponse"
   /searches:
     get:
-      tags: [Searches]
-      summary: List active search sessions.
+      tags:
+      - Searches
+      summary: Page retained search session metadata.
       operationId: listSearches
       responses:
-        "200":
-          $ref: "#/components/responses/SearchListResponse"
-        "400":
-          $ref: "#/components/responses/ErrorResponse"
-        "401":
-          $ref: "#/components/responses/ErrorResponse"
-        "404":
-          $ref: "#/components/responses/ErrorResponse"
-        "405":
-          $ref: "#/components/responses/MethodNotAllowedResponse"
-        "409":
-          $ref: "#/components/responses/ErrorResponse"
-        "500":
-          $ref: "#/components/responses/ErrorResponse"
-        "503":
-          $ref: "#/components/responses/ErrorResponse"
+        '200':
+          $ref: '#/components/responses/SearchListResponse'
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/ErrorResponse'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowedResponse'
+        '409':
+          $ref: '#/components/responses/ErrorResponse'
+        '500':
+          $ref: '#/components/responses/ErrorResponse'
+        '503':
+          $ref: '#/components/responses/ErrorResponse'
         default:
-          $ref: "#/components/responses/ErrorResponse"
+          $ref: '#/components/responses/ErrorResponse'
+      parameters:
+      - $ref: '#/components/parameters/SearchPageLimit'
+      - $ref: '#/components/parameters/SearchCursor'
     post:
-      tags: [Searches]
+      tags:
+      - Searches
       summary: Start a live network search.
-      description: >-
-        The session starts empty and collects only results observed through its
-        network search. Matching local or passive-index entries are not preloaded.
+      description: The session starts empty and collects only results observed through
+        its network search. Matching local or passive-index entries are not preloaded.
         Index and hybrid execution are separate future capabilities.
       operationId: createSearch
       requestBody:
@@ -2908,111 +2912,105 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/SearchCreateRequest"
+              $ref: '#/components/schemas/SearchCreateRequest'
       responses:
-        "200":
-          $ref: "#/components/responses/SearchResponse"
-        "400":
-          $ref: "#/components/responses/ErrorResponse"
-        "401":
-          $ref: "#/components/responses/ErrorResponse"
-        "404":
-          $ref: "#/components/responses/ErrorResponse"
-        "405":
-          $ref: "#/components/responses/MethodNotAllowedResponse"
-        "409":
-          $ref: "#/components/responses/ErrorResponse"
-        "500":
-          $ref: "#/components/responses/ErrorResponse"
-        "503":
-          $ref: "#/components/responses/ErrorResponse"
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/ErrorResponse'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowedResponse'
+        '409':
+          $ref: '#/components/responses/ErrorResponse'
+        '500':
+          $ref: '#/components/responses/ErrorResponse'
+        '503':
+          $ref: '#/components/responses/ErrorResponse'
         default:
-          $ref: "#/components/responses/ErrorResponse"
+          $ref: '#/components/responses/ErrorResponse'
+        '201':
+          $ref: '#/components/responses/SearchCreatedResponse'
     delete:
-      tags: [Searches]
+      tags:
+      - Searches
       summary: Delete all search sessions.
       operationId: deleteSearches
       parameters:
-        - $ref: "#/components/parameters/Confirm"
+      - $ref: '#/components/parameters/Confirm'
       responses:
-        "200":
-          $ref: "#/components/responses/OkResponse"
-        "400":
-          $ref: "#/components/responses/ErrorResponse"
-        "401":
-          $ref: "#/components/responses/ErrorResponse"
-        "404":
-          $ref: "#/components/responses/ErrorResponse"
-        "405":
-          $ref: "#/components/responses/MethodNotAllowedResponse"
-        "409":
-          $ref: "#/components/responses/ErrorResponse"
-        "500":
-          $ref: "#/components/responses/ErrorResponse"
-        "503":
-          $ref: "#/components/responses/ErrorResponse"
+        '200':
+          $ref: '#/components/responses/OkResponse'
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/ErrorResponse'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowedResponse'
+        '409':
+          $ref: '#/components/responses/ErrorResponse'
+        '500':
+          $ref: '#/components/responses/ErrorResponse'
+        '503':
+          $ref: '#/components/responses/ErrorResponse'
         default:
-          $ref: "#/components/responses/ErrorResponse"
+          $ref: '#/components/responses/ErrorResponse'
   /searches/{searchId}:
     parameters:
-      - $ref: "#/components/parameters/SearchId"
+    - $ref: '#/components/parameters/SearchId'
     get:
-      tags: [Searches]
-      summary: Return search status and results.
-      description: >
-        Returns the current native visible result snapshot for this search.
-        `offset` and `limit` bound the returned rows while preserving the
-        native search lifecycle and visibility behavior.
+      tags:
+      - Searches
+      summary: Return session metadata without result history.
+      description: Includes materialized result count, Unix-second timestamps and optional
+        active telemetry. Results and raw provenance are separate resources.
       operationId: getSearch
-      parameters:
-        - $ref: "#/components/parameters/Offset"
-        - $ref: "#/components/parameters/Limit"
-        - $ref: "#/components/parameters/IncludeEvidence"
-        - $ref: "#/components/parameters/ExactTotal"
-        - $ref: "#/components/parameters/SearchSort"
-        - $ref: "#/components/parameters/SearchSortOrder"
       responses:
-        "200":
-          $ref: "#/components/responses/SearchResponse"
-        "400":
-          $ref: "#/components/responses/ErrorResponse"
-        "401":
-          $ref: "#/components/responses/ErrorResponse"
-        "404":
-          $ref: "#/components/responses/ErrorResponse"
-        "405":
-          $ref: "#/components/responses/MethodNotAllowedResponse"
-        "409":
-          $ref: "#/components/responses/ErrorResponse"
-        "500":
-          $ref: "#/components/responses/ErrorResponse"
-        "503":
-          $ref: "#/components/responses/ErrorResponse"
+        '200':
+          $ref: '#/components/responses/SearchResponse'
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/ErrorResponse'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowedResponse'
+        '409':
+          $ref: '#/components/responses/ErrorResponse'
+        '500':
+          $ref: '#/components/responses/ErrorResponse'
+        '503':
+          $ref: '#/components/responses/ErrorResponse'
         default:
-          $ref: "#/components/responses/ErrorResponse"
+          $ref: '#/components/responses/ErrorResponse'
     delete:
-      tags: [Searches]
+      tags:
+      - Searches
       summary: Stop and delete one search session.
       operationId: deleteSearch
       responses:
-        "200":
-          $ref: "#/components/responses/OkResponse"
-        "400":
-          $ref: "#/components/responses/ErrorResponse"
-        "401":
-          $ref: "#/components/responses/ErrorResponse"
-        "404":
-          $ref: "#/components/responses/ErrorResponse"
-        "405":
-          $ref: "#/components/responses/MethodNotAllowedResponse"
-        "409":
-          $ref: "#/components/responses/ErrorResponse"
-        "500":
-          $ref: "#/components/responses/ErrorResponse"
-        "503":
-          $ref: "#/components/responses/ErrorResponse"
+        '200':
+          $ref: '#/components/responses/OkResponse'
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/ErrorResponse'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowedResponse'
+        '409':
+          $ref: '#/components/responses/ErrorResponse'
+        '500':
+          $ref: '#/components/responses/ErrorResponse'
+        '503':
+          $ref: '#/components/responses/ErrorResponse'
         default:
-          $ref: "#/components/responses/ErrorResponse"
+          $ref: '#/components/responses/ErrorResponse'
   /searches/{searchId}/results/{resultId}/download:
     parameters:
     - $ref: '#/components/parameters/SearchId'
@@ -3278,10 +3276,70 @@ paths:
       operationId: listSearchResultObservations
       parameters:
       - $ref: '#/components/parameters/SearchPageLimit'
-      - $ref: '#/components/parameters/SearchObservationCursor'
+      - $ref: '#/components/parameters/SearchCursor'
       responses:
         '200':
           $ref: '#/components/responses/SearchObservationPageResponse'
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/ErrorResponse'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowedResponse'
+        '500':
+          $ref: '#/components/responses/ErrorResponse'
+        '503':
+          $ref: '#/components/responses/ErrorResponse'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+  /searches/{searchId}/results:
+    parameters:
+    - $ref: '#/components/parameters/SearchId'
+    get:
+      tags:
+      - Searches
+      summary: Page globally sorted result summaries.
+      description: 'Rows and owned bytes are bounded. Cursors use a retained claim as
+        anchor, scoped to this session/sort/direction. Traversal is weakly consistent
+        while summaries change: rows can move across the boundary. No per-client snapshots
+        or observation expansion.'
+      operationId: listSearchResults
+      parameters:
+      - $ref: '#/components/parameters/SearchPageLimit'
+      - $ref: '#/components/parameters/SearchCursor'
+      - $ref: '#/components/parameters/SearchSort'
+      - $ref: '#/components/parameters/SearchSortOrder'
+      responses:
+        '200':
+          $ref: '#/components/responses/SearchResultPageResponse'
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/ErrorResponse'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowedResponse'
+        '500':
+          $ref: '#/components/responses/ErrorResponse'
+        '503':
+          $ref: '#/components/responses/ErrorResponse'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+  /searches/{searchId}/results/{resultId}:
+    parameters:
+    - $ref: '#/components/parameters/SearchId'
+    - $ref: '#/components/parameters/SearchResultId'
+    get:
+      tags:
+      - Searches
+      summary: Return one materialized result summary.
+      operationId: getSearchResult
+      responses:
+        '200':
+          $ref: '#/components/responses/SearchResultResponse'
         '400':
           $ref: '#/components/responses/ErrorResponse'
         '401':
@@ -3310,6 +3368,16 @@ components:
         const: "2.0.0"
         example: "2.0.0"
   parameters:
+    SearchCursor:
+      name: cursor
+      in: query
+      required: false
+      description: Opaque continuation scoped to this collection, session, sort and direction
+        where applicable.
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 512
     LibraryTagName:
       name: tagName
       in: path
@@ -3434,36 +3502,40 @@ components:
       schema:
         type: string
         minLength: 1
-    IncludeEvidence:
-      name: includeEvidence
-      in: query
-      required: false
-      schema:
-        type: boolean
-        default: true
-      description: Include the grouped SearchResult.evidence block on each result. Set false to omit the heavy evidence payload when only basic result metadata is needed.
-    ExactTotal:
-      name: exactTotal
-      in: query
-      required: false
-      schema:
-        type: boolean
-        default: true
-      description: Return an exact result total. Set false to allow `total` to be a lower-bound estimate when computing the exact count is expensive.
     SearchSort:
       name: sort
       in: query
       required: false
       schema:
         type: string
-        enum: [displayName, sizeBytes, sources, completeSources, rating, fileType, artist, album, title, lengthSeconds, bitrateKbps, codec]
+        enum:
+        - displayName
+        - sizeBytes
+        - sources
+        - completeSources
+        - rating
+        - fileType
+        - artist
+        - album
+        - title
+        - lengthSeconds
+        - bitrateKbps
+        - codec
+        default: sources
+      description: Global indexed ordering. Claim ID breaks ties in the same direction.
+        Text uses binary ordering; unknown size sorts before known size ascending and
+        after it descending.
     SearchSortOrder:
       name: order
       in: query
       required: false
       schema:
         type: string
-        enum: [asc, desc]
+        enum:
+        - asc
+        - desc
+        default: desc
+      description: Direction for the selected sort; descending by default.
     SearchPageLimit:
       name: limit
       in: query
@@ -3473,15 +3545,6 @@ components:
         minimum: 1
         maximum: 200
         default: 100
-    SearchObservationCursor:
-      name: cursor
-      in: query
-      required: false
-      description: Opaque continuation scoped to this session and result.
-      schema:
-        type: string
-        minLength: 1
-        maxLength: 512
     SearchResultId:
       name: resultId
       in: path
@@ -3579,6 +3642,38 @@ components:
         maximum: 200
         default: 100
   responses:
+    SearchResultPageResponse:
+      description: Bounded globally sorted result summaries.
+      headers:
+        X-Contract-Version:
+          $ref: '#/components/headers/ContractVersionHeader'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/SearchResultPageEnvelope'
+    SearchResultResponse:
+      description: Materialized result summary without observation history.
+      headers:
+        X-Contract-Version:
+          $ref: '#/components/headers/ContractVersionHeader'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/SearchResultEnvelope'
+    SearchCreatedResponse:
+      description: Committed new session metadata.
+      headers:
+        X-Contract-Version:
+          $ref: '#/components/headers/ContractVersionHeader'
+        Location:
+          description: Canonical session resource.
+          schema:
+            type: string
+            format: uri-reference
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/SearchEnvelope'
     LibrarySharingBatchResponse:
       description: Ordered per-hash sharing results. Committed failures state committed:true.
       headers:
@@ -4145,6 +4240,31 @@ components:
           schema:
             $ref: '#/components/schemas/DownloadCommentPageEnvelope'
   schemas:
+    SearchResultPageEnvelope:
+      type: object
+      additionalProperties: false
+      required:
+      - data
+      - meta
+      properties:
+        data:
+          type: array
+          maxItems: 200
+          items:
+            $ref: '#/components/schemas/SearchResult'
+        meta:
+          $ref: '#/components/schemas/CursorPageMeta'
+    SearchResultEnvelope:
+      type: object
+      additionalProperties: false
+      required:
+      - data
+      - meta
+      properties:
+        data:
+          $ref: '#/components/schemas/SearchResult'
+        meta:
+          $ref: '#/components/schemas/EnvelopeMeta'
     LibraryHashSelection:
       type: array
       minItems: 1
@@ -6673,104 +6793,6 @@ components:
             - "null"
         cached:
           type: boolean
-    SearchResultEvidence:
-      type: object
-      additionalProperties: false
-      required: [availabilityEvidence, nameEvidence, integrityEvidence]
-      properties:
-        availabilityEvidence:
-          $ref: "#/components/schemas/SearchAvailabilityEvidence"
-        nameEvidence:
-          $ref: "#/components/schemas/SearchNameEvidence"
-        integrityEvidence:
-          $ref: "#/components/schemas/SearchIntegrityEvidence"
-    SearchConfidence:
-      type: object
-      description: >-
-        Non-authoritative summary axis folding fake-file heuristics, user ratings
-        and Kad publisher consistency into one symmetric confidence band. Higher
-        score = more confident.
-      additionalProperties: false
-      required: [band, score, fakeScore, severity, spam, userRating, kadBand, reasons]
-      properties:
-        band:
-          type: string
-          enum: [spam, likely_fake, suspect, caution, looks_good, genuine]
-        score:
-          type: integer
-          minimum: 0
-          maximum: 100
-        fakeScore:
-          type: integer
-          minimum: 0
-          maximum: 100
-        severity:
-          type: string
-          enum: [none, low, medium, high, critical]
-        spam:
-          type: boolean
-        userRating:
-          type: integer
-          minimum: 0
-          maximum: 6
-        kadBand:
-          type: string
-          enum: [unknown, low, normal, high]
-        reasons:
-          type: array
-          items:
-            type: string
-    SearchAvailabilityEvidence:
-      type: object
-      additionalProperties: false
-      required: [sources, completeSources]
-      properties:
-        sources:
-          type: integer
-          minimum: 0
-        completeSources:
-          type: integer
-          minimum: 0
-        completionState:
-          $ref: "#/components/schemas/SearchCompletionState"
-        observedSourceEndpoints:
-          type: integer
-          minimum: 0
-    SearchCompletionState:
-      type: string
-      enum: [unknown, complete, incomplete]
-    SearchNameEvidence:
-      type: object
-      additionalProperties: false
-      required: [observedRawNames, observedNames, observedExtensions, divergent]
-      properties:
-        observedRawNames:
-          type: array
-          items:
-            type: string
-        observedNames:
-          type: array
-          items:
-            type: string
-        observedExtensions:
-          type: array
-          items:
-            type: string
-        divergent:
-          type: boolean
-    SearchIntegrityEvidence:
-      type: object
-      additionalProperties: false
-      required: [hasAichHash, multipleAich, aichHashes]
-      properties:
-        hasAichHash:
-          type: boolean
-        multipleAich:
-          type: boolean
-        aichHashes:
-          type: array
-          items:
-            type: string
     SharedFilePriority:
       type: string
       enum: [auto, not-published, verylow, low, normal, high, release]
@@ -8045,58 +8067,116 @@ components:
           minimum: 1
           maximum: 65535
     SearchListEnvelope:
-      unevaluatedProperties: false
-      allOf:
-        - $ref: "#/components/schemas/EnvelopeBase"
-        - type: object
-          properties:
-            data:
-              type: object
-              additionalProperties: false
-              required: [items]
-              properties:
-                items:
-                  type: array
-                  items:
-                    $ref: "#/components/schemas/SearchSession"
+      type: object
+      additionalProperties: false
+      required:
+      - data
+      - meta
+      properties:
+        data:
+          type: array
+          maxItems: 200
+          items:
+            $ref: '#/components/schemas/SearchSession'
+        meta:
+          $ref: '#/components/schemas/CursorPageMeta'
     SearchSession:
       type: object
       additionalProperties: false
-      required: [id, query, requestedMethod, resolvedMethod, type, criteria, status, statusReason, progress, resultCount]
+      required:
+      - id
+      - query
+      - requestedMethod
+      - resolvedMethod
+      - type
+      - criteria
+      - status
+      - statusReason
+      - progress
+      - resultCount
+      - createdAt
+      - updatedAt
+      - completedAt
       properties:
         id:
-          $ref: "#/components/schemas/SearchId"
+          $ref: '#/components/schemas/SearchId'
         query:
           type: string
         requestedMethod:
           type: string
-          enum: [automatic, server, global, kad]
+          enum:
+          - automatic
+          - server
+          - global
+          - kad
         resolvedMethod:
-          type: [string, "null"]
-          enum: [server, global, kad, null]
+          type:
+          - string
+          - 'null'
+          enum:
+          - server
+          - global
+          - kad
+          - null
         type:
           type: string
-          enum: ["", arc, audio, iso, image, pro, video, doc, emulecollection]
+          enum:
+          - ''
+          - arc
+          - audio
+          - iso
+          - image
+          - pro
+          - video
+          - doc
+          - emulecollection
         criteria:
-          $ref: "#/components/schemas/SearchCriteria"
+          $ref: '#/components/schemas/SearchCriteria'
         status:
           type: string
-          enum: [queued, running, stopped, complete, error]
+          enum:
+          - queued
+          - running
+          - completed
+          - error
         statusReason:
-          type: [string, "null"]
+          type:
+          - string
+          - 'null'
         progress:
-          $ref: "#/components/schemas/SearchProgress"
+          anyOf:
+          - $ref: '#/components/schemas/SearchProgress'
+          - type: 'null'
+          description: Ephemeral active-search telemetry; null when no live telemetry
+            is available.
         resultCount:
           type: integer
           minimum: 0
+        createdAt:
+          type: integer
+          minimum: 0
+          description: Unix seconds.
+        updatedAt:
+          type: integer
+          minimum: 0
+          description: Unix seconds.
+        completedAt:
+          type:
+          - integer
+          - 'null'
+          minimum: 0
+          description: Unix seconds.
     SearchEnvelope:
-      unevaluatedProperties: false
-      allOf:
-        - $ref: "#/components/schemas/EnvelopeBase"
-        - type: object
-          properties:
-            data:
-              $ref: "#/components/schemas/Search"
+      type: object
+      additionalProperties: false
+      required:
+      - data
+      - meta
+      properties:
+        data:
+          $ref: '#/components/schemas/SearchSession'
+        meta:
+          $ref: '#/components/schemas/EnvelopeMeta'
     ContentObservationId:
       type: string
       minLength: 1
@@ -8277,52 +8357,6 @@ components:
       pattern: ^[1-9][0-9]{0,18}(?![\s\S])
       description: Immutable never-reused search session ID, canonical positive decimal in 1..9223372036854775807. The parser enforces the numeric bound.
       example: '1'
-    Search:
-      type: object
-      unevaluatedProperties: false
-      required: [id, query, requestedMethod, resolvedMethod, type, criteria, status, statusReason, progress, items]
-      properties:
-        id:
-          $ref: "#/components/schemas/SearchId"
-        query:
-          type: string
-        requestedMethod:
-          type: string
-          enum: [automatic, server, global, kad]
-        resolvedMethod:
-          type: [string, "null"]
-          enum: [server, global, kad, null]
-        type:
-          type: string
-          enum: ["", arc, audio, iso, image, pro, video, doc, emulecollection]
-        criteria:
-          $ref: "#/components/schemas/SearchCriteria"
-        status:
-          type: string
-          enum: [queued, running, stopped, complete, error]
-        statusReason:
-          type: [string, "null"]
-        progress:
-          $ref: "#/components/schemas/SearchProgress"
-        sort:
-          type: [string, "null"]
-          enum: [displayName, sizeBytes, sources, completeSources, rating, fileType, artist, album, title, lengthSeconds, bitrateKbps, codec, null]
-        order:
-          type: [string, "null"]
-          enum: [asc, desc, null]
-        items:
-          type: array
-          description: >
-            Current native visible result snapshot for this page, bounded by the
-            `offset` and `limit` query parameters. The search resource shares the
-            common pagination fields (`total`/`offset`/`limit`). When
-            `exactTotal=false`, `total` may be a lower-bound estimate; controllers
-            should poll the resource and preserve eMule's stock eD2K/Kad search
-            semantics.
-          items:
-            $ref: "#/components/schemas/SearchResult"
-      allOf:
-        - $ref: "#/components/schemas/Pagination"
     SearchCriteria:
       type: object
       additionalProperties: false
@@ -8437,40 +8471,35 @@ components:
       type: object
       additionalProperties: false
       required:
-        - id
-        - searchId
-        - type
-        - hash
-        - displayName
-        - nameConsensus
-        - sizeBytes
-        - sources
-        - completeSources
-        - fileType
-        - media
-        - extension
-        - complete
-        - directory
-        - rating
-        - aichHash
-        - observations
+      - id
+      - searchId
+      - hash
+      - displayName
+      - sizeBytes
+      - sources
+      - completeSources
+      - fileType
+      - media
+      - extension
+      - complete
+      - directory
+      - rating
+      - aichHash
       properties:
         id:
-          $ref: "#/components/schemas/ContentClaimId"
+          $ref: '#/components/schemas/ContentClaimId'
         searchId:
-          $ref: "#/components/schemas/SearchId"
-        type:
-          type: string
-          enum: ["", arc, audio, iso, image, pro, video, doc, emulecollection]
+          $ref: '#/components/schemas/SearchId'
         hash:
           type: string
         displayName:
           type: string
-        nameConsensus:
-          $ref: "#/components/schemas/SearchNameConsensus"
         sizeBytes:
-          type: [integer, "null"]
-          description: Reported size; null means unknown, distinct from a known empty file.
+          type:
+          - integer
+          - 'null'
+          description: Reported size; null means unknown, distinct from a known empty
+            file.
           minimum: 0
         sources:
           type: integer
@@ -8480,11 +8509,12 @@ components:
           minimum: 0
         fileType:
           type: string
-          description: >
-            Raw native file-type tag reported by the search result row. This is
-            not constrained to the search request type enum and is not remapped.
+          description: 'Raw native file-type tag reported by the search result row. This
+            is not constrained to the search request type enum and is not remapped.
+
+            '
         media:
-          $ref: "#/components/schemas/SearchResultMedia"
+          $ref: '#/components/schemas/SearchResultMedia'
         extension:
           type: string
         complete:
@@ -8495,44 +8525,9 @@ components:
           type: integer
           minimum: 0
         aichHash:
-          type: [string, "null"]
-        observations:
-          type: array
-          items:
-            $ref: "#/components/schemas/SearchResultObservation"
-        evidence:
-          description: Present unless the caller sets `includeEvidence=false`.
-          $ref: "#/components/schemas/SearchResultEvidence"
-    SearchNameConsensus:
-      type: object
-      additionalProperties: false
-      required: [selectedName, observationCount, candidates]
-      properties:
-        selectedName:
-          type: string
-        observationCount:
-          description: Number of retained presentation observations, independent of reporter/name votes.
-          type: integer
-          minimum: 0
-        candidates:
-          type: array
-          items:
-            $ref: "#/components/schemas/SearchResultNameCandidate"
-    SearchResultNameCandidate:
-      type: object
-      additionalProperties: false
-      required: [normalizedName, votes, rawNames]
-      properties:
-        normalizedName:
-          type: string
-        votes:
-          description: Distinct reporters for this normalized filename. Packet repeats and changing metadata do not add votes; unknown reporters count once per origin.
-          type: integer
-          minimum: 1
-        rawNames:
-          type: array
-          items:
-            type: string
+          type:
+          - string
+          - 'null'
     SearchResultMedia:
       type: object
       additionalProperties: false
@@ -8552,54 +8547,6 @@ components:
           minimum: 0
         codec:
           type: string
-    SearchResultObservation:
-      type: object
-      additionalProperties: false
-      required: [origin, reporterEndpoint, rawName, normalizedName, sizeBytes, sources, completeSources, sourceClientId, sourceClientPort, fileType, media, rating, aichHash, complete, directory, observedAt]
-      properties:
-        origin:
-          type: string
-        reporterEndpoint:
-          description: Endpoint captured for the reporter of this observation. The associated download peer is identified separately. Null when no reporting endpoint was captured.
-          type: [string, "null"]
-        rawName:
-          type: string
-        normalizedName:
-          type: string
-        sizeBytes:
-          type: [integer, "null"]
-          description: Reported size; null means unknown, distinct from a known empty file.
-          minimum: 0
-        sources:
-          type: integer
-          minimum: 0
-        completeSources:
-          type: integer
-          minimum: 0
-        sourceClientId:
-          type: [integer, "null"]
-          minimum: 0
-          maximum: 4294967295
-        sourceClientPort:
-          type: [integer, "null"]
-          minimum: 0
-          maximum: 65535
-        fileType:
-          type: string
-        media:
-          $ref: "#/components/schemas/SearchResultMedia"
-        rating:
-          type: integer
-          minimum: 0
-        aichHash:
-          type: [string, "null"]
-        complete:
-          type: boolean
-        directory:
-          type: string
-        observedAt:
-          type: string
-          format: date-time
     SearchResultDownloadRequest:
       type: object
       additionalProperties: false

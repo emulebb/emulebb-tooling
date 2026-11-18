@@ -609,344 +609,150 @@ and does not implicitly disable sharing.
 
 ## Search and knowledge foundation
 
-One canonical search model distinguishes live/index/hybrid execution, with live
-as the stable default and separate network-backend selection. Design all modes
-now, advertise only implemented capabilities; autonomous index/hybrid execution
-and index projections/APIs are later implementation.
+One canonical model distinguishes live/index/hybrid execution. Live is the
+implemented default; automatic/server/global/Kad selects its network backend.
+Design index/hybrid and future adapters now, advertise only implemented
+capabilities. Live sessions start empty and collect network observations only.
+Passive-index lookups cannot preload session results or manufacture occurrences.
 
-Live sessions start empty and collect only their network observations. Do not
-preload matching local or passive-index entries, synthesize observations for
-lookups, or alter retained live results when passive-index settings change.
+### Identities and provenance
 
-Keep the fixed twelve global result sorts: display name, size, sources,
-complete sources, rating, file type, artist, album, title, length, bitrate and
-codec. Sources descending is the default. Every sort needs an indexed live
-keyset path and claim-ID tie-breaker; sorting a complete collection or only the
-current page is not acceptable. This operator decision is settled; indexed sort
-integration remains in the current REST/cache cut.
+SQLite allocates immutable never-reused positive i64 session and claim IDs,
+rendered as exact decimal strings. Claim identity is hash plus nullable unsigned
+64-bit size. Unknown, zero and contradictory known sizes remain distinct claims.
+Remote claims never create verified local library identity or prove local bytes.
 
-Separate search metadata, paginated result summaries and provenance. Give
-results stable claim identities based on hash plus size; preserve different
-known size claims rather than collapsing them by hash. Unknown size is a separate
-unresolved null-size claim, never a fabricated zero or automatic merge of
-contradictory sizes. Remote claims never overwrite local verified
-facts. Provenance includes meaningful origin, source/method, freshness and
-validation evidence. A complete-source observation does not prove local bytes.
+Permanent `content_claims` and typed `content_claim_observations` are independent
+of session membership and protocol-cache expiry. Fingerprints include origin,
+reporter and exact metadata presence/values. Aggregate identical occurrences by
+first/last-seen seconds and count; preserve meaningful variants. `reporterEndpoint`
+identifies the captured canonical reporting endpoint, separately from advertised
+peer identity. Unknown reporters are null. Kad retains the queried IPv4 contact,
+including replies without AICH. Store wire AICH as a typed 20-byte root; preserve
+reporter-IP/version corroboration and the distinction between server claims and
+accepted integrity authority.
 
-Implement reusable identities and independent claim/observation storage needed
-by current searches. Permanent knowledge is independent of client session
-membership and bounded protocol-cache expiry. Aggregate identical repetitions
-using source identity, first/last seen and count; retain distinct claims and
-meaningful metadata changes instead of every duplicate packet.
+`search_results` keys membership by session and claim. Its observation relation
+references the permanent observation through composite claim/observation keys
+and stores independent session-local occurrence times/counts. Terminal sessions
+freeze membership and summaries while late packets can enrich permanent facts.
+Retain history and knowledge without automatic expiry. Stop ends collection and
+preserves results; explicit deletion/clear discards session membership while
+retaining permanent knowledge. Restart durably records collecting sessions as
+interrupted errors; callers explicitly create a new linked search rather than
+silently replaying network work. The stop action and linked-search contract
+remain part of the pending lifecycle/cache cut.
 
-Filename consensus counts at most one vote from each reporter for each normalized
-filename. Repeated packets and changing source/complete-source counts never add
-votes for the same reporter/name pair. Known reporters use their captured
-canonical endpoint; an unknown reporter contributes at most one vote per origin.
-Raw metadata variants and occurrence counts remain independent provenance.
-This rule is implemented transactionally in the current filename-voting cut.
+### Durable reducers and ownership
 
-Retain search history and knowledge without automatic expiry. No required
-search-delete endpoint. Stop ends collection while preserving results. Terminal
-stopped/completed sessions freeze membership; late responses may enrich the
-independent corpus. Mark running sessions interrupted after restart; callers
-explicitly issue a new linked search instead of silently replaying it.
+Filename consensus gives at most one vote per reporter and normalized filename.
+Known endpoints share one vote across server/global origins; unknown reporters
+count once per origin. Repeated packets and changing counts do not multiply
+votes. Store reporter votes, materialized name totals and an indexed winner.
+Compare whole quality tuples (useful name, sources, complete sources, rating),
+then binary normalized name. Size knowledge is constant within a claim.
 
-### Observation reporter checkpoint
+For sources and complete sources independently, sum eD2K reporter maxima with
+u32 saturation and compare that subtotal with the strongest Kad estimate.
+Unknown eD2K reporters use one bucket per server/global origin. Keep independent
+eD2K and Kad components so eD2K can overtake an initially stronger Kad estimate.
+Generated columns expose their maximum without observation-history scans.
 
-Search and download filename observations use `reporterEndpoint` in JSON and
-`reporter_endpoint` in Rust/SQL. This identifies the captured reporting endpoint;
-advertised download-peer identity remains separate. Unknown reporting endpoints
-are null. Kad results retain the queried contact's IPv4 UDP endpoint, including
-results without AICH metadata. AICH corroboration retains reporter-IP/version
-rules. The independent corpus decodes server AICH's wire Base32 representation
-into the typed 20-byte root.
+Select populated presentation fields independently using whole quality tuples;
+equal quality prefers the smaller binary/numeric value. Keep source ID/port as
+one pair, rating as a maximum and completeness as any complete report. Missing
+fields never erase winners. Values live in `search_results`; `search_field_quality`
+retains only their winning tuples. Ingress supplies bounded fresh presentation
+observations independently of exact raw facts and filename votes.
 
-### Search session identity checkpoint
+The profile owner commits raw facts, membership, votes, availability, field
+winners and count/time updates atomically. Its receipt contains the complete
+committed summary. Allocation and publication remain owned after caller
+cancellation; SQL failure publishes no uncommitted state. Uncertain outcomes
+fault ingress and are not replayed automatically. Header writes contain no
+result snapshot and cannot replay observations. Network forwarding uses bounded
+channels, propagates backpressure and drains decoded occurrences on cancellation.
 
-The positive `search_sessions.id` AUTOINCREMENT primary key is the public session
-identity, rendered as an exact decimal string. SQL owns allocation; creation
-accepts no caller-selected ID. Queue admission precedes allocation and
-publication follows commit. Updates require an existing session. Deletion and
-clear do not reset allocation; exhaustion fails without wrapping. OpenAPI paths,
-summaries, details and result references share `SearchId`. The current native
-campaign proves exact IDs above JavaScript's safe-integer range, retrieval and
-non-reuse after deletion.
+Use the existing 64-slot/8 MiB temporary-work owner. Reads use its blocking SQL
+worker and retain reply charges through projection/serialization or caller drop.
+Header/provenance rows/pages cap charged backing at 128/256 KiB. Summary rows/pages
+cap it at 512 KiB/1 MiB. Selected download seeds retain 512 KiB and use a slim
+indexed identity/name/source lookup plus at most 100 byte-bounded provenance rows;
+permanent provenance stays separately pageable. Preserve High-ID source-hint and
+AICH trust rules. Admission, failed reads, closing and explicit retry reuse common
+patterns; do not manufacture hidden retries or copy full runtime configurations.
 
-### Claim-backed search membership checkpoint
+### Indexed browsing and native contract
 
-Fresh schema **97** stores permanent `content_claims` keyed by ED2K hash plus
-nullable unsigned size, with never-reused positive identities. Unknown size,
-known zero and conflicting known sizes remain distinct. Remote evidence creates
-no accepted library identity. Independent `content_claim_observations` retain
-typed metadata variants by origin and reporting endpoint, with first/last-seen
-Unix seconds and a saturating positive occurrence count. SHA-256 fingerprints
-use canonical typed metadata; timestamps and counts are not variant identity.
-Unknown reporters aggregate explicitly as null.
+Schema 98 maintains result cardinality transactionally and indexes collecting
+sessions for startup interruption. Header pages seek newest session ID first.
+Keep all twelve global result sorts: displayName, sizeBytes, sources,
+completeSources, rating, fileType, artist, album, title, lengthSeconds,
+bitrateKbps and codec. Sources descending is the default. Text uses binary
+ordering. Claim ID breaks ties in the same direction. Unknown size sorts before
+known size ascending and after it descending.
 
-`search_results` identifies membership by `(session_id, claim_id)` and stores its
-presentation summary. `search_result_observations` references the permanent
-observation through a composite claim/observation foreign key and retains
-session-local first/last-seen seconds and occurrence counts. Deleting membership
-retains independent claims and evidence. Header updates contain no result
-snapshot and cannot replay observations. Search-header timestamps use explicit
-`_s` columns.
+Each sort has a session-local index. A derived non-null size key distinguishes
+unknown from the full unsigned size range; a composite foreign key binds the
+membership key to the permanent claim, preventing contradictory copied size.
+Cursors carry an anchor claim ID scoped to session/sort/direction, not arbitrary
+text keys. Resolve that bounded key by primary key, then bind the explicit tuple
+into the indexed range. Reserve 128 KiB preparation separately from the 1 MiB
+result reply. Limits are 1..200, default 100; byte budgets can shorten a page.
+Follow `hasMore`/`nextCursor`. Traversal is weakly consistent during live summary
+changes; rows can move across a boundary. No per-client snapshots are retained.
+An absent anchor in a retained session yields an empty page.
 
-The shared profile persistence owner ingests decoded occurrences before session
-filtering. Corpus facts and accepted membership commit in one SQL transaction;
-terminal/deleted sessions can enrich the corpus without changing membership.
-The admitted request owns SQL and postcommit publication after caller disconnect.
-Publication payloads and aggregation copies reserve byte capacity before cloning.
-Only refusal before handoff waits for admission capacity; refusal while preparing
-an admitted projection returns Busy once without SQL or hidden replay. Uncertain
-commit faults ingress. Network forwarding drains decoded occurrences through
-bounded channels even when cancellation settles the request first.
+Use these independent resources:
 
-Live sessions contain network results only. Passive-index lookup does not
-preload results or manufacture corpus claims. The public summary exposes the
-permanent claim `id` as a positive decimal i64 string. Download admission uses
-`POST /searches/{searchId}/results/{resultId}/download`. It selects the exact
-hash/size claim; unknown size admits a job waiting for metadata. Kad preserves
-named results without a reported size. WebUI rows/actions use claim IDs and
-present unknown size separately from a known empty file.
+```text
+POST /searches                                      -> 201 metadata + Location
+GET  /searches                                      -> cursor-paged metadata
+GET  /searches/{searchId}                            -> metadata
+GET  /searches/{searchId}/results                    -> sorted summary page
+GET  /searches/{searchId}/results/{resultId}          -> selected summary
+GET  /searches/{searchId}/results/{resultId}/observations -> raw provenance page
+POST /searches/{searchId}/results/{resultId}/download -> exact-claim admission
+```
 
-Search creation, header transitions, completion/failure and delete/clear now
-share the profile owner and existing blocking SQL worker with raw ingestion.
-The admitted command owns SQL, queue/cache publication and cancellation after
-caller disconnect. Queue admission precedes durable ID allocation; SQL failure
-publishes neither a new entry nor an uncommitted status. Terminal sessions do
-not reopen. Late observations enrich the corpus without restoring removed
-membership. State -> queue locking also coordinates retries.
+Metadata exposes durable count and Unix-second created/updated/completed times,
+with nullable active telemetry. Results contain materialized fields; raw evidence
+has its own fixed observation-ID page. Unknown reported values remain null,
+including counts/media values. Its first/last seen and occurrence count belong
+to the selected session. Missing membership returns 404; busy/closing uses the
+common 503/error contract. Download admission supports unknown size as waiting
+for metadata; known zero stays a known empty file. Creation returns its owned
+receipt without a second postcommit read.
 
-Status writes convert header data only, preserving result membership and raw
-occurrence counts without cloning result history. Completion publishes accepted
-Kad integrity votes after SQL, with its temporary matching set bounded by incoming
-vote keys. Admission charges vote backing and header preparation; only an
-unadmitted Busy outcome waits for capacity. SQL/uncertain outcomes are not
-replayed automatically. Creation reserves six conservative copies of variable
-preparation/publication backing before cloning, within the existing owner budget.
-Immutable startup network configuration is shared across core clones instead of
-copying server/bootstrap lists per creation request. The public configuration
-shape is unchanged. Creation and removal reuse the shared REST persistence-error
-mapping, including HTTP 503 for busy/closing admission.
+The WebUI keeps one bounded session page, one result page and at most one selected
+50-row observation page. It uses the server's global order, opaque cursors and
+exact ID strings. First/Next replaces rows rather than accumulating caches.
+Evidence loads on demand with explicit retry. Client validation and fixtures
+adopt the same OpenAPI contract.
 
-Schema 93 maintains `search_sessions.result_count` transactionally through result
-membership insert/delete triggers. Header writes do not overwrite it; duplicate
-packets and summary updates do not increment it. Counter overflow aborts the
-whole raw-ingress/membership transaction.
+### Delivery and remaining acceptance
 
-Indexed SQL APIs now page session headers, result summaries and session-scoped
-provenance independently, without hydrating one from another. Pages accept
-1..200 rows. Header/provenance pages cap owned backing at 256 KiB with a 128 KiB
-row bound; summaries allow 1 MiB per page and 512 KiB per row because field
-winners may come from independently bounded packets. Checks charge borrowed
-SQLite text before allocating owned values. Numeric-ID keysets preserve exact
-full-width identities, distinguish missing resources from empty pages and allow
-continuation after a header cursor's row is removed.
+Storage tests cover first/late pages, all twelve sorts in both directions,
+100,000 equal-key results, Unicode/binary order, unknown/zero/full-u64 sizes,
+long anchor keys, byte-bound continuation, rollback, terminal freeze, independent
+session/global counts, cascade deletion and interrupted startup. The production
+late-page statements must use no full scan or temporary sort and fewer than 1,000
+SQLite VM steps; the anchor point read must stay below 100 steps. Owner tests
+cover retained charges, shared-budget refusal, closing, failed reads and explicit
+success after repair. Native evidence reuses the existing Python metadata
+fixtures, launchers and OpenAPI campaign.
 
-Download selection now reads the exact persisted session/claim membership through
-the existing blocking worker. It selects identity/name/source fields plus up to
-100 row/byte bounded provenance rows, with a retained 512 KiB owner charge until
-consumption. It does not fetch aggregate media text or clone/hydrate cached search
-history. Permanent provenance remains independently pageable. Core integration
-covers admission with the cached session history absent and preserves diagnostic
-names, unknown-size admission and existing AICH trust rules.
-
-The storage fixtures contain 100,000 sessions, results and provenance rows.
-First/late-page correctness and the exact production SELECT statements are
-checked: late seeks use no full scans or temporary sorts and fewer than 1,000
-SQLite VM steps. Byte-bound continuation, full-width IDs/sizes, session/global
-occurrence accounting and independently accumulated long summary fields are
-covered. This is storage-page evidence; app-wide startup/list behavior and the
-combined library/job resident-memory gate are not yet qualified.
-
-Schema 97 includes `search_name_reporters` keyed by session, claim, normalized name
-and reporter identity, plus materialized `search_name_totals`. Known endpoints
-share one vote across transport origins; unknown reporters count once per origin.
-Repeats and changed metadata preserve that cardinality. Totals retain a whole
-best-quality tuple (useful-name flag, reported sources, complete sources, rating),
-not independent component maxima. Immutable claim size makes size knowledge
-constant within each comparison. Ties resolve by binary normalized-name order.
-The winner index orders count, quality and name, avoiding a tally/history scan.
-
-Ingress supplies bounded, filtered presentation votes separately from raw facts.
-Projection fields have no caller-selected name or availability counts. Raw observations, membership,
-reporter votes, totals and the selected name commit atomically; the publication
-receipt carries the database-selected name and availability counts to the owner
-for cache publication.
-The first packet also uses normalized display naming while preserving raw names.
-Removed/terminal sessions skip presentation preparation and retain late raw facts
-without recreating membership. REST name-candidate votes follow the same reporter
-rule; presentation observation counts remain independent of vote counts.
-
-Regressions prove that two independent reporters beat one reporter with twenty
-metadata changes; known-endpoint transport deduplication; origin-scoped unknown
-reporters; tuple-quality and deterministic ties; session/size-claim isolation;
-terminal freeze; rollback followed by an explicit successful operation; and late
-raw ingestion independent of removed-session presentation. The exact winner
-SELECT on 100,000 names performs no full scan or temporary sort and fewer than
-200 SQLite VM steps. This proves the SQL reducer bound; other Core reducers still
-retain observations and require their remaining cut before whole-ingress or
-resident-memory qualification.
-
-The filename-consensus checkpoint passed **276 metadata**, **654 core** and **162 REST** tests with no
-compiler warnings. Voting evidence is in
-`reports/settings-request-round-1/search-name-votes-{metadata,core,rest}.log`.
-The selected Python contract/profile suite passes **175 tests**, recorded in
-`search-name-votes-python.log` in that directory. Earlier page/seed evidence is retained. New page/seed evidence is in
-`reports/settings-request-round-1/search-pages-{metadata,core,rest}.log`.
-Lifecycle evidence remains in `reports/settings-request-round-1/search-lifecycle-{core,rest}.log`.
-Regressions cover postcommit caller abort for creation, running, completion,
-failure and removal; queue publication and selective cancellation; accepted-vote
-publication without observation replay; frozen terminal status; and closed
-admission preserving sessions. Real SQLite trigger failures prove failed
-inserts allocate no public session/queue entry and failed updates leave both
-persisted and cached status unchanged. Later explicit successful operations work.
-
-Unchanged Kad evidence remains **147 tests**. WebUI evidence remains **56 unit** and **32 browser** tests, including its
-production build. These are retained in `search-membership-*.log` under the same
-report directory. Harness `65b1944e` passed **275 relevant Python tests** in its
-push gate: `reports/local-check/emulebb-build-tests/20261118T090024Z-badcbf37/02.log`.
-That includes formatted allowlist extraction, claim-ID live-wire fixtures and
-selected OpenAPI contract conformance. The UI source is unchanged by this voting slice.
-
-The final daemon/WebUI build passes with zero warnings:
-`logs/builds/20261118T110623Z-build-clients/build-result.json`.
-The native REST/OpenAPI campaign passes with graceful teardown on Rust
-`7b225241`, using Harness `65b1944e` and the Tooling contract at `7b6870e4`:
-`reports/rust-rest-openapi-ci/20261118T110915Z/report.json`.
-
-Availability is reduced transactionally from the bounded raw event batch.
-`search_ed2k_reporter_maxima` retains independent source/complete-source maxima
-per session, claim and canonical reporter. Known endpoints deduplicate server
-and global transports; unknown reporters use one bucket per origin. Positive
-reporter deltas increment independent saturated eD2K totals. Kad retains its
-strongest estimate independently. Stored generated columns expose the maximum
-of the eD2K subtotal and Kad estimate for each count. No observation-history scan
-or reporter-wide SUM is needed. A leading Kad estimate cannot erase eD2K progress.
-The receipt publishes these committed counts to Core. Missing and explicit-zero
-raw counts remain distinct provenance. Session removal cascades reporter state;
-terminal sessions keep raw facts without changing their frozen presentation.
-
-Availability regressions cover repeated/lower reports, transport and unknown
-reporter deduplication, independent source/complete-source totals, eD2K overtaking
-Kad, u32 saturation, absent/zero provenance, transaction rollback and explicit
-retry, session/size-claim isolation, terminal freeze and cascade deletion. The
-production reporter lookup against 100,000 rows uses no full scan or sort and
-fewer than 100 SQLite VM steps. Core checks committed/cached agreement across
-mixed transports. Current slice checks pass **282 metadata**, **655 core** and
-**162 REST** tests without compiler warnings; evidence is in
-`reports/settings-request-round-1/search-availability-{metadata,core,rest}.log`.
-Rust checkpoint `561d6c03` also passes **175 selected Python tests** using the
-existing harness (`search-availability-python.log` in that report directory).
-The daemon/WebUI build passes with zero warnings:
-`logs/builds/20261118T113447Z-build-clients/build-result.json`.
-The native REST/OpenAPI campaign passes with graceful teardown on Rust
-`561d6c03`, Harness `65b1944e` and Tooling `59185f20`:
-`reports/rust-rest-openapi-ci/20261118T113748Z/report.json`.
-
-
-Schema 97 also stores `search_field_quality`, one whole winning quality tuple
-per populated presentation field. A bounded batch carries fresh presentation
-observations independently of raw provenance and filename votes. Each nonempty
-field competes independently by useful-name flag, reported sources, complete
-sources and rating; immutable claim size makes size knowledge constant. Equal
-quality prefers the smaller binary text/blob or numeric value. The source ID
-and port compete and commit as one pair. Rating retains its maximum; completeness
-retains any complete report. Missing/empty fields never erase prior winners.
-Values remain in `search_results`; the quality table does not duplicate them.
-
-Raw facts, membership, quality tuples, selected fields, filename votes and
-availability commit together. The bounded receipt contains the whole committed
-summary, and Core reserves its memory before handoff and publishes it after SQL.
-Presentation input has independent item, per-observation and batch-byte bounds.
-The summary reader applies the same row-byte bound used for paged browsing.
-
-Field regressions cover independently populated fields, whole-tuple comparisons,
-arrival-independent ties, atomic source pairs, AICH/numeric selection, monotonic
-rating/completeness, rollback of values/quality/raw facts, cascade deletion and
-invalid/oversized admission before writes. Core also proves that a prior artist
-and a later codec survive with cached result history cleared between packets.
-Core still retains observations for current browsing and other pending paths;
-this reducer does not establish whole-ingress or combined-scale memory limits.
-
-Rust checkpoint `28b02343` passes **287 metadata**, **656 core**, **162 REST**
-and **175 selected Python tests**, without compiler warnings. Evidence is in
-`reports/settings-request-round-1/search-fields-{metadata,core,rest,python}.log`.
-The Python checks reuse the existing metadata, OpenAPI-route and native-campaign
-harness suite; no parallel test framework or launch path is introduced.
-The daemon/WebUI build passes with zero warnings:
-`logs/builds/20261118T115333Z-build-clients/build-result.json`.
-The native REST/OpenAPI campaign passes with graceful teardown on Rust
-`28b02343`, Harness `65b1944e` and Tooling `89733d33`:
-`reports/rust-rest-openapi-ci/20261118T115635Z/report.json`.
-
-
-
-The shared SQL worker now owns header pages/lookups, result pages/lookups,
-provenance pages and selected download seeds through one bounded read command.
-Public Core entry points retain the existing owner byte lease until caller
-release. Header/provenance replies reserve 256 KiB, selected summaries/seeds
-512 KiB and result pages 1 MiB, within the existing 8 MiB shared work budget.
-Invalid identities/cursors/page limits fail before admission. Ordinary read
-failures release their charge without faulting the writer or replaying work.
-Core regressions check each read kind, missing membership, retained charges,
-shared-capacity refusal, closed admission, and explicit success after a read fault.
-
-Schema 97 indexes collecting sessions separately. Core startup atomically marks
-queued/running sessions `error` with `interrupted-by-restart` in SQLite before
-loading state. Terminal history and evidence remain unchanged. Repeated startup
-is a no-op for settled sessions, clock rollback cannot decrease updated time,
-and a failed interruption statement rolls back the entire set. The production
-UPDATE against 100,000 terminal sessions and one collecting session uses no full
-scan or sort and fewer than 1,000 SQLite VM steps. Startup still hydrates history
-until the pending REST/cache integration is cut; this is index/transaction proof.
-
-Rust checkpoint `8aa4e7d6` passes **289 metadata**, **659 Core** and **31 existing
-Python metadata-harness tests**, without compiler warnings. Evidence is in
-`reports/settings-request-round-1/search-owned-reads-{metadata,core,python}.log`.
-REST/WebUI sources are unchanged in this dependency slice; their previous native
-campaign evidence remains attached to checkpoint `28b02343` above.
-
-`GET /searches/{searchId}/results/{resultId}/observations` now reads raw
-session-local provenance independently through the owner. Its fixed ascending
-observation-ID order uses collection-scoped opaque cursors, default limit 100,
-maximum 200 and the existing 256 KiB page bound. IDs are exact decimal strings;
-first/last seen are Unix seconds. Unknown reported values remain null, including
-counts and media values; zero stays distinct. Membership counts/times belong to
-the selected session, not the permanent corpus. Missing membership returns 404;
-closed/busy admission uses the common persistence error mapping. OpenAPI defines
-this separate page. Removal of embedded evidence from result summaries remains
-part of the pending result-page cut.
-
-The WebUI opens a single selected result inspector on demand. It retains only
-one 50-row observation page, replaces rows when paging, and offers First/Next
-and explicit retry. It does not accumulate observation pages or fetch evidence
-for every row. Native conformance extends the existing metadata fixture helpers
-and campaign launch/validation path, including a first observation whose global
-count is three but whose selected-session count is one.
-The observation-resource slice passes **165 REST**, **209 selected Python**,
-**58 WebUI unit** and **32 browser tests**, plus the UI production build.
-Evidence is in `reports/settings-request-round-1/search-observation-route-{rest,python,webui}.log`.
-Core/metadata are unchanged from the owned-read checkpoint above; its valid
-read-bound, restart and scale-index evidence is reused.
-Rust `b93bcfee` builds daemon/WebUI with zero warnings:
-`logs/builds/20261118T123848Z-build-clients/build-result.json`.
-Native REST/OpenAPI qualification passes with graceful teardown on that revision,
-Harness `0d00a002` and Tooling `574e12c8`:
-`reports/rust-rest-openapi-ci/20261118T124605Z/report.json`.
-Its baseline exercises 84 routes; intentionally skipped routes remain explicit.
-The nested `categoryPersistencePhase.searchObservations` proof passes two pages,
-two rows and session-local occurrence accounting against the real daemon/schema.
-
-
-
-The remaining search cut includes
-eliminating bulk startup/history hydration, wiring paged browsing through owned
-reads and canonical separate REST/OpenAPI/WebUI resources, and snapshot replacement.
-Combined-scale and total
-memory qualification remain open. Settings/runtime, CLI/Docker, library and
-remaining foundation allocations retain their existing acceptance gates.
+The sorted-resource cut passes **293 metadata**, **660 Core**, **166 REST**,
+**207 selected Python**, **58 WebUI unit** and **32 browser tests**, plus the UI
+production build. Rust test compilation has no warnings. Evidence is in
+`reports/settings-request-round-1/search-sorted-pages-{metadata,core,rest,python,webui}.log`.
+Daemon build and native campaign qualification are the remaining checkpoint gates.
+Remaining work includes removing bulk startup hydration, runtime result/observation
+caches, cache-based Kad completion probes and full-history diagnostic capture;
+completing stop/linked-search lifecycle; and running combined library/job memory
+qualification. Query-scale evidence alone does not qualify app-wide resident
+memory or the complete 100k-library/job operating model. Settings/runtime,
+CLI/Docker, library and remaining foundation gates retain their scope below.
 
 ## Native REST, OpenAPI and WebUI
 
