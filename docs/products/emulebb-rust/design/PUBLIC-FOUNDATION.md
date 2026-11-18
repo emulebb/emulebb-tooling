@@ -632,6 +632,13 @@ membership and bounded protocol-cache expiry. Aggregate identical repetitions
 using source identity, first/last seen and count; retain distinct claims and
 meaningful metadata changes instead of every duplicate packet.
 
+Filename consensus counts at most one vote from each reporter for each normalized
+filename. Repeated packets and changing source/complete-source counts never add
+votes for the same reporter/name pair. Known reporters use their captured
+canonical endpoint; an unknown reporter contributes at most one vote per origin.
+Raw metadata variants and occurrence counts remain independent provenance.
+Implementation of this rule remains part of the durable bounded aggregation cut.
+
 Retain search history and knowledge without automatic expiry. No required
 search-delete endpoint. Stop ends collection while preserving results. Terminal
 stopped/completed sessions freeze membership; late responses may enrich the
@@ -661,7 +668,7 @@ non-reuse after deletion.
 
 ### Claim-backed search membership checkpoint
 
-Fresh schema **92** stores permanent `content_claims` keyed by ED2K hash plus
+Fresh schema **93** stores permanent `content_claims` keyed by ED2K hash plus
 nullable unsigned size, with never-reused positive identities. Unknown size,
 known zero and conflicting known sizes remain distinct. Remote evidence creates
 no accepted library identity. Independent `content_claim_observations` retain
@@ -716,8 +723,40 @@ copying server/bootstrap lists per creation request. The public configuration
 shape is unchanged. Creation and removal reuse the shared REST persistence-error
 mapping, including HTTP 503 for busy/closing admission.
 
-Current lifecycle checks pass **651 core** and **162 REST** tests with no compiler
-warnings: `reports/settings-request-round-1/search-lifecycle-{core,rest}.log`.
+Schema 93 maintains `search_sessions.result_count` transactionally through result
+membership insert/delete triggers. Header writes do not overwrite it; duplicate
+packets and summary updates do not increment it. Counter overflow aborts the
+whole raw-ingress/membership transaction.
+
+Indexed SQL APIs now page session headers, result summaries and session-scoped
+provenance independently, without hydrating one from another. Pages accept
+1..200 rows. Header/provenance pages cap owned backing at 256 KiB with a 128 KiB
+row bound; summaries allow 1 MiB per page and 512 KiB per row because field
+winners may come from independently bounded packets. Checks charge borrowed
+SQLite text before allocating owned values. Numeric-ID keysets preserve exact
+full-width identities, distinguish missing resources from empty pages and allow
+continuation after a header cursor's row is removed.
+
+Download selection now reads the exact persisted session/claim membership through
+the existing blocking worker. It selects identity/name/source fields plus up to
+100 row/byte bounded provenance rows, with a retained 512 KiB owner charge until
+consumption. It does not fetch aggregate media text or clone/hydrate cached search
+history. Permanent provenance remains independently pageable. Core integration
+covers admission with the cached session history absent and preserves diagnostic
+names, unknown-size admission and existing AICH trust rules.
+
+The storage fixtures contain 100,000 sessions, results and provenance rows.
+First/late-page correctness and the exact production SELECT statements are
+checked: late seeks use no full scans or temporary sorts and fewer than 1,000
+SQLite VM steps. Byte-bound continuation, full-width IDs/sizes, session/global
+occurrence accounting and independently accumulated long summary fields are
+covered. This is storage-page evidence; app-wide startup/list behavior and the
+combined library/job resident-memory gate are not yet qualified.
+
+Current checks pass **270 metadata**, **652 core** and **162 REST** tests with no
+compiler warnings. New page/seed evidence is in
+`reports/settings-request-round-1/search-pages-{metadata,core,rest}.log`.
+Lifecycle evidence remains in `reports/settings-request-round-1/search-lifecycle-{core,rest}.log`.
 Regressions cover postcommit caller abort for creation, running, completion,
 failure and removal; queue publication and selective cancellation; accepted-vote
 publication without observation replay; frozen terminal status; and closed
@@ -725,8 +764,7 @@ admission preserving sessions. Real SQLite trigger failures prove failed
 inserts allocate no public session/queue entry and failed updates leave both
 persisted and cached status unchanged. Later explicit successful operations work.
 
-Unchanged claim storage and Kad evidence remains **263 metadata** and **147 Kad**
-tests. WebUI evidence remains **56 unit** and **32 browser** tests, including its
+Unchanged Kad evidence remains **147 tests**. WebUI evidence remains **56 unit** and **32 browser** tests, including its
 production build. These are retained in `search-membership-*.log` under the same
 report directory. Harness `65b1944e` passed **275 relevant Python tests** in its
 push gate: `reports/local-check/emulebb-build-tests/20261118T090024Z-badcbf37/02.log`.
@@ -735,13 +773,14 @@ selected OpenAPI contract conformance. The contract and UI source are unchanged
 by this lifecycle slice.
 
 The final daemon/WebUI build passes with zero warnings:
-`logs/builds/20261118T093913Z-build-clients/build-result.json`.
+`logs/builds/20261118T102011Z-build-clients/build-result.json`.
 The native REST/OpenAPI campaign passes with graceful teardown on Rust
-`a18e4eab`, using Harness `65b1944e` and the Tooling contract at `7d02d3ef`:
-`reports/rust-rest-openapi-ci/20261118T094209Z/report.json`.
+`b4048615`, using Harness `65b1944e` and the Tooling contract at `e2cc9acb`:
+`reports/rust-rest-openapi-ci/20261118T102308Z/report.json`.
 
-The remaining search cut includes bounded session/history/provenance reads,
-canonical separate REST/OpenAPI/WebUI resources and snapshot replacement.
+The remaining search cut includes durable bounded reporter/name aggregation,
+eliminating bulk startup/history hydration, wiring paged browsing through owned
+reads and canonical separate REST/OpenAPI/WebUI resources, and snapshot replacement.
 Combined-scale and total
 memory qualification remain open. Settings/runtime, CLI/Docker, library and
 remaining foundation allocations retain their existing acceptance gates.
