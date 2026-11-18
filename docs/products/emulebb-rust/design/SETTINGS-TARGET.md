@@ -473,7 +473,11 @@ passed **125 tests**, including two new regressions for fresh metadata-only
 initialization and settings edits with malformed bootstrap TOML:
 `reports/settings-request-round-1/daemon-offline-isolation.log`.
 Normal commit/push gates passed. The build/native evidence above predates this
-small isolation change; final integrated qualification must use the final cut.
+small isolation change. The subsequent combined native campaign on Rust
+`075ea97a` passes the settings CLI phase with this isolation in place; current
+build/native evidence is recorded under
+[Docker and deployment](PUBLIC-FOUNDATION.md#docker-and-deployment).
+Final integrated qualification must still use the final cut.
 
 Rust `9a96a8ba` adds `product::settings_schemas()`: named OpenAPI 3.1 components
 for complete values, saved mode/value leaves, recursively partial edits, PATCH,

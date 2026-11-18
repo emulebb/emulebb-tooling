@@ -863,10 +863,16 @@ already used in `emulebb-ed2k`'s `ed2k_transfer/fs_durability.rs`. GNU/BusyBox
 The package-private helper adds no public daemon commands, flags or environment
 settings bridge. The daemon itself runs with only `--profile`.
 
-Configure P2P interfaces through saved settings. A planned typed ephemeral
-receipt from the actual bound listener supplies the health-check endpoint; it
-is runtime output, not another configuration authority or a hand-written TOML
-parser. Missing/stale receipt handling must fail health checks honestly. Update
+Configure P2P interfaces through saved settings. The daemon atomically publishes
+the typed ephemeral `.emulebb-rest-listener.json` receipt after binding its
+control listener. It contains the actual bound address, probe host/port and an
+ephemeral instance ID; it contains no credential. Wildcard listeners use the
+corresponding loopback probe. This is runtime output, not another configuration
+authority or a hand-written TOML parser. The Docker health helper reads it with
+the standard JSON parser and requires HTTP 204 plus a matching
+`X-Emulebb-Instance` response header. Normal shutdown removes the receipt;
+missing, malformed and stale receipts fail health checks. Both image variants
+include `jq` for this package-private reader. Update
 launchers, Compose/VPN examples, both container variants, package smoke tests and
 harness callers. Preserve legitimate harness route/interface scenario inputs
 and apply them through canonical profile setup.
@@ -877,6 +883,23 @@ and at parent-directory sync. Include automatic resume, final-profile user edits
 concurrent publication, unsupported no-replace behavior and proof that no staging
 absolute path leaks into published state. Both Ubuntu and Alpine variants need
 actual proof; none is claimed by this design.
+
+The listener/health slice is implemented in Rust `075ea97a` and Harness
+`bab926fc`. Scoped checks passed **127 daemon**, **159 REST** and **55 Python**
+tests, plus Bash syntax validation and normal commit/push gates. Logs:
+`reports/settings-request-round-1/listener-{daemon,rest,python}.log`.
+The regular daemon/WebUI build passed with zero warnings:
+`logs/builds/20261118T035145Z-build-clients/build-result.json`.
+The native campaign passed on exact Rust
+`075ea97a1df3d04520d295788b10a562c6c6d75a` with graceful teardown:
+`reports/rust-rest-openapi-ci/20261118T035534Z/report.json`.
+Its `listenerReceiptPhase` proves the configured nondefault port, matching live
+instance and removal on shutdown; its settings CLI phase also passes. The
+existing Docker image smoke now exercises missing/malformed/stale receipts with
+the real packaged helper when run. Python mocks prove that smoke rejects false
+positives and cleans up; they do not prove actual image execution. Actual
+Ubuntu/Alpine images, interrupted provisioning and the remaining deployment cut
+are still unqualified.
 
 ## Ordered implementation and acceptance
 
