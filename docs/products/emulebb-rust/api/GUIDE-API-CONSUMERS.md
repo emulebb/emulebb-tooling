@@ -87,6 +87,13 @@ twelve documented sorts support both directions with claim ID as tie-breaker.
 Use the returned opaque cursor with the same session/sort/direction. Pages are
 limited to 1..200 rows and a byte budget, so `hasMore` controls continuation.
 
+To link a new session, send optional `parentSearchId` with the ordinary
+`POST /searches` body and your chosen criteria. It is an exact decimal ID string;
+null or omission creates an unlinked session. The parent supplies provenance.
+The new session starts empty and collects its own network results. An absent
+parent returns HTTP 404 without creating a session. Deleting a parent clears
+its children's link while preserving the children, criteria and results.
+
 Stop collection with `POST /searches/{searchId}/stop` and no body. HTTP 204
 confirms that collection is frozen and execution cancellation is requested.
 The session and collected results remain browsable; repeated stops are

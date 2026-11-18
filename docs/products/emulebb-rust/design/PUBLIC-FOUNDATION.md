@@ -639,13 +639,19 @@ freeze membership and summaries while late packets can enrich permanent facts.
 Retain history and knowledge without automatic expiry. Stop ends collection and
 preserves results; explicit deletion/clear discards session membership while
 retaining permanent knowledge. Restart durably records collecting sessions as
-interrupted errors; callers explicitly create a new linked search. Linked
-creation uses ordinary `POST /searches` with optional `parentSearchId` and normal
-creation criteria. The WebUI may prefill earlier criteria for editing; the
-backend uses the parent solely as provenance. The new ID owns independent
-network collection and results. The linked-creation field remains pending
-lifecycle implementation. Deleting a parent clears `parentSearchId` on its children while preserving the
-children and their results; implement the relationship with `ON DELETE SET NULL`.
+interrupted errors; callers explicitly create a new linked search through
+ordinary `POST /searches` with optional `parentSearchId` and their chosen
+criteria. The WebUI prefills criteria for editing and sends exact string IDs.
+Creation uses the declared file-type tokens. The parent supplies provenance;
+each new ID owns independent network collection and results. The creation
+transaction validates parent existence; a missing parent returns HTTP 404
+without allocating an ID.
+
+Deleting a parent clears its children's `parentSearchId` while preserving the
+children and results. The relationship uses `ON DELETE SET NULL`, an indexed
+parent key and a check that the parent ID precedes the child. Unlinking advances
+the child metadata timestamp. Status transitions preserve a committed unlink
+when execution still holds its immutable creation specification.
 
 `POST /searches/{searchId}/stop` durably freezes queued/running collection before
 removing queued execution and cancelling its worker. It preserves session/result
@@ -696,7 +702,7 @@ patterns; do not manufacture hidden retries or copy full runtime configurations.
 
 ### Indexed browsing and native contract
 
-Schema 100 maintains result cardinality transactionally and indexes collecting
+Schema 101 maintains result cardinality transactionally and indexes collecting
 sessions for startup interruption. Header pages seek newest session ID first.
 Keep all twelve global result sorts: displayName, sizeBytes, sources,
 completeSources, rating, fileType, artist, album, title, lengthSeconds,
@@ -831,9 +837,9 @@ qualification with Harness `e03d7afb` passed 87 routes and the positive
 full-width-ID Stop proof; teardown was graceful
 (`reports/rust-rest-openapi-ci/20261118T155620Z/report.json`).
 
-Remaining work includes implementing linked creation and running
-combined library/job memory qualification. Query-scale evidence alone does not qualify app-wide resident
-memory or the complete 100k-library/job operating model. Settings/runtime,
+Remaining work includes combined library/job memory qualification. Query-scale
+evidence alone does not qualify app-wide resident memory or the complete
+100k-library/job operating model. Settings/runtime,
 CLI/Docker, library and remaining foundation gates retain their scope below.
 Live Kad AICH seeding evidence uses a process-local FIFO cache capped at 512
 result entries and a conservative 4 MiB accounting budget. Accounting includes

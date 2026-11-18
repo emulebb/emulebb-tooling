@@ -8309,6 +8309,7 @@ components:
       - createdAt
       - updatedAt
       - completedAt
+      - parentSearchId
       properties:
         id:
           $ref: '#/components/schemas/SearchId'
@@ -8378,6 +8379,12 @@ components:
           - 'null'
           minimum: 0
           description: Unix seconds.
+        parentSearchId:
+          anyOf:
+          - $ref: '#/components/schemas/SearchId'
+          - type: 'null'
+          description: Optional existing parent session as provenance. Criteria are supplied by this request.
+            Deleting the parent clears this link and preserves the child and its results.
 
     SearchEnvelope:
       type: object
@@ -8621,23 +8628,37 @@ components:
     SearchCreateRequest:
       type: object
       additionalProperties: false
-      required: [query]
+      required:
+      - query
       properties:
         query:
           type: string
           minLength: 1
           maxLength: 160
-          pattern: '^(?=.*\S)[^\x00-\x08\x0E-\x1F\x7F-\x9F]*$'
+          pattern: ^(?=.*\S)[^\x00-\x08\x0E-\x1F\x7F-\x9F]*$
         method:
           type: string
-          description: >
-            Requested native search method. automatic resolves from live network
-            state: connected eD2K uses global, Kad-only uses kad, and offline
-            searches are rejected as not connected.
-          enum: [automatic, server, global, kad]
+          description: 'Requested native search method. automatic resolves from live network state: connected
+            eD2K uses global, Kad-only uses kad, and offline searches are rejected as not connected.
+
+            '
+          enum:
+          - automatic
+          - server
+          - global
+          - kad
         type:
           type: string
-          enum: ["", arc, audio, iso, image, pro, video, doc, emulecollection]
+          enum:
+          - ''
+          - arc
+          - audio
+          - iso
+          - image
+          - pro
+          - video
+          - doc
+          - emulecollection
         minSizeBytes:
           type: integer
           minimum: 0
@@ -8663,23 +8684,30 @@ components:
         extension:
           type: string
           maxLength: 256
-          pattern: '^[^\x00-\x08\x0E-\x1F\x7F-\x9F]*$'
+          pattern: ^[^\x00-\x08\x0E-\x1F\x7F-\x9F]*$
         codec:
           type: string
           maxLength: 256
-          pattern: '^[^\x00-\x08\x0E-\x1F\x7F-\x9F]*$'
+          pattern: ^[^\x00-\x08\x0E-\x1F\x7F-\x9F]*$
         title:
           type: string
           maxLength: 256
-          pattern: '^[^\x00-\x08\x0E-\x1F\x7F-\x9F]*$'
+          pattern: ^[^\x00-\x08\x0E-\x1F\x7F-\x9F]*$
         album:
           type: string
           maxLength: 256
-          pattern: '^[^\x00-\x08\x0E-\x1F\x7F-\x9F]*$'
+          pattern: ^[^\x00-\x08\x0E-\x1F\x7F-\x9F]*$
         artist:
           type: string
           maxLength: 256
-          pattern: '^[^\x00-\x08\x0E-\x1F\x7F-\x9F]*$'
+          pattern: ^[^\x00-\x08\x0E-\x1F\x7F-\x9F]*$
+        parentSearchId:
+          anyOf:
+          - $ref: '#/components/schemas/SearchId'
+          - type: 'null'
+          description: Optional existing parent session as provenance. Criteria are supplied by this request.
+            Deleting the parent clears this link and preserves the child and its results.
+
     SearchResult:
       type: object
       additionalProperties: false
