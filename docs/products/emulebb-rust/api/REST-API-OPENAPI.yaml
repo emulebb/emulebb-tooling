@@ -8304,11 +8304,12 @@ components:
     SearchResultObservation:
       type: object
       additionalProperties: false
-      required: [origin, serverEndpoint, rawName, normalizedName, sizeBytes, sources, completeSources, sourceClientId, sourceClientPort, fileType, media, rating, aichHash, complete, directory, observedAt]
+      required: [origin, reporterEndpoint, rawName, normalizedName, sizeBytes, sources, completeSources, sourceClientId, sourceClientPort, fileType, media, rating, aichHash, complete, directory, observedAt]
       properties:
         origin:
           type: string
-        serverEndpoint:
+        reporterEndpoint:
+          description: Endpoint captured for the reporter of this observation. The associated download peer is identified separately. Null when no reporting endpoint was captured.
           type: [string, "null"]
         rawName:
           type: string
@@ -9146,7 +9147,7 @@ components:
       - rawName
       - normalizedName
       - origin
-      - serverEndpoint
+      - reporterEndpoint
       - observedAt
       properties:
         rawName:
@@ -9157,7 +9158,8 @@ components:
           maxLength: 4096
         origin:
           type: string
-        serverEndpoint:
+        reporterEndpoint:
+          description: Endpoint captured for the reporter of this observation. The associated download peer is identified separately. Null when no reporting endpoint was captured.
           type:
           - string
           - 'null'
