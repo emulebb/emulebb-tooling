@@ -696,42 +696,53 @@ hash/size claim; unknown size admits a job waiting for metadata. Kad preserves
 named results without a reported size. WebUI rows/actions use claim IDs and
 present unknown size separately from a known empty file.
 
-Scoped checks pass **263 metadata**, **647 core**, **162 REST**, **147 Kad**,
-**56 WebUI unit** and **32 browser** tests, including the WebUI production build.
-The selected Python run passed 266 tests and exposed one shared-parameter
-component requirement; after correction all 119 tests in the affected OpenAPI
-module pass. Final harness validation also covers rustfmt’s compact allowlist
-form and claim-ID live-wire fixtures: **136 affected Python tests** pass on
-Harness `65b1944e`, recorded in `search-membership-python-formatted.log`.
-Evidence is under `reports/settings-request-round-1/`:
-`search-membership-{metadata,core,rest,kad,webui,python,python-repair}.log`.
-The strengthened REST flow selects between same-hash conflicting sizes and
-asserts that download admission retains the selected size. Metadata tests cover
-transaction rollback, cross-claim foreign keys, local/global counts, full-width
-unsigned sizes and terminal-session evidence. Owner tests cover caller abort,
-capacity refusal without replay and distinct unknown/zero/conflicting claims.
+Search creation, header transitions, completion/failure and delete/clear now
+share the profile owner and existing blocking SQL worker with raw ingestion.
+The admitted command owns SQL, queue/cache publication and cancellation after
+caller disconnect. Queue admission precedes durable ID allocation; SQL failure
+publishes neither a new entry nor an uncommitted status. Terminal sessions do
+not reopen. Late observations enrich the corpus without restoring removed
+membership. State -> queue locking also coordinates retries.
 
-Search delete/clear now use the shared owner and existing blocking SQL worker.
-The admitted command owns cancellation, queue cleanup and cache publication
-through caller disconnect. Removal shares ordering with raw observation ingress;
-a late observation enriches the corpus without restoring removed membership.
-The coordinator retains state -> queue locking with create/retry. SQL failure
-returns before cache/cancellation publication. Removal handlers reuse the shared
-persistence mapping, including HTTP 503 for busy/closing admission.
+Status writes convert header data only, preserving result membership and raw
+occurrence counts without cloning result history. Completion publishes accepted
+Kad integrity votes after SQL, with its temporary matching set bounded by incoming
+vote keys. Admission charges vote backing and header preparation; only an
+unadmitted Busy outcome waits for capacity. SQL/uncertain outcomes are not
+replayed automatically. Creation reserves six conservative copies of variable
+preparation/publication backing before cloning, within the existing owner budget.
+Immutable startup network configuration is shared across core clones instead of
+copying server/bootstrap lists per creation request. The public configuration
+shape is unchanged. Creation and removal reuse the shared REST persistence-error
+mapping, including HTTP 503 for busy/closing admission.
 
-Rust `9c1ae65c` adds regressions for caller abort after SQL, late ingress,
-permanent corpus retention, selective cancellation and preserved state when
-admission is closed. Scoped evidence:
-`reports/settings-request-round-1/search-removal-{core,rest}.log`.
-The daemon/WebUI build passes with zero warnings:
-`logs/builds/20261118T091314Z-build-clients/build-result.json`.
+Current lifecycle checks pass **651 core** and **162 REST** tests with no compiler
+warnings: `reports/settings-request-round-1/search-lifecycle-{core,rest}.log`.
+Regressions cover postcommit caller abort for creation, running, completion,
+failure and removal; queue publication and selective cancellation; accepted-vote
+publication without observation replay; frozen terminal status; and closed
+admission preserving sessions. Real SQLite trigger failures prove failed
+inserts allocate no public session/queue entry and failed updates leave both
+persisted and cached status unchanged. Later explicit successful operations work.
+
+Unchanged claim storage and Kad evidence remains **263 metadata** and **147 Kad**
+tests. WebUI evidence remains **56 unit** and **32 browser** tests, including its
+production build. These are retained in `search-membership-*.log` under the same
+report directory. Harness `65b1944e` passed **275 relevant Python tests** in its
+push gate: `reports/local-check/emulebb-build-tests/20261118T090024Z-badcbf37/02.log`.
+That includes formatted allowlist extraction, claim-ID live-wire fixtures and
+selected OpenAPI contract conformance. The contract and UI source are unchanged
+by this lifecycle slice.
+
+The final daemon/WebUI build passes with zero warnings:
+`logs/builds/20261118T093913Z-build-clients/build-result.json`.
 The native REST/OpenAPI campaign passes with graceful teardown on Rust
-`9c1ae65c`, using Harness `65b1944e` and the Tooling contract at `4bacf021`:
-`reports/rust-rest-openapi-ci/20261118T091608Z/report.json`.
+`a18e4eab`, using Harness `65b1944e` and the Tooling contract at `7d02d3ef`:
+`reports/rust-rest-openapi-ci/20261118T094209Z/report.json`.
 
 The remaining search cut includes bounded session/history/provenance reads,
-canonical separate REST/OpenAPI/WebUI resources, shared-owner session
-create/status and snapshot replacement. Combined-scale and total
+canonical separate REST/OpenAPI/WebUI resources and snapshot replacement.
+Combined-scale and total
 memory qualification remain open. Settings/runtime, CLI/Docker, library and
 remaining foundation allocations retain their existing acceptance gates.
 
