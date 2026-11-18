@@ -643,8 +643,16 @@ interrupted errors; callers explicitly create a new linked search. Linked
 creation uses ordinary `POST /searches` with optional `parentSearchId` and normal
 creation criteria. The WebUI may prefill earlier criteria for editing; the
 backend uses the parent solely as provenance. The new ID owns independent
-network collection and results. Stop and the linked-creation field remain
-pending lifecycle implementation.
+network collection and results. The linked-creation field remains pending
+lifecycle implementation. Parent-deletion semantics await an operator decision.
+
+`POST /searches/{searchId}/stop` durably freezes queued/running collection before
+removing queued execution and cancelling its worker. It preserves session/result
+membership and returns HTTP 204 without a body. Existing terminal sessions are
+idempotent successes with unchanged metadata; an absent ID returns HTTP 404.
+Stopped sessions expose status `stopped`, null `completedAt` and no active
+progress. Late packets can update permanent knowledge but not the frozen session.
+The WebUI offers Stop for queued/running sessions and continues to browse results.
 
 ### Durable reducers and ownership
 
@@ -687,7 +695,7 @@ patterns; do not manufacture hidden retries or copy full runtime configurations.
 
 ### Indexed browsing and native contract
 
-Schema 99 maintains result cardinality transactionally and indexes collecting
+Schema 100 maintains result cardinality transactionally and indexes collecting
 sessions for startup interruption. Header pages seek newest session ID first.
 Keep all twelve global result sorts: displayName, sizeBytes, sources,
 completeSources, rating, fileType, artist, album, title, lengthSeconds,

@@ -2958,6 +2958,36 @@ paths:
           $ref: '#/components/responses/ErrorResponse'
         default:
           $ref: '#/components/responses/ErrorResponse'
+  /searches/{searchId}/stop:
+    parameters:
+    - $ref: '#/components/parameters/SearchId'
+    post:
+      tags:
+      - Searches
+      summary: Stop collection and preserve the session and collected results.
+      operationId: stopSearch
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContentResponse'
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/ErrorResponse'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowedResponse'
+        '409':
+          $ref: '#/components/responses/ErrorResponse'
+        '500':
+          $ref: '#/components/responses/ErrorResponse'
+        '503':
+          $ref: '#/components/responses/ErrorResponse'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+      description: Commits stopped state before cancelling execution. Repeated stops and already terminal
+        sessions succeed without changing retained results. Returns no body.
+
   /searches/{searchId}:
     parameters:
     - $ref: '#/components/parameters/SearchId'
@@ -8321,6 +8351,7 @@ components:
           - running
           - completed
           - error
+          - stopped
         statusReason:
           type:
           - string
@@ -8329,8 +8360,7 @@ components:
           anyOf:
           - $ref: '#/components/schemas/SearchProgress'
           - type: 'null'
-          description: Ephemeral active-search telemetry; null when no live telemetry
-            is available.
+          description: Ephemeral active-search telemetry; null when no live telemetry is available.
         resultCount:
           type: integer
           minimum: 0
@@ -8348,6 +8378,7 @@ components:
           - 'null'
           minimum: 0
           description: Unix seconds.
+
     SearchEnvelope:
       type: object
       additionalProperties: false

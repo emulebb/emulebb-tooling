@@ -87,6 +87,13 @@ twelve documented sorts support both directions with claim ID as tie-breaker.
 Use the returned opaque cursor with the same session/sort/direction. Pages are
 limited to 1..200 rows and a byte budget, so `hasMore` controls continuation.
 
+Stop collection with `POST /searches/{searchId}/stop` and no body. HTTP 204
+confirms that collection is frozen and execution cancellation is requested.
+The session and collected results remain browsable; repeated stops are
+idempotent, existing terminal sessions stay unchanged, and an unknown ID returns
+HTTP 404. Stopped sessions expose status
+`stopped`, null `completedAt` and null active progress.
+
 Select a summary with `GET /searches/{searchId}/results/{resultId}`. Raw provenance
 has its own `/observations` cursor page, preserving unknown values as null and
 session-local occurrence counts. Metadata timestamps are Unix seconds. Traversal
