@@ -837,6 +837,18 @@ qualification with Harness `e03d7afb` passed 87 routes and the positive
 full-width-ID Stop proof; teardown was graceful
 (`reports/rust-rest-openapi-ci/20261118T155620Z/report.json`).
 
+The linked-creation cut passes **297 Metadata**, **667 Core**, **169 REST**,
+**207 selected Python**, **60 WebUI unit** and **32 browser tests** without Rust
+compilation warnings. It covers independent criteria/results, child preservation
+across deletion/reopen, stale execution specifications after unlink, creation
+rollback, disconnect ownership, exact IDs and selection outside an empty list
+page (`reports/settings-request-round-1/search-parent-{metadata,core,rest,python,webui}.log`).
+The daemon/WebUI build passed with zero warnings on Rust `0ef97f28`
+(`logs/builds/20261118T163030Z-build-clients/build-result.json`). Native
+qualification with Harness `4d1a626d` passed 87 routes and the positive
+full-width-ID linked-creation/unlink/nonallocation proof; teardown was graceful
+(`reports/rust-rest-openapi-ci/20261118T163329Z/report.json`).
+
 Remaining work includes combined library/job memory qualification. Query-scale
 evidence alone does not qualify app-wide resident memory or the complete
 100k-library/job operating model. Settings/runtime,
