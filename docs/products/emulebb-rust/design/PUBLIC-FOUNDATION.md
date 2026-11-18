@@ -644,7 +644,8 @@ creation uses ordinary `POST /searches` with optional `parentSearchId` and norma
 creation criteria. The WebUI may prefill earlier criteria for editing; the
 backend uses the parent solely as provenance. The new ID owns independent
 network collection and results. The linked-creation field remains pending
-lifecycle implementation. Parent-deletion semantics await an operator decision.
+lifecycle implementation. Deleting a parent clears `parentSearchId` on its children while preserving the
+children and their results; implement the relationship with `ON DELETE SET NULL`.
 
 `POST /searches/{searchId}/stop` durably freezes queued/running collection before
 removing queued execution and cancelling its worker. It preserves session/result
@@ -819,7 +820,18 @@ The daemon/WebUI build passed with zero warnings on Rust `3cc0bf93`
 (`logs/builds/20261118T150810Z-build-clients/build-result.json`). The unchanged
 Python harness qualified 86 native routes and retained search/diagnostic reads
 (`reports/rust-rest-openapi-ci/20261118T151111Z/report.json`); teardown was graceful.
-Remaining work includes completing stop/linked-search lifecycle and running
+The Stop lifecycle cut passes **295 Metadata**, **665 Core**, **168 REST**,
+**207 selected Python**, **59 WebUI unit** and **32 browser tests**, including
+rollback, caller disconnect, repeated stops, terminal preservation, late-ingress
+freeze and the Stop control. Rust compilation has no warnings. Evidence is
+`reports/settings-request-round-1/search-stop-{metadata,core,rest,python,webui}.log`.
+The daemon/WebUI build passed with zero warnings on Rust `c9235a4b`
+(`logs/builds/20261118T155327Z-build-clients/build-result.json`). Native
+qualification with Harness `e03d7afb` passed 87 routes and the positive
+full-width-ID Stop proof; teardown was graceful
+(`reports/rust-rest-openapi-ci/20261118T155620Z/report.json`).
+
+Remaining work includes implementing linked creation and running
 combined library/job memory qualification. Query-scale evidence alone does not qualify app-wide resident
 memory or the complete 100k-library/job operating model. Settings/runtime,
 CLI/Docker, library and remaining foundation gates retain their scope below.
