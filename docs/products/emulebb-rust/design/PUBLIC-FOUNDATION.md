@@ -101,7 +101,9 @@ documentation describes only implemented structure.
   publicly addressed by its eD2K hash; immutable tag and category names are their
   public IDs. Natural
   protocol identities remain distinct fields. SQLite may use internal keys.
-  Live upload and upload-queue entries use opaque UUID strings. Retain an ID
+  Live upload and upload-queue entries expose opaque UUID strings as `id`,
+  addressed by `/uploads/{id}` and `/upload-queue/{id}`. Use lowercase hyphenated
+  UUIDs and retain protocol identities in separate fields. Retain an ID
   while its entry survives, including ordinary reasks and transitions between
   waiting/granted/uploading. Removal or process restart ends that lifetime;
   subsequent entries receive fresh IDs. IDs are independent of protocol peer

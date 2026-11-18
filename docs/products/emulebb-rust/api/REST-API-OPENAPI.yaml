@@ -1929,9 +1929,9 @@ paths:
           $ref: "#/components/responses/ErrorResponse"
         default:
           $ref: "#/components/responses/ErrorResponse"
-  /uploads/{clientId}:
+  /uploads/{id}:
     parameters:
-      - $ref: "#/components/parameters/ClientId"
+      - $ref: "#/components/parameters/UploadId"
     get:
       tags: [Uploads]
       summary: Return one uploading client.
@@ -1955,9 +1955,9 @@ paths:
           $ref: "#/components/responses/ErrorResponse"
         default:
           $ref: "#/components/responses/ErrorResponse"
-  /uploads/{clientId}/operations/release-slot:
+  /uploads/{id}/operations/release-slot:
     parameters:
-      - $ref: "#/components/parameters/ClientId"
+      - $ref: "#/components/parameters/UploadId"
     post:
       tags: [Uploads]
       summary: Give one uploading client a release slot.
@@ -1981,9 +1981,9 @@ paths:
           $ref: "#/components/responses/ErrorResponse"
         default:
           $ref: "#/components/responses/ErrorResponse"
-  /uploads/{clientId}/operations/remove:
+  /uploads/{id}/operations/remove:
     parameters:
-      - $ref: "#/components/parameters/ClientId"
+      - $ref: "#/components/parameters/UploadId"
     post:
       tags: [Uploads]
       summary: Remove one active or queued upload client.
@@ -2007,9 +2007,9 @@ paths:
           $ref: "#/components/responses/ErrorResponse"
         default:
           $ref: "#/components/responses/ErrorResponse"
-  /uploads/{clientId}/operations/add-friend:
+  /uploads/{id}/operations/add-friend:
     parameters:
-      - $ref: "#/components/parameters/ClientId"
+      - $ref: "#/components/parameters/UploadId"
     post:
       tags: [Uploads]
       summary: Add one upload client as a friend.
@@ -2046,9 +2046,9 @@ paths:
             fault. Re-read current state before retrying an uncertain outcome.
         default:
           $ref: "#/components/responses/ErrorResponse"
-  /uploads/{clientId}/operations/remove-friend:
+  /uploads/{id}/operations/remove-friend:
     parameters:
-      - $ref: "#/components/parameters/ClientId"
+      - $ref: "#/components/parameters/UploadId"
     post:
       tags: [Uploads]
       summary: Remove one upload client from friends.
@@ -2085,9 +2085,9 @@ paths:
             fault. Re-read current state before retrying an uncertain outcome.
         default:
           $ref: "#/components/responses/ErrorResponse"
-  /uploads/{clientId}/operations/ban:
+  /uploads/{id}/operations/ban:
     parameters:
-      - $ref: "#/components/parameters/ClientId"
+      - $ref: "#/components/parameters/UploadId"
     post:
       tags: [Uploads]
       summary: Ban one upload client.
@@ -2111,9 +2111,9 @@ paths:
           $ref: "#/components/responses/ErrorResponse"
         default:
           $ref: "#/components/responses/ErrorResponse"
-  /uploads/{clientId}/operations/unban:
+  /uploads/{id}/operations/unban:
     parameters:
-      - $ref: "#/components/parameters/ClientId"
+      - $ref: "#/components/parameters/UploadId"
     post:
       tags: [Uploads]
       summary: Unban one upload client.
@@ -2165,9 +2165,9 @@ paths:
           $ref: "#/components/responses/ErrorResponse"
         default:
           $ref: "#/components/responses/ErrorResponse"
-  /upload-queue/{clientId}/operations/remove:
+  /upload-queue/{id}/operations/remove:
     parameters:
-      - $ref: "#/components/parameters/ClientId"
+      - $ref: "#/components/parameters/UploadId"
     post:
       tags: [Uploads]
       summary: Remove one waiting upload client.
@@ -2191,9 +2191,9 @@ paths:
           $ref: "#/components/responses/ErrorResponse"
         default:
           $ref: "#/components/responses/ErrorResponse"
-  /upload-queue/{clientId}:
+  /upload-queue/{id}:
     parameters:
-      - $ref: "#/components/parameters/ClientId"
+      - $ref: "#/components/parameters/UploadId"
     get:
       tags: [Uploads]
       summary: Return one waiting upload client.
@@ -2217,9 +2217,9 @@ paths:
           $ref: "#/components/responses/ErrorResponse"
         default:
           $ref: "#/components/responses/ErrorResponse"
-  /upload-queue/{clientId}/operations/release-slot:
+  /upload-queue/{id}/operations/release-slot:
     parameters:
-      - $ref: "#/components/parameters/ClientId"
+      - $ref: "#/components/parameters/UploadId"
     post:
       tags: [Uploads]
       summary: Release this peer's active upload slot if present.
@@ -2243,9 +2243,9 @@ paths:
           $ref: "#/components/responses/ErrorResponse"
         default:
           $ref: "#/components/responses/ErrorResponse"
-  /upload-queue/{clientId}/operations/add-friend:
+  /upload-queue/{id}/operations/add-friend:
     parameters:
-      - $ref: "#/components/parameters/ClientId"
+      - $ref: "#/components/parameters/UploadId"
     post:
       tags: [Uploads]
       summary: Add one queued upload client as a friend.
@@ -2282,9 +2282,9 @@ paths:
             fault. Re-read current state before retrying an uncertain outcome.
         default:
           $ref: "#/components/responses/ErrorResponse"
-  /upload-queue/{clientId}/operations/remove-friend:
+  /upload-queue/{id}/operations/remove-friend:
     parameters:
-      - $ref: "#/components/parameters/ClientId"
+      - $ref: "#/components/parameters/UploadId"
     post:
       tags: [Uploads]
       summary: Remove one queued upload client from friends.
@@ -2321,9 +2321,9 @@ paths:
             fault. Re-read current state before retrying an uncertain outcome.
         default:
           $ref: "#/components/responses/ErrorResponse"
-  /upload-queue/{clientId}/operations/ban:
+  /upload-queue/{id}/operations/ban:
     parameters:
-      - $ref: "#/components/parameters/ClientId"
+      - $ref: "#/components/parameters/UploadId"
     post:
       tags: [Uploads]
       summary: Ban one queued upload client.
@@ -2347,9 +2347,9 @@ paths:
           $ref: "#/components/responses/ErrorResponse"
         default:
           $ref: "#/components/responses/ErrorResponse"
-  /upload-queue/{clientId}/operations/unban:
+  /upload-queue/{id}/operations/unban:
     parameters:
-      - $ref: "#/components/parameters/ClientId"
+      - $ref: "#/components/parameters/UploadId"
     post:
       tags: [Uploads]
       summary: Unban one queued upload client.
@@ -3448,6 +3448,15 @@ components:
         type: boolean
         enum: [true]
       description: Required explicit confirmation for destructive body-free DELETE routes.
+    UploadId:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+        pattern: '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}(?![\s\S])'
+      description: Ephemeral queue-entry ID retained through reasks and upload state transitions.
     ClientId:
       name: clientId
       in: path
@@ -3455,7 +3464,7 @@ components:
       schema:
         type: string
         pattern: "^([0-9a-f]{32}|[^/]+:(6553[0-5]|655[0-2][0-9]|65[0-4][0-9]{2}|6[0-4][0-9]{3}|[1-5][0-9]{4}|[1-9][0-9]{0,3}))$"
-      description: Stable client selector returned by upload or queue rows, either a lowercase MD4 hash or an endpoint token parsed at the final `address:port` colon.
+      description: Download-source selector, either a lowercase MD4 hash or an endpoint token parsed at the final `address:port` colon.
     FileHash:
       name: hash
       in: path
@@ -7721,10 +7730,12 @@ components:
     Upload:
       type: object
       additionalProperties: false
-      required: [clientId, userName, userHash, clientSoftware, clientMod, uploadState, uploadSpeedKiBps, uploadedBytes, queueSessionUploaded, payloadBuffered, waitTimeMs, waitStartedTick, score, address, port, serverIp, serverPort, lowId, friendSlot, uploading, waitingQueue, requestedFileHash, requestedFileName, requestedFileSizeBytes, requestedPartsObtained, requestedPartsTotal, requestedPartsProgressText]
+      required: [id, userName, userHash, clientSoftware, clientMod, uploadState, uploadSpeedKiBps, uploadedBytes, queueSessionUploaded, payloadBuffered, waitTimeMs, waitStartedTick, score, address, port, serverIp, serverPort, lowId, friendSlot, uploading, waitingQueue, requestedFileHash, requestedFileName, requestedFileSizeBytes, requestedPartsObtained, requestedPartsTotal, requestedPartsProgressText]
       properties:
-        clientId:
+        id:
           type: string
+          format: uuid
+          pattern: '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}(?![\s\S])'
         userName:
           type: string
         userHash:
