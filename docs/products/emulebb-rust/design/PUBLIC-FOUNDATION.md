@@ -1367,14 +1367,47 @@ unproven: polling can miss the completed reload before a subsequent run resets
 its counters. Preserving an observation when available is insufficient for
 reliable completion evidence. Keep the strict failed verdicts.
 
-After these two combined failures, do not repeat the full initial hash pass as
-the next investigation. Reproduce watcher overlap against an explicitly
-validated harness-owned library baseline and identify the blocking owner with
-focused diagnostics; extend the existing campaign rather than creating another
-runner. Completion accounting needs reliable evidence from the completed run.
-No new latency SLO is adopted: the request timeout is a procedural guard, and
-loosening it alone is not a repair or qualification. The goal and all remaining
-container, restart, recovery and public-foundation gates remain unchanged.
+The existing campaign now supports `run --watcher-replay-from RUN_ID` through
+the same Builder lock and source-admission checks (Builder `d851f07`, Harness
+`6950cbec` and `0f77f21e`). Replay validates the owned source receipt, physical
+fixture, current metadata schema, foreign keys and download counts, and copies
+the database with SQLite backup without changing the original. It reuses the
+configured roots and explicitly excludes initial-payload-hashing qualification.
+The helper suite passes 57 tests; the Builder routing/lock suites pass 115 tests
+(`reports/builder-unit/515cd462ab6e`). No additional runner or product recovery
+path is introduced.
+
+Replay also exposed a populated-root replacement timeout before watcher work:
+`reports/workstreams/public-foundation-round-1/shared-library-io/rust-shared-library-io-20261118T201041Z-20328.json`.
+Derived publication was interrupted by shutdown, which exited with a reported
+persistence failure. That root-update finding remains open; focused watcher
+replay requests a reload without unnecessarily replacing existing roots.
+
+Rust `55857bc4` fixes an independently demonstrated catalog invalidation defect.
+Single-path and full-root admission preserve identical verification rows rather
+than replacing them, so unchanged scans do not invalidate the entire physical
+projection. An explicit trigger conflict clause preserves deduplication when
+changed evidence is already pending. The extended 100k regression fails before
+the repair by detecting an unwanted projection rebuild, then passes afterward;
+all 298 metadata tests pass. Retained proof:
+`reports/settings-request-round-1/root-admission-red.log` and
+`reports/settings-request-round-1/root-admission-metadata.log`.
+The build has zero warnings
+(`logs/builds/20261118T202735Z-build-clients/build-result.json`), and native
+REST/OpenAPI conformance passes with graceful teardown
+(`reports/rust-rest-openapi-ci/20261118T203919Z/report.json`).
+
+The repaired replay **still fails qualification**:
+`reports/workstreams/public-foundation-round-1/shared-library-io/rust-shared-library-io-20261118T203107Z-12236.json`.
+Its baseline storage checks pass, but the watcher-time collection read still
+times out and emergency cleanup requires force. The invalidation repair is not
+the sole cause of that failure. The next bounded investigation is transaction-
+stage diagnostics identifying the connection owner during the timeout, using
+replay instead of another full initial hash pass. Completion accounting also
+needs reliable evidence from the completed run. No latency SLO is adopted:
+request timeouts are procedural guards, and loosening them alone is not a
+repair or qualification. All remaining foundation and qualification gates keep
+their scope.
 
 ### Deferred follow-up
 
