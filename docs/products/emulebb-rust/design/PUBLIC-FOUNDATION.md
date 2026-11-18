@@ -1242,31 +1242,44 @@ failures through the native error contract. Network/lifecycle status remains
 independent of SQLite, including VPN monitoring. Rust `11400e31` updates the
 regular diagnostic summary to use the same authoritative count path.
 
-The core suite passes, including a connection-contention regression proving
-that the count read waits while network status remains available. **169 REST,
-1,458 transfer and 127 daemon tests** pass. Python fixture/campaign checks pass
-**64 tests** (34 metadata and 30 campaign tests). These cover atomic fixture
+Rust `5e662b40` uses fresh schema **102** and replaces the dashboard row scan
+with the same singleton `download_job_counts` summary used for collection
+counts. Its `unfinished`, `completed`, `started`, `delete_requested_unfinished`
+and `delete_requested_completed` counters update atomically with job mutations.
+`started` means started unfinished intent, excluding admitted destructive
+deletion; it is not resident-job or payload-execution concurrency. Existing
+dashboard membership rules and public response shapes remain unchanged.
+Insert/update/delete triggers maintain the counters, including intent changes,
+logical removal and pending deletion. No periodic rebuild, extra writer,
+migration or compatibility path is added.
+
+The counter cut passes **298 metadata, 668 core, 169 REST and 1,458 transfer
+tests**, including the connection-contention regression. The existing mixed
+100k SQL test now verifies both count queries use a primary-key seek with no
+full scan or sort and fewer than 80 VM steps. Lifecycle tests check counter
+results against an independent row-scan oracle and cover transaction rollback.
+Python fixture/campaign checks pass **64 tests** (34 metadata and 30 campaign
+tests). These cover atomic fixture
 rollback, valid short pages, restart, and rejection of incomplete/duplicate
 pages with the intended failure reason. The first native attempts exposed two
 harness assumptions about the public status shape and the difference between
 active and unfinished jobs; the corrected harness is `1396e0f4`.
 
 The final daemon/WebUI build has zero warnings:
-`logs/builds/20261118T173617Z-build-clients/build-result.json`.
-The native campaign passes on Rust `11400e31`, with graceful teardown:
-`reports/rust-rest-openapi-ci/20261118T173911Z/report.json`.
+`logs/builds/20261118T180054Z-build-clients/build-result.json`.
+The native campaign passes on Rust `5e662b40`, with graceful teardown:
+`reports/rust-rest-openapi-ci/20261118T180347Z/report.json`.
 Its `retainedDownloadScalePhase` proves complete newest-ID traversal of all
 100,000 jobs (500 pages), 99,000 completed jobs (495 pages) and 1,000 unfinished
 jobs (5 pages), with matching content hashes, scoped view membership and
 preserved counts after clean restart. Dashboard counts are 100 active downloads
 and 100,000 retained downloads. Unit logs include
-`reports/settings-request-round-1/retained-counts-{rest,ed2k,daemon}.log`.
+`reports/settings-request-round-1/fixed-dashboard-counts-{metadata,core,rest,ed2k}.log`.
 
 This is retained-job correctness evidence. Physical-library contents are not
 seeded by this fixture; combined library/job workload, CPU/memory measurement,
 the enforced 512 MiB/one-CPU container and physical-device gates remain open.
-Dashboard statistics still use the existing SQL aggregate; this checkpoint
-does not establish constant-work aggregation or a response-time guarantee.
+The fixed-work counter lookup is qualified; no response-time guarantee is set.
 Canonical runtime settings and the other foundation cuts retain their scope.
 
 ### Deferred follow-up
