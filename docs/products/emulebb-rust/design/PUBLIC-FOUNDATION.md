@@ -1713,8 +1713,18 @@ that an unowned category scan remains schedulable. Existing unavailable-root
 withdrawal/rejoin coverage passes. Branch quality checks pass in
 `reports/local-check/emulebb-rust/20261119T053148Z-77a6c745/`. This confirms the
 duplicate scheduling defect and repair; its causal contribution to the OOM is
-not yet proven. Fresh Linux package and unchanged-budget campaign evidence are
-still required on this revision.
+not yet proven.
+
+Fresh Linux GNU/AMD64 qualification passes on `9d5cbe9d`: strict Clippy,
+packet-diagnostics compilation, release build, **3,310 workspace tests** and
+**three VPN egress tests**, with logs under
+`reports/rust-linux/gnu-amd64/dc5b5b895abc45e09ec57aadfc7768d8/`.
+The clean-source archive SHA-256 is
+`ede02a46c700319588c9f4d23289c7a199ed0e21440e91646eb751ee4c27dfd6`.
+Non-root partial-download/restart/resume/completion smoke passes in
+`reports/rust-linux/gnu-amd64/633503b8e61e4060a2d22fd1add8f273/package-smoke.json`.
+Artifacts remain local and unpublished. Unchanged-budget full campaign
+qualification remains required.
 
 Compiler investigation uses Builder's diagnostic-only Linux collection command;
 its receipt explicitly records `qualityGatePassed:false` and
