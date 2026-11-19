@@ -703,9 +703,10 @@ after final publication deliberately authorizes no replay or cleanup. The
 package supplies the existing durable parent; the initializer creates no parent
 hierarchy. Static atomicity review identified this parent precondition, which
 the source and regression now enforce. All 13 provisioning regressions now pass
-on native Linux GNU/AMD64, including actual no-replace rename and restart at the
-journal/stage/final boundaries. The exact log is
-`reports/rust-linux/gnu-amd64/c50ed2869d2241088ad31c0b985c9a5b/container-profile-tests.log`.
+on native Linux GNU/AMD64 and musl/AMD64, including actual no-replace rename and
+restart at the journal/stage/final boundaries. The exact logs are
+`reports/rust-linux/gnu-amd64/c50ed2869d2241088ad31c0b985c9a5b/container-profile-tests.log`
+and `reports/rust-linux/musl-amd64/7c34c1642a364d9db8604805b8552ce7/container-profile-tests.log`.
 
 Builder `29fdb42` and `6c0aec6` build, stage, audit and attest the private Linux
 companion in GNU/musl packages. The scoped package/build/staging suites pass
@@ -717,17 +718,20 @@ The Windows daemon package suite passes 112 tests in
 `reports/settings-request-round-1/container-init-windows-daemon.log`; Linux-only
 provisioning tests are not included in that count.
 
-The GNU/AMD64 package build and its selected Linux library, tracker, durability
-and provisioning suites pass, producing the source-verified archive and DEB.
-The Ubuntu/AMD64 image builds from those bytes and passes the shared native
+The GNU/AMD64 and musl/AMD64 package builds and their selected Linux library,
+tracker, durability and provisioning suites pass, producing source-verified
+archives and the GNU DEB. Ubuntu/AMD64 and Alpine/AMD64 images build from those
+bytes and pass the shared native
 image smoke, including non-root ownership of config/incoming/temp, authenticated
 REST/WebUI, health receipt validation and graceful shutdown. Evidence is
-`reports/rust-image-smoke/50b492a5a63341b780b4f0ff07354858/` and
-`reports/settings-request-round-1/container-init-gnu-package.log`.
-The image proof explicitly prepares a saved `eth0` fixture before s6; it does
+`reports/rust-image-smoke/50b492a5a63341b780b4f0ff07354858/`,
+`reports/rust-image-smoke/a162a4899e854b7aa5a279f7ee23b9e1/` and
+`reports/settings-request-round-1/container-init-gnu-package.log` /
+`container-init-musl-package.log`.
+Each image proof explicitly prepares a saved `eth0` fixture before s6; it does
 not claim an unmodified default-entrypoint fresh start. Builder `5a6ef26`
 requires both storage owners and that fixture declaration in the proof, with
 169 image/security/candidate regressions passing in
-`reports/builder-unit/4b4ed101b8c8/`. Alpine, ARM64, actual VPN, physical power-cut
-and memory-tier qualification remain outside this checkpoint. No PR, merge,
+`reports/builder-unit/4b4ed101b8c8/`. ARM64, actual VPN and memory-tier
+qualification remain outside this checkpoint. No PR, merge,
 main write or publication was performed.

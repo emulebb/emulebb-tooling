@@ -2415,8 +2415,11 @@ ownership. The settings target records the evidence and the outstanding actual
 APK/device qualification. Harness `8c6c700b` adopts Android public-sharing settings;
 `fcb669b0` shares bounded cursor traversal with lifecycle and native conformance
 checks. Their controlled suites and a repeated native 100,000-retained-job run
-pass; the settings target records exact evidence and limits. Shared harness cleanup,
-Docker provisioning and WebUI settings still require adoption before complete
-cross-platform qualification. Watcher loss reporting, the final adaptive
+pass; the settings target records exact evidence and limits. Rust `89c807a5`
+implements container provisioning; native GNU/Ubuntu and musl/Alpine AMD64
+provisioning and image smoke checks pass. The settings target records the
+explicit network fixture and remaining platform limits. Shared harness cleanup
+and WebUI settings still require adoption before complete cross-platform
+qualification. Watcher loss reporting, the final adaptive
 scheduler and memory-tier capacity campaigns also remain unfinished. No PR,
 merge, main write or publication was performed.
