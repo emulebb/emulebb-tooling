@@ -1154,11 +1154,13 @@ interrupted first-run setup**. Provision only a genuinely fresh profile; never
 replay setup into an existing final profile or overwrite subsequent user edits.
 This is an accepted allocation target, not current package/runtime proof.
 
-The planned package-private initializer uses these boundaries:
+The package-private initializer uses these boundaries:
 
 1. Acquire a parent installation lock. Persist and sync an ownership journal
    identifying the intended private stage and final destination before creating
    that stage. Unknown ownership must not authorize cleanup or replay.
+   The package supplies an existing durable `/config` mount; the initializer
+   must not create an unsynced directory hierarchy above its ownership journal.
 2. Create private fresh staging on the same filesystem as the final profile.
    Run the canonical offline per-key settings service under one profile lease;
    do not spawn competing writers, bypass validation or add package-specific SQL.

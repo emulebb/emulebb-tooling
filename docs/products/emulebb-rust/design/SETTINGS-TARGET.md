@@ -692,3 +692,25 @@ while preserving the bilateral server-metadata and explicit P2P-binding gates.
 Rust branch checks and the strict documentation build pass. This is a feature
 checkpoint, with no PR, merge, main write or publication; the remaining scope
 and platform qualification above are still open.
+
+Rust `89c807a5` implements package-private container provisioning with an owned
+same-filesystem stage, a durable bounded journal and a parent OS lock. Staging
+uses the same prepared per-key operations as offline CLI settings under one
+profile lease, then closes SQLite, syncs owned files and publishes with Linux
+atomic no-replace rename. Default-marked storage receives package paths;
+custom values and existing final profiles are preserved. A retained journal
+after final publication deliberately authorizes no replay or cleanup. The
+package supplies the existing durable parent; the initializer creates no parent
+hierarchy. Static atomicity review identified this parent precondition, which
+the source and regression now enforce. Linux execution remains pending.
+
+Builder `29fdb42` and `6c0aec6` build, stage, audit and attest the private Linux
+companion in GNU/musl packages. The scoped package/build/staging suites pass
+318 tests in `reports/builder-unit/3937f7e087a3/` (one existing collection warning).
+Harness `c72fde2e` prepares explicit image/VPN fixture settings through the
+packaged offline CLI before starting the daemon and checks effective binding.
+Its existing focused owners pass 94 tests with one Windows platform skip.
+The Windows daemon package suite passes 112 tests in
+`reports/settings-request-round-1/container-init-windows-daemon.log`; Linux-only
+provisioning tests are not included in that count. Container image, actual VPN,
+Linux directory durability and restart recovery qualification are not yet claimed.
