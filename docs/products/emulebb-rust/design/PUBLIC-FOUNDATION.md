@@ -1833,6 +1833,33 @@ memory required by profiling is diagnostic-only: it cannot satisfy the unchanged
 512 MiB workload gate or set `workloadQualified` true. No further full campaign
 until profiling identifies a bounded repair to validate.
 
+Harness `b802a96b` and Builder `ab68276` provide the bounded allocation replay:
+
+```text
+python -m emule_workspace test rust-library-heap-profile --workstream public-foundation-round-1 --archive <current-gnu-amd64-archive> --receipt <retained-campaign-report.json>
+```
+
+It requires the exact inactive source/archive and verifies its labelled local
+volume. The existing replay copies the database into a new run; the failed
+source database and logs are preserved. The synthetic fixture is reused under
+the existing replay's probe cleanup/mutation rules. Heaptrack profiles only the
+first daemon lifetime, through warm baseline and watcher creation. Resource
+sampling observes the daemon child, not the profiler wrapper. Raw traces stay
+on native storage and interpreted allocation stacks are retained with the
+diagnostic reports. The validation image adds heaptrack only for this lane.
+
+Profiling uses a separate **1 GiB**, no-swap, one-CPU process-tree allowance.
+Reports always retain `workloadQualified:false` and failed workload acceptance;
+diagnostic completion cannot satisfy the normal 512 MiB gate. No product
+arguments, settings, schema or runtime binary change. Scoped harness checks pass
+115 tests in `reports/settings-request-round-1/heap-replay-harness.log`.
+Required combined push checks pass in
+`reports/local-check/emulebb-build-tests/20261119T080541Z-ee0c9177/` and
+`reports/local-check/emulebb-build/20261119T080727Z-a02496ae/`;
+Builder source-snapshot checks also pass in `reports/builder-unit/277bd7e12169/`.
+The live-wire byte-report fixture now supplies current search-result IDs and a
+deterministic clock, preserving its completed/partial-byte assertions.
+
 Compiler investigation uses Builder's diagnostic-only Linux collection command;
 its receipt explicitly records `qualityGatePassed:false` and
 `packageProduced:false`. Acceptance continues to require the ordinary strict
