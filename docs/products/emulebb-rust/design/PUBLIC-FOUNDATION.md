@@ -1610,8 +1610,31 @@ their exact rejection/count behavior. All 101 selected campaign tests pass:
 `reports/settings-request-round-1/fixture-inventory-memory-baseline.log` and
 `reports/settings-request-round-1/fixture-inventory-memory-final.log`.
 This is a Python allocation measurement, not a daemon RSS measurement or a
-passing full-scale result. Repeat the same process-tree budget with usable
-memory diagnostics; the limit, measured scope and workload remain unchanged.
+passing full-scale result.
+
+The repeat on the same Rust revision, Builder `9302058` and Harness `c939b02f`
+also **fails qualification** under the unchanged 512 MiB/one-CPU process-tree
+budget. Evidence is retained under
+`reports/linux-containers/library/15768d47ab30409abdf8ac72b714f99e/`.
+All 100,000 physical files and 10,485,760,000 bytes validate. The observer now
+retains 442 samples: sampled daemon RSS peaks at 446,324,736 bytes and controller
+RSS at 44,404,736 bytes. The kernel records one OOM kill and a 536,891,392-byte
+cgroup peak; these sampled process peaks are not simultaneous totals or private
+allocation measurements. Optional I/O readings are unavailable and remain null.
+The owned container is removed; the labelled volume retains its profile and
+fixture.
+
+Live counters reach 99,800 exhaustive-scan hashes after the separately hashed
+200-file startup cohort. This gap is intentional, not missing long-path files;
+the completed reload merges both cohorts. No completion event precedes the
+daemon's exit. Inspection narrows the remaining investigation to final root
+membership persistence and complete-catalog refresh, without yet attributing
+the OOM to either operation. Root persistence streams SQLite point updates from
+the retained scan inventory; refresh builds a replacement catalog while the
+current catalog remains available. Preserve transaction/publication fences and
+the full acceptance criteria when reducing peak allocation. After two failed
+full runs, investigate this path before another full campaign; do not raise the
+budget or repeat the unchanged approach.
 
 Compiler investigation uses Builder's diagnostic-only Linux collection command;
 its receipt explicitly records `qualityGatePassed:false` and
