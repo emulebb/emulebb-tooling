@@ -1789,6 +1789,18 @@ full scan in its query plan and a pruning snapshot backing allocation below
 Fresh Linux package and unchanged-budget full campaign evidence remain required
 before claiming that the populated-library OOM is resolved.
 
+Rust `169691c6` removes the reload target's unused hash-vector field and its
+constructor plumbing. Fresh Linux GNU/AMD64 qualification passes on that revision:
+strict Clippy, packet-diagnostics compilation, release build, **3,310 workspace
+tests** and **three VPN egress tests**. Logs:
+`reports/rust-linux/gnu-amd64/259c372a62264db39cda4625f73bcf8f/`.
+The clean-source archive SHA-256 is
+`03688335f6cd54dd42d582df35526e531bc75e6311e2e64508e10960a3f9a0ae`.
+Non-root partial-download/restart/resume/completion smoke passes in
+`reports/rust-linux/gnu-amd64/f7ace5145ac34e2f837d5815c29e2be5/package-smoke.json`.
+These are local, unpublished artifacts. The full unchanged-budget campaign is
+still required to qualify the populated-library repair.
+
 Compiler investigation uses Builder's diagnostic-only Linux collection command;
 its receipt explicitly records `qualityGatePassed:false` and
 `packageProduced:false`. Acceptance continues to require the ordinary strict
