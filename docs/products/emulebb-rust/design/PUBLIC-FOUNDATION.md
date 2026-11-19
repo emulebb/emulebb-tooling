@@ -1547,8 +1547,8 @@ Windows eD2k tests pass, including ingest cancellation, held-preparation capacit
 and publication coverage:
 `reports/settings-request-round-1/ingest-receipt-ed2k-final.log`.
 The native package evidence above still belongs specifically to `928ffe12`.
-Fresh Linux package qualification of the ingest change and actual constrained
-execution remain outstanding. Builder `5cfc75a` and Harness `7c95eb77` now provide
+Fresh Linux package qualification passes on the ingest change; constrained
+workload acceptance remains incomplete. Builder and Harness provide
 the persisted wrapper around the existing combined campaign. It verifies the
 current archive checksum/source/SBOM, snapshots exact independent Rust/Harness
 Git sources, and uses a labelled local Docker volume for native profile and
@@ -1575,6 +1575,32 @@ inventory dependencies. Scoped Builder checks pass in
 `reports/builder-unit/a10e14ab2c79`; all 168 selected harness tests pass in
 `reports/settings-request-round-1/container-library-harness.log`. These scoped
 checks verify orchestration and failure handling, not the full workload itself.
+
+The fresh GNU/AMD64 package gates and non-root smoke pass on Rust `733e5d16`:
+`reports/rust-linux/gnu-amd64/3e887912411743e390e43a38ef4f4d5a/` and
+`reports/rust-linux/gnu-amd64/6faf822a05d1474a8dff0e6e1be201a9/package-smoke.json`.
+The first full constrained execution on Builder `9302058` and Harness `9a1f5686`
+**fails qualification**. It prepares all 100,000 physical files, validates
+10,485,760,000 bytes, starts the 100k retained-job profile and enumerates the
+full library. During the initial scan the kernel kills the daemon at the
+512 MiB process-tree limit. The observer records one OOM kill, unchanged scope
+and limits, swap disabled and CPU quota/period 100,000/100,000. Receipt and failed
+campaign evidence are retained under
+`reports/linux-containers/library/ecb456c5b4bc4b98b437f4811f632558/`; its labelled
+native volume retains the profile and fixture. This is not a passing scale result.
+
+That run has no usable daemon RSS samples, so it does not establish whether
+daemon allocations or controller memory dominate the failure. Harness `fc0dd988`
+now preserves CPU/RSS readings when optional metrics are unavailable, records
+metric errors, leaves unavailable private/I/O measurements null, and records
+controller RSS before/after fixture preparation and alongside daemon samples.
+All 94 selected campaign tests pass in
+`reports/settings-request-round-1/container-memory-observability-python.log`.
+These fixes do not retroactively add measurements to the failed run. The next
+bounded work is to reduce the existing fixture validator's retained path
+collections without changing its coverage or the measured group, then repeat
+the same resource budget with usable memory diagnostics. The limit and
+acceptance criteria remain unchanged.
 
 Compiler investigation uses Builder's diagnostic-only Linux collection command;
 its receipt explicitly records `qualityGatePassed:false` and
