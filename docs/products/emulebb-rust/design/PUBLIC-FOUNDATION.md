@@ -1540,10 +1540,17 @@ before exposing completion, while independently charged result backing remains
 owned by its consumer. The same helper covers metadata reads, cleanup,
 job lifecycle/progress, delivery, payload/availability evidence and path/content
 mutations. Existing receipt-ordering and storage regressions remain required.
-Complete that ordering guarantee for the separate local-ingest preparation
-control before claiming all owner paths covered. Then run the existing combined
-100k campaign through persisted container orchestration; the full constrained
-campaign wrapper and its execution remain outstanding.
+Local-ingest preparation follows that same guarantee on Rust `733e5d16`:
+publication retains its preparation proof through the final projection, then
+hashing admission and transient workspace release before completion. All 1,458
+Windows eD2k tests pass, including ingest cancellation, held-preparation capacity
+and publication coverage:
+`reports/settings-request-round-1/ingest-receipt-ed2k-final.log`.
+The native package evidence above still belongs specifically to `928ffe12`.
+Fresh Linux package qualification of the ingest change belongs to the next
+constrained-campaign slice. Run the existing combined 100k campaign through
+persisted container orchestration; the full constrained campaign wrapper and
+its execution remain outstanding.
 
 Compiler investigation uses Builder's diagnostic-only Linux collection command;
 its receipt explicitly records `qualityGatePassed:false` and
