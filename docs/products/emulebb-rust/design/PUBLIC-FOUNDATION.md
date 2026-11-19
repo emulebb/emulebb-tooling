@@ -2051,12 +2051,11 @@ Current evidence under the configured output root:
 - `reports/settings-request-round-1/library-root-resource-webui-final.log`
   passes 74 unit tests, 32 browser tests, type checking and production build.
   Subsequent Rust changes affect only backend test fixtures.
-- `reports/settings-request-round-1/library-root-contract-python.log`,
-  `library-root-contract-python-repair.log` and `library-root-collection-python.log`
-  retain the first consumer run, corrections and passing collection checks.
-  The four additional consumer owners pass unchanged in
-  `library-root-consumers-python.log`; its four repaired owners pass all 413
-  tests in `library-root-consumers-python-repair.log`.
+- The required Harness push gate passes all 1,267 tests across the 18 affected
+  Python owner modules on `b0f22e60`. Its unified evidence is
+  `reports/local-check/emulebb-build-tests/20261119T131351Z-df275a57/02.log`;
+  the same directory retains source snapshots and gate results. Earlier scoped
+  failures and their repairs remain under `reports/settings-request-round-1`.
 - `reports/settings-request-round-1/library-root-openapi-final-python.log`
   passes 158 checks and finds the scan request must use a named component.
   That correction passes the complete selected-source comparison in
