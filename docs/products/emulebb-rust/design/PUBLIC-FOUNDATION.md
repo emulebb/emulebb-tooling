@@ -2115,9 +2115,9 @@ listener, Kad, peer and offline-settings phases pass. The retained-job phase
 explicitly records `memoryLimitQualified:false` and
 `physicalLibraryQualified:false`; it does not qualify either physical-library
 capacity tier. Both physical-library capacity tiers remain unqualified.
-Complete upstream watcher ingress/cache bounds before restarting those
-campaigns. Current GNU native evidence is recorded below; other platform
-qualification remains separate.
+Qualify the bounded watcher ingress and native subtree/flood behavior before
+restarting those campaigns. Current native evidence is recorded below; other
+platform qualification remains separate.
 Rust `4d15f544` establishes its durable foundation in fresh schema 106: each root
 stores a scan-required flag and bounded loss revision. The full scan captures
 the immutable root ID and revision before walking it, then acknowledges only
@@ -2191,11 +2191,29 @@ in `reports/settings-request-round-1/linux-contract-fixtures-python.log` and
 separately after that fixture wiring repair; unchanged compilation/test proof
 is retained rather than rerun.
 
-The upstream native debouncer still retains event/cache state outside the
-downstream bounds. Complete that bound, native subtree/flood qualification and
-both physical-library memory tiers before claiming watcher/capacity completion.
-GNU default-feature tests and package smoke do not qualify musl, ARM64, an
-Android device, the large-library tiers or the whole foundation objective.
+Rust `3f287cc7` admits raw native events directly to the bounded action queue,
+removing the additional event accumulator and per-file identity cache. The
+consumer retains at most 256 pending actions while the queue holds at most
+256 more; overflow collapses to a durable scan-required notice. Ordinary batches
+use a fixed two-second coalescing window; verified source ingestion still owns
+changes that continue during hashing. Native recursive registrations remain
+proportional to watched directories rather than requiring an additional cache
+entry for every library file. Windows destination-only renames reuse the
+existing verified native fingerprint relocation path and preserve uncertainty
+for an explicit scan; the monitor does not guess rename pairs.
+
+The Windows core suite passes 688 executions, including native file
+pickup/relocation/removal, controlled subtree recovery, a 10,000-event ingress
+flood, oversized-event admission, settling, cancellation and final loss drain:
+`reports/settings-request-round-1/bounded-native-core-final.log`. These tests
+prove the admission/retention mechanism, not a memory-limited native flood
+campaign. GNU qualification on this new Rust revision remains pending; the
+package receipt above belongs to `e8edf8cf` only.
+
+Complete native subtree/flood qualification and both physical-library memory
+tiers before claiming watcher/capacity completion. GNU default-feature tests and
+package smoke do not qualify musl, ARM64, an Android device, the large-library
+tiers or the whole foundation objective.
 No PR, merge, main update, release or publication is authorized.
 
 Compiler investigation uses Builder's diagnostic-only Linux collection command;
