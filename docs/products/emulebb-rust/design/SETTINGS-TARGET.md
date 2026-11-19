@@ -753,7 +753,27 @@ exercise representative field types, navigation, edits, reset, conflict and
 application state; they do not prove that every real daemon field renders.
 The settings-crate suite passes all 32 tests in
 `reports/settings-request-round-1/webui-settings-rust-fixture.log`, including
-the frontend default snapshot against all 59 canonical typed leaves. Actual
-packaged-daemon browser checks, the remaining shared harness adoption and the
-memory-tier campaigns are still required. The feature commit is pushed; no PR,
-merge, main write or publication was performed.
+the frontend default snapshot against all 59 canonical typed leaves.
+
+Harness `cdb4f2fc` extends the existing native package/browser owner rather than
+adding a runner. The source-verified Windows/x64 package at Rust `02a5bdb5`
+builds with zero warnings and passes
+`reports/rust-release-package/0141dc839a82/report.json`, with clean source
+provenance in the adjacent `sources.json`. Its retained `webuiSettings` proof
+checks all 59 emitted fields against actual saved modes and values (49 default
+leaves in this explicit fixture), then confirms exactly two revisioned UI writes
+to change and restore a live upload limit, including effective application.
+No response uncertainty authorizes a compensating write. The same campaign
+passes authenticated panel navigation, stale-key recovery, local 12 MiB delivery,
+verified partial-download restart, offline-writer exclusion and graceful
+shutdown. An initial run exposed the ownership probe's object-only unwrapping
+of a root page; its fixture now controls HTTP bytes and exercises the real
+envelope and cursor checks. The two focused Python owners pass all 139 tests.
+Build and final campaign logs are
+`reports/settings-request-round-1/webui-native-package.log` and
+`reports/settings-request-round-1/webui-native-smoke-final.log`.
+
+This is native Windows qualification with fresh local-only profiles; remaining
+shared harness adoption, other platform/browser campaigns and memory-tier
+qualification remain open. The feature checkpoints are pushed; no PR, merge,
+main write or publication was performed.

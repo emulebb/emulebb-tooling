@@ -2424,7 +2424,12 @@ default/custom modes, revisioned minimal writes and visible application state.
 Its scoped checks pass 87 unit tests, 32 browser tests, TypeScript checking and
 the production build; all 32 settings-crate tests also pass, including the
 shared 59-leaf default fixture. The settings target records exact evidence.
-These browser tests use controlled API fixtures; actual packaged-daemon browser
-qualification and shared harness cleanup remain pending. Watcher loss reporting, the final adaptive
+The subsequent native Windows package campaign passes with Harness `cdb4f2fc`:
+all 59 real daemon fields render with their saved modes and values, and exactly
+two revisioned UI writes change and restore a live upload limit. Local 12 MiB
+delivery, partial-download restart, profile ownership and graceful shutdown also
+pass. Evidence is `reports/rust-release-package/0141dc839a82/report.json` under
+the workspace output root. Shared harness cleanup and remaining platform
+qualification are still open. Watcher loss reporting, the final adaptive
 scheduler and memory-tier capacity campaigns also remain unfinished. No PR,
 merge, main write or publication was performed.
