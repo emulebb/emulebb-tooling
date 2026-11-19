@@ -1899,6 +1899,23 @@ they do not reduce the 100k support requirement at the 1 GiB tier. Investigate
 concrete allocation waste without making a major rewrite solely to force that
 larger workload into 512 MiB.
 
+The first 50k/512 MiB tier run fails functional qualification in
+`reports/linux-containers/library/ea2ebac600df4dd18da71c8d9ef31fb3/`.
+Initial hashing admits all 50,000 files/5,242,880,000 bytes, exact DB integrity,
+1,000 long paths and 100,000 retained jobs. Watcher creation passes for 1,000
+files, including 500 long paths and 40 REST identity samples. Watcher modification
+then fails hash transition/convergence after 600 seconds; all 1,000 persisted
+probe fingerprints still carry their creation-generation modification times.
+No missing paths or invalid hash geometry are reported. The daemon's log records
+three completed reloads but no subsequent reload or watcher error before shutdown.
+The failure is not an OOM: kernel OOM counters remain zero, sampled daemon and
+controller RSS peaks are 263,122,944 and 49,393,664 bytes, and the whole-cgroup
+peak is 536,973,312 bytes. Sources/limits remain unchanged and the owned container
+is absent. Total runtime is 1,052.861 seconds. Preserve this failed receipt and
+native volume. Investigate watcher final-intent delivery; do not increase the
+timeout or weaken hash-transition acceptance to obtain a tier pass. The 100k/1 GiB
+campaign is the next independent capacity qualification.
+
 Compiler investigation uses Builder's diagnostic-only Linux collection command;
 its receipt explicitly records `qualityGatePassed:false` and
 `packageProduced:false`. Acceptance continues to require the ordinary strict
