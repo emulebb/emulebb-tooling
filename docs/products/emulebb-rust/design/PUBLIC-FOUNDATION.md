@@ -1726,6 +1726,39 @@ Non-root partial-download/restart/resume/completion smoke passes in
 Artifacts remain local and unpublished. Unchanged-budget full campaign
 qualification remains required.
 
+The unchanged-budget campaign on Rust `9d5cbe9d`, Harness `5cb091ca`, Builder
+`9302058` and Tooling `3463be8f` **passes its initial physical-library phase**:
+100,000 successful hashes, 10,485,760,000 bytes read, settled idle state, exact
+active DB counts, zero integrity/scan failures and 1,000 long-path sources.
+The same profile retains 100,000 jobs. All/completed/unfinished traversal passes
+at 500/495/5 pages, and the populated-root update succeeds. Evidence is retained
+under `reports/linux-containers/library/d29f96e722a64ad18d9ad73037c9e0cd/`.
+
+The **full campaign still fails qualification**: an OOM kill occurs during a
+later catalog rebuild in the watcher phase, resetting a shared-file probe.
+Elapsed time is 1,011.89 seconds; the kernel records one OOM kill and a
+537,075,712-byte cgroup peak with unchanged limits. The owned container is
+removed; its labelled native volume retains the fixture/profile. Initial-phase
+sampled daemon/controller peaks are 337,403,904/44,167,168 bytes. Whole-campaign
+sampled peaks are 413,048,832/126,410,752 bytes; these are not simultaneous totals.
+Download traversal's sampled controller peak remains 43,872,256 bytes. The later
+controller increase therefore needs investigation in watcher polling rather
+than an assumption that download traversal retains all job rows.
+
+Harness `9522a32e` deterministically closes the campaign's read-only SQLite
+connections, including exceptions. SQLite connection context managers alone
+commit/roll back; they do not close connections. Active-source selection uses
+an indexed membership `EXISTS` test instead of a wide deduplicating join,
+preserving one row per path across overlapping roots. The existing 102 scoped
+tests pass, including overlapping-root counts, absence of a temporary
+deduplication tree in the query plan, and explicit close checks after successful
+and failing reads. Evidence:
+`reports/settings-request-round-1/watcher-reader-resources-python.log` and
+`reports/local-check/emulebb-build-tests/20261119T061033Z-989a1ee7/`.
+Rust and its qualified archive are unchanged. The impact of this reader-resource
+repair on the later constrained peak remains unproven; reuse that archive for
+the next unchanged-budget campaign rather than rebuilding product binaries.
+
 Compiler investigation uses Builder's diagnostic-only Linux collection command;
 its receipt explicitly records `qualityGatePassed:false` and
 `packageProduced:false`. Acceptance continues to require the ordinary strict
