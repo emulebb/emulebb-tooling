@@ -241,6 +241,12 @@ recursively. Do not follow nested symbolic links/junctions; external targets
 require their own roots. Overlapping roots do not duplicate content. Removing a
 root removes eligibility through it, not knowledge. After a category destination
 changes, the old path stays shared only if another current root covers it.
+Explicit root creation rejects an existing root at the same path or an
+ancestor/descendant overlap. It must not collapse or replace existing root
+resources, IDs or watch policies. Automatically managed incoming/category roots
+remain required by their owning settings; explicit creation does not override
+that ownership. Implement and qualify overlap rejection in the canonical create
+operation; it is not yet delivered by the metadata foundation below.
 Moving a file outside configured roots does not authorize searching arbitrary
 folders for it.
 Shared-directory GET returns cached configuration and last observed health,
@@ -2050,6 +2056,31 @@ and verify the addressed cache update, preservation of another root, released
 quota and absence of a reserved scan. Managed-root and missing-ID behavior also
 pass. Canonical create/delete runtime operations, REST/OpenAPI, UI, Python callers
 and native capacity qualification remain unfinished.
+
+Rust `90615214` adds exact-ID root deletion through the existing serialized
+owner and bounded reconciliation continuation. It retires only the selected
+explicit root, withdraws its memberships, removes its runtime descriptor and
+refreshes watcher subscriptions. Payload files remain untouched. Managed and
+missing IDs return distinct outcomes. A caller disconnect does not cancel
+admitted publication and reconciliation; a separate daemon shutdown retains the
+existing cancellation semantics.
+
+Membership pages for explicit deletion address the exact retired root ID, so a
+replacement at the same path cannot redirect cleanup. Category path lookups
+select their latest root instance rather than an arbitrary retired row. Root
+creation now has a transactional metadata primitive returning its committed ID
+and preserving an active-path conflict, ready for canonical owner integration.
+The newly accepted ancestor/descendant conflict policy still needs implementing
+in that integration; no canonical create route is exposed yet.
+
+The full Rust workspace passes on `90615214` in
+`reports/settings-request-round-1/library-root-crud-workspace.log`, including
+302 metadata unit tests, retired/replacement membership separation, managed-root
+protection and a real-file cancellation test proving sharing withdrawal while
+preserving payload bytes. Existing 100k catalog query-plan gates also pass.
+This does not qualify the unfinished REST/UI/harness cut or native capacity
+tiers. Continue canonical creation, resource reads and the joint caller cut;
+watcher overflow recovery remains an operator decision.
 
 Compiler investigation uses Builder's diagnostic-only Linux collection command;
 its receipt explicitly records `qualityGatePassed:false` and
