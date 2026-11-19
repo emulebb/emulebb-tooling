@@ -651,5 +651,24 @@ Existing delivery/listener tests pass all 84 cases, including those admission
 faults, in `android-peer-settings-final.log`. These are controlled HTTP/ADB
 outcomes; no phone or emulator was contacted and no APK qualification is claimed.
 
-Remaining Android public-sharing callers, shared harness cleanup, container
-provisioning and WebUI adoption remain pending.
+Harness `8c6c700b` adopts canonical revisioned settings in Android public-sharing
+preparation and observation. Preparation checks saved values and defers network
+start when a restart is required; observation requires effective values and no
+pending application. The unfinished-download guard uses the current bounded
+download resource. Its existing controlled HTTP/ADB suite passes 145 tests in
+`reports/settings-request-round-1/android-public-settings-final.log`.
+
+Harness `fcb669b0` shares strict cursor traversal between library roots, downloads,
+Android lifecycle verification and retained-job conformance. Lifecycle checks
+stream immutable job identities across every page without retaining the full
+history. Existing owners pass 362 tests in `android-shared-pages-final.log`;
+the final metadata-presence validation passes 18 focused tests in
+`shared-pages-metadata-final.log`, both under the same report directory.
+
+The native REST/OpenAPI campaign passes again with graceful teardown in
+`reports/rust-rest-openapi-ci/20261119T182755Z/report.json`. The shared iterator
+traverses all 100,000 retained jobs in 500 pages, 99,000 completed jobs in 495
+pages and 1,000 unfinished jobs in five pages; restart counts are preserved.
+Physical-library and memory-limit qualification remain explicitly false.
+Android tests above use controlled outcomes, not an actual APK/device campaign.
+Shared harness cleanup, container provisioning and WebUI adoption remain pending.
