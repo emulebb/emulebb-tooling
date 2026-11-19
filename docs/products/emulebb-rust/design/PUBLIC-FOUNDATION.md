@@ -1565,26 +1565,33 @@ Upload-list indexing, thin list shape and bounded keyset traversal remain open;
 UUID identity alone does not qualify those reads. No schema, settings or CLI
 changes are introduced by this checkpoint.
 
-### Global tag WebUI checkpoint (2026-11-19)
+### Tag WebUI checkpoint (2026-11-19)
 
-Rust `277e9819` adds global library-tag management under Sharing through the
-existing `/library/tags` resources. It retains one 100-row cursor page, replaces
-rows during traversal and supports explicit refresh, creation and confirmed
-deletion. Names remain immutable and use the same case-insensitive identity and
-ASCII validation rules as categories. A successful mutation refreshes only the
-tag resource and returns to its first page; failed writes retain the proposed
-name and current page. Late responses from a replaced client cannot overwrite
-the current page. There is no new polling loop or accumulated row cache.
+Rust `659d9f56` delivers global tag management under Sharing and hash-level
+assignment controls in file details. Global management uses `/library/tags`
+for browsing, creation and confirmed deletion. Names remain immutable and use
+the same case-insensitive identity and ASCII validation rules as categories.
+File details read `/library/files/{hash}/tags` and send explicit one-hash
+selections to the existing bulk add/remove endpoints. Removing an assignment
+does not delete the global tag; tag creation remains an explicit global action.
 
-The component reuses shared cursor controls and public-name validation rather
-than introducing another paging or naming implementation. All 66 WebUI unit
-tests and 32 browser tests pass, including six tag lifecycle/pagination tests:
-`reports/settings-request-round-1/library-tags-webui.log`.
+Both controls reuse one bounded tag-page loader, cursor controls and public-name
+validation. They retain one 100-row page per resource, replace rows during
+traversal and support explicit refresh. Successful mutations refresh only the
+tag resource and return to its first page. Failed writes retain the proposed
+name and current page; HTTP 207 item failures surface without retrying accepted
+work. A content change resets cursor/input scope, and late responses cannot
+overwrite the newly selected content. There is no new polling loop or
+accumulated row cache.
+
+All 72 WebUI unit tests and 32 browser tests pass, including tag lifecycle,
+pagination, hash-selection and partial-batch regressions:
+`reports/settings-request-round-1/content-tags-webui-final.log`.
 The staged daemon/WebUI build has zero warnings:
-`logs/builds/20261118T235447Z-build-clients/build-result.json`.
-Backend API, DB, settings and CLI are unchanged. File-tag assignment controls
-remain part of the library-browser cut; this checkpoint qualifies global tag
-management only.
+`logs/builds/20261119T000950Z-build-clients/build-result.json`.
+Backend API, DB, settings and CLI are unchanged. Multi-file selection and
+library filtering remain part of the library-browser cut; this checkpoint
+qualifies global tag management and selected-content assignment controls.
 
 ### Deferred follow-up
 
