@@ -2418,8 +2418,13 @@ checks. Their controlled suites and a repeated native 100,000-retained-job run
 pass; the settings target records exact evidence and limits. Rust `89c807a5`
 implements container provisioning; native GNU/Ubuntu and musl/Alpine AMD64
 provisioning and image smoke checks pass. The settings target records the
-explicit network fixture and remaining platform limits. Shared harness cleanup
-and WebUI settings still require adoption before complete cross-platform
-qualification. Watcher loss reporting, the final adaptive
+explicit network fixture and remaining platform limits. Rust `02a5bdb5` adopts
+the canonical settings envelope and metadata in the WebUI, with explicit
+default/custom modes, revisioned minimal writes and visible application state.
+Its scoped checks pass 87 unit tests, 32 browser tests, TypeScript checking and
+the production build; all 32 settings-crate tests also pass, including the
+shared 59-leaf default fixture. The settings target records exact evidence.
+These browser tests use controlled API fixtures; actual packaged-daemon browser
+qualification and shared harness cleanup remain pending. Watcher loss reporting, the final adaptive
 scheduler and memory-tier capacity campaigns also remain unfinished. No PR,
 merge, main write or publication was performed.

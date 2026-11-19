@@ -671,7 +671,8 @@ traverses all 100,000 retained jobs in 500 pages, 99,000 completed jobs in 495
 pages and 1,000 unfinished jobs in five pages; restart counts are preserved.
 Physical-library and memory-limit qualification remain explicitly false.
 Android tests above use controlled outcomes, not an actual APK/device campaign.
-Shared harness cleanup, container provisioning and WebUI adoption remain pending.
+The provisioning and WebUI checkpoints below supersede those integration gaps;
+shared harness cleanup and complete platform qualification remain pending.
 
 Rust `d8e7f657` shares synced temporary-file publication between hosted bootstrap
 writes and fresh daemon startup. Initial creation never replaces an existing
@@ -735,3 +736,24 @@ requires both storage owners and that fixture declaration in the proof, with
 `reports/builder-unit/4b4ed101b8c8/`. ARM64, actual VPN and memory-tier
 qualification remain outside this checkpoint. No PR, merge,
 main write or publication was performed.
+
+Rust `02a5bdb5` replaces the WebUI settings form with canonical surface-driven
+editors. Each emitted field carries an explicit default/custom choice; nullable
+values have an explicit unset choice. Saves contain only changed nested values
+and dotted resets, with the exact opaque revision. Saved and running values,
+pending restart and application failures are visible. A conflict or uncertain
+write outcome retains edits and requires an explicit discard/reload before
+another save; the UI never retries the write automatically. Bootstrap descriptors
+remain read-only and resource links retain their existing sections.
+
+Builder WebUI validation passes 87 unit tests, 32 Chromium/mobile-WebKit browser
+tests, TypeScript checking and the production build in
+`reports/settings-request-round-1/webui-settings-final.log`. The browser fixtures
+exercise representative field types, navigation, edits, reset, conflict and
+application state; they do not prove that every real daemon field renders.
+The settings-crate suite passes all 32 tests in
+`reports/settings-request-round-1/webui-settings-rust-fixture.log`, including
+the frontend default snapshot against all 59 canonical typed leaves. Actual
+packaged-daemon browser checks, the remaining shared harness adoption and the
+memory-tier campaigns are still required. The feature commit is pushed; no PR,
+merge, main write or publication was performed.
