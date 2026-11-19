@@ -1697,6 +1697,25 @@ OOM's allocating operation. No REST or watcher errors precede exit. Keep the
 same budget and acceptance criteria; do not repeat another full campaign
 without narrower allocation evidence or a justified repair.
 
+Rust `9d5cbe9d` repairs a verified duplicate-scan scheduling path. An explicit
+root command already reserves and arms its reload before acknowledging commit.
+Its health notification now requests only watch refresh; the health worker does
+not also interpret that event as root recovery and queue another inventory.
+Category changes without an owned scan still request one. Periodic offline-root
+recovery retains its scan behavior. Coalescing watch notifications cannot erase
+a pending scan request.
+
+All **670 core tests** pass in
+`reports/settings-request-round-1/root-scan-owner-core.log`. The regression holds
+reload execution at a gate, lets the committed root command hand off its scan,
+processes the health event and requires no second pending scan. It also verifies
+that an unowned category scan remains schedulable. Existing unavailable-root
+withdrawal/rejoin coverage passes. Branch quality checks pass in
+`reports/local-check/emulebb-rust/20261119T053148Z-77a6c745/`. This confirms the
+duplicate scheduling defect and repair; its causal contribution to the OOM is
+not yet proven. Fresh Linux package and unchanged-budget campaign evidence are
+still required on this revision.
+
 Compiler investigation uses Builder's diagnostic-only Linux collection command;
 its receipt explicitly records `qualityGatePassed:false` and
 `packageProduced:false`. Acceptance continues to require the ordinary strict
