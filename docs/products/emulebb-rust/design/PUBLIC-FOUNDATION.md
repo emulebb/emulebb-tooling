@@ -2229,6 +2229,18 @@ passes 119 checks; the corrected four recovery cases pass in
 gate passes on the committed sources. This is harness validation; the physical
 memory campaigns remain pending.
 
+Harness `a98cf88b` shares explicit/registered contract selection across profile
+writing, response validation and REST conformance, so a standalone container
+does not eagerly resolve absent workspace topology. Builder `5d306e8` supplies
+that input during the library import preflight as well as the workload. Scoped
+checks pass 112 tests with one host-specific skip in
+`reports/settings-request-round-1/standalone-contract-consumers-python.log`;
+container orchestration checks pass in `reports/builder-unit/2a6faf25dd73/`.
+The preceding failed preflight receipt at
+`reports/linux-containers/library/d41ade6b494a4b4690cdd9fc3105507c/report.json`
+records no fixture volume allocation, verified container removal and
+`workloadQualified:false`; it provides no capacity proof.
+
 Complete native subtree/flood qualification and both physical-library memory
 tiers before claiming watcher/capacity completion. GNU default-feature tests and
 package smoke do not qualify musl, ARM64, an Android device, the large-library
