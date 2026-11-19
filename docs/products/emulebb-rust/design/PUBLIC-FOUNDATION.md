@@ -2114,9 +2114,10 @@ Its extended category/storage/sharing/tag/upload-accounting, retained-job,
 listener, Kad, peer and offline-settings phases pass. The retained-job phase
 explicitly records `memoryLimitQualified:false` and
 `physicalLibraryQualified:false`; it does not qualify either physical-library
-capacity tier. Final-source Linux packages and both capacity tiers remain
-unqualified. Complete upstream watcher ingress/cache bounds and native/subtree
-qualification remain required before restarting capacity campaigns.
+capacity tier. Both physical-library capacity tiers remain unqualified.
+Complete upstream watcher ingress/cache bounds before restarting those
+campaigns. Current GNU native evidence is recorded below; other platform
+qualification remains separate.
 Rust `4d15f544` establishes its durable foundation in fresh schema 106: each root
 stores a scan-required flag and bounded loss revision. The full scan captures
 the immutable root ID and revision before walking it, then acknowledges only
@@ -2147,7 +2148,7 @@ share the full-scan gate so membership replacement cannot prune a newer edit;
 loss writes stay independent to preserve scan/stop ordering. Linux explicit
 scans retain the watch gate inside the tracked coverage-refresh job.
 
-The final Windows core suite passes 681 executions, including native
+The Windows core suite on that checkpoint passes 681 executions, including native
 pickup/rename/removal, admission pressure, loss scope, unchanged subscription
 identity, scan ordering and stop/drain. REST passes 169 tests, metadata passes
 310, OpenAPI checks pass 143 and WebUI passes 87 unit plus 32 browser tests,
@@ -2156,14 +2157,46 @@ type checking and production build. Evidence under
 `watcher-loss-rest.log`, `watcher-loss-metadata.log`, `watcher-loss-openapi.log`
 and `watcher-loss-webui.log`.
 
-The upstream native debouncer still retains event/cache state outside these
-downstream bounds. Complete that bound and qualify directory subtree
-creation/removal/rename, Linux native execution and the two physical-library
-memory tiers before claiming watcher/capacity completion. This checkpoint does
-not qualify a new native package or the whole foundation objective.
-The final documentation check passes in
-`reports/settings-request-round-1/library-root-docs-final-check.log` before this
-receipt update. No PR, merge, main update, release or publication is authorized.
+Rust `5781aac6` treats directory creation, removal and relocation as incomplete
+subtree observations: it flags the affected roots without recursively expanding
+the event or starting a scan. Untyped removals retain direct-file removal work
+and flag possible subtree loss. A controlled lifecycle test proves that an
+explicit scan discovers children, repairs directory relocation/removal and
+clears the flag while preserving content hashes. Windows core passes 684
+executions in `reports/settings-request-round-1/watcher-subtree-core.log` and
+`watcher-linux-lint-core.log`. This is controlled subtree recovery evidence,
+not a native event-flood or zero-payload-read claim.
+
+The clean GNU AMD64 package on Rust `e8edf8cf` passes canonical strict Clippy,
+packet diagnostics, release compilation, 3,315 workspace test executions and
+three dedicated VPN-egress tests. The workspace run includes actual native
+file pickup/relocation/removal and the controlled subtree recovery test.
+Build, test and daemon/initializer ELF inspection evidence is under
+`reports/rust-linux/gnu-amd64/ef66e2e79660478585951a279eb63a7d/`.
+Private settings-response variants own their large outcomes through boxes;
+runtime projections and CLI assertions satisfy the lint gate without changing
+the public settings, REST or profile contract.
+
+The non-root native GNU lifecycle passes against those same archive bytes with
+Harness `a7a128f2`, Builder `fbca689` and contract source Tooling `011d2a51`:
+`reports/rust-linux/gnu-amd64/3c1c909555534847be8833837c364e42/package-smoke.json`.
+It verifies a fresh schema-106 profile, a 12 MiB local transfer, verified output,
+partial restart and graceful shutdown. The standalone container receives the
+selected read-only OpenAPI contract through the existing explicit harness
+input; no materialized Builder workspace is needed inside it. The same input
+is supplied to library campaign containers. Focused fixture/package tests pass
+132 checks with one host-specific skip, and Linux orchestration tests pass 129,
+in `reports/settings-request-round-1/linux-contract-fixtures-python.log` and
+`reports/builder-unit/86aa64c64a10/` respectively. Package smoke is rerun
+separately after that fixture wiring repair; unchanged compilation/test proof
+is retained rather than rerun.
+
+The upstream native debouncer still retains event/cache state outside the
+downstream bounds. Complete that bound, native subtree/flood qualification and
+both physical-library memory tiers before claiming watcher/capacity completion.
+GNU default-feature tests and package smoke do not qualify musl, ARM64, an
+Android device, the large-library tiers or the whole foundation objective.
+No PR, merge, main update, release or publication is authorized.
 
 Compiler investigation uses Builder's diagnostic-only Linux collection command;
 its receipt explicitly records `qualityGatePassed:false` and
