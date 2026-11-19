@@ -245,11 +245,11 @@ Explicit root creation rejects an existing root at the same path or an
 ancestor/descendant overlap. It must not collapse or replace existing root
 resources, IDs or watch policies. Automatically managed incoming/category roots
 remain required by their owning settings; explicit creation does not override
-that ownership. Overlap rejection is implemented in the canonical metadata and
-runtime creation owner; the REST/UI/Python caller cut remains unfinished.
+that ownership. The canonical metadata/runtime owner, REST/OpenAPI, WebUI and
+Python callers implement this contract; native qualification remains pending.
 Moving a file outside configured roots does not authorize searching arbitrary
 folders for it.
-Shared-directory GET returns cached configuration and last observed health,
+Library-root GET returns cached configuration and last observed health,
 updated by the existing two-second monitor or explicit scans. New unverified
 roots are conservatively inaccessible; reads do not probe the filesystem or
 promise instantaneous truth. Physical root mutations/health work uses retained
@@ -1981,157 +1981,92 @@ that policy and settle overflow recovery before another capacity campaign.
 The repair itself changes no public API, settings, DB shape or CLI surface;
 the accepted root-policy work explicitly does change the root contract.
 
-The first opt-in policy cut is committed as Rust `26e2b213`.
-Fresh schema 103 stores `watch_enabled` on the physical root, defaulting to zero
-with a boolean constraint. Implicit-root refresh preserves an existing choice;
-there is no global setting or separate policy store. Typed root reads, create
-and replacement inputs expose `watchEnabled`. The Sharing UI offers opt-in when
-adding a root and displays existing policies read-only. A watch-only
-edit refreshes subscriptions without reserving a catalog scan.
+### Integrated library-root contract checkpoint (2026-11-19)
 
-An opted-in child remains configured beneath an unwatched parent. Scan planning
-deduplicates normalized paths in place while retaining both membership
-snapshots. Roots with no watch opt-in create no native monitor/debouncer.
-Regression coverage addresses implicit refresh, stored boolean validity,
-restart persistence, overlapping-root planning, no-scan watch edits, REST
-default/opt-in handling and creation without replacing other roots' choices.
-The first workspace run catches a missing REST body allow-list entry;
-`48fc9606` admits the current boolean through both root validation paths.
-The full Rust workspace then passes in
-`reports/settings-request-round-1/root-watch-workspace-final.log`.
-The failed run remains in `root-watch-workspace.log` alongside it.
+The source cut is Rust `d7d1d654`, Harness `b0f22e60` and OpenAPI
+`56313ed1`. These are feature-branch changes, not a merged public release.
 
-UI-only refinement `7b84f00f` avoids a whole-root-list write when expressing
-creation opt-in. Its 73 unit tests, 32 browser tests and production type/build
-checks pass in `reports/settings-request-round-1/root-watch-webui.log`.
-The backend workspace evidence above belongs to `48fc9606`; no backend source
-changes in that UI refinement. Native qualification of the schema-103 cut is
-still pending.
+Fresh schema 104 stores a never-reused positive root ID, native path, ownership,
+watch choice and cached health. Active-path uniqueness, active-ID traversal and
+membership foreign-key indexes cover separate access patterns. Retirement keeps
+native-path and membership history; adding the same path again allocates a new
+ID. Category destination synchronization addresses current resources. A delete
+withdraws only that exact root instance's memberships and preserves payload
+files and other roots' observed availability.
 
-This cut does not finish canonical root-resource IDs/routes, editing watch policy
-on automatically managed roots, overflow recovery or the revised Python capacity
-campaign. Those remain required work; it is not complete per-root policy
-delivery or capacity qualification. Existing root create/replacement callers
-have one current object shape; no alternate input shape is introduced.
+The public routes are:
 
-The next root-resource slice must expose immutable decimal public IDs under
-`/library/roots` and provide an atomic per-root watch edit, including managed
-roots. A single-root edit must preserve concurrent changes to other roots and
-must not replace the root collection from a stale UI snapshot. Wire that cut
-through the persistence owner, OpenAPI, UI and Python callers together, without
-dual routes. Settle the pending overflow choice before completing watcher
-recovery and restarting capacity qualification.
+| Resource | Operations | Contract |
+| --- | --- | --- |
+| `/library/roots` | GET, POST | Bounded cursor pages; create one path with optional `watchEnabled`, default false. Creation returns 201 and Location. |
+| `/library/roots/{id}` | GET, PATCH, DELETE | Immutable decimal-string ID; patch only `watchEnabled`; explicit deletion returns empty 204; managed deletion returns 409. |
+| `/library/scan` | GET, POST | Cached bounded scan status; POST coalesces through the existing retained worker and returns 202 with Location. Omit its body or send an empty JSON object. |
+| `/library/ignores` | GET, POST, DELETE | Global custom file-name glob rules. |
+| `/library/ignores/defaults/{ruleKey}` | PATCH | Toggle the addressed built-in ignore rule. |
 
-The metadata foundation for that slice is pushed through Rust `84a7416d`.
-Fresh schema 104 gives each root a never-reused positive ID. Retiring a root
-retains native-path and membership history; adding the path again creates a new
-resource. Active-path uniqueness and an unfiltered foreign-key index cover their
-separate lookup requirements. Category-root synchronization addresses only active
-resources. Bounded ID pages include managed roots, and a watch patch commits only
-the addressed policy with its receipt in the same transaction. Managed roots
-cannot be deleted through this operation. Deleting an explicit root retires only
-its own memberships and preserves other roots' observed availability.
+Creation resolves the candidate on the retained filesystem worker, then checks
+active native root components and inserts under one SQLite writer transaction.
+Duplicate, ancestor and descendant conflicts return 409 without changing prior
+resources, policies or ownership. Sibling names with a common textual prefix
+remain distinct. Windows comparison follows the existing case-insensitive
+component policy without changing stored native paths. Retired roots do not
+block new creation.
 
-The metadata package passes 300 unit tests and three integration tests on that
-revision, including ID retirement, managed ownership, stale-reader edits and
-cross-root health isolation. Evidence:
-`reports/settings-request-round-1/library-root-identities-metadata-scoped.log`.
-Earlier failed compilation and schema checks remain retained alongside that
-report. This is metadata-layer proof only: serialized runtime publication,
-canonical REST/OpenAPI routes, UI and Python callers still require the integrated
-root-resource slice. It is not final-source native or capacity qualification.
+Create/watch/delete use the existing serialized persistence owner. Creation
+reserves its scan handoff before admission; a conflict does not arm a scan.
+A watch-only update refreshes subscriptions without reserving a catalog scan.
+Admitted commit/publication and deletion reconciliation finish after caller
+disconnection. Exact-ID membership continuations prevent a replacement root at
+the same path from redirecting cleanup. Managed roots remain watch-editable and
+cannot be deleted independently of their owning settings/category.
 
-Rust `c315c056` adds the serialized watch-edit owner. The existing persistence
-queue commits an ID-addressed policy, publishes the matching explicit runtime
-descriptor, and signals subscription refresh without reserving a catalog scan.
-Managed roots retain their ownership and read the committed policy through the
-existing implicit-root descriptor path. The admitted owner finishes publication
-even when its caller disconnects. No new background service or REST route is
-introduced by this foundation checkpoint.
+Point reads and active-ID pages use the retained SQL worker and do not probe
+storage. Limits are 1–100 rows, additionally bounded by 32 KiB of native paths;
+one longer path up to 64 KiB may occupy its own page. SQLite checks lengths before
+decoding, and continuation resumes after the last returned ID. Each reply keeps
+its existing 1 MiB reservation through serialization/drop against the shared
+8 MiB temporary-work budget. No new resident cache or setting is introduced.
 
-The core package passes 641 unit tests and 34 integration tests on that revision:
-`reports/settings-request-round-1/library-root-watch-owner-core.log`.
-New tests gate the commit/publication gap, cancel the caller, drain the owner,
-and verify the addressed cache update, preservation of another root, released
-quota and absence of a reserved scan. Managed-root and missing-ID behavior also
-pass. Canonical create/delete runtime operations, REST/OpenAPI, UI, Python callers
-and native capacity qualification remain unfinished.
+The root DTO exposes `id`, display-only `path`, `watchEnabled`, `managed`,
+`accessible`, `shareable` and nullable `lastScannedAt` in Unix seconds. WebUI root
+browsing replaces one bounded page at a time; edits address IDs, including watch
+choices on managed roots. Creation, deletion and scan controls use their typed
+resources. Python consumers traverse the same bounded resource pages. The
+existing capacity campaign leaves its large baseline root unwatched and tests
+all four watcher mutations on a separate opted-in root in that same profile.
+MFC-specific harness operations continue to address the actual MFC contract.
 
-Rust `90615214` adds exact-ID root deletion through the existing serialized
-owner and bounded reconciliation continuation. It retires only the selected
-explicit root, withdraws its memberships, removes its runtime descriptor and
-refreshes watcher subscriptions. Payload files remain untouched. Managed and
-missing IDs return distinct outcomes. A caller disconnect does not cancel
-admitted publication and reconciliation; a separate daemon shutdown retains the
-existing cancellation semantics.
+Current evidence under the configured output root:
 
-Membership pages for explicit deletion address the exact retired root ID, so a
-replacement at the same path cannot redirect cleanup. Category path lookups
-select their latest root instance rather than an arbitrary retired row. Root
-creation now has a transactional metadata primitive returning its committed ID
-and preserving an active-path conflict, ready for canonical owner integration.
-The newly accepted ancestor/descendant conflict policy still needs implementing
-in that integration; no canonical create route is exposed yet.
+- `reports/settings-request-round-1/library-root-resource-workspace-final.log`
+  passes 644 Core unit tests and its integration suites, plus 305 metadata unit
+  tests and three integration tests on `a70fcc85`. Its overall command fails at
+  two REST integration fixtures that shared an ancestor of transfer storage;
+  this is not a full-workspace pass. The subsequent change is confined to REST
+  test fixtures and removes their retired-route assertions.
+- `reports/settings-request-round-1/library-root-resource-rest-final.log`
+  passes all 166 REST unit tests and three integration tests on `d7d1d654`.
+- `reports/settings-request-round-1/library-root-settings-final.log`
+  passes all 52 settings unit tests on that same source.
+- `reports/settings-request-round-1/library-root-resource-webui-final.log`
+  passes 74 unit tests, 32 browser tests, type checking and production build.
+  Subsequent Rust changes affect only backend test fixtures.
+- `reports/settings-request-round-1/library-root-contract-python.log`,
+  `library-root-contract-python-repair.log` and `library-root-collection-python.log`
+  retain the first consumer run, corrections and passing collection checks.
+  The four additional consumer owners pass unchanged in
+  `library-root-consumers-python.log`; its four repaired owners pass all 413
+  tests in `library-root-consumers-python-repair.log`.
+- `reports/settings-request-round-1/library-root-openapi-final-python.log`
+  passes 158 checks and finds the scan request must use a named component.
+  That correction passes the complete selected-source comparison in
+  `library-root-openapi-selected-final.log`. Documentation publication checks
+  pass in `library-root-docs-check.log` before that schema-reference refinement.
 
-The full Rust workspace passes on `90615214` in
-`reports/settings-request-round-1/library-root-crud-workspace.log`, including
-302 metadata unit tests, retired/replacement membership separation, managed-root
-protection and a real-file cancellation test proving sharing withdrawal while
-preserving payload bytes. Existing 100k catalog query-plan gates also pass.
-This does not qualify the unfinished REST/UI/harness cut or native capacity
-tiers. Continue canonical creation, resource reads and the joint caller cut;
-watcher overflow recovery remains an operator decision.
-
-Rust `3ead4900` implements canonical single-root creation with overlap rejection.
-The retained filesystem worker resolves and verifies the candidate directory.
-The serialized owner then checks active native root components and inserts under
-one SQLite writer transaction. Duplicate, ancestor and descendant conflicts leave
-existing resources unchanged, including managed roots; sibling names sharing a
-textual prefix remain distinct. Retired roots do not block new creation. Windows
-component comparison follows the existing case-insensitive root policy without
-changing stored native paths.
-
-The owner reserves its reload handoff before admission, publishes only the new
-descriptor and arms the existing scan worker after commit. A conflict does not
-arm a scan. Caller cancellation preserves a committed creation's scan intent.
-Scoped validation passes 305 metadata unit tests plus three integration tests,
-and 643 core unit tests plus its integration suites:
-`reports/settings-request-round-1/library-root-create-metadata.log` and
-`reports/settings-request-round-1/library-root-create-core.log`.
-Coverage includes independent-connection parent/child races, Windows case,
-managed-root overlap, preservation of prior IDs/policies, and committed scans
-after cancellation. The full-workspace evidence in the preceding paragraph
-belongs to `90615214`; these later changes use the two affected package suites.
-Resource read admission and the joint REST/OpenAPI/UI/Python cut remain next;
-no second root route family has been introduced.
-
-Rust `83c4630e` completes cached root-read admission through the existing
-persistence coordinator and SQL worker. Point reads and active-ID pages perform
-no filesystem probes. Page limits are 1â€“100 rows, additionally bounded by 32 KiB
-of native paths, with one longer path up to 64 KiB allowed on its own. SQLite
-length checks precede decoding. A byte-limited page continues from its last
-returned ID, so it neither skips the next root nor creates a client snapshot.
-Retired rows do not expand active-index traversal.
-
-The typed root projection exposes decimal-string `id`, display-only `path`,
-`watchEnabled`, `managed`, `accessible`, `shareable` and nullable
-`lastScannedAt` in Unix seconds. Cached health remains independent of read time.
-Native paths remain the internal identity; callers edit resources by ID.
-Each reply retains a 1 MiB reservation through projection, serialization or
-caller drop against the existing shared 8 MiB payload budget. Exhaustion returns
-the existing busy outcome and released replies restore admission; this is not
-a new resident cache, user setting or total daemon memory limit.
-
-The affected suites pass 306 metadata unit tests plus three integration tests,
-and 647 core unit tests plus its integration suites:
-`reports/settings-request-round-1/library-root-read-metadata.log` and
-`reports/settings-request-round-1/library-root-read-core.log`.
-Coverage includes byte-limited continuation, oversized stored-path refusal,
-managed resources, cached health, decimal IDs, second-based timestamps and
-retained reply quota through serialization and release. The next integrated
-slice is the canonical REST/OpenAPI, WebUI and Python caller cut; do not expose
-dual root contracts. Native capacity qualification and watcher overflow recovery
-remain unfinished.
+Staged-daemon conformance, final-source native packages and both capacity tiers
+remain unqualified. Watcher event-loss/overflow recovery still requires the
+operator's choice before finishing recovery and restarting capacity campaigns.
+No PR, merge, main update, release or publication is authorized.
 
 Compiler investigation uses Builder's diagnostic-only Linux collection command;
 its receipt explicitly records `qualityGatePassed:false` and
