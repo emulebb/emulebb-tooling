@@ -1759,6 +1759,36 @@ Rust and its qualified archive are unchanged. The impact of this reader-resource
 repair on the later constrained peak remains unproven; reuse that archive for
 the next unchanged-budget campaign rather than rebuilding product binaries.
 
+The repeat on the same Rust archive and Harness `9522a32e` keeps sampled
+controller RSS below 45,887,488 bytes. Initial physical-library acceptance and
+all three retained-job traversals pass again, but the full campaign still
+fails with an OOM kill during watcher creation. Sampled daemon RSS peaks at
+408,104,960 bytes; the unchanged cgroup records one OOM kill and a
+537,018,368-byte peak. Elapsed time is 906.681 seconds. Receipt, process samples
+and phase evidence are retained under
+`reports/linux-containers/library/8aae0f242d7b456d84fb313676accbe3/`; owned-container
+removal is confirmed and its native volume is retained. The reader repair
+reduces observed controller overhead; it does not qualify the daemon's later
+populated-library work.
+
+Rust `e73fc37d` removes the populated reload planner's full persisted
+path/fingerprint map. Each scanned path reads its current persisted fingerprint
+through the unique native-path index. Missing-source diagnostics retain only a
+compact snapshot of numeric path IDs and binary hashes; their seen/kept sets
+also use those compact identities. No duplicate set of full path strings or
+second collection of persisted fingerprints is retained. Fingerprint reuse,
+identity-alias fallback, changed files and missing-source counts remain covered
+by the core/transfer suites. No persistent schema or public surface changes.
+
+Scoped validation passes **298 metadata, 670 core and 1,458 transfer tests** in
+`reports/settings-request-round-1/indexed-reload-{metadata,core,ed2k}.log`.
+The existing 100k metadata fixture additionally proves a late-path seek with no
+full scan in its query plan and a pruning snapshot backing allocation below
+4 MiB. Branch quality checks pass in
+`reports/local-check/emulebb-rust/20261119T064728Z-dfdc7a81/`.
+Fresh Linux package and unchanged-budget full campaign evidence remain required
+before claiming that the populated-library OOM is resolved.
+
 Compiler investigation uses Builder's diagnostic-only Linux collection command;
 its receipt explicitly records `qualityGatePassed:false` and
 `packageProduced:false`. Acceptance continues to require the ordinary strict
