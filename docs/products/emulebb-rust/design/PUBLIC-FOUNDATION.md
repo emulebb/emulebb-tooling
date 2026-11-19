@@ -1556,7 +1556,8 @@ workload acceptance remains incomplete. Builder and Harness provide
 the persisted wrapper around the existing combined campaign. It verifies the
 current archive checksum/source/SBOM, snapshots exact independent Rust/Harness
 Git sources, and uses a labelled local Docker volume for native profile and
-fixture storage. The non-root container enforces 512 MiB, disabled swap, one CPU
+fixture storage. The non-root container enforces the selected capacity tier's
+memory limit, disabled swap, one CPU
 and a private cgroup. Kernel measurement includes archive extraction, fixture
 preparation and all campaign phases. Acceptance requires the full physical
 library/history report, its measured budget, unchanged sources and confirmed
@@ -1566,7 +1567,8 @@ claimed when Docker's backing topology is opaque.
 The supported entrypoints, run from Builder with the existing workstream, are:
 
 ```text
-python -m emule_workspace test rust-library-container --workstream public-foundation-round-1 --archive <current-gnu-amd64-archive>
+python -m emule_workspace test rust-library-container --workstream public-foundation-round-1 --archive <current-gnu-amd64-archive> --library-files 50000
+python -m emule_workspace test rust-library-container --workstream public-foundation-round-1 --archive <current-gnu-amd64-archive> --library-files 100000
 python -m emule_workspace cleanup-rust-library-container --workstream public-foundation-round-1 --receipt <campaign-report.json>
 ```
 
@@ -1872,10 +1874,27 @@ records no OOM events; both owned containers are absent. This is useful partial
 allocation evidence, not completed watcher coverage or workload qualification.
 It does not establish that remaining memory costs are unavoidable.
 
-The operator approved the two capacity tiers above on 2026-11-19. Extend the
-existing fixture/campaign and Builder admission to carry an explicit matched
-library-size/memory pair, retaining all phase and resource checks. Both tiers
-remain pending. Earlier failed 100k/512 MiB runs remain diagnostic evidence;
+The operator approved the two capacity tiers above on 2026-11-19. Harness
+`9c72fc6b` and Builder `03b8656` extend the existing fixture/campaign and admission
+to carry an explicit matched library-size/memory pair. `--library-files 50000`
+selects 512 MiB; `--library-files 100000` selects 1 GiB and is the default.
+Both keep 100,000 retained jobs. Fixture preparation, baseline hashing, four
+watcher phases, no-change and mutation reloads, restart/storage integrity and
+the whole process-tree budget are measured by the same campaign. Both sizes
+retain 1,000 long paths and all 16 Unicode cases. Mutation samples remain 1%
+of the library, preserving the file-size distribution.
+
+Reports name the target explicitly. Admission rejects an incorrect fixture or
+job count, mismatched target/limits, incomplete phases, OOM evidence, changed
+source or missing owned-container cleanup. Diagnostics without an explicit
+workload target cannot claim enforced workload limits even at a matching cap.
+Scoped Harness checks pass 126 tests plus 33 focused budget/preflight checks;
+required Harness push checks also pass in
+`reports/local-check/emulebb-build-tests/20261119T083225Z-e243ff02/`.
+Builder CLI/container checks pass in `reports/builder-unit/562bc95bd462/` and
+`reports/local-check/emulebb-build/20261119T083346Z-0620987d/`.
+The Rust source/archive are unchanged. Full tier qualification remains pending.
+Earlier failed 100k/512 MiB runs remain diagnostic evidence;
 they do not reduce the 100k support requirement at the 1 GiB tier. Investigate
 concrete allocation waste without making a major rewrite solely to force that
 larger workload into 512 MiB.
