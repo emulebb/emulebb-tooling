@@ -205,6 +205,17 @@ Do not add hidden configuration-application retry loops. An explicit settings
 update or daemon restart retries application, with failures reported until then.
 Ordinary protocol reconnection and download cleanup retry rules remain separate.
 
+For a valid desired save that mixes live and restart-bound changes, validate the
+proposed live values together with the effective restart-bound values. If that
+candidate violates a whole-settings dependency, save the desired document but
+defer the entire update until restart. Keep the complete effective capture
+unchanged, including otherwise independent live edits, and report every desired
+value differing from that capture in `pendingRestart`. Do not reject this valid
+save, clamp values, or apply a subset of the incompatible update. This operator
+decision was accepted on 2026-11-19. The pure declaration-driven application
+planner implements the decision; runtime owner/consumer integration remains
+part of the direct canonical settings cut.
+
 Return a bounded collection of independently detectable validation issues in
 one response, each with a canonical setting path, stable code and readable
 message; dependent checks require valid inputs. Any validation failure saves

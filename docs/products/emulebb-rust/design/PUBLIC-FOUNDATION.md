@@ -159,6 +159,11 @@ Keep straightforward live application; classify changes requiring complex
 reconfiguration as restart-bound. No hidden configuration-application retry
 loop: failures remain explicit, and retry is through an explicit settings update
 or daemon restart. Broad service hot-reconfiguration is outside scope.
+If a valid desired save combines live and restart-bound changes whose live
+candidate would violate current effective dependencies, save it and defer the
+entire update until restart. Keep effective values unchanged and report every
+outstanding desired difference as restart-pending. This includes independent
+live fields in that update; do not apply a partial incompatible candidate.
 Successful saved changes advance the revision.
 
 ### Path rules
