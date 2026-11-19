@@ -1513,6 +1513,44 @@ in `reports/settings-request-round-1/cgroup-budget-harness.log`,
 The probe explicitly records `workloadQualified:false`. Running the full
 physical-library/retained-job campaign inside this budget remains open.
 
+The GNU/AMD64 package prerequisite now passes on Rust `928ffe12`, Builder
+`0969bec` and Harness `3cbacb58`. The strict Clippy and packet-diagnostics
+compile gates pass; the release binary builds; all **3,308 workspace tests**
+and **three VPN egress tests** pass. The single ignored workspace entry is an
+isolated subprocess fixture invoked by its ownership regression tests. Evidence:
+`reports/rust-linux/gnu-amd64/e533c662023b4d8e848391ceff1c5b18/`.
+Windows scoped evidence also passes: 668 Core, 1,458 eD2k and 298 metadata tests,
+retained in `reports/settings-request-round-1/linux-quality-core-final.log`,
+`owner-receipts-ed2k.log` and `linux-native-profile-metadata.log`. The latter two
+filenames share that reports directory. Scoped Builder checks pass in
+`reports/builder-unit/2e90ef167383`.
+
+The source-verified GNU archive and DEB are local validation artifacts under
+`packages/rust-linux/0.1.0-beta.2/gnu-amd64/`. The archive's non-root lifecycle
+smoke passes with the current separate download-detail and bounded part
+resources, including verified partial progress, same-profile restart, resumed
+completion and retained history:
+`reports/rust-linux/gnu-amd64/c0e1d1b651fc42e386fcb3b4db269615/package-smoke.json`.
+All 76 scoped package-smoke Python tests pass in
+`reports/settings-request-round-1/package-download-resources-python.log`.
+These artifacts are neither published releases nor constrained-scale evidence.
+
+The owner receipt helper now releases transient workspace and command guards
+before exposing completion, while independently charged result backing remains
+owned by its consumer. The same helper covers metadata reads, cleanup,
+job lifecycle/progress, delivery, payload/availability evidence and path/content
+mutations. Existing receipt-ordering and storage regressions remain required.
+Complete that ordering guarantee for the separate local-ingest preparation
+control before claiming all owner paths covered. Then run the existing combined
+100k campaign through persisted container orchestration; the full constrained
+campaign wrapper and its execution remain outstanding.
+
+Compiler investigation uses Builder's diagnostic-only Linux collection command;
+its receipt explicitly records `qualityGatePassed:false` and
+`packageProduced:false`. Acceptance continues to require the ordinary strict
+gates. The canonical workspace test command now collects failures across crates
+without changing the failing exit status, avoiding successive hidden failures.
+
 ### Populated-root update replay (2026-11-18)
 
 The focused replay passes on Rust `9316bc39` and Harness `eb3c975e`:
