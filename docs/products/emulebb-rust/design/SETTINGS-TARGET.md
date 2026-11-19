@@ -540,11 +540,11 @@ and serialized read data. Validation command:
 This is read-model preparation; it does not complete runtime admission,
 publication or endpoint integration.
 
-One operator decision remains pending before runtime publication is finalized:
-when a valid saved update's live values cannot safely apply alongside the
-currently effective restart-bound values, defer the whole update to restart
-and report pending restart, or retain effective values and report application
-failures until an explicit retry/restart. Neither choice is adopted yet.
+The operator accepted whole-update deferral: a valid desired save whose live
+candidate conflicts with effective restart-bound values is saved atomically,
+keeps the effective configuration unchanged, and reports every outstanding
+desired difference as pending restart. The declaration-driven planner is tested;
+runtime publication and endpoint integration remain unfinished.
 The broader foundation goal remains open and no PR or merge was created.
 
 ## Qualification boundary

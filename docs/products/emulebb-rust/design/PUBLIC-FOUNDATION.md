@@ -18,6 +18,16 @@ Year-long operation means sustained correctness and bounded resource growth.
 Operator-initiated restarts are acceptable, including for configuration changes;
 restartless reconfiguration is not a requirement.
 
+The 50k/100k physical-library tiers and 100k retained-job cases are qualification
+workloads, not product collection limits. Design for the best performance and
+lowest practical resource use while preserving the full dataset and supported
+operations. Bound resident caches, request/buffer sizes and simultaneous
+expensive work; evict reloadable state or defer admission when budgets are
+exhausted. Pagination must allow complete traversal. Memory constraints must not
+silently omit durable records, truncate results, discard knowledge or make
+otherwise valid files permanently ineligible. Sixteen active downloads is an
+initial qualification baseline, not a permanent capability ceiling.
+
 Start with fresh profiles. Do not implement migrations, compatibility shims,
 aliases, old-schema readers, remapping, retired-name lists, special rejection
 paths or tests preserving removed inputs. Remove superseded active code,
@@ -273,10 +283,20 @@ separate opt-in watcher qualification on selected roots in the same large
 profile; optional watching does not excuse lost-event correctness failures.
 The root policy must be wired through fresh SQLite storage, REST/OpenAPI,
 WebUI and the existing Python harness before claiming this design delivered.
-One recovery choice remains pending: mark an affected root as needing an
-explicit scan after event loss/overflow, or automatically scan only that
-watched root. Automatic full-library scans are not the intended fallback for
-an optional watcher.
+Watcher event loss or overflow sets the affected root's `scanRequired` flag.
+Keep `watchEnabled` default false and preserve the configured startup scan
+behavior, which defaults enabled. A successful root scan clears `scanRequired`
+only when no newer event loss occurred during that scan. The flag reports known
+incompleteness, not a guarantee that an unwatched root is always current.
+Overflow does not itself launch a full-library scan. Explicit scans and external
+REST scheduling remain available; no new periodic full-scan interval is added.
+
+Reuse debounce and bounded coalescing. Bound the complete event ingress and
+debounce path, not only its final queue. Event storms must not create a scan,
+unbounded path backlog or database write per event. Latch/coalesce the affected
+root's dirty state and preserve newer invalidation across an in-flight scan.
+Persist and expose the flag through SQLite, REST/OpenAPI and WebUI before
+claiming this recovery contract delivered.
 
 Library rows represent one content hash, with local locations exposed separately
 and paginated. Default to present content; provide Shared, Unavailable and All
@@ -288,17 +308,14 @@ paginated locations resource. Support multiple locations for serving and
 availability without adding duplicate discovery, naming reconciliation or
 deduplication features. Users manage duplicates with external tools.
 
-Two library-view boundaries await the operator before the canonical list/detail
-surface is implemented:
+The accepted library-view boundaries are:
 
-- Present: verified copies under currently configured accessible roots, or also
-  verified copies outside those roots. Current-root-only is the recommendation;
-  removing a root still retains content knowledge.
-- All Known and hash detail: all client-owned hashes (accepted downloads and
-  verified/imported content), or only content ever verified complete. The first
-  is the recommendation; remote-only observations remain outside the library.
-
-These recommendations are pending decisions, not accepted public behavior.
+- Present: verified copies under currently configured accessible roots.
+  Removing a root retains content knowledge without treating copies outside
+  configured roots as currently present.
+- All Known and hash detail: all client-owned hashes, including accepted
+  unfinished downloads and verified/imported content. Remote-only search
+  observations remain outside the library.
 
 ### Sharing policy and tags
 
@@ -1025,11 +1042,20 @@ per-client collection snapshots. Never clone/filter/sort a full durable
 collection before slicing a response. Runtime queues need bounded query/index
 structures too. Separate thin list summaries from expensive details/evidence.
 
-Upload-list browsing order awaits an operator decision: fixed entry-admission
-order with live scheduler rank in detail is recommended for simple indexed
-paging; the alternative retains global live-rank ordering in list pages.
-Neither option changes upload scheduling, ranking or credit rules. Do not cut
-the list contract until that decision is settled.
+Waiting upload-queue pages use current scheduler rank, highest-ranked first,
+with stable tie-breaking and documented live traversal consistency. Ranking
+changes may move rows between page requests; do not retain per-client queue
+snapshots. Preserve existing upload scheduling, credits and ranking rules.
+Keep pagination and fetch only bounded thin summaries instead of constructing
+the complete queue representation before selecting a page. The live queue
+remains runtime state; pagination does not require storing it in SQLite.
+
+The WebUI separates uploading clients from waiting clients. Uploading summaries
+show client, file, rate, session bytes and elapsed time. Waiting summaries show
+rank, client, requested file, waiting time and blocking status where available.
+Fetch detailed score/credit evidence on demand and retain the existing friend,
+remove and ban controls. Refresh only the visible bounded page. Rank expresses
+current scheduling preference, not a guarantee of the next slot.
 
 The WebUI is an operations console using bounded pages, not continuous scrolling
 or unbounded accumulated row caches. Use server-side search/filter/sort, default
@@ -1982,7 +2008,7 @@ Windows watcher behavior stays unchanged. Its commit quality checks pass.
 The package evidence above belongs to `15fea22e`, not that later source.
 Fresh final-source native qualification and capacity reruns remain pending.
 The operator then accepted per-root opt-in watching, off by default. Integrate
-that policy and settle overflow recovery before another capacity campaign.
+that policy and implement the accepted flagged-root recovery before another capacity campaign.
 The repair itself changes no public API, settings, DB shape or CLI surface;
 the accepted root-policy work explicitly does change the root contract.
 
@@ -2076,8 +2102,8 @@ listener, Kad, peer and offline-settings phases pass. The retained-job phase
 explicitly records `memoryLimitQualified:false` and
 `physicalLibraryQualified:false`; it does not qualify either physical-library
 capacity tier. Final-source Linux packages and both capacity tiers remain
-unqualified. Watcher event-loss/overflow recovery still requires the operator's
-choice before finishing recovery and restarting capacity campaigns.
+unqualified. The accepted `scanRequired` recovery contract still requires
+implementation and validation before restarting capacity campaigns.
 The final documentation check passes in
 `reports/settings-request-round-1/library-root-docs-final-check.log` before this
 receipt update. No PR, merge, main update, release or publication is authorized.
