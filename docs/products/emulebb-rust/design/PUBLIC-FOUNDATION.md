@@ -1975,12 +1975,12 @@ that policy and settle overflow recovery before another capacity campaign.
 The repair itself changes no public API, settings, DB shape or CLI surface;
 the accepted root-policy work explicitly does change the root contract.
 
-The first opt-in policy cut is committed as Rust `26e2b213` (validation pending).
+The first opt-in policy cut is committed as Rust `26e2b213`.
 Fresh schema 103 stores `watch_enabled` on the physical root, defaulting to zero
 with a boolean constraint. Implicit-root refresh preserves an existing choice;
 there is no global setting or separate policy store. Typed root reads, create
-and replacement inputs expose `watchEnabled`, and the Sharing UI defaults new
-roots to unwatched and lets users change explicit-root choices. A watch-only
+and replacement inputs expose `watchEnabled`. The Sharing UI offers opt-in when
+adding a root and displays existing policies read-only. A watch-only
 edit refreshes subscriptions without reserving a catalog scan.
 
 An opted-in child remains configured beneath an unwatched parent. Scan planning
@@ -1988,14 +1988,33 @@ deduplicates normalized paths in place while retaining both membership
 snapshots. Roots with no watch opt-in create no native monitor/debouncer.
 Regression coverage addresses implicit refresh, stored boolean validity,
 restart persistence, overlapping-root planning, no-scan watch edits, REST
-default/opt-in handling and UI preservation of other roots' choices. Run the
-applicable unit/UI gates before treating those checks as passed.
+default/opt-in handling and creation without replacing other roots' choices.
+The first workspace run catches a missing REST body allow-list entry;
+`48fc9606` admits the current boolean through both root validation paths.
+The full Rust workspace then passes in
+`reports/settings-request-round-1/root-watch-workspace-final.log`.
+The failed run remains in `root-watch-workspace.log` alongside it.
+
+UI-only refinement `7b84f00f` avoids a whole-root-list write when expressing
+creation opt-in. Its 73 unit tests, 32 browser tests and production type/build
+checks pass in `reports/settings-request-round-1/root-watch-webui.log`.
+The backend workspace evidence above belongs to `48fc9606`; no backend source
+changes in that UI refinement. Native qualification of the schema-103 cut is
+still pending.
 
 This cut does not finish canonical root-resource IDs/routes, editing watch policy
 on automatically managed roots, overflow recovery or the revised Python capacity
 campaign. Those remain required work; it is not complete per-root policy
 delivery or capacity qualification. Existing root create/replacement callers
 have one current object shape; no alternate input shape is introduced.
+
+The next root-resource slice must expose immutable decimal public IDs under
+`/library/roots` and provide an atomic per-root watch edit, including managed
+roots. A single-root edit must preserve concurrent changes to other roots and
+must not replace the root collection from a stale UI snapshot. Wire that cut
+through the persistence owner, OpenAPI, UI and Python callers together, without
+dual routes. Settle the pending overflow choice before completing watcher
+recovery and restarting capacity qualification.
 
 Compiler investigation uses Builder's diagnostic-only Linux collection command;
 its receipt explicitly records `qualityGatePassed:false` and
