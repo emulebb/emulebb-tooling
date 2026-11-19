@@ -1916,6 +1916,33 @@ native volume. Investigate watcher final-intent delivery; do not increase the
 timeout or weaken hash-transition acceptance to obtain a tier pass. The 100k/1 GiB
 campaign is the next independent capacity qualification.
 
+The 100k/1 GiB run also fails watcher modification, after passing initial
+100,000-file/10,485,760,000-byte admission and watcher creation:
+`reports/linux-containers/library/94f979d7770f4acf97a3cc9bbb04a0a3/`.
+Runtime is 1,466.005 seconds; no OOM events occur. Sampled daemon/controller RSS
+peaks are 567,676,928/49,233,920 bytes and the whole-cgroup peak is 1,073,836,032
+bytes. Limits remain unchanged and the owned container is absent. Neither tier
+is qualified.
+
+A read-only live observation at 09:22:44 UTC is retained in
+`reports/settings-request-round-1/watch-coverage-100k-1g.json`. Reload state is
+idle with neither running nor pending work. Existing root/group/leaf controls
+have native subscriptions, but all nine newly created probe directories lack
+them among 10,626 watched inodes. A completed catalog scan therefore did not
+restore native recursive watch coverage. This rules out a still-running reload
+as the reason those later changes were not processed; the precise upstream
+event-loss mechanism is not yet established.
+
+Rust `15fea22e` adds in-place recursive re-registration before reconciliation,
+through the existing tracked root-I/O worker. It preserves the native watcher
+and consumer instead of stopping either, and keeps the subsequent scan behind
+that subscription repair. Partial root registration failures are logged while
+other roots continue. A Linux regression deliberately removes one child
+subscription, repairs it through that worker and expects a later file event
+through the original consumer. Commit quality checks pass; scoped core tests,
+native Linux qualification and full tier reruns are pending. No public API,
+settings, DB shape or CLI surface changes in this repair.
+
 Compiler investigation uses Builder's diagnostic-only Linux collection command;
 its receipt explicitly records `qualityGatePassed:false` and
 `packageProduced:false`. Acceptance continues to require the ordinary strict
