@@ -292,6 +292,9 @@ profile; optional watching does not excuse lost-event correctness failures.
 The root policy must be wired through fresh SQLite storage, REST/OpenAPI,
 WebUI and the existing Python harness before claiming this design delivered.
 Watcher event loss or overflow sets the affected root's `scanRequired` flag.
+Unknown loss scope flags the subscribed roots. Failed subscriptions and watcher
+stop/replacement also record their observation gap. Redundant refreshes retain
+healthy identical subscriptions rather than creating another gap.
 Keep `watchEnabled` default false and preserve the configured startup scan
 behavior, which defaults enabled. A successful root scan clears `scanRequired`
 only when no newer event loss occurred during that scan. The flag reports known
@@ -2068,7 +2071,7 @@ decoding, and continuation resumes after the last returned ID. Each reply keeps
 its existing 1 MiB reservation through serialization/drop against the shared
 8 MiB temporary-work budget. No new resident cache or setting is introduced.
 
-The root DTO exposes `id`, display-only `path`, `watchEnabled`, `managed`,
+The root DTO exposes `id`, display-only `path`, `watchEnabled`, `scanRequired`, `managed`,
 `accessible`, `shareable` and nullable `lastScannedAt` in Unix seconds. WebUI root
 browsing replaces one bounded page at a time; edits address IDs, including watch
 choices on managed roots. Creation, deletion and scan controls use their typed
@@ -2112,16 +2115,15 @@ listener, Kad, peer and offline-settings phases pass. The retained-job phase
 explicitly records `memoryLimitQualified:false` and
 `physicalLibraryQualified:false`; it does not qualify either physical-library
 capacity tier. Final-source Linux packages and both capacity tiers remain
-unqualified. The accepted `scanRequired` recovery contract still requires
-watcher-ingress and REST/WebUI wiring before restarting capacity campaigns.
+unqualified. Complete upstream watcher ingress/cache bounds and native/subtree
+qualification remain required before restarting capacity campaigns.
 Rust `4d15f544` establishes its durable foundation in fresh schema 106: each root
 stores a scan-required flag and bounded loss revision. The full scan captures
 the immutable root ID and revision before walking it, then acknowledges only
 that watermark in the membership transaction. A newer loss keeps the flag set;
 a replacement root cannot inherit the earlier scan. Failed commits preserve
 the flag, loss state survives reopening, and revision exhaustion stays required
-without wrapping. This does not yet change overflow-triggered rescanning or
-expose the flag through the public root resource.
+without wrapping.
 
 The metadata suite passes 310 test executions and the core suite passes 675,
 including native watcher pickup and existing scan/hash-reuse coverage. Rust
@@ -2131,6 +2133,34 @@ Evidence is retained under `reports/settings-request-round-1/` as
 `root-scan-watermark-ed2k.log`. These are Windows/default-feature package tests,
 not native package or physical-library qualification of schema 106. Earlier
 package receipts describe their recorded source revisions only.
+
+Rust `7d160aa9` wires loss reporting through the existing ordered SQL owner,
+cached root reads, OpenAPI and WebUI. Loss never triggers an overflow scan.
+Settled batches are checked before flattening/coalescing; the action queue and
+consumer batch retain at most 256 entries. Loss scope binds to subscription-time
+root IDs, so a late callback cannot flag a replacement at the same path.
+Stopping cancels ordinary path work, drains loss writes and records the gap;
+quota saturation waits for admission without replaying failed/uncertain SQL.
+Healthy identical subscriptions survive redundant root notifications, closing
+the replacement gap uncovered by the real pickup test. Ordinary watcher edits
+share the full-scan gate so membership replacement cannot prune a newer edit;
+loss writes stay independent to preserve scan/stop ordering. Linux explicit
+scans retain the watch gate inside the tracked coverage-refresh job.
+
+The final Windows core suite passes 681 executions, including native
+pickup/rename/removal, admission pressure, loss scope, unchanged subscription
+identity, scan ordering and stop/drain. REST passes 169 tests, metadata passes
+310, OpenAPI checks pass 143 and WebUI passes 87 unit plus 32 browser tests,
+type checking and production build. Evidence under
+`reports/settings-request-round-1/` is `watcher-loss-core-gated-final.log`,
+`watcher-loss-rest.log`, `watcher-loss-metadata.log`, `watcher-loss-openapi.log`
+and `watcher-loss-webui.log`.
+
+The upstream native debouncer still retains event/cache state outside these
+downstream bounds. Complete that bound and qualify directory subtree
+creation/removal/rename, Linux native execution and the two physical-library
+memory tiers before claiming watcher/capacity completion. This checkpoint does
+not qualify a new native package or the whole foundation objective.
 The final documentation check passes in
 `reports/settings-request-round-1/library-root-docs-final-check.log` before this
 receipt update. No PR, merge, main update, release or publication is authorized.

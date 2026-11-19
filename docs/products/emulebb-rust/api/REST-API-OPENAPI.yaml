@@ -4429,6 +4429,7 @@ components:
       - path
       - shareable
       - watchEnabled
+      - scanRequired
       - accessible
       - id
       - managed
@@ -4444,6 +4445,10 @@ components:
           type: boolean
           description: Whether native file-event watching is enabled for this recursive root; independent
             of sharing eligibility.
+        scanRequired:
+          type: boolean
+          description: Known watcher loss or an observation gap requires an explicit library scan.
+            A successful scan clears only loss known before that scan began; no automatic overflow scan is scheduled.
         accessible:
           type: boolean
           description: Last observed accessibility; false until verified, without a fresh probe on GET.
