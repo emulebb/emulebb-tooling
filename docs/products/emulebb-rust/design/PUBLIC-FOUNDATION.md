@@ -2430,6 +2430,12 @@ two revisioned UI writes change and restore a live upload limit. Local 12 MiB
 delivery, partial-download restart, profile ownership and graceful shutdown also
 pass. Evidence is `reports/rust-release-package/0141dc839a82/report.json` under
 the workspace output root. Shared harness cleanup and remaining platform
-qualification are still open. Watcher loss reporting, the final adaptive
+qualification are still open. Harness `321763e7` and `851d1b12` adopt canonical
+startup-default/NAT browser controls and the current bounded preview polling
+check; the native package campaign passes again with 59 fields and two UI writes
+in `reports/rust-release-package/ecb0db6fcded/report.json`. Harness `042fc180`
+removes dead Rust settings branches from the shared smoke script; its 145 tests
+pass while retaining the frozen MFC settings path. The settings target records
+controlled-test and public-network coverage limits. Watcher loss reporting, the final adaptive
 scheduler and memory-tier capacity campaigns also remain unfinished. No PR,
 merge, main write or publication was performed.

@@ -777,3 +777,21 @@ This is native Windows qualification with fresh local-only profiles; remaining
 shared harness adoption, other platform/browser campaigns and memory-tier
 qualification remain open. The feature checkpoints are pushed; no PR, merge,
 main write or publication was performed.
+
+Harness `321763e7` adopts canonical field editors in the fresh-default and NAT
+browser helpers. Unchanged values retain their modes without a write. Changed
+values use one revisioned save; application failures are errors, and a pending
+restart stops a combined consumer-network workflow before it starts. The two
+focused browser/package Python owners pass 156 tests. Harness `851d1b12` aligns
+the default-tab polling check with the current exact 12-download preview while
+continuing to reject broader download pages and unrelated secondary polling.
+The native package campaign passes again in
+`reports/rust-release-package/ecb0db6fcded/report.json`, including all 59 settings
+and their live save/restoration; the log is
+`reports/settings-request-round-1/webui-native-current-polling.log`. The NAT
+configuration action itself has controlled-test coverage, not a new public
+network or VPN execution claim. Harness `042fc180` removes dead Rust settings
+branches from the shared REST smoke owner and corrects stale unsupported-feature
+reporting; the frozen MFC settings path remains intact. All 145 tests in that
+existing owner pass, including push validation retained in
+`reports/local-check/emulebb-build-tests/20261119T210211Z-d0c009b5/`.
