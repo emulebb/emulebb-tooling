@@ -2338,3 +2338,49 @@ Docker provisioning and the integrated live daemon contract run remain pending.
 These package-level passes do not qualify that unfinished integration, capacity
 workloads or the final adaptive scheduler. No push, PR, merge or publication was
 performed in this slice.
+
+
+### Canonical daemon and minimal CLI checkpoint — 2026-11-19
+
+The operator confirmed the minimal CLI after reviewing the offline library
+workflows. Root creation and scanning use REST/WebUI; normal scans retain cached
+fingerprint comparison and trusted hash reuse. The sole offline import command
+is `import profile EXPORT [--hashes-only]`, alongside single-key settings
+get/set/reset and the runtime `--profile` selector. Help and version remain
+ordinary CLI behavior. There are no alternate command spellings or runtime
+configuration overrides.
+
+Rust `5b7feadf` passes the complete Builder `rust-unit` workspace run with 3,303
+passed test executions, zero failures and zero compiler warnings. One ownership
+child-process fixture is intentionally ignored as a standalone test and invoked
+by its regression tests. The retained log is
+`reports/settings-request-round-1/workspace-settings-5b7feadf.log` under the
+workspace output root. This is the Windows/default-feature unit and integration
+run, not Linux, live-network, WebUI or capacity qualification.
+
+Daemon startup projects the canonical product values into listener, connection,
+transfer, NAT, security and storage owners. Shared TCP/UDP transports stay enabled
+when either discovery network is enabled. NAT choices select the engine's own
+driver constants. Identity loading reuses the stored identity without rewriting
+it; new identities receive their protocol markers at creation.
+
+Application-host first-run initialization now seeds both incoming and temp paths
+in the canonical saved document, together with the explicit shared root in the
+schema-creation transaction. The Android host supplies these defaults only for
+fresh initialization; it no longer overrides temp storage on every start.
+Existing profiles, operator storage edits and deliberately removed roots are
+preserved. Interrupted initialization can retry without publishing a partial
+current schema. Host and daemon tests cover those cases.
+
+The daemon's 90 unit tests, three CLI parser tests and eight hosted lifecycle
+tests pass as part of the workspace run. The normal-scan regression proves that
+trusted imported hashes survive scanning and restart without payload rehashing;
+changed content is still planned for hashing. The standalone scan-plan wrapper
+and text-list intake implementation have been removed.
+
+The Rust working tree is clean and changes remain local on the existing feature
+branch. Existing Python launch/import workflows, Docker provisioning and WebUI
+settings still require adoption of the current contract before an integrated
+push or live daemon qualification. Watcher loss reporting, the final adaptive
+scheduler and memory-tier capacity campaigns also remain unfinished. No PR,
+merge, main write or publication was performed.

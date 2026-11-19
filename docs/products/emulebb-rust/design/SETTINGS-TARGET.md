@@ -58,8 +58,8 @@ overrides or duplicate authorities.
 ## Accepted settings representation
 
 Store one complete typed `SavedSettings` document and its revision in a
-singleton row. Offline settings commands, Core and REST use this representation;
-daemon and client adoption follow the checkpoints in the foundation specification:
+singleton row. Offline settings commands, Core, REST and daemon startup use this
+representation. Client adoption and qualification follow the foundation checkpoints:
 
 ```sql
 CREATE TABLE app_settings (
