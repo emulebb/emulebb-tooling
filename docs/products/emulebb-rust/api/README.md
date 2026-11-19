@@ -28,10 +28,11 @@ freeze and compatibility decision.
 
 Sharing management is folder-tree only:
 
-- configure roots with `/api/v1/shared-directories`;
-- every root is recursively scanned and monitored;
+- configure individual roots with `/api/v1/library/roots` and `/api/v1/library/roots/{id}`;
+- every root is recursively scanned; native watching is opt-in per root and off by default;
+- request a scan with `POST /api/v1/library/scan` and read cached progress with `GET /api/v1/library/scan`;
 - custom case-insensitive file-name globs and configurable built-in ignores
-  apply across every shared tree through `/api/v1/shared-directories/ignores`;
+  apply across every shared tree through `/api/v1/library/ignores`;
 - single-file share/unshare/delete-sharing routes are not part of the Rust
   public contract.
 

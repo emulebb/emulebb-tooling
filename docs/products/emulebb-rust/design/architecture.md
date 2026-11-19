@@ -137,7 +137,7 @@ graph TB
   and the `NatManager`. `crates/emulebb-core/src/lib.rs:239`.
 - All routes are defined in `crates/emulebb-rest/src/routes.rs`
   (`/api/v1/app`, `/status`, `/transfers`, `/uploads`, `/servers`, `/kad`,
-  `/searches`, `/shared-directories`, `/categories`, `/friends`, `/logs`, …).
+  `/searches`, `/library/roots`, `/library/scan`, `/categories`, `/friends`, `/logs`, …).
 - `VpnGuardMonitor` enforces the optional VPN-binding guard
   (`crates/emulebb-daemon/src/vpn_guard_monitor.rs`).
 

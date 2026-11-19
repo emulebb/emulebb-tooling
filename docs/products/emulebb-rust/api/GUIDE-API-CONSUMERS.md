@@ -112,8 +112,12 @@ through `POST /searches/{searchId}/results/{resultId}/download`. A null
 For direct admission, use `POST /downloads` with the documented
 `DownloadCreateRequest` source.
 
-Shared-folder management uses `/shared-directories` and its documented root and
-ignore operations. Roots are recursively scanned and monitored. Settings use
+Root management uses the bounded `/library/roots` collection and immutable
+`/library/roots/{id}` resources. Creation rejects duplicate and overlapping
+paths; deletion preserves payload files. Patch `watchEnabled` to opt in to
+native monitoring; it defaults off, including managed roots. Managed roots
+cannot be deleted. Use `/library/scan` for explicit scans and cached progress,
+and `/library/ignores` for ignore rules. Settings use
 `/app/settings`; bootstrap TOML has a different, minimal responsibility.
 
 For SSE, use a header-capable HTTP/fetch streaming client with `X-API-Key`.

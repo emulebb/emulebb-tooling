@@ -34,7 +34,6 @@ servers:
 security:
   - ApiKeyAuth: []
 tags:
-  - name: Library
   - name: App
   - name: Diagnostics
   - name: Stats
@@ -3476,6 +3475,7 @@ components:
       schema:
         $ref: '#/components/schemas/LibraryRootId'
     LibraryRootLimit:
+      required: false
       name: limit
       in: query
       schema:
@@ -3484,6 +3484,7 @@ components:
         maximum: 100
         default: 100
     LibraryRootCursor:
+      required: false
       name: cursor
       in: query
       schema:
@@ -4454,6 +4455,7 @@ components:
           default: false
     LibraryRootPatch:
       type: object
+      minProperties: 1
       additionalProperties: false
       required:
       - watchEnabled
