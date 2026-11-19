@@ -1860,6 +1860,15 @@ paths:
       summary: Request a library scan.
       description: Coalesce through one retained scan worker, independent of the requesting connection.
         GET the Location URI for progress.
+      requestBody:
+        required: false
+        description: Omit the body or send an empty JSON object.
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              properties: {}
       responses:
         '202':
           $ref: '#/components/responses/LibraryScanAcceptedResponse'
