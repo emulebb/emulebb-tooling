@@ -2035,6 +2035,22 @@ report. This is metadata-layer proof only: serialized runtime publication,
 canonical REST/OpenAPI routes, UI and Python callers still require the integrated
 root-resource slice. It is not final-source native or capacity qualification.
 
+Rust `c315c056` adds the serialized watch-edit owner. The existing persistence
+queue commits an ID-addressed policy, publishes the matching explicit runtime
+descriptor, and signals subscription refresh without reserving a catalog scan.
+Managed roots retain their ownership and read the committed policy through the
+existing implicit-root descriptor path. The admitted owner finishes publication
+even when its caller disconnects. No new background service or REST route is
+introduced by this foundation checkpoint.
+
+The core package passes 641 unit tests and 34 integration tests on that revision:
+`reports/settings-request-round-1/library-root-watch-owner-core.log`.
+New tests gate the commit/publication gap, cancel the caller, drain the owner,
+and verify the addressed cache update, preservation of another root, released
+quota and absence of a reserved scan. Managed-root and missing-ID behavior also
+pass. Canonical create/delete runtime operations, REST/OpenAPI, UI, Python callers
+and native capacity qualification remain unfinished.
+
 Compiler investigation uses Builder's diagnostic-only Linux collection command;
 its receipt explicitly records `qualityGatePassed:false` and
 `packageProduced:false`. Acceptance continues to require the ordinary strict
