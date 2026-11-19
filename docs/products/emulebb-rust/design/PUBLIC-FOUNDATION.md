@@ -1236,16 +1236,20 @@ resources while retaining the required checks below.
   validation, notification overflow/restart/baseline races and UI cache limits.
 - Docker fresh/existing/interrupted setup, configured listener health checks,
   package launches and offline command behavior.
-- One profile with **100,000 library contents plus 100,000 retained download
-  jobs**, mixed completed/queued/stopped and bounded active work. Measure startup,
+- Qualify two capacity tiers: **50,000 library contents plus 100,000 retained
+  download jobs at 512 MiB**, and **100,000 library contents plus 100,000 retained
+  download jobs at 1 GiB**. Both use mixed completed/queued/stopped jobs and
+  bounded active work. These are measured qualification targets, not enforced
+  file-count limits or guarantees before the full campaigns pass. Measure startup,
   first/late pages, substring search, every statistic sort, mutations, shutdown,
   memory and CPU. Inspect query plans and transient allocations, not only output
-  sizes. Qualify normal operation under an enforced **512 MiB total container
-  memory limit and 1 CPU**, with 100,000+ retained records and a realistic
+  sizes. Each tier uses its enforced **total container memory limit, no swap
+  and 1 CPU**, with 100,000 retained jobs and a realistic
   incomplete queue spanning the accepted 10-to-1,000 workload. Measure the whole
   daemon, including startup and background activity, not just resident manifests.
   Concurrency adapts; this target does not promise sixteen simultaneous payload
-  executions. Qualify higher-capacity operation separately. Physical reference
+  executions. Preserve long-path and Unicode coverage in both library sizes.
+  Qualify additional capacity separately. Physical reference
   devices remain distinct pending evidence; no idle-only or component-budget
   result proves the constrained-container gate.
 
@@ -1824,14 +1828,12 @@ during investigation belongs to its SQLCipher-only branch. No production pragma
 was changed. This rules out that default-mode assumption, not every transient
 SQLite allocation or the watcher read path.
 
-The next investigation must collect allocation stacks instead of repeating full
-campaigns against another unmeasured hypothesis. Reuse the retained initial-phase
+Allocation-stack investigation reuses the retained initial-phase
 proof and existing copied-profile watcher replay. Keep profiler dependencies and
 launch control in the persisted harness/Builder lane, preserve the failed source
 profile, and retain source/archive identities and trace evidence. Any additional
-memory required by profiling is diagnostic-only: it cannot satisfy the unchanged
-512 MiB workload gate or set `workloadQualified` true. No further full campaign
-until profiling identifies a bounded repair to validate.
+memory required by profiling is diagnostic-only: it cannot satisfy either
+capacity-tier workload gate or set `workloadQualified` true.
 
 Harness `b802a96b` and Builder `ab68276` provide the bounded allocation replay:
 
@@ -1850,7 +1852,7 @@ diagnostic reports. The validation image adds heaptrack only for this lane.
 
 Profiling uses a separate **1 GiB**, no-swap, one-CPU process-tree allowance.
 Reports always retain `workloadQualified:false` and failed workload acceptance;
-diagnostic completion cannot satisfy the normal 512 MiB gate. No product
+diagnostic completion cannot satisfy either capacity-tier gate. No product
 arguments, settings, schema or runtime binary change. Scoped harness checks pass
 115 tests in `reports/settings-request-round-1/heap-replay-harness.log`.
 Required combined push checks pass in
@@ -1859,6 +1861,24 @@ Required combined push checks pass in
 Builder source-snapshot checks also pass in `reports/builder-unit/277bd7e12169/`.
 The live-wire byte-report fixture now supplies current search-result IDs and a
 deterministic clock, preserving its completed/partial-byte assertions.
+
+The first allocation replay is terminal in
+`reports/linux-containers/library-heap/7e98565889934ebd9211e9b63d3852e0/`.
+It fails on a request timeout before watcher creation, but retains a successfully
+interpreted 23,118,438-byte trace (`daemon.zst.analysis.txt`). Heaptrack reports
+245.63 MB peak live heap, 491.02 MB peak RSS including instrumentation overhead,
+and 297,387,451 allocation calls over 577.55 seconds. The diagnostic cgroup
+records no OOM events; both owned containers are absent. This is useful partial
+allocation evidence, not completed watcher coverage or workload qualification.
+It does not establish that remaining memory costs are unavoidable.
+
+The operator approved the two capacity tiers above on 2026-11-19. Extend the
+existing fixture/campaign and Builder admission to carry an explicit matched
+library-size/memory pair, retaining all phase and resource checks. Both tiers
+remain pending. Earlier failed 100k/512 MiB runs remain diagnostic evidence;
+they do not reduce the 100k support requirement at the 1 GiB tier. Investigate
+concrete allocation waste without making a major rewrite solely to force that
+larger workload into 512 MiB.
 
 Compiler investigation uses Builder's diagnostic-only Linux collection command;
 its receipt explicitly records `qualityGatePassed:false` and
