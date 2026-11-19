@@ -1975,6 +1975,28 @@ that policy and settle overflow recovery before another capacity campaign.
 The repair itself changes no public API, settings, DB shape or CLI surface;
 the accepted root-policy work explicitly does change the root contract.
 
+The first opt-in policy cut is committed as Rust `26e2b213` (validation pending).
+Fresh schema 103 stores `watch_enabled` on the physical root, defaulting to zero
+with a boolean constraint. Implicit-root refresh preserves an existing choice;
+there is no global setting or separate policy store. Typed root reads, create
+and replacement inputs expose `watchEnabled`, and the Sharing UI defaults new
+roots to unwatched and lets users change explicit-root choices. A watch-only
+edit refreshes subscriptions without reserving a catalog scan.
+
+An opted-in child remains configured beneath an unwatched parent. Scan planning
+deduplicates normalized paths in place while retaining both membership
+snapshots. Roots with no watch opt-in create no native monitor/debouncer.
+Regression coverage addresses implicit refresh, stored boolean validity,
+restart persistence, overlapping-root planning, no-scan watch edits, REST
+default/opt-in handling and UI preservation of other roots' choices. Run the
+applicable unit/UI gates before treating those checks as passed.
+
+This cut does not finish canonical root-resource IDs/routes, editing watch policy
+on automatically managed roots, overflow recovery or the revised Python capacity
+campaign. Those remain required work; it is not complete per-root policy
+delivery or capacity qualification. Existing root create/replacement callers
+have one current object shape; no alternate input shape is introduced.
+
 Compiler investigation uses Builder's diagnostic-only Linux collection command;
 its receipt explicitly records `qualityGatePassed:false` and
 `packageProduced:false`. Acceptance continues to require the ordinary strict

@@ -7603,14 +7603,17 @@ components:
     SharedDirectory:
       type: object
       additionalProperties: false
-      required: [path, shareable, accessible]
-      description: Shared directories are configured as folder trees; every root is recursively scanned and monitored.
+      required: [path, watchEnabled, shareable, accessible]
+      description: Roots are recursively shared. Native file-event watching is an explicit per-root opt-in and is disabled by default.
       properties:
         path:
           type: string
           description: User-facing root path; Windows verbatim long-path prefixes are not exposed.
         shareable:
           type: boolean
+        watchEnabled:
+          type: boolean
+          description: Whether native file-event watching is enabled for this recursive root; independent of sharing eligibility.
         accessible:
           type: boolean
           description: Last observed accessibility; false until verified, without a fresh probe on GET.
@@ -7635,19 +7638,21 @@ components:
           type: string
           minLength: 1
           pattern: '\S'
+        watchEnabled:
+          type: boolean
+          default: false
     SharedDirectoryRootInput:
-      oneOf:
-        - type: string
+      type: object
+      additionalProperties: false
+      required: [path]
+      properties:
+        path:
+          type: string
           minLength: 1
           pattern: '\S'
-        - type: object
-          additionalProperties: false
-          required: [path]
-          properties:
-            path:
-              type: string
-              minLength: 1
-              pattern: '\S'
+        watchEnabled:
+          type: boolean
+          default: false
     SharedFileIgnoresEnvelope:
       unevaluatedProperties: false
       allOf:
