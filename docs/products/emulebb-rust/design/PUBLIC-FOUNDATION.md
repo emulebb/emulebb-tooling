@@ -2394,7 +2394,12 @@ conflict preservation. Evidence is retained under
 `reports/settings-request-round-1/` as `minimal-cli-stage.log`,
 `minimal-cli-callers-first.log`, `minimal-cli-native-final.log` and
 `minimal-cli-audit-final.log`. Linux container import qualification remains
-pending. Live REST actions, Docker
+pending. Harness `dd469f71`, `a0694400` and `a59a0018` adopt revisioned settings
+in the package smoke, upload-cap writers and P2P controls. Their existing Python
+owners pass; the settings target records exact counts, logs and controlled-HTTP
+limits. Writes expose conflicts without retry; temporary limits preserve the
+original default/custom mode, and P2P controls require restart-bound saves to be
+applied before connecting. Remaining REST callers, Docker
 provisioning and WebUI settings still require adoption before an integrated push
 or live daemon qualification. Watcher loss reporting, the final adaptive
 scheduler and memory-tier capacity campaigns also remain unfinished. No PR,

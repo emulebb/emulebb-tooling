@@ -587,6 +587,23 @@ writer passes and one POSIX-only skip in `profile-writer-second.log`; the broade
 caller run records 382 passes and one remaining cross-client assertion failure
 in `profile-callers-second.log`. After repairing that assertion, all 61 tests in
 its existing owner pass in `profile-cross-client-final.log`. These are Python
-fixture/caller checks, not live daemon or container qualification. Live REST
-settings actions, container provisioning and WebUI adoption
-remain pending.
+fixture/caller checks, not live daemon or container qualification.
+
+Harness `dd469f71`, `a0694400` and `a59a0018` adopt revisioned settings in the
+native package smoke, Rust upload-cap callers and online P2P controls. The
+package smoke restores a temporary download limit with its original default or
+custom mode. Rust rate writes use bytes per second and submit once against the
+observed exact revision. P2P controls stop before connecting when settings
+conflict, application fails or a restart is pending. Direct smoke profiles seed
+network choices before startup; the section-shaped network body adapter is gone.
+The MFC rate caller continues using its own product API.
+
+Existing Python owners pass 80 package tests, 106 upload/soak/cross-client tests,
+and 188 client/P2P/direct-smoke tests with one POSIX-only skip. Logs are
+`package-settings-second.log`, `upload-settings-first.log` and
+`network-settings-first.log` under `reports/settings-request-round-1/`.
+Tests exercise full-width revisions, original mode restoration, restart data
+loss and conflict/apply-failure admission. They use controlled HTTP outcomes;
+they do not qualify live networks or complete the packaged transfer campaign.
+Remaining REST callers, including the NAT matrix, container provisioning and
+WebUI adoption remain pending.
