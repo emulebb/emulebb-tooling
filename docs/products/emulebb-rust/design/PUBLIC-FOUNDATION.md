@@ -245,8 +245,8 @@ Explicit root creation rejects an existing root at the same path or an
 ancestor/descendant overlap. It must not collapse or replace existing root
 resources, IDs or watch policies. Automatically managed incoming/category roots
 remain required by their owning settings; explicit creation does not override
-that ownership. Implement and qualify overlap rejection in the canonical create
-operation; it is not yet delivered by the metadata foundation below.
+that ownership. Overlap rejection is implemented in the canonical metadata and
+runtime creation owner; the REST/UI/Python caller cut remains unfinished.
 Moving a file outside configured roots does not authorize searching arbitrary
 folders for it.
 Shared-directory GET returns cached configuration and last observed health,
@@ -2081,6 +2081,29 @@ preserving payload bytes. Existing 100k catalog query-plan gates also pass.
 This does not qualify the unfinished REST/UI/harness cut or native capacity
 tiers. Continue canonical creation, resource reads and the joint caller cut;
 watcher overflow recovery remains an operator decision.
+
+Rust `3ead4900` implements canonical single-root creation with overlap rejection.
+The retained filesystem worker resolves and verifies the candidate directory.
+The serialized owner then checks active native root components and inserts under
+one SQLite writer transaction. Duplicate, ancestor and descendant conflicts leave
+existing resources unchanged, including managed roots; sibling names sharing a
+textual prefix remain distinct. Retired roots do not block new creation. Windows
+component comparison follows the existing case-insensitive root policy without
+changing stored native paths.
+
+The owner reserves its reload handoff before admission, publishes only the new
+descriptor and arms the existing scan worker after commit. A conflict does not
+arm a scan. Caller cancellation preserves a committed creation's scan intent.
+Scoped validation passes 305 metadata unit tests plus three integration tests,
+and 643 core unit tests plus its integration suites:
+`reports/settings-request-round-1/library-root-create-metadata.log` and
+`reports/settings-request-round-1/library-root-create-core.log`.
+Coverage includes independent-connection parent/child races, Windows case,
+managed-root overlap, preservation of prior IDs/policies, and committed scans
+after cancellation. The full-workspace evidence in the preceding paragraph
+belongs to `90615214`; these later changes use the two affected package suites.
+Resource read admission and the joint REST/OpenAPI/UI/Python cut remain next;
+no second root route family has been introduced.
 
 Compiler investigation uses Builder's diagnostic-only Linux collection command;
 its receipt explicitly records `qualityGatePassed:false` and
