@@ -554,3 +554,26 @@ Docker and combined-scale acceptance cases. Run normal checks and two review
 rounds, retaining exact source evidence. This round ends at a tested pushed
 checkpoint, with no PR/merge/publication until operator review. Future automatic
 upgrades remain a design objective, not implemented machinery.
+
+
+### Harness settings fixtures
+
+The existing Python metadata initializer seeds `app_settings` revision 1 with a
+complete current saved document. Its defaults snapshot is generated from the
+compiled Rust field metadata and lives at
+`crates/emulebb-settings/tests/fixtures/default-settings.json` in the Rust repo.
+The native defaults/catalog test checks exact equality with `SavedSettings`.
+Product runtime code does not read this test fixture or gain another config input.
+
+The stopped-profile fixture editor accepts canonical dotted keys and explicit
+resets, preserves omitted leaves, classifies default/custom modes and advances
+one revision per atomic edit. It checks the serialized document budget before
+writing. Native startup remains the authority for product value validation.
+Unknown keys, overlapping resets, oversized documents and SQL failures do not
+partially update the document or revision.
+
+Rust `f2f01d7d` passes all 32 settings tests, with retained output at
+`reports/settings-request-round-1/settings-fixture-f2f01d7d.log`. Harness
+`a849396a` passes all 41 tests in the existing `test_rust_metadata.py` owner via
+Builder. The launch/import callers and container provisioning have not adopted
+the editor yet; their integration remains pending.
