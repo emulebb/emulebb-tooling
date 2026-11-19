@@ -1654,7 +1654,24 @@ the original path and fingerprint. Core/daemon evidence is in
 `reports/settings-request-round-1/root-admission-daemon.log`; branch quality
 checks pass in `reports/local-check/emulebb-rust/20261119T044347Z-a6814be6/`.
 This proves the scoped correctness checks, not resolution of the constrained
-OOM. A fresh Linux package and unchanged-budget campaign remain required.
+OOM.
+
+Fresh Linux GNU/AMD64 qualification passes on Rust `efa3c50d`: strict Clippy,
+packet-diagnostics compilation, release build, **3,308 workspace tests** and
+**three VPN egress tests**. Logs are retained under
+`reports/rust-linux/gnu-amd64/abef0e7e10cf439fa4bd7d85b650d200/`.
+The source-verified archive SHA-256 is
+`b32aca50c61c54569745ed8fe131c484cecc78bb66450476020155c72b2497c9`.
+Non-root partial-download/restart/resume/completion smoke passes in
+`reports/rust-linux/gnu-amd64/2b42c7609ae64983bec70fee23dfbab0/package-smoke.json`.
+These are local qualification artifacts, not published releases.
+
+Harness `5cb091ca` extends the existing log summary with fixed finalization
+event counters and the last event reached. It reads logs line by line and
+retains no log text or private paths in that summary. All 102 scoped campaign
+tests pass in `reports/settings-request-round-1/root-finalization-harness.log`
+and the required push checks. An unchanged-budget full campaign on this archive
+remains required before claiming the constrained OOM is resolved.
 
 Compiler investigation uses Builder's diagnostic-only Linux collection command;
 its receipt explicitly records `qualityGatePassed:false` and
