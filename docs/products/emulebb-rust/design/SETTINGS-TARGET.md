@@ -216,6 +216,14 @@ decision was accepted on 2026-11-19. The pure declaration-driven application
 planner implements the decision; runtime owner/consumer integration remains
 part of the direct canonical settings cut.
 
+The planner is implemented on Rust `2dad26c9`; all 55 settings tests pass in
+`reports/settings-request-round-1/settings-application-plan.log`. Coverage
+includes simultaneous dependent live fields, retained restart values, deferral
+of independent live edits with an incompatible mixed update, and invalid input
+without repair. The helper plans values only; it does not publish them as
+admitted effective state. The existing runtime transfer policies already use
+bytes per second, so this integration requires no new rate-conversion layer.
+
 Return a bounded collection of independently detectable validation issues in
 one response, each with a canonical setting path, stable code and readable
 message; dependent checks require valid inputs. Any validation failure saves
