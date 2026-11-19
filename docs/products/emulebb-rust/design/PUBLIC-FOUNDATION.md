@@ -2256,3 +2256,36 @@ an empty object. The strict documentation build also passes.
 Runtime endpoint validation, client adoption and integrated workspace validation
 remain required before this larger settings cut is publishable. This checkpoint
 has no PR, merge or release authorization.
+
+
+### Canonical Core settings checkpoint — 2026-11-19
+
+Rust `15a07e19` passes the Builder `rust-unit --package emulebb-core` run:
+641 unit tests and 34 integration tests, with no compiler warnings. Evidence is
+`reports/settings-request-round-1/core-settings-owner-final.log` under the
+workspace output root. This is scoped Core evidence, not a full workspace or
+live endpoint qualification.
+
+Core reads admitted canonical values and sends settings reads/writes through the
+existing profile persistence owner and SQL worker. Native writes enforce the
+expected revision, reserve bounded reply/work memory before cloning, validate
+the complete candidate before SQL, and publish runtime values after commit.
+Caller cancellation after admission cannot abandon committed publication.
+Restart-bound network changes remain pending until a new runtime is constructed.
+An incompatible mixed update saves the desired document but defers every change;
+a compatible explicit later update can apply the live subset. There is no hidden
+application retry.
+
+Seven owner tests cover invalid-candidate atomicity, competing CAS writers,
+disconnect after commit, whole-update deferral, SQL rollback and explicit retry,
+uncertain-commit failure of subsequent coherent reads/writes, and revision
+exhaustion. Restart integration covers the canonical network and upload values.
+The dashboard contention test holds the actual shared SQLite mutex and verifies
+that counts wait while network status remains responsive and durable jobs outside
+the active runtime cohort are counted.
+
+Daemon, REST and CLI integration edits are preserved for the next slice. Their
+consumer tests, WebUI adoption, integrated checks and pushes remain pending.
+Resource-derived download admission and its qualification also remain pending;
+this settings-owner slice does not qualify the temporary fixed active cohort as
+the final adaptive design. No PR, merge, main write or publication was performed.
