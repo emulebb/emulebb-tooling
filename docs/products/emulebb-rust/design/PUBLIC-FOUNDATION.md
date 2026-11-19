@@ -1547,10 +1547,34 @@ Windows eD2k tests pass, including ingest cancellation, held-preparation capacit
 and publication coverage:
 `reports/settings-request-round-1/ingest-receipt-ed2k-final.log`.
 The native package evidence above still belongs specifically to `928ffe12`.
-Fresh Linux package qualification of the ingest change belongs to the next
-constrained-campaign slice. Run the existing combined 100k campaign through
-persisted container orchestration; the full constrained campaign wrapper and
-its execution remain outstanding.
+Fresh Linux package qualification of the ingest change and actual constrained
+execution remain outstanding. Builder `5cfc75a` and Harness `7c95eb77` now provide
+the persisted wrapper around the existing combined campaign. It verifies the
+current archive checksum/source/SBOM, snapshots exact independent Rust/Harness
+Git sources, and uses a labelled local Docker volume for native profile and
+fixture storage. The non-root container enforces 512 MiB, disabled swap, one CPU
+and a private cgroup. Kernel measurement includes archive extraction, fixture
+preparation and all campaign phases. Acceptance requires the full physical
+library/history report, its measured budget, unchanged sources and confirmed
+owned-container removal. Physical SSD speed and cold-cache behavior are not
+claimed when Docker's backing topology is opaque.
+
+The supported entrypoints, run from Builder with the existing workstream, are:
+
+```text
+python -m emule_workspace test rust-library-container --workstream public-foundation-round-1 --archive <current-gnu-amd64-archive>
+python -m emule_workspace cleanup-rust-library-container --workstream public-foundation-round-1 --receipt <campaign-report.json>
+```
+
+Native profiles and fixture data remain on the recorded volume after success or
+failure. Cleanup checks the managed receipt, actual volume labels, local driver
+and absence of remote mount options or attached containers before removal, under
+the normal workspace lock. Reports remain in the output tree. The runtime image
+includes the existing campaign's Python validation/measurement and Linux disk
+inventory dependencies. Scoped Builder checks pass in
+`reports/builder-unit/a10e14ab2c79`; all 168 selected harness tests pass in
+`reports/settings-request-round-1/container-library-harness.log`. These scoped
+checks verify orchestration and failure handling, not the full workload itself.
 
 Compiler investigation uses Builder's diagnostic-only Linux collection command;
 its receipt explicitly records `qualityGatePassed:false` and
