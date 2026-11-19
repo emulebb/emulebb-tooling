@@ -2113,7 +2113,24 @@ explicitly records `memoryLimitQualified:false` and
 `physicalLibraryQualified:false`; it does not qualify either physical-library
 capacity tier. Final-source Linux packages and both capacity tiers remain
 unqualified. The accepted `scanRequired` recovery contract still requires
-implementation and validation before restarting capacity campaigns.
+watcher-ingress and REST/WebUI wiring before restarting capacity campaigns.
+Rust `4d15f544` establishes its durable foundation in fresh schema 106: each root
+stores a scan-required flag and bounded loss revision. The full scan captures
+the immutable root ID and revision before walking it, then acknowledges only
+that watermark in the membership transaction. A newer loss keeps the flag set;
+a replacement root cannot inherit the earlier scan. Failed commits preserve
+the flag, loss state survives reopening, and revision exhaustion stays required
+without wrapping. This does not yet change overflow-triggered rescanning or
+expose the flag through the public root resource.
+
+The metadata suite passes 310 test executions and the core suite passes 675,
+including native watcher pickup and existing scan/hash-reuse coverage. Rust
+`c763d5ec` updates the three eD2K scan fixtures; all 1,458 eD2K tests pass.
+Evidence is retained under `reports/settings-request-round-1/` as
+`root-scan-watermark-metadata.log`, `root-scan-watermark-core-final.log` and
+`root-scan-watermark-ed2k.log`. These are Windows/default-feature package tests,
+not native package or physical-library qualification of schema 106. Earlier
+package receipts describe their recorded source revisions only.
 The final documentation check passes in
 `reports/settings-request-round-1/library-root-docs-final-check.log` before this
 receipt update. No PR, merge, main update, release or publication is authorized.
@@ -2242,7 +2259,7 @@ implementation does not establish the required acceptance checks.
 ### Canonical settings-store checkpoint — 2026-11-19
 
 Rust commit `c3ab86b5` removes the section/key settings table and its readers,
-writers, DTOs and obsolete tests. Fresh schema 105 uses the complete typed
+writers, DTOs and obsolete tests. The fresh schema uses the complete typed
 `app_settings` document as the sole saved product-settings authority. Bootstrap
 TOML remains separate and unchanged. Host initialization seeds this document
 and sharing roots in one schema-creation transaction; reopening preserves explicit
