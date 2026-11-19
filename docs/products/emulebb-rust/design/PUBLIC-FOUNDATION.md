@@ -1673,6 +1673,30 @@ tests pass in `reports/settings-request-round-1/root-finalization-harness.log`
 and the required push checks. An unchanged-budget full campaign on this archive
 remains required before claiming the constrained OOM is resolved.
 
+That campaign, on Rust `efa3c50d`, Harness `5cb091ca`, Builder `9302058` and
+Tooling `9d25c202`, **fails qualification**. Evidence is retained under
+`reports/linux-containers/library/b4656cfbe2a746c2bb32059d177ebada/`.
+The budget and full workload remain unchanged. The kernel records one OOM kill
+and a 536,883,200-byte cgroup peak; the daemon exits with code -9. All 100,000
+physical files validate. The owned container is removed and the labelled native
+volume retains its profile and fixture.
+
+The new markers narrow the failure: root commit finishes, complete-catalog
+rebuilding starts, and a full reload completion event is emitted before the
+kill. Its numeric counters report 100,000 successful hashes, 10,485,760,000
+payload bytes read and zero hashing failures. The harness has not observed a
+settled initial phase before the process exits, so this is not a passing initial
+phase or full campaign. The completed reload distinguishes this result from the
+earlier finalization hypothesis; investigate the brief interval following
+publication rather than assume root persistence or catalog rebuilding failed.
+
+Across 441 retained samples, daemon RSS peaks at 397,762,560 bytes and controller
+RSS at 44,085,248 bytes. The daemon's sampled peak is lower than the preceding
+run, but sampling can miss a short allocation peak and does not establish the
+OOM's allocating operation. No REST or watcher errors precede exit. Keep the
+same budget and acceptance criteria; do not repeat another full campaign
+without narrower allocation evidence or a justified repair.
+
 Compiler investigation uses Builder's diagnostic-only Linux collection command;
 its receipt explicitly records `qualityGatePassed:false` and
 `packageProduced:false`. Acceptance continues to require the ordinary strict
