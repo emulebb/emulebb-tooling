@@ -1489,8 +1489,29 @@ The supported `linux-containers --workstream public-foundation-round-1
 and ARM64 support and successfully executes the ARM64 probe. Evidence:
 `reports/linux-containers/preflight.json` and
 `reports/settings-request-round-1/container-preflight.log`.
-This establishes the available container lane, not workload qualification or
-enforcement of the 512 MiB/one-CPU limits.
+This architecture-only preflight establishes the available container lane;
+it does not qualify the scale workload.
+
+The opt-in `linux-containers --resource-budget` preflight now verifies those
+limits with the campaign's actual kernel observer. Harness `8b7b8316` checks
+that the unified cgroup contains the controller, samples limits/OOM counters
+before and after the campaign, and fails a measured run if its scope, limits or
+OOM counters change. Missing
+namespace evidence leaves the run unqualified for the container budget. The
+observed budget covers the campaign controller and its ordinary process tree;
+it does not place the controller outside the measured envelope.
+
+Builder `f449487` reuses frozen Harness snapshots and owned-container cleanup
+for the real probe. Its result passes with memory limit **536,870,912 bytes**,
+swap disabled, CPU quota/period **100,000/100,000 microseconds**, unchanged scope
+and limits, no OOM events, and confirmed container removal:
+`reports/linux-containers/budget/9f51d39d17504c4ab05c468013ddfd9c/report.json`.
+All 88 focused harness tests and scoped Builder tests pass; evidence is retained
+in `reports/settings-request-round-1/cgroup-budget-harness.log`,
+`reports/builder-unit/2ad0bd27ceb7` and
+`reports/settings-request-round-1/cgroup-budget-native.log`.
+The probe explicitly records `workloadQualified:false`. Running the full
+physical-library/retained-job campaign inside this budget remains open.
 
 ### Populated-root update replay (2026-11-18)
 
