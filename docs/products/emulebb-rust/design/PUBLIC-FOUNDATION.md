@@ -249,6 +249,24 @@ roots are conservatively inaccessible; reads do not probe the filesystem or
 promise instantaneous truth. Physical root mutations/health work uses retained
 blocking I/O.
 
+Live filesystem watching is optional **per root, off by default**, including
+automatically owned incoming/category roots. Expose one explicit root policy
+(`watchEnabled`); do not add a competing global setting or silently enable or
+disable it at a file-count threshold. Watching does not determine sharing
+eligibility. Startup/explicit scans and normal completed-download admission
+remain independent of native watcher subscriptions. Root availability probes
+remain separate from recursive file-event watching.
+
+Normal capacity tiers must qualify large roots with watching disabled. Retain
+separate opt-in watcher qualification on selected roots in the same large
+profile; optional watching does not excuse lost-event correctness failures.
+The root policy must be wired through fresh SQLite storage, REST/OpenAPI,
+WebUI and the existing Python harness before claiming this design delivered.
+One recovery choice remains pending: mark an affected root as needing an
+explicit scan after event loss/overflow, or automatically scan only that
+watched root. Automatic full-library scans are not the intended fallback for
+an optional watcher.
+
 Library rows represent one content hash, with local locations exposed separately
 and paginated. Default to present content; provide Shared, Unavailable and All
 Known visibility filters. Use flat lists, not folder browsing/tree navigation.
@@ -1939,9 +1957,23 @@ and consumer instead of stopping either, and keeps the subsequent scan behind
 that subscription repair. Partial root registration failures are logged while
 other roots continue. A Linux regression deliberately removes one child
 subscription, repairs it through that worker and expects a later file event
-through the original consumer. Commit quality checks pass; scoped core tests,
-native Linux qualification and full tier reruns are pending. No public API,
-settings, DB shape or CLI surface changes in this repair.
+through the original consumer. Scoped core tests pass in
+`reports/settings-request-round-1/recursive-watch-core.log`. Native strict
+Clippy, packet diagnostics, workspace tests (including that Linux regression),
+VPN checks and non-root package lifecycle smoke pass for `15fea22e` in
+`reports/rust-linux/gnu-amd64/2d3c5923512040c999ff3308d7eee6f6/` and
+`reports/rust-linux/gnu-amd64/a2b1f4713fc242558dc3a89400c7686a/package-smoke.json`.
+
+Platform review found that the Windows dependency opens replacement handles
+when registering the same root again. Rust `9b9b9bed` therefore limits the
+repair to Linux, where missing child subscriptions can be added in place;
+Windows watcher behavior stays unchanged. Its commit quality checks pass.
+The package evidence above belongs to `15fea22e`, not that later source.
+Fresh final-source native qualification and capacity reruns remain pending.
+The operator then accepted per-root opt-in watching, off by default. Integrate
+that policy and settle overflow recovery before another capacity campaign.
+The repair itself changes no public API, settings, DB shape or CLI surface;
+the accepted root-policy work explicitly does change the root contract.
 
 Compiler investigation uses Builder's diagnostic-only Linux collection command;
 its receipt explicitly records `qualityGatePassed:false` and
