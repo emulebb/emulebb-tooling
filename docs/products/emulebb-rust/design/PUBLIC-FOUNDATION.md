@@ -2289,3 +2289,44 @@ consumer tests, WebUI adoption, integrated checks and pushes remain pending.
 Resource-derived download admission and its qualification also remain pending;
 this settings-owner slice does not qualify the temporary fixed active cohort as
 the final adaptive design. No PR, merge, main write or publication was performed.
+
+
+### Canonical REST settings checkpoint — 2026-11-19
+
+Rust `a75a290e` passes the Builder `rust-unit --package emulebb-rest` run:
+166 unit tests and three integration tests, without compiler warnings. The
+final retained log is `reports/settings-request-round-1/rest-settings-a75a290e.log`.
+The settings parser also passes all 32 tests on `27a4ba07`, retained in
+`reports/settings-request-round-1/settings-parser-27a4ba07.log`; the later Rust
+changes add the REST dependency declaration and remove four unused validator
+helpers, without changing that parser.
+
+The sole native settings routes are `GET/PATCH /api/v1/settings` and
+`GET /api/v1/settings/surface`. The read/write envelope carries the exact saved
+revision in `meta.settingsRevision` and separates saved modes, admitted effective
+values and application status. Settings metadata and JSON Schemas come from the
+same product declaration. Request decoding collects independently invalid types
+and field rules by canonical key; the final typed decode still checks duplicate
+JSON fields and exact structure. Submitted values are not echoed in these issues.
+
+HTTP evidence covers conflict without mutation, explicit resets and nullable
+values, omission/array replacement, unchanged explicit writes advancing the
+revision, restart-bound persistence, independent validation issues, SQL rollback
+and explicit retry, uncertain commit, revision exhaustion and closed persistence.
+The 256 KiB body boundary is enforced before buffering/parsing, including streamed
+bodies and misleading lengths; a candidate exceeding the 128 KiB saved-document
+budget returns HTTP 413 without SQL or runtime mutation. Restart-bound directory
+values are saved syntactically without probing or creating the target filesystem.
+
+Harness `6d06c940` and Tooling `f1ba1a48` pass 143 Python OpenAPI route/response
+checks against the current native sources and contract. The fixed error catalog
+includes settings conflicts, revision exhaustion and payload size failures;
+settings issues and conflict revision details have typed schemas. Diagnostics
+capture the canonical settings snapshot and its revision using the native
+envelope shape.
+
+The daemon/CLI edits are restored and preserved. Daemon consumers, WebUI settings,
+Docker provisioning and the integrated live daemon contract run remain pending.
+These package-level passes do not qualify that unfinished integration, capacity
+workloads or the final adaptive scheduler. No push, PR, merge or publication was
+performed in this slice.
