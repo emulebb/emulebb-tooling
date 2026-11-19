@@ -2016,6 +2016,25 @@ through the persistence owner, OpenAPI, UI and Python callers together, without
 dual routes. Settle the pending overflow choice before completing watcher
 recovery and restarting capacity qualification.
 
+The metadata foundation for that slice is pushed through Rust `84a7416d`.
+Fresh schema 104 gives each root a never-reused positive ID. Retiring a root
+retains native-path and membership history; adding the path again creates a new
+resource. Active-path uniqueness and an unfiltered foreign-key index cover their
+separate lookup requirements. Category-root synchronization addresses only active
+resources. Bounded ID pages include managed roots, and a watch patch commits only
+the addressed policy with its receipt in the same transaction. Managed roots
+cannot be deleted through this operation. Deleting an explicit root retires only
+its own memberships and preserves other roots' observed availability.
+
+The metadata package passes 300 unit tests and three integration tests on that
+revision, including ID retirement, managed ownership, stale-reader edits and
+cross-root health isolation. Evidence:
+`reports/settings-request-round-1/library-root-identities-metadata-scoped.log`.
+Earlier failed compilation and schema checks remain retained alongside that
+report. This is metadata-layer proof only: serialized runtime publication,
+canonical REST/OpenAPI routes, UI and Python callers still require the integrated
+root-resource slice. It is not final-source native or capacity qualification.
+
 Compiler investigation uses Builder's diagnostic-only Linux collection command;
 its receipt explicitly records `qualityGatePassed:false` and
 `packageProduced:false`. Acceptance continues to require the ordinary strict
