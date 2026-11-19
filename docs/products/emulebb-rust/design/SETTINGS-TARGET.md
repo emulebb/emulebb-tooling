@@ -633,5 +633,23 @@ checks pass. The report explicitly leaves physical-library and memory-limit
 qualification false. This is Windows/local evidence, not live VPN, Linux
 container, WebUI or combined memory-tier qualification.
 
-Remaining Android REST callers, shared harness cleanup, container provisioning
-and WebUI adoption remain pending.
+Harness `24cf800d` adopts canonical settings in Android storage configuration,
+startup verification and fixture cleanup. Configuration uses the observed
+revision, checks persistence, restarts through the existing service owner and
+verifies saved/effective paths before accepting the result. Cleanup protects
+both the active incoming path and a saved incoming path awaiting restart, and
+compares the complete settings snapshot including revision. Existing owners
+pass 320 tests in `android-storage-settings-first.log`.
+
+Harness `7003293b` adopts the same contract in the synthetic Android delivery
+and listener proofs. Temporary settings capture only the six current owned
+leaves; restoration preserves their default/custom modes and unrelated fields.
+Default leaves reset against installed defaults. Compensation requires the
+confirmed fixture-write revision: lost responses or intervening settings saves
+retain owned evidence for explicit recovery rather than issuing another write.
+Existing delivery/listener tests pass all 84 cases, including those admission
+faults, in `android-peer-settings-final.log`. These are controlled HTTP/ADB
+outcomes; no phone or emulator was contacted and no APK qualification is claimed.
+
+Remaining Android public-sharing callers, shared harness cleanup, container
+provisioning and WebUI adoption remain pending.

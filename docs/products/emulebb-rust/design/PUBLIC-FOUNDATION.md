@@ -2406,7 +2406,11 @@ REST/OpenAPI campaign passes against the current staged Rust daemon, including
 local upload/friend controls, Kad/category persistence and 100,000 retained-job
 pagination/restart checks. The settings target records its exact report and
 coverage limits; combined physical-library and memory-tier qualification is
-still outstanding. Remaining Android REST callers, shared harness cleanup,
+still outstanding. Harness `24cf800d` and `7003293b` adopt canonical settings in
+Android storage/startup/cleanup and delivery/listener proofs. Their controlled
+test suites pass; restoration preserves modes and requires confirmed revision
+ownership. The settings target records the evidence and the outstanding actual
+APK/device qualification. Remaining Android public-sharing callers, shared harness cleanup,
 Docker provisioning and WebUI settings still require adoption before an integrated push
 or live daemon qualification. Watcher loss reporting, the final adaptive
 scheduler and memory-tier capacity campaigns also remain unfinished. No PR,
