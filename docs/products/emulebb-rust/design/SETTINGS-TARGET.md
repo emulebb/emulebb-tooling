@@ -672,3 +672,13 @@ pages and 1,000 unfinished jobs in five pages; restart counts are preserved.
 Physical-library and memory-limit qualification remain explicitly false.
 Android tests above use controlled outcomes, not an actual APK/device campaign.
 Shared harness cleanup, container provisioning and WebUI adoption remain pending.
+
+Rust `d8e7f657` shares synced temporary-file publication between hosted bootstrap
+writes and fresh daemon startup. Initial creation never replaces an existing
+bootstrap; failed publication leaves no partial final file and can be retried.
+The accepted bootstrap template and keys remain unchanged. The Builder daemon
+package suite passes 112 test executions with one isolated ownership fixture
+intentionally ignored, including the two new publication regressions. Evidence
+is retained in `reports/settings-request-round-1/bootstrap-atomic-daemon.log`.
+This is Windows evidence for bootstrap-file publication, not qualification of
+the still-planned Docker directory journal, recovery or atomic stage publication.
