@@ -159,10 +159,10 @@ paths:
           $ref: "#/components/responses/ErrorResponse"
         default:
           $ref: "#/components/responses/ErrorResponse"
-  /app/settings:
+  /settings:
     get:
       tags: [App]
-      summary: Return DB-backed daemon settings.
+      summary: Return saved settings, admitted effective values and application status.
       operationId: getSettings
       responses:
         "200":
@@ -185,14 +185,23 @@ paths:
           $ref: "#/components/responses/ErrorResponse"
     patch:
       tags: [App]
-      summary: Update DB-backed daemon settings.
+      summary: Atomically update selected settings at an expected revision.
+      description: |
+        `expectedRevision` is the exact `meta.settingsRevision` from the latest settings read.
+        `set` supplies typed partial values; `reset` supplies canonical dotted keys.
+        An explicit successful write advances the revision, including an unchanged set.
+        A stale revision returns HTTP 409 with code SETTINGS_CONFLICT and details.actualRevision.
+        Values marked default resolve to the installed defaults at startup without a write.
+        Restart-bound changes remain pending. If a mixed live/restart update cannot form a
+        valid running configuration, the entire update waits for restart. There is no hidden
+        application retry. Requests are bounded to 262144 serialized UTF-8 bytes.
       operationId: patchSettings
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/AppSettingsUpdate"
+              $ref: "#/components/schemas/SettingsPatch"
       responses:
         "200":
           $ref: "#/components/responses/SettingsResponse"
@@ -206,20 +215,22 @@ paths:
           $ref: "#/components/responses/MethodNotAllowedResponse"
         "409":
           $ref: "#/components/responses/ErrorResponse"
+        "413":
+          $ref: "#/components/responses/ErrorResponse"
         "500":
           $ref: "#/components/responses/ErrorResponse"
         "503":
           $ref: "#/components/responses/ErrorResponse"
         default:
           $ref: "#/components/responses/ErrorResponse"
-  /app/settings/surface:
+  /settings/surface:
     get:
       tags: [App]
       summary: Return settings surface metadata.
       description: |
-        Describes the DB-backed `AppSettings` fields, redacted bootstrap-only
-        setting paths, and settings-adjacent section resources. Bootstrap-only
-        TOML secret values are intentionally not exposed through this route.
+        Returns the declaration-derived field catalog, JSON Schemas, bootstrap setting
+        names and adjacent resources. Defaults, validation rules and application modes
+        share the same Rust declaration as the saved document. Bootstrap values are absent.
       operationId: getSettingsSurface
       responses:
         "200":
@@ -4124,7 +4135,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/AppSettingsEnvelope"
+            $ref: "#/components/schemas/SettingsEnvelope"
     SettingsSurfaceResponse:
       description: Settings surface metadata envelope.
       headers:
@@ -4831,13 +4842,16 @@ components:
     EnvelopeMeta:
       type: object
       additionalProperties: false
-      required: [apiVersion]
+      required:
+      - apiVersion
       properties:
         apiVersion:
           type: string
         generatedAt:
           type: string
           format: date-time
+        settingsRevision:
+          $ref: '#/components/schemas/SettingsRevision'
     Ok:
       type: object
       additionalProperties: false
@@ -5397,14 +5411,20 @@ components:
           type: boolean
         shutdownInProgress:
           type: boolean
-    AppSettingsEnvelope:
-      unevaluatedProperties: false
-      allOf:
-        - $ref: "#/components/schemas/EnvelopeBase"
-        - type: object
-          properties:
-            data:
-              $ref: "#/components/schemas/AppSettings"
+    SettingsEnvelope:
+      type: object
+      additionalProperties: false
+      required:
+      - data
+      - meta
+      properties:
+        data:
+          $ref: '#/components/schemas/SettingsReadData'
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/EnvelopeMeta'
+          - required:
+            - settingsRevision
     SettingsSurfaceEnvelope:
       unevaluatedProperties: false
       allOf:
@@ -5424,37 +5444,188 @@ components:
     SettingsSurface:
       type: object
       additionalProperties: false
-      required: [settings, bootstrapSettings, sectionResources]
+      required:
+      - fields
+      - schemas
+      - bootstrap
+      - resources
       properties:
-        settings:
+        fields:
+          type: array
+          minItems: 59
+          maxItems: 59
+          items:
+            $ref: '#/components/schemas/SettingSpec'
+        schemas:
+          type: object
+          additionalProperties: false
+          required:
+          - SavedSettings
+          - SettingApplyFailure
+          - SettingKey
+          - SettingsApplicationStatus
+          - SettingsPartial
+          - SettingsPatch
+          - SettingsReadData
+          - SettingsRevision
+          - SettingsValues
+          properties:
+            SavedSettings:
+              type: object
+            SettingApplyFailure:
+              type: object
+            SettingKey:
+              type: object
+            SettingsApplicationStatus:
+              type: object
+            SettingsPartial:
+              type: object
+            SettingsPatch:
+              type: object
+            SettingsReadData:
+              type: object
+            SettingsRevision:
+              type: object
+            SettingsValues:
+              type: object
+        bootstrap:
           type: array
           items:
-            $ref: "#/components/schemas/SettingSurfaceSpec"
-        bootstrapSettings:
+            $ref: '#/components/schemas/SettingSurfaceSpec'
+        resources:
           type: array
           items:
-            $ref: "#/components/schemas/SettingSurfaceSpec"
-        sectionResources:
-          type: array
-          items:
-            $ref: "#/components/schemas/SettingsSectionResourceSpec"
+            $ref: '#/components/schemas/SettingsSectionResourceSpec'
+    SettingSpec:
+      type: object
+      additionalProperties: false
+      required:
+      - key
+      - nullable
+      - defaultValue
+      - application
+      - unit
+      - rule
+      properties:
+        key:
+          $ref: '#/components/schemas/SettingKey'
+        nullable:
+          type: boolean
+        defaultValue: {}
+        application:
+          enum:
+          - live
+          - restart
+        unit:
+          type: string
+        rule:
+          oneOf:
+          - type: object
+            additionalProperties: false
+            required:
+            - kind
+            properties:
+              kind:
+                const: boolean
+          - type: object
+            additionalProperties: false
+            required:
+            - kind
+            - minBytes
+            - maxBytes
+            - forbidControls
+            properties:
+              kind:
+                const: text
+              minBytes:
+                type: integer
+              maxBytes:
+                type: integer
+              forbidControls:
+                type: boolean
+          - type: object
+            additionalProperties: false
+            required:
+            - kind
+            properties:
+              kind:
+                const: ipv4
+          - type: object
+            additionalProperties: false
+            required:
+            - kind
+            - min
+            - max
+            - step
+            properties:
+              kind:
+                const: integer
+              min:
+                type: integer
+              max:
+                type: integer
+              step:
+                type: integer
+          - type: object
+            additionalProperties: false
+            required:
+            - kind
+            properties:
+              kind:
+                const: dnsServers
+          - type: object
+            additionalProperties: false
+            required:
+            - kind
+            properties:
+              kind:
+                const: natBackends
+          - type: object
+            additionalProperties: false
+            required:
+            - kind
+            properties:
+              kind:
+                const: path
+          - type: object
+            additionalProperties: false
+            required:
+            - kind
+            properties:
+              kind:
+                const: vpnMode
+          - type: object
+            additionalProperties: false
+            required:
+            - kind
+            properties:
+              kind:
+                const: ipv4Cidrs
     SettingSurfaceSpec:
       type: object
       additionalProperties: false
-      required: [path, class, restartRequired, uiSection, route, description]
+      required:
+      - path
+      - class
+      - restartRequired
+      - uiSection
+      - route
+      - description
       properties:
         path:
           type: string
-          description: Dot-separated settings path in the DB-backed settings document or bootstrap TOML file.
+          enum:
+          - rest.bind_addr
+          - rest.api_key
+          - rest.web_root_dir
         class:
-          $ref: "#/components/schemas/SettingSurfaceClass"
+          const: bootstrapOnly
         restartRequired:
-          type: boolean
+          const: true
         uiSection:
           type: string
         route:
-          type: string
-          enum: [/api/v1/app/settings, emulebb-rust-settings.toml]
+          const: emulebb-rust-settings.toml
         description:
           type: string
     SettingsSectionResourceSpec:
@@ -5475,823 +5646,4330 @@ components:
           type: string
     SettingSurfaceClass:
       type: string
-      enum: [normalControl, advancedControl, existingSectionResource, bootstrapOnly, notUserFacing]
-    AppSettings:
-      type: object
+      enum:
+      - existingSectionResource
+      - bootstrapOnly
+    SavedSettings:
       additionalProperties: false
       properties:
-        core:
-          $ref: "#/components/schemas/CoreSettings"
-        daemon:
-          $ref: "#/components/schemas/DaemonSettings"
-        ed2k:
-          $ref: "#/components/schemas/Ed2kSettings"
-        kad:
-          $ref: "#/components/schemas/KadSettings"
-        nat:
-          $ref: "#/components/schemas/NatSettings"
-        vpnGuard:
-          $ref: "#/components/schemas/VpnGuardSettings"
-        ipFilter:
-          $ref: "#/components/schemas/IpFilterSettings"
-    AppSettingsUpdate:
+        network:
+          additionalProperties: false
+          properties:
+            autoConnect:
+              additionalProperties: false
+              properties:
+                mode:
+                  enum:
+                  - default
+                  - custom
+                  type: string
+                value:
+                  type: boolean
+              required:
+              - mode
+              - value
+              type: object
+            connections:
+              additionalProperties: false
+              properties:
+                callbackTimeoutSeconds:
+                  additionalProperties: false
+                  properties:
+                    mode:
+                      enum:
+                      - default
+                      - custom
+                      type: string
+                    value:
+                      maximum: 86400
+                      minimum: 1
+                      multipleOf: 1
+                      type: integer
+                  required:
+                  - mode
+                  - value
+                  type: object
+                connectTimeoutSeconds:
+                  additionalProperties: false
+                  properties:
+                    mode:
+                      enum:
+                      - default
+                      - custom
+                      type: string
+                    value:
+                      maximum: 86400
+                      minimum: 1
+                      multipleOf: 1
+                      type: integer
+                  required:
+                  - mode
+                  - value
+                  type: object
+                maxConnections:
+                  additionalProperties: false
+                  properties:
+                    mode:
+                      enum:
+                      - default
+                      - custom
+                      type: string
+                    value:
+                      maximum: 2147483647
+                      minimum: 1
+                      multipleOf: 1
+                      type: integer
+                  required:
+                  - mode
+                  - value
+                  type: object
+                maxHalfOpenConnections:
+                  additionalProperties: false
+                  properties:
+                    mode:
+                      enum:
+                      - default
+                      - custom
+                      type: string
+                    value:
+                      maximum: 2147483647
+                      minimum: 1
+                      multipleOf: 1
+                      type: integer
+                  required:
+                  - mode
+                  - value
+                  type: object
+                maxNewConnectionsPerFiveSeconds:
+                  additionalProperties: false
+                  properties:
+                    mode:
+                      enum:
+                      - default
+                      - custom
+                      type: string
+                    value:
+                      maximum: 2147483647
+                      minimum: 1
+                      multipleOf: 1
+                      type: integer
+                  required:
+                  - mode
+                  - value
+                  type: object
+              required:
+              - maxConnections
+              - maxNewConnectionsPerFiveSeconds
+              - maxHalfOpenConnections
+              - connectTimeoutSeconds
+              - callbackTimeoutSeconds
+              type: object
+            ed2kEnabled:
+              additionalProperties: false
+              properties:
+                mode:
+                  enum:
+                  - default
+                  - custom
+                  type: string
+                value:
+                  type: boolean
+              required:
+              - mode
+              - value
+              type: object
+            hostnameLookup:
+              additionalProperties: false
+              properties:
+                dnsServers:
+                  additionalProperties: false
+                  properties:
+                    mode:
+                      enum:
+                      - default
+                      - custom
+                      type: string
+                    value:
+                      items:
+                        description: Unicast IPv4 socket address with a nonzero port.
+                        type: string
+                      maxItems: 8
+                      minItems: 0
+                      type: array
+                      uniqueItems: true
+                  required:
+                  - mode
+                  - value
+                  type: object
+                enabled:
+                  additionalProperties: false
+                  properties:
+                    mode:
+                      enum:
+                      - default
+                      - custom
+                      type: string
+                    value:
+                      type: boolean
+                  required:
+                  - mode
+                  - value
+                  type: object
+              required:
+              - enabled
+              - dnsServers
+              type: object
+            kadEnabled:
+              additionalProperties: false
+              properties:
+                mode:
+                  enum:
+                  - default
+                  - custom
+                  type: string
+                value:
+                  type: boolean
+              required:
+              - mode
+              - value
+              type: object
+            nat:
+              additionalProperties: false
+              properties:
+                backendOrder:
+                  additionalProperties: false
+                  properties:
+                    mode:
+                      enum:
+                      - default
+                      - custom
+                      type: string
+                    value:
+                      items:
+                        enum:
+                        - pcp-natpmp
+                        - upnp
+                        type: string
+                      maxItems: 2
+                      minItems: 1
+                      type: array
+                      uniqueItems: true
+                  required:
+                  - mode
+                  - value
+                  type: object
+                enabled:
+                  additionalProperties: false
+                  properties:
+                    mode:
+                      enum:
+                      - default
+                      - custom
+                      type: string
+                    value:
+                      type: boolean
+                  required:
+                  - mode
+                  - value
+                  type: object
+                externalIpOverride:
+                  additionalProperties: false
+                  properties:
+                    mode:
+                      enum:
+                      - default
+                      - custom
+                      type: string
+                    value:
+                      anyOf:
+                      - description: Unicast IPv4 address.
+                        format: ipv4
+                        type: string
+                      - type: 'null'
+                  required:
+                  - mode
+                  - value
+                  type: object
+                igdIp:
+                  additionalProperties: false
+                  properties:
+                    mode:
+                      enum:
+                      - default
+                      - custom
+                      type: string
+                    value:
+                      anyOf:
+                      - description: Unicast IPv4 address.
+                        format: ipv4
+                        type: string
+                      - type: 'null'
+                  required:
+                  - mode
+                  - value
+                  type: object
+                pcpServerIp:
+                  additionalProperties: false
+                  properties:
+                    mode:
+                      enum:
+                      - default
+                      - custom
+                      type: string
+                    value:
+                      anyOf:
+                      - description: Unicast IPv4 address.
+                        format: ipv4
+                        type: string
+                      - type: 'null'
+                  required:
+                  - mode
+                  - value
+                  type: object
+                requireInitialMapping:
+                  additionalProperties: false
+                  properties:
+                    mode:
+                      enum:
+                      - default
+                      - custom
+                      type: string
+                    value:
+                      type: boolean
+                  required:
+                  - mode
+                  - value
+                  type: object
+              required:
+              - enabled
+              - requireInitialMapping
+              - backendOrder
+              - pcpServerIp
+              - igdIp
+              - externalIpOverride
+              type: object
+            nickname:
+              additionalProperties: false
+              properties:
+                mode:
+                  enum:
+                  - default
+                  - custom
+                  type: string
+                value:
+                  maxLength: 128
+                  minLength: 1
+                  pattern: ^[^\u0000-\u001F\u007F-\u009F]*$
+                  type: string
+                  x-maxUtf8Bytes: 128
+                  x-minUtf8Bytes: 1
+              required:
+              - mode
+              - value
+              type: object
+            p2p:
+              additionalProperties: false
+              properties:
+                bindInterface:
+                  additionalProperties: false
+                  properties:
+                    mode:
+                      enum:
+                      - default
+                      - custom
+                      type: string
+                    value:
+                      anyOf:
+                      - maxLength: 256
+                        minLength: 1
+                        pattern: ^[^\u0000]*$
+                        type: string
+                        x-maxUtf8Bytes: 256
+                        x-minUtf8Bytes: 1
+                      - type: 'null'
+                  required:
+                  - mode
+                  - value
+                  type: object
+                bindIp:
+                  additionalProperties: false
+                  properties:
+                    mode:
+                      enum:
+                      - default
+                      - custom
+                      type: string
+                    value:
+                      anyOf:
+                      - description: Unicast IPv4 address.
+                        format: ipv4
+                        type: string
+                      - type: 'null'
+                  required:
+                  - mode
+                  - value
+                  type: object
+                tcpPort:
+                  additionalProperties: false
+                  properties:
+                    mode:
+                      enum:
+                      - default
+                      - custom
+                      type: string
+                    value:
+                      maximum: 65535
+                      minimum: 1
+                      multipleOf: 1
+                      type: integer
+                  required:
+                  - mode
+                  - value
+                  type: object
+                udpPort:
+                  additionalProperties: false
+                  properties:
+                    mode:
+                      enum:
+                      - default
+                      - custom
+                      type: string
+                    value:
+                      maximum: 65535
+                      minimum: 1
+                      multipleOf: 1
+                      type: integer
+                  required:
+                  - mode
+                  - value
+                  type: object
+              required:
+              - bindIp
+              - bindInterface
+              - tcpPort
+              - udpPort
+              type: object
+            servers:
+              additionalProperties: false
+              properties:
+                acceptServerListUpdates:
+                  additionalProperties: false
+                  properties:
+                    mode:
+                      enum:
+                      - default
+                      - custom
+                      type: string
+                    value:
+                      type: boolean
+                  required:
+                  - mode
+                  - value
+                  type: object
+                autoReconnect:
+                  additionalProperties: false
+                  properties:
+                    mode:
+                      enum:
+                      - default
+                      - custom
+                      type: string
+                    value:
+                      type: boolean
+                  required:
+                  - mode
+                  - value
+                  type: object
+                connectTimeoutSeconds:
+                  additionalProperties: false
+                  properties:
+                    mode:
+                      enum:
+                      - default
+                      - custom
+                      type: string
+                    value:
+                      maximum: 86400
+                      minimum: 1
+                      multipleOf: 1
+                      type: integer
+                  required:
+                  - mode
+                  - value
+                  type: object
+                deadServerRetries:
+                  additionalProperties: false
+                  properties:
+                    mode:
+                      enum:
+                      - default
+                      - custom
+                      type: string
+                    value:
+                      maximum: 10
+                      minimum: 1
+                      multipleOf: 1
+                      type: integer
+                  required:
+                  - mode
+                  - value
+                  type: object
+                keepaliveMinutes:
+                  additionalProperties: false
+                  properties:
+                    mode:
+                      enum:
+                      - default
+                      - custom
+                      type: string
+                    value:
+                      maximum: 1440
+                      minimum: 0
+                      multipleOf: 1
+                      type: integer
+                  required:
+                  - mode
+                  - value
+                  type: object
+                reconnectIntervalSeconds:
+                  additionalProperties: false
+                  properties:
+                    mode:
+                      enum:
+                      - default
+                      - custom
+                      type: string
+                    value:
+                      maximum: 86400
+                      minimum: 1
+                      multipleOf: 1
+                      type: integer
+                  required:
+                  - mode
+                  - value
+                  type: object
+                safeConnect:
+                  additionalProperties: false
+                  properties:
+                    mode:
+                      enum:
+                      - default
+                      - custom
+                      type: string
+                    value:
+                      type: boolean
+                  required:
+                  - mode
+                  - value
+                  type: object
+                sessionRotationSeconds:
+                  additionalProperties: false
+                  properties:
+                    mode:
+                      enum:
+                      - default
+                      - custom
+                      type: string
+                    value:
+                      maximum: 86400
+                      minimum: 0
+                      multipleOf: 1
+                      type: integer
+                  required:
+                  - mode
+                  - value
+                  type: object
+                staticOnly:
+                  additionalProperties: false
+                  properties:
+                    mode:
+                      enum:
+                      - default
+                      - custom
+                      type: string
+                    value:
+                      type: boolean
+                  required:
+                  - mode
+                  - value
+                  type: object
+                usePriorities:
+                  additionalProperties: false
+                  properties:
+                    mode:
+                      enum:
+                      - default
+                      - custom
+                      type: string
+                    value:
+                      type: boolean
+                  required:
+                  - mode
+                  - value
+                  type: object
+              required:
+              - autoReconnect
+              - safeConnect
+              - usePriorities
+              - staticOnly
+              - acceptServerListUpdates
+              - connectTimeoutSeconds
+              - reconnectIntervalSeconds
+              - keepaliveMinutes
+              - sessionRotationSeconds
+              - deadServerRetries
+              type: object
+          required:
+          - ed2kEnabled
+          - kadEnabled
+          - autoConnect
+          - nickname
+          - p2p
+          - connections
+          - servers
+          - hostnameLookup
+          - nat
+          type: object
+        security:
+          additionalProperties: false
+          properties:
+            ipFilter:
+              additionalProperties: false
+              properties:
+                enabled:
+                  additionalProperties: false
+                  properties:
+                    mode:
+                      enum:
+                      - default
+                      - custom
+                      type: string
+                    value:
+                      type: boolean
+                  required:
+                  - mode
+                  - value
+                  type: object
+                filePath:
+                  additionalProperties: false
+                  properties:
+                    mode:
+                      enum:
+                      - default
+                      - custom
+                      type: string
+                    value:
+                      anyOf:
+                      - description: Profile-relative or absolute UTF-8 filesystem path without NUL. No shell,
+                          environment or tilde expansion.
+                        minLength: 1
+                        pattern: ^[^\u0000]+$
+                        type: string
+                      - type: 'null'
+                  required:
+                  - mode
+                  - value
+                  type: object
+                level:
+                  additionalProperties: false
+                  properties:
+                    mode:
+                      enum:
+                      - default
+                      - custom
+                      type: string
+                    value:
+                      maximum: 4294967295
+                      minimum: 0
+                      multipleOf: 1
+                      type: integer
+                  required:
+                  - mode
+                  - value
+                  type: object
+              required:
+              - enabled
+              - filePath
+              - level
+              type: object
+            obfuscationEnabled:
+              additionalProperties: false
+              properties:
+                mode:
+                  enum:
+                  - default
+                  - custom
+                  type: string
+                value:
+                  type: boolean
+              required:
+              - mode
+              - value
+              type: object
+            tcpErrorFloodDetection:
+              additionalProperties: false
+              properties:
+                enabled:
+                  additionalProperties: false
+                  properties:
+                    mode:
+                      enum:
+                      - default
+                      - custom
+                      type: string
+                    value:
+                      type: boolean
+                  required:
+                  - mode
+                  - value
+                  type: object
+                intervalSeconds:
+                  additionalProperties: false
+                  properties:
+                    mode:
+                      enum:
+                      - default
+                      - custom
+                      type: string
+                    value:
+                      maximum: 86400
+                      minimum: 60
+                      multipleOf: 60
+                      type: integer
+                  required:
+                  - mode
+                  - value
+                  type: object
+                threshold:
+                  additionalProperties: false
+                  properties:
+                    mode:
+                      enum:
+                      - default
+                      - custom
+                      type: string
+                    value:
+                      maximum: 1000
+                      minimum: 1
+                      multipleOf: 1
+                      type: integer
+                  required:
+                  - mode
+                  - value
+                  type: object
+              required:
+              - enabled
+              - intervalSeconds
+              - threshold
+              type: object
+            vpnGuard:
+              additionalProperties: false
+              properties:
+                allowedPublicIpCidrs:
+                  additionalProperties: false
+                  properties:
+                    mode:
+                      enum:
+                      - default
+                      - custom
+                      type: string
+                    value:
+                      items:
+                        description: Canonical IPv4 CIDR with no host bits set.
+                        type: string
+                      maxItems: 256
+                      minItems: 0
+                      type: array
+                      uniqueItems: true
+                  required:
+                  - mode
+                  - value
+                  type: object
+                mode:
+                  additionalProperties: false
+                  properties:
+                    mode:
+                      enum:
+                      - default
+                      - custom
+                      type: string
+                    value:
+                      enum:
+                      - 'off'
+                      - block
+                      type: string
+                  required:
+                  - mode
+                  - value
+                  type: object
+              required:
+              - mode
+              - allowedPublicIpCidrs
+              type: object
+          required:
+          - obfuscationEnabled
+          - vpnGuard
+          - ipFilter
+          - tcpErrorFloodDetection
+          type: object
+        sharing:
+          additionalProperties: false
+          properties:
+            kadPublishingEnabled:
+              additionalProperties: false
+              properties:
+                mode:
+                  enum:
+                  - default
+                  - custom
+                  type: string
+                value:
+                  type: boolean
+              required:
+              - mode
+              - value
+              type: object
+            scanOnStartup:
+              additionalProperties: false
+              properties:
+                mode:
+                  enum:
+                  - default
+                  - custom
+                  type: string
+                value:
+                  type: boolean
+              required:
+              - mode
+              - value
+              type: object
+          required:
+          - scanOnStartup
+          - kadPublishingEnabled
+          type: object
+        storage:
+          additionalProperties: false
+          properties:
+            incomingDirectory:
+              additionalProperties: false
+              properties:
+                mode:
+                  enum:
+                  - default
+                  - custom
+                  type: string
+                value:
+                  description: Profile-relative or absolute UTF-8 filesystem path without NUL. No shell, environment
+                    or tilde expansion.
+                  minLength: 1
+                  pattern: ^[^\u0000]+$
+                  type: string
+              required:
+              - mode
+              - value
+              type: object
+            minFreeIncomingBytes:
+              additionalProperties: false
+              properties:
+                mode:
+                  enum:
+                  - default
+                  - custom
+                  type: string
+                value:
+                  maximum: 5497558138880
+                  minimum: 5368709120
+                  multipleOf: 1
+                  type: integer
+              required:
+              - mode
+              - value
+              type: object
+            minFreeProfileBytes:
+              additionalProperties: false
+              properties:
+                mode:
+                  enum:
+                  - default
+                  - custom
+                  type: string
+                value:
+                  maximum: 5497558138880
+                  minimum: 1073741824
+                  multipleOf: 1
+                  type: integer
+              required:
+              - mode
+              - value
+              type: object
+            minFreeTempBytes:
+              additionalProperties: false
+              properties:
+                mode:
+                  enum:
+                  - default
+                  - custom
+                  type: string
+                value:
+                  maximum: 5497558138880
+                  minimum: 5368709120
+                  multipleOf: 1
+                  type: integer
+              required:
+              - mode
+              - value
+              type: object
+            tempDirectory:
+              additionalProperties: false
+              properties:
+                mode:
+                  enum:
+                  - default
+                  - custom
+                  type: string
+                value:
+                  description: Profile-relative or absolute UTF-8 filesystem path without NUL. No shell, environment
+                    or tilde expansion.
+                  minLength: 1
+                  pattern: ^[^\u0000]+$
+                  type: string
+              required:
+              - mode
+              - value
+              type: object
+          required:
+          - incomingDirectory
+          - tempDirectory
+          - minFreeProfileBytes
+          - minFreeTempBytes
+          - minFreeIncomingBytes
+          type: object
+        transfers:
+          additionalProperties: false
+          properties:
+            downloadLimitBytesPerSecond:
+              additionalProperties: false
+              properties:
+                mode:
+                  enum:
+                  - default
+                  - custom
+                  type: string
+                value:
+                  maximum: 4398046509056
+                  minimum: 1
+                  multipleOf: 1
+                  type: integer
+              required:
+              - mode
+              - value
+              type: object
+            maxConcurrentDownloads:
+              additionalProperties: false
+              properties:
+                mode:
+                  enum:
+                  - default
+                  - custom
+                  type: string
+                value:
+                  anyOf:
+                  - maximum: 2147483647
+                    minimum: 1
+                    multipleOf: 1
+                    type: integer
+                  - type: 'null'
+              required:
+              - mode
+              - value
+              type: object
+            maxParallelDownloadPeers:
+              additionalProperties: false
+              properties:
+                mode:
+                  enum:
+                  - default
+                  - custom
+                  type: string
+                value:
+                  maximum: 2147483647
+                  minimum: 1
+                  multipleOf: 1
+                  type: integer
+              required:
+              - mode
+              - value
+              type: object
+            maxSourcesPerFile:
+              additionalProperties: false
+              properties:
+                mode:
+                  enum:
+                  - default
+                  - custom
+                  type: string
+                value:
+                  maximum: 2147483647
+                  minimum: 1
+                  multipleOf: 1
+                  type: integer
+              required:
+              - mode
+              - value
+              type: object
+            upload:
+              additionalProperties: false
+              properties:
+                baseSlots:
+                  additionalProperties: false
+                  properties:
+                    mode:
+                      enum:
+                      - default
+                      - custom
+                      type: string
+                    value:
+                      maximum: 64
+                      minimum: 1
+                      multipleOf: 1
+                      type: integer
+                  required:
+                  - mode
+                  - value
+                  type: object
+                creditSystemEnabled:
+                  additionalProperties: false
+                  properties:
+                    mode:
+                      enum:
+                      - default
+                      - custom
+                      type: string
+                    value:
+                      type: boolean
+                  required:
+                  - mode
+                  - value
+                  type: object
+                elasticPercent:
+                  additionalProperties: false
+                  properties:
+                    mode:
+                      enum:
+                      - default
+                      - custom
+                      type: string
+                    value:
+                      maximum: 100
+                      minimum: 0
+                      multipleOf: 1
+                      type: integer
+                  required:
+                  - mode
+                  - value
+                  type: object
+                queueCapacity:
+                  additionalProperties: false
+                  properties:
+                    mode:
+                      enum:
+                      - default
+                      - custom
+                      type: string
+                    value:
+                      maximum: 10000
+                      minimum: 2000
+                      multipleOf: 1
+                      type: integer
+                  required:
+                  - mode
+                  - value
+                  type: object
+                sessionTimeLimitSeconds:
+                  additionalProperties: false
+                  properties:
+                    mode:
+                      enum:
+                      - default
+                      - custom
+                      type: string
+                    value:
+                      maximum: 86400
+                      minimum: 0
+                      multipleOf: 1
+                      type: integer
+                  required:
+                  - mode
+                  - value
+                  type: object
+                sessionTransferPercent:
+                  additionalProperties: false
+                  properties:
+                    mode:
+                      enum:
+                      - default
+                      - custom
+                      type: string
+                    value:
+                      maximum: 100
+                      minimum: 0
+                      multipleOf: 1
+                      type: integer
+                  required:
+                  - mode
+                  - value
+                  type: object
+                targetClientRateBytesPerSecond:
+                  additionalProperties: false
+                  properties:
+                    mode:
+                      enum:
+                      - default
+                      - custom
+                      type: string
+                    value:
+                      maximum: 4398046510080
+                      minimum: 1
+                      multipleOf: 1
+                      type: integer
+                  required:
+                  - mode
+                  - value
+                  type: object
+              required:
+              - targetClientRateBytesPerSecond
+              - baseSlots
+              - elasticPercent
+              - queueCapacity
+              - sessionTransferPercent
+              - sessionTimeLimitSeconds
+              - creditSystemEnabled
+              type: object
+            uploadLimitBytesPerSecond:
+              additionalProperties: false
+              properties:
+                mode:
+                  enum:
+                  - default
+                  - custom
+                  type: string
+                value:
+                  maximum: 4398046509056
+                  minimum: 1
+                  multipleOf: 1
+                  type: integer
+              required:
+              - mode
+              - value
+              type: object
+          required:
+          - uploadLimitBytesPerSecond
+          - downloadLimitBytesPerSecond
+          - maxConcurrentDownloads
+          - maxSourcesPerFile
+          - maxParallelDownloadPeers
+          - upload
+          type: object
+      required:
+      - network
+      - transfers
+      - storage
+      - sharing
+      - security
       type: object
+      x-maxSerializedBytes: 131072
+    SettingApplyFailure:
       additionalProperties: false
-      minProperties: 1
       properties:
-        core:
-          $ref: "#/components/schemas/CoreSettingsUpdate"
-        daemon:
-          $ref: "#/components/schemas/DaemonSettingsUpdate"
-        ed2k:
-          $ref: "#/components/schemas/Ed2kSettingsUpdate"
-        kad:
-          $ref: "#/components/schemas/KadSettingsUpdate"
-        nat:
-          $ref: "#/components/schemas/NatSettingsUpdate"
-        vpnGuard:
-          $ref: "#/components/schemas/VpnGuardSettingsUpdate"
-        ipFilter:
-          $ref: "#/components/schemas/IpFilterSettingsUpdate"
-    CoreSettings:
+        code:
+          enum:
+          - applyFailed
+          type: string
+        key:
+          enum:
+          - network.ed2kEnabled
+          - network.kadEnabled
+          - network.autoConnect
+          - network.nickname
+          - network.p2p.bindIp
+          - network.p2p.bindInterface
+          - network.p2p.tcpPort
+          - network.p2p.udpPort
+          - network.connections.maxConnections
+          - network.connections.maxNewConnectionsPerFiveSeconds
+          - network.connections.maxHalfOpenConnections
+          - network.connections.connectTimeoutSeconds
+          - network.connections.callbackTimeoutSeconds
+          - network.servers.autoReconnect
+          - network.servers.safeConnect
+          - network.servers.usePriorities
+          - network.servers.staticOnly
+          - network.servers.acceptServerListUpdates
+          - network.servers.connectTimeoutSeconds
+          - network.servers.reconnectIntervalSeconds
+          - network.servers.keepaliveMinutes
+          - network.servers.sessionRotationSeconds
+          - network.servers.deadServerRetries
+          - network.hostnameLookup.enabled
+          - network.hostnameLookup.dnsServers
+          - network.nat.enabled
+          - network.nat.requireInitialMapping
+          - network.nat.backendOrder
+          - network.nat.pcpServerIp
+          - network.nat.igdIp
+          - network.nat.externalIpOverride
+          - transfers.uploadLimitBytesPerSecond
+          - transfers.downloadLimitBytesPerSecond
+          - transfers.maxConcurrentDownloads
+          - transfers.maxSourcesPerFile
+          - transfers.maxParallelDownloadPeers
+          - transfers.upload.targetClientRateBytesPerSecond
+          - transfers.upload.baseSlots
+          - transfers.upload.elasticPercent
+          - transfers.upload.queueCapacity
+          - transfers.upload.sessionTransferPercent
+          - transfers.upload.sessionTimeLimitSeconds
+          - transfers.upload.creditSystemEnabled
+          - storage.incomingDirectory
+          - storage.tempDirectory
+          - storage.minFreeProfileBytes
+          - storage.minFreeTempBytes
+          - storage.minFreeIncomingBytes
+          - sharing.scanOnStartup
+          - sharing.kadPublishingEnabled
+          - security.obfuscationEnabled
+          - security.vpnGuard.mode
+          - security.vpnGuard.allowedPublicIpCidrs
+          - security.ipFilter.enabled
+          - security.ipFilter.filePath
+          - security.ipFilter.level
+          - security.tcpErrorFloodDetection.enabled
+          - security.tcpErrorFloodDetection.intervalSeconds
+          - security.tcpErrorFloodDetection.threshold
+          type: string
+        message:
+          maxLength: 512
+          type: string
+          x-maxUtf8Bytes: 512
+        truncated:
+          type: boolean
+      required:
+      - key
+      - code
+      - message
+      - truncated
       type: object
+    SettingKey:
+      enum:
+      - network.ed2kEnabled
+      - network.kadEnabled
+      - network.autoConnect
+      - network.nickname
+      - network.p2p.bindIp
+      - network.p2p.bindInterface
+      - network.p2p.tcpPort
+      - network.p2p.udpPort
+      - network.connections.maxConnections
+      - network.connections.maxNewConnectionsPerFiveSeconds
+      - network.connections.maxHalfOpenConnections
+      - network.connections.connectTimeoutSeconds
+      - network.connections.callbackTimeoutSeconds
+      - network.servers.autoReconnect
+      - network.servers.safeConnect
+      - network.servers.usePriorities
+      - network.servers.staticOnly
+      - network.servers.acceptServerListUpdates
+      - network.servers.connectTimeoutSeconds
+      - network.servers.reconnectIntervalSeconds
+      - network.servers.keepaliveMinutes
+      - network.servers.sessionRotationSeconds
+      - network.servers.deadServerRetries
+      - network.hostnameLookup.enabled
+      - network.hostnameLookup.dnsServers
+      - network.nat.enabled
+      - network.nat.requireInitialMapping
+      - network.nat.backendOrder
+      - network.nat.pcpServerIp
+      - network.nat.igdIp
+      - network.nat.externalIpOverride
+      - transfers.uploadLimitBytesPerSecond
+      - transfers.downloadLimitBytesPerSecond
+      - transfers.maxConcurrentDownloads
+      - transfers.maxSourcesPerFile
+      - transfers.maxParallelDownloadPeers
+      - transfers.upload.targetClientRateBytesPerSecond
+      - transfers.upload.baseSlots
+      - transfers.upload.elasticPercent
+      - transfers.upload.queueCapacity
+      - transfers.upload.sessionTransferPercent
+      - transfers.upload.sessionTimeLimitSeconds
+      - transfers.upload.creditSystemEnabled
+      - storage.incomingDirectory
+      - storage.tempDirectory
+      - storage.minFreeProfileBytes
+      - storage.minFreeTempBytes
+      - storage.minFreeIncomingBytes
+      - sharing.scanOnStartup
+      - sharing.kadPublishingEnabled
+      - security.obfuscationEnabled
+      - security.vpnGuard.mode
+      - security.vpnGuard.allowedPublicIpCidrs
+      - security.ipFilter.enabled
+      - security.ipFilter.filePath
+      - security.ipFilter.level
+      - security.tcpErrorFloodDetection.enabled
+      - security.tcpErrorFloodDetection.intervalSeconds
+      - security.tcpErrorFloodDetection.threshold
+      type: string
+    SettingsApplicationStatus:
       additionalProperties: false
       properties:
-        downloadLimitKiBps:
-          type: integer
-          minimum: 1
-          maximum: 4294967294
-        uploadLimitKiBps:
-          type: integer
-          minimum: 1
-          maximum: 4294967294
-        maxSourcesPerFile:
-          type: integer
-          minimum: 1
-          maximum: 2147483647
-        maxConnections:
-          type: integer
-          minimum: 1
-          maximum: 2147483647
-        maxConnectionsPerFiveSeconds:
-          type: integer
-          minimum: 1
-          maximum: 2147483647
-        uploadClientDataRate:
-          type: integer
-          minimum: 1
-          maximum: 4294967295
-        baseUploadSlots:
-          type: integer
-          minimum: 1
-          maximum: 64
-          description: Baseline active upload slots; sustained underfill may expand the total active slots up to 128.
-        uploadSlotElasticPercent:
-          type: integer
-          minimum: 0
-          maximum: 100
-        queueSize:
-          type: integer
-          minimum: 2000
-          maximum: 10000
-        autoConnect:
-          type: boolean
-        creditSystem:
-          type: boolean
-        networkKademlia:
-          type: boolean
-        networkEd2k:
-          type: boolean
-    CoreSettingsUpdate:
-      type: object
-      additionalProperties: false
-      minProperties: 1
-      properties:
-        downloadLimitKiBps:
-          type: integer
-          minimum: 1
-          maximum: 4294967294
-        uploadLimitKiBps:
-          type: integer
-          minimum: 1
-          maximum: 4294967294
-        maxSourcesPerFile:
-          type: integer
-          minimum: 1
-          maximum: 2147483647
-        maxConnections:
-          type: integer
-          minimum: 1
-          maximum: 2147483647
-        maxConnectionsPerFiveSeconds:
-          type: integer
-          minimum: 1
-          maximum: 2147483647
-        uploadClientDataRate:
-          type: integer
-          minimum: 1
-          maximum: 4294967295
-        baseUploadSlots:
-          type: integer
-          minimum: 1
-          maximum: 64
-          description: Baseline active upload slots; sustained underfill may expand the total active slots up to 128.
-        uploadSlotElasticPercent:
-          type: integer
-          minimum: 0
-          maximum: 100
-        queueSize:
-          type: integer
-          minimum: 2000
-          maximum: 10000
-        autoConnect:
-          type: boolean
-        creditSystem:
-          type: boolean
-        networkKademlia:
-          type: boolean
-        networkEd2k:
-          type: boolean
-    DaemonSettingsUpdate:
-      type: object
-      additionalProperties: false
-      minProperties: 1
-      properties:
-        incomingDir:
-          type: [string, "null"]
-          minLength: 1
-          description: Finished download delivery directory; non-empty when set.
-        p2pBindIp:
-          type: [string, "null"]
-          format: ipv4
-        p2pBindInterface:
-          type: [string, "null"]
-          minLength: 1
-        ed2kUserHash:
-          type: [string, "null"]
-          pattern: "^[0-9a-f]{10}0e[0-9a-f]{16}6f[0-9a-f]{2}$"
-          description: Marker-normalized local eD2K user hash; `null` clears the override.
-        initialSharedDirectoryReload:
-          type: boolean
-          description: Run the initial shared-root scan and hash pass on daemon startup.
-        hostnameLookup:
-          $ref: "#/components/schemas/HostnameLookupSettingsUpdate"
-    DaemonSettings:
-      type: object
-      additionalProperties: false
-      properties:
-        incomingDir:
-          type: [string, "null"]
-          minLength: 1
-          description: Finished download delivery directory; non-empty when set.
-        p2pBindIp:
-          type: [string, "null"]
-          format: ipv4
-        p2pBindInterface:
-          type: [string, "null"]
-          minLength: 1
-        ed2kUserHash:
-          type: [string, "null"]
-          pattern: "^[0-9a-f]{10}0e[0-9a-f]{16}6f[0-9a-f]{2}$"
-          description: Marker-normalized local eD2K user hash; `null` means no configured override.
-        initialSharedDirectoryReload:
-          type: boolean
-          description: Run the initial shared-root scan and hash pass on daemon startup.
-        hostnameLookup:
-          $ref: "#/components/schemas/HostnameLookupSettings"
-    HostnameLookupSettings:
-      type: object
-      additionalProperties: false
-      properties:
-        enabled:
-          type: boolean
-        dnsServers:
-          type: array
+        failed:
           items:
-            type: string
-          description: Explicit DNS server IPv4 or IPv4:port entries for bound reverse-DNS lookup.
-        cacheTtlSecs:
-          type: integer
-          minimum: 1
-        maxLookupsPerTick:
-          type: integer
-          minimum: 1
-        tickIntervalSecs:
-          type: integer
-          minimum: 5
-    HostnameLookupSettingsUpdate:
-      type: object
-      additionalProperties: false
-      minProperties: 1
-      properties:
-        enabled:
-          type: boolean
-        dnsServers:
+            additionalProperties: false
+            properties:
+              code:
+                enum:
+                - applyFailed
+                type: string
+              key:
+                enum:
+                - network.ed2kEnabled
+                - network.kadEnabled
+                - network.autoConnect
+                - network.nickname
+                - network.p2p.bindIp
+                - network.p2p.bindInterface
+                - network.p2p.tcpPort
+                - network.p2p.udpPort
+                - network.connections.maxConnections
+                - network.connections.maxNewConnectionsPerFiveSeconds
+                - network.connections.maxHalfOpenConnections
+                - network.connections.connectTimeoutSeconds
+                - network.connections.callbackTimeoutSeconds
+                - network.servers.autoReconnect
+                - network.servers.safeConnect
+                - network.servers.usePriorities
+                - network.servers.staticOnly
+                - network.servers.acceptServerListUpdates
+                - network.servers.connectTimeoutSeconds
+                - network.servers.reconnectIntervalSeconds
+                - network.servers.keepaliveMinutes
+                - network.servers.sessionRotationSeconds
+                - network.servers.deadServerRetries
+                - network.hostnameLookup.enabled
+                - network.hostnameLookup.dnsServers
+                - network.nat.enabled
+                - network.nat.requireInitialMapping
+                - network.nat.backendOrder
+                - network.nat.pcpServerIp
+                - network.nat.igdIp
+                - network.nat.externalIpOverride
+                - transfers.uploadLimitBytesPerSecond
+                - transfers.downloadLimitBytesPerSecond
+                - transfers.maxConcurrentDownloads
+                - transfers.maxSourcesPerFile
+                - transfers.maxParallelDownloadPeers
+                - transfers.upload.targetClientRateBytesPerSecond
+                - transfers.upload.baseSlots
+                - transfers.upload.elasticPercent
+                - transfers.upload.queueCapacity
+                - transfers.upload.sessionTransferPercent
+                - transfers.upload.sessionTimeLimitSeconds
+                - transfers.upload.creditSystemEnabled
+                - storage.incomingDirectory
+                - storage.tempDirectory
+                - storage.minFreeProfileBytes
+                - storage.minFreeTempBytes
+                - storage.minFreeIncomingBytes
+                - sharing.scanOnStartup
+                - sharing.kadPublishingEnabled
+                - security.obfuscationEnabled
+                - security.vpnGuard.mode
+                - security.vpnGuard.allowedPublicIpCidrs
+                - security.ipFilter.enabled
+                - security.ipFilter.filePath
+                - security.ipFilter.level
+                - security.tcpErrorFloodDetection.enabled
+                - security.tcpErrorFloodDetection.intervalSeconds
+                - security.tcpErrorFloodDetection.threshold
+                type: string
+              message:
+                maxLength: 512
+                type: string
+                x-maxUtf8Bytes: 512
+              truncated:
+                type: boolean
+            required:
+            - key
+            - code
+            - message
+            - truncated
+            type: object
+          maxItems: 59
           type: array
+          x-uniqueBy: key
+        pendingRestart:
           items:
+            enum:
+            - network.ed2kEnabled
+            - network.kadEnabled
+            - network.autoConnect
+            - network.nickname
+            - network.p2p.bindIp
+            - network.p2p.bindInterface
+            - network.p2p.tcpPort
+            - network.p2p.udpPort
+            - network.connections.maxConnections
+            - network.connections.maxNewConnectionsPerFiveSeconds
+            - network.connections.maxHalfOpenConnections
+            - network.connections.connectTimeoutSeconds
+            - network.connections.callbackTimeoutSeconds
+            - network.servers.autoReconnect
+            - network.servers.safeConnect
+            - network.servers.usePriorities
+            - network.servers.staticOnly
+            - network.servers.acceptServerListUpdates
+            - network.servers.connectTimeoutSeconds
+            - network.servers.reconnectIntervalSeconds
+            - network.servers.keepaliveMinutes
+            - network.servers.sessionRotationSeconds
+            - network.servers.deadServerRetries
+            - network.hostnameLookup.enabled
+            - network.hostnameLookup.dnsServers
+            - network.nat.enabled
+            - network.nat.requireInitialMapping
+            - network.nat.backendOrder
+            - network.nat.pcpServerIp
+            - network.nat.igdIp
+            - network.nat.externalIpOverride
+            - transfers.uploadLimitBytesPerSecond
+            - transfers.downloadLimitBytesPerSecond
+            - transfers.maxConcurrentDownloads
+            - transfers.maxSourcesPerFile
+            - transfers.maxParallelDownloadPeers
+            - transfers.upload.targetClientRateBytesPerSecond
+            - transfers.upload.baseSlots
+            - transfers.upload.elasticPercent
+            - transfers.upload.queueCapacity
+            - transfers.upload.sessionTransferPercent
+            - transfers.upload.sessionTimeLimitSeconds
+            - transfers.upload.creditSystemEnabled
+            - storage.incomingDirectory
+            - storage.tempDirectory
+            - storage.minFreeProfileBytes
+            - storage.minFreeTempBytes
+            - storage.minFreeIncomingBytes
+            - sharing.scanOnStartup
+            - sharing.kadPublishingEnabled
+            - security.obfuscationEnabled
+            - security.vpnGuard.mode
+            - security.vpnGuard.allowedPublicIpCidrs
+            - security.ipFilter.enabled
+            - security.ipFilter.filePath
+            - security.ipFilter.level
+            - security.tcpErrorFloodDetection.enabled
+            - security.tcpErrorFloodDetection.intervalSeconds
+            - security.tcpErrorFloodDetection.threshold
             type: string
-          description: Explicit DNS server IPv4 or IPv4:port entries for bound reverse-DNS lookup.
-        cacheTtlSecs:
-          type: integer
-          minimum: 1
-        maxLookupsPerTick:
-          type: integer
-          minimum: 1
-        tickIntervalSecs:
-          type: integer
-          minimum: 5
-    Ed2kSettingsUpdate:
-      type: object
-      additionalProperties: false
-      minProperties: 1
-      properties:
-        listenPort:
-          type: [integer, "null"]
-          minimum: 1
-          maximum: 65535
-        nickname:
-          type: string
-          maxLength: 50
-        obfuscationEnabled:
-          type: boolean
-        probeSearchTerm:
-          type: [string, "null"]
-        connectTimeoutSecs:
-          type: integer
-          minimum: 0
-        serverConnectTimeoutSecs:
-          type: integer
-          minimum: 0
-        callbackTimeoutSecs:
-          type: integer
-          minimum: 0
-        reconnectIntervalSecs:
-          type: integer
-          minimum: 0
-        reconnectEnabled:
-          type: boolean
-          description: Automatically reconnect after an ED2K server session ends; owned only by the ed2k settings block.
-        safeServerConnect:
-          type: boolean
-          description: Limit automatic server connection attempts to one at a time; stock default false.
-        useServerPriorities:
-          type: boolean
-          description: Apply stable high, normal, then low server-priority ordering; stock default true.
-        autoConnectStaticOnly:
-          type: boolean
-          description: Restrict application startup auto-connect to static servers; explicit targeted connects are unaffected.
-        serverKeepaliveMinutes:
-          type: integer
-          minimum: 0
-          maximum: 1440
-          description: Whole-minute idle ED2K server keepalive interval; 0 disables keepalive and is the default.
-        sessionRotationSecs:
-          type: integer
-          minimum: 0
-        maxConcurrentDownloads:
-          type: integer
-          minimum: 0
-        maxNewConnectionsPerFiveSeconds:
-          type: integer
-          minimum: 0
-        maxHalfOpenConnections:
-          type: integer
-          minimum: 0
-        maxSourcesPerFile:
-          type: integer
-          minimum: 0
-        maxParallelDownloadPeers:
-          type: integer
-          minimum: 1
-        keywordServerAttemptBudget:
-          type: integer
-          minimum: 1
-        exactHashKeywordServerAttemptBudget:
-          type: integer
-          minimum: 1
-        sourceServerAttemptBudget:
-          type: integer
-          minimum: 1
-        uploadQueue:
-          $ref: "#/components/schemas/Ed2kUploadQueueSettingsUpdate"
-        downloadLimitBytesPerSec:
-          type: integer
-          minimum: 0
-        followMajorityFilenameForNewDownloads:
-          type: boolean
-          description: Let newly created transfers adopt a sufficiently corroborated filename; disabled by default.
-        followMajorityFilenameMinimumVotes:
-          type: integer
-          minimum: 0
-          maximum: 1000
-        followMajorityFilenameRequiredPercent:
-          type: integer
-          minimum: 1
-          maximum: 100
-        detectTcpErrorFlooder:
-          type: boolean
-        tcpErrorFlooderIntervalMinutes:
-          type: integer
-          minimum: 1
-          maximum: 1440
-        tcpErrorFlooderThreshold:
-          type: integer
-          minimum: 1
-          maximum: 1000
-        minFreeConfigSpaceBytes:
-          type: integer
-          minimum: 1073741824
-          maximum: 5497558138880
-          description: Raw-byte free-space floor for the profile/config volume; MFC default is 1 GiB.
-        minFreeTransferSpaceBytes:
-          type: integer
-          minimum: 5368709120
-          maximum: 5497558138880
-          description: Raw-byte free-space floor for incomplete-transfer volumes; MFC default is 5 GiB.
-        minFreeIncomingSpaceBytes:
-          type: integer
-          minimum: 5368709120
-          maximum: 5497558138880
-          description: Raw-byte free-space floor for incoming/destination volumes; MFC default is 5 GiB.
-        enableUdpReask:
-          type: boolean
-        publishEmuleRustIdentity:
-          type: boolean
-        offerFilesCapabilityEnabled:
-          type: boolean
-          description: Honor a complete validated offerfiles_v=1 server pacing advertisement; restart required.
-        addServersFromServer:
-          type: boolean
-          description: Add servers advertised by a connected server through OP_SERVERLIST; stock default false.
-        deadServerRetries:
-          type: integer
-          minimum: 1
-          maximum: 10
-    Ed2kSettings:
-      type: object
-      additionalProperties: false
-      properties:
-        listenPort:
-          type: [integer, "null"]
-          minimum: 1
-          maximum: 65535
-        nickname:
-          type: string
-          maxLength: 50
-        obfuscationEnabled:
-          type: boolean
-        probeSearchTerm:
-          type: [string, "null"]
-        connectTimeoutSecs:
-          type: integer
-          minimum: 0
-        serverConnectTimeoutSecs:
-          type: integer
-          minimum: 0
-        callbackTimeoutSecs:
-          type: integer
-          minimum: 0
-        reconnectIntervalSecs:
-          type: integer
-          minimum: 0
-        reconnectEnabled:
-          type: boolean
-          description: Automatically reconnect after an ED2K server session ends; owned only by the ed2k settings block.
-        safeServerConnect:
-          type: boolean
-          description: Limit automatic server connection attempts to one at a time; stock default false.
-        useServerPriorities:
-          type: boolean
-          description: Apply stable high, normal, then low server-priority ordering; stock default true.
-        autoConnectStaticOnly:
-          type: boolean
-          description: Restrict application startup auto-connect to static servers; explicit targeted connects are unaffected.
-        serverKeepaliveMinutes:
-          type: integer
-          minimum: 0
-          maximum: 1440
-          description: Whole-minute idle ED2K server keepalive interval; 0 disables keepalive and is the default.
-        sessionRotationSecs:
-          type: integer
-          minimum: 0
-        maxConcurrentDownloads:
-          type: integer
-          minimum: 0
-        maxNewConnectionsPerFiveSeconds:
-          type: integer
-          minimum: 0
-        maxHalfOpenConnections:
-          type: integer
-          minimum: 0
-        maxSourcesPerFile:
-          type: integer
-          minimum: 0
-        maxParallelDownloadPeers:
-          type: integer
-          minimum: 1
-        keywordServerAttemptBudget:
-          type: integer
-          minimum: 1
-        exactHashKeywordServerAttemptBudget:
-          type: integer
-          minimum: 1
-        sourceServerAttemptBudget:
-          type: integer
-          minimum: 1
-        uploadQueue:
-          $ref: "#/components/schemas/Ed2kUploadQueueSettings"
-        downloadLimitBytesPerSec:
-          type: integer
-          minimum: 0
-        followMajorityFilenameForNewDownloads:
-          type: boolean
-          description: Let newly created transfers adopt a sufficiently corroborated filename; disabled by default.
-        followMajorityFilenameMinimumVotes:
-          type: integer
-          minimum: 0
-          maximum: 1000
-        followMajorityFilenameRequiredPercent:
-          type: integer
-          minimum: 1
-          maximum: 100
-        detectTcpErrorFlooder:
-          type: boolean
-        tcpErrorFlooderIntervalMinutes:
-          type: integer
-          minimum: 1
-          maximum: 1440
-        tcpErrorFlooderThreshold:
-          type: integer
-          minimum: 1
-          maximum: 1000
-        minFreeConfigSpaceBytes:
-          type: integer
-          minimum: 1073741824
-          maximum: 5497558138880
-          description: Raw-byte free-space floor for the profile/config volume; MFC default is 1 GiB.
-        minFreeTransferSpaceBytes:
-          type: integer
-          minimum: 5368709120
-          maximum: 5497558138880
-          description: Raw-byte free-space floor for incomplete-transfer volumes; MFC default is 5 GiB.
-        minFreeIncomingSpaceBytes:
-          type: integer
-          minimum: 5368709120
-          maximum: 5497558138880
-          description: Raw-byte free-space floor for incoming/destination volumes; MFC default is 5 GiB.
-        enableUdpReask:
-          type: boolean
-        publishEmuleRustIdentity:
-          type: boolean
-        offerFilesCapabilityEnabled:
-          type: boolean
-          description: Honor a complete validated offerfiles_v=1 server pacing advertisement; restart required.
-        addServersFromServer:
-          type: boolean
-          description: Add servers advertised by a connected server through OP_SERVERLIST; stock default false.
-        deadServerRetries:
-          type: integer
-          minimum: 1
-          maximum: 10
-    Ed2kUploadQueueSettings:
-      type: object
-      additionalProperties: false
-      properties:
-        baseSlots:
-          type: integer
-          minimum: 1
-          maximum: 64
-        elasticPercent:
-          type: integer
-          minimum: 0
-          maximum: 100
-        uploadLimitBytesPerSec:
-          type: integer
-          minimum: 0
-        elasticUnderfillBytesPerSec:
-          type: integer
-          minimum: 0
-        elasticUnderfillSecs:
-          type: integer
-          minimum: 1
-        waitingCapacity:
-          type: integer
-          minimum: 0
-        waitingTimeoutSecs:
-          type: integer
-          minimum: 1
-        grantedTimeoutSecs:
-          type: integer
-          minimum: 1
-        uploadTimeoutSecs:
-          type: integer
-          minimum: 1
-        sessionTransferPercent:
-          type: integer
-          minimum: 0
-          maximum: 100
-        sessionTimeLimitSecs:
-          type: integer
-          minimum: 0
-    Ed2kUploadQueueSettingsUpdate:
-      type: object
-      additionalProperties: false
-      minProperties: 1
-      properties:
-        baseSlots:
-          type: integer
-          minimum: 1
-          maximum: 64
-        elasticPercent:
-          type: integer
-          minimum: 0
-          maximum: 100
-        uploadLimitBytesPerSec:
-          type: integer
-          minimum: 0
-        elasticUnderfillBytesPerSec:
-          type: integer
-          minimum: 0
-        elasticUnderfillSecs:
-          type: integer
-          minimum: 1
-        waitingCapacity:
-          type: integer
-          minimum: 0
-        waitingTimeoutSecs:
-          type: integer
-          minimum: 1
-        grantedTimeoutSecs:
-          type: integer
-          minimum: 1
-        uploadTimeoutSecs:
-          type: integer
-          minimum: 1
-        sessionTransferPercent:
-          type: integer
-          minimum: 0
-          maximum: 100
-        sessionTimeLimitSecs:
-          type: integer
-          minimum: 0
-    KadSettingsUpdate:
-      type: object
-      additionalProperties: false
-      minProperties: 1
-      properties:
-        listenPort:
-          type: [integer, "null"]
-          minimum: 1
-          maximum: 65535
-        bootstrapMinRoutingContacts:
-          type: integer
-          minimum: 1
-        localStoreEnabled:
-          type: boolean
-        localStoreKeywordTtlSecs:
-          type: integer
-          minimum: 1
-        localStoreSourceTtlSecs:
-          type: integer
-          minimum: 1
-        localStoreNotesTtlSecs:
-          type: integer
-          minimum: 1
-        localStoreKeywordCapacity:
-          type: integer
-          minimum: 1
-        localStoreSourceCapacity:
-          type: integer
-          minimum: 1
-        localStoreNotesCapacity:
-          type: integer
-          minimum: 1
-        localStoreSourcePerFileCapacity:
-          type: integer
-          minimum: 1
-        localStoreNotesPerFileCapacity:
-          type: integer
-          minimum: 1
-        publishSharedFilesEnabled:
-          type: boolean
-        republishIntervalSecs:
-          type: integer
-          minimum: 1
-        publishContactFanout:
-          type: integer
-          minimum: 1
-        udpFirewallCheckEnabled:
-          type: boolean
-        udpFirewallCheckIntervalSecs:
-          type: integer
-          minimum: 60
-        tcpFirewallCheckEnabled:
-          type: boolean
-        tcpFirewallCheckIntervalSecs:
-          type: integer
-          minimum: 60
-        buddyEnabled:
-          type: boolean
-        routingMaintenanceEnabled:
-          type: boolean
-        passiveReplayEnabled:
-          type: boolean
-    KadSettings:
-      type: object
-      additionalProperties: false
-      properties:
-        listenPort:
-          type: [integer, "null"]
-          minimum: 1
-          maximum: 65535
-        bootstrapMinRoutingContacts:
-          type: integer
-          minimum: 1
-        localStoreEnabled:
-          type: boolean
-        localStoreKeywordTtlSecs:
-          type: integer
-          minimum: 1
-        localStoreSourceTtlSecs:
-          type: integer
-          minimum: 1
-        localStoreNotesTtlSecs:
-          type: integer
-          minimum: 1
-        localStoreKeywordCapacity:
-          type: integer
-          minimum: 1
-        localStoreSourceCapacity:
-          type: integer
-          minimum: 1
-        localStoreNotesCapacity:
-          type: integer
-          minimum: 1
-        localStoreSourcePerFileCapacity:
-          type: integer
-          minimum: 1
-        localStoreNotesPerFileCapacity:
-          type: integer
-          minimum: 1
-        publishSharedFilesEnabled:
-          type: boolean
-        republishIntervalSecs:
-          type: integer
-          minimum: 1
-        publishContactFanout:
-          type: integer
-          minimum: 1
-        udpFirewallCheckEnabled:
-          type: boolean
-        udpFirewallCheckIntervalSecs:
-          type: integer
-          minimum: 60
-        tcpFirewallCheckEnabled:
-          type: boolean
-        tcpFirewallCheckIntervalSecs:
-          type: integer
-          minimum: 60
-        buddyEnabled:
-          type: boolean
-        routingMaintenanceEnabled:
-          type: boolean
-        passiveReplayEnabled:
-          type: boolean
-    NatSettings:
-      type: object
-      additionalProperties: false
-      properties:
-        enabled:
-          type: boolean
-        requireInitialMapping:
-          type: boolean
-        backendOrder:
+          maxItems: 59
           type: array
-          items:
-            type: string
-            enum: [pcp_natpmp, upnp_miniupnpc]
-        bindIp:
-          type: [string, "null"]
-          format: ipv4
-        pcpServerIp:
-          type: [string, "null"]
-          format: ipv4
-          description: Optional explicit PCP/NAT-PMP server; the protocol port is fixed at 5351.
-        igdIp:
-          type: [string, "null"]
-          format: ipv4
-        minissdpdSocket:
-          type: [string, "null"]
-          minLength: 1
-        ssdpLocalPort:
-          type: [integer, "null"]
-          minimum: 1
-          maximum: 65535
-        discoveryTimeoutSecs:
-          type: integer
-          minimum: 1
-        leaseDurationSecs:
-          type: integer
-          minimum: 1
-        renewMarginSecs:
-          type: integer
-          minimum: 1
-        externalIpOverride:
-          type: [string, "null"]
-          format: ipv4
-    NatSettingsUpdate:
+          uniqueItems: true
+      required:
+      - pendingRestart
+      - failed
       type: object
+    SettingsPartial:
       additionalProperties: false
-      minProperties: 1
       properties:
-        enabled:
-          type: boolean
-        requireInitialMapping:
-          type: boolean
-        backendOrder:
+        network:
+          additionalProperties: false
+          properties:
+            autoConnect:
+              type: boolean
+            connections:
+              additionalProperties: false
+              properties:
+                callbackTimeoutSeconds:
+                  maximum: 86400
+                  minimum: 1
+                  multipleOf: 1
+                  type: integer
+                connectTimeoutSeconds:
+                  maximum: 86400
+                  minimum: 1
+                  multipleOf: 1
+                  type: integer
+                maxConnections:
+                  maximum: 2147483647
+                  minimum: 1
+                  multipleOf: 1
+                  type: integer
+                maxHalfOpenConnections:
+                  maximum: 2147483647
+                  minimum: 1
+                  multipleOf: 1
+                  type: integer
+                maxNewConnectionsPerFiveSeconds:
+                  maximum: 2147483647
+                  minimum: 1
+                  multipleOf: 1
+                  type: integer
+              type: object
+            ed2kEnabled:
+              type: boolean
+            hostnameLookup:
+              additionalProperties: false
+              properties:
+                dnsServers:
+                  items:
+                    description: Unicast IPv4 socket address with a nonzero port.
+                    type: string
+                  maxItems: 8
+                  minItems: 0
+                  type: array
+                  uniqueItems: true
+                enabled:
+                  type: boolean
+              type: object
+            kadEnabled:
+              type: boolean
+            nat:
+              additionalProperties: false
+              properties:
+                backendOrder:
+                  items:
+                    enum:
+                    - pcp-natpmp
+                    - upnp
+                    type: string
+                  maxItems: 2
+                  minItems: 1
+                  type: array
+                  uniqueItems: true
+                enabled:
+                  type: boolean
+                externalIpOverride:
+                  anyOf:
+                  - description: Unicast IPv4 address.
+                    format: ipv4
+                    type: string
+                  - type: 'null'
+                igdIp:
+                  anyOf:
+                  - description: Unicast IPv4 address.
+                    format: ipv4
+                    type: string
+                  - type: 'null'
+                pcpServerIp:
+                  anyOf:
+                  - description: Unicast IPv4 address.
+                    format: ipv4
+                    type: string
+                  - type: 'null'
+                requireInitialMapping:
+                  type: boolean
+              type: object
+            nickname:
+              maxLength: 128
+              minLength: 1
+              pattern: ^[^\u0000-\u001F\u007F-\u009F]*$
+              type: string
+              x-maxUtf8Bytes: 128
+              x-minUtf8Bytes: 1
+            p2p:
+              additionalProperties: false
+              properties:
+                bindInterface:
+                  anyOf:
+                  - maxLength: 256
+                    minLength: 1
+                    pattern: ^[^\u0000]*$
+                    type: string
+                    x-maxUtf8Bytes: 256
+                    x-minUtf8Bytes: 1
+                  - type: 'null'
+                bindIp:
+                  anyOf:
+                  - description: Unicast IPv4 address.
+                    format: ipv4
+                    type: string
+                  - type: 'null'
+                tcpPort:
+                  maximum: 65535
+                  minimum: 1
+                  multipleOf: 1
+                  type: integer
+                udpPort:
+                  maximum: 65535
+                  minimum: 1
+                  multipleOf: 1
+                  type: integer
+              type: object
+            servers:
+              additionalProperties: false
+              properties:
+                acceptServerListUpdates:
+                  type: boolean
+                autoReconnect:
+                  type: boolean
+                connectTimeoutSeconds:
+                  maximum: 86400
+                  minimum: 1
+                  multipleOf: 1
+                  type: integer
+                deadServerRetries:
+                  maximum: 10
+                  minimum: 1
+                  multipleOf: 1
+                  type: integer
+                keepaliveMinutes:
+                  maximum: 1440
+                  minimum: 0
+                  multipleOf: 1
+                  type: integer
+                reconnectIntervalSeconds:
+                  maximum: 86400
+                  minimum: 1
+                  multipleOf: 1
+                  type: integer
+                safeConnect:
+                  type: boolean
+                sessionRotationSeconds:
+                  maximum: 86400
+                  minimum: 0
+                  multipleOf: 1
+                  type: integer
+                staticOnly:
+                  type: boolean
+                usePriorities:
+                  type: boolean
+              type: object
+          type: object
+        security:
+          additionalProperties: false
+          properties:
+            ipFilter:
+              additionalProperties: false
+              properties:
+                enabled:
+                  type: boolean
+                filePath:
+                  anyOf:
+                  - description: Profile-relative or absolute UTF-8 filesystem path without NUL. No shell, environment
+                      or tilde expansion.
+                    minLength: 1
+                    pattern: ^[^\u0000]+$
+                    type: string
+                  - type: 'null'
+                level:
+                  maximum: 4294967295
+                  minimum: 0
+                  multipleOf: 1
+                  type: integer
+              type: object
+            obfuscationEnabled:
+              type: boolean
+            tcpErrorFloodDetection:
+              additionalProperties: false
+              properties:
+                enabled:
+                  type: boolean
+                intervalSeconds:
+                  maximum: 86400
+                  minimum: 60
+                  multipleOf: 60
+                  type: integer
+                threshold:
+                  maximum: 1000
+                  minimum: 1
+                  multipleOf: 1
+                  type: integer
+              type: object
+            vpnGuard:
+              additionalProperties: false
+              properties:
+                allowedPublicIpCidrs:
+                  items:
+                    description: Canonical IPv4 CIDR with no host bits set.
+                    type: string
+                  maxItems: 256
+                  minItems: 0
+                  type: array
+                  uniqueItems: true
+                mode:
+                  enum:
+                  - 'off'
+                  - block
+                  type: string
+              type: object
+          type: object
+        sharing:
+          additionalProperties: false
+          properties:
+            kadPublishingEnabled:
+              type: boolean
+            scanOnStartup:
+              type: boolean
+          type: object
+        storage:
+          additionalProperties: false
+          properties:
+            incomingDirectory:
+              description: Profile-relative or absolute UTF-8 filesystem path without NUL. No shell, environment
+                or tilde expansion.
+              minLength: 1
+              pattern: ^[^\u0000]+$
+              type: string
+            minFreeIncomingBytes:
+              maximum: 5497558138880
+              minimum: 5368709120
+              multipleOf: 1
+              type: integer
+            minFreeProfileBytes:
+              maximum: 5497558138880
+              minimum: 1073741824
+              multipleOf: 1
+              type: integer
+            minFreeTempBytes:
+              maximum: 5497558138880
+              minimum: 5368709120
+              multipleOf: 1
+              type: integer
+            tempDirectory:
+              description: Profile-relative or absolute UTF-8 filesystem path without NUL. No shell, environment
+                or tilde expansion.
+              minLength: 1
+              pattern: ^[^\u0000]+$
+              type: string
+          type: object
+        transfers:
+          additionalProperties: false
+          properties:
+            downloadLimitBytesPerSecond:
+              maximum: 4398046509056
+              minimum: 1
+              multipleOf: 1
+              type: integer
+            maxConcurrentDownloads:
+              anyOf:
+              - maximum: 2147483647
+                minimum: 1
+                multipleOf: 1
+                type: integer
+              - type: 'null'
+            maxParallelDownloadPeers:
+              maximum: 2147483647
+              minimum: 1
+              multipleOf: 1
+              type: integer
+            maxSourcesPerFile:
+              maximum: 2147483647
+              minimum: 1
+              multipleOf: 1
+              type: integer
+            upload:
+              additionalProperties: false
+              properties:
+                baseSlots:
+                  maximum: 64
+                  minimum: 1
+                  multipleOf: 1
+                  type: integer
+                creditSystemEnabled:
+                  type: boolean
+                elasticPercent:
+                  maximum: 100
+                  minimum: 0
+                  multipleOf: 1
+                  type: integer
+                queueCapacity:
+                  maximum: 10000
+                  minimum: 2000
+                  multipleOf: 1
+                  type: integer
+                sessionTimeLimitSeconds:
+                  maximum: 86400
+                  minimum: 0
+                  multipleOf: 1
+                  type: integer
+                sessionTransferPercent:
+                  maximum: 100
+                  minimum: 0
+                  multipleOf: 1
+                  type: integer
+                targetClientRateBytesPerSecond:
+                  maximum: 4398046510080
+                  minimum: 1
+                  multipleOf: 1
+                  type: integer
+              type: object
+            uploadLimitBytesPerSecond:
+              maximum: 4398046509056
+              minimum: 1
+              multipleOf: 1
+              type: integer
+          type: object
+      type: object
+    SettingsPatch:
+      additionalProperties: false
+      description: Atomic settings edit. At least one leaf must be set or reset. Set/reset must not overlap.
+        The complete edited candidate must validate; any failure saves nothing.
+      properties:
+        expectedRevision:
+          description: Opaque positive decimal-string CAS token, at most 9223372036854775807. No leading zero.
+          maxLength: 19
+          minLength: 1
+          pattern: ^[1-9][0-9]*$
+          type: string
+          x-maximumDecimalValue: '9223372036854775807'
+        reset:
+          items:
+            enum:
+            - network.ed2kEnabled
+            - network.kadEnabled
+            - network.autoConnect
+            - network.nickname
+            - network.p2p.bindIp
+            - network.p2p.bindInterface
+            - network.p2p.tcpPort
+            - network.p2p.udpPort
+            - network.connections.maxConnections
+            - network.connections.maxNewConnectionsPerFiveSeconds
+            - network.connections.maxHalfOpenConnections
+            - network.connections.connectTimeoutSeconds
+            - network.connections.callbackTimeoutSeconds
+            - network.servers.autoReconnect
+            - network.servers.safeConnect
+            - network.servers.usePriorities
+            - network.servers.staticOnly
+            - network.servers.acceptServerListUpdates
+            - network.servers.connectTimeoutSeconds
+            - network.servers.reconnectIntervalSeconds
+            - network.servers.keepaliveMinutes
+            - network.servers.sessionRotationSeconds
+            - network.servers.deadServerRetries
+            - network.hostnameLookup.enabled
+            - network.hostnameLookup.dnsServers
+            - network.nat.enabled
+            - network.nat.requireInitialMapping
+            - network.nat.backendOrder
+            - network.nat.pcpServerIp
+            - network.nat.igdIp
+            - network.nat.externalIpOverride
+            - transfers.uploadLimitBytesPerSecond
+            - transfers.downloadLimitBytesPerSecond
+            - transfers.maxConcurrentDownloads
+            - transfers.maxSourcesPerFile
+            - transfers.maxParallelDownloadPeers
+            - transfers.upload.targetClientRateBytesPerSecond
+            - transfers.upload.baseSlots
+            - transfers.upload.elasticPercent
+            - transfers.upload.queueCapacity
+            - transfers.upload.sessionTransferPercent
+            - transfers.upload.sessionTimeLimitSeconds
+            - transfers.upload.creditSystemEnabled
+            - storage.incomingDirectory
+            - storage.tempDirectory
+            - storage.minFreeProfileBytes
+            - storage.minFreeTempBytes
+            - storage.minFreeIncomingBytes
+            - sharing.scanOnStartup
+            - sharing.kadPublishingEnabled
+            - security.obfuscationEnabled
+            - security.vpnGuard.mode
+            - security.vpnGuard.allowedPublicIpCidrs
+            - security.ipFilter.enabled
+            - security.ipFilter.filePath
+            - security.ipFilter.level
+            - security.tcpErrorFloodDetection.enabled
+            - security.tcpErrorFloodDetection.intervalSeconds
+            - security.tcpErrorFloodDetection.threshold
+            type: string
+          maxItems: 59
           type: array
-          items:
-            type: string
-            enum: [pcp_natpmp, upnp_miniupnpc]
-        bindIp:
-          type: [string, "null"]
-          format: ipv4
-        pcpServerIp:
-          type: [string, "null"]
-          format: ipv4
-          description: Optional explicit PCP/NAT-PMP server; the protocol port is fixed at 5351.
-        igdIp:
-          type: [string, "null"]
-          format: ipv4
-        minissdpdSocket:
-          type: [string, "null"]
-          minLength: 1
-        ssdpLocalPort:
-          type: [integer, "null"]
-          minimum: 1
-          maximum: 65535
-        discoveryTimeoutSecs:
-          type: integer
-          minimum: 1
-        leaseDurationSecs:
-          type: integer
-          minimum: 1
-        renewMarginSecs:
-          type: integer
-          minimum: 1
-        externalIpOverride:
-          type: [string, "null"]
-          format: ipv4
-    VpnGuardSettings:
+          uniqueItems: true
+        set:
+          additionalProperties: false
+          properties:
+            network:
+              additionalProperties: false
+              properties:
+                autoConnect:
+                  type: boolean
+                connections:
+                  additionalProperties: false
+                  properties:
+                    callbackTimeoutSeconds:
+                      maximum: 86400
+                      minimum: 1
+                      multipleOf: 1
+                      type: integer
+                    connectTimeoutSeconds:
+                      maximum: 86400
+                      minimum: 1
+                      multipleOf: 1
+                      type: integer
+                    maxConnections:
+                      maximum: 2147483647
+                      minimum: 1
+                      multipleOf: 1
+                      type: integer
+                    maxHalfOpenConnections:
+                      maximum: 2147483647
+                      minimum: 1
+                      multipleOf: 1
+                      type: integer
+                    maxNewConnectionsPerFiveSeconds:
+                      maximum: 2147483647
+                      minimum: 1
+                      multipleOf: 1
+                      type: integer
+                  type: object
+                ed2kEnabled:
+                  type: boolean
+                hostnameLookup:
+                  additionalProperties: false
+                  properties:
+                    dnsServers:
+                      items:
+                        description: Unicast IPv4 socket address with a nonzero port.
+                        type: string
+                      maxItems: 8
+                      minItems: 0
+                      type: array
+                      uniqueItems: true
+                    enabled:
+                      type: boolean
+                  type: object
+                kadEnabled:
+                  type: boolean
+                nat:
+                  additionalProperties: false
+                  properties:
+                    backendOrder:
+                      items:
+                        enum:
+                        - pcp-natpmp
+                        - upnp
+                        type: string
+                      maxItems: 2
+                      minItems: 1
+                      type: array
+                      uniqueItems: true
+                    enabled:
+                      type: boolean
+                    externalIpOverride:
+                      anyOf:
+                      - description: Unicast IPv4 address.
+                        format: ipv4
+                        type: string
+                      - type: 'null'
+                    igdIp:
+                      anyOf:
+                      - description: Unicast IPv4 address.
+                        format: ipv4
+                        type: string
+                      - type: 'null'
+                    pcpServerIp:
+                      anyOf:
+                      - description: Unicast IPv4 address.
+                        format: ipv4
+                        type: string
+                      - type: 'null'
+                    requireInitialMapping:
+                      type: boolean
+                  type: object
+                nickname:
+                  maxLength: 128
+                  minLength: 1
+                  pattern: ^[^\u0000-\u001F\u007F-\u009F]*$
+                  type: string
+                  x-maxUtf8Bytes: 128
+                  x-minUtf8Bytes: 1
+                p2p:
+                  additionalProperties: false
+                  properties:
+                    bindInterface:
+                      anyOf:
+                      - maxLength: 256
+                        minLength: 1
+                        pattern: ^[^\u0000]*$
+                        type: string
+                        x-maxUtf8Bytes: 256
+                        x-minUtf8Bytes: 1
+                      - type: 'null'
+                    bindIp:
+                      anyOf:
+                      - description: Unicast IPv4 address.
+                        format: ipv4
+                        type: string
+                      - type: 'null'
+                    tcpPort:
+                      maximum: 65535
+                      minimum: 1
+                      multipleOf: 1
+                      type: integer
+                    udpPort:
+                      maximum: 65535
+                      minimum: 1
+                      multipleOf: 1
+                      type: integer
+                  type: object
+                servers:
+                  additionalProperties: false
+                  properties:
+                    acceptServerListUpdates:
+                      type: boolean
+                    autoReconnect:
+                      type: boolean
+                    connectTimeoutSeconds:
+                      maximum: 86400
+                      minimum: 1
+                      multipleOf: 1
+                      type: integer
+                    deadServerRetries:
+                      maximum: 10
+                      minimum: 1
+                      multipleOf: 1
+                      type: integer
+                    keepaliveMinutes:
+                      maximum: 1440
+                      minimum: 0
+                      multipleOf: 1
+                      type: integer
+                    reconnectIntervalSeconds:
+                      maximum: 86400
+                      minimum: 1
+                      multipleOf: 1
+                      type: integer
+                    safeConnect:
+                      type: boolean
+                    sessionRotationSeconds:
+                      maximum: 86400
+                      minimum: 0
+                      multipleOf: 1
+                      type: integer
+                    staticOnly:
+                      type: boolean
+                    usePriorities:
+                      type: boolean
+                  type: object
+              type: object
+            security:
+              additionalProperties: false
+              properties:
+                ipFilter:
+                  additionalProperties: false
+                  properties:
+                    enabled:
+                      type: boolean
+                    filePath:
+                      anyOf:
+                      - description: Profile-relative or absolute UTF-8 filesystem path without NUL. No shell,
+                          environment or tilde expansion.
+                        minLength: 1
+                        pattern: ^[^\u0000]+$
+                        type: string
+                      - type: 'null'
+                    level:
+                      maximum: 4294967295
+                      minimum: 0
+                      multipleOf: 1
+                      type: integer
+                  type: object
+                obfuscationEnabled:
+                  type: boolean
+                tcpErrorFloodDetection:
+                  additionalProperties: false
+                  properties:
+                    enabled:
+                      type: boolean
+                    intervalSeconds:
+                      maximum: 86400
+                      minimum: 60
+                      multipleOf: 60
+                      type: integer
+                    threshold:
+                      maximum: 1000
+                      minimum: 1
+                      multipleOf: 1
+                      type: integer
+                  type: object
+                vpnGuard:
+                  additionalProperties: false
+                  properties:
+                    allowedPublicIpCidrs:
+                      items:
+                        description: Canonical IPv4 CIDR with no host bits set.
+                        type: string
+                      maxItems: 256
+                      minItems: 0
+                      type: array
+                      uniqueItems: true
+                    mode:
+                      enum:
+                      - 'off'
+                      - block
+                      type: string
+                  type: object
+              type: object
+            sharing:
+              additionalProperties: false
+              properties:
+                kadPublishingEnabled:
+                  type: boolean
+                scanOnStartup:
+                  type: boolean
+              type: object
+            storage:
+              additionalProperties: false
+              properties:
+                incomingDirectory:
+                  description: Profile-relative or absolute UTF-8 filesystem path without NUL. No shell, environment
+                    or tilde expansion.
+                  minLength: 1
+                  pattern: ^[^\u0000]+$
+                  type: string
+                minFreeIncomingBytes:
+                  maximum: 5497558138880
+                  minimum: 5368709120
+                  multipleOf: 1
+                  type: integer
+                minFreeProfileBytes:
+                  maximum: 5497558138880
+                  minimum: 1073741824
+                  multipleOf: 1
+                  type: integer
+                minFreeTempBytes:
+                  maximum: 5497558138880
+                  minimum: 5368709120
+                  multipleOf: 1
+                  type: integer
+                tempDirectory:
+                  description: Profile-relative or absolute UTF-8 filesystem path without NUL. No shell, environment
+                    or tilde expansion.
+                  minLength: 1
+                  pattern: ^[^\u0000]+$
+                  type: string
+              type: object
+            transfers:
+              additionalProperties: false
+              properties:
+                downloadLimitBytesPerSecond:
+                  maximum: 4398046509056
+                  minimum: 1
+                  multipleOf: 1
+                  type: integer
+                maxConcurrentDownloads:
+                  anyOf:
+                  - maximum: 2147483647
+                    minimum: 1
+                    multipleOf: 1
+                    type: integer
+                  - type: 'null'
+                maxParallelDownloadPeers:
+                  maximum: 2147483647
+                  minimum: 1
+                  multipleOf: 1
+                  type: integer
+                maxSourcesPerFile:
+                  maximum: 2147483647
+                  minimum: 1
+                  multipleOf: 1
+                  type: integer
+                upload:
+                  additionalProperties: false
+                  properties:
+                    baseSlots:
+                      maximum: 64
+                      minimum: 1
+                      multipleOf: 1
+                      type: integer
+                    creditSystemEnabled:
+                      type: boolean
+                    elasticPercent:
+                      maximum: 100
+                      minimum: 0
+                      multipleOf: 1
+                      type: integer
+                    queueCapacity:
+                      maximum: 10000
+                      minimum: 2000
+                      multipleOf: 1
+                      type: integer
+                    sessionTimeLimitSeconds:
+                      maximum: 86400
+                      minimum: 0
+                      multipleOf: 1
+                      type: integer
+                    sessionTransferPercent:
+                      maximum: 100
+                      minimum: 0
+                      multipleOf: 1
+                      type: integer
+                    targetClientRateBytesPerSecond:
+                      maximum: 4398046510080
+                      minimum: 1
+                      multipleOf: 1
+                      type: integer
+                  type: object
+                uploadLimitBytesPerSecond:
+                  maximum: 4398046509056
+                  minimum: 1
+                  multipleOf: 1
+                  type: integer
+              type: object
+          type: object
+      required:
+      - expectedRevision
       type: object
+      x-maxSerializedBytes: 262144
+    SettingsReadData:
+      additionalProperties: false
+      description: Coherent settings data. The containing native envelope carries the saved revision in meta.settingsRevision;
+        effective values are supplied by the runtime owner.
+      properties:
+        application:
+          additionalProperties: false
+          properties:
+            failed:
+              items:
+                additionalProperties: false
+                properties:
+                  code:
+                    enum:
+                    - applyFailed
+                    type: string
+                  key:
+                    enum:
+                    - network.ed2kEnabled
+                    - network.kadEnabled
+                    - network.autoConnect
+                    - network.nickname
+                    - network.p2p.bindIp
+                    - network.p2p.bindInterface
+                    - network.p2p.tcpPort
+                    - network.p2p.udpPort
+                    - network.connections.maxConnections
+                    - network.connections.maxNewConnectionsPerFiveSeconds
+                    - network.connections.maxHalfOpenConnections
+                    - network.connections.connectTimeoutSeconds
+                    - network.connections.callbackTimeoutSeconds
+                    - network.servers.autoReconnect
+                    - network.servers.safeConnect
+                    - network.servers.usePriorities
+                    - network.servers.staticOnly
+                    - network.servers.acceptServerListUpdates
+                    - network.servers.connectTimeoutSeconds
+                    - network.servers.reconnectIntervalSeconds
+                    - network.servers.keepaliveMinutes
+                    - network.servers.sessionRotationSeconds
+                    - network.servers.deadServerRetries
+                    - network.hostnameLookup.enabled
+                    - network.hostnameLookup.dnsServers
+                    - network.nat.enabled
+                    - network.nat.requireInitialMapping
+                    - network.nat.backendOrder
+                    - network.nat.pcpServerIp
+                    - network.nat.igdIp
+                    - network.nat.externalIpOverride
+                    - transfers.uploadLimitBytesPerSecond
+                    - transfers.downloadLimitBytesPerSecond
+                    - transfers.maxConcurrentDownloads
+                    - transfers.maxSourcesPerFile
+                    - transfers.maxParallelDownloadPeers
+                    - transfers.upload.targetClientRateBytesPerSecond
+                    - transfers.upload.baseSlots
+                    - transfers.upload.elasticPercent
+                    - transfers.upload.queueCapacity
+                    - transfers.upload.sessionTransferPercent
+                    - transfers.upload.sessionTimeLimitSeconds
+                    - transfers.upload.creditSystemEnabled
+                    - storage.incomingDirectory
+                    - storage.tempDirectory
+                    - storage.minFreeProfileBytes
+                    - storage.minFreeTempBytes
+                    - storage.minFreeIncomingBytes
+                    - sharing.scanOnStartup
+                    - sharing.kadPublishingEnabled
+                    - security.obfuscationEnabled
+                    - security.vpnGuard.mode
+                    - security.vpnGuard.allowedPublicIpCidrs
+                    - security.ipFilter.enabled
+                    - security.ipFilter.filePath
+                    - security.ipFilter.level
+                    - security.tcpErrorFloodDetection.enabled
+                    - security.tcpErrorFloodDetection.intervalSeconds
+                    - security.tcpErrorFloodDetection.threshold
+                    type: string
+                  message:
+                    maxLength: 512
+                    type: string
+                    x-maxUtf8Bytes: 512
+                  truncated:
+                    type: boolean
+                required:
+                - key
+                - code
+                - message
+                - truncated
+                type: object
+              maxItems: 59
+              type: array
+              x-uniqueBy: key
+            pendingRestart:
+              items:
+                enum:
+                - network.ed2kEnabled
+                - network.kadEnabled
+                - network.autoConnect
+                - network.nickname
+                - network.p2p.bindIp
+                - network.p2p.bindInterface
+                - network.p2p.tcpPort
+                - network.p2p.udpPort
+                - network.connections.maxConnections
+                - network.connections.maxNewConnectionsPerFiveSeconds
+                - network.connections.maxHalfOpenConnections
+                - network.connections.connectTimeoutSeconds
+                - network.connections.callbackTimeoutSeconds
+                - network.servers.autoReconnect
+                - network.servers.safeConnect
+                - network.servers.usePriorities
+                - network.servers.staticOnly
+                - network.servers.acceptServerListUpdates
+                - network.servers.connectTimeoutSeconds
+                - network.servers.reconnectIntervalSeconds
+                - network.servers.keepaliveMinutes
+                - network.servers.sessionRotationSeconds
+                - network.servers.deadServerRetries
+                - network.hostnameLookup.enabled
+                - network.hostnameLookup.dnsServers
+                - network.nat.enabled
+                - network.nat.requireInitialMapping
+                - network.nat.backendOrder
+                - network.nat.pcpServerIp
+                - network.nat.igdIp
+                - network.nat.externalIpOverride
+                - transfers.uploadLimitBytesPerSecond
+                - transfers.downloadLimitBytesPerSecond
+                - transfers.maxConcurrentDownloads
+                - transfers.maxSourcesPerFile
+                - transfers.maxParallelDownloadPeers
+                - transfers.upload.targetClientRateBytesPerSecond
+                - transfers.upload.baseSlots
+                - transfers.upload.elasticPercent
+                - transfers.upload.queueCapacity
+                - transfers.upload.sessionTransferPercent
+                - transfers.upload.sessionTimeLimitSeconds
+                - transfers.upload.creditSystemEnabled
+                - storage.incomingDirectory
+                - storage.tempDirectory
+                - storage.minFreeProfileBytes
+                - storage.minFreeTempBytes
+                - storage.minFreeIncomingBytes
+                - sharing.scanOnStartup
+                - sharing.kadPublishingEnabled
+                - security.obfuscationEnabled
+                - security.vpnGuard.mode
+                - security.vpnGuard.allowedPublicIpCidrs
+                - security.ipFilter.enabled
+                - security.ipFilter.filePath
+                - security.ipFilter.level
+                - security.tcpErrorFloodDetection.enabled
+                - security.tcpErrorFloodDetection.intervalSeconds
+                - security.tcpErrorFloodDetection.threshold
+                type: string
+              maxItems: 59
+              type: array
+              uniqueItems: true
+          required:
+          - pendingRestart
+          - failed
+          type: object
+        effective:
+          additionalProperties: false
+          properties:
+            network:
+              additionalProperties: false
+              properties:
+                autoConnect:
+                  type: boolean
+                connections:
+                  additionalProperties: false
+                  properties:
+                    callbackTimeoutSeconds:
+                      maximum: 86400
+                      minimum: 1
+                      multipleOf: 1
+                      type: integer
+                    connectTimeoutSeconds:
+                      maximum: 86400
+                      minimum: 1
+                      multipleOf: 1
+                      type: integer
+                    maxConnections:
+                      maximum: 2147483647
+                      minimum: 1
+                      multipleOf: 1
+                      type: integer
+                    maxHalfOpenConnections:
+                      maximum: 2147483647
+                      minimum: 1
+                      multipleOf: 1
+                      type: integer
+                    maxNewConnectionsPerFiveSeconds:
+                      maximum: 2147483647
+                      minimum: 1
+                      multipleOf: 1
+                      type: integer
+                  required:
+                  - maxConnections
+                  - maxNewConnectionsPerFiveSeconds
+                  - maxHalfOpenConnections
+                  - connectTimeoutSeconds
+                  - callbackTimeoutSeconds
+                  type: object
+                ed2kEnabled:
+                  type: boolean
+                hostnameLookup:
+                  additionalProperties: false
+                  properties:
+                    dnsServers:
+                      items:
+                        description: Unicast IPv4 socket address with a nonzero port.
+                        type: string
+                      maxItems: 8
+                      minItems: 0
+                      type: array
+                      uniqueItems: true
+                    enabled:
+                      type: boolean
+                  required:
+                  - enabled
+                  - dnsServers
+                  type: object
+                kadEnabled:
+                  type: boolean
+                nat:
+                  additionalProperties: false
+                  properties:
+                    backendOrder:
+                      items:
+                        enum:
+                        - pcp-natpmp
+                        - upnp
+                        type: string
+                      maxItems: 2
+                      minItems: 1
+                      type: array
+                      uniqueItems: true
+                    enabled:
+                      type: boolean
+                    externalIpOverride:
+                      anyOf:
+                      - description: Unicast IPv4 address.
+                        format: ipv4
+                        type: string
+                      - type: 'null'
+                    igdIp:
+                      anyOf:
+                      - description: Unicast IPv4 address.
+                        format: ipv4
+                        type: string
+                      - type: 'null'
+                    pcpServerIp:
+                      anyOf:
+                      - description: Unicast IPv4 address.
+                        format: ipv4
+                        type: string
+                      - type: 'null'
+                    requireInitialMapping:
+                      type: boolean
+                  required:
+                  - enabled
+                  - requireInitialMapping
+                  - backendOrder
+                  - pcpServerIp
+                  - igdIp
+                  - externalIpOverride
+                  type: object
+                nickname:
+                  maxLength: 128
+                  minLength: 1
+                  pattern: ^[^\u0000-\u001F\u007F-\u009F]*$
+                  type: string
+                  x-maxUtf8Bytes: 128
+                  x-minUtf8Bytes: 1
+                p2p:
+                  additionalProperties: false
+                  properties:
+                    bindInterface:
+                      anyOf:
+                      - maxLength: 256
+                        minLength: 1
+                        pattern: ^[^\u0000]*$
+                        type: string
+                        x-maxUtf8Bytes: 256
+                        x-minUtf8Bytes: 1
+                      - type: 'null'
+                    bindIp:
+                      anyOf:
+                      - description: Unicast IPv4 address.
+                        format: ipv4
+                        type: string
+                      - type: 'null'
+                    tcpPort:
+                      maximum: 65535
+                      minimum: 1
+                      multipleOf: 1
+                      type: integer
+                    udpPort:
+                      maximum: 65535
+                      minimum: 1
+                      multipleOf: 1
+                      type: integer
+                  required:
+                  - bindIp
+                  - bindInterface
+                  - tcpPort
+                  - udpPort
+                  type: object
+                servers:
+                  additionalProperties: false
+                  properties:
+                    acceptServerListUpdates:
+                      type: boolean
+                    autoReconnect:
+                      type: boolean
+                    connectTimeoutSeconds:
+                      maximum: 86400
+                      minimum: 1
+                      multipleOf: 1
+                      type: integer
+                    deadServerRetries:
+                      maximum: 10
+                      minimum: 1
+                      multipleOf: 1
+                      type: integer
+                    keepaliveMinutes:
+                      maximum: 1440
+                      minimum: 0
+                      multipleOf: 1
+                      type: integer
+                    reconnectIntervalSeconds:
+                      maximum: 86400
+                      minimum: 1
+                      multipleOf: 1
+                      type: integer
+                    safeConnect:
+                      type: boolean
+                    sessionRotationSeconds:
+                      maximum: 86400
+                      minimum: 0
+                      multipleOf: 1
+                      type: integer
+                    staticOnly:
+                      type: boolean
+                    usePriorities:
+                      type: boolean
+                  required:
+                  - autoReconnect
+                  - safeConnect
+                  - usePriorities
+                  - staticOnly
+                  - acceptServerListUpdates
+                  - connectTimeoutSeconds
+                  - reconnectIntervalSeconds
+                  - keepaliveMinutes
+                  - sessionRotationSeconds
+                  - deadServerRetries
+                  type: object
+              required:
+              - ed2kEnabled
+              - kadEnabled
+              - autoConnect
+              - nickname
+              - p2p
+              - connections
+              - servers
+              - hostnameLookup
+              - nat
+              type: object
+            security:
+              additionalProperties: false
+              properties:
+                ipFilter:
+                  additionalProperties: false
+                  properties:
+                    enabled:
+                      type: boolean
+                    filePath:
+                      anyOf:
+                      - description: Profile-relative or absolute UTF-8 filesystem path without NUL. No shell,
+                          environment or tilde expansion.
+                        minLength: 1
+                        pattern: ^[^\u0000]+$
+                        type: string
+                      - type: 'null'
+                    level:
+                      maximum: 4294967295
+                      minimum: 0
+                      multipleOf: 1
+                      type: integer
+                  required:
+                  - enabled
+                  - filePath
+                  - level
+                  type: object
+                obfuscationEnabled:
+                  type: boolean
+                tcpErrorFloodDetection:
+                  additionalProperties: false
+                  properties:
+                    enabled:
+                      type: boolean
+                    intervalSeconds:
+                      maximum: 86400
+                      minimum: 60
+                      multipleOf: 60
+                      type: integer
+                    threshold:
+                      maximum: 1000
+                      minimum: 1
+                      multipleOf: 1
+                      type: integer
+                  required:
+                  - enabled
+                  - intervalSeconds
+                  - threshold
+                  type: object
+                vpnGuard:
+                  additionalProperties: false
+                  properties:
+                    allowedPublicIpCidrs:
+                      items:
+                        description: Canonical IPv4 CIDR with no host bits set.
+                        type: string
+                      maxItems: 256
+                      minItems: 0
+                      type: array
+                      uniqueItems: true
+                    mode:
+                      enum:
+                      - 'off'
+                      - block
+                      type: string
+                  required:
+                  - mode
+                  - allowedPublicIpCidrs
+                  type: object
+              required:
+              - obfuscationEnabled
+              - vpnGuard
+              - ipFilter
+              - tcpErrorFloodDetection
+              type: object
+            sharing:
+              additionalProperties: false
+              properties:
+                kadPublishingEnabled:
+                  type: boolean
+                scanOnStartup:
+                  type: boolean
+              required:
+              - scanOnStartup
+              - kadPublishingEnabled
+              type: object
+            storage:
+              additionalProperties: false
+              properties:
+                incomingDirectory:
+                  description: Profile-relative or absolute UTF-8 filesystem path without NUL. No shell, environment
+                    or tilde expansion.
+                  minLength: 1
+                  pattern: ^[^\u0000]+$
+                  type: string
+                minFreeIncomingBytes:
+                  maximum: 5497558138880
+                  minimum: 5368709120
+                  multipleOf: 1
+                  type: integer
+                minFreeProfileBytes:
+                  maximum: 5497558138880
+                  minimum: 1073741824
+                  multipleOf: 1
+                  type: integer
+                minFreeTempBytes:
+                  maximum: 5497558138880
+                  minimum: 5368709120
+                  multipleOf: 1
+                  type: integer
+                tempDirectory:
+                  description: Profile-relative or absolute UTF-8 filesystem path without NUL. No shell, environment
+                    or tilde expansion.
+                  minLength: 1
+                  pattern: ^[^\u0000]+$
+                  type: string
+              required:
+              - incomingDirectory
+              - tempDirectory
+              - minFreeProfileBytes
+              - minFreeTempBytes
+              - minFreeIncomingBytes
+              type: object
+            transfers:
+              additionalProperties: false
+              properties:
+                downloadLimitBytesPerSecond:
+                  maximum: 4398046509056
+                  minimum: 1
+                  multipleOf: 1
+                  type: integer
+                maxConcurrentDownloads:
+                  anyOf:
+                  - maximum: 2147483647
+                    minimum: 1
+                    multipleOf: 1
+                    type: integer
+                  - type: 'null'
+                maxParallelDownloadPeers:
+                  maximum: 2147483647
+                  minimum: 1
+                  multipleOf: 1
+                  type: integer
+                maxSourcesPerFile:
+                  maximum: 2147483647
+                  minimum: 1
+                  multipleOf: 1
+                  type: integer
+                upload:
+                  additionalProperties: false
+                  properties:
+                    baseSlots:
+                      maximum: 64
+                      minimum: 1
+                      multipleOf: 1
+                      type: integer
+                    creditSystemEnabled:
+                      type: boolean
+                    elasticPercent:
+                      maximum: 100
+                      minimum: 0
+                      multipleOf: 1
+                      type: integer
+                    queueCapacity:
+                      maximum: 10000
+                      minimum: 2000
+                      multipleOf: 1
+                      type: integer
+                    sessionTimeLimitSeconds:
+                      maximum: 86400
+                      minimum: 0
+                      multipleOf: 1
+                      type: integer
+                    sessionTransferPercent:
+                      maximum: 100
+                      minimum: 0
+                      multipleOf: 1
+                      type: integer
+                    targetClientRateBytesPerSecond:
+                      maximum: 4398046510080
+                      minimum: 1
+                      multipleOf: 1
+                      type: integer
+                  required:
+                  - targetClientRateBytesPerSecond
+                  - baseSlots
+                  - elasticPercent
+                  - queueCapacity
+                  - sessionTransferPercent
+                  - sessionTimeLimitSeconds
+                  - creditSystemEnabled
+                  type: object
+                uploadLimitBytesPerSecond:
+                  maximum: 4398046509056
+                  minimum: 1
+                  multipleOf: 1
+                  type: integer
+              required:
+              - uploadLimitBytesPerSecond
+              - downloadLimitBytesPerSecond
+              - maxConcurrentDownloads
+              - maxSourcesPerFile
+              - maxParallelDownloadPeers
+              - upload
+              type: object
+          required:
+          - network
+          - transfers
+          - storage
+          - sharing
+          - security
+          type: object
+        saved:
+          additionalProperties: false
+          properties:
+            network:
+              additionalProperties: false
+              properties:
+                autoConnect:
+                  additionalProperties: false
+                  properties:
+                    mode:
+                      enum:
+                      - default
+                      - custom
+                      type: string
+                    value:
+                      type: boolean
+                  required:
+                  - mode
+                  - value
+                  type: object
+                connections:
+                  additionalProperties: false
+                  properties:
+                    callbackTimeoutSeconds:
+                      additionalProperties: false
+                      properties:
+                        mode:
+                          enum:
+                          - default
+                          - custom
+                          type: string
+                        value:
+                          maximum: 86400
+                          minimum: 1
+                          multipleOf: 1
+                          type: integer
+                      required:
+                      - mode
+                      - value
+                      type: object
+                    connectTimeoutSeconds:
+                      additionalProperties: false
+                      properties:
+                        mode:
+                          enum:
+                          - default
+                          - custom
+                          type: string
+                        value:
+                          maximum: 86400
+                          minimum: 1
+                          multipleOf: 1
+                          type: integer
+                      required:
+                      - mode
+                      - value
+                      type: object
+                    maxConnections:
+                      additionalProperties: false
+                      properties:
+                        mode:
+                          enum:
+                          - default
+                          - custom
+                          type: string
+                        value:
+                          maximum: 2147483647
+                          minimum: 1
+                          multipleOf: 1
+                          type: integer
+                      required:
+                      - mode
+                      - value
+                      type: object
+                    maxHalfOpenConnections:
+                      additionalProperties: false
+                      properties:
+                        mode:
+                          enum:
+                          - default
+                          - custom
+                          type: string
+                        value:
+                          maximum: 2147483647
+                          minimum: 1
+                          multipleOf: 1
+                          type: integer
+                      required:
+                      - mode
+                      - value
+                      type: object
+                    maxNewConnectionsPerFiveSeconds:
+                      additionalProperties: false
+                      properties:
+                        mode:
+                          enum:
+                          - default
+                          - custom
+                          type: string
+                        value:
+                          maximum: 2147483647
+                          minimum: 1
+                          multipleOf: 1
+                          type: integer
+                      required:
+                      - mode
+                      - value
+                      type: object
+                  required:
+                  - maxConnections
+                  - maxNewConnectionsPerFiveSeconds
+                  - maxHalfOpenConnections
+                  - connectTimeoutSeconds
+                  - callbackTimeoutSeconds
+                  type: object
+                ed2kEnabled:
+                  additionalProperties: false
+                  properties:
+                    mode:
+                      enum:
+                      - default
+                      - custom
+                      type: string
+                    value:
+                      type: boolean
+                  required:
+                  - mode
+                  - value
+                  type: object
+                hostnameLookup:
+                  additionalProperties: false
+                  properties:
+                    dnsServers:
+                      additionalProperties: false
+                      properties:
+                        mode:
+                          enum:
+                          - default
+                          - custom
+                          type: string
+                        value:
+                          items:
+                            description: Unicast IPv4 socket address with a nonzero port.
+                            type: string
+                          maxItems: 8
+                          minItems: 0
+                          type: array
+                          uniqueItems: true
+                      required:
+                      - mode
+                      - value
+                      type: object
+                    enabled:
+                      additionalProperties: false
+                      properties:
+                        mode:
+                          enum:
+                          - default
+                          - custom
+                          type: string
+                        value:
+                          type: boolean
+                      required:
+                      - mode
+                      - value
+                      type: object
+                  required:
+                  - enabled
+                  - dnsServers
+                  type: object
+                kadEnabled:
+                  additionalProperties: false
+                  properties:
+                    mode:
+                      enum:
+                      - default
+                      - custom
+                      type: string
+                    value:
+                      type: boolean
+                  required:
+                  - mode
+                  - value
+                  type: object
+                nat:
+                  additionalProperties: false
+                  properties:
+                    backendOrder:
+                      additionalProperties: false
+                      properties:
+                        mode:
+                          enum:
+                          - default
+                          - custom
+                          type: string
+                        value:
+                          items:
+                            enum:
+                            - pcp-natpmp
+                            - upnp
+                            type: string
+                          maxItems: 2
+                          minItems: 1
+                          type: array
+                          uniqueItems: true
+                      required:
+                      - mode
+                      - value
+                      type: object
+                    enabled:
+                      additionalProperties: false
+                      properties:
+                        mode:
+                          enum:
+                          - default
+                          - custom
+                          type: string
+                        value:
+                          type: boolean
+                      required:
+                      - mode
+                      - value
+                      type: object
+                    externalIpOverride:
+                      additionalProperties: false
+                      properties:
+                        mode:
+                          enum:
+                          - default
+                          - custom
+                          type: string
+                        value:
+                          anyOf:
+                          - description: Unicast IPv4 address.
+                            format: ipv4
+                            type: string
+                          - type: 'null'
+                      required:
+                      - mode
+                      - value
+                      type: object
+                    igdIp:
+                      additionalProperties: false
+                      properties:
+                        mode:
+                          enum:
+                          - default
+                          - custom
+                          type: string
+                        value:
+                          anyOf:
+                          - description: Unicast IPv4 address.
+                            format: ipv4
+                            type: string
+                          - type: 'null'
+                      required:
+                      - mode
+                      - value
+                      type: object
+                    pcpServerIp:
+                      additionalProperties: false
+                      properties:
+                        mode:
+                          enum:
+                          - default
+                          - custom
+                          type: string
+                        value:
+                          anyOf:
+                          - description: Unicast IPv4 address.
+                            format: ipv4
+                            type: string
+                          - type: 'null'
+                      required:
+                      - mode
+                      - value
+                      type: object
+                    requireInitialMapping:
+                      additionalProperties: false
+                      properties:
+                        mode:
+                          enum:
+                          - default
+                          - custom
+                          type: string
+                        value:
+                          type: boolean
+                      required:
+                      - mode
+                      - value
+                      type: object
+                  required:
+                  - enabled
+                  - requireInitialMapping
+                  - backendOrder
+                  - pcpServerIp
+                  - igdIp
+                  - externalIpOverride
+                  type: object
+                nickname:
+                  additionalProperties: false
+                  properties:
+                    mode:
+                      enum:
+                      - default
+                      - custom
+                      type: string
+                    value:
+                      maxLength: 128
+                      minLength: 1
+                      pattern: ^[^\u0000-\u001F\u007F-\u009F]*$
+                      type: string
+                      x-maxUtf8Bytes: 128
+                      x-minUtf8Bytes: 1
+                  required:
+                  - mode
+                  - value
+                  type: object
+                p2p:
+                  additionalProperties: false
+                  properties:
+                    bindInterface:
+                      additionalProperties: false
+                      properties:
+                        mode:
+                          enum:
+                          - default
+                          - custom
+                          type: string
+                        value:
+                          anyOf:
+                          - maxLength: 256
+                            minLength: 1
+                            pattern: ^[^\u0000]*$
+                            type: string
+                            x-maxUtf8Bytes: 256
+                            x-minUtf8Bytes: 1
+                          - type: 'null'
+                      required:
+                      - mode
+                      - value
+                      type: object
+                    bindIp:
+                      additionalProperties: false
+                      properties:
+                        mode:
+                          enum:
+                          - default
+                          - custom
+                          type: string
+                        value:
+                          anyOf:
+                          - description: Unicast IPv4 address.
+                            format: ipv4
+                            type: string
+                          - type: 'null'
+                      required:
+                      - mode
+                      - value
+                      type: object
+                    tcpPort:
+                      additionalProperties: false
+                      properties:
+                        mode:
+                          enum:
+                          - default
+                          - custom
+                          type: string
+                        value:
+                          maximum: 65535
+                          minimum: 1
+                          multipleOf: 1
+                          type: integer
+                      required:
+                      - mode
+                      - value
+                      type: object
+                    udpPort:
+                      additionalProperties: false
+                      properties:
+                        mode:
+                          enum:
+                          - default
+                          - custom
+                          type: string
+                        value:
+                          maximum: 65535
+                          minimum: 1
+                          multipleOf: 1
+                          type: integer
+                      required:
+                      - mode
+                      - value
+                      type: object
+                  required:
+                  - bindIp
+                  - bindInterface
+                  - tcpPort
+                  - udpPort
+                  type: object
+                servers:
+                  additionalProperties: false
+                  properties:
+                    acceptServerListUpdates:
+                      additionalProperties: false
+                      properties:
+                        mode:
+                          enum:
+                          - default
+                          - custom
+                          type: string
+                        value:
+                          type: boolean
+                      required:
+                      - mode
+                      - value
+                      type: object
+                    autoReconnect:
+                      additionalProperties: false
+                      properties:
+                        mode:
+                          enum:
+                          - default
+                          - custom
+                          type: string
+                        value:
+                          type: boolean
+                      required:
+                      - mode
+                      - value
+                      type: object
+                    connectTimeoutSeconds:
+                      additionalProperties: false
+                      properties:
+                        mode:
+                          enum:
+                          - default
+                          - custom
+                          type: string
+                        value:
+                          maximum: 86400
+                          minimum: 1
+                          multipleOf: 1
+                          type: integer
+                      required:
+                      - mode
+                      - value
+                      type: object
+                    deadServerRetries:
+                      additionalProperties: false
+                      properties:
+                        mode:
+                          enum:
+                          - default
+                          - custom
+                          type: string
+                        value:
+                          maximum: 10
+                          minimum: 1
+                          multipleOf: 1
+                          type: integer
+                      required:
+                      - mode
+                      - value
+                      type: object
+                    keepaliveMinutes:
+                      additionalProperties: false
+                      properties:
+                        mode:
+                          enum:
+                          - default
+                          - custom
+                          type: string
+                        value:
+                          maximum: 1440
+                          minimum: 0
+                          multipleOf: 1
+                          type: integer
+                      required:
+                      - mode
+                      - value
+                      type: object
+                    reconnectIntervalSeconds:
+                      additionalProperties: false
+                      properties:
+                        mode:
+                          enum:
+                          - default
+                          - custom
+                          type: string
+                        value:
+                          maximum: 86400
+                          minimum: 1
+                          multipleOf: 1
+                          type: integer
+                      required:
+                      - mode
+                      - value
+                      type: object
+                    safeConnect:
+                      additionalProperties: false
+                      properties:
+                        mode:
+                          enum:
+                          - default
+                          - custom
+                          type: string
+                        value:
+                          type: boolean
+                      required:
+                      - mode
+                      - value
+                      type: object
+                    sessionRotationSeconds:
+                      additionalProperties: false
+                      properties:
+                        mode:
+                          enum:
+                          - default
+                          - custom
+                          type: string
+                        value:
+                          maximum: 86400
+                          minimum: 0
+                          multipleOf: 1
+                          type: integer
+                      required:
+                      - mode
+                      - value
+                      type: object
+                    staticOnly:
+                      additionalProperties: false
+                      properties:
+                        mode:
+                          enum:
+                          - default
+                          - custom
+                          type: string
+                        value:
+                          type: boolean
+                      required:
+                      - mode
+                      - value
+                      type: object
+                    usePriorities:
+                      additionalProperties: false
+                      properties:
+                        mode:
+                          enum:
+                          - default
+                          - custom
+                          type: string
+                        value:
+                          type: boolean
+                      required:
+                      - mode
+                      - value
+                      type: object
+                  required:
+                  - autoReconnect
+                  - safeConnect
+                  - usePriorities
+                  - staticOnly
+                  - acceptServerListUpdates
+                  - connectTimeoutSeconds
+                  - reconnectIntervalSeconds
+                  - keepaliveMinutes
+                  - sessionRotationSeconds
+                  - deadServerRetries
+                  type: object
+              required:
+              - ed2kEnabled
+              - kadEnabled
+              - autoConnect
+              - nickname
+              - p2p
+              - connections
+              - servers
+              - hostnameLookup
+              - nat
+              type: object
+            security:
+              additionalProperties: false
+              properties:
+                ipFilter:
+                  additionalProperties: false
+                  properties:
+                    enabled:
+                      additionalProperties: false
+                      properties:
+                        mode:
+                          enum:
+                          - default
+                          - custom
+                          type: string
+                        value:
+                          type: boolean
+                      required:
+                      - mode
+                      - value
+                      type: object
+                    filePath:
+                      additionalProperties: false
+                      properties:
+                        mode:
+                          enum:
+                          - default
+                          - custom
+                          type: string
+                        value:
+                          anyOf:
+                          - description: Profile-relative or absolute UTF-8 filesystem path without NUL. No
+                              shell, environment or tilde expansion.
+                            minLength: 1
+                            pattern: ^[^\u0000]+$
+                            type: string
+                          - type: 'null'
+                      required:
+                      - mode
+                      - value
+                      type: object
+                    level:
+                      additionalProperties: false
+                      properties:
+                        mode:
+                          enum:
+                          - default
+                          - custom
+                          type: string
+                        value:
+                          maximum: 4294967295
+                          minimum: 0
+                          multipleOf: 1
+                          type: integer
+                      required:
+                      - mode
+                      - value
+                      type: object
+                  required:
+                  - enabled
+                  - filePath
+                  - level
+                  type: object
+                obfuscationEnabled:
+                  additionalProperties: false
+                  properties:
+                    mode:
+                      enum:
+                      - default
+                      - custom
+                      type: string
+                    value:
+                      type: boolean
+                  required:
+                  - mode
+                  - value
+                  type: object
+                tcpErrorFloodDetection:
+                  additionalProperties: false
+                  properties:
+                    enabled:
+                      additionalProperties: false
+                      properties:
+                        mode:
+                          enum:
+                          - default
+                          - custom
+                          type: string
+                        value:
+                          type: boolean
+                      required:
+                      - mode
+                      - value
+                      type: object
+                    intervalSeconds:
+                      additionalProperties: false
+                      properties:
+                        mode:
+                          enum:
+                          - default
+                          - custom
+                          type: string
+                        value:
+                          maximum: 86400
+                          minimum: 60
+                          multipleOf: 60
+                          type: integer
+                      required:
+                      - mode
+                      - value
+                      type: object
+                    threshold:
+                      additionalProperties: false
+                      properties:
+                        mode:
+                          enum:
+                          - default
+                          - custom
+                          type: string
+                        value:
+                          maximum: 1000
+                          minimum: 1
+                          multipleOf: 1
+                          type: integer
+                      required:
+                      - mode
+                      - value
+                      type: object
+                  required:
+                  - enabled
+                  - intervalSeconds
+                  - threshold
+                  type: object
+                vpnGuard:
+                  additionalProperties: false
+                  properties:
+                    allowedPublicIpCidrs:
+                      additionalProperties: false
+                      properties:
+                        mode:
+                          enum:
+                          - default
+                          - custom
+                          type: string
+                        value:
+                          items:
+                            description: Canonical IPv4 CIDR with no host bits set.
+                            type: string
+                          maxItems: 256
+                          minItems: 0
+                          type: array
+                          uniqueItems: true
+                      required:
+                      - mode
+                      - value
+                      type: object
+                    mode:
+                      additionalProperties: false
+                      properties:
+                        mode:
+                          enum:
+                          - default
+                          - custom
+                          type: string
+                        value:
+                          enum:
+                          - 'off'
+                          - block
+                          type: string
+                      required:
+                      - mode
+                      - value
+                      type: object
+                  required:
+                  - mode
+                  - allowedPublicIpCidrs
+                  type: object
+              required:
+              - obfuscationEnabled
+              - vpnGuard
+              - ipFilter
+              - tcpErrorFloodDetection
+              type: object
+            sharing:
+              additionalProperties: false
+              properties:
+                kadPublishingEnabled:
+                  additionalProperties: false
+                  properties:
+                    mode:
+                      enum:
+                      - default
+                      - custom
+                      type: string
+                    value:
+                      type: boolean
+                  required:
+                  - mode
+                  - value
+                  type: object
+                scanOnStartup:
+                  additionalProperties: false
+                  properties:
+                    mode:
+                      enum:
+                      - default
+                      - custom
+                      type: string
+                    value:
+                      type: boolean
+                  required:
+                  - mode
+                  - value
+                  type: object
+              required:
+              - scanOnStartup
+              - kadPublishingEnabled
+              type: object
+            storage:
+              additionalProperties: false
+              properties:
+                incomingDirectory:
+                  additionalProperties: false
+                  properties:
+                    mode:
+                      enum:
+                      - default
+                      - custom
+                      type: string
+                    value:
+                      description: Profile-relative or absolute UTF-8 filesystem path without NUL. No shell,
+                        environment or tilde expansion.
+                      minLength: 1
+                      pattern: ^[^\u0000]+$
+                      type: string
+                  required:
+                  - mode
+                  - value
+                  type: object
+                minFreeIncomingBytes:
+                  additionalProperties: false
+                  properties:
+                    mode:
+                      enum:
+                      - default
+                      - custom
+                      type: string
+                    value:
+                      maximum: 5497558138880
+                      minimum: 5368709120
+                      multipleOf: 1
+                      type: integer
+                  required:
+                  - mode
+                  - value
+                  type: object
+                minFreeProfileBytes:
+                  additionalProperties: false
+                  properties:
+                    mode:
+                      enum:
+                      - default
+                      - custom
+                      type: string
+                    value:
+                      maximum: 5497558138880
+                      minimum: 1073741824
+                      multipleOf: 1
+                      type: integer
+                  required:
+                  - mode
+                  - value
+                  type: object
+                minFreeTempBytes:
+                  additionalProperties: false
+                  properties:
+                    mode:
+                      enum:
+                      - default
+                      - custom
+                      type: string
+                    value:
+                      maximum: 5497558138880
+                      minimum: 5368709120
+                      multipleOf: 1
+                      type: integer
+                  required:
+                  - mode
+                  - value
+                  type: object
+                tempDirectory:
+                  additionalProperties: false
+                  properties:
+                    mode:
+                      enum:
+                      - default
+                      - custom
+                      type: string
+                    value:
+                      description: Profile-relative or absolute UTF-8 filesystem path without NUL. No shell,
+                        environment or tilde expansion.
+                      minLength: 1
+                      pattern: ^[^\u0000]+$
+                      type: string
+                  required:
+                  - mode
+                  - value
+                  type: object
+              required:
+              - incomingDirectory
+              - tempDirectory
+              - minFreeProfileBytes
+              - minFreeTempBytes
+              - minFreeIncomingBytes
+              type: object
+            transfers:
+              additionalProperties: false
+              properties:
+                downloadLimitBytesPerSecond:
+                  additionalProperties: false
+                  properties:
+                    mode:
+                      enum:
+                      - default
+                      - custom
+                      type: string
+                    value:
+                      maximum: 4398046509056
+                      minimum: 1
+                      multipleOf: 1
+                      type: integer
+                  required:
+                  - mode
+                  - value
+                  type: object
+                maxConcurrentDownloads:
+                  additionalProperties: false
+                  properties:
+                    mode:
+                      enum:
+                      - default
+                      - custom
+                      type: string
+                    value:
+                      anyOf:
+                      - maximum: 2147483647
+                        minimum: 1
+                        multipleOf: 1
+                        type: integer
+                      - type: 'null'
+                  required:
+                  - mode
+                  - value
+                  type: object
+                maxParallelDownloadPeers:
+                  additionalProperties: false
+                  properties:
+                    mode:
+                      enum:
+                      - default
+                      - custom
+                      type: string
+                    value:
+                      maximum: 2147483647
+                      minimum: 1
+                      multipleOf: 1
+                      type: integer
+                  required:
+                  - mode
+                  - value
+                  type: object
+                maxSourcesPerFile:
+                  additionalProperties: false
+                  properties:
+                    mode:
+                      enum:
+                      - default
+                      - custom
+                      type: string
+                    value:
+                      maximum: 2147483647
+                      minimum: 1
+                      multipleOf: 1
+                      type: integer
+                  required:
+                  - mode
+                  - value
+                  type: object
+                upload:
+                  additionalProperties: false
+                  properties:
+                    baseSlots:
+                      additionalProperties: false
+                      properties:
+                        mode:
+                          enum:
+                          - default
+                          - custom
+                          type: string
+                        value:
+                          maximum: 64
+                          minimum: 1
+                          multipleOf: 1
+                          type: integer
+                      required:
+                      - mode
+                      - value
+                      type: object
+                    creditSystemEnabled:
+                      additionalProperties: false
+                      properties:
+                        mode:
+                          enum:
+                          - default
+                          - custom
+                          type: string
+                        value:
+                          type: boolean
+                      required:
+                      - mode
+                      - value
+                      type: object
+                    elasticPercent:
+                      additionalProperties: false
+                      properties:
+                        mode:
+                          enum:
+                          - default
+                          - custom
+                          type: string
+                        value:
+                          maximum: 100
+                          minimum: 0
+                          multipleOf: 1
+                          type: integer
+                      required:
+                      - mode
+                      - value
+                      type: object
+                    queueCapacity:
+                      additionalProperties: false
+                      properties:
+                        mode:
+                          enum:
+                          - default
+                          - custom
+                          type: string
+                        value:
+                          maximum: 10000
+                          minimum: 2000
+                          multipleOf: 1
+                          type: integer
+                      required:
+                      - mode
+                      - value
+                      type: object
+                    sessionTimeLimitSeconds:
+                      additionalProperties: false
+                      properties:
+                        mode:
+                          enum:
+                          - default
+                          - custom
+                          type: string
+                        value:
+                          maximum: 86400
+                          minimum: 0
+                          multipleOf: 1
+                          type: integer
+                      required:
+                      - mode
+                      - value
+                      type: object
+                    sessionTransferPercent:
+                      additionalProperties: false
+                      properties:
+                        mode:
+                          enum:
+                          - default
+                          - custom
+                          type: string
+                        value:
+                          maximum: 100
+                          minimum: 0
+                          multipleOf: 1
+                          type: integer
+                      required:
+                      - mode
+                      - value
+                      type: object
+                    targetClientRateBytesPerSecond:
+                      additionalProperties: false
+                      properties:
+                        mode:
+                          enum:
+                          - default
+                          - custom
+                          type: string
+                        value:
+                          maximum: 4398046510080
+                          minimum: 1
+                          multipleOf: 1
+                          type: integer
+                      required:
+                      - mode
+                      - value
+                      type: object
+                  required:
+                  - targetClientRateBytesPerSecond
+                  - baseSlots
+                  - elasticPercent
+                  - queueCapacity
+                  - sessionTransferPercent
+                  - sessionTimeLimitSeconds
+                  - creditSystemEnabled
+                  type: object
+                uploadLimitBytesPerSecond:
+                  additionalProperties: false
+                  properties:
+                    mode:
+                      enum:
+                      - default
+                      - custom
+                      type: string
+                    value:
+                      maximum: 4398046509056
+                      minimum: 1
+                      multipleOf: 1
+                      type: integer
+                  required:
+                  - mode
+                  - value
+                  type: object
+              required:
+              - uploadLimitBytesPerSecond
+              - downloadLimitBytesPerSecond
+              - maxConcurrentDownloads
+              - maxSourcesPerFile
+              - maxParallelDownloadPeers
+              - upload
+              type: object
+          required:
+          - network
+          - transfers
+          - storage
+          - sharing
+          - security
+          type: object
+          x-maxSerializedBytes: 131072
+      required:
+      - saved
+      - effective
+      - application
+      type: object
+      x-maxSerializedBytes: 524288
+    SettingsRevision:
+      description: Opaque positive decimal-string CAS token, at most 9223372036854775807. No leading zero.
+      maxLength: 19
+      minLength: 1
+      pattern: ^[1-9][0-9]*$
+      type: string
+      x-maximumDecimalValue: '9223372036854775807'
+    SettingsValues:
       additionalProperties: false
       properties:
-        enabled:
-          type: boolean
-        mode:
-          type: string
-          enum: ["off", "block"]
-        allowedPublicIpCidrs:
-          type: string
-          description: Whitespace, comma, or semicolon separated public IPv4 CIDRs or host addresses; empty disables the CIDR gate.
-    VpnGuardSettingsUpdate:
+        network:
+          additionalProperties: false
+          properties:
+            autoConnect:
+              type: boolean
+            connections:
+              additionalProperties: false
+              properties:
+                callbackTimeoutSeconds:
+                  maximum: 86400
+                  minimum: 1
+                  multipleOf: 1
+                  type: integer
+                connectTimeoutSeconds:
+                  maximum: 86400
+                  minimum: 1
+                  multipleOf: 1
+                  type: integer
+                maxConnections:
+                  maximum: 2147483647
+                  minimum: 1
+                  multipleOf: 1
+                  type: integer
+                maxHalfOpenConnections:
+                  maximum: 2147483647
+                  minimum: 1
+                  multipleOf: 1
+                  type: integer
+                maxNewConnectionsPerFiveSeconds:
+                  maximum: 2147483647
+                  minimum: 1
+                  multipleOf: 1
+                  type: integer
+              required:
+              - maxConnections
+              - maxNewConnectionsPerFiveSeconds
+              - maxHalfOpenConnections
+              - connectTimeoutSeconds
+              - callbackTimeoutSeconds
+              type: object
+            ed2kEnabled:
+              type: boolean
+            hostnameLookup:
+              additionalProperties: false
+              properties:
+                dnsServers:
+                  items:
+                    description: Unicast IPv4 socket address with a nonzero port.
+                    type: string
+                  maxItems: 8
+                  minItems: 0
+                  type: array
+                  uniqueItems: true
+                enabled:
+                  type: boolean
+              required:
+              - enabled
+              - dnsServers
+              type: object
+            kadEnabled:
+              type: boolean
+            nat:
+              additionalProperties: false
+              properties:
+                backendOrder:
+                  items:
+                    enum:
+                    - pcp-natpmp
+                    - upnp
+                    type: string
+                  maxItems: 2
+                  minItems: 1
+                  type: array
+                  uniqueItems: true
+                enabled:
+                  type: boolean
+                externalIpOverride:
+                  anyOf:
+                  - description: Unicast IPv4 address.
+                    format: ipv4
+                    type: string
+                  - type: 'null'
+                igdIp:
+                  anyOf:
+                  - description: Unicast IPv4 address.
+                    format: ipv4
+                    type: string
+                  - type: 'null'
+                pcpServerIp:
+                  anyOf:
+                  - description: Unicast IPv4 address.
+                    format: ipv4
+                    type: string
+                  - type: 'null'
+                requireInitialMapping:
+                  type: boolean
+              required:
+              - enabled
+              - requireInitialMapping
+              - backendOrder
+              - pcpServerIp
+              - igdIp
+              - externalIpOverride
+              type: object
+            nickname:
+              maxLength: 128
+              minLength: 1
+              pattern: ^[^\u0000-\u001F\u007F-\u009F]*$
+              type: string
+              x-maxUtf8Bytes: 128
+              x-minUtf8Bytes: 1
+            p2p:
+              additionalProperties: false
+              properties:
+                bindInterface:
+                  anyOf:
+                  - maxLength: 256
+                    minLength: 1
+                    pattern: ^[^\u0000]*$
+                    type: string
+                    x-maxUtf8Bytes: 256
+                    x-minUtf8Bytes: 1
+                  - type: 'null'
+                bindIp:
+                  anyOf:
+                  - description: Unicast IPv4 address.
+                    format: ipv4
+                    type: string
+                  - type: 'null'
+                tcpPort:
+                  maximum: 65535
+                  minimum: 1
+                  multipleOf: 1
+                  type: integer
+                udpPort:
+                  maximum: 65535
+                  minimum: 1
+                  multipleOf: 1
+                  type: integer
+              required:
+              - bindIp
+              - bindInterface
+              - tcpPort
+              - udpPort
+              type: object
+            servers:
+              additionalProperties: false
+              properties:
+                acceptServerListUpdates:
+                  type: boolean
+                autoReconnect:
+                  type: boolean
+                connectTimeoutSeconds:
+                  maximum: 86400
+                  minimum: 1
+                  multipleOf: 1
+                  type: integer
+                deadServerRetries:
+                  maximum: 10
+                  minimum: 1
+                  multipleOf: 1
+                  type: integer
+                keepaliveMinutes:
+                  maximum: 1440
+                  minimum: 0
+                  multipleOf: 1
+                  type: integer
+                reconnectIntervalSeconds:
+                  maximum: 86400
+                  minimum: 1
+                  multipleOf: 1
+                  type: integer
+                safeConnect:
+                  type: boolean
+                sessionRotationSeconds:
+                  maximum: 86400
+                  minimum: 0
+                  multipleOf: 1
+                  type: integer
+                staticOnly:
+                  type: boolean
+                usePriorities:
+                  type: boolean
+              required:
+              - autoReconnect
+              - safeConnect
+              - usePriorities
+              - staticOnly
+              - acceptServerListUpdates
+              - connectTimeoutSeconds
+              - reconnectIntervalSeconds
+              - keepaliveMinutes
+              - sessionRotationSeconds
+              - deadServerRetries
+              type: object
+          required:
+          - ed2kEnabled
+          - kadEnabled
+          - autoConnect
+          - nickname
+          - p2p
+          - connections
+          - servers
+          - hostnameLookup
+          - nat
+          type: object
+        security:
+          additionalProperties: false
+          properties:
+            ipFilter:
+              additionalProperties: false
+              properties:
+                enabled:
+                  type: boolean
+                filePath:
+                  anyOf:
+                  - description: Profile-relative or absolute UTF-8 filesystem path without NUL. No shell, environment
+                      or tilde expansion.
+                    minLength: 1
+                    pattern: ^[^\u0000]+$
+                    type: string
+                  - type: 'null'
+                level:
+                  maximum: 4294967295
+                  minimum: 0
+                  multipleOf: 1
+                  type: integer
+              required:
+              - enabled
+              - filePath
+              - level
+              type: object
+            obfuscationEnabled:
+              type: boolean
+            tcpErrorFloodDetection:
+              additionalProperties: false
+              properties:
+                enabled:
+                  type: boolean
+                intervalSeconds:
+                  maximum: 86400
+                  minimum: 60
+                  multipleOf: 60
+                  type: integer
+                threshold:
+                  maximum: 1000
+                  minimum: 1
+                  multipleOf: 1
+                  type: integer
+              required:
+              - enabled
+              - intervalSeconds
+              - threshold
+              type: object
+            vpnGuard:
+              additionalProperties: false
+              properties:
+                allowedPublicIpCidrs:
+                  items:
+                    description: Canonical IPv4 CIDR with no host bits set.
+                    type: string
+                  maxItems: 256
+                  minItems: 0
+                  type: array
+                  uniqueItems: true
+                mode:
+                  enum:
+                  - 'off'
+                  - block
+                  type: string
+              required:
+              - mode
+              - allowedPublicIpCidrs
+              type: object
+          required:
+          - obfuscationEnabled
+          - vpnGuard
+          - ipFilter
+          - tcpErrorFloodDetection
+          type: object
+        sharing:
+          additionalProperties: false
+          properties:
+            kadPublishingEnabled:
+              type: boolean
+            scanOnStartup:
+              type: boolean
+          required:
+          - scanOnStartup
+          - kadPublishingEnabled
+          type: object
+        storage:
+          additionalProperties: false
+          properties:
+            incomingDirectory:
+              description: Profile-relative or absolute UTF-8 filesystem path without NUL. No shell, environment
+                or tilde expansion.
+              minLength: 1
+              pattern: ^[^\u0000]+$
+              type: string
+            minFreeIncomingBytes:
+              maximum: 5497558138880
+              minimum: 5368709120
+              multipleOf: 1
+              type: integer
+            minFreeProfileBytes:
+              maximum: 5497558138880
+              minimum: 1073741824
+              multipleOf: 1
+              type: integer
+            minFreeTempBytes:
+              maximum: 5497558138880
+              minimum: 5368709120
+              multipleOf: 1
+              type: integer
+            tempDirectory:
+              description: Profile-relative or absolute UTF-8 filesystem path without NUL. No shell, environment
+                or tilde expansion.
+              minLength: 1
+              pattern: ^[^\u0000]+$
+              type: string
+          required:
+          - incomingDirectory
+          - tempDirectory
+          - minFreeProfileBytes
+          - minFreeTempBytes
+          - minFreeIncomingBytes
+          type: object
+        transfers:
+          additionalProperties: false
+          properties:
+            downloadLimitBytesPerSecond:
+              maximum: 4398046509056
+              minimum: 1
+              multipleOf: 1
+              type: integer
+            maxConcurrentDownloads:
+              anyOf:
+              - maximum: 2147483647
+                minimum: 1
+                multipleOf: 1
+                type: integer
+              - type: 'null'
+            maxParallelDownloadPeers:
+              maximum: 2147483647
+              minimum: 1
+              multipleOf: 1
+              type: integer
+            maxSourcesPerFile:
+              maximum: 2147483647
+              minimum: 1
+              multipleOf: 1
+              type: integer
+            upload:
+              additionalProperties: false
+              properties:
+                baseSlots:
+                  maximum: 64
+                  minimum: 1
+                  multipleOf: 1
+                  type: integer
+                creditSystemEnabled:
+                  type: boolean
+                elasticPercent:
+                  maximum: 100
+                  minimum: 0
+                  multipleOf: 1
+                  type: integer
+                queueCapacity:
+                  maximum: 10000
+                  minimum: 2000
+                  multipleOf: 1
+                  type: integer
+                sessionTimeLimitSeconds:
+                  maximum: 86400
+                  minimum: 0
+                  multipleOf: 1
+                  type: integer
+                sessionTransferPercent:
+                  maximum: 100
+                  minimum: 0
+                  multipleOf: 1
+                  type: integer
+                targetClientRateBytesPerSecond:
+                  maximum: 4398046510080
+                  minimum: 1
+                  multipleOf: 1
+                  type: integer
+              required:
+              - targetClientRateBytesPerSecond
+              - baseSlots
+              - elasticPercent
+              - queueCapacity
+              - sessionTransferPercent
+              - sessionTimeLimitSeconds
+              - creditSystemEnabled
+              type: object
+            uploadLimitBytesPerSecond:
+              maximum: 4398046509056
+              minimum: 1
+              multipleOf: 1
+              type: integer
+          required:
+          - uploadLimitBytesPerSecond
+          - downloadLimitBytesPerSecond
+          - maxConcurrentDownloads
+          - maxSourcesPerFile
+          - maxParallelDownloadPeers
+          - upload
+          type: object
+      required:
+      - network
+      - transfers
+      - storage
+      - sharing
+      - security
       type: object
-      additionalProperties: false
-      minProperties: 1
-      properties:
-        enabled:
-          type: boolean
-        mode:
-          type: string
-          enum: ["off", "block"]
-        allowedPublicIpCidrs:
-          type: string
-          description: Whitespace, comma, or semicolon separated public IPv4 CIDRs or host addresses; empty disables the CIDR gate.
-    IpFilterSettings:
-      type: object
-      additionalProperties: false
-      properties:
-        enabled:
-          type: boolean
-        path:
-          type: [string, "null"]
-          minLength: 1
-        level:
-          type: integer
-          minimum: 0
-    IpFilterSettingsUpdate:
-      type: object
-      additionalProperties: false
-      minProperties: 1
-      properties:
-        enabled:
-          type: boolean
-        path:
-          type: [string, "null"]
-          minLength: 1
-        level:
-          type: integer
-          minimum: 0
     IpFilterStatus:
       type: object
       additionalProperties: false

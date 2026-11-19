@@ -2227,3 +2227,27 @@ Preserve evidence, branch heads and exact
 companion revisions for iterative review. Report completed phases, pending work,
 failed/unavailable gates and risks honestly. A launched process or pushed partial
 implementation does not establish the required acceptance checks.
+
+
+### Canonical settings-store checkpoint — 2026-11-19
+
+Rust commit `c3ab86b5` removes the section/key settings table and its readers,
+writers, DTOs and obsolete tests. Fresh schema 105 uses the complete typed
+`app_settings` document as the sole saved product-settings authority. Bootstrap
+TOML remains separate and unchanged. Host initialization seeds this document
+and sharing roots in one schema-creation transaction; reopening preserves explicit
+operator edits and an intentionally empty root list.
+
+Builder validation on that commit passes all 30 canonical settings tests and
+302 metadata unit tests plus three profile-ownership integration tests. The
+removed section-store tests are superseded by existing canonical-document
+coverage of validation before writes, SQL rollback, uncertain commits, concurrent
+CAS writers, revision exhaustion and startup default resolution. These scoped
+passes do not qualify the unfinished daemon/REST/WebUI integration.
+
+The OpenAPI settings components now consume the compiled declaration-generated
+schema artifact from the settings tests, rather than a second handwritten field
+catalog. The current paths are `/api/v1/settings` and `/api/v1/settings/surface`.
+Runtime endpoint validation, client adoption and integrated workspace validation
+remain required before this larger settings cut is publishable. This checkpoint
+has no PR, merge or release authorization.
