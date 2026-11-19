@@ -206,10 +206,18 @@ help/version behavior. Omission selects `current_exe().parent()` on every
 platform; an explicit profile can create a fresh selected directory. Installed
 launchers may supply an explicit writable profile.
 
-Preserve the implemented MFC-only offline operations and their limited scope:
-`import-emule-profile` (including hashes-only), `import-shared-directories` and
-`reconcile-shared-files`. Do not expand into Rust-version profile migration,
-full settings/identity import or download restoration.
+The offline import command is:
+
+```text
+emulebb-rust --profile PATH import profile EXPORT [--hashes-only]
+```
+
+It imports the supported MFC SQLite export, with its limited file metadata,
+hash/hashset, upload-statistics and optional root scope. It does not import
+settings or identity, restore downloads, or migrate existing Rust profiles.
+Library root creation and scans use REST/WebUI. Cached fingerprint comparison
+and hash reuse remain part of ordinary scanning. Offline directory-list intake
+and a standalone metadata-only scan plan are outside the CLI contract.
 
 Add:
 

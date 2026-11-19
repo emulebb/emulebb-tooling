@@ -57,9 +57,9 @@ overrides or duplicate authorities.
 
 ## Accepted settings representation
 
-Fresh schema 91 implements the typed singleton document below. Offline settings
-commands use it; runtime consumers and REST have not switched yet. Store one
-complete typed `SavedSettings` document and its revision in a singleton row:
+Store one complete typed `SavedSettings` document and its revision in a
+singleton row. Offline settings commands, Core and REST use this representation;
+daemon and client adoption follow the checkpoints in the foundation specification:
 
 ```sql
 CREATE TABLE app_settings (
