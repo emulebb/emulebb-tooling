@@ -2399,8 +2399,15 @@ in the package smoke, upload-cap writers and P2P controls. Their existing Python
 owners pass; the settings target records exact counts, logs and controlled-HTTP
 limits. Writes expose conflicts without retry; temporary limits preserve the
 original default/custom mode, and P2P controls require restart-bound saves to be
-applied before connecting. Remaining REST callers, Docker
-provisioning and WebUI settings still require adoption before an integrated push
+applied before connecting. Harness `81570df5` adopts canonical NAT matrix writes
+and effective-value checks after restart. Harness `01ed0014` corrects contract
+selection and prepares settings writes from the live revision. The native
+REST/OpenAPI campaign passes against the current staged Rust daemon, including
+local upload/friend controls, Kad/category persistence and 100,000 retained-job
+pagination/restart checks. The settings target records its exact report and
+coverage limits; combined physical-library and memory-tier qualification is
+still outstanding. Remaining Android REST callers, shared harness cleanup,
+Docker provisioning and WebUI settings still require adoption before an integrated push
 or live daemon qualification. Watcher loss reporting, the final adaptive
 scheduler and memory-tier capacity campaigns also remain unfinished. No PR,
 merge, main write or publication was performed.

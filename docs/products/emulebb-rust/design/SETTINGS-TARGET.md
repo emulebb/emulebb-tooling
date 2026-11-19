@@ -605,5 +605,33 @@ and 188 client/P2P/direct-smoke tests with one POSIX-only skip. Logs are
 Tests exercise full-width revisions, original mode restoration, restart data
 loss and conflict/apply-failure admission. They use controlled HTTP outcomes;
 they do not qualify live networks or complete the packaged transfer campaign.
-Remaining REST callers, including the NAT matrix, container provisioning and
-WebUI adoption remain pending.
+Harness `81570df5` adopts canonical settings in the NAT matrix and its direct,
+OpenVPN and Gluetun callers. The default case resets the backend order; explicit
+cases use the public backend choices. Every case verifies saved values and the
+effective configuration after restart before evaluating NAT status. Conflicts,
+lost effective values and unapplied settings stop the case. Existing Python
+owners pass 45 tests, including generated-OpenAPI validation, recorded in
+`nat-settings-first.log`. These are controlled outcomes, not live gateway proof.
+
+Harness `dd27c771` verifies the local seeder's effective upload policy through
+the canonical settings API. Harness `01ed0014` prepares the generic settings
+write with a live observed revision, keeps HTTP 200 as its success criterion,
+and selects the matching worktree's OpenAPI document by default. The generic
+probe leaves full-library scan I/O to explicitly controlled library phases.
+Unit validation exposed and replaced obsolete schema/root fixtures; the final
+three focused regressions pass in `conformance-settings-focused-final.log`.
+
+The existing native REST/OpenAPI campaign passes against Rust `f2f01d7d` and
+Harness `01ed0014`, with graceful teardown. Its authoritative report is
+`reports/rust-rest-openapi-ci/20261119T175332Z/report.json`. All 115 routes are
+registered: 90 are exercised (38 successes and 52 expected errors), and 25
+disruptive routes are intentionally skipped. Offline single-key settings,
+profile ownership, local friend/upload controls, Kad persistence and category
+persistence phases pass. Retained-job pagination traverses 100,000 jobs across
+500 pages, including 99,000 completed and 1,000 unfinished jobs, and its restart
+checks pass. The report explicitly leaves physical-library and memory-limit
+qualification false. This is Windows/local evidence, not live VPN, Linux
+container, WebUI or combined memory-tier qualification.
+
+Remaining Android REST callers, shared harness cleanup, container provisioning
+and WebUI adoption remain pending.
