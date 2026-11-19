@@ -366,11 +366,11 @@ graph TD
   recovery before publishing completion. Optional recovery failures still
   permit MD4 completion; missing live recovery coverage is queryable without
   payload reads or automatic repair hashing.
-- `reconcile-shared-files` checks live cache reuse offline without executing
-  hashing. `import-shared-directories` decodes a directory text list, collapses
-  listed descendants, merges roots, and runs the existing offline scan/hash
-  pipeline. It never starts networking. Explicit archive import and ordinary
-  runtime access remain separate operations.
+- `import profile` applies an explicit stock/MFC archive while the daemon is
+  stopped. The Python operator verifies native bindings and imported hash
+  metadata without starting scans or networking. Root management and scans use
+  REST/WebUI; ordinary scans retain native fingerprint checks and cached hash
+  reuse. Explicit archive import and runtime access remain separate operations.
 - Recovery responses use the requested part's leaves and upper-tree part
   roots. Current native file eligibility and fingerprint checks still apply.
   Missing or rejected recovery data returns protocol recovery-unavailable;
