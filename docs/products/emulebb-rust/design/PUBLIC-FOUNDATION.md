@@ -1636,6 +1636,26 @@ the full acceptance criteria when reducing peak allocation. After two failed
 full runs, investigate this path before another full campaign; do not raise the
 budget or repeat the unchanged approach.
 
+Rust `efa3c50d` removes a concrete scan/admission allocation overlap. Root scan
+snapshots retain only the path and fingerprint needed for later admission,
+without duplicate planning keys or disk identifiers. Membership input is
+consumed row by row inside the existing SQLite transaction instead of building
+another full-library vector. Both reload paths consume reused-file planning
+records before finalization. Publication fences and transaction semantics are
+unchanged; no public schema changes. Structured log markers distinguish root
+commit from complete-catalog rebuilding in subsequent diagnostic evidence.
+
+Scoped validation passes 298 metadata tests, 668 core tests and 127 daemon tests
+(plus the intentionally ignored ownership subprocess fixture exercised by its
+parent tests). A late invalid member rolls back earlier streamed admission and
+session verification. Scan coverage checks that compact root records preserve
+the original path and fingerprint. Core/daemon evidence is in
+`reports/settings-request-round-1/root-admission-core.log` and
+`reports/settings-request-round-1/root-admission-daemon.log`; branch quality
+checks pass in `reports/local-check/emulebb-rust/20261119T044347Z-a6814be6/`.
+This proves the scoped correctness checks, not resolution of the constrained
+OOM. A fresh Linux package and unchanged-budget campaign remain required.
+
 Compiler investigation uses Builder's diagnostic-only Linux collection command;
 its receipt explicitly records `qualityGatePassed:false` and
 `packageProduced:false`. Acceptance continues to require the ordinary strict
