@@ -2414,7 +2414,7 @@ APK/device qualification. Harness `8c6c700b` adopts Android public-sharing setti
 `fcb669b0` shares bounded cursor traversal with lifecycle and native conformance
 checks. Their controlled suites and a repeated native 100,000-retained-job run
 pass; the settings target records exact evidence and limits. Shared harness cleanup,
-Docker provisioning and WebUI settings still require adoption before an integrated push
-or live daemon qualification. Watcher loss reporting, the final adaptive
+Docker provisioning and WebUI settings still require adoption before complete
+cross-platform qualification. Watcher loss reporting, the final adaptive
 scheduler and memory-tier capacity campaigns also remain unfinished. No PR,
 merge, main write or publication was performed.

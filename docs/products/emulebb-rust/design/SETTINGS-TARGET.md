@@ -682,3 +682,13 @@ intentionally ignored, including the two new publication regressions. Evidence
 is retained in `reports/settings-request-round-1/bootstrap-atomic-daemon.log`.
 This is Windows evidence for bootstrap-file publication, not qualification of
 the still-planned Docker directory journal, recovery or atomic stage publication.
+
+The feature checkpoints are pushed for Rust (`d8e7f657`), Harness (`f6819c12`)
+and Tooling. Harness push validation passes 1,967 tests, with 16 platform skips
+and five deselected cases; its exact evidence is
+`reports/local-check/emulebb-build-tests/20261119T185438Z-0c3447f1/`.
+The two initially failing source-wiring assertions now check canonical settings
+while preserving the bilateral server-metadata and explicit P2P-binding gates.
+Rust branch checks and the strict documentation build pass. This is a feature
+checkpoint, with no PR, merge, main write or publication; the remaining scope
+and platform qualification above are still open.
