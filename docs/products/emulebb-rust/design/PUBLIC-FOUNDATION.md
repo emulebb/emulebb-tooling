@@ -2105,6 +2105,34 @@ belongs to `90615214`; these later changes use the two affected package suites.
 Resource read admission and the joint REST/OpenAPI/UI/Python cut remain next;
 no second root route family has been introduced.
 
+Rust `83c4630e` completes cached root-read admission through the existing
+persistence coordinator and SQL worker. Point reads and active-ID pages perform
+no filesystem probes. Page limits are 1–100 rows, additionally bounded by 32 KiB
+of native paths, with one longer path up to 64 KiB allowed on its own. SQLite
+length checks precede decoding. A byte-limited page continues from its last
+returned ID, so it neither skips the next root nor creates a client snapshot.
+Retired rows do not expand active-index traversal.
+
+The typed root projection exposes decimal-string `id`, display-only `path`,
+`watchEnabled`, `managed`, `accessible`, `shareable` and nullable
+`lastScannedAt` in Unix seconds. Cached health remains independent of read time.
+Native paths remain the internal identity; callers edit resources by ID.
+Each reply retains a 1 MiB reservation through projection, serialization or
+caller drop against the existing shared 8 MiB payload budget. Exhaustion returns
+the existing busy outcome and released replies restore admission; this is not
+a new resident cache, user setting or total daemon memory limit.
+
+The affected suites pass 306 metadata unit tests plus three integration tests,
+and 647 core unit tests plus its integration suites:
+`reports/settings-request-round-1/library-root-read-metadata.log` and
+`reports/settings-request-round-1/library-root-read-core.log`.
+Coverage includes byte-limited continuation, oversized stored-path refusal,
+managed resources, cached health, decimal IDs, second-based timestamps and
+retained reply quota through serialization and release. The next integrated
+slice is the canonical REST/OpenAPI, WebUI and Python caller cut; do not expose
+dual root contracts. Native capacity qualification and watcher overflow recovery
+remain unfinished.
+
 Compiler investigation uses Builder's diagnostic-only Linux collection command;
 its receipt explicitly records `qualityGatePassed:false` and
 `packageProduced:false`. Acceptance continues to require the ordinary strict
