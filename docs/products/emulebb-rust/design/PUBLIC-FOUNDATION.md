@@ -2207,8 +2207,27 @@ pickup/relocation/removal, controlled subtree recovery, a 10,000-event ingress
 flood, oversized-event admission, settling, cancellation and final loss drain:
 `reports/settings-request-round-1/bounded-native-core-final.log`. These tests
 prove the admission/retention mechanism, not a memory-limited native flood
-campaign. GNU qualification on this new Rust revision remains pending; the
+campaign. GNU AMD64 qualification also passes on this new Rust revision:
+strict Clippy, packet diagnostics, release compilation, 3,319 workspace test
+executions, three dedicated VPN-egress tests and native non-root package smoke.
+Build/test evidence is under
+`reports/rust-linux/gnu-amd64/c695fc0d7d3646a19fc488fc9338a9de/`; package
+lifecycle evidence is
+`reports/rust-linux/gnu-amd64/d12ae54859b84ee88978d0e9e65c026c/package-smoke.json`.
+The smoke uses Harness `a7a128f2` and contract source Tooling `f437c6a5`, and
+verifies the local transfer, partial restart and graceful shutdown. The earlier
 package receipt above belongs to `e8edf8cf` only.
+
+Harness `01fd758d` brings the physical campaign's 1,000-file watcher bursts under
+the same recovery contract. Each phase starts from an acknowledged watched root,
+keeps exact REST/SQLite path, count and hash checks, and records whether loss was
+reported. A reported loss permits one explicit REST scan through the existing
+reload observer. A failed scan is not retried, and a still-required scan fails
+acceptance even if the file counts happen to match. The preceding focused suite
+passes 119 checks; the corrected four recovery cases pass in
+`reports/settings-request-round-1/watcher-recovery-cases-final.log`, and the push
+gate passes on the committed sources. This is harness validation; the physical
+memory campaigns remain pending.
 
 Complete native subtree/flood qualification and both physical-library memory
 tiers before claiming watcher/capacity completion. GNU default-feature tests and
