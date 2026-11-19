@@ -588,5 +588,5 @@ caller run records 382 passes and one remaining cross-client assertion failure
 in `profile-callers-second.log`. After repairing that assertion, all 61 tests in
 its existing owner pass in `profile-cross-client-final.log`. These are Python
 fixture/caller checks, not live daemon or container qualification. Live REST
-settings actions, CLI workflow callers, container provisioning and WebUI adoption
+settings actions, container provisioning and WebUI adoption
 remain pending.

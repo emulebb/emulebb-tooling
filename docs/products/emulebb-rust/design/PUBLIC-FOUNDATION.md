@@ -2383,7 +2383,18 @@ branch. Harness `0cbe8481` moves the shared stopped-profile writer and its calle
 to canonical settings keys, explicit resets and the complete SQLite document;
 the section/row writers are removed. Existing Python caller suites and local
 commit checks pass after fixture repairs; the settings target records the exact
-evidence and its limits. Live REST actions, CLI workflow callers, Docker
+evidence and its limits. Harness `4b35465d` and `8f65da74` adopt the retained
+offline CLI in the operator import jobs and package ownership probes. Offline
+import validates accepted native bindings directly, without launching scans or
+networking. Its existing fast suites pass 126 tests; the final audit repair
+passes all 35 tests in that owner. A fresh Windows daemon/WebUI build passes
+with zero warnings, and both native import cases pass against the verified
+managed stage, including original/relocated paths, repeated enrichment and
+conflict preservation. Evidence is retained under
+`reports/settings-request-round-1/` as `minimal-cli-stage.log`,
+`minimal-cli-callers-first.log`, `minimal-cli-native-final.log` and
+`minimal-cli-audit-final.log`. Linux container import qualification remains
+pending. Live REST actions, Docker
 provisioning and WebUI settings still require adoption before an integrated push
 or live daemon qualification. Watcher loss reporting, the final adaptive
 scheduler and memory-tier capacity campaigns also remain unfinished. No PR,
