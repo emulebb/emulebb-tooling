@@ -2379,8 +2379,12 @@ changed content is still planned for hashing. The standalone scan-plan wrapper
 and text-list intake implementation have been removed.
 
 The Rust working tree is clean and changes remain local on the existing feature
-branch. Existing Python launch/import workflows, Docker provisioning and WebUI
-settings still require adoption of the current contract before an integrated
-push or live daemon qualification. Watcher loss reporting, the final adaptive
+branch. Harness `0cbe8481` moves the shared stopped-profile writer and its callers
+to canonical settings keys, explicit resets and the complete SQLite document;
+the section/row writers are removed. Existing Python caller suites and local
+commit checks pass after fixture repairs; the settings target records the exact
+evidence and its limits. Live REST actions, CLI workflow callers, Docker
+provisioning and WebUI settings still require adoption before an integrated push
+or live daemon qualification. Watcher loss reporting, the final adaptive
 scheduler and memory-tier capacity campaigns also remain unfinished. No PR,
 merge, main write or publication was performed.

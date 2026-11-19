@@ -575,5 +575,18 @@ partially update the document or revision.
 Rust `f2f01d7d` passes all 32 settings tests, with retained output at
 `reports/settings-request-round-1/settings-fixture-f2f01d7d.log`. Harness
 `a849396a` passes all 41 tests in the existing `test_rust_metadata.py` owner via
-Builder. The launch/import callers and container provisioning have not adopted
-the editor yet; their integration remains pending.
+Builder. Harness `0cbe8481` adopts this editor in the shared profile writer and
+its launch/import, Android peer, library qualification and upload-soak callers.
+The writer accepts canonical dotted keys and resets, validates supplied values
+against `SettingsPartial` in the selected OpenAPI contract, and keeps server and
+Kad bootstrap resources separate. Optional fixture inputs are omitted when not
+supplied; nullable product values remain explicit. Section/row writers are gone.
+
+Builder evidence under `reports/settings-request-round-1/` records 46 profile
+writer passes and one POSIX-only skip in `profile-writer-second.log`; the broader
+caller run records 382 passes and one remaining cross-client assertion failure
+in `profile-callers-second.log`. After repairing that assertion, all 61 tests in
+its existing owner pass in `profile-cross-client-final.log`. These are Python
+fixture/caller checks, not live daemon or container qualification. Live REST
+settings actions, CLI workflow callers, container provisioning and WebUI adoption
+remain pending.
