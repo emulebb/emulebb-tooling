@@ -43,7 +43,7 @@ tags:
   - name: Categories
   - name: Downloads
   - name: SharedFiles
-  - name: SharedDirectories
+  - name: Library
   - name: Uploads
   - name: Servers
   - name: Kad
@@ -1665,131 +1665,226 @@ paths:
           $ref: "#/components/responses/ErrorResponse"
         default:
           $ref: "#/components/responses/ErrorResponse"
-  /shared-directories:
+  /library/roots:
     get:
-      tags: [SharedDirectories]
-      summary: List configured shared directory roots.
-      description: >-
-        Returns cached configuration and last observed health from the existing
-        monitor or explicit scans, without a fresh filesystem probe per request.
-        Accessibility is an observation, not instantaneous filesystem truth;
-        new unverified roots report false. The monitor's two-second interval is
-        not a freshness guarantee.
-      operationId: listSharedDirectories
-      responses:
-        "200":
-          $ref: "#/components/responses/SharedDirectoryListResponse"
-        "400":
-          $ref: "#/components/responses/ErrorResponse"
-        "401":
-          $ref: "#/components/responses/ErrorResponse"
-        "404":
-          $ref: "#/components/responses/ErrorResponse"
-        "405":
-          $ref: "#/components/responses/MethodNotAllowedResponse"
-        "409":
-          $ref: "#/components/responses/ErrorResponse"
-        "500":
-          $ref: "#/components/responses/ErrorResponse"
-        "503":
-          $ref: "#/components/responses/ErrorResponse"
-        default:
-          $ref: "#/components/responses/ErrorResponse"
-    patch:
-      tags: [SharedDirectories]
-      summary: Replace configured shared directory roots.
-      operationId: replaceSharedDirectories
-      description: >-
-        Roots are recursive. Listed descendants collapse under a listed parent;
-        children already covered by Incoming or category roots are not stored
-        as additional explicit roots. Unrelated siblings remain separate.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/SharedDirectoryReplaceRequest"
-      responses:
-        "200":
-          $ref: "#/components/responses/SharedDirectoryListResponse"
-        "400":
-          $ref: "#/components/responses/ErrorResponse"
-        "401":
-          $ref: "#/components/responses/ErrorResponse"
-        "404":
-          $ref: "#/components/responses/ErrorResponse"
-        "405":
-          $ref: "#/components/responses/MethodNotAllowedResponse"
-        "409":
-          $ref: "#/components/responses/ErrorResponse"
-        "500":
-          $ref: "#/components/responses/ErrorResponse"
-        "503":
-          $ref: "#/components/responses/ErrorResponse"
-        default:
-          $ref: "#/components/responses/ErrorResponse"
-  /shared-directories/roots:
-    post:
-      tags: [SharedDirectories]
-      summary: Add one configured shared directory root.
-      operationId: addSharedDirectoryRoot
-      description: >-
-        Roots are recursive. Adding a covered child is a successful no-op;
-        adding a parent consolidates existing explicit children under it.
-        Incoming and category roots retain their mandatory origins.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/SharedDirectoryRootCreateRequest"
-      responses:
-        "200":
-          $ref: "#/components/responses/SharedDirectoryListResponse"
-        "400":
-          $ref: "#/components/responses/ErrorResponse"
-        "401":
-          $ref: "#/components/responses/ErrorResponse"
-        "404":
-          $ref: "#/components/responses/ErrorResponse"
-        "405":
-          $ref: "#/components/responses/MethodNotAllowedResponse"
-        "409":
-          $ref: "#/components/responses/ErrorResponse"
-        "500":
-          $ref: "#/components/responses/ErrorResponse"
-        "503":
-          $ref: "#/components/responses/ErrorResponse"
-        default:
-          $ref: "#/components/responses/ErrorResponse"
-    delete:
-      tags: [SharedDirectories]
-      summary: Remove one configured shared directory root.
-      operationId: removeSharedDirectoryRoot
+      tags:
+      - Library
+      operationId: listLibraryRoots
+      summary: Page cached root resources.
+      description: Live ID-ordered pages bounded by count and path bytes; pages may be shorter than limit.
+        Follow nextCursor/hasMore. No filesystem probes or per-client snapshots.
       parameters:
-        - $ref: "#/components/parameters/SharedDirectoryRootPath"
+      - $ref: '#/components/parameters/LibraryRootLimit'
+      - $ref: '#/components/parameters/LibraryRootCursor'
       responses:
-        "200":
-          $ref: "#/components/responses/SharedDirectoryListResponse"
-        "400":
-          $ref: "#/components/responses/ErrorResponse"
-        "401":
-          $ref: "#/components/responses/ErrorResponse"
-        "404":
-          $ref: "#/components/responses/ErrorResponse"
-        "405":
-          $ref: "#/components/responses/MethodNotAllowedResponse"
-        "409":
-          $ref: "#/components/responses/ErrorResponse"
-        "500":
-          $ref: "#/components/responses/ErrorResponse"
-        "503":
-          $ref: "#/components/responses/ErrorResponse"
+        '200':
+          $ref: '#/components/responses/LibraryRootPageResponse'
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/ErrorResponse'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowedResponse'
+        '409':
+          $ref: '#/components/responses/ErrorResponse'
+        '500':
+          $ref: '#/components/responses/ErrorResponse'
+        '503':
+          $ref: '#/components/responses/ErrorResponse'
         default:
-          $ref: "#/components/responses/ErrorResponse"
-  /shared-directories/ignores:
+          $ref: '#/components/responses/ErrorResponse'
+        '413':
+          $ref: '#/components/responses/ErrorResponse'
+    post:
+      tags:
+      - Library
+      operationId: createLibraryRoot
+      summary: Create one recursive root.
+      description: Canonicalize and verify the directory. Duplicate and ancestor/descendant overlaps return
+        409 ROOT_CONFLICT without replacing roots. Watching defaults off. Committed scan intent survives
+        caller disconnect.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LibraryRootCreateRequest'
+      responses:
+        '201':
+          $ref: '#/components/responses/LibraryRootCreatedResponse'
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/ErrorResponse'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowedResponse'
+        '409':
+          $ref: '#/components/responses/ErrorResponse'
+        '500':
+          $ref: '#/components/responses/ErrorResponse'
+        '503':
+          $ref: '#/components/responses/ErrorResponse'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+        '413':
+          $ref: '#/components/responses/ErrorResponse'
+  /library/roots/{id}:
     get:
-      tags: [SharedDirectories]
+      tags:
+      - Library
+      operationId: getLibraryRoot
+      summary: Read cached root state.
+      parameters:
+      - $ref: '#/components/parameters/LibraryRootId'
+      responses:
+        '200':
+          $ref: '#/components/responses/LibraryRootResponse'
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/ErrorResponse'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowedResponse'
+        '409':
+          $ref: '#/components/responses/ErrorResponse'
+        '500':
+          $ref: '#/components/responses/ErrorResponse'
+        '503':
+          $ref: '#/components/responses/ErrorResponse'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+        '413':
+          $ref: '#/components/responses/ErrorResponse'
+    patch:
+      tags:
+      - Library
+      operationId: updateLibraryRoot
+      summary: Set one root watch policy.
+      description: Atomic by immutable ID, including managed roots. Does not schedule a scan or replace
+        the root collection.
+      parameters:
+      - $ref: '#/components/parameters/LibraryRootId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LibraryRootPatch'
+      responses:
+        '200':
+          $ref: '#/components/responses/LibraryRootResponse'
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/ErrorResponse'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowedResponse'
+        '409':
+          $ref: '#/components/responses/ErrorResponse'
+        '500':
+          $ref: '#/components/responses/ErrorResponse'
+        '503':
+          $ref: '#/components/responses/ErrorResponse'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+        '413':
+          $ref: '#/components/responses/ErrorResponse'
+    delete:
+      tags:
+      - Library
+      operationId: deleteLibraryRoot
+      summary: Remove one explicit root.
+      description: Withdraw eligibility through this root; preserve payload files and content knowledge.
+        Managed roots return 409 ROOT_MANAGED. Retired IDs are never reused.
+      parameters:
+      - $ref: '#/components/parameters/LibraryRootId'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContentResponse'
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/ErrorResponse'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowedResponse'
+        '409':
+          $ref: '#/components/responses/ErrorResponse'
+        '500':
+          $ref: '#/components/responses/ErrorResponse'
+        '503':
+          $ref: '#/components/responses/ErrorResponse'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+        '413':
+          $ref: '#/components/responses/ErrorResponse'
+  /library/scan:
+    get:
+      tags:
+      - Library
+      operationId: getLibraryScan
+      summary: Read bounded cached scan progress.
+      responses:
+        '200':
+          $ref: '#/components/responses/LibraryScanResponse'
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/ErrorResponse'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowedResponse'
+        '409':
+          $ref: '#/components/responses/ErrorResponse'
+        '500':
+          $ref: '#/components/responses/ErrorResponse'
+        '503':
+          $ref: '#/components/responses/ErrorResponse'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+        '413':
+          $ref: '#/components/responses/ErrorResponse'
+    post:
+      tags:
+      - Library
+      operationId: scanLibrary
+      summary: Request a library scan.
+      description: Coalesce through one retained scan worker, independent of the requesting connection.
+        GET the Location URI for progress.
+      responses:
+        '202':
+          $ref: '#/components/responses/LibraryScanAcceptedResponse'
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/ErrorResponse'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowedResponse'
+        '409':
+          $ref: '#/components/responses/ErrorResponse'
+        '500':
+          $ref: '#/components/responses/ErrorResponse'
+        '503':
+          $ref: '#/components/responses/ErrorResponse'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+        '413':
+          $ref: '#/components/responses/ErrorResponse'
+  /library/ignores:
+    get:
+      tags: [Library]
       summary: List custom file-name glob patterns and configurable default ignore rules.
       operationId: listSharedFileIgnores
       responses:
@@ -1808,7 +1903,7 @@ paths:
         default:
           $ref: "#/components/responses/ErrorResponse"
     post:
-      tags: [SharedDirectories]
+      tags: [Library]
       summary: Ignore matching file names across shared trees.
       operationId: addSharedFileIgnorePattern
       requestBody:
@@ -1833,7 +1928,7 @@ paths:
         default:
           $ref: "#/components/responses/ErrorResponse"
     delete:
-      tags: [SharedDirectories]
+      tags: [Library]
       summary: Remove one custom file-name ignore pattern.
       operationId: removeSharedFileIgnorePattern
       parameters:
@@ -1853,9 +1948,9 @@ paths:
           $ref: "#/components/responses/ErrorResponse"
         default:
           $ref: "#/components/responses/ErrorResponse"
-  /shared-directories/ignores/defaults/{ruleKey}:
+  /library/ignores/defaults/{ruleKey}:
     patch:
-      tags: [SharedDirectories]
+      tags: [Library]
       summary: Enable or disable one built-in shared-file ignore rule.
       operationId: updateSharedFileIgnoreRule
       parameters:
@@ -1878,30 +1973,6 @@ paths:
         "405":
           $ref: "#/components/responses/MethodNotAllowedResponse"
         "500":
-          $ref: "#/components/responses/ErrorResponse"
-        default:
-          $ref: "#/components/responses/ErrorResponse"
-  /shared-directories/operations/reload:
-    post:
-      tags: [SharedDirectories]
-      summary: Request a shared-directory and shared-file reload.
-      operationId: reloadSharedDirectories
-      responses:
-        "200":
-          $ref: "#/components/responses/SharedDirectoryReloadResponse"
-        "400":
-          $ref: "#/components/responses/ErrorResponse"
-        "401":
-          $ref: "#/components/responses/ErrorResponse"
-        "404":
-          $ref: "#/components/responses/ErrorResponse"
-        "405":
-          $ref: "#/components/responses/MethodNotAllowedResponse"
-        "409":
-          $ref: "#/components/responses/ErrorResponse"
-        "500":
-          $ref: "#/components/responses/ErrorResponse"
-        "503":
           $ref: "#/components/responses/ErrorResponse"
         default:
           $ref: "#/components/responses/ErrorResponse"
@@ -3398,6 +3469,27 @@ components:
         const: "2.0.0"
         example: "2.0.0"
   parameters:
+    LibraryRootId:
+      name: id
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/LibraryRootId'
+    LibraryRootLimit:
+      name: limit
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 100
+    LibraryRootCursor:
+      name: cursor
+      in: query
+      schema:
+        type: string
+        maxLength: 512
+      description: Opaque continuation for this root collection.
     SearchCursor:
       name: cursor
       in: query
@@ -3604,15 +3696,6 @@ components:
         type: string
         pattern: "^[^/]+:(6553[0-5]|655[0-2][0-9]|65[0-4][0-9]{2}|6[0-4][0-9]{3}|[1-5][0-9]{4}|[1-9][0-9]{0,3})$"
       description: URL-encoded endpoint token parsed at the final `address:port` colon.
-    SharedDirectoryRootPath:
-      name: path
-      in: query
-      required: true
-      schema:
-        type: string
-        minLength: 1
-        pattern: '\S'
-      description: Shared-directory root path to remove.
     SharedFileIgnorePattern:
       name: pattern
       in: query
@@ -3681,6 +3764,59 @@ components:
         maximum: 200
         default: 100
   responses:
+    LibraryRootResponse:
+      description: LibraryRootResponse
+      headers:
+        X-Contract-Version:
+          $ref: '#/components/headers/ContractVersionHeader'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/LibraryRootEnvelope'
+    LibraryRootCreatedResponse:
+      description: LibraryRootCreatedResponse
+      headers:
+        X-Contract-Version:
+          $ref: '#/components/headers/ContractVersionHeader'
+        Location:
+          description: Canonical resource URI.
+          schema:
+            type: string
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/LibraryRootEnvelope'
+    LibraryRootPageResponse:
+      description: LibraryRootPageResponse
+      headers:
+        X-Contract-Version:
+          $ref: '#/components/headers/ContractVersionHeader'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/LibraryRootPageEnvelope'
+    LibraryScanResponse:
+      description: LibraryScanResponse
+      headers:
+        X-Contract-Version:
+          $ref: '#/components/headers/ContractVersionHeader'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/LibraryScanEnvelope'
+    LibraryScanAcceptedResponse:
+      description: LibraryScanAcceptedResponse
+      headers:
+        X-Contract-Version:
+          $ref: '#/components/headers/ContractVersionHeader'
+        Location:
+          description: Canonical resource URI.
+          schema:
+            type: string
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/LibraryScanEnvelope'
     SearchResultPageResponse:
       description: Bounded globally sorted result summaries.
       headers:
@@ -3963,15 +4099,6 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/OkEnvelope"
-    SharedDirectoryReloadResponse:
-      description: Shared-directory reload operation envelope.
-      headers:
-        X-Contract-Version:
-          $ref: "#/components/headers/ContractVersionHeader"
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/SharedDirectoryReloadEnvelope"
     PeerBanResponse:
       description: Peer ban-state operation envelope.
       headers:
@@ -4053,15 +4180,6 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/ServerStatusEnvelope"
-    SharedDirectoryListResponse:
-      description: Shared-directory collection envelope.
-      headers:
-        X-Contract-Version:
-          $ref: "#/components/headers/ContractVersionHeader"
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/SharedDirectoryListEnvelope"
     SharedFileIgnoresResponse:
       description: Shared-file ignore policy envelope.
       headers:
@@ -4279,6 +4397,117 @@ components:
           schema:
             $ref: '#/components/schemas/DownloadCommentPageEnvelope'
   schemas:
+    LibraryRootId:
+      type: string
+      minLength: 1
+      maxLength: 19
+      pattern: ^[1-9][0-9]{0,18}(?![\s\S])
+      description: Never-reused positive decimal i64 identity; at most 9223372036854775807.
+    LibraryRoot:
+      type: object
+      additionalProperties: false
+      required:
+      - path
+      - shareable
+      - watchEnabled
+      - accessible
+      - id
+      - managed
+      - lastScannedAt
+      description: Cached root resource; use its immutable ID for edits.
+      properties:
+        path:
+          type: string
+          description: User-facing root path; Windows verbatim long-path prefixes are not exposed.
+        shareable:
+          type: boolean
+        watchEnabled:
+          type: boolean
+          description: Whether native file-event watching is enabled for this recursive root; independent
+            of sharing eligibility.
+        accessible:
+          type: boolean
+          description: Last observed accessibility; false until verified, without a fresh probe on GET.
+        id:
+          $ref: '#/components/schemas/LibraryRootId'
+        managed:
+          type: boolean
+          description: Required by incoming/category settings; cannot be deleted directly.
+        lastScannedAt:
+          type:
+          - integer
+          - 'null'
+          minimum: 0
+          description: Last completed scan as Unix seconds, or null.
+    LibraryRootCreateRequest:
+      type: object
+      additionalProperties: false
+      required:
+      - path
+      properties:
+        path:
+          type: string
+          minLength: 1
+          pattern: \S
+        watchEnabled:
+          type: boolean
+          default: false
+    LibraryRootPatch:
+      type: object
+      additionalProperties: false
+      required:
+      - watchEnabled
+      properties:
+        watchEnabled:
+          type: boolean
+    LibraryRootEnvelope:
+      type: object
+      additionalProperties: false
+      required:
+      - data
+      - meta
+      properties:
+        data:
+          $ref: '#/components/schemas/LibraryRoot'
+        meta:
+          $ref: '#/components/schemas/EnvelopeMeta'
+    LibraryRootPageEnvelope:
+      type: object
+      additionalProperties: false
+      required:
+      - data
+      - meta
+      properties:
+        data:
+          type: array
+          maxItems: 100
+          items:
+            $ref: '#/components/schemas/LibraryRoot'
+        meta:
+          $ref: '#/components/schemas/CursorPageMeta'
+    LibraryScanEnvelope:
+      type: object
+      additionalProperties: false
+      required:
+      - data
+      - meta
+      properties:
+        data:
+          $ref: '#/components/schemas/LibraryScan'
+        meta:
+          $ref: '#/components/schemas/EnvelopeMeta'
+    LibraryScan:
+      type: object
+      additionalProperties: false
+      required:
+      - hashingCount
+      - reloadProgress
+      properties:
+        hashingCount:
+          type: integer
+          minimum: 0
+        reloadProgress:
+          $ref: '#/components/schemas/SharedDirectoryReloadProgress'
     SearchResultPageEnvelope:
       type: object
       additionalProperties: false
@@ -7550,109 +7779,6 @@ components:
             - string
             - "null"
           enum: [md4, aich, null]
-    SharedDirectoryListEnvelope:
-      unevaluatedProperties: false
-      allOf:
-        - $ref: "#/components/schemas/EnvelopeBase"
-        - type: object
-          properties:
-            data:
-              $ref: "#/components/schemas/SharedDirectoryList"
-    SharedDirectoryReloadEnvelope:
-      unevaluatedProperties: false
-      allOf:
-        - $ref: "#/components/schemas/EnvelopeBase"
-        - type: object
-          properties:
-            data:
-              type: object
-              additionalProperties: false
-              required: [ok, started, queued]
-              properties:
-                ok:
-                  type: boolean
-                  const: true
-                started:
-                  type: boolean
-                queued:
-                  type: integer
-                  minimum: 0
-    SharedDirectoryList:
-      type: object
-      additionalProperties: false
-      required: [roots, hashingCount, reloadProgress]
-      properties:
-        roots:
-          type: array
-          items:
-            $ref: "#/components/schemas/SharedDirectory"
-        hashingCount:
-          type: integer
-          minimum: 0
-        reloadProgress:
-          $ref: "#/components/schemas/SharedDirectoryReloadProgress"
-        total:
-          type: integer
-          minimum: 0
-        offset:
-          type: integer
-          minimum: 0
-        limit:
-          type: integer
-          minimum: 0
-    SharedDirectory:
-      type: object
-      additionalProperties: false
-      required: [path, watchEnabled, shareable, accessible]
-      description: Roots are recursively shared. Native file-event watching is an explicit per-root opt-in and is disabled by default.
-      properties:
-        path:
-          type: string
-          description: User-facing root path; Windows verbatim long-path prefixes are not exposed.
-        shareable:
-          type: boolean
-        watchEnabled:
-          type: boolean
-          description: Whether native file-event watching is enabled for this recursive root; independent of sharing eligibility.
-        accessible:
-          type: boolean
-          description: Last observed accessibility; false until verified, without a fresh probe on GET.
-    SharedDirectoryReplaceRequest:
-      type: object
-      additionalProperties: false
-      required: [confirmReplaceRoots, roots]
-      properties:
-        confirmReplaceRoots:
-          type: boolean
-          enum: [true]
-        roots:
-          type: array
-          items:
-            $ref: "#/components/schemas/SharedDirectoryRootInput"
-    SharedDirectoryRootCreateRequest:
-      type: object
-      additionalProperties: false
-      required: [path]
-      properties:
-        path:
-          type: string
-          minLength: 1
-          pattern: '\S'
-        watchEnabled:
-          type: boolean
-          default: false
-    SharedDirectoryRootInput:
-      type: object
-      additionalProperties: false
-      required: [path]
-      properties:
-        path:
-          type: string
-          minLength: 1
-          pattern: '\S'
-        watchEnabled:
-          type: boolean
-          default: false
     SharedFileIgnoresEnvelope:
       unevaluatedProperties: false
       allOf:
