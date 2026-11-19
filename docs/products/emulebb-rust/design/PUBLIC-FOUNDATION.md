@@ -2063,10 +2063,20 @@ Current evidence under the configured output root:
   `library-root-openapi-selected-final.log`. Documentation publication checks
   pass in `library-root-docs-check.log` before that schema-reference refinement.
 
-Staged-daemon conformance, final-source native packages and both capacity tiers
-remain unqualified. Watcher event-loss/overflow recovery still requires the
-operator's choice before finishing recovery and restarting capacity campaigns.
-No PR, merge, main update, release or publication is authorized.
+The staged Windows daemon/WebUI build on `d7d1d654` passes with zero warnings:
+`logs/builds/20261119T130645Z-build-clients/build-result.json`.
+Live conformance then passes all 91 safe routes, with zero failed routes and
+graceful teardown, in `reports/rust-rest-openapi-ci/20261119T131006Z/report.json`.
+Its extended category/storage/sharing/tag/upload-accounting, retained-job,
+listener, Kad, peer and offline-settings phases pass. The retained-job phase
+explicitly records `memoryLimitQualified:false` and
+`physicalLibraryQualified:false`; it does not qualify either physical-library
+capacity tier. Final-source Linux packages and both capacity tiers remain
+unqualified. Watcher event-loss/overflow recovery still requires the operator's
+choice before finishing recovery and restarting capacity campaigns.
+The final documentation check passes in
+`reports/settings-request-round-1/library-root-docs-final-check.log` before this
+receipt update. No PR, merge, main update, release or publication is authorized.
 
 Compiler investigation uses Builder's diagnostic-only Linux collection command;
 its receipt explicitly records `qualityGatePassed:false` and
