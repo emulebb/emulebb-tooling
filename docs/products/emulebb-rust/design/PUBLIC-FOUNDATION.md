@@ -1596,11 +1596,22 @@ metric errors, leaves unavailable private/I/O measurements null, and records
 controller RSS before/after fixture preparation and alongside daemon samples.
 All 94 selected campaign tests pass in
 `reports/settings-request-round-1/container-memory-observability-python.log`.
-These fixes do not retroactively add measurements to the failed run. The next
-bounded work is to reduce the existing fixture validator's retained path
-collections without changing its coverage or the measured group, then repeat
-the same resource budget with usable memory diagnostics. The limit and
-acceptance criteria remain unchanged.
+These fixes do not retroactively add measurements to the failed run.
+
+Harness `c939b02f` reduces the existing fixture validator's transient allocation
+cost without changing its generated paths, sizes, Unicode/long-path coverage or
+acceptance criteria. It verifies each complete native relative path against its
+generated index, tracks expected-file presence in a compact byte array, retains
+only unexpected paths, and aggregates geometry bounds incrementally. A 100k
+metadata-only inventory regression measures 160,907,569 traced allocation bytes
+before the change and enforces a limit below 16 MiB afterward. Malformed-index,
+misplaced, missing, unexpected, wrong-size and duplicate-walk cases preserve
+their exact rejection/count behavior. All 101 selected campaign tests pass:
+`reports/settings-request-round-1/fixture-inventory-memory-baseline.log` and
+`reports/settings-request-round-1/fixture-inventory-memory-final.log`.
+This is a Python allocation measurement, not a daemon RSS measurement or a
+passing full-scale result. Repeat the same process-tree budget with usable
+memory diagnostics; the limit, measured scope and workload remain unchanged.
 
 Compiler investigation uses Builder's diagnostic-only Linux collection command;
 its receipt explicitly records `qualityGatePassed:false` and
