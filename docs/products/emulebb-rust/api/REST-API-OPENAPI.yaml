@@ -1866,9 +1866,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              additionalProperties: false
-              properties: {}
+              $ref: '#/components/schemas/LibraryScanRequest'
       responses:
         '202':
           $ref: '#/components/responses/LibraryScanAcceptedResponse'
@@ -4507,6 +4505,10 @@ components:
           $ref: '#/components/schemas/LibraryScan'
         meta:
           $ref: '#/components/schemas/EnvelopeMeta'
+    LibraryScanRequest:
+      type: object
+      additionalProperties: false
+      properties: {}
     LibraryScan:
       type: object
       additionalProperties: false
