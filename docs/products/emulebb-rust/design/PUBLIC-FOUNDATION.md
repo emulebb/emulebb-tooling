@@ -2021,7 +2021,7 @@ the same path from redirecting cleanup. Managed roots remain watch-editable and
 cannot be deleted independently of their owning settings/category.
 
 Point reads and active-ID pages use the retained SQL worker and do not probe
-storage. Limits are 1–100 rows, additionally bounded by 32 KiB of native paths;
+storage. Limits are 1â€“100 rows, additionally bounded by 32 KiB of native paths;
 one longer path up to 64 KiB may occupy its own page. SQLite checks lengths before
 decoding, and continuation resumes after the last returned ID. Each reply keeps
 its existing 1 MiB reservation through serialization/drop against the shared
