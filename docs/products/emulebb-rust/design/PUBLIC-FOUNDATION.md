@@ -2248,6 +2248,11 @@ passes do not qualify the unfinished daemon/REST/WebUI integration.
 The OpenAPI settings components now consume the compiled declaration-generated
 schema artifact from the settings tests, rather than a second handwritten field
 catalog. The current paths are `/api/v1/settings` and `/api/v1/settings/surface`.
+The existing Python OpenAPI route/response owners pass all 133 tests, including
+exact generated-schema comparison and the selected Rust route contract. The
+shared patch-shape checker now recognizes a nonempty `required` list as rejecting
+an empty object. The strict documentation build also passes.
+
 Runtime endpoint validation, client adoption and integrated workspace validation
 remain required before this larger settings cut is publishable. This checkpoint
 has no PR, merge or release authorization.
