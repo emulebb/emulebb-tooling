@@ -1801,6 +1801,38 @@ Non-root partial-download/restart/resume/completion smoke passes in
 These are local, unpublished artifacts. The full unchanged-budget campaign is
 still required to qualify the populated-library repair.
 
+The full campaign on Rust `169691c6`, Harness `9522a32e`, Builder `9302058` and
+Tooling `726e8261` **still fails qualification**. Evidence is retained under
+`reports/linux-containers/library/d4b19e6433b64f8789abb87d758390c0/`.
+Initial physical-library acceptance passes. A second reload plans and reuses all
+100,000 files without payload reads, commits memberships and completes catalog
+rebuilding. An OOM kill later resets a watcher-phase shared-file probe before
+watcher convergence is recorded. Elapsed time is 1,441.758 seconds; the unchanged
+cgroup records one OOM kill and a 536,977,408-byte peak. Sampled daemon/controller
+RSS peaks are 465,154,048/45,481,984 bytes, not simultaneous totals. Owned-container
+removal is confirmed; the labelled native volume retains the fixture/profile.
+
+A diagnostic extension of the existing 100k metadata test checks per-connection
+SQLite page-cache growth through `SQLITE_DBSTATUS_CACHE_USED`; it passes a bound
+below 8 MiB when constructing the library projection. The diagnostic patch and
+298-test result are retained in
+`reports/settings-request-round-1/projection-cache-probe.patch` and
+`reports/settings-request-round-1/projection-cache-baseline.log`.
+This was a diagnostic probe, not a retained product/source change. The checked
+dependency build uses ordinary bundled SQLite; the memory-temp-store flag found
+during investigation belongs to its SQLCipher-only branch. No production pragma
+was changed. This rules out that default-mode assumption, not every transient
+SQLite allocation or the watcher read path.
+
+The next investigation must collect allocation stacks instead of repeating full
+campaigns against another unmeasured hypothesis. Reuse the retained initial-phase
+proof and existing copied-profile watcher replay. Keep profiler dependencies and
+launch control in the persisted harness/Builder lane, preserve the failed source
+profile, and retain source/archive identities and trace evidence. Any additional
+memory required by profiling is diagnostic-only: it cannot satisfy the unchanged
+512 MiB workload gate or set `workloadQualified` true. No further full campaign
+until profiling identifies a bounded repair to validate.
+
 Compiler investigation uses Builder's diagnostic-only Linux collection command;
 its receipt explicitly records `qualityGatePassed:false` and
 `packageProduced:false`. Acceptance continues to require the ordinary strict
