@@ -2347,6 +2347,13 @@ Windows passes 1,477 eD2K and 688 Core executions in
 `reports/settings-request-round-1/category-byte-admission-ed2k.log` and
 `category-byte-admission-core.log` in that directory. A bounded lock-order review
 found no reachable cycle; category SQL can temporarily block cache access.
+Rust `a9dfbdf3` closes unsuccessful-hydration retirement before increasing Core
+concurrency. Admission refusal or empty hydration can follow successful storage
+preparation, so those exits now drain producers and release the Native execution
+before surrendering attempt ownership. Genuine storage errors retain the manual-
+start fault policy. A canceled allocation reply records its Native generation
+without restoring callback authority. Windows passes 690 Core executions in
+`reports/settings-request-round-1/selection-hydration-retirement-core-final.log`.
 Core scheduler limits, adaptive admission and payload qualification remain open.
 Public contracts and configured memory ceilings are unchanged.
 The 1-GiB campaign remains a final-source gate after these runtime changes;

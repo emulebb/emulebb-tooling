@@ -1310,6 +1310,31 @@ Core adaptive admission and actual payload/session qualification remain open:
   the global cache during this administrative operation. No latency target is
   claimed; no new worker, budget or retry machinery is introduced.
 
+Rust `a9dfbdf3` closes Core's unsuccessful-hydration retirement gap before raising
+admission ceilings. `ensure_job` can establish a Native storage session before
+resident hydration refuses; returning directly from that outcome abandoned
+temporary ownership across repeated queue selections. Empty/failed hydration now
+uses the same retirement as a settled network worker: cancel producers, retire
+UDP state, checkpoint/release the Native execution, and release source-file
+ownership before dropping the attempt guard. Successful hydration keeps its
+execution. Busy/Closing deferral and an empty outcome preserve healthy started
+intent; genuine preparation storage errors retain their explicit-start failure.
+If cancellation wins an allocation reply, both the guard and canceled attempt
+record the Native generation for retirement while callback authority stays
+revoked. The guard's immutable content identity is available without a hydrated
+Transfer value.
+
+Windows passes 690 Core executions in
+`reports/settings-request-round-1/selection-hydration-retirement-core-final.log`.
+Outcome-boundary tests use real begun Native storage/cache state, then exercise
+empty, Busy, Closing, storage-failure and successful hydration results. They prove
+generation retirement, removal of old cached views, preserved runnable/manual-
+fault policy, retained attempt ownership through cleanup and successful execution
+continuity. The cancellation rebind test checks recorded generation, revoked
+selection and eventual slot release. These are retirement-policy tests, not
+actual memory-pressure or higher-concurrency payload qualification; Native's
+existing admission-pressure proofs retain their own source evidence.
+
 The next bounded work is Core adaptive scheduling and payload/session
 qualification, including structural snapshots, retained session pins and held-I/O
 pressure. Core still has its engineering selection/preparation restrictions;
