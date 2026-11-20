@@ -1194,8 +1194,16 @@ before replacing the eighteen-resident restriction with byte-only admission:
   piece-checkpoint owner. Cancellation must not let a competing writer snapshot
   an older cache and overwrite the first writer's committed piece. Validate this
   with two writers, a postcommit gate, caller cancellation and old reader pins.
-  Normalize category/content lock ordering across store, hydration and cache-only
-  publication; a queued category writer must not complete a lock cycle.
+  Rust `7a6d5e89` prepares this handoff with retainable scoped guards: the exact
+  mutex and registry key live through the last guard owner. It also fixes private
+  hydration to acquire content before category, matching store/cache publication.
+  A deterministic test proves a category writer can finish while hydration waits
+  on held content. Guard tests prove retained exclusion, unrelated-key progress
+  and exact registry retirement; the existing 100,000-key churn test also passes.
+  Windows validation passes 1,462 eD2K and 688 Core executions in
+  `reports/settings-request-round-1/retained-io-lock-order-ed2k.log` and
+  `retained-io-lock-order-core.log` in that directory. Ordinary-store callers do
+  not yet transfer a retained I/O guard; their cancellation cut remains pending.
   Progress SQL must preserve authoritative shared comment/rating/upload-priority
   fields rather than restoring a stale snapshot. Reconciled backing must fit
   its preadmitted credit before commit, not discover a size refusal afterward.
@@ -1205,14 +1213,17 @@ before replacing the eighteen-resident restriction with byte-only admission:
   ordinary cache writers during preparation, and complete postcommit publication
   without further capacity admission.
 
-The next bounded slice establishes retained I/O ownership and consistent lock
-ordering for ordinary store publication, then completes its precommit admission.
+The next bounded slice transfers retained I/O ownership through every ordinary
+store caller and the SQL/cache/checkpoint owner. Reserve backing before SQL and
+prepare the reconciled resident representation before commit so publication
+cannot discover a new size/capacity refusal after durable mutation.
 Current count restrictions remain until bookkeeping and category-batch admission
 also pass. The accepted 64-MiB soft target, 128-MiB hard resident ceiling and
 separate 8-MiB transient allowance stay unchanged; no new saved setting or second
-worker pool is introduced. Only the owned-unwrap repair is accepted by the scoped
-native evidence above; ordinary-store publication and adaptive admission remain
-pending. Earlier library/package receipts retain their own source revisions.
+worker pool is introduced. Owned unwrap, guard retention and private-hydration
+lock ordering have the scoped evidence above; ordinary-store publication and
+adaptive admission remain pending. Earlier library/package receipts retain their
+own source revisions.
 
 Reads retain immutable pins; resident bytes and job slots survive cache eviction
 and release through the existing admission wake control. MD4, peer/name,

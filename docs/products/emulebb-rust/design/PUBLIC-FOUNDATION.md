@@ -2285,11 +2285,19 @@ all 1,460 Windows eD2K tests pass in
 `reports/settings-request-round-1/resident-owned-frontier-ed2k.log`. Failed
 admission preserves an immutable pin, and reader departure cannot bypass the
 working allowance. Count restrictions and all configured memory ceilings remain.
-The next bounded implementation retains job I/O ownership through ordinary-store
-publication, normalizes its category/content lock order, and admits backing
-before SQL. The runtime item retains the competing-writer and durable-authority
-acceptance criteria. Bookkeeping and category-batch accounting follow before
-count removal and adaptive scheduler qualification.
+Rust `7a6d5e89` makes the existing scoped I/O guard retainable and fixes private
+hydration's category/content lock inversion. Deterministic tests verify retained
+exclusion through last-owner release, unrelated-key progress, exact key cleanup,
+and category-writer progress while hydration waits for content. Windows passes
+1,462 eD2K and 688 Core executions in
+`reports/settings-request-round-1/retained-io-lock-order-ed2k.log` and
+`retained-io-lock-order-core.log` in that directory. This establishes the guard
+primitive; ordinary-store callers do not yet transfer it through publication.
+The next bounded implementation wires that retained I/O ownership through the
+ordinary SQL/cache/checkpoint owner and prepares reconciled backing before
+commit. The runtime item retains competing-writer, cancellation and durable-
+authority acceptance criteria. Bookkeeping and category-batch accounting follow
+before count removal and adaptive scheduler qualification.
 The 1-GiB campaign remains a final-source gate after these runtime changes;
 the 512-MiB receipt above is preserved for its actual selected revisions.
 No PR, merge, main update, release or publication is authorized.
