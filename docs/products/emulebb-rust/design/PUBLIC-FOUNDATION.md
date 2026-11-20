@@ -2495,6 +2495,16 @@ The 1-GiB campaign remains a final-source gate after these runtime changes;
 the 512-MiB receipt above is preserved for its actual selected revisions.
 No PR, merge, main update, release or publication is authorized.
 
+Rust `15148425` adds a compact, generation-fenced verified-part read for waiting
+preparation. Geometry and checkpoints share one SQLite snapshot; present bytes
+alone are never advertised as verified. The existing Native read owner retains
+a 128-KiB transient allowance with the result, without a resident manifest or
+piece-file access. Windows passes 319 metadata and 1,494 Native executions,
+without warnings, in `reports/settings-request-round-1/`:
+`waiting-verified-parts-metadata-final.log` and `waiting-verified-parts-ed2k.log`.
+Normal hooks passed. Source discovery still must consume this dependency and
+produce prepared executions; schema 107 and public contracts remain unchanged.
+
 Compiler investigation uses Builder's diagnostic-only Linux collection command;
 its receipt explicitly records `qualityGatePassed:false` and
 `packageProduced:false`. Acceptance continues to require the ordinary strict

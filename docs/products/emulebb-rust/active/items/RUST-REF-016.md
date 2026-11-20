@@ -1460,6 +1460,24 @@ commit/push hooks passed. The production scheduler still supplies no prepared
 future: discovery and Native-owner construction remain the next integration,
 not qualified behavior. Schema, public contracts and memory ceilings are unchanged.
 
+Rust `15148425` provides the compact local status needed before probing a
+known-size waiting job. One SQLite snapshot checks current generation, runnable
+intent and healthy nonterminal storage, derives data-part geometry and reads
+verified checkpoints through the existing job/piece primary key. It neither
+hydrates a manifest nor opens piece files. Present but unverified bytes remain
+false; geometry and verified extents are checked before use. The existing Native
+read owner reserves 128 KiB before allocation and retains that transient charge
+with the returned status. No schema or public API change is required.
+
+Windows passes **319 metadata and 1,494 Native executions**, without warnings,
+in `reports/settings-request-round-1/waiting-verified-parts-metadata-final.log`
+and `waiting-verified-parts-ed2k.log`. Tests cover stale/stopped/unknown/retired
+jobs, exact-multiple geometry, presence versus verification, extent corruption,
+allocation bounds and a 256-GiB waiting job with no manifest, storage or resident
+charge. The transient charge survives worker reaping and ends with result drop.
+Normal hooks passed. This is a preparation dependency; production source
+discovery and prepared execution remain unconnected.
+
 The next bounded work is ready-source selection and scarcity/burst scheduling,
 then payload/session qualification including structural snapshots, retained
 session pins and held-I/O pressure. The new dependency still requires musl,
