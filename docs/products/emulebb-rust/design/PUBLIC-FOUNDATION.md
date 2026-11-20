@@ -2308,9 +2308,18 @@ in that directory. Deterministic cases cover precommit refusal/rollback, competi
 writers, caller cancellation, old reader charges and stale catalog presentation.
 This qualifies the SQL/cache/checkpoint handoff; catalog refresh remains a
 caller-owned follow-on. The runtime item records that boundary and shutdown
-ownership. The next bounded slice charges resident bookkeeping and retained
-container capacity. Category-batch accounting follows before count removal and
-adaptive scheduler qualification.
+ownership. Rust `144081e7` replaces checkpoint dirty-piece tree nodes with
+geometry-sized, resident-charged bitmaps. Maximum supported geometry retains
+3,536 membership bytes, including after all bits are acknowledged. Allocation
+precedes SQL/cache publication; stale stopped callbacks cannot recreate dirty
+state. Windows passes 1,468 eD2K and 688 Core executions in
+`reports/settings-request-round-1/checkpoint-bitmap-ed2k-final.log` and
+`checkpoint-bitmap-core.log` in that directory.
+
+The next bounded slice charges retained cache/checkpoint table capacity. Every possible postcommit
+insertion needs precommitted capacity, including concurrent accepted owners.
+Category-batch accounting follows before slot-registry/count removal and adaptive
+scheduler qualification. Public contracts and configured memory ceilings are unchanged.
 The 1-GiB campaign remains a final-source gate after these runtime changes;
 the 512-MiB receipt above is preserved for its actual selected revisions.
 No PR, merge, main update, release or publication is authorized.

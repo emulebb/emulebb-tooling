@@ -1177,7 +1177,7 @@ This measures backing capacities, not allocator metadata or total daemon RSS.
 The bounded resident-accounting review of Rust `3f287cc7` identifies prerequisites
 before replacing the eighteen-resident restriction with byte-only admission:
 
-- Charge retained slot/map/cache capacity and checkpoint dirty-set bookkeeping,
+- Charge retained slot/map/cache and checkpoint-table capacity,
   including container capacity retained after eviction. These allocations are
   currently bounded partly by the entry-count restriction rather than the ledger.
 - Rust `34a59a82` closes the owned-unwrap credit gap in
@@ -1222,21 +1222,48 @@ before replacing the eighteen-resident restriction with byte-only admission:
   are outside the local-mutation registry drain. Hosted owners must drain their
   Tokio runtime, as required by the hosted shutdown contract; final-source
   shutdown qualification remains required.
+- Rust `144081e7` replaces checkpoint dirty-piece tree nodes with a geometry-sized
+  bitmap. Exact word backing is admitted to the existing resident budget before
+  allocation and remains charged through the checkpoint owner's lifetime, even
+  when acknowledgment clears every bit. Maximum supported geometry needs 3,536
+  bytes. Duplicate marks and acknowledgments allocate nothing. All supported part
+  positions remain representable; no new file/job/library limit is introduced.
+  Ordinary stores prepare replacement bitmaps before SQL. Piece checkpoints
+  prepare missing bookkeeping before their SQL commit. Cache-only publication
+  validates the live execution, admits backing and checks revision headroom
+  before publishing cache and dirty state under their existing locks. A stale
+  stopped callback cannot recreate either half. Checkpoint state is no longer
+  freely cloneable into uncharged bitmap backing.
+  Windows passes all 1,468 eD2K and 688 Core executions in
+  `reports/settings-request-round-1/checkpoint-bitmap-ed2k-final.log` and
+  `checkpoint-bitmap-core.log` in that directory. New regressions cover every
+  maximum-geometry part, duplicate marks/acknowledgments, retained empty backing,
+  final release and bitmap-credit refusal before SQL/cache mutation. The existing
+  stopped-callback regression caught premature preflight insertion; the validated
+  common publication path repairs it and the full rerun passes unchanged.
+  Slot/map/cache/checkpoint-table allocations remain outside this scoped proof.
 - Replace `category_cache.rs` fixed full-copy reservation per member with charged,
   version-stable category replacements before admitting larger cohorts. Validate
   more than twenty-one small resident members, a reader arriving during SQL,
   ordinary cache writers during preparation, and complete postcommit publication
   without further capacity admission.
 
-The next bounded slice charges retained slot/map/cache capacity and checkpoint
-bookkeeping before removing entry-count restrictions. Category-batch preparation
-and publication must then pass their larger-cohort admission tests.
+The next bounded slice charges retained cache/checkpoint table capacity before
+removing entry-count restrictions. Use measurable sorted-vector capacity,
+including spare capacity after removal. Prepare owned insertion claims before
+SQL for every path that can add an entry; concurrent accepted owners and rollback
+must preserve those claims without postcommit admission. Keep old table backing
+charged until it is freed, and free empty buffers. Category-batch preparation and
+publication must also pass their larger-cohort admission tests. Byte-based
+reservations can then replace the weak slot registry and job counter; immutable
+manifest readers keep independent charges through last-owner release.
 Current count restrictions remain until bookkeeping and category-batch admission
 also pass. The accepted 64-MiB soft target, 128-MiB hard resident ceiling and
 separate 8-MiB transient allowance stay unchanged; no new saved setting or second
 worker pool is introduced. Owned unwrap, guard retention and private-hydration
-lock ordering and ordinary SQL/cache/checkpoint publication have the scoped
-evidence above; adaptive admission remains pending. Earlier library/package receipts retain their
+lock ordering, ordinary SQL/cache/checkpoint publication and dirty membership
+backing have the scoped evidence above; adaptive admission remains pending.
+Earlier library/package receipts retain their
 own source revisions.
 
 Reads retain immutable pins; resident bytes and job slots survive cache eviction
