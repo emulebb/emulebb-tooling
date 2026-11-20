@@ -2521,10 +2521,23 @@ across restart. The campaign includes 100k retained jobs and graceful teardown.
 Schema, settings, public routes and memory ceilings are unchanged.
 
 Callback-only sources retain their current execution route while compact
-listener-owned preparation is implemented. Prepared A4AF, full payload
+listener-owned preparation is implemented. Prepared multi-file payload
 completion, complete ready/scarcity/burst scheduling and final platform/memory
 qualification remain required. An inbound callback's ephemeral TCP port or
 server-scoped LowID must never be persisted as a direct-dial endpoint.
+
+Rust `79bfbc35` shares one Native A4AF file-switch loop between ordinary and
+prepared outbound connections. Core passes selected alternate files and receives
+the same observed-identity/per-file report, retaining earlier outcomes after a
+later failure. Windows passes 1,495 Native and 704 Core executions without
+warnings in `reports/settings-request-round-1/prepared-a4af-ed2k-contract.log`
+and `prepared-a4af-core.log`. New socket cases prove NNP/FNF switches, later
+close/error handling and permit release without another HELLO or connection.
+The existing prepared single-file payload and ordinary A4AF tests also pass.
+Normal hooks passed; schema, settings and public routes are unchanged. Full
+multi-file payload/endgame, callback preparation, pressure and final
+platform/memory-tier qualification remain open. Build/REST evidence above
+retains its actual earlier source revision.
 
 Compiler investigation uses Builder's diagnostic-only Linux collection command;
 its receipt explicitly records `qualityGatePassed:false` and

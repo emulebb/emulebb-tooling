@@ -1500,7 +1500,7 @@ The source-less category fixture proves a reserved SQLite pathname/UUID remains
 unmaterialized across stop/restart; it does not confuse a plan with filesystem
 ownership. Settings CLI, Kad, search, sharing and 100k retained-job checks pass.
 
-This does not qualify full prepared-payload completion, A4AF on prepared sockets,
+This does not qualify full prepared multi-file payload completion,
 callback preparation, global ready/scarcity ordering or pressure/capacity tiers.
 Callback-only discoveries retain their existing execution route. The next
 callback integration must keep the inbound dispatcher, connection guards and
@@ -1509,6 +1509,26 @@ start receipt to Core, and fence that receipt to the exact preparation request
 and successor job generation. Do not persist an inbound ephemeral port or a
 server LowID as a directly dialable endpoint. A bounded read-only specialist
 review resolved this ownership question and finished; the parent owns implementation.
+
+Rust `79bfbc35` connects prepared sockets to the same Native A4AF file-switch
+loop used by ordinary outbound connections. Connection profile, secure-ident
+state and observed identity carry across files; file-specific state is reset by
+the existing session constructor. Core passes the selected alternate plans and
+consumes the normal per-file report, including earlier NNP/FNF outcomes when a
+later file fails. The prepared primary's cached metadata is consumed once;
+there is no extra HELLO, connection admission or redial.
+
+Windows passes **1,495 Native and 704 Core executions**, without warnings, in
+`reports/settings-request-round-1/prepared-a4af-ed2k-contract.log` and
+`prepared-a4af-core.log`. Socket cases cover NNP-to-FNF switching, a later close
+reported as accepted-but-incomplete, and a malformed later reply retaining the
+earlier outcomes plus a terminal error. They check the observed identity on
+each result and release of connection/preparation permits. Existing ordinary
+A4AF, prepared single-file payload and other Native suites also pass. Normal
+hooks passed. This is scoped Windows evidence, not multi-file payload/endgame,
+pressure, final package/platform or memory-tier qualification. The earlier
+daemon/WebUI/REST receipts remain evidence for their actual Rust `0181e102`.
+Schema 107, settings and public REST contracts are unchanged.
 
 The next bounded work is callback preparation and complete ready-source selection,
 then scarcity/burst scheduling,
