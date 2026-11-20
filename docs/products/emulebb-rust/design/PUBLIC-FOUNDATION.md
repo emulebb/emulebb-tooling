@@ -2280,9 +2280,16 @@ controlled subtree unit test and the campaign's individual-file mutation bursts.
 
 Before lifting download count caps, the resident ledger and publication
 prerequisites in the [runtime item](../active/items/RUST-REF-016.md) must close.
-The next bounded implementation repairs direct publication-credit gaps while
-retaining the current count restrictions. Bookkeeping and category-batch
-accounting follow before count removal and adaptive scheduler qualification.
+Rust `34a59a82` repairs mutable-credit restoration after owned resident unwrap;
+all 1,460 Windows eD2K tests pass in
+`reports/settings-request-round-1/resident-owned-frontier-ed2k.log`. Failed
+admission preserves an immutable pin, and reader departure cannot bypass the
+working allowance. Count restrictions and all configured memory ceilings remain.
+The next bounded implementation retains job I/O ownership through ordinary-store
+publication, normalizes its category/content lock order, and admits backing
+before SQL. The runtime item retains the competing-writer and durable-authority
+acceptance criteria. Bookkeeping and category-batch accounting follow before
+count removal and adaptive scheduler qualification.
 The 1-GiB campaign remains a final-source gate after these runtime changes;
 the 512-MiB receipt above is preserved for its actual selected revisions.
 No PR, merge, main update, release or publication is authorized.

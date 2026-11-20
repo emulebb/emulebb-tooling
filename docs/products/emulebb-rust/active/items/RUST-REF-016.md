@@ -1180,24 +1180,39 @@ before replacing the eighteen-resident restriction with byte-only admission:
 - Charge retained slot/map/cache capacity and checkpoint dirty-set bookkeeping,
   including container capacity retained after eviction. These allocations are
   currently bounded partly by the entry-count restriction rather than the ledger.
-- In `resident.rs::try_edit_owned`, restore mutable allowance if a reader departs
-  between the unique-owner check and successful unwrap. A deterministic
-  interleaving must prove that mutation never proceeds on retained-only credit.
+- Rust `34a59a82` closes the owned-unwrap credit gap in
+  `resident.rs::try_edit_owned`: every successful unwrap restores mutable
+  allowance before exposing a draft. Refusal returns an intact immutable pin.
+  Deterministic tests release a reader after observing shared ownership, then
+  prove restoration, pressure refusal, readmission and complete charge release.
+  The Windows eD2K suite passes 1,460 executions in
+  `reports/settings-request-round-1/resident-owned-frontier-ed2k.log`.
 - In `store.rs::store_manifest_unlocked`, reserve replacement credit before SQL
   and settle publication to actual retained backing. Pressure must refuse before
   durable mutation; existing immutable readers keep their charges until release.
+  Retain the job I/O guard through commit and publication, matching the existing
+  piece-checkpoint owner. Cancellation must not let a competing writer snapshot
+  an older cache and overwrite the first writer's committed piece. Validate this
+  with two writers, a postcommit gate, caller cancellation and old reader pins.
+  Normalize category/content lock ordering across store, hydration and cache-only
+  publication; a queued category writer must not complete a lock cycle.
+  Progress SQL must preserve authoritative shared comment/rating/upload-priority
+  fields rather than restoring a stale snapshot. Reconciled backing must fit
+  its preadmitted credit before commit, not discover a size refusal afterward.
 - Replace `category_cache.rs` fixed full-copy reservation per member with charged,
   version-stable category replacements before admitting larger cohorts. Validate
   more than twenty-one small resident members, a reader arriving during SQL,
   ordinary cache writers during preparation, and complete postcommit publication
   without further capacity admission.
 
-The next bounded slice repairs the two direct publication-credit gaps while
-preserving current count limits. Bookkeeping and category-batch work then precede
-count removal. The accepted 64-MiB soft target, 128-MiB hard resident ceiling and
+The next bounded slice establishes retained I/O ownership and consistent lock
+ordering for ordinary store publication, then completes its precommit admission.
+Current count restrictions remain until bookkeeping and category-batch admission
+also pass. The accepted 64-MiB soft target, 128-MiB hard resident ceiling and
 separate 8-MiB transient allowance stay unchanged; no new saved setting or second
-worker pool is introduced. These are read-only review findings and pending
-acceptance criteria, not implemented or qualified behavior.
+worker pool is introduced. Only the owned-unwrap repair is accepted by the scoped
+native evidence above; ordinary-store publication and adaptive admission remain
+pending. Earlier library/package receipts retain their own source revisions.
 
 Reads retain immutable pins; resident bytes and job slots survive cache eviction
 and release through the existing admission wake control. MD4, peer/name,
