@@ -1530,6 +1530,25 @@ pressure, final package/platform or memory-tier qualification. The earlier
 daemon/WebUI/REST receipts remain evidence for their actual Rust `0181e102`.
 Schema 107, settings and public REST contracts are unchanged.
 
+Rust `ff351aec` fences inbound callback acknowledgment to the job token and hash
+captured before peer I/O. Completion neither rereads a mutable queue head nor
+consumes a replacement generation or a redownload job with the same hash.
+Copies of the captured execution across matching callback routes are still
+consumed together. Repeated acknowledgment cannot consume the next execution;
+unacknowledged replacement work remains owned and returns to `NeedsDispatch`
+when the listener claim finishes. No extra worker, database row or public field
+is introduced.
+
+Windows passes **1,497 Native executions**, without warnings, in
+`reports/settings-request-round-1/callback-execution-ack-ed2k-final.log`.
+Regressions cover generation/job-ID replacement and mixed-generation copies
+across routes, alongside the existing listener, dispatch/drop and A4AF callback
+cases. Normal hooks passed. This is the execution-acknowledgment prerequisite,
+not deferred callback preparation: the metadata-only exchange, exact preparation
+request identity, one-shot Core start receipt and listener settlement remain
+required. Earlier Core/build/REST receipts retain their actual revisions.
+Schema 107, saved settings and public APIs are unchanged.
+
 The next bounded work is callback preparation and complete ready-source selection,
 then scarcity/burst scheduling,
 then payload/session qualification including structural snapshots, retained

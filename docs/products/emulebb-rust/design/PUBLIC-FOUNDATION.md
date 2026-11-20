@@ -2539,6 +2539,16 @@ multi-file payload/endgame, callback preparation, pressure and final
 platform/memory-tier qualification remain open. Build/REST evidence above
 retains its actual earlier source revision.
 
+Rust `ff351aec` acknowledges callback work by the execution token/hash captured
+before peer I/O, preserving replacement generations/jobs and unrelated queue
+entries. Same-execution copies across callback routes are still consumed
+together. Windows passes 1,497 Native executions without warnings in
+`reports/settings-request-round-1/callback-execution-ack-ed2k-final.log`, including
+generation/job-ID replacement, repeated acknowledgment and mixed-route cases.
+Normal hooks passed; schema, settings and public APIs are unchanged. The deferred
+callback handshake still requires its preparation request identity and one-shot
+Core decision; this race fix does not complete callback preparation.
+
 Compiler investigation uses Builder's diagnostic-only Linux collection command;
 its receipt explicitly records `qualityGatePassed:false` and
 `packageProduced:false`. Acceptance continues to require the ordinary strict
