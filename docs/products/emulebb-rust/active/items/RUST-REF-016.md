@@ -1335,16 +1335,35 @@ selection and eventual slot release. These are retirement-policy tests, not
 actual memory-pressure or higher-concurrency payload qualification; Native's
 existing admission-pressure proofs retain their own source evidence.
 
-The next bounded work is Core adaptive scheduling and payload/session
-qualification, including structural snapshots, retained session pins and held-I/O
-pressure. Core still has its engineering selection/preparation restrictions;
-Native byte-based admission alone does not qualify higher transfer concurrency.
+Rust `64917f38` implements the ordinary adaptive admission layer. Memory-only
+host/cgroup sampling shares the scheduler clock and uses the existing blocking
+pool. Scalar Native samples expose charged resident/transient bytes, available
+mutation units and connection usage without taking a cache or SQL lock. Finished
+mutation tasks are reaped before sampling capacity. The initial active baseline
+can grow beyond 16, one saturated sample at a time, within host/connection bounds
+and any positive configured limit. Pressure drains admission without cancelling
+owned work. Preparation and active work share the overall capacity; resident
+construction keeps update headroom and actual producers still reserve bytes.
+
+Windows passes 697 Core and 1,477 Native executions without warnings in
+`reports/settings-request-round-1/adaptive-admission-core.log` and
+`adaptive-admission-ed2k.log`. New checks exercise growth, configured ceilings,
+shared capacity, resident/connection/I/O exhaustion and gradual recovery.
+Builder `98fa3d2` permits resolving newly added registry dependencies through its
+existing explicit lock-authoring flag; ordinary validation remains locked.
+Its scoped tests and mandatory push checks pass.
+
+The next bounded work is ready-source selection and scarcity/burst scheduling,
+then payload/session qualification including structural snapshots, retained
+session pins and held-I/O pressure. The new dependency requires applicable
+cross-platform qualification. Unit tests alone do not qualify higher transfer
+concurrency or measured host/container pressure.
 The accepted 64-MiB soft target, 128-MiB hard resident ceiling and
 separate 8-MiB transient allowance stay unchanged; no new saved setting or second
 worker pool is introduced. Owned unwrap, guard retention and private-hydration
 lock ordering, ordinary SQL/cache/checkpoint publication, dirty membership and
 checkpoint/cache-table backing, category batches and Native byte admission have
-scoped evidence above; adaptive admission remains pending.
+scoped evidence above; complete adaptive scheduling remains pending.
 Earlier library/package receipts retain their
 own source revisions.
 

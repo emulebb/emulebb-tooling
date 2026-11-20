@@ -2354,8 +2354,29 @@ before surrendering attempt ownership. Genuine storage errors retain the manual-
 start fault policy. A canceled allocation reply records its Native generation
 without restoring callback authority. Windows passes 690 Core executions in
 `reports/settings-request-round-1/selection-hydration-retirement-core-final.log`.
-Core scheduler limits, adaptive admission and payload qualification remain open.
-Public contracts and configured memory ceilings are unchanged.
+Rust `64917f38` adds ordinary adaptive admission using memory-only `sysinfo`
+samples on the existing shared scheduler clock, bounded by host/cgroup available
+memory, connection capacity and Native resident/transient work availability.
+The initial 16-active baseline can grow by one per saturated sample; configured
+positive limits remain ordinary ceilings without clipping them to 16. Pressure
+closes new admission and drains existing ownership without cancellation. Native
+reservations remain the allocation authority; estimates never grant memory.
+Construction leaves four mutable-manifest allowances for updates, while bounded
+metadata preparation can continue when resident construction cannot. No per-job
+sampler or additional worker pool is introduced.
+
+Windows passes 697 Core and 1,477 eD2K executions without warnings in
+`reports/settings-request-round-1/adaptive-admission-core.log` and
+`adaptive-admission-ed2k.log` in that directory. Tests cover growth beyond 16,
+explicit limits, shared active/preparation capacity, pressure and gradual
+recovery without cancelling owned execution. Builder `98fa3d2` extends its
+existing explicit lock-authoring option to resolve new registry dependencies;
+ordinary tests remain locked. Its scoped suite and push checks pass.
+
+Ready-source selection, scarcity, 25% bursts and actual concurrent-payload
+qualification remain open. The new dependency still needs the applicable
+cross-platform matrix. Public contracts and configured memory ceilings are
+unchanged; unit evidence does not qualify host-pressure or container behavior.
 The 1-GiB campaign remains a final-source gate after these runtime changes;
 the 512-MiB receipt above is preserved for its actual selected revisions.
 No PR, merge, main update, release or publication is authorized.
