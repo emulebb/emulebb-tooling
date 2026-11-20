@@ -2395,8 +2395,36 @@ input consumption and output; absent data bits remain unverified and the exact-
 multiple EOF bit retains stock semantics. Windows passes 1,480 Native executions
 without warnings in `reports/settings-request-round-1/compact-request-status-ed2k.log`,
 including listener/download protocol cases and three compact-status regressions.
-This is an encoder prerequisite, not an implemented probe or ready-job gate.
+This receipt covers the shared encoders, not the complete ready-job gate.
 The GNU package receipt above remains evidence for its recorded source revision.
+
+Rust `82487d53` implements Native payload-free availability probes for directly
+dialable peers. They reuse transport/obfuscation, the three negotiated request
+encoders and secure-ident handlers. Two shared preparation permits plus existing
+global connection/rate admission bound active probes; refusal opens no socket
+and creates no waiter. One total deadline and a 64-packet allowance retire silent
+or flooding peers. Probes never start a job generation, hydrate its manifest,
+open its temporary store, join the upload queue or request hashsets/payload.
+Validated status is attributed to the decoded HELLO identity; mismatched hashes,
+sizes, part counts and malformed multipacket contents fail. Filename-only
+availability applies only to single-part files. Protocol EOF bits are excluded
+from returned data-part status. Discovery hints alone never establish readiness.
+
+Windows passes 1,489 Native executions without warnings in
+`reports/settings-request-round-1/peer-availability-probe-ed2k-final.log`.
+Socket tests prove metadata-only negotiation, no new job/resident backing,
+admission refusal before connect, cancellation/deadline resource release and
+bounded control-flood retirement. Decoder tests cover partial/complete status,
+EOF handling, filename inference and contradictory/truncated metadata. GNU
+workspace/all-target diagnostics compile successfully with no Rust warning/error
+diagnostics under
+`reports/rust-linux/gnu-amd64/47e6530a8f1c41a4a8522e5c59648b1c/`.
+That collection explicitly records `qualityGatePassed:false` and
+`packageProduced:false`; strict package qualification remains required.
+The Native probe is not yet called by Core scheduling. Generation/intent-fenced
+durable observations, bounded shared discovery and ready-source admission remain
+the next integration slice, including callback-only sources. No REST, settings
+or schema shape changes in this component checkpoint.
 
 Ready-source selection, scarcity, 25% bursts and actual concurrent-payload
 qualification remain open. Musl, Android-target and other applicable platform

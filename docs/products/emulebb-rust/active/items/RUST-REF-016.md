@@ -1373,8 +1373,31 @@ Windows passes 1,480 Native executions without warnings in
 `reports/settings-request-round-1/compact-request-status-ed2k.log`. The new
 regressions assert wire bytes, byte-boundary/EOF behavior, absent status and
 geometry-bounded consumption/output. Existing listener/download cases still pass.
-Actual waiting-job probing and ready-source admission are not implemented by
-this prerequisite; GNU evidence above retains its exact earlier source revision.
+GNU package evidence above retains its exact earlier source revision.
+
+Rust `82487d53` adds the Native availability-probe component for directly
+dialable peers, sharing normal transport, negotiated request encoders and
+secure-ident handlers. Two shared try-only preparation permits and global
+connection/rate admission precede socket creation. A total deadline and finite
+packet allowance retire stalled/flooding peers. No job generation, resident
+manifest, temporary storage, upload-queue request, hashset or payload request is
+created. Replies retain the actual HELLO identity and validated data-part status;
+filename-only completeness applies only to one-part files. Hints alone cannot
+establish useful-part availability.
+
+Windows passes 1,489 Native executions without warnings in
+`reports/settings-request-round-1/peer-availability-probe-ed2k-final.log`,
+including socket-level no-payload/storage, refusal, cancellation/deadline and
+control-flood cases, plus malformed/conflicting metadata and EOF normalization.
+GNU workspace/all-target diagnostic collection builds successfully and reports
+no Rust warnings/errors in
+`reports/rust-linux/gnu-amd64/47e6530a8f1c41a4a8522e5c59648b1c/`.
+Its receipt remains diagnostic-only (`qualityGatePassed:false`,
+`packageProduced:false`), not strict package or runtime proof. Core has not yet
+adopted the probe. The next integration must persist observations under current
+job generation/intent authority before ready admission; callback-only sources
+and bounded shared discovery remain part of that work. No public REST/config or
+schema change is made by the component.
 
 The next bounded work is ready-source selection and scarcity/burst scheduling,
 then payload/session qualification including structural snapshots, retained
