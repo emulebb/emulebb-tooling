@@ -2421,10 +2421,37 @@ diagnostics under
 `reports/rust-linux/gnu-amd64/47e6530a8f1c41a4a8522e5c59648b1c/`.
 That collection explicitly records `qualityGatePassed:false` and
 `packageProduced:false`; strict package qualification remains required.
-The Native probe is not yet called by Core scheduling. Generation/intent-fenced
-durable observations, bounded shared discovery and ready-source admission remain
-the next integration slice, including callback-only sources. No REST, settings
-or schema shape changes in this component checkpoint.
+The Native probe is not yet called by Core scheduling. Core adoption of durable
+observations, bounded shared discovery and ready-source admission remains the
+next integration slice, including callback-only sources. No REST, settings or
+schema shape changes in this probe checkpoint.
+
+Rust `5f31a6c5` establishes source-availability storage in fresh schema **107**.
+`download_job_source_availability` is a separate current-status record keyed by
+job/source, with a cascading composite foreign key to the existing source row.
+It stores packed LSB-first data-part bits, observed HELLO identity, file size,
+execution generation, runtime session ID and Unix-second observation time.
+Source hints alone never populate it. Queries require matching identity,
+generation, runnable intent, geometry, runtime session and an explicit freshness
+interval. Removal cascades; a changed identity or a new runtime cannot reuse old
+reachability. Derive geometry from saved size/part size before preparation;
+the execution part count can still be zero on newly admitted jobs.
+
+The existing owned peer-delta worker commits hints and status in one transaction.
+Only explicit renaming reserves a mutable resident manifest; source/name/status
+observations use the existing transient-work budget without resident hydration.
+Status pages seek the observed-row primary key and retain a byte-bounded loan;
+they do not scan all hints or silently truncate retained source capability.
+Windows passes **316 metadata, 1,491 Native and 697 Core executions** without
+warnings in `reports/settings-request-round-1/source-observations-metadata-geometry.log`,
+`source-observations-ed2k-cohort.log` and `source-observations-core.log` in that
+directory. Regressions cover sparse observations among 100k hints, complete
+cursor traversal of large bitmaps, stale authority, atomic failure/cascade,
+observer cancellation and status writes at the fully charged 128-MiB resident
+ceiling. Reopened runtimes require fresh session evidence. These are scoped
+Windows proofs; earlier GNU/package/capacity receipts retain their source/schema
+revisions. Core still must connect preparation/probing to these write/read APIs
+and admit only useful-source jobs. No migration or compatibility layer is added.
 
 Ready-source selection, scarcity, 25% bursts and actual concurrent-payload
 qualification remain open. Musl, Android-target and other applicable platform

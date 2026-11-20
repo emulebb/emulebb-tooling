@@ -1399,6 +1399,31 @@ job generation/intent authority before ready admission; callback-only sources
 and bounded shared discovery remain part of that work. No public REST/config or
 schema change is made by the component.
 
+Rust `5f31a6c5` adds the durable Native observation boundary in fresh schema 107.
+The compact `download_job_source_availability` record cascades with its source,
+stores packed data-part status plus observed identity/generation/session/time,
+and is read through byte-bounded retained keyset pages over observed rows.
+Discovery hints cannot establish readiness. Transactional writes and reads fence
+current runnable intent, generation, geometry and source identity; queries also
+fence runtime session and the caller's explicit freshness interval. Geometry is
+derived from saved size/part size before execution preparation, without requiring
+the execution part count to be initialized. No migration path is introduced.
+
+Source/name/status deltas now reserve only transient work; only an explicit
+rename reserves resident write credit for cached publication. The existing owned
+blocking delta retains its guard and capacity through SQL after observer loss.
+Windows passes 316 metadata, 1,491 Native and 697 Core executions without warnings:
+`reports/settings-request-round-1/source-observations-metadata-geometry.log`,
+`source-observations-ed2k-cohort.log` and `source-observations-core.log`.
+The tests prove sparse observed-row seeks among 100k hints, byte-bounded complete
+paging, stale identity/session/generation/intent fences, rollback/cascade,
+cancellation completion and writes at exactly 128 MiB of charged resident
+backing. Reopening requires new observation evidence. These are scoped Windows
+results; earlier platform and capacity receipts retain their actual revisions.
+Core still has not connected probing and these observation APIs to ready-job
+admission. That integration must keep preparation compact, include known-size
+waiting jobs and preserve authority across cancellation and selection changes.
+
 The next bounded work is ready-source selection and scarcity/burst scheduling,
 then payload/session qualification including structural snapshots, retained
 session pins and held-I/O pressure. The new dependency still requires musl,
