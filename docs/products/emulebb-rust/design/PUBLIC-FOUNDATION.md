@@ -2453,6 +2453,29 @@ Windows proofs; earlier GNU/package/capacity receipts retain their source/schema
 revisions. Core still must connect preparation/probing to these write/read APIs
 and admit only useful-source jobs. No migration or compatibility layer is added.
 
+Rust `af4bef8f` makes successful Native probes return a linear prepared-connection
+owner. It retains the socket, HELLO/security state, validated metadata and actual
+connection/preparation permits. Drop closes the socket before releasing those
+permits; promotion releases the preparation permit and continues the normal
+download session on the same socket. Temporary probe inputs are not retained;
+the owner is proven `Send + 'static` for bounded Core workers. Captured metadata
+is applied through the normal filename/AICH/part-status handlers before further
+startup requests, preserving live source statistics and preventing queue entry
+when the peer offers no needed parts, even with a cached hashset. Observation
+persistence and payload handoff both check the captured job/content identity.
+
+Windows passes 1,493 Native and 697 Core executions without warnings in
+`reports/settings-request-round-1/prepared-peer-handoff-ed2k-owned.log` and
+`prepared-peer-handoff-core.log` in that directory. A controlled 128-KiB transfer
+persists its actual status and completes on the original connection without
+another HELLO/file request or redial. Other checks prove unselected-owner drop,
+wrong-job refusal, input-buffer lifetime and no-needed-parts ordering. This is
+Native component evidence, not Core scheduler integration or large-file/AICH,
+callback-preparation, pressure or higher-concurrency payload qualification.
+Core adoption must reuse the existing connection permit and source lease/retry
+policies, keep waiting preparation bounded, and include callback-only sources.
+REST, settings and schema 107 remain unchanged by this ownership checkpoint.
+
 Ready-source selection, scarcity, 25% bursts and actual concurrent-payload
 qualification remain open. Musl, Android-target and other applicable platform
 checks remain required for the new dependency. Public contracts and configured

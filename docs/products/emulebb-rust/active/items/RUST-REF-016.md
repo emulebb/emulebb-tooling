@@ -1424,6 +1424,26 @@ Core still has not connected probing and these observation APIs to ready-job
 admission. That integration must keep preparation compact, include known-size
 waiting jobs and preserve authority across cancellation and selection changes.
 
+Rust `af4bef8f` retains an owned prepared peer across Native probe/payload
+handoff. Its socket, connection/preparation permits, observed HELLO/SUI state and
+at most two metadata answers have one non-cloneable owner. Dropping it closes
+the socket before releasing permits. Promotion releases preparation capacity,
+checks job/content identity and uses the normal download session on that socket.
+Already-received metadata passes through normal AICH/name/part-status handlers
+before additional startup requests, including for a cached hashset. Temporary
+probe buffers can be dropped; the prepared owner satisfies `Send + 'static`.
+
+Windows passes 1,493 Native and 697 Core executions without warnings in
+`reports/settings-request-round-1/prepared-peer-handoff-ed2k-owned.log` and
+`prepared-peer-handoff-core.log`. The socket case persists real observed status
+and downloads 128 KiB on the original TCP connection, without repeated HELLO,
+file request or redial; live part availability is preserved. Drop, identity
+refusal, input lifetime and no-needed-parts-before-queue ordering also pass.
+These are component proofs, not scheduler, large-file/AICH, callback-preparation
+or pressure/higher-concurrency qualification. Core must adopt this owner without
+another connection admission and reuse source lease/retry machinery. Schema 107
+and public REST/settings contracts are unchanged in this checkpoint.
+
 The next bounded work is ready-source selection and scarcity/burst scheduling,
 then payload/session qualification including structural snapshots, retained
 session pins and held-I/O pressure. The new dependency still requires musl,
