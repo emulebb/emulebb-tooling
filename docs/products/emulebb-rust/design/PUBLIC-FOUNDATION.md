@@ -2450,8 +2450,8 @@ cursor traversal of large bitmaps, stale authority, atomic failure/cascade,
 observer cancellation and status writes at the fully charged 128-MiB resident
 ceiling. Reopened runtimes require fresh session evidence. These are scoped
 Windows proofs; earlier GNU/package/capacity receipts retain their source/schema
-revisions. Core still must connect preparation/probing to these write/read APIs
-and admit only useful-source jobs. No migration or compatibility layer is added.
+revisions. Core direct preparation below consumes these APIs; callback
+preparation remains open. No migration or compatibility layer is added.
 
 Rust `af4bef8f` makes successful Native probes return a linear prepared-connection
 owner. It retains the socket, HELLO/security state, validated metadata and actual
@@ -2483,8 +2483,8 @@ Cancellation and generation authority remain with the same guard. Windows
 passes 702 Core executions without warnings in
 `reports/settings-request-round-1/core-prepared-execution.log`, including full
 connection-budget reuse, deduplication, refusal and worker-drain checks. Normal
-commit/push hooks passed. Discovery does not yet produce prepared executions;
-this checkpoint does not claim production ready-source selection.
+commit/push hooks passed. Production direct discovery is connected below;
+this component gate alone does not qualify ready-source selection.
 
 Ready-source selection, scarcity, 25% bursts and actual concurrent-payload
 qualification remain open. Musl, Android-target and other applicable platform
@@ -2502,8 +2502,29 @@ a 128-KiB transient allowance with the result, without a resident manifest or
 piece-file access. Windows passes 319 metadata and 1,494 Native executions,
 without warnings, in `reports/settings-request-round-1/`:
 `waiting-verified-parts-metadata-final.log` and `waiting-verified-parts-ed2k.log`.
-Normal hooks passed. Source discovery still must consume this dependency and
-produce prepared executions; schema 107 and public contracts remain unchanged.
+Normal hooks passed. Production direct discovery below consumes this dependency;
+schema 107 and public contracts remain unchanged.
+
+Rust `0181e102` connects known-size direct preparation before hydration, using
+scalar discovery targets, charged endpoint pages and the existing source
+lease/reask/dead-source rules. A useful prepared connection crosses hydration
+under the same attempt owner and executes without another connection admission.
+Windows passes 704 Core executions without warnings; the regular daemon/WebUI
+build has zero warnings. Evidence:
+`reports/settings-request-round-1/core-source-preparation-final.log`,
+`logs/builds/20261120T054316Z-build-clients/build-result.json`, and the passing
+Python REST/OpenAPI campaign `reports/rust-rest-openapi-ci/20261120T055818Z/report.json`.
+Harness `08fc73e8` retains the tested fixture bytes and passes 30 Python tests.
+The real-peer phase verifies materialized UUID storage and category deletion;
+the source-less phase verifies that its durable path plan remains unmaterialized
+across restart. The campaign includes 100k retained jobs and graceful teardown.
+Schema, settings, public routes and memory ceilings are unchanged.
+
+Callback-only sources retain their current execution route while compact
+listener-owned preparation is implemented. Prepared A4AF, full payload
+completion, complete ready/scarcity/burst scheduling and final platform/memory
+qualification remain required. An inbound callback's ephemeral TCP port or
+server-scoped LowID must never be persisted as a direct-dial endpoint.
 
 Compiler investigation uses Builder's diagnostic-only Linux collection command;
 its receipt explicitly records `qualityGatePassed:false` and

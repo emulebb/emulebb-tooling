@@ -1420,9 +1420,8 @@ paging, stale identity/session/generation/intent fences, rollback/cascade,
 cancellation completion and writes at exactly 128 MiB of charged resident
 backing. Reopening requires new observation evidence. These are scoped Windows
 results; earlier platform and capacity receipts retain their actual revisions.
-Core still has not connected probing and these observation APIs to ready-job
-admission. That integration must keep preparation compact, include known-size
-waiting jobs and preserve authority across cancellation and selection changes.
+Core's direct preparation below consumes these observation APIs. Callback
+preparation and complete ready-job ordering remain open.
 
 Rust `af4bef8f` retains an owned prepared peer across Native probe/payload
 handoff. Its socket, connection/preparation permits, observed HELLO/SUI state and
@@ -1440,8 +1439,8 @@ and downloads 128 KiB on the original TCP connection, without repeated HELLO,
 file request or redial; live part availability is preserved. Drop, identity
 refusal, input lifetime and no-needed-parts-before-queue ordering also pass.
 These are component proofs, not scheduler, large-file/AICH, callback-preparation
-or pressure/higher-concurrency qualification. Core must adopt this owner without
-another connection admission and reuse source lease/retry machinery. Schema 107
+or pressure/higher-concurrency qualification. Core adoption below reuses this
+connection admission and source lease/retry machinery. Schema 107
 and public REST/settings contracts are unchanged in this checkpoint.
 
 Rust `3306ca5b` adds the Core promotion/execution boundary. Preparation promotes
@@ -1456,9 +1455,9 @@ Windows passes **702 Core executions**, without warnings, in
 `reports/settings-request-round-1/core-prepared-execution.log`. Five new cases
 cover promotion refusal/drain/cancellation, full connection-budget reuse,
 endpoint deduplication, worker-panic drain and content-mismatch cleanup. Normal
-commit/push hooks passed. The production scheduler still supplies no prepared
-future: discovery and Native-owner construction remain the next integration,
-not qualified behavior. Schema, public contracts and memory ceilings are unchanged.
+commit/push hooks passed. The production consumer is described below; this
+component gate alone does not qualify discovery. Schema, public contracts and
+memory ceilings are unchanged.
 
 Rust `15148425` provides the compact local status needed before probing a
 known-size waiting job. One SQLite snapshot checks current generation, runnable
@@ -1475,10 +1474,44 @@ and `waiting-verified-parts-ed2k.log`. Tests cover stale/stopped/unknown/retired
 jobs, exact-multiple geometry, presence versus verification, extent corruption,
 allocation bounds and a 256-GiB waiting job with no manifest, storage or resident
 charge. The transient charge survives worker reaping and ends with result drop.
-Normal hooks passed. This is a preparation dependency; production source
-discovery and prepared execution remain unconnected.
+Normal hooks passed. Production direct preparation below consumes this read.
 
-The next bounded work is ready-source selection and scarcity/burst scheduling,
+Rust `0181e102` connects direct preparation to production scheduling. Known-size
+jobs enter the bounded preparation cohort before hydration. Discovery accepts
+scalar job targets rather than hydrated transfer rows; remembered endpoints are
+read and projected in charged pages. The common source registry retains lease,
+dead-source and NNP/reask rules. Useful observed parts promote the same attempt
+guard and connection into execution; endpoint authority follows the committed
+hydration generation. Discovery can retain hints without construction headroom,
+but avoids probing when the cohort cannot currently admit execution. The job
+cursor stops at the last considered row when preparation capacity is exhausted.
+Preparation observation authority grants no passive-request or payload authority.
+
+Windows passes **704 Core executions**, without warnings, in
+`reports/settings-request-round-1/core-source-preparation-final.log`. The regular
+daemon/WebUI build passes with zero warnings in
+`logs/builds/20261120T054316Z-build-clients/build-result.json`. The existing
+Python REST/OpenAPI campaign passes with graceful teardown:
+`reports/rust-rest-openapi-ci/20261120T055818Z/report.json`. Harness `08fc73e8`
+contains the tested fixture bytes; its 30 Python tests and normal hooks pass.
+Real local active/queued peers prove UUID/category temp storage materialization,
+preservation after category deletion and identity persistence after shutdown.
+The source-less category fixture proves a reserved SQLite pathname/UUID remains
+unmaterialized across stop/restart; it does not confuse a plan with filesystem
+ownership. Settings CLI, Kad, search, sharing and 100k retained-job checks pass.
+
+This does not qualify full prepared-payload completion, A4AF on prepared sockets,
+callback preparation, global ready/scarcity ordering or pressure/capacity tiers.
+Callback-only discoveries retain their existing execution route. The next
+callback integration must keep the inbound dispatcher, connection guards and
+callback claim in the listener task, pass bounded availability plus a one-shot
+start receipt to Core, and fence that receipt to the exact preparation request
+and successor job generation. Do not persist an inbound ephemeral port or a
+server LowID as a directly dialable endpoint. A bounded read-only specialist
+review resolved this ownership question and finished; the parent owns implementation.
+
+The next bounded work is callback preparation and complete ready-source selection,
+then scarcity/burst scheduling,
 then payload/session qualification including structural snapshots, retained
 session pins and held-I/O pressure. The new dependency still requires musl,
 Android-target and other applicable platform qualification. GNU execution does
