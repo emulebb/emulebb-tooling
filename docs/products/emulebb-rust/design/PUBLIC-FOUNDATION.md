@@ -2325,9 +2325,18 @@ buffers are released. Windows passes 1,472 eD2K and 688 Core executions in
 `reports/settings-request-round-1/checkpoint-table-ed2k.log` and
 `checkpoint-table-core.log` in that directory.
 
-The next bounded slice applies this ownership to the manifest cache. Every
-possible postcommit cache insertion needs precommitted capacity, including
-concurrent accepted owners.
+Rust `ea8d4477` applies the same charged storage to the manifest cache. Ordinary
+stores reserve both table insertions before SQL; selected hydration, identity
+refresh and cache-only progress reserve cache space before activation. Eviction
+releases empty entry storage while independently pinned manifest versions keep
+their charges. Windows passes 1,475 eD2K and 688 Core executions in
+`reports/settings-request-round-1/resident-cache-ed2k.log` and
+`resident-cache-core.log` in that directory. Regressions prove cache-capacity
+refusal before SQL/publication, refusal at the selected-hydration boundary, and
+reader-backed lifetime across eviction and rehydration.
+
+The remaining resident prerequisites are category-batch preparation and removal
+of the weak slot/count registry once byte-based ownership is qualified.
 Category-batch accounting follows before slot-registry/count removal and adaptive
 scheduler qualification. Public contracts and configured memory ceilings are unchanged.
 The 1-GiB campaign remains a final-source gate after these runtime changes;

@@ -1177,10 +1177,10 @@ This measures backing capacities, not allocator metadata or total daemon RSS.
 The bounded resident-accounting review of Rust `3f287cc7` identifies prerequisites
 before replacing the eighteen-resident restriction with byte-only admission:
 
-- Charge the manifest cache and slot registry, including container capacity
-  retained after eviction. Their allocations remain bounded partly by the entry-
-  count restriction rather than the ledger. The checkpoint table now has its
-  scoped retained-capacity proof below.
+- Remove the weak slot/count registry once the remaining category-batch and
+  byte-based admission prerequisites pass. Slot allocations are still bounded
+  partly by the entry-count restriction rather than the ledger. Manifest-cache
+  and checkpoint-table capacity now have the scoped proofs below.
 - Rust `34a59a82` closes the owned-unwrap credit gap in
   `resident.rs::try_edit_owned`: every successful unwrap restores mutable
   allowance before exposing a draft. Refusal returns an intact immutable pin.
@@ -1263,28 +1263,45 @@ before replacing the eighteen-resident restriction with byte-only admission:
   at a full budget, old-plus-new peak refusal and actual ordinary-store refusal
   before SQL/cache/checkpoint publication. Existing caller-cancellation and
   competing-writer tests also pass with the claimed table. This does not qualify
-  more than eighteen selected jobs or close manifest-cache/slot accounting.
+  more than eighteen selected jobs or close manifest-cache/slot accounting on
+  that source revision.
+- Rust `ea8d4477` applies the same resident-charged table to the manifest cache.
+  Ordinary stores retain cache and checkpoint insertion claims before SQL.
+  Selected hydration claims its activation space before the observed-availability
+  publication callback. Identity refresh and cache-only progress also claim
+  before activation. Cache readers, eligibility projection and category/scalar
+  publication share this one cache; fixture construction admits the same storage
+  instead of inserting through an uncharged test map. No new worker or budget is
+  introduced, and no public contract or schema changes.
+  Windows passes 1,475 eD2K and 688 Core executions in
+  `reports/settings-request-round-1/resident-cache-ed2k.log` and
+  `resident-cache-core.log` in that directory. New regressions isolate cache
+  growth refusal before SQL with checkpoint space already reserved, refuse
+  selected-hydration activation at a full budget, and prove eviction releases
+  entry storage while old reader backing remains charged through rehydration.
+  Full owner release returns every charge. Existing competing-writer,
+  cancellation, stopped-callback, dirty-progress and scalar-patch tests pass.
+  The slot registry and category-batch reservation plan remain outside this proof.
 - Replace `category_cache.rs` fixed full-copy reservation per member with charged,
   version-stable category replacements before admitting larger cohorts. Validate
   more than twenty-one small resident members, a reader arriving during SQL,
   ordinary cache writers during preparation, and complete postcommit publication
   without further capacity admission.
 
-The next bounded slice applies the charged table and insertion ownership to the
-manifest cache before removing entry-count restrictions. Prepare owned insertion
-claims before SQL for every path that can activate an entry; concurrent accepted
-owners and rollback must preserve those claims without postcommit admission.
-Keep old table backing charged until it is freed, and free empty buffers.
-Category-batch preparation and
-publication must also pass their larger-cohort admission tests. Byte-based
-reservations can then replace the weak slot registry and job counter; immutable
-manifest readers keep independent charges through last-owner release.
+The next bounded integration closes category-batch preparation/publication and
+byte-based reservation ownership before removing entry-count restrictions.
+Category plans must reserve version-stable replacements without spending a full
+mutable allowance per member; ordinary cache writers and readers arriving during
+SQL must preserve the prepared cut and require no new postcommit admission.
+The larger-than-twenty-one-member test remains required. Byte-based reservations
+can then replace the weak slot registry and job counter; immutable manifest
+readers keep independent charges through last-owner release.
 Current count restrictions remain until bookkeeping and category-batch admission
 also pass. The accepted 64-MiB soft target, 128-MiB hard resident ceiling and
 separate 8-MiB transient allowance stay unchanged; no new saved setting or second
 worker pool is introduced. Owned unwrap, guard retention and private-hydration
 lock ordering, ordinary SQL/cache/checkpoint publication, dirty membership and
-checkpoint-table backing have scoped evidence above; adaptive admission remains pending.
+checkpoint/cache-table backing have scoped evidence above; adaptive admission remains pending.
 Earlier library/package receipts retain their
 own source revisions.
 
