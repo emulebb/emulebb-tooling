@@ -2476,6 +2476,16 @@ Core adoption must reuse the existing connection permit and source lease/retry
 policies, keep waiting preparation bounded, and include callback-only sources.
 REST, settings and schema 107 remain unchanged by this ownership checkpoint.
 
+Rust `3306ca5b` provides Core's bounded promotion/execution boundary: promote
+the existing attempt guard before hydration, and consume one prepared execution
+under the normal worker quota without a second connection admission or redial.
+Cancellation and generation authority remain with the same guard. Windows
+passes 702 Core executions without warnings in
+`reports/settings-request-round-1/core-prepared-execution.log`, including full
+connection-budget reuse, deduplication, refusal and worker-drain checks. Normal
+commit/push hooks passed. Discovery does not yet produce prepared executions;
+this checkpoint does not claim production ready-source selection.
+
 Ready-source selection, scarcity, 25% bursts and actual concurrent-payload
 qualification remain open. Musl, Android-target and other applicable platform
 checks remain required for the new dependency. Public contracts and configured

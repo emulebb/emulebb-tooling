@@ -1444,6 +1444,22 @@ or pressure/higher-concurrency qualification. Core must adopt this owner without
 another connection admission and reuse source lease/retry machinery. Schema 107
 and public REST/settings contracts are unchanged in this checkpoint.
 
+Rust `3306ca5b` adds the Core promotion/execution boundary. Preparation promotes
+the same attempt guard before resident/storage hydration, preserving its nonce,
+generation and cancellation. Refusal retains preparation ownership; existing
+active work drains after a lower admission window. The direct-download driver
+can consume a one-shot prepared future under its existing worker quota without
+acquiring another connection permit or redialing that endpoint. Other sources
+retain their normal retry behavior and common result handling.
+
+Windows passes **702 Core executions**, without warnings, in
+`reports/settings-request-round-1/core-prepared-execution.log`. Five new cases
+cover promotion refusal/drain/cancellation, full connection-budget reuse,
+endpoint deduplication, worker-panic drain and content-mismatch cleanup. Normal
+commit/push hooks passed. The production scheduler still supplies no prepared
+future: discovery and Native-owner construction remain the next integration,
+not qualified behavior. Schema, public contracts and memory ceilings are unchanged.
+
 The next bounded work is ready-source selection and scarcity/burst scheduling,
 then payload/session qualification including structural snapshots, retained
 session pins and held-I/O pressure. The new dependency still requires musl,
