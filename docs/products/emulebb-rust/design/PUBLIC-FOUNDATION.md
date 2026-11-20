@@ -2292,12 +2292,25 @@ and category-writer progress while hydration waits for content. Windows passes
 1,462 eD2K and 688 Core executions in
 `reports/settings-request-round-1/retained-io-lock-order-ed2k.log` and
 `retained-io-lock-order-core.log` in that directory. This establishes the guard
-primitive; ordinary-store callers do not yet transfer it through publication.
-The next bounded implementation wires that retained I/O ownership through the
-ordinary SQL/cache/checkpoint owner and prepares reconciled backing before
-commit. The runtime item retains competing-writer, cancellation and durable-
-authority acceptance criteria. Bookkeeping and category-batch accounting follow
-before count removal and adaptive scheduler qualification.
+primitive. Rust `181f3c40` wires retained I/O ownership through every ordinary
+store caller and its SQL/cache/checkpoint worker. Replacement credit and revision
+headroom are checked before SQL; conversion and backing settlement happen while
+the transaction can still roll back. Caller cancellation cannot release the I/O
+cut before publication or let the next writer overwrite committed progress from
+an older cache snapshot. Progress preserves current operator metadata, and
+verification/salvage catalog updates follow successful persistence and resolve
+current presentation at the final SQL fence.
+
+Windows validation passes 1,466 eD2K, 312 metadata and 688 Core executions in
+`reports/settings-request-round-1/ordinary-store-catalog-ed2k.log`,
+`ordinary-store-catalog-metadata-final.log` and `ordinary-store-catalog-core.log`
+in that directory. Deterministic cases cover precommit refusal/rollback, competing
+writers, caller cancellation, old reader charges and stale catalog presentation.
+This qualifies the SQL/cache/checkpoint handoff; catalog refresh remains a
+caller-owned follow-on. The runtime item records that boundary and shutdown
+ownership. The next bounded slice charges resident bookkeeping and retained
+container capacity. Category-batch accounting follows before count removal and
+adaptive scheduler qualification.
 The 1-GiB campaign remains a final-source gate after these runtime changes;
 the 512-MiB receipt above is preserved for its actual selected revisions.
 No PR, merge, main update, release or publication is authorized.

@@ -1187,13 +1187,14 @@ before replacing the eighteen-resident restriction with byte-only admission:
   prove restoration, pressure refusal, readmission and complete charge release.
   The Windows eD2K suite passes 1,460 executions in
   `reports/settings-request-round-1/resident-owned-frontier-ed2k.log`.
-- In `store.rs::store_manifest_unlocked`, reserve replacement credit before SQL
-  and settle publication to actual retained backing. Pressure must refuse before
-  durable mutation; existing immutable readers keep their charges until release.
-  Retain the job I/O guard through commit and publication, matching the existing
-  piece-checkpoint owner. Cancellation must not let a competing writer snapshot
-  an older cache and overwrite the first writer's committed piece. Validate this
-  with two writers, a postcommit gate, caller cancellation and old reader pins.
+- Rust `181f3c40` moves ordinary persistence into `store_publication.rs` and
+  transfers the caller's exact I/O guard through its SQL/cache/checkpoint worker.
+  Reserve replacement credit and revision headroom before SQL; conversion and
+  backing settlement must succeed before commit. Existing immutable readers keep
+  their charges until release. Cache-only publication also settles to actual
+  retained backing. Deterministic tests prove precommit pressure/revision refusal,
+  metadata rollback on preparation failure, competing-writer exclusion after
+  caller cancellation, retained old reader pins and final backing-charge release.
   Rust `7a6d5e89` prepares this handoff with retainable scoped guards: the exact
   mutex and registry key live through the last guard owner. It also fixes private
   hydration to acquire content before category, matching store/cache publication.
@@ -1202,27 +1203,40 @@ before replacing the eighteen-resident restriction with byte-only admission:
   and exact registry retirement; the existing 100,000-key churn test also passes.
   Windows validation passes 1,462 eD2K and 688 Core executions in
   `reports/settings-request-round-1/retained-io-lock-order-ed2k.log` and
-  `retained-io-lock-order-core.log` in that directory. Ordinary-store callers do
-  not yet transfer a retained I/O guard; their cancellation cut remains pending.
-  Progress SQL must preserve authoritative shared comment/rating/upload-priority
-  fields rather than restoring a stale snapshot. Reconciled backing must fit
-  its preadmitted credit before commit, not discover a size refusal afterward.
+  `retained-io-lock-order-core.log` in that directory. The ordinary-store handoff
+  is now wired by `181f3c40`. Progress SQL preserves authoritative shared
+  comment/rating/upload-priority fields rather than restoring a stale snapshot.
+  Verification and salvage publish catalog geometry only after successful
+  persistence, and the final SQL fence supplies current presentation and AICH
+  authority even when the caller retains an older proposal. Regressions prove a
+  refused whole-piece store cannot advertise uncommitted ranges and a stale
+  catalog refresh cannot undo an operator edit.
+  Windows validation passes 1,466 eD2K, 312 metadata and 688 Core executions in
+  `reports/settings-request-round-1/ordinary-store-catalog-ed2k.log`,
+  `ordinary-store-catalog-metadata-final.log` and `ordinary-store-catalog-core.log`
+  in that directory. After the eD2K run, only two metadata-test callback signatures
+  and their formatting changed; metadata/Core checks and the mandatory commit
+  hook cover those repairs. No production bytes changed after that eD2K proof.
+  The cancellation proof covers SQL/cache/checkpoints; catalog refresh remains a
+  caller-owned follow-on. Ordinary blocking stores retain the profile lease but
+  are outside the local-mutation registry drain. Hosted owners must drain their
+  Tokio runtime, as required by the hosted shutdown contract; final-source
+  shutdown qualification remains required.
 - Replace `category_cache.rs` fixed full-copy reservation per member with charged,
   version-stable category replacements before admitting larger cohorts. Validate
   more than twenty-one small resident members, a reader arriving during SQL,
   ordinary cache writers during preparation, and complete postcommit publication
   without further capacity admission.
 
-The next bounded slice transfers retained I/O ownership through every ordinary
-store caller and the SQL/cache/checkpoint owner. Reserve backing before SQL and
-prepare the reconciled resident representation before commit so publication
-cannot discover a new size/capacity refusal after durable mutation.
+The next bounded slice charges retained slot/map/cache capacity and checkpoint
+bookkeeping before removing entry-count restrictions. Category-batch preparation
+and publication must then pass their larger-cohort admission tests.
 Current count restrictions remain until bookkeeping and category-batch admission
 also pass. The accepted 64-MiB soft target, 128-MiB hard resident ceiling and
 separate 8-MiB transient allowance stay unchanged; no new saved setting or second
 worker pool is introduced. Owned unwrap, guard retention and private-hydration
-lock ordering have the scoped evidence above; ordinary-store publication and
-adaptive admission remain pending. Earlier library/package receipts retain their
+lock ordering and ordinary SQL/cache/checkpoint publication have the scoped
+evidence above; adaptive admission remains pending. Earlier library/package receipts retain their
 own source revisions.
 
 Reads retain immutable pins; resident bytes and job slots survive cache eviction
