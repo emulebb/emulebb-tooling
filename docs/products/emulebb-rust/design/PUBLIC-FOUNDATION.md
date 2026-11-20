@@ -2114,10 +2114,9 @@ Its extended category/storage/sharing/tag/upload-accounting, retained-job,
 listener, Kad, peer and offline-settings phases pass. The retained-job phase
 explicitly records `memoryLimitQualified:false` and
 `physicalLibraryQualified:false`; it does not qualify either physical-library
-capacity tier. Both physical-library capacity tiers remain unqualified.
-Qualify the bounded watcher ingress and native subtree/flood behavior before
-restarting those campaigns. Current native evidence is recorded below; other
-platform qualification remains separate.
+capacity tier. The later bounded-ingress GNU and 512-MiB physical campaign
+evidence below qualifies those selected revisions; the 1-GiB physical tier and
+other platform qualification remain separate.
 Rust `4d15f544` establishes its durable foundation in fresh schema 106: each root
 stores a scan-required flag and bounded loss revision. The full scan captures
 the immutable root ID and revision before walking it, then acknowledges only
@@ -2231,7 +2230,7 @@ The scoped suite passes 122 checks in
 `reports/settings-request-round-1/watcher-loss-watermark-harness-python.log`;
 all six recovery cases pass after the message update in
 `watcher-loss-watermark-cases-final.log` in that directory. The committed push
-gate passes. This is harness validation; the physical memory tiers remain open.
+gate passes. The physical campaign result below is separate from those unit checks.
 
 Harness `a98cf88b` shares explicit/registered contract selection across profile
 writing, response validation and REST conformance, so a standalone container
@@ -2254,13 +2253,38 @@ and integrity. Rename still reports scan-required after the explicit scan, so
 acceptance correctly fails. Kernel receipts prove unchanged 512 MiB/no-swap/
 one-CPU limits and zero OOM events; owned containers are removed and the labelled
 fixture volume is retained. This is partial evidence, not capacity qualification.
-The strengthened recovery harness will distinguish a newer late loss from an
-unacknowledged unchanged revision on the next full run.
+The succeeding campaign below distinguishes newer late loss from an
+unacknowledged unchanged revision.
 
-Complete native subtree/flood qualification and both physical-library memory
-tiers before claiming watcher/capacity completion. GNU default-feature tests and
-package smoke do not qualify musl, ARM64, an Android device, the large-library
-tiers or the whole foundation objective.
+The full **50,000-file plus 100,000-retained-job campaign at 512 MiB passes** on
+Rust `3f287cc7`, Harness `80331750`, Builder `5d306e8` and Tooling `271f3bc9`:
+`reports/linux-containers/library/9e044c15b37b4f1885a0ba17484f93a3/report.json`.
+Its nested `campaign/rust-shared-library-io-20261120T000219Z-1.json` passes all
+global, phase and watcher checks in 825.619 seconds. Cold hashing reads exactly
+5 GiB across 50,000 files; the unchanged reload reuses all files with zero payload
+reads; the one-percent mutation hashes 500 files and reuses 49,500, reading
+50 MiB. Retained-job traversal/counts, populated-root update, long paths, all four
+1,000-file watcher bursts, warm/final restart persistence and graceful shutdown
+pass. REST and watcher errors are zero. Create acknowledgements observe revisions
+2 then 4, and rename observes 7 then 9: the second explicit scans acknowledge
+proven newer losses, after which every watched root is clear.
+
+Kernel evidence proves unchanged 512-MiB memory, zero-swap and one-CPU limits
+with no OOM events or kills across the campaign process tree. The owned
+container is removed and its labelled volume retained. This qualifies physical
+library operation with metadata-only retained download history on that source
+set, not concurrent payload downloading, all platforms, year-long operation or
+the whole foundation. The 100,000-file/100,000-job tier at 1 GiB remains required.
+Native whole-directory rename/removal recovery also remains separate from the
+controlled subtree unit test and the campaign's individual-file mutation bursts.
+
+Before lifting download count caps, the resident ledger and publication
+prerequisites in the [runtime item](../active/items/RUST-REF-016.md) must close.
+The next bounded implementation repairs direct publication-credit gaps while
+retaining the current count restrictions. Bookkeeping and category-batch
+accounting follow before count removal and adaptive scheduler qualification.
+The 1-GiB campaign remains a final-source gate after these runtime changes;
+the 512-MiB receipt above is preserved for its actual selected revisions.
 No PR, merge, main update, release or publication is authorized.
 
 Compiler investigation uses Builder's diagnostic-only Linux collection command;

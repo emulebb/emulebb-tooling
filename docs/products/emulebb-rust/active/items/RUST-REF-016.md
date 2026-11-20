@@ -1174,6 +1174,31 @@ operator-authorized fixed **128-MiB** cap. The passing capacity regression retai
 all eighteen entries and old reader pins while publishing four replacements.
 This measures backing capacities, not allocator metadata or total daemon RSS.
 
+The bounded resident-accounting review of Rust `3f287cc7` identifies prerequisites
+before replacing the eighteen-resident restriction with byte-only admission:
+
+- Charge retained slot/map/cache capacity and checkpoint dirty-set bookkeeping,
+  including container capacity retained after eviction. These allocations are
+  currently bounded partly by the entry-count restriction rather than the ledger.
+- In `resident.rs::try_edit_owned`, restore mutable allowance if a reader departs
+  between the unique-owner check and successful unwrap. A deterministic
+  interleaving must prove that mutation never proceeds on retained-only credit.
+- In `store.rs::store_manifest_unlocked`, reserve replacement credit before SQL
+  and settle publication to actual retained backing. Pressure must refuse before
+  durable mutation; existing immutable readers keep their charges until release.
+- Replace `category_cache.rs` fixed full-copy reservation per member with charged,
+  version-stable category replacements before admitting larger cohorts. Validate
+  more than twenty-one small resident members, a reader arriving during SQL,
+  ordinary cache writers during preparation, and complete postcommit publication
+  without further capacity admission.
+
+The next bounded slice repairs the two direct publication-credit gaps while
+preserving current count limits. Bookkeeping and category-batch work then precede
+count removal. The accepted 64-MiB soft target, 128-MiB hard resident ceiling and
+separate 8-MiB transient allowance stay unchanged; no new saved setting or second
+worker pool is introduced. These are read-only review findings and pending
+acceptance criteria, not implemented or qualified behavior.
+
 Reads retain immutable pins; resident bytes and job slots survive cache eviction
 and release through the existing admission wake control. MD4, peer/name,
 delivery-evidence, AICH, content-metadata and ingest callbacks admit replacement
