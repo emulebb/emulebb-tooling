@@ -2373,10 +2373,24 @@ recovery without cancelling owned execution. Builder `98fa3d2` extends its
 existing explicit lock-authoring option to resolve new registry dependencies;
 ordinary tests remain locked. Its scoped suite and push checks pass.
 
+Rust `770b1484` fixes a test-only strict Clippy assertion found by the GNU gate;
+312 Windows metadata executions pass in
+`reports/settings-request-round-1/adaptive-gate-metadata.log`. On that revision,
+GNU AMD64 passes strict workspace Clippy, packet-diagnostics checks, the release
+build, 3,349 workspace executions and all three VPN egress tests. Logs are under
+`reports/rust-linux/gnu-amd64/81a2037abd804dacb0331eef1295eb76/`.
+The non-root package lifecycle passes in
+`reports/rust-linux/gnu-amd64/4d8e5014a8564f269dd2e6cf99501fbd/package-smoke.json`.
+It verifies a 12-MiB controlled download, partial restart, exact delivered
+SHA-256, retained completed job, library registration and graceful shutdown.
+Public discovery is disabled. This is local GNU qualification, not publication,
+rendered browser proof, real VPN-provider operation or higher concurrency.
+
 Ready-source selection, scarcity, 25% bursts and actual concurrent-payload
-qualification remain open. The new dependency still needs the applicable
-cross-platform matrix. Public contracts and configured memory ceilings are
-unchanged; unit evidence does not qualify host-pressure or container behavior.
+qualification remain open. Musl, Android-target and other applicable platform
+checks remain required for the new dependency. Public contracts and configured
+memory ceilings are unchanged; this gate does not qualify adaptive host-pressure
+behavior or either large-library memory tier.
 The 1-GiB campaign remains a final-source gate after these runtime changes;
 the 512-MiB receipt above is preserved for its actual selected revisions.
 No PR, merge, main update, release or publication is authorized.

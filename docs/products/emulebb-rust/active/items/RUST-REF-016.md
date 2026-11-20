@@ -1353,11 +1353,22 @@ Builder `98fa3d2` permits resolving newly added registry dependencies through it
 existing explicit lock-authoring flag; ordinary validation remains locked.
 Its scoped tests and mandatory push checks pass.
 
+Rust `770b1484` repairs a test-only strict Clippy assertion; 312 Windows metadata
+executions pass in `reports/settings-request-round-1/adaptive-gate-metadata.log`.
+Its GNU AMD64 gate passes strict workspace Clippy, packet-diagnostics, release
+build, 3,349 workspace executions and three VPN egress tests. Evidence is under
+`reports/rust-linux/gnu-amd64/81a2037abd804dacb0331eef1295eb76/`.
+Non-root runtime smoke passes in
+`reports/rust-linux/gnu-amd64/4d8e5014a8564f269dd2e6cf99501fbd/package-smoke.json`,
+including a 12-MiB local download, partial restart, exact output hash, retained
+completion, library registration and graceful shutdown. Public discovery is
+disabled; this is not public-network or higher-concurrency qualification.
+
 The next bounded work is ready-source selection and scarcity/burst scheduling,
 then payload/session qualification including structural snapshots, retained
-session pins and held-I/O pressure. The new dependency requires applicable
-cross-platform qualification. Unit tests alone do not qualify higher transfer
-concurrency or measured host/container pressure.
+session pins and held-I/O pressure. The new dependency still requires musl,
+Android-target and other applicable platform qualification. GNU execution does
+not prove adaptive pressure behavior or either memory-tier capacity campaign.
 The accepted 64-MiB soft target, 128-MiB hard resident ceiling and
 separate 8-MiB transient allowance stay unchanged; no new saved setting or second
 worker pool is introduced. Owned unwrap, guard retention and private-hydration
