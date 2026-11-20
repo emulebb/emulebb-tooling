@@ -2218,16 +2218,20 @@ The smoke uses Harness `a7a128f2` and contract source Tooling `f437c6a5`, and
 verifies the local transfer, partial restart and graceful shutdown. The earlier
 package receipt above belongs to `e8edf8cf` only.
 
-Harness `01fd758d` brings the physical campaign's 1,000-file watcher bursts under
-the same recovery contract. Each phase starts from an acknowledged watched root,
-keeps exact REST/SQLite path, count and hash checks, and records whether loss was
-reported. A reported loss permits one explicit REST scan through the existing
-reload observer. A failed scan is not retried, and a still-required scan fails
-acceptance even if the file counts happen to match. The preceding focused suite
-passes 119 checks; the corrected four recovery cases pass in
-`reports/settings-request-round-1/watcher-recovery-cases-final.log`, and the push
-gate passes on the committed sources. This is harness validation; the physical
-memory campaigns remain pending.
+Harness `80331750` qualifies the physical campaign's 1,000-file watcher bursts
+under the same recovery contract. Each phase starts from an acknowledged watched
+root, keeps exact REST/SQLite path, count and hash checks, and records the durable
+loss revision before each explicit REST scan. A second acknowledgement is
+permitted only for a strictly newer revision, matching the rule that loss during
+a scan remains unacknowledged. An unchanged revision, failed scan, or further
+loss beyond this bounded acknowledgement budget fails acceptance; no failed
+request is retried. The final root must be acknowledged even when file counts
+already match. Fixed phase/revision messages retain progress without paths.
+The scoped suite passes 122 checks in
+`reports/settings-request-round-1/watcher-loss-watermark-harness-python.log`;
+all six recovery cases pass after the message update in
+`watcher-loss-watermark-cases-final.log` in that directory. The committed push
+gate passes. This is harness validation; the physical memory tiers remain open.
 
 Harness `a98cf88b` shares explicit/registered contract selection across profile
 writing, response validation and REST conformance, so a standalone container
@@ -2240,6 +2244,18 @@ The preceding failed preflight receipt at
 `reports/linux-containers/library/d41ade6b494a4b4690cdd9fc3105507c/report.json`
 records no fixture volume allocation, verified container removal and
 `workloadQualified:false`; it provides no capacity proof.
+
+The first full 50,000-file/100,000-retained-job campaign at 512 MiB fails watcher
+rename acknowledgement:
+`reports/linux-containers/library/31d32e13edf84d3192a885a3d6cb76a2/report.json`.
+Its nested campaign report records all 50,000 files initially hashed, successful
+watcher creation/modification phases, and exact renamed paths, counts, hashes
+and integrity. Rename still reports scan-required after the explicit scan, so
+acceptance correctly fails. Kernel receipts prove unchanged 512 MiB/no-swap/
+one-CPU limits and zero OOM events; owned containers are removed and the labelled
+fixture volume is retained. This is partial evidence, not capacity qualification.
+The strengthened recovery harness will distinguish a newer late loss from an
+unacknowledged unchanged revision on the next full run.
 
 Complete native subtree/flood qualification and both physical-library memory
 tiers before claiming watcher/capacity completion. GNU default-feature tests and
