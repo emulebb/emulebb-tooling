@@ -2386,6 +2386,18 @@ SHA-256, retained completed job, library registration and graceful shutdown.
 Public discovery is disabled. This is local GNU qualification, not publication,
 rendered browser proof, real VPN-provider operation or higher concurrency.
 
+Rust `949b9e26` removes the execution-manifest dependency from standalone,
+multipacket and extended-identifier file-request encoding. All three encode
+file size and streamed verified-part bits; payload startup uses those same
+encoders directly, without an additional bitmap allocation. This enables a
+compact waiting-job probe without a parallel wire encoder. Geometry bounds
+input consumption and output; absent data bits remain unverified and the exact-
+multiple EOF bit retains stock semantics. Windows passes 1,480 Native executions
+without warnings in `reports/settings-request-round-1/compact-request-status-ed2k.log`,
+including listener/download protocol cases and three compact-status regressions.
+This is an encoder prerequisite, not an implemented probe or ready-job gate.
+The GNU package receipt above remains evidence for its recorded source revision.
+
 Ready-source selection, scarcity, 25% bursts and actual concurrent-payload
 qualification remain open. Musl, Android-target and other applicable platform
 checks remain required for the new dependency. Public contracts and configured

@@ -1364,6 +1364,18 @@ including a 12-MiB local download, partial restart, exact output hash, retained
 completion, library registration and graceful shutdown. Public discovery is
 disabled; this is not public-network or higher-concurrency qualification.
 
+Rust `949b9e26` makes the three file-request encoders consume only geometry and
+streamed verified bits. Payload startup calls the same encoders, with no extra
+bitmap allocation. Probes can therefore use compact database status without
+constructing a resident execution manifest or duplicating protocol encoding.
+Absent bits never imply verified data; the exact-multiple EOF slice is complete.
+Windows passes 1,480 Native executions without warnings in
+`reports/settings-request-round-1/compact-request-status-ed2k.log`. The new
+regressions assert wire bytes, byte-boundary/EOF behavior, absent status and
+geometry-bounded consumption/output. Existing listener/download cases still pass.
+Actual waiting-job probing and ready-source admission are not implemented by
+this prerequisite; GNU evidence above retains its exact earlier source revision.
+
 The next bounded work is ready-source selection and scarcity/burst scheduling,
 then payload/session qualification including structural snapshots, retained
 session pins and held-I/O pressure. The new dependency still requires musl,
