@@ -1174,13 +1174,16 @@ operator-authorized fixed **128-MiB** cap. The passing capacity regression retai
 all eighteen entries and old reader pins while publishing four replacements.
 This measures backing capacities, not allocator metadata or total daemon RSS.
 
-The bounded resident-accounting review of Rust `3f287cc7` identifies prerequisites
-before replacing the eighteen-resident restriction with byte-only admission:
+The following scoped changes close Native resident-accounting prerequisites.
+Core adaptive admission and actual payload/session qualification remain open:
 
-- Remove the weak slot/count registry once the remaining category-batch and
-  byte-based admission prerequisites pass. Slot allocations are still bounded
-  partly by the entry-count restriction rather than the ledger. Manifest-cache
-  and checkpoint-table capacity now have the scoped proofs below.
+- Rust `cc263416` replaces the weak slot/count registry with direct byte
+  reservations. Each backing owns its budget/control identity and job ID;
+  immutable readers release their charge only with their last backing owner.
+  No per-job slot allocation, weak-node table or Native resident-count limit
+  remains. Regressions admit 96 distinct small reservations, retain independent
+  reader versions, and reject mutable credits from another job or budget in
+  both unique and reader-pinned cases. The 128-MiB ceiling is unchanged.
 - Rust `34a59a82` closes the owned-unwrap credit gap in
   `resident.rs::try_edit_owned`: every successful unwrap restores mutable
   allowance before exposing a draft. Refusal returns an intact immutable pin.
@@ -1282,30 +1285,45 @@ before replacing the eighteen-resident restriction with byte-only admission:
   Full owner release returns every charge. Existing competing-writer,
   cancellation, stopped-callback, dirty-progress and scalar-patch tests pass.
   The slot registry and category-batch reservation plan remain outside this proof.
-- Replace `category_cache.rs` fixed full-copy reservation per member with charged,
-  version-stable category replacements before admitting larger cohorts. Validate
-  more than twenty-one small resident members, a reader arriving during SQL,
-  ordinary cache writers during preparation, and complete postcommit publication
-  without further capacity admission.
+- Rust `cc263416` also prepares category replacements at their actual retained
+  size, with charged plan-vector backing. Core/root preparation and DB queue
+  waiting hold only the existing category fence. After dequeue, the blocking DB
+  owner acquires the cache, prepares every selected immutable replacement before
+  SQL, and retains that exact cut through commit and synchronous publication.
+  Readers and writers cannot invalidate the prepared cut. Budget refusal occurs
+  before durable mutation; publication requires no new admission or allocation.
+  Scalar download patches keep their single-member mutable credit and existing
+  lifecycle/I/O/content/category fences.
+  The 32-member category regression proves small replacements use less than one
+  MiB together, preserves old reader values, parks an arriving reader and ordinary
+  writer across the SQL cut, and finishes publication at a full resident budget
+  after observer cancellation. The writer subsequently retains the new category
+  and its own progress. Windows passes 1,477 eD2K and 688 Core executions in
+  `reports/settings-request-round-1/category-byte-admission-ed2k.log` and
+  `category-byte-admission-core.log` in that directory.
+  A bounded independent source review found no reachable lock/queue cycle:
+  category SQL/publication must remain independent of Core replies, root-epoch
+  waits and catalog locks while the cache is held. Hydration/AICH metadata
+  callbacks use preheld cache guards; ordinary upsert, ingest and control finish
+  metadata calls before reacquiring cache. Preserve that order. Metadata
+  contention, SQLite waits, category/root updates and fsync can temporarily stall
+  the global cache during this administrative operation. No latency target is
+  claimed; no new worker, budget or retry machinery is introduced.
 
-The next bounded integration closes category-batch preparation/publication and
-byte-based reservation ownership before removing entry-count restrictions.
-Category plans must reserve version-stable replacements without spending a full
-mutable allowance per member; ordinary cache writers and readers arriving during
-SQL must preserve the prepared cut and require no new postcommit admission.
-The larger-than-twenty-one-member test remains required. Byte-based reservations
-can then replace the weak slot registry and job counter; immutable manifest
-readers keep independent charges through last-owner release.
-Current count restrictions remain until bookkeeping and category-batch admission
-also pass. The accepted 64-MiB soft target, 128-MiB hard resident ceiling and
+The next bounded work is Core adaptive scheduling and payload/session
+qualification, including structural snapshots, retained session pins and held-I/O
+pressure. Core still has its engineering selection/preparation restrictions;
+Native byte-based admission alone does not qualify higher transfer concurrency.
+The accepted 64-MiB soft target, 128-MiB hard resident ceiling and
 separate 8-MiB transient allowance stay unchanged; no new saved setting or second
 worker pool is introduced. Owned unwrap, guard retention and private-hydration
 lock ordering, ordinary SQL/cache/checkpoint publication, dirty membership and
-checkpoint/cache-table backing have scoped evidence above; adaptive admission remains pending.
+checkpoint/cache-table backing, category batches and Native byte admission have
+scoped evidence above; adaptive admission remains pending.
 Earlier library/package receipts retain their
 own source revisions.
 
-Reads retain immutable pins; resident bytes and job slots survive cache eviction
+Reads retain immutable pins; resident bytes survive cache eviction
 and release through the existing admission wake control. MD4, peer/name,
 delivery-evidence, AICH, content-metadata and ingest callbacks admit replacement
 credit before SQL. Joint transient/resident admission avoids self-generated

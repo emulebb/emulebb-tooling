@@ -448,8 +448,8 @@ working-state memory, available system memory/pressure, and bounded connection
 and I/O capacity. Respect applicable container limits; available-memory estimates
 alone do not authorize allocations. **16 active downloads plus 2 preparation
 slots** is the initial engineering/qualification baseline, not a permanent
-product count ceiling. Replace the implementation's fixed eighteen-resident
-restriction when delivering this policy.
+product count ceiling. Native resident ownership is byte-based; the Core
+scheduler must also replace its fixed engineering limits when delivering this policy.
 
 Keep the setting name `maxConcurrentDownloads`, nullable with default `null`
 for automatic adaptive concurrency. In automatic mode the scheduler chooses
@@ -496,9 +496,9 @@ payload bytes remain on disk. The existing **8 MiB native transient-work
 budget** remains separate. Charge resident backing until its last reader
 releases it, including after eviction. These are internal subsystem budgets,
 not new saved memory settings, a second worker pool or a total daemon RAM limit.
-Maximum-geometry retained-backing validation selected 128 MiB: eighteen entries
-plus four admitted replacement credits require 120,696,504 bytes on the measured
-Windows target. This is component evidence, not full adaptive concurrency,
+Maximum-geometry retained-backing validation selected 128 MiB. The current
+regression keeps the eighteen-entry engineering cohort and four admitted
+replacement credits within that ceiling. This is component evidence, not full adaptive concurrency,
 total RSS or end-to-end acceptance; the owning
 [runtime item](../active/items/RUST-REF-016.md) records remaining qualification.
 
@@ -2278,8 +2278,9 @@ the whole foundation. The 100,000-file/100,000-job tier at 1 GiB remains require
 Native whole-directory rename/removal recovery also remains separate from the
 controlled subtree unit test and the campaign's individual-file mutation bursts.
 
-Before lifting download count caps, the resident ledger and publication
-prerequisites in the [runtime item](../active/items/RUST-REF-016.md) must close.
+The resident ledger and publication changes in the
+[runtime item](../active/items/RUST-REF-016.md) have scoped component evidence below;
+Core adaptive scheduling and payload qualification remain required.
 Rust `34a59a82` repairs mutable-credit restoration after owned resident unwrap;
 all 1,460 Windows eD2K tests pass in
 `reports/settings-request-round-1/resident-owned-frontier-ed2k.log`. Failed
@@ -2335,10 +2336,19 @@ their charges. Windows passes 1,475 eD2K and 688 Core executions in
 refusal before SQL/publication, refusal at the selected-hydration boundary, and
 reader-backed lifetime across eviction and rehydration.
 
-The remaining resident prerequisites are category-batch preparation and removal
-of the weak slot/count registry once byte-based ownership is qualified.
-Category-batch accounting follows before slot-registry/count removal and adaptive
-scheduler qualification. Public contracts and configured memory ceilings are unchanged.
+Rust `cc263416` closes category-batch preparation and replaces Native slot/count
+ownership with byte-based reservations. The existing blocking DB owner prepares
+actual-sized immutable category copies immediately before SQL, retains one cache
+cut through commit/publication, and admits no new capacity after commit. It never
+holds the cache while queued or preparing root epochs. A 32-member cohort proves
+full-budget publication after observer cancellation, preserved old readers and
+correct progress from a waiting writer. Wrong-job/budget credit is rejected.
+Windows passes 1,477 eD2K and 688 Core executions in
+`reports/settings-request-round-1/category-byte-admission-ed2k.log` and
+`category-byte-admission-core.log` in that directory. A bounded lock-order review
+found no reachable cycle; category SQL can temporarily block cache access.
+Core scheduler limits, adaptive admission and payload qualification remain open.
+Public contracts and configured memory ceilings are unchanged.
 The 1-GiB campaign remains a final-source gate after these runtime changes;
 the 512-MiB receipt above is preserved for its actual selected revisions.
 No PR, merge, main update, release or publication is authorized.
