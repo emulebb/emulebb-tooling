@@ -2316,8 +2316,18 @@ state. Windows passes 1,468 eD2K and 688 Core executions in
 `reports/settings-request-round-1/checkpoint-bitmap-ed2k-final.log` and
 `checkpoint-bitmap-core.log` in that directory.
 
-The next bounded slice charges retained cache/checkpoint table capacity. Every possible postcommit
-insertion needs precommitted capacity, including concurrent accepted owners.
+Rust `c910046c` charges the in-memory checkpoint table's retained entry capacity
+and fixed backing allowance to the same resident ceiling. Sorted storage avoids
+assumptions about private hash/tree node layouts. Growth admits peak old and new
+buffers before moving entries; accepted writers retain insertion claims through
+SQL and cancellation. Spare capacity remains charged, and empty unclaimed
+buffers are released. Windows passes 1,472 eD2K and 688 Core executions in
+`reports/settings-request-round-1/checkpoint-table-ed2k.log` and
+`checkpoint-table-core.log` in that directory.
+
+The next bounded slice applies this ownership to the manifest cache. Every
+possible postcommit cache insertion needs precommitted capacity, including
+concurrent accepted owners.
 Category-batch accounting follows before slot-registry/count removal and adaptive
 scheduler qualification. Public contracts and configured memory ceilings are unchanged.
 The 1-GiB campaign remains a final-source gate after these runtime changes;

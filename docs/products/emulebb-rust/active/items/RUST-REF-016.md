@@ -1177,9 +1177,10 @@ This measures backing capacities, not allocator metadata or total daemon RSS.
 The bounded resident-accounting review of Rust `3f287cc7` identifies prerequisites
 before replacing the eighteen-resident restriction with byte-only admission:
 
-- Charge retained slot/map/cache and checkpoint-table capacity,
-  including container capacity retained after eviction. These allocations are
-  currently bounded partly by the entry-count restriction rather than the ledger.
+- Charge the manifest cache and slot registry, including container capacity
+  retained after eviction. Their allocations remain bounded partly by the entry-
+  count restriction rather than the ledger. The checkpoint table now has its
+  scoped retained-capacity proof below.
 - Rust `34a59a82` closes the owned-unwrap credit gap in
   `resident.rs::try_edit_owned`: every successful unwrap restores mutable
   allowance before exposing a draft. Refusal returns an intact immutable pin.
@@ -1241,19 +1242,40 @@ before replacing the eighteen-resident restriction with byte-only admission:
   final release and bitmap-credit refusal before SQL/cache mutation. The existing
   stopped-callback regression caught premature preflight insertion; the validated
   common publication path repairs it and the full rerun passes unchanged.
-  Slot/map/cache/checkpoint-table allocations remain outside this scoped proof.
+  Slot/map/cache/checkpoint-table allocations remain outside the bitmap proof.
+- Rust `c910046c` replaces the in-memory checkpoint HashMap with resident-charged
+  sorted entry storage. Lookups use binary search; membership insertion/removal
+  shifts entries only for selected execution bookkeeping. The fixed backing
+  allowance and actual Vec capacity remain charged, including unused capacity.
+  Growth reserves peak old-plus-new backing before moving entries and frees the
+  old buffer before returning its credit. Failed admission preserves the table.
+  Ordinary SQL owners claim insertion space before commit. Concurrent accepted
+  claims reserve enough capacity for every owner; cancellation releases its
+  claim without an async lock. Claimed publication performs no new admission or
+  storage allocation. Last removal frees an empty buffer when no claim needs it;
+  rollback-only spare remains fully charged until the next edit or table drop.
+  Checkpoint bitmaps retain their independent charges. Native token ordering is
+  derived from job ID and generation; SQLite and public ID shapes are unchanged.
+  Windows passes 1,472 eD2K and 688 Core executions in
+  `reports/settings-request-round-1/checkpoint-table-ed2k.log` and
+  `checkpoint-table-core.log` in that directory. Regressions cover 64 storage-only
+  entries, retained spare capacity, final release, competing claims plus rollback
+  at a full budget, old-plus-new peak refusal and actual ordinary-store refusal
+  before SQL/cache/checkpoint publication. Existing caller-cancellation and
+  competing-writer tests also pass with the claimed table. This does not qualify
+  more than eighteen selected jobs or close manifest-cache/slot accounting.
 - Replace `category_cache.rs` fixed full-copy reservation per member with charged,
   version-stable category replacements before admitting larger cohorts. Validate
   more than twenty-one small resident members, a reader arriving during SQL,
   ordinary cache writers during preparation, and complete postcommit publication
   without further capacity admission.
 
-The next bounded slice charges retained cache/checkpoint table capacity before
-removing entry-count restrictions. Use measurable sorted-vector capacity,
-including spare capacity after removal. Prepare owned insertion claims before
-SQL for every path that can add an entry; concurrent accepted owners and rollback
-must preserve those claims without postcommit admission. Keep old table backing
-charged until it is freed, and free empty buffers. Category-batch preparation and
+The next bounded slice applies the charged table and insertion ownership to the
+manifest cache before removing entry-count restrictions. Prepare owned insertion
+claims before SQL for every path that can activate an entry; concurrent accepted
+owners and rollback must preserve those claims without postcommit admission.
+Keep old table backing charged until it is freed, and free empty buffers.
+Category-batch preparation and
 publication must also pass their larger-cohort admission tests. Byte-based
 reservations can then replace the weak slot registry and job counter; immutable
 manifest readers keep independent charges through last-owner release.
@@ -1261,8 +1283,8 @@ Current count restrictions remain until bookkeeping and category-batch admission
 also pass. The accepted 64-MiB soft target, 128-MiB hard resident ceiling and
 separate 8-MiB transient allowance stay unchanged; no new saved setting or second
 worker pool is introduced. Owned unwrap, guard retention and private-hydration
-lock ordering, ordinary SQL/cache/checkpoint publication and dirty membership
-backing have the scoped evidence above; adaptive admission remains pending.
+lock ordering, ordinary SQL/cache/checkpoint publication, dirty membership and
+checkpoint-table backing have scoped evidence above; adaptive admission remains pending.
 Earlier library/package receipts retain their
 own source revisions.
 
