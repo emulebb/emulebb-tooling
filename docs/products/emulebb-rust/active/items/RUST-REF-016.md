@@ -53,10 +53,9 @@ timestamp distinctions and exact retained charges through conversion/encoding/dr
 Evidence is `reports/settings-request-round-1/library-summary-{metadata,core}.log`
 below `EMULEBB_WORKSPACE_OUTPUT_ROOT`; normal commit/push hooks passed.
 
-The canonical REST/OpenAPI/WebUI cut remains open. Two operator questions are
-pending in the authoritative foundation: detail-only reads for link/local
-comments, and persistent hash ownership of upload priority/local comment/rating.
-Neither recommendation has been assumed. No transitional REST routes were added.
+The canonical REST/OpenAPI/WebUI cut remains open. The operator accepted detail-only reads for the link and local comment/rating.
+Persistent hash ownership of upload priority/local comment/rating remains pending
+in the authoritative foundation. No transitional REST routes were added.
 
 ## Cached locations REST/WebUI integration (2026-11-21)
 
@@ -425,10 +424,34 @@ software text, optional totals, departed/expired anchors, no read-driven queue
 cleanup, accurate durations, bitmap omission and retained-charge release.
 Evidence below `EMULEBB_WORKSPACE_OUTPUT_ROOT` is
 `reports/settings-request-round-1/upload-management-native-final.log` and
-`upload-management-core.log`; normal commit/push hooks passed. Waiting-page
-REST/WebUI integration is recorded above. The active-page DTO/envelope/UI cut,
-retained detail bodies, removal of fabricated fields and unit cleanup remain
-open; this Native checkpoint registers no new uploads wire shape.
+`upload-management-core.log`; normal commit/push hooks passed.
+
+Rust `e651b35b` completes the upload DTO/REST/WebUI cut. Both lanes expose
+bounded cursor pages and optional totals. Detail reads retain their bodies and
+actual scheduler diagnostics; nullable identity/file facts remain unknown rather
+than becoming fabricated values. Rates use bytes per second and durations use
+elapsed seconds. Controls read fixed scalar identity independently of captions
+and read-body admission. A borrowed envelope encoder admits exact wire backing
+without another full projection allowance and retains it through HTTP body drop.
+The snapshot completes unrelated metadata work before retaining upload pages;
+this prevents its own reservations from exhausting the existing budget. Diagnostic
+capture uses the same bounded active-page reader and reports a 200-row limit.
+
+Scoped gates passed **1,534 Native, 729 Core and 173 REST executions**, with no
+Rust compiler warnings, plus **93 WebUI unit, 33 browser and 224 Python harness
+tests**. Type checking and production bundling passed. REST cases cover both
+collection envelopes, optional totals, limit boundaries, cross-collection cursors
+and missing anchors. WebUI cases cover independent paging, cursor refresh,
+selection races, elapsed units and totals differing from page lengths. An existing
+Core recovery test now waits for both publication and the completion checkpoint
+within its original timeout, preserving all data and recovery assertions.
+
+Evidence below `EMULEBB_WORKSPACE_OUTPUT_ROOT` is
+`reports/settings-request-round-1/upload-wire-native.log`,
+`upload-wire-core-current.log`, `upload-wire-rest-accepted.log`,
+`upload-wire-webui-current.log` and `upload-wire-python.log`.
+Current-build live REST qualification and combined resource qualification remain
+open; these scoped passes do not qualify total daemon memory or sustained soak.
 
 Rust `0ce94c98` replaces serving-view hydration in upload list/detail captions
 with a scalar metadata read through the existing bounded Native worker. It seeks

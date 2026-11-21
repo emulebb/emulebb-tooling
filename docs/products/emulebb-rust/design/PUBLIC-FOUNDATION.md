@@ -943,13 +943,21 @@ Keep other supported meaningful network/system resources; finish an exact route
 inventory before the cut. Evolve daemon routes, typed DTOs, validators, OpenAPI,
 SPA and harness callers together; do not expose transitional dual contracts.
 
-Two operator choices remain pending before the library wire cut: whether the
-hash detail should carry the eD2K link and local comment/rating instead of separate
-read endpoints, and whether upload priority plus local comment/rating should
-have one persistent hash-level owner, editable without an available copy.
-The recommendations are detail-only reads and one hash-level owner. Do not
-apply either recommendation until the operator answers; locations and tags
-remain separate paginated resources under both options.
+The hash detail carries the eD2K link and local comment/rating; it replaces
+separate read endpoints for those scalar facts. Locations and tags remain
+separate paginated resources. One operator choice remains pending: whether
+upload priority plus local comment/rating have one persistent hash-level owner,
+editable without an available copy. The recommendation is one hash-level owner;
+do not apply that ownership change before the operator answers.
+
+Both `/uploads` and `/upload-queue` return bounded data arrays with cursor,
+limit (default 100, maximum 200), and optional countTotal. Cursors are scoped
+to their collection; a departed anchor requires a first-page refresh (409).
+Use bytes per second for rates and elapsed seconds for wait/upload duration.
+Unknown identity/file facts are null. Waiting rows expose their full queue rank;
+active rows use null. List rows omit score diagnostics; detail reads expose the
+actual scheduler score and modifiers. Controls resolve scalar peer identity
+independently of caption reads and response-body admission.
 
 Use correct HTTP status codes with `data`/`meta` success wrappers and structured
 `error.code`, `message`, `details`. Never hide an error under HTTP 200. Specify

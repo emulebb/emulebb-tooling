@@ -2034,6 +2034,10 @@ paths:
       tags: [Uploads]
       summary: List active upload slots.
       operationId: listUploads
+      parameters:
+        - $ref: "#/components/parameters/UploadPageLimit"
+        - $ref: "#/components/parameters/UploadPageCursor"
+        - $ref: "#/components/parameters/CountTotal"
       responses:
         "200":
           $ref: "#/components/responses/UploadListResponse"
@@ -2046,6 +2050,8 @@ paths:
         "405":
           $ref: "#/components/responses/MethodNotAllowedResponse"
         "409":
+          $ref: "#/components/responses/ErrorResponse"
+        "413":
           $ref: "#/components/responses/ErrorResponse"
         "500":
           $ref: "#/components/responses/ErrorResponse"
@@ -2072,6 +2078,8 @@ paths:
         "405":
           $ref: "#/components/responses/MethodNotAllowedResponse"
         "409":
+          $ref: "#/components/responses/ErrorResponse"
+        "413":
           $ref: "#/components/responses/ErrorResponse"
         "500":
           $ref: "#/components/responses/ErrorResponse"
@@ -2268,8 +2276,8 @@ paths:
       operationId: listUploadQueue
       description: Live scheduler rank order. A departed anchor returns 409; refresh from the first page. Rows may move between requests. Pages may contain fewer than limit rows to bound response memory. Score evidence is available through client details.
       parameters:
-        - $ref: "#/components/parameters/UploadQueueLimit"
-        - $ref: "#/components/parameters/UploadQueueCursor"
+        - $ref: "#/components/parameters/UploadPageLimit"
+        - $ref: "#/components/parameters/UploadPageCursor"
         - $ref: "#/components/parameters/CountTotal"
       responses:
         "200":
@@ -2283,6 +2291,8 @@ paths:
         "405":
           $ref: "#/components/responses/MethodNotAllowedResponse"
         "409":
+          $ref: "#/components/responses/ErrorResponse"
+        "413":
           $ref: "#/components/responses/ErrorResponse"
         "500":
           $ref: "#/components/responses/ErrorResponse"
@@ -2335,6 +2345,8 @@ paths:
         "405":
           $ref: "#/components/responses/MethodNotAllowedResponse"
         "409":
+          $ref: "#/components/responses/ErrorResponse"
+        "413":
           $ref: "#/components/responses/ErrorResponse"
         "500":
           $ref: "#/components/responses/ErrorResponse"
@@ -3694,17 +3706,17 @@ components:
       schema:
         type: boolean
         default: false
-      description: Include the exact visible waiting count in meta.total.
-    UploadQueueLimit:
+      description: Include the exact collection count in meta.total.
+    UploadPageLimit:
       name: limit
       in: query
       required: false
       schema: {type: integer, minimum: 1, maximum: 200, default: 100}
-    UploadQueueCursor:
+    UploadPageCursor:
       name: cursor
       in: query
       required: false
-      description: Opaque live queue continuation. A departed anchor requires refreshing from the first page.
+      description: Opaque live continuation scoped to this collection. A departed anchor requires refreshing from the first page.
       schema: {type: string, minLength: 1, maxLength: 512}
     LastEventId:
       name: Last-Event-ID
@@ -4409,7 +4421,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/UploadQueueEntryEnvelope"
+            $ref: "#/components/schemas/UploadEnvelope"
     UrlImportResponse:
       description: URL import operation envelope.
       headers:
@@ -10978,7 +10990,7 @@ components:
               uploadQueue:
                 type: array
                 items:
-                  $ref: '#/components/schemas/UploadQueueEntry'
+                  $ref: '#/components/schemas/Upload'
               servers:
                 type: array
                 items:
@@ -11746,109 +11758,82 @@ components:
         enabled:
           type: boolean
     UploadListEnvelope:
-      unevaluatedProperties: false
-      allOf:
-        - $ref: "#/components/schemas/EnvelopeBase"
-        - type: object
-          properties:
-            data:
-              type: object
-              additionalProperties: false
-              required: [items]
-              properties:
-                items:
-                  type: array
-                  items:
-                    $ref: "#/components/schemas/Upload"
+      type: object
+      additionalProperties: false
+      required: [data, meta]
+      properties:
+        data:
+          type: array
+          maxItems: 200
+          items:
+            $ref: "#/components/schemas/Upload"
+        meta:
+          $ref: "#/components/schemas/CursorPageMeta"
     Upload:
       type: object
       additionalProperties: false
-      required: [id, userName, userHash, clientSoftware, clientMod, uploadState, uploadSpeedKiBps, uploadedBytes, queueSessionUploaded, payloadBuffered, waitTimeMs, waitStartedTick, score, address, port, serverIp, serverPort, lowId, friendSlot, uploading, waitingQueue, requestedFileHash, requestedFileName, requestedFileSizeBytes, requestedPartsObtained, requestedPartsTotal, requestedPartsProgressText]
+      required: [id, userHash, clientSoftware, uploadState, uploadRateBytesPerSec, sessionUploadedBytes, waitTimeSeconds, uploadDurationSeconds, address, port, lowId, friendSlot, connected, requestedFileHash, requestedFileName, requestedFileSizeBytes, filePartsAvailable, filePartsTotal, queueRank]
       properties:
         id:
           type: string
           format: uuid
           pattern: '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}(?![\s\S])'
-        userName:
-          type: string
         userHash:
-          type:
-            - string
-            - "null"
+          type: [string, "null"]
+          pattern: '^[0-9a-f]{32}(?![\s\S])'
         clientSoftware:
-          type: string
-        clientMod:
-          type: string
+          type: [string, "null"]
         uploadState:
           type: string
-          enum: [uploading, queued, connecting, banned, idle]
-        fileHash:
-          type: string
-        fileName:
-          type: string
-        uploadSpeedKiBps:
-          type: number
-          minimum: 0
-        uploadedBytes:
+          enum: [queued, connecting, uploading]
+        uploadRateBytesPerSec:
           type: integer
           minimum: 0
-        queueSessionUploaded:
+        sessionUploadedBytes:
           type: integer
           minimum: 0
-        payloadBuffered:
+        waitTimeSeconds:
           type: integer
           minimum: 0
-        waitTimeMs:
-          type: integer
+          description: Elapsed queue wait, frozen when this upload stint begins.
+        uploadDurationSeconds:
+          type: [integer, "null"]
           minimum: 0
-        waitStartedTick:
-          type: integer
-          minimum: 0
-        score:
-          type: integer
-          minimum: 0
+          description: Seconds since the first accepted payload in this stint; null before uploading.
         address:
           type: string
         port:
           type: integer
           minimum: 0
           maximum: 65535
-        serverIp:
-          type: string
-        serverPort:
-          type: integer
-          minimum: 0
-          maximum: 65535
         lowId:
-          type: boolean
+          type: [boolean, "null"]
         friendSlot:
           type: boolean
-        uploading:
-          type: boolean
-        waitingQueue:
+        connected:
           type: boolean
         requestedFileHash:
-          type:
-            - string
-            - "null"
-        requestedFileName:
-          type:
-            - string
-            - "null"
-        requestedFileSizeBytes:
-          type:
-            - integer
-            - "null"
-          minimum: 0
-        requestedPartsObtained:
-          type: integer
-          minimum: 0
-        requestedPartsTotal:
-          type: integer
-          minimum: 0
-        requestedPartsProgressText:
           type: string
+          pattern: '^[0-9a-f]{32}(?![\s\S])'
+        requestedFileName:
+          type: [string, "null"]
+        requestedFileSizeBytes:
+          type: [integer, "null"]
+          minimum: 0
+        filePartsAvailable:
+          type: [integer, "null"]
+          minimum: 0
+          description: Cached local file availability; null when no file summary is available.
+        filePartsTotal:
+          type: [integer, "null"]
+          minimum: 0
+          description: Cached local file availability; null when no file summary is available.
+        queueRank:
+          type: [integer, "null"]
+          minimum: 1
+          description: Full waiting rank; null for active uploads.
         scoreBreakdown:
+          description: Included by detail reads only.
           $ref: "#/components/schemas/UploadScoreBreakdown"
     UploadEnvelope:
       unevaluatedProperties: false
@@ -11880,25 +11865,14 @@ components:
     UploadScoreBreakdown:
       type: object
       additionalProperties: false
-      required: [availability, baseScore, effectiveScore]
+      required: [score, creditRatio, filePriorityScore, lowRatioApplied, lowRatioBonus, lowIdPenaltyApplied, lowIdDivisor, oldClientPenaltyApplied]
       properties:
-        availability:
-          type: string
-          enum: [available, friendSlot, cooldown, unavailable]
-        baseScore:
-          type: integer
-          minimum: 0
-        effectiveScore:
-          type: integer
-          minimum: 0
-        coreScore:
-          type: number
-        effectiveScoreFloat:
+        score:
           type: number
         creditRatio:
           type: number
-        filePriority:
-          type: integer
+        filePriorityScore:
+          type: number
         lowRatioApplied:
           type: boolean
         lowRatioBonus:
@@ -11911,9 +11885,6 @@ components:
           minimum: 0
         oldClientPenaltyApplied:
           type: boolean
-        cooldownRemainingMs:
-          type: integer
-          minimum: 0
     UploadQueueListEnvelope:
       type: object
       additionalProperties: false
@@ -11923,26 +11894,9 @@ components:
           type: array
           maxItems: 200
           items:
-            $ref: "#/components/schemas/UploadQueueEntry"
+            $ref: "#/components/schemas/Upload"
         meta:
           $ref: "#/components/schemas/CursorPageMeta"
-    UploadQueueEntry:
-      unevaluatedProperties: false
-      allOf:
-        - $ref: "#/components/schemas/Upload"
-        - type: object
-          properties:
-            queueRank:
-              type: integer
-              minimum: 0
-    UploadQueueEntryEnvelope:
-      unevaluatedProperties: false
-      allOf:
-        - $ref: "#/components/schemas/EnvelopeBase"
-        - type: object
-          properties:
-            data:
-              $ref: "#/components/schemas/UploadQueueEntry"
     ServerListEnvelope:
       unevaluatedProperties: false
       allOf:
