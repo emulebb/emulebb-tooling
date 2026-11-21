@@ -2630,18 +2630,34 @@ commit is pushed. The Native same-socket start/skip/cancel tests above remain
 component evidence; a complete Core callback-payload/pressure campaign and newer
 GNU/platform qualification are still required.
 
-Acceptance remains open for a confirmed ownership gap: a local hydration Busy
-can discard a useful prepared connection while retaining the source's 20-minute
-network reask stamp. An earlier swarm run in `callback-producer-core-final.log`
+The producer review found an ownership gap: a local hydration Busy could discard
+a useful prepared connection while retaining the source's 20-minute network
+reask stamp. An earlier swarm run in `callback-producer-core-final.log`
 left one healthy started job queued with zero geometry and no persisted storage
 fault while the second delivered. Subsequent changed-source runs pass; they do
-not establish that failure's cause or close this gap. Next, retain the existing
-bounded ready owner and lease while local admission/hydration is temporarily
-busy, using the shared clock and cancellation signals. Split begin/rebind from
-remaining hydration so retries cannot advance execution repeatedly; do not clear
-protocol cooldowns, redial, re-probe or create another queue. Add an injected
-post-begin Busy regression, same-connection recovery and cancellation/settlement
-proof before claiming that handoff qualified.
+not establish that failure's cause.
+
+Rust `df7f02e8` repairs the local handoff by retaining the bounded ready owner,
+source lease and guard during local admission/hydration waits. Begin/rebind
+happens once; only unfinished local hydration retries on the shared clock.
+Read loans and the category gate are released before waiting. Callback admission
+keeps its original ticket deadline; direct admission uses the existing configured
+connect timeout, with the current ten-second minimum, starting at availability.
+Cancellation, shutdown and expiry settle normally. An owned connection does not
+require another free connection slot to hydrate. Protocol cooldowns remain
+unchanged; this path neither redials nor repeats discovery/probing.
+
+Windows passes **707 Core executions**, without warnings, in
+`reports/settings-request-round-1/prepared-hydration-core-baseline.log`. Injected
+post-begin Busy cases cover recovery, cancellation, shutdown and deadline expiry,
+one execution generation, lease rebinding, released category lock, unchanged
+resident baseline and no physical allocation at refusal. A real local eMuleBB
+seed then proves retained-connection delivery after Busy with the 20-minute
+source cooldown still active. Both payload bytes and completed state are checked;
+the existing Kad swarm also passes. Tests measure against admitted thin-content
+bookkeeping, not an assumed zero resident baseline. Normal hooks pass and the
+commit is pushed. Current GNU/platform gates, callback-payload pressure cases,
+global scarcity/burst scheduling and final memory tiers remain open.
 
 Compiler investigation uses Builder's diagnostic-only Linux collection command;
 its receipt explicitly records `qualityGatePassed:false` and

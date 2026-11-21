@@ -1648,14 +1648,34 @@ drops the prepared peer and retires execution, but leaves the 20-minute source
 reask stamp. Busy intentionally preserves healthy Started intent, so this local
 refusal can lose useful capacity until another permitted network reask.
 
-The next bounded repair retains the existing prepared owner, guard and lease
-across temporary local admission/hydration refusal, using the shared retry clock
-and cancellation/shutdown. Begin/rebind must happen once; split the remaining
-hydration phase instead of rerunning generation allocation. Release read loans
-and category locks before waiting. Do not erase source cooldowns, re-probe,
-redial or add a queue. Inject a post-begin Busy, then prove same-connection
-completion, unchanged single-probe count and exactly one execution start, plus
-cancellation/shutdown settlement. This checkpoint does not
+Rust `df7f02e8` retains the existing ready owner, guard and lease across temporary
+local admission/hydration refusal. Begin/rebind is separate from remaining local
+hydration and runs once; Busy retries only the refused local phase on the shared
+clock. Source endpoint ownership follows that first rebind. Read loans and the
+category gate do not cross waits. Direct admission is bounded by the configured
+connect timeout (ten-second minimum) from availability; callbacks retain their
+original ticket deadline. Cancellation, shutdown and expiry use normal producer
+settlement and retirement. Local hydration no longer demands a second connection
+slot for an already-owned socket. Cooldowns, discovery and network probes are
+not reset or repeated.
+
+Windows passes **707 Core executions**, without warnings, in
+`reports/settings-request-round-1/prepared-hydration-core-baseline.log`. The new
+injected post-begin Busy regression checks one generation, preserved/rebound
+lease, released category gate, unchanged resident baseline and unmaterialized
+storage, then recovery or cancellation/shutdown/expiry. The real local eMuleBB
+seed test retains its prepared socket during the wait and delivers exact bytes
+before the still-active 20-minute reask cooldown could permit another probe.
+The completed job has no storage fault or additional selection generation.
+The existing Kad swarm also passes. Initial test repairs corrected derived-part
+versus materialization assumptions and use the actual thin-content resident
+baseline. The fixture disables Kad via the existing canonical settings helper
+and uses only loopback endpoints. Normal hooks pass; the commit is pushed.
+
+This closes the demonstrated local-Busy handoff gap at Windows component/local
+integration scope, without proving the cause of the earlier swarm failure.
+Current strict GNU/platform checks, callback-payload/held-I/O pressure cases and
+full scheduling qualification remain required. This checkpoint does not
 qualify multi-file payload/endgame, adaptive pressure, either final memory tier,
 musl, Android-target or other outstanding platforms. Schema 107, saved settings,
 CLI and public REST contracts are unchanged.
