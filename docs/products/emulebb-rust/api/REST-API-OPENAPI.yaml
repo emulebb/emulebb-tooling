@@ -2230,10 +2230,11 @@ paths:
       tags: [Uploads]
       summary: List waiting upload clients.
       operationId: listUploadQueue
+      description: Live scheduler rank order. A departed anchor returns 409; refresh from the first page. Rows may move between requests. Pages may contain fewer than limit rows to bound response memory. Score evidence is available through client details.
       parameters:
-        - $ref: "#/components/parameters/Limit"
-        - $ref: "#/components/parameters/Offset"
-        - $ref: "#/components/parameters/IncludeScoreBreakdown"
+        - $ref: "#/components/parameters/UploadQueueLimit"
+        - $ref: "#/components/parameters/UploadQueueCursor"
+        - $ref: "#/components/parameters/CountTotal"
       responses:
         "200":
           $ref: "#/components/responses/UploadQueueListResponse"
@@ -3631,14 +3632,25 @@ components:
         minimum: 0
         maximum: 2147483647
         default: 0
-    IncludeScoreBreakdown:
-      name: includeScoreBreakdown
+    CountTotal:
+      name: countTotal
       in: query
       required: false
       schema:
         type: boolean
         default: false
-      description: Include per-client upload score diagnostics such as cooldown availability and cooldown remaining time.
+      description: Include the exact visible waiting count in meta.total.
+    UploadQueueLimit:
+      name: limit
+      in: query
+      required: false
+      schema: {type: integer, minimum: 1, maximum: 200, default: 100}
+    UploadQueueCursor:
+      name: cursor
+      in: query
+      required: false
+      description: Opaque live queue continuation. A departed anchor requires refreshing from the first page.
+      schema: {type: string, minLength: 1, maxLength: 512}
     LastEventId:
       name: Last-Event-ID
       in: header
@@ -4787,6 +4799,9 @@ components:
           maxLength: 512
         hasMore:
           type: boolean
+        total:
+          type: integer
+          minimum: 0
       allOf:
       - if:
           properties:
@@ -11814,22 +11829,17 @@ components:
           type: integer
           minimum: 0
     UploadQueueListEnvelope:
-      unevaluatedProperties: false
-      allOf:
-        - $ref: "#/components/schemas/EnvelopeBase"
-        - type: object
-          properties:
-            data:
-              type: object
-              unevaluatedProperties: false
-              required: [items]
-              properties:
-                items:
-                  type: array
-                  items:
-                    $ref: "#/components/schemas/UploadQueueEntry"
-              allOf:
-                - $ref: "#/components/schemas/Pagination"
+      type: object
+      additionalProperties: false
+      required: [data, meta]
+      properties:
+        data:
+          type: array
+          maxItems: 200
+          items:
+            $ref: "#/components/schemas/UploadQueueEntry"
+        meta:
+          $ref: "#/components/schemas/CursorPageMeta"
     UploadQueueEntry:
       unevaluatedProperties: false
       allOf:

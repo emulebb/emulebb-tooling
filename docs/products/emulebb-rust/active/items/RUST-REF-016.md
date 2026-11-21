@@ -79,6 +79,43 @@ prove nonterminal duplicate-block cancellation, decoder consumption of the parti
 frame, an explicit wire cancel message, daemon output delivery, sustained rare-job
 displacement or final platform/memory campaigns. Those requirements remain open.
 
+## Upload queue REST/WebUI integration (2026-11-21)
+
+Rust `f000fb0f` connects the live Native selector to cursor-based queue browsing,
+snapshot previews and diagnostic prefixes. REST returns a data array and cursor
+metadata, optional exact `meta.total`, and HTTP 409/`CONFLICT` for a departed
+anchor. Score diagnostics are detail-only. The WebUI fetches its visible page,
+uses the existing cursor controls and refreshes from the first page after expiry.
+Hostname enrichment reads scalar peer addresses without constructing upload rows
+or file captions. The scheduler helper identified by GNU Clippy was moved
+unchanged before its inline test module; the full GNU gate needs a fresh run.
+
+The existing temporary-work ledger admits the Native page before queue locking
+and retains input/output through asynchronous caption projection. Native
+projection is byte-bounded; Core bounds owned rows with JSON escaping headroom.
+Encoded responses retain their charge through the standard Bytes owner until
+HTTP delivery/drop. The schema and settings surface are unchanged. Tests cover
+cancellation drop order, complete traversal with large multibyte peer labels,
+memory ownership through JSON encoding, unchanged resident-cache use, cursor
+scope/expiry, and UI refresh without retaining previous pages.
+
+Scoped gates passed 1,522 Native, 726 Core and 170 REST executions; final compiler
+warning scans were empty. The WebUI passed 92 unit and 32 browser tests, type
+checking and production build. Harness `98e1c0a1` passed 220 selected Python
+checks: 131 route/schema, 30 conformance-runner, 39 cross-client fixture and 20
+response-schema tests. Strict download field checks and fixtures were aligned
+with the already-required `waitingReason` field. Evidence below
+`EMULEBB_WORKSPACE_OUTPUT_ROOT` is
+`reports/settings-request-round-1/upload-queue-final-emulebb-{ed2k,core,rest}.log`,
+`upload-queue-integration-webui.log`, `upload-queue-python-openapi-final.log` and
+`upload-queue-python-{ci,reask,responses}.log` in the same directory. A final,
+equivalent positive IPv4 projection passed the existing product-policy hook.
+
+Current release/live conformance and cross-platform/physical-library campaigns
+remain open. Snapshot/diagnostic selection is bounded; this does not claim
+complete aggregate-response accounting or final upload DTO cleanup. No PR or
+merge is authorized.
+
 ## Upload management read prerequisites (2026-11-21)
 
 Rust `85d5d0b6` adds Native live waiting-page selection in scheduler rank order.
@@ -92,8 +129,8 @@ Native validation passed 1,520 executions without warnings in
 `reports/settings-request-round-1/upload-queue-page-native.log` below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT`. Tests cover complete traversal against scheduler
 order, optional totals, limit bounds, bitmaps, ties, departed anchors and score
-changes between pages. Core/REST/WebUI consumption and final response ownership
-remain unfinished; existing HTTP queue reads are not yet paged by this selector.
+changes between pages. That Native checkpoint did not integrate Core/REST/WebUI
+consumption or final response ownership; see the integration checkpoint above.
 
 Rust `0ce94c98` replaces serving-view hydration in upload list/detail captions
 with a scalar metadata read through the existing bounded Native worker. It seeks
@@ -117,19 +154,17 @@ former Core in-memory part-count calculation test. Gates passed 326 Metadata,
 `upload-caption-{native,core,rest}.log` in the same directory below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
 
-This closes per-file serving-state hydration in management reads. Waiting lists
-still construct the full queue, and Native snapshots still copy requester bitmaps.
-Bounded list DTOs, page selection and final response/JSON ownership remain open;
-this checkpoint does not qualify queue-wide memory use or the final platform and
-physical-library campaigns.
+That checkpoint closed per-file serving-state hydration in management reads.
+It did not qualify queue-wide memory use or final platform/physical-library
+campaigns. Subsequent cursor/ownership integration is recorded above.
 
 The attempted full GNU/Linux package gate at Rust `0ce94c98` stopped in strict
 Clippy: `download_scheduler.rs` declares `collect_ready` after its test module.
 Evidence is `reports/rust-linux/gnu-amd64/003ba42ed6fa48babc1bd62ac52df32f/clippy.log`
 and `reports/settings-request-round-1/foundation-current-gnu-full.log` below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT`. This run produced no qualified package or smoke
-result. Move the unchanged helper before the test module and rerun the required
-gate after integration; final Linux qualification remains open.
+result. The integration moved the helper unchanged; rerunning the full gate and
+final Linux qualification remain open.
 
 Rust `d0876435` selects active upload sessions before constructing management
 snapshots. Active list/status reads no longer clone waiting-client bitmaps or
@@ -158,9 +193,8 @@ event timeout. The unchanged full-suite recheck passed; the unexpected packet is
 unexplained and remains a final-qualification concern. No UDP production code or
 acceptance assertion was changed to obtain the passing recheck.
 
-These prerequisites do not close upload-list pagination. The current waiting-list
-path still constructs the full queue before selecting responses; it must use
-bounded thin reads. The operator selected departed-anchor expiry: when the last
+Those prerequisites preceded upload-list pagination. The operator selected
+departed-anchor expiry: when the last
 returned entry leaves the waiting queue, the caller must refresh from the first
 page. Do not continue from its saved rank. The accepted contract is recorded in
 [PUBLIC-FOUNDATION](../../design/PUBLIC-FOUNDATION.md). Schema, REST and settings contracts

@@ -1010,6 +1010,13 @@ entry leaves the waiting queue, expire the cursor and require a refresh from the
 first page. Do not continue from a saved rank. Rank changes can still move rows
 between requests under the documented live traversal consistency.
 
+`GET /upload-queue` accepts `limit` (1–200, default 100), an opaque `cursor` and
+optional `countTotal`. Return a data array with `meta.nextCursor` and
+`meta.hasMore`; include `meta.total` only when requested. A departed anchor
+returns HTTP 409 with `CONFLICT`. Pages may contain fewer than `limit` rows to
+bound memory; continuation must still make every remaining entry reachable.
+Fetch score/credit evidence from the client detail resource.
+
 The WebUI separates uploading clients from waiting clients. Uploading summaries
 show client, file, rate, session bytes and elapsed time. Waiting summaries show
 rank, client, requested file, waiting time and blocking status where available.
