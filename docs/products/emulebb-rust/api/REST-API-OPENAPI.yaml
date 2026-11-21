@@ -3595,9 +3595,10 @@ components:
       name: q
       in: query
       required: false
-      description: Case-insensitive substring search across the visible file name, path, and lowercase eD2K hash.
+      description: Case-insensitive literal substring of the displayed filename only. The trimmed query must contain at least three Unicode characters; wildcard and query syntax have no special meaning.
       schema:
         type: string
+        minLength: 3
     SharedFilePriorityFilter:
       name: priority
       in: query

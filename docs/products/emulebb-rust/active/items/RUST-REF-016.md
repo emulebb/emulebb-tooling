@@ -160,6 +160,31 @@ canonical library resource, visibility filters, thin DTOs and statistic sorts
 remain implementation work. Extend the existing campaign for those requirements
 before claiming the full tier, and qualify the 100k-file/1-GiB tier separately.
 
+## Library filename-search contract (2026-11-21)
+
+Rust `2143a89c` applies the agreed filename-only literal substring rule through
+the existing indexed catalog, REST validation and WebUI. A supplied query must
+contain at least three Unicode characters after trimming. Validate before
+lowercasing because lowercasing can expand a character. SQL matches only the
+stored filename search key; parent directories, content hashes and wildcard
+syntax do not participate. The WebUI labels this scope and prevents short
+submissions. OpenAPI documents the same constraint. No schema change is needed.
+
+Scoped checks passed 327 metadata, 171 REST, 92 WebUI unit, 32 browser and 131
+existing Python OpenAPI executions. Metadata and REST compiler warning scans
+were empty. The existing 100k catalog fixture verifies filename scope without
+allocating a full result collection. The REST integration uses an actual Unicode
+filename and verifies uppercase and mid-word matches. Evidence below
+`EMULEBB_WORKSPACE_OUTPUT_ROOT` is
+`reports/settings-request-round-1/library-filename-metadata.log`,
+`library-filename-rest-final.log`, `library-filename-webui.log`,
+`library-filename-python-openapi.log` and `library-filename-docs.log` in that
+same directory. Normal Rust commit hooks passed.
+
+This closes only search semantics on the current collection. Canonical library
+routes, visibility filters, thin summaries, locations and statistic sorting
+still require integration; full constrained-tier qualification remains open.
+
 ## Upload management read prerequisites (2026-11-21)
 
 Rust `85d5d0b6` adds Native live waiting-page selection in scheduler rank order.
