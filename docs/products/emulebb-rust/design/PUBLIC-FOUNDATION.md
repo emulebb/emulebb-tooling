@@ -413,6 +413,9 @@ or recycling a slot, or switching its requested hash, ends the stint; a later
 admitted payload starts another. Requests for unknown hashes do not create
 library records.
 
+SQL-backed file counters support 0 through 9,223,372,036,854,775,807 inclusive.
+Preserve exact integer arithmetic in that range. Overflow fails the entire
+checkpoint and retains captured deltas; never publish clamped file counters.
 Checkpoint accumulating lifetime counters in batches and flush on clean shutdown.
 A crash may lose the uncheckpointed statistics window. Do not require permanent
 per-peer connection-history rows. Support server-side sorting by every displayed

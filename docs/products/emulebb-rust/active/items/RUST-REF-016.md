@@ -160,6 +160,41 @@ canonical library resource, visibility filters, thin DTOs and statistic sorts
 remain implementation work. Extend the existing campaign for those requirements
 before claiming the full tier, and qualify the 100k-file/1-GiB tier separately.
 
+## Library statistic-index prerequisite (2026-11-21)
+
+Rust `76db28a1` adds a sparse, connection-local SQL projection of captured
+session uploaded bytes, requests and accepted upload stints. The existing
+peer/file checkpoint updates these counters and lifetime facts in one
+transaction. It adds no per-payload SQLite operation or second runtime counter
+map. Scalar reads hydrate no file, perform no filesystem probe and create no
+session rows. Unknown hashes and zero deltas allocate no projection row. Keys
+are content hashes, independent of reusable numeric content IDs.
+
+Three indexes support scalar session-statistic seeks with hash tie-breakers;
+tests inspect their query plans and prove no sort or full scan for those seeks.
+Clones share session counters. Opening a new connection starts session counters
+at zero while preserving durable lifetime facts. File counter arithmetic now
+fails atomically outside the supported SQLite integer range instead of clamping.
+The exact upper boundary succeeds; overflow changes neither file projection nor
+peer credits. Existing captured deltas remain available to the checkpoint owner
+after failure. No durable schema version, settings or REST shape changed.
+
+Scoped gates passed 331 metadata and 1,522 Native executions, without compiler
+warnings. New fault injection fails the second file's session projection after
+earlier peer/file writes, proves complete rollback, then retries exactly once.
+The existing Native capture/removal/checkpoint/reopen fixture now also compares
+its committed SQL projection with captured bytes, demand and accepted stints,
+and verifies session reset with preserved lifetime values. Evidence below
+`EMULEBB_WORKSPACE_OUTPUT_ROOT` is
+`reports/settings-request-round-1/library-statistics-metadata-final.log` and
+`library-statistics-native-final.log`; normal Rust commit hooks passed.
+
+This prepares the storage read model, not the complete library surface. Bounded
+publication before a query, sparse zero-activity ordering, canonical library
+summaries/visibility/locations, REST/OpenAPI/WebUI integration and combined-scale
+qualification remain open. No full collection is selected or sorted by this
+scalar read; complete library query ownership still needs implementation.
+
 ## Library filename-search contract (2026-11-21)
 
 Rust `2143a89c` applies the agreed filename-only literal substring rule through
