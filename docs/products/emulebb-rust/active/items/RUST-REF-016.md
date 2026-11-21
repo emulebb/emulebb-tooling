@@ -81,6 +81,20 @@ displacement or final platform/memory campaigns. Those requirements remain open.
 
 ## Upload management read prerequisites (2026-11-21)
 
+Rust `85d5d0b6` adds Native live waiting-page selection in scheduler rank order.
+It scans scalar keys with a heap bounded to the requested page plus one lookahead
+and projects only selected entries, without requester bitmaps or per-row full
+rank recounts. Waiting-order position preserves stable ties at sequence saturation.
+Continuation resolves the anchor's current rank; a removed, promoted or timed-out
+anchor returns a typed cursor-expired result. Reads filter the ordinary waiting
+timeout without invoking protocol maintenance or retaining per-caller snapshots.
+Native validation passed 1,520 executions without warnings in
+`reports/settings-request-round-1/upload-queue-page-native.log` below
+`EMULEBB_WORKSPACE_OUTPUT_ROOT`. Tests cover complete traversal against scheduler
+order, optional totals, limit bounds, bitmaps, ties, departed anchors and score
+changes between pages. Core/REST/WebUI consumption and final response ownership
+remain unfinished; existing HTTP queue reads are not yet paged by this selector.
+
 Rust `0ce94c98` replaces serving-view hydration in upload list/detail captions
 with a scalar metadata read through the existing bounded Native worker. It seeks
 the requested hash and counts whole verified ranges in SQL, including a short
@@ -108,6 +122,14 @@ still construct the full queue, and Native snapshots still copy requester bitmap
 Bounded list DTOs, page selection and final response/JSON ownership remain open;
 this checkpoint does not qualify queue-wide memory use or the final platform and
 physical-library campaigns.
+
+The attempted full GNU/Linux package gate at Rust `0ce94c98` stopped in strict
+Clippy: `download_scheduler.rs` declares `collect_ready` after its test module.
+Evidence is `reports/rust-linux/gnu-amd64/003ba42ed6fa48babc1bd62ac52df32f/clippy.log`
+and `reports/settings-request-round-1/foundation-current-gnu-full.log` below
+`EMULEBB_WORKSPACE_OUTPUT_ROOT`. This run produced no qualified package or smoke
+result. Move the unchanged helper before the test module and rerun the required
+gate after integration; final Linux qualification remains open.
 
 Rust `d0876435` selects active upload sessions before constructing management
 snapshots. Active list/status reads no longer clone waiting-client bitmaps or
