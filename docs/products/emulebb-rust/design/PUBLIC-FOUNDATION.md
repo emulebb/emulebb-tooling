@@ -880,8 +880,14 @@ retained search-item JSON at the smaller of 1 MiB and the requested bundle budge
 Result omissions and continuation are explicit; the session collection has no
 exact global total. The inline bundle contract is `emulebb.diagnostic-bundle.v7`;
 search items contain `session` metadata and a bounded `results` collection. The
-Python diagnostic collector consumes that same contract. Existing final bundle
-encoding applies its exact overall byte cap afterward.
+Python diagnostic collector consumes that same contract. Final bundle encoding
+counts exact escaped UTF-8 bytes and trims before allocating the final wire
+backing. Admit one capture or retained capture response per listener; hold its
+slot through HTTP body/frame clones until the last backing is dropped. Another
+capture returns HTTP 503/SERVICE_BUSY without queuing; ordinary status reads
+remain independent. Keep the existing bundle byte range and explicit omissions.
+This bounds concurrent capture/encoding; selected metadata and aggregate snapshot
+construction still require their own bounded ownership.
 
 Kad completion resolves only incoming vote hashes through the indexed
 `(session_id, ed2k_hash)` result projection. Its copied hash and size sort key

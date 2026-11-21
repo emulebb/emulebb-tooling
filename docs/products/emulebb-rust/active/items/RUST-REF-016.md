@@ -29,6 +29,39 @@ during consolidation; documentation checks passed in
 `reports/settings-request-round-1/foundation-spec-consolidation-docs.log` below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
 
+## Diagnostic encoding and response ownership (2026-11-22)
+
+Rust `f6a9a206` measures escaped UTF-8 JSON with serde's writer before allocating
+wire backing. Both search-item fitting and whole-bundle trimming use this
+allocation-free count. Final encoding allocates one exact boxed slice after the
+payload fits its requested byte cap; `budget.encodedBytes` includes its own
+serialized decimal width. Mandatory core data still fails explicitly if it
+cannot fit, and optional omission accounting retains the v7 contract.
+
+One diagnostic capture or retained capture body is admitted per REST listener.
+The standard owned semaphore permit moves into the body owner and survives
+body-frame clones; concurrent captures return existing HTTP 503/SERVICE_BUSY
+without waiting. Failure releases admission. This separates the explicitly
+requested diagnostic output allowance from Native metadata work and leaves
+ordinary status reads available while a client retains a bundle. No setting,
+byte-range change, format revision or daemon-side output file was introduced.
+
+The complete REST gate passed **173 unit + 4 integration tests**, without
+compiler warnings. New cases cover escaped/control/multibyte text, decimal-size
+boundaries, frame-clone retention, status reads during retention, release after
+the final clone, and repeated captures after a persistence failure. Existing
+exact byte-budget, mandatory-core and omission tests remain green. Evidence is
+`reports/settings-request-round-1/diagnostic-capture-rest.log` below
+`EMULEBB_WORKSPACE_OUTPUT_ROOT`. The existing Python route/response schema suites
+also passed **151 tests** (`diagnostic-capture-python.log` in the same directory).
+The last full Windows/live receipt belongs to Rust `e651b35b`; it is not proof
+for this later source revision.
+
+This closes diagnostic encoding and concurrent body ownership. Aggregate
+snapshot/diagnostic construction, underlying full reads and combined physical
+library/memory qualification remain open; selected metadata trees are not
+claimed to fit the final encoded-byte allowance.
+
 ## Typed library summary reads (2026-11-21)
 
 Rust `bfdd3824` adds typed Core summaries and an admitted exact-hash read over

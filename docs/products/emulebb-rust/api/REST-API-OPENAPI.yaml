@@ -322,7 +322,11 @@ paths:
       description: >
         Unsafe diagnostic endpoint. It requires API-key authorization and an
         explicit confirmation field in the request body. The complete bounded
-        bundle is returned inline and is never persisted by the daemon.
+        bundle is returned inline and is never persisted by the daemon. One
+        capture or retained capture response is admitted per listener. Concurrent
+        captures return HTTP 503 with SERVICE_BUSY; ordinary status reads remain
+        independent. Exact encoded size is measured before allocating the final
+        response backing.
       requestBody:
         required: true
         content:
