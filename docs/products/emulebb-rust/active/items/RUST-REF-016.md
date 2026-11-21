@@ -81,6 +81,34 @@ displacement or final platform/memory campaigns. Those requirements remain open.
 
 ## Upload management read prerequisites (2026-11-21)
 
+Rust `0ce94c98` replaces serving-view hydration in upload list/detail captions
+with a scalar metadata read through the existing bounded Native worker. It seeks
+the requested hash and counts whole verified ranges in SQL, including a short
+final part, without loading hashsets, paths, manifests or local part arrays.
+Cached content/job names and geometry are display facts independent of current
+physical-copy availability; this read grants no protocol serving authority.
+Unknown or observation-only hashes have no caption. Complete cached local content
+takes precedence over a download record. Schema and REST response fields are
+unchanged.
+
+The read bounds names to the existing 64-KiB allowance and retains a 256-KiB
+temporary-work charge with its result. Native regression proves large geometry
+does not allocate storage or hydrate the resident cache, and that dropping the
+result releases its charge. SQL tests cover disjoint/partial/short-final ranges,
+cached content without paths/hashsets, UTF-8 byte bounds without truncation and
+indexed plans without collection scans or temporary sorts. These replace the
+former Core in-memory part-count calculation test. Gates passed 326 Metadata,
+1,516 Native, 725 Core and 169 REST executions without warnings. Evidence is
+`reports/settings-request-round-1/upload-caption-metadata-validated.log` and
+`upload-caption-{native,core,rest}.log` in the same directory below
+`EMULEBB_WORKSPACE_OUTPUT_ROOT`.
+
+This closes per-file serving-state hydration in management reads. Waiting lists
+still construct the full queue, and Native snapshots still copy requester bitmaps.
+Bounded list DTOs, page selection and final response/JSON ownership remain open;
+this checkpoint does not qualify queue-wide memory use or the final platform and
+physical-library campaigns.
+
 Rust `d0876435` selects active upload sessions before constructing management
 snapshots. Active list/status reads no longer clone waiting-client bitmaps or
 compute ranks for waiting entries. Selection still scans/reaps the runtime queue;
@@ -89,8 +117,8 @@ projection now lives in `upload_api.rs`. The existing admission fixture verifies
 that active identities, phase/rank fields and ordering match the combined view.
 Scoped gates passed 1,514 Native, 722 Core and 169 REST executions without
 warnings; logs are `reports/settings-request-round-1/active-upload-read-*.log`
-below `EMULEBB_WORKSPACE_OUTPUT_ROOT`. No public response shape changed. Thin
-file metadata projection and bounded waiting-queue pages remain unfinished.
+below `EMULEBB_WORKSPACE_OUTPUT_ROOT`. No public response shape changed. That
+checkpoint did not address thin file metadata or bounded waiting-queue pages.
 
 Rust `85e113f4` computes one waiting client's rank with an allocation-free linear
 count instead of sorting a full queue copy. It shares the scheduler's unchanged
@@ -108,9 +136,9 @@ event timeout. The unchanged full-suite recheck passed; the unexpected packet is
 unexplained and remains a final-qualification concern. No UDP production code or
 acceptance assertion was changed to obtain the passing recheck.
 
-This prerequisite does not close upload-list pagination. Current list paths still
-construct the full queue and hydrate serving views before selecting responses;
-they must use bounded thin reads. The operator decision on departed-anchor cursor
+These prerequisites do not close upload-list pagination. The current waiting-list
+path still constructs the full queue before selecting responses; it must use
+bounded thin reads. The operator decision on departed-anchor cursor
 expiry versus current-rank continuation is pending. Do not implement dependent
 public cursor behavior before that answer. Schema, REST and settings contracts
 are unchanged by this checkpoint. No PR or merge is authorized.
