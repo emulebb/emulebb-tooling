@@ -1849,6 +1849,33 @@ slot, proves a real rare download starts above the ordinary limit, then frees
 the other held owner and verifies both deliveries and disconnect cleanup.
 Normal hooks pass; both commits are pushed. Public surfaces/schema are unchanged.
 
+Rust `cfeb1a24` adds current-execution scheduling classification through the
+existing Native blocking/read owner. A 1-MiB reservation covers bounded frequency
+workspace; source references are checked against it before allocation and no
+reporters are truncated. Reads borrow current cached manifests, reject stale
+authority, try the job/cache gates without parking behind payload I/O, and return
+only rarity, the shared block-leaser endgame classification and accepted-payload
+counter/time. Waiting jobs never hydrate; temporary backing and resident read
+loans outlive observer cancellation through the existing ownership machinery.
+
+All **1,512 Native and 717 Core executions** pass without warnings in
+`reports/settings-request-round-1/active-scheduling-ed2k-final.log` and
+`active-scheduling-core-final.log`. New regressions cover cold/stale jobs, busy
+job-I/O refusal, duplicate versus independent reporters, progress observations,
+workspace refusal and final-verification protection at full 128-MiB resident
+accounting occupancy. The initial full-residency fixture exceeded the per-request
+reservation bound; the final run uses the suite's established fixed-size-credit
+pattern without weakening the full-occupancy assertion. Normal hooks pass and
+the commit is pushed. This is classification evidence, not completed displacement.
+
+The next integrated displacement slice must recheck the selected token/progress,
+protect current rarity/endgame and fresh readiness during handoff, finish accepted
+storage work at a safe checkpoint, close any interrupted framed stream, and keep
+capacity owned until retirement. The no-claimable-block path reports NNP and
+must not stand in for yielding. Allow at most one outstanding displacement while
+its owner drains; use the existing worker/control/checkpoint paths and no new
+saved priority or per-waiting-job task.
+
 Next complete safe displacement scheduling and resource observability,
 then payload/session qualification including structural snapshots, retained
 session pins and held-I/O pressure. The new dependency still requires musl,

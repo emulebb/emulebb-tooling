@@ -2874,6 +2874,15 @@ Safe rare-opportunity displacement, resource/waiting-reason observability, full
 payload/pressure tests and final platform/capacity campaigns remain open. Native
 code is unchanged in these two commits; GNU evidence still covers `a3295661`.
 
+Rust `cfeb1a24` adds a bounded, read-only classification of current cached
+executions for displacement: reporter rarity, the existing endgame policy and
+accepted-payload progress/time. It never hydrates waiting jobs and refuses busy
+job/cache gates or insufficient temporary workspace. The shared Native owner
+reserves 1 MiB through actual worker completion; resident read loans stay charged
+to their existing allocations. Full Native/Core suites pass; the
+[runtime item](../active/items/RUST-REF-016.md) records exact evidence. Safe yield
+requests and Core victim selection are not wired yet; public surfaces are unchanged.
+
 Compiler investigation uses Builder's diagnostic-only Linux collection command;
 its receipt explicitly records `qualityGatePassed:false` and
 `packageProduced:false`. Acceptance continues to require the ordinary strict
