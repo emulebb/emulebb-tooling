@@ -88,7 +88,7 @@ anchor. Score diagnostics are detail-only. The WebUI fetches its visible page,
 uses the existing cursor controls and refreshes from the first page after expiry.
 Hostname enrichment reads scalar peer addresses without constructing upload rows
 or file captions. The scheduler helper identified by GNU Clippy was moved
-unchanged before its inline test module; the full GNU gate needs a fresh run.
+unchanged before its inline test module; the fresh full GNU gate passed below.
 
 The existing temporary-work ledger admits the Native page before queue locking
 and retains input/output through asynchronous caption projection. Native
@@ -119,7 +119,19 @@ with graceful teardown, in
 existing populated upload resources, persistence and retained-download scale
 phases; it does not qualify a physical library or a constrained-memory tier.
 
-Current cross-platform/physical-library campaigns remain open.
+The full GNU amd64 package gate passed on the same Rust revision: strict Clippy,
+packet diagnostics, 3,438 workspace tests and three VPN-egress tests. Evidence is
+`reports/rust-linux/gnu-amd64/0bf3b4df84da4d9683c0d97b34b74d71/`.
+The non-root package lifecycle passed in
+`reports/rust-linux/gnu-amd64/18231a3914684074a608f6aeb60b85a5/package-smoke.json`.
+It verifies a real 12 MiB download and delivery, a 9,728,000-byte verified prefix
+preserved across restart and explicit start, retained completed history and
+three graceful shutdowns. It checks packaged WebUI assets and backend resources,
+not rendered browser operation. The bundled PCP/NAT-PMP C build emitted warnings;
+this is not a zero-warning Linux result. The local archive SHA-256 is
+`09d398d531daae5c4cfee539f2871ec3d30bbbb9dc7ae9da794833d4b887a9a6`.
+
+Remaining platform and physical-library campaigns remain open.
 Snapshot/diagnostic selection is bounded; this does not claim
 complete aggregate-response accounting or final upload DTO cleanup. No PR or
 merge is authorized.
