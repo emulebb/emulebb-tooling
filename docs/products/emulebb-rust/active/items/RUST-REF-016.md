@@ -136,6 +136,30 @@ Snapshot/diagnostic selection is bounded; this does not claim
 complete aggregate-response accounting or final upload DTO cleanup. No PR or
 merge is authorized.
 
+### Physical library and retained-history checkpoint (2026-11-21)
+
+The existing container campaign passed on Rust `f000fb0f`, Harness `98e1c0a1`,
+Tooling `d374d6de` and Builder `98fa3d2`: 50,000 physical files (5,242,880,000
+bytes), 100,000 retained jobs, 512 MiB total container memory, no swap and one
+CPU. Evidence is
+`reports/linux-containers/library/76bee0996e7f4344919d9b8225723735/report.json`
+below `EMULEBB_WORKSPACE_OUTPUT_ROOT`, with its linked campaign report.
+The fixture includes 1,000 long paths and Unicode paths. All four opt-in watcher
+bursts passed exact-content and root-acknowledgement checks. No-change reloads
+read no payload; the 1% mutation rehashed exactly 500 files. Retained completed,
+queued and stopped jobs survived restarts; all 100,000 job rows were traversed.
+Kernel OOM and OOM-kill deltas were zero. Recorded cgroup peak was 536,932,352
+bytes, slightly above the 536,870,912-byte enforced limit; it is whole-campaign
+memory, not daemon RSS or a resident-cache measurement.
+
+This is scoped capacity evidence, not complete tier acceptance. The campaign's
+download history is metadata-only. Active-payload pressure, large-library
+substring queries and every statistic sort remain unqualified. Current library
+browsing still uses the path-ordered `/shared-files` surface; the accepted
+canonical library resource, visibility filters, thin DTOs and statistic sorts
+remain implementation work. Extend the existing campaign for those requirements
+before claiming the full tier, and qualify the 100k-file/1-GiB tier separately.
+
 ## Upload management read prerequisites (2026-11-21)
 
 Rust `85d5d0b6` adds Native live waiting-page selection in scheduler rank order.
