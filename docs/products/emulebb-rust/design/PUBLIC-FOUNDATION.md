@@ -268,6 +268,13 @@ disappears. Separate content, local instances and root membership. Distinguish
 known, present, unavailable and eligible-for-sharing facts. A failed scan is not
 proof of deletion. Withdraw unavailable copies and reconcile on return.
 
+`library_files` records retained client membership by internal content ID.
+Verified/imported local content, accepted download jobs and explicit client-origin
+knowledge establish membership in their accepting transaction. Retiring the
+final job, path, root or origin does not erase it. Passive-only observations do
+not establish membership. Library policy, tags, locations and client-session
+accounting use this same boundary; membership alone never authorizes payloads.
+
 Reuse cached verification only when trustworthy filesystem identity and change
 evidence permits; otherwise hash. A same-filesystem move or hard link can often
 reuse native identity; a copy on another filesystem generally needs hashing.
@@ -421,6 +428,16 @@ A crash may lose the uncheckpointed statistics window. Do not require permanent
 per-peer connection-history rows. Support server-side sorting by every displayed
 library statistic, including session/lifetime values and activity timestamps,
 with deterministic tie-breakers and measured bounded-resource implementations.
+
+Library reads publish captured counters into a process-local indexed SQL read
+projection through the existing admitted owner. Reading statistics must not
+force a durable checkpoint. Compute effective lifetime values from committed
+totals plus uncheckpointed deltas; preserve the existing checkpoint cadence.
+Bound publication snapshots, serialize publication with checkpoint drain/restore,
+and release the capture mutex before SQL work. Captures arriving during publication
+remain dirty for a later update, and failed publication retains its invalidations.
+Index the actual library population, including zero-activity rows, so global
+ordering does not sort a sparse overlay joined to the full collection.
 
 IP filtering stays file-backed with one configured source and explicit reload.
 

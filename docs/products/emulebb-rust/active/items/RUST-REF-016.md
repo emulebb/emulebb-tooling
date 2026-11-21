@@ -29,6 +29,42 @@ during consolidation; documentation checks passed in
 `reports/settings-request-round-1/foundation-spec-consolidation-docs.log` below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
 
+## Retained client library identity (2026-11-21)
+
+Rust `5cd0ad7a` introduces fresh schema **109** with `library_files`, the retained
+client-membership relation keyed by content ID. Accepting a download, verified
+local content or client-origin knowledge records membership in the same
+transaction. Retiring the final job, copy, root or origin preserves it.
+Passive-only knowledge does not establish membership. Tags now reference this
+relation through a foreign key; policy, tag reads/writes, cached locations and
+client-session counter publication use the same boundary.
+
+The metadata locations reader returns an empty page for an unfinished accepted
+download. It gains no verified identity, size or serving authority
+merely from membership. Tests run the real removal/retirement/finalization path,
+then prove that the hash, tags and policy survive without authorizing payloads.
+Injected acceptance failure rolls back membership, content creation and the job.
+Passive demand retains its lifetime accounting but creates no client-session
+counter; explicit client acceptance changes that classification atomically.
+
+Scoped gates passed **334 metadata, 1,522 Native, 726 Core and 171 REST**
+executions without compiler warnings. The existing Python metadata suite passed
+**41 tests**, including current-source schema/fixture construction. Evidence below
+`EMULEBB_WORKSPACE_OUTPUT_ROOT` is
+`reports/settings-request-round-1/library-identity-{metadata-final,native-final,core-final,rest}.log`
+and `library-identity-python-metadata.log` in that directory. Counter and policy
+fixtures now declare client origins; dedicated passive-observation coverage
+remains. Ordering, cancellation, admission and failure assertions are preserved.
+Normal Rust commit hooks passed. No migration, alias or retired-input handling
+was introduced. Final package and constrained-tier qualification remain open.
+
+The bounded specialist question about live statistic publication is resolved in
+the foundation specification: publish to indexed TEMP read state under existing
+ownership, keeping durable checkpoints batched. That publication/query integration
+is still implementation work. One operator question remains pending: keep the
+first client-accepted library name, or follow the latest verified local filename.
+Name-selection behavior is unchanged pending that answer.
+
 ## Real-peer endgame contention checkpoint (2026-11-21)
 
 Rust `1d92d229` adds nonterminal verified-part contention for both winner roles
