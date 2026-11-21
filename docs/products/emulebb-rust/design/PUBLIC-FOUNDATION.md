@@ -2721,10 +2721,22 @@ pushed. Current GNU evidence remains scoped to `a3295661`.
 
 Remaining scheduling work includes measured reporter-level scarcity, shared-peer
 candidate alignment, rare bursts/displacement and the public resource summary.
-Source-probe resource refusal also needs exact unstarted-lease settlement: a
-Native no-socket deferral must not leave a network reask penalty for an endpoint
-that was never contacted. That repair must fence the captured owner, preserve
-real/ambiguous wire-attempt cooldowns and gain a forced-capacity regression.
+
+Rust `9c9f498d` settles Native no-socket deferrals without retaining a network
+reask penalty. Captured monotonic source-lease identities and job ownership fence
+cleanup against newer reservations; real or ambiguous attempts retain their
+cooldowns. No-Needed-Parts holds and registered candidates remain intact.
+The forced-capacity regression calls the real Native probe while its connection
+budget is occupied, verifies immediate Core reacquisition, and proves stale
+cleanup cannot release the new lease. Registry tests also cover same-clock
+reacquisition and preservation of holds. All **711 Core executions** pass without
+warnings in `reports/settings-request-round-1/probe-deferral-core-final.log`.
+The initial run exposed a synchronization race in the two-seed ordering fixture:
+open sockets did not yet prove both preparations were ready. Test-only cohort
+observation now waits for ready ownership before releasing the occupied slot;
+the ordering and delivery assertions remain. Normal hooks pass and the commit
+is pushed. Schema 107 and public settings/API contracts are unchanged; current
+GNU evidence remains scoped to `a3295661`.
 
 Compiler investigation uses Builder's diagnostic-only Linux collection command;
 its receipt explicitly records `qualityGatePassed:false` and

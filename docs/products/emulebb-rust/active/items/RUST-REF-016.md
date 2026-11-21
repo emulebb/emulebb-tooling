@@ -1734,11 +1734,21 @@ recovery and Kad swarm cases pass. Normal hooks pass; the commit is pushed.
 No schema, setting or public REST shape changes are introduced. GNU qualification
 above remains scoped to `a3295661`, preceding this ready-cohort change.
 
-The next bounded work is exact source-lease settlement on Native no-socket probe
-deferral: local capacity refusal must not consume a network reask period. Fence
-the captured lease owner and preserve cooldowns for real or ambiguous attempts;
-force capacity refusal in its regression. Then complete measured reporter-level
-scarcity, shared-peer ordering and burst/displacement scheduling,
+Rust `9c9f498d` completes exact source-lease settlement for Native no-socket probe
+deferral. Monotonic lease identity and job-token fences prevent stale cleanup
+from releasing a newer reservation or erasing its cooldown. Explicit capacity
+refusal permits immediate reacquisition; real/ambiguous attempts retain their
+reask stamps, and candidates and No-Needed-Parts holds survive settlement.
+All **711 Core executions** pass without warnings in
+`reports/settings-request-round-1/probe-deferral-core-final.log`, including a
+real Native forced-capacity refusal, Core reacquisition/stale-release checks and
+same-clock registry replacement. The initial full run exposed a test race in
+the preceding ready-order fixture: two connections did not prove completed
+metadata preparation. A test-only ready-cohort count now synchronizes that
+fixture without weakening ordering, hydration or delivery assertions. Normal
+hooks pass; the commit is pushed. Schema 107 and public contracts are unchanged.
+
+Next complete measured reporter-level scarcity, shared-peer ordering and burst/displacement scheduling,
 then payload/session qualification including structural snapshots, retained
 session pins and held-I/O pressure. The new dependency still requires musl,
 Android-target and other applicable platform qualification. GNU execution does
