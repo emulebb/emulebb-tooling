@@ -55,7 +55,8 @@ Evidence below `EMULEBB_WORKSPACE_OUTPUT_ROOT` is
 `library-locations-python-{openapi,ci}.log` in the same directory. Normal commit
 hooks passed. Current release/live conformance remains pending; this closes the
 locations resource, not global library browsing, visibility or statistic sorting.
-The library-name decision remains pending and its behavior is unchanged.
+The operator selected a stable first client-accepted display name; enforcing
+that selection remains part of the library-query implementation.
 
 ## Retained client library identity (2026-11-21)
 
@@ -89,9 +90,9 @@ was introduced. Final package and constrained-tier qualification remain open.
 The bounded specialist question about live statistic publication is resolved in
 the foundation specification: publish to indexed TEMP read state under existing
 ownership, keeping durable checkpoints batched. That publication/query integration
-is still implementation work. One operator question remains pending: keep the
-first client-accepted library name, or follow the latest verified local filename.
-Name-selection behavior is unchanged pending that answer.
+is still implementation work. The operator selected the first client-accepted
+library display name. Later copies retain their actual filenames in locations;
+enforcing the stable display-name selection remains implementation work.
 
 ## Real-peer endgame contention checkpoint (2026-11-21)
 

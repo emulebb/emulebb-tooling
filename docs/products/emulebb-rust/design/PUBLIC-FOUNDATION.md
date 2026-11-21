@@ -337,7 +337,8 @@ and paginated. Default to present content; provide Shared, Unavailable and All
 Known visibility filters. Use flat lists, not folder browsing/tree navigation.
 Filename search is case-insensitive substring matching, minimum three
 characters, without query language, regex or additional word-search modes.
-Match the stored display name only; names of other copies remain visible in the
+Keep the first client-accepted library display name when other filenames are
+observed. Match that stored display name only; names of other copies remain visible in the
 paginated locations resource. Support multiple locations for serving and
 availability without adding duplicate discovery, naming reconciliation or
 deduplication features. Users manage duplicates with external tools.
