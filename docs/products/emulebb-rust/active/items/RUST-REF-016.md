@@ -18,6 +18,31 @@ source: 2026-10-23 Rust async and portability audit
 
 # RUST-REF-016 - Move blocking SQLite work behind bounded async persistence
 
+## Upload rank-query prerequisite (2026-11-21)
+
+Rust `85e113f4` computes one waiting client's rank with an allocation-free linear
+count instead of sorting a full queue copy. It shares the scheduler's unchanged
+score/sequence ordering and preserves stable waiting-order ties at sequence
+saturation. The regression compares counted ranks with scheduler ordering at
+multiple ages and verifies equal-score ties and absent clients. Full Native
+recheck passed 1,514 tests without warnings in
+`reports/settings-request-round-1/upload-rank-count-native-recheck.log` below
+`EMULEBB_WORKSPACE_OUTPUT_ROOT`.
+
+The preceding run passed the rank regression but failed
+`live_plan_replacement_discards_stale_events_and_polls_added_server`: its responder
+received a status request where it expected a description request, followed by an
+event timeout. The unchanged full-suite recheck passed; the unexpected packet is
+unexplained and remains a final-qualification concern. No UDP production code or
+acceptance assertion was changed to obtain the passing recheck.
+
+This prerequisite does not close upload-list pagination. Current list paths still
+construct the full queue and hydrate serving views before selecting responses;
+they must use bounded thin reads. The operator decision on departed-anchor cursor
+expiry versus current-rank continuation is pending. Do not implement dependent
+public cursor behavior before that answer. Schema, REST and settings contracts
+are unchanged by this checkpoint. No PR or merge is authorized.
+
 ## Closed waiting reasons checkpoint (2026-11-21)
 
 Rust `81a4c52e` adds required nullable `waitingReason` to download summaries,
