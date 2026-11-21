@@ -1716,8 +1716,29 @@ Existing hashset/AICH wire and Core local-seed/Kad delivery cases pass. Normal
 hooks pass and the commit is pushed. Schema 107, settings and public contracts
 are unchanged; the preceding GNU receipt remains scoped to `a3295661`.
 
-The next bounded work is global ready-job ranking and measured reporter-level
-scarcity for waiting jobs, then burst/displacement scheduling,
+Rust `5c102cde` introduces bounded ordinary ready admission. Preparation and active
+execution use separate task sets on the existing Tokio executor; guards account
+for pending/ready preparations under the same two-slot allowance. Ready work
+retains its connection until promotion or settled cancellation/expiry. Ordinary
+selection uses remaining bytes and rotating creation-ID ties. Preparation is
+independent of a full ordinary payload ceiling, while promotion still requires
+ordinary capacity and respects drain limits. Shutdown settles preparation results
+and ready owners before draining active execution.
+
+All **708 Core executions** pass without warnings in
+`reports/settings-request-round-1/ready-admission-core.log`. A two-seed fixture
+holds the single ordinary slot, confirms two retained connections without storage
+or generation allocation, then proves the smaller later-created job starts first,
+both files deliver and disconnect releases their connections. Existing Busy
+recovery and Kad swarm cases pass. Normal hooks pass; the commit is pushed.
+No schema, setting or public REST shape changes are introduced. GNU qualification
+above remains scoped to `a3295661`, preceding this ready-cohort change.
+
+The next bounded work is exact source-lease settlement on Native no-socket probe
+deferral: local capacity refusal must not consume a network reask period. Fence
+the captured lease owner and preserve cooldowns for real or ambiguous attempts;
+force capacity refusal in its regression. Then complete measured reporter-level
+scarcity, shared-peer ordering and burst/displacement scheduling,
 then payload/session qualification including structural snapshots, retained
 session pins and held-I/O pressure. The new dependency still requires musl,
 Android-target and other applicable platform qualification. GNU execution does

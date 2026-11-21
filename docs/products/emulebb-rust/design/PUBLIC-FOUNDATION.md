@@ -2699,6 +2699,33 @@ pass. Normal hooks pass; the commit is pushed. The GNU receipt above belongs to
 jobs, burst/displacement policy and final pressure/platform/memory qualification
 remain open.
 
+Rust `5c102cde` separates preparation completion from payload execution under the
+existing Tokio executor and guard limits. Ready connections remain charged to
+the preparation allowance until promotion. Ordinary admission chooses the
+smallest remaining byte count in the bounded ready cohort, rotating creation-ID
+ties after the last admitted job. Pending and ready work share the same initial
+two-slot preparation allowance; no waiting-history task or timer is introduced.
+Cancelled/expired ready owners are settled before releasing their guards, and
+shutdown drains preparation results, ready owners and active workers.
+
+Preparation can continue when the ordinary payload ceiling is full, subject to
+actual connection/construction capacity. A preparation guard still grants no
+payload authority; promotion enforces the ordinary ceiling and drain limits.
+Windows passes **708 Core executions**, without warnings, in
+`reports/settings-request-round-1/ready-admission-core.log`. The existing local
+seed fixture now covers two ready connections while one ordinary slot is held:
+both jobs remain unhydrated, the smaller later-created job begins first after
+release, both deliver, and disconnect releases the connections. Existing local
+Busy recovery and Kad swarm cases also pass. Normal hooks pass; the commit is
+pushed. Current GNU evidence remains scoped to `a3295661`.
+
+Remaining scheduling work includes measured reporter-level scarcity, shared-peer
+candidate alignment, rare bursts/displacement and the public resource summary.
+Source-probe resource refusal also needs exact unstarted-lease settlement: a
+Native no-socket deferral must not leave a network reask penalty for an endpoint
+that was never contacted. That repair must fence the captured owner, preserve
+real/ambiguous wire-attempt cooldowns and gain a forced-capacity regression.
+
 Compiler investigation uses Builder's diagnostic-only Linux collection command;
 its receipt explicitly records `qualityGatePassed:false` and
 `packageProduced:false`. Acceptance continues to require the ordinary strict
