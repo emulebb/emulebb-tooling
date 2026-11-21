@@ -53,10 +53,40 @@ Evidence below `EMULEBB_WORKSPACE_OUTPUT_ROOT` is
 `reports/settings-request-round-1/library-locations-core.log`,
 `library-locations-rest-final.log`, `library-locations-webui-final.log` and
 `library-locations-python-{openapi,ci}.log` in the same directory. Normal commit
-hooks passed. Current release/live conformance remains pending; this closes the
+hooks passed. The regular Windows release build passed without compiler warnings
+on Rust `c90e5eb7`; its full live REST/OpenAPI campaign passed with Harness
+`a61955ff`. All 91 selected operations passed their success or expected-error
+contracts. The populated category phase proved both real cached copies present;
+settings CLI, category/friend/Kad persistence and retained-download scale phases
+passed, with graceful teardown. Evidence is
+`reports/rust-rest-openapi-ci/20261121T204225Z/report.json` and
+`reports/settings-request-round-1/library-locations-{windows-build,live-identity}.log`.
+
+The generic unknown-hash probe requires 404, while the populated phase requires
+200 and both copies. That phase compares filesystem identity rather than Windows
+extended-length path spelling; failure reports preserve returned observations.
+No daemon path conversion or endpoint expectation was weakened. This closes the
 locations resource, not global library browsing, visibility or statistic sorting.
-The operator selected a stable first client-accepted display name; enforcing
-that selection remains part of the library-query implementation.
+
+## Stable client library names (2026-11-21)
+
+Rust `53b3fb31` implements the operator's first client-accepted display-name
+decision using retained library membership. Download admission, verified local
+acceptance and client-origin indexing select the client name before membership
+is established, replacing a passive-only label. Subsequent observations, copies
+and jobs preserve it, even after the final job and origin rows are removed.
+Job presentation and actual location filenames remain independent. No schema
+change, additional authority or name-reconciliation machinery was introduced.
+
+Scoped validation passed **335 metadata and 1,522 Native tests** without
+compiler warnings. The acceptance-failure regression proves the name and
+membership roll back together, then exercises real job retirement and a new
+attempt with different presentation. Existing verified-copy and origin tests
+cover passive promotion and later local names. Evidence is
+`reports/settings-request-round-1/library-first-name-{metadata-final,native}.log`.
+Normal commit/push hooks passed. The preceding release/live receipt proves the
+locations integration on `c90e5eb7`; final package, current-source live and tier
+qualification after remaining library-query integration stay open.
 
 ## Retained client library identity (2026-11-21)
 
@@ -90,9 +120,8 @@ was introduced. Final package and constrained-tier qualification remain open.
 The bounded specialist question about live statistic publication is resolved in
 the foundation specification: publish to indexed TEMP read state under existing
 ownership, keeping durable checkpoints batched. That publication/query integration
-is still implementation work. The operator selected the first client-accepted
-library display name. Later copies retain their actual filenames in locations;
-enforcing the stable display-name selection remains implementation work.
+is still implementation work. The first client-accepted library display-name
+decision is implemented above; later copies retain actual filenames in locations.
 
 ## Real-peer endgame contention checkpoint (2026-11-21)
 
