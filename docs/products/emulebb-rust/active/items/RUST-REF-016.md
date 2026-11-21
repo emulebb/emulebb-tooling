@@ -1674,8 +1674,28 @@ and uses only loopback endpoints. Normal hooks pass; the commit is pushed.
 
 This closes the demonstrated local-Busy handoff gap at Windows component/local
 integration scope, without proving the cause of the earlier swarm failure.
-Current strict GNU/platform checks, callback-payload/held-I/O pressure cases and
-full scheduling qualification remain required. This checkpoint does not
+Rust `a3295661` removes two needless return statements caught by strict Clippy;
+the complete **GNU AMD64** lane then passes workspace Clippy, packet-diagnostics
+checking, optimized release build, **3,392 workspace tests plus 3 VPN-egress
+tests**, and non-root package smoke. The one ignored ownership entry is the
+isolated subprocess fixture invoked by its regression parents. Upstream C
+dependency warnings remain logged; strict Rust checks pass. Exact build/test
+evidence is under
+`reports/rust-linux/gnu-amd64/c81883508cab4490a8c0114fa2816962/`.
+
+Runtime receipt:
+`reports/rust-linux/gnu-amd64/9dc6e2deb84c490fa5b0e8c791e5b7ab/package-smoke.json`.
+It records exact Rust `a32956617901ed30b887ca22665c442d70d408b3` and Harness
+`08fc73e865cb2e098d910b764743d5048ee31849`. Real local-source delivery matches the
+12-MiB payload SHA-256; verified bytes and part zero survive same-profile/binary
+restart, explicit start completes delivery, and output registration/completed
+history persist. Three shutdowns are graceful and public discovery is disabled.
+Archive SHA-256:
+`396e7812debddc448948c96dce4bbaae804473687eb84a95d5d09f7351015a6d`.
+This is local qualification, not publication or rendered-WebUI evidence.
+
+Current musl/Android/other platform gates, callback-payload/held-I/O pressure cases
+and full scheduling qualification remain required. This checkpoint does not
 qualify multi-file payload/endgame, adaptive pressure, either final memory tier,
 musl, Android-target or other outstanding platforms. Schema 107, saved settings,
 CLI and public REST contracts are unchanged.

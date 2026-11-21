@@ -2656,8 +2656,28 @@ seed then proves retained-connection delivery after Busy with the 20-minute
 source cooldown still active. Both payload bytes and completed state are checked;
 the existing Kad swarm also passes. Tests measure against admitted thin-content
 bookkeeping, not an assumed zero resident baseline. Normal hooks pass and the
-commit is pushed. Current GNU/platform gates, callback-payload pressure cases,
-global scarcity/burst scheduling and final memory tiers remain open.
+commit is pushed. Callback-payload pressure cases, global scarcity/burst
+scheduling and final memory tiers remain open.
+
+Rust `a3295661` removes two unnecessary return statements identified by strict
+Clippy, then passes the complete **GNU AMD64** package lane: strict workspace
+Clippy, packet-diagnostics checking, optimized release build, **3,392 workspace
+tests plus 3 VPN-egress tests**, and non-root runtime smoke. The ignored ownership
+entry remains a subprocess fixture invoked by its parent regressions. Upstream C
+dependency warnings are retained; the Rust quality gates pass. Build/test logs:
+`reports/rust-linux/gnu-amd64/c81883508cab4490a8c0114fa2816962/`.
+
+The exact-source smoke receipt is
+`reports/rust-linux/gnu-amd64/9dc6e2deb84c490fa5b0e8c791e5b7ab/package-smoke.json`,
+with Harness `08fc73e8`. It proves real 12-MiB local-source delivery, exact payload
+SHA-256, the same verified first part across stopped-profile restart, explicit
+resume, retained completion, output registration and three graceful shutdowns.
+Archive SHA-256:
+`396e7812debddc448948c96dce4bbaae804473687eb84a95d5d09f7351015a6d`.
+This is local package qualification, not publication or rendered-WebUI proof;
+the receipt checks assets and panel backends. Current musl/Android/other platform
+gates, callback-pressure cases, scheduling policy and final memory tiers remain
+open. No PR or merge was created.
 
 Compiler investigation uses Builder's diagnostic-only Linux collection command;
 its receipt explicitly records `qualityGatePassed:false` and
