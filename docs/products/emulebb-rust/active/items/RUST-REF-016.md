@@ -29,6 +29,34 @@ during consolidation; documentation checks passed in
 `reports/settings-request-round-1/foundation-spec-consolidation-docs.log` below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
 
+## Cached locations REST/WebUI integration (2026-11-21)
+
+Rust `c90e5eb7` exposes `GET /library/files/{hash}/locations` through the existing
+admitted metadata worker. The hash-scoped cursor selects at most 200 cached
+copies, with a default of 100 and a 1-MiB result allowance. Results retain their
+allowance through Core conversion, JSON serialization and HTTP body delivery.
+The response is a thin data array of paths and cached presence; it neither
+probes files nor grants upload permission. Accepted copyless hashes return an
+empty page; unknown/passive-only hashes return 404. The selected-file WebUI
+inspector fetches one location page and resets paging on hash selection.
+
+Scoped checks passed **727 Core, 174 REST, 93 WebUI unit and 33 browser tests**,
+plus **131 existing Python route/schema and 30 conformance-runner tests**.
+Rust compiler warning scans were empty. A three-copy REST fixture traverses
+every page with sharing disabled, then deletes the physical files and proves
+that reads still return cached observations. Core checks unchanged resident
+execution use and exact retained charges through encoding/drop. Browser fixtures
+now use canonical lowercase hashes. The existing Python populated sharing phase
+also checks both physical copy paths through the new route.
+
+Evidence below `EMULEBB_WORKSPACE_OUTPUT_ROOT` is
+`reports/settings-request-round-1/library-locations-core.log`,
+`library-locations-rest-final.log`, `library-locations-webui-final.log` and
+`library-locations-python-{openapi,ci}.log` in the same directory. Normal commit
+hooks passed. Current release/live conformance remains pending; this closes the
+locations resource, not global library browsing, visibility or statistic sorting.
+The library-name decision remains pending and its behavior is unchanged.
+
 ## Retained client library identity (2026-11-21)
 
 Rust `5cd0ad7a` introduces fresh schema **109** with `library_files`, the retained

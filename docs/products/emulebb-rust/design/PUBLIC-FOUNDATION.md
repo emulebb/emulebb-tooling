@@ -351,6 +351,17 @@ The accepted library-view boundaries are:
   unfinished downloads and verified/imported content. Remote-only search
   observations remain outside the library.
 
+`GET /library/files/{hash}/locations` returns a thin `data` array of
+`{path, present}` with `meta.nextCursor` and `meta.hasMore`. Limit defaults to
+100 and cannot exceed 200; byte-bounded pages may be shorter. An accepted
+copyless hash returns an empty page; an unknown or passive-only hash returns
+404. Presence describes cached verification under configured accessible roots,
+independently of complete-content sharing policy. Reads never probe files or
+grant payload access. Paths retain each copy's actual filename. Cursors are
+opaque and scoped to the hash, continue after deleted boundaries, and make no
+snapshot guarantee under concurrent changes. The WebUI browses only the selected
+hash's current page and resets that page when selection changes.
+
 ### Sharing policy and tags
 
 The persistent sharing enabled/disabled flag is **hash-level**, affecting all

@@ -843,6 +843,42 @@ paths:
           $ref: '#/components/responses/ErrorResponse'
         default:
           $ref: '#/components/responses/ErrorResponse'
+  /library/files/{hash}/locations:
+    parameters:
+    - $ref: '#/components/parameters/FileHash'
+    get:
+      tags: [Library]
+      summary: List cached copy locations for client library content.
+      operationId: listLibraryFileLocations
+      description: >-
+        Return a data array in stable internal path-key order. Default limit 100,
+        maximum 200; the byte budget may produce shorter pages. Cursors are opaque
+        and scoped to this hash. A deleted boundary still permits continuation.
+        Live traversal may miss concurrent changes and retains no client snapshot.
+        Paths and presence are cached observations; reading performs no filesystem
+        probe and grants no payload access. Presence is independent of hash sharing
+        policy. Accepted unfinished or unavailable content may have an empty page.
+        Unknown or passive-only hashes return 404.
+      parameters:
+      - $ref: '#/components/parameters/LibraryLocationCursor'
+      - $ref: '#/components/parameters/LibraryLocationLimit'
+      responses:
+        '200':
+          $ref: '#/components/responses/LibraryLocationPageResponse'
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/ErrorResponse'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowedResponse'
+        '500':
+          $ref: '#/components/responses/ErrorResponse'
+        '503':
+          $ref: '#/components/responses/ErrorResponse'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
   /library/files/{hash}/tags:
     parameters:
     - $ref: '#/components/parameters/FileHash'
@@ -3527,6 +3563,24 @@ components:
       schema:
         $ref: '#/components/schemas/LibraryTagName'
       description: Immutable public name. Lookup is ASCII case-insensitive; returned spelling is preserved.
+    LibraryLocationCursor:
+      name: cursor
+      in: query
+      required: false
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 512
+      description: Opaque live continuation scoped to the library hash; do not interpret.
+    LibraryLocationLimit:
+      name: limit
+      in: query
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 200
+        default: 100
     LibraryTagCursor:
       name: cursor
       in: query
@@ -3917,6 +3971,15 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/LibraryTagEnvelope'
+    LibraryLocationPageResponse:
+      description: Cached client-library copy locations.
+      headers:
+        X-Contract-Version:
+          $ref: '#/components/headers/ContractVersionHeader'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/LibraryLocationPageEnvelope'
     LibraryTagPageResponse:
       description: LibraryTagPageResponse
       headers:
@@ -4831,6 +4894,28 @@ components:
           $ref: '#/components/schemas/LibraryTag'
         meta:
           $ref: '#/components/schemas/EnvelopeMeta'
+    LibraryLocation:
+      type: object
+      additionalProperties: false
+      required: [path, present]
+      properties:
+        path:
+          type: string
+        present:
+          type: boolean
+          description: Cached verification under a configured accessible root, independent of sharing policy.
+    LibraryLocationPageEnvelope:
+      type: object
+      additionalProperties: false
+      required: [data, meta]
+      properties:
+        data:
+          type: array
+          maxItems: 200
+          items:
+            $ref: '#/components/schemas/LibraryLocation'
+        meta:
+          $ref: '#/components/schemas/CursorPageMeta'
     LibraryTagPageEnvelope:
       type: object
       additionalProperties: false
