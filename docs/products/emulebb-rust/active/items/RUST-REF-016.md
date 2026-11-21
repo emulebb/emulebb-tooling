@@ -18,6 +18,32 @@ source: 2026-10-23 Rust async and portability audit
 
 # RUST-REF-016 - Move blocking SQLite work behind bounded async persistence
 
+## Closed waiting reasons checkpoint (2026-11-21)
+
+Rust `81a4c52e` adds required nullable `waitingReason` to download summaries,
+details and creation responses, using only `network`, `sources` or `resources`
+while queued and null in other lifecycle states. OpenAPI constraints and the
+WebUI discriminated union enforce the same combinations. Browse/detail/create
+share the projection. Network policy and explicit binding availability take
+precedence over ready preparation evidence. Prepared sources retain only a
+scalar deadline on their existing ownership entry; expiry, cancellation,
+generation rebind, promotion and drop invalidate that evidence. No source-hint
+scan, per-history-job status cache, new worker or persisted field is added.
+Schema 108 and settings/CLI contracts are unchanged.
+
+Validation passed: 722 Core and 169 REST executions without warnings; 20 existing
+Python OpenAPI-response tests, including every lifecycle/reason combination;
+91 WebUI unit and 32 stateful browser tests, type checking and production build.
+The existing two-peer preparation fixture proves queued `resources` projections
+before payload allocation. A separate test proves a missing explicit interface
+reports `network` even with VPN policy off. Windows release build passed with
+zero warnings. Logs are `reports/settings-request-round-1/waiting-reasons-*.log`
+below `EMULEBB_WORKSPACE_OUTPUT_ROOT`. Live REST conformance passed in
+`reports/rust-rest-openapi-ci/20261121T135424Z/report.json`, including 100,000
+metadata-only retained jobs, restart-preserved counts and graceful teardown.
+Upload-queue pagination, real-payload scheduling/endgame qualification and final
+physical-library/platform campaigns remain open. No PR or merge is authorized.
+
 ## Download resource summary checkpoint (2026-11-21)
 
 Rust `ee90d905` and `215c75d2` introduce fresh schema 108 and the canonical
@@ -46,8 +72,8 @@ Evidence: `reports/settings-request-round-1/resource-summary-*.log` below
 metadata-only retained jobs, 100 waiting jobs, preserved restart counts and
 graceful teardown. This does not qualify physical libraries, real payload
 displacement/endgame contention, current Linux packages or final 512-MiB/1-GiB
-campaigns. Per-download waiting reasons and upload-queue pagination remain
-separate unfinished foundation slices. No PR or merge is authorized.
+campaigns. Upload-queue pagination remains an unfinished foundation slice.
+No PR or merge is authorized.
 
 ## Current download provider
 

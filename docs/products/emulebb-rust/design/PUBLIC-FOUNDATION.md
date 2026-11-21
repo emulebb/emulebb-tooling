@@ -542,6 +542,13 @@ semantics. These codes are not an extensible string set. Adding/changing a code
 requires an explicit public-contract decision. Enforce state/reason combinations
 in OpenAPI, backend checks and client types; detail belongs in network/failure
 information and the resource summary, not new scheduler-specific reason codes.
+Derive reasons from effective network policy/binding and the bounded preparation
+cohort. A prepared peer with unexpired useful-data evidence, or local completion
+work ready for admission, explains a resource wait. Retained endpoint hints alone
+do not prove useful reachable work. Expiry, cancellation, promotion and execution
+generation handoff invalidate preparation observations. Resolve explicit binding
+availability once per browse observation, before locking Core state; do not scan
+source bitmaps or maintain a status entry for every retained job.
 Include one lightweight resource summary: active/preparing/waiting counts,
 configured concurrency mode/value, current adaptive target, burst activity,
 and resident-memory usage/budget. Coalesce updates rather than emitting per-block

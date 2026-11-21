@@ -12961,6 +12961,27 @@ components:
       - removing
       - failed
       description: Observed execution state, separate from desired intent and retained terminal completion.
+    DownloadWaitingReason:
+      type: string
+      enum: [network, sources, resources]
+      description: >-
+        Network cannot operate; no reachable peer currently confirms useful
+        missing data; or confirmed useful/local completion work awaits resources.
+        Prepared-peer evidence expires with its admission deadline. Retained
+        source hints alone do not establish useful reachable work.
+    DownloadWaitingState:
+      type: object
+      required: [state, waitingReason]
+      if:
+        properties:
+          state: {const: queued}
+      then:
+        properties:
+          waitingReason:
+            $ref: '#/components/schemas/DownloadWaitingReason'
+      else:
+        properties:
+          waitingReason: {type: 'null'}
     DownloadIntent:
       type: string
       enum:
@@ -13008,6 +13029,8 @@ components:
     DownloadSummary:
       type: object
       additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/DownloadWaitingState'
       required:
       - id
       - hash
@@ -13017,6 +13040,7 @@ components:
       - progress
       - intent
       - state
+      - waitingReason
       - createdAt
       - updatedAt
       - completedAt
@@ -13049,6 +13073,10 @@ components:
           $ref: '#/components/schemas/DownloadIntent'
         state:
           $ref: '#/components/schemas/DownloadState'
+        waitingReason:
+          oneOf:
+          - $ref: '#/components/schemas/DownloadWaitingReason'
+          - type: 'null'
         createdAt:
           type: integer
           minimum: 0
@@ -13087,6 +13115,8 @@ components:
     Download:
       type: object
       additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/DownloadWaitingState'
       required:
       - id
       - hash
@@ -13096,6 +13126,7 @@ components:
       - progress
       - intent
       - state
+      - waitingReason
       - createdAt
       - updatedAt
       - completedAt
@@ -13131,6 +13162,10 @@ components:
           $ref: '#/components/schemas/DownloadIntent'
         state:
           $ref: '#/components/schemas/DownloadState'
+        waitingReason:
+          oneOf:
+          - $ref: '#/components/schemas/DownloadWaitingReason'
+          - type: 'null'
         createdAt:
           type: integer
           minimum: 0
