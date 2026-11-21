@@ -2574,6 +2574,21 @@ payload/endgame, callback admission control, scarcity/bursts, adaptive pressure,
 final memory tiers and the remaining platform gates stay open. Public contracts
 and schema 107 are unchanged.
 
+Rust `849b58ef` adds the listener-owned callback admission handoff: two bounded
+preparation registrations, opaque request identity, one-shot start/skip,
+cancellation and listener-settlement receipts. Availability precedes manifest
+hydration and payload. Start validates the current execution token and continues
+on the same connection; acknowledgment cannot consume a replacement request.
+Preparation capacity is released before settlement notification, or transferred
+out of preparation when active execution starts. Windows passes 1,503 Native and
+704 Core executions without warnings in
+`reports/settings-request-round-1/callback-admission-ed2k-receipts.log` and
+`callback-admission-core.log`, including real-socket start, skip and cancellation.
+The commit is pushed and normal hooks pass. The production Core scheduler still
+does not create these registrations; producer integration remains open. The GNU
+evidence above applies to `6385fa17`, not this newer handoff. No public schema,
+settings or REST contract changes are introduced by this internal mechanism.
+
 Compiler investigation uses Builder's diagnostic-only Linux collection command;
 its receipt explicitly records `qualityGatePassed:false` and
 `packageProduced:false`. Acceptance continues to require the ordinary strict

@@ -1584,9 +1584,26 @@ three times. Public discovery is disabled. The archive SHA-256 is
 `3926fc3239da0bef41e14f0361685b3104d528052c034367ac98c774491011dd`.
 This is local package evidence, not publication or rendered-WebUI proof.
 
+Rust `849b58ef` adds the bounded Native callback admission handoff. Two pending
+registrations carry opaque request identity, an absolute deadline and one-shot
+start/skip/cancellation channels. The listener retains the socket, callback claim
+and metadata while Core decides. Start verifies the authoritative current job
+token and content before payload; exact request acknowledgment preserves newer
+registrations. Preparation capacity follows the listener through cancellation,
+is released before settlement notification, and leaves preparation accounting
+when execution starts. No per-waiting-job tasks or new saved settings are added.
+
+Windows passes **1,503 Native and 704 Core executions**, without warnings, in
+`reports/settings-request-round-1/callback-admission-ed2k-receipts.log` and
+`callback-admission-core.log`. Real-socket tests prove no early payload or storage
+hydration, same-connection completion with a newer execution token, skip and
+cancellation. Capacity and replacement-request fencing have unit coverage.
+The commit is pushed and normal hooks pass. GNU evidence above remains scoped
+to `6385fa17`; this newer handoff has not yet run that lane.
+
 The production callback route still hydrates under its current Core selection
-before dispatch. Core-controlled preparation before that admission, request
-identity/start receipt and settlement remain open. This checkpoint does not
+before dispatch: the Core producer does not yet create preparation registrations.
+Producer integration before hydration remains open. This checkpoint does not
 qualify multi-file payload/endgame, adaptive pressure, either final memory tier,
 musl, Android-target or other outstanding platforms. Schema 107, saved settings,
 CLI and public REST contracts are unchanged.
