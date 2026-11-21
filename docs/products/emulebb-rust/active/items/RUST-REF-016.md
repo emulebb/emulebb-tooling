@@ -111,8 +111,16 @@ with the already-required `waitingReason` field. Evidence below
 `upload-queue-python-{ci,reask,responses}.log` in the same directory. A final,
 equivalent positive IPv4 projection passed the existing product-policy hook.
 
-Current release/live conformance and cross-platform/physical-library campaigns
-remain open. Snapshot/diagnostic selection is bounded; this does not claim
+The regular Windows release/WebUI build passed with zero warnings in
+`logs/builds/20261121T175221Z-build-clients/build-result.json`. Live REST/OpenAPI
+conformance passed on exact Rust `f000fb0ff2705a50e6d1d2a5373ad1d6969bf692`,
+with graceful teardown, in
+`reports/rust-rest-openapi-ci/20261121T175848Z/report.json`. This includes the
+existing populated upload resources, persistence and retained-download scale
+phases; it does not qualify a physical library or a constrained-memory tier.
+
+Current cross-platform/physical-library campaigns remain open.
+Snapshot/diagnostic selection is bounded; this does not claim
 complete aggregate-response accounting or final upload DTO cleanup. No PR or
 merge is authorized.
 
