@@ -1769,7 +1769,27 @@ pushed. Schema 107 and public contracts are unchanged. Callback-only readiness
 still lacks equivalent persisted evidence and receives no inferred rarity
 advantage; active part-frequency identity deduplication is also not yet done.
 
-Next complete callback scarcity evidence, shared-peer ordering and burst/displacement scheduling,
+Rust `54567712` includes live callback proof in ready scarcity without persisting
+an inbound socket or LowID as a direct source. Core keeps the accepted identity,
+shared bounded bitmap, size and captured time until admission. The common
+metadata read checks current job authority/geometry, excludes verified parts and
+other identities, and lets a live reply supersede older same-identity status.
+Native checks the 30-second proof lifetime before work and again after receipt;
+contention cannot renew it. Worker backing stays under the existing 128-KiB
+transient reservation and Core releases its preparation bitmap at payload start
+or cancellation. No table, setting, public shape or worker pool is added.
+
+**321 metadata, 1,509 Native and 712 Core executions** pass without warnings in
+`reports/settings-request-round-1/callback-scarcity-metadata.log`,
+`callback-scarcity-ed2k-final.log` and `callback-scarcity-core-final.log`. The real
+callback fixture checks accepted status rarity, expiry and zero inserted source
+hints before retaining its start/skip/cancel and same-socket newer-token payload
+checks. Metadata tests cover no-endpoint proof, geometry and authority fences,
+and newer live status overriding an older reporter claim. An initial Native
+compile rejected moving the borrowed bitmap; final Native/Core evidence follows
+the bounded-copy correction. Normal hooks pass and the commit is pushed.
+
+Next complete shared-peer ordering and burst/displacement scheduling,
 then payload/session qualification including structural snapshots, retained
 session pins and held-I/O pressure. The new dependency still requires musl,
 Android-target and other applicable platform qualification. GNU execution does

@@ -2719,7 +2719,7 @@ release, both deliver, and disconnect releases the connections. Existing local
 Busy recovery and Kad swarm cases also pass. Normal hooks pass; the commit is
 pushed. Current GNU evidence remains scoped to `a3295661`.
 
-Remaining scheduling work includes callback scarcity evidence, shared-peer
+Remaining scheduling work includes shared-peer
 candidate alignment, rare bursts/displacement and the public resource summary.
 
 Rust `9c9f498d` settles Native no-socket deferrals without retaining a network
@@ -2764,6 +2764,32 @@ advantage. Shared-peer candidate alignment, active part-frequency identity
 deduplication, bursts/displacement and full pressure qualification remain open.
 Schema 107, settings and public API shapes are unchanged; current GNU evidence
 remains scoped to `a3295661`.
+
+Rust `54567712` extends the same rarity calculation to listener-owned callback
+readiness. Core retains only the accepted HELLO identity, a bounded shared bitmap,
+captured observation time and size while awaiting admission. The Native read
+shares this bitmap with its existing retained worker; it validates current job
+geometry/intent/generation, excludes verified parts and other reporter claims,
+and expires live proof after 30 seconds both before work and after receipt.
+An older persisted status from that identity cannot restore parts absent from
+the live reply. No inbound ephemeral port or server LowID becomes an outbound
+source hint, and no callback endpoint/status row is invented for ranking.
+Preparation releases its bitmap when payload execution starts or cancellation
+settles. This uses the existing 128-KiB transient read reservation, preparation
+quota and blocking owner; schema 107, settings and public API shapes are unchanged.
+
+**321 metadata, 1,509 Native and 712 Core executions** pass without warnings in
+`reports/settings-request-round-1/callback-scarcity-metadata.log`,
+`callback-scarcity-ed2k-final.log` and `callback-scarcity-core-final.log`. The real
+accepted-callback fixture checks rarity and expiration with zero source-hint
+insertion before its existing start/skip/cancel and same-socket successor-token
+delivery assertions. Metadata tests cover a callback with no endpoint record,
+conflicting geometry, stale ownership and newer live status superseding older
+same-identity claims. The first Native compile exposed a borrowed-bitmap test
+mistake; the final Native/Core runs above follow its correction. Normal hooks
+pass and the commit is pushed. Full Core callback payload/pressure qualification,
+shared-peer alignment, active part-frequency identity deduplication and burst/
+displacement remain open; GNU evidence still covers `a3295661`.
 
 Compiler investigation uses Builder's diagnostic-only Linux collection command;
 its receipt explicitly records `qualityGatePassed:false` and
