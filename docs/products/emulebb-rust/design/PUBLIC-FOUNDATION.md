@@ -2584,8 +2584,9 @@ out of preparation when active execution starts. Windows passes 1,503 Native and
 704 Core executions without warnings in
 `reports/settings-request-round-1/callback-admission-ed2k-receipts.log` and
 `callback-admission-core.log`, including real-socket start, skip and cancellation.
-The commit is pushed and normal hooks pass. The production Core scheduler still
-does not create these registrations; producer integration remains open. The GNU
+The commit is pushed and normal hooks pass. At this revision the Core scheduler
+did not create these registrations. The later producer checkpoint below wires
+them into selection. The GNU
 evidence above applies to `6385fa17`, not this newer handoff. No public schema,
 settings or REST contract changes are introduced by this internal mechanism.
 
@@ -2605,8 +2606,42 @@ cancellation before dispatch and unchanged hydration invariants. Its first run
 caught a fixture bind-address mismatch; the corrected loopback fixture passes
 all 704 Core executions without warnings in
 `reports/settings-request-round-1/callback-server-core-final.log`. Normal hooks
-pass and the commit is pushed. Scheduler production of callback preparation
-remains open; these dispatch changes do not complete producer integration.
+pass and the commit is pushed. Those dispatch changes alone do not complete
+producer integration.
+
+Rust `70dafa72` connects waiting callback preparation to the scheduler for direct
+UDP, Kad buddy/FINDSOURCE and server routes. It registers before dispatch, checks
+actual needed-part availability before hydration, and sends the current execution
+token to the listener only after admission and hydration. Skip, resource refusal,
+cancellation and shutdown settle the listener owner; an unstarted callback is
+also settled when cancellation arrives between hydration and the first attempt.
+FINDSOURCE producers are supervised and drained. Known-unavailable routes return
+immediately; joined or ambiguous dispatch and fast inbound claims keep their
+bounded availability wait. Callback replies are not converted into direct hints
+using an inbound socket's ephemeral port or a server LowID.
+
+All **704 Core executions** pass without warnings in
+`reports/settings-request-round-1/callback-producer-core-settlement.log`. The
+existing real UDP fixture proves guard cancellation and shutdown while waiting,
+no hydration/storage or generation change, release of both Native preparation
+slots before return, and immediate unavailable-route completion. The existing
+Kad swarm delivery test passes on this final source. Normal hooks pass and the
+commit is pushed. The Native same-socket start/skip/cancel tests above remain
+component evidence; a complete Core callback-payload/pressure campaign and newer
+GNU/platform qualification are still required.
+
+Acceptance remains open for a confirmed ownership gap: a local hydration Busy
+can discard a useful prepared connection while retaining the source's 20-minute
+network reask stamp. An earlier swarm run in `callback-producer-core-final.log`
+left one healthy started job queued with zero geometry and no persisted storage
+fault while the second delivered. Subsequent changed-source runs pass; they do
+not establish that failure's cause or close this gap. Next, retain the existing
+bounded ready owner and lease while local admission/hydration is temporarily
+busy, using the shared clock and cancellation signals. Split begin/rebind from
+remaining hydration so retries cannot advance execution repeatedly; do not clear
+protocol cooldowns, redial, re-probe or create another queue. Add an injected
+post-begin Busy regression, same-connection recovery and cancellation/settlement
+proof before claiming that handoff qualified.
 
 Compiler investigation uses Builder's diagnostic-only Linux collection command;
 its receipt explicitly records `qualityGatePassed:false` and

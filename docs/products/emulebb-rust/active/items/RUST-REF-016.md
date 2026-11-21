@@ -1620,9 +1620,42 @@ passes all **704 Core executions**, without warnings, in
 pass and the commit is pushed. This enables reuse by waiting preparation but
 does not implement its scheduler producer.
 
-The production callback route still hydrates under its current Core selection
-before dispatch: the Core producer does not yet create preparation registrations.
-Producer integration before hydration remains open. This checkpoint does not
+Rust `70dafa72` wires preparation before hydration into Core selection for direct
+UDP, Kad buddy/FINDSOURCE and server callbacks. The bounded producer retains only
+metadata until needed parts and resource admission permit hydration, then sends
+the rebound execution token to the existing listener. It supervises/drains
+FINDSOURCE work and settles callback receipts on refusal, cancellation, shutdown
+and the gap between hydration and first execution. Known-unavailable dispatch
+does not consume the callback wait; joined/ambiguous dispatch and fast inbound
+claims still wait for their exact receipt. Inbound ephemeral ports and server
+LowIDs do not become direct endpoint hints.
+
+Windows passes all **704 Core executions**, without warnings, in
+`reports/settings-request-round-1/callback-producer-core-settlement.log`. The
+existing UDP fixture covers pending producer cancellation and shutdown, no early
+storage/resident/generation change, both Native preparation slots available
+before return, and immediate completion without a route. The existing Kad swarm
+two-file delivery case also passes. Normal hooks pass; the commit is pushed.
+Native same-socket start/skip/cancel evidence remains separately scoped above;
+full Core callback payload/pressure and current GNU/platform qualification remain
+open.
+
+An earlier run, `callback-producer-core-final.log`, failed the swarm delivery
+deadline: one started job remained queued with zero geometry and no storage
+fault while the second delivered. Later changed-source passes do not prove its
+cause. Source review confirms a relevant ownership gap: unsuccessful hydration
+drops the prepared peer and retires execution, but leaves the 20-minute source
+reask stamp. Busy intentionally preserves healthy Started intent, so this local
+refusal can lose useful capacity until another permitted network reask.
+
+The next bounded repair retains the existing prepared owner, guard and lease
+across temporary local admission/hydration refusal, using the shared retry clock
+and cancellation/shutdown. Begin/rebind must happen once; split the remaining
+hydration phase instead of rerunning generation allocation. Release read loans
+and category locks before waiting. Do not erase source cooldowns, re-probe,
+redial or add a queue. Inject a post-begin Busy, then prove same-connection
+completion, unchanged single-probe count and exactly one execution start, plus
+cancellation/shutdown settlement. This checkpoint does not
 qualify multi-file payload/endgame, adaptive pressure, either final memory tier,
 musl, Android-target or other outstanding platforms. Schema 107, saved settings,
 CLI and public REST contracts are unchanged.
