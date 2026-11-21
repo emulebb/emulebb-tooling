@@ -29,6 +29,28 @@ during consolidation; documentation checks passed in
 `reports/settings-request-round-1/foundation-spec-consolidation-docs.log` below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
 
+## Real-peer endgame contention checkpoint (2026-11-21)
+
+Rust `5b03afb7` extends the existing Core loopback transfer fixtures with two
+real Native peers and a resumed payload obtained over TCP. Both the original
+and replacement endgame lease win in separate cases. The losing connection
+receives a partial data frame before the winner completes the payload; the
+fixture requires receiver-side socket closure without reconnect, exact verified
+payload bytes, a single accepted-byte charge, empty outstanding requests and
+connection/temporary-work accounting restored to baseline. Real lease age and
+rate conditions are exercised rather than fabricated manifest progress.
+
+The regular locked Core gate passed 724 executions without warnings in
+`reports/settings-request-round-1/endgame-two-peer-core-final.log` below
+`EMULEBB_WORKSPACE_OUTPUT_ROOT`. Formatting, diff checks and commit hooks passed.
+The test-only dependency uses the existing pinned Tokio codec; no package version,
+product behavior, public contract or schema changed.
+
+This proves final-tail contention and whole-payload socket drain. It does not
+prove nonterminal duplicate-block cancellation, decoder consumption of the partial
+frame, an explicit wire cancel message, daemon output delivery, sustained rare-job
+displacement or final platform/memory campaigns. Those requirements remain open.
+
 ## Upload management read prerequisites (2026-11-21)
 
 Rust `d0876435` selects active upload sessions before constructing management
