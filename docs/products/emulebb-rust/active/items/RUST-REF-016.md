@@ -18,7 +18,18 @@ source: 2026-10-23 Rust async and portability audit
 
 # RUST-REF-016 - Move blocking SQLite work behind bounded async persistence
 
-## Upload rank-query prerequisite (2026-11-21)
+## Upload management read prerequisites (2026-11-21)
+
+Rust `d0876435` selects active upload sessions before constructing management
+snapshots. Active list/status reads no longer clone waiting-client bitmaps or
+compute ranks for waiting entries. Selection still scans/reaps the runtime queue;
+the retained result is bounded by the existing active-slot policy. Core upload
+projection now lives in `upload_api.rs`. The existing admission fixture verifies
+that active identities, phase/rank fields and ordering match the combined view.
+Scoped gates passed 1,514 Native, 722 Core and 169 REST executions without
+warnings; logs are `reports/settings-request-round-1/active-upload-read-*.log`
+below `EMULEBB_WORKSPACE_OUTPUT_ROOT`. No public response shape changed. Thin
+file metadata projection and bounded waiting-queue pages remain unfinished.
 
 Rust `85e113f4` computes one waiting client's rank with an allocation-free linear
 count instead of sorting a full queue copy. It shares the scheduler's unchanged
