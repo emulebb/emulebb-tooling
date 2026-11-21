@@ -2589,6 +2589,17 @@ does not create these registrations; producer integration remains open. The GNU
 evidence above applies to `6385fa17`, not this newer handoff. No public schema,
 settings or REST contract changes are introduced by this internal mechanism.
 
+Rust `877534e7` gives callback dispatch scalar job/content authority instead of
+requiring a hydrated transfer. Kad buddy and direct UDP dispatch preserve the
+preparation identity; all three route families share request construction.
+The existing real UDP test now registers preparation for an unhydrated started
+job and proves exact callback bytes with UDP reask disabled, unchanged execution
+token, absent storage, unchanged resident cache and no transfer-row hydration.
+All 704 Core executions pass without warnings in
+`reports/settings-request-round-1/callback-scalar-core.log`; normal hooks pass
+and the commit is pushed. Server dispatch extraction and scheduler production
+of callback preparation remain open. This is not full producer integration.
+
 Compiler investigation uses Builder's diagnostic-only Linux collection command;
 its receipt explicitly records `qualityGatePassed:false` and
 `packageProduced:false`. Acceptance continues to require the ordinary strict

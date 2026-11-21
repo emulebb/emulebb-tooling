@@ -1601,6 +1601,17 @@ cancellation. Capacity and replacement-request fencing have unit coverage.
 The commit is pushed and normal hooks pass. GNU evidence above remains scoped
 to `6385fa17`; this newer handoff has not yet run that lane.
 
+Rust `877534e7` removes the hydrated-transfer input from Kad buddy and direct
+UDP callback dispatch. Shared scalar job/content authority constructs requests
+for all three route families and preserves an optional preparation identity.
+The real UDP test registers preparation for a fresh started job, dispatches the
+exact callback frame with UDP reask disabled and proves no storage, resident
+cache, transfer-row hydration or execution-generation change. All **704 Core
+executions** pass without warnings in
+`reports/settings-request-round-1/callback-scalar-core.log`. Normal hooks pass
+and the commit is pushed. The server dispatch block still needs extraction for
+reuse by waiting preparation; this is a precursor, not full producer wiring.
+
 The production callback route still hydrates under its current Core selection
 before dispatch: the Core producer does not yet create preparation registrations.
 Producer integration before hydration remains open. This checkpoint does not
