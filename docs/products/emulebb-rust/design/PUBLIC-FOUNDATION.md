@@ -1005,8 +1005,10 @@ snapshots. Preserve existing upload scheduling, credits and ranking rules.
 Keep pagination and fetch only bounded thin summaries instead of constructing
 the complete queue representation before selecting a page. The live queue
 remains runtime state; pagination does not require storing it in SQLite.
-Departed-anchor cursor behavior is an open operator decision, recorded in
-[RUST-REF-016](../active/items/RUST-REF-016.md#upload-management-read-prerequisites-2026-11-21).
+The cursor anchors the last returned client's queue-entry lifetime. If that
+entry leaves the waiting queue, expire the cursor and require a refresh from the
+first page. Do not continue from a saved rank. Rank changes can still move rows
+between requests under the documented live traversal consistency.
 
 The WebUI separates uploading clients from waiting clients. Uploading summaries
 show client, file, rate, session bytes and elapsed time. Waiting summaries show

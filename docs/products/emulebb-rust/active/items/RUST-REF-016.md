@@ -138,9 +138,10 @@ acceptance assertion was changed to obtain the passing recheck.
 
 These prerequisites do not close upload-list pagination. The current waiting-list
 path still constructs the full queue before selecting responses; it must use
-bounded thin reads. The operator decision on departed-anchor cursor
-expiry versus current-rank continuation is pending. Do not implement dependent
-public cursor behavior before that answer. Schema, REST and settings contracts
+bounded thin reads. The operator selected departed-anchor expiry: when the last
+returned entry leaves the waiting queue, the caller must refresh from the first
+page. Do not continue from its saved rank. The accepted contract is recorded in
+[PUBLIC-FOUNDATION](../../design/PUBLIC-FOUNDATION.md). Schema, REST and settings contracts
 are unchanged by this checkpoint. No PR or merge is authorized.
 
 ## Closed waiting reasons checkpoint (2026-11-21)
