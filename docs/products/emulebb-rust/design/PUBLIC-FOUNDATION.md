@@ -2719,7 +2719,7 @@ release, both deliver, and disconnect releases the connections. Existing local
 Busy recovery and Kad swarm cases also pass. Normal hooks pass; the commit is
 pushed. Current GNU evidence remains scoped to `a3295661`.
 
-Remaining scheduling work includes measured reporter-level scarcity, shared-peer
+Remaining scheduling work includes callback scarcity evidence, shared-peer
 candidate alignment, rare bursts/displacement and the public resource summary.
 
 Rust `9c9f498d` settles Native no-socket deferrals without retaining a network
@@ -2737,6 +2737,33 @@ observation now waits for ready ownership before releasing the occupied slot;
 the ordering and delivery assertions remain. Normal hooks pass and the commit
 is pushed. Schema 107 and public settings/API contracts are unchanged; current
 GNU evidence remains scoped to `a3295661`.
+
+Rust `de0738a6` derives direct-source rarity from current-session status rows in
+one generation/intent-fenced SQLite snapshot. It unions the selected reporter's
+offered parts across endpoints, removes parts offered by any other freshly
+observed identity, and removes locally verified parts and protocol padding.
+Unknown or stale observations do not establish rarity. All observations are
+streamed, including those beyond one diagnostic page, using two part bitsets
+bounded by protocol geometry. The Native read uses the existing retained-work
+registry, a 128-KiB transient reservation and its shared blocking execution;
+it does not hydrate a manifest or allocate per-waiting-job state.
+
+Direct ready admission refreshes that proof before ranking scarcity ahead of
+remaining bytes and rotating creation-ID ties. Local two-seed fixtures prove
+both the remaining-bytes tie break and admission of a larger unique-reporter
+opportunity before a smaller file with a second reporter; both files deliver
+and disconnect releases their connections. **320 metadata, 1,509 Native and
+712 Core executions** pass without warnings in
+`reports/settings-request-round-1/reporter-scarcity-metadata.log`,
+`reporter-scarcity-ed2k.log` and `reporter-scarcity-core.log`. Maximum-geometry
+multi-page status, duplicate endpoint identity, verified/stale/session/generation
+exclusion, full resident occupancy and reopened-session invalidation are covered.
+Normal hooks pass and the commit is pushed. Callback-only preparation still
+lacks equivalent durable reporter evidence and receives no inferred rarity
+advantage. Shared-peer candidate alignment, active part-frequency identity
+deduplication, bursts/displacement and full pressure qualification remain open.
+Schema 107, settings and public API shapes are unchanged; current GNU evidence
+remains scoped to `a3295661`.
 
 Compiler investigation uses Builder's diagnostic-only Linux collection command;
 its receipt explicitly records `qualityGatePassed:false` and

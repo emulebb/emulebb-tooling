@@ -1748,7 +1748,28 @@ metadata preparation. A test-only ready-cohort count now synchronizes that
 fixture without weakening ordering, hydration or delivery assertions. Normal
 hooks pass; the commit is pushed. Schema 107 and public contracts are unchanged.
 
-Next complete measured reporter-level scarcity, shared-peer ordering and burst/displacement scheduling,
+Rust `de0738a6` adds measured direct-ready reporter scarcity. A bounded Native
+metadata read streams all matching observations in one SQLite snapshot, unions
+parts by selected identity versus other identities, and excludes verified parts
+and protocol padding. Repeated endpoints do not multiply reporters. Current
+generation, intent, runtime session and a 30-second freshness interval fence
+proof. Two protocol-bounded bitsets and the existing 128-KiB transient read
+reservation avoid manifest hydration, per-waiting-job state or a new worker pool.
+Core refreshes proof before ready ranking and prioritizes rare opportunities
+over remaining bytes; ordinary ties retain the rotating creation-ID policy.
+
+**320 metadata, 1,509 Native and 712 Core executions** pass without warnings in
+`reports/settings-request-round-1/reporter-scarcity-metadata.log`,
+`reporter-scarcity-ed2k.log` and `reporter-scarcity-core.log`. Tests cover duplicate
+identity endpoints, competing proof beyond one maximum-geometry diagnostic
+page, verified/padding/stale/session/generation exclusion, full resident-budget
+reads, reopened-session invalidation and real two-seed ready ordering with both
+payload deliveries and disconnect cleanup. Normal hooks pass; the commit is
+pushed. Schema 107 and public contracts are unchanged. Callback-only readiness
+still lacks equivalent persisted evidence and receives no inferred rarity
+advantage; active part-frequency identity deduplication is also not yet done.
+
+Next complete callback scarcity evidence, shared-peer ordering and burst/displacement scheduling,
 then payload/session qualification including structural snapshots, retained
 session pins and held-I/O pressure. The new dependency still requires musl,
 Android-target and other applicable platform qualification. GNU execution does
