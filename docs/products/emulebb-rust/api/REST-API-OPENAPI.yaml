@@ -5369,6 +5369,18 @@ components:
                 details:
                   required:
                   - actualRevision
+          - if:
+              required: [code]
+              properties:
+                code: {const: LOCAL_CONTENT_CHOICE_REQUIRED}
+            then:
+              properties:
+                details:
+                  required: [availability]
+                  properties:
+                    availability:
+                      type: string
+                      enum: [present, unavailable, absent]
           properties:
             code:
               type: string
@@ -5379,7 +5391,12 @@ components:
               - METHOD_NOT_ALLOWED
               - NOT_FOUND
               - INVALID_STATE
+              - CONFLICT
               - DOWNLOAD_CONFLICT
+              - LOCAL_CONTENT_CHOICE_REQUIRED
+              - ROOT_CONFLICT
+              - ROOT_MANAGED
+              - INTERNAL_ERROR
               - CATEGORY_NAME_CONFLICT
               - TAG_NAME_CONFLICT
               - SERVICE_BUSY

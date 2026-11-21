@@ -29,6 +29,43 @@ during consolidation; documentation checks passed in
 `reports/settings-request-round-1/foundation-spec-consolidation-docs.log` below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
 
+## Current REST error catalogue (2026-11-22)
+
+The closed OpenAPI error enum now includes the current cursor, overlapping-root,
+managed-root, local-content-choice and internal-error responses emitted by native
+handlers. The previous catalogue omitted these outcomes even though controller
+regressions exercised them. Local-content choice requires typed
+`details.availability` with the actual present/unavailable/absent values. No
+endpoint behavior, error-code translation, alias or compatibility path was added.
+
+The existing Python response suite validates each affected operation/status
+combination, including both upload collections and diagnostic SERVICE_BUSY.
+Missing or invalid local-content availability is rejected. Together with the
+existing route suite, **165 tests passed**; evidence is
+`reports/settings-request-round-1/current-error-contract-python.log` below
+`EMULEBB_WORKSPACE_OUTPUT_ROOT`. These schema checks complement the controller
+regressions; they do not expand the earlier live campaign's selected outcomes.
+
+## Current GNU/Linux qualification (2026-11-22)
+
+Rust `f6a9a206`, Harness `439304ec` and the selected tooling contract passed the
+supported amd64/GNU full package gate: strict Clippy, packet-diagnostics
+compilation, **3,479 workspace test executions**, three VPN-egress tests, release
+build, GNU archive/DEB packaging and native non-root lifecycle smoke. The one
+ignored test entry is the ownership-test subprocess fixture; its parent ownership
+regressions invoke it explicitly and passed. This is not an omitted qualification
+case. Smoke delivered and verified 12 MiB, preserved its verified prefix across a
+stop/restart, retained completed history and shut down gracefully.
+
+Evidence below `EMULEBB_WORKSPACE_OUTPUT_ROOT` is
+`reports/settings-request-round-1/foundation-current-gnu-full.log`,
+`reports/rust-linux/gnu-amd64/2671accd66d74fdbbd8d8b694158b51c/` and
+`reports/rust-linux/gnu-amd64/919b64e498124598bb721949bc77444a/package-smoke.json`.
+The archive SHA-256 is
+`5ac2bb9f318ff164df2d41ec3a91235f5f6f810200140927a219b319664ffa4f`.
+This qualifies the current GNU source checkpoint, not the physical-library/memory
+tiers, Android APK/device behavior, sustained soak or other platform gates.
+
 ## Diagnostic encoding and response ownership (2026-11-22)
 
 Rust `f6a9a206` measures escaped UTF-8 JSON with serde's writer before allocating
