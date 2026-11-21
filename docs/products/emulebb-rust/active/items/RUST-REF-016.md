@@ -18,6 +18,17 @@ source: 2026-10-23 Rust async and portability audit
 
 # RUST-REF-016 - Move blocking SQLite work behind bounded async persistence
 
+## Foundation specification
+
+[PUBLIC-FOUNDATION](../../design/PUBLIC-FOUNDATION.md) owns the current contracts,
+ordered delivery plan and required proof. It contains no checkpoint chronology
+or superseded component-status claims. Keep implementation evidence and open
+qualification concerns in owning items such as this one. The specification's
+required-proof checklist and deferred-soak boundary were preserved verbatim
+during consolidation; documentation checks passed in
+`reports/settings-request-round-1/foundation-spec-consolidation-docs.log` below
+`EMULEBB_WORKSPACE_OUTPUT_ROOT`.
+
 ## Upload management read prerequisites (2026-11-21)
 
 Rust `d0876435` selects active upload sessions before constructing management
