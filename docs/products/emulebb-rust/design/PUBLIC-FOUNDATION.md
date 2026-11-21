@@ -2719,7 +2719,7 @@ release, both deliver, and disconnect releases the connections. Existing local
 Busy recovery and Kad swarm cases also pass. Normal hooks pass; the commit is
 pushed. Current GNU evidence remains scoped to `a3295661`.
 
-Remaining scheduling work includes rare bursts/displacement and the public
+Remaining scheduling work includes safe displacement and the public
 resource summary.
 
 Rust `9c9f498d` settles Native no-socket deferrals without retaining a network
@@ -2843,6 +2843,36 @@ evidence follows that correction. Normal hooks pass and the commit is pushed.
 Schema 107 and public contracts are unchanged. Rare bursts/displacement, resource
 observability, full payload/pressure qualification and final platform/capacity
 campaigns remain open; the GNU receipt still covers `a3295661`.
+
+Rust `479a1c55` adds rare-only burst promotion to the existing attempt owner.
+The configured ceiling remains ordinary: N permits at most N + ceil(N/4)
+active downloads, and ordinary work cannot use the extra allowance. The private
+adaptive window supplies an additional resource allowance, closes it under
+resident/work pressure, and continues to enforce its shared total over active
+and preparing owners. No guard is dropped/recreated to promote, no pending
+retirement counts as free capacity, and already-owned executions drain after
+limits fall. Automatic admission uses a quarter of the current adaptive target
+as its initial extra allowance, under the same actual Native budgets.
+
+Rust `cd210059` uses hydration headroom for that allowance because a ready socket
+already owns its connection. A full connection cap closes new preparation but
+does not demand another slot for owned readiness; the shared cohort still
+enforces total capacity. The Core scheduler supplies the currently measured
+rarity flag, while ordinary/internal repeated promotion remains idempotent for
+an already active owner. No saved setting, REST shape or schema change occurs.
+
+All **717 Core executions** pass without warnings in
+`reports/settings-request-round-1/rare-burst-core.log` and the final
+`rare-burst-owned-connection-core.log`. Policy regressions cover rounded ceilings
+for N=1, 4 and 5, ordinary exclusion, resource closure below the private adaptive
+target, shared-cohort draining, retained ownership and connection reuse. The real
+two-seed fixture holds controls occupying the full allowed count, releases one,
+and proves the chosen rare file begins in the burst slot while the ordinary
+owner remains. It then releases the remaining held control, delivers both files
+and checks disconnect cleanup. Normal hooks pass and both commits are pushed.
+Safe rare-opportunity displacement, resource/waiting-reason observability, full
+payload/pressure tests and final platform/capacity campaigns remain open. Native
+code is unchanged in these two commits; GNU evidence still covers `a3295661`.
 
 Compiler investigation uses Builder's diagnostic-only Linux collection command;
 its receipt explicitly records `qualityGatePassed:false` and

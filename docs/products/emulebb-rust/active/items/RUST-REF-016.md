@@ -1828,7 +1828,28 @@ models; ordinary ordering and existing ready/callback/Busy/Kad cases pass.
 An initial Native compile needed an explicit empty-vector assertion; final
 evidence follows its correction. Normal hooks pass and the commit is pushed.
 
-Next complete burst/displacement scheduling and resource observability,
+Rust `479a1c55` adds resource-safe rare-only burst promotion through the existing
+attempt guard. Configured N remains the ordinary ceiling; active count cannot
+exceed N + ceil(N/4). The adaptive window contributes a bounded extra allowance,
+closes it under resident/work pressure and retains the shared active/preparing
+cohort cap. Ordinary work cannot consume burst slots. Promotion keeps the same
+owner, and lower limits drain actual owners without assuming pending work has
+released capacity. Automatic mode derives its initial extra allowance from a
+quarter of the current adaptive target, subject to actual Native admission.
+
+Rust `cd210059` corrects the allowance to use hydration headroom for already-owned
+ready sockets. Full connection capacity stops new probes, while a prepared
+connection can reuse its existing slot; the shared cohort still caps count.
+All **717 Core executions** pass without warnings in
+`reports/settings-request-round-1/rare-burst-core.log` and the final
+`rare-burst-owned-connection-core.log`. Tests cover N=1/4/5 rounding, ordinary
+exclusion, pressure closure below the adaptive target, pending-owner drain and
+connection reuse. The two-seed fixture holds the full count ceiling, frees one
+slot, proves a real rare download starts above the ordinary limit, then frees
+the other held owner and verifies both deliveries and disconnect cleanup.
+Normal hooks pass; both commits are pushed. Public surfaces/schema are unchanged.
+
+Next complete safe displacement scheduling and resource observability,
 then payload/session qualification including structural snapshots, retained
 session pins and held-I/O pressure. The new dependency still requires musl,
 Android-target and other applicable platform qualification. GNU execution does
