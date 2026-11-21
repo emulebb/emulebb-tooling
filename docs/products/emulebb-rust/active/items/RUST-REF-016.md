@@ -1609,8 +1609,16 @@ exact callback frame with UDP reask disabled and proves no storage, resident
 cache, transfer-row hydration or execution-generation change. All **704 Core
 executions** pass without warnings in
 `reports/settings-request-round-1/callback-scalar-core.log`. Normal hooks pass
-and the commit is pushed. The server dispatch block still needs extraction for
-reuse by waiting preparation; this is a precursor, not full producer wiring.
+and the commit is pushed. Rust `80a29803` extracts server dispatch into the shared
+callback owner, retaining current server-route generation, HighID, cooldown and
+dispatch-settlement rules. The real UDP test also proves exact global callback
+bytes, suppression of an already-pending request and cancellation before
+dispatch, with the same no-hydration assertions. The first run found the fixture
+still used a documentation-only bind address; the corrected loopback fixture
+passes all **704 Core executions**, without warnings, in
+`reports/settings-request-round-1/callback-server-core-final.log`. Normal hooks
+pass and the commit is pushed. This enables reuse by waiting preparation but
+does not implement its scheduler producer.
 
 The production callback route still hydrates under its current Core selection
 before dispatch: the Core producer does not yet create preparation registrations.

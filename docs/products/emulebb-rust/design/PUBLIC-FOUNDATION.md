@@ -2597,8 +2597,16 @@ job and proves exact callback bytes with UDP reask disabled, unchanged execution
 token, absent storage, unchanged resident cache and no transfer-row hydration.
 All 704 Core executions pass without warnings in
 `reports/settings-request-round-1/callback-scalar-core.log`; normal hooks pass
-and the commit is pushed. Server dispatch extraction and scheduler production
-of callback preparation remain open. This is not full producer integration.
+and the commit is pushed. Rust `80a29803` then extracts the server dispatcher for
+the same scalar authority, preserving route-generation checks, HighID gating,
+cooldowns and known-not-sent versus ambiguous dispatch settlement. The expanded
+real UDP test verifies exact global callback bytes, pending-request suppression,
+cancellation before dispatch and unchanged hydration invariants. Its first run
+caught a fixture bind-address mismatch; the corrected loopback fixture passes
+all 704 Core executions without warnings in
+`reports/settings-request-round-1/callback-server-core-final.log`. Normal hooks
+pass and the commit is pushed. Scheduler production of callback preparation
+remains open; these dispatch changes do not complete producer integration.
 
 Compiler investigation uses Builder's diagnostic-only Linux collection command;
 its receipt explicitly records `qualityGatePassed:false` and
