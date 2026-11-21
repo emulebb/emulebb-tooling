@@ -31,6 +31,34 @@ during consolidation; documentation checks passed in
 
 ## Real-peer endgame contention checkpoint (2026-11-21)
 
+Rust `1d92d229` adds nonterminal verified-part contention for both winner roles
+and fixes the redundant-peer read gap exposed by that fixture. Each source has
+only its first verified part; the final part remains missing. After verification,
+one latched per-peer signal wakes the losing reader at the existing safe read
+boundary. The registry retains every live lease owner through takeover and removes
+only the exact dropped owner. No task or future is allocated per block to wait for
+completion, and no state is retained for historical jobs. The source fixture
+disables upload-session rotation so its resumable prefix can exceed the independent
+90%-of-file session policy; product defaults are unchanged.
+
+Validation passed 1,515 Native and 726 Core executions without warnings, including
+all four real-peer winner/completion combinations. The nonterminal cases verify
+the exact first-part payload, single accepted-byte accounting, an incomplete final
+manifest, receiver-side socket closure without reconnect and restored connection
+and temporary-work accounting before the normal peer timeout. Regular Windows
+release/WebUI build passed with zero warnings. Evidence is
+`reports/settings-request-round-1/endgame-nonterminal-native-final.log`,
+`endgame-nonterminal-core-final.log` and `endgame-nonterminal-windows-build.log`
+under the same directory below `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
+
+The prior baseline reached duplicate-tail contention but exceeded its drain
+deadline after the winner was released. Earlier diagnostic attempts located slow
+prefix setup separately from that drain assertion. Detailed scope and remaining
+interop proof belong to [RUST-FEAT-038](RUST-FEAT-038.md). Decoder consumption of
+the partial frame, explicit wire cancellation, daemon output delivery, sustained
+rare-job displacement and final platform/memory campaigns remain unqualified.
+No schema, settings or public API changed; no PR or merge is authorized.
+
 Rust `5b03afb7` extends the existing Core loopback transfer fixtures with two
 real Native peers and a resumed payload obtained over TCP. Both the original
 and replacement endgame lease win in separate cases. The losing connection
