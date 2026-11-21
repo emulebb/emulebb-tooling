@@ -2719,8 +2719,8 @@ release, both deliver, and disconnect releases the connections. Existing local
 Busy recovery and Kad swarm cases also pass. Normal hooks pass; the commit is
 pushed. Current GNU evidence remains scoped to `a3295661`.
 
-Remaining scheduling work includes safe displacement and the public
-resource summary.
+Remaining scheduling work includes integrated displacement/payload-pressure
+qualification and the public resource summary.
 
 Rust `9c9f498d` settles Native no-socket deferrals without retaining a network
 reask penalty. Captured monotonic source-lease identities and job ownership fence
@@ -2880,8 +2880,21 @@ accepted-payload progress/time. It never hydrates waiting jobs and refuses busy
 job/cache gates or insufficient temporary workspace. The shared Native owner
 reserves 1 MiB through actual worker completion; resident read loans stay charged
 to their existing allocations. Full Native/Core suites pass; the
-[runtime item](../active/items/RUST-REF-016.md) records exact evidence. Safe yield
-requests and Core victim selection are not wired yet; public surfaces are unchanged.
+[runtime item](../active/items/RUST-REF-016.md) records exact evidence and the
+subsequent yield integration; public surfaces are unchanged.
+
+Rust `6de86094` wires rare-driven displacement through that bounded owner and
+the existing checkpoint/retirement path. It chooses least-recent accepted
+progress among ordinary candidates, rechecks token/progress/protection and ready
+opportunity lifetime, and permits only one outstanding displacement. Live rare
+block acquisition, endgame and short readiness handoff grace are protected;
+merely queued source availability cannot indefinitely protect an active slot.
+Native stops new block claims and closes the connection as incomplete at an
+accepted-storage checkpoint, including when its next frame is only partly read.
+It does not report NNP or reuse that interrupted stream for another file.
+Control capacity remains charged through actual retirement. The runtime item
+records **1,513 Native and 718 Core** passing executions and the still-open
+longer payload/pressure and platform/capacity qualification.
 
 Compiler investigation uses Builder's diagnostic-only Linux collection command;
 its receipt explicitly records `qualityGatePassed:false` and

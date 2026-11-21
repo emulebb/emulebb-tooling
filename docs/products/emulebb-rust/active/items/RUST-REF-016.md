@@ -1868,15 +1868,32 @@ reservation bound; the final run uses the suite's established fixed-size-credit
 pattern without weakening the full-occupancy assertion. Normal hooks pass and
 the commit is pushed. This is classification evidence, not completed displacement.
 
-The next integrated displacement slice must recheck the selected token/progress,
-protect current rarity/endgame and fresh readiness during handoff, finish accepted
-storage work at a safe checkpoint, close any interrupted framed stream, and keep
-capacity owned until retirement. The no-claimable-block path reports NNP and
-must not stand in for yielding. Allow at most one outstanding displacement while
-its owner drains; use the existing worker/control/checkpoint paths and no new
-saved priority or per-waiting-job task.
+Rust `6de86094` wires rare-driven displacement. Core chooses the least recently
+progressing ordinary owner, revalidates the ready opportunity after its Native
+read, and rechecks the victim's token, accepted-byte version and protection.
+One outstanding yield/drain blocks another displacement; the same control entry
+remains active until actual producer/checkpoint retirement. A short admission
+grace protects fresh readiness before live block acquisition is visible.
+Native protects actual rare block leases and endgame, rather than letting a
+queued rare-source bitmap protect a stalled slot indefinitely. Its runtime-only
+yield signal leaves intent/resumable data intact, prevents new block claims,
+and interrupts only the next framed read after accepted storage handlers settle.
+Incomplete disposition closes that stream instead of reusing partial framing
+or imposing an NNP hold. Idle/deferred Core execution observes the same signal.
 
-Next complete safe displacement scheduling and resource observability,
+All **1,513 Native and 718 Core executions** pass without warnings in
+`reports/settings-request-round-1/safe-displacement-ed2k-final.log` and
+`safe-displacement-core-acquisition.log`. Native tests cover stale/progress
+rejection, rare acquisition versus queued availability, preserved Started intent,
+and a real callback ending incomplete after only three bytes of its next frame.
+The Core two-seed fixture supplies a controlled ordinary owner: it verifies the
+yield request, retained count during Native retirement, actual guard release,
+then rare admission and both real payload deliveries. An initial fixture omitted
+persisted temp selection; final evidence uses the canonical selection path.
+Normal hooks pass; the commit is pushed. This does not qualify sustained active
+payload displacement, endgame contention, held filesystem I/O or either memory tier.
+
+Next complete resource observability,
 then payload/session qualification including structural snapshots, retained
 session pins and held-I/O pressure. The new dependency still requires musl,
 Android-target and other applicable platform qualification. GNU execution does
