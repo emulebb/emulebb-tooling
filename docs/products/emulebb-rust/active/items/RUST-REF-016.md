@@ -119,8 +119,8 @@ was introduced. Final package and constrained-tier qualification remain open.
 
 The bounded specialist question about live statistic publication is resolved in
 the foundation specification: publish to indexed TEMP read state under existing
-ownership, keeping durable checkpoints batched. That publication/query integration
-is still implementation work. The first client-accepted library display-name
+ownership, keeping durable checkpoints batched. Bounded publication is implemented
+below; library collection/query integration remains open. The first client-accepted library display-name
 decision is implemented above; later copies retain actual filenames in locations.
 
 ## Real-peer endgame contention checkpoint (2026-11-21)
@@ -254,40 +254,51 @@ canonical library resource, visibility filters, thin DTOs and statistic sorts
 remain implementation work. Extend the existing campaign for those requirements
 before claiming the full tier, and qualify the 100k-file/1-GiB tier separately.
 
-## Library statistic-index prerequisite (2026-11-21)
+## Bounded live statistic publication (2026-11-21)
 
-Rust `76db28a1` adds a sparse, connection-local SQL projection of captured
-session uploaded bytes, requests and accepted upload stints. The existing
-peer/file checkpoint updates these counters and lifetime facts in one
-transaction. It adds no per-payload SQLite operation or second runtime counter
-map. Scalar reads hydrate no file, perform no filesystem probe and create no
-session rows. Unknown hashes and zero deltas allocate no projection row. Keys
-are content hashes, independent of reusable numeric content IDs.
+Rust `146262e9` publishes captured statistics into a connection-local SQL read
+model through the existing admitted metadata owner. It moves the dirty-key set
+instead of cloning the complete ledger, copies at most 128 fixed-size captures
+at a time, and releases the capture mutex before SQL. Publication shares the
+credit-settlement gate, so effective lifetime values are committed totals plus
+still-parked deltas. Session values are absolute current-process captures.
+Reading does not checkpoint credit or file totals and hydrates no execution.
+The scalar read retains a 64-KiB allowance until its result is dropped.
 
-Three indexes support scalar session-statistic seeks with hash tie-breakers;
-tests inspect their query plans and prove no sort or full scan for those seeks.
-Clones share session counters. Opening a new connection starts session counters
-at zero while preserving durable lifetime facts. File counter arithmetic now
-fails atomically outside the supported SQLite integer range instead of clamping.
-The exact upper boundary succeeds; overflow changes neither file projection nor
-peer credits. Existing captured deltas remain available to the checkpoint owner
-after failure. No durable schema version, settings or REST shape changed.
+Each SQL chunk is atomic. Failure or unwinding restores all detached keys,
+including keys whose earlier chunks published successfully; absolute retry
+does not add those values twice. Captures during publication remain dirty for
+the next read. Checkpoint drain marks affected hashes for recomputation after
+commit or restoration. Durable peer/file writes retain their existing batched
+transaction and reject out-of-range arithmetic atomically. No additional runtime
+counter map, per-payload SQL write, durable schema, settings or REST shape was
+introduced.
 
-Scoped gates passed 331 metadata and 1,522 Native executions, without compiler
-warnings. New fault injection fails the second file's session projection after
-earlier peer/file writes, proves complete rollback, then retries exactly once.
-The existing Native capture/removal/checkpoint/reopen fixture now also compares
-its committed SQL projection with captured bytes, demand and accepted stints,
-and verifies session reset with preserved lifetime values. Evidence below
-`EMULEBB_WORKSPACE_OUTPUT_ROOT` is
-`reports/settings-request-round-1/library-statistics-metadata-final.log` and
-`library-statistics-native-final.log`; normal Rust commit hooks passed.
+The SQL population includes every retained client hash, including inactive
+zero-valued rows, and excludes passive-only observations. Eight indexes cover
+session/lifetime bytes, demand and accepted stints, plus both activity timestamps,
+with deterministic hash ties. A 100,000-hash fixture proves indexed first pages
+in both directions and late-page seeks without a temporary sort; nullable
+timestamps retain their meaning. Repeating identical captures performs no
+writes. Clones share publication, and reopening resets session values while
+retaining checkpointed lifetime facts.
 
-This prepares the storage read model, not the complete library surface. Bounded
-publication before a query, sparse zero-activity ordering, canonical library
-summaries/visibility/locations, REST/OpenAPI/WebUI integration and combined-scale
-qualification remain open. No full collection is selected or sorted by this
-scalar read; complete library query ownership still needs implementation.
+Scoped gates passed **336 metadata, 1,527 Native and 727 Core executions**,
+without compiler warnings. Native cases prove nonzero durable baselines plus
+uncheckpointed captures, equality after checkpoint, retained result charges,
+capture/publication/checkpoint races, overflow recovery, unwinding, and failure
+after the first of multiple chunks. The existing capture/removal/rebuild/reopen
+test retains all byte, request and stint assertions through admitted publication.
+Evidence below `EMULEBB_WORKSPACE_OUTPUT_ROOT` is
+`reports/settings-request-round-1/library-statistics-publication-metadata.log`,
+`library-statistics-publication-native-verified.log` and
+`library-statistics-publication-core.log` in that directory. Normal commit/push
+hooks passed.
+
+This is the statistics prerequisite. Canonical library collection/query ownership,
+summary DTOs, visibility/filter combinations, REST/OpenAPI/WebUI sorting and
+combined-scale qualification remain open. The in-memory SQL fixture is not a
+constrained-container or final-package qualification claim.
 
 ## Library filename-search contract (2026-11-21)
 
