@@ -2719,8 +2719,8 @@ release, both deliver, and disconnect releases the connections. Existing local
 Busy recovery and Kad swarm cases also pass. Normal hooks pass; the commit is
 pushed. Current GNU evidence remains scoped to `a3295661`.
 
-Remaining scheduling work includes shared-peer
-candidate alignment, rare bursts/displacement and the public resource summary.
+Remaining scheduling work includes measured rare-file ordering for shared-peer
+handoffs, rare bursts/displacement and the public resource summary.
 
 Rust `9c9f498d` settles Native no-socket deferrals without retaining a network
 reask penalty. Captured monotonic source-lease identities and job ownership fence
@@ -2790,6 +2790,31 @@ mistake; the final Native/Core runs above follow its correction. Normal hooks
 pass and the commit is pushed. Full Core callback payload/pressure qualification,
 shared-peer alignment, active part-frequency identity deduplication and burst/
 displacement remain open; GNU evidence still covers `a3295661`.
+
+Rust `035de25c` separates peer eligibility from file scheduling. Any registered
+file selected for preparation may acquire the peer if it is free; membership
+alone cannot hide that file behind another registered job. Exclusive ownership,
+per-file reask cooldowns, NNP holds, dead lists and explicit candidate pruning
+remain in their existing owners. The peer registry carries source membership
+and lease state, without a second scheduling score or duplicated progress count.
+It lends the other-file set to Core rather than cloning the complete set before
+lifecycle filtering. Core copies only eligible execution plans, ranks ordinary
+same-connection handoffs by current remaining bytes and creation-ID ties, and
+chooses an ordinary NNP/FNF fallback before cloning its transfer model.
+
+All **713 Core executions** pass without warnings in
+`reports/settings-request-round-1/shared-peer-alignment-core-final.log`.
+Regressions cover either registered file acquiring the released peer without
+double engagement, current remaining bytes versus total file size, creation-order
+ties and exclusion of paused/completed jobs. Existing real ready/delivery, Busy,
+Kad, NNP/FNF/cooldown and disconnect cases pass. The initial run exposed one
+remaining registry-ranking test and an unnecessary expiry check added to leasing;
+the latter was removed so existing pruning retains expiry ownership and reask
+cadence assertions remain intact. Normal hooks pass and the commit is pushed.
+This closes eligibility and ordinary handoff alignment, not measured rare-file
+handoff ordering, active part-frequency identity deduplication or burst/
+displacement. Native code and public shapes are unchanged; prior Native and GNU
+receipts retain their own revisions.
 
 Compiler investigation uses Builder's diagnostic-only Linux collection command;
 its receipt explicitly records `qualityGatePassed:false` and

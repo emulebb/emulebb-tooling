@@ -1789,7 +1789,27 @@ and newer live status overriding an older reporter claim. An initial Native
 compile rejected moving the borrowed bitmap; final Native/Core evidence follows
 the bounded-copy correction. Normal hooks pass and the commit is pushed.
 
-Next complete shared-peer ordering and burst/displacement scheduling,
+Rust `035de25c` aligns shared-peer eligibility and ordinary handoffs. The registry
+leases the selected registered file while enforcing exclusive peer ownership;
+source membership supplies no independent scheduling score or progress copy.
+Other-file iteration borrows the source set, so Core filters lifecycle before
+copying eligible plans and orders ordinary work by current remaining bytes,
+then creation ID. NNP/FNF fallback picks one eligible ordinary transfer before
+cloning it. Reask cooldowns, NNP holds, dead lists and explicit expiry pruning
+keep their existing ownership.
+
+All **713 Core executions** pass without warnings in
+`reports/settings-request-round-1/shared-peer-alignment-core-final.log`.
+Tests cover independent acquisition after release without concurrent engagement,
+remaining bytes rather than total size, tie order and paused/completed exclusion;
+existing ready/delivery, Busy, Kad, cooldown/NNP/FNF and disconnect checks pass.
+The initial run identified an obsolete ranking assertion and a newly added
+expiry check in the wrong layer. The final run keeps candidate expiry in pruning
+and retains the cadence assertions. Normal hooks pass; the commit is pushed.
+No Native, schema, setting or public API shape changes occur in this slice.
+
+Next complete measured rare-file shared-peer ordering, active part-frequency
+identity deduplication and burst/displacement scheduling,
 then payload/session qualification including structural snapshots, retained
 session pins and held-I/O pressure. The new dependency still requires musl,
 Android-target and other applicable platform qualification. GNU execution does
