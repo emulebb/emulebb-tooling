@@ -1544,10 +1544,52 @@ Windows passes **1,497 Native executions**, without warnings, in
 Regressions cover generation/job-ID replacement and mixed-generation copies
 across routes, alongside the existing listener, dispatch/drop and A4AF callback
 cases. Normal hooks passed. This is the execution-acknowledgment prerequisite,
-not deferred callback preparation: the metadata-only exchange, exact preparation
+not deferred callback preparation: the Core-controlled handshake, exact preparation
 request identity, one-shot Core start receipt and listener settlement remain
 required. Earlier Core/build/REST receipts retain their actual revisions.
 Schema 107, saved settings and public APIs are unchanged.
+
+Rust `6385fa17` shares the bounded metadata exchange between outbound preparation
+and listener-owned callback sockets. Accepted preparation uses compact job/part
+reads, retains the existing preparation quota with its linear result and leaves
+the socket in the listener. It performs no manifest/storage hydration, outbound
+connection admission, upload-queue join or payload request. Cached metadata and
+security state feed the normal session once consumed. Existing callback
+executions preserve incomplete-close/timeout and A4AF-tail disposition; neither
+is availability proof, and an interrupted framed read closes the socket.
+Prepared sessions can send the negotiated standalone SX2 request omitted during
+metadata-only preparation, with the actual sent flag preventing duplication.
+
+Windows passes **1,498 Native and 704 Core executions**, without warnings, in
+`reports/settings-request-round-1/accepted-probe-ed2k-closure.log` and
+`accepted-probe-core.log`. The accepted-socket cases cover availability without
+resident/storage growth, quota refusal before metadata I/O, wrong-content
+refusal and quota release. The existing prepared payload case now verifies one
+standalone SX2 request before queue entry and completion on the same socket.
+Normal commit/push hooks passed.
+
+The same clean Rust revision passes the strict **GNU AMD64** package lane:
+workspace Clippy, packet-diagnostics, optimized release build, **3,384 workspace
+tests plus 3 VPN egress tests**, and the non-root runtime smoke. The one ignored
+workspace entry is the isolated subprocess fixture used by ownership regressions.
+Rust gates pass; upstream C dependency warnings remain visible in the logs.
+Build/test evidence is under `reports/rust-linux/gnu-amd64/e81ab868b66e47c387cd931bf4d17c1b/`.
+Runtime evidence is
+`reports/rust-linux/gnu-amd64/d2fe4b66e6c0410c9d28625c0ff70554/package-smoke.json`.
+It records exact Rust `6385fa170d7442174bff85a38659c6df1497f53a` and Harness
+`08fc73e865cb2e098d910b764743d5048ee31849`. A 12-MiB local direct download preserves
+its verified first part across same-profile restart, resumes, delivers exact
+SHA-256 bytes, registers the output, retains completion and shuts down gracefully
+three times. Public discovery is disabled. The archive SHA-256 is
+`3926fc3239da0bef41e14f0361685b3104d528052c034367ac98c774491011dd`.
+This is local package evidence, not publication or rendered-WebUI proof.
+
+The production callback route still hydrates under its current Core selection
+before dispatch. Core-controlled preparation before that admission, request
+identity/start receipt and settlement remain open. This checkpoint does not
+qualify multi-file payload/endgame, adaptive pressure, either final memory tier,
+musl, Android-target or other outstanding platforms. Schema 107, saved settings,
+CLI and public REST contracts are unchanged.
 
 The next bounded work is callback preparation and complete ready-source selection,
 then scarcity/burst scheduling,

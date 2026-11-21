@@ -2549,6 +2549,31 @@ Normal hooks passed; schema, settings and public APIs are unchanged. The deferre
 callback handshake still requires its preparation request identity and one-shot
 Core decision; this race fix does not complete callback preparation.
 
+Rust `6385fa17` shares one bounded metadata exchange between outbound and
+listener-owned callback sockets. Accepted preparation retains quota and packet/
+security state without hydrating a manifest, materializing storage, taking an
+outbound permit or requesting payload. Current callback executions consume it
+on the same socket; Core-controlled pre-admission callback preparation remains
+open. Prepared admission also sends a negotiated SX2 request once when the
+metadata phase omitted it. Windows passes 1,498 Native and 704 Core executions
+without warnings in `reports/settings-request-round-1/accepted-probe-ed2k-closure.log`
+and `accepted-probe-core.log`; normal hooks passed.
+
+The exact clean revision passes strict GNU AMD64 Clippy, packet-diagnostics,
+release build, 3,384 workspace tests plus 3 VPN egress tests, and non-root package
+smoke. The ignored ownership entry is a subprocess fixture invoked by its parent
+regressions; upstream C dependency warnings remain logged. Evidence:
+`reports/rust-linux/gnu-amd64/e81ab868b66e47c387cd931bf4d17c1b/` and
+`reports/rust-linux/gnu-amd64/d2fe4b66e6c0410c9d28625c0ff70554/package-smoke.json`.
+The real 12-MiB direct download preserves its verified first part across restart,
+resumes to exact SHA-256 delivery and retains its completed job, with graceful
+shutdown. Archive SHA-256:
+`3926fc3239da0bef41e14f0361685b3104d528052c034367ac98c774491011dd`.
+This is local qualification, not publication or browser rendering. Multi-file
+payload/endgame, callback admission control, scarcity/bursts, adaptive pressure,
+final memory tiers and the remaining platform gates stay open. Public contracts
+and schema 107 are unchanged.
+
 Compiler investigation uses Builder's diagnostic-only Linux collection command;
 its receipt explicitly records `qualityGatePassed:false` and
 `packageProduced:false`. Acceptance continues to require the ordinary strict
