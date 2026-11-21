@@ -2679,6 +2679,26 @@ the receipt checks assets and panel backends. Current musl/Android/other platfor
 gates, callback-pressure cases, scheduling policy and final memory tiers remain
 open. No PR or merge was created.
 
+Rust `75c4ed40` applies the agreed within-file order in the existing part picker
+and block-reservation path: measured scarcity first, then started or preferred
+in-flight work among equally scarce parts, with fewer bytes to finish started
+work. Untouched ties retain stable part order. Unknown frequency receives no
+rarity advantage, and verified/empty protocol slices cannot become payload work.
+Preferred-part affinity participates in this order for both ordinary gaps and
+endgame takeover candidates. No additional scheduler, database shape or saved
+setting is introduced.
+
+Windows passes **1,509 Native and 707 Core executions**, without warnings, in
+`reports/settings-request-round-1/part-scarcity-ed2k-final.log` and
+`part-scarcity-core.log`. The real reservation fixture checks rare-part choice
+before affinity and reuse of affinity when scarcity ties. Picker cases cover
+unknown frequency, started interior work, untouched short-tail ties and empty
+slices. Existing hashset/AICH wire tests and Core local-seed/Kad delivery cases
+pass. Normal hooks pass; the commit is pushed. The GNU receipt above belongs to
+`a3295661`. Global ready-job ranking, measured reporter-level scarcity for waiting
+jobs, burst/displacement policy and final pressure/platform/memory qualification
+remain open.
+
 Compiler investigation uses Builder's diagnostic-only Linux collection command;
 its receipt explicitly records `qualityGatePassed:false` and
 `packageProduced:false`. Acceptance continues to require the ordinary strict

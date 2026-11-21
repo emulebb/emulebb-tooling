@@ -1700,8 +1700,24 @@ qualify multi-file payload/endgame, adaptive pressure, either final memory tier,
 musl, Android-target or other outstanding platforms. Schema 107, saved settings,
 CLI and public REST contracts are unchanged.
 
-The next bounded work is callback preparation and complete ready-source selection,
-then scarcity/burst scheduling,
+Rust `75c4ed40` updates the existing within-file picker and actual block lease
+path to rank measured scarcity first, then started/preferred work among equally
+scarce parts, then bytes left to finish started work. Untouched ties are stable.
+Unknown frequency is not rarity; verified and empty protocol slices are excluded.
+Preferred-part affinity cannot bypass observed scarcity, including during the
+ordinary-gap and endgame-takeover passes.
+
+Windows passes **1,509 Native and 707 Core executions**, without warnings, in
+`reports/settings-request-round-1/part-scarcity-ed2k-final.log` and
+`part-scarcity-core.log`. A real block-reservation fixture verifies both rarity
+before affinity and affinity among ties. Picker regressions cover unknown
+frequency, started interior parts, untouched short-tail ties and empty slices.
+Existing hashset/AICH wire and Core local-seed/Kad delivery cases pass. Normal
+hooks pass and the commit is pushed. Schema 107, settings and public contracts
+are unchanged; the preceding GNU receipt remains scoped to `a3295661`.
+
+The next bounded work is global ready-job ranking and measured reporter-level
+scarcity for waiting jobs, then burst/displacement scheduling,
 then payload/session qualification including structural snapshots, retained
 session pins and held-I/O pressure. The new dependency still requires musl,
 Android-target and other applicable platform qualification. GNU execution does
