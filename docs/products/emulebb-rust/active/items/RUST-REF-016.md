@@ -1808,8 +1808,27 @@ expiry check in the wrong layer. The final run keeps candidate expiry in pruning
 and retains the cadence assertions. Normal hooks pass; the commit is pushed.
 No Native, schema, setting or public API shape changes occur in this slice.
 
-Next complete measured rare-file shared-peer ordering, active part-frequency
-identity deduplication and burst/displacement scheduling,
+Rust `f3f7eacd` completes measured rarity ordering for eligible same-connection
+handoff plans and deduplicates known reporter identities in active part counts.
+Native sorts borrowed live observations, reuses one part bitset and counts each
+known identity at most once per part; unidentified endpoints stay separate and
+stale/no-status observations contribute nothing. Core releases its state lock
+before bounded Native scarcity reads, uses the prepared peer's decoded HELLO
+identity where available, and sorts rare handoffs ahead of remaining-byte and
+creation-ID ties. No manifest hydration, peer acquisition, source truncation,
+saved setting or public-shape change is introduced.
+
+All **1,510 Native and 714 Core executions** pass without warnings in
+`reports/settings-request-round-1/scarcity-consistency-ed2k-final.log` and
+`scarcity-consistency-core-final.log`. Tests cover duplicate-identity bitmap
+union, independent unidentified endpoints, stale/no-status and zero geometry,
+real Native observation-backed handoff ranking and unchanged resident occupancy.
+The reused size-aware Core fixture also keeps SQL geometry consistent with its
+models; ordinary ordering and existing ready/callback/Busy/Kad cases pass.
+An initial Native compile needed an explicit empty-vector assertion; final
+evidence follows its correction. Normal hooks pass and the commit is pushed.
+
+Next complete burst/displacement scheduling and resource observability,
 then payload/session qualification including structural snapshots, retained
 session pins and held-I/O pressure. The new dependency still requires musl,
 Android-target and other applicable platform qualification. GNU execution does

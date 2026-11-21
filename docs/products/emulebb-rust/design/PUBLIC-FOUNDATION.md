@@ -2719,8 +2719,8 @@ release, both deliver, and disconnect releases the connections. Existing local
 Busy recovery and Kad swarm cases also pass. Normal hooks pass; the commit is
 pushed. Current GNU evidence remains scoped to `a3295661`.
 
-Remaining scheduling work includes measured rare-file ordering for shared-peer
-handoffs, rare bursts/displacement and the public resource summary.
+Remaining scheduling work includes rare bursts/displacement and the public
+resource summary.
 
 Rust `9c9f498d` settles Native no-socket deferrals without retaining a network
 reask penalty. Captured monotonic source-lease identities and job ownership fence
@@ -2815,6 +2815,34 @@ This closes eligibility and ordinary handoff alignment, not measured rare-file
 handoff ordering, active part-frequency identity deduplication or burst/
 displacement. Native code and public shapes are unchanged; prior Native and GNU
 receipts retain their own revisions.
+
+Rust `f3f7eacd` aligns active part frequencies and same-connection handoff rarity.
+Native groups live endpoint observations by known HELLO identity and unions
+their offered parts, contributing at most one vote per part. Unidentified
+endpoints remain separate; stale/no-status peers contribute nothing. Sorting
+borrowed peer references and reusing one part bitset avoids per-identity bitmap
+copies and quadratic peer scans. No source or part capability is truncated.
+
+Core builds eligible handoff plans under its state lock, releases the lock, then
+uses the existing bounded Native rarity read before ordering rare opportunities,
+remaining bytes and creation-ID ties. A prepared connection supplies its actual
+decoded HELLO identity; other sources without identity proof receive no inferred
+rarity advantage. Ranking does not hydrate manifests or acquire peer leases.
+The existing fixture now admits matching SQL geometry for its variable-size
+models and covers both ordinary ties and a larger unique-reporter opportunity
+preceding a near-complete file with two independent reporters.
+
+All **1,510 Native and 714 Core executions** pass without warnings in
+`reports/settings-request-round-1/scarcity-consistency-ed2k-final.log` and
+`scarcity-consistency-core-final.log`. New coverage verifies overlapping endpoint
+bitmaps for one identity, independent unidentified endpoints, stale/no-status
+exclusion, zero-part geometry, measured handoff ordering and unchanged resident
+usage. Existing ready delivery, callback, Busy recovery and Kad cases pass.
+The initial Native compile required an explicit empty-vector assertion; final
+evidence follows that correction. Normal hooks pass and the commit is pushed.
+Schema 107 and public contracts are unchanged. Rare bursts/displacement, resource
+observability, full payload/pressure qualification and final platform/capacity
+campaigns remain open; the GNU receipt still covers `a3295661`.
 
 Compiler investigation uses Builder's diagnostic-only Linux collection command;
 its receipt explicitly records `qualityGatePassed:false` and
