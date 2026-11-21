@@ -29,6 +29,35 @@ during consolidation; documentation checks passed in
 `reports/settings-request-round-1/foundation-spec-consolidation-docs.log` below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
 
+## Typed library summary reads (2026-11-21)
+
+Rust `bfdd3824` adds typed Core summaries and an admitted exact-hash read over
+the indexed metadata model. Collection and exact reads expose identical scalar
+facts, including unavailable/copyless client hashes, accepted nullable size,
+sharing policy and real session/lifetime statistics. Exact reads do not warm
+unrelated filename keys or inspect physical files. Core conversion and JSON
+encoding retain the existing admission charge until backing is dropped.
+Storage failures retain their storage classification instead of becoming
+invalid-user-input responses.
+
+Library filters now accept immutable public tag names, resolved case-insensitively
+inside SQLite. A valid absent tag returns an empty page without creating a tag,
+matching the existing download-category filter behavior. Numeric tag keys remain
+internal; no per-row Rust lookup or extra persistence owner was added.
+
+Scoped checks passed **345 metadata and 729 Core executions** without compiler
+warnings, including the Native dispatcher used by the Core reads. New cases
+prove exact/copyless/passive boundaries, no unrelated name warming, equality of
+collection/exact facts, positive current-field JSON serialization, unknown/zero
+timestamp distinctions and exact retained charges through conversion/encoding/drop.
+Evidence is `reports/settings-request-round-1/library-summary-{metadata,core}.log`
+below `EMULEBB_WORKSPACE_OUTPUT_ROOT`; normal commit/push hooks passed.
+
+The canonical REST/OpenAPI/WebUI cut remains open. Two operator questions are
+pending in the authoritative foundation: detail-only reads for link/local
+comments, and persistent hash ownership of upload priority/local comment/rating.
+Neither recommendation has been assumed. No transitional REST routes were added.
+
 ## Cached locations REST/WebUI integration (2026-11-21)
 
 Rust `c90e5eb7` exposes `GET /library/files/{hash}/locations` through the existing

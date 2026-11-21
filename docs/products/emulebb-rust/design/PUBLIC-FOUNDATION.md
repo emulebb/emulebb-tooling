@@ -943,6 +943,14 @@ Keep other supported meaningful network/system resources; finish an exact route
 inventory before the cut. Evolve daemon routes, typed DTOs, validators, OpenAPI,
 SPA and harness callers together; do not expose transitional dual contracts.
 
+Two operator choices remain pending before the library wire cut: whether the
+hash detail should carry the eD2K link and local comment/rating instead of separate
+read endpoints, and whether upload priority plus local comment/rating should
+have one persistent hash-level owner, editable without an available copy.
+The recommendations are detail-only reads and one hash-level owner. Do not
+apply either recommendation until the operator answers; locations and tags
+remain separate paginated resources under both options.
+
 Use correct HTTP status codes with `data`/`meta` success wrappers and structured
 `error.code`, `message`, `details`. Never hide an error under HTTP 200. Specify
 creation/acceptance/no-content and error status/body combinations exactly in
