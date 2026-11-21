@@ -18,6 +18,37 @@ source: 2026-10-23 Rust async and portability audit
 
 # RUST-REF-016 - Move blocking SQLite work behind bounded async persistence
 
+## Download resource summary checkpoint (2026-11-21)
+
+Rust `ee90d905` and `215c75d2` introduce fresh schema 108 and the canonical
+`stats.downloadResources` summary across stats/status/snapshot and the WebUI.
+Active execution and preparation counts include draining owners. Waiting work
+uses a transaction-maintained scalar, excluding stopped, failed, metadata-only,
+verified-delivery, removed and terminal jobs; sorted unique selected IDs are
+checked by primary key in the same read transaction. Cohort membership, not
+retained history, bounds request memory and lookup work. The existing Native
+metadata worker accounts for the request backing; no new pool or task per
+waiting job is introduced. Concurrency reports automatic/fixed configuration,
+current ordinary target and active owners above it. Native resident-cache usage,
+soft target and hard ceiling are explicitly separate from total process RAM.
+
+Scoped validation passed: 322 Metadata, 1,513 Native, 719 Core, 169 REST and
+112 daemon test executions; the daemon's ignored child-process entry point is
+invoked through its parent ownership test. No Rust warnings were reported.
+Existing Python suites passed 18 Rust OpenAPI response, 30 REST campaign,
+119 shared-library and 145 shared smoke tests. WebUI passed 88 unit and 32
+stateful browser tests, type checking and production build. Windows release
+build passed with zero warnings.
+
+Evidence: `reports/settings-request-round-1/resource-summary-*.log` below
+`EMULEBB_WORKSPACE_OUTPUT_ROOT`; live conformance passed in
+`reports/rust-rest-openapi-ci/20261121T132251Z/report.json`, including 100,000
+metadata-only retained jobs, 100 waiting jobs, preserved restart counts and
+graceful teardown. This does not qualify physical libraries, real payload
+displacement/endgame contention, current Linux packages or final 512-MiB/1-GiB
+campaigns. Per-download waiting reasons and upload-queue pagination remain
+separate unfinished foundation slices. No PR or merge is authorized.
+
 ## Current download provider
 
 Rust `cb35ecac` on the existing foundation branch provides:

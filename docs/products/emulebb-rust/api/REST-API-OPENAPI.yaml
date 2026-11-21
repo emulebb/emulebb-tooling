@@ -10194,7 +10194,7 @@ components:
     Stats:
       type: object
       additionalProperties: false
-      required: [connected, downloadSpeedKiBps, uploadSpeedKiBps, sessionDownloadedBytes, sessionUploadedBytes, activeUploads, waitingUploads, downloadCount, ed2kConnected, ed2kHighId, kadRunning, kadConnected, kadFirewallState]
+      required: [connected, downloadSpeedKiBps, uploadSpeedKiBps, sessionDownloadedBytes, sessionUploadedBytes, downloadResources, activeUploads, waitingUploads, downloadCount, ed2kConnected, ed2kHighId, kadRunning, kadConnected, kadFirewallState]
       properties:
         connected:
           type: boolean
@@ -10216,9 +10216,8 @@ components:
         totalUploadedBytes:
           type: integer
           minimum: 0
-        activeDownloads:
-          type: integer
-          minimum: 0
+        downloadResources:
+          $ref: "#/components/schemas/DownloadResources"
         activeUploads:
           type: integer
           minimum: 0
@@ -10269,6 +10268,72 @@ components:
           type: boolean
         kadFirewallState:
           $ref: "#/components/schemas/FirewallState"
+    DownloadResources:
+      type: object
+      additionalProperties: false
+      description: >-
+        Coarse observations of the bounded runtime cohort and current queued work.
+        Samples may change during the request and do not grant admission.
+        Draining owners remain in active/preparing until their work retires.
+        Waiting excludes selected execution/verification owners, stopped, failed,
+        metadata-waiting, delivering, removed and terminal completed jobs.
+      required: [active, preparing, waiting, concurrency, residentMemory]
+      properties:
+        active:
+          type: integer
+          minimum: 0
+        preparing:
+          type: integer
+          minimum: 0
+        waiting:
+          type: integer
+          minimum: 0
+        concurrency:
+          $ref: "#/components/schemas/DownloadConcurrency"
+        residentMemory:
+          $ref: "#/components/schemas/DownloadResidentMemory"
+    DownloadConcurrency:
+      type: object
+      additionalProperties: false
+      required: [mode, configuredLimit, target, burstActive]
+      properties:
+        mode:
+          type: string
+          enum: [automatic, fixed]
+        configuredLimit:
+          type: [integer, "null"]
+          minimum: 1
+          description: Effective maxConcurrentDownloads setting; null selects automatic mode.
+        target:
+          type: integer
+          minimum: 0
+          description: Current ordinary admission target, constrained by configured and resource limits.
+        burstActive:
+          type: integer
+          minimum: 0
+          description: Active owners above the current target; includes draining excess after a target reduction.
+      oneOf:
+        - properties:
+            mode: {const: automatic}
+            configuredLimit: {type: "null"}
+        - properties:
+            mode: {const: fixed}
+            configuredLimit: {type: integer, minimum: 1}
+    DownloadResidentMemory:
+      type: object
+      additionalProperties: false
+      description: Accounted Native download-cache bytes, separate from total process RAM and temporary work budgets.
+      required: [usedBytes, softTargetBytes, limitBytes]
+      properties:
+        usedBytes:
+          type: integer
+          minimum: 0
+        softTargetBytes:
+          type: integer
+          minimum: 0
+        limitBytes:
+          type: integer
+          minimum: 0
     FirewallState:
       type: string
       enum: [unknown, open, firewalled]

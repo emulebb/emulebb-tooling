@@ -547,6 +547,17 @@ configured concurrency mode/value, current adaptive target, burst activity,
 and resident-memory usage/budget. Coalesce updates rather than emitting per-block
 events or fetching all jobs. Do not expose internal scheduling scores.
 
+The summary is `stats.downloadResources` in `/stats`, `/status` and `/snapshot`:
+`active`, `preparing`, `waiting`, `concurrency` and `residentMemory`.
+Concurrency reports `mode` (`automatic` or `fixed`), nullable `configuredLimit`,
+current ordinary `target`, and `burstActive` (active owners above that target,
+including excess draining after a reduction). Resident memory reports
+`usedBytes`, `softTargetBytes` and `limitBytes`; these are Native download-cache
+accounting, not total process RAM. Runtime samples are approximate observations,
+not admission authority. Waiting uses a transaction-maintained counter and
+primary-key lookups of only selected execution/verification owners; no retained
+history scan or per-waiting-job allocation is permitted.
+
 An active duplicate add returns its existing job unchanged, including category,
 destination and intent. Size is optional; conflicting known sizes remain errors.
 Local content that still exists requires explicit re-download. Confirmed absent
