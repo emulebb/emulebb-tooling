@@ -450,8 +450,21 @@ Evidence below `EMULEBB_WORKSPACE_OUTPUT_ROOT` is
 `reports/settings-request-round-1/upload-wire-native.log`,
 `upload-wire-core-current.log`, `upload-wire-rest-accepted.log`,
 `upload-wire-webui-current.log` and `upload-wire-python.log`.
-Current-build live REST qualification and combined resource qualification remain
-open; these scoped passes do not qualify total daemon memory or sustained soak.
+The regular Windows release build passed without warnings on Rust `e651b35b`
+with Harness `439304ec` and Tooling `8edaf975`. The full existing live REST/OpenAPI
+campaign passed: all 91 selected operations across the 116-route inventory met
+their success/expected-error contracts, with no failed routes. Its six real peer
+friend-control front doors, category/Kad persistence, offline settings CLI,
+listener receipt and retained-download history phases passed, with graceful
+teardown. This includes actual active and waiting upload identities under the
+new schemas. Evidence is
+`logs/builds/20261121T231839Z-build-clients/build-result.json` and
+`reports/rust-rest-openapi-ci/20261121T232156Z/report.json`; the executable SHA-256
+is `dfb3deb50e47504f5a5b20eb493b306ce79180b891b1b7fb9ac212b40c41e4a7`.
+
+Combined physical-library/memory qualification and aggregate snapshot/diagnostic
+ownership remain open. The history phase explicitly does not qualify physical
+library size or a memory limit; sustained soak remains deferred.
 
 Rust `0ce94c98` replaces serving-view hydration in upload list/detail captions
 with a scalar metadata read through the existing bounded Native worker. It seeks
