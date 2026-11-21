@@ -404,19 +404,31 @@ still require integration; full constrained-tier qualification remains open.
 
 ## Upload management read prerequisites (2026-11-21)
 
-Rust `85d5d0b6` adds Native live waiting-page selection in scheduler rank order.
-It scans scalar keys with a heap bounded to the requested page plus one lookahead
-and projects only selected entries, without requester bitmaps or per-row full
-rank recounts. Waiting-order position preserves stable ties at sequence saturation.
-Continuation resolves the anchor's current rank; a removed, promoted or timed-out
-anchor returns a typed cursor-expired result. Reads filter the ordinary waiting
-timeout without invoking protocol maintenance or retaining per-caller snapshots.
-Native validation passed 1,520 executions without warnings in
-`reports/settings-request-round-1/upload-queue-page-native.log` below
-`EMULEBB_WORKSPACE_OUTPUT_ROOT`. Tests cover complete traversal against scheduler
-order, optional totals, limit bounds, bitmaps, ties, departed anchors and score
-changes between pages. That Native checkpoint did not integrate Core/REST/WebUI
-consumption or final response ownership; see the integration checkpoint above.
+Rust `dd34104e` provides Native active and waiting management pages. Waiting
+pages preserve scheduler rank; active pages use immutable entry-ID order.
+Selection keeps a page-sized heap plus lookahead, copies only selected entries
+and omits requester bitmaps. A departed anchor requires refresh. Byte-short pages
+retain continuation, so every entry remains reachable. Active results retain a
+1-MiB allowance until drop; selection bounds cloned backing to 512 KiB.
+
+Selected-client reads also omit requester bitmaps and no longer run protocol
+maintenance. Waiting reads apply the ordinary timeout without physically
+retiring state. Full management ranks are independent of the protocol's u16
+rank representation, with a 65,536-entry regression. Snapshot facts now include
+real elapsed seconds: waiting stops at first accepted payload, while upload
+duration is null until that stint starts. Scheduling, credits and wire ranks
+retain their existing owners.
+
+Scoped validation passed **1,533 Native and 729 Core executions** without
+warnings. Cases cover complete ID/rank traversal, byte limits without truncated
+software text, optional totals, departed/expired anchors, no read-driven queue
+cleanup, accurate durations, bitmap omission and retained-charge release.
+Evidence below `EMULEBB_WORKSPACE_OUTPUT_ROOT` is
+`reports/settings-request-round-1/upload-management-native-final.log` and
+`upload-management-core.log`; normal commit/push hooks passed. Waiting-page
+REST/WebUI integration is recorded above. The active-page DTO/envelope/UI cut,
+retained detail bodies, removal of fabricated fields and unit cleanup remain
+open; this Native checkpoint registers no new uploads wire shape.
 
 Rust `0ce94c98` replaces serving-view hydration in upload list/detail captions
 with a scalar metadata read through the existing bounded Native worker. It seeks
