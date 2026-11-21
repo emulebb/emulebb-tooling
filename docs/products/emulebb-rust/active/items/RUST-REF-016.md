@@ -120,7 +120,8 @@ was introduced. Final package and constrained-tier qualification remain open.
 The bounded specialist question about live statistic publication is resolved in
 the foundation specification: publish to indexed TEMP read state under existing
 ownership, keeping durable checkpoints batched. Bounded publication is implemented
-below; library collection/query integration remains open. The first client-accepted library display-name
+below; the indexed backend query is implemented as well. REST/OpenAPI/WebUI
+collection integration remains open. The first client-accepted library display-name
 decision is implemented above; later copies retain actual filenames in locations.
 
 ## Real-peer endgame contention checkpoint (2026-11-21)
@@ -254,6 +255,53 @@ canonical library resource, visibility filters, thin DTOs and statistic sorts
 remain implementation work. Extend the existing campaign for those requirements
 before claiming the full tier, and qualify the 100k-file/1-GiB tier separately.
 
+## Indexed hash-level library queries (2026-11-21)
+
+Rust `3901716f` adds the admitted Native library-page read. It supports Present,
+Shared, Unavailable and All Known, filename substring, root, tag and sharing
+filters, optional exact totals, and both directions of name/size plus all eight
+statistic sorts. Rows contain one client hash, its stable display name, accepted
+nullable size, cached presence, sharing policy and scalar statistics. Passive-only
+observations, paths, job arrays, hashsets and tag arrays stay outside the page.
+Limit defaults to 100 and cannot exceed 200; byte-short pages retain a cursor.
+
+SQLite owns the disposable summary projection. Missing/changed Unicode name keys
+warm one bounded label at a time; idle reads rewrite neither names nor projections.
+Presence changes reconcile only affected content in the existing physical-index
+refresh. Statistic indexes have a presence prefix, letting Present skip retained
+copyless jobs. All Known uses SQLite's ordered merge of the two indexed cohorts
+instead of another index set or a full collection sort. Generated non-null keys
+permit tuple seeks for nullable sizes/timestamps; zero remains distinct from
+unknown. The scale test exposed a 701k-step expression-index cursor walk, which
+the generated columns eliminated without weakening the work bound.
+
+Hash anchors remain usable outside the current filters. Missing anchors fail
+before cold projection warming, so invalid cursors do not repeatedly warm and
+roll back the index. Pages are live and make no multi-request snapshot guarantee.
+The Native result retains 2 MiB of work/result allowance until drop, including
+folding headroom; the decoded page remains bounded to 1 MiB. Durable statistics
+updates also invalidate SQL-owned keys, so inactive imported/seeded lifetime
+facts publish without allocating runtime accounting rows. Runtime captures and
+durable pending keys share the existing bounded publication path.
+
+Scoped gates passed **343 metadata, 1,528 Native and 727 Core executions** without
+compiler warnings. The 100k query fixture places 99,900 unavailable hashes before
+100 cached present copies; every sort/view/direction late-page combination uses
+fewer than 10,000 SQLite VM steps and no temporary sort. Smaller fixtures cover
+Unicode/literal matching, filter conjunctions, zero/unknown values, one-row and
+byte-short traversal, anchors outside filter membership and cold refusal.
+Native coverage proves global live/inactive lifetime ranking, unchanged durable
+pending bytes, no execution hydration/runtime statistics allocation for inactive
+rows, and exact retained charges through drop. The final cursor-refusal change
+reran metadata coverage; its successful-query paths are unchanged.
+
+Evidence below `EMULEBB_WORKSPACE_OUTPUT_ROOT` is
+`reports/settings-request-round-1/library-query-metadata-verified.log`,
+`library-query-native.log` and `library-query-core.log` in that directory. Normal
+commit/push hooks passed. REST/OpenAPI/WebUI collection integration and the
+extended physical tier campaigns remain open; this backend fixture does not
+qualify constrained-container RAM or a final package.
+
 ## Bounded live statistic publication (2026-11-21)
 
 Rust `146262e9` publishes captured statistics into a connection-local SQL read
@@ -295,10 +343,10 @@ Evidence below `EMULEBB_WORKSPACE_OUTPUT_ROOT` is
 `library-statistics-publication-core.log` in that directory. Normal commit/push
 hooks passed.
 
-This is the statistics prerequisite. Canonical library collection/query ownership,
-summary DTOs, visibility/filter combinations, REST/OpenAPI/WebUI sorting and
-combined-scale qualification remain open. The in-memory SQL fixture is not a
-constrained-container or final-package qualification claim.
+The indexed backend collection/query integration is implemented above. Native
+REST/OpenAPI/WebUI collection DTOs and combined-scale qualification remain open.
+The in-memory SQL fixtures are not constrained-container or final-package
+qualification claims.
 
 ## Library filename-search contract (2026-11-21)
 
