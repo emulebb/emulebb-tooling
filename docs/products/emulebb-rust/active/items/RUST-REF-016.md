@@ -45,6 +45,18 @@ Runtime evidence for this extended fixture is pending. Its minimum overlap
 assertion remains two charged owners; this change neither promises sixteen
 simultaneous executions nor closes constrained active-transfer pressure proof.
 
+The first extended runtime attempt failed on HTTP 503 from `GET /status`
+after two starts were accepted. Its response body was not preserved, so the
+specific API error remains unproven. Evidence is
+`reports/rust-linux/gnu-amd64/0bdce69cf4c344de8a3f92264b501af8/runtime.log`.
+The portable gate and UI build passed under
+`reports/rust-linux/gnu-amd64/826e9d761a094204900e5d0021b8ad84/`.
+The smoke transport now preserves the HTTP exception and adds only its bounded
+API error code to diagnostic notes, without credentials or error-message text.
+All 103 package-smoke Python tests passed. The next runtime attempt uses the
+existing source-verified archive through Builder's smoke-only command; no
+acceptance criterion or retry behavior has changed.
+
 ## Canonical network-setting startup guidance (2026-11-23)
 
 Rust `080441ec` reports P2P binding failures with `network.p2p.bindIp` and
