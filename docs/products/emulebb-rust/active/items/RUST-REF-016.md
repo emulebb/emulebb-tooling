@@ -29,6 +29,34 @@ during consolidation; documentation checks passed in
 `reports/settings-request-round-1/foundation-spec-consolidation-docs.log` below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
 
+## Current Windows runtime and REST proof (2026-11-22)
+
+Rust `9196c5a3`, Harness `cce2809f` and Builder `98fa3d2` build and stage the
+current schema-117 Windows daemon and WebUI with **zero warnings**. The build
+receipt is `logs/builds/20261122T131530Z-build-clients/build-result.json` below
+`EMULEBB_WORKSPACE_OUTPUT_ROOT`.
+
+The first current-binary REST gate exposed missing generic probe definitions for
+the canonical library point routes. Harness now supplies a valid upload-priority
+PATCH body and expects 404 for its intentionally absent detail/PATCH hash.
+Dedicated fixture edits continue to require 204 and verify retained values.
+**77 focused Python tests pass.**
+
+The refreshed live report,
+`reports/rust-rest-openapi-ci/20261122T132203Z/report.json`, passes with graceful
+teardown: **114 declared operations, 89 safe operations exercised, 38 successful
+responses and 51 expected errors**, with no failed routes. The 25 operations
+excluded from generic safe sampling are not all thereby qualified. Dedicated
+settings/lease, category/library policy and tags, friend and Kad persistence
+phases pass. Metadata-only traversal covers **100,000 retained jobs** (99,000
+completed, 100 queued, 900 stopped), all/completed/unfinished pages and restart
+counts. This establishes neither physical-library capacity nor a memory limit.
+Current constrained-container and platform qualification remains pending.
+
+A further visible-output Core run passes 750 tests and preserves a successful
+comparison trace in `reports/settings-request-round-1/endgame-visible-core.log`.
+It does not reproduce or resolve the intermittent endgame failure described below.
+
 ## Endgame close diagnostics (2026-11-22)
 
 Rust `9196c5a3` retains exact prefix-forwarding offsets and distinguishes
