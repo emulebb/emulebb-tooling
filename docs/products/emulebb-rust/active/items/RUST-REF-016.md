@@ -29,6 +29,40 @@ during consolidation; documentation checks passed in
 `reports/settings-request-round-1/foundation-spec-consolidation-docs.log` below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
 
+## Current physical-library capacity tiers (2026-11-22)
+
+Both existing full physical-library campaigns passed on Rust `7bf86227`,
+Harness `44e9c8fa`, Builder `54bfc7d` and Tooling `2b0d9aa0`, using GNU archive
+SHA-256 `853d916638b32cba251327be30d4a94c3e7d48e718c1ba29f2c713a92588d06f`.
+
+| Physical library | Retained jobs | Enforced memory | Campaign seconds | Cgroup peak bytes |
+| --- | ---: | ---: | ---: | ---: |
+| 50,000 files / 5,242,880,000 bytes | 100,000 | 512 MiB | 938.140 | 536,920,064 |
+| 100,000 files / 10,485,760,000 bytes | 100,000 | 1 GiB | 1,744.145 | 1,073,782,784 |
+
+Both enforced one CPU and no swap, with zero OOM, OOM-kill or group-kill events.
+All campaign acceptance checks passed: initial payload hashing, exact physical
+fixtures, optional watcher lifecycle, populated-root update, mutations, retained
+download counts/traversal, warm/final restarts and graceful shutdowns. Each
+fixture includes 1,000 long-path files and 16 Unicode-path files. The measured
+cgroup peak covers the campaign process tree and filesystem cache; it is not
+daemon RSS or evidence of spare RAM. Native fixture volumes remain retained.
+
+Evidence under `EMULEBB_WORKSPACE_OUTPUT_ROOT`:
+
+- 512 MiB: `reports/linux-containers/library/2940043ebc4d47cba53f95b732ce6e9d/report.json`,
+  with `campaign/rust-shared-library-io-20261122T200935Z-1.json` beneath that run.
+- 1 GiB: `reports/linux-containers/library/609abb5e77d341ce9bc20d304609a76e/report.json`,
+  with `campaign/rust-shared-library-io-20261122T202719Z-1.json` beneath that run.
+
+The retained-job workload is explicitly metadata-only: 99,000 completed,
+900 stopped and 100 started/waiting jobs. It does not prove combined active
+payload pressure or maximum geometry. The campaign currently probes library
+counts rather than every public library sort, late page and substring query;
+that runtime read qualification remains required. The native local-client
+integration fixture also still needs its settings/library/search calls updated
+to the current contract. These are open acceptance work, not waived gates.
+
 ## Current GNU package checkpoint (2026-11-22)
 
 Rust `7bf86227`, Harness `44e9c8fa`, Builder `54bfc7d` and Tooling `5e8e9b1f`
