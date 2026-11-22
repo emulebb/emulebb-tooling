@@ -29,7 +29,7 @@ during consolidation; documentation checks passed in
 `reports/settings-request-round-1/foundation-spec-consolidation-docs.log` below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
 
-## Current GNU and 512 MiB capacity proof (2026-11-22)
+## Current GNU and capacity proof (2026-11-22)
 
 Rust `264b9fe9`, Harness `cce2809f`, Tooling `cc33be1c` and Builder `98fa3d2`
 pass the current schema-117 GNU/amd64 package gate: Clippy, packet-diagnostics
@@ -55,8 +55,19 @@ events. The recorded cgroup peak is **536,899,584 bytes**; this includes the
 campaign process tree and does not establish spare daemon RAM. The container is
 removed and its owned native volume is retained for evidence.
 
-Retained download history is explicitly **metadata-only**. This campaign does
-not qualify the active-payload worst case, the 100k-file/1 GiB tier or endurance.
+The same archive also passes **100,000 physical files plus 100,000 retained jobs
+at 1 GiB, 1 CPU and no swap**, with Tooling `1e101261` and the same Rust, Harness
+and Builder revisions. Its report is
+`reports/linux-containers/library/f066678e7de64723a9e68f724e6af798/report.json`.
+All global acceptance checks pass, including watcher policy, populated-root
+updates, long paths, mutations, warm/final restarts, retained-job counts and
+graceful shutdowns. Kernel checks show unchanged limits, the same process-tree
+scope and no OOM events. The recorded cgroup peak is **1,073,762,304 bytes**;
+it does not establish spare daemon RAM. The container is removed and its native
+volume is retained.
+
+Retained download history is explicitly **metadata-only** in both tiers. These
+campaigns do not qualify the active-payload worst case or endurance.
 The intermittent Windows endgame concern and server public cutover remain open;
 the Linux nonterminal endgame and Unix filesystem-grouping tests pass.
 
