@@ -129,6 +129,9 @@ documentation describes only implemented structure.
   100/maximum 200 rows and byte-short continuation; disabled rows remain visible.
   DELETE removes the saved server resource. PATCH with `enabled:false` retains
   it disabled; a later import after deletion creates a new resource ID.
+  Explicit `POST /servers` returns 409 when that live address/port pair already
+  exists, without editing or enabling the existing server. Imports merge into
+  existing live resources and preserve their IDs; they are separate from creation.
 - Persisted and public calendar timestamps are Unix seconds. Runtime scheduling
   uses monotonic clocks and whatever finer precision it requires. Revisions,
   not timestamps, order changes and detect conflicts.

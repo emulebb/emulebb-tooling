@@ -49,10 +49,11 @@ Evidence below `EMULEBB_WORKSPACE_OUTPUT_ROOT` is
 in that same directory.
 
 Next, wire these storage operations through the retained Core mutation owner,
-then switch REST/OpenAPI/WebUI and native callers together. The operator decision
-on duplicate explicit `POST /servers` remains pending: 409 without changing the
-existing resource (recommended), or update it and return the existing ID.
-Imports retain their separate merge semantics. No choice is assumed from silence.
+then switch REST/OpenAPI/WebUI and native callers together. The operator settled
+duplicate explicit `POST /servers`: return 409 without changing the existing
+resource. Imports retain their separate merge semantics and stable live IDs.
+This decision is saved in the authoritative specification; the explicit creation
+path still needs implementation and validation.
 
 ## Native library comparison reads (2026-11-22)
 
