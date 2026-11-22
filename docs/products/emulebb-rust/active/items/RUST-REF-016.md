@@ -48,12 +48,26 @@ Evidence below `EMULEBB_WORKSPACE_OUTPUT_ROOT` is
 `server-mutations-emulebb-core.log` and `server-mutations-emulebb-daemon.log`
 in that same directory.
 
+Rust `9e762739` adds explicit creation separately from import merging. A SQLite
+immediate transaction spans the live-endpoint uniqueness check, insertion and
+discovery initialization; conflict returns the typed `ServerEndpointConflict`
+without updating or enabling the existing server. **369 metadata tests pass**
+without compiler warnings, including simultaneous creators, preservation of a
+disabled resource, fresh identity after deletion, and initialization-failure
+rollback. Evidence is
+`reports/settings-request-round-1/server-create-metadata-second.log` below the
+same output root. The first attempt found a test closure-lifetime error, fixed
+before the passing run. Schema 117 and the HTTP surface remain unchanged.
+
 Next, wire these storage operations through the retained Core mutation owner,
 then switch REST/OpenAPI/WebUI and native callers together. The operator settled
 duplicate explicit `POST /servers`: return 409 without changing the existing
 resource. Imports retain their separate merge semantics and stable live IDs.
-This decision is saved in the authoritative specification; the explicit creation
-path still needs implementation and validation.
+This decision is saved in the authoritative specification; the public creation
+path still needs integration and validation. Reuse the existing persistence
+actor and SQL worker, retaining only the server publication context rather than
+the full Core. The network configuration is already held by `Arc`, and external
+reachability provides a cheap cloned reader.
 
 ## Native library comparison reads (2026-11-22)
 
