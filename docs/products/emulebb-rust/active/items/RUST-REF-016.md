@@ -29,6 +29,37 @@ during consolidation; documentation checks passed in
 `reports/settings-request-round-1/foundation-spec-consolidation-docs.log` below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
 
+## Current GNU package checkpoint (2026-11-22)
+
+Rust `7bf86227`, Harness `44e9c8fa`, Builder `54bfc7d` and Tooling `5e8e9b1f`
+passed the full GNU amd64 package gate. This follows the server REST/catalog,
+status/snapshot, discovery-import and runtime read changes above. The first
+attempt stopped at Clippy; unused endpoint-token validators were removed and
+a redundant test field initializer corrected before the passing rerun.
+
+Passing evidence under `EMULEBB_WORKSPACE_OUTPUT_ROOT`:
+
+- `reports/rust-linux/gnu-amd64/56f566942afe4601a7e45a5eae9fdb15/`:
+  Clippy, packet diagnostics, release build, 3,542 workspace tests and three
+  explicit VPN egress tests. The initial lint failure is retained separately in
+  `reports/rust-linux/gnu-amd64/3f06f78f955740a7b6399d1c0af3fee4/clippy.log`.
+- `reports/rust-linux/gnu-amd64/6fd830e14b034920976a58357dc4ab11/package-smoke.json`:
+  non-root packaged lifecycle, CLI/profile behavior, WebUI/backend checks,
+  verified partial stop/restart/delivery, and 16 independent real-payload peers.
+  All 16 added outputs verified; 17 retained completed jobs including the initial
+  transfer. One recorded start-admission retry among 17 requests; no hidden
+  daemon retry. All auxiliary source processes exited successfully.
+- GNU archive SHA-256:
+  `853d916638b32cba251327be30d4a94c3e7d48e718c1ba29f2c713a92588d06f`.
+
+The 112 resource samples peaked at eight charged active downloads, 15 waiting,
+zero sampled preparation/burst and 8,152 resident manifest bytes. This is ordinary
+payload qualification, not maximum geometry, sixteen simultaneous executions,
+safe-update pressure or constrained-container memory proof. Both capacity tiers
+must be rerun on this archive; older tier results are not transferred. The full
+goal remains open, including maximum-geometry/adaptive/contention proof and the
+remaining current-surface/platform/fixture acceptance work.
+
 ## Borrowed server feedback and case-insensitive retirement (2026-11-22)
 
 Feedback endpoint resolution and discovered-server intake now use selected
