@@ -1340,6 +1340,11 @@ environment and serialized heavy validation. Keep deterministic fresh fixtures
 isolated from public bootstrap; replacing source-file sentinels must not cause
 accidental public traffic.
 
+Qualification clients may make bounded, recorded retries of start actions that
+return per-item HTTP 503 `DOWNLOAD_UNAVAILABLE`. Record every attempt and backoff.
+This is caller behavior, not a daemon retry policy; execution/storage failures
+must not enter that admission-retry path or restart automatically.
+
 ### Required proof
 
 This round has no response-time acceptance threshold. Record timings as
