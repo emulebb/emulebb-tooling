@@ -29,6 +29,37 @@ during consolidation; documentation checks passed in
 `reports/settings-request-round-1/foundation-spec-consolidation-docs.log` below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
 
+## Current GNU and 512 MiB capacity proof (2026-11-22)
+
+Rust `264b9fe9`, Harness `cce2809f`, Tooling `cc33be1c` and Builder `98fa3d2`
+pass the current schema-117 GNU/amd64 package gate: Clippy, packet-diagnostics
+compilation, release build, **3,529 workspace tests plus 3 VPN-egress tests**, and
+non-root package smoke validation. The only source repair is a borrowed-slice
+expectation in a metadata test, preserving its assertion without cloning. Its
+scoped Windows gate passes **369 metadata tests**.
+
+Evidence below `EMULEBB_WORKSPACE_OUTPUT_ROOT` is
+`reports/rust-linux/gnu-amd64/b5b4c405d9224f1ebca48c2086959f56/`, with runtime smoke
+in `reports/rust-linux/gnu-amd64/0be5de6d92e542bf8265a1f984dda248/package-smoke.json`.
+The archive SHA-256 is
+`f696b41bae72e09168d8030eb774cb6396589e410c22d01b9ea5f3e261f10e79`.
+The earlier Clippy failure remains recorded under
+`reports/rust-linux/gnu-amd64/009efefb708c4c9a8970df89a589ed1e/`.
+
+That archive passes the full **50,000 physical files plus 100,000 retained jobs
+at 512 MiB, 1 CPU and no swap** campaign, including initial payload hashing,
+watcher lifecycle, rescans, mutations and restarts. Its report is
+`reports/linux-containers/library/35a6d8e76fd242bcbd3c0e3df98a92bc/report.json`.
+Kernel checks prove unchanged limits, the same process-tree scope and no OOM
+events. The recorded cgroup peak is **536,899,584 bytes**; this includes the
+campaign process tree and does not establish spare daemon RAM. The container is
+removed and its owned native volume is retained for evidence.
+
+Retained download history is explicitly **metadata-only**. This campaign does
+not qualify the active-payload worst case, the 100k-file/1 GiB tier or endurance.
+The intermittent Windows endgame concern and server public cutover remain open;
+the Linux nonterminal endgame and Unix filesystem-grouping tests pass.
+
 ## Current Windows runtime and REST proof (2026-11-22)
 
 Rust `9196c5a3`, Harness `cce2809f` and Builder `98fa3d2` build and stage the
