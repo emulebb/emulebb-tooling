@@ -979,6 +979,8 @@ priority remains omitted.
 Persist these values on the canonical hash record; job checkpoints and verified
 copy registration must not become competing saved authorities or overwrite an
 existing client hash's metadata. Restrict edits to client library membership.
+Only explicit user edits set the local comment/rating. Remote Kad notes and
+peer comments remain network evidence; they do not fill empty local values.
 
 Both `/uploads` and `/upload-queue` return bounded data arrays with cursor,
 limit (default 100, maximum 200), and optional countTotal. Cursors are scoped

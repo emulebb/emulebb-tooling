@@ -29,6 +29,40 @@ during consolidation; documentation checks passed in
 `reports/settings-request-round-1/foundation-spec-consolidation-docs.log` below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
 
+## Copyless Native metadata mutation service (2026-11-22)
+
+Rust `7aeee57c` exposes the runtime's canonical `update_library_file_metadata`
+operation through the existing retained content mutation owner. It accepts a
+client-library hash without requiring a current job, local copy or serving-view
+lookup. Unknown hashes return false without implicit creation; successful edits
+return true. Existing Core/Native consumers use that operation. The service does
+not allocate payload storage or grant upload eligibility for copyless content.
+
+The existing owner retains SQL, active-cache and catalog publication through
+caller cancellation. Two new Native regressions cover copyless edits after
+normal job removal and cancellation after commit but before publication; drain
+waits until the held producer finishes and the cache/catalog contain the edit.
+Native, Core and REST gates passed **1,537, 740 and 178 tests**, respectively,
+with no compiler warnings. Logs below `EMULEBB_WORKSPACE_OUTPUT_ROOT` are
+`reports/settings-request-round-1/hash-metadata-service-native.log`,
+`hash-metadata-service-core.log` and `hash-metadata-service-rest-final.log` in
+that directory. Normal commit/push checks passed.
+
+The first REST run found the snapshot shape fixture competing with its own
+background root scan and receiving the valid shared-capacity refusal. That
+fixture now waits for its setup scan to settle before making its single snapshot
+request. The independent retained-frame capacity/refusal/recovery test remains
+unchanged and passed. No backend retry or capacity relaxation was added.
+
+This closes the Native mutation frontdoor, not the public library editing
+contract or Core's Kad/eD2K scheduling side effects. Those still need the retained
+Core service and coordinated REST/OpenAPI/WebUI cutover. The operator also chose
+**explicit user edits only** for local comment/rating: passive Kad autofill must
+be removed and remote notes kept separate as network evidence. That behavior
+change is the next slice and is not claimed implemented by this checkpoint.
+The database remains schema 115. Earlier platform/resource receipts retain their
+recorded source revisions, and the no-PR boundary remains unchanged.
+
 ## One persisted hash-presentation owner (2026-11-22)
 
 Rust `4b481e2d` gives upload priority, automatic-priority mode, local comment and
