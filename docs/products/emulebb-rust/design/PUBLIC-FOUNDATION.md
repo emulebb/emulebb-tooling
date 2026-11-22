@@ -375,6 +375,12 @@ remains a monotonic elapsed duration. `running` and `pending` come from one
 coordinator observation, so callers can wait for quiescence after an accepted
 action without depending on a calendar value changing.
 
+Native status exposes lifecycle, statistics, network state and real runtime
+diagnostics. Status/statistics/diagnostics use the bounded cached scan observation
+without reading configured root collections. `sharedFilesComplete` reports scan
+quiescence: no running pass, pending follow-up or active hashing. Root
+`scanRequired` flags remain the separate indication of known incompleteness.
+
 Reuse debounce and bounded coalescing. Bound the complete event ingress and
 debounce path, not only its final queue. Event storms must not create a scan,
 unbounded path backlog or database write per event. Latch/coalesce the affected

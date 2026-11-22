@@ -10346,7 +10346,7 @@ components:
     Status:
       type: object
       additionalProperties: false
-      required: [lifecycle, stats, servers, kad, network, sharedStartupCache, runtimeDiagnostics]
+      required: [lifecycle, stats, servers, kad, network, runtimeDiagnostics]
       properties:
         lifecycle:
           $ref: "#/components/schemas/AppLifecycle"
@@ -10358,8 +10358,6 @@ components:
           $ref: "#/components/schemas/NetworkStatus"
         stats:
           $ref: "#/components/schemas/Stats"
-        sharedStartupCache:
-          $ref: "#/components/schemas/SharedStartupCache"
         runtimeDiagnostics:
           $ref: "#/components/schemas/RuntimeDiagnostics"
     StatsEnvelope:
@@ -10437,6 +10435,7 @@ components:
           type: boolean
         sharedFilesComplete:
           type: boolean
+          description: No scan, pending follow-up or hashing work is active. Root scanRequired flags separately report known incompleteness.
         ed2kConnected:
           type: boolean
         ed2kHighId:
@@ -10516,114 +10515,6 @@ components:
     FirewallState:
       type: string
       enum: [unknown, open, firewalled]
-    SharedStartupCache:
-      type: object
-      additionalProperties: false
-      required: [available, ready]
-      properties:
-        available:
-          type: boolean
-        ready:
-          type: boolean
-        complete:
-          type: boolean
-        filePresent:
-          type: boolean
-        loaded:
-          type: boolean
-        rejected:
-          type: boolean
-        removed:
-          type: boolean
-        rejectCode:
-          type:
-            - string
-            - "null"
-        recordsLoaded:
-          type: integer
-          minimum: 0
-        volumesLoaded:
-          type: integer
-          minimum: 0
-        duplicatePathCache:
-          type: object
-          additionalProperties: false
-          properties:
-            loaded:
-              type: boolean
-            rejected:
-              type: boolean
-            removed:
-              type: boolean
-            rejectCode:
-              type:
-                - string
-                - "null"
-            recordsLoaded:
-              type: integer
-              minimum: 0
-        scan:
-          type: object
-          additionalProperties: false
-          properties:
-            requestedDirectories:
-              type: integer
-              minimum: 0
-            dedupedDirectories:
-              type: integer
-              minimum: 0
-            duplicateDirectories:
-              type: integer
-              minimum: 0
-            directoriesFromCache:
-              type: integer
-              minimum: 0
-            directoriesRescanned:
-              type: integer
-              minimum: 0
-            inaccessibleDirectories:
-              type: integer
-              minimum: 0
-            knownFilesAccepted:
-              type: integer
-              minimum: 0
-            duplicatePathsReused:
-              type: integer
-              minimum: 0
-            filesQueuedForHash:
-              type: integer
-              minimum: 0
-            filesIgnored:
-              type: integer
-              minimum: 0
-        save:
-          type: object
-          additionalProperties: false
-          properties:
-            running:
-              type: boolean
-            dirty:
-              type: boolean
-            waitingForFollowUp:
-              type: boolean
-            phase:
-              type: string
-              enum: [idle, buildingRecords, writingFile, applyingResult]
-            completedDirectories:
-              type: integer
-              minimum: 0
-            totalDirectories:
-              type: integer
-              minimum: 0
-        hashingCount:
-          type: integer
-          minimum: 0
-        deferredHashingActive:
-          type: boolean
-        interruptedHashingInvalidatedCache:
-          type: boolean
-        reloadProgress:
-          $ref: "#/components/schemas/SharedDirectoryReloadProgress"
     RuntimeDiagnostics:
       type: object
       additionalProperties: false

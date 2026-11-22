@@ -29,6 +29,25 @@ during consolidation; documentation checks passed in
 `reports/settings-request-round-1/foundation-spec-consolidation-docs.log` below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
 
+## Canonical status and cached scan observations (2026-11-22)
+
+Native status exposes lifecycle, statistics, server/Kad/network state and real
+runtime diagnostics. Status, stats and diagnostics read `Core.library_scan()`;
+they do not clone configured root collections to obtain progress. The WebUI
+uses the lifecycle object and current scan/diagnostics DTOs directly.
+
+`sharedFilesComplete` now means scan quiescence: no running pass, pending
+follow-up or active hashing. The response regression covers discovery and
+pending work with zero active hashers, preventing premature completion.
+Root `scanRequired` flags separately report known incompleteness.
+
+All 182 REST tests, 304 scoped Python route/schema/conformance tests, 94 WebUI
+unit tests, 35 browser tests and the UI production build passed. Core code is
+unchanged by this cut. Evidence under `EMULEBB_WORKSPACE_OUTPUT_ROOT`:
+`reports/settings-request-round-1/status-canonical-scan-{rest,python}.log` and
+`reports/settings-request-round-1/status-canonical-lifecycle-webui.log`.
+Verified-runtime wire validation follows the committed source rebuild.
+
 ## Fractional or unknown Kad bootstrap progress (2026-11-22)
 
 Kad bootstrap progress now follows the foundation rule: `0.0` while stopped,
