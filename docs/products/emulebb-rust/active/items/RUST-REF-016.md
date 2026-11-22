@@ -29,6 +29,28 @@ during consolidation; documentation checks passed in
 `reports/settings-request-round-1/foundation-spec-consolidation-docs.log` below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
 
+## Scan follow-up progress and device grouping (2026-11-22)
+
+Rust `5c827531` preserves the active scanning/planning/hashing phase when more
+scan requests coalesce into the existing pending follow-up. Its counters and
+calendar values remain attached to the current pass; idle requests still show
+queued work. There is no new scan queue, completion token or scheduling policy.
+
+Unix scheduling groups now reuse the existing filesystem device identity
+helper, including nearest-existing-ancestor handling. Resolution remains once
+per configured root. Windows physical-disk resolution is unchanged. A Unix
+filesystem device is a scheduling proxy and does not identify shared hardware
+behind partitions or virtual volumes.
+
+**749 Core tests pass on Windows**, without compiler warnings, including a
+regression exercising repeated follow-up requests during all three active
+phases and final draining. Evidence below `EMULEBB_WORKSPACE_OUTPUT_ROOT` is
+`reports/settings-request-round-1/scan-followup-core.log`. The Unix-only
+regression is present but was **not executed by the Windows gate**; the Linux
+matrix remains required. Public scan calendar naming/seconds, remaining server
+contract integration, aggregate ownership and current resource qualification
+remain open. The pending server-name question is unchanged.
+
 ## Retained server resource mutations (2026-11-22)
 
 Rust `72558714` routes canonical server create/edit/delete through the existing

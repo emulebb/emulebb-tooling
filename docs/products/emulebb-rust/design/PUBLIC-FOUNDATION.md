@@ -340,6 +340,9 @@ without completion tokens or a durable job system. One coordinator runs a pass
 with at most one coalesced follow-up pending. Adding roots during a pass requests
 that follow-up, which reads the updated configured roots. Hashing is sequential
 within each disk group and concurrent across distinct disk groups.
+Resolve storage identity once per configured root. Windows uses physical-disk
+volume extents; Unix uses filesystem device identity as a portable scheduling
+proxy. Separate filesystems can share underlying hardware.
 
 Show the current pass's discovery count without a percentage while its total is
 unknown. During hashing, show byte progress, completed/planned files, read rate,
