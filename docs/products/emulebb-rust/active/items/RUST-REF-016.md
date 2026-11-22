@@ -29,6 +29,44 @@ during consolidation; documentation checks passed in
 `reports/settings-request-round-1/foundation-spec-consolidation-docs.log` below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
 
+## Retained server resource mutations (2026-11-22)
+
+Rust `72558714` routes canonical server create/edit/delete through the existing
+profile persistence actor and SQL worker. The command keeps its input and
+publication allowance until SQL, derived cache and connection-plan publication
+finish, including after caller cancellation. Its publication context retains
+only shared server/network handles, not the full Core. Creation preserves typed
+endpoint conflicts; selected-field edits preserve current cached health data.
+Projected record backing is checked before commit so an edit cannot create a
+resource the bounded point reader cannot return.
+
+A shared server mutation fence covers that SQL/cache window and existing
+feedback/discovery writers. It prevents stale feedback snapshots from overtaking
+a committed edit. Connection initialization occurs after the existing add path
+releases the fence. Delayed feedback also cannot recreate a deleted resource
+from startup connection configuration. This protects current resource lifecycle;
+it adds no profile migration, retired-input path, worker or retry loop.
+
+**748 Core and 179 REST tests pass**, without compiler warnings. Eight new
+regressions cover all three canceled mutation callers, charge release, no
+retained Core, selected-field health preservation, SQL rollback, typed conflicts,
+oversized-input/record refusal, feedback ordering, and late feedback after
+deletion. Evidence below `EMULEBB_WORKSPACE_OUTPUT_ROOT` is
+`reports/settings-request-round-1/server-owner-core-fenced.log` and
+`server-owner-rest.log` in the same directory. The first run found a private
+test-fixture accessor, corrected using the established shared in-memory database
+fixture. The intermediate owner run passed before adding the shared fence.
+
+This is a service checkpoint. REST/OpenAPI/WebUI and native callers still need
+the coordinated ID/pagination/deletion cut, including retirement of endpoint-based
+entrypoints. Aggregate server list/connection-plan construction ownership and
+current runtime/resource qualification remain open. Existing feedback SQL still
+uses its current persistence path under the fence; do not claim every server
+writer has moved to the actor. The server-name ownership question is pending:
+preserve an explicit user alias separately from the reported name (recommended),
+or keep only the network/import name and omit name editing. Do not infer a
+decision from silence.
+
 ## Atomic server resource storage prerequisite (2026-11-22)
 
 Rust `07ff665a` makes server upsert return the stable ID from the SQL write,
@@ -59,8 +97,7 @@ rollback. Evidence is
 same output root. The first attempt found a test closure-lifetime error, fixed
 before the passing run. Schema 117 and the HTTP surface remain unchanged.
 
-Next, wire these storage operations through the retained Core mutation owner,
-then switch REST/OpenAPI/WebUI and native callers together. The operator settled
+Next, switch REST/OpenAPI/WebUI and native callers together. The operator settled
 duplicate explicit `POST /servers`: return 409 without changing the existing
 resource. Imports retain their separate merge semantics and stable live IDs.
 This decision is saved in the authoritative specification; the public creation
