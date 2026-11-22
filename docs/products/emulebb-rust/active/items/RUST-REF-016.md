@@ -29,6 +29,37 @@ during consolidation; documentation checks passed in
 `reports/settings-request-round-1/foundation-spec-consolidation-docs.log` below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
 
+## Current native local-client fixture (2026-11-22)
+
+The existing `test_emulebb_rust_local_client.py` now uses revisioned settings
+saved/effective/application data, root resources and paginated library rows,
+204 metadata edits, separate search headers/results and immutable server IDs.
+It tests disabling separately from deletion and creates stopped jobs from an
+explicit content source. Passive-index search preloading and unused fixture
+manifest helpers were removed. Existing profile, publication, paging, local-peer
+and runtime-stage helpers are reused.
+
+All four tests passed together: two fast tests and both native scenarios.
+The Windows Rust/WebUI build passed without warnings on Rust `7bf86227`;
+evidence is `logs/builds/20261122T210356Z-build-clients/build-result.json` below
+`EMULEBB_WORKSPACE_OUTPUT_ROOT`. Final scenario evidence is
+`reports/settings-request-round-1/native-client-qualified-runtime.log`, its
+`native-client-qualified-junit.xml` sibling and retained scenario profiles.
+The input descriptors attest the verified runtime and fixture SHA-256
+`9be4ac1f9b29cff7d7a49aa1bc4ec504d1f766a6e32b0e744a78503527194a91`.
+
+The declared local Kad peer uses plaintext transport and produces real routing
+replies. With one contact and the daemon's current ten-contact readiness rule,
+this qualifies partial bootstrap telemetry, not a fully populated Kad network.
+Server-bind evidence exercises configured binding and REST lifecycle, not
+observed socket-source-IP proof. No daemon transport/default was changed.
+
+One separate public-contract mismatch was identified: Kad `bootstrapProgress`
+still emits 0/50/100, while PUBLIC-FOUNDATION requires numeric progress to use
+fractions or null. Its DTO, OpenAPI and consumers must be aligned before the
+contract freeze. Runtime all-sort/substring, active-payload pressure and maximum
+geometry qualification also remain open.
+
 ## Current physical-library capacity tiers (2026-11-22)
 
 Both existing full physical-library campaigns passed on Rust `7bf86227`,
