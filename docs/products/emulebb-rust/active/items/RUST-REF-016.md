@@ -29,6 +29,31 @@ during consolidation; documentation checks passed in
 `reports/settings-request-round-1/foundation-spec-consolidation-docs.log` below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
 
+## Snapshot wire ownership (2026-11-22)
+
+Rust `130ca0b2` encodes the existing snapshot envelope from a typed borrowed
+projection. Upload/queue rows and download counts retain their admitted input
+backing through encoding instead of being copied into another JSON value tree.
+The existing retained-read encoder admits exact output bytes before allocation;
+the HTTP body and all frame clones keep that output charge until final drop.
+Capacity refusal uses the common persistence error contract. No route, field,
+setting or database shape changed.
+
+The complete REST gate passed **174 unit and four integration tests**, without
+compiler warnings. A new response-level regression retains cloned snapshot
+frames until shared capacity refuses another request with 503/PERSISTENCE_BUSY,
+then proves capacity recovers after final drop. Existing snapshot shape and
+collection assertions remain green. Evidence is
+`reports/settings-request-round-1/snapshot-wire-rest.log` below
+`EMULEBB_WORKSPACE_OUTPUT_ROOT`; normal commit/push checks passed.
+
+This closes snapshot transfer-row duplication and encoded-body ownership, not
+aggregate construction. Server reads still build the full cached catalog, and
+library projection and diagnostic selected metadata need their coordinated
+bounded construction work. The preceding package and physical-library receipts
+remain attributed to `d603eb42`; they were not rerun for this change. Operator
+choices and the no-PR boundary remain unchanged.
+
 ## Schema-114 GNU package and constrained library campaigns (2026-11-22)
 
 Rust `d603eb42`, Harness `7da4dd8d`, Tooling `83d5f29c` and Builder `98fa3d2c`

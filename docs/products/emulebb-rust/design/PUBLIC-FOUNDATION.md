@@ -1099,6 +1099,8 @@ download view unfinished with explicit Completed/All. Fetch for the active view.
 Keep lightweight native SSE change/reset notifications, coalesce refreshes and
 use polling as fallback rather than redundant broad snapshot polling. Snapshot
 is a bounded dashboard summary; its underlying work must also be bounded.
+Borrow admitted transfer pages when encoding it; reserve exact wire backing in
+the shared read budget and retain that charge through the final HTTP frame clone.
 Its download portion is `downloads:{unfinished,completed}`, counting unremoved
 jobs by historical completion without embedding job rows. Existing-stream
 `download.changed`/`download.removed` events carry `downloadId`, not full rows
