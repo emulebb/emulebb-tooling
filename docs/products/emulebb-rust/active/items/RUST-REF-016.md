@@ -62,12 +62,42 @@ An intermediate broad SQL edit also changed friend re-add behavior; the existing
 FIFO regression caught it, the unrelated edit was restored, and Core passed.
 No friend-domain change remains in the final diff.
 
-This is the database/read-model prerequisite. Core admission, the coordinated
+This is the database/read-model prerequisite. The coordinated
 server REST/OpenAPI/WebUI caller cut, aggregate snapshot/diagnostic ownership,
 persisted-calendar timestamp consolidation and resource qualification remain
 open. The server deletion choice and the separate library hash-metadata choice
 remain pending in the authoritative foundation. Existing platform receipts keep
 their own source/schema revisions and do not qualify schema 110.
+
+## Admitted server catalog reads (2026-11-22)
+
+Rust `7d3736bf` routes server pages and exact-ID reads through the existing
+Native metadata worker. Validation precedes admission. Results retain the
+1-MiB read allowance under the shared transient-work budget until conversion or
+final drop; missing exact IDs release their allowance. No new worker pool,
+saved setting, endpoint or alternate server catalogue was introduced.
+
+Core exposes the retained persisted records without walking or populating its
+runtime server cache. It checks persistence coherence before and after the
+await. Invalid queries remain typed validation failures, oversized rows become
+PERSISTENCE_TOO_LARGE, admission/closing errors retain their classification and
+SQL failures remain storage errors instead of empty results or missing IDs.
+Connection presentation and the coordinated HTTP model remain separate work.
+
+The complete scoped gates passed **1,535 Native and 732 Core executions**, with
+zero compiler warnings. Existing compact-result and cancelled-receiver/drain
+coverage now includes server pages. New cases prove shared-budget saturation,
+validation before saturated admission, release on missing/closed reads, persisted
+ID authority with an empty runtime cache, no resident download hydration,
+retained conversion/exact JSON backing, ordered page continuation, oversized-row
+handling and SQL failure classification. Evidence below
+`EMULEBB_WORKSPACE_OUTPUT_ROOT` is
+`reports/settings-request-round-1/server-admission-native-final.log` and
+`server-admission-core.log`.
+
+This closes server read admission. Server mutation ownership, public caller
+adoption, aggregate response ownership, timestamp consolidation and platform/
+resource qualification remain open. This is not profile-fault-policy proof.
 
 ## Current REST error catalogue (2026-11-22)
 
