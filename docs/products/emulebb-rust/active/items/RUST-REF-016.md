@@ -29,6 +29,40 @@ during consolidation; documentation checks passed in
 `reports/settings-request-round-1/foundation-spec-consolidation-docs.log` below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
 
+## Native calendar DTOs and capture time (2026-11-22)
+
+Rust `6c35e587` serializes the DateTime-backed Core REST models as integer Unix
+seconds, including nullable hostname resolution and Kad node creation/last-seen
+facts. Missing optional hostname values retain their default/omission semantics;
+epoch zero remains a valid time. The explicit server response mapper uses the
+same seconds representation. Diagnostic `capturedAt` is an integer, validated by
+the WebUI's typed capture client. Downloads use that capture time in their file
+name without substituting a client clock. The WebUI formats Kad/log times from
+seconds and uses only the canonical log `timestamp` field.
+
+The canonical OpenAPI document defines integer seconds for those fields, optional
+`EnvelopeMeta.generatedAt` and log timestamps. Harness `c2bb4a9e` extends the
+existing response-schema suite with nullable/nonnegative/integer constraints.
+Current fixtures and the embedded UI adopt the same shapes together.
+
+Scoped gates passed **735 Core, 177 REST, 93 WebUI unit, 35 browser and 213 Python
+contract executions**, with no Rust compiler warnings. Cases prove nullable and
+epoch-zero hostname serialization/deserialization, the explicit current-server
+mapper, actual HTTP capture time, bounded capture bytes, Kad browser date
+rendering, diagnostic download content/naming and current OpenAPI validation.
+The production WebUI build also passed. No database shape changed from schema
+114, and no full platform/live/resource campaign is claimed by these checks.
+Evidence below `EMULEBB_WORKSPACE_OUTPUT_ROOT` is
+`reports/settings-request-round-1/public-calendar-seconds-core.log`,
+`public-calendar-seconds-rest.log`, `public-calendar-seconds-webui.log` and
+`public-calendar-seconds-python.log`.
+
+This closes the DateTime-backed native calendar group. Explicitly named
+millisecond calendar fields in public diagnostics, canonical library/server
+cutovers, aggregate response ownership and final qualification remain open.
+The pending operator choices are unchanged. Durations retain their documented
+precision, and previous package/resource receipts keep their own revisions.
+
 ## Persisted calendar timestamp consolidation (2026-11-22)
 
 Rust `b3ca4c69` introduces fresh schema 114 and closes the remaining peer/Kad

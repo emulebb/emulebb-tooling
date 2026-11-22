@@ -4970,8 +4970,8 @@ components:
         apiVersion:
           type: string
         generatedAt:
-          type: string
-          format: date-time
+          type: integer
+          minimum: 0
         settingsRevision:
           $ref: '#/components/schemas/SettingsRevision'
     Ok:
@@ -5034,8 +5034,8 @@ components:
             and materialized result summaries from bounded SQLite pages. Raw observation history is read through
             its resource.
         capturedAt:
-          type: string
-          format: date-time
+          type: integer
+          minimum: 0
         app:
           type: object
           additionalProperties: true
@@ -12024,8 +12024,8 @@ components:
           type: [string, "null"]
           enum: [unknown, queued, resolved, notFound, failed, blockedByBindPolicy, null]
         hostNameResolvedAt:
-          type: [string, "null"]
-          format: date-time
+          type: [integer, "null"]
+          minimum: 0
         hostNameError:
           type: [string, "null"]
         obfuscationTcpPort:
@@ -12234,8 +12234,8 @@ components:
           type: string
           enum: [unknown, queued, resolved, notFound, failed, blockedByBindPolicy]
         hostNameResolvedAt:
-          type: [string, "null"]
-          format: date-time
+          type: [integer, "null"]
+          minimum: 0
         hostNameError:
           type: [string, "null"]
         udpPort:
@@ -12274,11 +12274,11 @@ components:
         bootstrap:
           type: boolean
         createdAt:
-          type: string
-          format: date-time
+          type: integer
+          minimum: 0
         lastSeen:
-          type: string
-          format: date-time
+          type: integer
+          minimum: 0
     KadBootstrapRequest:
       type: object
       additionalProperties: false
@@ -12960,10 +12960,8 @@ components:
       required: [message]
       properties:
         timestamp:
-          oneOf:
-            - type: string
-              format: date-time
-            - type: integer
+          type: integer
+          minimum: 0
         level:
           type: string
         debug:
