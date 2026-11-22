@@ -11458,7 +11458,7 @@ components:
     SharedDirectoryReloadProgress:
       type: object
       additionalProperties: false
-      required: [phase, running, pending, scannedCount, plannedHashCount, reusedCount, newCount, changedCount, escapedDisplayPathCount, missingFingerprintCount, statFailedCount, skippedFailedCount, skippedIntakeCount, prunedCount, staleHashCount, diskCount, activeHashCount, hashedCount, failedHashCount, plannedHashBytes, completedHashBytes, plannedReadBytes, completedReadBytes, readRateBytesPerSec, startedAtMs, updatedAtMs, active, recent, upcoming, disks]
+      required: [phase, running, pending, scannedCount, plannedHashCount, reusedCount, newCount, changedCount, escapedDisplayPathCount, missingFingerprintCount, statFailedCount, skippedFailedCount, skippedIntakeCount, prunedCount, staleHashCount, diskCount, activeHashCount, hashedCount, failedHashCount, plannedHashBytes, completedHashBytes, plannedReadBytes, completedReadBytes, readRateBytesPerSec, startedAt, updatedAt, active, recent, upcoming, disks]
       properties:
         phase:
           type: string
@@ -11535,16 +11535,16 @@ components:
           type: integer
           format: int64
           minimum: 0
-        startedAtMs:
-          type:
-            - integer
-            - "null"
+        startedAt:
+          type: [integer, "null"]
           format: int64
-        updatedAtMs:
-          type:
-            - integer
-            - "null"
+          minimum: 0
+          description: Unix seconds, or null before the pass starts.
+        updatedAt:
+          type: [integer, "null"]
           format: int64
+          minimum: 0
+          description: Unix seconds, or null before the pass starts.
         active:
           type: array
           items:
@@ -11564,7 +11564,7 @@ components:
     SharedDirectoryHashActiveFile:
       type: object
       additionalProperties: false
-      required: [id, diskKey, path, name, sizeBytes, reason, stage, stageReadBytes, stageTotalBytes, readBytes, readBytesTotal, readRateBytesPerSec, startedAtMs, updatedAtMs]
+      required: [id, diskKey, path, name, sizeBytes, reason, stage, stageReadBytes, stageTotalBytes, readBytes, readBytesTotal, readRateBytesPerSec, startedAt, updatedAt]
       properties:
         id:
           type: string
@@ -11605,16 +11605,20 @@ components:
           type: integer
           format: int64
           minimum: 0
-        startedAtMs:
+        startedAt:
           type: integer
           format: int64
-        updatedAtMs:
+          minimum: 0
+          description: Unix seconds.
+        updatedAt:
           type: integer
           format: int64
+          minimum: 0
+          description: Unix seconds.
     SharedDirectoryHashRecentFile:
       type: object
       additionalProperties: false
-      required: [id, diskKey, path, name, sizeBytes, reason, result, error, hash, readBytes, readBytesTotal, durationMs, averageReadRateBytesPerSec, finishedAtMs]
+      required: [id, diskKey, path, name, sizeBytes, reason, result, error, hash, readBytes, readBytesTotal, durationMs, averageReadRateBytesPerSec, finishedAt]
       properties:
         id:
           type: string
@@ -11659,9 +11663,11 @@ components:
           type: integer
           format: int64
           minimum: 0
-        finishedAtMs:
+        finishedAt:
           type: integer
           format: int64
+          minimum: 0
+          description: Unix seconds.
     SharedDirectoryHashQueuedFile:
       type: object
       additionalProperties: false

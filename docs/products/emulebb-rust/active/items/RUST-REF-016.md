@@ -29,6 +29,32 @@ during consolidation; documentation checks passed in
 `reports/settings-request-round-1/foundation-spec-consolidation-docs.log` below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
 
+## Scan calendar contract (2026-11-22)
+
+Rust `af8f2b37` exposes scan/pass and active-file `startedAt`/`updatedAt`, plus
+recent-file `finishedAt`, as Unix seconds. Monotonic clocks continue to own rate,
+duration and completion ordering; `durationMs` retains its elapsed-time unit.
+OpenAPI and embedded WebUI types use the same field names and units. Coordinator
+state now supplies the running/pending pair under one lock, preventing mixed
+observations from reporting false idle during a worker/pending transition.
+
+Harness `1a864dde` removes calendar-change completion fences from the existing
+real-media and WebUI proofs. They observe accepted actions, coherent quiescence
+and catalog facts. Structured completion evidence continues to use existing log
+offsets; calendar values may stay equal or move backward. No completion token,
+revision comparison, additional worker or retry loop is added.
+
+Scoped gates pass **750 Windows Core, 179 REST, 499 Python, 93 WebUI unit and
+35 browser tests**, without Rust compiler warnings. Coverage includes calendar
+serialization against a seconds clock, preserved monotonic precision, same-second
+completion, completion before the first poll and backward-moving calendar facts.
+Evidence below `EMULEBB_WORKSPACE_OUTPUT_ROOT` is
+`reports/settings-request-round-1/scan-calendar-core.log`,
+`scan-calendar-rest.log`, `scan-calendar-python.log` and `scan-calendar-webui.log`
+in that same directory. Schema 117 is unchanged. Linux/platform and full resource
+qualification remain pending, along with the server-name decision and server
+public-resource cutover.
+
 ## Scan follow-up progress and device grouping (2026-11-22)
 
 Rust `5c827531` preserves the active scanning/planning/hashing phase when more
@@ -47,8 +73,8 @@ regression exercising repeated follow-up requests during all three active
 phases and final draining. Evidence below `EMULEBB_WORKSPACE_OUTPUT_ROOT` is
 `reports/settings-request-round-1/scan-followup-core.log`. The Unix-only
 regression is present but was **not executed by the Windows gate**; the Linux
-matrix remains required. Public scan calendar naming/seconds, remaining server
-contract integration, aggregate ownership and current resource qualification
+matrix remains required. Remaining server contract integration,
+aggregate ownership and current resource qualification
 remain open. The pending server-name question is unchanged.
 
 ## Retained server resource mutations (2026-11-22)

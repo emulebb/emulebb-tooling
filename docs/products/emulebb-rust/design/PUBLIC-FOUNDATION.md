@@ -351,6 +351,11 @@ overwriting the active phase. Reset counters for the next pass; do not combine
 unknown pending work into a percentage. Retain the final summary and failures.
 Calendar values are presentation facts, not completion identities or ordering
 fences. Callers do not receive exact request-to-completion correlation.
+Scan progress and active hash rows use `startedAt`/`updatedAt`; recent completed
+rows use `finishedAt`. These calendar fields are Unix seconds. `durationMs`
+remains a monotonic elapsed duration. `running` and `pending` come from one
+coordinator observation, so callers can wait for quiescence after an accepted
+action without depending on a calendar value changing.
 
 Reuse debounce and bounded coalescing. Bound the complete event ingress and
 debounce path, not only its final queue. Event storms must not create a scan,
