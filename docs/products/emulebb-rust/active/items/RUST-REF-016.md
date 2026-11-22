@@ -29,6 +29,32 @@ during consolidation; documentation checks passed in
 `reports/settings-request-round-1/foundation-spec-consolidation-docs.log` below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
 
+## Borrowed server feedback and case-insensitive retirement (2026-11-22)
+
+Feedback endpoint resolution and discovered-server intake now use selected
+endpoint reads rather than cloning the full rich catalog. Resolved-IP fallback
+borrows cached rows and preserves deterministic endpoint ordering. Reverse-DNS
+candidate collection borrows records and retains compact IPv4 candidates only;
+it still includes configured endpoints, live dynamic-host facts, Kad contacts
+and upload peers.
+
+The new deletion regression found that the exact-string disabled set disagreed
+with SQLite's ASCII case-insensitive server identity: deleting `seed.example`
+could leave configured `Seed.Example` eligible for reconnect or delayed feedback.
+The internal endpoint set now uses that same case-insensitive identity rule.
+Server records retain their display spelling. The regression verifies that
+deletion excludes the configured endpoint, delayed metadata cannot recreate it,
+and explicit re-import receives a fresh ID and restores eligibility.
+
+All 753 Core tests passed without compiler warnings; evidence under
+`EMULEBB_WORKSPACE_OUTPUT_ROOT`:
+`reports/settings-request-round-1/server-feedback-borrowed-core.log`.
+The preceding focused run passed 58 server tests. Daemon startup popularity
+selection remains a full-list caller; the active connection directory and DNS
+candidate storage still scale with server count. No constant-memory claim or
+server-count limit is introduced. Current-artifact integrated qualification
+remains required before full-goal acceptance.
+
 ## Server point reads and connection-plan merge (2026-11-22)
 
 Single-endpoint Core reads now clone only their selected cached/configured row,
