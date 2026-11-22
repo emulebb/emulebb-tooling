@@ -29,6 +29,25 @@ during consolidation; documentation checks passed in
 `reports/settings-request-round-1/foundation-spec-consolidation-docs.log` below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
 
+## Bounded server connection status (2026-11-22)
+
+REST status and server connection acknowledgements now use an admitted metadata
+summary: a live-row count and at most one indexed endpoint lookup in one read
+transaction. They no longer clone the configured/cached catalog. Core projects
+only that current row and live connection details; disabled resources count,
+deleted resources do not. Missing current endpoints remain null, and storage or
+admission failures propagate through the normal HTTP error path. Existing status
+fields and queued-connect acknowledgement semantics are preserved.
+
+Validation passed: 374 Metadata tests, 140 focused Native server tests, all
+752 Core tests and all 182 REST tests. The metadata regression injects an
+unrelated oversized row to prove a summary does not materialize other records;
+Core verifies retained projection charge and release without hydrating its
+server cache. Evidence under `EMULEBB_WORKSPACE_OUTPUT_ROOT`:
+`reports/settings-request-round-1/server-status-summary-{metadata,native,core,rest}.log`.
+Snapshot's embedded catalog and runtime connection-plan construction remain
+unfinished; this checkpoint does not claim those paths are bounded.
+
 ## Bounded diagnostic server prefix (2026-11-22)
 
 Diagnostic operational snapshots now traverse admitted server-resource pages
