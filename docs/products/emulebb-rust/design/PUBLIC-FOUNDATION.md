@@ -332,12 +332,19 @@ incompleteness, not a guarantee that an unwatched root is always current.
 Overflow does not itself launch a full-library scan. Explicit scans and external
 REST scheduling remain available; no new periodic full-scan interval is added.
 
-Pending operator choice: whether explicit scan acknowledgements and status expose
-an opaque completion token shared by coalesced requests, or retain fire-and-forget
-semantics without exact completion tracking. The recommendation is a token using
-the existing worker, without a durable job system. Do not implement the token
-contract before the operator answers. Calendar values are presentation facts,
-not completion identities or ordering fences.
+Scan requests are fire-and-forget: return acceptance and expose current progress,
+without completion tokens or a durable job system. One coordinator runs a pass
+with at most one coalesced follow-up pending. Adding roots during a pass requests
+that follow-up, which reads the updated configured roots. Hashing is sequential
+within each disk group and concurrent across distinct disk groups.
+
+Show the current pass's discovery count without a percentage while its total is
+unknown. During hashing, show byte progress, completed/planned files, read rate,
+failures and per-disk progress. Show pending follow-up work separately without
+overwriting the active phase. Reset counters for the next pass; do not combine
+unknown pending work into a percentage. Retain the final summary and failures.
+Calendar values are presentation facts, not completion identities or ordering
+fences. Callers do not receive exact request-to-completion correlation.
 
 Reuse debounce and bounded coalescing. Bound the complete event ingress and
 debounce path, not only its final queue. Event storms must not create a scan,

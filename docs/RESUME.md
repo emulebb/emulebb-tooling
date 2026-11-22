@@ -15,21 +15,21 @@ retired-input handling. Preserve operator profiles and inherited environment.
 **No PR, draft PR, merge, main write, release or publication before operator
 review.** Sustained soak is follow-up work. Keep the complete goal intact.
 
-## Decision hold
+## Accepted decisions and next work
 
-The operator has accepted two decisions:
+The operator has accepted all three decisions:
 
 1. Upload priority and local comment/rating have one persistent hash-level
    owner, editable without an available copy.
 2. DELETE removes a server resource, separate from disabling through PATCH;
    later import creates a new ID.
+3. Keep scan progress only; omit completion tokens. Preserve one coordinator,
+   one coalesced pending follow-up and parallel hashing across disk groups.
+   Show current-pass progress and pending work separately.
 
-Scan completion tracking is still under discussion: whether acknowledgement and
-status expose an opaque token shared by coalesced requests on the existing
-worker. No token design is approved. Do not interpret automatic continuations
-or silence as approval. PUBLIC-FOUNDATION owns these decisions. The operator
-currently requests an explanation of existing scan behavior and implementation
-complexity before choosing item 3.
+The operator explicitly resumed work. PUBLIC-FOUNDATION owns these decisions.
+Continue the coordinated library/server/scan implementation on the same branches;
+no further product decision is currently identified. Preserve the no-PR boundary.
 
 ## Source checkpoint
 
@@ -75,7 +75,7 @@ All paths here are relative to `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
   `library-coherence-rest.log`.
 
 Do not assign earlier package/live/resource evidence to later revisions.
-Canonical library/server REST/OpenAPI/WebUI cutovers, scan completion/calendar
+Canonical library/server REST/OpenAPI/WebUI cutovers, scan progress/calendar
 projection, aggregate construction ownership, active payload/session pressure,
 expanded canonical-query campaigns and remaining platform/device gates are open.
 The current database schema is 114. The overall goal is not complete.
