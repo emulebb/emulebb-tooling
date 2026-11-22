@@ -17,18 +17,19 @@ review.** Sustained soak is follow-up work. Keep the complete goal intact.
 
 ## Decision hold
 
-The next coordinated public cutovers await three unanswered operator questions:
+The operator has accepted two decisions:
 
-1. Whether upload priority and local comment/rating have one persistent
-   hash-level owner, editable without an available copy. Recommendation: yes.
-2. Whether DELETE removes a server resource, separate from disabling through
-   PATCH; later import creates a new ID. Recommendation: yes.
-3. Whether scan acknowledgement/status expose an opaque completion token,
-   shared by coalesced requests on the existing worker. Recommendation: yes.
+1. Upload priority and local comment/rating have one persistent hash-level
+   owner, editable without an available copy.
+2. DELETE removes a server resource, separate from disabling through PATCH;
+   later import creates a new ID.
 
-These are questions, not accepted behavior. Do not interpret automatic goal
-continuations or silence as approval. They are saved in PUBLIC-FOUNDATION.
-Resume the coordinated library/server/scan work when the operator answers.
+Scan completion tracking is still under discussion: whether acknowledgement and
+status expose an opaque token shared by coalesced requests on the existing
+worker. No token design is approved. Do not interpret automatic continuations
+or silence as approval. PUBLIC-FOUNDATION owns these decisions. The operator
+currently requests an explanation of existing scan behavior and implementation
+complexity before choosing item 3.
 
 ## Source checkpoint
 

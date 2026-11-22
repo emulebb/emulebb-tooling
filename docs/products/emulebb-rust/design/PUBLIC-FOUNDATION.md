@@ -127,9 +127,8 @@ documentation describes only implemented structure.
   address matching. Updates preserve identity. Retired identities stay retired;
   re-import allocates a new ID. Server pages use ascending ID boundaries, default
   100/maximum 200 rows and byte-short continuation; disabled rows remain visible.
-  Before the server wire cut, the operator must choose between true resource
-  removal through DELETE with separate disable through PATCH, and disable-only
-  through PATCH with no DELETE route. Do not implement that pending choice.
+  DELETE removes the saved server resource. PATCH with `enabled:false` retains
+  it disabled; a later import after deletion creates a new resource ID.
 - Persisted and public calendar timestamps are Unix seconds. Runtime scheduling
   uses monotonic clocks and whatever finer precision it requires. Revisions,
   not timestamps, order changes and detect conflicts.
@@ -966,10 +965,10 @@ SPA and harness callers together; do not expose transitional dual contracts.
 
 The hash detail carries the eD2K link and local comment/rating; it replaces
 separate read endpoints for those scalar facts. Locations and tags remain
-separate paginated resources. One operator choice remains pending: whether
-upload priority plus local comment/rating have one persistent hash-level owner,
-editable without an available copy. The recommendation is one hash-level owner;
-do not apply that ownership change before the operator answers.
+separate paginated resources. Upload priority and local comment/rating have one
+persistent hash-level owner, shared by every copy and editable without an
+available local copy. Removing copies does not discard this metadata. Download
+priority remains omitted.
 
 Both `/uploads` and `/upload-queue` return bounded data arrays with cursor,
 limit (default 100, maximum 200), and optional countTotal. Cursors are scoped
