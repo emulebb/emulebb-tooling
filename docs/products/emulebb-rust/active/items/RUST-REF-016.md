@@ -29,6 +29,46 @@ during consolidation; documentation checks passed in
 `reports/settings-request-round-1/foundation-spec-consolidation-docs.log` below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
 
+## Library calendar timestamps and scan completion (2026-11-22)
+
+Rust `cb06ca76` introduces fresh schema 113. Library content/origin/name
+observations, local verification, root creation/deletion/scanning, memberships,
+ignore rules and source-scan failures persist explicit Unix-second calendar
+columns. Native filesystem fingerprints retain their full precision. Download
+storage owners share the metadata seconds clock instead of deriving another
+clock through milliseconds. Core root DTOs consume seconds directly, preserving
+the existing public `lastScannedAt` shape.
+
+Root recovery now detects scan completion through the active root ID and its
+committed `scan_revision`, independently of calendar time. The revision advances
+atomically with scan memberships and loss acknowledgement. A new root at the
+same path starts at zero and cannot count as a completed scan. Revision
+exhaustion fails and rolls back the scan instead of wrapping, saturating or
+falsely acknowledging progress. This is internal state, not a new API field,
+setting, timer or automatic scan policy.
+
+Harness `a46bcb2d` updates the existing metadata/physical-library helpers and
+soak-control SQL consumers. Scoped gates passed **358 metadata, 1,535 Native,
+733 Core and 297 Python executions**, with zero Rust compiler warnings. New
+checks cover library calendar bounds, preserved fingerprint evidence, identical
+scan timestamps with distinct completion revisions, reopen, replacement-root
+identity and revision-exhaustion rollback. Existing root recovery, watcher loss,
+indexed library queries, transfer admission and current-schema helper suites
+continue to pass. Two native import tests were deselected by the standard
+Python lane and are not qualified here.
+
+Evidence below `EMULEBB_WORKSPACE_OUTPUT_ROOT` is
+`reports/settings-request-round-1/library-seconds-metadata.log`,
+`library-seconds-native.log`, `library-seconds-core.log` and
+`library-seconds-python-final.log`. The initial Python run caught two invalid
+clock-helper references introduced during the fixture edit; both were corrected
+before the passing rerun. Rust inputs did not change after their passing gates.
+
+Peer-credit and Kad calendar storage remain to consolidate. Public library/
+server cutovers, aggregate response ownership and final platform/resource gates
+remain open. This checkpoint does not rerun the physical 512-MiB/1-GiB campaigns
+or a sustained soak; prior package receipts do not qualify schema 113.
+
 ## Profile, identity and friend calendar timestamps (2026-11-22)
 
 Rust `8156fc82` introduces fresh schema 112. Schema-marker/profile creation,
