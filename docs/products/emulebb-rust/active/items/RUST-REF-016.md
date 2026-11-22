@@ -29,6 +29,38 @@ during consolidation; documentation checks passed in
 `reports/settings-request-round-1/foundation-spec-consolidation-docs.log` below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
 
+## Retained single-record server imports (2026-11-22)
+
+Manual server.met imports now merge each observed endpoint/name through the
+canonical persistence owner. SQL preserves the live ID, operator controls and
+health columns; an absent name tag preserves the known name. A previously
+deleted endpoint receives a fresh ID and initial controls. The bounded row is
+validated inside the write transaction before commit, so a failed projection
+rolls back both the import and discovery initialization. Cache publication
+changes only the reported name, preserving current health and controls.
+
+The new disconnect regression holds a committed record import before cache
+publication, disconnects its caller and changes cached health. Publication
+finishes without retaining the full Core, preserves the disabled/high/static
+controls and newer health, and releases its reservation. Malformed payload and
+persistence errors propagate rather than becoming a zero-import result; REST
+uses the shared persistence error mapping.
+
+**372 metadata tests, 750 Core tests and 180 REST tests pass**, including both
+nonterminal Windows endgame fixtures in this Core run. This passing run is not
+a causal repair for their earlier intermittent admission failure. Logs below
+`EMULEBB_WORKSPACE_OUTPUT_ROOT`:
+
+- `reports/settings-request-round-1/server-import-metadata.log`
+- `reports/settings-request-round-1/server-import-core.log`
+- `reports/settings-request-round-1/server-import-rest.log`
+
+This proves retained ownership for one admitted record, not whole-payload
+ownership. Payload fetching/parsing still needs bounded ingress and full import
+ownership. The unused-by-production creation helper still has test callers to
+convert before removal; startup bootstrap and aggregate server construction
+retain their separate remaining work.
+
 ## Canonical server controls and restart proof (2026-11-22)
 
 Endpoint-addressed edit and disable-as-delete methods are removed. Internal
