@@ -132,6 +132,9 @@ documentation describes only implemented structure.
   Explicit `POST /servers` returns 409 when that live address/port pair already
   exists, without editing or enabling the existing server. Imports merge into
   existing live resources and preserve their IDs; they are separate from creation.
+  The public `name` is a read-only observation populated by network/server.met
+  metadata. Creation and updates accept endpoint/control fields; REST and WebUI
+  do not edit names. Persist only the reported name, with no user-name override.
 - Persisted and public calendar timestamps are Unix seconds. Runtime scheduling
   uses monotonic clocks and whatever finer precision it requires. Revisions,
   not timestamps, order changes and detect conflicts.

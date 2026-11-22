@@ -29,6 +29,42 @@ during consolidation; documentation checks passed in
 `reports/settings-request-round-1/foundation-spec-consolidation-docs.log` below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
 
+## Ordinary parallel payload proof (2026-11-22)
+
+Harness `92469fe1` extends the existing native package smoke with sixteen distinct
+1 MiB payloads, sixteen independent Rust seeders and the existing receiver. Peer
+leases remain genuine: one shared source is not presented as sixteen independent
+uploaders. Existing profile, launch, publication, delivery and process-sampling
+helpers own the fixture. Auxiliary processes drain through `ExitStack`, including
+startup/shutdown failure cases. The original verified-part restart proof remains.
+
+The GNU/amd64 runtime report passes against Rust `264b9fe9`, Builder `54bfc7d`
+and Tooling `332df28a`:
+`reports/rust-linux/gnu-amd64/29c8907ac3b44894a756f47c0c4a610f/package-smoke.json`
+below `EMULEBB_WORKSPACE_OUTPUT_ROOT`. It verifies all **16 delivered byte hashes
+and library locations**, retains **17 completed jobs** including the original
+restart case, and records **112 resource samples**. Sampled maxima are **8 charged
+active owners**, target 16, zero sampled preparations and **8,152 resident-cache
+bytes**. Receiver sampled peak working set is **53,829,632 bytes**. All fifteen
+auxiliary source exits are zero; the original peers also shut down gracefully.
+
+Start controls use one ID per request. Under the operator-approved test-client
+policy, 17 requests include **one recorded 503 `DOWNLOAD_UNAVAILABLE` retry after
+0.25 seconds**. Each job has at most five attempts with recorded backoffs; other
+errors and execution/storage failures do not enter that path. The existing waiter
+requires `None` until completion, covered by a regression that fails on premature
+one-sample completion. **100 focused Python tests pass.**
+
+This proves ordinary real-payload operation, not sixteen simultaneous executions,
+maximum manifest geometry, a total RAM limit or combined-scale active-payload
+qualification. Those proofs remain open. Its archive SHA-256 is
+`b766339a268a79f2d5ad2f7ddc18e12f751a55c96a35fa9d01de325588c19754`;
+capacity evidence below remains pinned to its separately recorded archive.
+
+The server-name decision is settled: retain only reported names and expose no
+name editing. Its DB/service, REST/OpenAPI, WebUI and caller cutover remains to
+be implemented with the stable resource-ID work.
+
 ## Focused Windows endgame diagnostics (2026-11-22)
 
 Builder `54bfc7d` extends the existing `test rust-unit` command with diagnostic
@@ -175,9 +211,9 @@ completion, completion before the first poll and backward-moving calendar facts.
 Evidence below `EMULEBB_WORKSPACE_OUTPUT_ROOT` is
 `reports/settings-request-round-1/scan-calendar-core.log`,
 `scan-calendar-rest.log`, `scan-calendar-python.log` and `scan-calendar-webui.log`
-in that same directory. Schema 117 is unchanged. Linux/platform and full resource
-qualification remain pending, along with the server-name decision and server
-public-resource cutover.
+in that same directory. Schema 117 is unchanged. Current Linux and resource
+evidence is recorded above at its actual scope. Server public-resource
+cutover and remaining active-payload qualification remain open.
 
 ## Scan follow-up progress and device grouping (2026-11-22)
 
@@ -196,10 +232,10 @@ behind partitions or virtual volumes.
 regression exercising repeated follow-up requests during all three active
 phases and final draining. Evidence below `EMULEBB_WORKSPACE_OUTPUT_ROOT` is
 `reports/settings-request-round-1/scan-followup-core.log`. The Unix-only
-regression is present but was **not executed by the Windows gate**; the Linux
-matrix remains required. Remaining server contract integration,
+regression was **not executed by the Windows gate**; its GNU result is recorded
+above. Remaining server contract integration,
 aggregate ownership and current resource qualification
-remain open. The pending server-name question is unchanged.
+remain open. Server names are reported observations, with no editing surface.
 
 ## Retained server resource mutations (2026-11-22)
 
@@ -234,10 +270,8 @@ the coordinated ID/pagination/deletion cut, including retirement of endpoint-bas
 entrypoints. Aggregate server list/connection-plan construction ownership and
 current runtime/resource qualification remain open. Existing feedback SQL still
 uses its current persistence path under the fence; do not claim every server
-writer has moved to the actor. The server-name ownership question is pending:
-preserve an explicit user alias separately from the reported name (recommended),
-or keep only the network/import name and omit name editing. Do not infer a
-decision from silence.
+writer has moved to the actor. The settled name contract retains only network/
+import observations; the coordinated cut must remove name mutation inputs.
 
 ## Atomic server resource storage prerequisite (2026-11-22)
 
