@@ -29,6 +29,34 @@ during consolidation; documentation checks passed in
 `reports/settings-request-round-1/foundation-spec-consolidation-docs.log` below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
 
+## Canonical creation callers and reported bootstrap names (2026-11-22)
+
+The remaining server creation helper, its DTO and validator are removed.
+All Core, REST and daemon fixtures now use canonical explicit creation and
+separate reported observations where required. Fresh-profile bootstrap leaves
+an unreported name empty; endpoint display remains a separate presentation
+concern. Its existing seed test asserts the empty observation.
+
+The snapshot frame-retention proof now builds a large response from sixteen
+valid 65,535-byte reported names. No single fixture record bypasses the canonical
+row allowance. The reader-fault test injects an oversized stored row directly
+through its existing SQLite test seam and verifies bounded read failure and
+released backing. It does not add a product mutation bypass.
+
+Validation passes: **750 Core tests, 180 REST tests and 112 daemon tests**.
+The daemon's child-only profile-ownership entry remains intentionally ignored;
+its parent ownership tests pass. The final full Core run passes after the
+reader fixture repair. Logs below `EMULEBB_WORKSPACE_OUTPUT_ROOT`:
+
+- `reports/settings-request-round-1/server-create-removal-core-final.log`
+- `reports/settings-request-round-1/server-create-removal-rest.log`
+- `reports/settings-request-round-1/server-create-removal-daemon.log`
+
+Creation-helper cleanup is complete. Whole-import bounded admission/ownership,
+server aggregate construction and current-source runtime qualification remain
+open. These passing endgame fixtures still do not establish a causal repair
+for the earlier intermittent admission failure.
+
 ## Retained single-record server imports (2026-11-22)
 
 Manual server.met imports now merge each observed endpoint/name through the
