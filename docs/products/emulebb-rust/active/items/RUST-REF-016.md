@@ -29,6 +29,26 @@ during consolidation; documentation checks passed in
 `reports/settings-request-round-1/foundation-spec-consolidation-docs.log` below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
 
+## Server point reads and connection-plan merge (2026-11-22)
+
+Single-endpoint Core reads now clone only their selected cached/configured row,
+then apply controls, connection presentation and hostname facts. Connection-plan
+publication compares its replacement with a borrowed watch value instead of
+cloning the previous directory. Merging saved metadata uses an endpoint-to-index
+map rather than repeatedly scanning the growing entry vector. Reported metadata
+supersedes configured observations while preserving configured host spelling.
+There is no server-count cap or omitted connection entry.
+
+All 753 Core tests and 182 REST tests passed. The added regression covers
+case-insensitive endpoint identity, cached reported-name precedence, configured
+host spelling, operator controls and missing endpoints. Evidence under
+`EMULEBB_WORKSPACE_OUTPUT_ROOT`:
+`reports/settings-request-round-1/server-plan-merge-{core,rest}.log`.
+The active connection directory still retains entries proportional to its server
+count; this is not constant-memory catalog selection. Feedback endpoint
+resolution and hostname-candidate collection still have full-list callers and
+remain concrete follow-on work before closing the catalog-memory audit.
+
 ## Dashboard server resources separated from summaries (2026-11-22)
 
 Dashboard snapshots carry server connection status and the catalog count.
