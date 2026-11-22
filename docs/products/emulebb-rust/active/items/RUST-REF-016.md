@@ -29,6 +29,26 @@ during consolidation; documentation checks passed in
 `reports/settings-request-round-1/foundation-spec-consolidation-docs.log` below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
 
+## Native library comparison reads (2026-11-22)
+
+Harness `0f01dd7e` updates the existing soak-control comparison utilities to
+stream canonical shared hash pages and separate cached locations. Hash-only
+comparison does not load copies. Path/root comparisons include every present
+copy, fingerprint paths immediately, and keep content totals distinct from copy
+totals. They do not recreate physical REST records. MFC collection reads retain
+their own offset contract. The shared library iterator accepts page sizes from
+1 through 200; the comparison command defaults to 200 without clamping inputs.
+Sharing policy remains independent of upload queue priority; offline database
+priority manipulation is outside the utility's command surface.
+
+**128 scoped Python checks pass**, including two hashes with multiple copies,
+location-page continuation, excluded non-present copies, root grouping,
+hash-only reads, MFC offset reads and current page bounds. Evidence below
+`EMULEBB_WORKSPACE_OUTPUT_ROOT` is
+`reports/settings-request-round-1/library-soak-control-second-python.log`.
+This is caller validation, not a running persisted-profile soak or current
+resource qualification. The native local-client fixture conversion remains open.
+
 ## Canonical library resources checkpoint (2026-11-22)
 
 Rust `f1b38386` and Harness `1f0203de` switch REST/OpenAPI and the embedded WebUI to
@@ -96,8 +116,8 @@ are not current-source qualification. Server resources, scan progress/calendar,
 aggregate ownership and intermittent endgame/preparation failures remain open.
 No PR or merge is authorized.
 
-The remaining caller inventory includes native local-client tests and the Rust
-side of `rust-soak-control.py`; MFC-only callers are not a Rust removal target.
+The remaining caller inventory includes native local-client tests;
+MFC-only callers are not a Rust removal target.
 Do not add a common projection that reconstructs physical flat records from
 the canonical hash/detail/location resources.
 
