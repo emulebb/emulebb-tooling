@@ -29,6 +29,22 @@ during consolidation; documentation checks passed in
 `reports/settings-request-round-1/foundation-spec-consolidation-docs.log` below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
 
+## Admission-time package resource observations (2026-11-23)
+
+The existing sixteen-peer package smoke now samples daemon resource counters
+before admission, after each accepted start and throughout completion polling.
+Process sampling uses the same observation path. The result records admission
+sample count separately and retains maxima across all phases, preventing an
+early overlap peak from disappearing before the final start. Each independently
+served payload is 4 MiB, paced at 64 KiB/s to make overlap observable.
+
+All 100 package-smoke Python tests passed through Builder. The existing
+multi-job regression now models overlap that ends before the final start,
+requiring the early peak to be retained while still awaiting every delivery.
+Runtime evidence for this extended fixture is pending. Its minimum overlap
+assertion remains two charged owners; this change neither promises sixteen
+simultaneous executions nor closes constrained active-transfer pressure proof.
+
 ## Canonical network-setting startup guidance (2026-11-23)
 
 Rust `080441ec` reports P2P binding failures with `network.p2p.bindIp` and
