@@ -373,6 +373,28 @@ The accepted library-view boundaries are:
   unfinished downloads and verified/imported content. Remote-only search
   observations remain outside the library.
 
+`GET /library/files` returns thin hash rows in a `data` array with cursor page
+metadata. Limit defaults to 100 and cannot exceed 200; byte admission may shorten
+a page. `countTotal=true` explicitly requests a total. Filters are `view`
+(`present`, `shared`, `unavailable`, `allKnown`), `q`, `rootId`, `tag` and
+`sharingEnabled`. Default ordering is `sort=displayName&order=asc`; `order`
+accepts `asc` or `desc`. Other sorts are `sizeBytes`, `sessionUploadedBytes`,
+`sessionUploadRequests`, `sessionAcceptedUploads`, `lifetimeUploadedBytes`,
+`lifetimeUploadRequests`, `lifetimeAcceptedUploads`, `lastUploadRequestedAt`
+and `lastUploadedAt`. The hash provides a deterministic tie breaker. Cursors
+are opaque, scoped to the filters and ordering, and offer no snapshot guarantee.
+A removed ordering anchor returns 409 `CURSOR_EXPIRED`; callers restart browsing.
+
+`GET /library/files/{hash}` returns on-demand local metadata, a nullable eD2K
+link and publication status alongside summary facts, including for copyless
+client-owned hashes. `uploadPriority` is one read/write mode: `auto`, `verylow`,
+`low`, `normal`, `high` or `release`. It controls upload queue preference,
+independently of sharing policy. `PATCH /library/files/{hash}` edits
+`uploadPriority` and/or the explicit local `comment`/`rating` pair. Success is
+204 without a follow-up detail read; an unknown hash returns 404. The dashboard
+snapshot does not embed a library array. The WebUI browses bounded collection
+pages and reads detail only for the selected hash.
+
 `GET /library/files/{hash}/locations` returns a thin `data` array of
 `{path, present}` with `meta.nextCursor` and `meta.hasMore`. Limit defaults to
 100 and cannot exceed 200; byte-bounded pages may be shorter. An accepted
@@ -960,6 +982,7 @@ Use `/api/v1` with these domain resources:
 /uploads
 /upload-queue
 /categories
+/library/files
 /library/files/{hash}
 /library/roots
 /library/tags

@@ -34,23 +34,22 @@ servers:
 security:
   - ApiKeyAuth: []
 tags:
-  - name: App
-  - name: Diagnostics
-  - name: Stats
-  - name: Network
-  - name: Nat
-  - name: Categories
-  - name: Downloads
-  - name: SharedFiles
-  - name: Library
-  - name: Uploads
-  - name: Servers
-  - name: Kad
-  - name: Searches
-  - name: Friends
-  - name: IpFilter
-  - name: VpnGuard
-  - name: Logs
+- name: App
+- name: Diagnostics
+- name: Stats
+- name: Network
+- name: Nat
+- name: Categories
+- name: Downloads
+- name: Library
+- name: Uploads
+- name: Servers
+- name: Kad
+- name: Searches
+- name: Friends
+- name: IpFilter
+- name: VpnGuard
+- name: Logs
 paths:
   /app:
     get:
@@ -1579,142 +1578,6 @@ paths:
           $ref: '#/components/responses/ErrorResponse'
         default:
           $ref: '#/components/responses/ErrorResponse'
-  /shared-files:
-    get:
-      tags: [SharedFiles]
-      summary: List completed shared files.
-      operationId: listSharedFiles
-      parameters:
-        - $ref: "#/components/parameters/Limit"
-        - $ref: "#/components/parameters/SharedFileCursor"
-        - $ref: "#/components/parameters/SharedFileSearch"
-        - $ref: "#/components/parameters/SharedFilePriorityFilter"
-      responses:
-        "200":
-          $ref: "#/components/responses/SharedFileListResponse"
-        "400":
-          $ref: "#/components/responses/ErrorResponse"
-        "401":
-          $ref: "#/components/responses/ErrorResponse"
-        "404":
-          $ref: "#/components/responses/ErrorResponse"
-        "405":
-          $ref: "#/components/responses/MethodNotAllowedResponse"
-        "409":
-          $ref: "#/components/responses/ErrorResponse"
-        "500":
-          $ref: "#/components/responses/ErrorResponse"
-        "503":
-          $ref: "#/components/responses/ErrorResponse"
-        default:
-          $ref: "#/components/responses/ErrorResponse"
-  /shared-files/{hash}:
-    parameters:
-      - $ref: "#/components/parameters/FileHash"
-    get:
-      tags: [SharedFiles]
-      summary: Return one shared file.
-      operationId: getSharedFile
-      responses:
-        "200":
-          $ref: "#/components/responses/SharedFileResponse"
-        "400":
-          $ref: "#/components/responses/ErrorResponse"
-        "401":
-          $ref: "#/components/responses/ErrorResponse"
-        "404":
-          $ref: "#/components/responses/ErrorResponse"
-        "405":
-          $ref: "#/components/responses/MethodNotAllowedResponse"
-        "409":
-          $ref: "#/components/responses/ErrorResponse"
-        "500":
-          $ref: "#/components/responses/ErrorResponse"
-        "503":
-          $ref: "#/components/responses/ErrorResponse"
-        default:
-          $ref: "#/components/responses/ErrorResponse"
-    patch:
-      tags: [SharedFiles]
-      summary: Update shared-file metadata and upload priority.
-      operationId: patchSharedFile
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/SharedFilePatch"
-      responses:
-        "200":
-          $ref: "#/components/responses/SharedFileResponse"
-        "400":
-          $ref: "#/components/responses/ErrorResponse"
-        "401":
-          $ref: "#/components/responses/ErrorResponse"
-        "404":
-          $ref: "#/components/responses/ErrorResponse"
-        "405":
-          $ref: "#/components/responses/MethodNotAllowedResponse"
-        "409":
-          $ref: "#/components/responses/ErrorResponse"
-        "500":
-          $ref: "#/components/responses/ErrorResponse"
-        "503":
-          $ref: "#/components/responses/ErrorResponse"
-        default:
-          $ref: "#/components/responses/ErrorResponse"
-  /shared-files/{hash}/ed2k-link:
-    parameters:
-      - $ref: "#/components/parameters/FileHash"
-    get:
-      tags: [SharedFiles]
-      summary: Return the ED2K link for one shared file.
-      operationId: getSharedFileEd2kLink
-      responses:
-        "200":
-          $ref: "#/components/responses/Ed2kLinkResponse"
-        "400":
-          $ref: "#/components/responses/ErrorResponse"
-        "401":
-          $ref: "#/components/responses/ErrorResponse"
-        "404":
-          $ref: "#/components/responses/ErrorResponse"
-        "405":
-          $ref: "#/components/responses/MethodNotAllowedResponse"
-        "409":
-          $ref: "#/components/responses/ErrorResponse"
-        "500":
-          $ref: "#/components/responses/ErrorResponse"
-        "503":
-          $ref: "#/components/responses/ErrorResponse"
-        default:
-          $ref: "#/components/responses/ErrorResponse"
-  /shared-files/{hash}/comments:
-    parameters:
-      - $ref: "#/components/parameters/FileHash"
-    get:
-      tags: [SharedFiles]
-      summary: Return known comments for one shared file.
-      operationId: listSharedFileComments
-      responses:
-        "200":
-          $ref: "#/components/responses/CommentListResponse"
-        "400":
-          $ref: "#/components/responses/ErrorResponse"
-        "401":
-          $ref: "#/components/responses/ErrorResponse"
-        "404":
-          $ref: "#/components/responses/ErrorResponse"
-        "405":
-          $ref: "#/components/responses/MethodNotAllowedResponse"
-        "409":
-          $ref: "#/components/responses/ErrorResponse"
-        "500":
-          $ref: "#/components/responses/ErrorResponse"
-        "503":
-          $ref: "#/components/responses/ErrorResponse"
-        default:
-          $ref: "#/components/responses/ErrorResponse"
   /library/roots:
     get:
       tags:
@@ -3525,6 +3388,101 @@ paths:
           $ref: '#/components/responses/ErrorResponse'
         default:
           $ref: '#/components/responses/ErrorResponse'
+  /library/files:
+    get:
+      tags:
+      - Library
+      summary: Page cached client-library hashes without loading jobs or copy lists.
+      operationId: listLibraryFiles
+      parameters:
+      - $ref: '#/components/parameters/LibraryFileLimit'
+      - $ref: '#/components/parameters/LibraryFileCursor'
+      - $ref: '#/components/parameters/LibraryFileView'
+      - $ref: '#/components/parameters/LibraryFileSort'
+      - $ref: '#/components/parameters/LibraryFileOrder'
+      - $ref: '#/components/parameters/LibraryFileSearch'
+      - $ref: '#/components/parameters/LibraryFileRootId'
+      - $ref: '#/components/parameters/LibraryFileTag'
+      - $ref: '#/components/parameters/LibraryFileSharingEnabled'
+      - $ref: '#/components/parameters/LibraryFileCountTotal'
+      responses:
+        '200':
+          $ref: '#/components/responses/LibraryFilePageResponse'
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/ErrorResponse'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowedResponse'
+        '409':
+          $ref: '#/components/responses/ErrorResponse'
+        '500':
+          $ref: '#/components/responses/ErrorResponse'
+        '503':
+          $ref: '#/components/responses/ErrorResponse'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+  /library/files/{hash}:
+    parameters:
+    - $ref: '#/components/parameters/FileHash'
+    get:
+      tags:
+      - Library
+      summary: Return cached hash detail including copyless content and explicit local metadata.
+      operationId: getLibraryFile
+      responses:
+        '200':
+          $ref: '#/components/responses/LibraryFileDetailResponse'
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/ErrorResponse'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowedResponse'
+        '409':
+          $ref: '#/components/responses/ErrorResponse'
+        '500':
+          $ref: '#/components/responses/ErrorResponse'
+        '503':
+          $ref: '#/components/responses/ErrorResponse'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+    patch:
+      tags:
+      - Library
+      summary: Edit explicit local hash metadata; admitted publication finishes after caller disconnect.
+      operationId: patchLibraryFile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LibraryFilePatch'
+      responses:
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/ErrorResponse'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowedResponse'
+        '409':
+          $ref: '#/components/responses/ErrorResponse'
+        '500':
+          $ref: '#/components/responses/ErrorResponse'
+        '503':
+          $ref: '#/components/responses/ErrorResponse'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+        '204':
+          $ref: '#/components/responses/NoContentResponse'
+        '413':
+          $ref: '#/components/responses/ErrorResponse'
 components:
   securitySchemes:
     ApiKeyAuth:
@@ -3654,28 +3612,6 @@ components:
       schema:
         type: string
         pattern: "^[0-9a-f]{32}$"
-    SharedFileCursor:
-      name: cursor
-      in: query
-      required: false
-      description: Server-issued opaque cursor for the next path-ordered page. Clients must preserve the same search and priority filters while following a cursor.
-      schema:
-        type: string
-    SharedFileSearch:
-      name: q
-      in: query
-      required: false
-      description: Case-insensitive literal substring of the displayed filename only. The trimmed query must contain at least three Unicode characters; wildcard and query syntax have no special meaning.
-      schema:
-        type: string
-        minLength: 3
-    SharedFilePriorityFilter:
-      name: priority
-      in: query
-      required: false
-      description: Return only shared files with this upload priority.
-      schema:
-        $ref: "#/components/schemas/SharedFilePriority"
     Limit:
       name: limit
       in: query
@@ -3865,6 +3801,102 @@ components:
         minimum: 1
         maximum: 200
         default: 100
+    LibraryFileCursor:
+      name: cursor
+      in: query
+      description: Opaque cursor scoped to view, sort, order and filters. A missing anchor returns 409; refresh the
+        first page.
+      schema:
+        type: string
+        maxLength: 512
+      required: false
+    LibraryFileLimit:
+      name: limit
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 200
+        default: 100
+      required: false
+    LibraryFileTag:
+      name: tag
+      in: query
+      schema:
+        type: string
+        pattern: ^[A-Za-z0-9-]{1,64}(?![\s\S])
+        maxLength: 64
+      required: false
+    LibraryFileSearch:
+      name: q
+      in: query
+      schema:
+        type: string
+        minLength: 3
+        maxLength: 65536
+        description: Case-insensitive literal substring of the stored display name; at most 65536 UTF-8 bytes.
+      required: false
+    LibraryFileSharingEnabled:
+      name: sharingEnabled
+      in: query
+      schema:
+        type: boolean
+      required: false
+    LibraryFileView:
+      name: view
+      in: query
+      schema:
+        type: string
+        enum:
+        - present
+        - shared
+        - unavailable
+        - allKnown
+        default: present
+      required: false
+    LibraryFileSort:
+      name: sort
+      in: query
+      schema:
+        type: string
+        enum:
+        - displayName
+        - sizeBytes
+        - sessionUploadedBytes
+        - sessionUploadRequests
+        - sessionAcceptedUploads
+        - lifetimeUploadedBytes
+        - lifetimeUploadRequests
+        - lifetimeAcceptedUploads
+        - lastUploadRequestedAt
+        - lastUploadedAt
+        default: displayName
+      required: false
+    LibraryFileRootId:
+      name: rootId
+      in: query
+      schema:
+        type: string
+        pattern: ^[1-9][0-9]{0,18}(?![\s\S])
+        description: Immutable configured root identity.
+      required: false
+    LibraryFileCountTotal:
+      name: countTotal
+      in: query
+      schema:
+        type: boolean
+        default: false
+      required: false
+    LibraryFileOrder:
+      name: order
+      in: query
+      schema:
+        type: string
+        enum:
+        - asc
+        - desc
+        default: asc
+      required: false
   responses:
     LibraryRootResponse:
       description: LibraryRootResponse
@@ -4087,24 +4119,6 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/CategoryEnvelope"
-    CommentListResponse:
-      description: Comment collection envelope.
-      headers:
-        X-Contract-Version:
-          $ref: "#/components/headers/ContractVersionHeader"
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/CommentListEnvelope"
-    Ed2kLinkResponse:
-      description: ED2K link envelope.
-      headers:
-        X-Contract-Version:
-          $ref: "#/components/headers/ContractVersionHeader"
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/Ed2kLinkEnvelope"
     ErrorResponse:
       description: Error envelope.
       headers:
@@ -4300,24 +4314,6 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/SharedFileIgnoresEnvelope"
-    SharedFileListResponse:
-      description: Shared-file collection envelope.
-      headers:
-        X-Contract-Version:
-          $ref: "#/components/headers/ContractVersionHeader"
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/SharedFileListEnvelope"
-    SharedFileResponse:
-      description: Shared-file envelope.
-      headers:
-        X-Contract-Version:
-          $ref: "#/components/headers/ContractVersionHeader"
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/SharedFileEnvelope"
     SnapshotResponse:
       description: Snapshot envelope.
       headers:
@@ -4507,6 +4503,24 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/DownloadCommentPageEnvelope'
+    LibraryFileDetailResponse:
+      description: Bounded library resource envelope.
+      headers:
+        X-Contract-Version:
+          $ref: '#/components/headers/ContractVersionHeader'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/LibraryFileDetailEnvelope'
+    LibraryFilePageResponse:
+      description: Bounded library resource envelope.
+      headers:
+        X-Contract-Version:
+          $ref: '#/components/headers/ContractVersionHeader'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/LibraryFilePageEnvelope'
   schemas:
     LibraryRootId:
       type: string
@@ -5029,10 +5043,9 @@ components:
       properties:
         schema:
           type: string
-          const: emulebb.diagnostic-bundle.v7
-          description: Inline bounded diagnostic capture. Search snapshots contain canonical session metadata
-            and materialized result summaries from bounded SQLite pages. Raw observation history is read through
-            its resource.
+          const: emulebb.diagnostic-bundle.v8
+          description: Inline bounded diagnostic capture. Search snapshots contain canonical session metadata and materialized
+            result summaries from bounded SQLite pages. Raw observation history is read through its resource.
         capturedAt:
           type: integer
           minimum: 0
@@ -5111,7 +5124,7 @@ components:
           - tailBytesPerArtifact
           - tailRecordsPerArtifact
           - serverSnapshots
-          - sharedFileSnapshots
+          - libraryFileSnapshots
           - searchSnapshots
           - searchResultsPerSnapshot
           - searchSnapshotBytes
@@ -5137,7 +5150,7 @@ components:
             serverSnapshots:
               type: integer
               minimum: 0
-            sharedFileSnapshots:
+            libraryFileSnapshots:
               type: integer
               minimum: 0
             searchSnapshots:
@@ -5183,7 +5196,7 @@ components:
           additionalProperties: false
           required:
           - servers
-          - sharedFiles
+          - libraryFiles
           - searches
           - downloads
           - uploads
@@ -5191,7 +5204,7 @@ components:
           properties:
             servers:
               $ref: '#/components/schemas/DiagnosticSnapshotCollection'
-            sharedFiles:
+            libraryFiles:
               $ref: '#/components/schemas/DiagnosticSnapshotCollection'
             searches:
               type: object
@@ -11217,7 +11230,6 @@ components:
             - app
             - status
             - downloads
-            - sharedFiles
             - uploads
             - uploadQueue
             - servers
@@ -11231,10 +11243,6 @@ components:
                 $ref: '#/components/schemas/Status'
               downloads:
                 $ref: '#/components/schemas/DownloadCounts'
-              sharedFiles:
-                type: array
-                items:
-                  $ref: '#/components/schemas/SharedFile'
               uploads:
                 type: array
                 items:
@@ -11409,9 +11417,6 @@ components:
             - "null"
         cached:
           type: boolean
-    SharedFilePriority:
-      type: string
-      enum: [auto, not-published, verylow, low, normal, high, release]
     ClearLogsRequest:
       type: object
       additionalProperties: false
@@ -11450,224 +11455,6 @@ components:
         confirmCrash:
           type: boolean
           enum: [true]
-    SharedFileListEnvelope:
-      unevaluatedProperties: false
-      allOf:
-        - $ref: "#/components/schemas/EnvelopeBase"
-        - type: object
-          properties:
-            data:
-              type: object
-              unevaluatedProperties: false
-              required: [items, total, limit, nextCursor]
-              properties:
-                items:
-                  type: array
-                  items:
-                    $ref: "#/components/schemas/SharedFile"
-                total:
-                  type: integer
-                  minimum: 0
-                  description: Total shared files matching the current search and priority filters.
-                limit:
-                  type: integer
-                  minimum: 1
-                  maximum: 1000
-                nextCursor:
-                  type: [string, "null"]
-                  description: Server-issued cursor for the next path-ordered page, or null when this page is final.
-    SharedFileEnvelope:
-      unevaluatedProperties: false
-      allOf:
-        - $ref: "#/components/schemas/EnvelopeBase"
-        - type: object
-          properties:
-            data:
-              $ref: "#/components/schemas/SharedFile"
-    SharedFile:
-      type: object
-      additionalProperties: false
-      required: [hash, name, path, directory, sizeBytes, priority, autoUploadPriority, requests, acceptedRequests, transferredBytes, allTimeRequests, allTimeAccepts, allTimeTransferred, partCount, partFile, complete, comment, rating, hasComment, userRating, publishedEd2k, publication, sharedByRule]
-      properties:
-        hash:
-          type: string
-        name:
-          type: string
-        path:
-          type: string
-          description: User-facing shared file path; Windows verbatim long-path prefixes are not exposed.
-        sizeBytes:
-          type: integer
-          minimum: 0
-        priority:
-          $ref: "#/components/schemas/SharedFilePriority"
-        rating:
-          type: integer
-          minimum: 0
-          maximum: 5
-        comment:
-          type: string
-        ed2kLink:
-          type: string
-        directory:
-          type: string
-          description: User-facing shared file directory; Windows verbatim long-path prefixes are not exposed.
-        autoUploadPriority:
-          type: boolean
-        allTimeRequests:
-          type: integer
-          minimum: 0
-        allTimeAccepts:
-          type: integer
-          minimum: 0
-        allTimeTransferred:
-          type: integer
-          minimum: 0
-        partCount:
-          type: integer
-          minimum: 0
-        partFile:
-          type: boolean
-        complete:
-          type: boolean
-        hasComment:
-          type: boolean
-        userRating:
-          type: integer
-          minimum: 0
-        publishedEd2k:
-          type: boolean
-          description: Compatibility projection that is true only when the eD2K publication lane is published.
-        publication:
-          oneOf:
-            - $ref: "#/components/schemas/SharedFilePublicationStatus"
-            - type: "null"
-          description: Live runtime publication status. List responses populate it; single-file read and update responses currently return null.
-        sharedByRule:
-          type: boolean
-        requests:
-          type: integer
-          minimum: 0
-        acceptedRequests:
-          type: integer
-          minimum: 0
-        transferredBytes:
-          type: integer
-          minimum: 0
-    SharedFilePublishState:
-      type: string
-      enum: [unavailable, waiting, queued, publishing, partial, published, failed]
-      description: |
-        Live publication lifecycle. `unavailable` means the lane is disabled or the file is ineligible;
-        `waiting` means the required network runtime is not ready; `queued` means eligible and ready;
-        `publishing` means an attempt is active; `partial` means only part of a multi-keyword Kad publication
-        is confirmed; `published` means the runtime observed protocol-level success; and `failed` means the
-        most recent attempt failed. Publication state is ephemeral and is not a list-filter contract.
-    SharedFilePublishLane:
-      type: object
-      additionalProperties: false
-      required: [state, lastSuccessAt]
-      properties:
-        state:
-          $ref: "#/components/schemas/SharedFilePublishState"
-        lastSuccessAt:
-          type: [integer, "null"]
-          minimum: 0
-          format: int64
-          description: Unix epoch seconds for the most recent confirmed runtime success, retained after a later failure.
-    SharedFileKadKeywordPublish:
-      type: object
-      additionalProperties: false
-      required: [state, publishedKeywords, totalKeywords, lastSuccessAt]
-      properties:
-        state:
-          $ref: "#/components/schemas/SharedFilePublishState"
-        publishedKeywords:
-          type: integer
-          minimum: 0
-        totalKeywords:
-          type: integer
-          minimum: 0
-        lastSuccessAt:
-          type: [integer, "null"]
-          minimum: 0
-          format: int64
-          description: Unix epoch seconds for the most recent confirmed Kad keyword publication.
-    SharedFilePublicationStatus:
-      type: object
-      additionalProperties: false
-      required: [ed2k, kadKeyword, kadSource]
-      properties:
-        ed2k:
-          allOf:
-            - $ref: "#/components/schemas/SharedFilePublishLane"
-          description: A successful state means the offer-files packet was written in the current accepted server session; eD2K has no per-file acknowledgement.
-        kadKeyword:
-          $ref: "#/components/schemas/SharedFileKadKeywordPublish"
-        kadSource:
-          allOf:
-            - $ref: "#/components/schemas/SharedFilePublishLane"
-          description: A successful state means the most recent Kad source-store search received at least one acknowledgement.
-    SharedFilePatch:
-      type: object
-      additionalProperties: false
-      minProperties: 1
-      dependentRequired:
-        comment: [rating]
-        rating: [comment]
-      properties:
-        priority:
-          $ref: "#/components/schemas/SharedFilePriority"
-        rating:
-          type: integer
-          minimum: 0
-          maximum: 5
-        comment:
-          type: string
-    Ed2kLinkEnvelope:
-      unevaluatedProperties: false
-      allOf:
-        - $ref: "#/components/schemas/EnvelopeBase"
-        - type: object
-          properties:
-            data:
-              type: object
-              additionalProperties: false
-              required: [hash, link]
-              properties:
-                hash:
-                  type: string
-                link:
-                  type: string
-    CommentListEnvelope:
-      unevaluatedProperties: false
-      allOf:
-        - $ref: "#/components/schemas/EnvelopeBase"
-        - type: object
-          properties:
-            data:
-              type: object
-              additionalProperties: false
-              required: [items]
-              properties:
-                items:
-                  type: array
-                  items:
-                    type: object
-                    additionalProperties: false
-                    properties:
-                      source:
-                        type: string
-                      userName:
-                        type:
-                          - string
-                          - "null"
-                      fileName:
-                        type: string
-                      rating:
-                        type: integer
-                      comment:
-                        type: string
     SharedDirectoryReloadProgress:
       type: object
       additionalProperties: false
@@ -14059,3 +13846,287 @@ components:
           download.changed: '#/components/schemas/DownloadChangedEvent'
           download.removed: '#/components/schemas/DownloadRemovedEvent'
           sync.reset: '#/components/schemas/DownloadSyncResetEvent'
+    LibraryUploadPriority:
+      type: string
+      enum:
+      - auto
+      - verylow
+      - low
+      - normal
+      - high
+      - release
+    LibraryFilePageEnvelope:
+      type: object
+      additionalProperties: false
+      required:
+      - data
+      - meta
+      properties:
+        data:
+          type: array
+          maxItems: 200
+          items:
+            $ref: '#/components/schemas/LibraryFile'
+        meta:
+          $ref: '#/components/schemas/CursorPageMeta'
+    LibraryFileKadKeywordPublish:
+      type: object
+      additionalProperties: false
+      required:
+      - state
+      - publishedKeywords
+      - totalKeywords
+      - lastSuccessAt
+      properties:
+        state:
+          $ref: '#/components/schemas/LibraryFilePublishState'
+        publishedKeywords:
+          type: integer
+          minimum: 0
+        totalKeywords:
+          type: integer
+          minimum: 0
+        lastSuccessAt:
+          type:
+          - integer
+          - 'null'
+          minimum: 0
+          format: int64
+          description: Unix epoch seconds for the most recent confirmed Kad keyword publication.
+    LibraryFilePublishLane:
+      type: object
+      additionalProperties: false
+      required:
+      - state
+      - lastSuccessAt
+      properties:
+        state:
+          $ref: '#/components/schemas/LibraryFilePublishState'
+        lastSuccessAt:
+          type:
+          - integer
+          - 'null'
+          minimum: 0
+          format: int64
+          description: Unix epoch seconds for the most recent confirmed runtime success, retained after a later failure.
+    LibraryFileDetailEnvelope:
+      type: object
+      additionalProperties: false
+      required:
+      - data
+      - meta
+      properties:
+        data:
+          $ref: '#/components/schemas/LibraryFileDetail'
+        meta:
+          $ref: '#/components/schemas/EnvelopeMeta'
+    LibraryFilePublishState:
+      type: string
+      enum:
+      - unavailable
+      - waiting
+      - queued
+      - publishing
+      - partial
+      - published
+      - failed
+      description: 'Live publication lifecycle. `unavailable` means the lane is disabled or the file is ineligible;
+
+        `waiting` means the required network runtime is not ready; `queued` means eligible and ready;
+
+        `publishing` means an attempt is active; `partial` means only part of a multi-keyword Kad publication
+
+        is confirmed; `published` means the runtime observed protocol-level success; and `failed` means the
+
+        most recent attempt failed. Publication state is ephemeral and is not a list-filter contract.
+
+        '
+    LibraryFileDetail:
+      type: object
+      additionalProperties: false
+      required:
+      - hash
+      - displayName
+      - sizeBytes
+      - present
+      - sharingEnabled
+      - sessionUploadedBytes
+      - sessionUploadRequests
+      - sessionAcceptedUploads
+      - lifetimeUploadedBytes
+      - lifetimeUploadRequests
+      - lifetimeAcceptedUploads
+      - lastUploadRequestedAt
+      - lastUploadedAt
+      - uploadPriority
+      - comment
+      - rating
+      - ed2kLink
+      - publication
+      properties:
+        hash:
+          type: string
+          pattern: ^[0-9a-f]{32}(?![\s\S])
+        displayName:
+          type: string
+          maxLength: 65536
+        sizeBytes:
+          type:
+          - integer
+          - 'null'
+          minimum: 0
+        present:
+          type: boolean
+        sharingEnabled:
+          type: boolean
+        sessionUploadedBytes:
+          type: integer
+          minimum: 0
+        sessionUploadRequests:
+          type: integer
+          minimum: 0
+        sessionAcceptedUploads:
+          type: integer
+          minimum: 0
+        lifetimeUploadedBytes:
+          type: integer
+          minimum: 0
+        lifetimeUploadRequests:
+          type: integer
+          minimum: 0
+        lifetimeAcceptedUploads:
+          type: integer
+          minimum: 0
+        lastUploadRequestedAt:
+          type:
+          - integer
+          - 'null'
+          format: int64
+          minimum: 0
+        lastUploadedAt:
+          type:
+          - integer
+          - 'null'
+          format: int64
+          minimum: 0
+        uploadPriority:
+          $ref: '#/components/schemas/LibraryUploadPriority'
+          description: Configured queue-priority mode. Automatic mode is returned as auto, so the value can be read
+            and written back without changing the mode.
+        comment:
+          type: string
+          maxLength: 65536
+          description: Explicit local user comment; at most 65536 UTF-8 bytes.
+        rating:
+          type: integer
+          minimum: 0
+          maximum: 5
+        ed2kLink:
+          type:
+          - string
+          - 'null'
+          description: Null until content size is accepted. Uses accepted identity and an optional trusted AICH root.
+        publication:
+          $ref: '#/components/schemas/LibraryFilePublicationStatus'
+    LibraryFilePublicationStatus:
+      type: object
+      additionalProperties: false
+      required:
+      - ed2k
+      - kadKeyword
+      - kadSource
+      properties:
+        ed2k:
+          allOf:
+          - $ref: '#/components/schemas/LibraryFilePublishLane'
+          description: A successful state means the offer-files packet was written in the current accepted server session;
+            eD2K has no per-file acknowledgement.
+        kadKeyword:
+          $ref: '#/components/schemas/LibraryFileKadKeywordPublish'
+        kadSource:
+          allOf:
+          - $ref: '#/components/schemas/LibraryFilePublishLane'
+          description: A successful state means the most recent Kad source-store search received at least one acknowledgement.
+    LibraryFile:
+      type: object
+      additionalProperties: false
+      required:
+      - hash
+      - displayName
+      - sizeBytes
+      - present
+      - sharingEnabled
+      - sessionUploadedBytes
+      - sessionUploadRequests
+      - sessionAcceptedUploads
+      - lifetimeUploadedBytes
+      - lifetimeUploadRequests
+      - lifetimeAcceptedUploads
+      - lastUploadRequestedAt
+      - lastUploadedAt
+      properties:
+        hash:
+          type: string
+          pattern: ^[0-9a-f]{32}(?![\s\S])
+        displayName:
+          type: string
+          maxLength: 65536
+        sizeBytes:
+          type:
+          - integer
+          - 'null'
+          minimum: 0
+        present:
+          type: boolean
+        sharingEnabled:
+          type: boolean
+        sessionUploadedBytes:
+          type: integer
+          minimum: 0
+        sessionUploadRequests:
+          type: integer
+          minimum: 0
+        sessionAcceptedUploads:
+          type: integer
+          minimum: 0
+        lifetimeUploadedBytes:
+          type: integer
+          minimum: 0
+        lifetimeUploadRequests:
+          type: integer
+          minimum: 0
+        lifetimeAcceptedUploads:
+          type: integer
+          minimum: 0
+        lastUploadRequestedAt:
+          type:
+          - integer
+          - 'null'
+          format: int64
+          minimum: 0
+        lastUploadedAt:
+          type:
+          - integer
+          - 'null'
+          format: int64
+          minimum: 0
+    LibraryFilePatch:
+      type: object
+      additionalProperties: false
+      minProperties: 1
+      dependentRequired:
+        comment:
+        - rating
+        rating:
+        - comment
+      properties:
+        uploadPriority:
+          $ref: '#/components/schemas/LibraryUploadPriority'
+        comment:
+          type: string
+          maxLength: 65536
+          description: Explicit local user comment; at most 65536 UTF-8 bytes.
+        rating:
+          type: integer
+          minimum: 0
+          maximum: 5

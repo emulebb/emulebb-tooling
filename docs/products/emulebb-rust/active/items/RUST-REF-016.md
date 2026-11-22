@@ -29,6 +29,78 @@ during consolidation; documentation checks passed in
 `reports/settings-request-round-1/foundation-spec-consolidation-docs.log` below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
 
+## Canonical library resources checkpoint (2026-11-22)
+
+Rust `f1b38386` and Harness `1f0203de` switch REST/OpenAPI and the embedded WebUI to
+thin `/library/files` pages, admitted hash detail and separate cached locations.
+Metadata PATCH returns 204 after retained ownership completes; it does not
+perform a post-commit read. Publication visibility is on demand. The snapshot
+has no library array. One public `uploadPriority` mode round-trips automatic
+selection; sharing eligibility remains independent. Fresh schema is **117**.
+Diagnostic bundle **v8** contains a bounded `libraryFiles` page rather than a
+physical shared-file projection; this does not close aggregate ownership work.
+
+Scoped current-source evidence below `EMULEBB_WORKSPACE_OUTPUT_ROOT`:
+
+- `reports/settings-request-round-1/library-api-cut-rest-third.log`:
+  **175 REST unit and 4 real-file integration tests pass**, without compiler
+  warnings. Fixtures compare native paths by filesystem identity and settle
+  setup scanning before testing idle reads; capacity refusal remains supported.
+- `reports/settings-request-round-1/library-api-cut-webui-order.log`:
+  type checking/build, **93 unit and 35 browser tests pass** with the final
+  `order` query parameter and one public upload-priority mode.
+- `reports/settings-request-round-1/library-api-cut-scale-python.log`:
+  **412 Python checks pass**, including the existing scale caller, bounded
+  traversal and selected OpenAPI/response checks. Scale totals come from page
+  metadata; sampled physical paths come from separate cached location pages.
+- `reports/settings-request-round-1/library-api-cut-consumer-python.log`:
+  **106 Python checks pass** for the consumer/WebUI proof helpers, including a
+  thin-row/detail/location restart regression. This is not a live consumer run.
+- `reports/settings-request-round-1/library-api-cut-docs.log`: documentation
+  publication checks pass after the specification update.
+- `reports/settings-request-round-1/library-api-cut-emulebb-metadata.log`,
+  `library-api-cut-emulebb-ed2k.log` and `library-api-cut-emulebb-core.log` in the
+  same directory: **363 metadata, 1,535 Native and 740 Core tests pass**, without
+  compiler warnings. Core includes the automatic-priority round-trip and
+  endgame/preparation fixtures. Those fixtures passing at this revision does
+  not establish the cause or repair of their earlier intermittent failures.
+- `reports/settings-request-round-1/library-api-cut-upload-python.log`:
+  **23 upload-proof helper checks pass** using canonical hash detail.
+- `reports/settings-request-round-1/library-api-cut-package-python.log`:
+  **79 package-smoke helper checks pass**. Completed delivery requires matching
+  job identity, canonical detail and a present cached location for the delivered
+  path before the existing on-disk size/SHA-256 proof.
+- `reports/settings-request-round-1/library-api-cut-cross-client-second-python.log`:
+  **103 cross-client/reask checks pass** after the Rust callers use bounded
+  library pages and selected detail. Reask withdrawal checks point-detail
+  presence/sharing eligibility, so retained copyless knowledge is not mistaken
+  for shared content. MFC continues to use its own native contract.
+- `reports/settings-request-round-1/library-api-cut-android-peer-python.log`:
+  **82 Android peer helper checks pass**, preserving collision, output-byte,
+  restart and cleanup assertions through separate cached-location reads.
+- `reports/settings-request-round-1/library-api-cut-android-sharing-second-python.log`:
+  **145 public-sharing helper checks pass**. Approved-copy validation joins thin
+  hash rows to paginated cached locations, checks every observed present copy
+  against operator scope, and reports whether all approved instances are
+  indexed. It keeps distinct-content ambiguity visible and tests 221 hash rows
+  across pages. These Python checks launch no public-network campaign or APK.
+- `reports/settings-request-round-1/library-api-cut-daemon.log`:
+  **112 daemon/import tests pass**, without compiler warnings; one subprocess
+  fixture remains intentionally ignored by this unit entrypoint and needs its
+  registered full-matrix execution before final qualification.
+
+Remaining before library integration closes: convert the other native harness
+callers, run applicable current-binary proofs, and reconcile the current
+caller/docs inventories. The earlier schema-114 scale results
+are not current-source qualification. Server resources, scan progress/calendar,
+aggregate ownership and intermittent endgame/preparation failures remain open.
+No PR or merge is authorized.
+
+The remaining caller inventory includes native local-client tests and the Rust
+side of `rust-soak-control.py`; MFC-only callers are not a Rust removal target.
+Do not add a common projection that reconstructs physical flat records from
+the canonical hash/detail/location resources.
+
 ## Bounded library hash-detail prerequisite (2026-11-22)
 
 Rust `c5877019` adds metadata/Native/Core point-detail reads for client hashes,
