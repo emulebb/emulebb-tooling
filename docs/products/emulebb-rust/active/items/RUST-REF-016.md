@@ -29,6 +29,36 @@ during consolidation; documentation checks passed in
 `reports/settings-request-round-1/foundation-spec-consolidation-docs.log` below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
 
+## Monotonic scan progress measurements (2026-11-22)
+
+Rust `d603eb42` separates scan elapsed-time anchors from calendar presentation.
+Aggregate, active-file and per-disk rates use monotonic elapsed time; completion
+durations use the same clock. Recent results merge by monotonic completion
+order, and bootstrap progress retains its matching earliest start anchor and
+calendar fact. Merged rates are refreshed after counters combine. Successful
+completion calculates its average from the confirmed final byte count,
+consistently with the reported completed bytes.
+
+The anchors stay private and are excluded from JSON. This prerequisite does not
+change public timestamp keys/units, add a token, change SQLite, introduce new
+workers or alter the existing bounded progress lists. The scan calendar API cut
+is deferred until the operator answers the completion-token question now recorded
+in [PUBLIC-FOUNDATION](../../design/PUBLIC-FOUNDATION.md).
+
+Scoped gates passed **739 Core and 177 REST executions**, with zero Rust compiler
+warnings. New cases exercise backward/forward calendar changes with fixed
+monotonic elapsed time, aggregate/active/disk rate agreement, precise completion
+duration, final-byte average consistency, merged start/completion ordering and
+absence of private anchors in JSON. Evidence below
+`EMULEBB_WORKSPACE_OUTPUT_ROOT` is
+`reports/settings-request-round-1/scan-monotonic-core.log` and
+`scan-monotonic-rest.log`.
+
+This closes internal scan-clock separation. Scan completion tracking/calendar
+projection, canonical library/server resources, aggregate ownership and final
+platform/resource qualification remain open. The schema remains 114; the other
+pending operator decisions and the no-PR review boundary remain unchanged.
+
 ## Global publish diagnostics and fresh-catalog proof (2026-11-22)
 
 Rust `76d4a6e8` exposes global eD2K attempt/success/update times and Kad update

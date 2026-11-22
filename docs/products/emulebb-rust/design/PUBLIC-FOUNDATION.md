@@ -333,6 +333,13 @@ incompleteness, not a guarantee that an unwatched root is always current.
 Overflow does not itself launch a full-library scan. Explicit scans and external
 REST scheduling remain available; no new periodic full-scan interval is added.
 
+Pending operator choice: whether explicit scan acknowledgements and status expose
+an opaque completion token shared by coalesced requests, or retain fire-and-forget
+semantics without exact completion tracking. The recommendation is a token using
+the existing worker, without a durable job system. Do not implement the token
+contract before the operator answers. Calendar values are presentation facts,
+not completion identities or ordering fences.
+
 Reuse debounce and bounded coalescing. Bound the complete event ingress and
 debounce path, not only its final queue. Event storms must not create a scan,
 unbounded path backlog or database write per event. Latch/coalesce the affected
