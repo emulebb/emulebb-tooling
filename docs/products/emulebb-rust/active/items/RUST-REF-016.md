@@ -29,6 +29,32 @@ during consolidation; documentation checks passed in
 `reports/settings-request-round-1/foundation-spec-consolidation-docs.log` below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
 
+## Current Windows REST/OpenAPI campaign (2026-11-22)
+
+The existing Builder `test rust-rest-openapi --workstream
+public-foundation-round-1` campaign passed against the verified Windows release
+stage for Rust `130ca0b2`, with Harness `0c39dc1a`. Its receipt is
+`reports/rust-rest-openapi-ci/20261122T044049Z/report.json` below
+`EMULEBB_WORKSPACE_OUTPUT_ROOT`; the parent log is
+`reports/settings-request-round-1/schema114-current-rest-openapi.log`.
+
+Registry/OpenAPI agreement covers **116 routes**. Conformance exercised the
+**91 safe operations**: 38 successes and 53 expected errors, with no failed
+routes. The 25 unsafe operations were not indiscriminately executed. Dedicated
+local phases separately passed all six required peer/friend frontdoors,
+category persistence and hash-wide sharing/wire eligibility, search identity and
+parent-child lifecycle, Kad import/retry/reopen, canonical single-key settings
+CLI, listener identity/removal and retained-download views/restart counts.
+Top-level teardown was graceful.
+
+These are local-only fixtures. The retained-download phase explicitly records
+metadata-only history, with neither memory-limit nor physical-library
+qualification. This receipt does not establish public-network interoperability,
+rendered WebUI behavior, active payload pressure or physical-device behavior.
+It verifies the current integrated surface, while the planned canonical library
+and server cuts and scan completion contract remain unfinished. The three
+operator choices and the no-PR review boundary remain unchanged.
+
 ## Native Windows profile-import qualification (2026-11-22)
 
 The current Windows release client and embedded WebUI built successfully from
