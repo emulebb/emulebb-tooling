@@ -29,6 +29,44 @@ during consolidation; documentation checks passed in
 `reports/settings-request-round-1/foundation-spec-consolidation-docs.log` below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
 
+## One persisted hash-presentation owner (2026-11-22)
+
+Rust `4b481e2d` gives upload priority, automatic-priority mode, local comment and
+rating one persisted owner on `known_files`. Fresh schema **115** removes the
+duplicate columns from download jobs and verified local content. Catalog,
+publication, payload, execution and manifest reads project the same hash values.
+Progress checkpoints reconcile their in-memory snapshot against this owner and
+do not write presentation fields. Verified-content registration preserves an
+existing client hash's metadata; first acceptance may initialize it from intake.
+
+The metadata mutation requires client library membership and can update a hash
+without any available copy or remaining job. It does not implicitly create
+unknown content. If an unfinished job exists, its exact execution token is
+returned for the existing cache publication path. The unused complete-copy-only
+mutation was removed. Harness `e31d487d` seeds these fields on the hash and reads
+them from that owner, preserving existing metadata when seeding another job.
+
+Scoped gates passed **360 metadata, 1,535 Native, 740 Core, 178 REST and 70 Python
+tests**, with no Rust compiler warnings. A new persisted regression edits a
+copyless hash, removes its job, edits again, reopens the database and admits a
+new job while retaining the same values. Existing stale-progress protection,
+execution observation fences, catalog and upload-priority tests passed. Evidence
+below `EMULEBB_WORKSPACE_OUTPUT_ROOT` is
+`reports/settings-request-round-1/hash-metadata-owner-metadata-final.log`,
+`hash-metadata-owner-native.log`, `hash-metadata-owner-core.log`,
+`hash-metadata-owner-rest.log` and `hash-metadata-owner-python.log` in that same
+directory. Normal commit/push checks passed in both repos.
+
+This closes persisted ownership, not the canonical public editing contract.
+Core's current shared-file edit frontdoor still requires an available share;
+unavailable-hash edits and canonical library detail remain the next coordinated
+Core/REST/OpenAPI/WebUI slice. Two native import tests were deselected in the
+Python gate: the stage must be rebuilt for schema 115 before rerunning them.
+Earlier package, live and resource receipts retain their recorded revisions.
+All three operator decisions are now accepted: persistent hash metadata,
+separate server deletion/disabling and progress-only scans without completion
+tokens. The goal remains active and the no-PR review boundary is unchanged.
+
 ## Library reads respect profile coherence (2026-11-22)
 
 Rust `45d8f3cd` applies the existing profile-coherence checks to library summary
