@@ -29,6 +29,62 @@ during consolidation; documentation checks passed in
 `reports/settings-request-round-1/foundation-spec-consolidation-docs.log` below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
 
+## Retained Core metadata edit publication (2026-11-22)
+
+Rust `075ee6fb` extends the existing profile persistence owner across hash
+metadata edits and their Kad/eD2K scheduling effects. Its admitted command
+supports copyless client hashes, clones bounded text only after admission and
+keeps ownership after caller cancellation. The SQL transaction computes scalar
+change receipts and deletes the persisted Kad notes clock atomically with an
+actual comment/rating change. Unknown hashes remain absent; identical notes and
+ordinary priority-only edits do not reset the notes clock. Native retains its
+existing SQL/cache/catalog publication ownership.
+
+Core then dirties the live notes schedule and queues affected server offers.
+The established catalog publisher now has a small reusable retained context;
+its worker, debounce and rate limits are preserved, without capturing the whole
+Core/persistence owner in the edit command. The existing HTTP edit path uses this
+service. The canonical library route/DTO/OpenAPI/WebUI cutover remains the next
+delivery slice; no transitional routes or compatibility handling were added.
+Fresh schema remains **116**.
+
+Passed gates: **362 metadata, 1,537 Native and 179 REST tests**, with no compiler
+warnings. The new Core regression cancels the caller after Native publication
+but before Core scheduling, then proves the ordered owner finishes both network
+effects and releases capacity. Existing rating/publish-status reoffer tests also
+pass. Metadata covers unchanged-note/priority behavior and rolls back the entire
+edit when a synthetic persisted-clock deletion fails. Evidence below
+`EMULEBB_WORKSPACE_OUTPUT_ROOT` is
+`reports/settings-request-round-1/retained-library-edit-metadata-final.log`,
+`retained-library-edit-native.log` and `retained-library-edit-rest.log` in that
+same directory. The first metadata compile found a missing timestamp argument
+in the new test setup; that was corrected before the passing gate.
+
+**The full Core gate is not green:** `retained-library-edit-core-final.log`
+records **703 passed, one failed**, the previously observed
+`nonterminal_original_copy_drains_replacement_endgame_peer` prefix setup. The
+first run (`retained-library-edit-core.log`) also exposed two reoffer regressions
+in the initial demand-signal-only implementation; the retained publisher context
+repairs those. That first run separately timed out waiting for the existing
+download-preparation fixture's completed shares. Its cause remains unproven;
+passing on the subsequent relevant-code run is not a repair of that timeout.
+
+A bounded read-only endgame investigation establishes that the periodic
+4,229,120-byte progress message is not the closing offset. Receiver EOF/reset
+drops the relay's upstream writer, so the later seed EOF alone cannot identify
+which side closed first. The incomplete/no-terminal-error downloader report
+also represents both peer closure and its own receive timeout. Existing upload
+byte-cap, replacement-only rotation and resident-cache code do not establish a
+4 MiB cutoff. Next diagnostic proof must retain the exact forwarded count, the
+receiver's timeout/closure reason and the seed handler's full terminal result.
+Do not change geometry, timeout or acceptance without that evidence. This
+failure remains a final qualification blocker, not a claimed green rerun.
+
+Normal Rust commit checks passed. Canonical library/server cuts, scan progress
+and calendar work, aggregate construction ownership and final platform/pressure
+qualification remain open. Earlier binary/package/resource receipts retain
+their recorded source revisions. No PR or merge is authorized before review.
+
 ## Remote Kad notes are independent evidence (2026-11-22)
 
 Rust `7aec1fba` removes passive Kad note autofill from local comment/rating. The

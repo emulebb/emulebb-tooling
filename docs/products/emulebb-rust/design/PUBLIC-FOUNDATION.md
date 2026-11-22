@@ -981,6 +981,11 @@ copy registration must not become competing saved authorities or overwrite an
 existing client hash's metadata. Restrict edits to client library membership.
 Only explicit user edits set the local comment/rating. Remote Kad notes and
 peer comments remain network evidence; they do not fill empty local values.
+Admitted edits retain ownership through durable storage, active cache, catalog
+and network scheduling publication after caller disconnect. Actual local note
+changes reset the persisted Kad notes clock in the metadata transaction and
+dirty the live notes schedule. Identical notes and ordinary priority-only edits
+do not reset it. Queue an eD2K reoffer when the published rating changes.
 Remote note observations retain nullable comment and claimed publisher identity
 in the existing corpus model. Publisher identity is distinct from the responding
 endpoint. Missing reported name, size or endpoint stays unknown; a query filter
