@@ -31,6 +31,17 @@ during consolidation; documentation checks passed in
 
 ## Reported server names: canonical edits (2026-11-22)
 
+The subsequent bounded endgame investigation added error-chain context at
+upload serving-entry resolution, reader admission and verified-fragment reads,
+with nested job-resolution/local-serving-view context. The captured busy error
+can otherwise originate from several admitted read/publication paths. Reads
+explicitly prohibit waiting for capacity while holding job/content guards;
+do not add an indiscriminate retry loop to these paths. The four focused
+endgame fixtures pass with these diagnostics in
+`reports/settings-request-round-1/endgame-upload-admission-context.log` below
+`EMULEBB_WORKSPACE_OUTPUT_ROOT`. No capacity, retry or disconnect behavior was
+changed, and the intermittent full-run failure remains unresolved.
+
 Explicit creation now uses `MetadataServerCreate`: address, port, priority,
 static status and enabled status only. Rich network/import records remain
 separate. The DB returns the committed initial snapshot, avoiding a second
