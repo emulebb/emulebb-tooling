@@ -31,6 +31,20 @@ during consolidation; documentation checks passed in
 
 ## Reported server names: canonical edits (2026-11-22)
 
+Explicit creation now uses `MetadataServerCreate`: address, port, priority,
+static status and enabled status only. Rich network/import records remain
+separate. The DB returns the committed initial snapshot, avoiding a second
+post-commit read for retained cache publication. Core checks projected read size
+and reserves command memory before cloning the creation input. Creation starts
+without reported names or telemetry; a subsequent import supplies observations
+while preserving the ID. Duplicate, rollback, disconnect, feedback ordering and
+oversize proofs remain covered. **367 metadata unit tests, three ownership
+tests and seven focused Core server tests pass**. Logs:
+`reports/settings-request-round-1/server-create-input-metadata.log` and
+`reports/settings-request-round-1/server-create-input-core.log` below
+`EMULEBB_WORKSPACE_OUTPUT_ROOT`. This focused pass does not supersede the full
+Core endgame failure recorded below.
+
 Canonical ID-addressed metadata/Core edits accept only priority, static status
 and enabled status. Reported names are preserved by the selective SQL write and
 cache publication. The feedback/publication regression now supplies a network
