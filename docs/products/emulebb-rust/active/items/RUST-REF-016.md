@@ -29,6 +29,35 @@ during consolidation; documentation checks passed in
 `reports/settings-request-round-1/foundation-spec-consolidation-docs.log` below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
 
+## Global publish diagnostics and fresh-catalog proof (2026-11-22)
+
+Rust `76d4a6e8` exposes global eD2K attempt/success/update times and Kad update
+time as nullable integer Unix seconds. Idle diagnostics report null; epoch zero
+is valid. The canonical OpenAPI document now names both diagnostic models and
+declares all their existing fields, rather than leaving the objects untyped.
+Their counters and publication behavior remain unchanged.
+
+Harness `7da4dd8d` requires a known empty eD2K catalog before its disposable WebUI
+sharing proof mutates roots. It then requires the exact positive fixture count,
+complete publication, zero pending entries, a known success time and no error.
+Publication no longer depends on a strictly greater calendar timestamp. New
+cases prove same-second and epoch-zero success and refuse nonempty/unknown
+baselines, partial catalogs, invalid success facts and failed publication.
+
+Scoped gates passed **737 Core, 177 REST and 343 Python executions**, with no
+Rust compiler warnings. Core covers idle nulls, epoch zero and real seconds-based
+update clocks for both diagnostic owners. Python extends existing OpenAPI field
+constraints and WebUI-proof unit coverage. The live publication campaign was not
+rerun here; these are scoped unit/contract results. Evidence below
+`EMULEBB_WORKSPACE_OUTPUT_ROOT` is
+`reports/settings-request-round-1/global-publish-seconds-core.log`,
+`global-publish-seconds-rest.log` and `global-publish-seconds-python.log`.
+
+Global publication calendar fields are closed. Library scan progress still
+needs its calendar/elapsed-time separation and ordering work. Canonical resource
+cutovers, aggregate response ownership and final platform/resource qualification
+remain open, with schema 114 and the pending operator choices unchanged.
+
 ## Process samples and per-file publication time (2026-11-22)
 
 Rust `38e8a713` exposes process `sampledAt` and per-file publication

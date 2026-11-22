@@ -10603,11 +10603,9 @@ components:
         diagnosticWriter:
           $ref: "#/components/schemas/DiagnosticWriterHealth"
         ed2kPublish:
-          type: object
-          additionalProperties: true
+          $ref: "#/components/schemas/Ed2kPublishDiagnostics"
         kadPublish:
-          type: object
-          additionalProperties: true
+          $ref: "#/components/schemas/KadPublishDiagnostics"
         downloadEvents:
           $ref: "#/components/schemas/DownloadEventRuntimeDiagnostics"
         downloadFileCount:
@@ -10623,6 +10621,238 @@ components:
           oneOf:
             - $ref: "#/components/schemas/GeolocationRuntimeDiagnostics"
             - type: "null"
+    Ed2kPublishDiagnostics:
+      type: object
+      additionalProperties: false
+      required: [phase, running, dirty, queuedCount, entriesSent, totalEntries, publishedEntries, pendingEntries, nextCursor, wrapped, skippedDuplicateBatch, sessionPumpActive, notConnectedCount, noNetworkCount, failureCount, lastError, lastAttemptAt, lastSuccessAt, updatedAt]
+      properties:
+        phase:
+          type: string
+        running:
+          type: boolean
+        dirty:
+          type: boolean
+        queuedCount:
+          type: integer
+          minimum: 0
+        entriesSent:
+          type: integer
+          minimum: 0
+        totalEntries:
+          type: integer
+          minimum: 0
+        publishedEntries:
+          type: integer
+          minimum: 0
+        pendingEntries:
+          type: integer
+          minimum: 0
+        nextCursor:
+          type: integer
+          minimum: 0
+        wrapped:
+          type: boolean
+        skippedDuplicateBatch:
+          type: boolean
+        sessionPumpActive:
+          type: boolean
+        notConnectedCount:
+          type: integer
+          minimum: 0
+        noNetworkCount:
+          type: integer
+          minimum: 0
+        failureCount:
+          type: integer
+          minimum: 0
+        lastError:
+          type: [string, "null"]
+        lastAttemptAt:
+          type: [integer, "null"]
+          minimum: 0
+          description: Calendar time as Unix seconds, or null before it is known.
+        lastSuccessAt:
+          type: [integer, "null"]
+          minimum: 0
+          description: Calendar time as Unix seconds, or null before it is known.
+        updatedAt:
+          type: [integer, "null"]
+          minimum: 0
+          description: Calendar time as Unix seconds, or null before it is known.
+    KadPublishDiagnostics:
+      type: object
+      additionalProperties: false
+      required: [phase, running, bootstrapped, gateAllowed, gateBlockReason, itemCount, inspectedCount, attemptedFiles, fileBudget, inFlightCount, inFlightBudget, activeKeywordPublishes, activeSourcePublishes, activeNotesPublishes, availableSearchPermits, keywordBudget, sourceBudget, notesBudget, budgetExhausted, keywordDueCount, sourceDueCount, notesDueCount, keywordAttempted, sourceAttempted, notesAttempted, keywordSkippedByBudget, sourceSkippedByBudget, notesSkippedByBudget, keywordPublished, sourcePublished, notesPublished, completedCount, failedCount, timedOutCount, busyCount, keywordPublishedTotal, sourcePublishedTotal, notesPublishedTotal, keywordFailed, sourceFailed, notesFailed, keywordContactsConsideredTotal, sourceContactsConsideredTotal, notesContactsConsideredTotal, keywordAttemptedContactsTotal, sourceAttemptedContactsTotal, notesAttemptedContactsTotal, keywordAckedContactsTotal, sourceAckedContactsTotal, notesAckedContactsTotal, keywordContactTimeoutsTotal, sourceContactTimeoutsTotal, notesContactTimeoutsTotal, keywordAckedContacts, sourceAckedContacts, notesAckedContacts, tickSecs, updatedAt]
+      properties:
+        phase:
+          type: string
+        running:
+          type: boolean
+        bootstrapped:
+          type: boolean
+        gateAllowed:
+          type: boolean
+        gateBlockReason:
+          type: string
+        itemCount:
+          type: integer
+          minimum: 0
+        inspectedCount:
+          type: integer
+          minimum: 0
+        attemptedFiles:
+          type: integer
+          minimum: 0
+        fileBudget:
+          type: integer
+          minimum: 0
+        inFlightCount:
+          type: integer
+          minimum: 0
+        inFlightBudget:
+          type: integer
+          minimum: 0
+        activeKeywordPublishes:
+          type: integer
+          minimum: 0
+        activeSourcePublishes:
+          type: integer
+          minimum: 0
+        activeNotesPublishes:
+          type: integer
+          minimum: 0
+        availableSearchPermits:
+          type: integer
+          minimum: 0
+        keywordBudget:
+          type: integer
+          minimum: 0
+        sourceBudget:
+          type: integer
+          minimum: 0
+        notesBudget:
+          type: integer
+          minimum: 0
+        budgetExhausted:
+          type: boolean
+        keywordDueCount:
+          type: integer
+          minimum: 0
+        sourceDueCount:
+          type: integer
+          minimum: 0
+        notesDueCount:
+          type: integer
+          minimum: 0
+        keywordAttempted:
+          type: integer
+          minimum: 0
+        sourceAttempted:
+          type: integer
+          minimum: 0
+        notesAttempted:
+          type: integer
+          minimum: 0
+        keywordSkippedByBudget:
+          type: integer
+          minimum: 0
+        sourceSkippedByBudget:
+          type: integer
+          minimum: 0
+        notesSkippedByBudget:
+          type: integer
+          minimum: 0
+        keywordPublished:
+          type: integer
+          minimum: 0
+        sourcePublished:
+          type: integer
+          minimum: 0
+        notesPublished:
+          type: integer
+          minimum: 0
+        completedCount:
+          type: integer
+          minimum: 0
+        failedCount:
+          type: integer
+          minimum: 0
+        timedOutCount:
+          type: integer
+          minimum: 0
+        busyCount:
+          type: integer
+          minimum: 0
+        keywordPublishedTotal:
+          type: integer
+          minimum: 0
+        sourcePublishedTotal:
+          type: integer
+          minimum: 0
+        notesPublishedTotal:
+          type: integer
+          minimum: 0
+        keywordFailed:
+          type: integer
+          minimum: 0
+        sourceFailed:
+          type: integer
+          minimum: 0
+        notesFailed:
+          type: integer
+          minimum: 0
+        keywordContactsConsideredTotal:
+          type: integer
+          minimum: 0
+        sourceContactsConsideredTotal:
+          type: integer
+          minimum: 0
+        notesContactsConsideredTotal:
+          type: integer
+          minimum: 0
+        keywordAttemptedContactsTotal:
+          type: integer
+          minimum: 0
+        sourceAttemptedContactsTotal:
+          type: integer
+          minimum: 0
+        notesAttemptedContactsTotal:
+          type: integer
+          minimum: 0
+        keywordAckedContactsTotal:
+          type: integer
+          minimum: 0
+        sourceAckedContactsTotal:
+          type: integer
+          minimum: 0
+        notesAckedContactsTotal:
+          type: integer
+          minimum: 0
+        keywordContactTimeoutsTotal:
+          type: integer
+          minimum: 0
+        sourceContactTimeoutsTotal:
+          type: integer
+          minimum: 0
+        notesContactTimeoutsTotal:
+          type: integer
+          minimum: 0
+        keywordAckedContacts:
+          type: integer
+          minimum: 0
+        sourceAckedContacts:
+          type: integer
+          minimum: 0
+        notesAckedContacts:
+          type: integer
+          minimum: 0
+        tickSecs:
+          type: integer
+          minimum: 0
+        updatedAt:
+          type: [integer, "null"]
+          minimum: 0
+          description: Calendar time as Unix seconds, or null before it is known.
     ProcessResources:
       type: object
       additionalProperties: false
