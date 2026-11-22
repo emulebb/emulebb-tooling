@@ -29,6 +29,32 @@ during consolidation; documentation checks passed in
 `reports/settings-request-round-1/foundation-spec-consolidation-docs.log` below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
 
+## Endgame close diagnostics (2026-11-22)
+
+Rust `9196c5a3` retains exact prefix-forwarding offsets and distinguishes
+receiver EOF/reset from receiver-read and upstream-write failures in the existing
+loopback fixture. Native debug events identify receiver EOF, read errors,
+response deadlines and scheduling cancellation. Upload close events preserve
+policy/cancellation reasons; listener errors include their complete error chain.
+A test-only subscriber captures the relevant Native targets in libtest output.
+Transfer policy, timeouts, geometry and acceptance assertions are unchanged.
+
+The first diagnostic gate reproduced the intermittent failure in
+`nonterminal_verified_part_drains_redundant_endgame_peer`: seed EOF followed
+**1,290,240 of 9,400,064 prefix bytes**, while the receiver-forwarding task was
+still pending at that observation. This does not establish which side initiated
+closure. It disproves treating the previous periodic progress marker as a fixed
+4 MiB close boundary. The failure remains an open qualification concern; neither
+additional logging nor a later passing run establishes a repair.
+
+After adding test log capture, the scoped gates pass **750 Windows Core and
+1,535 Native tests**, without compiler warnings. Evidence below
+`EMULEBB_WORKSPACE_OUTPUT_ROOT` is
+`reports/settings-request-round-1/endgame-close-core.log` (reproduction),
+`endgame-close-trace-core.log` and `endgame-close-trace-native.log` in that same
+directory. Further diagnosis must use the captured close reason before changing
+transfer behavior. Full current-platform/resource qualification remains pending.
+
 ## Scan calendar contract (2026-11-22)
 
 Rust `af8f2b37` exposes scan/pass and active-file `startedAt`/`updatedAt`, plus
