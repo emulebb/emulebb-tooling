@@ -42,7 +42,10 @@ All 753 Core tests, 182 REST tests, 306 scoped Python tests, 94 WebUI unit tests
 35 browser tests and the UI production build passed. REST covers ready, joining
 and stopped serialization; schema tests exercise numeric boundaries and null.
 The existing native fixture additionally requires null after its one-peer
-partial bootstrap. Its updated wire check remains pending a verified rebuild.
+partial bootstrap. All four fixture tests passed against the verified Windows
+rebuild on Rust `0740f76b` and Harness `346c3db5`, including both native scenarios.
+Evidence is `reports/settings-request-round-1/kad-progress-native-qualified-runtime.log`,
+the sibling JUnit XML and retained scenario input/profile descriptors.
 Evidence under `EMULEBB_WORKSPACE_OUTPUT_ROOT`:
 `reports/settings-request-round-1/kad-progress-fraction-{core,rest,python,webui}.log`.
 
