@@ -29,6 +29,36 @@ during consolidation; documentation checks passed in
 `reports/settings-request-round-1/foundation-spec-consolidation-docs.log` below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
 
+## Profile, identity and friend calendar timestamps (2026-11-22)
+
+Rust `8156fc82` introduces fresh schema 112. Schema-marker/profile creation,
+local-identity creation/update and friend first-seen/last-seen/deletion use Unix
+seconds in explicit `_s` columns. Identity updates preserve creation time. The
+friend recovery postcondition compares the same seconds stored by the write
+owner. Core restores friend times using the seconds constructor and serializes
+`lastSeen` as nullable integer Unix seconds. OpenAPI and the WebUI adopt that
+shape together; the UI formats known times and leaves unknown times blank.
+
+Harness `778bf132` extends the existing metadata seed helpers, durable friend
+campaign reads and response-schema suite. No replacement launcher or parallel
+schema definition was introduced. Scoped checks passed **355 metadata, 733 Core,
+177 REST, 93 WebUI unit, 34 browser and 256 Python executions**, with no Rust
+compiler warnings. New evidence covers profile/identity calendar bounds,
+creation-time preservation, friend persistence/recovery and JSON round-trips,
+nullable/epoch-zero values, subsecond reduction, schema integer constraints and
+actual browser display. The standard Python lane deselected two native profile
+import tests; this checkpoint does not claim their execution or current native
+import qualification.
+
+Evidence below `EMULEBB_WORKSPACE_OUTPUT_ROOT` is
+`reports/settings-request-round-1/profile-seconds-metadata-final.log`,
+`profile-seconds-core.log`, `profile-seconds-rest.log`,
+`profile-seconds-webui.log` and `profile-seconds-python.log`.
+Other timestamp domains and final combined platform/resource qualification
+remain open. Library and server public cutovers still depend on the two
+operator choices recorded in the authoritative foundation. Existing platform
+receipts retain their original revisions and do not qualify schema 112.
+
 ## Server calendar timestamps (2026-11-22)
 
 Rust `87b22226` introduces fresh schema 111: server `first_seen_at_s`,

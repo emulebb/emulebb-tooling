@@ -12922,10 +12922,9 @@ components:
           minimum: 0
           maximum: 65535
         lastSeen:
-          type:
-            - string
-            - "null"
-          format: date-time
+          description: Last observed calendar time as Unix seconds, or null when unknown.
+          type: [integer, "null"]
+          minimum: 0
     FriendCreateRequest:
       type: object
       additionalProperties: false
