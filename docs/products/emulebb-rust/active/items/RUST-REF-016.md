@@ -29,6 +29,31 @@ during consolidation; documentation checks passed in
 `reports/settings-request-round-1/foundation-spec-consolidation-docs.log` below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
 
+## Library reads respect profile coherence (2026-11-22)
+
+Rust `45d8f3cd` applies the existing profile-coherence checks to library summary
+pages, exact summaries and location pages. Each checks before Native admission
+and after its database await, including absent-hash results. An unreconciled
+profile therefore returns the common `CommitUnknown` persistence failure rather
+than ordinary library data or an authoritative-looking not-found result. This
+matches the existing download/server read pattern and adds no recovery worker,
+settings, schema or wire shape.
+
+The Core and REST gates passed **740 and 178 tests**, respectively, with no
+compiler warnings. The new regression injects an actual postcommit worker fault,
+then proves collection and known/absent point/location reads preserve that
+failure and retain no transient read capacity. It tests an already-faulted
+profile; it does not independently orchestrate a fault during an in-flight SQL
+read. Evidence below `EMULEBB_WORKSPACE_OUTPUT_ROOT` is
+`reports/settings-request-round-1/library-coherence-core.log` and
+`library-coherence-rest.log`. Normal commit/push checks passed.
+
+This closes a prerequisite read-failure gap. Canonical library REST/OpenAPI/WebUI
+cutover, server resources, aggregate construction and active payload pressure
+remain open. Prior Windows live and GNU/resource receipts remain qualified to
+their recorded source revisions, not this later change. Operator choices and
+the no-PR boundary are unchanged.
+
 ## Current Windows REST/OpenAPI campaign (2026-11-22)
 
 The existing Builder `test rust-rest-openapi --workstream
