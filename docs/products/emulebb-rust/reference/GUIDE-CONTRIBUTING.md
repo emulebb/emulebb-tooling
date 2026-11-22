@@ -57,6 +57,17 @@ Replace the selector with the parent-assigned ID; commands above illustrate
 different scoped checks, not a requirement to run all of them for every edit.
 Use the smallest relevant set and the normal full gates required by the changed
 contract. Source-set receipts must identify the actual selected revisions.
+For focused diagnostics, `test rust-unit` also accepts `--filter` and
+`--nocapture`, for example:
+
+```powershell
+python -m emule_workspace test rust-unit --package emulebb-core --filter tests::download_endgame --nocapture --workstream YOUR-WORKSTREAM
+```
+
+The filter is a literal Rust test-name substring. Omit it for required full
+gates; a filtered pass does not establish full-suite acceptance. Locking, source
+cache checks, owned scratch and runtime-artifact cleanup remain in the same owner.
+
 Live/soak/profile work uses persisted Harness entry points and needs its routed
 policy and explicit allocation. Do not start extra local heavy jobs to fill idle
 time or use a cache hit as proof for a different source.

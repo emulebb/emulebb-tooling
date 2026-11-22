@@ -29,6 +29,24 @@ during consolidation; documentation checks passed in
 `reports/settings-request-round-1/foundation-spec-consolidation-docs.log` below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
 
+## Focused Windows endgame diagnostics (2026-11-22)
+
+Builder `54bfc7d` extends the existing `test rust-unit` command with diagnostic
+`--filter` and `--nocapture` options. Default full-suite selection is unchanged;
+filters remain literal test-name substrings, with the existing lock, source-cache
+checks, owned scratch and runtime-artifact cleanup. Seven scoped Builder tests
+pass, including diagnostic/default success and failure cleanup.
+
+The supported filtered Windows run passes all four endgame fixtures against
+Rust `264b9fe9`; its evidence is
+`reports/settings-request-round-1/endgame-focused-windows.log` below
+`EMULEBB_WORKSPACE_OUTPUT_ROOT`. Connection-abort messages also occur in this
+successful run and do not establish the intermittent fault's cause. No transfer
+behavior, timeout or assertion is changed; the fault remains open. Further
+investigation should distinguish fixture interference or a specific close cause
+rather than repeating unchanged runs until green. Filtered evidence does not
+replace required full-suite validation.
+
 ## Current GNU and capacity proof (2026-11-22)
 
 Rust `264b9fe9`, Harness `cce2809f`, Tooling `cc33be1c` and Builder `98fa3d2`
