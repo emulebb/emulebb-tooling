@@ -10631,11 +10631,12 @@ components:
         diagnostics, status, snapshot and diagnostic bundles for at least one
         second. OS reads run outside the async executor. Unavailable counters
         are null, never fabricated zeroes. No host-wide process scan is used.
-      required: [sampledAtMs, residentMemoryBytes, cpuUsagePercent, cpuSampleIntervalMs]
+      required: [sampledAt, residentMemoryBytes, cpuUsagePercent, cpuSampleIntervalMs]
       properties:
-        sampledAtMs:
+        sampledAt:
           type: [integer, "null"]
-          description: Unix time in milliseconds when the OS counters were sampled.
+          minimum: 0
+          description: Unix time in seconds when the OS counters were sampled.
         residentMemoryBytes:
           type: [integer, "null"]
           minimum: 0
@@ -11335,18 +11336,19 @@ components:
     SharedFilePublishLane:
       type: object
       additionalProperties: false
-      required: [state, lastSuccessAtMs]
+      required: [state, lastSuccessAt]
       properties:
         state:
           $ref: "#/components/schemas/SharedFilePublishState"
-        lastSuccessAtMs:
+        lastSuccessAt:
           type: [integer, "null"]
+          minimum: 0
           format: int64
-          description: Unix epoch milliseconds for the most recent confirmed runtime success, retained after a later failure.
+          description: Unix epoch seconds for the most recent confirmed runtime success, retained after a later failure.
     SharedFileKadKeywordPublish:
       type: object
       additionalProperties: false
-      required: [state, publishedKeywords, totalKeywords, lastSuccessAtMs]
+      required: [state, publishedKeywords, totalKeywords, lastSuccessAt]
       properties:
         state:
           $ref: "#/components/schemas/SharedFilePublishState"
@@ -11356,10 +11358,11 @@ components:
         totalKeywords:
           type: integer
           minimum: 0
-        lastSuccessAtMs:
+        lastSuccessAt:
           type: [integer, "null"]
+          minimum: 0
           format: int64
-          description: Unix epoch milliseconds for the most recent confirmed Kad keyword publication.
+          description: Unix epoch seconds for the most recent confirmed Kad keyword publication.
     SharedFilePublicationStatus:
       type: object
       additionalProperties: false

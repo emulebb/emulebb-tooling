@@ -29,6 +29,42 @@ during consolidation; documentation checks passed in
 `reports/settings-request-round-1/foundation-spec-consolidation-docs.log` below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
 
+## Process samples and per-file publication time (2026-11-22)
+
+Rust `38e8a713` exposes process `sampledAt` and per-file publication
+`lastSuccessAt` as nullable integer Unix seconds. The process sampler retains
+monotonic CPU intervals and their millisecond precision. Kad publication
+tracking stores seconds; eD2K's protocol-side millisecond evidence is converted
+at the public projection boundary. Unknown times stay null, while epoch zero
+remains a confirmed time and survives a later failed publication attempt.
+The WebUI formats those seconds in sample labels and publication tooltips.
+
+The canonical OpenAPI document and Harness `e14f455b` adopt those fields together.
+The Android physical-resource reader consumes the current key and accepts epoch
+zero as a valid timestamp while retaining positive RSS, finite CPU and settled
+interval requirements. This change does not run or qualify a physical device.
+
+Scoped gates passed **736 Core, 177 REST, 93 UI unit, 35 browser and 479 Python
+executions**, with no Rust compiler warnings. Evidence covers publication-state
+serialization, retained success after failure, epoch-zero sampling/publication,
+seconds-formatted browser tooltips, unchanged millisecond CPU intervals,
+OpenAPI integer/null constraints and Android reader warmup/multicore handling.
+The existing contract-serialization fixture needed its renamed Rust fields;
+Core's final rerun passed without changing the already validated WebUI inputs.
+
+Logs below `EMULEBB_WORKSPACE_OUTPUT_ROOT` are
+`reports/settings-request-round-1/resource-publication-seconds-core-final.log`,
+`resource-publication-seconds-rest.log`,
+`resource-publication-seconds-webui.log` and
+`resource-publication-seconds-python.log`.
+
+Global eD2K/Kad publish diagnostics and library scan progress still expose
+millisecond calendar fields. Scan progress also uses wall-clock values for
+rates and recent ordering; its conversion needs a coordinated runtime-clock
+change. These remain open alongside public resource cutovers, aggregate response
+ownership and final platform/resource qualification. The database remains schema
+114 and the pending operator choices remain unchanged.
+
 ## Native calendar DTOs and capture time (2026-11-22)
 
 Rust `6c35e587` serializes the DateTime-backed Core REST models as integer Unix
