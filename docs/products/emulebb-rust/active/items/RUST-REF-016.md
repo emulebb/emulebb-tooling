@@ -46,7 +46,12 @@ unit tests, 35 browser tests and the UI production build passed. Core code is
 unchanged by this cut. Evidence under `EMULEBB_WORKSPACE_OUTPUT_ROOT`:
 `reports/settings-request-round-1/status-canonical-scan-{rest,python}.log` and
 `reports/settings-request-round-1/status-canonical-lifecycle-webui.log`.
-Verified-runtime wire validation follows the committed source rebuild.
+All four local-client checks, including both native scenarios, also passed
+against the verified Windows rebuild on Rust `f36ea7d7` and Harness `346c3db5`.
+Wire evidence is
+`reports/settings-request-round-1/status-canonical-native-qualified-runtime.log`,
+the sibling JUnit XML and retained input/profile descriptors. This completes
+this status cut; runtime query/sort and active-memory qualifications remain open.
 
 ## Fractional or unknown Kad bootstrap progress (2026-11-22)
 
