@@ -29,6 +29,23 @@ during consolidation; documentation checks passed in
 `reports/settings-request-round-1/foundation-spec-consolidation-docs.log` below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
 
+## Bounded diagnostic server prefix (2026-11-22)
+
+Diagnostic operational snapshots now traverse admitted server-resource pages
+instead of loading and sorting the entire catalog. The section keeps at most
+512 records in immutable-ID order and at most 1 MiB of encoded item backing
+(or the smaller requested bundle budget). Each read page is released before
+the next; the existing single-capture permit owns the bounded diagnostic JSON.
+Count-limit and byte-budget omissions are reported separately. This limits
+diagnostic capture, not the stored catalog or its paginated REST access.
+
+All 182 REST tests passed (178 unit and four integration), including a 513-server
+regression covering multiple pages, the record limit and byte-budget omissions.
+Evidence: `reports/settings-request-round-1/diagnostic-server-pages-rest.log`
+under `EMULEBB_WORKSPACE_OUTPUT_ROOT`. Full-catalog reads in aggregate status,
+snapshot and runtime planning remain separate unfinished work; this checkpoint
+does not claim their memory use is bounded.
+
 ## Small, retained discovery imports (2026-11-22)
 
 Direct read-only HTTP measurements on 2026-11-22 returned:
