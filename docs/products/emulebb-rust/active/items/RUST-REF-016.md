@@ -29,6 +29,42 @@ during consolidation; documentation checks passed in
 `reports/settings-request-round-1/foundation-spec-consolidation-docs.log` below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
 
+## Bounded library hash-detail prerequisite (2026-11-22)
+
+Rust `c5877019` adds metadata/Native/Core point-detail reads for client hashes,
+including copyless content. A shared point-query helper reads summary facts and
+explicit local priority/comment/rating in one transaction. It checks borrowed
+text lengths before decoding, retains only a fixed-size AICH root, and does not
+read jobs, path lists or hashsets. Passive-only evidence remains outside library
+membership. Thin collection rows do not acquire detail fields.
+
+The existing admitted Native read owner supplies captured upload counters and
+retains the result. Core checks profile coherence before and after the read,
+then separately admits detail conversion, link construction and JSON backing.
+Its 2 MiB detail allowance covers maximum-length name/comment and escaped link
+text within the existing shared transient budget; no new cache, worker or user
+setting is introduced. Unknown accepted size yields a null link. Accepted size
+uses the existing delimiter-safe eD2K/AICH link formatter.
+
+Scoped gates passed **363 metadata, 1,537 Native and 740 Core tests**, without
+compiler warnings. Coverage includes copyless explicit fields/current counters,
+no payload admission, conversion/serialization charge release, absent hashes,
+coherence faults, accepted-size links, oversized-comment refusal, maximum-length
+name/comment and fixed AICH identity. Evidence below
+`EMULEBB_WORKSPACE_OUTPUT_ROOT` is
+`reports/settings-request-round-1/library-hash-detail-metadata.log`,
+`library-hash-detail-native.log` and `library-hash-detail-core.log` in that same
+directory. Normal Rust commit checks passed.
+
+The Core gate is green at this revision, including endgame and preparation
+fixtures. Their earlier intermittent failures remain unresolved qualification
+concerns; this pass does not explain or repair them. Fresh schema stays **116**.
+This is the bounded service prerequisite, not the public REST/OpenAPI/WebUI
+cutover. Next switch those callers together, preserve on-demand publication
+visibility and remove the shared-file collection/detail/scalar read surface.
+Server resources, scan progress/calendar work, aggregate construction ownership
+and final platform/pressure gates also remain open. No PR is authorized.
+
 ## Retained Core metadata edit publication (2026-11-22)
 
 Rust `075ee6fb` extends the existing profile persistence owner across hash

@@ -972,7 +972,10 @@ SPA and harness callers together; do not expose transitional dual contracts.
 
 The hash detail carries the eD2K link and local comment/rating; it replaces
 separate read endpoints for those scalar facts. Locations and tags remain
-separate paginated resources. Upload priority and local comment/rating have one
+separate paginated resources. The link is null until content size is accepted;
+a provisional download size must not become identity through a library read.
+Collection rows remain thin; detail text and link construction belong to an
+admitted point read. Upload priority and local comment/rating have one
 persistent hash-level owner, shared by every copy and editable without an
 available local copy. Removing copies does not discard this metadata. Download
 priority remains omitted.
