@@ -29,6 +29,40 @@ during consolidation; documentation checks passed in
 `reports/settings-request-round-1/foundation-spec-consolidation-docs.log` below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
 
+## Native Windows profile-import qualification (2026-11-22)
+
+The current Windows release client and embedded WebUI built successfully from
+Rust `130ca0b2`, with zero warnings. Build evidence is
+`reports/settings-request-round-1/schema114-windows-build.log` and
+`logs/builds/20261122T042947Z-build-clients/build-result.json` below
+`EMULEBB_WORKSPACE_OUTPUT_ROOT`.
+
+Enabling the existing native import regressions found a root fixture that used
+a nonexistent conflict constraint and a hashes-only importer that selected the
+operator executable instead of its managed source's verified runtime. Harness
+`0c39dc1a` uses fresh root IDs after retiring the previous fixture resources and
+uses the existing verified-stage owner for managed imports. Canonical source
+imports retain their explicitly staged operator runtime. Unknown source layouts
+fail before export or execution; managed-stage admission has no operator fallback.
+The affected fixtures use the selected Rust source, current root timestamps and
+the canonical settings singleton. No product alias or compatibility path was added.
+
+The four existing profile/import Python suites passed **79 tests**, including
+the two previously deselected native profile tests and two native corrupt-AICH
+cases. Coverage includes fresh import, preserved upload counters on enrichment,
+optional AICH rejection with MD4 reuse, relocated files and immutable replacement
+root IDs with watching off. Synthetic fixtures were kept under the workspace
+output root using pytest's `--basetemp`. Evidence is
+`reports/settings-request-round-1/schema114-native-import-python-final.log`.
+Normal commit and push checks also passed.
+
+One Docker/WSL integration test was skipped because `EMULEBB_IMPORT_TEST_IMAGE`
+was not configured; cross-platform import is therefore not qualified here.
+This is import/build evidence, not a fresh full Windows REST/OpenAPI campaign or
+physical-device proof. Aggregate construction, canonical library/server resource
+cutovers and active payload pressure remain open, together with the pending
+operator choices. Existing GNU/resource receipts retain their recorded revisions.
+
 ## Snapshot wire ownership (2026-11-22)
 
 Rust `130ca0b2` encodes the existing snapshot envelope from a typed borrowed
