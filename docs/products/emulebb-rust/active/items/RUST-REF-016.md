@@ -47,6 +47,16 @@ investigation should distinguish fixture interference or a specific close cause
 rather than repeating unchanged runs until green. Filtered evidence does not
 replace required full-suite validation.
 
+Inspection of the retained failing process finds four distinct endgame fixture
+directories, ruling out a directory collision in that run. Metadata fixtures use
+separate in-memory SQLite connections. A broader supported Windows run of
+`tests::download_` also passes **61 tests** with visible Native tracing; evidence
+is `reports/settings-request-round-1/endgame-download-family-windows.log` below
+the output root. Neither focused concurrency scenario reproduces the failure.
+No directory allocator, timeout, transfer policy or retry behavior is changed on
+this evidence. Preserve the open fault and stop unchanged reruns; active-payload
+memory qualification is a separate outstanding acceptance task.
+
 ## Current GNU and capacity proof (2026-11-22)
 
 Rust `264b9fe9`, Harness `cce2809f`, Tooling `cc33be1c` and Builder `98fa3d2`
