@@ -29,6 +29,23 @@ during consolidation; documentation checks passed in
 `reports/settings-request-round-1/foundation-spec-consolidation-docs.log` below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
 
+## Capacity campaign library-read coverage (2026-11-22)
+
+The existing shared-library I/O campaign now streams all ten library sorts in
+both directions through their terminal pages, plus case-insensitive literal
+substring probes covering case, punctuation, Unicode and a nonmatching wildcard
+lookalike. It checks strict sort/hash advancement, exact baseline counts and
+shared-row eligibility. Only current-page data and compact first/last summaries
+are retained; the existing process sampler and total campaign deadline apply.
+This unchanged baseline exercises equal-key upload-statistic cohorts, not live
+upload counter changes. The global acceptance gate requires these reads.
+
+All 137 focused Python tests passed through Builder's `test python` operation
+with `test_rust_shared_library_io.py` and `test_rust_rest_contract.py`. Failure
+cases include truncated traversal, duplicate/reversed rows, nonmatching results,
+stalled continuation and invalid counters. The extended constrained runtime
+campaigns remain pending; earlier capacity evidence does not prove these checks.
+
 ## Canonical status and cached scan observations (2026-11-22)
 
 Native status exposes lifecycle, statistics, server/Kad/network state and real
