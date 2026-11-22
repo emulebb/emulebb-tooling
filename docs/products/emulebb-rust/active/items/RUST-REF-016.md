@@ -29,6 +29,29 @@ during consolidation; documentation checks passed in
 `reports/settings-request-round-1/foundation-spec-consolidation-docs.log` below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
 
+## Canonical server controls and restart proof (2026-11-22)
+
+Endpoint-addressed edit and disable-as-delete methods are removed. Internal
+callers and tests use retained ID-addressed update/delete operations. The
+runtime control overlay uses `MetadataServerUpdate` directly, with no name
+field or separate public edit DTO. Tests disable explicitly and delete
+explicitly. The live-plan test persists its server resource before mutating it;
+configured protocol endpoints alone do not manufacture a saved resource ID.
+
+The profile integration test creates through the canonical owner and verifies
+identity, edited controls and disabling across restart, then deletion across a
+further reopen. **93 focused server tests and the full Core suite of 749 tests
+pass**, including this profile test and the Windows endgame fixtures. Logs below
+`EMULEBB_WORKSPACE_OUTPUT_ROOT`:
+
+- `reports/settings-request-round-1/server-canonical-controls-core.log`
+- `reports/settings-request-round-1/server-canonical-controls-core-full.log`
+
+This passing endgame run does not establish a causal repair for the previously
+captured intermittent admission failure. Explicit creation/import separation
+and aggregate server construction remain open; operator edits now have only
+the canonical retained mutation path.
+
 ## Server resource REST/OpenAPI/WebUI cutover (2026-11-22)
 
 Native server list/detail reads now use admitted persisted-ID reads and a
