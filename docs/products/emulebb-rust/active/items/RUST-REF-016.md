@@ -29,6 +29,38 @@ during consolidation; documentation checks passed in
 `reports/settings-request-round-1/foundation-spec-consolidation-docs.log` below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
 
+## Server resource REST/OpenAPI/WebUI cutover (2026-11-22)
+
+Native server list/detail reads now use admitted persisted-ID reads and a
+separately admitted presentation projection. They do not build the complete
+configured/runtime server list. Pages default to 100, cap at 200, may end early
+on byte allowance and expose optional exact totals. Ascending-ID cursors remain
+usable after anchor deletion. Resource responses include immutable decimal IDs;
+per-server connect resolves that ID rather than accepting a protocol endpoint.
+
+Creation uses the retained canonical owner, returns 201 with `data.id` and
+`Location`, and reports 409 `SERVER_EXISTS` without changing an existing live
+endpoint. PATCH saves selected operator controls and DELETE retires the resource;
+both return 204. Names are observation-only. The WebUI fetches one cursor page,
+selects/actions by ID and provides no name input. Its filter is explicitly local
+to the displayed page. The native Python conformance owner supplies server-ID
+fixtures; the separate MFC contract and smoke fixtures were left untouched.
+
+Checks pass: **176 REST unit tests plus four integration tests; 179 native
+Python route/conformance tests; 93 WebUI unit tests and 35 browser tests**, with
+TypeScript checking and the production UI build. Logs below
+`EMULEBB_WORKSPACE_OUTPUT_ROOT`:
+
+- `reports/settings-request-round-1/server-resource-rest.log`
+- `reports/settings-request-round-1/server-resource-python.log`
+- `reports/settings-request-round-1/server-resource-webui.log`
+
+These checks do not replace current-source packaged/runtime qualification or
+the full Core gate. Internal endpoint-based creation/edit/import helpers and
+manual-name overlays still need removal/replacement; snapshot, status,
+diagnostics and connection-plan aggregate construction remain separate bounded
+ownership work. The intermittent Windows endgame admission failure remains open.
+
 ## Reported server names: canonical edits (2026-11-22)
 
 The subsequent bounded endgame investigation added error-chain context at

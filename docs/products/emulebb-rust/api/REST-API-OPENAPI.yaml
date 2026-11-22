@@ -2382,6 +2382,10 @@ paths:
       tags: [Servers]
       summary: List known ED2K servers.
       operationId: listServers
+      parameters:
+        - $ref: "#/components/parameters/UploadPageLimit"
+        - $ref: "#/components/parameters/ServerCursor"
+        - $ref: "#/components/parameters/CountTotal"
       responses:
         "200":
           $ref: "#/components/responses/ServerListResponse"
@@ -2412,8 +2416,8 @@ paths:
             schema:
               $ref: "#/components/schemas/ServerCreateRequest"
       responses:
-        "200":
-          $ref: "#/components/responses/ServerResponse"
+        "201":
+          $ref: "#/components/responses/ServerCreatedResponse"
         "400":
           $ref: "#/components/responses/ErrorResponse"
         "401":
@@ -2578,8 +2582,8 @@ paths:
             schema:
               $ref: "#/components/schemas/ServerPatch"
       responses:
-        "200":
-          $ref: "#/components/responses/ServerResponse"
+        "204":
+          $ref: "#/components/responses/NoContentResponse"
         "400":
           $ref: "#/components/responses/ErrorResponse"
         "401":
@@ -2601,8 +2605,8 @@ paths:
       summary: Remove one ED2K server.
       operationId: deleteServer
       responses:
-        "200":
-          $ref: "#/components/responses/ServerResponse"
+        "204":
+          $ref: "#/components/responses/NoContentResponse"
         "400":
           $ref: "#/components/responses/ErrorResponse"
         "401":
@@ -3726,14 +3730,20 @@ components:
       required: true
       schema:
         $ref: "#/components/schemas/SearchId"
+    ServerCursor:
+      name: cursor
+      in: query
+      required: false
+      description: Opaque ascending server-ID boundary; deletion of the anchor does not expire it.
+      schema: {type: string, minLength: 1, maxLength: 512}
     ServerId:
       name: serverId
       in: path
       required: true
       schema:
         type: string
-        pattern: "^[^/]+:(6553[0-5]|655[0-2][0-9]|65[0-4][0-9]{2}|6[0-4][0-9]{3}|[1-5][0-9]{4}|[1-9][0-9]{0,3})$"
-      description: URL-encoded endpoint token parsed at the final `address:port` colon.
+        pattern: '^[1-9][0-9]*$'
+      description: Immutable never-reused positive decimal server ID.
     SharedFileIgnorePattern:
       name: pattern
       in: query
@@ -4278,6 +4288,18 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/SearchListEnvelope"
+    ServerCreatedResponse:
+      description: Created server identity.
+      headers:
+        X-Contract-Version:
+          $ref: '#/components/headers/ContractVersionHeader'
+        Location:
+          description: Canonical resource URI.
+          schema: {type: string}
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ServerCreatedEnvelope'
     ServerListResponse:
       description: Server collection envelope.
       headers:
@@ -11945,22 +11967,17 @@ components:
         meta:
           $ref: "#/components/schemas/CursorPageMeta"
     ServerListEnvelope:
-      unevaluatedProperties: false
-      allOf:
-        - $ref: "#/components/schemas/EnvelopeBase"
-        - type: object
-          properties:
-            data:
-              $ref: "#/components/schemas/ServerList"
-    ServerList:
       type: object
       additionalProperties: false
-      required: [items]
+      required: [data, meta]
       properties:
-        items:
+        data:
           type: array
+          maxItems: 200
           items:
-            $ref: "#/components/schemas/Server"
+            $ref: "#/components/schemas/ServerResource"
+        meta:
+          $ref: "#/components/schemas/CursorPageMeta"
     ServerEnvelope:
       unevaluatedProperties: false
       allOf:
@@ -11968,12 +11985,37 @@ components:
         - type: object
           properties:
             data:
-              $ref: "#/components/schemas/Server"
+              $ref: "#/components/schemas/ServerResource"
+    ServerCreatedEnvelope:
+      unevaluatedProperties: false
+      allOf:
+        - $ref: "#/components/schemas/EnvelopeBase"
+        - type: object
+          properties:
+            data:
+              type: object
+              additionalProperties: false
+              required: [id]
+              properties:
+                id:
+                  type: string
+                  pattern: '^[1-9][0-9]*$'
+    ServerResource:
+      unevaluatedProperties: false
+      allOf:
+        - $ref: "#/components/schemas/Server"
+        - type: object
+          required: [id]
+          properties:
+            id:
+              type: string
+              pattern: '^[1-9][0-9]*$'
     Server:
       type: object
-      additionalProperties: false
       required: [address, port, name, priority, static, enabled, connected, connecting, current, description, dynIp, auxiliaryPorts, failedCount, hardFiles, ip, ping, softFiles, offerFilesPublishedEntries, offerFilesPendingEntries, version, users, files]
       properties:
+        endpoint:
+          type: string
         address:
           type: string
         port:
@@ -11982,6 +12024,7 @@ components:
           maximum: 65535
         name:
           type: string
+          readOnly: true
         priority:
           type: string
           enum: [low, normal, high]
@@ -12109,22 +12152,19 @@ components:
           type: integer
           minimum: 1
           maximum: 65535
-        name:
-          type: string
         priority:
           type: string
           enum: [low, normal, high]
         static:
           type: boolean
-        connect:
+        enabled:
           type: boolean
+          default: true
     ServerPatch:
       type: object
       additionalProperties: false
       minProperties: 1
       properties:
-        name:
-          type: string
         priority:
           type: string
           enum: [low, normal, high]

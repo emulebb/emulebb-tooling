@@ -135,6 +135,13 @@ documentation describes only implemented structure.
   The public `name` is a read-only observation populated by network/server.met
   metadata. Creation and updates accept endpoint/control fields; REST and WebUI
   do not edit names. Persist only the reported name, with no user-name override.
+  `GET /servers` accepts `limit`, opaque `cursor` and optional `countTotal`;
+  it returns a data array and cursor metadata. Deleted anchors remain valid
+  ascending-ID boundaries. Creation accepts address, port, priority (default
+  normal), static (default false) and enabled (default true), returning 201 with
+  `data.id` and a resource `Location`. PATCH accepts priority, static and enabled;
+  PATCH and DELETE return 204 after the retained mutation completes. GET,
+  PATCH, DELETE and the explicit connect action address decimal server IDs.
 - Persisted and public calendar timestamps are Unix seconds. Runtime scheduling
   uses monotonic clocks and whatever finer precision it requires. Revisions,
   not timestamps, order changes and detect conflicts.
