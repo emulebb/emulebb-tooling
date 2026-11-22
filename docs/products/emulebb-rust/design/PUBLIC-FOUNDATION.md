@@ -160,6 +160,8 @@ documentation describes only implemented structure.
 - Progress is a fraction from 0 to 1, or null when unknown. Unknown size is
   null, not a fabricated zero. Verified bytes, verification, delivery and
   completion are distinct facts.
+  Kad `bootstrapProgress` is 0 when stopped, 1 when ready and null while joining;
+  joining a changing network has no measurable completion fraction.
 
 ## Settings, paths and CLI
 

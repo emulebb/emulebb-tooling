@@ -12248,8 +12248,10 @@ components:
         bootstrapping:
           type: boolean
         bootstrapProgress:
-          type: integer
+          type: [number, "null"]
           minimum: 0
+          maximum: 1
+          description: Fraction complete; 0 when stopped, 1 when ready, null while joining because completion is unknown.
         indexedSources:
           type: integer
           minimum: 0

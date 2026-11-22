@@ -29,6 +29,23 @@ during consolidation; documentation checks passed in
 `reports/settings-request-round-1/foundation-spec-consolidation-docs.log` below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
 
+## Fractional or unknown Kad bootstrap progress (2026-11-22)
+
+Kad bootstrap progress now follows the foundation rule: `0.0` while stopped,
+`1.0` when ready and `null` while joining. A changing network has no measurable
+completion fraction; REST preserves unknown progress rather than fabricating
+a numeric value. Core's DTO uses an optional floating-point value; OpenAPI
+declares a nullable number bounded by zero and one, and the WebUI type accepts
+null. This changes runtime telemetry only.
+
+All 753 Core tests, 182 REST tests, 306 scoped Python tests, 94 WebUI unit tests,
+35 browser tests and the UI production build passed. REST covers ready, joining
+and stopped serialization; schema tests exercise numeric boundaries and null.
+The existing native fixture additionally requires null after its one-peer
+partial bootstrap. Its updated wire check remains pending a verified rebuild.
+Evidence under `EMULEBB_WORKSPACE_OUTPUT_ROOT`:
+`reports/settings-request-round-1/kad-progress-fraction-{core,rest,python,webui}.log`.
+
 ## Current native local-client fixture (2026-11-22)
 
 The existing `test_emulebb_rust_local_client.py` now uses revisioned settings
@@ -54,11 +71,8 @@ this qualifies partial bootstrap telemetry, not a fully populated Kad network.
 Server-bind evidence exercises configured binding and REST lifecycle, not
 observed socket-source-IP proof. No daemon transport/default was changed.
 
-One separate public-contract mismatch was identified: Kad `bootstrapProgress`
-still emits 0/50/100, while PUBLIC-FOUNDATION requires numeric progress to use
-fractions or null. Its DTO, OpenAPI and consumers must be aligned before the
-contract freeze. Runtime all-sort/substring, active-payload pressure and maximum
-geometry qualification also remain open.
+Runtime all-sort/substring, active-payload pressure and maximum geometry
+qualification remain open.
 
 ## Current physical-library capacity tiers (2026-11-22)
 
