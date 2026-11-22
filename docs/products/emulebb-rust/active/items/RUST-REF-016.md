@@ -29,6 +29,59 @@ during consolidation; documentation checks passed in
 `reports/settings-request-round-1/foundation-spec-consolidation-docs.log` below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
 
+## Small, retained discovery imports (2026-11-22)
+
+Direct read-only HTTP measurements on 2026-11-22 returned:
+
+| Source | File bytes |
+| --- | ---: |
+| https://upd.emule-security.org/server.met | 3,390 |
+| https://upd.emule-security.org/nodes.dat | 5,962 |
+| https://emuling.gitlab.io/server.met | 1,692 |
+| https://www.gruk.org/server.met | 1,964 |
+
+The primary documents advertised 20 servers and 175 version-2 contacts. Their
+SHA-256 digests were respectively
+`8457474eb14dcc4b609ef30afae4c4101175085488b974acc241cd1872b31c3f`
+and `93933d8b06e8b9f516ebe3fcae181a8e9ee4a00ee05bd5c5e6d6beba9fdd9cde`.
+No downloaded source files were retained. These are observations of mutable
+providers, not a guarantee of their future size.
+
+The operator selected one 8 KiB ceiling for both file types and both automatic
+and manual intake, retaining Core's 8 MiB pool. The existing ingress ticket now
+serves both discovery types. Server imports reserve body/frame backing before
+fetch, parse the bounded document on the SQL owner, commit accepted records in
+one transaction and retain only IDs for subsequent bounded point publication.
+The whole accepted document finishes after caller disconnect without retaining
+the full Core. Shared per-record merging preserves identity, controls and health.
+
+Unusable endpoints are skipped. Corrupt variable tag framing stops server intake
+at its valid prefix; fixed-layout nodes intake retains complete declared records
+and ignores an incomplete tail. Neither guesses new offsets. Zero usable records
+return HTTP 400; a successful HTTP response waits for persistence/publication.
+The REST regression reuses the existing Core loopback discovery fixture and
+checks both zero-result routes through redirects plus visible partial intake.
+The SQL regression proves an injected second-row failure rolls back the accepted
+set and initialization. The quota-pressure proof still fills the actual shared
+allowance; live-change tests no longer assume a tiny request saturates it.
+
+Passes: **752 Core, 373 metadata, 181 REST and 112 daemon tests**, with the daemon
+child-only ownership entry intentionally ignored and invoked by parent tests.
+Also **four server.met and twelve nodes.dat parser tests pass**. Logs below
+`EMULEBB_WORKSPACE_OUTPUT_ROOT`:
+
+- `reports/settings-request-round-1/discovery-small-import-core-full.log`
+- `reports/settings-request-round-1/discovery-small-import-metadata.log`
+- `reports/settings-request-round-1/discovery-small-import-rest.log`
+- `reports/settings-request-round-1/discovery-small-import-daemon.log`
+- `reports/settings-request-round-1/discovery-small-import-ed2k.log`
+- `reports/settings-request-round-1/discovery-small-import-kad.log`
+
+Whole-import ownership is implemented. Server aggregate construction and
+current-source packaged/runtime qualification remain open. Passing endgame
+fixtures in this run do not establish a causal repair for their earlier
+intermittent admission failure.
+
 ## Canonical creation callers and reported bootstrap names (2026-11-22)
 
 The remaining server creation helper, its DTO and validator are removed.

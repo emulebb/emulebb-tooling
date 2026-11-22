@@ -1232,6 +1232,20 @@ initialization and import directly into SQLite. Do not retain or write back
 downloaded source files. Kad runtime routing state also uses the coordinated
 database owner.
 
+Use the same **8 KiB (8,192 bytes) per-document ceiling** for automatic bootstrap
+and manual server.met/nodes.dat imports. These input bounds do not limit the
+daemon's learned server/contact catalogs. Retain the existing Core 64-slot/8 MiB
+persistence allowance. Reserve body/frame backing before fetch and reuse the
+existing owner for accepted import work; no import job/status API is needed.
+
+Import HTTP requests wait for fetch, intake, persistence and publication. Skip
+unusable records at known boundaries. If damaged framing prevents locating the
+next record, stop there and keep the valid prefix without resynchronization
+guessing. Return 400 if no usable records remain; otherwise complete the import
+before returning 200. Save the accepted set in one transaction: a database write
+failure rolls that transaction back. Retain accepted work after caller disconnect
+and publish bounded record projections without collecting the existing catalog.
+
 Server source order is eMule Security, Emuling, then Gruk; use the first
 parser-valid nonempty list. Kad uses eMule Security; no independent working
 fallback has been confirmed. Reachability/header checks do not replace parsing.

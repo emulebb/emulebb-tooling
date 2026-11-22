@@ -2520,6 +2520,11 @@ paths:
       tags: [Servers]
       summary: Import or update server.met from a URL.
       operationId: createServerMetUrlImport
+      description: >-
+        Waits for an at-most-8192-byte document to be fetched and imported.
+        Skips unusable records at known boundaries and retains a valid prefix
+        if later framing is damaged. Returns 400 when no usable records remain.
+        Successful completion includes persistence and runtime publication.
       requestBody:
         required: true
         content:
@@ -2724,6 +2729,11 @@ paths:
       tags: [Kad]
       summary: Validate URL-provided Kad contacts and import them into SQLite.
       operationId: createKadNodesUrlImport
+      description: >-
+        Waits for an at-most-8192-byte document to be fetched and imported.
+        Skips unusable contacts and ignores an incomplete trailing record.
+        Returns 400 when no usable contacts remain. Successful completion
+        includes persistence and runtime publication.
       requestBody:
         required: true
         content:
