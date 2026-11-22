@@ -29,6 +29,30 @@ during consolidation; documentation checks passed in
 `reports/settings-request-round-1/foundation-spec-consolidation-docs.log` below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
 
+## Server calendar timestamps (2026-11-22)
+
+Rust `87b22226` introduces fresh schema 111: server `first_seen_at_s`,
+`last_seen_at_s` and `deleted_at_s` use Unix seconds. Bootstrap and ordinary
+upsert use the same seconds clock, preserve first-seen time on updates and keep
+ping durations in milliseconds. Live-row indexes, admitted page/exact reads and
+protocol catalog loading use the current columns. Harness `42ae73b1` updates
+the existing seed and discovery-snapshot helpers to that same schema.
+
+Scoped gates passed **354 metadata, 732 Core and 43 Python metadata executions**,
+with no Rust compiler warnings. New cases check real calendar-time bounds,
+first-seen preservation on update and unchanged ping precision. Existing
+retirement, re-import, identity and bounded-read checks continue to pass. Logs
+below `EMULEBB_WORKSPACE_OUTPUT_ROOT` are
+`reports/settings-request-round-1/server-seconds-metadata.log`,
+`server-seconds-core.log` and `server-seconds-python.log`.
+
+This closes only server calendar-time storage. Other persisted/public calendar
+timestamp domains still require consolidation. Server mutations and the public
+caller cut, canonical library resources, aggregate response ownership and
+current platform/resource qualification remain open. Earlier platform receipts
+do not qualify schema 111. The two operator choices recorded in the foundation
+remain pending; this slice does not select either behavior.
+
 ## Server identity and bounded metadata prerequisites (2026-11-22)
 
 Rust `046b83a1` introduces the fresh schema-110 server identity foundation.
