@@ -29,6 +29,53 @@ during consolidation; documentation checks passed in
 `reports/settings-request-round-1/foundation-spec-consolidation-docs.log` below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
 
+## Remote Kad notes are independent evidence (2026-11-22)
+
+Rust `7aec1fba` removes passive Kad note autofill from local comment/rating. The
+existing bounded observation owner now retains remote note text, reported rating
+and claimed publisher ID as corpus observations. It does not hydrate a selected
+manifest to store a note, create accepted library content or attach observations
+to a search session. Unknown name, size and responder endpoint remain null;
+the query's size filter is not treated as reported content size. Exact repeated
+notes increase occurrence counts, while different publishers/comments remain
+distinct semantic observations.
+
+Fresh schema **116** extends the existing observation table/model with nullable
+comment and publisher identity. Ingestion accounting and borrowed-row byte checks
+include note text before cloning. Corpus and session readers retain bounded
+pages. The existing REST observation projection/OpenAPI and on-demand WebUI
+metadata details expose `comment` and `publisherId`; the publisher is a claimed
+32-character lowercase hex identity, separate from the responder endpoint.
+Passive observations still have no implicit search-session membership. This is
+no new indexer search mode, notes endpoint, worker or settings surface.
+
+Scoped gates passed **361 metadata, 739 Core, 179 REST, 93 WebUI unit, 35 browser
+and 177 Python tests**, with no final Rust compiler warnings. Core covers empty
+and explicitly edited local fields while retaining remote notes, duplicate
+occurrences, independent publishers and an unrelated non-library hash. Metadata
+covers roundtrip/deduplication and oversized-note rollback. REST/SPA/Python cover
+the typed remote-note fields and strict publisher identity. Harness `3e487a5c`
+extends the existing OpenAPI suite. Evidence below
+`EMULEBB_WORKSPACE_OUTPUT_ROOT` is
+`reports/settings-request-round-1/remote-note-evidence-metadata.log`,
+`remote-note-evidence-core-final.log`, `remote-note-evidence-rest.log`,
+`remote-note-evidence-webui.log` and `remote-note-evidence-python.log` in that
+same directory.
+
+The initial Core run passed the new notes regression but failed the existing
+`nonterminal_original_copy_drains_replacement_endgame_peer` fixture when its seed
+closed after a partial prefix. The final gate passed without changing its
+geometry, timeout or acceptance conditions. The fixture now reports the actual
+downloader outcome if its relay fails. **The early close's cause is unresolved**;
+keep it in final endgame qualification rather than treating a rerun as a repair.
+The original failure is retained in `remote-note-evidence-core.log`.
+
+This delivers explicit-user-only local notes and separate remote retention.
+Core-owned metadata publication side effects, canonical library/server resource
+cutovers, scan progress/calendar work, aggregate ownership and final platform/
+pressure qualification remain open. Earlier Native/package/live/resource receipts
+retain their original source revisions. No PR is authorized before review.
+
 ## Copyless Native metadata mutation service (2026-11-22)
 
 Rust `7aeee57c` exposes the runtime's canonical `update_library_file_metadata`

@@ -981,6 +981,12 @@ copy registration must not become competing saved authorities or overwrite an
 existing client hash's metadata. Restrict edits to client library membership.
 Only explicit user edits set the local comment/rating. Remote Kad notes and
 peer comments remain network evidence; they do not fill empty local values.
+Remote note observations retain nullable comment and claimed publisher identity
+in the existing corpus model. Publisher identity is distinct from the responding
+endpoint. Missing reported name, size or endpoint stays unknown; a query filter
+does not establish those facts. Passive note retention creates neither client
+library membership nor search-session results. Expose note fields in the typed
+observation contract without introducing a parallel notes store.
 
 Both `/uploads` and `/upload-queue` return bounded data arrays with cursor,
 limit (default 100, maximum 200), and optional countTotal. Cursors are scoped

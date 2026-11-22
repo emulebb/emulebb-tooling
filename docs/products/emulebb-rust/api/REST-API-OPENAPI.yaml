@@ -12657,6 +12657,8 @@ components:
       - id
       - origin
       - reporterEndpoint
+      - publisherId
+      - comment
       - rawName
       - normalizedName
       - sizeBytes
@@ -12686,6 +12688,17 @@ components:
           type:
           - string
           - 'null'
+        publisherId:
+          type:
+          - string
+          - 'null'
+          pattern: ^[0-9a-f]{32}(?![\s\S])
+          description: Claimed note publisher identity, distinct from the responding endpoint.
+        comment:
+          type:
+          - string
+          - 'null'
+          description: Exact remote comment; independent of the user's local comment.
         rawName:
           type:
           - string
