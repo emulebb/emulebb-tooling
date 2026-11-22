@@ -29,6 +29,46 @@ during consolidation; documentation checks passed in
 `reports/settings-request-round-1/foundation-spec-consolidation-docs.log` below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
 
+## Server identity and bounded metadata prerequisites (2026-11-22)
+
+Rust `046b83a1` introduces the fresh schema-110 server identity foundation.
+Positive SQLite AUTOINCREMENT IDs survive metadata updates and reopen and are
+never reassigned after deletion. Live address/port uniqueness uses ASCII
+case-insensitive address matching. Retired rows do not block a fresh identity at
+the same endpoint and cannot be resurrected by upsert. The existing Python
+server seed helper uses the same live-row upsert semantics and preserves the
+allocation high-water mark when clearing fixture data. No migration, alias or
+endpoint-to-ID compatibility path was added.
+
+New metadata readers select one exact ID or an ascending keyset page of at most
+200 rows, default 100, with optional totals. A 1-MiB allowance includes text/port
+conversion headroom; SQLite checks text length before cloning. Byte-short pages
+preserve continuation without truncating strings. Disabled rows remain visible,
+retired rows are hidden and removed ID boundaries still continue. A live-ID
+partial index avoids walking retired history. Existing protocol catalog loading
+shares the row decoder; auxiliary ports retain first-observed order with bounded
+duplicate lookup work.
+
+Scoped gates passed **353 metadata, 729 Core and 42 existing Python fixture
+executions**. Rust warning scans were empty. Cases cover stable IDs, hard-delete
+high-water retention, retired-endpoint re-import, hostname case, distinct ports,
+reopen, disabled/retired visibility, byte-short traversal, oversized rows and
+invalid queries. The 100,000-row case includes 50,000 retired rows and proves a
+late indexed seek without a temporary sort in fewer than 10,000 SQLite VM steps.
+Evidence below `EMULEBB_WORKSPACE_OUTPUT_ROOT` is
+`reports/settings-request-round-1/server-identity-metadata-verified.log`,
+`server-identity-core-accepted.log` and `server-identity-python-verified.log`.
+An intermediate broad SQL edit also changed friend re-add behavior; the existing
+FIFO regression caught it, the unrelated edit was restored, and Core passed.
+No friend-domain change remains in the final diff.
+
+This is the database/read-model prerequisite. Core admission, the coordinated
+server REST/OpenAPI/WebUI caller cut, aggregate snapshot/diagnostic ownership,
+persisted-calendar timestamp consolidation and resource qualification remain
+open. The server deletion choice and the separate library hash-metadata choice
+remain pending in the authoritative foundation. Existing platform receipts keep
+their own source/schema revisions and do not qualify schema 110.
+
 ## Current REST error catalogue (2026-11-22)
 
 The closed OpenAPI error enum now includes the current cursor, overlapping-root,

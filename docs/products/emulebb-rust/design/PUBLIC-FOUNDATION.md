@@ -122,6 +122,14 @@ documentation describes only implemented structure.
   identity, credit identity and changing queue rank. Maintain no durable
   per-connection history or database ID allocation for these ephemeral entries;
   credits and lifetime accounting retain their separate persistence rules.
+- Server resources use their durable IDs; address and port remain protocol
+  attributes. A live address/port pair is unique, with ASCII case-insensitive
+  address matching. Updates preserve identity. Retired identities stay retired;
+  re-import allocates a new ID. Server pages use ascending ID boundaries, default
+  100/maximum 200 rows and byte-short continuation; disabled rows remain visible.
+  Before the server wire cut, the operator must choose between true resource
+  removal through DELETE with separate disable through PATCH, and disable-only
+  through PATCH with no DELETE route. Do not implement that pending choice.
 - Persisted and public calendar timestamps are Unix seconds. Runtime scheduling
   uses monotonic clocks and whatever finer precision it requires. Revisions,
   not timestamps, order changes and detect conflicts.
