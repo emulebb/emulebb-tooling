@@ -29,6 +29,26 @@ during consolidation; documentation checks passed in
 `reports/settings-request-round-1/foundation-spec-consolidation-docs.log` below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
 
+## Reported server names: canonical edits (2026-11-22)
+
+Canonical ID-addressed metadata/Core edits accept only priority, static status
+and enabled status. Reported names are preserved by the selective SQL write and
+cache publication. The feedback/publication regression now supplies a network
+name while an operator control edit is held at publication; both the observed
+name and edited priority survive. REST/OpenAPI/WebUI creation and editing still
+require their coordinated cutover; this prerequisite does not claim that cutover.
+
+Validation: **366 metadata unit tests and three profile-ownership tests pass**.
+All **seven canonical Core server tests pass** within the broader Core run.
+That run finishes **714 passed, one failed**: the existing Windows nonterminal
+endgame fixture reports an early seed EOF at 1,290,240 of 9,400,064 prefix bytes.
+Importantly, this capture includes a preceding seeder listener error:
+`local mutation capacity is busy`. Investigate the bounded mutation-admission
+path before another unchanged endgame rerun; this is evidence, not a proven fix.
+The retained log is
+`reports/settings-request-round-1/server-reported-name-core.log` below
+`EMULEBB_WORKSPACE_OUTPUT_ROOT`. Full Core acceptance remains blocked.
+
 ## Ordinary parallel payload proof (2026-11-22)
 
 Harness `92469fe1` extends the existing native package smoke with sixteen distinct
