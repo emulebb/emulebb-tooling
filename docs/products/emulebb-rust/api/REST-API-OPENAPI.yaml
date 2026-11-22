@@ -4347,7 +4347,7 @@ components:
           schema:
             $ref: "#/components/schemas/SharedFileIgnoresEnvelope"
     SnapshotResponse:
-      description: Snapshot envelope.
+      description: Dashboard summary and bounded activity pages. Browse server resources through GET /servers.
       headers:
         X-Contract-Version:
           $ref: "#/components/headers/ContractVersionHeader"
@@ -11264,7 +11264,6 @@ components:
             - downloads
             - uploads
             - uploadQueue
-            - servers
             - kad
             - network
             - logs
@@ -11283,10 +11282,6 @@ components:
                 type: array
                 items:
                   $ref: '#/components/schemas/Upload'
-              servers:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Server'
               kad:
                 $ref: '#/components/schemas/Kad'
               network:

@@ -144,6 +144,10 @@ documentation describes only implemented structure.
   `data.id` and a resource `Location`. PATCH accepts priority, static and enabled;
   PATCH and DELETE return 204 after the retained mutation completes. GET,
   PATCH, DELETE and the explicit connect action address decimal server IDs.
+  Dashboard snapshots carry connection status and the catalog count, while
+  server rows are read through the paginated collection. Status reads count
+  live rows and look up only the current endpoint. The WebUI Network view
+  pages server endpoints independently and uses the status summary for totals.
 - Persisted and public calendar timestamps are Unix seconds. Runtime scheduling
   uses monotonic clocks and whatever finer precision it requires. Revisions,
   not timestamps, order changes and detect conflicts.

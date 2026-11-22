@@ -29,6 +29,27 @@ during consolidation; documentation checks passed in
 `reports/settings-request-round-1/foundation-spec-consolidation-docs.log` below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
 
+## Dashboard server resources separated from summaries (2026-11-22)
+
+Dashboard snapshots carry server connection status and the catalog count.
+Catalog rows are browsed through `GET /servers`; the WebUI Network view owns
+an independent cursor page and its metrics use the status count. Overview and
+the connection toolbar use status facts directly. OpenAPI, WebUI types and
+browser fixtures use this shape. REST has no remaining calls to the full-list
+`Core.servers()` reader.
+
+The retained-frame capacity regression now exercises real byte-short server
+pages, retains cloned response frames until Native's shared allowance refuses
+another request, then verifies recovery after final drop. Snapshot regressions
+verify summary counts and separate paginated catalog access.
+
+Validation passed: all 182 REST tests, 94 WebUI unit tests, 35 browser tests,
+WebUI typecheck/production build and 303 Python route/schema/conformance tests.
+Evidence under `EMULEBB_WORKSPACE_OUTPUT_ROOT`:
+`reports/settings-request-round-1/snapshot-server-resource-{rest,webui,python}.log`.
+Runtime connection-plan construction and final current-artifact qualification
+remain open. This is a public-surface checkpoint, not full-goal acceptance.
+
 ## Bounded server connection status (2026-11-22)
 
 REST status and server connection acknowledgements now use an admitted metadata
