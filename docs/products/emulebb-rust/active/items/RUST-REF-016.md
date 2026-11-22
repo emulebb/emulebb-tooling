@@ -29,6 +29,48 @@ during consolidation; documentation checks passed in
 `reports/settings-request-round-1/foundation-spec-consolidation-docs.log` below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
 
+## Schema-114 GNU package and constrained library campaigns (2026-11-22)
+
+Rust `d603eb42`, Harness `7da4dd8d`, Tooling `83d5f29c` and Builder `98fa3d2c`
+passed the full GNU amd64 package gate and both agreed physical-library tiers.
+The archive SHA-256 is
+`9445c9902fe417b8f97b5d9c2ba37908ddc99025299d373a0e94b83485fceb22`.
+All evidence paths below are relative to `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
+
+The package gate passed strict Clippy, packet diagnostics, release compilation,
+**3,505 workspace tests and three VPN-egress tests**. One intentionally ignored
+ownership-child fixture is exercised by its parent tests. The archive and DEB
+were built locally; no release was published. The non-root native package smoke
+passed a 12 MiB local transfer, preserved its verified 9,728,000-byte prefix over
+a stopped-job restart, completed delivery with the expected SHA-256, retained
+the completed job and shut down gracefully. It does not prove rendered WebUI
+behavior. Receipts are `reports/settings-request-round-1/foundation-gnu-schema114-full.log`,
+`reports/rust-linux/gnu-amd64/b5879ba8ed2944cabaf2f85db004fdcc/` and
+`reports/rust-linux/gnu-amd64/57b927673ff3409e90ed16d05efface9/package-smoke.json`.
+
+| Physical library | Retained jobs | Enforced memory | Campaign receipt |
+| --- | --- | --- | --- |
+| 50,000 files / 5,242,880,000 bytes | 100,000 | 512 MiB | `reports/linux-containers/library/d65ce811618c49d7b894d5486476f94b/report.json` |
+| 100,000 files / 10,485,760,000 bytes | 100,000 | 1 GiB | `reports/linux-containers/library/4a9beb312ba0467ea691a83ad0679d42/report.json` |
+
+Both receipts report `passed` and `workloadQualified: true`, with one CPU,
+no swap, unchanged resource limits and no OOM events. Both include 1,000
+long-path files. The campaigns cover initial payload hashing, catalog recovery
+over restarts, root updates, opt-in watching and filesystem mutations. The 100k
+campaign's global checks also confirm preserved retained-job counts, graceful
+shutdowns and no REST/watcher errors. Owned execution containers were removed.
+Kernel campaign-tree memory peaks include filesystem cache and controller
+charges; they are not daemon RSS or proof of the resident-cache ceiling.
+
+Retained history contains 99,000 completed jobs, 900 stopped jobs and 100 started
+intents. Its explicit qualification scope is **metadata-only download history**,
+not concurrent payload execution. These passes establish the current campaign
+baseline; canonical library/server resource cutovers, their expanded query and
+mutation qualification, aggregate response ownership, active payload/session
+pressure and remaining platform gates are still open. They do not complete the
+foundation goal or authorize a PR. The three pending operator choices are
+unchanged.
+
 ## Monotonic scan progress measurements (2026-11-22)
 
 Rust `d603eb42` separates scan elapsed-time anchors from calendar presentation.
