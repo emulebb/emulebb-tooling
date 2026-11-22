@@ -29,6 +29,46 @@ during consolidation; documentation checks passed in
 `reports/settings-request-round-1/foundation-spec-consolidation-docs.log` below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
 
+## Persisted calendar timestamp consolidation (2026-11-22)
+
+Rust `b3ca4c69` introduces fresh schema 114 and closes the remaining peer/Kad
+calendar storage conversion. Peer first/last-seen times and the exact 150-day
+credit expiry use seconds. Kad bootstrap updates, received publish observations
+and outbound schedule times use seconds throughout their metadata writers and
+readers. The index snapshot bridge preserves encoded tags while reducing stored
+observation time to seconds. Live scheduling remains monotonic; restart restores
+elapsed seconds and treats future wall times as zero elapsed time. The separate
+metadata millisecond clock and superseded snapshot-column alternatives are
+removed. Duration fields and native filesystem fingerprints keep their units.
+
+Harness `d5ca37f4` updates bootstrap seeding and fixes both source-statistics
+queries to consume the canonical size/verification columns. The source diagnostic
+regression now creates the actual compiled schema rather than a hand-written
+subset, and checks seconds-based filtering while retaining native mtime
+precision. That stronger fixture exposed the adjacent summary query's column
+mismatch, which was repaired before the final passing run.
+
+Scoped checks passed **359 metadata, 86 index, 1,535 Native, 734 Core and 197
+Python executions**, with no Rust compiler warnings. New cases cover exact
+credit-expiry boundaries, real peer calendar bounds, snapshot subsecond
+reduction with unchanged wire tags, future/normal wall-clock reconstruction and
+current-schema source diagnostics. Existing publish admission/Busy rollback,
+snapshot expiry, credit settlement and reopen checks passed. One Native
+settlement test's direct SQL needed the current timestamp columns; its final
+rerun passed. No acceptance checks were relaxed.
+
+Evidence below `EMULEBB_WORKSPACE_OUTPUT_ROOT` is
+`reports/settings-request-round-1/peer-kad-seconds-metadata.log`,
+`peer-kad-seconds-index.log`, `peer-kad-seconds-native-final.log`,
+`peer-kad-seconds-core.log` and `peer-kad-seconds-python-final.log`.
+
+This closes persisted calendar timestamp units, not the complete public time
+contract. Public diagnostic/DTO timestamps still require coordinated review and
+conversion. Canonical library/server resources, aggregate response ownership,
+native import qualification and final platform/resource campaigns remain open.
+Earlier package and constrained-container receipts do not qualify schema 114.
+The pending operator choices in the authoritative foundation are unchanged.
+
 ## Library calendar timestamps and scan completion (2026-11-22)
 
 Rust `cb06ca76` introduces fresh schema 113. Library content/origin/name
