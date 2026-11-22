@@ -29,6 +29,31 @@ during consolidation; documentation checks passed in
 `reports/settings-request-round-1/foundation-spec-consolidation-docs.log` below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
 
+## Atomic server resource storage prerequisite (2026-11-22)
+
+Rust `07ff665a` makes server upsert return the stable ID from the SQL write,
+only after its transaction commits. ID-addressed edits update only selected
+operator fields, preserving endpoint identity and network observations. Deletion
+atomically disables and retires the resource; repeated deletion and edits of a
+missing ID do not create rows. Importing the endpoint again allocates a new ID.
+The fresh schema remains **117**; no schema shape or public route changes here.
+
+Scoped gates pass **366 metadata, 740 Core and 112 daemon tests**, without
+compiler warnings. One daemon subprocess fixture remains intentionally ignored
+by the unit entrypoint, pending its registered full-matrix execution. Coverage
+includes update/delete failure rollback, field preservation, case-insensitive
+identity receipts, disabled-resource retention and re-import identity.
+Evidence below `EMULEBB_WORKSPACE_OUTPUT_ROOT` is
+`reports/settings-request-round-1/server-mutations-metadata.log`,
+`server-mutations-emulebb-core.log` and `server-mutations-emulebb-daemon.log`
+in that same directory.
+
+Next, wire these storage operations through the retained Core mutation owner,
+then switch REST/OpenAPI/WebUI and native callers together. The operator decision
+on duplicate explicit `POST /servers` remains pending: 409 without changing the
+existing resource (recommended), or update it and return the existing ID.
+Imports retain their separate merge semantics. No choice is assumed from silence.
+
 ## Native library comparison reads (2026-11-22)
 
 Harness `0f01dd7e` updates the existing soak-control comparison utilities to
