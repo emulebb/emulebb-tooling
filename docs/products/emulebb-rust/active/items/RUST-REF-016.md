@@ -29,7 +29,7 @@ during consolidation; documentation checks passed in
 `reports/settings-request-round-1/foundation-spec-consolidation-docs.log` below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
 
-## Capacity campaign library-read coverage (2026-11-22)
+## Qualified capacity campaigns and library reads (2026-11-23)
 
 The existing shared-library I/O campaign now streams all ten library sorts in
 both directions through their terminal pages, plus case-insensitive literal
@@ -43,8 +43,51 @@ upload counter changes. The global acceptance gate requires these reads.
 All 137 focused Python tests passed through Builder's `test python` operation
 with `test_rust_shared_library_io.py` and `test_rust_rest_contract.py`. Failure
 cases include truncated traversal, duplicate/reversed rows, nonmatching results,
-stalled continuation and invalid counters. The extended constrained runtime
-campaigns remain pending; earlier capacity evidence does not prove these checks.
+stalled continuation and invalid counters. The required push checks also passed
+after the focused nine-test query repair: Harness `1297a1ca` uses a three-character
+literal wildcard-lookalike probe and preserves descending order with default
+sorting. An earlier campaign correctly returned HTTP 400 for the harness's
+two-character probe; its failure remains preserved under
+`reports/linux-containers/library/1799bf0c9415496d867ada16fbdea4e0/`.
+
+Both complete constrained campaigns passed against Rust `f36ea7d7`, Harness
+`1297a1ca`, Builder `54bfc7d` and Tooling `de594433`. Each used one CPU, no swap,
+physical library contents and 100,000 retained jobs. Every sort/direction
+traversal returned the exact baseline count with strict key/hash advancement.
+All five substring probes matched their expected counts: 1,000, 2, 1, 0 and 1.
+Watcher lifecycle, mutations, restart hydration, retained-job traversal and
+graceful shutdown also passed. Both reported zero OOM, OOM-kill or group-kill
+events. Evidence below is relative to `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
+
+| Library files | Memory limit | Campaign seconds | Pages per sort/direction | Kernel peak bytes | Read-phase daemon RSS peak bytes |
+| --- | --- | --- | --- | --- | --- |
+| 50,000 | 512 MiB | 858.902 | 250 | 536,883,200 | 146,833,408 |
+| 100,000 | 1 GiB | 1,627.230 | 500 | 1,073,770,496 | 349,229,056 |
+
+The capacity reports are:
+
+- `reports/linux-containers/library/5d2b1525dd2f4daf97d6ea9048209856/report.json`
+  and its `campaign/rust-shared-library-io-20261122T224635Z-1.json` detail.
+- `reports/linux-containers/library/3fd2500cbfbe4b41972b7d09f22b4e7a/report.json`
+  and its `campaign/rust-shared-library-io-20261122T230254Z-1.json` detail.
+
+The exact GNU archive SHA-256 is
+`6a0de0ecf00524a4aeb63544c6844a2d1b91ec2d0a0648c17215b0a39360346e`.
+Its full Linux gate passed Clippy, packet diagnostics, 3,542 workspace tests,
+three VPN egress tests and release compilation. The WebUI build and non-root
+package lifecycle/download smoke passed. Evidence is
+`reports/rust-linux/gnu-amd64/ae887898f593407ebd3a222c1d62385c/` and
+`reports/rust-linux/gnu-amd64/874ed5e8faa54b1b934c7bf9750a654d/package-smoke.json`.
+
+These measurements qualify this archive and campaign workload. Kernel peaks
+include controller memory and file cache and can slightly exceed nominal limits
+through kernel accounting; they do not measure daemon RSS or spare capacity.
+Read-phase RSS is sampled, not an overall daemon ceiling. Retained jobs remain
+metadata-only: 99,000 completed, 900 stopped and 100 started/waiting. Live upload
+statistics, active-transfer pressure, full adaptive/burst behavior and coupled
+scan/download contention remain separate required proof. Package smoke verifies
+sixteen distinct payload deliveries but only requires two overlapping charged
+owners; it does not qualify sixteen simultaneous executions or maximum geometry.
 
 ## Canonical status and cached scan observations (2026-11-22)
 
@@ -68,7 +111,8 @@ against the verified Windows rebuild on Rust `f36ea7d7` and Harness `346c3db5`.
 Wire evidence is
 `reports/settings-request-round-1/status-canonical-native-qualified-runtime.log`,
 the sibling JUnit XML and retained input/profile descriptors. This completes
-this status cut; runtime query/sort and active-memory qualifications remain open.
+this status cut. Capacity/read evidence appears above; active-memory
+qualification remains open.
 
 ## Fractional or unknown Kad bootstrap progress (2026-11-22)
 
