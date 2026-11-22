@@ -29,6 +29,19 @@ during consolidation; documentation checks passed in
 `reports/settings-request-round-1/foundation-spec-consolidation-docs.log` below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
 
+## Canonical network-setting startup guidance (2026-11-23)
+
+Rust `080441ec` reports P2P binding failures with `network.p2p.bindIp` and
+`network.p2p.bindInterface`, matching the current settings catalog. Ambiguous
+default routes direct the operator to the offline command
+`emulebb-rust --profile <PATH> settings set network.p2p.bindInterface <NAME>`
+while the daemon is stopped. Existing route/interface regression assertions
+cover this guidance. Builder's `test rust-unit --package emulebb-daemon` passed
+112 tests; its one ignored ownership child is an isolated subprocess fixture
+invoked by the passing parent tests. Normal commit checks also passed.
+This diagnostics-only cut does not replace the archive-specific capacity
+evidence below.
+
 ## Qualified capacity campaigns and library reads (2026-11-23)
 
 The existing shared-library I/O campaign now streams all ten library sorts in
