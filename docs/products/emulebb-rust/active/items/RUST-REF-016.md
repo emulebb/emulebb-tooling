@@ -236,6 +236,19 @@ All 151 affected Harness tests and targeted Ruff undefined-name checking pass.
 The next campaign must finish with a complete acceptance report; neither a
 partial workload result nor this reporting repair qualifies either tier.
 
+The complete **512 MiB / 50,000 physical library files / 100,000 retained jobs**
+campaign now passes for Rust `c27785a8` and Harness `7ee9e617`:
+`reports/linux-containers/library/da2b1d0b36ad463494ca1b1d53279f98/report.json`,
+with detailed campaign evidence in
+`campaign/rust-shared-library-io-20261123T074105Z-1.json` beneath that directory.
+All acceptance checks pass, including one measured payload-byte-growth interval
+during hashing, verified delivery, destructive removal with library withdrawal,
+restoration of the 100,000-job cohort, watcher acknowledgements and restart.
+The campaign records 1,069.44 seconds, one CPU, no swap and zero OOM events.
+Kernel peak is 537,133,056 bytes, including cache/controller costs and kernel
+accounting overshoot; this is not daemon RSS or a claim of memory headroom.
+The 1 GiB / 100,000-file tier remains pending on this same archive.
+
 The public-surface inventory also found two stale bind-command instructions in
 the getting-started guide and former setting names in the Android post-failure
 diagnostic matcher. The guide now uses the canonical offline settings command;
