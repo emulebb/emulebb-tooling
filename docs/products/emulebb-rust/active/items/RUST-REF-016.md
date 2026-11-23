@@ -119,6 +119,27 @@ the failed run does not establish a daemon regression. Scoped Builder tests
 passed in `reports/builder-unit/f9ff98eebe3d/`. Reuse the built archive for the
 standalone smoke rerun; renewed constrained capacity campaigns remain pending.
 
+That standalone rerun returned a real fixture failure in
+`reports/rust-linux/gnu-amd64/04c336ef87ac42c68524c54e44fb8d88/runtime.log`:
+all sixteen starts were accepted on their first request, thirteen jobs completed,
+and jobs 3, 7 and 8 stayed queued for sources with zero payload progress until
+the 1,144-second guard. The observed active peak was thirteen and resident peak
+11,737 bytes. Thus extending the outer guard supplied diagnostics, not a pass.
+The log also records local mutation-capacity refusals; the exact cause of each
+stalled job remains subject to native confirmation.
+
+Rust `76cd86c9` fixes one independently verified source-bookkeeping gap:
+an availability-persistence Busy/Closing refusal now settles only its captured
+probe lease without consuming the peer's reask interval. Genuine network and
+protocol errors retain the existing cooldown. The regression exercises the
+real Core source registry with wrapped errors; all 757 Core tests passed in
+`reports/settings-request-round-1/probe-capacity-core.log`. Harness `fdeff3fc`
+enables the preparation diagnostic topic in package smoke and preserves the
+beginning and end of each bounded failure-log excerpt, so later server retry
+warnings cannot hide the initial cause. All 112 package-harness tests passed.
+Current native smoke and both constrained campaigns still require new proof;
+the earlier Linux build/test evidence applies only to `b466fa8b`.
+
 The rebuilt GNU archive passed its full Linux gate: Clippy, packet diagnostics,
 3,543 workspace tests, three VPN egress tests, release compilation, the WebUI
 build and non-root package smoke. Gate evidence is
