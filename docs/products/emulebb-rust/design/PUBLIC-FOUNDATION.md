@@ -144,6 +144,10 @@ documentation describes only implemented structure.
   `data.id` and a resource `Location`. PATCH accepts priority, static and enabled;
   PATCH and DELETE return 204 after the retained mutation completes. GET,
   PATCH, DELETE and the explicit connect action address decimal server IDs.
+  Both connect actions return HTTP 200 with the instantaneous server status
+  plus `operationQueued: true`, acknowledging asynchronous command acceptance.
+  This does not guarantee connectivity. Ordinary status responses omit that
+  command acknowledgement; OpenAPI describes the two response shapes separately.
   Dashboard snapshots carry connection status and the catalog count, while
   server rows are read through the paginated collection. Status reads count
   live rows and look up only the current endpoint. The WebUI Network view

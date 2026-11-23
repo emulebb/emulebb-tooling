@@ -59,9 +59,32 @@ automatic target 16 and no byte progress; kernel OOM counters remained zero.
 The fixture had enabled settings but omitted manual runtime activation while
 automatic connection was disabled. It now creates isolated loopback server
 resources and invokes `/servers/operations/connect`, matching existing package
-smoke. Activation must succeed before publishing or starting the payload.
+smoke. Command acceptance must succeed before publishing or starting the payload.
 The scheduler regression independently demonstrates the refill defect; the
 failed campaign alone does not prove which delay would follow activation.
+
+The second attempt, `eed380694ea14d28a8611f1886c0297f`, stopped at the
+fixture's acknowledgement check: it guessed a `running` response field instead
+of the actual `operationQueued`. Both connect actions also lacked that field
+in their published success schemas. OpenAPI now describes their actual
+acknowledgement separately from ordinary status, without changing the daemon's
+wire behavior. The fixture validates this complete shape rather than guessing
+a boolean. All 270 focused schema/fixture tests passed; after adding the native
+preflight, all 149 shared-library campaign tests passed through Builder.
+The refreshed Windows executable and WebUI built with zero warnings; the
+runtime REST/OpenAPI gate passed with graceful teardown in
+`reports/rust-rest-openapi-ci/20261123T021327Z/report.json`. The first admission
+attempt refused an older registered executable; Builder refreshed it before
+the successful gate. Documentation publication checks also passed.
+
+Before physical library preparation, the constrained campaign now runs the
+same real transfer lifecycle against an empty library and the full retained-job
+cohort. Only an explicit missing-hashing-overlap failure after verified owned
+delivery, removal, restored baseline and graceful source shutdown satisfies
+this negative control. Earlier failures remain fatal, the receiver must stop
+gracefully, and the full campaign still requires actual hashing/byte overlap.
+This prevents another expensive library setup from concealing fixture wiring
+errors. Native preflight and renewed coupled capacity results remain pending.
 
 The rebuilt GNU archive passed its full Linux gate: Clippy, packet diagnostics,
 3,543 workspace tests, three VPN egress tests, release compilation, the WebUI

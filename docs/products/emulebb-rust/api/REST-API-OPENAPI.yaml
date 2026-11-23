@@ -2459,7 +2459,7 @@ paths:
       operationId: connectServerAny
       responses:
         "200":
-          $ref: "#/components/responses/ServerStatusResponse"
+          $ref: "#/components/responses/ServerConnectAcknowledgementResponse"
         "400":
           $ref: "#/components/responses/ErrorResponse"
         "401":
@@ -2637,7 +2637,7 @@ paths:
       operationId: connectServer
       responses:
         "200":
-          $ref: "#/components/responses/ServerStatusResponse"
+          $ref: "#/components/responses/ServerConnectAcknowledgementResponse"
         "400":
           $ref: "#/components/responses/ErrorResponse"
         "401":
@@ -4328,6 +4328,15 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/ServerEnvelope"
+    ServerConnectAcknowledgementResponse:
+      description: Connection command accepted; status is instantaneous and does not guarantee a connection.
+      headers:
+        X-Contract-Version:
+          $ref: "#/components/headers/ContractVersionHeader"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ServerConnectAcknowledgementEnvelope"
     ServerStatusResponse:
       description: Server status envelope.
       headers:
@@ -12004,6 +12013,38 @@ components:
             - integer
             - "null"
           minimum: 0
+    ServerConnectAcknowledgementEnvelope:
+      unevaluatedProperties: false
+      allOf:
+        - $ref: "#/components/schemas/EnvelopeBase"
+        - type: object
+          properties:
+            data:
+              $ref: "#/components/schemas/ServerConnectAcknowledgement"
+    ServerConnectAcknowledgement:
+      type: object
+      additionalProperties: false
+      required: [connected, connecting, currentServer, ed2kIdState, serverCount, operationQueued]
+      properties:
+        operationQueued:
+          type: boolean
+          const: true
+          description: The asynchronous connection command was accepted.
+        connected:
+          type: boolean
+        connecting:
+          type: boolean
+        currentServer:
+          oneOf:
+            - $ref: "#/components/schemas/Server"
+            - type: "null"
+        ed2kIdState:
+          $ref: "#/components/schemas/Ed2kIdState"
+        serverCount:
+          type: integer
+          minimum: 0
+        active:
+          $ref: "#/components/schemas/Server"
     ServerStatusEnvelope:
       unevaluatedProperties: false
       allOf:
