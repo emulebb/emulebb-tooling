@@ -29,6 +29,44 @@ during consolidation; documentation checks passed in
 `reports/settings-request-round-1/foundation-spec-consolidation-docs.log` below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
 
+## Cursor refill and coupled scan/payload qualification (2026-11-23)
+
+Rust `99d4ccf5` refills free source-preparation slots within the current SQLite
+cursor pass. Source-less preparations previously retired without a retained
+wake, leaving available slots idle until a later selection tick. The change
+uses the existing preparation bound and stops immediate refill when the cursor
+pass is exhausted; it adds no worker pool, business count cap or storage retry.
+The regression queues 100 source-less jobs before a sourced job: the old loop
+failed its 10-second test guard, while the refill passed in 0.90 seconds.
+This is mechanism evidence, not a product response-time promise. All 754 Core
+tests passed, including the full endgame cases; all 251 affected Python tests
+passed through Builder.
+
+Harness `f75c54d5` extends the existing capacity campaign's mutation/rehash phase
+with a real 64 MiB payload, paced at 512 KiB/s by one additional Rust source.
+Both daemons remain in the same enforced cgroup and communicate only over
+loopback with Docker networking disabled. The campaign requires payload-byte
+growth across observations of active hashing, OpenAPI-conformant resource
+samples within the 128 MiB resident ceiling, SHA-256-verified owned delivery,
+explicit removal and restoration of the 100,000-job baseline. The extra hash's
+client-owned metadata remains known after its output is removed. Source cleanup
+and bounded failure observations are recorded on every exit.
+
+The initial coupled 512 MiB campaign failed before payload progress:
+`reports/linux-containers/library/9d6b3ab0a03540baaab42eab61efd8ac/` below
+`EMULEBB_WORKSPACE_OUTPUT_ROOT`. Its job remained queued with reason `sources`,
+automatic target 16 and no byte progress; kernel OOM counters remained zero.
+The fixture had enabled settings but omitted manual runtime activation while
+automatic connection was disabled. It now creates isolated loopback server
+resources and invokes `/servers/operations/connect`, matching existing package
+smoke. Activation must succeed before publishing or starting the payload.
+The scheduler regression independently demonstrates the refill defect; the
+failed campaign alone does not prove which delay would follow activation.
+
+A rebuilt Linux archive and both complete constrained campaigns are pending
+for this cut. Earlier capacity and standalone-overlap evidence below retain
+their exact source/artifact scope; they do not qualify the new coupled phase.
+
 ## Admission-time package resource observations (2026-11-23)
 
 The existing sixteen-peer package smoke now samples daemon resource counters
