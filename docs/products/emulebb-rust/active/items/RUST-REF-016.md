@@ -166,6 +166,24 @@ an already-detached alternate source. Normal Rust commit hooks pass. Current
 native smoke and both constrained campaigns remain pending; this component
 proof does not establish the cause or resolution of every observed live stall.
 
+The renewed GNU AMD64 gate passes Clippy, packet diagnostics, optimized build,
+3,550 workspace tests, three VPN-egress tests and the WebUI build in
+`reports/rust-linux/gnu-amd64/e6ef56924a134395bbfed3004ec53e7e/`.
+Package lifecycle smoke passes in
+`reports/rust-linux/gnu-amd64/f3e1ca5855334329ba5ba4f0735283da/package-smoke.json`.
+All sixteen parallel jobs completed, with sixteen active at peak and 6,298,640
+resident bytes charged; no start retry was needed. The archive SHA-256 is
+`4e5933bafb61f193f8c6dcf3ca6190037697b9665f34ccf331637be4b96598cc`.
+This qualifies the native fixture, not constrained-memory library operation.
+
+The 512 MiB campaign stopped before library preparation in
+`reports/linux-containers/library/40d7f8a48ff441cfad691a8457bd7ee6/`: all five
+recorded client start attempts returned `DOWNLOAD_UNAVAILABLE`. No OOM or
+large-library result is inferred from this admission failure. Harness `13fb84e5`
+exports the existing bounded package-smoke diagnostics into coupled failure
+evidence; all 151 shared-library Harness tests pass. The next bounded step is
+to establish the native admission cause, then resume constrained qualification.
+
 The public-surface inventory also found two stale bind-command instructions in
 the getting-started guide and former setting names in the Android post-failure
 diagnostic matcher. The guide now uses the canonical offline settings command;
