@@ -147,17 +147,24 @@ progress. Peak active work was fifteen and resident memory 6,303,193 bytes.
 Job 8 logged a local mutation-capacity refusal during its network attempt.
 This does not qualify the native sixteen-job case or either constrained tier.
 
-The next repair is the prepared-source handoff, not another unchanged broad
-rerun. Availability must be recorded again under the selected execution
-generation; that write can refuse local capacity after preparation succeeds.
-Unused prepared sockets can also expire before execution. Carry the exact
-source lease and its actual owning token through handoff, including Begin
-cancellation, then settle local deferrals without penalizing the peer or
-clearing a newer reservation. Preserve genuine peer-failure cooldowns and the
-explicit storage-failure retry contract. Required focused proof covers typed
-refusals versus I/O failures, expiry before/after generation transfer and stale
-same-token cleanup. Current native smoke and both constrained campaigns remain
-pending.
+Rust `4699dc29` carries the exact source lease and its actual owning token
+through prepared-source handoff, including cancellation around Begin. Unused
+sockets close before settlement; local capacity refusals release only their
+reservation without penalizing the peer or clearing a newer reservation.
+Genuine peer-failure cooldowns and explicit storage-failure retry remain intact.
+Accepted UDP reask ownership survives later metadata-read failures and another
+peer's retry. Runner faults retain structured outcomes and typed errors rather
+than discarding accepted handoffs. An existing retry regression caught a lost
+prior error; that defect was repaired before the final full-suite pass.
+
+All 761 Core executions pass in
+`reports/settings-request-round-1/prepared-source-udp-core-final.log`. Focused
+coverage includes typed local refusals versus I/O errors, expiry before/after
+generation transfer, cancelled Begin, stale same-token cleanup, permit release,
+UDP detachment followed by a refused completion read, and retry exclusion for
+an already-detached alternate source. Normal Rust commit hooks pass. Current
+native smoke and both constrained campaigns remain pending; this component
+proof does not establish the cause or resolution of every observed live stall.
 
 The public-surface inventory also found two stale bind-command instructions in
 the getting-started guide and former setting names in the Android post-failure
