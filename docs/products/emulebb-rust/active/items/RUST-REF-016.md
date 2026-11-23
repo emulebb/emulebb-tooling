@@ -104,8 +104,20 @@ Regressions cover the only-copy case and preservation of another eligible copy,
 including the serving catalog. All 756 Core and 1,537 eD2K tests passed; evidence
 is `reports/settings-request-round-1/deletion-presence-core.log` and
 `reports/settings-request-round-1/deletion-presence-ed2k.log` below
-`EMULEBB_WORKSPACE_OUTPUT_ROOT`. The GNU archive and renewed native capacity
-campaigns still need to qualify this deletion-publication fix.
+`EMULEBB_WORKSPACE_OUTPUT_ROOT`.
+
+Rust `b466fa8b` also passed Linux Clippy, packet diagnostics, release compilation,
+all 3,545 workspace tests, three VPN egress tests and the WebUI production build:
+`reports/rust-linux/gnu-amd64/dbbf6f61c714433db91b2f4dc7b120f5/`.
+The subsequent package smoke did not return a report; its runtime log was empty
+in `reports/rust-linux/gnu-amd64/67f12cc7cf0e4e0db214f4703759ecd8/`.
+The outer container guard was only 600 seconds, below the fixture's existing
+1,144-second completion guard. Builder `988b3e4` allows 30 minutes for the whole
+smoke and records typed timeout/exit diagnostics in the existing log. This
+changes no payload, concurrency, integrity or memory acceptance condition;
+the failed run does not establish a daemon regression. Scoped Builder tests
+passed in `reports/builder-unit/f9ff98eebe3d/`. Reuse the built archive for the
+standalone smoke rerun; renewed constrained capacity campaigns remain pending.
 
 The rebuilt GNU archive passed its full Linux gate: Clippy, packet diagnostics,
 3,543 workspace tests, three VPN egress tests, release compilation, the WebUI
