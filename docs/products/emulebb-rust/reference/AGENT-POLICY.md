@@ -43,18 +43,17 @@ Do not load unrelated Rust annexes merely because the repository is active.
 - The bounded-monolith target is one daemon and one SQLite database with
   explicit client, indexer, and compatibility domain boundaries. The future
   autonomous indexer and Arr adapters must not introduce parallel client state.
-- API and database schema compatibility remain explicitly unstable through all
-  three phases and freeze together only after the Arr gate. An incompatible
-  schema requires an entirely fresh profile. Minimal TOML bootstrap settings
-  have a separate stability goal after adopting the accepted clean Beta3
-  snake_case contract. Use the [Persistence Policy](PERSISTENCE-POLICY.md) for
-  naming, target defaults and ownership; obsolete shapes are hard errors, never
-  aliases, compatibility shims, fallback keys or remapped values.
+- The accepted [Public Foundation](../design/PUBLIC-FOUNDATION.md) coordinates
+  round-one DB/settings/CLI/REST stabilization before later adapter/indexer
+  implementation. Start fresh; automatic upgrade machinery remains deferred.
+  Use the [Persistence Policy](PERSISTENCE-POLICY.md) for current-schema
+  validation, naming, target defaults and ownership. Remove superseded code
+  outright; add no shims, aliases, remapping or retired-input handling/tests.
 - `policy\rust-client.toml`, its omission registry, and its extension registry
   are the machine-readable authority for platform, behavior authority,
   protocol, long-path, reviewed-omission, and intentional-extension policy.
-- Retired REST, settings, and metadata fields are hard errors. Do not ignore,
-  alias, remap, or bridge them.
+- Validate the current contract without preserving lists or tests of removed
+  REST, settings, CLI or metadata shapes.
 
 ## Source And Output Boundaries
 

@@ -20,11 +20,10 @@ source: Stock compatibility review against current aMule 3.1
 
 ## Summary
 
-Allow healthy sources to take over outstanding blocks near download completion
-instead of holding an exclusive lease on an entire part until its original
-source finishes or fails. Current aMule explicitly redistributes final work
-across sources; Rust's whole-part claim can leave the transfer waiting behind a
-single slow source even when other useful peers are idle.
+Allow healthy sources to take over outstanding blocks near download completion.
+Block-granular ownership keeps useful peers working when a source stalls on the
+last missing ranges, while bounding deliberate duplicates and preserving verified
+payloads.
 
 ## Current State
 
@@ -96,6 +95,23 @@ already received from another source.
 
 ## Evidence
 
+- Round-one Rust `1d92d229` retains both live endgame lease owners and signals
+  redundant peers after verified-part publication. Read cancellation closes the
+  connection at the existing safe boundary; it never reuses a partially read
+  frame for another file. The signal is per peer, with no waiter task per block.
+- The existing Core loopback fixtures now qualify both original and replacement
+  winners for whole-payload completion and nonterminal first-part verification.
+  Real Native sources, TCP framing, lease age and measured rate gates are used.
+  The loser receives a partial frame before the winning copy is released. Exact
+  bytes, one accepted-byte charge, socket closure, no reconnect, empty requests
+  and restored resource accounting are asserted. A missing final part prevents
+  whole-file completion from masking nonterminal cancellation.
+- Scoped gates passed 1,515 Native and 726 Core executions, and the regular
+  Windows release/WebUI build passed with zero warnings. Retained paths and
+  qualification limits are recorded in
+  [RUST-REF-016](RUST-REF-016.md#real-peer-endgame-contention-checkpoint-2026-11-21).
+  Sending a partial frame does not prove decoder consumption. Explicit wire
+  cancellation, comparative latency and the current-aMule witness remain open.
 - The 2026-10-18 beta.3 scope audit traced the active scheduler to
   `block_lease.rs`, the piece-state tests, and the TCP duplicate, stale,
   out-of-order, and reconnect fixtures.

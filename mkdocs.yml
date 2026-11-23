@@ -86,6 +86,7 @@ nav:
       - Active Backlog: products/emulebb-rust/active/INDEX.md
       - Release Scope: products/emulebb-rust/RELEASE-SCOPE.md
       - Architecture: products/emulebb-rust/design/architecture.md
+      - Design — Public Foundation: products/emulebb-rust/design/PUBLIC-FOUNDATION.md
       - Stock/MFC Hash Import: products/emulebb-rust/reference/GUIDE-PROFILE-IMPORT.md
       - Design — Integrated Suite: products/emulebb-rust/design/integrated-suite.md
       - Nightly Builds: https://github.com/emulebb/emulebb-rust/releases

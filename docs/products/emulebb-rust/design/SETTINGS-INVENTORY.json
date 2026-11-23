@@ -1,28 +1,66 @@
 {
   "schema": "emulebb.settings-target-inventory/1",
-  "status": "PROPOSED_REVIEW_ONLY_NOT_IMPLEMENTED",
+  "status": "ACCEPTED_ROUND_ONE_TARGET_RUNTIME_INTEGRATION_PENDING",
   "ownerIssue": "https://github.com/emulebb/emulebb-rust/issues/297",
-  "reviewSourceRevision": "15020b7663a6771bc2d6e8282416ea36a7d7c163",
-  "defaultStatus": "The operator accepted clean snake_case bootstrap keys and target REST 20017 / P2P TCP 20019 / UDP 20020 on 2026-11-12; other proposed leaf defaults still require parent review and implementation qualification.",
-  "naming": "TOML, Rust and SQL names use snake_case; JSON uses camelCase and URL segments kebab-case. Use canonical names directly. No aliases, compatibility shims, fallback keys, remapping or silent ignoring; obsolete shapes are hard errors.",
+  "reviewSourceRevision": "70e595a2",
+  "defaultStatus": "PM accepted 59 public leaves on 2026-11-15; source-backed defaults except explicit adaptive concurrency default null and tempDirectory=temp. This is the implementation target, not runtime qualification.",
+  "naming": "TOML/Rust/SQL snake_case, JSON camelCase, URL kebab-case. Current-contract validation only; no aliases, compatibility shims, fallback keys, remapping, retired-input handling or removed-name tests.",
   "commonContract": {
     "definitionOwner": "emulebb-settings",
     "persistenceOwner": "emulebb-metadata",
-    "productStorage": "five closed typed domain documents in one SQLite database",
+    "productStorage": "one singleton app_settings row: positive checked revision and complete typed SavedSettings JSON document with all five groups and 59 mode/value leaves",
     "publicSettingsResource": "/api/v1/settings",
-    "snapshotRead": "complete domains plus one revision from one DB snapshot",
-    "validation": "closed typed whole-candidate validation; all JSON integers within exact interoperable range; no coercion",
+    "snapshotRead": "coherent resolved saved/default markers, plain admitted effective values, application pendingRestart/failed and exact decimal-string meta.settingsRevision under one publication boundary",
+    "validation": "typed whole-candidate validation with documented integer ranges; JSON numbers may exceed JavaScript exact-integer precision; no silent clamping",
     "secretHandling": "credentials and generated private keys excluded from settings/status DTOs, error values, public examples and normal structured logs; once-only fresh-key provisioning is an explicit bootstrap handoff",
     "privateDiagnosticContract": "#280 owns authenticated raw full-fidelity private export including its exact API key/sensitive-value fields and warning/acknowledgement; settings-resource exclusion assigns no export redaction or logger rewrite",
-    "representationValidator": "strong quoted settings-<saved-revision>-<64-lowercase-hex-SHA256>; digest of exact RFC 8785 canonical UTF-8 identity-encoded full SettingsRead; no generated timestamp",
-    "conditionalWrite": "compare full current validator under the publication/order boundary before a write or no-op, then saved-revision CAS in the SQLite transaction; changed effective/application data can cause 412 with the same saved revision",
-    "omission": "leave saved leaf unchanged",
-    "null": "only nullable leaves clear their override",
-    "reset": "PATCH an explicit inventory default; no magic reset token",
+    "conditionalWrite": "PATCH expectedRevision plus recursively partial typed set and canonical-key reset; one transaction CASes saved revision and checked advancement; no representation-digest CAS",
+    "omission": "unchanged leaf and mode; nullable partial DTO presence is distinct from null",
+    "null": "only nullable leaves accept explicit null; on explicit set, null equal to current default selects default, otherwise custom; an untouched custom null stays custom even if a future release default becomes null",
+    "reset": "mark leaf default and resolve current running default; no historical comparison",
     "arrays": "replace the complete bounded leaf array",
     "patchBodyMaximumBytes": 262144,
-    "serializedSnapshotMaximumBytes": 131072,
-    "application": "live fields publish as one logical runtime snapshot after commit; restart fields remain pending until restart"
+    "serializedSnapshotMaximumBytes": 524288,
+    "application": "saved desired values remain authoritative on apply failure; expose effective values, failures and restart-pending fields",
+    "defaultState": "each complete leaf has mode/value; default uses running typed default; untouched custom remains custom even if a new release default equals it; equality classification only on explicit set",
+    "savedRepresentation": {
+      "table": "app_settings",
+      "singletonKey": 1,
+      "columns": {
+        "revision": "positive signed 64-bit SQLite integer",
+        "document_json": "complete typed SavedSettings JSON object"
+      },
+      "leaf": {
+        "mode": "default|custom",
+        "value": "the authoritative leaf type"
+      },
+      "startup": "replace default-marked values in memory from running typed defaults before whole-candidate validation; no old-default comparison and no startup revision advance"
+    },
+    "patchShape": {
+      "expectedRevision": "required positive decimal string, no leading zero, maximum 9223372036854775807",
+      "set": "optional SettingsPartial of the same five plain-value typed groups",
+      "reset": "optional array of canonical dotted SettingKey values",
+      "invalid": "unknown current key, duplicate reset, set/reset overlap, empty operation including empty nested objects"
+    },
+    "revisionAdvancement": "every successful explicit nonempty REST write or offline set/reset advances, even if resulting value/mode is unchanged; startup resolution alone never advances; failed CAS/validation/DB commit changes neither document nor revision; exhaustion never wraps",
+    "serializedSavedDocumentMaximumBytes": 131072,
+    "sizeConstraint": "saved 128KiB is a whole-candidate serialized UTF-8 limit, not a guarantee every individually valid leaf combination fits; validate before SQL and test escaping/byte boundaries; typed DocumentTooLarge maps HTTP 413; no silent truncation or arbitrary new per-path cap",
+    "applicationStatusBounds": {
+      "maximumFailures": 59,
+      "failureFields": [
+        "key",
+        "code",
+        "message",
+        "truncated"
+      ],
+      "failureMessageMaximumUtf8Bytes": 512,
+      "truncation": "explicit flag; never split UTF-8 code point",
+      "exceptions": "no raw unbounded exception echo",
+      "scope": "read snapshot contains resolved default-marked saved values, admitted effective values and bounded application status; surface default metadata is separate"
+    },
+    "definitionGeneration": "one typed definition source derives value/saved/partial DTOs, metadata and validation; reuse existing nullable helpers, no independent 59-field maps",
+    "defaultEvolution": "review valid custom/default cross-field combinations for future compiled-default changes; no automatic clamping or custom-value discard",
+    "commitUncertainty": "an uncertain worker/commit outcome is explicitly unknown until recovered; never report uncertainty as proven rollback"
   },
   "processInputs": [
     {
@@ -32,21 +70,8 @@
       "storage": "process invocation; not persisted as a product setting",
       "type": "path",
       "unit": "none",
-      "default": "platform-default profile directory",
+      "default": "current_exe().parent(); offline settings/import commands require explicit --profile",
       "validation": "select one profile before bootstrap loading; validate access without changing another profile",
-      "secret": false,
-      "publicVisibility": "process bootstrap only",
-      "application": "process start"
-    },
-    {
-      "name": "--rest-bind-addr",
-      "canonicalName": "rest_bind_addr",
-      "owner": "emulebb-daemon::CLI",
-      "storage": "process invocation; overrides bootstrap without writing it",
-      "type": "ipv4-socket",
-      "unit": "address and port",
-      "default": null,
-      "validation": "same endpoint validation as rest.bind_addr; absent uses bootstrap/default",
       "secret": false,
       "publicVisibility": "process bootstrap only",
       "application": "process start"
@@ -59,7 +84,7 @@
       "canonicalName": "rest.bind_addr",
       "type": "ipv4-socket",
       "unit": "address and port",
-      "default": "127.0.0.1:20017",
+      "default": "0.0.0.0:20017",
       "validation": {
         "format": "IPv4 socket address",
         "portMinimum": 1,
@@ -78,14 +103,10 @@
       "canonicalName": "rest.api_key",
       "type": "string",
       "unit": "ASCII bytes",
-      "default": {
-        "generation": "OS CSPRNG, 32 random bytes encoded as 64 hexadecimal characters; fresh bootstrap only"
-      },
+      "default": "change_me_123change_me_123change_me_123",
       "validation": {
         "minimumLength": 32,
-        "maximumLength": 1024,
-        "allowed": "ASCII 0x21..0x7e; exact bytes",
-        "forbiddenCaseInsensitive": ["change-me", "changeme", "replace-me", "replace_with_32_or_more_random_characters"]
+        "reviewStatus": "preserve existing accepted key semantics; no new secret-generation or placeholder-policy proposal"
       },
       "owner": "emulebb-daemon::RestBootstrapSettings",
       "storage": "private toml",
@@ -116,7 +137,7 @@
   ],
   "settings": [
     {
-      "storage": "sqlite.settings_documents",
+      "storage": "SQLite typed settings with explicit default/custom state",
       "definitionOwner": "emulebb-settings",
       "persistenceOwner": "emulebb-metadata",
       "publicVisibility": "normal",
@@ -125,17 +146,21 @@
       "application": "restart",
       "domain": "network",
       "path": "network.ed2kEnabled",
-      "canonicalName": "network.ed2k_enabled",
       "type": "boolean",
       "unit": "none",
       "default": true,
       "validation": {
         "kind": "boolean"
       },
-      "runtimeOwner": "emulebb-core::network_api"
+      "runtimeOwner": "emulebb-core::network_api",
+      "acceptance": "accepted round-one target; not yet implemented or qualified",
+      "definitionSource": "crates/emulebb-settings/src/lib.rs",
+      "boundsEvidence": "source boolean type",
+      "rustType": "bool",
+      "consumerSource": "current network/coordinator owner"
     },
     {
-      "storage": "sqlite.settings_documents",
+      "storage": "SQLite typed settings with explicit default/custom state",
       "definitionOwner": "emulebb-settings",
       "persistenceOwner": "emulebb-metadata",
       "publicVisibility": "normal",
@@ -144,17 +169,21 @@
       "application": "restart",
       "domain": "network",
       "path": "network.kadEnabled",
-      "canonicalName": "network.kad_enabled",
       "type": "boolean",
       "unit": "none",
       "default": true,
       "validation": {
         "kind": "boolean"
       },
-      "runtimeOwner": "emulebb-core::network_api"
+      "runtimeOwner": "emulebb-core::network_api",
+      "acceptance": "accepted round-one target; not yet implemented or qualified",
+      "definitionSource": "crates/emulebb-settings/src/lib.rs",
+      "boundsEvidence": "source boolean type",
+      "rustType": "bool",
+      "consumerSource": "current network/coordinator owner"
     },
     {
-      "storage": "sqlite.settings_documents",
+      "storage": "SQLite typed settings with explicit default/custom state",
       "definitionOwner": "emulebb-settings",
       "persistenceOwner": "emulebb-metadata",
       "publicVisibility": "normal",
@@ -163,17 +192,21 @@
       "application": "restart",
       "domain": "network",
       "path": "network.autoConnect",
-      "canonicalName": "network.auto_connect",
       "type": "boolean",
       "unit": "none",
       "default": true,
       "validation": {
         "kind": "boolean"
       },
-      "runtimeOwner": "emulebb-core::server_list"
+      "runtimeOwner": "emulebb-core::server_list",
+      "acceptance": "accepted round-one target; not yet implemented or qualified",
+      "definitionSource": "crates/emulebb-settings/src/lib.rs",
+      "boundsEvidence": "source boolean type",
+      "rustType": "bool",
+      "consumerSource": "current network/coordinator owner"
     },
     {
-      "storage": "sqlite.settings_documents",
+      "storage": "SQLite typed settings with explicit default/custom state",
       "definitionOwner": "emulebb-settings",
       "persistenceOwner": "emulebb-metadata",
       "publicVisibility": "normal",
@@ -182,7 +215,6 @@
       "application": "restart",
       "domain": "network",
       "path": "network.p2p.bindIp",
-      "canonicalName": "network.p2p.bind_ip",
       "type": "ipv4",
       "unit": "none",
       "default": null,
@@ -192,10 +224,15 @@
         "format": "unicast IPv4; when interface is set the address must belong to it",
         "nullMeaning": "automatic address on the selected interface or unique default route"
       },
-      "runtimeOwner": "emulebb-core::network_api"
+      "runtimeOwner": "emulebb-core::network_api",
+      "acceptance": "accepted round-one target; not yet implemented or qualified",
+      "definitionSource": "crates/emulebb-settings/src/lib.rs",
+      "boundsEvidence": "typed IP and current bind/NAT consumers; resolve runtime availability when applying",
+      "rustType": "Option<Ipv4Addr>",
+      "consumerSource": "current network/coordinator owner"
     },
     {
-      "storage": "sqlite.settings_documents",
+      "storage": "SQLite typed settings with explicit default/custom state",
       "definitionOwner": "emulebb-settings",
       "persistenceOwner": "emulebb-metadata",
       "publicVisibility": "normal",
@@ -204,7 +241,6 @@
       "application": "restart",
       "domain": "network",
       "path": "network.p2p.bindInterface",
-      "canonicalName": "network.p2p.bind_interface",
       "type": "string",
       "unit": "none",
       "default": null,
@@ -215,10 +251,15 @@
         "nonEmpty": true,
         "nullMeaning": "automatic unique default-route interface"
       },
-      "runtimeOwner": "emulebb-core::network_api"
+      "runtimeOwner": "emulebb-core::network_api",
+      "acceptance": "accepted round-one target; not yet implemented or qualified",
+      "definitionSource": "crates/emulebb-settings/src/lib.rs",
+      "boundsEvidence": "engineering target bound; validate centrally rather than rely on runtime coercion",
+      "rustType": "Option<String>",
+      "consumerSource": "current network/coordinator owner"
     },
     {
-      "storage": "sqlite.settings_documents",
+      "storage": "SQLite typed settings with explicit default/custom state",
       "definitionOwner": "emulebb-settings",
       "persistenceOwner": "emulebb-metadata",
       "publicVisibility": "normal",
@@ -227,7 +268,6 @@
       "application": "restart",
       "domain": "network",
       "path": "network.p2p.tcpPort",
-      "canonicalName": "network.p2p.tcp_port",
       "type": "integer",
       "unit": "port",
       "default": 20019,
@@ -236,10 +276,15 @@
         "minimum": 1,
         "maximum": 65535
       },
-      "runtimeOwner": "emulebb-core::network_api"
+      "runtimeOwner": "emulebb-core::network_api",
+      "acceptance": "accepted round-one target; not yet implemented or qualified",
+      "definitionSource": "crates/emulebb-settings/src/lib.rs",
+      "boundsEvidence": "nonzero u16 listener port; actual current typed port is Option<u16> with fresh default seeding",
+      "rustType": "u16",
+      "consumerSource": "current network/coordinator owner"
     },
     {
-      "storage": "sqlite.settings_documents",
+      "storage": "SQLite typed settings with explicit default/custom state",
       "definitionOwner": "emulebb-settings",
       "persistenceOwner": "emulebb-metadata",
       "publicVisibility": "normal",
@@ -248,7 +293,6 @@
       "application": "restart",
       "domain": "network",
       "path": "network.p2p.udpPort",
-      "canonicalName": "network.p2p.udp_port",
       "type": "integer",
       "unit": "port",
       "default": 20020,
@@ -257,10 +301,15 @@
         "minimum": 1,
         "maximum": 65535
       },
-      "runtimeOwner": "emulebb-core::network_api"
+      "runtimeOwner": "emulebb-core::network_api",
+      "acceptance": "accepted round-one target; not yet implemented or qualified",
+      "definitionSource": "crates/emulebb-settings/src/lib.rs",
+      "boundsEvidence": "nonzero u16 listener port; actual current typed port is Option<u16> with fresh default seeding",
+      "rustType": "u16",
+      "consumerSource": "current network/coordinator owner"
     },
     {
-      "storage": "sqlite.settings_documents",
+      "storage": "SQLite typed settings with explicit default/custom state",
       "definitionOwner": "emulebb-settings",
       "persistenceOwner": "emulebb-metadata",
       "publicVisibility": "normal",
@@ -269,7 +318,6 @@
       "application": "restart",
       "domain": "network",
       "path": "network.nickname",
-      "canonicalName": "network.nickname",
       "type": "string",
       "unit": "none",
       "default": "eMule",
@@ -279,10 +327,15 @@
         "maxUtf8Bytes": 128,
         "forbidden": "NUL and control characters"
       },
-      "runtimeOwner": "emulebb-core::network_api"
+      "runtimeOwner": "emulebb-core::network_api",
+      "acceptance": "accepted round-one target; not yet implemented or qualified",
+      "definitionSource": "crates/emulebb-settings/src/lib.rs",
+      "boundsEvidence": "engineering target bound; validate centrally rather than rely on runtime coercion",
+      "rustType": "String",
+      "consumerSource": "current network/coordinator owner"
     },
     {
-      "storage": "sqlite.settings_documents",
+      "storage": "SQLite typed settings with explicit default/custom state",
       "definitionOwner": "emulebb-settings",
       "persistenceOwner": "emulebb-metadata",
       "publicVisibility": "normal",
@@ -291,7 +344,6 @@
       "application": "live",
       "domain": "network",
       "path": "network.connections.maxConnections",
-      "canonicalName": "network.connections.max_connections",
       "type": "integer",
       "unit": "connections",
       "default": 500,
@@ -300,10 +352,15 @@
         "minimum": 1,
         "maximum": 2147483647
       },
-      "runtimeOwner": "emulebb-core::core_settings"
+      "runtimeOwner": "emulebb-core::core_settings",
+      "acceptance": "accepted round-one target; not yet implemented or qualified",
+      "definitionSource": "crates/emulebb-settings/src/lib.rs",
+      "boundsEvidence": "engineering target bound; validate centrally rather than rely on runtime coercion",
+      "rustType": "u32",
+      "consumerSource": "current network/coordinator owner"
     },
     {
-      "storage": "sqlite.settings_documents",
+      "storage": "SQLite typed settings with explicit default/custom state",
       "definitionOwner": "emulebb-settings",
       "persistenceOwner": "emulebb-metadata",
       "publicVisibility": "advanced",
@@ -312,7 +369,6 @@
       "application": "live",
       "domain": "network",
       "path": "network.connections.maxNewConnectionsPerFiveSeconds",
-      "canonicalName": "network.connections.max_new_connections_per_five_seconds",
       "type": "integer",
       "unit": "connections per five seconds",
       "default": 50,
@@ -321,10 +377,15 @@
         "minimum": 1,
         "maximum": 2147483647
       },
-      "runtimeOwner": "emulebb-core::core_settings"
+      "runtimeOwner": "emulebb-core::core_settings",
+      "acceptance": "accepted round-one target; not yet implemented or qualified",
+      "definitionSource": "crates/emulebb-settings/src/lib.rs",
+      "boundsEvidence": "engineering target bound; validate centrally rather than rely on runtime coercion",
+      "rustType": "u32",
+      "consumerSource": "current network/coordinator owner"
     },
     {
-      "storage": "sqlite.settings_documents",
+      "storage": "SQLite typed settings with explicit default/custom state",
       "definitionOwner": "emulebb-settings",
       "persistenceOwner": "emulebb-metadata",
       "publicVisibility": "advanced",
@@ -333,7 +394,6 @@
       "application": "restart",
       "domain": "network",
       "path": "network.connections.maxHalfOpenConnections",
-      "canonicalName": "network.connections.max_half_open_connections",
       "type": "integer",
       "unit": "connections",
       "default": 50,
@@ -342,10 +402,15 @@
         "minimum": 1,
         "maximum": 2147483647
       },
-      "runtimeOwner": "emulebb-ed2k::Ed2kTransferRuntime"
+      "runtimeOwner": "emulebb-ed2k::Ed2kTransferRuntime",
+      "acceptance": "accepted round-one target; not yet implemented or qualified",
+      "definitionSource": "crates/emulebb-settings/src/lib.rs",
+      "boundsEvidence": "engineering target bound; validate centrally rather than rely on runtime coercion",
+      "rustType": "u32",
+      "consumerSource": "current network/coordinator owner"
     },
     {
-      "storage": "sqlite.settings_documents",
+      "storage": "SQLite typed settings with explicit default/custom state",
       "definitionOwner": "emulebb-settings",
       "persistenceOwner": "emulebb-metadata",
       "publicVisibility": "advanced",
@@ -354,7 +419,6 @@
       "application": "restart",
       "domain": "network",
       "path": "network.connections.connectTimeoutSeconds",
-      "canonicalName": "network.connections.connect_timeout_seconds",
       "type": "integer",
       "unit": "seconds",
       "default": 30,
@@ -363,10 +427,15 @@
         "minimum": 1,
         "maximum": 86400
       },
-      "runtimeOwner": "emulebb-core::network_api"
+      "runtimeOwner": "emulebb-core::network_api",
+      "acceptance": "accepted round-one target; not yet implemented or qualified",
+      "definitionSource": "crates/emulebb-settings/src/lib.rs",
+      "boundsEvidence": "engineering target bound; validate centrally rather than rely on runtime coercion",
+      "rustType": "u64",
+      "consumerSource": "current network/coordinator owner"
     },
     {
-      "storage": "sqlite.settings_documents",
+      "storage": "SQLite typed settings with explicit default/custom state",
       "definitionOwner": "emulebb-settings",
       "persistenceOwner": "emulebb-metadata",
       "publicVisibility": "advanced",
@@ -375,7 +444,6 @@
       "application": "restart",
       "domain": "network",
       "path": "network.connections.callbackTimeoutSeconds",
-      "canonicalName": "network.connections.callback_timeout_seconds",
       "type": "integer",
       "unit": "seconds",
       "default": 45,
@@ -384,105 +452,130 @@
         "minimum": 1,
         "maximum": 86400
       },
-      "runtimeOwner": "emulebb-core::network_api"
+      "runtimeOwner": "emulebb-core::network_api",
+      "acceptance": "accepted round-one target; not yet implemented or qualified",
+      "definitionSource": "crates/emulebb-settings/src/lib.rs",
+      "boundsEvidence": "engineering target bound; validate centrally rather than rely on runtime coercion",
+      "rustType": "u64",
+      "consumerSource": "current network/coordinator owner"
     },
     {
-      "storage": "sqlite.settings_documents",
+      "storage": "SQLite typed settings with explicit default/custom state",
       "definitionOwner": "emulebb-settings",
       "persistenceOwner": "emulebb-metadata",
       "publicVisibility": "normal",
       "secret": false,
       "sensitivity": "operator",
-      "application": "live",
+      "application": "restart",
       "domain": "network",
       "path": "network.servers.autoReconnect",
-      "canonicalName": "network.servers.auto_reconnect",
       "type": "boolean",
       "unit": "none",
       "default": true,
       "validation": {
         "kind": "boolean"
       },
-      "runtimeOwner": "emulebb-core::server_list"
+      "runtimeOwner": "emulebb-core::server_list",
+      "acceptance": "accepted round-one target; not yet implemented or qualified",
+      "definitionSource": "crates/emulebb-settings/src/lib.rs",
+      "boundsEvidence": "source boolean type",
+      "rustType": "bool",
+      "consumerSource": "crates/emulebb-ed2k/src/ed2k_server/loop_runtime.rs; server_entry.rs; core server-plan admission"
     },
     {
-      "storage": "sqlite.settings_documents",
+      "storage": "SQLite typed settings with explicit default/custom state",
       "definitionOwner": "emulebb-settings",
       "persistenceOwner": "emulebb-metadata",
       "publicVisibility": "normal",
       "secret": false,
       "sensitivity": "operator",
-      "application": "live",
+      "application": "restart",
       "domain": "network",
       "path": "network.servers.safeConnect",
-      "canonicalName": "network.servers.safe_connect",
       "type": "boolean",
       "unit": "none",
       "default": false,
       "validation": {
         "kind": "boolean"
       },
-      "runtimeOwner": "emulebb-core::server_list"
+      "runtimeOwner": "emulebb-core::server_list",
+      "acceptance": "accepted round-one target; not yet implemented or qualified",
+      "definitionSource": "crates/emulebb-settings/src/lib.rs",
+      "boundsEvidence": "source boolean type",
+      "rustType": "bool",
+      "consumerSource": "crates/emulebb-ed2k/src/ed2k_server/loop_runtime.rs; server_entry.rs; core server-plan admission"
     },
     {
-      "storage": "sqlite.settings_documents",
+      "storage": "SQLite typed settings with explicit default/custom state",
       "definitionOwner": "emulebb-settings",
       "persistenceOwner": "emulebb-metadata",
       "publicVisibility": "normal",
       "secret": false,
       "sensitivity": "operator",
-      "application": "live",
+      "application": "restart",
       "domain": "network",
       "path": "network.servers.usePriorities",
-      "canonicalName": "network.servers.use_priorities",
       "type": "boolean",
       "unit": "none",
       "default": true,
       "validation": {
         "kind": "boolean"
       },
-      "runtimeOwner": "emulebb-core::server_list"
+      "runtimeOwner": "emulebb-core::server_list",
+      "acceptance": "accepted round-one target; not yet implemented or qualified",
+      "definitionSource": "crates/emulebb-settings/src/lib.rs",
+      "boundsEvidence": "source boolean type",
+      "rustType": "bool",
+      "consumerSource": "crates/emulebb-ed2k/src/ed2k_server/loop_runtime.rs; server_entry.rs; core server-plan admission"
     },
     {
-      "storage": "sqlite.settings_documents",
+      "storage": "SQLite typed settings with explicit default/custom state",
       "definitionOwner": "emulebb-settings",
       "persistenceOwner": "emulebb-metadata",
       "publicVisibility": "normal",
       "secret": false,
       "sensitivity": "operator",
-      "application": "live",
+      "application": "restart",
       "domain": "network",
       "path": "network.servers.staticOnly",
-      "canonicalName": "network.servers.static_only",
       "type": "boolean",
       "unit": "none",
       "default": false,
       "validation": {
         "kind": "boolean"
       },
-      "runtimeOwner": "emulebb-core::server_list"
+      "runtimeOwner": "emulebb-core::server_list",
+      "acceptance": "accepted round-one target; not yet implemented or qualified",
+      "definitionSource": "crates/emulebb-settings/src/lib.rs",
+      "boundsEvidence": "source boolean type",
+      "rustType": "bool",
+      "consumerSource": "crates/emulebb-ed2k/src/ed2k_server/loop_runtime.rs; server_entry.rs; core server-plan admission"
     },
     {
-      "storage": "sqlite.settings_documents",
+      "storage": "SQLite typed settings with explicit default/custom state",
       "definitionOwner": "emulebb-settings",
       "persistenceOwner": "emulebb-metadata",
       "publicVisibility": "normal",
       "secret": false,
       "sensitivity": "operator",
-      "application": "live",
+      "application": "restart",
       "domain": "network",
       "path": "network.servers.acceptServerListUpdates",
-      "canonicalName": "network.servers.accept_server_list_updates",
       "type": "boolean",
       "unit": "none",
       "default": false,
       "validation": {
         "kind": "boolean"
       },
-      "runtimeOwner": "emulebb-core::server_list"
+      "runtimeOwner": "emulebb-core::server_list",
+      "acceptance": "accepted round-one target; not yet implemented or qualified",
+      "definitionSource": "crates/emulebb-settings/src/lib.rs",
+      "boundsEvidence": "source boolean type",
+      "rustType": "bool",
+      "consumerSource": "crates/emulebb-ed2k/src/ed2k_server/loop_runtime.rs; server_entry.rs; core server-plan admission"
     },
     {
-      "storage": "sqlite.settings_documents",
+      "storage": "SQLite typed settings with explicit default/custom state",
       "definitionOwner": "emulebb-settings",
       "persistenceOwner": "emulebb-metadata",
       "publicVisibility": "advanced",
@@ -491,7 +584,6 @@
       "application": "restart",
       "domain": "network",
       "path": "network.servers.connectTimeoutSeconds",
-      "canonicalName": "network.servers.connect_timeout_seconds",
       "type": "integer",
       "unit": "seconds",
       "default": 25,
@@ -500,10 +592,15 @@
         "minimum": 1,
         "maximum": 86400
       },
-      "runtimeOwner": "emulebb-core::server_list"
+      "runtimeOwner": "emulebb-core::server_list",
+      "acceptance": "accepted round-one target; not yet implemented or qualified",
+      "definitionSource": "crates/emulebb-settings/src/lib.rs",
+      "boundsEvidence": "engineering target bound; validate centrally rather than rely on runtime coercion",
+      "rustType": "u64",
+      "consumerSource": "crates/emulebb-ed2k/src/ed2k_server/loop_runtime.rs; server_entry.rs; core server-plan admission"
     },
     {
-      "storage": "sqlite.settings_documents",
+      "storage": "SQLite typed settings with explicit default/custom state",
       "definitionOwner": "emulebb-settings",
       "persistenceOwner": "emulebb-metadata",
       "publicVisibility": "advanced",
@@ -512,7 +609,6 @@
       "application": "restart",
       "domain": "network",
       "path": "network.servers.reconnectIntervalSeconds",
-      "canonicalName": "network.servers.reconnect_interval_seconds",
       "type": "integer",
       "unit": "seconds",
       "default": 30,
@@ -521,10 +617,15 @@
         "minimum": 1,
         "maximum": 86400
       },
-      "runtimeOwner": "emulebb-core::server_list"
+      "runtimeOwner": "emulebb-core::server_list",
+      "acceptance": "accepted round-one target; not yet implemented or qualified",
+      "definitionSource": "crates/emulebb-settings/src/lib.rs",
+      "boundsEvidence": "engineering target bound; validate centrally rather than rely on runtime coercion",
+      "rustType": "u64",
+      "consumerSource": "crates/emulebb-ed2k/src/ed2k_server/loop_runtime.rs; server_entry.rs; core server-plan admission"
     },
     {
-      "storage": "sqlite.settings_documents",
+      "storage": "SQLite typed settings with explicit default/custom state",
       "definitionOwner": "emulebb-settings",
       "persistenceOwner": "emulebb-metadata",
       "publicVisibility": "advanced",
@@ -533,7 +634,6 @@
       "application": "restart",
       "domain": "network",
       "path": "network.servers.keepaliveMinutes",
-      "canonicalName": "network.servers.keepalive_minutes",
       "type": "integer",
       "unit": "whole minutes",
       "default": 0,
@@ -543,10 +643,15 @@
         "maximum": 1440
       },
       "runtimeOwner": "emulebb-core::server_list",
-      "zeroMeaning": "disabled"
+      "zeroMeaning": "disabled",
+      "acceptance": "accepted round-one target; not yet implemented or qualified",
+      "definitionSource": "crates/emulebb-settings/src/lib.rs",
+      "boundsEvidence": "source MAX_SERVER_KEEPALIVE_MINUTES=1440 and validate_ed2k_settings; zero disables",
+      "rustType": "u64",
+      "consumerSource": "crates/emulebb-ed2k/src/ed2k_server/loop_runtime.rs; server_entry.rs; core server-plan admission"
     },
     {
-      "storage": "sqlite.settings_documents",
+      "storage": "SQLite typed settings with explicit default/custom state",
       "definitionOwner": "emulebb-settings",
       "persistenceOwner": "emulebb-metadata",
       "publicVisibility": "advanced",
@@ -555,7 +660,6 @@
       "application": "restart",
       "domain": "network",
       "path": "network.servers.sessionRotationSeconds",
-      "canonicalName": "network.servers.session_rotation_seconds",
       "type": "integer",
       "unit": "seconds",
       "default": 0,
@@ -565,19 +669,23 @@
         "maximum": 86400
       },
       "runtimeOwner": "emulebb-core::server_list",
-      "zeroMeaning": "disabled"
+      "zeroMeaning": "disabled",
+      "acceptance": "accepted round-one target; not yet implemented or qualified",
+      "definitionSource": "crates/emulebb-settings/src/lib.rs",
+      "boundsEvidence": "engineering target bound; validate centrally rather than rely on runtime coercion",
+      "rustType": "u64",
+      "consumerSource": "crates/emulebb-ed2k/src/ed2k_server/loop_runtime.rs; server_entry.rs; core server-plan admission"
     },
     {
-      "storage": "sqlite.settings_documents",
+      "storage": "SQLite typed settings with explicit default/custom state",
       "definitionOwner": "emulebb-settings",
       "persistenceOwner": "emulebb-metadata",
       "publicVisibility": "advanced",
       "secret": false,
       "sensitivity": "operator",
-      "application": "live",
+      "application": "restart",
       "domain": "network",
       "path": "network.servers.deadServerRetries",
-      "canonicalName": "network.servers.dead_server_retries",
       "type": "integer",
       "unit": "failed attempts",
       "default": 1,
@@ -586,10 +694,15 @@
         "minimum": 1,
         "maximum": 10
       },
-      "runtimeOwner": "emulebb-core::server_list"
+      "runtimeOwner": "emulebb-core::server_list",
+      "acceptance": "accepted round-one target; not yet implemented or qualified",
+      "definitionSource": "crates/emulebb-settings/src/lib.rs",
+      "boundsEvidence": "engineering target bound; validate centrally rather than rely on runtime coercion",
+      "rustType": "u64",
+      "consumerSource": "crates/emulebb-ed2k/src/ed2k_server/loop_runtime.rs; server_entry.rs; core server-plan admission"
     },
     {
-      "storage": "sqlite.settings_documents",
+      "storage": "SQLite typed settings with explicit default/custom state",
       "definitionOwner": "emulebb-settings",
       "persistenceOwner": "emulebb-metadata",
       "publicVisibility": "advanced",
@@ -598,17 +711,21 @@
       "application": "live",
       "domain": "network",
       "path": "network.hostnameLookup.enabled",
-      "canonicalName": "network.hostname_lookup.enabled",
       "type": "boolean",
       "unit": "none",
       "default": false,
       "validation": {
         "kind": "boolean"
       },
-      "runtimeOwner": "emulebb-core::hostname_lookup"
+      "runtimeOwner": "emulebb-core::hostname_lookup",
+      "acceptance": "accepted round-one target; not yet implemented or qualified",
+      "definitionSource": "crates/emulebb-settings/src/lib.rs",
+      "boundsEvidence": "source boolean type",
+      "rustType": "bool",
+      "consumerSource": "crates/emulebb-core/src/hostname_lookup.rs: current settings reread by worker"
     },
     {
-      "storage": "sqlite.settings_documents",
+      "storage": "SQLite typed settings with explicit default/custom state",
       "definitionOwner": "emulebb-settings",
       "persistenceOwner": "emulebb-metadata",
       "publicVisibility": "advanced",
@@ -617,7 +734,6 @@
       "application": "live",
       "domain": "network",
       "path": "network.hostnameLookup.dnsServers",
-      "canonicalName": "network.hostname_lookup.dns_servers",
       "type": "array<ipv4-socket>",
       "unit": "endpoints",
       "default": [],
@@ -628,31 +744,15 @@
         "item": "unicast IPv4:port, port 1..65535",
         "emptyMeaning": "no configured resolver; enabling lookup requires a nonempty list"
       },
-      "runtimeOwner": "emulebb-core::hostname_lookup"
+      "runtimeOwner": "emulebb-core::hostname_lookup",
+      "acceptance": "accepted round-one target; not yet implemented or qualified",
+      "definitionSource": "crates/emulebb-settings/src/lib.rs",
+      "boundsEvidence": "engineering target bound; validate centrally rather than rely on runtime coercion",
+      "rustType": "Vec<typed item>",
+      "consumerSource": "crates/emulebb-core/src/hostname_lookup.rs: current settings reread by worker"
     },
     {
-      "storage": "sqlite.settings_documents",
-      "definitionOwner": "emulebb-settings",
-      "persistenceOwner": "emulebb-metadata",
-      "publicVisibility": "advanced",
-      "secret": false,
-      "sensitivity": "operator",
-      "application": "live",
-      "domain": "network",
-      "path": "network.hostnameLookup.cacheTtlSeconds",
-      "canonicalName": "network.hostname_lookup.cache_ttl_seconds",
-      "type": "integer",
-      "unit": "seconds",
-      "default": 86400,
-      "validation": {
-        "kind": "integer",
-        "minimum": 1,
-        "maximum": 604800
-      },
-      "runtimeOwner": "emulebb-core::hostname_lookup"
-    },
-    {
-      "storage": "sqlite.settings_documents",
+      "storage": "SQLite typed settings with explicit default/custom state",
       "definitionOwner": "emulebb-settings",
       "persistenceOwner": "emulebb-metadata",
       "publicVisibility": "normal",
@@ -661,17 +761,21 @@
       "application": "restart",
       "domain": "network",
       "path": "network.nat.enabled",
-      "canonicalName": "network.nat.enabled",
       "type": "boolean",
       "unit": "none",
       "default": true,
       "validation": {
         "kind": "boolean"
       },
-      "runtimeOwner": "emulebb-ed2k::NatManager"
+      "runtimeOwner": "emulebb-ed2k::NatManager",
+      "acceptance": "accepted round-one target; not yet implemented or qualified",
+      "definitionSource": "crates/emulebb-settings/src/lib.rs",
+      "boundsEvidence": "source boolean type",
+      "rustType": "bool",
+      "consumerSource": "crates/emulebb-daemon/src/lib.rs::nat_config_from_settings; emulebb-ed2k nat providers"
     },
     {
-      "storage": "sqlite.settings_documents",
+      "storage": "SQLite typed settings with explicit default/custom state",
       "definitionOwner": "emulebb-settings",
       "persistenceOwner": "emulebb-metadata",
       "publicVisibility": "advanced",
@@ -680,17 +784,21 @@
       "application": "restart",
       "domain": "network",
       "path": "network.nat.requireInitialMapping",
-      "canonicalName": "network.nat.require_initial_mapping",
       "type": "boolean",
       "unit": "none",
       "default": false,
       "validation": {
         "kind": "boolean"
       },
-      "runtimeOwner": "emulebb-ed2k::NatManager"
+      "runtimeOwner": "emulebb-ed2k::NatManager",
+      "acceptance": "accepted round-one target; not yet implemented or qualified",
+      "definitionSource": "crates/emulebb-settings/src/lib.rs",
+      "boundsEvidence": "source boolean type",
+      "rustType": "bool",
+      "consumerSource": "crates/emulebb-daemon/src/lib.rs::nat_config_from_settings; emulebb-ed2k nat providers"
     },
     {
-      "storage": "sqlite.settings_documents",
+      "storage": "SQLite typed settings with explicit default/custom state",
       "definitionOwner": "emulebb-settings",
       "persistenceOwner": "emulebb-metadata",
       "publicVisibility": "advanced",
@@ -699,11 +807,10 @@
       "application": "restart",
       "domain": "network",
       "path": "network.nat.backendOrder",
-      "canonicalName": "network.nat.backend_order",
       "type": "array<enum>",
       "unit": "ordered backends",
       "default": [
-        "pcpNatpmp",
+        "pcp-natpmp",
         "upnp"
       ],
       "validation": {
@@ -712,14 +819,19 @@
         "maxItems": 2,
         "unique": true,
         "itemsEnum": [
-          "pcpNatpmp",
+          "pcp-natpmp",
           "upnp"
         ]
       },
-      "runtimeOwner": "emulebb-ed2k::NatManager"
+      "runtimeOwner": "emulebb-ed2k::NatManager",
+      "acceptance": "accepted round-one target; not yet implemented or qualified",
+      "definitionSource": "crates/emulebb-settings/src/lib.rs",
+      "boundsEvidence": "engineering target bound; validate centrally rather than rely on runtime coercion",
+      "rustType": "Vec<NatBackend>",
+      "consumerSource": "crates/emulebb-daemon/src/lib.rs::nat_config_from_settings; emulebb-ed2k nat providers"
     },
     {
-      "storage": "sqlite.settings_documents",
+      "storage": "SQLite typed settings with explicit default/custom state",
       "definitionOwner": "emulebb-settings",
       "persistenceOwner": "emulebb-metadata",
       "publicVisibility": "advanced",
@@ -728,7 +840,6 @@
       "application": "restart",
       "domain": "network",
       "path": "network.nat.pcpServerIp",
-      "canonicalName": "network.nat.pcp_server_ip",
       "type": "ipv4",
       "unit": "none",
       "default": null,
@@ -738,10 +849,15 @@
         "format": "unicast IPv4",
         "nullMeaning": "gateway discovery"
       },
-      "runtimeOwner": "emulebb-ed2k::NatManager"
+      "runtimeOwner": "emulebb-ed2k::NatManager",
+      "acceptance": "accepted round-one target; not yet implemented or qualified",
+      "definitionSource": "crates/emulebb-settings/src/lib.rs",
+      "boundsEvidence": "typed IP and current bind/NAT consumers; resolve runtime availability when applying",
+      "rustType": "Option<Ipv4Addr>",
+      "consumerSource": "crates/emulebb-daemon/src/lib.rs::nat_config_from_settings; emulebb-ed2k nat providers"
     },
     {
-      "storage": "sqlite.settings_documents",
+      "storage": "SQLite typed settings with explicit default/custom state",
       "definitionOwner": "emulebb-settings",
       "persistenceOwner": "emulebb-metadata",
       "publicVisibility": "advanced",
@@ -750,7 +866,6 @@
       "application": "restart",
       "domain": "network",
       "path": "network.nat.igdIp",
-      "canonicalName": "network.nat.igd_ip",
       "type": "ipv4",
       "unit": "none",
       "default": null,
@@ -760,73 +875,15 @@
         "format": "unicast IPv4",
         "nullMeaning": "gateway discovery"
       },
-      "runtimeOwner": "emulebb-ed2k::NatManager"
+      "runtimeOwner": "emulebb-ed2k::NatManager",
+      "acceptance": "accepted round-one target; not yet implemented or qualified",
+      "definitionSource": "crates/emulebb-settings/src/lib.rs",
+      "boundsEvidence": "typed IP and current bind/NAT consumers; resolve runtime availability when applying",
+      "rustType": "Option<Ipv4Addr>",
+      "consumerSource": "crates/emulebb-daemon/src/lib.rs::nat_config_from_settings; emulebb-ed2k nat providers"
     },
     {
-      "storage": "sqlite.settings_documents",
-      "definitionOwner": "emulebb-settings",
-      "persistenceOwner": "emulebb-metadata",
-      "publicVisibility": "advanced",
-      "secret": false,
-      "sensitivity": "operator",
-      "application": "restart",
-      "domain": "network",
-      "path": "network.nat.discoveryTimeoutSeconds",
-      "canonicalName": "network.nat.discovery_timeout_seconds",
-      "type": "integer",
-      "unit": "seconds",
-      "default": 5,
-      "validation": {
-        "kind": "integer",
-        "minimum": 1,
-        "maximum": 300
-      },
-      "runtimeOwner": "emulebb-ed2k::NatManager"
-    },
-    {
-      "storage": "sqlite.settings_documents",
-      "definitionOwner": "emulebb-settings",
-      "persistenceOwner": "emulebb-metadata",
-      "publicVisibility": "advanced",
-      "secret": false,
-      "sensitivity": "operator",
-      "application": "restart",
-      "domain": "network",
-      "path": "network.nat.leaseDurationSeconds",
-      "canonicalName": "network.nat.lease_duration_seconds",
-      "type": "integer",
-      "unit": "seconds",
-      "default": 3600,
-      "validation": {
-        "kind": "integer",
-        "minimum": 1,
-        "maximum": 4294967295
-      },
-      "runtimeOwner": "emulebb-ed2k::NatManager"
-    },
-    {
-      "storage": "sqlite.settings_documents",
-      "definitionOwner": "emulebb-settings",
-      "persistenceOwner": "emulebb-metadata",
-      "publicVisibility": "advanced",
-      "secret": false,
-      "sensitivity": "operator",
-      "application": "restart",
-      "domain": "network",
-      "path": "network.nat.renewMarginSeconds",
-      "canonicalName": "network.nat.renew_margin_seconds",
-      "type": "integer",
-      "unit": "seconds",
-      "default": 300,
-      "validation": {
-        "kind": "integer",
-        "minimum": 1,
-        "maximum": 4294967295
-      },
-      "runtimeOwner": "emulebb-ed2k::NatManager"
-    },
-    {
-      "storage": "sqlite.settings_documents",
+      "storage": "SQLite typed settings with explicit default/custom state",
       "definitionOwner": "emulebb-settings",
       "persistenceOwner": "emulebb-metadata",
       "publicVisibility": "advanced",
@@ -835,7 +892,6 @@
       "application": "restart",
       "domain": "network",
       "path": "network.nat.externalIpOverride",
-      "canonicalName": "network.nat.external_ip_override",
       "type": "ipv4",
       "unit": "none",
       "default": null,
@@ -845,10 +901,15 @@
         "format": "unicast IPv4",
         "nullMeaning": "no operator hint; runtime reachability owns observations"
       },
-      "runtimeOwner": "emulebb-ed2k::NatManager"
+      "runtimeOwner": "emulebb-ed2k::NatManager",
+      "acceptance": "accepted round-one target; not yet implemented or qualified",
+      "definitionSource": "crates/emulebb-settings/src/lib.rs",
+      "boundsEvidence": "typed IP and current bind/NAT consumers; resolve runtime availability when applying",
+      "rustType": "Option<Ipv4Addr>",
+      "consumerSource": "crates/emulebb-daemon/src/lib.rs::nat_config_from_settings; emulebb-ed2k nat providers"
     },
     {
-      "storage": "sqlite.settings_documents",
+      "storage": "SQLite typed settings with explicit default/custom state",
       "definitionOwner": "emulebb-settings",
       "persistenceOwner": "emulebb-metadata",
       "publicVisibility": "normal",
@@ -857,19 +918,23 @@
       "application": "live",
       "domain": "transfers",
       "path": "transfers.uploadLimitBytesPerSecond",
-      "canonicalName": "transfers.upload_limit_bytes_per_second",
       "type": "integer",
       "unit": "bytes per second",
       "default": 6348800,
       "validation": {
         "kind": "integer",
         "minimum": 1,
-        "maximum": 9007199254740991
+        "maximum": 4398046509056
       },
-      "runtimeOwner": "emulebb-core::core_settings"
+      "runtimeOwner": "emulebb-core::core_settings",
+      "acceptance": "accepted round-one target; not yet implemented or qualified",
+      "definitionSource": "crates/emulebb-settings/src/lib.rs",
+      "boundsEvidence": "source positive core u32 KiB/s maximum converted to bytes; target minimum1 whole byte/second; preserve effective source defaults",
+      "rustType": "u64",
+      "consumerSource": "crates/emulebb-core/src/core_settings.rs: shared payload/upload budgets"
     },
     {
-      "storage": "sqlite.settings_documents",
+      "storage": "SQLite typed settings with explicit default/custom state",
       "definitionOwner": "emulebb-settings",
       "persistenceOwner": "emulebb-metadata",
       "publicVisibility": "normal",
@@ -878,40 +943,50 @@
       "application": "live",
       "domain": "transfers",
       "path": "transfers.downloadLimitBytesPerSecond",
-      "canonicalName": "transfers.download_limit_bytes_per_second",
       "type": "integer",
       "unit": "bytes per second",
       "default": 12499968,
       "validation": {
         "kind": "integer",
         "minimum": 1,
-        "maximum": 9007199254740991
+        "maximum": 4398046509056
       },
-      "runtimeOwner": "emulebb-core::core_settings"
+      "runtimeOwner": "emulebb-core::core_settings",
+      "acceptance": "accepted round-one target; not yet implemented or qualified",
+      "definitionSource": "crates/emulebb-settings/src/lib.rs",
+      "boundsEvidence": "source positive core u32 KiB/s maximum converted to bytes; target minimum1 whole byte/second; preserve effective source defaults",
+      "rustType": "u64",
+      "consumerSource": "crates/emulebb-core/src/core_settings.rs: shared payload/upload budgets"
     },
     {
-      "storage": "sqlite.settings_documents",
+      "storage": "SQLite typed settings with explicit default/custom state",
       "definitionOwner": "emulebb-settings",
       "persistenceOwner": "emulebb-metadata",
       "publicVisibility": "advanced",
       "secret": false,
       "sensitivity": "operator",
-      "application": "restart",
+      "application": "live",
       "domain": "transfers",
       "path": "transfers.maxConcurrentDownloads",
-      "canonicalName": "transfers.max_concurrent_downloads",
       "type": "integer",
-      "unit": "active downloads",
-      "default": 500,
+      "unit": "ordinary active-download ceiling; fixed 25% rare-opportunity burst allowed",
+      "default": null,
       "validation": {
         "kind": "integer",
+        "nullable": true,
+        "nullMeaning": "automatic adaptive concurrency",
         "minimum": 1,
         "maximum": 2147483647
       },
-      "runtimeOwner": "emulebb-ed2k::Ed2kTransferRuntime"
+      "runtimeOwner": "emulebb-core download admission scheduler",
+      "acceptance": "accepted round-one target; not yet implemented or qualified",
+      "definitionSource": "crates/emulebb-settings/src/lib.rs",
+      "boundsEvidence": "operator accepted automatic null or positive ordinary ceiling, distinct from global connection cap; fixed 25% rare-opportunity burst rounded up, resource constrained; integer minimum1 maximum2147483647",
+      "rustType": "Option<u32>",
+      "consumerSource": "new bounded job-admission scheduler"
     },
     {
-      "storage": "sqlite.settings_documents",
+      "storage": "SQLite typed settings with explicit default/custom state",
       "definitionOwner": "emulebb-settings",
       "persistenceOwner": "emulebb-metadata",
       "publicVisibility": "advanced",
@@ -920,7 +995,6 @@
       "application": "live",
       "domain": "transfers",
       "path": "transfers.maxSourcesPerFile",
-      "canonicalName": "transfers.max_sources_per_file",
       "type": "integer",
       "unit": "sources per file",
       "default": 600,
@@ -929,10 +1003,15 @@
         "minimum": 1,
         "maximum": 2147483647
       },
-      "runtimeOwner": "emulebb-core::core_settings"
+      "runtimeOwner": "emulebb-core::core_settings",
+      "acceptance": "accepted round-one target; not yet implemented or qualified",
+      "definitionSource": "crates/emulebb-settings/src/lib.rs",
+      "boundsEvidence": "engineering target bound; validate centrally rather than rely on runtime coercion",
+      "rustType": "u32",
+      "consumerSource": "shared download coordinator and discovery admission; wire one admitted value to both"
     },
     {
-      "storage": "sqlite.settings_documents",
+      "storage": "SQLite typed settings with explicit default/custom state",
       "definitionOwner": "emulebb-settings",
       "persistenceOwner": "emulebb-metadata",
       "publicVisibility": "advanced",
@@ -941,7 +1020,6 @@
       "application": "restart",
       "domain": "transfers",
       "path": "transfers.maxParallelDownloadPeers",
-      "canonicalName": "transfers.max_parallel_download_peers",
       "type": "integer",
       "unit": "peers per file",
       "default": 2,
@@ -950,10 +1028,15 @@
         "minimum": 1,
         "maximum": 2147483647
       },
-      "runtimeOwner": "emulebb-ed2k::Ed2kTransferRuntime"
+      "runtimeOwner": "emulebb-ed2k::Ed2kTransferRuntime",
+      "acceptance": "accepted round-one target; not yet implemented or qualified",
+      "definitionSource": "crates/emulebb-settings/src/lib.rs",
+      "boundsEvidence": "engineering target bound; validate centrally rather than rely on runtime coercion",
+      "rustType": "u32",
+      "consumerSource": "crates/emulebb-core/src/lib.rs: per-job peer budget from admitted network config"
     },
     {
-      "storage": "sqlite.settings_documents",
+      "storage": "SQLite typed settings with explicit default/custom state",
       "definitionOwner": "emulebb-settings",
       "persistenceOwner": "emulebb-metadata",
       "publicVisibility": "advanced",
@@ -962,19 +1045,23 @@
       "application": "live",
       "domain": "transfers",
       "path": "transfers.upload.targetClientRateBytesPerSecond",
-      "canonicalName": "transfers.upload.target_client_rate_bytes_per_second",
       "type": "integer",
       "unit": "bytes per second",
       "default": 32768,
       "validation": {
         "kind": "integer",
         "minimum": 1,
-        "maximum": 9007199254740991
+        "maximum": 4398046510080
       },
-      "runtimeOwner": "emulebb-core::core_settings"
+      "runtimeOwner": "emulebb-core::core_settings",
+      "acceptance": "accepted round-one target; not yet implemented or qualified",
+      "definitionSource": "crates/emulebb-settings/src/lib.rs",
+      "boundsEvidence": "source positive core u32 KiB/s maximum converted to bytes; target minimum1 whole byte/second; preserve effective source defaults",
+      "rustType": "u64",
+      "consumerSource": "crates/emulebb-core/src/core_settings.rs: upload elastic target"
     },
     {
-      "storage": "sqlite.settings_documents",
+      "storage": "SQLite typed settings with explicit default/custom state",
       "definitionOwner": "emulebb-settings",
       "persistenceOwner": "emulebb-metadata",
       "publicVisibility": "normal",
@@ -983,7 +1070,6 @@
       "application": "live",
       "domain": "transfers",
       "path": "transfers.upload.baseSlots",
-      "canonicalName": "transfers.upload.base_slots",
       "type": "integer",
       "unit": "slots",
       "default": 12,
@@ -992,10 +1078,15 @@
         "minimum": 1,
         "maximum": 64
       },
-      "runtimeOwner": "emulebb-core::core_settings"
+      "runtimeOwner": "emulebb-core::core_settings",
+      "acceptance": "accepted round-one target; not yet implemented or qualified",
+      "definitionSource": "crates/emulebb-settings/src/lib.rs",
+      "boundsEvidence": "source CORE_SETTING_SPECS",
+      "rustType": "u32",
+      "consumerSource": "crates/emulebb-core/src/core_settings.rs: upload queue runtime policy"
     },
     {
-      "storage": "sqlite.settings_documents",
+      "storage": "SQLite typed settings with explicit default/custom state",
       "definitionOwner": "emulebb-settings",
       "persistenceOwner": "emulebb-metadata",
       "publicVisibility": "advanced",
@@ -1004,7 +1095,6 @@
       "application": "live",
       "domain": "transfers",
       "path": "transfers.upload.elasticPercent",
-      "canonicalName": "transfers.upload.elastic_percent",
       "type": "integer",
       "unit": "percent",
       "default": 80,
@@ -1013,10 +1103,15 @@
         "minimum": 0,
         "maximum": 100
       },
-      "runtimeOwner": "emulebb-core::core_settings"
+      "runtimeOwner": "emulebb-core::core_settings",
+      "acceptance": "accepted round-one target; not yet implemented or qualified",
+      "definitionSource": "crates/emulebb-settings/src/lib.rs",
+      "boundsEvidence": "source CORE_SETTING_SPECS",
+      "rustType": "u32",
+      "consumerSource": "crates/emulebb-core/src/core_settings.rs: upload queue runtime policy"
     },
     {
-      "storage": "sqlite.settings_documents",
+      "storage": "SQLite typed settings with explicit default/custom state",
       "definitionOwner": "emulebb-settings",
       "persistenceOwner": "emulebb-metadata",
       "publicVisibility": "advanced",
@@ -1025,7 +1120,6 @@
       "application": "live",
       "domain": "transfers",
       "path": "transfers.upload.queueCapacity",
-      "canonicalName": "transfers.upload.queue_capacity",
       "type": "integer",
       "unit": "waiting peers",
       "default": 10000,
@@ -1034,94 +1128,15 @@
         "minimum": 2000,
         "maximum": 10000
       },
-      "runtimeOwner": "emulebb-core::core_settings"
+      "runtimeOwner": "emulebb-core::core_settings",
+      "acceptance": "accepted round-one target; not yet implemented or qualified",
+      "definitionSource": "crates/emulebb-settings/src/lib.rs",
+      "boundsEvidence": "source CORE_SETTING_SPECS",
+      "rustType": "u32",
+      "consumerSource": "crates/emulebb-core/src/core_settings.rs: upload queue runtime policy"
     },
     {
-      "storage": "sqlite.settings_documents",
-      "definitionOwner": "emulebb-settings",
-      "persistenceOwner": "emulebb-metadata",
-      "publicVisibility": "advanced",
-      "secret": false,
-      "sensitivity": "operator",
-      "application": "restart",
-      "domain": "transfers",
-      "path": "transfers.upload.elasticUnderfillSeconds",
-      "canonicalName": "transfers.upload.elastic_underfill_seconds",
-      "type": "integer",
-      "unit": "seconds",
-      "default": 10,
-      "validation": {
-        "kind": "integer",
-        "minimum": 10,
-        "maximum": 86400
-      },
-      "runtimeOwner": "emulebb-ed2k::Ed2kTransferRuntime"
-    },
-    {
-      "storage": "sqlite.settings_documents",
-      "definitionOwner": "emulebb-settings",
-      "persistenceOwner": "emulebb-metadata",
-      "publicVisibility": "advanced",
-      "secret": false,
-      "sensitivity": "operator",
-      "application": "restart",
-      "domain": "transfers",
-      "path": "transfers.upload.waitingTimeoutSeconds",
-      "canonicalName": "transfers.upload.waiting_timeout_seconds",
-      "type": "integer",
-      "unit": "seconds",
-      "default": 3600,
-      "validation": {
-        "kind": "integer",
-        "minimum": 1,
-        "maximum": 86400
-      },
-      "runtimeOwner": "emulebb-ed2k::Ed2kTransferRuntime"
-    },
-    {
-      "storage": "sqlite.settings_documents",
-      "definitionOwner": "emulebb-settings",
-      "persistenceOwner": "emulebb-metadata",
-      "publicVisibility": "advanced",
-      "secret": false,
-      "sensitivity": "operator",
-      "application": "restart",
-      "domain": "transfers",
-      "path": "transfers.upload.grantedTimeoutSeconds",
-      "canonicalName": "transfers.upload.granted_timeout_seconds",
-      "type": "integer",
-      "unit": "seconds",
-      "default": 5,
-      "validation": {
-        "kind": "integer",
-        "minimum": 1,
-        "maximum": 86400
-      },
-      "runtimeOwner": "emulebb-ed2k::Ed2kTransferRuntime"
-    },
-    {
-      "storage": "sqlite.settings_documents",
-      "definitionOwner": "emulebb-settings",
-      "persistenceOwner": "emulebb-metadata",
-      "publicVisibility": "advanced",
-      "secret": false,
-      "sensitivity": "operator",
-      "application": "restart",
-      "domain": "transfers",
-      "path": "transfers.upload.uploadTimeoutSeconds",
-      "canonicalName": "transfers.upload.upload_timeout_seconds",
-      "type": "integer",
-      "unit": "seconds",
-      "default": 30,
-      "validation": {
-        "kind": "integer",
-        "minimum": 1,
-        "maximum": 86400
-      },
-      "runtimeOwner": "emulebb-ed2k::Ed2kTransferRuntime"
-    },
-    {
-      "storage": "sqlite.settings_documents",
+      "storage": "SQLite typed settings with explicit default/custom state",
       "definitionOwner": "emulebb-settings",
       "persistenceOwner": "emulebb-metadata",
       "publicVisibility": "advanced",
@@ -1130,7 +1145,6 @@
       "application": "restart",
       "domain": "transfers",
       "path": "transfers.upload.sessionTransferPercent",
-      "canonicalName": "transfers.upload.session_transfer_percent",
       "type": "integer",
       "unit": "percent of requested file",
       "default": 90,
@@ -1140,10 +1154,15 @@
         "maximum": 100
       },
       "runtimeOwner": "emulebb-ed2k::Ed2kTransferRuntime",
-      "zeroMeaning": "session byte cap disabled"
+      "zeroMeaning": "session byte cap disabled",
+      "acceptance": "accepted round-one target; not yet implemented or qualified",
+      "definitionSource": "crates/emulebb-settings/src/lib.rs",
+      "boundsEvidence": "engineering target bound; validate centrally rather than rely on runtime coercion",
+      "rustType": "u32",
+      "consumerSource": "crates/emulebb-ed2k/src/ed2k_transfer/upload_queue.rs: session byte-cap rotation"
     },
     {
-      "storage": "sqlite.settings_documents",
+      "storage": "SQLite typed settings with explicit default/custom state",
       "definitionOwner": "emulebb-settings",
       "persistenceOwner": "emulebb-metadata",
       "publicVisibility": "advanced",
@@ -1152,7 +1171,6 @@
       "application": "restart",
       "domain": "transfers",
       "path": "transfers.upload.sessionTimeLimitSeconds",
-      "canonicalName": "transfers.upload.session_time_limit_seconds",
       "type": "integer",
       "unit": "seconds",
       "default": 7200,
@@ -1162,10 +1180,15 @@
         "maximum": 86400
       },
       "runtimeOwner": "emulebb-ed2k::Ed2kTransferRuntime",
-      "zeroMeaning": "session time cap disabled"
+      "zeroMeaning": "session time cap disabled",
+      "acceptance": "accepted round-one target; not yet implemented or qualified",
+      "definitionSource": "crates/emulebb-settings/src/lib.rs",
+      "boundsEvidence": "engineering target bound; validate centrally rather than rely on runtime coercion",
+      "rustType": "u64",
+      "consumerSource": "crates/emulebb-ed2k/src/ed2k_transfer/upload_queue.rs: session time-cap rotation"
     },
     {
-      "storage": "sqlite.settings_documents",
+      "storage": "SQLite typed settings with explicit default/custom state",
       "definitionOwner": "emulebb-settings",
       "persistenceOwner": "emulebb-metadata",
       "publicVisibility": "normal",
@@ -1174,79 +1197,21 @@
       "application": "live",
       "domain": "transfers",
       "path": "transfers.upload.creditSystemEnabled",
-      "canonicalName": "transfers.upload.credit_system_enabled",
       "type": "boolean",
       "unit": "none",
       "default": true,
       "validation": {
         "kind": "boolean"
       },
-      "runtimeOwner": "emulebb-ed2k::Ed2kTransferRuntime"
-    },
-    {
-      "storage": "sqlite.settings_documents",
-      "definitionOwner": "emulebb-settings",
-      "persistenceOwner": "emulebb-metadata",
-      "publicVisibility": "normal",
-      "secret": false,
-      "sensitivity": "operator",
-      "application": "restart",
-      "domain": "transfers",
-      "path": "transfers.filenameVoting.enabledForNewDownloads",
-      "canonicalName": "transfers.filename_voting.enabled_for_new_downloads",
-      "type": "boolean",
-      "unit": "none",
-      "default": false,
-      "validation": {
-        "kind": "boolean"
-      },
-      "runtimeOwner": "emulebb-ed2k::Ed2kTransferRuntime"
-    },
-    {
-      "storage": "sqlite.settings_documents",
-      "definitionOwner": "emulebb-settings",
-      "persistenceOwner": "emulebb-metadata",
-      "publicVisibility": "advanced",
-      "secret": false,
-      "sensitivity": "operator",
-      "application": "restart",
-      "domain": "transfers",
-      "path": "transfers.filenameVoting.minimumVotes",
-      "canonicalName": "transfers.filename_voting.minimum_votes",
-      "type": "integer",
-      "unit": "votes",
-      "default": 0,
-      "validation": {
-        "kind": "integer",
-        "minimum": 0,
-        "maximum": 1000
-      },
       "runtimeOwner": "emulebb-ed2k::Ed2kTransferRuntime",
-      "zeroMeaning": "no additional absolute vote threshold"
+      "acceptance": "accepted round-one target; not yet implemented or qualified",
+      "definitionSource": "crates/emulebb-settings/src/lib.rs",
+      "boundsEvidence": "source boolean type",
+      "rustType": "bool",
+      "consumerSource": "current network/coordinator owner"
     },
     {
-      "storage": "sqlite.settings_documents",
-      "definitionOwner": "emulebb-settings",
-      "persistenceOwner": "emulebb-metadata",
-      "publicVisibility": "advanced",
-      "secret": false,
-      "sensitivity": "operator",
-      "application": "restart",
-      "domain": "transfers",
-      "path": "transfers.filenameVoting.requiredPercent",
-      "canonicalName": "transfers.filename_voting.required_percent",
-      "type": "integer",
-      "unit": "percent",
-      "default": 51,
-      "validation": {
-        "kind": "integer",
-        "minimum": 1,
-        "maximum": 100
-      },
-      "runtimeOwner": "emulebb-ed2k::Ed2kTransferRuntime"
-    },
-    {
-      "storage": "sqlite.settings_documents",
+      "storage": "SQLite typed settings with explicit default/custom state",
       "definitionOwner": "emulebb-settings",
       "persistenceOwner": "emulebb-metadata",
       "publicVisibility": "normal",
@@ -1255,20 +1220,27 @@
       "application": "restart",
       "domain": "storage",
       "path": "storage.incomingDirectory",
-      "canonicalName": "storage.incoming_directory",
       "type": "path",
       "unit": "none",
-      "default": null,
+      "default": "incoming",
       "validation": {
         "kind": "path",
-        "nullable": true,
-        "format": "local directory path; UTF-8, no NUL; incoming path-class long-path rules",
-        "nullMeaning": "profile-root/incoming"
+        "nullable": false,
+        "nonEmpty": true,
+        "forbidden": "NUL",
+        "relativeBase": "profile",
+        "expansion": "none",
+        "pathClass": "incoming/delivery; platform long-path rules"
       },
-      "runtimeOwner": "emulebb-daemon"
+      "runtimeOwner": "emulebb-daemon",
+      "acceptance": "accepted round-one target; not yet implemented or qualified",
+      "definitionSource": "crates/emulebb-settings/src/lib.rs",
+      "boundsEvidence": "current profile/incoming fallback; path syntax validated before runtime filesystem resolution",
+      "rustType": "PathBuf",
+      "consumerSource": "daemon incoming directory, completed delivery and implicit root owner"
     },
     {
-      "storage": "sqlite.settings_documents",
+      "storage": "SQLite typed settings with explicit default/custom state",
       "definitionOwner": "emulebb-settings",
       "persistenceOwner": "emulebb-metadata",
       "publicVisibility": "normal",
@@ -1276,8 +1248,36 @@
       "sensitivity": "operator",
       "application": "restart",
       "domain": "storage",
+      "path": "storage.tempDirectory",
+      "type": "path",
+      "unit": "none",
+      "default": "temp",
+      "validation": {
+        "kind": "path",
+        "nullable": false,
+        "nonEmpty": true,
+        "forbidden": "NUL",
+        "relativeBase": "profile",
+        "expansion": "none",
+        "pathClass": "internal piece storage; platform short-path rules"
+      },
+      "runtimeOwner": "emulebb-daemon",
+      "acceptance": "accepted round-one target; not yet implemented or qualified",
+      "definitionSource": "crates/emulebb-settings/src/lib.rs",
+      "boundsEvidence": "new configurable temp path; existing current default is internal transfers path",
+      "rustType": "PathBuf",
+      "consumerSource": "new first-start job storage selection; existing transfer-root and disk reservation owner"
+    },
+    {
+      "storage": "SQLite typed settings with explicit default/custom state",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "normal",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "live",
+      "domain": "storage",
       "path": "storage.minFreeProfileBytes",
-      "canonicalName": "storage.min_free_profile_bytes",
       "type": "integer",
       "unit": "bytes",
       "default": 1073741824,
@@ -1286,19 +1286,23 @@
         "minimum": 1073741824,
         "maximum": 5497558138880
       },
-      "runtimeOwner": "emulebb-ed2k::Ed2kTransferRuntime"
+      "runtimeOwner": "emulebb-ed2k::Ed2kTransferRuntime",
+      "acceptance": "accepted round-one target; not yet implemented or qualified",
+      "definitionSource": "crates/emulebb-settings/src/lib.rs",
+      "boundsEvidence": "source validate_free_space_floor: configured floor cannot fall below1GiB profile or5GiB payload floors and maximum5TiB",
+      "rustType": "u64",
+      "consumerSource": "crates/emulebb-core/src/disk_guard.rs: settings reread for reservations"
     },
     {
-      "storage": "sqlite.settings_documents",
+      "storage": "SQLite typed settings with explicit default/custom state",
       "definitionOwner": "emulebb-settings",
       "persistenceOwner": "emulebb-metadata",
       "publicVisibility": "normal",
       "secret": false,
       "sensitivity": "operator",
-      "application": "restart",
+      "application": "live",
       "domain": "storage",
-      "path": "storage.minFreeTransferBytes",
-      "canonicalName": "storage.min_free_transfer_bytes",
+      "path": "storage.minFreeTempBytes",
       "type": "integer",
       "unit": "bytes",
       "default": 5368709120,
@@ -1307,19 +1311,23 @@
         "minimum": 5368709120,
         "maximum": 5497558138880
       },
-      "runtimeOwner": "emulebb-ed2k::Ed2kTransferRuntime"
+      "runtimeOwner": "emulebb-ed2k::Ed2kTransferRuntime",
+      "acceptance": "accepted round-one target; not yet implemented or qualified",
+      "definitionSource": "crates/emulebb-settings/src/lib.rs",
+      "boundsEvidence": "source validate_free_space_floor: configured floor cannot fall below1GiB profile or5GiB payload floors and maximum5TiB",
+      "rustType": "u64",
+      "consumerSource": "crates/emulebb-core/src/disk_guard.rs: settings reread for reservations"
     },
     {
-      "storage": "sqlite.settings_documents",
+      "storage": "SQLite typed settings with explicit default/custom state",
       "definitionOwner": "emulebb-settings",
       "persistenceOwner": "emulebb-metadata",
       "publicVisibility": "normal",
       "secret": false,
       "sensitivity": "operator",
-      "application": "restart",
+      "application": "live",
       "domain": "storage",
       "path": "storage.minFreeIncomingBytes",
-      "canonicalName": "storage.min_free_incoming_bytes",
       "type": "integer",
       "unit": "bytes",
       "default": 5368709120,
@@ -1328,10 +1336,15 @@
         "minimum": 5368709120,
         "maximum": 5497558138880
       },
-      "runtimeOwner": "emulebb-ed2k::Ed2kTransferRuntime"
+      "runtimeOwner": "emulebb-ed2k::Ed2kTransferRuntime",
+      "acceptance": "accepted round-one target; not yet implemented or qualified",
+      "definitionSource": "crates/emulebb-settings/src/lib.rs",
+      "boundsEvidence": "source validate_free_space_floor: configured floor cannot fall below1GiB profile or5GiB payload floors and maximum5TiB",
+      "rustType": "u64",
+      "consumerSource": "crates/emulebb-core/src/disk_guard.rs: settings reread for reservations"
     },
     {
-      "storage": "sqlite.settings_documents",
+      "storage": "SQLite typed settings with explicit default/custom state",
       "definitionOwner": "emulebb-settings",
       "persistenceOwner": "emulebb-metadata",
       "publicVisibility": "advanced",
@@ -1340,17 +1353,21 @@
       "application": "restart",
       "domain": "sharing",
       "path": "sharing.scanOnStartup",
-      "canonicalName": "sharing.scan_on_startup",
       "type": "boolean",
       "unit": "none",
       "default": true,
       "validation": {
         "kind": "boolean"
       },
-      "runtimeOwner": "emulebb-daemon"
+      "runtimeOwner": "emulebb-daemon",
+      "acceptance": "accepted round-one target; not yet implemented or qualified",
+      "definitionSource": "crates/emulebb-settings/src/lib.rs",
+      "boundsEvidence": "source boolean type",
+      "rustType": "bool",
+      "consumerSource": "daemon initial shared-directory load"
     },
     {
-      "storage": "sqlite.settings_documents",
+      "storage": "SQLite typed settings with explicit default/custom state",
       "definitionOwner": "emulebb-settings",
       "persistenceOwner": "emulebb-metadata",
       "publicVisibility": "normal",
@@ -1359,17 +1376,21 @@
       "application": "restart",
       "domain": "sharing",
       "path": "sharing.kadPublishingEnabled",
-      "canonicalName": "sharing.kad_publishing_enabled",
       "type": "boolean",
       "unit": "none",
       "default": true,
       "validation": {
         "kind": "boolean"
       },
-      "runtimeOwner": "emulebb-core::kad_shared_publish"
+      "runtimeOwner": "emulebb-core::kad_shared_publish",
+      "acceptance": "accepted round-one target; not yet implemented or qualified",
+      "definitionSource": "crates/emulebb-settings/src/lib.rs",
+      "boundsEvidence": "source boolean type",
+      "rustType": "bool",
+      "consumerSource": "daemon Kad network configuration and core shared publish driver"
     },
     {
-      "storage": "sqlite.settings_documents",
+      "storage": "SQLite typed settings with explicit default/custom state",
       "definitionOwner": "emulebb-settings",
       "persistenceOwner": "emulebb-metadata",
       "publicVisibility": "normal",
@@ -1378,17 +1399,21 @@
       "application": "restart",
       "domain": "security",
       "path": "security.obfuscationEnabled",
-      "canonicalName": "security.obfuscation_enabled",
       "type": "boolean",
       "unit": "none",
       "default": true,
       "validation": {
         "kind": "boolean"
       },
-      "runtimeOwner": "emulebb-core::network_api"
+      "runtimeOwner": "emulebb-core::network_api",
+      "acceptance": "accepted round-one target; not yet implemented or qualified",
+      "definitionSource": "crates/emulebb-settings/src/lib.rs",
+      "boundsEvidence": "source boolean type",
+      "rustType": "bool",
+      "consumerSource": "daemon network config and ED2K peer/server handshakes"
     },
     {
-      "storage": "sqlite.settings_documents",
+      "storage": "SQLite typed settings with explicit default/custom state",
       "definitionOwner": "emulebb-settings",
       "persistenceOwner": "emulebb-metadata",
       "publicVisibility": "normal",
@@ -1397,7 +1422,6 @@
       "application": "restart",
       "domain": "security",
       "path": "security.vpnGuard.mode",
-      "canonicalName": "security.vpn_guard.mode",
       "type": "enum",
       "unit": "none",
       "default": "off",
@@ -1408,10 +1432,15 @@
           "block"
         ]
       },
-      "runtimeOwner": "emulebb-core::vpn_guard"
+      "runtimeOwner": "emulebb-core::vpn_guard",
+      "acceptance": "accepted round-one target; not yet implemented or qualified",
+      "definitionSource": "crates/emulebb-settings/src/lib.rs",
+      "boundsEvidence": "engineering target bound; validate centrally rather than rely on runtime coercion",
+      "rustType": "closed enum",
+      "consumerSource": "daemon bind guard and core vpn_guard.rs; one mode owns enabled state"
     },
     {
-      "storage": "sqlite.settings_documents",
+      "storage": "SQLite typed settings with explicit default/custom state",
       "definitionOwner": "emulebb-settings",
       "persistenceOwner": "emulebb-metadata",
       "publicVisibility": "normal",
@@ -1420,7 +1449,6 @@
       "application": "restart",
       "domain": "security",
       "path": "security.vpnGuard.allowedPublicIpCidrs",
-      "canonicalName": "security.vpn_guard.allowed_public_ip_cidrs",
       "type": "array<ipv4-cidr>",
       "unit": "networks",
       "default": [],
@@ -1431,10 +1459,15 @@
         "item": "canonical IPv4 CIDR",
         "emptyMeaning": "interface-binding gate only; no public-address allowlist"
       },
-      "runtimeOwner": "emulebb-core::vpn_guard"
+      "runtimeOwner": "emulebb-core::vpn_guard",
+      "acceptance": "accepted round-one target; not yet implemented or qualified",
+      "definitionSource": "crates/emulebb-settings/src/lib.rs",
+      "boundsEvidence": "engineering target bound; validate centrally rather than rely on runtime coercion",
+      "rustType": "Vec<Ipv4Net>",
+      "consumerSource": "daemon bind guard and core vpn_guard.rs; one mode owns enabled state"
     },
     {
-      "storage": "sqlite.settings_documents",
+      "storage": "SQLite typed settings with explicit default/custom state",
       "definitionOwner": "emulebb-settings",
       "persistenceOwner": "emulebb-metadata",
       "publicVisibility": "normal",
@@ -1443,17 +1476,52 @@
       "application": "restart",
       "domain": "security",
       "path": "security.ipFilter.enabled",
-      "canonicalName": "security.ip_filter.enabled",
       "type": "boolean",
       "unit": "none",
       "default": false,
       "validation": {
         "kind": "boolean"
       },
-      "runtimeOwner": "emulebb-ed2k::ipfilter"
+      "runtimeOwner": "emulebb-ed2k::ipfilter",
+      "acceptance": "accepted round-one target; not yet implemented or qualified",
+      "definitionSource": "crates/emulebb-settings/src/lib.rs",
+      "boundsEvidence": "source boolean type",
+      "rustType": "bool",
+      "consumerSource": "daemon load_ip_filter and captured-source explicit reload"
     },
     {
-      "storage": "sqlite.settings_documents",
+      "storage": "SQLite typed settings with explicit default/custom state",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "normal",
+      "secret": false,
+      "sensitivity": "operator",
+      "application": "restart",
+      "domain": "security",
+      "path": "security.ipFilter.filePath",
+      "type": "path",
+      "unit": "none",
+      "default": null,
+      "validation": {
+        "kind": "path",
+        "nullable": true,
+        "nonEmptyWhenSet": true,
+        "forbidden": "NUL",
+        "relativeBase": "profile",
+        "expansion": "none",
+        "pathClass": "configured external filter file",
+        "requiredWhen": "security.ipFilter.enabled"
+      },
+      "runtimeOwner": "emulebb-daemon",
+      "acceptance": "accepted round-one target; not yet implemented or qualified",
+      "definitionSource": "crates/emulebb-settings/src/lib.rs",
+      "boundsEvidence": "existing IpFilterSettings.path source; retained external file authority",
+      "rustType": "Option<PathBuf>",
+      "consumerSource": "daemon load_ip_filter and captured-source explicit reload",
+      "owner": "emulebb-ed2k::ipfilter"
+    },
+    {
+      "storage": "SQLite typed settings with explicit default/custom state",
       "definitionOwner": "emulebb-settings",
       "persistenceOwner": "emulebb-metadata",
       "publicVisibility": "normal",
@@ -1462,7 +1530,6 @@
       "application": "restart",
       "domain": "security",
       "path": "security.ipFilter.level",
-      "canonicalName": "security.ip_filter.level",
       "type": "integer",
       "unit": "filter level",
       "default": 127,
@@ -1471,10 +1538,15 @@
         "minimum": 0,
         "maximum": 4294967295
       },
-      "runtimeOwner": "emulebb-ed2k::ipfilter"
+      "runtimeOwner": "emulebb-ed2k::ipfilter",
+      "acceptance": "accepted round-one target; not yet implemented or qualified",
+      "definitionSource": "crates/emulebb-settings/src/lib.rs",
+      "boundsEvidence": "current u32 parser/filter level",
+      "rustType": "u32",
+      "consumerSource": "daemon load_ip_filter and captured-source explicit reload"
     },
     {
-      "storage": "sqlite.settings_documents",
+      "storage": "SQLite typed settings with explicit default/custom state",
       "definitionOwner": "emulebb-settings",
       "persistenceOwner": "emulebb-metadata",
       "publicVisibility": "normal",
@@ -1483,17 +1555,21 @@
       "application": "restart",
       "domain": "security",
       "path": "security.tcpErrorFloodDetection.enabled",
-      "canonicalName": "security.tcp_error_flood_detection.enabled",
       "type": "boolean",
       "unit": "none",
       "default": true,
       "validation": {
         "kind": "boolean"
       },
-      "runtimeOwner": "emulebb-ed2k::Ed2kTransferRuntime"
+      "runtimeOwner": "emulebb-ed2k::Ed2kTransferRuntime",
+      "acceptance": "accepted round-one target; not yet implemented or qualified",
+      "definitionSource": "crates/emulebb-settings/src/lib.rs",
+      "boundsEvidence": "source boolean type",
+      "rustType": "bool",
+      "consumerSource": "crates/emulebb-core/src/network_api.rs: listener options; emulebb-ed2k listener enforcement"
     },
     {
-      "storage": "sqlite.settings_documents",
+      "storage": "SQLite typed settings with explicit default/custom state",
       "definitionOwner": "emulebb-settings",
       "persistenceOwner": "emulebb-metadata",
       "publicVisibility": "advanced",
@@ -1502,19 +1578,24 @@
       "application": "restart",
       "domain": "security",
       "path": "security.tcpErrorFloodDetection.intervalSeconds",
-      "canonicalName": "security.tcp_error_flood_detection.interval_seconds",
       "type": "integer",
       "unit": "seconds",
       "default": 3600,
       "validation": {
         "kind": "integer",
         "minimum": 60,
-        "maximum": 86400
+        "maximum": 86400,
+        "multipleOf": 60
       },
-      "runtimeOwner": "emulebb-ed2k::Ed2kTransferRuntime"
+      "runtimeOwner": "emulebb-ed2k::Ed2kTransferRuntime",
+      "acceptance": "accepted round-one target; not yet implemented or qualified",
+      "definitionSource": "crates/emulebb-settings/src/lib.rs",
+      "boundsEvidence": "source validates whole1..1440 minutes; canonical seconds value stays a whole-minute multiple",
+      "rustType": "u32",
+      "consumerSource": "crates/emulebb-core/src/network_api.rs: listener options; emulebb-ed2k listener enforcement"
     },
     {
-      "storage": "sqlite.settings_documents",
+      "storage": "SQLite typed settings with explicit default/custom state",
       "definitionOwner": "emulebb-settings",
       "persistenceOwner": "emulebb-metadata",
       "publicVisibility": "advanced",
@@ -1523,7 +1604,6 @@
       "application": "restart",
       "domain": "security",
       "path": "security.tcpErrorFloodDetection.threshold",
-      "canonicalName": "security.tcp_error_flood_detection.threshold",
       "type": "integer",
       "unit": "failures per interval",
       "default": 10,
@@ -1532,21 +1612,25 @@
         "minimum": 1,
         "maximum": 1000
       },
-      "runtimeOwner": "emulebb-ed2k::Ed2kTransferRuntime"
+      "runtimeOwner": "emulebb-ed2k::Ed2kTransferRuntime",
+      "acceptance": "accepted round-one target; not yet implemented or qualified",
+      "definitionSource": "crates/emulebb-settings/src/lib.rs",
+      "boundsEvidence": "source validate_ed2k_settings threshold1..1000",
+      "rustType": "u32",
+      "consumerSource": "crates/emulebb-core/src/network_api.rs: listener options; emulebb-ed2k listener enforcement"
     }
   ],
   "crossValidation": [
-    "network.p2p.bindIp must belong to network.p2p.bindInterface when both are non-null; automatic selection must be unambiguous.",
-    "network.connections.maxHalfOpenConnections and transfers.maxParallelDownloadPeers cannot exceed network.connections.maxConnections.",
-    "transfers.upload.baseSlots cannot exceed network.connections.maxConnections.",
-    "All cross-field constraints must hold in both the saved candidate and projected effective snapshot before commit; a live cap cannot invalidate an effective restart-bound prerequisite.",
-    "network.hostnameLookup.enabled requires at least one valid DNS server; disabling lookup permits an empty resolver list.",
-    "network.nat.renewMarginSeconds must be less than network.nat.leaseDurationSeconds.",
-    "network.nat derives its local binding and mapping ports from network.p2p; there is no second mutable binding or public UDP port.",
-    "security.vpnGuard.mode=block requires a confirmed explicit local interface/address; a configured allowlist additionally gates observed public egress.",
-    "Numeric zero is allowed only where the field declares its meaning; it never means reset.",
-    "Path validation never writes or creates a target directory before settings commit; later operational errors are reported separately.",
-    "Settings documents contain no collection entities, generated identity, protocol implementation constants or bootstrap secrets."
+    "Validate current typed whole candidate atomically before persistence; no per-field silent coercion.",
+    "Configured bind IP/interface must be syntactically valid; membership and current route/interface availability are application-time checks, including offline cross-machine preparation.",
+    "network.connections.maxHalfOpenConnections and transfers.maxParallelDownloadPeers do not exceed network.connections.maxConnections; upload.baseSlots does not exceed the connection cap.",
+    "Default/custom resolution and admitted effective snapshots preserve the master saved/effective/restart/apply-failure contract.",
+    "network.hostnameLookup.enabled requires at least one valid configured resolver; resolver list is bounded and has no silently discarded invalid entries.",
+    "network.nat derives local binding and ports from network.p2p. Internal lease/discovery policy retains source defaults 5/3600/300 seconds and renewal margin below lease.",
+    "security.vpnGuard.mode=block requires an explicit interface or bind IP, with current runtime fail-closed checks; CIDR list may be empty for interface-only gating.",
+    "security.ipFilter.enabled requires a non-null nonempty filePath; validate syntax offline and filesystem availability when applying. Do not silently admit enabled-but-unfiltered state.",
+    "Relative paths resolve against profile; no environment/tilde expansion. Apply platform path classes.",
+    "maxConcurrentDownloads null selects adaptive automatic concurrency. A positive integer is the ordinary ceiling with a fixed non-configurable 25% rare-opportunity burst rounded up, always within resource budgets. Lowering the ceiling drains admissions; do not silently stop current jobs. Initial two-slot preparation allowance is not a setting."
   ],
   "nonSettingsState": [
     {
@@ -1605,43 +1689,37 @@
       "route": "/api/v1/servers",
       "owner": "server repository",
       "storage": "SQLite",
-      "contents": "server identities, endpoints, priority/static flags and observations"
+      "contents": "server identities/endpoints/priority/static flags and observations"
     },
     {
-      "route": "/api/v1/kad/bootstrap-endpoints",
-      "owner": "Kad repository",
-      "storage": "SQLite",
-      "contents": "explicit bootstrap endpoint collection"
-    },
-    {
-      "route": "/api/v1/shared-directories",
+      "route": "/api/v1/library/roots",
       "owner": "sharing repository",
       "storage": "SQLite",
-      "contents": "monitored recursive roots"
+      "contents": "monitored recursive roots and origin/membership"
     },
     {
-      "route": "/api/v1/shared-directories/ignores",
+      "resource": "shared-root ignore rules",
       "owner": "sharing repository",
       "storage": "SQLite",
-      "contents": "ignore rules"
+      "routeStatus": "exact route inventory remains under PUBLIC-FOUNDATION"
     },
     {
       "route": "/api/v1/categories",
       "owner": "category repository",
       "storage": "SQLite",
-      "contents": "category paths and metadata"
+      "contents": "routing category metadata, not download priority"
     },
     {
-      "route": "/api/v1/friends",
-      "owner": "friend repository",
+      "route": "/api/v1/library/tags",
+      "owner": "content-tag repository",
       "storage": "SQLite",
-      "contents": "friend identities"
+      "contents": "immutable name IDs and hash membership"
     },
     {
-      "route": "/api/v1/ip-filter/rules",
-      "owner": "filter repository",
-      "storage": "SQLite",
-      "contents": "parsed filter rules; imports are read-only source operations"
+      "resource": "IP-filter contents",
+      "owner": "file-backed filter loader",
+      "storage": "external file referenced by security.ipFilter.filePath",
+      "operation": "explicit reload; no SQLite rule collection"
     }
   ],
   "internalPolicies": [
@@ -1887,6 +1965,87 @@
       "value": "approved extension registry",
       "storage": "code or reviewed policy registry",
       "publicVisibility": "not a public setting"
+    },
+    {
+      "name": "download_exploration_jobs",
+      "owner": "existing corresponding runtime policy owner",
+      "type": "integer",
+      "unit": "jobs",
+      "value": 2,
+      "storage": "code or reviewed policy registry",
+      "publicVisibility": "not a public setting"
+    },
+    {
+      "name": "hostname_lookup_cache_seconds",
+      "owner": "existing corresponding runtime policy owner",
+      "type": "integer",
+      "unit": "seconds",
+      "value": 86400,
+      "storage": "code or reviewed policy registry",
+      "publicVisibility": "not a public setting"
+    },
+    {
+      "name": "nat_discovery_timeout_seconds",
+      "owner": "existing corresponding runtime policy owner",
+      "type": "integer",
+      "unit": "seconds",
+      "value": 5,
+      "storage": "code or reviewed policy registry",
+      "publicVisibility": "not a public setting"
+    },
+    {
+      "name": "nat_lease_duration_seconds",
+      "owner": "existing corresponding runtime policy owner",
+      "type": "integer",
+      "unit": "seconds",
+      "value": 3600,
+      "storage": "code or reviewed policy registry",
+      "publicVisibility": "not a public setting"
+    },
+    {
+      "name": "nat_renew_margin_seconds",
+      "owner": "existing corresponding runtime policy owner",
+      "type": "integer",
+      "unit": "seconds",
+      "value": 300,
+      "storage": "code or reviewed policy registry",
+      "publicVisibility": "not a public setting"
+    },
+    {
+      "name": "upload_elastic_underfill_seconds",
+      "owner": "existing corresponding runtime policy owner",
+      "type": "integer",
+      "unit": "seconds",
+      "value": 10,
+      "storage": "code or reviewed policy registry",
+      "publicVisibility": "not a public setting"
+    },
+    {
+      "name": "upload_waiting_timeout_seconds",
+      "owner": "existing corresponding runtime policy owner",
+      "type": "integer",
+      "unit": "seconds",
+      "value": 3600,
+      "storage": "code or reviewed policy registry",
+      "publicVisibility": "not a public setting"
+    },
+    {
+      "name": "upload_granted_timeout_seconds",
+      "owner": "existing corresponding runtime policy owner",
+      "type": "integer",
+      "unit": "seconds",
+      "value": 5,
+      "storage": "code or reviewed policy registry",
+      "publicVisibility": "not a public setting"
+    },
+    {
+      "name": "upload_idle_timeout_seconds",
+      "owner": "existing corresponding runtime policy owner",
+      "type": "integer",
+      "unit": "seconds",
+      "value": 30,
+      "storage": "code or reviewed policy registry",
+      "publicVisibility": "not a public setting"
     }
   ],
   "sourceEvidence": [
@@ -1968,5 +2127,23 @@
     "bootstrapFile": "emulebb-rust-settings.toml",
     "databaseFile": "emulebb-rust-metadata.db"
   },
-  "implementationStatus": "No runtime, default-port, schema, API or profile changes authorized by this inventory."
+  "implementationStatus": "Rust 3d702720 includes the 59-leaf typed model, fresh schema 91 singleton storage, exact revision/CAS, read-only default resolution, candidate validation, typed commit uncertainty and exclusive single-key offline settings commands independent of runtime loading. Typed PATCH/keyed helpers, explicit default-resolution recovery and declaration-derived OpenAPI 3.1 schema components are implemented. The native CLI phase passes on 3d702720 with Harness 46c8e509, alongside durable search identities and reporter provenance. Declaration-derived components still await their REST/WebUI consumers. Runtime admission/publication, REST/OpenAPI consumer integration, WebUI, Docker, runtime-argument removal and canonical Python profile initialization remain pending. This inventory retains the accepted pre-cut source review; it is not a runtime reader.",
+  "authoritativeSpecification": "PUBLIC-FOUNDATION.md",
+  "offlineSettings": {
+    "operations": [
+      "get KEY",
+      "set KEY VALUE",
+      "reset KEY"
+    ],
+    "profile": "explicit --profile; exclusive stopped-profile lease",
+    "valueInput": {
+      "ordinary": "plain text parsed according to the canonical key type",
+      "list": "one inline JSON array VALUE argument, parsed with the standard JSON parser",
+      "scope": "one key per command; no JSON input file or bulk settings operation"
+    },
+    "write": "one key, whole-candidate validation and atomic save; advances revision without caller CAS",
+    "getOutput": "resolved value only; diagnostics stderr",
+    "storage": "SQLite application settings only"
+  },
+  "acceptedLeafCount": 59
 }

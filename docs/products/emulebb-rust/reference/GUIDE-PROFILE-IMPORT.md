@@ -11,12 +11,11 @@ its runtime never consults imported or staging tables.
 - Close stock/MFC after its hashing finishes. Save a backup of its configuration.
 - Obtain a checkout of `emulebb-build-tests` and Python 3.10 or later.
   Python 3.10 additionally needs `python -m pip install "tomli>=2"`.
-- Obtain a Rust executable/image supporting portable SQLite imports and full
-  AICH recovery sets. An incompatible older build will fail visibly.
-- Choose a fresh or compatible, stopped destination profile. Existing profiles
+- Obtain the current Rust executable/image with portable SQLite imports and full
+  AICH recovery sets.
+- Choose a fresh or current, stopped destination profile. Existing profiles
   receive an additive merge: compatible missing data is enriched, existing file
   preferences are retained, and conflicting path/hash bindings are reported.
-  Incompatible schemas require a fresh profile; there is no migration or reset.
 - For Docker, have the image loaded locally and the Docker daemon running.
   Windows uses Docker through the selected WSL distribution. Linux uses a local
   Docker daemon; remote Docker contexts are unsupported because bind paths are
@@ -41,8 +40,8 @@ Edit the paths and executable/image, then run:
 python -B scripts/import-emule-profile.py --config import.toml
 ```
 
-The same command works for all three examples. It exports, imports, reconciles,
-checks imported hashes and path bindings, and exits. It never launches the
+The same command works for all three examples. It exports, imports, checks
+imported hashes and native path bindings, and exits. It never launches the
 ordinary client or executes pending hashing. Keep real jobs and reports private.
 
 ## Job fields and mappings
@@ -101,7 +100,7 @@ Exit statuses:
 
 | Code | Meaning |
 |---|---|
-| 0 | Complete reuse; no pending or unresolved file work reported |
+| 0 | Import and metadata validation completed without reported conflicts |
 | 2 | Import completed but needs attention; valid imported data is retained |
 | 1 | Preflight or execution failure; inspect the diagnostic |
 
@@ -112,10 +111,10 @@ recovery trees remained unchanged. It contains no payload data, is separate
 from the portable archive, and is never imported or consulted by Rust.
 The `emulebb.profile-exchange.v2` archive is read-only during Rust apply; it
 retains all stock hash records and available recovery trees, including unmatched
-records. Native schema 58 contains no `imported_` tables. Regenerate an archive
-from stock metadata if it uses the earlier exchange format.
-The summary includes MD4/AICH validation, current path bindings, reused files,
-pending hashing, unavailable fingerprints, conflicts, and recovery coverage.
+records. Rust stores accepted content and paths directly in its library tables.
+The summary includes MD4/AICH validation, current path bindings, unmatched paths,
+conflicts, and recovery coverage. It does not scan for unimported files or plan
+hashing; the normal library scan handles new or changed files.
 `destinationModified` indicates whether profile import was attempted. Preflight
 errors before report creation are printed on the console.
 
@@ -137,7 +136,7 @@ missing trees without reading payloads. Missing AICH master hashes are shown by
 the difference between known records and recovery-set coverage; sets may also
 be shared by duplicate contents.
 
-When Rust rejects an optional recovery set, the tool continues MD4 reconciliation
+When Rust rejects an optional recovery set, the tool continues importing usable MD4 metadata
 and returns exit 2. Verification permits a wholly absent rejected set or an
 existing complete tree proven unchanged against the baseline. Rejection counts
 must account for these outcomes. Partial trees, altered existing metadata, and
@@ -145,10 +144,10 @@ unexplained missing sets remain failures. The report separates verified imported
 sets, unavailable sets, retained existing trees, and preserved conflicting
 records/bindings. A source conflict cannot excuse a changed live record.
 
-If hashing is pending, review roots, mappings, file modifications, and whether
-stock finished hashing. Do not start the normal client until you accept that
-work: normal startup can hash new or changed files. Inaccessible roots fail
-preflight; files becoming inaccessible during execution are reported.
+Review roots, mappings, unmatched files, and whether stock finished hashing
+before starting the daemon. Normal startup scans can hash new or changed files.
+Inaccessible roots fail preflight; files becoming inaccessible during import
+are reported.
 
 On failure or a needs-attention result, preserve the report, archive, and valid
 imported profile. Correct the cause and explicitly retry/merge; the tool never
@@ -157,7 +156,6 @@ automatically clears a previous attempt.
 Importing stock Incoming makes it shared. It does not set Rust's new-download
 destination. Configure that separately. Client identities, credentials, network
 settings, server/bootstrap lists, and partial-download queues are not imported.
-Rust database upgradeability is a separate workstream.
 
 ## Portable archives and advanced use
 
@@ -166,49 +164,21 @@ low-level operations, use the existing `export-emule-profile.py` exporter and
 Rust commands:
 
 ```text
-emulebb-rust --profile NEW_PROFILE import-emule-profile hashes.sqlite
-emulebb-rust --profile NEW_PROFILE reconcile-shared-files
+emulebb-rust --profile PROFILE import profile hashes.sqlite
+emulebb-rust --profile PROFILE import profile --hashes-only hashes.sqlite
 ```
 
-A full archive includes target-platform sharing paths. To import only hashes
-into an already configured, compatible profile, the existing low-level
-`import-emule-profile --hashes-only hashes.sqlite` command preserves its roots.
-The operator tool also merges into an existing compatible profile; its normal
-job imports both roots and hashes.
+A full archive includes target-platform sharing paths. The hashes-only form
+preserves the destination's configured roots. The operator tool imports both
+roots and hashes and can enrich an existing current profile.
 
-## Import a shared-directory list without Python
+Manage library roots and request scans through REST or WebUI. New overlapping
+root creation is rejected; existing root identities and watch policies remain
+stable. Normal scans reuse unchanged native fingerprints and cached hashes,
+and hash new or changed files through the regular MD4/AICH pipeline. Imported
+stock roots are recursive Rust roots; review their scope before importing.
 
-```text
-emulebb-rust --profile PROFILE import-shared-directories shareddir.dat
-```
-
-This native command accepts UTF-8 and BOM-marked UTF-16 LE/BE lists, validates
-absolute paths, collapses listed descendants, and merges roots. Consolidation
-also removes existing explicit child roots covered by an imported parent;
-mandatory roots remain. It then runs the normal offline library scan: unchanged
-live fingerprints reuse existing hashes; new or changed files are hashed using
-the existing MD4/AICH pass. Networking is never started. The original list and
-media files are unchanged. A backup filename such as `shareddir.dat.bak_BAK`
-works identically.
-
-The same backend consolidation applies to UI/API additions and bulk updates.
-A child already covered by a recursive parent is not added separately. Adding
-a parent replaces redundant explicit children; unrelated siblings remain.
-Incoming and category roots keep their mandatory internal roles.
-
-Unlike metadata import, a directory list carries no hashes. Its command can
-therefore read substantial payload data when the live profile has no reusable
-hashes. Import a hash archive first to reuse stock knowledge before adding a
-broader directory list. Stock directory lists become recursive Rust roots;
-children not shared by stock may consequently become shared by Rust.
-
-Completed file hashes are committed during the pass. If the offline process is
-interrupted, rerun the same command with the same profile: completed unchanged
-files are reused, and an interrupted file is hashed again. Keep the client
-stopped while running these offline operations.
-Native content and its successfully cached recovery tree commit atomically.
-Download finalization saves available recovery metadata before publishing
-completion. An optional cache error still permits valid MD4 work to finish;
-the directory-import result reports `missingAichRecoverySets` for accepted live
-contents large enough for recovery that have a master but no saved full tree.
-Missing optional recovery never schedules a payload read by itself.
+Configure new-download storage separately with the offline single-key command
+`emulebb-rust --profile PROFILE settings set storage.incomingDirectory PATH`,
+or through the canonical settings API while the daemon runs. Storage changes
+apply after restart.

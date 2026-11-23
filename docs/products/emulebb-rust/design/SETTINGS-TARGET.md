@@ -1,547 +1,797 @@
-# Configuration And Settings Target
+# Configuration and settings target
 
-**Review target; not implemented or accepted as a runtime change.**
-[RUST-CI-043 / #297](../active/items/RUST-CI-043.md) owns this specification.
-The [target inventory](SETTINGS-INVENTORY.json) defines every proposed public
-setting and bootstrap value, including owner, storage, type, units, defaults,
-validation, sensitivity, visibility and application mode. Parent review must
-accept the remaining target before implementation. The operator accepted the
-clean bootstrap naming and target default ports below on 2026-11-12; this does
-not accept the complete proposed leaf, storage or REST redesign.
-Current user guides and OpenAPI remain
-the authority for the implemented client.
+**Accepted round-one target: 59 leaves; typed model and singleton storage implemented, runtime integration pending.**
+The operator accepted the [Public Foundation](PUBLIC-FOUNDATION.md) on
+2026-11-15. That is the master scope and behavior specification under
+[RUST-CI-043 / #297](../active/items/RUST-CI-043.md). This document owns the
+settings-specific detail. The PM accepted the source-reviewed 59-leaf engineering catalog in
+[SETTINGS-INVENTORY.json](SETTINGS-INVENTORY.json). This does not claim
+implementation. Regenerate/check the final inventory from typed
+settings definitions once implemented; do not create another runtime reader.
 
-## Ownership And Names
+## Ownership and supported surface
 
-TOML contains process/profile/control-service bootstrap only. SQLite owns
-mutable product settings and durable product state. Runtime sockets, timers,
-queues and active work stay in memory; payloads, logs and diagnostics stay in
-files. Requiring a restart does not make a product setting bootstrap material.
+TOML owns only process/profile/control-service bootstrap. SQLite exclusively
+owns mutable product settings and durable product state. A restart requirement
+does not make a setting bootstrap material. Runtime sockets, timers and active
+work stay in memory; payloads, logs and diagnostics remain files.
 
-The operator-facing settings domains are `network`, `transfers`, `storage`,
-`sharing` and `security`. Each value has one typed definition, persistence
-owner and runtime consumer. JSON uses camelCase; TOML, SQL columns and Rust use
-snake_case; URL segments use kebab-case. Apply these conventions directly.
-There are no aliases, compatibility shims, fallback keys, semantic remapping or
-silently ignored obsolete fields. Retired shapes are hard errors. The target
-defines one spelling and meaning for each value.
+Application groups are `network`, `transfers`, `storage`, `sharing`, `security`.
+Each key has one typed definition, persistence owner and runtime consumer.
+`emulebb-settings` owns types, defaults, bounds, units and whole-candidate
+validation; `emulebb-metadata` owns coordinated transactions. Core coordinates
+runtime application. REST/OpenAPI and SPA consume generated metadata rather
+than independent default or validation lists.
 
-`emulebb-settings` owns typed field definitions, defaults, bounds and cross-field
-validation. `emulebb-metadata` owns settings transactions. Core coordinates
-publication to the runtime owners identified in the inventory. HTTP behavior
-belongs to the REST/OpenAPI contract; the SPA consumes that same schema and
-build-generated field metadata. Implementation must generate/check leaf schema
-and UI metadata from the typed definitions rather than maintain independent
-lists of defaults or bounds. The review inventory becomes a checked generated
-snapshot when those definitions are implemented; it is not another runtime
-configuration reader.
+JSON uses camelCase; SQL/Rust/TOML use snake_case; URL segments use kebab-case.
+Names specify units such as BytesPerSecond and Seconds. Closed current types
+receive normal validation, without shims, aliases, remapping, retired-input
+lists or tests preserving removed names. Curate actual operator controls;
+implementation tuning, generated identities and private keys are not settings.
+Unknown keys/fields use ordinary current-schema errors, with no removed-name
+recognition. Document the accepted settings surface only; remove superseded
+shapes/examples instead of preserving comparison or historical guidance.
+Download priority and category priority defaults are absent.
 
-## Bootstrap
+## Bootstrap and profile
 
-The profile locator selects one profile before its private bootstrap is read.
-An explicit `--profile` wins over the executable-directory default on every
-platform. Without it, resolve `current_exe().parent()`, never the shell working
-directory or a home/XDG/Local AppData fallback. Relative explicit paths resolve
-from the shell working directory; missing selected directories/bootstrap files
-are created, while existing files and database preferences are preserved.
-Read-only selection fails visibly. Desktop/container launchers may pass a
-documented explicit writable profile; this does not change the daemon default. The
-bootstrap file is `emulebb-rust-settings.toml`; the database filename is the
-fixed profile-local `emulebb-rust-metadata.db`, not a product setting.
+The sole TOML table is `[rest]`:
 
-The only TOML table is `[rest]`, with these keys:
-
-| Key | Target default | Responsibility |
+| Key | Default | Responsibility |
 | --- | --- | --- |
-| `bind_addr` | `127.0.0.1:20017` | Authenticated REST/WebUI listener |
-| `api_key` | `change_me_123change_me_123change_me_123` | Shared local starter key; replace before external exposure |
-| `web_root_dir` | Unset | Optional static-asset location; default is `webui` beside the executable |
+| `bind_addr` | `0.0.0.0:20017` | Authenticated REST/WebUI listener |
+| `api_key` | `change_me_123change_me_123change_me_123` | Accepted ready-package/fresh-profile starter secret |
+| `web_root_dir` | Unset | Explicit assets directory; omitted default is `webui` beside executable |
 
-The process may receive `--rest-bind-addr` for an explicit run-scoped control
-listener selection. Its precedence is CLI, then bootstrap, then fresh-bootstrap
-defaults. This does not write the bootstrap or product settings. Product
-settings have no parallel CLI or environment value authority. Workspace
-`EMULEBB_` variables remain tooling inputs, outside the product settings API.
+Preserve existing bootstrap semantics, accepted key policy and minimum length.
+Do not add secret generation, key-renaming or additional validation proposals
+under this foundation. Keep secrets out of normal settings/status/log surfaces;
+the separately owned authenticated private diagnostic contract remains intact.
 
-Both the top-level bootstrap and nested table reject unknown keys and invalid
-types. Paths resolve once against the profile when relative; validation is
-non-mutating. The key uses exact printable non-whitespace ASCII bytes, length
-32..1024, and rejects the inventory's case-insensitive placeholder list. Fresh
-initialization copies the same canonical ready template shipped in packages;
-its public starter key has 39 ASCII characters and meets the retained 32-byte
-minimum. The operator explicitly selected this startup UX; existing bootstrap
-files and database preferences are never overwritten. There is no secret-bearing CLI flag
-or secret-bearing URL parameter.
+Normal startup has only `--profile` as runtime configuration. Omission uses
+`current_exe().parent()` on every platform; explicit relative paths use caller
+CWD. Missing selected profiles can be created; read-only paths fail visibly.
+Installed launchers may supply explicit writable profiles. Keep the fixed
+profile-local bootstrap and database filenames. Do not add product environment
+overrides or duplicate authorities.
 
-The bootstrap is owner-only: Unix profile/file modes `0700`/`0600`, with the
-corresponding owner-restricted Windows access. Reject unsafe existing access
-with actionable diagnostics. Never print an existing key or include it in
-settings, status, error values, ordinary structured logs or public examples.
-Fresh-profile provisioning may display the newly initialized starter key once;
-this explicit provisioning handoff is separate from ordinary structured logs.
-The public starter value may appear in package instructions; actual operator
-replacement secrets must not appear in ordinary logs or public examples.
-Rotation edits private bootstrap and takes effect on process restart.
+## Accepted settings representation
 
-The authenticated private diagnostic bundle has its own full-fidelity contract
-under [#280](../active/items/RUST-BUG-178.md), including the exact API key and
-sensitive values. Its warning, private labeling and acknowledgement remain with
-that owner. The settings resource's secret exclusion does not change that
-private export contract or assign backend redaction, a shareable export or a
-logger rewrite to this review.
-
-The operator explicitly chose this clean Beta3 bootstrap contract and target
-REST `20017`, P2P TCP `20019` and UDP `20020` defaults. Use only canonical keys;
-reject obsolete spellings without aliases, shims, fallback reads, remapping or
-silent ignoring. Other proposed bootstrap validation, address-family or
-key-generation changes are not accepted by this naming/default decision.
-Preserve existing `--incoming-dir` and `--p2p-bind-interface` run
-overrides in initial hardening; removing them needs a separate scope decision.
-This review changes no reader or startup behavior and includes no profile
-evolution work.
-
-## Product Settings And Public Surface
-
-The inventory specifies 68 proposed product controls. `normal` controls form
-the primary console; `advanced` controls remain supported but secondary. Both
-use the same contract and validation. Restart-bound network/NAT, binding and
-security controls remain SQLite settings. Limits, live upload policy and server
-connection policy have explicitly named runtime owners.
-
-All numeric units are explicit in names and inventory. Rates are bytes per
-second; storage floors are bytes; durations use their named units. Server
-keepalive is whole minutes, with zero disabling it, under the contract owned
-by [#223](../active/items/RUST-BUG-156.md). A zero value has meaning only where
-the inventory states it. JSON integers remain exactly representable by the
-first-party client and checked by the Rust type/validator.
-
-Generated client identity and private keys belong to dedicated durable state,
-not editable settings. Protocol TTLs/capacities, scheduler cadence, negotiated
-capabilities and diagnostic probes remain implementation policies. Their
-inventory entries describe ownership, not public controls. Autonomous Indexer
-state and its retention model are outside this Client review.
-
-Server entries, bootstrap endpoints, shared roots/ignore rules, categories,
-friends and filter rules remain dedicated SQLite-backed collections. Do not
-embed them in the settings snapshot. Bounded scalar arrays such as DNS resolver
-endpoints and NAT backend preference are single leaf values. Imported filter
-rules are durable product data; a mutable side file is not their authority.
-
-`server.met` and `nodes.dat` are read-only compatibility inputs. Import actions
-never create, refresh, replace or write them back. Their SQLite-state work stays
-with [#233](../active/items/RUST-FEAT-062.md).
-
-## Settings Representation
-
-Use **validated structured domain documents**, one row per domain, in the one
-profile SQLite database. Do not create a generic untyped scalar key store or a
-parallel file. The target repository boundary is conceptually:
+Store one complete typed `SavedSettings` document and its revision in a
+singleton row. Offline settings commands, Core, REST and daemon startup use this
+representation. Client adoption and qualification follow the foundation checkpoints:
 
 ```sql
-CREATE TABLE settings_documents (
-    domain TEXT PRIMARY KEY CHECK (domain IN
-        ('network', 'transfers', 'storage', 'sharing', 'security')),
-    document_json TEXT NOT NULL
-        CHECK (json_valid(document_json) AND json_type(document_json) = 'object')
-) STRICT;
-
-CREATE TABLE settings_revision (
-    singleton INTEGER PRIMARY KEY CHECK (singleton = 1),
-    revision INTEGER NOT NULL CHECK (revision >= 1)
+CREATE TABLE app_settings (
+    id INTEGER PRIMARY KEY CHECK (id = 1),
+    revision INTEGER NOT NULL CHECK (revision >= 1),
+    document_json TEXT NOT NULL CHECK (
+        json_valid(document_json)
+        AND json_type(document_json) = 'object'
+        AND length(CAST(document_json AS BLOB)) <= 131072
+    )
 ) STRICT;
 ```
 
-This is a proposed settings representation, not executable schema work or a
-product schema-version allocation. JSON object keys follow the JSON casing
-rule; SQL identifiers stay snake_case. All rows decode into closed typed Rust
-domains, with recursive unknown-field rejection and whole-candidate validation.
-Startup rejects malformed, incomplete or invalid current-schema settings;
-defaults are materialized only by the fresh-profile transaction. There is no
-silent per-field substitution for invalid durable data.
-
-Settings are bounded whole-snapshot reads and small conditional writes. No
-runtime query needs to search a particular setting across profiles or join its
-leaf against a large catalog. Domain documents therefore avoid duplicated
-per-leaf SQL/Rust constraints and keep additions reviewable. Typed SQL columns
-would be justified by relational query requirements that these settings do not
-have. This choice makes no claim about catalog query performance and changes no
-transfer/library indexes. [#298](../active/items/RUST-CI-044.md) owns that wider
-schema review.
-
-One read transaction captures all domain rows and the revision. One
-`BEGIN IMMEDIATE` write transaction checks the expected revision and writes
-every changed domain plus the next revision. Serialization and validation finish
-before the first write. No update API may commit a domain independently. Use
-checked revision arithmetic; exhaustion fails without changing state.
-
-## One Settings Resource
-
-The target resource is **`/api/v1/settings`**, with GET and PATCH only. It is
-authenticated with `X-API-Key`, bounded to 256 KiB for a PATCH body and requires
-`application/json` (an optional UTF-8 charset is accepted); request content
-encoding must be absent or `identity`. Bootstrap credentials and generated identity are absent.
-Existing dedicated collections, network/NAT status, logs and operations remain
-separate resources. This review does not alter `/api/v1`, `apiVersion` or the
-contract-version policy.
-
-GET returns the full typed shape defined by the inventory:
+All five groups and all 59 leaves are present. Each leaf has the same typed
+`{mode, value}` representation:
 
 ```typescript
-type SettingsSnapshot = {
-  network: NetworkSettings;
-  transfers: TransferSettings;
-  storage: StorageSettings;
-  sharing: SharingSettings;
-  security: SecuritySettings;
-};
-type SettingsApplication = {
-  state: "applied" | "restartRequired" | "applyFailed";
-  pendingRestart: string[]; // canonical JSON pointers to restart-bound leaves
-  pendingApply: string[];   // canonical JSON pointers whose publication failed
-};
-type SettingsRead = {
-  data: {
-    saved: SettingsSnapshot;
-    effective: SettingsSnapshot;
-    application: SettingsApplication;
+type SavedValue<T> = { mode: "default" | "custom"; value: T };
+```
+
+The value type comes from that leaf's one authoritative definition. This is a
+bounded typed settings document, not an untyped key/value/EAV store. Generate
+value, saved and partial-update types plus field metadata/validation from the
+same definitions; do not hand-maintain three independent 59-field catalogs.
+Reuse existing nullable-update helpers where they express presence correctly.
+
+### Default resolution
+
+At startup, replace default-marked values in memory from the running typed
+defaults before validating the resolved whole candidate. The stored value of a
+default-marked leaf is not authoritative. There is no previous-default comparison,
+intent tracking, per-field repair or caller revision check. Startup resolution
+alone does not write the row or advance its revision.
+
+A custom leaf retains its saved value, even when a later release's default now
+happens to equal it. Equality classification happens only during an explicit
+set: a set equal to the current default becomes default; otherwise it becomes
+custom. Reset always selects default. Untouched leaves keep their modes.
+An explicit set of null is valid only for a nullable leaf: it selects default
+when the current default is null, otherwise custom. An already-custom null
+remains custom if a future release default becomes null, like every other
+untouched custom value. Required leaves reject null.
+
+Future changes to compiled defaults must review valid custom/default cross-field
+combinations. Never silently clamp a custom value or discard it to make a new
+default fit. The compiled default document itself must meet whole-candidate and
+serialized-representation limits.
+
+### Coherent read and typed PATCH
+
+GET returns one coherent capture of resolved saved settings/default markers,
+admitted effective values, revision and application status. Use this data shape
+inside the normal native envelope:
+
+```typescript
+type SettingsReadData = {
+  saved: SavedSettings;       // five complete groups, all 59 tagged leaves
+  effective: SettingsValues; // five complete groups, plain typed values
+  application: {
+    pendingRestart: SettingKey[];
+    failed: SettingApplyFailure[];
   };
-  meta: {
-    apiVersion: "v1";
-    settingsRevision: string;
-  };
+};
+type SettingApplyFailure = {
+  key: SettingKey;
+  code: "applyFailed";
+  message: string;
+  truncated: boolean;
+};
+type SettingsPatch = {
+  expectedRevision: string;
+  set?: SettingsPartial;
+  reset?: SettingKey[];
 };
 ```
 
-Each domain's exact fields, types, nullability and bounds are the inventory's
-paths under that domain. No other domain or leaf is accepted. The revision is
-an opaque decimal string on the wire, avoiding loss of integer precision. This
-representation contains no generated timestamp or other per-request field.
-Native responses retain `X-Contract-Version` and use
-`Cache-Control: no-store, no-transform`.
+`meta.settingsRevision` and `expectedRevision` are exact positive decimal
+strings, no leading zero, within SQLite's signed 64-bit range. They are opaque
+CAS tokens, not timestamps or counters clients should increment. The normal
+native `meta` fields remain present. There is no full-representation ETag/digest
+CAS requirement: runtime-only application changes do not create a second saved
+settings validator.
 
-GET and successful PATCH emit the complete `SettingsRead` as RFC 8785 canonical
-JSON, UTF-8 without a BOM, extra whitespace or trailing newline. Hash those
-exact response bytes with SHA-256. The strong ETag is the quoted ASCII value
-`"settings-<saved-revision>-<digest>"`, with a 64-character lowercase hexadecimal
-digest. The saved revision in the tag equals `meta.settingsRevision`; it is not
-the full representation validator by itself. Responses use identity encoding
-with no `Content-Encoding`; compression middleware must exclude this resource.
-An additional representation encoding would require its own correct strong
-validator and explicit contract review.
+`SettingsPartial` is a recursively partial version of the same five typed value
+groups. It must distinguish an omitted nullable leaf from an explicit null.
+`SettingKey` uses canonical dotted keys from the compiled 59-field catalog.
+Reject unknown current keys, duplicate reset keys, an overlap between set/reset,
+and a syntactically empty operation. Empty nested objects do not count as an
+operation. Replacing a supplied bounded array replaces that whole leaf.
 
-`If-Match` must contain exactly one tag in that format. Reject weak tags,
-wildcards, lists and malformed revision/digest strings as invalid requests.
-Saved revisions use canonical positive decimal digits, no leading zero, up to
-SQLite's signed 64-bit maximum. The stored serialized complete snapshot is
-bounded to 128 KiB before commit. The larger request bound accommodates escaping
-of accepted long paths; string bounds apply to decoded values, not escaped
-request bytes.
-
-`saved` is the complete committed snapshot. `effective` is the runtime's admitted
-settings snapshot: startup-bound leaves retain the captured startup values until
-restart, while live policy leaves publish together. This is not a promise that
-a socket is bound or a peer connected; those outcomes belong to network/status
-resources. Application lists are sorted and contain canonical pointers only.
-GET observes a settings publication barrier so it cannot combine half an update
-with another revision. Capture saved rows/revision, effective values and
-application state under the same ordered publication boundary, then derive
-immutable response bytes and their validator from that capture. Every event
-that changes effective/application data uses that boundary too. The resource
-does not expose an ambiguous effective-revision scalar when the process has a
-mix of live and startup-bound values.
-
-An unchanged representation has identical bytes and ETag on repeated GETs.
-Admission of saved values after restart or an application-state change changes
-the ETag when it changes the representation, even if the saved revision stays
-the same. A restart that changes none of the represented data keeps the ETag.
-
-PATCH uses a closed, recursively partial `SettingsSnapshot` in the body, without
-the response envelope. It requires `If-Match` from a successful GET. For example:
+This is an exact target PATCH example, not a current-runtime command:
 
 ```http
 PATCH /api/v1/settings
 Content-Type: application/json
 X-API-Key: <private-key>
-If-Match: "settings-42-0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
 
-{"network":{"p2p":{"tcpPort":20029,"udpPort":20030}},"sharing":{"scanOnStartup":true}}
+{
+  "expectedRevision": "42",
+  "set": {
+    "security": {
+      "ipFilter": {
+        "enabled": true,
+        "filePath": "filters/ipfilter.dat"
+      }
+    },
+    "transfers": { "maxConcurrentDownloads": 8 }
+  },
+  "reset": ["storage.incomingDirectory"]
+}
 ```
 
-This is a schematic authenticated target request, not a current-client command.
-It returns `SettingsRead` with the committed revision and explicit application
-state. Listener settings in this example are saved and reported as pending
-restart until a successful process restart admits them.
+The explicit 8 is custom because the current concurrency default is `null`
+(automatic). Reset selects the current incoming default. Validate the entire resolved
+candidate, including cross-field rules, before committing any of these edits.
+Offline syntactic validation must not require the target interface or filesystem
+to exist on the preparation machine; runtime availability is checked on apply.
 
-- Omitted leaves stay unchanged. Supplied objects merge their known leaves.
-- `null` clears only a nullable override; its fallback is stated in the
-  inventory. Null for a required leaf is rejected.
-- A supplied array replaces that complete bounded leaf array. Validate item
-  types, order, uniqueness and cross-field prerequisites before writing.
-- Resetting a value means explicitly PATCHing its inventory default. There is
-  no magic reset token or settings reset action.
-- Empty bodies, empty supplied objects, duplicate JSON keys and unknown fields
-  are rejected at every nesting level.
-  A nonempty, valid patch producing the saved snapshot is a successful no-op
-  only after its full current validator matches: no revision increment, write
-  or runtime notification; unchanged represented state keeps the same ETag.
-- Concurrent writers serialize. Compare the complete current strong validator
-  under the publication/order boundary before any write; check the captured
-  saved revision again inside the write transaction. Either a changed full
-  representation or a failed revision compare-and-set returns 412 without a
-  write. A saved revision alone is insufficient authorization to overwrite.
+### Revision, persistence and publication
 
-## Commit And Application Semantics
+One write transaction checks the expected saved revision and updates the document
+and its checked next revision together. Use the shared bounded persistence owner
+for runtime commands and retain required commit/publication work after caller
+cancellation. Do not add another atomicity actor or per-request blocking lane.
 
-Authenticate and parse first; validate shape, field bounds and the complete
-candidate, including cross-domain rules. Use the existing bounded persistence
-execution boundary. Filesystem validation does not create directories or hold
-the global core/DB mutex over async work.
+Every successful explicit nonempty REST write and offline set/reset advances the
+checked revision, even when the resulting value/mode is unchanged. A set equal
+to an already-selected default is still a valid explicit operation. Startup
+resolution alone never advances. Failed CAS, validation or database commit leaves
+the document/revision unchanged. Exhaustion fails explicitly without wrapping.
+Missing/malformed expected revision is invalid input; stale revision is a conflict.
+An uncertain worker/commit outcome remains explicitly unknown until recovered;
+do not translate uncertainty into a claim that the write rolled back.
 
-Validate both the saved candidate and its projected effective snapshot before
-writing. A live change cannot violate an invariant against startup-bound values
-that remain active until restart. Such a request fails with
-`SETTINGS_VALIDATION_FAILED` and the relevant canonical paths. For example,
-lowering the live connection cap must remain valid against the effective
-half-open limit even when the same request saves a smaller restart-bound limit.
-The caller can save the startup-bound prerequisite, restart, then change the
-live cap. Missing interfaces, changed filesystem access or failed binds after
-commit are operational outcomes, not permission to silently alter durable data.
+After a valid commit, saved desired values remain authoritative even if live
+application fails. Return coherent saved/effective/application status; report
+failed fields rather than pretending the save rolled back. Restart-bound leaves
+stay pending until restart. Capture the read under the same ordered publication
+boundary so it cannot combine revisions or half-published live settings. Broad
+service hot-reconfiguration is outside scope. Keep live application only where
+straightforward; daemon restart is an acceptable way to apply configuration.
+Do not add hidden configuration-application retry loops. An explicit settings
+update or daemon restart retries application, with failures reported until then.
+Ordinary protocol reconnection and download cleanup retry rules remain separate.
 
-An owned settings coordinator orders mutations through commit and runtime
-publication. Cancellation while queued writes nothing. Once accepted for
-completion, dropping the HTTP caller cannot abandon a committed update. Capture
-the current full representation and compare `If-Match` before accepting its
-candidate for a write or a no-op. Keep mutation and effective/application events
-ordered through candidate validation, commit and publication. The transaction
-compares the captured saved revision before any write. No DB/global-state mutex
-is held over awaited validation/driver work. A validation, precondition or
-persistence failure changes neither saved state nor runtime behavior.
+For a valid desired save that mixes live and restart-bound changes, validate the
+proposed live values together with the effective restart-bound values. If that
+candidate violates a whole-settings dependency, save the desired document but
+defer the entire update until restart. Keep the complete effective capture
+unchanged, including otherwise independent live edits, and report every desired
+value differing from that capture in `pendingRestart`. Do not reject this valid
+save, clamp values, or apply a subset of the incompatible update. This operator
+decision was accepted on 2026-11-19. The pure declaration-driven application
+planner implements the decision; runtime owner/consumer integration remains
+part of the direct canonical settings cut.
 
-A changed effective/application state may cause 412 while the saved revision
-is unchanged. After any 412, GET the complete resource again, reassess the patch
-against its saved/effective/application data and submit its exact returned ETag.
-Do not reconstruct a tag from a revision or blindly retry using a fresh token.
+The planner is implemented on Rust `2dad26c9`; all 55 settings tests pass in
+`reports/settings-request-round-1/settings-application-plan.log`. Coverage
+includes simultaneous dependent live fields, retained restart values, deferral
+of independent live edits with an incompatible mixed update, and invalid input
+without repair. The helper plans values only; it does not publish them as
+admitted effective state. The existing runtime transfer policies already use
+bytes per second, so this integration requires no new rate-conversion layer.
 
-After commit, publish the precomputed live policy as one logical snapshot. Do
-not expose mixed upload, download and connection budgets by independently
-updating public owners. Release DB/global-state guards before awaited driver
-notifications; those callbacks must not re-enter the update coordinator.
-Restart-bound values remain pending rather than being described as active.
+Return a bounded collection of independently detectable validation issues in
+one response, each with a canonical setting path, stable code and readable
+message; dependent checks require valid inputs. Any validation failure saves
+nothing. Do not force repeated requests merely to discover the next independent
+invalid field.
 
-A post-commit publication failure cannot claim rollback. Return
-`SETTINGS_APPLY_FAILED` with `details.committed: true`, the saved revision and
-bounded `pendingApply`/`pendingRestart` pointer lists. GET remains the recovery
-read for saved/effective state. Do not return the submitted values or secrets in
-an error. Repeating an obsolete conditional request does not create another
-revision. No implicit retry or profile repair is part of this contract.
+### Size and application-status bounds
 
-## Errors
+- Request body: 256 KiB (262,144 bytes).
+- Serialized resolved saved document: 128 KiB (131,072 UTF-8 bytes), checked
+  before SQL. This is a whole-candidate constraint, not a promise that every
+  individually valid leaf combination fits.
+- Coherent read representation: 512 KiB (524,288 bytes), including resolved
+  default-marked saved values, admitted effective values and bounded application
+  status. Default metadata exposed by the settings surface is separate.
+- At most one failure entry per supported leaf; each message is bounded to 512
+  UTF-8 bytes without splitting a code point, with explicit `truncated` state.
+  Keys/codes use the bounded current catalog. Do not echo unbounded exceptions.
 
-Errors use the native `error.code`, `error.message`, `error.details` envelope.
-Details contain bounded canonical field paths and state/revision metadata,
-never raw submitted values or credentials.
+The typed `DocumentTooLarge` outcome maps to HTTP 413. Prove exact serialized
+UTF-8 boundaries including JSON escaping, not just decoded character counts.
+Do not silently truncate setting values or add arbitrary per-path limits that
+regress accepted long-path support. Serialization and validation complete before
+the first SQL write. The 59-leaf catalog below is an accepted target; current
+code does not yet centrally enforce every target bound or application mode.
 
-The exact error shape is:
+## REST, CLI and collections
 
-```typescript
-type SettingsError = {
-  error: { code: string; message: string; details: SettingsErrorDetails };
-};
-type SettingsRule =
-  | "syntax" | "shape" | "unknown-field" | "duplicate-key" | "null" | "empty"
-  | "if-match" | "minimum" | "maximum" | "length" | "format" | "enum"
-  | "array-size" | "duplicate-item" | "cross-field" | "effective-prerequisite"
-  | "snapshot-size" | "path";
-type SettingsErrorDetails =
-  | Record<string, never>
-  | { issues: { path: string; rule: SettingsRule }[]; truncated: boolean }
-  | { settingsRevision: string }
-  | { maximumBytes: 262144 }
-  | {
-      committed: true;
-      settingsRevision: string;
-      pendingApply: string[];
-      pendingRestart: string[];
-    };
+Native settings live at `/api/v1/settings` and `/api/v1/settings/surface`, using
+the common native data/meta and structured error conventions. Preserve current
+native authentication; future adapters use their protocol's authentication with
+the same secret. Typed bounds include request and response size limits.
+
+Offline commands require explicit `--profile`:
+
+```text
+emulebb-rust --profile PATH settings get KEY
+emulebb-rust --profile PATH settings set KEY VALUE
+emulebb-rust --profile PATH settings reset KEY
 ```
 
-`SETTINGS_REQUEST_INVALID` and `SETTINGS_VALIDATION_FAILED` use `issues`, capped
-at 64 entries sorted by path/rule, with `truncated` reporting the cap. Paths are
-canonical JSON pointers, or the empty root pointer for an unparseable document;
-an unknown key is reported against its known containing object without echoing
-the supplied name. Rules contain no submitted values.
-`SETTINGS_PRECONDITION_FAILED` returns the current saved `settingsRevision`.
-That value can equal the caller's saved revision because the full represented
-effective/application data participates in the condition. The error contains no
-replacement validator; a fresh GET supplies the representation and its ETag.
-`PAYLOAD_TOO_LARGE` reports the request `maximumBytes`.
-`SETTINGS_APPLY_FAILED` uses the committed-outcome shape. All remaining codes
-use empty details. Messages are sanitized human text, at most 512 UTF-8 bytes;
-clients branch on code/rules, not message wording.
+For a list-valued key, `VALUE` is one inline JSON array, for example
+`settings set network.nat.backendOrder '["pcp-natpmp","upnp"]'`.
+Ordinary values use plain text and the canonical key's type. Shell quoting
+delivers the whole list as one argument. This remains a one-key operation;
+reuse the standard JSON parser for list values. The literal `null` selects null
+for nullable keys; string values otherwise remain literal plain text. Successful
+set/reset commands print nothing to stdout.
 
-| HTTP | Code | Outcome |
-| --- | --- | --- |
-| 400 | `SETTINGS_REQUEST_INVALID` | Invalid JSON, unknown key, wrong shape, empty patch, null misuse or malformed conditional validator; no change |
-| 401 | `UNAUTHORIZED` | Missing/incorrect authentication; no state disclosure |
-| 412 | `SETTINGS_PRECONDITION_FAILED` | Full representation validator or saved-revision compare-and-set failed; no change |
-| 413 | `PAYLOAD_TOO_LARGE` | Request exceeds the bound; no change |
-| 415 | `UNSUPPORTED_MEDIA_TYPE` | Unsupported body encoding; no change |
-| 422 | `SETTINGS_VALIDATION_FAILED` | Field or complete-candidate constraint failed; no change |
-| 428 | `SETTINGS_PRECONDITION_REQUIRED` | Required full `If-Match` validator absent; no change |
-| 500 | `SETTINGS_PERSISTENCE_FAILED` | Transaction failed/rolled back; runtime unchanged |
-| 500 | `SETTINGS_APPLY_FAILED` | Explicit committed outcome; application state available through GET |
-| 503 | `SETTINGS_UNAVAILABLE` | Bounded executor/order admission unavailable; no write accepted |
+They manage SQLite settings only, require the daemon stopped and use the existing
+exclusive profile lease. Get prints only the resolved value; diagnostics go to
+stderr. Each set/reset loads and validates the whole candidate, commits one key
+atomically and advances revision without caller-supplied CAS. No JSON input
+file or staged transaction. REST supports atomic multi-field changes.
 
-These codes/statuses are proposed target definitions, not implemented OpenAPI.
-Operational network errors do not turn an invalid request into a successful
-settings change. Internal error causes remain sanitized private diagnostics.
+Server entries, shared roots, categories, tags, friends and observations remain
+dedicated collections, not settings blobs. IP-filter contents stay file-backed
+with a configured source and explicit reload. Read-only network discovery
+imports feed SQLite directly without retained met/dat files. Import scope
+remains the implemented limited MFC scope; no Rust profile migration.
 
-## One P2P UDP Owner
+## Paths, numbers and deployment
 
-The accepted target default is P2P TCP `20019` and **one P2P UDP endpoint `20020`**.
-They are SQLite controls, not TOML keys. The network listener owner initializes
-the shared UDP transport once; Kad RPC and eD2K client UDP use its receive/send
-handles. Disabling Kad routing must not disable eD2K client UDP. With no enabled
-P2P protocol there is no advertised active P2P endpoint.
+Relative product paths resolve against the profile; absolute and supported UNC
+paths are direct. No shell/environment/tilde expansion. Relative CLI profile and
+import paths resolve against caller CWD. Explicit relative web assets are
+profile-relative; omitted assets remain beside the executable. Expose resolved
+paths where useful. Paths refer to the daemon/container filesystem.
 
-Protocol classification, obfuscation key spaces, source filtering, request
-correlation and malformed-input bounds remain protocol-specific. A Kad-specific
-policy must not consume unrelated eD2K traffic. Reserved marker and encrypted
-packet cases need their protocol goldens; this review does not redefine wire
-formats or propose a second public socket.
+Rates use bytes per second, storage sizes bytes, durations their explicit units.
+Calendar timestamps use Unix seconds. JSON counters are numbers with documented
+integer bounds and JavaScript precision limits; do not promise all 64-bit
+integers are exactly representable in JavaScript or silently clamp them.
 
-NAT derives its local address and TCP/UDP mappings from the one P2P binding.
-Only verified gateway/peer observations may change advertised external ports.
-Every enabled, eligible UDP advertisement uses the same effective mapping in
-eD2K HELLO UDP fields, eMule info and Kad/source advertisements; client
-reask/callback sends use that transport. Disabled capabilities keep their
-protocol-defined zero/omission behavior, verified against wire goldens. TCP
-server login uses the same
-effective TCP mapping owner. Mapping loss/remap updates advertisements and
-reachability coherently; never advertise a query/probe socket's source port.
+Docker uses `/config/emulebb-rust`, `/data/incoming`, `/data/temp`. Canonical
+offline operations provision storage only on genuinely fresh first-run setup;
+recover interrupted provisioning and preserve initialized profiles. Subsequent
+launches pass only `--profile`. Saved settings own P2P interfaces and health
+checks follow the configured listener. Existing Python harness owners prepare
+new fixtures; no ad-hoc setup or parallel testing framework.
 
-Server queries, DNS and STUN may use bounded request-scoped ephemeral sockets
-for correlation, reply processing and egress pinning. They are internal
-transports, not independently configured public listeners or advertised P2P
-ports. A separate advertised listener requires demonstrated protocol evidence
-and parent review. Higher default port numbers provide no security benefit.
+## Accepted leaf catalog
 
-## Implementation Queue
+The machine-readable inventory owns exact types, bounds, defaults, application
+modes and source evidence for these 59 leaves. Source review is at Rust
+`70e595a2`; field consumers are inspected in the existing settings, daemon, core
+and ED2K modules. Source defaults do not prove every current runtime wire is
+correct. In particular, the existing connection coordinator cap is not an
+active-job cap, and configured half-open limits must reach the admitted runtime.
 
-No slice is authorized by this review. Existing owners retain their work; the
-parent allocates code only after accepting the target and reserving files.
+`transfers.maxConcurrentDownloads` defaults to `null` for adaptive automatic
+concurrency. A positive integer sets the ordinary ceiling with a fixed,
+non-configurable 25% rare-opportunity burst allowance rounded up, always subject
+to resource budgets. Sixteen active plus two preparation slots is an initial
+qualification baseline, not a permanent count ceiling. The
+[foundation scheduling contract](PUBLIC-FOUNDATION.md#resource-admission-and-discovery)
+owns admission, scarcity and endgame behavior; no extra memory/burst setting is
+introduced. The connection cap stays 500. Lowering the ordinary ceiling drains admissions without
+silently stopping current jobs. `storage.incomingDirectory` defaults to
+profile-relative `incoming`; `storage.tempDirectory` to profile-relative `temp`.
+They are selected for jobs under the master first-start/delivery rules.
 
-| Slice | Existing owner | Dependency | Acceptance |
-| --- | --- | --- | --- |
-| S1: typed target definitions and closed bootstrap | #297 | Parent target acceptance | Complete defaults/units/validation, unknown-key rejection and secret exclusion |
-| S2: settings repository and ordered atomic publication | Extend delivered #299; coordinate #155/#298 | S1 and shared persistence owner | One conditional transaction, rollback and cancellation guarantees, saved/effective state |
-| S3: server behavior authority | #223 | S1; coordinate S2 core ownership | One connection-plan owner, whole-minute keepalive, correct live/restart state |
-| S4: listener/default and shared UDP integration | #297 | S1/S2; S3 advertisements | Configured binds and advertisements agree on Windows/Linux; no extra public UDP listener |
-| S5: REST/OpenAPI/SPA target | #297 | S1/S2; S3/S4 contract frozen for the slice | One resource, exact errors/ETags, generated schemas/controls and settings-resource secret exclusion |
-| S6: durable collections and import boundaries | #233 for Kad, #298 settings/state coordination | S1; independent of S5 UI styling | Read-only compatibility inputs; collection state in SQLite; no mutable settings side file |
-| S7: cross-platform qualification and current-doc update | #297 | Accepted implementation slices | Synthetic failure/restart/bind/conformance proof and qualified current instructions |
+`live` means the identified parameter owner admits it without restart;
+`restart` means saved desired changes stay pending until restart. Do not label
+server-plan or listener settings live without wiring and tests. Disk floors and
+hostname enabled/resolvers already have rereading consumers. IP-filter explicit
+reload rereads its admitted source file; changing its configured source remains
+restart-bound in this round.
 
-File reservations are bounded by slice:
+Bounds marked engineering target in the inventory must become central validation;
+several current source fields have only integer types/runtime clamps. Defaults
+and existing enforced floor/core/keepalive/flood bounds are source-backed. This
+catalog is not a claim that current code implements all bounds or application
+modes. Native counters remain JSON numbers; the settings catalog does not adopt
+a blanket JavaScript-safe-integer limit.
 
-- **S1:** `emulebb-settings/src/lib.rs` and `surface.rs`; daemon bootstrap/CLI
-  types, fresh-bootstrap output and their tests. Keep runtime consumers
-  untouched until their owner is assigned. Preserve the accepted bootstrap
-  spelling/defaults; other reader changes require their own acceptance.
-- **S2:** metadata settings repository/schema objects, `core/profile_state.rs`,
-  settings methods in `core/app_api.rs`, and atomicity/router tests. Reuse the
-  delivered #299 transaction and owned ordered completion; do not create
-  parallel DB/HTTP atomicity fixes or a competing persistence actor.
-- **S3:** server settings consumption and connection-plan functions, coordinated
-  portions of `network_api.rs` and their focused tests. Core budget and listener
-  reservations remain separate.
-- **S4:** daemon network assembly/binding; core listener, reachability and NAT
-  mapping paths; Kad RPC receive and eD2K UDP/HELLO adapters only where required.
-  Parent serializes shared `network_api.rs` integration with S3.
-- **S5:** REST settings handler/validator/routes, the canonical OpenAPI settings
-  schemas, SPA types/forms/client error handling and conformance tests. Preserve
-  the separate #280 authenticated raw private-bundle contract and owner. Derive
-  leaf metadata from S1; no independent field/default registry.
-- **S6:** existing Kad persistence/import owner. A filter-rule import/DB slice
-  needs an explicit implementation assignment under #297/#298 before code;
-  this specification allocates no unrelated table/index redesign.
-- **S7:** persisted harness fixtures/checks, current product guides and examples
-  only after the implementation is qualified. Review docs stay target-only.
+| Key | Rust type | Default | Bounds/shape | Apply |
+| --- | --- | --- | --- | --- |
+| `network.ed2kEnabled` | `bool` | `true` | boolean | restart |
+| `network.kadEnabled` | `bool` | `true` | boolean | restart |
+| `network.autoConnect` | `bool` | `true` | boolean | restart |
+| `network.p2p.bindIp` | `Option<Ipv4Addr>` | `null` | unicast IPv4; nullable | restart |
+| `network.p2p.bindInterface` | `Option<String>` | `null` | nonempty UTF-8;256 bytes max; nullable | restart |
+| `network.p2p.tcpPort` | `u16` | `20019` | 1..65535 | restart |
+| `network.p2p.udpPort` | `u16` | `20020` | 1..65535 | restart |
+| `network.nickname` | `String` | `"eMule"` | nonempty UTF-8;128 bytes max | restart |
+| `network.connections.maxConnections` | `u32` | `500` | 1..2147483647 | live |
+| `network.connections.maxNewConnectionsPerFiveSeconds` | `u32` | `50` | 1..2147483647 | live |
+| `network.connections.maxHalfOpenConnections` | `u32` | `50` | 1..2147483647 | restart |
+| `network.connections.connectTimeoutSeconds` | `u64` | `30` | 1..86400 | restart |
+| `network.connections.callbackTimeoutSeconds` | `u64` | `45` | 1..86400 | restart |
+| `network.servers.autoReconnect` | `bool` | `true` | boolean | restart |
+| `network.servers.safeConnect` | `bool` | `false` | boolean | restart |
+| `network.servers.usePriorities` | `bool` | `true` | boolean | restart |
+| `network.servers.staticOnly` | `bool` | `false` | boolean | restart |
+| `network.servers.acceptServerListUpdates` | `bool` | `false` | boolean | restart |
+| `network.servers.connectTimeoutSeconds` | `u64` | `25` | 1..86400 | restart |
+| `network.servers.reconnectIntervalSeconds` | `u64` | `30` | 1..86400 | restart |
+| `network.servers.keepaliveMinutes` | `u64` | `0` | 0..1440 | restart |
+| `network.servers.sessionRotationSeconds` | `u64` | `0` | 0..86400 | restart |
+| `network.servers.deadServerRetries` | `u64` | `1` | 1..10 | restart |
+| `network.hostnameLookup.enabled` | `bool` | `false` | boolean | live |
+| `network.hostnameLookup.dnsServers` | `Vec<typed item>` | `[]` | bounded typed array;8 max | live |
+| `network.nat.enabled` | `bool` | `true` | boolean | restart |
+| `network.nat.requireInitialMapping` | `bool` | `false` | boolean | restart |
+| `network.nat.backendOrder` | `Vec<NatBackend>` | `["pcp-natpmp","upnp"]` | bounded typed array;2 max | restart |
+| `network.nat.pcpServerIp` | `Option<Ipv4Addr>` | `null` | unicast IPv4; nullable | restart |
+| `network.nat.igdIp` | `Option<Ipv4Addr>` | `null` | unicast IPv4; nullable | restart |
+| `network.nat.externalIpOverride` | `Option<Ipv4Addr>` | `null` | unicast IPv4; nullable | restart |
+| `transfers.uploadLimitBytesPerSecond` | `u64` | `6348800` | 1..4398046509056 | live |
+| `transfers.downloadLimitBytesPerSecond` | `u64` | `12499968` | 1..4398046509056 | live |
+| `transfers.maxConcurrentDownloads` | `Option<u32>` | `null` | null=auto; 1..2147483647 | live |
+| `transfers.maxSourcesPerFile` | `u32` | `600` | 1..2147483647 | live |
+| `transfers.maxParallelDownloadPeers` | `u32` | `2` | 1..2147483647 | restart |
+| `transfers.upload.targetClientRateBytesPerSecond` | `u64` | `32768` | 1..4398046510080 | live |
+| `transfers.upload.baseSlots` | `u32` | `12` | 1..64 | live |
+| `transfers.upload.elasticPercent` | `u32` | `80` | 0..100 | live |
+| `transfers.upload.queueCapacity` | `u32` | `10000` | 2000..10000 | live |
+| `transfers.upload.sessionTransferPercent` | `u32` | `90` | 0..100 | restart |
+| `transfers.upload.sessionTimeLimitSeconds` | `u64` | `7200` | 0..86400 | restart |
+| `transfers.upload.creditSystemEnabled` | `bool` | `true` | boolean | live |
+| `storage.incomingDirectory` | `PathBuf` | `"incoming"` | profile-relative or absolute; no expansion | restart |
+| `storage.tempDirectory` | `PathBuf` | `"temp"` | profile-relative or absolute; no expansion | restart |
+| `storage.minFreeProfileBytes` | `u64` | `1073741824` | 1073741824..5497558138880 | live |
+| `storage.minFreeTempBytes` | `u64` | `5368709120` | 5368709120..5497558138880 | live |
+| `storage.minFreeIncomingBytes` | `u64` | `5368709120` | 5368709120..5497558138880 | live |
+| `sharing.scanOnStartup` | `bool` | `true` | boolean | restart |
+| `sharing.kadPublishingEnabled` | `bool` | `true` | boolean | restart |
+| `security.obfuscationEnabled` | `bool` | `true` | boolean | restart |
+| `security.vpnGuard.mode` | `closed enum` | `"off"` | off / block | restart |
+| `security.vpnGuard.allowedPublicIpCidrs` | `Vec<Ipv4Net>` | `[]` | bounded typed array;256 max | restart |
+| `security.ipFilter.enabled` | `bool` | `false` | boolean | restart |
+| `security.ipFilter.filePath` | `Option<PathBuf>` | `null` | profile-relative or absolute; no expansion; nullable | restart |
+| `security.ipFilter.level` | `u32` | `127` | 0..4294967295 | restart |
+| `security.tcpErrorFloodDetection.enabled` | `bool` | `true` | boolean | restart |
+| `security.tcpErrorFloodDetection.intervalSeconds` | `u32` | `3600` | 60..86400 step60 | restart |
+| `security.tcpErrorFloodDetection.threshold` | `u32` | `10` | 1..1000 | restart |
 
-Atomic settings #299 is delivered on current main `080a5dea`; preserve its
-ordered completion, transaction, rollback and cancellation guarantees. It is
-not evidence that the target representation, resource, revision or validator
-is implemented. Six proposed live server controls still need the actual runtime
-owner under #223; incoming-directory application remains startup-bound.
+## Typed settings implementation boundary
 
-## Required Verification
+Rust `5460706c` implements the canonical declaration in
+`crates/emulebb-settings/src/product/catalog.rs`. One macro derives complete
+typed values, saved mode/value leaves, recursively partial edits, defaults,
+field metadata and canonical key dispatch. The model resolves default-marked
+values before validation, preserves custom intent (including null), classifies
+only explicit sets against current defaults, and applies edits to a private
+whole candidate. Independent range/dependency issues are collected by canonical
+key. List, address, CIDR, UTF-8 and exact serialized-document bounds are enforced
+by this model without filesystem probes or value truncation.
 
-Use synthetic disposable profiles and persisted supported runners. This review
-opens no operator profile, creates no network runtime and executes no tests.
+Managed `emulebb-settings` validation passed **37 tests**, including twelve
+new contract tests: complete 59-leaf shape/default metadata, default changes,
+custom null, omission, whole-array replacement, exact revision strings, atomic candidate failure,
+independent validation, reset conflicts, required saved fields and the exact
+128 KiB boundary with UTF-8/JSON escaping. Evidence:
+`reports/settings-store-round-1/settings.log`. Normal commit/push gates passed.
+The existing pinned `ipnet` dependency supplies typed IPv4 CIDRs with serde;
+no dependency version was upgraded.
 
-- **Definitions/defaults:** exact fresh bootstrap and DB defaults; all inventory
-  leaves round-trip through typed definitions; mechanical casing; every unknown
-  key rejected recursively; no hidden state/constants in the public payload.
-- **Bounds:** integer overflow/precision, nullability, array replacement,
-  duplicate keys/invalid enum values, request/snapshot size, IPv4/interface
-  membership, NAT renewal/lease
-  ordering, resolver prerequisites, path validation without pre-commit writes.
-- **Atomicity:** accepted routed cross-domain PATCH with injected later SQLite
-  failure; independent connection observes no partial update; restart loads the
-  complete saved snapshot; failed persistence leaves runtime unchanged.
-- **Concurrency/cancellation:** two conditional writers; stale full validator
-  after waiting; DB revision compare-and-set failure; queued cancellation;
-  cancellation after commit; read barrier; precondition checks before a no-op;
-  no DB/global lock over awaited validation/driver work.
-- **Representation validators:** stable canonical bytes/digest for unchanged
-  GETs and no-ops; exact SHA-256/strong-tag syntax; no generated timestamp;
-  effective/application change and restart admission alter the tag without a
-  settings write; unchanged restart retains it; stale tags return 412 even with
-  the same saved revision; recovery refetches and reassesses the whole resource.
-  Identity encoding and no-transform survive response middleware. Reject weak,
-  wildcard, multiple and malformed tags before any mutation.
-- **Application:** live policy snapshot is coherent; restart fields stay pending;
-  saved/effective cross-field prerequisites hold before commit;
-  post-commit failure reports committed state and exact pending paths; restart
-  admits the saved snapshot or exposes a bounded operational startup failure.
-- **Secrets:** API key/private identity excluded from the settings/status
-  resources, their errors, generated public schemas/examples and normal
-  structured logging. Once-only
-  fresh-key provisioning follows the accepted bootstrap handoff. Retain the
-  separate #280 authenticated private-bundle full-fidelity tests and its
-  warning/acknowledgement ownership. Authentication is mandatory on
-  the settings resource; no URL/query credential transport.
-- **Windows/Linux sockets:** fresh default-model assertions; actual TCP/UDP
-  binds; nondefault configured ports; occupied/invalid bind handling; shared
-  UDP Kad/eD2K plaintext/encrypted/malformed dispatch; Kad stopped/eD2K active;
-  NAT remap/loss and every advertised port field. Keep request sockets distinct
-  from advertised listeners. Do not substitute random ports for a default-bind
-  acceptance check or silently skip an occupied-runner result.
-- **Surface conformance:** exact GET/PATCH fields, errors, strong ETags,
-  conditional writes, current OpenAPI and SPA controls move in the same accepted
-  implementation; all schemas/default metadata agree with S1. No synthetic
-  success count replaces a real persistence-failure route.
+Rust `783292b0` adds fresh-profile schema **88** and
+`emulebb-metadata/src/app_settings_store.rs`. Fresh Rust-created schemas seed a
+complete revision-1 document in the same transaction as profile identity and
+host storage initialization. Host-selected incoming storage becomes an explicit
+custom leaf directly from the initializer. The canonical reader reads only this
+document, resolves default markers without rewriting or advancing revision, and
+returns errors for missing or malformed documents. It never interprets section
+rows or repairs a document.
 
-Binding tests disable external discovery in the fixture and use local peers.
-Default-model verification is separate from isolated network execution. Heavy
-validation is parent-serialized; optional platform work does not silently
-change Windows/Linux requirements. Beta3 publication and long soak stay held.
+Runtime CAS and caller-token-free offline edits share one write implementation.
+It validates and serializes a complete private candidate before opening the
+write transaction, then CASes the captured revision and atomically replaces the
+document/revision. Independent connections cannot silently overwrite one
+another. Every successful nonempty operation advances, including unchanged
+values/modes. Stale CAS, invalid candidates and exhausted revisions change
+nothing. COMMIT errors are typed as uncertain outcomes rather than claimed
+rollbacks. Positive decimal-string revision tokens preserve the complete signed
+64-bit range without JavaScript-number rounding.
 
-## Source Evidence
+Metadata validation passed **248 unit and 3 ownership tests**, daemon validation
+passed **123 tests** (the isolated ownership-child fixture remains intentionally
+ignored for direct invocation), and the existing Python metadata/native-contract
+suites passed **53 tests**. Logs: `reports/settings-store-round-1/`. Coverage
+includes independent-connection CAS, unchanged writes, failure/rollback and
+manual retry, deferred commit failure, exhaustion, byte limits, read-only default
+resolution/reopen, missing/malformed records and host initialization.
+The regular daemon/WebUI build passed with **zero warnings**:
+`logs/builds/20261118T020354Z-build-clients/build-result.json`.
+The existing native REST/OpenAPI campaign passed on exact Rust
+`783292b06ee696055b16efed41c71ccf96c9fdb1`, with graceful teardown:
+`reports/rust-rest-openapi-ci/20261118T020742Z/report.json`.
 
-Read-only source baseline: Rust
-`15020b7663a6771bc2d6e8282416ea36a7d7c163`. The inventory records the reviewed
-files. Key trace boundaries are daemon `DaemonBootstrapSettings` and
-`DaemonProfile`, settings `CoreSettings`/`AppSettings` and surface registry,
-metadata `load_setting_json`/`replace_settings_section`, core
-`update_app_settings`/budget derivation/connection plan, REST request validators,
-OpenAPI and SPA form serialization.
+Rust `40ddcfba` and `99b9a76e` implement the single-key offline commands above,
+using the existing exclusive profile lease and canonical singleton writer.
+Canonical key dispatch, leaf serialization/copy/comparison and typed partial
+updates derive from the same declaration. The typed `SettingsPatch` request and
+allocation-free serialized-size accounting are ready for REST integration;
+transport must still bound the original request bytes separately.
 
-Shared UDP evidence is in `core/network_api.rs` listener assembly,
-`kad-net/rpc/receive_loop.rs` foreign datagram dispatch, DHT raw datagram send,
-`ed2k_client_udp/dispatch.rs` and `service.rs`, `ed2k_tcp/hello.rs`, and
-`core/ed2k_net_drivers.rs` mapping/advertisement synchronization. Request-scoped
-server UDP transport is in `ed2k_server/udp_runtime.rs`; DNS uses its bound
-request transport in `core/hostname_lookup.rs`.
+Validation diagnostics identify canonical keys and stable issue codes without
+echoing input values. Explicit edits decode the complete typed saved document
+before resolving and validating the edited candidate. This permits an explicit
+set/reset to restore a valid combination after compiled defaults change. Normal
+reads still resolve and validate without rewriting; malformed or missing typed
+documents remain errors. There is no automatic repair or default comparison.
 
-Source inspection establishes design dependencies and ownership, not executed
-portability, performance, protocol parity or implementation completion.
+Final scoped checks passed **42 settings tests**, **249 metadata unit plus 3
+ownership tests**, and **22 Python tests**. Evidence:
+`reports/settings-request-round-1/{settings-final,metadata-final,python-final}.log`.
+The daemon suite passed 123 tests before the final diagnostic/recovery repair;
+the final regular build and native campaign integrate that repair. The build
+passed with zero warnings:
+`logs/builds/20261118T031134Z-build-clients/build-result.json`.
+The native campaign passed on Rust
+`99b9a76e6ad57a310b4419c08451150ee1b26d85`, with graceful teardown:
+`reports/rust-rest-openapi-ci/20261118T032020Z/report.json`.
+Its `settingsCliPhase` proves single-key output, inline lists, unchanged records
+after invalid writes, explicit profile selection, running-profile refusal,
+field diagnostics and explicit default-resolution recovery. Harness changes
+are in `98fdf9c4`.
+
+Rust `7dca2f03` then separates offline access from runtime loading: commands
+acquire the existing profile lease and open/initialize canonical metadata
+directly. They neither parse nor create control-service TOML. This keeps explicit
+settings recovery available when runtime startup is invalid. The daemon suite
+passed **125 tests**, including two new regressions for fresh metadata-only
+initialization and settings edits with malformed bootstrap TOML:
+`reports/settings-request-round-1/daemon-offline-isolation.log`.
+Normal commit/push gates passed. The build/native evidence above predates this
+small isolation change. The subsequent combined native campaign on Rust
+`075ea97a` passes the settings CLI phase with this isolation in place; current
+build/native evidence is recorded under
+[Docker and deployment](PUBLIC-FOUNDATION.md#docker-and-deployment).
+Final integrated qualification must still use the final cut.
+
+Rust `9a96a8ba` adds `product::settings_schemas()`: named OpenAPI 3.1 components
+for complete values, saved mode/value leaves, recursively partial edits, PATCH,
+canonical keys and revision strings. Group shape derives from the same typed
+declaration, and list bounds share the runtime rule owner. Partial schemas have
+neither required groups nor schema defaults, preserving omission. Nullable
+leaves explicitly admit null; complete documents and all object shapes remain
+closed. UTF-8 and serialized-byte bounds use explicit schema extensions rather
+than claiming Unicode character counts are bytes. Revision numeric-string
+range, address semantics and whole-candidate dependencies still require typed
+validation; the schema descriptions identify these constraints.
+All **46 settings tests** passed, including actual serde-shape agreement across
+the 59 keys, saved wrappers, omission/null, typed enums and multibyte bounds:
+`reports/settings-request-round-1/settings-schema.log`.
+Normal commit/push gates passed. These components are not yet consumed by the
+published OpenAPI, settings surface endpoint or WebUI; that integration remains
+part of the coordinated cut below.
+
+The canonical document is not yet the daemon's active settings authority.
+Runtime admission/effective state, ordered persistence publication, native
+REST/OpenAPI, WebUI, Docker provisioning and runtime-argument removal still
+require their coordinated cut. Python profile creation must adopt canonical
+initialization when those readers switch; raw DDL fixtures do not currently
+create a typed settings document. The native campaign proves current daemon
+flows and the new offline commands, not the future settings endpoint.
+
+The typed settings owner now also provides `SettingsReadData`,
+`SettingsApplicationStatus` and `SettingApplyFailure`, with generated schema
+components from the same 59-key declaration. The read constructor resolves
+default-marked saved values, validates saved and effective candidates
+independently, and checks the exact 512 KiB serialized data limit. It never
+infers effective values from saved settings. Application lists admit each key
+at most once per list; failures use the fixed `applyFailed` code and copy at
+most 512 UTF-8 message bytes with accurate truncation state. Revision remains
+in the containing envelope's `meta.settingsRevision`.
+
+The settings package passes **52 tests**, including exact-limit JSON escaping,
+UTF-8 message boundaries, duplicate status keys and agreement between schemas
+and serialized read data. Validation command:
+`python -m emule_workspace test rust-unit --workstream public-foundation-round-1 --package emulebb-settings`.
+This is read-model preparation; it does not complete runtime admission,
+publication or endpoint integration.
+
+The operator accepted whole-update deferral: a valid desired save whose live
+candidate conflicts with effective restart-bound values is saved atomically,
+keeps the effective configuration unchanged, and reports every outstanding
+desired difference as pending restart. The declaration-driven planner is tested;
+runtime publication and endpoint integration remain unfinished.
+The broader foundation goal remains open and no PR or merge was created.
+
+## Qualification boundary
+
+Use the master specification's settings, revision, lease, restart/apply-failure,
+Docker and combined-scale acceptance cases. Run normal checks and two review
+rounds, retaining exact source evidence. This round ends at a tested pushed
+checkpoint, with no PR/merge/publication until operator review. Future automatic
+upgrades remain a design objective, not implemented machinery.
+
+
+### Harness settings fixtures
+
+The existing Python metadata initializer seeds `app_settings` revision 1 with a
+complete current saved document. Its defaults snapshot is generated from the
+compiled Rust field metadata and lives at
+`crates/emulebb-settings/tests/fixtures/default-settings.json` in the Rust repo.
+The native defaults/catalog test checks exact equality with `SavedSettings`.
+Product runtime code does not read this test fixture or gain another config input.
+
+The stopped-profile fixture editor accepts canonical dotted keys and explicit
+resets, preserves omitted leaves, classifies default/custom modes and advances
+one revision per atomic edit. It checks the serialized document budget before
+writing. Native startup remains the authority for product value validation.
+Unknown keys, overlapping resets, oversized documents and SQL failures do not
+partially update the document or revision.
+
+Rust `f2f01d7d` passes all 32 settings tests, with retained output at
+`reports/settings-request-round-1/settings-fixture-f2f01d7d.log`. Harness
+`a849396a` passes all 41 tests in the existing `test_rust_metadata.py` owner via
+Builder. Harness `0cbe8481` adopts this editor in the shared profile writer and
+its launch/import, Android peer, library qualification and upload-soak callers.
+The writer accepts canonical dotted keys and resets, validates supplied values
+against `SettingsPartial` in the selected OpenAPI contract, and keeps server and
+Kad bootstrap resources separate. Optional fixture inputs are omitted when not
+supplied; nullable product values remain explicit. Section/row writers are gone.
+
+Builder evidence under `reports/settings-request-round-1/` records 46 profile
+writer passes and one POSIX-only skip in `profile-writer-second.log`; the broader
+caller run records 382 passes and one remaining cross-client assertion failure
+in `profile-callers-second.log`. After repairing that assertion, all 61 tests in
+its existing owner pass in `profile-cross-client-final.log`. These are Python
+fixture/caller checks, not live daemon or container qualification.
+
+Harness `dd469f71`, `a0694400` and `a59a0018` adopt revisioned settings in the
+native package smoke, Rust upload-cap callers and online P2P controls. The
+package smoke restores a temporary download limit with its original default or
+custom mode. Rust rate writes use bytes per second and submit once against the
+observed exact revision. P2P controls stop before connecting when settings
+conflict, application fails or a restart is pending. Direct smoke profiles seed
+network choices before startup; the section-shaped network body adapter is gone.
+The MFC rate caller continues using its own product API.
+
+Existing Python owners pass 80 package tests, 106 upload/soak/cross-client tests,
+and 188 client/P2P/direct-smoke tests with one POSIX-only skip. Logs are
+`package-settings-second.log`, `upload-settings-first.log` and
+`network-settings-first.log` under `reports/settings-request-round-1/`.
+Tests exercise full-width revisions, original mode restoration, restart data
+loss and conflict/apply-failure admission. They use controlled HTTP outcomes;
+they do not qualify live networks or complete the packaged transfer campaign.
+Harness `81570df5` adopts canonical settings in the NAT matrix and its direct,
+OpenVPN and Gluetun callers. The default case resets the backend order; explicit
+cases use the public backend choices. Every case verifies saved values and the
+effective configuration after restart before evaluating NAT status. Conflicts,
+lost effective values and unapplied settings stop the case. Existing Python
+owners pass 45 tests, including generated-OpenAPI validation, recorded in
+`nat-settings-first.log`. These are controlled outcomes, not live gateway proof.
+
+Harness `dd27c771` verifies the local seeder's effective upload policy through
+the canonical settings API. Harness `01ed0014` prepares the generic settings
+write with a live observed revision, keeps HTTP 200 as its success criterion,
+and selects the matching worktree's OpenAPI document by default. The generic
+probe leaves full-library scan I/O to explicitly controlled library phases.
+Unit validation exposed and replaced obsolete schema/root fixtures; the final
+three focused regressions pass in `conformance-settings-focused-final.log`.
+
+The existing native REST/OpenAPI campaign passes against Rust `f2f01d7d` and
+Harness `01ed0014`, with graceful teardown. Its authoritative report is
+`reports/rust-rest-openapi-ci/20261119T175332Z/report.json`. All 115 routes are
+registered: 90 are exercised (38 successes and 52 expected errors), and 25
+disruptive routes are intentionally skipped. Offline single-key settings,
+profile ownership, local friend/upload controls, Kad persistence and category
+persistence phases pass. Retained-job pagination traverses 100,000 jobs across
+500 pages, including 99,000 completed and 1,000 unfinished jobs, and its restart
+checks pass. The report explicitly leaves physical-library and memory-limit
+qualification false. This is Windows/local evidence, not live VPN, Linux
+container, WebUI or combined memory-tier qualification.
+
+Harness `24cf800d` adopts canonical settings in Android storage configuration,
+startup verification and fixture cleanup. Configuration uses the observed
+revision, checks persistence, restarts through the existing service owner and
+verifies saved/effective paths before accepting the result. Cleanup protects
+both the active incoming path and a saved incoming path awaiting restart, and
+compares the complete settings snapshot including revision. Existing owners
+pass 320 tests in `android-storage-settings-first.log`.
+
+Harness `7003293b` adopts the same contract in the synthetic Android delivery
+and listener proofs. Temporary settings capture only the six current owned
+leaves; restoration preserves their default/custom modes and unrelated fields.
+Default leaves reset against installed defaults. Compensation requires the
+confirmed fixture-write revision: lost responses or intervening settings saves
+retain owned evidence for explicit recovery rather than issuing another write.
+Existing delivery/listener tests pass all 84 cases, including those admission
+faults, in `android-peer-settings-final.log`. These are controlled HTTP/ADB
+outcomes; no phone or emulator was contacted and no APK qualification is claimed.
+
+Harness `8c6c700b` adopts canonical revisioned settings in Android public-sharing
+preparation and observation. Preparation checks saved values and defers network
+start when a restart is required; observation requires effective values and no
+pending application. The unfinished-download guard uses the current bounded
+download resource. Its existing controlled HTTP/ADB suite passes 145 tests in
+`reports/settings-request-round-1/android-public-settings-final.log`.
+
+Harness `fcb669b0` shares strict cursor traversal between library roots, downloads,
+Android lifecycle verification and retained-job conformance. Lifecycle checks
+stream immutable job identities across every page without retaining the full
+history. Existing owners pass 362 tests in `android-shared-pages-final.log`;
+the final metadata-presence validation passes 18 focused tests in
+`shared-pages-metadata-final.log`, both under the same report directory.
+
+The native REST/OpenAPI campaign passes again with graceful teardown in
+`reports/rust-rest-openapi-ci/20261119T182755Z/report.json`. The shared iterator
+traverses all 100,000 retained jobs in 500 pages, 99,000 completed jobs in 495
+pages and 1,000 unfinished jobs in five pages; restart counts are preserved.
+Physical-library and memory-limit qualification remain explicitly false.
+Android tests above use controlled outcomes, not an actual APK/device campaign.
+The provisioning and WebUI checkpoints below supersede those integration gaps;
+shared harness cleanup and complete platform qualification remain pending.
+
+Rust `d8e7f657` shares synced temporary-file publication between hosted bootstrap
+writes and fresh daemon startup. Initial creation never replaces an existing
+bootstrap; failed publication leaves no partial final file and can be retried.
+The accepted bootstrap template and keys remain unchanged. The Builder daemon
+package suite passes 112 test executions with one isolated ownership fixture
+intentionally ignored, including the two new publication regressions. Evidence
+is retained in `reports/settings-request-round-1/bootstrap-atomic-daemon.log`.
+This is Windows evidence for bootstrap-file publication, not qualification of
+the still-planned Docker directory journal, recovery or atomic stage publication.
+
+The feature checkpoints are pushed for Rust (`d8e7f657`), Harness (`f6819c12`)
+and Tooling. Harness push validation passes 1,967 tests, with 16 platform skips
+and five deselected cases; its exact evidence is
+`reports/local-check/emulebb-build-tests/20261119T185438Z-0c3447f1/`.
+The two initially failing source-wiring assertions now check canonical settings
+while preserving the bilateral server-metadata and explicit P2P-binding gates.
+Rust branch checks and the strict documentation build pass. This is a feature
+checkpoint, with no PR, merge, main write or publication; the remaining scope
+and platform qualification above are still open.
+
+Rust `89c807a5` implements package-private container provisioning with an owned
+same-filesystem stage, a durable bounded journal and a parent OS lock. Staging
+uses the same prepared per-key operations as offline CLI settings under one
+profile lease, then closes SQLite, syncs owned files and publishes with Linux
+atomic no-replace rename. Default-marked storage receives package paths;
+custom values and existing final profiles are preserved. A retained journal
+after final publication deliberately authorizes no replay or cleanup. The
+package supplies the existing durable parent; the initializer creates no parent
+hierarchy. Static atomicity review identified this parent precondition, which
+the source and regression now enforce. All 13 provisioning regressions now pass
+on native Linux GNU/AMD64 and musl/AMD64, including actual no-replace rename and
+restart at the journal/stage/final boundaries. The exact logs are
+`reports/rust-linux/gnu-amd64/c50ed2869d2241088ad31c0b985c9a5b/container-profile-tests.log`
+and `reports/rust-linux/musl-amd64/7c34c1642a364d9db8604805b8552ce7/container-profile-tests.log`.
+
+Builder `29fdb42` and `6c0aec6` build, stage, audit and attest the private Linux
+companion in GNU/musl packages. The scoped package/build/staging suites pass
+318 tests in `reports/builder-unit/3937f7e087a3/` (one existing collection warning).
+Harness `c72fde2e` prepares explicit image/VPN fixture settings through the
+packaged offline CLI before starting the daemon and checks effective binding.
+Its existing focused owners pass 94 tests with one Windows platform skip.
+The Windows daemon package suite passes 112 tests in
+`reports/settings-request-round-1/container-init-windows-daemon.log`; Linux-only
+provisioning tests are not included in that count.
+
+The GNU/AMD64 and musl/AMD64 package builds and their selected Linux library,
+tracker, durability and provisioning suites pass, producing source-verified
+archives and the GNU DEB. Ubuntu/AMD64 and Alpine/AMD64 images build from those
+bytes and pass the shared native
+image smoke, including non-root ownership of config/incoming/temp, authenticated
+REST/WebUI, health receipt validation and graceful shutdown. Evidence is
+`reports/rust-image-smoke/50b492a5a63341b780b4f0ff07354858/`,
+`reports/rust-image-smoke/a162a4899e854b7aa5a279f7ee23b9e1/` and
+`reports/settings-request-round-1/container-init-gnu-package.log` /
+`container-init-musl-package.log`.
+Each image proof explicitly prepares a saved `eth0` fixture before s6; it does
+not claim an unmodified default-entrypoint fresh start. Builder `5a6ef26`
+requires both storage owners and that fixture declaration in the proof, with
+169 image/security/candidate regressions passing in
+`reports/builder-unit/4b4ed101b8c8/`. ARM64, actual VPN and memory-tier
+qualification remain outside this checkpoint. No PR, merge,
+main write or publication was performed.
+
+Rust `02a5bdb5` replaces the WebUI settings form with canonical surface-driven
+editors. Each emitted field carries an explicit default/custom choice; nullable
+values have an explicit unset choice. Saves contain only changed nested values
+and dotted resets, with the exact opaque revision. Saved and running values,
+pending restart and application failures are visible. A conflict or uncertain
+write outcome retains edits and requires an explicit discard/reload before
+another save; the UI never retries the write automatically. Bootstrap descriptors
+remain read-only and resource links retain their existing sections.
+
+Builder WebUI validation passes 87 unit tests, 32 Chromium/mobile-WebKit browser
+tests, TypeScript checking and the production build in
+`reports/settings-request-round-1/webui-settings-final.log`. The browser fixtures
+exercise representative field types, navigation, edits, reset, conflict and
+application state; they do not prove that every real daemon field renders.
+The settings-crate suite passes all 32 tests in
+`reports/settings-request-round-1/webui-settings-rust-fixture.log`, including
+the frontend default snapshot against all 59 canonical typed leaves.
+
+Harness `cdb4f2fc` extends the existing native package/browser owner rather than
+adding a runner. The source-verified Windows/x64 package at Rust `02a5bdb5`
+builds with zero warnings and passes
+`reports/rust-release-package/0141dc839a82/report.json`, with clean source
+provenance in the adjacent `sources.json`. Its retained `webuiSettings` proof
+checks all 59 emitted fields against actual saved modes and values (49 default
+leaves in this explicit fixture), then confirms exactly two revisioned UI writes
+to change and restore a live upload limit, including effective application.
+No response uncertainty authorizes a compensating write. The same campaign
+passes authenticated panel navigation, stale-key recovery, local 12 MiB delivery,
+verified partial-download restart, offline-writer exclusion and graceful
+shutdown. An initial run exposed the ownership probe's object-only unwrapping
+of a root page; its fixture now controls HTTP bytes and exercises the real
+envelope and cursor checks. The two focused Python owners pass all 139 tests.
+Build and final campaign logs are
+`reports/settings-request-round-1/webui-native-package.log` and
+`reports/settings-request-round-1/webui-native-smoke-final.log`.
+
+This is native Windows qualification with fresh local-only profiles; remaining
+shared harness adoption, other platform/browser campaigns and memory-tier
+qualification remain open. The feature checkpoints are pushed; no PR, merge,
+main write or publication was performed.
+
+Harness `321763e7` adopts canonical field editors in the fresh-default and NAT
+browser helpers. Unchanged values retain their modes without a write. Changed
+values use one revisioned save; application failures are errors, and a pending
+restart stops a combined consumer-network workflow before it starts. The two
+focused browser/package Python owners pass 156 tests. Harness `851d1b12` aligns
+the default-tab polling check with the current exact 12-download preview while
+continuing to reject broader download pages and unrelated secondary polling.
+The native package campaign passes again in
+`reports/rust-release-package/ecb0db6fcded/report.json`, including all 59 settings
+and their live save/restoration; the log is
+`reports/settings-request-round-1/webui-native-current-polling.log`. The NAT
+configuration action itself has controlled-test coverage, not a new public
+network or VPN execution claim. Harness `042fc180` removes dead Rust settings
+branches from the shared REST smoke owner and corrects stale unsupported-feature
+reporting; the frozen MFC settings path remains intact. All 145 tests in that
+existing owner pass, including push validation retained in
+`reports/local-check/emulebb-build-tests/20261119T210211Z-d0c009b5/`.

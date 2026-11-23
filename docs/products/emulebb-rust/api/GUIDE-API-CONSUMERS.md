@@ -69,7 +69,7 @@ does not expose private application state.
 ## Explore Without Guessing DTOs
 
 Start with authenticated GETs to `/api/v1/app`, `/status`, `/network` and
-`/transfers` under the same API prefix. After network connection, a search can use:
+`/downloads` under the same API prefix. After network connection, a search can use:
 
 ```bash
 curl --fail-with-body \
@@ -78,15 +78,46 @@ curl --fail-with-body \
   http://127.0.0.1:4711/api/v1/searches
 ```
 
-`automatic` resolves from current network state; offline searches are rejected
-as not connected. Read the returned search ID and documented result model.
-Download an actual result through
-`POST /searches/{searchId}/results/{hash}/operations/download`, or use the
-documented `TransferCreateRequest` eD2K-link form. Do not manufacture a transfer
-request from a displayed result object.
+Creation returns HTTP 201, session metadata and its `Location`. Live sessions
+start empty; configured searches can queue while their backend connects.
+`automatic` selects the backend from current network state. Read session metadata
+with `GET /searches/{searchId}` and cursor-paged summaries with
+`GET /searches/{searchId}/results`. Results default to sources descending; all
+twelve documented sorts support both directions with claim ID as tie-breaker.
+Use the returned opaque cursor with the same session/sort/direction. Pages are
+limited to 1..200 rows and a byte budget, so `hasMore` controls continuation.
 
-Shared-folder management uses `/shared-directories` and its documented root and
-ignore operations. Roots are recursively scanned and monitored. Settings use
+To link a new session, send optional `parentSearchId` with the ordinary
+`POST /searches` body and your chosen criteria. It is an exact decimal ID string;
+null or omission creates an unlinked session. The parent supplies provenance.
+The new session starts empty and collects its own network results. An absent
+parent returns HTTP 404 without creating a session. Deleting a parent clears
+its children's link while preserving the children, criteria and results.
+
+Stop collection with `POST /searches/{searchId}/stop` and no body. HTTP 204
+confirms that collection is frozen and execution cancellation is requested.
+The session and collected results remain browsable; repeated stops are
+idempotent, existing terminal sessions stay unchanged, and an unknown ID returns
+HTTP 404. Stopped sessions expose status
+`stopped`, null `completedAt` and null active progress.
+
+Select a summary with `GET /searches/{searchId}/results/{resultId}`. Raw provenance
+has its own `/observations` cursor page, preserving unknown values as null and
+session-local occurrence counts. Metadata timestamps are Unix seconds. Traversal
+is weakly consistent while a live session changes; retained terminal membership
+and summaries are frozen. No client-side full-history sort or per-client snapshot
+is needed. Select the result’s permanent `id`, then download that exact hash/size claim
+through `POST /searches/{searchId}/results/{resultId}/download`. A null
+`sizeBytes` admits a download waiting for metadata; zero is a known empty file.
+For direct admission, use `POST /downloads` with the documented
+`DownloadCreateRequest` source.
+
+Root management uses the bounded `/library/roots` collection and immutable
+`/library/roots/{id}` resources. Creation rejects duplicate and overlapping
+paths; deletion preserves payload files. Patch `watchEnabled` to opt in to
+native monitoring; it defaults off, including managed roots. Managed roots
+cannot be deleted. Use `/library/scan` for explicit scans and cached progress,
+and `/library/ignores` for ignore rules. Settings use
 `/app/settings`; bootstrap TOML has a different, minimal responsibility.
 
 For SSE, use a header-capable HTTP/fetch streaming client with `X-API-Key`.

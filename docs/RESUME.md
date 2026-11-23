@@ -1,63 +1,81 @@
 # eMuleBB Resume Handoff
 
-Use the [PM coordination policy](reference/PM-COORDINATION-POLICY.md) for the
-standing operating routine and [Release Scope](products/emulebb-rust/RELEASE-SCOPE.md)
-for product boundaries and holds. GitHub issues and Project #3 own workflow state.
+## Active mandate
 
-## Operator Finish Line
+Deliver public foundation round 1 as PM and default implementer. Use
+[PUBLIC-FOUNDATION](products/emulebb-rust/design/PUBLIC-FOUNDATION.md) as the
+contract and phased plan, and
+[RUST-REF-016](products/emulebb-rust/active/items/RUST-REF-016.md) for evidence and
+remaining qualification. Use the existing Python Harness and Builder; do not
+invent launch or monitoring paths. Work one bounded slice at a time, with
+scoped checks and granular commits. No standing workers or ordinary delegation.
 
-The operator narrowed this chunk to a stable merged main, documentation and
-integrated-workstream cleanup, then stop. Do not start more backlog work, another
-nightly, or a poweroff operation from this handoff. Use Android emulators unless
-the operator asks for a phone test. Beta 3 promotion remains held.
+Fresh profiles only: no migrations, aliases, compatibility shims, remapping or
+retired-input handling. Preserve operator profiles and inherited environment.
+**No PR, draft PR, merge, main write, release or publication before operator
+review.** Sustained soak is follow-up work. Keep the complete goal intact.
 
-## Delivered Source And Packages
+## Accepted decisions and next work
 
-- Rust [PR #333](https://github.com/emulebb/emulebb-rust/pull/333) delivered the
-  Android 12+ launcher/service, signing and packaging, storage handling, mobile
-  WebUI, diagnostics and branding. Its source is
-  `23e685b87bb76db21489c9b1cc725dd0da4241c1`.
-- The signed universal APK and both native Android archives are public in
-  [nightly `0.1.0-beta.2.nightly.20261115.g23e685b8`](https://github.com/emulebb/emulebb-rust/releases/tag/rust-v0.1.0-beta.2.nightly.20261115.g23e685b8).
-  [RUST-FEAT-056](products/emulebb-rust/active/items/RUST-FEAT-056.md) owns exact
-  producer identities, public-byte hashes and API 31–37 emulator evidence.
-  [Platform instructions](products/emulebb-rust/reference/GUIDE-DOWNLOADS-PLATFORMS.md)
-  separate the APK from experimental Termux/native archive usage.
-- [PR #334](https://github.com/emulebb/emulebb-rust/pull/334), merged at
-  `e735319bbd7b72cbd21dac6ef172d318b3543947`, repaired boolean settings PATCH,
-  strict NAT null validation and typed profile-lease release. Its fresh-main
-  workflows and explicitly selected Android guest/TLS proof passed.
-- [PR #335](https://github.com/emulebb/emulebb-rust/pull/335), merged at
-  `0840e9005fd2ab28e9cbe262054dd692262e5698`, delivered proof validation before
-  payload I/O, parked-credit failure preservation, bounded deletion-marker
-  reads, mobile keyboard-focus visibility and process-isolated executable
-  copying in profile tests. The exact pre-merge source
-  `c6b9ceff0590b222fe5c5cc23df8622c229809d1` passed all six local stages and
-  all applicable hosted checks. The local report is
-  `reports/local-check/emulebb-rust/20261115T075009Z-41880a82`, relative to
-  inherited `EMULEBB_WORKSPACE_OUTPUT_ROOT`. Fresh merged-main workflows are
-  separate evidence; consult their actual results before claiming main green.
+The operator has accepted all three decisions:
 
-PRs #334 and #335 did not republish the APK. Do not assign their provider pins
-or source identities to the existing public release.
+1. Upload priority and local comment/rating have one persistent hash-level
+   owner, editable without an available copy.
+2. DELETE removes a server resource, separate from disabling through PATCH;
+   later import creates a new ID.
+3. Keep scan progress only; omit completion tokens. Preserve one coordinator,
+   one coalesced pending follow-up and parallel hashing across disk groups.
+   Show current-pass progress and pending work separately.
 
-## Retained Limits And Open Owners
+The operator explicitly resumed work. PUBLIC-FOUNDATION owns these decisions.
+Continue the coordinated library/server/scan implementation on the same branches;
+no further product decision is currently identified. Preserve the no-PR boundary.
 
-- [#162](products/emulebb-rust/history/items/RUST-BUG-136.md) is closed and
-  Project #3 Done. Its archived spec records bounded reads and restart/retry proof.
-- [#250](products/emulebb-rust/active/items/RUST-BUG-166.md) retains request
-  correlation and solicited-answer admission beyond delivered proof-before-I/O.
-- [#155](products/emulebb-rust/active/items/RUST-REF-016.md) retains the broader
-  persistence owner, friend CRUD and separate first-bind/add/flush boundary.
-  [#233](products/emulebb-rust/active/items/RUST-FEAT-062.md) remains a related
-  storage-contract owner.
-- [#297](products/emulebb-rust/active/items/RUST-CI-043.md) retains the broader
-  configuration/API review; revision/ETag designs are not accepted implementation.
-- [#226](products/emulebb-rust/active/items/RUST-FEAT-056.md) retains Android
-  endurance, native archive/Termux runtime and other recorded gaps. Emulator
-  screen-off smoke is not 24-hour proof. Historical physical-phone evidence
-  uses an older source. Public serving was not demonstrated. Boot resume is
-  deliberately deferred; manual user launch is accepted.
+## Source checkpoint
 
-Keep source qualification distinct from published bytes. Preserve the signing
-key and operator profiles, and leave unrelated workstreams and processes alone.
+Use the existing managed workstream below
+`EMULEBB_WORKSPACE_ROOT/workspaces/agents/public-foundation-round-1` and its
+`feature/public-foundation-round-1` branch in each involved repository:
+
+- Rust: `45d8f3cd` (pushed).
+- Harness: `0c39dc1a` (pushed).
+- Builder: `98fa3d2c` (unchanged).
+- Tooling: this handoff and the owning evidence item on the same feature branch.
+
+Rust, Harness and Tooling were clean and synchronized before this handoff edit.
+No test/build/container campaign remains running from this session. Completed
+specialists are dormant; do not revive them without a concrete difficult task.
+Policy and handoff changes on this feature branch are not integrated into main
+or the canonical startup checkout; do not claim future sessions inherit them.
+
+## Verified evidence and limits
+
+All paths here are relative to `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
+
+- Rust `d603eb42`: full GNU amd64 package gate, 3,505 workspace tests plus three
+  VPN-egress tests and native non-root transfer/restart smoke passed. One ignored
+  ownership-child fixture is exercised by its parent tests. Local packages only.
+- That GNU archive passed physical 50k-library/100k-retained-job qualification
+  at 512 MiB and 100k-library/100k-retained-job qualification at 1 GiB, each with
+  one CPU, no swap and no OOM events. Receipts are
+  `reports/linux-containers/library/d65ce811618c49d7b894d5486476f94b/report.json`
+  and `reports/linux-containers/library/4a9beb312ba0467ea691a83ad0679d42/report.json`.
+  Retained downloads are metadata-only history, not active payload pressure.
+- Rust `130ca0b2`: Windows release/WebUI build passed with zero warnings. Current
+  local REST/OpenAPI campaign passed: 116 declarations, 91 safe operations and
+  dedicated persistence/peer/settings phases. Receipt:
+  `reports/rust-rest-openapi-ci/20261122T044049Z/report.json`.
+- Harness native import repair: 79 tests passed; one Docker/WSL test was skipped
+  because `EMULEBB_IMPORT_TEST_IMAGE` was unconfigured. Synthetic import tests
+  require a unique pytest `--basetemp` below the output root.
+- Rust `45d8f3cd`: library summary/location reads now check profile coherence
+  before admission and after SQL await, including absent hashes. 740 Core and
+  178 REST tests passed with no warnings. Logs:
+  `reports/settings-request-round-1/library-coherence-core.log` and
+  `library-coherence-rest.log`.
+
+Do not assign earlier package/live/resource evidence to later revisions.
+Canonical library/server REST/OpenAPI/WebUI cutovers, scan progress/calendar
+projection, aggregate construction ownership, active payload/session pressure,
+expanded canonical-query campaigns and remaining platform/device gates are open.
+The current database schema is 114. The overall goal is not complete.

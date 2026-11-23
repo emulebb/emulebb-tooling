@@ -18,6 +18,199 @@ source: operator-approved profile continuity design 2026-11-05
 
 # RUST-FEAT-062 - Persist Kad routing state in SQLite and keep met files import-only
 
+The [#155 registered category checkpoint](RUST-REF-016.md#registered-category-checkpoint-2026-11-16)
+records the subsequent exact `22573afd` staged bundle and repeat passing real Kad
+SQL fault/retry/reopen/restart proof, plus the root/reload shutdown interaction.
+Its Core fixture checks persisted snapshot/revision before releasing a held
+reload-execution gate; that is not blocked slow-filesystem proof. The older
+registered checkpoints below retain their own exact source attribution.
+
+## Registered Kad runtime checkpoint (2026-11-16)
+
+The supported registered REST CI campaign **passed** with graceful teardown at
+the exact source bundle below. The regular supported client build completed in
+200 seconds with zero warnings; its receipt is
+`EMULEBB_WORKSPACE_OUTPUT_ROOT/logs/builds/20261116T001836Z-build-clients/build-result.json`.
+The ready runtime receipt is
+`EMULEBB_WORKSPACE_OUTPUT_ROOT/tools/workstreams/public-foundation-round-1/emulebb-rust/x86_64-pc-windows-msvc/stage.json`.
+The retained campaign report is
+`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/rust-rest-openapi-ci/20261116T002313Z/report.json`.
+
+- Rust: `d5c2cfbefd00cb2407acf598d61953deb179bb6c`.
+- Tests: `0531be836b919cca9ab1938d8209fb48dcc0fb63`.
+- Tooling: `eac34a72512d592a5f70545fa4cb7721a0775574`.
+- Builder: `e93fca5abc195cc203ba28d0d935db500f056334`.
+
+Main conformance exercised 83 of 105 operations: 40 successful responses and
+43 expected errors, with 22 explicit unsafe skips, no failed routes and a passing
+SSE check. The loopback friend phase proved all six delegated mutation frontdoors:
+real SQLite faults returned HTTP 500 `PERSISTENCE_FAILED`, cache and durable
+state remained unchanged, and retries succeeded. Its three closed databases
+passed `quick_check`; owned fault triggers were removed.
+
+The new loopback Kad phase injected a real routing-revision SQLite trigger fault
+into node import. HTTP 500 `PERSISTENCE_FAILED` left routing and cache unchanged;
+retry imported the unique actual peer, which produced one real routing reply.
+After graceful close and database reopen, a restart with the same profile
+preserved the Kad identity and contacts. Protocol wire identity and REST display
+identity were compared using their respective representations. No profile
+cache file was written. This Kad phase records reopen/restart assertions, not
+a database `quick_check` result; the friend integrity result does not extend it.
+All owned daemons ended gracefully.
+
+These results qualify this exact staged contract and scoped runtime lifecycle.
+An ensuing evidence-only tooling commit is not the tested runtime's source head.
+They do not establish sustained upload-byte progress under SQL contention,
+100k runtime or combined-job performance, a full platform matrix, 365-day
+endurance, or the remaining settings/CLI and public-foundation implementation.
+
+## Runtime coupling local-suite checkpoint (2026-11-16)
+
+Before the registered checkpoint above, the final coupled **uncommitted working
+material** was green in the supported local Rust suite. This is accepted
+local-suite evidence, not an exact committed
+source or newly staged runtime qualification. `test rust-unit --workstream
+public-foundation-round-1` exited zero; retained log:
+`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/kad-sqlite-rust-acceptance-round-4/rust-unit.log`.
+The aggregate was 2,871 passed, zero failures and one ignored subprocess helper.
+Selected owners included Core 537 with all integrations; REST 158 plus 3
+integrations; metadata 113 plus 3 integrations; daemon 108 unit plus 8 hosted,
+1 logging and 6 ownership checks; DHT 146, Kad-net 92 and routing 63. All workspace
+consumers were included, including 11 host-run Android consumer checks; this is
+not Android device or cross-platform qualification.
+
+Eight existing Python owners passed 250 checks with one POSIX-only skip:
+`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/kad-sqlite-harness-cut-round-2/junit.xml`.
+The WebUI gate also passed 52 unit checks and 32 Playwright checks across Chromium
+and mobile WebKit, plus TypeScript typecheck and production build. These are
+selected local consumer checks, not proof that the entire round-one public
+surface or 59-field settings redesign is implemented.
+
+Earlier Rust rounds 1 and 3 failed fixture/lifetime defects and remain retained
+under `reports/kad-sqlite-rust-acceptance-round-1` and
+`reports/kad-sqlite-rust-acceptance-round-3`. Round 2 was safely interrupted during
+compilation after a hosted fixture's file-backed discovery assumption was found;
+it has no completed test verdict. Repairs include:
+
+- the direct-route startup fixture no longer retains a blocking VPN guard;
+- ingress leases span the worker allocation peak and fixed-buffer transient
+  capacity is accounted, with structural regressions;
+- startup attachment releases its temporary permit before replying, while an
+  explicit handoff fence protects queued commands;
+- a real SQLite-failure regression through the shared daemon finalizer verifies
+  network cleanup and owner drain, typed failure, unchanged Kad revision and
+  reopen after removing the owned fault trigger. Code inspection confirms
+  post-owner exit paths use that finalizer, and the existing eight hosted tests
+  pass; separate SQL-fault injection in every early hosted branch is not proved;
+- hosted fixtures initialize both SQLite discovery domains instead of relying
+  on a profile cache-file sentinel; Rust does not write source-input cache files.
+
+The [#155 accounting scope](RUST-REF-016.md#admission-and-resource-accounting)
+is retained product-payload capacity, not measured total RSS. The existing REST
+CI campaign and test owner were extended for real Kad HTTP 500 fault/retry,
+clean reopen and loopback restart, including the corrected protocol-versus-REST
+node-ID comparison. That phase was unrun at this local-suite checkpoint; the
+registered checkpoint above now records the exact committed-stage qualification.
+The staged `b509524f` friend campaign below remains older evidence.
+No 100k runtime campaign, combined 100k jobs, full platform matrix or 365-day
+qualification is claimed.
+
+The actual database-backed POST frontdoors in this cut are import, stop, server
+connection (automatic and server-specific), and server creation with connect=true.
+Kad start only changes running intent/status; bootstrap uses an existing DHT and
+network bootstrap. Neither currently creates a runtime or invokes SQLite. Keep
+shared error translation consistent without claiming unreachable SQL-fault proof
+for those two routes. Review the existing start-without-runtime/Kad-only
+lifecycle concern in the later native-controller cut; do not add production SQL
+or artificial runtime work merely to make a fault fixture reachable.
+
+## Schema 72 and typed owner checkpoint (2026-11-15)
+
+Rust `b08709a1` adds bounded typed Kad load/initialize commands and a leased
+snapshot payload through the shared owner. Rust `ca5e6993` persists the generated
+Kad node identity in SQLite and selects fresh schema 72. Identity is durable
+state, not a mutable application setting. The earlier schema 71 repository
+checkpoint below is dated evidence, not the current fresh-schema declaration.
+
+Parent-recorded focused proof: 112 metadata unit plus 3 integration checks and
+517 Core checks plus selected integrations passed; the selected Python suite
+passed 72 with one POSIX-only skip against the actual fresh selected schema 72.
+This is storage/owner proof. At this checkpoint production DHT identity binding
+and runtime restore/import/checkpoint wiring were in progress and not qualified
+by it; the registered checkpoint above records the subsequent runtime proof.
+The passing local peer campaign at `b509524f` exercised the earlier staged
+runtime; it is not proof for the new schema 72 lifecycle. Keep runtime wiring on
+the same owner and retain admission-before-copy, generation and drain contracts.
+
+## Typed DHT boundary and shared-owner proof (2026-11-15)
+
+Rust `45ca468b` adds typed DHT routing capture/restore and learned-key boundary
+handling. The selected typed-boundary test sets passed 90, 59 and 141 checks.
+This commit does not change SQL or wire the runtime persistence lifecycle.
+The [#155 local peer/current-contract campaign](RUST-REF-016.md#registered-conformance-and-local-peer-checkpoint-2026-11-15)
+records the subsequent ordinary-request/drain repair and passing rerun at
+`b509524f`. At that checkpoint runtime Kad delivery remained pending; the
+registered checkpoint above records its later scoped proof. Actual upload-byte
+progress under SQL contention remains pending; retain the same shared owner.
+
+## Shared friend-owner dependency checkpoint (2026-11-15)
+
+The [#155 scoped friend-owner checkpoint](RUST-REF-016.md#scoped-friend-owner-checkpoint-2026-11-15)
+records implementation at Rust `ea0f9653`, focused Core/REST/integration proof
+and selected-artifact OpenAPI validation. Historical discovery notes below
+predate that worker implementation. This does not claim runtime Kad persistence,
+the canonical settings/CLI redesign, all-SQL async conversion, actual upload
+contention behavior or combined-scale qualification. Continue through the same
+owner rather than add another persistence lane.
+
+## Typed metadata checkpoint (2026-11-15)
+
+Rust `c14433d5` adds typed Kad routing snapshot persistence; `82181294` makes
+SQL column ownership explicit. That checkpoint used fresh schema 71. These commits
+are pushed on the round-one branch, not merged delivery. Snapshot replacement,
+validation and initialization status use coordinated metadata transactions;
+no opaque source-file or serialized contact blob is the stored authority.
+
+Focused metadata proof: 108 unit plus 3 integration checks passed. The existing
+Python selection against an actual fresh schema 71 from the selected Rust
+sources passed 80 with one POSIX-only skip; retained XML is
+`EMULEBB_WORKSPACE_OUTPUT_ROOT/reports/public-foundation-round-1/schema71-python.xml`.
+The selected companion heads are Rust `82181294`, tests `d14d5871` and tooling
+`9a2d3deb`. This adds metadata repository capability only. Runtime Kad snapshot
+admission/checkpointing, source-file removal, settings/REST work and full-scope
+qualification remain pending. Runtime wiring waits for the shared
+[#155-A owner](RUST-REF-016.md#allocated-foundation-owner-155-a-2026-11-15);
+no competing actor or per-request blocking-task lane is authorized.
+
+## Historical foundation discovery checkpoint (2026-11-15)
+
+Round-one branch evidence: Rust `70e595a2`, build-tests `d14d5871` and
+specification/policy baseline tooling `77b30a82`. These are pushed checkpoints,
+not merged delivery; no PR is authorized before the operator returns.
+
+The first scoped implementation adds independent durable discovery-initialization
+state and atomic server-list initialization. Automatic server import accepts the
+first validated nonempty fallback, preserves explicit empty/disabled operator
+state, and does not overwrite a list changed while a fetch was in flight. The
+existing Python harness uses selected-workstream fixtures and transactional
+explicit server inputs, preserving deterministic public-bootstrap isolation.
+
+Focused evidence recorded by the parent: metadata 104 unit plus 3 integration
+checks; daemon 108 unit plus 15 integration checks with one ignored helper;
+Python 80 passed with one POSIX-only skip. Two review rounds resulted in
+operator-race and explicit-fixture repairs. Normal push checks passed with
+output-root-relative receipts:
+
+- `reports/local-check/emulebb-rust/20261115T185408Z-f63dbe33`
+- `reports/local-check/emulebb-build-tests/20261115T185216Z-90fd5f42`
+
+This does not qualify the full public foundation. Kad file persistence removal,
+the coordinated settings/REST redesign, library/download/search changes and
+combined-scale proof remain pending. The accepted #155-A bounded persistence
+worker is still unimplemented and is a prerequisite for runtime Kad checkpoint
+wiring; reuse that owner rather than introduce a competing actor. Bootstrap
+state alone is not a claim that runtime Kad persistence is complete.
+
 ## Summary
 
 Make SQLite the durable authority for accepted Kad routing contacts while the
@@ -31,7 +224,7 @@ shutdown persistence paths. It also formalizes the existing `server.met`
 behavior, which already imports server rows into SQLite without retaining the
 payload.
 
-## Current State
+## Historical review baseline (2026-11-12)
 
 Reviewed against product revision
 `080a5dea70186da31dab958757b5b8c0fd883f82`, whose exact current schema is 68.
@@ -66,8 +259,10 @@ is historical provenance, not the current schema contract.
 - Keep open sockets, pending RPCs, searches, lookup queues, timers, retry
   scheduling, publish state, and other transient work in memory only.
 - Restore usable, non-expired contacts from SQLite before Kad bootstrap begins.
-  Configured bootstrap endpoints and built-in fallback seeds remain available
-  when the durable set is empty or insufficient.
+  An initialized-empty collection must suppress hidden built-in/public fallback
+  seeds and automatic repopulation. Explicit operator-configured bootstrap
+  endpoints remain usable as distinct operator input. An unfinished fresh
+  provider initialization follows the master's next-launch retry rule.
 - Represent a bootstrap endpoint whose node identity is not yet learned as
   logical bootstrap data rather than fabricating a routing-table identity.
 
@@ -99,7 +294,16 @@ use typed columns and explicit constraints. It must not store an opaque
 - Coalesce dirty changes into periodic checkpoints every 15 minutes. A clean
   interval does no SQLite write. Explicit import and graceful shutdown are
   immediate checkpoints outside that periodic cadence.
-- Checkpoint on graceful shutdown before the networking runtime is discarded.
+- After shutdown begins, seal reload/regular admission and stop/join the monitor,
+  then call the final DHT checkpoint directly before Kad cancellation or the
+  bounded network-cleanup timeout can discard its source runtime. Local
+  eligibility finalizers do not precede this DHT-only capture. Outside the
+  network timeout, follow the [#155 terminal sequence](RUST-REF-016.md#planned-category-publication-continuation-phase-2a):
+  owner drain resolves accepted root tokens, then cooperative reload join,
+  local-registry seal/drain, root-SQL drain and eligibility-read drain, attempting
+  every stage before connection/profile-lease release. The #155 checkpoint
+  records scoped implementation proof and its remaining resource-test limits.
+  Never rely on a snapshot request made after teardown has already canceled Kad.
 - A successful explicit `nodes.dat` import commits its normalized logical
   contacts immediately, even if Kad is stopped. If Kad is running, merge the
   same normalized records into the live routing table.
@@ -108,6 +312,39 @@ use typed columns and explicit constraints. It must not store an opaque
 - A periodic write failure is visible in diagnostics and leaves the snapshot
   dirty for a bounded retry. A shutdown write failure is reported but must not
   resurrect a met-file fallback.
+
+### Generation and compact key projection
+
+This accepted integration contract remains pending implementation. Keep routing
+mutation generation, coarse learned-key generation and the database CAS revision
+as separate concepts. A database revision is not the dirty signal, and a coarse
+key-cache change alone is not proof that persisted routing evidence changed.
+
+At the 15-minute checkpoint boundary, derive an exact, stably ordered compact
+projection of durable key/binding evidence for the accepted routing contacts.
+Compare relevant identities, endpoint/key and bound-address values, not a digest,
+count or unrelated peer-cache activity. A non-routing key-cache change whose
+projection is unchanged must not create a database checkpoint. Route changes or
+changed relevant key evidence require a coherent bounded full snapshot.
+
+Fence capture against routing/key-generation and binding changes; never publish
+or acknowledge a stale mixture. Only acknowledge the captured generation and
+projection after successful persistence for that runtime generation. Concurrent
+new mutations remain dirty. A delayed snapshot must not overwrite a newer
+explicit import or replacement runtime; retain database revision CAS as the
+independent durability guard. Generation exhaustion must not silently wrap.
+
+Reserve and measure projection, snapshot and conversion costs under the shared
+bounded-owner contract before cloning. Use the actual routing table as membership
+authority; do not introduce a second long-lived shadow-membership registry or
+another persistence worker. The comparison projection is a bounded derived
+checkpoint aid, not a competing routing authority.
+
+Required proof includes no-write clean intervals and irrelevant-key changes,
+relevant learned-key/binding changes, route membership changes, mutation during
+capture, delayed old-runtime completion and revision conflicts. Preserve final
+snapshot admission before Kad cancellation/teardown and final drain before lease
+release. These are acceptance requirements, not current-runtime claims.
 
 ### Import and merge rules
 

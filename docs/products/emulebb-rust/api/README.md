@@ -28,10 +28,11 @@ freeze and compatibility decision.
 
 Sharing management is folder-tree only:
 
-- configure roots with `/api/v1/shared-directories`;
-- every root is recursively scanned and monitored;
+- configure individual roots with `/api/v1/library/roots` and `/api/v1/library/roots/{id}`;
+- every root is recursively scanned; native watching is opt-in per root and off by default;
+- request a scan with `POST /api/v1/library/scan` and read cached progress with `GET /api/v1/library/scan`;
 - custom case-insensitive file-name globs and configurable built-in ignores
-  apply across every shared tree through `/api/v1/shared-directories/ignores`;
+  apply across every shared tree through `/api/v1/library/ignores`;
 - single-file share/unshare/delete-sharing routes are not part of the Rust
   public contract.
 
@@ -48,9 +49,12 @@ first-party adapters can gate on the contract without parsing the body first.
 Adapter surfaces (`/api/v2` qBit-compat, Torznab) must not broaden or weaken the
 native route shape.
 
-## Settings Review Target
+## Accepted foundation target
 
-The [settings target specification](../design/SETTINGS-TARGET.md) is a proposed
-forward design owned by RUST-CI-043 / #297. It is submitted for parent review;
-its routes, defaults and schemas are not implemented by this document. The
-canonical OpenAPI and current guides remain unchanged until implementation.
+The operator accepted the [public-foundation specification](../design/PUBLIC-FOUNDATION.md)
+and its [59-field settings target](../design/SETTINGS-TARGET.md). These are the
+round-one implementation target under RUST-CI-043 / #297 and RUST-CI-044 / #298,
+not claims that all new routes, schemas or settings already exist. Update this
+canonical OpenAPI alongside each implemented slice. Current operational guides
+continue to describe implemented behavior; the accepted target must not be
+exposed as a fake runtime stage.

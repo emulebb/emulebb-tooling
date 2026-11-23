@@ -158,7 +158,8 @@ release attachment is publication evidence, not a runnable container archive.
 A container engine must support the selected CPU. Provide writable `/config`
 and `/data` mounts, configure `PUID`/`PGID` as appropriate for their ownership,
 and keep persistent state when replacing the container. The s6 launcher selects
-the profile at `/config/emulebb-rust` and completed downloads at `/data/ed2k`.
+the profile at `/config/emulebb-rust`, completed downloads at `/data/incoming`
+and temporary pieces at `/data/temp`.
 
 For example, in a Linux shell replace `VERSION_FROM_RELEASE` with a published
 version and choose `ubuntu` or `alpine`. Set PUID/PGID to the intended volume
@@ -177,9 +178,12 @@ docker run --detach --name emulebb-rust \
 Open `http://127.0.0.1:20017/` on the container host and enter the starter key
 or your configured key from
 `/config/emulebb-rust/emulebb-rust-settings.toml`. Both variants run the daemon
-under s6 in the background, explicitly selecting `0.0.0.0:20017`, the profile
-above and `/data/ed2k` for incoming files. Those launch arguments take precedence
-over the corresponding persisted settings. Stop with `docker stop emulebb-rust`;
+under s6 in the background, selecting only the profile above. First-run setup
+stores the packaged incoming and temporary paths through the canonical settings
+service; interrupted owned staging resumes automatically. Existing final
+profiles and staged custom settings are preserved. The TOML bootstrap selects
+the REST listener; SQLite settings select storage and P2P binding.
+Stop with `docker stop emulebb-rust`;
 restart with `docker start emulebb-rust`. Preserve both volumes when replacing
 the image and select restart policy through your container engine if desired.
 
@@ -189,7 +193,9 @@ to the port mappings. The
 [optional Gluetun example](https://github.com/emulebb/emulebb-rust/blob/main/packaging/docker/compose.gluetun.example.yaml)
 is an advanced deployment reference with its own pinned image version. Select
 an actual published version for a new deployment; the example does not establish
-general VPN-safety proof.
+general VPN-safety proof. Configure the saved `network.p2p.bindInterface` as
+`tun0` and `security.vpnGuard.mode` as `block` for this topology, then restart
+the daemon to apply them.
 
 ## Android: APK Or Native Shell
 

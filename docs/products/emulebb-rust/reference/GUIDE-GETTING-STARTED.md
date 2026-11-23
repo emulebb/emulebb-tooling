@@ -5,6 +5,10 @@ API. Start with a [matching nightly package](GUIDE-DOWNLOADS-PLATFORMS.md), veri
 its checksum, and keep the complete extracted layout, including `webui`. No Rust
 toolchain is needed to use the native packages.
 
+The typed settings commands in this guide require a build that includes
+[Public Foundation Round One](../design/PUBLIC-FOUNDATION.md). For an earlier
+nightly, use the README shipped with that package.
+
 ![eMuleBB Rust WebUI Search view](../../../assets/emulebb-rust/webui-eac9b37a6e20.png){ width="1280" height="720" }
 
 Controlled Windows x64 candidate-package capture from
@@ -93,17 +97,23 @@ First-run listener defaults are eD2K TCP 20019, Kad UDP 20020 and REST TCP 20017
 Router/firewall/container mappings must match your chosen settings; High ID is
 not guaranteed behind every NAT, router or VPN.
 
-If route detection is ambiguous, select the intended interface explicitly for
-that run with `--p2p-bind-interface "INTERFACE_NAME"`, then save the network
-setting through the console. Resolve an ambiguous P2P bind before starting
-transfers. VPN use is optional and does not itself
-establish native leak-safety proof.
+If route detection is ambiguous, stop the daemon and save the intended interface:
 
-Empty enabled discovery lists may trigger trusted bootstrap downloads. Bootstrap
-failure leaves the console available for manual recovery. The policy target is
-read-only `server.met`/`nodes.dat` import, but removal of remaining `nodes.dat`
-write-back is still tracked by [RUST-FEAT-062](../active/items/RUST-FEAT-062.md).
-Do not treat bootstrap file formats as a second mutable-settings authority.
+```text
+emulebb-rust --profile "PATH_TO_PROFILE" settings set network.p2p.bindInterface "INTERFACE_NAME"
+```
+
+Restart the daemon after saving. Resolve an ambiguous P2P bind before starting
+transfers. VPN use is optional and does not itself establish native leak-safety proof.
+
+Fresh discovery initialization is tracked in SQLite independently of list
+contents. Failed initialization leaves the console available and retries at the
+next launch. An explicitly initialized empty list stays empty; Kad does not
+silently use hidden fallback seeds, while explicit operator bootstrap endpoints
+remain available. Validated `server.met`/`nodes.dat` input records are imported
+into SQLite; those source files are not written as profile state. Runtime
+persistence qualification remains tracked by
+[RUST-FEAT-062](../active/items/RUST-FEAT-062.md).
 
 ## Search, Download And Share
 
@@ -155,12 +165,12 @@ netsh interface ipv4 show excludedportrange protocol=tcp
 Get-NetTCPConnection -LocalPort 20017 -ErrorAction SilentlyContinue
 ```
 
-Choose an available loopback port if needed. A temporary
-`--rest-bind-addr 127.0.0.1:14711` changes only that run; browse to the matching
-address. To retain it, stop the daemon and update `[rest].bind_addr` in the private
-bootstrap TOML. This does not change eD2K/Kad ports. For ambiguous P2P routing,
+Choose an available loopback port if needed. Stop the daemon and set
+`bind_addr = "127.0.0.1:14711"` under `[rest]` in the private bootstrap TOML.
+Restart the daemon and browse to that address. This does not change eD2K/Kad
+ports. For ambiguous P2P routing,
 `Get-NetAdapter | Select-Object Name, Status` identifies Windows interface names;
-use the intended name with `--p2p-bind-interface`, then persist through Settings.
+save the intended name with the offline settings command above, then restart.
 
 The browser console is served at the REST origin root, with history routes such
 as `/transfers` and static `/assets`. Reverse-proxy subpath mounting is not part
