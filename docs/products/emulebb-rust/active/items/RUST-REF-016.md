@@ -38,12 +38,26 @@ sample count separately and retains maxima across all phases, preventing an
 early overlap peak from disappearing before the final start. Each independently
 served payload is 4 MiB, paced at 64 KiB/s to make overlap observable.
 
-All 100 package-smoke Python tests passed through Builder. The existing
+All 104 package-smoke Python tests passed through Builder. The existing
 multi-job regression now models overlap that ends before the final start,
 requiring the early peak to be retained while still awaiting every delivery.
-Runtime evidence for this extended fixture is pending. Its minimum overlap
-assertion remains two charged owners; this change neither promises sixteen
-simultaneous executions nor closes constrained active-transfer pressure proof.
+Failure tests also cover bounded error-code and final progress evidence.
+
+The source-verified runtime run passed on Rust `080441ec` and Harness `daa30faf`,
+using GNU archive SHA-256
+`b200d3bab6a1c012330a1e62c4252ea1c14f67e0411ab6d9fee59ab51f45a6aa`.
+Evidence is
+`reports/rust-linux/gnu-amd64/a12753275af046eb8b6af9e9021e4d0e/package-smoke.json`.
+It recorded 216 resource samples, including 17 during admission, and observed
+16 active downloads, one preparing slot, zero burst activity and a 15,091-byte
+resident-cache peak. All 16 starts succeeded on their first request; all sixteen
+4 MiB deliveries matched SHA-256, and all 17 jobs including the preceding
+12 MiB restart/delivery scenario remained completed. The receiver's sampled
+RSS peak was 70,541,312 bytes; controller RSS was measured separately.
+This proves the observed overlap, not a new product concurrency promise.
+The fixture's minimum overlap assertion remains two charged owners.
+Maximum geometry, constrained active-transfer pressure and coupled scanning
+remain separate qualification requirements.
 
 The first extended runtime attempt failed on HTTP 503 from `GET /status`
 after two starts were accepted. Its response body was not preserved, so the
@@ -51,11 +65,8 @@ specific API error remains unproven. Evidence is
 `reports/rust-linux/gnu-amd64/0bdce69cf4c344de8a3f92264b501af8/runtime.log`.
 The portable gate and UI build passed under
 `reports/rust-linux/gnu-amd64/826e9d761a094204900e5d0021b8ad84/`.
-The smoke transport now preserves the HTTP exception and adds only its bounded
+The smoke transport preserves the HTTP exception and adds only its bounded
 API error code to diagnostic notes, without credentials or error-message text.
-All 103 package-smoke Python tests passed. The next runtime attempt uses the
-existing source-verified archive through Builder's smoke-only command; no
-acceptance criterion or retry behavior has changed.
 
 The diagnostic rerun passed admission without another HTTP error but reached
 the unchanged 120-second completion deadline. Evidence is
@@ -63,9 +74,10 @@ the unchanged 120-second completion deadline. Evidence is
 It did not preserve final per-job progress, so pacing versus a stalled transfer
 cannot yet be distinguished. Completion failures now attach bounded progress
 history, latest states/reasons, resource maxima and recorded start attempts.
-All 104 package-smoke Python tests passed, including failure-evidence capture.
-The next run is a focused diagnostic, not another unmodified validation attempt;
-neither the deadline nor acceptance criteria have been relaxed.
+The later passing run does not establish the causes of either earlier failure.
+No retry behavior, deadline or acceptance criterion was relaxed. Retain these
+two findings for focused follow-up; do not label the overall fixture reliably
+qualified solely from its one passing execution.
 
 ## Canonical network-setting startup guidance (2026-11-23)
 
