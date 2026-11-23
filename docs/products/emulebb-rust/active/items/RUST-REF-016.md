@@ -57,6 +57,16 @@ All 103 package-smoke Python tests passed. The next runtime attempt uses the
 existing source-verified archive through Builder's smoke-only command; no
 acceptance criterion or retry behavior has changed.
 
+The diagnostic rerun passed admission without another HTTP error but reached
+the unchanged 120-second completion deadline. Evidence is
+`reports/rust-linux/gnu-amd64/0697e26de4b54ca98dc417b93e1cca48/runtime.log`.
+It did not preserve final per-job progress, so pacing versus a stalled transfer
+cannot yet be distinguished. Completion failures now attach bounded progress
+history, latest states/reasons, resource maxima and recorded start attempts.
+All 104 package-smoke Python tests passed, including failure-evidence capture.
+The next run is a focused diagnostic, not another unmodified validation attempt;
+neither the deadline nor acceptance criteria have been relaxed.
+
 ## Canonical network-setting startup guidance (2026-11-23)
 
 Rust `080441ec` reports P2P binding failures with `network.p2p.bindIp` and
