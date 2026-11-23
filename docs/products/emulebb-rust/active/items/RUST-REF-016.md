@@ -63,9 +63,25 @@ smoke. Activation must succeed before publishing or starting the payload.
 The scheduler regression independently demonstrates the refill defect; the
 failed campaign alone does not prove which delay would follow activation.
 
-A rebuilt Linux archive and both complete constrained campaigns are pending
-for this cut. Earlier capacity and standalone-overlap evidence below retain
-their exact source/artifact scope; they do not qualify the new coupled phase.
+The rebuilt GNU archive passed its full Linux gate: Clippy, packet diagnostics,
+3,543 workspace tests, three VPN egress tests, release compilation, the WebUI
+build and non-root package smoke. Gate evidence is
+`reports/rust-linux/gnu-amd64/80c9ac85b22f4087932899ac733469f0/`; runtime evidence
+is `reports/rust-linux/gnu-amd64/d63608aa7d0440b5a88a80f573479329/package-smoke.json`.
+The archive SHA-256 is
+`d0b04d7314e5325ac609fddaea503d746c79e92ed02f1e5d6b251293a8f0a4fa`.
+Smoke observed sixteen active downloads and a 6,299,377-byte resident peak.
+All sixteen starts succeeded on their first request. Of 435 recorded read
+attempts, one `/status` read returned exact `503 PERSISTENCE_BUSY`; its recorded
+0.25-second client retry succeeded. This validates the typed client policy
+without changing daemon retry behavior. The receiver's sampled RSS peak was
+68,120,576 bytes.
+
+Both complete constrained campaigns remain pending for this cut. Earlier
+capacity and standalone-overlap evidence below retain their exact source and
+artifact scope; they do not qualify the new coupled phase. A stale diagnostic
+matcher was also removed from the harness; all 35 shared local REST-helper
+tests passed, without adding a retired-input test or compatibility path.
 
 ## Admission-time package resource observations (2026-11-23)
 
