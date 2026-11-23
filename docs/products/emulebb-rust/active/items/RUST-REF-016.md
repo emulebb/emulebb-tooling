@@ -217,6 +217,25 @@ evidence of both. It requests no extra scan and retries no mutation. All 151
 shared-library Harness tests pass. Reuse the valid archive for the next campaign;
 neither constrained tier is qualified by these package results.
 
+The populated 512 MiB run in
+`reports/linux-containers/library/7cb8d7913f2840aa9ff68b66fbf747aa/` completed
+payload delivery, removal and baseline restoration after the cache fix, but
+correctly failed strict hashing overlap: mutation had occurred before startup,
+allowing hashing to finish too early. Harness `da3fabe3` moves the deterministic
+mutation after observed payload progress and refreshes scan-completion log
+offsets at that boundary. The existing regression verifies mutation ordering.
+
+The next run in
+`reports/linux-containers/library/b04993ab43884687b40fe75256291a1c/` proves
+payload byte growth during hashing, exactly 500 changed files and 50 MiB read,
+all mutation-phase acceptance checks, verified output delivery, removal and
+restoration of the 100,000-job cohort. Its final report failed with a stale local
+variable reference introduced by the mutation move, so it is not a full pass.
+Harness `7ee9e617` reads the retained mutation result from the report instead.
+All 151 affected Harness tests and targeted Ruff undefined-name checking pass.
+The next campaign must finish with a complete acceptance report; neither a
+partial workload result nor this reporting repair qualifies either tier.
+
 The public-surface inventory also found two stale bind-command instructions in
 the getting-started guide and former setting names in the Android post-failure
 diagnostic matcher. The guide now uses the canonical offline settings command;
