@@ -38,22 +38,23 @@ sample count separately and retains maxima across all phases, preventing an
 early overlap peak from disappearing before the final start. Each independently
 served payload is 4 MiB, paced at 64 KiB/s to make overlap observable.
 
-All 104 package-smoke Python tests passed through Builder. The existing
+All 146 focused Python tests across package smoke and the shared local REST
+helpers passed through Builder. The existing
 multi-job regression now models overlap that ends before the final start,
 requiring the early peak to be retained while still awaiting every delivery.
 Failure tests also cover bounded error-code and final progress evidence.
 
-The source-verified runtime run passed on Rust `080441ec` and Harness `daa30faf`,
+The source-verified runtime run passed on Rust `080441ec` and Harness `c105efdb`,
 using GNU archive SHA-256
 `b200d3bab6a1c012330a1e62c4252ea1c14f67e0411ab6d9fee59ab51f45a6aa`.
 Evidence is
-`reports/rust-linux/gnu-amd64/a12753275af046eb8b6af9e9021e4d0e/package-smoke.json`.
-It recorded 216 resource samples, including 17 during admission, and observed
-16 active downloads, one preparing slot, zero burst activity and a 15,091-byte
+`reports/rust-linux/gnu-amd64/74c96d5f940b4eb890c56e830e421a4d/package-smoke.json`.
+It recorded 246 resource samples, including 17 during admission, and observed
+16 active downloads, one preparing slot, zero burst activity and a 15,155-byte
 resident-cache peak. All 16 starts succeeded on their first request; all sixteen
 4 MiB deliveries matched SHA-256, and all 17 jobs including the preceding
 12 MiB restart/delivery scenario remained completed. The receiver's sampled
-RSS peak was 70,541,312 bytes; controller RSS was measured separately.
+RSS peak was 74,305,536 bytes; controller RSS was measured separately.
 This proves the observed overlap, not a new product concurrency promise.
 The fixture's minimum overlap assertion remains two charged owners.
 Maximum geometry, constrained active-transfer pressure and coupled scanning
@@ -65,8 +66,14 @@ specific API error remains unproven. Evidence is
 `reports/rust-linux/gnu-amd64/0bdce69cf4c344de8a3f92264b501af8/runtime.log`.
 The portable gate and UI build passed under
 `reports/rust-linux/gnu-amd64/826e9d761a094204900e5d0021b8ad84/`.
-The smoke transport preserves the HTTP exception and adds only its bounded
-API error code to diagnostic notes, without credentials or error-message text.
+The smoke transport now uses the existing typed `RustRestFailure`, preserving
+HTTP status and bounded API error codes without printing credentials or raw
+error-message text. Observation reads record every request and retry only HTTP
+503 with exact code `PERSISTENCE_BUSY`, at most five attempts with explicit
+backoff. Other failures, including malformed observations and storage/closing
+errors, escape immediately. Completion polling disables the generic helper's
+exception retrying, preventing silent recovery from contract failures. The
+passing run recorded all 476 read requests with zero read or start retries.
 
 The diagnostic rerun passed admission without another HTTP error but reached
 the unchanged 120-second completion deadline. Evidence is
@@ -74,10 +81,14 @@ the unchanged 120-second completion deadline. Evidence is
 It did not preserve final per-job progress, so pacing versus a stalled transfer
 cannot yet be distinguished. Completion failures now attach bounded progress
 history, latest states/reasons, resource maxima and recorded start attempts.
-The later passing run does not establish the causes of either earlier failure.
-No retry behavior, deadline or acceptance criterion was relaxed. Retain these
-two findings for focused follow-up; do not label the overall fixture reliably
-qualified solely from its one passing execution.
+The completion hang guard now follows actual paced fixture work, including
+serial admission: total payload bytes divided by the source's 64 KiB/s cap,
+plus 120 seconds of overhead. For sixteen 4 MiB payloads this is 1,144 seconds.
+It is a test hang guard, not a product response-time guarantee. All output
+hashes, completed history and the separate overlap requirement remain strict.
+The current runtime pass validates this explicit client policy. It does not
+identify the first failure's API code or establish whether the earlier timeout
+was pacing or a transient stall; those archived runs lack that evidence.
 
 ## Canonical network-setting startup guidance (2026-11-23)
 
