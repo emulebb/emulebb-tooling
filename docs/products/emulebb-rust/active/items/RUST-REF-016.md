@@ -279,6 +279,39 @@ are not established by these runs. Maximum-geometry resident ownership and
 adaptive/burst component evidence must be assessed at its actual scope before
 closing the overall foundation acceptance review. No PR or merge is authorized.
 
+### Live pressure, drain and readmission proof
+
+The bounded resource-acceptance review confirmed the maximum-geometry resident
+regression and both coupled container results at their stated scopes. It found
+one missing integration proof: pressure closing new admission while live payload
+work drains, followed by gradual recovery. It did not require a full 256-GiB
+payload transfer, soak or hostile-parser campaign to establish that mechanism.
+
+Rust `1cdbc78a` adds that integration proof using the existing two-peer Core
+fixture and the scheduler's normal admission-refresh path. A test-only memory
+sample closes admission after actual nonterminal payload bytes arrive. A
+test-only gate holds verified payload before output delivery. Assertions require
+the active owner to survive pressure and the held storage boundary, ordinary
+ready work to remain unhydrated with the public `resources` reason, and bounded
+active/preparing/resident observations. Delivery and normal retirement then
+release cache backing; an earlier pinned reader remains charged until dropped.
+Admission remains closed after drain while pressure persists, then recovers from
+zero to one and two as useful work resumes. Both delivered payloads verify
+byte-for-byte, and connections/active owners return to zero.
+
+Early fixture assertions were corrected after checking their actual APIs:
+prepared owners count as preparing, `manifest_optional` is a loading operation,
+and cache release can precede final retirement during successful publication.
+The final test uses passive metadata/counter observations and the earlier
+delivery boundary. It passes in
+`reports/settings-request-round-1/live-memory-pressure-delivery-boundary.log`;
+all **763 Core executions** pass in `live-memory-pressure-core.log` in that
+directory. A bounded re-review confirms closure of the specific finding. Normal
+commit hooks pass. The sample/gate are test-only; the production sampler retains
+the same implementation with its System field named explicitly. Existing
+capacity evidence remains scoped to the qualified `c27785a8` archive; final
+Linux/package checks for this test-support revision remain pending.
+
 The public-surface inventory also found two stale bind-command instructions in
 the getting-started guide and former setting names in the Android post-failure
 diagnostic matcher. The guide now uses the canonical offline settings command;
