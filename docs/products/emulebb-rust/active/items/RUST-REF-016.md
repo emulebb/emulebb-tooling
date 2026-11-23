@@ -249,6 +249,36 @@ Kernel peak is 537,133,056 bytes, including cache/controller costs and kernel
 accounting overshoot; this is not daemon RSS or a claim of memory headroom.
 The 1 GiB / 100,000-file tier remains pending on this same archive.
 
+The first 1 GiB run,
+`reports/linux-containers/library/e69d049528994700bf149ebc4b8a5358/`, passed
+initial hashing and watcher checks with zero OOM events, but its coupled fixture
+timed out at a 120-second startup-initialization guard. The trace shows the
+100,000-file no-change reload progressing and completing while background
+catalog hydration had not reached its completion boundary. Harness `2ccf4ae0`
+uses the existing 15-minute catalog-hydration guard, capped by remaining campaign
+time, and records both initialization and scan quiescence while waiting. It
+changes no product threshold or functional acceptance. All 151 affected Harness
+tests and targeted undefined-name checks pass; normal hooks pass.
+
+The complete **1 GiB / 100,000 physical library files / 100,000 retained jobs**
+campaign now passes for the same Rust/archive and Harness `2ccf4ae0`:
+`reports/linux-containers/library/b95211222e514bc3b5eddcd83b7a4433/report.json`,
+with detail in `campaign/rust-shared-library-io-20261123T083940Z-1.json` beneath
+that directory. All acceptance checks pass. Four measured intervals show payload
+byte growth during hashing; output verification, removal/library withdrawal,
+the restored 100,000-job cohort, watcher acknowledgements and restart also pass.
+The campaign records 1,764.932 seconds, one CPU, no swap and zero OOM events.
+Kernel peak is 1,073,860,608 bytes; sampled read-phase daemon RSS peaks at
+282,300,416 bytes. Kernel/cache/controller accounting and sampled daemon RSS
+remain separate measurements; neither is a whole-daemon ceiling guarantee.
+
+Both agreed constrained capacity tiers are now qualified for this archive and
+their recorded workloads. Soak, physical-reference-device results, full-size
+256-GiB payload transfer and complete hostile-parser allocation qualification
+are not established by these runs. Maximum-geometry resident ownership and
+adaptive/burst component evidence must be assessed at its actual scope before
+closing the overall foundation acceptance review. No PR or merge is authorized.
+
 The public-surface inventory also found two stale bind-command instructions in
 the getting-started guide and former setting names in the Android post-failure
 diagnostic matcher. The guide now uses the canonical offline settings command;
