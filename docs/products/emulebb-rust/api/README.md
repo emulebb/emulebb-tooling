@@ -49,12 +49,9 @@ first-party adapters can gate on the contract without parsing the body first.
 Adapter surfaces (`/api/v2` qBit-compat, Torznab) must not broaden or weaken the
 native route shape.
 
-## Accepted foundation target
+## Public foundation
 
-The operator accepted the [public-foundation specification](../design/PUBLIC-FOUNDATION.md)
-and its [59-field settings target](../design/SETTINGS-TARGET.md). These are the
-round-one implementation target under RUST-CI-043 / #297 and RUST-CI-044 / #298,
-not claims that all new routes, schemas or settings already exist. Update this
-canonical OpenAPI alongside each implemented slice. Current operational guides
-continue to describe implemented behavior; the accepted target must not be
-exposed as a fake runtime stage.
+The [public-foundation specification](../design/PUBLIC-FOUNDATION.md) and the
+[59-field settings contract](../design/SETTINGS-TARGET.md) landed in [Rust PR #349](https://github.com/emulebb/emulebb-rust/pull/349).
+Update the canonical OpenAPI alongside changes to routes and schemas. Check
+the README shipped with a package for the behavior it contains.

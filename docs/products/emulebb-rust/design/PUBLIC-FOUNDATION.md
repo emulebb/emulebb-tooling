@@ -1,14 +1,9 @@
 # Public foundation: round one
 
-Status: accepted implementation specification, 2026-11-15. This document records
-the operator's consolidated decisions. It defines the round-one target, not a
-claim that the current product implements or qualifies it. The PM coordinates
-implementation under [RUST-CI-043](../active/items/RUST-CI-043.md) / #297 and
-[RUST-CI-044](../active/items/RUST-CI-044.md) / #298, reusing the existing
-persistence, Kad and harness owners. Progress, current risks and evidence belong
-in those owning items and [RUST-REF-016](../active/items/RUST-REF-016.md), not a
-second branch-wide backlog. This specification contains current contracts and
-acceptance requirements; checkpoint chronology remains in Git and owning items.
+Round one landed in [Rust PR #349](https://github.com/emulebb/emulebb-rust/pull/349) on 2026-11-23. This specification records the
+operator's decisions, delivered contracts and acceptance requirements.
+The [active backlog](../active/INDEX.md) lists remaining qualification.
+The [proof archive](https://github.com/emulebb/emulebb-tooling/blob/main/docs/products/emulebb-rust/history/items/INDEX.md) links to exact source and checkpoint evidence.
 
 ## Outcome and delivery boundary
 
@@ -86,7 +81,7 @@ documentation describes only implemented structure.
 - One daemon, one SQLite database and coordinated persistence ownership. Reuse
   existing repository, profile-lease and storage infrastructure; no competing
   persistence actor or adapter-owned shadow state. The allocated
-  [155-A owner contract](../active/items/RUST-REF-016.md#allocated-foundation-owner-155-a-2026-11-15)
+  [155-A owner contract](https://github.com/emulebb/emulebb-tooling/blob/07c034bbe59462244015a00204b68df4213ad75f/docs/products/emulebb-rust/active/items/RUST-REF-016.md#allocated-foundation-owner-155-a-2026-11-15)
   owns bounded FIFO admission through commit/publication and explicit drain/join.
   Friend CRUD integrates first; runtime Kad/settings work reuses it later.
   The owning item's scoped friend checkpoint records implemented paths and
@@ -630,7 +625,7 @@ Maximum-geometry retained-backing validation selected 128 MiB. The current
 regression keeps the eighteen-entry engineering cohort and four admitted
 replacement credits within that ceiling. This is component evidence, not full adaptive concurrency,
 total RSS or end-to-end acceptance; the owning
-[runtime item](../active/items/RUST-REF-016.md) records remaining qualification.
+[RUST-CI-052](../active/items/RUST-CI-052.md) tracks sustained workload qualification.
 
 ### Scarcity, completion and endgame
 
@@ -710,7 +705,7 @@ remain separately observable. Public `sizeBytes` is the persisted job expected/
 learned total: admission may initialize an absent claim from accepted canonical
 content, while independent verification fills an unknown total or fences an
 incompatible claim. Verified content keeps its authority; reads never silently
-rewrite job claims. The [2b/2c storage allocation](../active/items/RUST-CI-044.md#allocated-download-job-storage-cut-phases-2b2c)
+rewrite job claims. The [2b/2c storage allocation](https://github.com/emulebb/emulebb-tooling/blob/07c034bbe59462244015a00204b68df4213ad75f/docs/products/emulebb-rust/active/items/RUST-CI-044.md#allocated-download-job-storage-cut-phases-2b2c)
 owns job children, callback generations and durable cleanup references.
 
 Category names are their immutable public IDs. SQLite retains a positive
@@ -754,10 +749,10 @@ check the root epoch and admit an owned packet of at most the existing 200 serve
 items under a short lock, then release it before I/O. Earlier root changes
 invalidate/retry; a later change may let that one in-flight packet finish, while
 each subsequent batch rechecks. Current lifecycle evidence and remaining resource
-obligations belong in [RUST-REF-016](../active/items/RUST-REF-016.md).
-[#155-A](../active/items/RUST-REF-016.md#planned-category-publication-continuation-phase-2a)
+obligations belong in [RUST-REF-016](https://github.com/emulebb/emulebb-tooling/blob/main/docs/products/emulebb-rust/history/items/RUST-REF-016.md).
+[#155-A](https://github.com/emulebb/emulebb-tooling/blob/07c034bbe59462244015a00204b68df4213ad75f/docs/products/emulebb-rust/active/items/RUST-REF-016.md#planned-category-publication-continuation-phase-2a)
 owns bounded admission, leases and serving revalidation, alongside the
-[#233 shutdown contract](../active/items/RUST-FEAT-062.md).
+[#233 shutdown contract](https://github.com/emulebb/emulebb-tooling/blob/main/docs/products/emulebb-rust/history/items/RUST-FEAT-062.md).
 
 The local-eligibility finalizer registry tracks existing blocking
 SQL/publication units through caller abort and shutdown. Its separate limit is
@@ -801,7 +796,7 @@ and journals when atomic directory rename is unsupported. Preserve foreign
 replacements, markers, symlinks and collisions; if safety cannot be proved,
 leave cleanup pending without unchecked rename or recursive deletion. This
 delivery/job-storage repair belongs to phases 2b/2c; the owning
-[#155 analysis and acceptance](../active/items/RUST-REF-016.md#allocated-deliveryjob-storage-repair-phases-2b2c)
+[#155 analysis and acceptance](https://github.com/emulebb/emulebb-tooling/blob/07c034bbe59462244015a00204b68df4213ad75f/docs/products/emulebb-rust/active/items/RUST-REF-016.md#allocated-deliveryjob-storage-repair-phases-2b2c)
 records its evidence and unimplemented status.
 
 Removal of an unfinished or completed job requires an explicit `deleteData`.
@@ -1277,7 +1272,7 @@ call the final Kad checkpoint directly before bounded network cleanup can
 discard its DHT runtime. Outside that cleanup timeout, drain the persistence
 owner, join the reload worker without abort, seal/drain local finalizers, then
 drain root SQL and eligibility reads before connection/profile-lease release.
-Attempt every stage even after a failure; the [#155 lifecycle contract](../active/items/RUST-REF-016.md#planned-category-publication-continuation-phase-2a)
+Attempt every stage even after a failure; the [#155 lifecycle contract](https://github.com/emulebb/emulebb-tooling/blob/07c034bbe59462244015a00204b68df4213ad75f/docs/products/emulebb-rust/active/items/RUST-REF-016.md#planned-category-publication-continuation-phase-2a)
 owns retained tokens, cooperative stop, error reporting and the limits of the
 scoped checkpoint evidence; this does not imply full phase-2a qualification.
 
@@ -1394,8 +1389,10 @@ diagnostics; prioritize functional correctness, recovery, stability and bounded
 resources while retaining the required checks below.
 
 - Default/custom startup resolution with changed running defaults, equal-value
-  and reset behavior, revision conflicts, atomic candidate failure, committed
-  but failed application, restart-pending reporting and offline lease races.
+  and reset behavior, revision conflicts, atomic candidate failure,
+  restart-pending reporting and offline lease races. A future fallible live
+  owner must also report a committed save whose runtime application fails.
+  The five current live operations apply changes in memory without I/O.
 - Creation/re-download races, nullable metadata, immutable IDs, no historical
   resurrection, start/stop intent, bounded active work and retained history.
 - Adaptive admission and fixed burst semantics, rare-part capture, endgame
@@ -1440,11 +1437,9 @@ device evidence as explicitly pending.
 
 ### Deferred follow-up
 
-A sustained mixed-workload soak is follow-up work, not a prerequisite for this
-delivery checkpoint. No soak duration is set for this round. Reuse the existing
-Python harness and monitoring when that follow-up is scheduled. Current scoped
-tests do not establish year-long endurance; report the evidence at its actual
-scope without delaying functional delivery for a long-running campaign.
+[RUST-CI-052](../active/items/RUST-CI-052.md) tracks the sustained
+mixed-workload soak. Use the existing Python Harness for that run and
+record its duration, workload and limits alongside the exact source bundle.
 
 Preserve evidence, branch heads and exact
 companion revisions for iterative review. Report completed phases, pending work,

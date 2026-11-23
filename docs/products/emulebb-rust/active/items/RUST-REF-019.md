@@ -26,7 +26,7 @@ source: Operator-approved Rust async I/O and path portability review
 - [ ] Preserve transfer correctness and resume while evaluating bounded CPU
       admission. A current-stable aMule comparison is evidence, not wire authority
       or an automatic claim that Rust is faster or safer.
-- [ ] Share persistence ownership with [#155](RUST-REF-016.md); no competing
+- [ ] Share persistence ownership with [#155](https://github.com/emulebb/emulebb-tooling/blob/main/docs/products/emulebb-rust/history/items/RUST-REF-016.md); no competing
       SQLite actor, new scheduler, hardware program or long soak is activated.
 
 ## Summary

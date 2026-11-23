@@ -4,31 +4,22 @@ This task-routed annex applies only to persisted settings, metadata, database
 schemas, or profile compatibility.
 
 - Keep TOML limited to basic process/profile/service bootstrap configuration.
-  The accepted clean Beta3 target uses snake_case `bind_addr`, `api_key` and
-  `web_root_dir`, with REST `20017`, P2P TCP `20019` and UDP `20020`. Adopt that
-  contract directly, then preserve its keys and semantics across updates by
-  default; future changes need explicit contract review. The accepted
-  [Public Foundation](../design/PUBLIC-FOUNDATION.md) coordinates DB/settings/
-  CLI/REST stabilization now. No shims, aliases, remapping, retired-input
-  handling or tests preserving removed names. Validate the current model.
-  [RUST-CI-043](../active/items/RUST-CI-043.md) owns configuration/API delivery.
+  Beta3 uses snake_case keys such as `bind_addr`, `api_key` and
+  `web_root_dir`, with REST `20017`, P2P TCP `20019` and UDP `20020`.
+  Preserve these keys and semantics across updates by default. Future changes
+  need explicit contract review. The [Public Foundation](../design/PUBLIC-FOUNDATION.md)
+  defines the coordinated DB, settings, CLI and REST contract.
 - SQLite owns mutable settings and durable product state. Runtime-only sockets,
   timers, queues, and pending work remain in memory. Downloaded payloads, logs,
   and retained diagnostics remain files, not alternative settings authorities.
-- `server.met` and `nodes.dat` are read-only compatibility import inputs. The
-  Rust client must not create, refresh, replace, or write them back. Existing
-  `nodes.dat` persistence paths must be removed under
-  [RUST-FEAT-062](../active/items/RUST-FEAT-062.md); the target contract is not
-  a claim that those paths are already fixed. This rule does not rewrite stock
-  MFC or upstream server fixture-generation behavior.
-- Review schema efficiency, naming, and future domain boundaries under
-  [RUST-CI-044](../active/items/RUST-CI-044.md). Configuration stability does not
-  authorize product migrations, aliases, or silent profile repair. A proposal
-  to preserve profiles across incompatible schemas is a separate parent review
-  of the current beta rules below. Existing
-  [RUST-FEAT-063](../active/items/RUST-FEAT-063.md) owns explicit source-version
-  semantic export and fresh-target import; that workflow does not migrate an
-  old database during normal startup and remains unimplemented.
+- `server.met` and `nodes.dat` are read-only compatibility import inputs.
+  The Rust client must never write them. [RUST-CI-055](../active/items/RUST-CI-055.md)
+  tracks end-to-end qualification of the import and checkpoint lifecycle.
+  Stock MFC and upstream fixtures have their own contracts.
+- Review schema changes against the [Public Foundation](../design/PUBLIC-FOUNDATION.md).
+  Preserving profiles across incompatible schemas requires separate review.
+  [RUST-FEAT-063](../active/items/RUST-FEAT-063.md) owns explicit
+  source-version semantic export and fresh-target import.
 - Round one implements a coordinated fresh-profile schema. Review every
   persisted-data change against the accepted foundation and exact current
   model. Future automatic upgrades are an objective, not implemented machinery

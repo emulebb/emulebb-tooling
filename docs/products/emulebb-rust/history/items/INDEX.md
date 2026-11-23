@@ -12,6 +12,11 @@ to locate a closed record.
 
 | Item | Decision | Evidence |
 | --- | --- | --- |
+| [RUST-REF-016](https://github.com/emulebb/emulebb-tooling/blob/main/docs/products/emulebb-rust/history/items/RUST-REF-016.md) | DONE | [#155](https://github.com/emulebb/emulebb-rust/issues/155), [PR #349](https://github.com/emulebb/emulebb-rust/pull/349) |
+| [RUST-CI-043](https://github.com/emulebb/emulebb-tooling/blob/main/docs/products/emulebb-rust/history/items/RUST-CI-043.md) | DONE | [#297](https://github.com/emulebb/emulebb-rust/issues/297), [PR #349](https://github.com/emulebb/emulebb-rust/pull/349) |
+| [RUST-CI-044](https://github.com/emulebb/emulebb-tooling/blob/main/docs/products/emulebb-rust/history/items/RUST-CI-044.md) | DONE | [#298](https://github.com/emulebb/emulebb-rust/issues/298), [PR #349](https://github.com/emulebb/emulebb-rust/pull/349) |
+| [RUST-FEAT-062](https://github.com/emulebb/emulebb-tooling/blob/main/docs/products/emulebb-rust/history/items/RUST-FEAT-062.md) | DONE | [#233](https://github.com/emulebb/emulebb-rust/issues/233), [PR #349](https://github.com/emulebb/emulebb-rust/pull/349) |
+| [RUST-FEAT-038](https://github.com/emulebb/emulebb-tooling/blob/main/docs/products/emulebb-rust/history/items/RUST-FEAT-038.md) | DONE | [#27](https://github.com/emulebb/emulebb-rust/issues/27), [PR #349](https://github.com/emulebb/emulebb-rust/pull/349) |
 | [RUST-BUG-136](RUST-BUG-136.md) | DONE; fixed-size deletion authority reads with restart/retry coverage | [#162](https://github.com/emulebb/emulebb-rust/issues/162), [PR #335](https://github.com/emulebb/emulebb-rust/pull/335) |
 | [RUST-BUG-168](https://github.com/emulebb/emulebb-tooling/blob/main/docs/products/emulebb-rust/history/items/RUST-BUG-168.md) | DONE; stock secure-ident size bound | [#269](https://github.com/emulebb/emulebb-rust/issues/269), [PR #329](https://github.com/emulebb/emulebb-rust/pull/329) |
 | [RUST-BUG-176](https://github.com/emulebb/emulebb-tooling/blob/main/docs/products/emulebb-rust/history/items/RUST-BUG-176.md) | DONE; bounded discovery fetch | [#278](https://github.com/emulebb/emulebb-rust/issues/278), [PR #329](https://github.com/emulebb/emulebb-rust/pull/329) |

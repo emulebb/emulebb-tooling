@@ -47,8 +47,8 @@ review only, not a unit implementation or indefinitely parked service project.
 - [ ] A target-specific validation proposal covers install, explicit enablement,
       start/status/stop/restart, profile exclusivity, secrets/logs, deterministic
       transfer/resume, update/rollback and state-preserving uninstall.
-- [ ] Dependencies on [#297](RUST-CI-043.md), [#234](RUST-FEAT-063.md) and
-      [#298](RUST-CI-044.md) are resolved or explicitly identified for parent
+- [ ] Dependencies on [#297](https://github.com/emulebb/emulebb-tooling/blob/main/docs/products/emulebb-rust/history/items/RUST-CI-043.md), [#234](RUST-FEAT-063.md) and
+      [#298](https://github.com/emulebb/emulebb-tooling/blob/main/docs/products/emulebb-rust/history/items/RUST-CI-044.md) are resolved or explicitly identified for parent
       review; no contract is invented by a packaging script.
 - [ ] The owning issue records the reviewed disposition. Implementation,
       installation, enablement and publication are separate later decisions.

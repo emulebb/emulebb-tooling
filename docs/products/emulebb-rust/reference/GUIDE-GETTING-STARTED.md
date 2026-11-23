@@ -25,9 +25,7 @@ Experimental Termux users keep the complete native archive under private
 `$HOME` and use its `run-developer.sh` launcher.
 
 Native nightly packages provide the ready bootstrap described below. Use the
-README shipped with your selected package for its exact qualified behavior. The
-broader [settings review](https://github.com/emulebb/emulebb-rust/issues/297) remains
-open.
+README shipped with your selected package for its exact qualified behavior.
 
 Without `--profile`, the daemon uses the **directory containing its executable**
 on every platform, independently of the shell working directory. A missing
@@ -113,7 +111,7 @@ silently use hidden fallback seeds, while explicit operator bootstrap endpoints
 remain available. Validated `server.met`/`nodes.dat` input records are imported
 into SQLite; those source files are not written as profile state. Runtime
 persistence qualification remains tracked by
-[RUST-FEAT-062](../active/items/RUST-FEAT-062.md).
+[RUST-FEAT-062](https://github.com/emulebb/emulebb-tooling/blob/main/docs/products/emulebb-rust/history/items/RUST-FEAT-062.md).
 
 ## Search, Download And Share
 

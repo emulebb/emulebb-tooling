@@ -40,7 +40,7 @@ The later README-only [PR #330](https://github.com/emulebb/emulebb-rust/pull/330
 also proved trusted documentation-only CI on both its real PR and actual main
 push `bc0f319d`; it did not produce new binaries. Balanced reliability leads
 the next product implementation wave, including
-the shared bounded-persistence contract under [#155](active/items/RUST-REF-016.md).
+the shared bounded-persistence contract under [#155](https://github.com/emulebb/emulebb-tooling/blob/main/docs/products/emulebb-rust/history/items/RUST-REF-016.md).
 Existing configuration, schema and client-correctness owners retain their
 responsibilities; the checkpoint is evidence, not a recurring precondition for
 every new branch.
@@ -141,8 +141,7 @@ Native and OCI delivery consume one daemon, adjacent WebUI, authenticated
 control contract and profile-ownership model. Keep writable profiles, payloads
 and secrets outside versioned application installations. A package manager or
 service wrapper must not become another settings authority or API bridge.
-[#297](active/items/RUST-CI-043.md) owns that shared deployment/configuration
-contract; [#298](active/items/RUST-CI-044.md) owns database boundaries.
+The shared deployment, configuration and database contracts landed in [Rust PR #349](https://github.com/emulebb/emulebb-rust/pull/349).
 
 Ubuntu 24.04 and Debian 13, each on x64 and ARM64, are the initial declared
 Linux qualification targets. These are targets, not completed four-way install
@@ -206,14 +205,10 @@ owned consumers, OpenAPI, examples, validators, and tests together.
   its keys and semantics by default; mutable settings belong in SQLite.
   [Persistence Policy](reference/PERSISTENCE-POLICY.md) owns the contract,
   including read-only `server.met` and `nodes.dat` imports. Configuration/API
-  coherence and schema review are high-priority Beta3 work under
-  [RUST-CI-043](active/items/RUST-CI-043.md) and
-  [RUST-CI-044](active/items/RUST-CI-044.md). Release remains held; these reviews
-  do not authorize migrations or silently change profile compatibility.
+  coherence and database ownership landed in [Rust PR #349](https://github.com/emulebb/emulebb-rust/pull/349). Release remains held.
+  Incompatible schemas still require a fresh profile.
 - `/api/v1` remains the native namespace. The accepted
-  [Public Foundation](design/PUBLIC-FOUNDATION.md) coordinates fresh-profile
-  DB/settings/CLI/REST implementation now, designing future consumers before
-  their implementation. No shims, aliases, remapping or retired-input
+  [Public Foundation](design/PUBLIC-FOUNDATION.md) defines the fresh-profile DB, settings, CLI and REST contracts and plans future consumers. No shims, aliases, remapping or retired-input
   handling/tests; validate the current model.
 - Product code accepts only the exact current SQLite schema. Any incompatible
   schema change fails startup and requires a completely fresh profile. There

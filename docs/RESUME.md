@@ -1,81 +1,28 @@
 # eMuleBB Resume Handoff
 
-## Active mandate
+## Public foundation round one
 
-Deliver public foundation round 1 as PM and default implementer. Use
-[PUBLIC-FOUNDATION](products/emulebb-rust/design/PUBLIC-FOUNDATION.md) as the
-contract and phased plan, and
-[RUST-REF-016](products/emulebb-rust/active/items/RUST-REF-016.md) for evidence and
-remaining qualification. Use the existing Python Harness and Builder; do not
-invent launch or monitoring paths. Work one bounded slice at a time, with
-scoped checks and granular commits. No standing workers or ordinary delegation.
+[Rust PR #349](https://github.com/emulebb/emulebb-rust/pull/349) merged at [7c0e5fbe](https://github.com/emulebb/emulebb-rust/commit/7c0e5fbee9adb9fcbcdbb21918e1be42268a6bff). The registered full local
+validation and hosted PR checks passed on the consolidated head.
+The [foundation contract](products/emulebb-rust/design/PUBLIC-FOUNDATION.md)
+owns fresh-profile behavior. The [proof index](products/emulebb-rust/history/items/INDEX.md)
+links the five retired work records to exact evidence.
 
-Fresh profiles only: no migrations, aliases, compatibility shims, remapping or
-retired-input handling. Preserve operator profiles and inherited environment.
-**No PR, draft PR, merge, main write, release or publication before operator
-review.** Sustained soak is follow-up work. Keep the complete goal intact.
+Companion PRs and source pins
 
-## Accepted decisions and next work
+- [Builder #68](https://github.com/emulebb/emulebb-build/pull/68) `00ef9423`.
+- [Harness #114](https://github.com/emulebb/emulebb-build-tests/pull/114) `4a1834c4`.
+- [Tooling #194](https://github.com/emulebb/emulebb-tooling/pull/194) `ac860975`.
 
-The operator has accepted all three decisions:
+## Follow-up
 
-1. Upload priority and local comment/rating have one persistent hash-level
-   owner, editable without an available copy.
-2. DELETE removes a server resource, separate from disabling through PATCH;
-   later import creates a new ID.
-3. Keep scan progress only; omit completion tokens. Preserve one coordinator,
-   one coalesced pending follow-up and parallel hashing across disk groups.
-   Show current-pass progress and pending work separately.
+- [RUST-CI-052](products/emulebb-rust/active/items/RUST-CI-052.md) Qualify the Rust foundation under sustained mixed load.
+- [RUST-CI-053](products/emulebb-rust/active/items/RUST-CI-053.md) Qualify live upload and REST during SQLite writer contention.
+- [RUST-CI-054](products/emulebb-rust/active/items/RUST-CI-054.md) Qualify final-block takeover latency and aMule interoperation.
+- [RUST-CI-055](products/emulebb-rust/active/items/RUST-CI-055.md) Qualify Kad checkpoint cadence and import-only lifecycle.
+- [RUST-REF-025](products/emulebb-rust/active/items/RUST-REF-025.md) Replace Chrono with time.
 
-The operator explicitly resumed work. PUBLIC-FOUNDATION owns these decisions.
-Continue the coordinated library/server/scan implementation on the same branches;
-no further product decision is currently identified. Preserve the no-PR boundary.
+Package publication remains on hold. Prior fixed-load and physical-capacity
+receipts apply to the revisions recorded in their proof entries.
 
-## Source checkpoint
-
-Use the existing managed workstream below
-`EMULEBB_WORKSPACE_ROOT/workspaces/agents/public-foundation-round-1` and its
-`feature/public-foundation-round-1` branch in each involved repository:
-
-- Rust: `45d8f3cd` (pushed).
-- Harness: `0c39dc1a` (pushed).
-- Builder: `98fa3d2c` (unchanged).
-- Tooling: this handoff and the owning evidence item on the same feature branch.
-
-Rust, Harness and Tooling were clean and synchronized before this handoff edit.
-No test/build/container campaign remains running from this session. Completed
-specialists are dormant; do not revive them without a concrete difficult task.
-Policy and handoff changes on this feature branch are not integrated into main
-or the canonical startup checkout; do not claim future sessions inherit them.
-
-## Verified evidence and limits
-
-All paths here are relative to `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
-
-- Rust `d603eb42`: full GNU amd64 package gate, 3,505 workspace tests plus three
-  VPN-egress tests and native non-root transfer/restart smoke passed. One ignored
-  ownership-child fixture is exercised by its parent tests. Local packages only.
-- That GNU archive passed physical 50k-library/100k-retained-job qualification
-  at 512 MiB and 100k-library/100k-retained-job qualification at 1 GiB, each with
-  one CPU, no swap and no OOM events. Receipts are
-  `reports/linux-containers/library/d65ce811618c49d7b894d5486476f94b/report.json`
-  and `reports/linux-containers/library/4a9beb312ba0467ea691a83ad0679d42/report.json`.
-  Retained downloads are metadata-only history, not active payload pressure.
-- Rust `130ca0b2`: Windows release/WebUI build passed with zero warnings. Current
-  local REST/OpenAPI campaign passed: 116 declarations, 91 safe operations and
-  dedicated persistence/peer/settings phases. Receipt:
-  `reports/rust-rest-openapi-ci/20261122T044049Z/report.json`.
-- Harness native import repair: 79 tests passed; one Docker/WSL test was skipped
-  because `EMULEBB_IMPORT_TEST_IMAGE` was unconfigured. Synthetic import tests
-  require a unique pytest `--basetemp` below the output root.
-- Rust `45d8f3cd`: library summary/location reads now check profile coherence
-  before admission and after SQL await, including absent hashes. 740 Core and
-  178 REST tests passed with no warnings. Logs:
-  `reports/settings-request-round-1/library-coherence-core.log` and
-  `library-coherence-rest.log`.
-
-Do not assign earlier package/live/resource evidence to later revisions.
-Canonical library/server REST/OpenAPI/WebUI cutovers, scan progress/calendar
-projection, aggregate construction ownership, active payload/session pressure,
-expanded canonical-query campaigns and remaining platform/device gates are open.
-The current database schema is 114. The overall goal is not complete.
+[Previous handoff](https://github.com/emulebb/emulebb-tooling/blob/07c034bbe59462244015a00204b68df4213ad75f/docs/RESUME.md)

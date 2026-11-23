@@ -1,13 +1,9 @@
 # Configuration and settings target
 
-**Accepted round-one target: 59 leaves; typed model and singleton storage implemented, runtime integration pending.**
-The operator accepted the [Public Foundation](PUBLIC-FOUNDATION.md) on
-2026-11-15. That is the master scope and behavior specification under
-[RUST-CI-043 / #297](../active/items/RUST-CI-043.md). This document owns the
-settings-specific detail. The PM accepted the source-reviewed 59-leaf engineering catalog in
-[SETTINGS-INVENTORY.json](SETTINGS-INVENTORY.json). This does not claim
-implementation. Regenerate/check the final inventory from typed
-settings definitions once implemented; do not create another runtime reader.
+The 59-leaf settings contract landed in [Rust PR #349](https://github.com/emulebb/emulebb-rust/pull/349). The
+[Public Foundation](PUBLIC-FOUNDATION.md) defines the shared behavior, and
+[SETTINGS-INVENTORY.json](SETTINGS-INVENTORY.json) records the accepted leaf catalog.
+The typed Rust definitions own the current field metadata.
 
 ## Ownership and supported surface
 
@@ -402,158 +398,21 @@ a blanket JavaScript-safe-integer limit.
 | `security.tcpErrorFloodDetection.intervalSeconds` | `u32` | `3600` | 60..86400 step60 | restart |
 | `security.tcpErrorFloodDetection.threshold` | `u32` | `10` | 1..1000 | restart |
 
-## Typed settings implementation boundary
+## Delivered implementation
 
-Rust `5460706c` implements the canonical declaration in
-`crates/emulebb-settings/src/product/catalog.rs`. One macro derives complete
-typed values, saved mode/value leaves, recursively partial edits, defaults,
-field metadata and canonical key dispatch. The model resolves default-marked
-values before validation, preserves custom intent (including null), classifies
-only explicit sets against current defaults, and applies edits to a private
-whole candidate. Independent range/dependency issues are collected by canonical
-key. List, address, CIDR, UTF-8 and exact serialized-document bounds are enforced
-by this model without filesystem probes or value truncation.
-
-Managed `emulebb-settings` validation passed **37 tests**, including twelve
-new contract tests: complete 59-leaf shape/default metadata, default changes,
-custom null, omission, whole-array replacement, exact revision strings, atomic candidate failure,
-independent validation, reset conflicts, required saved fields and the exact
-128 KiB boundary with UTF-8/JSON escaping. Evidence:
-`reports/settings-store-round-1/settings.log`. Normal commit/push gates passed.
-The existing pinned `ipnet` dependency supplies typed IPv4 CIDRs with serde;
-no dependency version was upgraded.
-
-Rust `783292b0` adds fresh-profile schema **88** and
-`emulebb-metadata/src/app_settings_store.rs`. Fresh Rust-created schemas seed a
-complete revision-1 document in the same transaction as profile identity and
-host storage initialization. Host-selected incoming storage becomes an explicit
-custom leaf directly from the initializer. The canonical reader reads only this
-document, resolves default markers without rewriting or advancing revision, and
-returns errors for missing or malformed documents. It never interprets section
-rows or repairs a document.
-
-Runtime CAS and caller-token-free offline edits share one write implementation.
-It validates and serializes a complete private candidate before opening the
-write transaction, then CASes the captured revision and atomically replaces the
-document/revision. Independent connections cannot silently overwrite one
-another. Every successful nonempty operation advances, including unchanged
-values/modes. Stale CAS, invalid candidates and exhausted revisions change
-nothing. COMMIT errors are typed as uncertain outcomes rather than claimed
-rollbacks. Positive decimal-string revision tokens preserve the complete signed
-64-bit range without JavaScript-number rounding.
-
-Metadata validation passed **248 unit and 3 ownership tests**, daemon validation
-passed **123 tests** (the isolated ownership-child fixture remains intentionally
-ignored for direct invocation), and the existing Python metadata/native-contract
-suites passed **53 tests**. Logs: `reports/settings-store-round-1/`. Coverage
-includes independent-connection CAS, unchanged writes, failure/rollback and
-manual retry, deferred commit failure, exhaustion, byte limits, read-only default
-resolution/reopen, missing/malformed records and host initialization.
-The regular daemon/WebUI build passed with **zero warnings**:
-`logs/builds/20261118T020354Z-build-clients/build-result.json`.
-The existing native REST/OpenAPI campaign passed on exact Rust
-`783292b06ee696055b16efed41c71ccf96c9fdb1`, with graceful teardown:
-`reports/rust-rest-openapi-ci/20261118T020742Z/report.json`.
-
-Rust `40ddcfba` and `99b9a76e` implement the single-key offline commands above,
-using the existing exclusive profile lease and canonical singleton writer.
-Canonical key dispatch, leaf serialization/copy/comparison and typed partial
-updates derive from the same declaration. The typed `SettingsPatch` request and
-allocation-free serialized-size accounting are ready for REST integration;
-transport must still bound the original request bytes separately.
-
-Validation diagnostics identify canonical keys and stable issue codes without
-echoing input values. Explicit edits decode the complete typed saved document
-before resolving and validating the edited candidate. This permits an explicit
-set/reset to restore a valid combination after compiled defaults change. Normal
-reads still resolve and validate without rewriting; malformed or missing typed
-documents remain errors. There is no automatic repair or default comparison.
-
-Final scoped checks passed **42 settings tests**, **249 metadata unit plus 3
-ownership tests**, and **22 Python tests**. Evidence:
-`reports/settings-request-round-1/{settings-final,metadata-final,python-final}.log`.
-The daemon suite passed 123 tests before the final diagnostic/recovery repair;
-the final regular build and native campaign integrate that repair. The build
-passed with zero warnings:
-`logs/builds/20261118T031134Z-build-clients/build-result.json`.
-The native campaign passed on Rust
-`99b9a76e6ad57a310b4419c08451150ee1b26d85`, with graceful teardown:
-`reports/rust-rest-openapi-ci/20261118T032020Z/report.json`.
-Its `settingsCliPhase` proves single-key output, inline lists, unchanged records
-after invalid writes, explicit profile selection, running-profile refusal,
-field diagnostics and explicit default-resolution recovery. Harness changes
-are in `98fdf9c4`.
-
-Rust `7dca2f03` then separates offline access from runtime loading: commands
-acquire the existing profile lease and open/initialize canonical metadata
-directly. They neither parse nor create control-service TOML. This keeps explicit
-settings recovery available when runtime startup is invalid. The daemon suite
-passed **125 tests**, including two new regressions for fresh metadata-only
-initialization and settings edits with malformed bootstrap TOML:
-`reports/settings-request-round-1/daemon-offline-isolation.log`.
-Normal commit/push gates passed. The build/native evidence above predates this
-small isolation change. The subsequent combined native campaign on Rust
-`075ea97a` passes the settings CLI phase with this isolation in place; current
-build/native evidence is recorded under
-[Docker and deployment](PUBLIC-FOUNDATION.md#docker-and-deployment).
-Final integrated qualification must still use the final cut.
-
-Rust `9a96a8ba` adds `product::settings_schemas()`: named OpenAPI 3.1 components
-for complete values, saved mode/value leaves, recursively partial edits, PATCH,
-canonical keys and revision strings. Group shape derives from the same typed
-declaration, and list bounds share the runtime rule owner. Partial schemas have
-neither required groups nor schema defaults, preserving omission. Nullable
-leaves explicitly admit null; complete documents and all object shapes remain
-closed. UTF-8 and serialized-byte bounds use explicit schema extensions rather
-than claiming Unicode character counts are bytes. Revision numeric-string
-range, address semantics and whole-candidate dependencies still require typed
-validation; the schema descriptions identify these constraints.
-All **46 settings tests** passed, including actual serde-shape agreement across
-the 59 keys, saved wrappers, omission/null, typed enums and multibyte bounds:
-`reports/settings-request-round-1/settings-schema.log`.
-Normal commit/push gates passed. These components are not yet consumed by the
-published OpenAPI, settings surface endpoint or WebUI; that integration remains
-part of the coordinated cut below.
-
-The canonical document is not yet the daemon's active settings authority.
-Runtime admission/effective state, ordered persistence publication, native
-REST/OpenAPI, WebUI, Docker provisioning and runtime-argument removal still
-require their coordinated cut. Python profile creation must adopt canonical
-initialization when those readers switch; raw DDL fixtures do not currently
-create a typed settings document. The native campaign proves current daemon
-flows and the new offline commands, not the future settings endpoint.
-
-The typed settings owner now also provides `SettingsReadData`,
-`SettingsApplicationStatus` and `SettingApplyFailure`, with generated schema
-components from the same 59-key declaration. The read constructor resolves
-default-marked saved values, validates saved and effective candidates
-independently, and checks the exact 512 KiB serialized data limit. It never
-infers effective values from saved settings. Application lists admit each key
-at most once per list; failures use the fixed `applyFailed` code and copy at
-most 512 UTF-8 message bytes with accurate truncation state. Revision remains
-in the containing envelope's `meta.settingsRevision`.
-
-The settings package passes **52 tests**, including exact-limit JSON escaping,
-UTF-8 message boundaries, duplicate status keys and agreement between schemas
-and serialized read data. Validation command:
-`python -m emule_workspace test rust-unit --workstream public-foundation-round-1 --package emulebb-settings`.
-This is read-model preparation; it does not complete runtime admission,
-publication or endpoint integration.
-
-The operator accepted whole-update deferral: a valid desired save whose live
-candidate conflicts with effective restart-bound values is saved atomically,
-keeps the effective configuration unchanged, and reports every outstanding
-desired difference as pending restart. The declaration-driven planner is tested;
-runtime publication and endpoint integration remain unfinished.
-The broader foundation goal remains open and no PR or merge was created.
+The Rust typed declaration owns the saved document and generated schemas.
+The singleton store enforces revision checks. The profile owner orders
+durable writes with runtime publication, and the CLI owns offline edits.
+See [Rust PR #349](https://github.com/emulebb/emulebb-rust/pull/349) for current source and validation. The
+[development checkpoints](https://github.com/emulebb/emulebb-tooling/blob/07c034bbe59462244015a00204b68df4213ad75f/docs/products/emulebb-rust/design/SETTINGS-TARGET.md#typed-settings-implementation-boundary)
+remain available in Git.
 
 ## Qualification boundary
 
-Use the master specification's settings, revision, lease, restart/apply-failure,
-Docker and combined-scale acceptance cases. Run normal checks and two review
-rounds, retaining exact source evidence. This round ends at a tested pushed
-checkpoint, with no PR/merge/publication until operator review. Future automatic
-upgrades remain a design objective, not implemented machinery.
+Use the master specification for settings revisions, offline leases,
+restart reporting, and scoped qualification. The live owners in this round
+update in-memory state. A future fallible owner must report a committed save
+whose runtime application fails.
 
 
 ### Harness settings fixtures
