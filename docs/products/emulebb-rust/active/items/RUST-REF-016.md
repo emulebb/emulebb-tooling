@@ -29,6 +29,54 @@ during consolidation; documentation checks passed in
 `reports/settings-request-round-1/foundation-spec-consolidation-docs.log` below
 `EMULEBB_WORKSPACE_OUTPUT_ROOT`.
 
+## Local foundation review checkpoint (2026-11-23)
+
+The [authoritative specification](../../design/PUBLIC-FOUNDATION.md) remains the
+contract and phased-plan owner. The round-one branches now provide a tested
+local review checkpoint. No PR, merge, release or publication was performed.
+
+- DB/domain: fresh schema 117, durable job identity/storage, persistent hash
+  policy/metadata, immutable name-based categories/tags, independent search
+  claims and indexed reads are implemented. Current workspace tests include
+  persistence, cancellation, restart, collision/cleanup and query-plan cases.
+- Settings/CLI: the typed 59-leaf catalog owns saved SQLite product settings;
+  bootstrap TOML keeps `[rest]` with `bind_addr`, `api_key` and optional
+  `web_root_dir`. The executable declares only `--profile`, offline one-key
+  settings get/set/reset and profile import. Current-source inspection and
+  packaged lifecycle checks corroborate the canonical surface.
+- REST/consumers: native DTO/OpenAPI, bounded library/download/search/upload
+  resources, identity notifications, current WebUI and Harness consumers are
+  integrated. The registered REST/OpenAPI evidence and dedicated fixtures below
+  retain their exact binary/revision scopes; the current GNU gate also builds
+  the WebUI and tests the REST crate. Future adapters/indexer remain design-only.
+- Runtime qualification: both enforced capacity tiers pass on the recorded
+  `c27785a8` archive, with real payload growth during hashing, full sorted-page
+  traversals, literal substring probes, watcher mutations, removal and restart.
+  The maximum-geometry resident test and the new live pressure/drain/readmission
+  test close the resource proof at their documented component/integration scopes.
+- Delivery: one persistent feature branch per involved repository, granular
+  commits and required local hooks/checks. Reuse existing Python Harness and
+  Builder owners; no additional launcher or monitoring framework was introduced.
+
+Rust `1cdbc78a` passes the final GNU AMD64 gate: Clippy, packet diagnostics,
+optimized build, **3,552 workspace tests plus three VPN-egress tests**, and the
+WebUI build. Evidence:
+`reports/rust-linux/gnu-amd64/02a45f27459b417c99a699339fff1a54/`.
+The new pressure integration test passes on Windows and Linux. Non-root package
+lifecycle and all sixteen real parallel payloads pass in
+`reports/rust-linux/gnu-amd64/9670f178094c4bf29f57c00904af4034/package-smoke.json`:
+sixteen sampled active owners, 6,305,177 charged resident bytes, zero start
+retries and graceful shutdown. The current archive SHA-256 is
+`a9a4d093b1cc5e8c8f4626618f0c337bee131b526b50044588da435c595a015d`.
+The capacity archive and this test-support revision are identified separately;
+the latter changes no production scheduling behavior or public surface.
+
+Operator review is the next delivery boundary. PR-only checks, physical-device
+qualification and the deferred soak remain outside this local checkpoint.
+The tests do not establish a year-long session, a full 256-GiB payload transfer,
+complete hostile-parser allocation bounds or a total-daemon 128-MiB RSS limit.
+Existing detailed evidence and failures below preserve those practical limits.
+
 ## Cursor refill and coupled scan/payload qualification (2026-11-23)
 
 Rust `99d4ccf5` refills free source-preparation slots within the current SQLite
@@ -310,7 +358,8 @@ directory. A bounded re-review confirms closure of the specific finding. Normal
 commit hooks pass. The sample/gate are test-only; the production sampler retains
 the same implementation with its System field named explicitly. Existing
 capacity evidence remains scoped to the qualified `c27785a8` archive; final
-Linux/package checks for this test-support revision remain pending.
+Linux/package checks for this test-support revision pass at the review checkpoint
+above.
 
 The public-surface inventory also found two stale bind-command instructions in
 the getting-started guide and former setting names in the Android post-failure
