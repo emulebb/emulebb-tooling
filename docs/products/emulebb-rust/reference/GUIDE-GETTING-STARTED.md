@@ -5,6 +5,10 @@ API. Start with a [matching nightly package](GUIDE-DOWNLOADS-PLATFORMS.md), veri
 its checksum, and keep the complete extracted layout, including `webui`. No Rust
 toolchain is needed to use the native packages.
 
+The typed settings commands in this guide require a build that includes
+[Public Foundation Round One](../design/PUBLIC-FOUNDATION.md). For an earlier
+nightly, use the README shipped with that package.
+
 ![eMuleBB Rust WebUI Search view](../../../assets/emulebb-rust/webui-eac9b37a6e20.png){ width="1280" height="720" }
 
 Controlled Windows x64 candidate-package capture from
