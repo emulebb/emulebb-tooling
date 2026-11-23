@@ -203,6 +203,20 @@ actual receiver log path to existing bounded failure diagnostics; all 263
 affected Harness tests pass. Normal commit hooks pass. Renewed Linux and both
 constrained campaigns remain pending for this revision.
 
+The renewed Linux gate and sixteen-job package smoke pass for `c27785a8` in
+`reports/rust-linux/gnu-amd64/540efa689a8c4cc19c0baae0425f5713/` and
+`reports/rust-linux/gnu-amd64/a8e0a604e1db4b17bdef3c8bddf03375/package-smoke.json`.
+The archive SHA-256 is
+`b3c49ebf8628cd2271faabfec48112c2c20885d5ac5a9c77ab7d3137a613aef7`.
+Constrained preflight then refused payload creation with `PERSISTENCE_BUSY`
+while startup catalog rebuilding was still running, before testing the cache
+fix (`reports/linux-containers/library/7a5b3c51d2f8433ead66604076efc4bb/`).
+Harness `b5d8cf16` waits for the existing startup-initialization log boundary and
+public scan quiescence before beginning coupled work, retaining sanitized
+evidence of both. It requests no extra scan and retries no mutation. All 151
+shared-library Harness tests pass. Reuse the valid archive for the next campaign;
+neither constrained tier is qualified by these package results.
+
 The public-surface inventory also found two stale bind-command instructions in
 the getting-started guide and former setting names in the Android post-failure
 diagnostic matcher. The guide now uses the canonical offline settings command;
