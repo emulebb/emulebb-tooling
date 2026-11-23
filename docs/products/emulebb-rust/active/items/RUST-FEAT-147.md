@@ -30,7 +30,7 @@ and executable lifecycle evidence, not external bucket publication.
   [Nightly 43242135692](https://github.com/emulebb/emulebb-rust/actions/runs/43242135692)
   supplies x64/ARM64 Windows ZIP evidence. Preserve the complete adjacent WebUI,
   binary identity, SBOM and workflow provenance. Do not track a moving nightly.
-- The latest [#297 bootstrap contract](RUST-CI-043.md) selects the executable
+- The latest [#297 bootstrap contract](https://github.com/emulebb/emulebb-tooling/blob/main/docs/products/emulebb-rust/history/items/RUST-CI-043.md) selects the executable
   directory by default, superseding the source-080a platform default above.
   Scoop's future launcher must use an explicit stable writable `--profile`
   outside its versioned installation; installation/update must not become the
@@ -91,8 +91,7 @@ This intake records accepted scope, not an implemented Scoop channel.
 
 ## Dependencies And Boundaries
 
-[#297](RUST-CI-043.md) owns deployment/config authority; [#298](RUST-CI-044.md)
-owns schema boundaries; [#234](RUST-FEAT-063.md) owns semantic profile continuity.
+The deployment and schema contracts landed in [Rust PR #349](https://github.com/emulebb/emulebb-rust/pull/349). [#234](RUST-FEAT-063.md) owns semantic profile continuity.
 Preparation may precede that future continuity implementation using the accepted
 fresh-profile contract. Linux-service implementation is not a prerequisite.
 Reliability remains the leading product lane; implementation starts only after

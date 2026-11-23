@@ -70,7 +70,6 @@ inventory and required checks remain enforced; this intake changes neither.
 
 | ID | Class | Title |
 |---|---|---|
-| [RUST-CI-043](items/RUST-CI-043.md) | Evidence | Review configuration authority and REST contract coherence |
 | [CI-054](items/CI-054.md) | Evidence | Add native Windows Rust/MFC protocol-parity diagnostics campaign |
 | [RUST-BUG-117](items/RUST-BUG-117.md) | Bug | Expire silent Kad buddy links from received activity |
 | [RUST-BUG-128](items/RUST-BUG-128.md) | Bug | Preserve incremental ED2K offer publication |
@@ -86,7 +85,6 @@ inventory and required checks remain enforced; this intake changes neither.
 | [RUST-CI-006](items/RUST-CI-006.md) | Evidence | Refresh current-head stock parity evidence and reconcile docs |
 | [RUST-CI-009](items/RUST-CI-009.md) | Evidence | Certify a Beta 3 candidate without publishing |
 | [RUST-CI-033](items/RUST-CI-033.md) | Evidence | Preserve native build scripts in Dependabot fuzz updates |
-| [RUST-CI-044](items/RUST-CI-044.md) | Evidence | Review SQLite schema efficiency and evolution boundaries |
 
 ## Parallel Client Work — Non-gating for Beta 3
 
@@ -103,6 +101,10 @@ ranking and GitHub placement.
 | [RUST-CI-032](items/RUST-CI-032.md) | Evidence | Add dependency-aware early Rust checks without weakening pre-push coverage |
 | [RUST-CI-046](items/RUST-CI-046.md) | Evidence | Complete coordinated public presence and release download guidance |
 | [RUST-CI-049](items/RUST-CI-049.md) | Evidence | Review the Linux daemon service and ownership contract |
+| [RUST-CI-052](items/RUST-CI-052.md) | Evidence | Qualify the Rust foundation under sustained mixed load |
+| [RUST-CI-053](items/RUST-CI-053.md) | Evidence | Qualify live upload and REST during SQLite writer contention |
+| [RUST-CI-054](items/RUST-CI-054.md) | Evidence | Qualify final-block takeover latency and aMule interoperation |
+| [RUST-CI-055](items/RUST-CI-055.md) | Evidence | Qualify Kad checkpoint cadence and import-only lifecycle |
 | [RUST-FEAT-147](items/RUST-FEAT-147.md) | Feature | Distribute verified Windows daemon packages through Scoop |
 | [RUST-BUG-160](items/RUST-BUG-160.md) | Bug | Reuse stock hashes across unambiguous Unicode filename normalization |
 | [RUST-BUG-162](items/RUST-BUG-162.md) | Bug | Bound profile archive fields before allocating import buffers |
@@ -130,7 +132,6 @@ ranking and GitHub placement.
 | [RUST-CI-040](items/RUST-CI-040.md) | Evidence | Verify download limits charge payload rather than control overhead |
 | [RUST-CI-041](items/RUST-CI-041.md) | Evidence | Verify per-address limits when upload slots are immediately available |
 | [RUST-FEAT-025](items/RUST-FEAT-025.md) | Feature | Validate conformant duplicate-block rejection diagnostics |
-| [RUST-FEAT-038](items/RUST-FEAT-038.md) | Feature | Add current-aMule-style endgame source takeover |
 | [RUST-FEAT-039](items/RUST-FEAT-039.md) | Feature | Size ED2K request depth from measured RTT and bandwidth |
 | [RUST-FEAT-040](items/RUST-FEAT-040.md) | Feature | Carry ED2K and Kad search metadata end to end |
 | [RUST-FEAT-048](items/RUST-FEAT-048.md) | Feature | Use sparse part files without weakening capacity reservations |
@@ -140,7 +141,6 @@ ranking and GitHub placement.
 | [RUST-FEAT-059](items/RUST-FEAT-059.md) | Feature | Support FreeBSD on x64 and ARM64 |
 | [RUST-FEAT-060](items/RUST-FEAT-060.md) | Feature | Support ChromeOS through Android and Crostini lanes |
 | [RUST-FEAT-061](items/RUST-FEAT-061.md) | Feature | Support illumos, NetBSD, and OpenBSD as portable Unix targets |
-| [RUST-FEAT-062](items/RUST-FEAT-062.md) | Feature | Persist Kad routing state in SQLite and keep met files import-only |
 | [RUST-FEAT-063](items/RUST-FEAT-063.md) | Feature | Carry semantic profile state into a fresh current-schema profile |
 | [RUST-FEAT-064](items/RUST-FEAT-064.md) | Feature | Address unusual native paths through lossless API locators |
 | [RUST-FEAT-065](items/RUST-FEAT-065.md) | Feature | Expose AICH trust integrity and recovery health to operators |
@@ -154,7 +154,6 @@ ranking and GitHub placement.
 | [RUST-REF-009](items/RUST-REF-009.md) | Refactor | Use native storage domains for cross-platform library scheduling |
 | [RUST-REF-010](items/RUST-REF-010.md) | Refactor | Bound watcher reconciliation I/O for large shared libraries |
 | [RUST-REF-011](items/RUST-REF-011.md) | Refactor | Consolidate duplicated ED2K opcode and capability constants |
-| [RUST-REF-016](items/RUST-REF-016.md) | Refactor | Move blocking SQLite work behind bounded async persistence |
 | [RUST-REF-018](items/RUST-REF-018.md) | Refactor | Keep shared-root filesystem work outside async state locks |
 | [RUST-REF-019](items/RUST-REF-019.md) | Refactor | Offload remaining transfer and large-library CPU bursts |
 | [RUST-REF-020](items/RUST-REF-020.md) | Refactor | Reuse validated incoming AICH recovery proofs within bounded ownership |
@@ -162,6 +161,7 @@ ranking and GitHub placement.
 | [RUST-REF-022](items/RUST-REF-022.md) | Refactor | Restrict incomplete download rechecks to verified payload ranges |
 | [RUST-REF-023](items/RUST-REF-023.md) | Refactor | Move fork-only PCP ownership and route integration into consumers |
 | [RUST-REF-024](items/RUST-REF-024.md) | Refactor | Replace unchecked AICH geometry narrowing with bounded conversions |
+| [RUST-REF-025](items/RUST-REF-025.md) | Refactor | Replace Chrono with time |
 
 ## Indexer Gate
 
