@@ -84,7 +84,28 @@ delivery, removal, restored baseline and graceful source shutdown satisfies
 this negative control. Earlier failures remain fatal, the receiver must stop
 gracefully, and the full campaign still requires actual hashing/byte overlap.
 This prevents another expensive library setup from concealing fixture wiring
-errors. Native preflight and renewed coupled capacity results remain pending.
+errors. Its first native execution, `30fe9a03cdd149f2b1dd05e4de9835fd`,
+verified the complete 64 MiB owned output but timed out waiting for retirement;
+the large library was never prepared. Job reads reached 404, while the fixture
+had not separately recorded library presence and output existence. It now
+records both conditions explicitly and rejects malformed presence responses;
+all 151 affected Python tests passed.
+
+A focused Core regression independently proved that physical destructive
+deletion left the output's library membership active. Cleanup now withdraws
+only the exact recorded path/hash/fingerprint, reusing existing membership
+withdrawal and retaining the path-to-hash cache and client metadata. Windows
+withdrawal uses the same native path spelling as local registration. The
+retained cleanup owner publishes the current content view before final job
+settlement, including after receipt cancellation. Its filesystem phase retains
+the existing 1 MiB charge; publication uses the existing nonblocking capacity
+transition. A refused transition leaves the durable cleanup row for retry.
+Regressions cover the only-copy case and preservation of another eligible copy,
+including the serving catalog. All 756 Core and 1,537 eD2K tests passed; evidence
+is `reports/settings-request-round-1/deletion-presence-core.log` and
+`reports/settings-request-round-1/deletion-presence-ed2k.log` below
+`EMULEBB_WORKSPACE_OUTPUT_ROOT`. The GNU archive and renewed native capacity
+campaigns still need to qualify this deletion-publication fix.
 
 The rebuilt GNU archive passed its full Linux gate: Clippy, packet diagnostics,
 3,543 workspace tests, three VPN egress tests, release compilation, the WebUI
