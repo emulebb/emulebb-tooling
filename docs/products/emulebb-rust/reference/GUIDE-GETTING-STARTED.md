@@ -93,11 +93,14 @@ First-run listener defaults are eD2K TCP 20019, Kad UDP 20020 and REST TCP 20017
 Router/firewall/container mappings must match your chosen settings; High ID is
 not guaranteed behind every NAT, router or VPN.
 
-If route detection is ambiguous, select the intended interface explicitly for
-that run with `--p2p-bind-interface "INTERFACE_NAME"`, then save the network
-setting through the console. Resolve an ambiguous P2P bind before starting
-transfers. VPN use is optional and does not itself
-establish native leak-safety proof.
+If route detection is ambiguous, stop the daemon and save the intended interface:
+
+```text
+emulebb-rust --profile "PATH_TO_PROFILE" settings set network.p2p.bindInterface "INTERFACE_NAME"
+```
+
+Restart the daemon after saving. Resolve an ambiguous P2P bind before starting
+transfers. VPN use is optional and does not itself establish native leak-safety proof.
 
 Fresh discovery initialization is tracked in SQLite independently of list
 contents. Failed initialization leaves the console available and retries at the
@@ -163,7 +166,7 @@ Choose an available loopback port if needed. Stop the daemon and set
 Restart the daemon and browse to that address. This does not change eD2K/Kad
 ports. For ambiguous P2P routing,
 `Get-NetAdapter | Select-Object Name, Status` identifies Windows interface names;
-use the intended name with `--p2p-bind-interface`, then persist through Settings.
+save the intended name with the offline settings command above, then restart.
 
 The browser console is served at the REST origin root, with history routes such
 as `/transfers` and static `/assets`. Reverse-proxy subpath mounting is not part

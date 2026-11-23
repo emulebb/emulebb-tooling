@@ -137,8 +137,36 @@ real Core source registry with wrapped errors; all 757 Core tests passed in
 enables the preparation diagnostic topic in package smoke and preserves the
 beginning and end of each bounded failure-log excerpt, so later server retry
 warnings cannot hide the initial cause. All 112 package-harness tests passed.
-Current native smoke and both constrained campaigns still require new proof;
-the earlier Linux build/test evidence applies only to `b466fa8b`.
+Rust `76cd86c9` passed the renewed Linux Clippy, packet diagnostics, release,
+workspace-test, VPN-test and WebUI-build gate in
+`reports/rust-linux/gnu-amd64/8c1ec01cdfe242349874065fd1c5252d/`.
+Package smoke still failed in
+`reports/rust-linux/gnu-amd64/88f0a725fb2d40feba9d1137fd974a0c/runtime.log`:
+fourteen jobs completed, while jobs 8 and 11 remained source-waiting with zero
+progress. Peak active work was fifteen and resident memory 6,303,193 bytes.
+Job 8 logged a local mutation-capacity refusal during its network attempt.
+This does not qualify the native sixteen-job case or either constrained tier.
+
+The next repair is the prepared-source handoff, not another unchanged broad
+rerun. Availability must be recorded again under the selected execution
+generation; that write can refuse local capacity after preparation succeeds.
+Unused prepared sockets can also expire before execution. Carry the exact
+source lease and its actual owning token through handoff, including Begin
+cancellation, then settle local deferrals without penalizing the peer or
+clearing a newer reservation. Preserve genuine peer-failure cooldowns and the
+explicit storage-failure retry contract. Required focused proof covers typed
+refusals versus I/O failures, expiry before/after generation transfer and stale
+same-token cleanup. Current native smoke and both constrained campaigns remain
+pending.
+
+The public-surface inventory also found two stale bind-command instructions in
+the getting-started guide and former setting names in the Android post-failure
+diagnostic matcher. The guide now uses the canonical offline settings command;
+the matcher and its current-message fixtures use actual native diagnostics.
+No retired-name recognition or rejection cases were added. All 399 affected
+Python tests passed. Existing package progress samples now emit compact flushed
+diagnostics through the persisted runtime log, without changing acceptance or
+adding a monitor.
 
 The rebuilt GNU archive passed its full Linux gate: Clippy, packet diagnostics,
 3,543 workspace tests, three VPN egress tests, release compilation, the WebUI
