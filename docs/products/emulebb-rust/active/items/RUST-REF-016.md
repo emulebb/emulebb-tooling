@@ -184,6 +184,25 @@ exports the existing bounded package-smoke diagnostics into coupled failure
 evidence; all 151 shared-library Harness tests pass. The next bounded step is
 to establish the native admission cause, then resume constrained qualification.
 
+The next 512 MiB run completed the preflight transfer/removal and prepared and
+hashed all 50,000 files. Watcher mutation acknowledgements and the no-change
+reload also progressed. It failed before coupled payload progress in
+`reports/linux-containers/library/a09ceb7407404275b7b3510c6b7fced6/`: adaptive
+admission stayed at zero despite only 496 charged download-resident bytes.
+Kernel evidence records zero OOM events. Investigation found that the installed
+sysinfo cgroup free-memory value subtracts all charged file cache, preventing
+new work after the scan fills otherwise reclaimable cache.
+
+Rust `c27785a8` includes inactive file cache in the available-memory estimate,
+conservatively subtracting dirty/writeback bytes and retaining host and cgroup
+ceilings. Anonymous memory and swap provide no added headroom. All eight
+admission tests pass in
+`reports/settings-request-round-1/reclaimable-cache-core.log`; genuine pressure
+still closes admission. Harness `a8e418af` supplies the caller's API key and
+actual receiver log path to existing bounded failure diagnostics; all 263
+affected Harness tests pass. Normal commit hooks pass. Renewed Linux and both
+constrained campaigns remain pending for this revision.
+
 The public-surface inventory also found two stale bind-command instructions in
 the getting-started guide and former setting names in the Android post-failure
 diagnostic matcher. The guide now uses the canonical offline settings command;
