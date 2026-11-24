@@ -96,6 +96,15 @@ or pull requests, merges work, cleans delivery state, or creates release tags.
 - `emulebb-rust` is rebase-merge only. Merge its pull requests with
   `gh pr merge <number> --rebase --delete-branch`; never probe or retry that
   repository with `--merge` because merge commits are disabled.
+- At PR intake, confirm the permitted merge method, required contexts, and
+  exact cross-repository prerequisites before starting expensive validation.
+  Compare the server's commit count with the merge method's limits. Rust PRs
+  above GitHub's 100-commit rebase limit need an agreed history strategy first.
+  Read the count with `gh api repos/emulebb/emulebb-rust/pulls/<number> --jq .commits`.
+- For changes to Rust release artifact formats, producer pins, or candidate
+  validators, record Builder's `replay-rust-nightly` result and exact input
+  identities. If those inputs predate a changed producer pin, qualify the
+  new bytes through the full candidate assembly and publication gates.
 - Before final handoff, audit open pull requests plus local and remote
   non-default branches in every touched repository. Preserve the explicitly
   active workstream branch. Merge review-ready batches and
@@ -113,6 +122,10 @@ or pull requests, merges work, cleans delivery state, or creates release tags.
   For a manual dispatch, rerun, or another workflow run sharing a commit with
   older failures, monitor only that run with
   `python scripts/gh-actions-status.py --run <run-id> --repo <owner/repo>`.
+  Run monitoring reports the current attempt, elapsed time, job transitions,
+  and failed steps with job links. Use `--snapshot reports/<name>.json` to
+  persist compact state under the inherited output root. One executor monitors
+  the run and owns retry decisions.
   Do not use `gh run watch`, streamed logs, or
   newly improvised polling loops for routine monitoring. Use `--once` for a
   non-waiting snapshot and inspect logs only after the compact poller reports a
