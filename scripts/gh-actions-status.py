@@ -5,10 +5,14 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import subprocess
 import sys
+import tempfile
 import time
 from collections import Counter
+from datetime import datetime, timezone
+from pathlib import Path
 from typing import Any
 
 
@@ -40,6 +44,7 @@ def run_gh(arguments: list[str], *, json_output: bool = True) -> Any:
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         text=True,
+        timeout=60,
     )
     output = result.stdout.strip()
     if json_output and output:
@@ -136,6 +141,79 @@ def read_run(repo: str, run_id: int) -> dict[str, Any]:
     if not isinstance(value, dict) or not value.get("id"):
         raise RuntimeError(f"workflow run {run_id} returned invalid data")
     return value
+
+
+def read_attempt_jobs(repo: str, run: dict[str, Any]) -> list[dict[str, Any]]:
+    """Read exact-attempt jobs, including successful work reused from earlier attempts."""
+    attempt = run.get("run_attempt")
+    if type(attempt) is not int or attempt < 1:
+        raise RuntimeError("workflow metadata has no valid attempt")
+    endpoint = f"repos/{repo}/actions/runs/{run['id']}/attempts/{attempt}/jobs?per_page=100"
+    pages = run_gh(["api", "--paginate", "--slurp", endpoint])
+    if not isinstance(pages, list) or not pages:
+        raise RuntimeError("workflow attempt returned no job inventory")
+    jobs = []
+    for page in pages:
+        if not isinstance(page, dict) or not isinstance(page.get("jobs"), list):
+            raise RuntimeError("workflow attempt returned invalid job data")
+        jobs.extend(page["jobs"])
+    if any(not isinstance(job, dict) or type(job.get("id")) is not int or job.get("run_id") != run["id"]
+           or not isinstance(job.get("name"), str) for job in jobs):
+        raise RuntimeError("workflow attempt returned invalid job identity")
+    return jobs
+
+
+def job_state(job: dict[str, Any]) -> tuple[str, tuple[str, ...]]:
+    """Key visible transitions by state and any failed steps."""
+    state = str(job.get("conclusion") or job.get("status") or "unknown")
+    failed = tuple(str(step["name"]) for step in job.get("steps") or []
+                   if step.get("name") and step.get("conclusion") in RUN_FAILURE_CONCLUSIONS)
+    return state, failed
+
+
+def elapsed_seconds(start: str | None, end: str | None, now: datetime) -> int | None:
+    """Use the reported start and end rather than the polling interval."""
+    if not start:
+        return None
+    started = datetime.fromisoformat(start)
+    finished = datetime.fromisoformat(end) if end else now
+    return max(0, int((finished - started).total_seconds()))
+
+
+def report_attempt(run: dict[str, Any], jobs: list[dict[str, Any]],
+                   previous: dict[int, tuple[str, tuple[str, ...]]], destination: Path | None) -> None:
+    """Print job transitions and optionally persist the same snapshot as compact JSON."""
+    now = datetime.now(timezone.utc)
+    elapsed = elapsed_seconds(run.get("run_started_at"),
+                              run.get("updated_at") if run.get("status") == "completed" else None, now)
+    counts = Counter(job_state(job)[0] for job in jobs)
+    count_summary = " ".join(f"{name}={count}" for name, count in sorted(counts.items()))
+    print(f"run {run['id']} attempt {run['run_attempt']}: {run.get('conclusion') or run['status']}"
+          f" elapsed={elapsed if elapsed is not None else '?'}s {count_summary}".rstrip(), flush=True)
+    snapshot = []
+    for job in jobs:
+        state, steps = job_state(job)
+        duration = elapsed_seconds(job.get("started_at"), job.get("completed_at"), now)
+        snapshot.append({"id": job["id"], "name": job["name"], "state": state, "elapsedSeconds": duration,
+                         "failedSteps": steps, "url": job.get("html_url")})
+        if previous.get(job["id"]) == (state, steps) or state == "skipped":
+            continue
+        if not previous and state in {"success", "neutral"}:
+            continue
+        name = job["name"].rsplit(" / ", 1)[-1]
+        suffix = f" step={', '.join(steps)}" if steps else ""
+        if state in RUN_FAILURE_CONCLUSIONS:
+            suffix += f" {job.get('html_url') or ''}"
+        print(f"  {name}: {state} elapsed={duration if duration is not None else '?'}s{suffix}", flush=True)
+    if destination is not None:
+        payload = {"id": run["id"], "attempt": run["run_attempt"], "sourceSha": run.get("head_sha"),
+                   "status": run["status"], "conclusion": run.get("conclusion"), "elapsedSeconds": elapsed,
+                   "observedAt": now.isoformat(), "jobs": snapshot, "url": run.get("html_url")}
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        with tempfile.TemporaryDirectory(dir=destination.parent, prefix="actions-status-") as temp:
+            staged = Path(temp) / "snapshot.json"
+            staged.write_text(json.dumps(payload, separators=(",", ":")) + "\n", encoding="utf-8", newline="\n")
+            staged.replace(destination)
 
 
 def check_bucket(check: dict[str, Any]) -> str:
@@ -247,6 +325,7 @@ def parse_args() -> argparse.Namespace:
     target.add_argument("--run", type=int, help="Exact workflow run ID to monitor.")
     parser.add_argument("--repo", help="Optional OWNER/REPO override. Defaults to the current checkout.")
     parser.add_argument("--once", action="store_true", help="Print one snapshot without waiting.")
+    parser.add_argument("--snapshot", type=Path, help="Save --run JSON under the inherited output root.")
     parser.add_argument("--interval-seconds", type=float, default=20.0)
     parser.add_argument("--settle-seconds", type=float, default=30.0)
     parser.add_argument("--timeout-seconds", type=float, default=1200.0)
@@ -262,6 +341,22 @@ def validate_timing(args: argparse.Namespace) -> None:
         raise RuntimeError("--settle-seconds must not be negative")
     if args.timeout_seconds <= 0:
         raise RuntimeError("--timeout-seconds must be positive")
+    if args.snapshot is not None and args.run is None:
+        raise RuntimeError("--snapshot requires --run")
+
+
+def resolve_snapshot(destination: Path | None) -> Path | None:
+    """Keep persisted snapshots within the operator's inherited output root."""
+    if destination is None:
+        return None
+    value = os.environ.get("EMULEBB_WORKSPACE_OUTPUT_ROOT")
+    if not value or not Path(value).is_absolute() or not Path(value).is_dir():
+        raise RuntimeError("--snapshot requires an existing absolute EMULEBB_WORKSPACE_OUTPUT_ROOT")
+    root = Path(value).resolve()
+    path = (root / destination).resolve()
+    if path == root or not path.is_relative_to(root):
+        raise RuntimeError("--snapshot must name a file below EMULEBB_WORKSPACE_OUTPUT_ROOT")
+    return path
 
 
 def main() -> int:
@@ -270,13 +365,17 @@ def main() -> int:
     args = parse_args()
     try:
         validate_timing(args)
+        destination = resolve_snapshot(args.snapshot)
         repo = resolve_repo(args.repo)
         commit_sha = resolve_commit(repo, args.commit) if args.commit else None
         deadline = time.monotonic() + args.timeout_seconds
         last_signature: tuple[Any, ...] | None = None
+        last_attempt = None
+        last_jobs: dict[int, tuple[str, tuple[str, ...]]] = {}
         stable_since = time.monotonic()
 
         while True:
+            jobs = []
             if args.pr is not None:
                 pr, checks, runs = snapshot_pr(repo, args.pr)
                 head_sha = str(pr["headRefOid"])
@@ -286,15 +385,23 @@ def main() -> int:
                 head_sha = str(run.get("head_sha") or "")
                 checks = []
                 runs = [run]
+                jobs = read_attempt_jobs(repo, run)
             else:
                 pr = None
                 head_sha = str(commit_sha)
                 checks = []
                 runs = read_head_runs(repo, head_sha)
             signature = snapshot_signature(head_sha, checks, runs)
+            if args.run is not None:
+                job_states = {job["id"]: job_state(job) for job in jobs}
+                signature += (run["run_attempt"], tuple(sorted(job_states.items())))
             now = time.monotonic()
             if signature != last_signature:
-                print_summary(checks, runs)
+                if args.run is not None:
+                    report_attempt(run, jobs, last_jobs if run["run_attempt"] == last_attempt else {}, destination)
+                    last_attempt, last_jobs = run["run_attempt"], job_states
+                else:
+                    print_summary(checks, runs)
                 last_signature = signature
                 stable_since = now
 
@@ -333,7 +440,7 @@ def main() -> int:
                 print(f"timeout: {target_name} did not reach a final Actions state", file=sys.stderr)
                 return 3
             time.sleep(args.interval_seconds)
-    except (OSError, RuntimeError) as exc:
+    except (OSError, RuntimeError, ValueError, subprocess.TimeoutExpired) as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 2
 

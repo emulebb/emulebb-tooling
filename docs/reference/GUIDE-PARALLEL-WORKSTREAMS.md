@@ -12,6 +12,10 @@ Implementation and qualification are tracked by
 
 The parent selects one independently reviewable outcome, its issue, worker,
 required repositories, reserved files, dependencies, and acceptance criteria.
+Delegate reviews that can finish independently, such as comparing retained
+artifact pins or diagnosing one failed job. Ask for a finding, an exact
+revision or run link, and a proposed next action. The parent owns shared build
+output, the merge order, and workflow retries.
 Use an isolated worktree for every repository the assignment changes. Reuse
 canonical supporting checkouts only when the assignment does not change them;
 record their exact revisions with validation evidence.
