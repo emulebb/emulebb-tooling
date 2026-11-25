@@ -101,6 +101,7 @@ or pull requests, merges work, cleans delivery state, or creates release tags.
   at most 100. Recheck after changing the target or head and before merge.
   For an open PR, compare the count with
   `gh api repos/emulebb/emulebb-rust/pulls/<number> --jq .commits`.
+  [GitHub repository rebase limits](https://docs.github.com/en/repositories/creating-and-managing-repositories/repository-limits#rebase-limits)
 - Above 100 commits, split independently reviewable outcomes into ordered PRs.
   For an indivisible batch, preserve a recovery ref and consolidate related
   commits before opening the PR. Preserve attribution, verify the resulting
