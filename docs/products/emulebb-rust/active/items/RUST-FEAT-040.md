@@ -33,6 +33,12 @@ to public search results.
   an operator-visible projection with explicit provenance.
 - Notes search exists for known files/passive replay, but it is not reconciled
   into the public search-result model with source/provenance semantics.
+- Rust trims incoming Kad notes and persists the comment without stock's
+  comment filter or description cap. Stock eMule `ac3d52e` checks both the
+  filename and description before admitting the note (`Search.cpp:1003`), then
+  caps the description at 128 UTF-16 code units (`Opcodes.h:101`). amule-org
+  aMule `c5989ec4a` retains the incoming text and filters displayed comments
+  (`Search.cpp:1738`, `KnownFile.cpp:246`).
 
 ## Why This Matters
 
@@ -77,6 +83,11 @@ making informed choices without starting a download.
       decoder, internal model, persistence, and API serialization.
 - [ ] Kad results retain file type, rating/note metadata, and one provenance-
       bearing AICH candidate when valid for the peer version.
+- [ ] Apply stock's case-insensitive substring filter to the original Kad
+      note filename and description before persistence and rating aggregation.
+      Use the stock default filters and a UTF-16-aware 128-unit description
+      cap for accepted notes. Cover mixed case, supplementary Unicode, and a
+      filtered note that also carries a rating.
 - [ ] Conflicting observations retain provenance and use documented merge rules.
 - [ ] Malformed/oversized tags are bounded without losing an otherwise valid
       result.
