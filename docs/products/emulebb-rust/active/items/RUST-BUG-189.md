@@ -23,7 +23,14 @@ Preserve versioned HighID and LowID wire identity and the source server tuple th
 Deduplicate directly reachable peers by endpoint and LowIDs by server
 endpoint plus client ID. Carry the route through durable reads and
 preparation. LowIDs use existing callback admission and never become direct
-dials. Preserve useful-part selection and requester exclusion in egress.
+dials. Classic stock eMule and aMule replies omit genuine LowIDs.
+Preserve the known server tuple of offered HighIDs, useful-part selection,
+and requester exclusion in egress. Use the distinct v4 hybrid encoding
+for a directly reachable address ending in .0.
+
+[RUST-BUG-197](RUST-BUG-197.md) tracks source replies from the upload
+queue for complete library shares. [RUST-CI-058](RUST-CI-058.md) tracks
+the negotiated tagged source extension.
 
 Verify the implementation against stock eMule `ac3d52e` and amule-org aMule `c5989ec4a`. Use stock eMule for supported wire behavior where the peers differ.
 
