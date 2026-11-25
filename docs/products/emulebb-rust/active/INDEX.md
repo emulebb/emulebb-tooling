@@ -167,6 +167,8 @@ ranking and GitHub placement.
 | [RUST-FEAT-155](items/RUST-FEAT-155.md) | Feature | Retain bounded alternate eD2K routes for one known peer |
 | [RUST-CI-056](items/RUST-CI-056.md) | Evidence | Measure aMule-inspired Kad republish seed reuse |
 | [RUST-CI-057](items/RUST-CI-057.md) | Evidence | Assess negotiated eD2K LowID rendezvous |
+| [RUST-BUG-197](items/RUST-BUG-197.md) | Bug | Serve classic source exchange from eligible upload peers |
+| [RUST-CI-058](items/RUST-CI-058.md) | Evidence | Assess negotiated extended eD2K source exchange |
 | [RUST-REF-005](items/RUST-REF-005.md) | Refactor | Decompose oversized Rust modules by responsibility |
 | [RUST-REF-006](items/RUST-REF-006.md) | Refactor | Consolidate Rust NAT and runtime safety internals |
 | [RUST-REF-007](items/RUST-REF-007.md) | Refactor | Review Rust upload hot-path performance candidates |
