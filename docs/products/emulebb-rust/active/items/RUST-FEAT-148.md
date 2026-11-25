@@ -25,10 +25,14 @@ Beta 3 requires bidirectional browsing against stock eMule and aMule. Serve flat
 - Serve on listener and established outbound sessions. Filter the live
   shareable catalog by negotiated encoding and large-file capabilities. Use
   virtual directory labels and resolve requests only against advertised labels.
+  Include eligible verified partials in the flat view, and use the stock
+  `!Incomplete Files` label for the partial-directory view.
 - Everyone is the approved Rust fresh-profile default. Friends requires an
   enrolled key and its matching verified session proof. A manually added hash
   requires trusted enrollment before it can authorize a browse. First contact
   alone cannot authenticate an existing friend. Off sets the no-view bit.
+  The operator can supply the SHA-256 fingerprint of the trusted peer's DER
+  key when creating or updating the friend. Removing the friend revokes it.
 - Match stock access denials. A prohibited flat request returns an empty list.
   Prohibited directory requests receive the shared-list denial. An authorized
   request for an unknown directory echoes the label and returns zero entries.

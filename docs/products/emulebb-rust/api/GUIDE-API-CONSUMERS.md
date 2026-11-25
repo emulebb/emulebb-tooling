@@ -112,6 +112,13 @@ through `POST /searches/{searchId}/results/{resultId}/download`. A null
 For direct admission, use `POST /downloads` with the documented
 `DownloadCreateRequest` source.
 
+Browse a connected transfer peer from its source row with
+`POST /downloads/{id}/sources/{clientId}/operations/browse`. Poll with `GET`
+and `/{searchId}` appended until collection finishes. Use `offset` and `limit`
+to page the retained files. See the
+[peer browse contract](README.md#browse-peer-shared-files) for status and friend
+enrollment.
+
 Root management uses the bounded `/library/roots` collection and immutable
 `/library/roots/{id}` resources. Creation rejects duplicate and overlapping
 paths; deletion preserves payload files. Patch `watchEnabled` to opt in to
