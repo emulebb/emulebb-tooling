@@ -147,6 +147,25 @@ ranking and GitHub placement.
 | [RUST-FEAT-066](items/RUST-FEAT-066.md) | Feature | Weight Kad user estimates by observed firewall and version ratios |
 | [RUST-FEAT-067](items/RUST-FEAT-067.md) | Feature | Define supported search text syntax and rating criteria |
 | [RUST-FEAT-068](items/RUST-FEAT-068.md) | Feature | Make non-Windows legacy encoding policy explicit |
+| [RUST-BUG-187](items/RUST-BUG-187.md) | Bug | Advance Kad bootstrap candidates across retries |
+| [RUST-BUG-188](items/RUST-BUG-188.md) | Bug | Honor negotiated eD2K extended filename requests |
+| [RUST-BUG-189](items/RUST-BUG-189.md) | Bug | Preserve eD2K SX2 hybrid IDs and callback routes |
+| [RUST-BUG-190](items/RUST-BUG-190.md) | Bug | Enforce stock eD2K large-file capabilities |
+| [RUST-BUG-191](items/RUST-BUG-191.md) | Bug | Return stock eD2K metadata replies for partial and unknown files |
+| [RUST-BUG-192](items/RUST-BUG-192.md) | Bug | Preserve Kad source UDP ports and relay eligibility |
+| [RUST-FEAT-148](items/RUST-FEAT-148.md) | Feature | Serve and browse eD2K peer shared-file lists |
+| [RUST-FEAT-149](items/RUST-FEAT-149.md) | Feature | Add opt-in IPv6 peer TCP through eD2K server discovery |
+| [RUST-FEAT-150](items/RUST-FEAT-150.md) | Feature | Learn eligible eD2K requesters as passive sources |
+| [RUST-BUG-193](items/RUST-BUG-193.md) | Bug | Apply Kad publisher trust before keyword pagination |
+| [RUST-BUG-194](items/RUST-BUG-194.md) | Bug | Retain Kad publisher filename votes in keyword search |
+| [RUST-BUG-195](items/RUST-BUG-195.md) | Bug | Bound automatic eD2K TCP search continuation |
+| [RUST-FEAT-151](items/RUST-FEAT-151.md) | Feature | Apply bounded Smart ID to automatic eD2K selection |
+| [RUST-FEAT-152](items/RUST-FEAT-152.md) | Feature | Use validated MD4 part hashes from eD2K file links |
+| [RUST-BUG-196](items/RUST-BUG-196.md) | Bug | Report unverified Kad UDP reachability as unknown |
+| [RUST-FEAT-153](items/RUST-FEAT-153.md) | Feature | Qualify Kad-buddy callback for queued LowID upload promotion |
+| [RUST-FEAT-154](items/RUST-FEAT-154.md) | Feature | Support stock and aMule eD2K link source hints |
+| [RUST-FEAT-155](items/RUST-FEAT-155.md) | Feature | Retain bounded alternate eD2K routes for one known peer |
+| [RUST-CI-056](items/RUST-CI-056.md) | Evidence | Measure aMule-inspired Kad republish seed reuse |
 | [RUST-REF-005](items/RUST-REF-005.md) | Refactor | Decompose oversized Rust modules by responsibility |
 | [RUST-REF-006](items/RUST-REF-006.md) | Refactor | Consolidate Rust NAT and runtime safety internals |
 | [RUST-REF-007](items/RUST-REF-007.md) | Refactor | Review Rust upload hot-path performance candidates |

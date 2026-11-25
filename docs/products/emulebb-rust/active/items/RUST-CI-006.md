@@ -31,6 +31,11 @@ source: Stock compatibility review and retained parity evidence audit
 
 ## Summary
 
+Include the current Beta 3 stock repairs and bidirectional peer browsing from
+[Release Scope](../../RELEASE-SCOPE.md#beta-increment-gate). Record the
+stock eMule and amule-org aMule revision, direction, packet and operator
+result for each interop witness.
+
 After the compatibility findings in this review are dispositioned, run one
 authoritative stock eMule/current-aMule/Rust campaign from a clean immutable
 Rust head and reconcile the durable documentation to that evidence. The
