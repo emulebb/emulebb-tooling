@@ -5,7 +5,7 @@ product: emulebb-rust
 phase: Phase 0
 github_issue: https://github.com/emulebb/emulebb-rust/issues/374
 title: Return stock eD2K metadata replies for partial and unknown files
-status: OPEN
+status: IN_PROGRESS
 priority: Major
 category: bug
 labels: [rust, beta3-blocker]

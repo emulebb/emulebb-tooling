@@ -20,6 +20,12 @@ source: Stock eMule and amule-org aMule protocol review
 
 Match stock v0 hash-only, v1 part status, and v2 complete-source count. Cover standalone and all supported multipacket forms through both ordinary peer sessions and source probes.
 
+The negotiated version follows the physical connection through callback
+handoff and file switches. A legacy eMule INFO without an overriding tag
+preserves the value already learned from HELLO. Honor the stock v2 count
+after the zero part-count sentinel. Verify exact bytes and the boundary of
+the next sub-opcode for each negotiated version.
+
 Verify the implementation against stock eMule `ac3d52e` and amule-org aMule `c5989ec4a`. Use stock eMule for supported wire behavior where the peers differ.
 
 Use [RUST-CI-031](RUST-CI-031.md) for deterministic fixtures and

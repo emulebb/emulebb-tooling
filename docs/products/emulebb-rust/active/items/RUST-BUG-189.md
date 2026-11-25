@@ -20,6 +20,11 @@ source: Stock eMule and amule-org aMule protocol review
 
 Preserve versioned HighID and LowID wire identity and the source server tuple through intake and response. Prove a valid hybrid .0 endpoint, callback eligibility, and SX2 v2/v4 framing.
 
+Deduplicate directly reachable peers by endpoint and LowIDs by server
+endpoint plus client ID. Carry the route through durable reads and
+preparation. LowIDs use existing callback admission and never become direct
+dials. Preserve useful-part selection and requester exclusion in egress.
+
 Verify the implementation against stock eMule `ac3d52e` and amule-org aMule `c5989ec4a`. Use stock eMule for supported wire behavior where the peers differ.
 
 Use [RUST-CI-031](RUST-CI-031.md) for deterministic fixtures and
