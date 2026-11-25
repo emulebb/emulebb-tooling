@@ -28,6 +28,16 @@ Preserve the known server tuple of offered HighIDs, useful-part selection,
 and requester exclusion in egress. Use the distinct v4 hybrid encoding
 for a directly reachable address ending in .0.
 
+After a metadata-only probe hands off its live socket, send deferred SX2
+inside the negotiated legacy multipacket for peers without file identifiers.
+aMule 3.0.1 reads the three-byte SX2 prefix but checks the original standalone
+payload against the SX1 length, so it disconnects before the hashset exchange.
+Stock eMule and current aMule accept the embedded request. Current aMule also
+accepts the standalone request after amule-org commit `b99d8c2d1`.
+Verify the standard and extended legacy envelopes and retained standalone
+behavior without restarting the connection or repeating filename and status
+requests.
+
 [RUST-BUG-197](RUST-BUG-197.md) tracks source replies from the upload
 queue for complete library shares. [RUST-CI-058](RUST-CI-058.md) tracks
 the negotiated tagged source extension.
