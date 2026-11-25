@@ -148,7 +148,11 @@ def read_attempt_jobs(repo: str, run: dict[str, Any]) -> list[dict[str, Any]]:
     attempt = run.get("run_attempt")
     if type(attempt) is not int or attempt < 1:
         raise RuntimeError("workflow metadata has no valid attempt")
-    endpoint = f"repos/{repo}/actions/runs/{run['id']}/attempts/{attempt}/jobs?per_page=100"
+    return read_jobs(f"repos/{repo}/actions/runs/{run['id']}/attempts/{attempt}/jobs?per_page=100", run["id"])
+
+
+def read_jobs(endpoint: str, run_id: int) -> list[dict[str, Any]]:
+    """Read the paginated inventory for a single run."""
     pages = run_gh(["api", "--paginate", "--slurp", endpoint])
     if not isinstance(pages, list) or not pages:
         raise RuntimeError("workflow attempt returned no job inventory")
@@ -157,10 +161,19 @@ def read_attempt_jobs(repo: str, run: dict[str, Any]) -> list[dict[str, Any]]:
         if not isinstance(page, dict) or not isinstance(page.get("jobs"), list):
             raise RuntimeError("workflow attempt returned invalid job data")
         jobs.extend(page["jobs"])
-    if any(not isinstance(job, dict) or type(job.get("id")) is not int or job.get("run_id") != run["id"]
-           or not isinstance(job.get("name"), str) for job in jobs):
+    if any(not isinstance(job, dict) or type(job.get("id")) is not int or job.get("run_id") != run_id
+           or type(job.get("run_attempt")) is not int or not isinstance(job.get("name"), str) for job in jobs):
         raise RuntimeError("workflow attempt returned invalid job identity")
     return jobs
+
+
+def previous_job_names(repo: str, run: dict[str, Any]) -> set[str]:
+    """Record prior job names once per rerun so previously skipped work stays new."""
+    if run["run_attempt"] == 1:
+        return set()
+    history = read_jobs(f"repos/{repo}/actions/runs/{run['id']}/jobs?filter=all&per_page=100", run["id"])
+    return {job["name"] for job in history if job["run_attempt"] < run["run_attempt"]
+            and job.get("conclusion") not in {None, "skipped"}}
 
 
 def job_state(job: dict[str, Any]) -> tuple[str, tuple[str, ...]]:
@@ -180,35 +193,65 @@ def elapsed_seconds(start: str | None, end: str | None, now: datetime) -> int | 
     return max(0, int((finished - started).total_seconds()))
 
 
+def job_timing(job: dict[str, Any], prior_names: set[str], now: datetime) -> tuple[str, int | None, int | None]:
+    """Distinguish queue and execution time from copied Actions job records."""
+    if job.get("conclusion") == "skipped":
+        return "skipped", None, None
+    created, started, completed = (job.get(field) for field in ("created_at", "started_at", "completed_at"))
+    # WHY: GitHub gives copied jobs new IDs, creation times and attempt numbers,
+    # while preserving the execution timestamps of the earlier attempt.
+    if created and started and datetime.fromisoformat(started) < datetime.fromisoformat(created):
+        return "reused", None, elapsed_seconds(started, completed, now)
+    disposition = "rerun" if job["name"] in prior_names else "new"
+    if job.get("status") in {"queued", "waiting", "pending", "requested"}:
+        return disposition, elapsed_seconds(created, None, now), None
+    queue = elapsed_seconds(created, started, now) if started else None
+    return disposition, queue, elapsed_seconds(started, completed, now)
+
+
 def report_attempt(run: dict[str, Any], jobs: list[dict[str, Any]],
-                   previous: dict[int, tuple[str, tuple[str, ...]]], destination: Path | None) -> None:
+                   previous: dict[int, tuple[str, tuple[str, ...]]], prior_names: set[str],
+                   destination: Path | None) -> None:
     """Print job transitions and optionally persist the same snapshot as compact JSON."""
     now = datetime.now(timezone.utc)
     elapsed = elapsed_seconds(run.get("run_started_at"),
                               run.get("updated_at") if run.get("status") == "completed" else None, now)
     counts = Counter(job_state(job)[0] for job in jobs)
     count_summary = " ".join(f"{name}={count}" for name, count in sorted(counts.items()))
+    timings = {job["id"]: job_timing(job, prior_names, now) for job in jobs}
+    disposition_counts = Counter(state for state, _, _ in timings.values())
+    max_queue = max((queue for _, queue, _ in timings.values() if queue is not None), default=None)
+    max_execution = max((execution for state, _, execution in timings.values()
+                         if state != "reused" and execution is not None), default=None)
     print(f"run {run['id']} attempt {run['run_attempt']}: {run.get('conclusion') or run['status']}"
-          f" elapsed={elapsed if elapsed is not None else '?'}s {count_summary}".rstrip(), flush=True)
+          f" elapsed={elapsed if elapsed is not None else '?'}s {count_summary}"
+          f" rerun={disposition_counts['rerun']} reused={disposition_counts['reused']}"
+          f" maxQueue={max_queue if max_queue is not None else '?'}s"
+          f" maxExecution={max_execution if max_execution is not None else '?'}s", flush=True)
     snapshot = []
     for job in jobs:
         state, steps = job_state(job)
-        duration = elapsed_seconds(job.get("started_at"), job.get("completed_at"), now)
-        snapshot.append({"id": job["id"], "name": job["name"], "state": state, "elapsedSeconds": duration,
+        disposition, queue, duration = timings[job["id"]]
+        snapshot.append({"id": job["id"], "name": job["name"], "state": state, "disposition": disposition,
+                         "queueSeconds": queue, "elapsedSeconds": duration,
                          "failedSteps": steps, "url": job.get("html_url")})
         if previous.get(job["id"]) == (state, steps) or state == "skipped":
             continue
-        if not previous and state in {"success", "neutral"}:
+        if not previous and state in {"success", "neutral"} and disposition != "rerun":
             continue
         name = job["name"].rsplit(" / ", 1)[-1]
         suffix = f" step={', '.join(steps)}" if steps else ""
         if state in RUN_FAILURE_CONCLUSIONS:
             suffix += f" {job.get('html_url') or ''}"
-        print(f"  {name}: {state} elapsed={duration if duration is not None else '?'}s{suffix}", flush=True)
+        print(f"  {name}: {state} ({disposition}) queue={queue if queue is not None else '?'}s"
+              f" execution={duration if duration is not None else '?'}s{suffix}", flush=True)
     if destination is not None:
         payload = {"id": run["id"], "attempt": run["run_attempt"], "sourceSha": run.get("head_sha"),
                    "status": run["status"], "conclusion": run.get("conclusion"), "elapsedSeconds": elapsed,
-                   "observedAt": now.isoformat(), "jobs": snapshot, "url": run.get("html_url")}
+                   "observedAt": now.isoformat(), "jobs": snapshot, "url": run.get("html_url"),
+                   "maxQueueSeconds": max_queue, "maxExecutionSeconds": max_execution,
+                   "rerunJobs": [job["name"] for job in snapshot if job["disposition"] == "rerun"],
+                   "reusedJobCount": disposition_counts["reused"]}
         destination.parent.mkdir(parents=True, exist_ok=True)
         with tempfile.TemporaryDirectory(dir=destination.parent, prefix="actions-status-") as temp:
             staged = Path(temp) / "snapshot.json"
@@ -372,6 +415,7 @@ def main() -> int:
         last_signature: tuple[Any, ...] | None = None
         last_attempt = None
         last_jobs: dict[int, tuple[str, tuple[str, ...]]] = {}
+        prior_names: set[str] = set()
         stable_since = time.monotonic()
 
         while True:
@@ -398,7 +442,10 @@ def main() -> int:
             now = time.monotonic()
             if signature != last_signature:
                 if args.run is not None:
-                    report_attempt(run, jobs, last_jobs if run["run_attempt"] == last_attempt else {}, destination)
+                    if run["run_attempt"] != last_attempt:
+                        prior_names = previous_job_names(repo, run)
+                        last_jobs = {}
+                    report_attempt(run, jobs, last_jobs, prior_names, destination)
                     last_attempt, last_jobs = run["run_attempt"], job_states
                 else:
                     print_summary(checks, runs)

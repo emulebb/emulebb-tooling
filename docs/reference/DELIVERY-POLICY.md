@@ -124,8 +124,9 @@ or pull requests, merges work, cleans delivery state, or creates release tags.
   `python scripts/gh-actions-status.py --run <run-id> --repo <owner/repo>`.
   Run monitoring reports the current attempt, elapsed time, job transitions,
   and failed steps with job links. Use `--snapshot reports/<name>.json` to
-  persist compact state under the inherited output root. One executor monitors
-  the run and owns retry decisions.
+  persist compact state under the inherited output root. The snapshot includes
+  job queue and execution times and distinguishes actual reruns from reused
+  jobs. One executor monitors the run and owns retry decisions.
   Do not use `gh run watch`, streamed logs, or
   newly improvised polling loops for routine monitoring. Use `--once` for a
   non-waiting snapshot and inspect logs only after the compact poller reports a
