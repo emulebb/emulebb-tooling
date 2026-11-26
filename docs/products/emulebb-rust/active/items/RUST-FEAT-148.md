@@ -49,7 +49,9 @@ Beta 3 requires bidirectional browsing against stock eMule and aMule. Serve flat
 
 Prove both directions against each oracle. Cover empty, denied, unsupported,
 timeout and disconnected responses, Friends enrollment and revocation,
-Unicode names, legacy large-file capability, and a 100,000-file catalog.
+Unicode names, and legacy large-file capability. A 10,000-file catalog per
+reference client is sufficient for interoperability. Qualify Rust catalog
+capacity separately at 100,000 files.
 Verify that no real filesystem paths leave the daemon and normal transfers
 remain responsive during browse activity.
 
