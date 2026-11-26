@@ -14,7 +14,7 @@ created: 2026-11-25
 source: Stock eMule and amule-org aMule protocol review
 ---
 
-> GitHub [issue #392](https://github.com/emulebb/emulebb-rust/issues/392) tracks workflow status.
+> Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb-rust/issues/392. This local document owns the durable engineering specification and evidence.
 
 # RUST-BUG-198 - Preserve Kad keyword load deferrals across restarts
 
