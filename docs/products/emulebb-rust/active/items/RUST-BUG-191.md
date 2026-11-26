@@ -20,6 +20,20 @@ source: Stock eMule and amule-org aMule protocol review
 
 Return a sized all-zero standalone availability bitmap for known incomplete multipart files. Preserve the separate payload-serving gate. Match the stock filename and status sequence for unknown files.
 
+For standalone filename requests and classic, EXT, and EXT2 multipackets,
+stock eMule admits a queued download once it has received one part's worth of
+bytes in aggregate. Include sparse blocks and exact contiguous progress in
+that total. aMule's fallback instead compares the total file size with one
+part. Retain the stock behavior and keep upload admission and payload reads
+gated on verified parts.
+
+The deterministic TCP fixture must cross from one byte below one part to
+exactly one part across two incomplete parts. Below the boundary, expect
+standalone filename silence and a file-not-found multipacket reply. At the
+boundary, expect a standalone filename answer and a zero availability bitmap
+in all multipacket forms. Standalone status keeps the two-part zero bitmap at
+both points. The file remains ineligible for upload.
+
 Verify the implementation against stock eMule `ac3d52e` and amule-org aMule `c5989ec4a`. Use stock eMule for supported wire behavior where the peers differ.
 
 Use [RUST-CI-031](RUST-CI-031.md) for deterministic fixtures and

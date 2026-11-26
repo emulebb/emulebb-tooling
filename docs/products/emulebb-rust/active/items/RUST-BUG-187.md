@@ -20,6 +20,13 @@ source: Stock eMule and amule-org aMule protocol review
 
 Keep bounded maintenance bootstrap rounds and advance across configured and restored endpoints after failed rounds. Preserve explicit single-endpoint bootstrap and no-seed behavior. Prove that a healthy eleventh endpoint can be reached after ten silent endpoints, and cover exhaustion and a changed candidate list.
 
+The loopback fixture observes UDP bootstrap requests at ten silent sockets,
+then an eleventh candidate in the next round on the same Rust node. Its reply
+must lead to a FIND_NODE request for the Rust node's own Kad ID, addressed to
+the responding contact. Stock eMule and aMule consume transient seed queues
+and stop at exhaustion. Rust's retry cursor wraps, so the loopback case does
+not establish matching exhaustion or cadence.
+
 Verify the implementation against stock eMule `ac3d52e` and amule-org aMule `c5989ec4a`. Use stock eMule for supported wire behavior where the peers differ.
 
 Use [RUST-CI-031](RUST-CI-031.md) for deterministic fixtures and
