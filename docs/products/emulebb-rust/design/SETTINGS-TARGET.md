@@ -69,7 +69,7 @@ CREATE TABLE app_settings (
 ) STRICT;
 ```
 
-All five groups and all 59 leaves are present. Each leaf has the same typed
+All five groups and all 60 leaves are present. Each leaf has the same typed
 `{mode, value}` representation:
 
 ```typescript
@@ -79,7 +79,7 @@ type SavedValue<T> = { mode: "default" | "custom"; value: T };
 The value type comes from that leaf's one authoritative definition. This is a
 bounded typed settings document, not an untyped key/value/EAV store. Generate
 value, saved and partial-update types plus field metadata/validation from the
-same definitions; do not hand-maintain three independent 59-field catalogs.
+same definitions for all three shapes.
 Reuse existing nullable-update helpers where they express presence correctly.
 
 ### Default resolution
@@ -112,7 +112,7 @@ inside the normal native envelope:
 
 ```typescript
 type SettingsReadData = {
-  saved: SavedSettings;       // five complete groups, all 59 tagged leaves
+  saved: SavedSettings;       // five complete groups, all 60 tagged leaves
   effective: SettingsValues; // five complete groups, plain typed values
   application: {
     pendingRestart: SettingKey[];
@@ -141,7 +141,7 @@ settings validator.
 
 `SettingsPartial` is a recursively partial version of the same five typed value
 groups. It must distinguish an omitted nullable leaf from an explicit null.
-`SettingKey` uses canonical dotted keys from the compiled 59-field catalog.
+`SettingKey` uses canonical dotted keys from the compiled settings catalog.
 Reject unknown current keys, duplicate reset keys, an overlap between set/reset,
 and a syntactically empty operation. Empty nested objects do not count as an
 operation. Replacing a supplied bounded array replaces that whole leaf.
@@ -243,7 +243,7 @@ The typed `DocumentTooLarge` outcome maps to HTTP 413. Prove exact serialized
 UTF-8 boundaries including JSON escaping, not just decoded character counts.
 Do not silently truncate setting values or add arbitrary per-path limits that
 regress accepted long-path support. Serialization and validation complete before
-the first SQL write. The 59-leaf catalog below is an accepted target; current
+the first SQL write. The catalog below is an accepted target; current
 code does not yet centrally enforce every target bound or application mode.
 
 ## REST, CLI and collections
@@ -304,7 +304,7 @@ new fixtures; no ad-hoc setup or parallel testing framework.
 ## Accepted leaf catalog
 
 The machine-readable inventory owns exact types, bounds, defaults, application
-modes and source evidence for these 59 leaves. Source review is at Rust
+modes and source evidence for these leaves. Source review is at Rust
 `70e595a2`; field consumers are inspected in the existing settings, daemon, core
 and ED2K modules. Source defaults do not prove every current runtime wire is
 correct. In particular, the existing connection coordinator cap is not an
@@ -381,6 +381,7 @@ a blanket JavaScript-safe-integer limit.
 | `transfers.upload.sessionTransferPercent` | `u32` | `90` | 0..100 | restart |
 | `transfers.upload.sessionTimeLimitSeconds` | `u64` | `7200` | 0..86400 | restart |
 | `transfers.upload.creditSystemEnabled` | `bool` | `true` | boolean | live |
+| `transfers.upload.sharedFilesVisibility` | `SharedFilesVisibility` | `"everyone"` | everyone / friends / off | live |
 | `storage.incomingDirectory` | `PathBuf` | `"incoming"` | profile-relative or absolute; no expansion | restart |
 | `storage.tempDirectory` | `PathBuf` | `"temp"` | profile-relative or absolute; no expansion | restart |
 | `storage.minFreeProfileBytes` | `u64` | `1073741824` | 1073741824..5497558138880 | live |

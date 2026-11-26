@@ -36,6 +36,34 @@ Sharing management is folder-tree only:
 - single-file share/unshare/delete-sharing routes are not part of the Rust
   public contract.
 
+### Browse peer shared files
+
+Use `viewSharedFiles` on a download source to check whether its connected peer
+can be browsed, and `sharedFilesRequestPending` to check whether a browse is
+already in progress. Send
+`POST /api/v1/downloads/{id}/sources/{clientId}/operations/browse` to start or
+reuse the pending request. The response contains a decimal-string `searchId`
+and `alreadyPending`.
+
+Read `GET /api/v1/downloads/{id}/sources/{clientId}/operations/browse/{searchId}`
+with `offset` and `limit`. Poll while `status` is `pending`. Each page reports
+the current `total`, applied `offset`, and `files`. Every file has a peer-supplied
+`displayName`, `fileHash`, `sizeBytes`, and a virtual `directory` label or null
+for a flat result. The other statuses end collection. A browse request belongs
+to the peer and can be read through a download that currently lists that peer.
+Results expire with the daemon's browse retention. Unknown or expired IDs
+and mismatched sources return HTTP 404.
+
+`transfers.upload.sharedFilesVisibility` applies live. It defaults to
+`everyone`, and also accepts `friends` and `off`. With `friends`, the remote
+session must prove possession of an enrolled SecureIdent key. Send the optional
+`browseKeySha256` on `POST /api/v1/friends` to enroll the 64-hexadecimal-digit
+SHA-256 fingerprint of the friend's DER-encoded public key after verifying it
+through a trusted channel. Adding a friend from a source records the peer's
+user hash and display name. Key enrollment is a separate step. An omitted
+fingerprint preserves any existing enrollment. Removing the friend removes
+enrollment.
+
 ## Conformance
 
 Change this spec in the same change as the implementation. The Rust conformance

@@ -1399,7 +1399,8 @@ paths:
     post:
       tags:
       - Downloads
-      summary: Request source browsing for one download job source.
+      summary: Request the shared-file list from a connected download source.
+      description: Starts a peer browse or returns the identifier of its pending request.
       operationId: browseDownloadSource
       responses:
         '200':
@@ -1414,6 +1415,36 @@ paths:
           $ref: '#/components/responses/MethodNotAllowedResponse'
         '409':
           $ref: '#/components/responses/ErrorResponse'
+        '500':
+          $ref: '#/components/responses/ErrorResponse'
+        '503':
+          $ref: '#/components/responses/ErrorResponse'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+  /downloads/{id}/sources/{clientId}/operations/browse/{searchId}:
+    parameters:
+    - $ref: '#/components/parameters/DownloadId'
+    - $ref: '#/components/parameters/ClientId'
+    - $ref: '#/components/parameters/DownloadSourceBrowseId'
+    get:
+      tags:
+      - Downloads
+      summary: Read peer browse progress and results for a download source.
+      operationId: getDownloadSourceBrowse
+      parameters:
+      - $ref: '#/components/parameters/Offset'
+      - $ref: '#/components/parameters/DownloadLimit'
+      responses:
+        '200':
+          $ref: '#/components/responses/DownloadSourceBrowsePageResponse'
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/ErrorResponse'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowedResponse'
         '500':
           $ref: '#/components/responses/ErrorResponse'
         '503':
@@ -3821,6 +3852,13 @@ components:
         minimum: 1
         maximum: 200
         default: 100
+    DownloadSourceBrowseId:
+      name: searchId
+      in: path
+      required: true
+      description: The peer browse identifier returned by the browse operation.
+      schema:
+        $ref: '#/components/schemas/DownloadSourceBrowseId'
     LibraryFileCursor:
       name: cursor
       in: query
@@ -4527,7 +4565,7 @@ components:
           schema:
             $ref: '#/components/schemas/DownloadSourceEnvelope'
     DownloadSourceBrowseResponse:
-      description: DownloadSourceBrowse envelope.
+      description: Peer browse started or already pending.
       headers:
         X-Contract-Version:
           $ref: '#/components/headers/ContractVersionHeader'
@@ -4535,6 +4573,15 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/DownloadSourceBrowseEnvelope'
+    DownloadSourceBrowsePageResponse:
+      description: Peer browse status and one page of currently retained files.
+      headers:
+        X-Contract-Version:
+          $ref: '#/components/headers/ContractVersionHeader'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DownloadSourceBrowsePageEnvelope'
     DownloadCommentPageResponse:
       description: DownloadCommentPage envelope.
       headers:
@@ -5501,7 +5548,7 @@ components:
                 issues:
                   type: array
                   minItems: 1
-                  maxItems: 59
+                  maxItems: 60
                   items:
                     $ref: '#/components/schemas/SettingsValidationIssue'
                   description: Independent canonical setting issues; no submitted values are echoed.
@@ -5666,8 +5713,8 @@ components:
       properties:
         fields:
           type: array
-          minItems: 59
-          maxItems: 59
+          minItems: 60
+          maxItems: 60
           items:
             $ref: '#/components/schemas/SettingSpec'
         schemas:
@@ -5808,6 +5855,13 @@ components:
             properties:
               kind:
                 const: vpnMode
+          - type: object
+            additionalProperties: false
+            required:
+            - kind
+            properties:
+              kind:
+                const: sharedFilesVisibility
           - type: object
             additionalProperties: false
             required:
@@ -6933,6 +6987,24 @@ components:
                   - mode
                   - value
                   type: object
+                sharedFilesVisibility:
+                  additionalProperties: false
+                  properties:
+                    mode:
+                      enum:
+                      - default
+                      - custom
+                      type: string
+                    value:
+                      enum:
+                      - everyone
+                      - friends
+                      - 'off'
+                      type: string
+                  required:
+                  - mode
+                  - value
+                  type: object
                 targetClientRateBytesPerSecond:
                   additionalProperties: false
                   properties:
@@ -6958,6 +7030,7 @@ components:
               - sessionTransferPercent
               - sessionTimeLimitSeconds
               - creditSystemEnabled
+              - sharedFilesVisibility
               type: object
             uploadLimitBytesPerSecond:
               additionalProperties: false
@@ -7044,6 +7117,7 @@ components:
           - transfers.upload.sessionTransferPercent
           - transfers.upload.sessionTimeLimitSeconds
           - transfers.upload.creditSystemEnabled
+          - transfers.upload.sharedFilesVisibility
           - storage.incomingDirectory
           - storage.tempDirectory
           - storage.minFreeProfileBytes
@@ -7118,6 +7192,7 @@ components:
       - transfers.upload.sessionTransferPercent
       - transfers.upload.sessionTimeLimitSeconds
       - transfers.upload.creditSystemEnabled
+      - transfers.upload.sharedFilesVisibility
       - storage.incomingDirectory
       - storage.tempDirectory
       - storage.minFreeProfileBytes
@@ -7191,6 +7266,7 @@ components:
                 - transfers.upload.sessionTransferPercent
                 - transfers.upload.sessionTimeLimitSeconds
                 - transfers.upload.creditSystemEnabled
+                - transfers.upload.sharedFilesVisibility
                 - storage.incomingDirectory
                 - storage.tempDirectory
                 - storage.minFreeProfileBytes
@@ -7220,7 +7296,7 @@ components:
             - message
             - truncated
             type: object
-          maxItems: 59
+          maxItems: 60
           type: array
           x-uniqueBy: key
         pendingRestart:
@@ -7269,6 +7345,7 @@ components:
             - transfers.upload.sessionTransferPercent
             - transfers.upload.sessionTimeLimitSeconds
             - transfers.upload.creditSystemEnabled
+            - transfers.upload.sharedFilesVisibility
             - storage.incomingDirectory
             - storage.tempDirectory
             - storage.minFreeProfileBytes
@@ -7286,7 +7363,7 @@ components:
             - security.tcpErrorFloodDetection.intervalSeconds
             - security.tcpErrorFloodDetection.threshold
             type: string
-          maxItems: 59
+          maxItems: 60
           type: array
           uniqueItems: true
       required:
@@ -7612,6 +7689,12 @@ components:
                   minimum: 0
                   multipleOf: 1
                   type: integer
+                sharedFilesVisibility:
+                  enum:
+                  - everyone
+                  - friends
+                  - 'off'
+                  type: string
                 targetClientRateBytesPerSecond:
                   maximum: 4398046510080
                   minimum: 1
@@ -7683,6 +7766,7 @@ components:
             - transfers.upload.sessionTransferPercent
             - transfers.upload.sessionTimeLimitSeconds
             - transfers.upload.creditSystemEnabled
+            - transfers.upload.sharedFilesVisibility
             - storage.incomingDirectory
             - storage.tempDirectory
             - storage.minFreeProfileBytes
@@ -7700,7 +7784,7 @@ components:
             - security.tcpErrorFloodDetection.intervalSeconds
             - security.tcpErrorFloodDetection.threshold
             type: string
-          maxItems: 59
+          maxItems: 60
           type: array
           uniqueItems: true
         set:
@@ -8022,6 +8106,12 @@ components:
                       minimum: 0
                       multipleOf: 1
                       type: integer
+                    sharedFilesVisibility:
+                      enum:
+                      - everyone
+                      - friends
+                      - 'off'
+                      type: string
                     targetClientRateBytesPerSecond:
                       maximum: 4398046510080
                       minimum: 1
@@ -8100,6 +8190,7 @@ components:
                     - transfers.upload.sessionTransferPercent
                     - transfers.upload.sessionTimeLimitSeconds
                     - transfers.upload.creditSystemEnabled
+                    - transfers.upload.sharedFilesVisibility
                     - storage.incomingDirectory
                     - storage.tempDirectory
                     - storage.minFreeProfileBytes
@@ -8129,7 +8220,7 @@ components:
                 - message
                 - truncated
                 type: object
-              maxItems: 59
+              maxItems: 60
               type: array
               x-uniqueBy: key
             pendingRestart:
@@ -8178,6 +8269,7 @@ components:
                 - transfers.upload.sessionTransferPercent
                 - transfers.upload.sessionTimeLimitSeconds
                 - transfers.upload.creditSystemEnabled
+                - transfers.upload.sharedFilesVisibility
                 - storage.incomingDirectory
                 - storage.tempDirectory
                 - storage.minFreeProfileBytes
@@ -8195,7 +8287,7 @@ components:
                 - security.tcpErrorFloodDetection.intervalSeconds
                 - security.tcpErrorFloodDetection.threshold
                 type: string
-              maxItems: 59
+              maxItems: 60
               type: array
               uniqueItems: true
           required:
@@ -8588,6 +8680,12 @@ components:
                       minimum: 0
                       multipleOf: 1
                       type: integer
+                    sharedFilesVisibility:
+                      enum:
+                      - everyone
+                      - friends
+                      - 'off'
+                      type: string
                     targetClientRateBytesPerSecond:
                       maximum: 4398046510080
                       minimum: 1
@@ -8601,6 +8699,7 @@ components:
                   - sessionTransferPercent
                   - sessionTimeLimitSeconds
                   - creditSystemEnabled
+                  - sharedFilesVisibility
                   type: object
                 uploadLimitBytesPerSecond:
                   maximum: 4398046509056
@@ -9692,6 +9791,24 @@ components:
                       - mode
                       - value
                       type: object
+                    sharedFilesVisibility:
+                      additionalProperties: false
+                      properties:
+                        mode:
+                          enum:
+                          - default
+                          - custom
+                          type: string
+                        value:
+                          enum:
+                          - everyone
+                          - friends
+                          - 'off'
+                          type: string
+                      required:
+                      - mode
+                      - value
+                      type: object
                     targetClientRateBytesPerSecond:
                       additionalProperties: false
                       properties:
@@ -9717,6 +9834,7 @@ components:
                   - sessionTransferPercent
                   - sessionTimeLimitSeconds
                   - creditSystemEnabled
+                  - sharedFilesVisibility
                   type: object
                 uploadLimitBytesPerSecond:
                   additionalProperties: false
@@ -10169,6 +10287,12 @@ components:
                   minimum: 0
                   multipleOf: 1
                   type: integer
+                sharedFilesVisibility:
+                  enum:
+                  - everyone
+                  - friends
+                  - 'off'
+                  type: string
                 targetClientRateBytesPerSecond:
                   maximum: 4398046510080
                   minimum: 1
@@ -10182,6 +10306,7 @@ components:
               - sessionTransferPercent
               - sessionTimeLimitSeconds
               - creditSystemEnabled
+              - sharedFilesVisibility
               type: object
             uploadLimitBytesPerSecond:
               maximum: 4398046509056
@@ -12955,6 +13080,10 @@ components:
           type: string
           maxLength: 128
           pattern: '^[^\x00-\x1F\x7F-\x9F]*$'
+        browseKeySha256:
+          type: string
+          pattern: '^[0-9A-Fa-f]{64}$'
+          description: SHA-256 fingerprint of the friend's SecureIdent DER public key, verified by the operator before enrollment. Omission leaves any existing enrollment unchanged.
     LogListEnvelope:
       unevaluatedProperties: false
       allOf:
@@ -13642,8 +13771,10 @@ components:
           minimum: 0
         viewSharedFiles:
           type: boolean
+          description: Whether a connected peer session currently supports browsing.
         sharedFilesRequestPending:
           type: boolean
+          description: Whether a browse request is pending for this peer.
     DownloadFileNameObservation:
       type: object
       additionalProperties: false
@@ -13709,7 +13840,12 @@ components:
         alreadyPending:
           type: boolean
         searchId:
-          $ref: "#/components/schemas/SearchId"
+          $ref: '#/components/schemas/DownloadSourceBrowseId'
+    DownloadSourceBrowseId:
+      type: string
+      pattern: '^[1-9][0-9]{0,19}$'
+      x-maximumDecimalValue: '18446744073709551615'
+      description: Positive decimal u64 string for a peer browse retained by this daemon.
     DownloadSourceBrowseEnvelope:
       type: object
       additionalProperties: false
@@ -13721,6 +13857,54 @@ components:
           $ref: '#/components/schemas/DownloadSourceBrowseResult'
         meta:
           $ref: '#/components/schemas/DownloadMeta'
+    DownloadSourceBrowsePageEnvelope:
+      type: object
+      additionalProperties: false
+      required: [data, meta]
+      properties:
+        data:
+          $ref: '#/components/schemas/DownloadSourceBrowsePage'
+        meta:
+          $ref: '#/components/schemas/DownloadMeta'
+    DownloadSourceBrowsePage:
+      type: object
+      additionalProperties: false
+      required: [searchId, status, total, offset, files]
+      properties:
+        searchId:
+          $ref: '#/components/schemas/DownloadSourceBrowseId'
+        status:
+          type: string
+          enum: [pending, complete, denied, timeout, disconnected, malformed, limit]
+        total:
+          type: integer
+          minimum: 0
+          description: Number of files currently retained for this browse. The total can grow while pending.
+        offset:
+          type: integer
+          minimum: 0
+          description: Applied offset, clamped to the number of retained files.
+        files:
+          type: array
+          maxItems: 200
+          items:
+            $ref: '#/components/schemas/DownloadSourceBrowseFile'
+    DownloadSourceBrowseFile:
+      type: object
+      additionalProperties: false
+      required: [directory, fileHash, displayName, sizeBytes]
+      properties:
+        directory:
+          type: [string, 'null']
+          description: Virtual directory label supplied by the peer, or null for a flat response.
+        fileHash:
+          type: string
+          pattern: '^[0-9a-f]{32}$'
+        displayName:
+          type: string
+        sizeBytes:
+          type: integer
+          minimum: 0
     DownloadComment:
       type: object
       additionalProperties: false

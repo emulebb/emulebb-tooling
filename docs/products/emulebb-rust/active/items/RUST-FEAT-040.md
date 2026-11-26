@@ -20,22 +20,25 @@ source: Stock compatibility review against eMule 0.72a and current aMule 3.1
 
 ## Summary
 
-Preserve standard search metadata from ED2K server and Kad decoders through the
-internal model, persistence, and Rust-native API. Rust publishes media metadata
-but drops much of the equivalent inbound data; Kad mapping additionally forces
-unknown file type, zero rating, and empty AICH. Current aMule also attaches
-available notes/ratings to public search results.
+Complete the remaining notes and rating projection, cross-origin merge rules,
+and decoder-to-API evidence. Current aMule attaches available notes and ratings
+to public search results.
 
 ## Current State
 
 - Sharing/publishing paths extract and emit media metadata.
-- `crates/emulebb-ed2k/src/ed2k_server/result_decoder.rs` retains basic type,
-  rating, and AICH data but does not surface standard media tags such as artist,
-  album, title, length, bitrate, and codec.
-- `crates/emulebb-core/src/search_query.rs` maps Kad results with unknown file
-  type, zero rating, and no AICH candidate.
+- The server decoder retains media fields, and the eD2K and Kad projections
+  carry media, file type, and AICH evidence into search observations.
+- The Kad keyword projection still sets a zero rating. Notes and ratings need
+  an operator-visible projection with explicit provenance.
 - Notes search exists for known files/passive replay, but it is not reconciled
   into the public search-result model with source/provenance semantics.
+- Rust trims incoming Kad notes and persists the comment without stock's
+  comment filter or description cap. Stock eMule `ac3d52e` checks both the
+  filename and description before admitting the note (`Search.cpp:1003`), then
+  caps the description at 128 UTF-16 code units (`Opcodes.h:101`). amule-org
+  aMule `c5989ec4a` retains the incoming text and filters displayed comments
+  (`Search.cpp:1738`, `KnownFile.cpp:246`).
 
 ## Why This Matters
 
@@ -80,6 +83,11 @@ making informed choices without starting a download.
       decoder, internal model, persistence, and API serialization.
 - [ ] Kad results retain file type, rating/note metadata, and one provenance-
       bearing AICH candidate when valid for the peer version.
+- [ ] Apply stock's case-insensitive substring filter to the original Kad
+      note filename and description before persistence and rating aggregation.
+      Use the stock default filters and a UTF-16-aware 128-unit description
+      cap for accepted notes. Cover mixed case, supplementary Unicode, and a
+      filtered note that also carries a rating.
 - [ ] Conflicting observations retain provenance and use documented merge rules.
 - [ ] Malformed/oversized tags are bounded without losing an otherwise valid
       result.

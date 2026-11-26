@@ -96,11 +96,19 @@ or pull requests, merges work, cleans delivery state, or creates release tags.
 - `emulebb-rust` is rebase-merge only. Merge its pull requests with
   `gh pr merge <number> --rebase --delete-branch`; never probe or retry that
   repository with `--merge` because merge commits are disabled.
+- Before opening a rebase PR, fetch its actual remote target and run
+  `git rev-list --count <remote-target>..<proposed-head>`. The count must be
+  at most 100. Recheck after changing the target or head and before merge.
+  For an open PR, compare the count with
+  `gh api repos/emulebb/emulebb-rust/pulls/<number> --jq .commits`.
+  [GitHub repository rebase limits](https://docs.github.com/en/repositories/creating-and-managing-repositories/repository-limits#rebase-limits)
+- Above 100 commits, split independently reviewable outcomes into ordered PRs.
+  For an indivisible batch, preserve a recovery ref and consolidate related
+  commits before opening the PR. Preserve attribution, verify the resulting
+  tree, and validate the final head. Rewriting a published branch still follows
+  the applicable authorization and exact recovery and lease rules.
 - At PR intake, confirm the permitted merge method, required contexts, and
   exact cross-repository prerequisites before starting expensive validation.
-  Compare the server's commit count with the merge method's limits. Rust PRs
-  above GitHub's 100-commit rebase limit need an agreed history strategy first.
-  Read the count with `gh api repos/emulebb/emulebb-rust/pulls/<number> --jq .commits`.
 - For changes to Rust release artifact formats, producer pins, or candidate
   validators, record Builder's `replay-rust-nightly` result and exact input
   identities. If those inputs predate a changed producer pin, qualify the

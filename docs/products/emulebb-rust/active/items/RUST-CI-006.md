@@ -31,6 +31,11 @@ source: Stock compatibility review and retained parity evidence audit
 
 ## Summary
 
+Include the current Beta 3 stock repairs and bidirectional peer browsing from
+[Release Scope](../../RELEASE-SCOPE.md#beta-increment-gate). Record the
+stock eMule and amule-org aMule revision, direction, packet and operator
+result for each interop witness.
+
 After the compatibility findings in this review are dispositioned, run one
 authoritative stock eMule/current-aMule/Rust campaign from a clean immutable
 Rust head and reconcile the durable documentation to that evidence. The
@@ -140,7 +145,7 @@ The complete audit collection was reconciled against current source and
 owning issues. The following are retained findings, corrected assumptions,
 or required evidence for this owner; inspection does not replace runtime proof.
 
-- `emulebb-rust-prompt_audit_findings_protocol_01.md` section 4.1 / 3 (existing): Browse refusal and truthful no-view advertisement remain. This is a documentation/scope gap, not an interoperability defect or approval to implement peer browsing.
+- `emulebb-rust-prompt_audit_findings_protocol_01.md` section 4.1 / 3 recorded the earlier browse refusal. [RUST-FEAT-148](RUST-FEAT-148.md) now owns bidirectional browsing and the no-view bit for Off. Current-head evidence must cover catalog replies and visibility changes.
 - `emulebb-rust-prompt_audit_findings_protocol_01.md` section 4.2 (design): The sole connect-options producer supports and optionally requests crypto; no supported require-crypto setting exists. Do not implement a hypothetical feature to eliminate a dead future path.
 - `emulebb-rust-prompt_audit_findings_protocol_01.md` section 9.1 / 10.3 (existing): Static audit is not candidate runtime proof. Reuse existing candidate certification and current-head evidence owners; other platforms are parallel and non-gating for the user's Beta 3 scope.
 - `emulebb-rust-prompt_audit_findings_kad-routing-maint.md` section 4.2 (existing): The built-in fallback still exists. The existing SQLite routing/bootstrap item explicitly preserves built-in seeds and owns bootstrap provenance; scope reconciliation should record this headless operational choice.
@@ -156,8 +161,8 @@ or required evidence for this owner; inspection does not replace runtime proof.
 
 ### Scoped Follow-up Acceptance
 
-- [ ] Reconcile refusal with omission registry and release scope under current-head evidence.
-- [ ] Retain truthful capability advertisement and stock-shaped refusal.
+- [ ] Reconcile enabled peer browsing and Off with the omission registry and release scope under current-head evidence.
+- [ ] Verify successful flat and directory replies, capability advertisement, and stock-shaped access denials.
 - [ ] Document conservative supported posture during registry reconciliation.
 - [ ] Revisit hello/login require bits only with an approved require-crypto setting.
 - [ ] Retain exact revisions and artifacts for required Windows/Linux candidate workflows.

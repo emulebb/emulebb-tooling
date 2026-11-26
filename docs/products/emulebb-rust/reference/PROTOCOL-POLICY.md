@@ -13,10 +13,12 @@ capabilities, network identity, protocol state machines, or interoperability.
   buffering, batching, or observability only when supported stock interactions
   retain their required external semantics.
 - Broadband-oriented async I/O is the baseline, not a compatibility toggle.
-  IPv6 remains parked and the protocol cores stay IPv4-only.
+  The Beta 3 protocol cores stay IPv4-only. After Beta 3,
+  [RUST-FEAT-149](../active/items/RUST-FEAT-149.md) owns opt-in peer TCP over
+  IPv6 using the aMule and eD2K-server negotiated source path.
 - Source Exchange is intentionally SX2-only. Absent `OP_REQUESTSOURCES` and
   `OP_ANSWERSOURCES` live paths are not regressions.
-- Peer chat/captcha, peer preview, IPv6, and the stricter stock LAN-mode Kad
+- Peer chat/captcha, peer preview, and the stricter stock LAN-mode Kad
   flood distinction remain approved permanent omissions. Do not reopen them as
   incidental parity work.
 - A default-on negotiated extension requires an explicit registry contract.

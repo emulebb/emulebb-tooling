@@ -3,12 +3,12 @@
   "status": "ACCEPTED_ROUND_ONE_TARGET_RUNTIME_INTEGRATION_PENDING",
   "ownerIssue": "https://github.com/emulebb/emulebb-rust/issues/297",
   "reviewSourceRevision": "70e595a2",
-  "defaultStatus": "PM accepted 59 public leaves on 2026-11-15; source-backed defaults except explicit adaptive concurrency default null and tempDirectory=temp. This is the implementation target, not runtime qualification.",
+  "defaultStatus": "PM accepted 59 public leaves on 2026-11-15. RUST-FEAT-148 adds the 60th leaf, peer shared-file visibility, defaulting to everyone. The catalog retains the source-backed defaults plus the accepted adaptive concurrency and temporary directory defaults.",
   "naming": "TOML/Rust/SQL snake_case, JSON camelCase, URL kebab-case. Current-contract validation only; no aliases, compatibility shims, fallback keys, remapping, retired-input handling or removed-name tests.",
   "commonContract": {
     "definitionOwner": "emulebb-settings",
     "persistenceOwner": "emulebb-metadata",
-    "productStorage": "one singleton app_settings row: positive checked revision and complete typed SavedSettings JSON document with all five groups and 59 mode/value leaves",
+    "productStorage": "one singleton app_settings row: positive checked revision and complete typed SavedSettings JSON document with all five groups and 60 mode/value leaves",
     "publicSettingsResource": "/api/v1/settings",
     "snapshotRead": "coherent resolved saved/default markers, plain admitted effective values, application pendingRestart/failed and exact decimal-string meta.settingsRevision under one publication boundary",
     "validation": "typed whole-candidate validation with documented integer ranges; JSON numbers may exceed JavaScript exact-integer precision; no silent clamping",
@@ -46,7 +46,7 @@
     "serializedSavedDocumentMaximumBytes": 131072,
     "sizeConstraint": "saved 128KiB is a whole-candidate serialized UTF-8 limit, not a guarantee every individually valid leaf combination fits; validate before SQL and test escaping/byte boundaries; typed DocumentTooLarge maps HTTP 413; no silent truncation or arbitrary new per-path cap",
     "applicationStatusBounds": {
-      "maximumFailures": 59,
+      "maximumFailures": 60,
       "failureFields": [
         "key",
         "code",
@@ -58,7 +58,7 @@
       "exceptions": "no raw unbounded exception echo",
       "scope": "read snapshot contains resolved default-marked saved values, admitted effective values and bounded application status; surface default metadata is separate"
     },
-    "definitionGeneration": "one typed definition source derives value/saved/partial DTOs, metadata and validation; reuse existing nullable helpers, no independent 59-field maps",
+    "definitionGeneration": "one typed definition source derives value/saved/partial DTOs, metadata and validation",
     "defaultEvolution": "review valid custom/default cross-field combinations for future compiled-default changes; no automatic clamping or custom-value discard",
     "commitUncertainty": "an uncertain worker/commit outcome is explicitly unknown until recovered; never report uncertainty as proven rollback"
   },
@@ -1217,6 +1217,34 @@
       "publicVisibility": "normal",
       "secret": false,
       "sensitivity": "operator",
+      "application": "live",
+      "domain": "transfers",
+      "path": "transfers.upload.sharedFilesVisibility",
+      "type": "enum",
+      "unit": "none",
+      "default": "everyone",
+      "validation": {
+        "kind": "enum",
+        "values": [
+          "everyone",
+          "friends",
+          "off"
+        ]
+      },
+      "runtimeOwner": "emulebb-ed2k::Ed2kTransferRuntime",
+      "acceptance": "RUST-FEAT-148 peer shared-file visibility and verified friend enrollment",
+      "definitionSource": "crates/emulebb-settings/src/product/catalog.rs",
+      "boundsEvidence": "typed SharedFilesVisibility variants and compiled settings-surface artifact",
+      "rustType": "SharedFilesVisibility",
+      "consumerSource": "crates/emulebb-ed2k/src/ed2k_transfer.rs"
+    },
+    {
+      "storage": "SQLite typed settings with explicit default/custom state",
+      "definitionOwner": "emulebb-settings",
+      "persistenceOwner": "emulebb-metadata",
+      "publicVisibility": "normal",
+      "secret": false,
+      "sensitivity": "operator",
       "application": "restart",
       "domain": "storage",
       "path": "storage.incomingDirectory",
@@ -2145,5 +2173,5 @@
     "getOutput": "resolved value only; diagnostics stderr",
     "storage": "SQLite application settings only"
   },
-  "acceptedLeafCount": 59
+  "acceptedLeafCount": 60
 }

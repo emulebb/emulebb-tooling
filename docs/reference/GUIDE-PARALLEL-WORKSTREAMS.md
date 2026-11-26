@@ -12,6 +12,9 @@ Implementation and qualification are tracked by
 
 The parent selects one independently reviewable outcome, its issue, worker,
 required repositories, reserved files, dependencies, and acceptance criteria.
+Plan the commit budget before combining worker contributions. Run the
+[rebase PR commit-count preflight](DELIVERY-POLICY.md#pull-requests-and-completion)
+against the actual target and proposed batch head before opening the PR.
 Delegate reviews that can finish independently, such as comparing retained
 artifact pins or diagnosing one failed job. Ask for a finding, an exact
 revision or run link, and a proposed next action. The parent owns shared build

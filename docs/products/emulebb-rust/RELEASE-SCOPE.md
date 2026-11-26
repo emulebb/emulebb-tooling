@@ -227,7 +227,7 @@ set is complete.
 | Registry ID | Disposition | Compatibility contract |
 |---|---|---|
 | `sx1-live-source-exchange` | Permanent omission | SX2 only; SX1 is unadvertised and live SX1 packets are ignored. |
-| `ipv6-ed2k-kad` | Permanent omission | eD2K, Kad, peer transfer, NAT, and bootstrap remain IPv4-only. |
+| `ipv6-ed2k-kad` | Beta 3 omission | The Beta 3 data plane remains IPv4-only. [RUST-FEAT-149](active/items/RUST-FEAT-149.md) owns post-Beta 3 IPv6 peer TCP. |
 | `peer-chat-messaging` | Permanent omission | No peer chat/captcha surface; captcha is unadvertised and bounded unsolicited packets are tolerated. |
 | `ed2k-preview` | Permanent omission | Preview is unadvertised; Rust neither requests nor answers peer media previews. |
 | `kad-flood-lan-exemption` | Permanent omission | LAN/loopback stays flood-exempt; public peers retain stock flood controls. |
@@ -283,6 +283,12 @@ complete. RUST-CI-009 owns the current Beta 3 candidate certification and
 depends on RUST-CI-006 current-head parity evidence, required hosted CI, complete
 dry-run release assembly, packaged lifecycle checks, and a retained manifest of
 exact revisions and artifact digests.
+
+Beta 3 also requires the confirmed stock peer-request, SX2, large-file,
+standalone file-status, Kad bootstrap and Kad source-publication fixes
+([RUST-BUG-187](active/items/RUST-BUG-187.md) through
+[RUST-BUG-192](active/items/RUST-BUG-192.md)), and bidirectional
+[peer share browsing](active/items/RUST-FEAT-148.md).
 
 For Beta 3, only Windows/Linux native x64 and ARM64 packages and the required
 Linux OCI variants are mandatory platform deliverables. macOS, Android/Fire
@@ -355,7 +361,7 @@ implementation and its actual qualification still obey their phase gates.
 - Internal category-rule, scheduling, media-selection, or post-processing
   engines.
 - Coordinator or federation behavior before an explicit later product phase.
-- Proxy transports, IPv6 eD2K/Kad, uTP peer transport, collection-file import/
+- Proxy transports, native IPv6 Kad or eD2K server transport, uTP peer transport, collection-file import/
   export, peer chat/captcha, peer preview, SX1, single-file sharing, or
   non-recursive shared roots.
 - Compatibility layers for retired beta API, configuration, or schema shapes.
