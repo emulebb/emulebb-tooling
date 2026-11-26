@@ -26,6 +26,20 @@ preserves the value already learned from HELLO. Honor the stock v2 count
 after the zero part-count sentinel. Verify exact bytes and the boundary of
 the next sub-opcode for each negotiated version.
 
+Stock eMule and aMule readers use the declared eD2K part count for validation
+and the real data part count for bitmap width. At an exact multiple of eight
+data parts, the virtual EOF bit alone would need another byte. Omit that
+byte from outgoing filename requests so the complete-source count and next
+sub-opcode stay aligned. Keep decoding the wider bitmap used by historical
+senders. Use length for standalone requests and full suffix framing for
+multipackets. Prefer the native reader width when both interpretations are
+valid. Normal file-status replies use their existing bitmap layout.
+
+Qualify the boundary with a 77,824,000-byte transfer from each native client
+and check the probe's filename bytes and matching metadata response. The
+stock receiver rejects the misaligned sub-opcode. aMule can accept that
+frame while reading the wrong complete-source count.
+
 Verify the implementation against stock eMule `ac3d52e` and amule-org aMule `c5989ec4a`. Use stock eMule for supported wire behavior where the peers differ.
 
 Use [RUST-CI-031](RUST-CI-031.md) for deterministic fixtures and
