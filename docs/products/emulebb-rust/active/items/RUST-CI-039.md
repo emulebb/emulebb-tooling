@@ -43,6 +43,11 @@ Static source/spec review; no validation executed.
 
 - [ ] Measure deterministic startup-to-first-request latency under a stated target.
 - [ ] Cover hostname resolution and UDP source discovery.
+- [ ] Compare a newly learned hostname server with delayed first UDP status,
+      a silent server, and a server with previously verified legacy flags.
+      Measure whether capability-sensitive source discovery loses eligible
+      large-file requests. Confirm bounded progress and preserve safe fallback.
+      [aMule comparison](https://github.com/amule-org/amule/pull/2637)
 - [ ] Retain reconnect/rate-limit safety.
 
 ## Dependencies And Coordination
