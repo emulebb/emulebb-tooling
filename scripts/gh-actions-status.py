@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import subprocess
 import sys
 import tempfile
@@ -184,6 +185,34 @@ def job_state(job: dict[str, Any]) -> tuple[str, tuple[str, ...]]:
     return state, failed
 
 
+def failure_kind(job: dict[str, Any]) -> str | None:
+    """Classify only failures with a useful signal in the job metadata."""
+    state, steps = job_state(job)
+    first = steps[0].lower() if steps else ""
+    if state == "skipped":
+        return "skipped"
+    if state in {"queued", "waiting", "pending", "requested"} and not job.get("runner_id"):
+        return "waiting-for-runner"
+    if state in {"startup_failure", "timed_out"} and not job.get("runner_id") and not steps:
+        return "runner-startup"
+    if state not in RUN_FAILURE_CONCLUSIONS:
+        return None
+    if first.startswith(("download ", "install ", "restore ", "set up ")):
+        return "dependency-setup"
+    if any(word in first for word in ("test", "smoke", "conformance")):
+        return "product-or-test"
+    return "unknown"
+
+
+def write_snapshot(destination: Path, payload: dict[str, Any]) -> None:
+    """Replace the snapshot only once complete JSON is available."""
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    with tempfile.TemporaryDirectory(dir=destination.parent, prefix="actions-status-") as temp:
+        staged = Path(temp) / "snapshot.json"
+        staged.write_text(json.dumps(payload, separators=(",", ":")) + "\n", encoding="utf-8", newline="\n")
+        staged.replace(destination)
+
+
 def elapsed_seconds(start: str | None, end: str | None, now: datetime) -> int | None:
     """Use the reported start and end rather than the polling interval."""
     if not start:
@@ -234,7 +263,8 @@ def report_attempt(run: dict[str, Any], jobs: list[dict[str, Any]],
         disposition, queue, duration = timings[job["id"]]
         snapshot.append({"id": job["id"], "name": job["name"], "state": state, "disposition": disposition,
                          "queueSeconds": queue, "elapsedSeconds": duration,
-                         "failedSteps": steps, "url": job.get("html_url")})
+                         "failedSteps": steps, "firstFailedStep": steps[0] if steps else None,
+                         "failureKind": failure_kind(job), "url": job.get("html_url")})
         if previous.get(job["id"]) == (state, steps) or state == "skipped":
             continue
         if not previous and state in {"success", "neutral"} and disposition != "rerun":
@@ -252,11 +282,91 @@ def report_attempt(run: dict[str, Any], jobs: list[dict[str, Any]],
                    "maxQueueSeconds": max_queue, "maxExecutionSeconds": max_execution,
                    "rerunJobs": [job["name"] for job in snapshot if job["disposition"] == "rerun"],
                    "reusedJobCount": disposition_counts["reused"]}
-        destination.parent.mkdir(parents=True, exist_ok=True)
-        with tempfile.TemporaryDirectory(dir=destination.parent, prefix="actions-status-") as temp:
-            staged = Path(temp) / "snapshot.json"
-            staged.write_text(json.dumps(payload, separators=(",", ":")) + "\n", encoding="utf-8", newline="\n")
-            staged.replace(destination)
+        write_snapshot(destination, payload)
+
+
+def retry_job(repo: str, run_id: int, attempt: int, job_id: int) -> None:
+    """Request one job rerun after verifying its current failed attempt."""
+    run = read_run(repo, run_id)
+    if run["run_attempt"] != attempt or run["status"] != "completed":
+        raise RuntimeError("Retry requires the requested run attempt to be current and completed")
+    job = next((row for row in read_attempt_jobs(repo, run) if row["id"] == job_id), None)
+    if not job or job["run_attempt"] != attempt or job.get("conclusion") not in RUN_FAILURE_CONCLUSIONS:
+        raise RuntimeError("Retry requires a failed job from that exact attempt")
+    try:
+        run_gh(["api", "--method", "POST", f"repos/{repo}/actions/jobs/{job_id}/rerun"], json_output=False)
+    except (RuntimeError, OSError, subprocess.TimeoutExpired) as error:
+        # WHY: an unsuccessful response can follow an accepted mutation.
+        current = read_run(repo, run_id)
+        if current["run_attempt"] <= attempt and current["status"] == "completed":
+            raise RuntimeError(
+                "Retry acceptance is unresolved. Observe the run before issuing any further request"
+            ) from error
+    print(f"Observe the retry at {run['html_url']}")
+
+
+def verify_nightly_publication(repo: str, run: dict[str, Any], jobs: list[dict[str, Any]], tag: str) -> bool:
+    """Require executed publication jobs and a final release on the producer commit."""
+    if run.get("path") != ".github/workflows/nightly.yml" or not re.fullmatch(r"rust-v[0-9][A-Za-z0-9.+-]*", tag):
+        raise RuntimeError("Publication verification requires a Nightly run and exact Rust tag")
+    expected = {"Publish both verified container variants", "Publish verified native release assets",
+                "Advance both verified nightly image channels"}
+    now = datetime.now(timezone.utc)
+    executed = {job["name"].rsplit(" / ", 1)[-1] for job in jobs
+                if job.get("conclusion") == "success" and job.get("started_at")
+                and job_timing(job, set(), now)[0] != "reused"}
+    if not expected <= executed:
+        print("Publication skipped or incomplete. Expected publication jobs did not all pass.")
+        return False
+    release = run_gh(["api", f"repos/{repo}/releases/tags/{tag}"])
+    commit = run_gh(["api", f"repos/{repo}/commits/{tag}"])
+    assets = release["assets"]
+    if (release["draft"] or not assets or commit["sha"] != run["head_sha"]
+            or any(not re.fullmatch(r"sha256:[0-9a-f]{64}", asset.get("digest") or "") for asset in assets)):
+        raise RuntimeError("Final release bytes or tag do not match the Nightly source")
+    print(f"Verified Nightly publication with {len(assets)} digested assets {release['html_url']}")
+    return True
+
+
+def dispatch_diagnostic(repo: str, request_id: str, inputs: list[str]) -> None:
+    """Send each correlated ARM64 diagnostic dispatch at most once locally."""
+    if repo != "emulebb/emulebb-rust" or not re.fullmatch(r"[a-f0-9]{32}", request_id):
+        raise RuntimeError("Select emulebb/emulebb-rust and a 32-character lowercase hexadecimal request ID")
+    required = {"run_id", "attempt", "source_sha", "artifact_name", "artifact_sha256", "harness_sha"}
+    pairs = dict(item.split("=", 1) for item in inputs)
+    if set(pairs) != required or len(pairs) != len(inputs) or not all(pairs.values()):
+        raise RuntimeError(f"Supply each diagnostic input exactly once: {', '.join(sorted(required))}")
+    endpoint = f"repos/{repo}/actions/workflows/arm64-package-replay.yml"
+    title = f"ARM64 package replay {request_id}"
+    receipt = resolve_snapshot(Path("reports/actions-dispatch") / f"{request_id}.json")
+
+    def find_run() -> dict[str, Any] | None:
+        runs = run_gh(["api", f"{endpoint}/runs?event=workflow_dispatch&branch=main&per_page=100"])
+        matches = [run for run in runs["workflow_runs"] if run["display_title"] == title]
+        if len(matches) > 1:
+            raise RuntimeError("More than one Actions run has the diagnostic request ID")
+        return matches[0] if matches else None
+
+    found = find_run()
+    if found:
+        print(found["html_url"])
+        return
+    receipt.parent.mkdir(parents=True, exist_ok=True)
+    try:
+        with receipt.open("x", encoding="utf-8") as stream:
+            json.dump({"workflow": endpoint, "requestId": request_id, "inputs": pairs}, stream)
+    except FileExistsError as exc:
+        raise RuntimeError("Dispatch was already attempted. Observe Actions for this request ID") from exc
+    arguments = ["api", "--method", "POST", f"{endpoint}/dispatches", "-f", "ref=main"]
+    for name, value in {**pairs, "request_id": request_id}.items():
+        arguments.extend(["-f", f"inputs[{name}]={value}"])
+    try:
+        run_gh(arguments, json_output=False)
+    except (RuntimeError, OSError, subprocess.TimeoutExpired) as exc:
+        found = find_run()
+        if not found:
+            raise RuntimeError("Dispatch acceptance is unresolved. Observe Actions using the same request ID") from exc
+    print(found["html_url"] if found else f"Dispatched {title}")
 
 
 def check_bucket(check: dict[str, Any]) -> str:
@@ -366,9 +476,14 @@ def parse_args() -> argparse.Namespace:
     target.add_argument("--pr", type=int, help="Pull request number to monitor.")
     target.add_argument("--commit", help="Exact commit or commit-ish to monitor.")
     target.add_argument("--run", type=int, help="Exact workflow run ID to monitor.")
+    target.add_argument("--dispatch-arm64", metavar="REQUEST_ID", help="Dispatch one correlated ARM64 diagnostic.")
+    parser.add_argument("--input", action="append", default=[], metavar="NAME=VALUE", help="ARM64 diagnostic workflow input.")
     parser.add_argument("--repo", help="Optional OWNER/REPO override. Defaults to the current checkout.")
     parser.add_argument("--once", action="store_true", help="Print one snapshot without waiting.")
-    parser.add_argument("--snapshot", type=Path, help="Save --run JSON under the inherited output root.")
+    parser.add_argument("--snapshot", type=Path, help="Save JSON under the inherited output root.")
+    parser.add_argument("--retry-job", type=int, metavar="JOB_ID", help="Explicitly retry a failed job and its dependents.")
+    parser.add_argument("--attempt", type=int, help="Expected completed attempt for --retry-job.")
+    parser.add_argument("--publication-tag", help="Require actual Nightly publication of this exact tag in --run mode.")
     parser.add_argument("--interval-seconds", type=float, default=20.0)
     parser.add_argument("--settle-seconds", type=float, default=30.0)
     parser.add_argument("--timeout-seconds", type=float, default=1200.0)
@@ -384,8 +499,18 @@ def validate_timing(args: argparse.Namespace) -> None:
         raise RuntimeError("--settle-seconds must not be negative")
     if args.timeout_seconds <= 0:
         raise RuntimeError("--timeout-seconds must be positive")
-    if args.snapshot is not None and args.run is None:
-        raise RuntimeError("--snapshot requires --run")
+    if args.retry_job is not None:
+        if args.run is None or not args.attempt or args.attempt < 1 or args.retry_job < 1 or args.once or args.snapshot:
+            raise RuntimeError("--retry-job requires --run and a positive --attempt in place of monitoring options")
+    elif args.attempt is not None:
+        raise RuntimeError("--attempt requires --retry-job")
+    if args.publication_tag and (args.run is None or args.retry_job is not None):
+        raise RuntimeError("--publication-tag requires --run monitoring")
+    if args.dispatch_arm64 is not None:
+        if args.once or args.snapshot:
+            raise RuntimeError("Diagnostic dispatch does not accept monitoring options")
+    elif args.input:
+        raise RuntimeError("--input requires --dispatch-arm64")
 
 
 def resolve_snapshot(destination: Path | None) -> Path | None:
@@ -410,6 +535,12 @@ def main() -> int:
         validate_timing(args)
         destination = resolve_snapshot(args.snapshot)
         repo = resolve_repo(args.repo)
+        if args.dispatch_arm64 is not None:
+            dispatch_diagnostic(repo, args.dispatch_arm64, args.input)
+            return 0
+        if args.retry_job is not None:
+            retry_job(repo, args.run, args.attempt, args.retry_job)
+            return 0
         commit_sha = resolve_commit(repo, args.commit) if args.commit else None
         deadline = time.monotonic() + args.timeout_seconds
         last_signature: tuple[Any, ...] | None = None
@@ -449,6 +580,11 @@ def main() -> int:
                     last_attempt, last_jobs = run["run_attempt"], job_states
                 else:
                     print_summary(checks, runs)
+                    if destination is not None:
+                        write_snapshot(destination, {
+                            "repository": repo, "sourceSha": head_sha, "pullRequest": pr,
+                            "checks": checks, "runs": runs, "observedAt": datetime.now(timezone.utc).isoformat(),
+                        })
                 last_signature = signature
                 stable_since = now
 
@@ -463,6 +599,8 @@ def main() -> int:
             if failed:
                 print_failures(checks, runs)
                 return 1
+            if args.publication_tag and observed and not pending:
+                return 0 if verify_nightly_publication(repo, run, jobs, args.publication_tag) else 4
             if args.once:
                 return 0 if observed and not pending else 8
             if observed and not pending and now - stable_since >= args.settle_seconds:
