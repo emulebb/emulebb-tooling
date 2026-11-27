@@ -152,6 +152,20 @@ def project_items_by_url(project_number_value: str, errors: list[str]) -> dict[s
 
     if not project_number_value:
         return {}
+    overview = run_gh(
+        ["project", "view", project_number_value, "--owner", OWNER, "--format", "json"]
+    )
+    if overview.returncode != 0:
+        errors.append(f"cannot read project inventory for {OWNER}/{PROJECT_TITLE}")
+        return {}
+    project = load_json(overview, "read project inventory")
+    inventory = project.get("items") if isinstance(project, dict) else None
+    total = inventory.get("totalCount") if isinstance(inventory, dict) else None
+    if type(total) is not int or total < 0:
+        errors.append(f"invalid project item count for {OWNER}/{PROJECT_TITLE}")
+        return {}
+    if total == 0:
+        return {}
     result = run_gh(
         [
             "project",
@@ -162,7 +176,7 @@ def project_items_by_url(project_number_value: str, errors: list[str]) -> dict[s
             "--format",
             "json",
             "--limit",
-            "200",
+            str(total),
         ]
     )
     if result.returncode != 0:
@@ -170,6 +184,9 @@ def project_items_by_url(project_number_value: str, errors: list[str]) -> dict[s
         return {}
     data = load_json(result, "list project items")
     items = data.get("items", []) if isinstance(data, dict) else []
+    if not isinstance(items, list) or len(items) != total:
+        errors.append(f"project item inventory changed while reading {OWNER}/{PROJECT_TITLE}")
+        return {}
     by_url: dict[str, dict[str, object]] = {}
     for project_item in items:
         if not isinstance(project_item, dict):
