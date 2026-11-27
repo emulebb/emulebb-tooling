@@ -66,11 +66,10 @@ or pull requests, merges work, cleans delivery state, or creates release tags.
   request for each granular commit. Keep the single work-in-progress branch
   pushed without a pull request until it contains a significant, coherent,
   review-ready chunk whose implementation and source inspection are accepted
-  and whose focused local checks and normal hooks have passed. The parent may open this frozen
-  review-ready PR while its applicable full local matrix continues, allowing
-  hosted checks to run concurrently. State pending local proof explicitly;
-  retain every applicable full local and hosted check as a merge condition on
-  the final selected sources. Do not open a PR to hide an unresolved known
+  and whose focused local checks and normal hooks have passed. A coherent Rust
+  slice may use a draft PR for hosted Windows feedback before it is ready.
+  State pending local proof explicitly. Keep all applicable targeted local and
+  hosted checks as merge conditions on the final selected sources. Do not open a PR to hide an unresolved known
   failure or incomplete implementation, and do not report qualification as
   delivery.
 - A checkpoint is complete when its scoped local validation passes, its
@@ -141,6 +140,17 @@ or pull requests, merges work, cleans delivery state, or creates release tags.
   failure.
 
 ## Push And Handoff
+
+- Rust development uses targeted Windows builds and tests. Build another
+  platform or package when the next test needs it. A draft PR can provide
+  hosted Windows feedback on a coherent change. Marking it ready starts full
+  hosted platform qualification. Before merge, verify all applicable platform
+  results and targeted local proof for the exact head, current base and pins.
+  Android changes need a debug APK build and smoke result for every affected
+  ABI. Whole-tree local validation remains an explicit diagnostic option.
+- Run `scripts/rust-delivery-preflight.py --repo <rust-checkout>` before opening
+  a Rust PR. Use `--offline` ahead of local hooks to check Go, npm and the
+  manifest without contacting GitHub.
 
 - Run applicable local checks before commit and push. The shared pre-commit
   hook runs fast staged-file checks; the shared pre-push hook runs fast

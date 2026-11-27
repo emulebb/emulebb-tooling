@@ -243,9 +243,9 @@ rewrite protected main or release tags. Follow the
    and normal hooks have passed, then freeze the combined clean tip and exact
    companion revisions.
    No known unresolved failure may be hidden by calling the batch review-ready.
-5. Open one review-ready batch PR per affected repository so hosted platform
-   qualification can run alongside the remaining applicable full local gate.
-   State pending local proof explicitly in the PR. Run full local validation
+5. Open one batch PR per affected repository. Mark the Rust PR ready to start
+   full hosted qualification alongside the remaining targeted local proof.
+   State pending local proof explicitly in the PR. Run local validation
    through the existing Builder and heavy lock; docs-only edits retain their
    documented lighter checks. Independent workers do not each repeat this final
    integration proof. This is PM coordination, not a queue or new automation.
