@@ -170,6 +170,7 @@ ranking and GitHub placement.
 | [RUST-BUG-197](items/RUST-BUG-197.md) | Bug | Serve classic source exchange from eligible upload peers |
 | [RUST-CI-058](items/RUST-CI-058.md) | Evidence | Assess negotiated extended eD2K source exchange |
 | [RUST-BUG-198](items/RUST-BUG-198.md) | Bug | Preserve Kad keyword load deferrals across restarts |
+| [RUST-BUG-200](items/RUST-BUG-200.md) | Bug | Preserve strict P2P interface identity through socket binding |
 | [RUST-REF-005](items/RUST-REF-005.md) | Refactor | Decompose oversized Rust modules by responsibility |
 | [RUST-REF-006](items/RUST-REF-006.md) | Refactor | Consolidate Rust NAT and runtime safety internals |
 | [RUST-REF-007](items/RUST-REF-007.md) | Refactor | Review Rust upload hot-path performance candidates |

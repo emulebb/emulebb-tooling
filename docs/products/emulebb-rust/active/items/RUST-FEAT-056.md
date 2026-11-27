@@ -509,7 +509,26 @@ observability but does not retroactively classify that error or establish a
 public upload. Exact private inventory, filenames, paths and user-media hashes
 remain only in local output evidence.
 
-### Latest API 31 Phone Smoke
+### Current Android 12 and Android 16 Phone Smoke
+
+The signed ARM64 APK from Rust `a2059cc3` passed hardware startup,
+authenticated REST, graceful stop and stop-and-exit, and the diagnostics share
+chooser on API 31 and API 36. The Android 12 local transfer verified 262,144
+bytes, preserved an existing destination with the same name, and retained
+completion metadata after a daemon restart.
+[Rust PR #399](https://github.com/emulebb/emulebb-rust/pull/399) · [Physical fixture PR #123](https://github.com/emulebb/emulebb-build-tests/pull/123)
+
+On the API 31 phone's Linux 4.14 kernel, the shell probe bound UDP successfully.
+The interface-index option returned `ENOPROTOOPT` and the interface-name option
+returned `EPERM`. The controlled test preserves the app's automatic route
+when it is configured for that mode and verifies the peer resolves the same
+address. Strict binding under the APK UID needs separate qualification.
+Require native unprivileged TCP and UDP tests on competing routes before
+claiming strict or VPN support. Record the rejected socket operation and errno.
+Verify that route loss blocks off-route traffic.
+[Strict interface identity](RUST-BUG-200.md)
+
+### API 31 Route Repair Smoke
 
 A signed local APK (`versionCode` 44) built from Rust source
 `20a07429bf41ec58649725bc56e58b0e7855839f` passed 13 fresh physical-device
