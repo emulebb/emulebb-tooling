@@ -260,7 +260,7 @@ address. Explicit IP, interface or VPN Guard choices remain strict bindings and
 fail when unsupported. The automatic direct-route repair has passed this
 API 31 device smoke; older Android kernel binding support and full Android
 qualification remain unproved. See the
-[evidence record](../active/items/RUST-FEAT-056.md#latest-api-31-phone-smoke).
+[evidence record](../active/items/RUST-FEAT-056.md#api-31-route-repair-smoke).
 
 After Start, a dedicated foreground service and partial wake lock keep the
 daemon running independently of the shell and browser. This consumes battery

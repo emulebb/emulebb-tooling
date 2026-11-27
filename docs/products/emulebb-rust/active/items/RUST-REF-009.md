@@ -182,6 +182,10 @@ Additional acceptance criteria:
       `/`; partitions and shared backing devices do not falsely prove independence.
 - [ ] Per-operation/per-domain reports show queue wait, read/write bytes, active
       counts, service windows, topology confidence, and foreground latency.
+- [ ] Stall an in-flight sync on one known storage domain. A queued verified
+      delivery on a disjoint domain must progress while the stalled operation
+      retains its slot. Both jobs must settle once, with normal backpressure
+      when the domains overlap or independence is unknown.
 - [ ] Synthetic overlap and generation tests preserve one-pass MD4/AICH,
       current payload authority, native path identity, and optional-cache behavior.
 

@@ -122,6 +122,15 @@ it is not a shortcut around existing safety tests.
 
 ## Validation and Dependencies
 
+Exercise an unmounted destination whose pathname still exists on the backing
+filesystem. The current recovery path can sync that visible parent and
+release a reservation when the output is missing. Retain the reservation and
+verified source if the admitted destination is unavailable. Verify that an
+exact remount resumes delivery once, and a different filesystem or replacement
+directory at the same pathname requires explicit re-admission. Use native
+volume and directory identity where available and keep legacy attempts safe
+when they lack that evidence.
+
 Extend existing delivery and completion tests rather than introducing a second
 materialization implementation. Use injected copy/read counters and deterministic
 mutation barriers, then capability-gated native Windows/Unix filesystem tests.

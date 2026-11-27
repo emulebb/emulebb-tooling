@@ -18,7 +18,7 @@ source: Stock eMule and amule-org aMule protocol review
 
 # RUST-FEAT-148 - Serve and browse eD2K peer shared-file lists
 
-Beta 3 requires bidirectional browsing against stock eMule and aMule. Serve flat and directory views with Everyone as the fresh-profile default, verified Friends, and Off. Make the existing REST and WebUI browse action fetch bounded peer results. Cover capability advertising, safe virtual directory names, and a 100,000-file catalog.
+Rust serves and browses peer shared-file lists over established eD2K sessions. It supports flat and directory views, with Everyone as the fresh-profile default, verified Friends, and Off. Qualification covered capability advertising, virtual directory names, and a 100,000-file Rust catalog. [Rust PR #394](https://github.com/emulebb/emulebb-rust/pull/394)
 
 ## Peer contract
 
@@ -60,3 +60,27 @@ Verify the implementation against stock eMule `ac3d52e` and amule-org aMule `c59
 Use [RUST-CI-031](RUST-CI-031.md) for deterministic fixtures and
 [RUST-CI-006](RUST-CI-006.md) to retain same-revision interoperability
 evidence when the feature is in the release scope.
+
+The exact PR head `6ba4662f` qualified all four native requester and publisher
+directions at 9,964 rows against stock eMule and the official frozen aMule
+3.0.1 build. File bytes progressed on the shared connection during browsing
+and the completed transfers matched their expected hashes. The Rust 100,000-row
+TCP test and stock publisher run are separate capacity evidence.
+[Retained interoperability results](https://github.com/emulebb/emulebb-rust/issues/376)
+
+## Follow-up Acceptance
+
+- [ ] Allow a user to browse a known reachable source whose eD2K session is
+      closed. Stock eMule and upstream aMule initiate a connection on demand.
+      Reuse normal peer admission and the existing session when present.
+      Verify an exact canary filename, size and eD2K hash from both stock
+      publishers. Exercise duplicate requests, banned peers and unreachable
+      peers within the existing bounds.
+      [Rust entry point](https://github.com/emulebb/emulebb-rust/blob/045d9a1d5d176132eb6eeea5add2b0bb50c686ab/crates/emulebb-core/src/transfer_control_api.rs#L6) · [Stock eMule](https://github.com/irwir/eMule/blob/ac3d52e/srchybrid/BaseClient.cpp#L1785) · [aMule](https://github.com/amule-org/amule/blob/c5989ec4a/src/BaseClient.cpp#L3557)
+- [ ] Compare one outstanding directory request with a small bounded window
+      using both native publishers and an active transfer. The aMule baseline
+      spent about 116 seconds on the wire across 30 requests, with a
+      3.915-second median per reply. Compare exact rows, browse time, transfer
+      throughput and pending memory. Keep the catalog and frame bounds, match
+      replies to outstanding raw labels, and cover duplicate, unmatched and
+      late replies. Adopt a window only after repeatable improvement.
