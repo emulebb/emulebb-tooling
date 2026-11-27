@@ -311,15 +311,20 @@ def verify_nightly_publication(repo: str, run: dict[str, Any], jobs: list[dict[s
         raise RuntimeError("Publication verification requires a Nightly run and exact Rust tag")
     expected = {"Publish both verified container variants", "Publish verified native release assets",
                 "Advance both verified nightly image channels"}
-    executed = {job["name"].rsplit(" / ", 1)[-1] for job in jobs if job.get("conclusion") == "success"}
+    now = datetime.now(timezone.utc)
+    executed = {job["name"].rsplit(" / ", 1)[-1] for job in jobs
+                if job.get("conclusion") == "success" and job.get("started_at")
+                and job_timing(job, set(), now)[0] != "reused"}
     if not expected <= executed:
         print("Publication skipped or incomplete. Expected publication jobs did not all pass.")
         return False
     release = run_gh(["api", f"repos/{repo}/releases/tags/{tag}"])
     commit = run_gh(["api", f"repos/{repo}/commits/{tag}"])
-    if release["draft"] or not release["assets"] or commit["sha"] != run["head_sha"]:
+    assets = release["assets"]
+    if (release["draft"] or not assets or commit["sha"] != run["head_sha"]
+            or any(not re.fullmatch(r"sha256:[0-9a-f]{64}", asset.get("digest") or "") for asset in assets)):
         raise RuntimeError("Final release bytes or tag do not match the Nightly source")
-    print(f"Verified Nightly publication {release['html_url']}")
+    print(f"Verified Nightly publication with {len(assets)} digested assets {release['html_url']}")
     return True
 
 

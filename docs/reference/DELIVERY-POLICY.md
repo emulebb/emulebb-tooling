@@ -69,9 +69,8 @@ or pull requests, merges work, cleans delivery state, or creates release tags.
   and whose focused local checks and normal hooks have passed. A coherent Rust
   slice may use a draft PR for hosted Windows feedback before it is ready.
   State pending local proof explicitly. Keep all applicable targeted local and
-  hosted checks as merge conditions on the final selected sources. Do not open a PR to hide an unresolved known
-  failure or incomplete implementation, and do not report qualification as
-  delivery.
+  hosted checks as merge conditions on the final selected sources. Keep known
+  failures visible on open PRs and report delivery after integration.
 - A checkpoint is complete when its scoped local validation passes, its
   granular commits are pushed, and the worktree is clean. Sessions and tasks
   may end at this checkpoint while the same workstream branch remains active.
@@ -151,6 +150,13 @@ or pull requests, merges work, cleans delivery state, or creates release tags.
 - Run `scripts/rust-delivery-preflight.py --repo <rust-checkout>` before opening
   a Rust PR. Use `--offline` ahead of local hooks to check Go, npm and the
   manifest without contacting GitHub.
+- Preview local Rust checks with `python -B -m emule_workspace local-check
+  --repo <rust-checkout> --plan`. The default `dev` stage selects touched
+  Windows crates and accepts edits before commit. Use `--cargo-jobs` to
+  set the job budget and `--resume <receipt-directory>` for matching clean
+  inputs after a failure. For Android development use
+  `package-rust-android-apk --debug --debug-abi <abi>` and
+  `smoke-rust-android-debug-apk` on an empty emulator with that ABI.
 
 - Run applicable local checks before commit and push. The shared pre-commit
   hook runs fast staged-file checks; the shared pre-push hook runs fast

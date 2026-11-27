@@ -46,7 +46,12 @@ def preflight(repo: Path, remote: str, offline: bool) -> tuple[dict, list[str]]:
             problems.append("Could not compare HEAD with actual remote main. Fetch main and rerun")
         try:
             methods = json.loads(output(repo, "gh", "repo", "view", "--json", "mergeCommitAllowed,rebaseMergeAllowed"))
-            if not methods["rebaseMergeAllowed"] or methods["mergeCommitAllowed"]:
+            rules = json.loads(output(repo, "gh", "api", "repos/{owner}/{repo}/rules/branches/main"))
+            permitted = [row["parameters"]["allowed_merge_methods"] for row in rules if row["type"] == "pull_request"]
+            linear = any(row["type"] == "required_linear_history" for row in rules)
+            report["mergeMethod"] = "rebase"
+            if (not methods["rebaseMergeAllowed"] or any("rebase" not in allowed for allowed in permitted)
+                    or methods["mergeCommitAllowed"] and not linear and all("merge" in allowed for allowed in permitted)):
                 problems.append("Rust repository is expected to use rebase merge")
         except (OSError, subprocess.SubprocessError, ValueError, KeyError):
             problems.append("Could not verify the GitHub rebase merge settings")
