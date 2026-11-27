@@ -5,7 +5,7 @@ product: emulebb-rust
 phase: Phase 0
 github_issue: https://github.com/emulebb/emulebb-rust/issues/283
 title: Bound RIFF media parsing and retain malformed-input regressions
-status: OPEN
+status: DONE
 priority: Major
 category: bug
 labels: [rust, audit]
@@ -17,6 +17,16 @@ source: Operator-authorized audit reconciliation and Windows/Linux Beta 3 priori
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb-rust/issues/283. This local document owns the durable engineering specification and evidence.
 
 # RUST-BUG-181 - Bound RIFF media parsing and retain malformed-input regressions
+
+## Closure
+
+PR #319 bounded RIFF LIST traversal to 16 levels within the existing 2 MiB
+metadata prefix. It retained deterministic regressions for the nesting
+boundary, valid sibling metadata and a truncated AVI list. The fix and its
+tests are present on Rust main. GitHub closed the owning issue as completed
+and the Roadmap marks it Done. The original audit proposed a continuous
+media fuzz target, which remains unverified by this evidence.
+[Implementation and validation](https://github.com/emulebb/emulebb-rust/pull/319) · [Closed issue](https://github.com/emulebb/emulebb-rust/issues/283)
 
 ## Summary
 
