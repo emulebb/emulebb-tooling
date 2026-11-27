@@ -5,7 +5,7 @@ product: emulebb-rust
 phase: Phase 0
 github_issue: https://github.com/emulebb/emulebb-rust/issues/376
 title: Serve and browse eD2K peer shared-file lists
-status: OPEN
+status: IN_PROGRESS
 priority: Major
 category: feature
 labels: [rust, beta3-blocker]
