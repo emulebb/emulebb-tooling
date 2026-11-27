@@ -171,7 +171,7 @@ ports. For ambiguous P2P routing,
 save the intended name with the offline settings command above, then restart.
 
 The browser console is served at the REST origin root, with history routes such
-as `/transfers` and static `/assets`. Reverse-proxy subpath mounting is not part
+as `/downloads` and static `/assets`. Reverse-proxy subpath mounting is not part
 of the current deployment contract. Keep the complete packaged asset directory.
 
 ## Common Problems
