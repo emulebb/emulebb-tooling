@@ -170,6 +170,9 @@ ranking and GitHub placement.
 | [RUST-CI-058](items/RUST-CI-058.md) | Evidence | Assess negotiated extended eD2K source exchange |
 | [RUST-BUG-198](items/RUST-BUG-198.md) | Bug | Preserve Kad keyword load deferrals across restarts |
 | [RUST-BUG-200](items/RUST-BUG-200.md) | Bug | Preserve strict P2P interface identity through socket binding |
+| [RUST-BUG-201](items/RUST-BUG-201.md) | Bug | Use inbound Kad TCP evidence for direct callback eligibility |
+| [RUST-BUG-202](items/RUST-BUG-202.md) | Bug | Use a valid sender address for optional eD2K UDP obfuscation |
+| [RUST-BUG-203](items/RUST-BUG-203.md) | Bug | Exclude the connected hostname server from global eD2K keyword search |
 | [RUST-REF-005](items/RUST-REF-005.md) | Refactor | Decompose oversized Rust modules by responsibility |
 | [RUST-REF-006](items/RUST-REF-006.md) | Refactor | Consolidate Rust NAT and runtime safety internals |
 | [RUST-REF-007](items/RUST-REF-007.md) | Refactor | Review Rust upload hot-path performance candidates |
