@@ -364,6 +364,9 @@ def load_items(items_root: Path = ACTIVE_ITEMS) -> list[Item]:
         fields = parse_frontmatter(text)
         item_id = fields.get("id", path.stem)
         lane = lane_by_id.get(item_id) or infer_lane(fields)
+        milestone = fields.get("milestone", "")
+        if milestone in ('""', "''"):
+            milestone = ""
         items.append(
             Item(
                 item_id=item_id,
@@ -372,7 +375,7 @@ def load_items(items_root: Path = ACTIVE_ITEMS) -> list[Item]:
                 priority=fields.get("priority", ""),
                 category=fields.get("category", ""),
                 labels=parse_label_list(fields.get("labels", "")),
-                milestone=fields.get("milestone", ""),
+                milestone=milestone,
                 lane=lane,
                 path=path,
                 github_issue=fields.get("github_issue", ""),

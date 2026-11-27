@@ -12,6 +12,7 @@ to locate a closed record.
 
 | Item | Decision | Evidence |
 | --- | --- | --- |
+| [RUST-BUG-181](https://github.com/emulebb/emulebb-tooling/blob/main/docs/products/emulebb-rust/history/items/RUST-BUG-181.md) | DONE | [#283](https://github.com/emulebb/emulebb-rust/issues/283), [PR #319](https://github.com/emulebb/emulebb-rust/pull/319) |
 | [RUST-REF-016](https://github.com/emulebb/emulebb-tooling/blob/main/docs/products/emulebb-rust/history/items/RUST-REF-016.md) | DONE | [#155](https://github.com/emulebb/emulebb-rust/issues/155), [PR #349](https://github.com/emulebb/emulebb-rust/pull/349) |
 | [RUST-CI-043](https://github.com/emulebb/emulebb-tooling/blob/main/docs/products/emulebb-rust/history/items/RUST-CI-043.md) | DONE | [#297](https://github.com/emulebb/emulebb-rust/issues/297), [PR #349](https://github.com/emulebb/emulebb-rust/pull/349) |
 | [RUST-CI-044](https://github.com/emulebb/emulebb-tooling/blob/main/docs/products/emulebb-rust/history/items/RUST-CI-044.md) | DONE | [#298](https://github.com/emulebb/emulebb-rust/issues/298), [PR #349](https://github.com/emulebb/emulebb-rust/pull/349) |

@@ -5,7 +5,7 @@ product: emulebb-rust
 phase: Phase 0
 github_issue: https://github.com/emulebb/emulebb-rust/issues/372
 title: Preserve eD2K SX2 hybrid IDs and callback routes
-status: OPEN
+status: IN_PROGRESS
 priority: Major
 category: bug
 labels: [rust, beta3-blocker]

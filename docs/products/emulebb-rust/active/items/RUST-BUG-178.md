@@ -5,7 +5,7 @@ product: emulebb-rust
 phase: Phase 0
 github_issue: https://github.com/emulebb/emulebb-rust/issues/280
 title: Warn before creating private diagnostic bundles
-status: OPEN
+status: IN_PROGRESS
 priority: Major
 category: bug
 labels: [rust, audit]

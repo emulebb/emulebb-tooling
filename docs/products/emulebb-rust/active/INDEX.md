@@ -81,7 +81,6 @@ inventory and required checks remain enforced; this intake changes neither.
 | [RUST-BUG-165](items/RUST-BUG-165.md) | Bug | Require trusted AICH and MD4 agreement during download verification |
 | [RUST-BUG-166](items/RUST-BUG-166.md) | Bug | Admit AICH recovery answers only for matching outstanding requests |
 | [RUST-BUG-178](items/RUST-BUG-178.md) | Bug | Warn before creating private diagnostic bundles |
-| [RUST-BUG-181](items/RUST-BUG-181.md) | Bug | Bound RIFF media parsing and retain malformed-input regressions |
 | [RUST-CI-006](items/RUST-CI-006.md) | Evidence | Refresh current-head stock parity evidence and reconcile docs |
 | [RUST-CI-009](items/RUST-CI-009.md) | Evidence | Certify a Beta 3 candidate without publishing |
 | [RUST-CI-033](items/RUST-CI-033.md) | Evidence | Preserve native build scripts in Dependabot fuzz updates |
