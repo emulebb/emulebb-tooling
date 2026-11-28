@@ -5,7 +5,7 @@ product: emulebb-rust
 phase: Phase 1
 github_issue: https://github.com/emulebb/emulebb-rust/issues/244
 title: Respect filesystem case semantics when consolidating shared roots
-status: OPEN
+status: DONE
 priority: Major
 category: bug
 labels: [rust, sharing, paths, unicode, portability]
@@ -17,6 +17,12 @@ source: Operator-approved Rust async I/O and path portability review
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb-rust/issues/244. This local document owns the durable engineering specification and evidence.
 
 # RUST-BUG-161 - Respect filesystem case semantics when consolidating shared roots
+
+## Closure
+
+Root overlap and scan consolidation use native filesystem evidence. The tests cover case-distinct roots, aliases, unreadable traversal, and removing a root while the other share remains available.
+
+Verified on Rust main `c1414405`. [PR #405](https://github.com/emulebb/emulebb-rust/pull/405) · [Exact main CI](https://github.com/emulebb/emulebb-rust/actions/runs/46121217391) · [Optional platform CI](https://github.com/emulebb/emulebb-rust/actions/runs/46121217360) · [Nightly workflow](https://github.com/emulebb/emulebb-rust/actions/runs/46124453788) · [Original Intel macOS failure](https://github.com/emulebb/emulebb-rust/actions/runs/46108998975/job/140868205830) · [Passing exact-head retry](https://github.com/emulebb/emulebb-rust/actions/runs/46108998975/attempts/2)
 
 ## Summary
 

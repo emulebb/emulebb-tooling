@@ -5,7 +5,7 @@ product: emulebb-rust
 phase: Phase 0
 github_issue: https://github.com/emulebb/emulebb-rust/issues/280
 title: Warn before creating private diagnostic bundles
-status: IN_PROGRESS
+status: DONE
 priority: Major
 category: bug
 labels: [rust, audit]
@@ -17,6 +17,12 @@ source: Operator-authorized audit reconciliation and Windows/Linux Beta 3 priori
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb-rust/issues/280. This local document owns the durable engineering specification and evidence.
 
 # RUST-BUG-178 - Warn before creating private diagnostic bundles
+
+## Closure
+
+The WebUI names the private data in the diagnostic bundle and requires acknowledgement before capture. Browser and unit tests cover cancellation and acceptance. The REST endpoint continues to export the full-fidelity bundle.
+
+Verified on Rust main `c1414405`. [PR #405](https://github.com/emulebb/emulebb-rust/pull/405) · [Exact main CI](https://github.com/emulebb/emulebb-rust/actions/runs/46121217391) · [Optional platform CI](https://github.com/emulebb/emulebb-rust/actions/runs/46121217360) · [Nightly workflow](https://github.com/emulebb/emulebb-rust/actions/runs/46124453788) · [Original Intel macOS failure](https://github.com/emulebb/emulebb-rust/actions/runs/46108998975/job/140868205830) · [Passing exact-head retry](https://github.com/emulebb/emulebb-rust/actions/runs/46108998975/attempts/2)
 
 ## Summary
 

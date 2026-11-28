@@ -118,7 +118,7 @@ The seven raw-export privacy findings below were revalidated against the
 intentional authenticated private-bundle contract. The response deliberately
 contains exact credentials and operator evidence; the tests require this.
 There was no existing safe/shareable-export promise to repair. Their final
-disposition is design/nondefect, while stable [RUST-BUG-178](../../active/items/RUST-BUG-178.md)
+disposition is design/nondefect, while stable [RUST-BUG-178](RUST-BUG-178.md)
 owns the actual Beta3 UI defect: a visible private-content warning and explicit
 acknowledgement before capture/download. A full allowlisted shareable summary
 remains a design proposal outside Beta3, with no endpoint implementation

@@ -5,7 +5,7 @@ product: emulebb-rust
 phase: Phase 1
 github_issue: https://github.com/emulebb/emulebb-rust/issues/277
 title: Correlate STUN mapping replies with the expected endpoint
-status: OPEN
+status: DONE
 priority: Minor
 category: bug
 labels: [rust, audit]
@@ -17,6 +17,12 @@ source: Operator-authorized audit reconciliation and Windows/Linux Beta 3 priori
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb-rust/issues/277. This local document owns the durable engineering specification and evidence.
 
 # RUST-BUG-175 - Correlate STUN mapping replies with the expected endpoint
+
+## Closure
+
+STUN requires the expected IPv4 address, port, and transaction. Wrong-source, truncated, and stale replies remain bounded by the original deadline. The same request can accept a later valid reply.
+
+Verified on Rust main `c1414405`. [PR #406](https://github.com/emulebb/emulebb-rust/pull/406) · [Exact main CI](https://github.com/emulebb/emulebb-rust/actions/runs/46121217391) · [Optional platform CI](https://github.com/emulebb/emulebb-rust/actions/runs/46121217360) · [Nightly workflow](https://github.com/emulebb/emulebb-rust/actions/runs/46124453788)
 
 ## Summary
 

@@ -286,7 +286,7 @@ exact revisions and artifact digests.
 
 Beta 3 also requires the confirmed stock peer-request, SX2, large-file,
 standalone file-status, Kad bootstrap and Kad source-publication fixes
-([RUST-BUG-187](active/items/RUST-BUG-187.md) through
+([RUST-BUG-187](https://github.com/emulebb/emulebb-tooling/blob/main/docs/products/emulebb-rust/history/items/RUST-BUG-187.md) through
 [RUST-BUG-192](active/items/RUST-BUG-192.md)), and bidirectional
 [peer share browsing](active/items/RUST-FEAT-148.md).
 
