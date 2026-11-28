@@ -11510,12 +11510,16 @@ components:
     SharedDirectoryReloadProgress:
       type: object
       additionalProperties: false
-      required: [phase, running, pending, scannedCount, plannedHashCount, reusedCount, newCount, changedCount, escapedDisplayPathCount, missingFingerprintCount, statFailedCount, skippedFailedCount, skippedIntakeCount, prunedCount, staleHashCount, diskCount, activeHashCount, hashedCount, failedHashCount, plannedHashBytes, completedHashBytes, plannedReadBytes, completedReadBytes, readRateBytesPerSec, startedAt, updatedAt, active, recent, upcoming, disks]
+      required: [phase, errorCode, running, pending, scannedCount, plannedHashCount, reusedCount, newCount, changedCount, escapedDisplayPathCount, missingFingerprintCount, statFailedCount, skippedFailedCount, skippedIntakeCount, prunedCount, staleHashCount, diskCount, activeHashCount, hashedCount, failedHashCount, plannedHashBytes, completedHashBytes, plannedReadBytes, completedReadBytes, readRateBytesPerSec, startedAt, updatedAt, active, recent, upcoming, disks]
       properties:
         phase:
           type: string
-          enum: [idle, queued, scanning, planning, hashing, rebuilding]
-          description: Rebuilding reconciles and publishes the catalog after file hashing completes.
+          enum: [idle, queued, scanning, planning, hashing, rebuilding, failed]
+          description: Rebuilding reconciles and publishes the catalog after hashing. Failed records a scan pass that terminated with an error and stays visible until the next pass starts.
+        errorCode:
+          type: [string, 'null']
+          enum: [SCAN_FAILED, null]
+          description: Stable error code for a failed scan pass. Individual file failures contribute to failedHashCount.
         running:
           type: boolean
         pending:
