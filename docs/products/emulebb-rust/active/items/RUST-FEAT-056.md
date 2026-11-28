@@ -92,7 +92,7 @@ request fields; mocked tests must not crash or stop an operator daemon. Validate
 displayed values and action payloads against actual response contracts, including
 the private raw diagnostic bundle. Do not describe that bundle as sanitized or
 safe for public sharing. This supersedes the earlier acknowledgement proposal in
-[RUST-BUG-178](RUST-BUG-178.md).
+[RUST-BUG-178](https://github.com/emulebb/emulebb-tooling/blob/main/docs/products/emulebb-rust/history/items/RUST-BUG-178.md).
 
 Acceptance includes realistic mocked data for all views at phone, tablet and
 desktop widths; theme persistence and unavailable storage; keyboard/menu/focus

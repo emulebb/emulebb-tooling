@@ -3,7 +3,7 @@ id: RUST-BUG-156
 workflow: github
 github_issue: https://github.com/emulebb/emulebb-rust/issues/223
 title: Give ED2K server settings one authority
-status: IN_PROGRESS
+status: DONE
 priority: Major
 category: bug
 labels: [rust, ed2k, config, api, webui, beta]
@@ -17,6 +17,12 @@ source: beta settings ownership and stock-default audit
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb-rust/issues/223. This local document owns the durable engineering contract.
 
 # RUST-BUG-156 - Give ED2K server settings one authority
+
+## Closure
+
+The typed settings rollout established one server preferences owner. This fix ties the TCP keepalive to time since the last send or receive, independently of the UDP status timer.
+
+Verified on Rust main `c1414405`. [PR #406](https://github.com/emulebb/emulebb-rust/pull/406) · [Exact main CI](https://github.com/emulebb/emulebb-rust/actions/runs/46121217391) · [Optional platform CI](https://github.com/emulebb/emulebb-rust/actions/runs/46121217360) · [Nightly workflow](https://github.com/emulebb/emulebb-rust/actions/runs/46124453788)
 
 ## Summary
 

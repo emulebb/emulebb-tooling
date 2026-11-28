@@ -5,7 +5,7 @@ product: emulebb-rust
 phase: Phase 1
 github_issue: https://github.com/emulebb/emulebb-rust/issues/271
 title: Restore the compatible-client branch of old-client upload scoring
-status: OPEN
+status: DONE
 priority: Minor
 category: bug
 labels: [rust, audit]
@@ -17,6 +17,12 @@ source: Operator-authorized audit reconciliation and Windows/Linux Beta 3 priori
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb-rust/issues/271. This local document owns the durable engineering specification and evidence.
 
 # RUST-BUG-170 - Restore the compatible-client branch of old-client upload scoring
+
+## Closure
+
+HELLO and INFO feed the stock upload predicate independently of wire-extension negotiation. Tests cover the named eMule hash marker, compatible IDs, queue ordering, and the 0x19 and 0x1a version boundary.
+
+Verified on Rust main `c1414405`. [PR #406](https://github.com/emulebb/emulebb-rust/pull/406) · [Exact main CI](https://github.com/emulebb/emulebb-rust/actions/runs/46121217391) · [Optional platform CI](https://github.com/emulebb/emulebb-rust/actions/runs/46121217360) · [Nightly workflow](https://github.com/emulebb/emulebb-rust/actions/runs/46124453788)
 
 ## Summary
 

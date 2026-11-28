@@ -5,7 +5,7 @@ product: emulebb-rust
 phase: Phase 1
 github_issue: https://github.com/emulebb/emulebb-rust/issues/281
 title: Handle malformed transfer-event frames predictably
-status: OPEN
+status: DONE
 priority: Minor
 category: bug
 labels: [rust, audit]
@@ -17,6 +17,12 @@ source: Operator-authorized audit reconciliation and Windows/Linux Beta 3 priori
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb-rust/issues/281. This local document owns the durable engineering specification and evidence.
 
 # RUST-BUG-179 - Handle malformed transfer-event frames predictably
+
+## Closure
+
+The WebUI bounds and validates each transfer event before dispatch, cancels a failed or abandoned read, and preserves the last valid resume cursor. Reconnect retains its pacing.
+
+Verified on Rust main `c1414405`. [PR #406](https://github.com/emulebb/emulebb-rust/pull/406) · [Exact main CI](https://github.com/emulebb/emulebb-rust/actions/runs/46121217391) · [Optional platform CI](https://github.com/emulebb/emulebb-rust/actions/runs/46121217360) · [Nightly workflow](https://github.com/emulebb/emulebb-rust/actions/runs/46124453788)
 
 ## Summary
 

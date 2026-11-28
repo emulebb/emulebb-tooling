@@ -74,13 +74,8 @@ inventory and required checks remain enforced; this intake changes neither.
 | [RUST-BUG-117](items/RUST-BUG-117.md) | Bug | Expire silent Kad buddy links from received activity |
 | [RUST-BUG-128](items/RUST-BUG-128.md) | Bug | Preserve incremental ED2K offer publication |
 | [RUST-BUG-154](items/RUST-BUG-154.md) | Bug | Admit Kad datagrams before learning sender state |
-| [RUST-BUG-155](items/RUST-BUG-155.md) | Bug | Share established peer identity and control state |
-| [RUST-BUG-156](items/RUST-BUG-156.md) | Bug | Give ED2K server settings one authority |
-| [RUST-BUG-159](items/RUST-BUG-159.md) | Bug | Respect destination filename limits during download delivery |
-| [RUST-BUG-161](items/RUST-BUG-161.md) | Bug | Respect filesystem case semantics when consolidating shared roots |
 | [RUST-BUG-165](items/RUST-BUG-165.md) | Bug | Require trusted AICH and MD4 agreement during download verification |
 | [RUST-BUG-166](items/RUST-BUG-166.md) | Bug | Admit AICH recovery answers only for matching outstanding requests |
-| [RUST-BUG-178](items/RUST-BUG-178.md) | Bug | Warn before creating private diagnostic bundles |
 | [RUST-CI-006](items/RUST-CI-006.md) | Evidence | Refresh current-head stock parity evidence and reconcile docs |
 | [RUST-CI-009](items/RUST-CI-009.md) | Evidence | Certify a Beta 3 candidate without publishing |
 | [RUST-CI-033](items/RUST-CI-033.md) | Evidence | Preserve native build scripts in Dependabot fuzz updates |
@@ -109,14 +104,11 @@ ranking and GitHub placement.
 | [RUST-BUG-162](items/RUST-BUG-162.md) | Bug | Bound profile archive fields before allocating import buffers |
 | [RUST-BUG-167](items/RUST-BUG-167.md) | Bug | Release and retry failed AICH recovery requests across eligible peers |
 | [RUST-BUG-169](items/RUST-BUG-169.md) | Bug | Honor negotiated secure-ident V2 support and LowID challenge addressing |
-| [RUST-BUG-170](items/RUST-BUG-170.md) | Bug | Restore the compatible-client branch of old-client upload scoring |
 | [RUST-BUG-171](items/RUST-BUG-171.md) | Bug | Reject degenerate server Diffie-Hellman public values |
 | [RUST-BUG-172](items/RUST-BUG-172.md) | Bug | Omit unavailable MD4 sections from modern hashset answers |
 | [RUST-BUG-173](items/RUST-BUG-173.md) | Bug | Reject file sizes outside representable ED2K hashset geometry |
 | [RUST-BUG-174](items/RUST-BUG-174.md) | Bug | Require authenticated or corroborated public-IP evidence for VPN Guard |
-| [RUST-BUG-175](items/RUST-BUG-175.md) | Bug | Correlate STUN mapping replies with the expected endpoint |
 | [RUST-BUG-177](items/RUST-BUG-177.md) | Bug | Bound remote control-plane admission and authentication abuse |
-| [RUST-BUG-179](items/RUST-BUG-179.md) | Bug | Handle malformed transfer-event frames predictably |
 | [RUST-BUG-180](items/RUST-BUG-180.md) | Bug | Bound Kad tracker population under source churn |
 | [RUST-BUG-182](items/RUST-BUG-182.md) | Bug | Honor ID3 flags before publishing derived text |
 | [RUST-BUG-183](items/RUST-BUG-183.md) | Bug | Verify and upstream the PCP socket-initialization allocation leak |
@@ -146,7 +138,6 @@ ranking and GitHub placement.
 | [RUST-FEAT-066](items/RUST-FEAT-066.md) | Feature | Weight Kad user estimates by observed firewall and version ratios |
 | [RUST-FEAT-067](items/RUST-FEAT-067.md) | Feature | Define supported search text syntax and rating criteria |
 | [RUST-FEAT-068](items/RUST-FEAT-068.md) | Feature | Make non-Windows legacy encoding policy explicit |
-| [RUST-BUG-187](items/RUST-BUG-187.md) | Bug | Advance Kad bootstrap candidates across retries |
 | [RUST-BUG-188](items/RUST-BUG-188.md) | Bug | Honor negotiated eD2K extended filename requests |
 | [RUST-BUG-189](items/RUST-BUG-189.md) | Bug | Preserve eD2K SX2 hybrid IDs and callback routes |
 | [RUST-BUG-190](items/RUST-BUG-190.md) | Bug | Enforce stock eD2K large-file capabilities |
@@ -157,10 +148,8 @@ ranking and GitHub placement.
 | [RUST-FEAT-150](items/RUST-FEAT-150.md) | Feature | Learn eligible eD2K requesters as passive sources |
 | [RUST-BUG-193](items/RUST-BUG-193.md) | Bug | Apply Kad publisher trust before keyword pagination |
 | [RUST-BUG-194](items/RUST-BUG-194.md) | Bug | Retain Kad publisher filename votes in keyword search |
-| [RUST-BUG-195](items/RUST-BUG-195.md) | Bug | Bound automatic eD2K TCP search continuation |
 | [RUST-FEAT-151](items/RUST-FEAT-151.md) | Feature | Apply bounded Smart ID to automatic eD2K selection |
 | [RUST-FEAT-152](items/RUST-FEAT-152.md) | Feature | Use validated MD4 part hashes from eD2K file links |
-| [RUST-BUG-196](items/RUST-BUG-196.md) | Bug | Report unverified Kad UDP reachability as unknown |
 | [RUST-FEAT-153](items/RUST-FEAT-153.md) | Feature | Qualify Kad-buddy callback for queued LowID upload promotion |
 | [RUST-FEAT-154](items/RUST-FEAT-154.md) | Feature | Support stock and aMule eD2K link source hints |
 | [RUST-FEAT-155](items/RUST-FEAT-155.md) | Feature | Retain bounded alternate eD2K routes for one known peer |

@@ -3,7 +3,7 @@ id: RUST-BUG-155
 workflow: github
 github_issue: https://github.com/emulebb/emulebb-rust/issues/222
 title: Share established peer identity and control state
-status: IN_PROGRESS
+status: DONE
 priority: Major
 category: bug
 labels: [rust, ed2k, protocol, peer, callback, state-machine, beta]
@@ -17,6 +17,12 @@ source: stock eMule established-peer control audit against Rust inbound and outb
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb-rust/issues/222. This local document owns the durable engineering contract.
 
 # RUST-BUG-155 - Share established peer identity and control state
+
+## Closure
+
+Actual inbound and outbound ID-change frames prove that a known standby numeric server updates the LowID in the upload queue. The directory is available before server login. Callback routing still requires the active server session, and only an authorized inbound firewall acknowledgement can verify TCP reachability. The updated stock catalog proof is in [Harness PR #127](https://github.com/emulebb/emulebb-build-tests/pull/127).
+
+Verified on Rust main `c1414405`. [PR #406](https://github.com/emulebb/emulebb-rust/pull/406) · [Exact main CI](https://github.com/emulebb/emulebb-rust/actions/runs/46121217391) · [Optional platform CI](https://github.com/emulebb/emulebb-rust/actions/runs/46121217360) · [Nightly workflow](https://github.com/emulebb/emulebb-rust/actions/runs/46124453788)
 
 ## Summary
 

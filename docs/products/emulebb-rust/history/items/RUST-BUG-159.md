@@ -5,7 +5,7 @@ product: emulebb-rust
 phase: Phase 1
 github_issue: https://github.com/emulebb/emulebb-rust/issues/242
 title: Respect destination filename limits during download delivery
-status: OPEN
+status: DONE
 priority: Major
 category: bug
 labels: [rust, delivery, paths, unicode, portability]
@@ -17,6 +17,12 @@ source: Operator-approved Rust async I/O and path portability review
 > Workflow status is tracked in GitHub: https://github.com/emulebb/emulebb-rust/issues/242. This local document owns the durable engineering specification and evidence.
 
 # RUST-BUG-159 - Respect destination filename limits during download delivery
+
+## Closure
+
+Finished downloads use the destination filesystem’s native filename limit. Regression tests cover Unicode, collision suffixes, installation without overwrites, retained canonical metadata, and restart.
+
+Verified on Rust main `c1414405`. [PR #405](https://github.com/emulebb/emulebb-rust/pull/405) · [Exact main CI](https://github.com/emulebb/emulebb-rust/actions/runs/46121217391) · [Optional platform CI](https://github.com/emulebb/emulebb-rust/actions/runs/46121217360) · [Nightly workflow](https://github.com/emulebb/emulebb-rust/actions/runs/46124453788) · [Original Intel macOS failure](https://github.com/emulebb/emulebb-rust/actions/runs/46108998975/job/140868205830) · [Passing exact-head retry](https://github.com/emulebb/emulebb-rust/actions/runs/46108998975/attempts/2)
 
 ## Summary
 

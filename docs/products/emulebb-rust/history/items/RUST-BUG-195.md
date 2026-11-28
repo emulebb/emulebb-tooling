@@ -5,7 +5,7 @@ product: emulebb-rust
 phase: Phase 0
 github_issue: https://github.com/emulebb/emulebb-rust/issues/381
 title: Bound automatic eD2K TCP search continuation
-status: OPEN
+status: DONE
 priority: Minor
 category: bug
 labels: [rust, parallel-non-gating]
@@ -18,8 +18,14 @@ source: Stock eMule and amule-org aMule protocol review
 
 # RUST-BUG-195 - Bound automatic eD2K TCP search continuation
 
+## Closure
+
+The one-shot, connected, and diagnostic TCP paths share stock’s five-request More limit and retain collected pages. Controlled servers cover terminal pages and partial results at the deadline.
+
+Verified on Rust main `c1414405`. [PR #406](https://github.com/emulebb/emulebb-rust/pull/406) · [Exact main CI](https://github.com/emulebb/emulebb-rust/actions/runs/46121217391) · [Optional platform CI](https://github.com/emulebb/emulebb-rust/actions/runs/46121217360) · [Nightly workflow](https://github.com/emulebb/emulebb-rust/actions/runs/46124453788)
+
 Use stock's maximum of five More requests as a bounded automatic Rust limit. Share the limit across session paths and preserve collected pages. Cover deadline, cancellation and early terminal pages.
 
 This is a parallel Client follow-up. Record the exact stock eMule and
 amule-org aMule revisions and retain the relevant fixtures with
-[RUST-CI-031](RUST-CI-031.md).
+[RUST-CI-031](../../active/items/RUST-CI-031.md).

@@ -5,7 +5,7 @@ product: emulebb-rust
 phase: Phase 0
 github_issue: https://github.com/emulebb/emulebb-rust/issues/370
 title: Advance Kad bootstrap candidates across retries
-status: IN_PROGRESS
+status: DONE
 priority: Major
 category: bug
 labels: [rust, beta3-blocker]
@@ -18,6 +18,12 @@ source: Stock eMule and amule-org aMule protocol review
 
 # RUST-BUG-187 - Advance Kad bootstrap candidates across retries
 
+## Closure
+
+Bounded Kad rounds reach the eleventh endpoint, stop at exhaustion, accept new candidates after a seed-list change, and discard the paused round. A separate fixture expires the last routing contact and proves bootstrap can resume.
+
+Verified on Rust main `c1414405`. [PR #406](https://github.com/emulebb/emulebb-rust/pull/406) · [Exact main CI](https://github.com/emulebb/emulebb-rust/actions/runs/46121217391) · [Optional platform CI](https://github.com/emulebb/emulebb-rust/actions/runs/46121217360) · [Nightly workflow](https://github.com/emulebb/emulebb-rust/actions/runs/46124453788)
+
 Keep bounded maintenance bootstrap rounds and advance across configured and restored endpoints after failed rounds. Preserve explicit single-endpoint bootstrap and no-seed behavior. Prove that a healthy eleventh endpoint can be reached after ten silent endpoints, and cover exhaustion and a changed candidate list.
 
 The loopback fixture observes UDP bootstrap requests at ten silent sockets,
@@ -29,6 +35,6 @@ not establish matching exhaustion or cadence.
 
 Verify the implementation against stock eMule `ac3d52e` and amule-org aMule `c5989ec4a`. Use stock eMule for supported wire behavior where the peers differ.
 
-Use [RUST-CI-031](RUST-CI-031.md) for deterministic fixtures and
-[RUST-CI-006](RUST-CI-006.md) to retain same-revision interoperability
+Use [RUST-CI-031](../../active/items/RUST-CI-031.md) for deterministic fixtures and
+[RUST-CI-006](../../active/items/RUST-CI-006.md) to retain same-revision interoperability
 evidence when the feature is in the release scope.
