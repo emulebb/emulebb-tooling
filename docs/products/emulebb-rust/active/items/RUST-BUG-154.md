@@ -41,13 +41,13 @@ metadata, banned responses retaining pending state, spoofed replies followed by
 a legitimate reply, and a nonzero encrypted source-port-53 positive control.
 The receive-loop helper also has a zero-key boundary regression.
 
-This is source reconciliation, not a newly executed campaign. The accepted
-specific mixed Rust/MFC Kad campaign receipt for `kad.ingress.admission` and
-`kad.ingress.port53-verify-key` has not been confirmed. General CI, packaged
-local transfers and PR #225's eD2K server-search/OFFERFILES evidence do not
-substitute for that Kad slice. Keep the issue In Progress and its acceptance
-open until the parent locates and accepts existing evidence or allocates the
-remaining bounded proof through the existing protocol harness owner.
+The focused Kad regressions and full Rust workspace suite passed on Windows
+and Linux GNU amd64 at Rust revision `c4d064e1005f7446970ca97182aec2783b25a6bd`.
+The operator deferred the mixed Rust/MFC campaign to a follow-up so the current
+branch work can proceed. Keep the issue in progress and both catalog claims
+open. The follow-up needs a deterministic receipt for both claims and an
+isolated test route that exercises flood admission. The existing loopback
+campaign bypasses flood tracking.
 
 ## Slice Binding
 
