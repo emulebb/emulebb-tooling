@@ -11514,7 +11514,8 @@ components:
       properties:
         phase:
           type: string
-          enum: [idle, queued, scanning, planning, hashing]
+          enum: [idle, queued, scanning, planning, hashing, rebuilding]
+          description: Rebuilding reconciles and publishes the catalog after file hashing completes.
         running:
           type: boolean
         pending:
